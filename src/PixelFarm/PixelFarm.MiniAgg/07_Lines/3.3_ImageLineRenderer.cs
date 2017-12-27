@@ -62,7 +62,7 @@ namespace PixelFarm.Agg.Lines
         int m_dilation;
         int m_dilation_hr;
         SubImageRW m_buf;
-        byte[] m_data = null;
+        int[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
         int m_height;
@@ -144,7 +144,7 @@ namespace PixelFarm.Agg.Lines
             if (m_DataSizeInBytes < newSizeInBytes)
             {
                 m_DataSizeInBytes = newSizeInBytes;
-                m_data = new byte[m_DataSizeInBytes];
+                m_data = new int[m_DataSizeInBytes / 4];
             }
 
 

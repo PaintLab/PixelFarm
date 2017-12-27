@@ -79,25 +79,25 @@ namespace Mini
 
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename);
             System.Drawing.Imaging.BitmapData bmpData = null;
-            byte[] imgBuffer = null;
+            int[] imgBuffer = null;
 
             PixelFarm.Agg.PixelFormat selectedFormat = PixelFarm.Agg.PixelFormat.ARGB32;
             switch (bmp.PixelFormat)
             {
                 default:
                     throw new NotSupportedException();
-                case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
-                    {
-                        bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
-                             System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                             System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb 
-                             );
-                        selectedFormat = PixelFarm.Agg.PixelFormat.ARGB32; //lock and read as 32-argb
-                        imgBuffer = new byte[bmpData.Stride * bmp.Height];
-                        System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, imgBuffer, 0, imgBuffer.Length);
-                        bmp.UnlockBits(bmpData);
-                    }
-                    break;
+                //case System.Drawing.Imaging.PixelFormat.Format24bppRgb:
+                //    {
+                //        bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+                //             System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                //             System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb 
+                //             );
+                //        selectedFormat = PixelFarm.Agg.PixelFormat.ARGB32; //lock and read as 32-argb
+                //        imgBuffer = new byte[bmpData.Stride * bmp.Height];
+                //        System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, imgBuffer, 0, imgBuffer.Length);
+                //        bmp.UnlockBits(bmpData);
+                //    }
+                //    break;
                 case System.Drawing.Imaging.PixelFormat.Format32bppRgb:
                 case System.Drawing.Imaging.PixelFormat.Format32bppArgb:
                     {
@@ -107,7 +107,7 @@ namespace Mini
                             bmp.PixelFormat //lock and read as 32-argb
                             );
 
-                        imgBuffer = new byte[bmpData.Stride * bmp.Height];
+                        imgBuffer = new int[bmpData.Width * bmp.Height];
                         System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, imgBuffer, 0, imgBuffer.Length);
                         bmp.UnlockBits(bmpData);
                     }

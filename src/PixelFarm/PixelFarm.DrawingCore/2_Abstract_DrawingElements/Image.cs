@@ -55,16 +55,14 @@ namespace PixelFarm.Drawing
             public ImgBufferRequestArgs(int requestPixelFormat, RequestType reqType)
             {
                 this.RequestType = reqType;
-                this.RequestPixelFormat = requestPixelFormat;
-                this.OutputBuffer = null;
+                this.RequestPixelFormat = requestPixelFormat; 
                 this.IsInvertedImage = true;
+                this.OutputBuffer32 = null;
             }
             public bool IsInvertedImage { get; set; }
             public int RequestPixelFormat { get; private set; }
-            public RequestType RequestType { get; private set; }
-
-            public byte[] OutputBuffer { get; set; }
-
+            public RequestType RequestType { get; private set; } 
+            public int[] OutputBuffer32 { get; set; }
         }
     }
 

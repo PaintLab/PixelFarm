@@ -125,44 +125,10 @@ namespace PixelFarm.Agg
             var destImage = this.DestImage;
             int width = destImage.Width;
             int height = destImage.Height;
-            byte[] buffer = destImage.GetBuffer();
+            int[] buffer = destImage.GetBuffer32();
             switch (destImage.BitDepth)
             {
-                case 8:
-                    {
-                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                        //byte byteColor = color.Red0To255;
-                        //int clipRectLeft = clippingRectInt.Left;
-
-                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
-                        //{
-                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
-                        //    {
-                        //        buffer[bufferOffset] = color.blue;
-                        //        bufferOffset += bytesBetweenPixels;
-                        //    }
-                        //}
-                        throw new NotSupportedException("temp");
-                    }
-                case 24:
-                    {
-                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                        //int clipRectLeft = clippingRectInt.Left;
-                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
-                        //{
-                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
-                        //    {
-                        //        buffer[bufferOffset + 0] = color.blue;
-                        //        buffer[bufferOffset + 1] = color.green;
-                        //        buffer[bufferOffset + 2] = color.red;
-                        //        bufferOffset += bytesBetweenPixels;
-                        //    }
-                        //}
-                        throw new NotSupportedException("temp");
-                    }
-                    break;
+                default: throw new NotSupportedException();
                 case 32:
                     {
                         //------------------------------
@@ -173,7 +139,7 @@ namespace PixelFarm.Agg
                         if (color == Color.White)
                         {
                             //fast cleat with white color
-                            int n = buffer.Length / 4;
+                            int n = buffer.Length;
                             unsafe
                             {
                                 fixed (void* head = &buffer[0])
@@ -190,7 +156,7 @@ namespace PixelFarm.Agg
                         else if (color == Color.Black)
                         {
                             //fast cleat with black color
-                            int n = buffer.Length / 4;
+                            int n = buffer.Length;
                             unsafe
                             {
                                 fixed (void* head = &buffer[0])
@@ -212,7 +178,7 @@ namespace PixelFarm.Agg
 #else
                             uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
 #endif
-                            int n = buffer.Length / 4;
+                            int n = buffer.Length;
                             unsafe
                             {
                                 fixed (void* head = &buffer[0])
@@ -228,9 +194,114 @@ namespace PixelFarm.Agg
                         }
                     }
                     break;
-                default:
-                    throw new NotImplementedException();
+                 
             }
+
+            //            switch (destImage.BitDepth)
+            //            {
+            //                case 8:
+            //                    {
+            //                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
+            //                        //byte byteColor = color.Red0To255;
+            //                        //int clipRectLeft = clippingRectInt.Left;
+
+            //                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+            //                        //{
+            //                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+            //                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
+            //                        //    {
+            //                        //        buffer[bufferOffset] = color.blue;
+            //                        //        bufferOffset += bytesBetweenPixels;
+            //                        //    }
+            //                        //}
+            //                        throw new NotSupportedException("temp");
+            //                    }
+            //                case 24:
+            //                    {
+            //                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
+            //                        //int clipRectLeft = clippingRectInt.Left;
+            //                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
+            //                        //{
+            //                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+            //                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
+            //                        //    {
+            //                        //        buffer[bufferOffset + 0] = color.blue;
+            //                        //        buffer[bufferOffset + 1] = color.green;
+            //                        //        buffer[bufferOffset + 2] = color.red;
+            //                        //        bufferOffset += bytesBetweenPixels;
+            //                        //    }
+            //                        //}
+            //                        throw new NotSupportedException("temp");
+            //                    }
+            //                    break;
+            //                case 32:
+            //                    {
+            //                        //------------------------------
+            //                        //fast clear buffer
+            //                        //skip clipping ****
+            //                        //TODO: reimplement clipping***
+            //                        //------------------------------ 
+            //                        if (color == Color.White)
+            //                        {
+            //                            //fast cleat with white color
+            //                            int n = buffer.Length / 4;
+            //                            unsafe
+            //                            {
+            //                                fixed (void* head = &buffer[0])
+            //                                {
+            //                                    uint* head_i32 = (uint*)head;
+            //                                    for (int i = n - 1; i >= 0; --i)
+            //                                    {
+            //                                        *head_i32 = 0xffffffff; //white (ARGB)
+            //                                        head_i32++;
+            //                                    }
+            //                                }
+            //                            }
+            //                        }
+            //                        else if (color == Color.Black)
+            //                        {
+            //                            //fast cleat with black color
+            //                            int n = buffer.Length / 4;
+            //                            unsafe
+            //                            {
+            //                                fixed (void* head = &buffer[0])
+            //                                {
+            //                                    uint* head_i32 = (uint*)head;
+            //                                    for (int i = n - 1; i >= 0; --i)
+            //                                    {
+            //                                        *head_i32 = 0xff000000; //black (ARGB)
+            //                                        head_i32++;
+            //                                    }
+            //                                }
+            //                            }
+            //                        }
+            //                        else
+            //                        {
+            //                            //other color
+            //#if WIN
+            //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+            //#else
+            //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
+            //#endif
+            //                            int n = buffer.Length / 4;
+            //                            unsafe
+            //                            {
+            //                                fixed (void* head = &buffer[0])
+            //                                {
+            //                                    uint* head_i32 = (uint*)head;
+            //                                    for (int i = n - 1; i >= 0; --i)
+            //                                    {
+            //                                        *head_i32 = colorARGB;
+            //                                        head_i32++;
+            //                                    }
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                    break;
+            //                default:
+            //                    throw new NotImplementedException();
+            //            }
         }
 
 

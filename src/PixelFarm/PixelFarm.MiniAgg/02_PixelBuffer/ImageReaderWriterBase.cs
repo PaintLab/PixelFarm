@@ -35,11 +35,11 @@ namespace PixelFarm.Agg
         int[] yTableArray;
         int[] xTableArray;
         //--------------------------------------------
-        byte[] m_ByteBuffer;
-        // int[] raw_buffre32;
+        //byte[] m_ByteBuffer;
+        int[] raw_buffer32;
         //--------------------------------------------
-        // Pointer to first pixel depending on strideInBytes and image position
-        protected int startBufferPixelAt;
+        // Pointer to first pixel depending on strideInBytes and image position         
+        protected int int32ArrayStartPixelAt;
         int width;  // in pixels
         int height; // in pixels
         int strideInBytes; // Number of bytes per row,  Can be < 0
@@ -54,25 +54,29 @@ namespace PixelFarm.Agg
         //-------------------------------------------- 
         public byte[] GetBuffer()
         {
-            return m_ByteBuffer;
+            throw new NotSupportedException();
+        }
+        public int[] GetBuffer32()
+        {
+            return this.raw_buffer32;
         }
 
         public TempMemPtr GetBufferPtr()
         {
-            return new TempMemPtr(m_ByteBuffer);
+            return new TempMemPtr(raw_buffer32);
         }
 
         protected void SetBufferToNull()
         {
-            this.m_ByteBuffer = null;
+            this.raw_buffer32 = null;
         }
-        protected void SetBuffer(byte[] byteBuffer)
+        protected void SetBuffer(int[] byteBuffer)
         {
-            m_ByteBuffer = byteBuffer;
+            raw_buffer32 = byteBuffer;
         }
 
 
-        public abstract void ReplaceBuffer(byte[] newbuffer);
+        public abstract void ReplaceBuffer(int[] newbuffer);
 
         /// <summary>
         /// attach image buffer and its information to the reader
@@ -82,7 +86,7 @@ namespace PixelFarm.Agg
         /// <param name="bitsPerPixel"></param>
         /// <param name="imgbuffer"></param>
         /// <param name="recieveBlender"></param>
-        protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
+        protected void Attach(int width, int height, int bitsPerPixel, int[] imgbuffer, IPixelBlender recieveBlender)
         {
 
 
@@ -111,7 +115,8 @@ namespace PixelFarm.Agg
             //
             SetRecieveBlender(recieveBlender);
             //
-            this.m_ByteBuffer = imgbuffer;
+            //this.m_ByteBuffer = imgbuffer;
+            this.raw_buffer32 = imgbuffer;
         }
 
 
@@ -294,7 +299,8 @@ namespace PixelFarm.Agg
                     for (int i = height - 1; i >= 0;)
                     {
                         //--------------------
-                        *cur = i * strideInBytes;
+                        //*cur = i * strideInBytes;
+                        *cur = i * width;
                         --i;
                         cur--;
                         //--------------------
@@ -308,7 +314,8 @@ namespace PixelFarm.Agg
                     for (int i = width - 1; i >= 0;)
                     {
                         //--------------------
-                        *cur = i * m_DistanceInBytesBetweenPixelsInclusive;
+                        //*cur = i * m_DistanceInBytesBetweenPixelsInclusive;
+                        *cur = i * 1;
                         --i;
                         cur--;
                         //--------------------
@@ -338,42 +345,69 @@ namespace PixelFarm.Agg
             //check pixel format for an image buffer before use
             //if mBuffer is not 32 bits ARGB => this may not correct
 
-
             int i = 0;
-            byte[] mBuffer = buff.m_ByteBuffer;
+            int[] mBuffer = buff.raw_buffer32;
             for (int y = my; y < h; ++y)
             {
-                int xbufferOffset = buff.GetBufferOffsetXY(0, y);
+                //int xbufferOffset = buff.GetBufferOffsetXY(0, y);
+                int xbuffOffset32 = buff.GetBufferOffsetXY32(0, y);
+
                 for (int x = mx; x < w; ++x)
                 {
                     //A R G B
-                    byte r = mBuffer[xbufferOffset + 2];
-                    byte g = mBuffer[xbufferOffset + 1];
-                    byte b = mBuffer[xbufferOffset];
-                    xbufferOffset += 4;
+
+                    int val = mBuffer[xbuffOffset32];
+
+                    byte r = (byte)((val >> 16) & 0xff);// mBuffer[xbufferOffset + 2];
+                    byte g = (byte)((val >> 8) & 0xff);// mBuffer[xbufferOffset + 1];
+                    byte b = (byte)((val >> 0) & 0xff);// mBuffer[xbufferOffset];
+
+
+                    //xbufferOffset += 4;
+                    xbuffOffset32++;
                     //
                     buffer[i] = b | (g << 8) | (r << 16);
                     i++;
                 }
             }
+            //int i = 0;
+            //byte[] mBuffer = buff.m_ByteBuffer;
+            //for (int y = my; y < h; ++y)
+            //{
+            //    int xbufferOffset = buff.GetBufferOffsetXY(0, y);
+            //    for (int x = mx; x < w; ++x)
+            //    {
+            //        //A R G B
+            //        byte r = mBuffer[xbufferOffset + 2];
+            //        byte g = mBuffer[xbufferOffset + 1];
+            //        byte b = mBuffer[xbufferOffset];
+            //        xbufferOffset += 4;
+            //        //
+            //        buffer[i] = b | (g << 8) | (r << 16);
+            //        i++;
+            //    }
+            //}
         }
         public Color GetPixel(int x, int y)
         {
-            return _recvBlender32.PixelToColorRGBA(m_ByteBuffer, GetBufferOffsetXY(x, y));
+            return _recvBlender32.PixelToColorRGBA(raw_buffer32, GetBufferOffsetXY(x, y) / 4);
         }
         public int GetBufferOffsetXY(int x, int y)
         {
-            return startBufferPixelAt + yTableArray[y] + xTableArray[x];
+            return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
+        }
+        public int GetBufferOffsetXY32(int x, int y)
+        {
+            return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public void SetPixel(int x, int y, Color color)
         {
-            _recvBlender32.CopyPixel(GetBuffer(), GetBufferOffsetXY(x, y), color);
+            _recvBlender32.CopyPixel(raw_buffer32, GetBufferOffsetXY32(x, y), color);
         }
 
         public void CopyHL(int x, int y, int len, Color sourceColor)
         {
-            int bufferOffset = GetBufferOffsetXY(x, y);
-            _recvBlender32.CopyPixels(this.m_ByteBuffer, bufferOffset, sourceColor, len);
+            _recvBlender32.CopyPixels(this.raw_buffer32, GetBufferOffsetXY32(x, y), sourceColor, len);
         }
 
         public void CopyVL(int x, int y, int len, Color sourceColor)
@@ -526,7 +560,30 @@ namespace PixelFarm.Agg
                 int scanWidthBytes = Stride;
                 unchecked
                 {
-                    int bufferOffset = GetBufferOffsetXY(x, y);
+                    //int bufferOffset = GetBufferOffsetXY(x, y);
+                    int bufferOffset32 = GetBufferOffsetXY(x, y) / 4;
+                    //do
+                    //{
+                    //    //byte oldAlpha = sourceColor.A;
+                    //    ////TODO:review here, sourceColor mat not changed
+                    //    //sourceColor.alpha = (byte)(((int)(sourceColor.A) * ((int)(covers[coversIndex++]) + 1)) >> 8); 
+
+                    //    //TODO: review here again
+                    //    Color newcolor = sourceColor.NewFromChangeCoverage(covers[coversIndex++]);
+                    //    if (newcolor.alpha == BASE_MASK)
+                    //    {
+                    //        _recvBlender32.CopyPixel(m_ByteBuffer, bufferOffset, newcolor);
+                    //    }
+                    //    else
+                    //    {
+                    //        _recvBlender32.BlendPixel(m_ByteBuffer, bufferOffset, newcolor);
+                    //    }
+                    //    bufferOffset += scanWidthBytes;
+                    //    //sourceColor.alpha = oldAlpha;
+                    //}
+                    //while (--len != 0); 
+                    //
+                    int actualW = scanWidthBytes / 4;
                     do
                     {
                         //byte oldAlpha = sourceColor.A;
@@ -537,13 +594,14 @@ namespace PixelFarm.Agg
                         Color newcolor = sourceColor.NewFromChangeCoverage(covers[coversIndex++]);
                         if (newcolor.alpha == BASE_MASK)
                         {
-                            _recvBlender32.CopyPixel(m_ByteBuffer, bufferOffset, newcolor);
+                            _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, newcolor);
                         }
                         else
                         {
-                            _recvBlender32.BlendPixel(m_ByteBuffer, bufferOffset, newcolor);
+
+                            _recvBlender32.BlendPixel32(raw_buffer32, bufferOffset32, newcolor);
                         }
-                        bufferOffset += scanWidthBytes;
+                        bufferOffset32 += scanWidthBytes;
                         //sourceColor.alpha = oldAlpha;
                     }
                     while (--len != 0);
@@ -553,52 +611,66 @@ namespace PixelFarm.Agg
 
         public void CopyColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex)
         {
-            int bufferOffset = GetBufferOffsetXY(x, y);
+            int bufferOffset32 = GetBufferOffsetXY(x, y) / 4;
             do
             {
-                _recvBlender32.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]);
+                _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
-                bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                bufferOffset32++;
             }
             while (--len != 0);
         }
 
         public void CopyColorVSpan(int x, int y, int len, Color[] colors, int colorsIndex)
         {
-            int bufferOffset = GetBufferOffsetXY(x, y);
+            //int bufferOffset = GetBufferOffsetXY(x, y);
+            //do
+            //{
+            //    _recvBlender32.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]);
+            //    ++colorsIndex;
+            //    bufferOffset += strideInBytes;
+            //}
+            //while (--len != 0);
+            //
+            int bufferOffset32 = GetBufferOffsetXY(x, y) / 4;
+            int actualW = strideInBytes / 4;
             do
             {
-                _recvBlender32.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]);
+                _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
-                bufferOffset += strideInBytes;
+                bufferOffset32 += actualW;
             }
             while (--len != 0);
         }
 
         public void BlendColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            int bufferOffset = GetBufferOffsetXY(x, y);
-            _recvBlender32.BlendPixels(m_ByteBuffer, bufferOffset, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
+            //int bufferOffset = GetBufferOffsetXY(x, y);
+            int bufferOffset32 = GetBufferOffsetXY(x, y) / 4;
+            //_recvBlender32.BlendPixels(m_ByteBuffer, bufferOffset, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
+            _recvBlender32.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
         }
 
         public void BlendColorVSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            int bufferOffset = GetBufferOffsetXY(x, y);
+            //int bufferOffset = GetBufferOffsetXY(x, y);
+            int bufferOffset32 = GetBufferOffsetXY(x, y) / 4;
             int scanWidthBytes = System.Math.Abs(Stride);
             if (!firstCoverForAll)
             {
                 unsafe
                 {
-                    fixed (byte* head = &m_ByteBuffer[bufferOffset])
+                    fixed (int* head = &raw_buffer32[bufferOffset32])
                     {
                         int* hptr = (int*)head;
                         int actualWidth = scanWidthBytes / 4;
-
                         do
                         {
-                            CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, hptr, bufferOffset, colors[colorsIndex], covers[coversIndex++]);
+                            CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, hptr, bufferOffset32, colors[colorsIndex], covers[coversIndex++]);
 
-                            bufferOffset += actualWidth;
+                            //bufferOffset += actualWidth;
+                            bufferOffset32++;
                             ++colorsIndex;
                         }
                         while (--len != 0);
@@ -612,7 +684,7 @@ namespace PixelFarm.Agg
                 {
                     unsafe
                     {
-                        fixed (byte* destH = &m_ByteBuffer[0])
+                        fixed (int* destH = &raw_buffer32[0])
                         {
                             int* destBuffer = (int*)destH;
                             int actualWidth = scanWidthBytes / 4;
@@ -633,14 +705,14 @@ namespace PixelFarm.Agg
                 {
                     unsafe
                     {
-                        fixed (byte* byteptr = &m_ByteBuffer[0])
+                        fixed (int* byteptr = &raw_buffer32[0])
                         {
                             int* head = (int*)byteptr;
                             int actualWidth = scanWidthBytes / 4;
                             do
                             {
-                                CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, head, bufferOffset, colors[colorsIndex], covers[coversIndex]);
-                                bufferOffset += actualWidth;
+                                CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, head, bufferOffset32, colors[colorsIndex], covers[coversIndex]);
+                                // bufferOffset += actualWidth;
                                 ++colorsIndex;
                             }
                             while (--len != 0);
@@ -796,6 +868,14 @@ namespace PixelFarm.Agg
                 }
             }
         }
+
+        public int[] GetInt32Buffer()
+        {
+            return this.raw_buffer32;
+            //throw new NotImplementedException();
+        }
+
+
         //public void apply_gamma_inv(GammaLookUpTable g)
         //{
         //    throw new System.NotImplementedException();
@@ -833,7 +913,7 @@ namespace PixelFarm.Agg
         public MyImageReaderWriter()
         {
         }
-        public override void ReplaceBuffer(byte[] newbuffer)
+        public override void ReplaceBuffer(int[] newbuffer)
         {
             ActualImage.ReplaceBuffer(actualImage, newbuffer);
         }

@@ -35,8 +35,9 @@ namespace PixelFarm.Agg
         IPixelBlender GetRecieveBlender();
         void SetRecieveBlender(IPixelBlender value);
         byte[] GetBuffer();
+        int[] GetInt32Buffer();
         TempMemPtr GetBufferPtr();
-        void ReplaceBuffer(byte[] newBuffer);
+        void ReplaceBuffer(int[] newBuffer);
 
         Color GetPixel(int x, int y);
         void SetPixel(int x, int y, Color color);
