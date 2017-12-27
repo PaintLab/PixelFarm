@@ -187,6 +187,8 @@ namespace PixelFarm.Agg
                 if ((uint)x < (uint)m_rbuf.Width
                     && (uint)y < (uint)m_rbuf.Height)
                 {
+
+
                     int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
                     byte[] buffer = m_rbuf.GetBuffer();
                     return buffer[bufferIndex];
