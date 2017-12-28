@@ -15,6 +15,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         AggRenderSurface gfx;
         public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
+            :base(destImage.Width,destImage.Height)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
@@ -96,7 +97,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 AggRenderSurface aggsx = p2.RenderSurface;
                 SubImageRW subImg = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
                 //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
-                SubImageRW rasterGamma = new SubImageRW(subImg, new PixelBlenderGammaBGRA(this.GammaValue));
+
+                var gamma = new PixelBlenderBGRA();
+                gamma.GammaValue = 1;
+                gamma.EnableGamma = true;
+                SubImageRW rasterGamma = new SubImageRW(subImg, gamma);
+
+
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(subImg);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);
