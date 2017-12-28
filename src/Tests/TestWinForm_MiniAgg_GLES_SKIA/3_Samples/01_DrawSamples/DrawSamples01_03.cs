@@ -20,10 +20,28 @@ namespace PixelFarm.Agg.Sample_Draw
     {
         public override void Init()
         {
+            UseBitmapExt = false;
         }
 
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
         public override void Draw(Painter p)
         {
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = RenderQualtity.Fast;
+            }
+            else
+            {
+                p.RenderQuality = RenderQualtity.HighQuality;
+            }
+
+
+
 
             p.Clear(Drawing.Color.White);
             p.UseSubPixelRendering = true;
@@ -31,11 +49,30 @@ namespace PixelFarm.Agg.Sample_Draw
             p.FillColor = Color.Black;
             p.CurrentFont = new RequestFont("tahoma", 10);
             p.StrokeColor = Color.Red;
+
             //
-            p.RenderQuality = RenderQualtity.Fast;
+            //---red reference line--
             p.DrawLine(0, 400, 800, 400);
-            p.DrawLine(0, 400, 800, 500);
+            p.DrawLine(0, 400, 800, 500); //test oblique line
             p.DrawString(teststr, 300, 400);
+            //
+            p.DrawRect(0.5, 400, 40, 40);
+            //
+
+            p.FillColor = Color.Yellow;
+            p.StrokeColor = Color.Blue;
+
+            p.FillEllipse(100.5, 400, 40, 60);
+            p.DrawEllipse(50.5, 400, 40, 60);
+
+            //---red reference line--
+            p.StrokeColor = Color.Red;
+            p.DrawLine(0, 500, 800, 500);
+
+            p.StrokeColor = Color.Blue;
+            p.FillColor = Color.Yellow;
+            p.FillRect(0.5, 500, 40, 40);
+
 
         }
     }
@@ -71,8 +108,26 @@ namespace PixelFarm.Agg.Sample_Draw
         {
 
         }
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
         public override void Draw(Painter p)
         {
+
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = RenderQualtity.Fast;
+            }
+            else
+            {
+                p.RenderQuality = RenderQualtity.HighQuality;
+            }
+
+
+
             int width = 800;
             int height = 600;
             //clear the image to white         
