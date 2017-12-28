@@ -527,7 +527,11 @@ namespace PixelFarm.Agg
             VertexSnapIter snapIter = snap.GetVertexSnapIter();
             VertexCmd cmd;
 
-            double latestMoveToX = 0, latestMoveToY = 0;
+            int latestMoveToX = 0, latestMoveToY = 0;
+            int latestX = 0, latestY = 0;
+
+
+            bool closed = false;
 
             _reusablePolygonList.Clear();
 
@@ -543,11 +547,9 @@ namespace PixelFarm.Agg
                                 _reusablePolygonList.Clear();
                             }
 
-                            latestMoveToY = y;
-                            latestMoveToX = x;
-
-                            _reusablePolygonList.Add((int)Math.Round(x));
-                            _reusablePolygonList.Add((int)Math.Round(y));
+                            closed = false;  
+                            _reusablePolygonList.Add(latestMoveToX = latestX = (int)Math.Round(x));
+                            _reusablePolygonList.Add(latestMoveToY = latestY = (int)Math.Round(y));
 
                         }
                         break;
@@ -556,8 +558,8 @@ namespace PixelFarm.Agg
                     case VertexCmd.P3c:
                         {
                             //collect to the polygon
-                            _reusablePolygonList.Add((int)Math.Round(x));
-                            _reusablePolygonList.Add((int)Math.Round(y));
+                            _reusablePolygonList.Add(latestX = (int)Math.Round(x));
+                            _reusablePolygonList.Add(latestY = (int)Math.Round(y));
                         }
                         break;
                     case VertexCmd.Close:
@@ -566,20 +568,35 @@ namespace PixelFarm.Agg
                             if (_reusablePolygonList.Count > 0)
                             {
                                 //flush by draw line
-                                _reusablePolygonList.Add((int)Math.Round(latestMoveToX));
-                                _reusablePolygonList.Add((int)Math.Round(latestMoveToY));
+                                _reusablePolygonList.Add(latestX = latestMoveToX);
+                                _reusablePolygonList.Add(latestY = latestMoveToY);
 
                                 _bxt.FillPolygon(_reusablePolygonList.ToArray(),
                                     this.fillColor.ToARGB());
                             }
 
                             _reusablePolygonList.Clear();
+                            closed = true;
                         }
                         break;
                     default:
                         break;
                 }
-            } 
+            }
+            //---------------
+            if (!closed && (_reusablePolygonList.Count > 0) &&
+               (latestX == latestMoveToX) && (latestY == latestMoveToY))
+            {
+
+                //flush by draw line
+                _reusablePolygonList.Add(latestMoveToX);
+                _reusablePolygonList.Add(latestMoveToY);
+
+                _bxt.FillPolygon(_reusablePolygonList.ToArray(),
+                    this.fillColor.ToARGB());
+
+
+            }
         }
         /// <summary>
         /// fill vertex store, we do NOT store snap
@@ -588,7 +605,7 @@ namespace PixelFarm.Agg
         /// <param name="c"></param>
         public override void Fill(VertexStoreSnap snap)
         {
-            
+
             //BitmapExt
             if (this._renderQuality == RenderQualtity.Fast)
             {

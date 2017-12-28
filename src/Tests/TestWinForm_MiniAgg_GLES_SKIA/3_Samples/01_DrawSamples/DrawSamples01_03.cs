@@ -72,7 +72,7 @@ namespace PixelFarm.Agg.Sample_Draw
             p.StrokeColor = Color.Blue;
             p.FillColor = Color.Yellow;
             p.FillRect(0.5, 500, 40, 40);
-
+            //---red reference line--
 
         }
     }
