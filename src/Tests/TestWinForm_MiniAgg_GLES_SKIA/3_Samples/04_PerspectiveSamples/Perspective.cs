@@ -103,7 +103,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                 if (txBilinear.IsValid)
                 {
                     var v3 = GetFreeVxs();
-                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Path.Vxs, v3),
+                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Vxs, v3),
                         lionShape.Colors,
                         lionShape.PathIndexList,
                         lionShape.NumPaths);
@@ -142,7 +142,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                 if (txPerspective.IsValid)
                 {
                     var v1 = GetFreeVxs();
-                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path.Vxs, v1),
+                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Vxs, v1),
                       lionShape.Colors,
                       lionShape.PathIndexList,
                       lionShape.NumPaths);
