@@ -47,7 +47,7 @@ namespace OpenTkEssTest
             aggPainter = new AggPainter(_aggsx);
 
 
-            DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
+            DrawLion(aggPainter, lionShape, lionShape.Vxs);
             //convert affImage to texture 
             glBmp = DemoHelper.LoadTexture(aggImage);
         }

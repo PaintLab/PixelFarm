@@ -50,6 +50,7 @@ namespace PixelFarm.Agg
             this.stroke = new Stroke(1);//default
             this.scline = aggsx.ScanlinePacked8;
             this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
+            _orientation = DrawBoardOrientation.LeftBottom;
         }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
@@ -469,7 +470,7 @@ namespace PixelFarm.Agg
         /// <param name="spanGen"></param>
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
-            sclineRas.AddPath(vxs);
+            this.sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
         }
         public override void DrawImage(Image img, double left, double top)
@@ -481,8 +482,8 @@ namespace PixelFarm.Agg
                 if (this._orientation == DrawBoardOrientation.LeftTop)
                 {
                     //place left upper corner at specific x y
-                    //this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
-                    this._aggsx.Render(this.sharedImageWriterReader, left, top);
+                    this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
+
                 }
                 else
                 {

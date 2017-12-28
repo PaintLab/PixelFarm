@@ -15,7 +15,6 @@ namespace PixelFarm.Agg
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
-            AutoFlipY = true;
         }
         public bool AutoFlipY
         {
@@ -55,60 +54,29 @@ namespace PixelFarm.Agg
         {
             if (myvxs == null)
             {
-                Affine transform = null;
 
-                if (!AutoFlipY)
-                {
-                    //transform = Affine.NewMatix(
-                    //    AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-                    //    AffinePlan.Scale(spriteScale, spriteScale),
-                    //    AffinePlan.Rotate(angle + Math.PI),
-                    //    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                    //    AffinePlan.Translate(Width / 2, Height / 2)                        
-                    //);
-
-                    transform = Affine.NewMatix(
-                       AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-                       AffinePlan.Scale(spriteScale, spriteScale),
-                       AffinePlan.Rotate(angle + Math.PI),
-                       AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                       AffinePlan.Translate(Width / 2, Height / 2)
-                   );
-                }
-                else
-                {
-                   // transform = Affine.NewMatix(
-                   //   AffinePlan.Scale(1, -1),//flip Y
-                   //   AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y), //move to lion centr
-                   //   AffinePlan.Scale(spriteScale, spriteScale),
-                   //   AffinePlan.Rotate(angle + Math.PI),
-                   //   AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                   //   AffinePlan.Translate(Width / 2, Height / 2)
-                   //);
-                    transform = Affine.NewMatix(
-                     AffinePlan.Scale(1, -1),//flip Y
-                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y), //move to lion centr
-                    // AffinePlan.Scale(spriteScale, spriteScale),
-                    // AffinePlan.Rotate(angle + Math.PI),
-                    // AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                     AffinePlan.Translate(Width / 2, Height / 2)
-                  );
-                }
+                var transform = Affine.NewMatix(
+                        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                        AffinePlan.Scale(spriteScale, spriteScale),
+                        AffinePlan.Rotate(angle + Math.PI),
+                        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                        AffinePlan.Translate(Width / 2, Height / 2)
+                );
                 //create vertextStore again from original path
                 myvxs = new VertexStore();
 
-                transform.TransformToVxs(lionShape.Path.Vxs, myvxs);
+                transform.TransformToVxs(lionShape.Vxs, myvxs);
 
-                //if (AutoFlipY)
-                //{
-                //    //flip the lion
-                //    PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
-                //      PixelFarm.Agg.Transform.AffinePlan.Scale(-1, -1),
-                //      PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
-                //    //
-                //    var v2 = new VertexStore();
-                //    myvxs = transform.TransformToVxs(myvxs, v2);
-                //}
+                if (AutoFlipY)
+                {
+                    //flip the lion
+                    PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
+                      PixelFarm.Agg.Transform.AffinePlan.Scale(-1, -1),
+                      PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
+                    //
+                    var v2 = new VertexStore();
+                    myvxs = transform.TransformToVxs(myvxs, v2);
+                }
 
             }
             //---------------------------------------------------------------------------------------------

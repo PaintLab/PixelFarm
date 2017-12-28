@@ -19,7 +19,6 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         AggLcdDistributionLookupTable lcdLut;
         double primary = 1;
         public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualImage destImage)
-            : base(destImage.Width, destImage.Height)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
@@ -254,11 +253,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 var widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
                 aggsx.UseSubPixelRendering = false;
                 PixelBlenderBGRA normalBlender = new PixelBlenderBGRA();
-                PixelBlenderBGRA gammaBlender = new PixelBlenderBGRA();
-                gammaBlender.GammaValue = GammaValue;
+                PixelBlenderBGRA gammaBlender = new PixelBlenderBGRA(); //TODO: revisit, and fix this again
+                gammaBlender.GammaValue = this.GammaValue;
                 gammaBlender.EnableGamma = true;
-
-
                 var rasterGamma = new SubImageRW(widgetsSubImage, gammaBlender);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
@@ -268,9 +265,6 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 int size_mul = (int)this.PixelSize;
                 CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, aggsx.DestActualImage);
                 rasterizer.Reset();
-
-                //design for internal use only
-
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);

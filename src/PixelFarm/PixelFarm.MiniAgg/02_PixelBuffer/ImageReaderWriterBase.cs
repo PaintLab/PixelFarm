@@ -310,14 +310,7 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
-            if (value is PixelBlenderBGRA)
-            {
-                _recvBlender32 = (PixelBlenderBGRA)value;
-            }
-            else
-            {
-
-            }
+            _recvBlender32 = (PixelBlenderBGRA)value;
         }
 
         protected void SetUpLookupTables()
@@ -433,10 +426,6 @@ namespace PixelFarm.Agg
         }
         public int GetBufferOffsetXY32(int x, int y)
         {
-            if (y >= yTableArray.Length || x >= xTableArray.Length)
-            {
-
-            }
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public void SetPixel(int x, int y, Color color)

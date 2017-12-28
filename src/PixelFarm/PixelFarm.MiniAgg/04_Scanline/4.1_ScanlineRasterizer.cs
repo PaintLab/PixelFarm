@@ -109,13 +109,13 @@ namespace PixelFarm.Agg
 
         int _renderSurfaceW;
         int _renderSurfaceH;
-        bool _flipY;
+        //bool _filpY;
 
         public ScanlineRasterizer(int w, int h)
         {
             this._renderSurfaceW = w;
             this._renderSurfaceH = h;
-            _flipY = true;
+            //_filpY = true;
 
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);
@@ -129,11 +129,7 @@ namespace PixelFarm.Agg
                 m_gammaLut[i] = i;
             }
         }
-        public bool FlipY
-        {
-            get { return _flipY; }
-            set { _flipY = value; }
-        }
+        //public bool FlipY { get { return _filpY; } set { _filpY = value; } }
         //--------------------------------------------------------------------
         public void Reset()
         {
@@ -167,6 +163,7 @@ namespace PixelFarm.Agg
         static int upscale(int v)
         {
             return v << poly_subpix.SHIFT;
+            //return v * poly_subpix.SCALE; 
         }
         ////from vector clipper
         //static int downscale(int v)
@@ -174,11 +171,11 @@ namespace PixelFarm.Agg
         //    return v / (int)poly_subpix.SCALE;
         //}
         //---------------------------------
-        //FillingRule ScanlineFillingRule
-        //{
-        //    get { return this.m_filling_rule; }
-        //    set { this.m_filling_rule = value; }
-        //}
+        FillingRule ScanlineFillingRule
+        {
+            get { return this.m_filling_rule; }
+            set { this.m_filling_rule = value; }
+        }
         //bool AutoClose
         //{
         //    get { return m_auto_close; }
@@ -193,9 +190,10 @@ namespace PixelFarm.Agg
                     gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK);
             }
         }
+
+        //------------------------------------------------------------------------
         public void MoveTo(double x, double y)
         {
-
             if (m_cellAARas.Sorted) { Reset(); }
             if (m_auto_close) { ClosePolygon(); }
 
@@ -204,6 +202,7 @@ namespace PixelFarm.Agg
                 mul_start_y = upscale(y));
             m_status = Status.MoveTo;
         }
+        //------------------------------------------------------------------------
         public void LineTo(double x, double y)
         {
             m_vectorClipper.LineTo(upscale(x), upscale(y));
@@ -237,6 +236,8 @@ namespace PixelFarm.Agg
                     ClosePolygon();
                     break;
                 default:
+                    {
+                    }
                     break;
             }
         }
@@ -303,12 +304,10 @@ namespace PixelFarm.Agg
             //the snap but not store the snap inside rasterizer
             //-----------------------------------------------------
 
+
             double x = 0;
             double y = 0;
             if (m_cellAARas.Sorted) { Reset(); }
-
-
-
             float offsetOrgX = OffsetOriginX;
             float offsetOrgY = OffsetOriginY;
 
@@ -319,75 +318,40 @@ namespace PixelFarm.Agg
             int dbugVertexCount = 0;
 #endif
 
-
             if (ExtendX3ForSubPixelRendering)
             {
 
-                if (_flipY)
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
                 {
-                    //my extension
-                    offsetOrgY = _renderSurfaceH - offsetOrgY;
-                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-                    {
 #if DEBUG
-                        dbugVertexCount++;
+                    dbugVertexCount++;
 #endif
-                        //---------------------------------------------
-                        //NOTE: we scale horizontal 3 times.
-                        //subpixel renderer will shrink it to 1 
-                        //---------------------------------------------
-                        //AddVertex(cmd, (x + offsetOrgX) * 3, _renderSurfaceH - (y + offsetOrgY));
-                        AddVertex(cmd, (x + offsetOrgX) * 3, offsetOrgY - y);
-                    }
-                }
-                else
-                {
-                    //original version
-                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-                    {
-#if DEBUG
-                        dbugVertexCount++;
-#endif
-                        //---------------------------------------------
-                        //NOTE: we scale horizontal 3 times.
-                        //subpixel renderer will shrink it to 1 
-                        //---------------------------------------------
-                        AddVertex(cmd, (x + offsetOrgX) * 3, (y + offsetOrgY));
-                    }
+                    //---------------------------------------------
+                    //NOTE: we scale horizontal 3 times.
+                    //subpixel renderer will shrink it to 1 
+                    //---------------------------------------------
+
+                    AddVertex(cmd, (x + offsetOrgX) * 3, (y + offsetOrgY));
                 }
 
 
             }
             else
             {
-                if (_flipY)
+
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
                 {
-                    //my extension
-                    offsetOrgY = _renderSurfaceH - offsetOrgY;
-                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-                    {
 #if DEBUG
-                        dbugVertexCount++;
+                    dbugVertexCount++;
 #endif
 
-                        //AddVertex(cmd, x + offsetOrgX, _renderSurfaceH - (y + offsetOrgY));
-                        AddVertex(cmd, x + offsetOrgX, offsetOrgY - y);
-                    }
+                    AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
                 }
-                else
-                {
 
-                    //original version
-                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-                    {
-#if DEBUG
-                        dbugVertexCount++;
-#endif
 
-                        AddVertex(cmd, x + offsetOrgX, (y + offsetOrgY));
-                    }
-                }
             }
+
+
 
 
 
@@ -465,13 +429,13 @@ namespace PixelFarm.Agg
 
 
         //--------------------------------------------------------------------
-#if DEBUG
-        void dbugSort()
+        void Sort()
         {
             if (m_auto_close) { ClosePolygon(); }
+
             m_cellAARas.SortCells();
         }
-#endif
+
         //------------------------------------------------------------------------
         internal bool RewindScanlines()
         {

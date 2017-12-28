@@ -42,6 +42,8 @@ namespace PixelFarm.Drawing.Fonts
             this._fontLoader = fontLoader;
 
             _glyphMeshStore = new GlyphMeshStore();
+            _glyphMeshStore.FlipGlyphUpward = true;
+
             //
             _pxScaleEngine = new PixelScaleLayoutEngine();
             _pxScaleEngine.HintedFontStore = _glyphMeshStore;//share _glyphMeshStore with pixel-scale-layout-engine
@@ -275,16 +277,16 @@ namespace PixelFarm.Drawing.Fonts
             _painter.SetOrigin(ox, oy);
         }
 
+
+
         public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
-
-
             Painter painter = this.TargetCanvasPainter;
-
             if (StartDrawOnLeftTop)
             {
-                //offset y down
-                y -= this.FontLineSpacingPx;
+                //version 2
+                //offset y down 
+                y += this.FontLineSpacingPx;
             }
 
 
@@ -314,6 +316,9 @@ namespace PixelFarm.Drawing.Fonts
             float baseY = (int)y;
             if (!hasColorGlyphs)
             {
+
+
+
                 for (int i = startAt; i < endBefore; ++i)
                 {   //-----------------------------------
                     //TODO: review here ***
@@ -324,8 +329,20 @@ namespace PixelFarm.Drawing.Fonts
                     g_x = glyphPlan.ExactX + x;
                     g_y = glyphPlan.ExactY + y;
                     painter.SetOrigin(g_x, g_y);
-                    //-----------------------------------   
+                    //-----------------------------------  
+                    //invert each glyph 
+                    //version 3:
+
                     painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+
+                    //version2; 
+                    //VertexStore vsx = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
+                    //_vxs1 = _invertY.TransformToVxs(vsx, _vxs1);
+                    //painter.Fill(_vxs1);
+                    //_vxs1.Clear();
+
+                    //version1
+                    //painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
             }
             else

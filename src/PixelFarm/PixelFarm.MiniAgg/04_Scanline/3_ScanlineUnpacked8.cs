@@ -126,7 +126,7 @@ namespace PixelFarm.Agg
             minX = min_x;
             last_span_index = 0;
         }
-        public sealed override void AddCell(int x, int cover)
+        public override void AddCell(int x, int cover)
         {
             x -= minX;
             m_covers[x] = (byte)cover;

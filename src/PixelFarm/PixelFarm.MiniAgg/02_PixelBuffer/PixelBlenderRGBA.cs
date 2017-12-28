@@ -127,42 +127,20 @@ namespace PixelFarm.Agg.Imaging
         //straight.B = premultiplied.B  * ((1/straight.A) * 255);
         //straight.A = premultiplied.A;
 
-        GammaLookUpTable m_gamma;
-        float _gammaValue;
         bool _enableGamma;
-        public PixelBlenderBGRA()
-        {
-
-        }
-
-        //static Dictionary<float, GammaLookUpTable> gammaTablePool = new Dictionary<float, GammaLookUpTable>();
-        //public PixelBlenderGammaBGRA(float gammaValue)
-        //{
-        //    //TODO: review caching here
-        //    GammaLookUpTable found;
-        //    if (!gammaTablePool.TryGetValue(gammaValue, out found))
-        //    {
-        //        found = new GammaLookUpTable(gammaValue);
-        //        gammaTablePool.Add(gammaValue, found);
-        //    }
-
-        //    this.m_gamma = found;
-        //}
-
+        float _gammaValue;
+        public PixelBlenderBGRA() { }
         public bool EnableGamma
         {
             get { return _enableGamma; }
             set
             {
-                _enableGamma = value;
-                if (value)
+
+                if (value != _enableGamma)
                 {
-                    //update gamma
-                    if (m_gamma == null)
-                    {
-                        m_gamma = new GammaLookUpTable(_gammaValue);
-                    }
+
                 }
+                this._enableGamma = value;
             }
         }
         public float GammaValue
@@ -171,18 +149,10 @@ namespace PixelFarm.Agg.Imaging
             set
             {
                 _gammaValue = value;
-                if (value != _gammaValue)
-                {
-                    //some changed
-                    if (_enableGamma)
-                    {
-                        m_gamma = new GammaLookUpTable(_gammaValue);
-                    }
-                }
-
+                //TODO: 
+                //get new gamma table
             }
         }
-
         public void BlendPixel32(int[] buffer, int arrayOffset, Color sourceColor)
         {
             unsafe

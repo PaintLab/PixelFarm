@@ -205,13 +205,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
-            AggRenderSurface aggsx = new AggRenderSurface(glyphImg);
-            AggPainter painter = new AggPainter(aggsx);
+            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
+            AggPainter painter = new AggPainter(glyph2d);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f * 3;
             int x = 10, y = 10;
-           // painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
+            painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
             int lineLen = 4;
 
 
@@ -247,8 +247,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
-            AggRenderSurface aggsx = new AggRenderSurface(glyphImg);
-            AggPainter painter = new AggPainter(aggsx);
+            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
+            AggPainter painter = new AggPainter(glyph2d);
             //
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f;

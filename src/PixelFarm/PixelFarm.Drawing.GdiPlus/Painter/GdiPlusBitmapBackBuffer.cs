@@ -79,17 +79,9 @@ namespace PixelFarm.Agg.Imaging
                 this.width = width;
                 this.height = height;
 
-                //if (bitDepth != 32)
-                //{
-                //    throw new NotImplementedException("Don't support this bit depth yet.");
-                //}
-                //else
-                //{
-                //    actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
                 this.actualImage = actualImage;
-                nativeWin32Dc = new Win32.NativeWin32MemoryDc(width, height, true);
-                //    return Graphics2D.CreateFromImage(actualImage);
-                //}
+                nativeWin32Dc = new Win32.NativeWin32MemoryDc(width, height, false);
+
                 return;
             }
             throw new NotSupportedException();

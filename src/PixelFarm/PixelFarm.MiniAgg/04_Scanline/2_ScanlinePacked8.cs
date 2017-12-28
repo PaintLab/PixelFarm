@@ -49,7 +49,7 @@ namespace PixelFarm.Agg
         {
         }
 
-        public sealed override void ResetSpans(int min_x, int max_x)
+        public override void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 3;
             if (max_len > m_spans.Length)
@@ -63,7 +63,7 @@ namespace PixelFarm.Agg
             last_span_index = 0;
             m_spans[last_span_index].len = 0;
         }
-        public sealed override void AddCell(int x, int cover)
+        public override void AddCell(int x, int cover)
         {
             m_covers[m_cover_index] = (byte)cover;
             if (x == last_x + 1 && m_spans[last_span_index].len > 0)
@@ -80,7 +80,7 @@ namespace PixelFarm.Agg
             last_x = x;
             m_cover_index++; //make it ready for next add
         }
-        public sealed override void AddSpan(int x, int len, int cover)
+        public override void AddSpan(int x, int len, int cover)
         {
             int backupCover = cover;
             if (x == last_x + 1
@@ -101,7 +101,7 @@ namespace PixelFarm.Agg
             }
             last_x = x + len - 1;
         }
-        public sealed override void ResetSpans()
+        public override void ResetSpans()
         {
             last_x = 0x7FFFFFF0;
             last_span_index = 0;

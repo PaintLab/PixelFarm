@@ -1411,12 +1411,8 @@ namespace PixelFarm.Agg
 
         ScanlineSubPixelRasterizer scSubPixRas = new ScanlineSubPixelRasterizer();
         ArrayList<Color> tempSpanColors = new ArrayList<Color>();
-        int _destHeight;
-        int _destWidth;
-        public ScanlineRasToDestBitmapRenderer(int destW, int destH)
+        public ScanlineRasToDestBitmapRenderer()
         {
-            this._destWidth = destW;
-            this._destHeight = destH;
         }
         public ScanlineRenderMode ScanlineRenderMode
         {
@@ -1490,12 +1486,10 @@ namespace PixelFarm.Agg
             }
 
             Color[] colorArray = tempSpanColors.Array;
-
-
             while (sclineRas.SweepScanline(scline))
             {
                 //render single scanline 
-                int y = scline.Y; 
+                int y = scline.Y;
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
                 for (int i = 1; i <= num_spans; ++i)
@@ -1533,11 +1527,6 @@ namespace PixelFarm.Agg
     //----------------------------
     public class CustomScanlineRasToDestBitmapRenderer : ScanlineRasToDestBitmapRenderer
     {
-        public CustomScanlineRasToDestBitmapRenderer(int w, int h)
-            : base(w, h)
-        {
-
-        }
     }
 
 

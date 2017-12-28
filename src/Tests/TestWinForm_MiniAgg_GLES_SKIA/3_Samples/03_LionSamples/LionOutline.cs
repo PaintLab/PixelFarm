@@ -137,7 +137,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 Drawing.Color[] colors = lionShape.Colors;
                 //graphics2D.UseSubPixelRendering = true; 
                 var vxs = GetFreeVxs();
-                affTx.TransformToVxs(lionShape.Path.Vxs, vxs);
+                affTx.TransformToVxs(lionShape.Vxs, vxs);
                 p.StrokeWidth = 1;
                 for (int i = 0; i < j; ++i)
                 {
@@ -169,7 +169,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 //Stroke stroke = new Stroke(strokeWidth);
                 //stroke.LineJoin = LineJoin.Round;
                 var vxs = GetFreeVxs();
-                affTx.TransformToVxs(lionShape.Path.Vxs, vxs);
+                affTx.TransformToVxs(lionShape.Vxs, vxs);
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
@@ -194,7 +194,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 rasterizer.RoundCap = true;
                 //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
                 var vxs = GetFreeVxs();
-                affTx.TransformToVxs(lionShape.Path.Vxs, vxs);// trans.DoTransformToNewVxStorage();
+                affTx.TransformToVxs(lionShape.Vxs, vxs);// trans.DoTransformToNewVxStorage();
                 int j = lionShape.NumPaths;
                 for (int i = 0; i < j; ++i)
                 {

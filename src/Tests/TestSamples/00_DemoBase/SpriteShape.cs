@@ -16,18 +16,21 @@ namespace PixelFarm.Agg
         int numPaths = 0;
         RectD boundingRect;
         Vector2 center;
+
+        VertexStore _lionVxs;
         public SpriteShape()
         {
         }
 
-        public PathWriter Path
+
+        public VertexStore Vxs
         {
             get
             {
-                return path;
+                return _lionVxs;
+
             }
         }
-
         public int NumPaths
         {
             get
@@ -71,9 +74,20 @@ namespace PixelFarm.Agg
         public void ParseLion()
         {
             numPaths = PixelFarm.Agg.LionDataStore.LoadLionData(path, colors, pathIndexList);
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(path.Vxs, pathIndexList, numPaths, out boundingRect);
+            _lionVxs = path.Vxs;
+            PixelFarm.Agg.BoundingRect.GetBoundingRect(_lionVxs, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
+            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0; 
+            
+            ////since lion is bottom-up
+            ////we invert it
+            //Transform.Affine aff = Transform.Affine.NewMatix(
+            //    new Transform.AffinePlan(Transform.AffineMatrixCommand.Scale, 1, -1));
+            //VertexStore newvxs = new VertexStore();
+            //_lionVxs = aff.TransformToVxs(_lionVxs, newvxs);
+
+
+
         }
         public static void UnsafeDirectSetData(SpriteShape lion,
             int numPaths,

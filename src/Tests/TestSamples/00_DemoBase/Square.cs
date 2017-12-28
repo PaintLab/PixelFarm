@@ -21,7 +21,6 @@ namespace PixelFarm.Agg
             IImageReaderWriter destImage, Color color,
             double x, double y)
         {
-            //design for internal use only
             ras.Reset();
             ras.MoveTo(x * m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size);
