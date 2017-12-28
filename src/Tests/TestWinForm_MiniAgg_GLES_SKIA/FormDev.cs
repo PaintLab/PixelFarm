@@ -188,60 +188,60 @@ namespace Mini
             //--------------
 #if DEBUG
 
-            //test01
-            var lionShape = new PixelFarm.Agg.SpriteShape();
-            lionShape.ParseLion();
-            //test path serialize to binary stream
-            System.Diagnostics.Debugger.Break();
-            using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Create))
-            {
-                var writer = new System.IO.BinaryWriter(fs);
-                //1. all coords and commands
-                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteToStream(
-                    writer,
-                    lionShape.Path);
-                //2. colors
-                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteColorsToStream(
-                   writer, lionShape.Colors
-                   );
-                //---------------------------------------
-                //3. num paths, & path index 
-                int npath = lionShape.NumPaths;
-                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WritePathIndexListToStream(
-                  writer, lionShape.PathIndexList,
-                  npath
-                  );
-                writer.Close();
-                fs.Close();
-            }
-            //--------------
-            //test load path from binary stream
-            using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
-            {
-                var reader = new System.IO.BinaryReader(fs);
-                var lionShape2 = new PixelFarm.Agg.SpriteShape();
-                PixelFarm.Agg.VertexSource.PathWriter path;
-                PixelFarm.Drawing.Color[] colors;
-                int[] pathIndexList;
-                //1. path and command
-                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
-                  reader, out path
-                  );
-                //2. colors
-                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadColorDataFromStream(
-                  reader, out colors
-                  );
-                //3. path indice
-                int npaths;
-                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathIndexListFromStream(
-                  reader, out npaths, out pathIndexList
-                 );
-                PixelFarm.Agg.SpriteShape.UnsafeDirectSetData(
-                     lionShape2,
-                     npaths,
-                     path, colors, pathIndexList);
-                fs.Close();
-            }
+            ////test01
+            //var lionShape = new PixelFarm.Agg.SpriteShape();
+            //lionShape.ParseLion();
+            ////test path serialize to binary stream
+            //System.Diagnostics.Debugger.Break();
+            //using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Create))
+            //{
+            //    var writer = new System.IO.BinaryWriter(fs);
+            //    //1. all coords and commands
+            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteToStream(
+            //        writer,
+            //        lionShape.Path);
+            //    //2. colors
+            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteColorsToStream(
+            //       writer, lionShape.Colors
+            //       );
+            //    //---------------------------------------
+            //    //3. num paths, & path index 
+            //    int npath = lionShape.NumPaths;
+            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WritePathIndexListToStream(
+            //      writer, lionShape.PathIndexList,
+            //      npath
+            //      );
+            //    writer.Close();
+            //    fs.Close();
+            //}
+            ////--------------
+            ////test load path from binary stream
+            //using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
+            //{
+            //    var reader = new System.IO.BinaryReader(fs);
+            //    var lionShape2 = new PixelFarm.Agg.SpriteShape();
+            //    PixelFarm.Agg.VertexSource.PathWriter path;
+            //    PixelFarm.Drawing.Color[] colors;
+            //    int[] pathIndexList;
+            //    //1. path and command
+            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
+            //      reader, out path
+            //      );
+            //    //2. colors
+            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadColorDataFromStream(
+            //      reader, out colors
+            //      );
+            //    //3. path indice
+            //    int npaths;
+            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathIndexListFromStream(
+            //      reader, out npaths, out pathIndexList
+            //     );
+            //    PixelFarm.Agg.SpriteShape.UnsafeDirectSetData(
+            //         lionShape2,
+            //         npaths,
+            //         path, colors, pathIndexList);
+            //    fs.Close();
+            //}
             //------------
 #endif
         }

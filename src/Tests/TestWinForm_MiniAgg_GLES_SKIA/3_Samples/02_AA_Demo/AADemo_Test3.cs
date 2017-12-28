@@ -243,17 +243,24 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
             if (p is PixelFarm.Agg.AggPainter)
             {
+
+
                 var p2 = (PixelFarm.Agg.AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
+                ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
+
+
                 var widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
                 aggsx.UseSubPixelRendering = false;
-                IPixelBlender NormalBlender = new PixelBlenderBGRA();
-                IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
-                var rasterGamma = new SubImageRW(widgetsSubImage, GammaBlender);
+                PixelBlenderBGRA normalBlender = new PixelBlenderBGRA();
+                PixelBlenderBGRA gammaBlender = new PixelBlenderBGRA(); //TODO: revisit, and fix this again
+                gammaBlender.GammaValue = this.GammaValue;
+                gammaBlender.EnableGamma = true;
+                var rasterGamma = new SubImageRW(widgetsSubImage, gammaBlender);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);
-                var rasterizer = aggsx.ScanlineRasterizer;
+
                 ScanlineUnpacked8 sl = new ScanlineUnpacked8();
                 int size_mul = (int)this.PixelSize;
                 CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, aggsx.DestActualImage);

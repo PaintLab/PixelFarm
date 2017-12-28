@@ -26,7 +26,7 @@ namespace Mini.WinForms
             {
                 g.TranslateTransform(offsetX, offSetY);
                 int j = spriteShape.NumPaths;
-                var myvxs = spriteShape.Path.Vxs;
+                var myvxs = spriteShape.Vxs;
                 int[] pathList = spriteShape.PathIndexList;
                 PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
                 for (int i = 0; i < j; ++i)
@@ -77,7 +77,7 @@ namespace Mini.WinForms
             if (!validBoundingRect)
             {
                 var spriteShape = lionFill.GetSpriteShape();
-                PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(spriteShape.Path.Vxs), ref boundingRect);
+                PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(spriteShape.Vxs), ref boundingRect);
                 validBoundingRect = true;
             }
             if (this.boundingRect.Contains(x, y))
@@ -85,7 +85,7 @@ namespace Mini.WinForms
                 //fine tune
                 //hit test ***
                 var spriteShape = lionFill.GetSpriteShape();
-                return VertexHitTester.IsPointInVxs(spriteShape.Path.Vxs, x, y);
+                return VertexHitTester.IsPointInVxs(spriteShape.Vxs, x, y);
             }
             return false;
         }

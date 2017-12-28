@@ -266,7 +266,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 //var lionVxs = lionShape.Path.Vxs;// transform.TransformToVxs(lionShape.Path.Vxs);
 
                 var lionVxs = new VertexStore();
-                transform.TransformToVxs(lionShape.Path.Vxs, lionVxs);
+                transform.TransformToVxs(lionShape.Vxs, lionVxs);
                 for (int i = 0; i < n; ++i)
                 {
                     VxsHelper.FillVxsSnap(lionGfx,
@@ -386,7 +386,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             ////trans.DoTransform(vxlist); 
 
             var tmpVxs1 = new VertexStore();
-            transform.TransformToVxs(lionShape.Path.Vxs, tmpVxs1);
+            transform.TransformToVxs(lionShape.Vxs, tmpVxs1);
 
             sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,

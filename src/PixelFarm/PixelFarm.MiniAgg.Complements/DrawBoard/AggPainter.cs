@@ -50,6 +50,7 @@ namespace PixelFarm.Agg
             this.stroke = new Stroke(1);//default
             this.scline = aggsx.ScanlinePacked8;
             this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
+            _orientation = DrawBoardOrientation.LeftBottom;
         }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation

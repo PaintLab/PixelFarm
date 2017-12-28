@@ -22,6 +22,8 @@ namespace PixelFarm.Agg.Samples
         {
             p.Clear(Drawing.Color.White);
             p.FillColor = Drawing.Color.Black;
+            p.DrawRect(10, 10, 30, 30);
+
             foreach (var brushPath in this.myBrushPathList)
             {
                 if (brushPath.Vxs != null)
