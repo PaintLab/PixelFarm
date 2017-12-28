@@ -270,6 +270,9 @@ namespace PixelFarm.Agg
         }
         public void Render(IImageReaderWriter source, double destX, double destY)
         {
+
+
+
             int inScaleX = 1;
             int inScaleY = 1;
             int angleRadians = 0;
@@ -310,7 +313,7 @@ namespace PixelFarm.Agg
 #endif
             bool isScale = (scaleX != 1 || scaleY != 1);
             bool isRotated = true;
-            if (Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
+            if (angleRadians != 0 && Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
             {
                 isRotated = false;
                 angleRadians = 0;

@@ -547,7 +547,7 @@ namespace PixelFarm.Agg
                                 _reusablePolygonList.Clear();
                             }
 
-                            closed = false;  
+                            closed = false;
                             _reusablePolygonList.Add(latestMoveToX = latestX = (int)Math.Round(x));
                             _reusablePolygonList.Add(latestMoveToY = latestY = (int)Math.Round(y));
 
@@ -688,10 +688,25 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, double left, double top)
         {
+
+
+
             //check image caching system
             if (img is ActualImage)
             {
-                this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+
+                ActualImage actualImg = (ActualImage)img;
+                if (this._renderQuality == RenderQualtity.Fast)
+                {
+                    //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
+                    //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
+                    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+                    this._bxt.CopyBlit(left, top, srcBmp);
+                    return;
+                }
+
+
+                this.sharedImageWriterReader.ReloadImage(actualImg);
                 if (this._orientation == DrawBoardOrientation.LeftTop)
                 {
                     //place left upper corner at specific x y
