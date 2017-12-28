@@ -389,7 +389,7 @@ namespace PixelFarm.Agg
                       ColorInt.FromArgb(this.fillColor.ToARGB()));
                 return;
             }
-             
+
             //Agg
             //---------------------------------------------------------- 
             if (this._orientation == DrawBoardOrientation.LeftBottom)
@@ -526,18 +526,9 @@ namespace PixelFarm.Agg
         /// <param name="vxs"></param>
         public override void Fill(VertexStore vxs)
         {
-
-
-
             sclineRas.AddPath(vxs);
-            try
-            {
-                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
-            }
-            catch (Exception ex)
-            {
+            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
 
-            }
         }
         public override bool UseSubPixelRendering
         {
