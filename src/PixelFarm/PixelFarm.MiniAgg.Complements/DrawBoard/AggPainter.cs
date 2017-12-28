@@ -1,6 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.DrawingBuffer;
@@ -508,7 +509,77 @@ namespace PixelFarm.Agg
                     _textPrinter.ChangeFont(this.currentFont);
                 }
             }
+        }
 
+
+        List<int> _reusablePolygonList = new List<int>();
+        /// <summary>
+        /// fill with BitmapBufferExtension lib
+        /// </summary>
+        void FillWithBxt(VertexStoreSnap snap)
+        {
+            //transate the vxs/snap to command
+            double x = 0;
+            double y = 0;
+            double offsetOrgX = this.OriginX;
+            double offsetOrgY = this.OriginY;
+
+            VertexSnapIter snapIter = snap.GetVertexSnapIter();
+            VertexCmd cmd;
+
+            double latestMoveToX = 0, latestMoveToY = 0;
+
+            _reusablePolygonList.Clear();
+
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+            {
+                switch (cmd)
+                {
+                    case VertexCmd.MoveTo:
+                        {
+                            if (_reusablePolygonList.Count > 0)
+                            {
+                                //no drawline
+                                _reusablePolygonList.Clear();
+                            }
+
+                            latestMoveToY = y;
+                            latestMoveToX = x;
+
+                            _reusablePolygonList.Add((int)Math.Round(x));
+                            _reusablePolygonList.Add((int)Math.Round(y));
+
+                        }
+                        break;
+                    case VertexCmd.LineTo:
+                    case VertexCmd.P2c:
+                    case VertexCmd.P3c:
+                        {
+                            //collect to the polygon
+                            _reusablePolygonList.Add((int)Math.Round(x));
+                            _reusablePolygonList.Add((int)Math.Round(y));
+                        }
+                        break;
+                    case VertexCmd.Close:
+                    case VertexCmd.CloseAndEndFigure:
+                        {
+                            if (_reusablePolygonList.Count > 0)
+                            {
+                                //flush by draw line
+                                _reusablePolygonList.Add((int)Math.Round(latestMoveToX));
+                                _reusablePolygonList.Add((int)Math.Round(latestMoveToY));
+
+                                _bxt.FillPolygon(_reusablePolygonList.ToArray(),
+                                    this.fillColor.ToARGB());
+                            }
+
+                            _reusablePolygonList.Clear();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } 
         }
         /// <summary>
         /// fill vertex store, we do NOT store snap
@@ -517,6 +588,15 @@ namespace PixelFarm.Agg
         /// <param name="c"></param>
         public override void Fill(VertexStoreSnap snap)
         {
+            
+            //BitmapExt
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                FillWithBxt(snap);
+                return;
+            }
+
+            //Agg
             sclineRas.AddPath(snap);
             sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
         }
@@ -526,6 +606,14 @@ namespace PixelFarm.Agg
         /// <param name="vxs"></param>
         public override void Fill(VertexStore vxs)
         {
+            //
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                FillWithBxt(new VertexStoreSnap(vxs));
+                return;
+            }
+
+            //
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
 

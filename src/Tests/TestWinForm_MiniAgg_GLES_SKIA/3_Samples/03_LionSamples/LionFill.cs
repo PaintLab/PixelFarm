@@ -50,13 +50,28 @@ namespace PixelFarm.Agg.Samples
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
+
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = Drawing.RenderQualtity.Fast;
+            }
+            else
+            {
+                p.RenderQuality = Drawing.RenderQualtity.HighQuality;
+            }
+
             lionFill.Draw(p);
         }
         public override void MouseDrag(int x, int y)
         {
             lionFill.Move(x, y);
         }
-
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
         [DemoConfig(MaxValue = 20)]
         public int SharpRadius
         {

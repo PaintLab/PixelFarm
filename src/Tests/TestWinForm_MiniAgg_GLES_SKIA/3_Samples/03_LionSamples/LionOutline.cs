@@ -88,6 +88,15 @@ namespace PixelFarm.Agg.Sample_LionOutline
             }
         }
 
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get { return lionFill.UseBitmapExt; }
+            set
+            {
+                lionFill.UseBitmapExt = value;
+            }
+        }
 
     }
     //--------------------------------------------------
@@ -116,8 +125,20 @@ namespace PixelFarm.Agg.Sample_LionOutline
             get;
             set;
         }
+
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
+
+        Stroke stroke1 = new Stroke(1);
+
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
+
+
             int strokeWidth = 1;
             int width = p.Width;
             int height = p.Height;
@@ -150,13 +171,48 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 return; //**
             }
 
+
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = Drawing.RenderQualtity.Fast;
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                Drawing.Color[] colors = lionShape.Colors;
+
+                p.Clear(Drawing.Color.White);
+
+                var vxs = GetFreeVxs();
+                var vxs2 = stroke1.MakeVxs(affTx.TransformToVxs(lionShape.Vxs, vxs), GetFreeVxs());
+
+                p.StrokeWidth = 1;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    p.StrokeColor = colors[i];
+                    p.Draw(new PixelFarm.Drawing.VertexStoreSnap(vxs2, pathList[i]));
+
+                }
+                //not agg   
+                Release(ref vxs);
+                Release(ref vxs2);
+                return; //**
+
+            }
+            else
+            {
+                p.RenderQuality = Drawing.RenderQualtity.HighQuality;
+            }
+
+
+
+
             //-----------------------
-            AggRenderSurface aggRdsf = p1.RenderSurface;
+            AggRenderSurface aggsx = p1.RenderSurface;
             //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             //int width = widgetsSubImage.Width;
             //int height = widgetsSubImage.Height; 
 
-            SubImageRW widgetsSubImage = ImageHelper.CreateSubImgRW(aggRdsf.DestImage, aggRdsf.GetClippingRect());
+            SubImageRW widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
             SubImageRW clippedSubImage = new SubImageRW(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
@@ -164,17 +220,17 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
             if (RenderAsScanline)
             {
-                var rasterizer = aggRdsf.ScanlineRasterizer;
+                var rasterizer = aggsx.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
                 //Stroke stroke = new Stroke(strokeWidth);
                 //stroke.LineJoin = LineJoin.Round;
                 var vxs = GetFreeVxs();
                 affTx.TransformToVxs(lionShape.Vxs, vxs);
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
-                    aggRdsf.ScanlinePacked8,
+                    aggsx.ScanlinePacked8,
                     vxs,
                     lionShape.Colors,
                     lionShape.PathIndexList,
