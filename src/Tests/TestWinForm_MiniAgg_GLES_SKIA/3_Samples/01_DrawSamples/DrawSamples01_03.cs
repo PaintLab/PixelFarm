@@ -18,9 +18,17 @@ namespace PixelFarm.Agg.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : DemoBase
     {
+        ActualImage lionImg;
         public override void Init()
         {
             UseBitmapExt = false;
+
+            string imgFileName = "d:\\WImageTest\\lion1.png";
+            if (System.IO.File.Exists(imgFileName))
+            {
+                lionImg = DemoHelper.LoadImage(imgFileName);
+            }
+
         }
 
         [DemoConfig]
@@ -74,6 +82,8 @@ namespace PixelFarm.Agg.Sample_Draw
             p.FillRect(0.5, 500, 40, 40);
             //---red reference line--
 
+
+            p.DrawImage(lionImg, 0, 0);
         }
     }
 
@@ -104,6 +114,7 @@ namespace PixelFarm.Agg.Sample_Draw
     {
 
         Stroke stroke = new Stroke(1);
+
         public override void Init()
         {
 
@@ -168,6 +179,14 @@ namespace PixelFarm.Agg.Sample_Draw
             littlePoly.LineTo(50, 50);
             p.FillColor = Drawing.Color.Blue;
             p.Fill(littlePoly.MakeVertexSnap());
+
+
+            //----
+            //test draw img
+
+
+
+            //            
             //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
             // draw some text  
