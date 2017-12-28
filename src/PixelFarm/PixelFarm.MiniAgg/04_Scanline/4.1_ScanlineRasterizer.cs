@@ -106,8 +106,17 @@ namespace PixelFarm.Agg
             Closed
         }
 
-        public ScanlineRasterizer()
+
+        int _renderSurfaceW;
+        int _renderSurfaceH;
+        //bool _filpY;
+
+        public ScanlineRasterizer(int w, int h)
         {
+            this._renderSurfaceW = w;
+            this._renderSurfaceH = h;
+            //_filpY = true;
+
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);
             m_filling_rule = FillingRule.NonZero;
@@ -120,6 +129,7 @@ namespace PixelFarm.Agg
                 m_gammaLut[i] = i;
             }
         }
+        //public bool FlipY { get { return _filpY; } set { _filpY = value; } }
         //--------------------------------------------------------------------
         public void Reset()
         {
@@ -294,6 +304,7 @@ namespace PixelFarm.Agg
             //the snap but not store the snap inside rasterizer
             //-----------------------------------------------------
 
+
             double x = 0;
             double y = 0;
             if (m_cellAARas.Sorted) { Reset(); }
@@ -309,6 +320,7 @@ namespace PixelFarm.Agg
 
             if (ExtendX3ForSubPixelRendering)
             {
+
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
                 {
 #if DEBUG
@@ -318,11 +330,15 @@ namespace PixelFarm.Agg
                     //NOTE: we scale horizontal 3 times.
                     //subpixel renderer will shrink it to 1 
                     //---------------------------------------------
-                    AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
+
+                    AddVertex(cmd, (x + offsetOrgX) * 3, (y + offsetOrgY));
                 }
+
+
             }
             else
             {
+
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
                 {
 #if DEBUG
@@ -331,7 +347,12 @@ namespace PixelFarm.Agg
 
                     AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
                 }
+
+
             }
+
+
+
 
 
             //            if (snap.VxsHasMoreThanOnePart)

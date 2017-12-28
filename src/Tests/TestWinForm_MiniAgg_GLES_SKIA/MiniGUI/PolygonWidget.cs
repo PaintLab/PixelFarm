@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using System; 
+using System;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.UI
 {
@@ -81,7 +81,7 @@ namespace PixelFarm.Agg.UI
         public VertexStore MakeVxs(VertexStore vxs)
         {
             m_vertex = 0;
-            for (;;)
+            for (; ; )
             {
                 double x, y;
                 var cmd = this.GetNextVertex(out x, out y);
@@ -265,12 +265,15 @@ namespace PixelFarm.Agg.UI
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)
         {
+
             bool ret = false;
             m_node = -1;
             m_edge = -1;
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.InverseTransform(ref x, ref y);
+
+
+            //ParentToChildTransform.InverseTransform(ref x, ref y);
             //ParentToChildTransform.Transform(ref x, ref y);
             for (int i = 0; i < m_num_points; i++)
             {
@@ -333,7 +336,7 @@ namespace PixelFarm.Agg.UI
             double dy;
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.InverseTransform(ref x, ref y);
+            //  ParentToChildTransform.InverseTransform(ref x, ref y);
             //ParentToChildTransform.Transform(ref x, ref y);
             if (m_node == (int)(m_num_points))
             {
@@ -506,7 +509,7 @@ namespace PixelFarm.Agg.UI
         }
     };
     //----------------------------------------------------------polygon_ctrl
-    //template<class ColorT> 
+
     public class PolygonEditWidget : PolygonControl
     {
         Color m_color;

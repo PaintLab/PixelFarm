@@ -36,7 +36,7 @@ namespace OpenTkEssTest
                  PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
             lionVxs = new VertexStore();
-            aff.TransformToVxs(lionShape.Path.Vxs, lionVxs);
+            aff.TransformToVxs(lionShape.Vxs, lionVxs);
             //convert lion vxs to renderVx
 
             ////-------------

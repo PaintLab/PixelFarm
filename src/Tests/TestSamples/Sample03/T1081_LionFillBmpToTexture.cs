@@ -22,7 +22,7 @@ namespace OpenTkEssTest
         //---------------------------
 
         ActualImage aggImage;
-        AggRenderSurface imgGfx2d;
+        AggRenderSurface _aggsx;
         AggPainter aggPainter;
 
         //---------------------------
@@ -43,11 +43,11 @@ namespace OpenTkEssTest
             RectD lionBounds = lionShape.Bounds;
             //-------------
             aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
-            imgGfx2d = new AggRenderSurface(aggImage);
-            aggPainter = new AggPainter(imgGfx2d);
+            _aggsx = new AggRenderSurface(aggImage);
+            aggPainter = new AggPainter(_aggsx);
 
 
-            DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
+            DrawLion(aggPainter, lionShape, lionShape.Vxs);
             //convert affImage to texture 
             glBmp = DemoHelper.LoadTexture(aggImage);
         }

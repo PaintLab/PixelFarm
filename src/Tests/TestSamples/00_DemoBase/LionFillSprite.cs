@@ -65,7 +65,7 @@ namespace PixelFarm.Agg
                 //create vertextStore again from original path
                 myvxs = new VertexStore();
 
-                transform.TransformToVxs(lionShape.Path.Vxs, myvxs);
+                transform.TransformToVxs(lionShape.Vxs, myvxs);
 
                 if (AutoFlipY)
                 {

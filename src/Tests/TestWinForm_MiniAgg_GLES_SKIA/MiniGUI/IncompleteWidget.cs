@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.UI
     {
         // this should probably some type of dirty rects with the current invalid set stored.
 
-        Transform.Affine parentToChildTransform = Affine.IdentityMatrix;
+        Transform.Affine parentToChildTransform = Affine.IdentityMatrix; //start with identiy matrix
         RectD localBounds;
         public virtual Vector2 OriginRelativeParent
         {
