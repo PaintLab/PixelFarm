@@ -211,7 +211,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f * 3;
             int x = 10, y = 10;
-            painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
+           // painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
             int lineLen = 4;
 
 

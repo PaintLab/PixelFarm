@@ -377,7 +377,7 @@ namespace PixelFarm.Agg
                     imgBoundsPath,
                     destX, destY);
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
+                Affine sourceRectTransform =   destRectTransform.CreateInvert();
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)

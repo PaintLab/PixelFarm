@@ -469,7 +469,7 @@ namespace PixelFarm.Agg
         /// <param name="spanGen"></param>
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
-            this.sclineRas.AddPath(vxs);
+            sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
         }
         public override void DrawImage(Image img, double left, double top)
@@ -481,8 +481,8 @@ namespace PixelFarm.Agg
                 if (this._orientation == DrawBoardOrientation.LeftTop)
                 {
                     //place left upper corner at specific x y
-                    this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
-
+                    //this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
+                    this._aggsx.Render(this.sharedImageWriterReader, left, top);
                 }
                 else
                 {
