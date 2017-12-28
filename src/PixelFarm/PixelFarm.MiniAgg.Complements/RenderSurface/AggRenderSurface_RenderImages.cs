@@ -312,12 +312,17 @@ namespace PixelFarm.Agg
 	        }
 #endif
             bool isScale = (scaleX != 1 || scaleY != 1);
-            bool isRotated = true;
-            if (angleRadians != 0 && Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
+            bool isRotated = false;
+            if (angleRadians != 0 && Math.Abs(angleRadians) >= (0.1 * MathHelper.Tau / 360))
             {
-                isRotated = false;
-                angleRadians = 0;
+                isRotated = true;
             }
+            else
+            {
+                angleRadians = 0;//reset very small angle to 0
+
+            }
+
 
             //bool IsMipped = false;
             //double ox, oy;
