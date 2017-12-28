@@ -1495,8 +1495,7 @@ namespace PixelFarm.Agg
             while (sclineRas.SweepScanline(scline))
             {
                 //render single scanline 
-                int y = scline.Y;
-                y = _destHeight - y;
+                int y = scline.Y; 
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
                 for (int i = 1; i <= num_spans; ++i)
