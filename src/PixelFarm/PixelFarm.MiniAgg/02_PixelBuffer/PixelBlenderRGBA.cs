@@ -127,6 +127,32 @@ namespace PixelFarm.Agg.Imaging
         //straight.B = premultiplied.B  * ((1/straight.A) * 255);
         //straight.A = premultiplied.A;
 
+        bool _enableGamma;
+        float _gammaValue;
+        public PixelBlenderBGRA() { }
+        public bool EnableGamma
+        {
+            get { return _enableGamma; }
+            set
+            {
+
+                if (value != _enableGamma)
+                {
+
+                }
+                this._enableGamma = value;
+            }
+        }
+        public float GammaValue
+        {
+            get { return _gammaValue; }
+            set
+            {
+                _gammaValue = value;
+                //TODO: 
+                //get new gamma table
+            }
+        }
         public void BlendPixel32(int[] buffer, int arrayOffset, Color sourceColor)
         {
             unsafe
@@ -949,155 +975,155 @@ namespace PixelFarm.Agg.Imaging
 
 
     }
-    public sealed class PixelBlenderGammaBGRA : PixelBlenderBGRABase, IPixelBlender
-        {
-            GammaLookUpTable m_gamma;
-            static Dictionary<float, GammaLookUpTable> gammaTablePool = new Dictionary<float, GammaLookUpTable>();
-            public PixelBlenderGammaBGRA(float gammaValue)
-            {
-                //TODO: review caching here
-                GammaLookUpTable found;
-                if (!gammaTablePool.TryGetValue(gammaValue, out found))
-                {
-                    found = new GammaLookUpTable(gammaValue);
-                    gammaTablePool.Add(gammaValue, found);
-                }
+    //public sealed class PixelBlenderGammaBGRA : PixelBlenderBGRABase, IPixelBlender
+    //{
+    //    GammaLookUpTable m_gamma;
+    //    static Dictionary<float, GammaLookUpTable> gammaTablePool = new Dictionary<float, GammaLookUpTable>();
+    //    public PixelBlenderGammaBGRA(float gammaValue)
+    //    {
+    //        //TODO: review caching here
+    //        GammaLookUpTable found;
+    //        if (!gammaTablePool.TryGetValue(gammaValue, out found))
+    //        {
+    //            found = new GammaLookUpTable(gammaValue);
+    //            gammaTablePool.Add(gammaValue, found);
+    //        }
 
-                this.m_gamma = found;
-            }
-            public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
-            {
-                return new Color(
-                    buffer[bufferOffset + CO.A],
-                    buffer[bufferOffset + CO.R],
-                    buffer[bufferOffset + CO.G],
-                    buffer[bufferOffset + CO.B]
-                    );
-            }
+    //        this.m_gamma = found;
+    //    }
+    //    public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
+    //    {
+    //        return new Color(
+    //            buffer[bufferOffset + CO.A],
+    //            buffer[bufferOffset + CO.R],
+    //            buffer[bufferOffset + CO.G],
+    //            buffer[bufferOffset + CO.B]
+    //            );
+    //    }
 
-            public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
-            {
-                do
-                {
-                    buffer[bufferOffset + CO.R] = m_gamma.inv(sourceColor.red);
-                    buffer[bufferOffset + CO.G] = m_gamma.inv(sourceColor.green);
-                    buffer[bufferOffset + CO.B] = m_gamma.inv(sourceColor.blue);
-                    buffer[bufferOffset + CO.A] = m_gamma.inv(sourceColor.alpha);
-                    bufferOffset += 4;
-                }
-                while (--count != 0);
-            }
+    //    public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
+    //    {
+    //        do
+    //        {
+    //            buffer[bufferOffset + CO.R] = m_gamma.inv(sourceColor.red);
+    //            buffer[bufferOffset + CO.G] = m_gamma.inv(sourceColor.green);
+    //            buffer[bufferOffset + CO.B] = m_gamma.inv(sourceColor.blue);
+    //            buffer[bufferOffset + CO.A] = m_gamma.inv(sourceColor.alpha);
+    //            bufferOffset += 4;
+    //        }
+    //        while (--count != 0);
+    //    }
 
-            public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
-            {
-                buffer[bufferOffset + CO.R] = m_gamma.inv(sourceColor.red);
-                buffer[bufferOffset + CO.G] = m_gamma.inv(sourceColor.green);
-                buffer[bufferOffset + CO.B] = m_gamma.inv(sourceColor.blue);
-                buffer[bufferOffset + CO.A] = m_gamma.inv(sourceColor.alpha);
-            }
-            public void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor)
-            {
-                unchecked
-                {
-                    byte r = buffer[bufferOffset + CO.R];
-                    byte g = buffer[bufferOffset + CO.G];
-                    byte b = buffer[bufferOffset + CO.B];
-                    byte a = buffer[bufferOffset + CO.A];
-                    buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
-                    buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
-                    buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
-                    buffer[CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorEx.BASE_SHIFT));
-                }
-            }
+    //    public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
+    //    {
+    //        buffer[bufferOffset + CO.R] = m_gamma.inv(sourceColor.red);
+    //        buffer[bufferOffset + CO.G] = m_gamma.inv(sourceColor.green);
+    //        buffer[bufferOffset + CO.B] = m_gamma.inv(sourceColor.blue);
+    //        buffer[bufferOffset + CO.A] = m_gamma.inv(sourceColor.alpha);
+    //    }
+    //    public void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor)
+    //    {
+    //        unchecked
+    //        {
+    //            byte r = buffer[bufferOffset + CO.R];
+    //            byte g = buffer[bufferOffset + CO.G];
+    //            byte b = buffer[bufferOffset + CO.B];
+    //            byte a = buffer[bufferOffset + CO.A];
+    //            buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+    //            buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+    //            buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+    //            buffer[CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorEx.BASE_SHIFT));
+    //        }
+    //    }
 
-            public void BlendPixels(byte[] buffer, int bufferOffset,
-                Color[] sourceColors, int sourceColorsOffset,
-                byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count)
-            {
-                throw new NotImplementedException();
-            }
-        }
+    //    public void BlendPixels(byte[] buffer, int bufferOffset,
+    //        Color[] sourceColors, int sourceColorsOffset,
+    //        byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
 
 #if DEBUG
-        public sealed class dbugPixelBlenderPolyColorPreMultBGRA : PixelBlenderBGRABase, IPixelBlender
+    public sealed class dbugPixelBlenderPolyColorPreMultBGRA : PixelBlenderBGRABase, IPixelBlender
+    {
+
+        Color polyColor;
+        public dbugPixelBlenderPolyColorPreMultBGRA(Color polyColor)
         {
+            this.polyColor = polyColor;
+        }
 
-            Color polyColor;
-            public dbugPixelBlenderPolyColorPreMultBGRA(Color polyColor)
-            {
-                this.polyColor = polyColor;
-            }
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
+        {
+            return new Color(buffer[bufferOffset + CO.A], buffer[bufferOffset + CO.R], buffer[bufferOffset + CO.G], buffer[bufferOffset + CO.B]);
+        }
 
-            public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
-            {
-                return new Color(buffer[bufferOffset + CO.A], buffer[bufferOffset + CO.R], buffer[bufferOffset + CO.G], buffer[bufferOffset + CO.B]);
-            }
-
-            public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
-            {
-                for (int i = 0; i < count; i++)
-                {
-                    buffer[bufferOffset + CO.R] = sourceColor.red;
-                    buffer[bufferOffset + CO.G] = sourceColor.green;
-                    buffer[bufferOffset + CO.B] = sourceColor.blue;
-                    buffer[bufferOffset + CO.A] = sourceColor.alpha;
-                    bufferOffset += 4;
-                }
-            }
-            public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
+        public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
+        {
+            for (int i = 0; i < count; i++)
             {
                 buffer[bufferOffset + CO.R] = sourceColor.red;
                 buffer[bufferOffset + CO.G] = sourceColor.green;
                 buffer[bufferOffset + CO.B] = sourceColor.blue;
                 buffer[bufferOffset + CO.A] = sourceColor.alpha;
+                bufferOffset += 4;
             }
+        }
+        public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
+        {
+            buffer[bufferOffset + CO.R] = sourceColor.red;
+            buffer[bufferOffset + CO.G] = sourceColor.green;
+            buffer[bufferOffset + CO.B] = sourceColor.blue;
+            buffer[bufferOffset + CO.A] = sourceColor.alpha;
+        }
 
-            public void BlendPixel(byte[] pDestBuffer, int bufferOffset, Color sourceColor)
+        public void BlendPixel(byte[] pDestBuffer, int bufferOffset, Color sourceColor)
+        {
+            //unsafe
+            {
+                int sourceA = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.alpha + 255) >> 8]);
+                int oneOverAlpha = BASE_MASK - sourceA;
+                unchecked
+                {
+                    byte sourceR = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.red + 255) >> 8];
+                    byte sourceG = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8];
+                    byte sourceB = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8];
+                    byte destR = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceR];
+                    byte destG = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceG];
+                    byte destB = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceB];
+                    // TODO: calculated the correct dest alpha
+                    //int destA = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
+
+                    pDestBuffer[bufferOffset + CO.R] = destR;
+                    pDestBuffer[bufferOffset + CO.G] = destG;
+                    pDestBuffer[bufferOffset + CO.B] = destB;
+                    //pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
+                }
+            }
+        }
+
+        public void BlendPixels(byte[] pDestBuffer, int bufferOffset,
+            Color[] sourceColors, int sourceColorsOffset,
+            byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count)
+        {
+            if (firstCoverForAll)
             {
                 //unsafe
                 {
-                    int sourceA = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.alpha + 255) >> 8]);
-                    int oneOverAlpha = BASE_MASK - sourceA;
-                    unchecked
+                    if (sourceCovers[sourceCoversOffset] == 255)
                     {
-                        byte sourceR = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.red + 255) >> 8];
-                        byte sourceG = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8];
-                        byte sourceB = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8];
-                        byte destR = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceR];
-                        byte destG = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceG];
-                        byte destB = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceB];
-                        // TODO: calculated the correct dest alpha
-                        //int destA = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
-
-                        pDestBuffer[bufferOffset + CO.R] = destR;
-                        pDestBuffer[bufferOffset + CO.G] = destG;
-                        pDestBuffer[bufferOffset + CO.B] = destB;
-                        //pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
-                    }
-                }
-            }
-
-            public void BlendPixels(byte[] pDestBuffer, int bufferOffset,
-                Color[] sourceColors, int sourceColorsOffset,
-                byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count)
-            {
-                if (firstCoverForAll)
-                {
-                    //unsafe
-                    {
-                        if (sourceCovers[sourceCoversOffset] == 255)
+                        for (int i = 0; i < count; i++)
                         {
-                            for (int i = 0; i < count; i++)
-                            {
-                                BlendPixel(pDestBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
-                                sourceColorsOffset++;
-                                bufferOffset += 4;
-                            }
+                            BlendPixel(pDestBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
+                            sourceColorsOffset++;
+                            bufferOffset += 4;
                         }
-                        else
-                        {
-                            throw new NotImplementedException("need to consider the polyColor");
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("need to consider the polyColor");
 #if false
                         for (int i = 0; i < count; i++)
                         {
@@ -1133,12 +1159,12 @@ namespace PixelFarm.Agg.Imaging
                             bufferOffset += 4;
                         }
 #endif
-                        }
                     }
                 }
-                else
-                {
-                    throw new NotImplementedException("need to consider the polyColor");
+            }
+            else
+            {
+                throw new NotImplementedException("need to consider the polyColor");
 #if false
                 for (int i = 0; i < count; i++)
                 {
@@ -1171,9 +1197,9 @@ namespace PixelFarm.Agg.Imaging
                     bufferOffset += 4;
                 }
 #endif
-                }
             }
         }
+    }
 #endif //DEBUG
 }
 
