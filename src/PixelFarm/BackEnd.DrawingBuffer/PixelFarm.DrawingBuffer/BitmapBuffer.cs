@@ -5,7 +5,57 @@ using System;
 namespace PixelFarm.DrawingBuffer
 {
 
+    public enum AffineMatrixCommand : byte
+    {
+        None,
+        Scale,
+        Skew,
+        Rotate,
+        Translate,
+        Invert
+    }
 
+    public struct AffinePlan
+    {
+        public readonly AffineMatrixCommand cmd;
+        public readonly double x;
+        public readonly double y;
+        public AffinePlan(AffineMatrixCommand cmd, double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+            this.cmd = cmd;
+        }
+        public AffinePlan(AffineMatrixCommand cmd, double x)
+        {
+            this.x = x;
+            this.y = 0;
+            this.cmd = cmd;
+        }
+
+
+        //----------------------------------------------------------------------------
+        public static AffinePlan Translate(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Translate, x, y);
+        }
+        public static AffinePlan Rotate(double radAngle)
+        {
+            return new AffinePlan(AffineMatrixCommand.Rotate, radAngle);
+        }
+        public static AffinePlan Skew(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Skew, x, y);
+        }
+        public static AffinePlan Scale(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Scale, x, y);
+        }
+        public static AffinePlan Scale(double both)
+        {
+            return new AffinePlan(AffineMatrixCommand.Scale, both, both);
+        }
+    }
     public sealed class Affine
     {
         //agg's Affine
@@ -24,7 +74,97 @@ namespace PixelFarm.DrawingBuffer
             tx = copyFrom.tx;
             ty = copyFrom.ty;
         }
+        internal Affine(AffinePlan[] creationPlans)
+        {
+            //-----------------------
+            //start with identity matrix
 
+            sx = 1;
+            shy = 0;
+            shx = 0;
+            sy = 1;
+            tx = 0;
+            ty = 0;
+            //-----------------------
+            int j = creationPlans.Length;
+            for (int i = 0; i < j; ++i)
+            {
+                AffinePlan plan = creationPlans[i];
+                switch (plan.cmd)
+                {
+                    case AffineMatrixCommand.None:
+                        break;
+                    case AffineMatrixCommand.Rotate:
+                        {
+                            double angleRad = plan.x;
+                            double ca = Math.Cos(angleRad);
+                            double sa = Math.Sin(angleRad);
+                            double t0 = sx * ca - shy * sa;
+                            double t2 = shx * ca - sy * sa;
+                            double t4 = tx * ca - ty * sa;
+                            shy = sx * sa + shy * ca;
+                            sy = shx * sa + sy * ca;
+                            ty = tx * sa + ty * ca;
+                            sx = t0;
+                            shx = t2;
+                            tx = t4;
+                        }
+                        break;
+                    case AffineMatrixCommand.Scale:
+                        {
+                            double mm0 = plan.x;
+                            double mm3 = plan.y;
+                            sx *= mm0;
+                            shx *= mm0;
+                            tx *= mm0;
+                            shy *= mm3;
+                            sy *= mm3;
+                            ty *= mm3;
+                        }
+                        break;
+                    case AffineMatrixCommand.Translate:
+                        {
+                            tx += plan.x;
+                            ty += plan.y;
+                        }
+                        break;
+                    case AffineMatrixCommand.Skew:
+                        {
+                            double m_sx = 1;
+                            double m_sy = 1;
+                            double m_shx = Math.Tan(plan.x);
+                            double m_shy = Math.Tan(plan.y);
+                            double t0 = sx * m_sx + shy * m_shx;
+                            double t2 = shx * m_sx + sy * m_shx;
+                            double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
+                            shy = sx * m_shy + shy * m_sy;
+                            sy = shx * m_shy + sy * m_sy;
+                            ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
+                            sx = t0;
+                            shx = t2;
+                            tx = t4;
+                        }
+                        break;
+                    case AffineMatrixCommand.Invert:
+                        {
+                            double d = CalculateDeterminantReciprocal();
+                            double t0 = sy * d;
+                            sy = sx * d;
+                            shy = -shy * d;
+                            shx = -shx * d;
+                            double t4 = -tx * t0 - ty * shx;
+                            ty = -tx * shy - ty * sy;
+                            sx = t0;
+                            tx = t4;
+                        }
+                        break;
+                    default:
+                        {
+                            throw new NotSupportedException();
+                        }
+                }
+            }
+        }
         // Custom matrix. Usually used in derived classes
         private Affine(double v0_sx, double v1_shy,
                        double v2_shx, double v3_sy,
@@ -64,6 +204,92 @@ namespace PixelFarm.DrawingBuffer
             tx = a.tx;
             ty = a.ty;
             MultiplyMatrix(ref sx, ref sy, ref shx, ref shy, ref tx, ref ty, b);
+        }
+        private Affine(Affine copyFrom, AffinePlan creationPlan)
+        {
+            //-----------------------
+            sx = copyFrom.sx;
+            shy = copyFrom.shy;
+            shx = copyFrom.shx;
+            sy = copyFrom.sy;
+            tx = copyFrom.tx;
+            ty = copyFrom.ty;
+            //-----------------------
+            switch (creationPlan.cmd)
+            {
+                default:
+                    {
+                        throw new NotSupportedException();
+                    }
+                case AffineMatrixCommand.None:
+                    break;
+                case AffineMatrixCommand.Rotate:
+                    {
+                        double angleRad = creationPlan.x;
+                        double ca = Math.Cos(angleRad);
+                        double sa = Math.Sin(angleRad);
+                        double t0 = sx * ca - shy * sa;
+                        double t2 = shx * ca - sy * sa;
+                        double t4 = tx * ca - ty * sa;
+                        shy = sx * sa + shy * ca;
+                        sy = shx * sa + sy * ca;
+                        ty = tx * sa + ty * ca;
+                        sx = t0;
+                        shx = t2;
+                        tx = t4;
+                    }
+                    break;
+                case AffineMatrixCommand.Scale:
+                    {
+                        double mm0 = creationPlan.x;
+                        double mm3 = creationPlan.y;
+                        sx *= mm0;
+                        shx *= mm0;
+                        tx *= mm0;
+                        shy *= mm3;
+                        sy *= mm3;
+                        ty *= mm3;
+                    }
+                    break;
+                case AffineMatrixCommand.Skew:
+                    {
+                        double m_sx = 1;
+                        double m_sy = 1;
+                        double m_shx = Math.Tan(creationPlan.x);
+                        double m_shy = Math.Tan(creationPlan.y);
+                        double t0 = sx * m_sx + shy * m_shx;
+                        double t2 = shx * m_sx + sy * m_shx;
+                        double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
+                        shy = sx * m_shy + shy * m_sy;
+                        sy = shx * m_shy + sy * m_sy;
+                        ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
+                        sx = t0;
+                        shx = t2;
+                        tx = t4;
+                        //return new Affine(1.0, Math.Tan(y), Math.Tan(x), 1.0, 0.0, 0.0);
+
+                    }
+                    break;
+                case AffineMatrixCommand.Translate:
+                    {
+                        tx += creationPlan.x;
+                        ty += creationPlan.y;
+                    }
+                    break;
+                case AffineMatrixCommand.Invert:
+                    {
+                        double d = CalculateDeterminantReciprocal();
+                        double t0 = sy * d;
+                        sy = sx * d;
+                        shy = -shy * d;
+                        shx = -shx * d;
+                        double t4 = -tx * t0 - ty * shx;
+                        ty = -tx * shy - ty * sy;
+                        sx = t0;
+                        tx = t4;
+                    }
+                    break;
+            }
         }
 
 
@@ -152,7 +378,13 @@ namespace PixelFarm.DrawingBuffer
             tx = t4;
         }
 
-
+        // Invert matrix. Do not try to invert degenerate matrices, 
+        // there's no check for validity. If you set scale to 0 and 
+        // then try to invert matrix, expect unpredictable result.
+        public Affine CreateInvert()
+        {
+            return new Affine(this, new AffinePlan(AffineMatrixCommand.Invert, 0));
+        }
         //-------------------------------------------- Transformations
         // Direct transformation of x and y
         public void Transform(ref double x, ref double y)
@@ -236,6 +468,10 @@ namespace PixelFarm.DrawingBuffer
     {
         MatrixTransform _inverseVersion;
         Affine affine;
+        public MatrixTransform(AffinePlan[] affPlans)
+        {
+            affine = new Affine(affPlans);
+        }
         public MatrixTransform(Affine affine)
         {
             this.affine = affine;
@@ -253,8 +489,7 @@ namespace PixelFarm.DrawingBuffer
             {
                 if (_inverseVersion == null)
                 {
-                    Affine invertedAffine = Affine.NewScaling(1, -1);
-                    return _inverseVersion = new MatrixTransform(affine * invertedAffine);
+                    return _inverseVersion = new MatrixTransform(affine.CreateInvert());
                 }
                 return _inverseVersion;
             }
