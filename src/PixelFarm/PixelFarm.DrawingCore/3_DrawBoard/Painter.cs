@@ -64,24 +64,19 @@ namespace PixelFarm.Drawing
         public abstract void FillEllipse(double left, double top, double width, double height);
         public abstract void DrawEllipse(double left, double top, double width, double height);
         //
-
-        //public abstract void DrawBezierCurve(
-        //    float startX, float startY, float endX, float endY,
-        //    float controlX1, float controlY1,
-        //    float controlX2, float controlY2);
-        ////------------------------------------------------------- 
-
+ 
+        /// <summary>
+        /// draw image, not scale
+        /// </summary>
+        /// <param name="actualImage"></param>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
         public abstract void DrawImage(Image actualImage, double left, double top);
         public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
 
-        //public abstract void DoFilterBlurStack(RectInt area, int r);
-        //public abstract void DoFilterBlurRecursive(RectInt area, int r);
-        //public abstract void DoFilter(RectInt area, int r);
-        //-------------------------------------------------------
-
-
+      
         ////////////////////////////////////////////////////////////////////////////
         //vertext store/snap/rendervx
         public abstract void Fill(VertexStoreSnap snap);
