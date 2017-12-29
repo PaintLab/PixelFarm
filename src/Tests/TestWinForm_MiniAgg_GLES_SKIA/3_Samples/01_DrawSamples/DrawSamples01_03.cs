@@ -87,13 +87,15 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.DrawImage(lionImg, 0, 0); //reference at 0,0 
             p.DrawImage(lionImg, 300, 0);
 
+            int _imgW = lionImg.Width;
+            int _imgH = lionImg.Height;
             p.DrawImage(lionImg,
               //move to center of the image (hotspot x,y)
-              AffinePlan.Translate(-lionImg.Width / 2, -lionImg.Height / 2),              
+              AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
               AffinePlan.Rotate(AggMath.deg2rad(45)),
-              AffinePlan.Scale(1.5, 1.5),
-              //move back 
-              AffinePlan.Translate(lionImg.Width / 2, lionImg.Height / 2));
+              AffinePlan.Scale(0.2, 0.2),
+              //move to target
+              AffinePlan.Translate(400, 200));
         }
     }
 
