@@ -714,8 +714,8 @@ namespace PixelFarm.Agg
 
                 this.sharedImageWriterReader.ReloadImage(actualImg);
 
-                bool useSubPix = UseSubPixelLcdEffect; //save, restore later...
-
+                //save, restore later... 
+                bool useSubPix = UseSubPixelLcdEffect;
                 //before render an image we turn off vxs subpixel rendering
                 this.UseSubPixelLcdEffect = false;
                 _aggsx.UseSubPixelRendering = false;
@@ -732,8 +732,9 @@ namespace PixelFarm.Agg
                     this._aggsx.Render(this.sharedImageWriterReader, left, top);
                 }
 
+                //restore...
                 this.UseSubPixelLcdEffect = useSubPix;
-                _aggsx.UseSubPixelRendering = useSubPix; //restore
+                _aggsx.UseSubPixelRendering = useSubPix;
 
             }
             else
@@ -747,6 +748,12 @@ namespace PixelFarm.Agg
             if (img is ActualImage)
             {
                 this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+
+                bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
+                //before render an image we turn off vxs subpixel rendering
+                this.UseSubPixelLcdEffect = false;
+                _aggsx.UseSubPixelRendering = false;
+
                 try
                 {
                     this._aggsx.Render(sharedImageWriterReader, affinePlans);
@@ -755,6 +762,11 @@ namespace PixelFarm.Agg
                 {
 
                 }
+
+
+                //restore...
+                this.UseSubPixelLcdEffect = useSubPix;
+                _aggsx.UseSubPixelRendering = useSubPix;
             }
             else
             {

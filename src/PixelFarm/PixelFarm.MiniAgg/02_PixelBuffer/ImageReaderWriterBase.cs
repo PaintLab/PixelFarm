@@ -426,22 +426,27 @@ namespace PixelFarm.Agg
             if (y >= yTableArray.Length ||
                 x >= xTableArray.Length)
             {
-                throw new NotSupportedException();
+                return -1;
+                //throw new NotSupportedException();
             }
 #endif
 
             return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) * 4;
 
         }
-        public int GetBufferOffsetXY32(int x, int y)
+        public int GetBufferOffsetXY32Check(int x, int y)
         {
-#if DEBUG
+ 
             if (y >= yTableArray.Length ||
                 x >= xTableArray.Length)
             {
-                throw new NotSupportedException();
+                return -1;
             }
-#endif
+ 
+            return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
+        }
+        public int GetBufferOffsetXY32(int x, int y)
+        {
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public void SetPixel(int x, int y, Color color)
@@ -694,7 +699,7 @@ namespace PixelFarm.Agg
         public void BlendColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
 
-            int bufferOffset32 = GetBufferOffsetXY32(x, y);
+            int bufferOffset32 = GetBufferOffsetXY32Check(x, y);
             if (bufferOffset32 > -1)
             {
                 _recvBlender32.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
