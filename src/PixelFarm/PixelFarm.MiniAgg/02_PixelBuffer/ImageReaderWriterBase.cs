@@ -421,6 +421,15 @@ namespace PixelFarm.Agg
         }
         public int GetByteBufferOffsetXY(int x, int y)
         {
+
+#if DEBUG
+            //if (y >= yTableArray.Length ||
+            //    x >= xTableArray.Length)
+            //{
+
+            //}
+#endif
+
             return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) * 4;
 
         }
