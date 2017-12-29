@@ -128,10 +128,12 @@ namespace PixelFarm.Agg
                     case Drawing.SmoothingMode.AntiAlias:
                         //TODO: review here
                         //anti alias != lcd technique 
+                        this.RenderQuality = RenderQualtity.HighQuality;
                         _aggsx.UseSubPixelRendering = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
                     default:
+                        this.RenderQuality = RenderQualtity.Fast;
                         _aggsx.UseSubPixelRendering = false;
                         break;
                 }
@@ -643,7 +645,7 @@ namespace PixelFarm.Agg
         {
             get
             {
-                return this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect;                 
+                return this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect;
             }
             set
             {
