@@ -694,84 +694,90 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, double left, double top)
         {
-
-
-
-            //check image caching system
-            if (img is ActualImage)
+            ActualImage actualImg = img as ActualImage;
+            if (actualImg == null)
             {
+                //? TODO
+                return;
+            }
+            //check image caching system 
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
+                //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+                this._bxt.CopyBlit(left, top, srcBmp);
+                return;
+            }
 
-                ActualImage actualImg = (ActualImage)img;
-                if (this._renderQuality == RenderQualtity.Fast)
-                {
-                    //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
-                    //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
-                    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
-                    this._bxt.CopyBlit(left, top, srcBmp);
-                    return;
-                }
+            this.sharedImageWriterReader.ReloadImage(actualImg);
 
+            //save, restore later... 
+            bool useSubPix = UseSubPixelLcdEffect;
+            //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+            _aggsx.UseSubPixelRendering = false;
 
-                this.sharedImageWriterReader.ReloadImage(actualImg);
-
-                //save, restore later... 
-                bool useSubPix = UseSubPixelLcdEffect;
-                //before render an image we turn off vxs subpixel rendering
-                this.UseSubPixelLcdEffect = false;
-                _aggsx.UseSubPixelRendering = false;
-
-                if (this._orientation == DrawBoardOrientation.LeftTop)
-                {
-                    //place left upper corner at specific x y                    
-                    this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
-                }
-                else
-                {
-                    //left-bottom as original
-                    //place left-lower of the img at specific (x,y)
-                    this._aggsx.Render(this.sharedImageWriterReader, left, top);
-                }
-
-                //restore...
-                this.UseSubPixelLcdEffect = useSubPix;
-                _aggsx.UseSubPixelRendering = useSubPix;
-
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //place left upper corner at specific x y                    
+                this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
             }
             else
             {
-                //TODO:
+                //left-bottom as original
+                //place left-lower of the img at specific (x,y)
+                this._aggsx.Render(this.sharedImageWriterReader, left, top);
             }
+
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+            _aggsx.UseSubPixelRendering = useSubPix;
+
+
 
         }
         public override void DrawImage(Image img, params Transform.AffinePlan[] affinePlans)
         {
-            if (img is ActualImage)
+            ActualImage actualImg = img as ActualImage;
+            if (actualImg == null)
             {
-                this.sharedImageWriterReader.ReloadImage((ActualImage)img);
-
-                bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
-                //before render an image we turn off vxs subpixel rendering
-                this.UseSubPixelLcdEffect = false;
-                _aggsx.UseSubPixelRendering = false;
-
-                try
-                {
-                    this._aggsx.Render(sharedImageWriterReader, affinePlans);
-                }
-                catch (Exception ex1)
-                {
-
-                }
-
-
-                //restore...
-                this.UseSubPixelLcdEffect = useSubPix;
-                _aggsx.UseSubPixelRendering = useSubPix;
+                //? TODO
+                return;
             }
-            else
-            {
-                //TODO:
-            }
+
+            //if (this._renderQuality == RenderQualtity.Fast)
+            //{
+            //    //todo, review here again
+            //    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+            //    //this._bxt.CopyBlit(left, top, srcBmp); 
+            //    DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
+            //        DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
+            //        DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
+            //        //DrawingBuffer.AffinePlan.Translate(100,100)
+            //    });
+            //    //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
+            //    this._bxt.BlitRender(srcBmp, false, 1, mx);
+            //    return;
+            //}
+
+
+            this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+
+            bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
+                                                   //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+            _aggsx.UseSubPixelRendering = false;
+
+
+            this._aggsx.Render(sharedImageWriterReader, affinePlans);
+
+
+
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+            _aggsx.UseSubPixelRendering = useSubPix;
+
         }
 
         public override void ApplyFilter(ImageFilter imgFilter)
