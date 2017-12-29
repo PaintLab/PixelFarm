@@ -270,6 +270,9 @@ namespace PixelFarm.Agg
         }
         public void Render(IImageReaderWriter source, double destX, double destY)
         {
+
+
+
             int inScaleX = 1;
             int inScaleY = 1;
             int angleRadians = 0;
@@ -309,12 +312,17 @@ namespace PixelFarm.Agg
 	        }
 #endif
             bool isScale = (scaleX != 1 || scaleY != 1);
-            bool isRotated = true;
-            if (Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
+            bool isRotated = false;
+            if (angleRadians != 0 && Math.Abs(angleRadians) >= (0.1 * MathHelper.Tau / 360))
             {
-                isRotated = false;
-                angleRadians = 0;
+                isRotated = true;
             }
+            else
+            {
+                angleRadians = 0;//reset very small angle to 0
+
+            }
+
 
             //bool IsMipped = false;
             //double ox, oy;
@@ -327,6 +335,8 @@ namespace PixelFarm.Agg
             }
 
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
+           
+
             VertexStore imgBoundsPath = GetFreeVxs();
             // this is the fast drawing path
             if (needSourceResampling)
