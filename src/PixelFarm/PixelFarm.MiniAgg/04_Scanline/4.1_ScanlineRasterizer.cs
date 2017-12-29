@@ -89,8 +89,8 @@ namespace PixelFarm.Agg
         int m_scan_y;
         //---------------------------
         const int AA_SHIFT = 8;
-        const int AA_SCALE = 1 << AA_SHIFT;
-        const int AA_MASK = AA_SCALE - 1;
+        const int AA_SCALE = 1 << AA_SHIFT; //256
+        const int AA_MASK = AA_SCALE - 1;   //255, or oxff
         const int AA_SCALE2 = AA_SCALE * 2;
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
