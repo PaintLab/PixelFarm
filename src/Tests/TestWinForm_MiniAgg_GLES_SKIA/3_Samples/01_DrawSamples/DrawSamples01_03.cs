@@ -18,25 +18,72 @@ namespace PixelFarm.Agg.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : DemoBase
     {
+        ActualImage lionImg;
         public override void Init()
         {
+            UseBitmapExt = false;
+
+            string imgFileName = "d:\\WImageTest\\lion1.png";
+            if (System.IO.File.Exists(imgFileName))
+            {
+                lionImg = DemoHelper.LoadImage(imgFileName);
+            }
+
         }
 
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
         public override void Draw(Painter p)
         {
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = RenderQualtity.Fast;
+            }
+            else
+            {
+                p.RenderQuality = RenderQualtity.HighQuality;
+            }
+
+
+
 
             p.Clear(Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelLcdEffect = true;
             string teststr = "ABCDE pqyt 1230";
             p.FillColor = Color.Black;
             p.CurrentFont = new RequestFont("tahoma", 10);
             p.StrokeColor = Color.Red;
-            //
-            p.RenderQuality = RenderQualtity.Fast;
-            p.DrawLine(0, 400, 800, 400);
-            p.DrawLine(0, 400, 800, 500);
-            p.DrawString(teststr, 300, 400);
 
+            //
+            //---red reference line--
+            p.DrawLine(0, 400, 800, 400);
+            p.DrawLine(0, 400, 800, 500); //test oblique line
+            p.DrawString(teststr, 300, 400);
+            //
+            p.DrawRect(0.5, 400, 40, 40);
+            //
+
+            p.FillColor = Color.Yellow;
+            p.StrokeColor = Color.Blue;
+
+            p.FillEllipse(100.5, 400, 40, 60);
+            p.DrawEllipse(50.5, 400, 40, 60);
+
+            //---red reference line--
+            p.StrokeColor = Color.Red;
+            p.DrawLine(0, 500, 800, 500);
+
+            p.StrokeColor = Color.Blue;
+            p.FillColor = Color.Yellow;
+            p.FillRect(0.5, 500, 40, 40);
+            //---red reference line--
+
+
+             p.DrawImage(lionImg, 0, 0);
         }
     }
 
@@ -67,12 +114,31 @@ namespace PixelFarm.Agg.Sample_Draw
     {
 
         Stroke stroke = new Stroke(1);
+
         public override void Init()
         {
 
         }
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
         public override void Draw(Painter p)
         {
+
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = RenderQualtity.Fast;
+            }
+            else
+            {
+                p.RenderQuality = RenderQualtity.HighQuality;
+            }
+
+
+
             int width = 800;
             int height = 600;
             //clear the image to white         
@@ -113,6 +179,14 @@ namespace PixelFarm.Agg.Sample_Draw
             littlePoly.LineTo(50, 50);
             p.FillColor = Drawing.Color.Blue;
             p.Fill(littlePoly.MakeVertexSnap());
+
+
+            //----
+            //test draw img
+
+
+
+            //            
             //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
             // draw some text  

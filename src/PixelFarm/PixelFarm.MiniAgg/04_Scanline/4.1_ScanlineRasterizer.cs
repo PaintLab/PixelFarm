@@ -89,8 +89,8 @@ namespace PixelFarm.Agg
         int m_scan_y;
         //---------------------------
         const int AA_SHIFT = 8;
-        const int AA_SCALE = 1 << AA_SHIFT;
-        const int AA_MASK = AA_SCALE - 1;
+        const int AA_SCALE = 1 << AA_SHIFT; //256
+        const int AA_MASK = AA_SCALE - 1;   //255, or oxff
         const int AA_SCALE2 = AA_SCALE * 2;
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
@@ -275,21 +275,22 @@ namespace PixelFarm.Agg
             this.AddPath(new VertexStoreSnap(vxs));
         }
 
-        bool _extendX3ForSubPixelRendering;
-        public bool ExtendX3ForSubPixelRendering
+
+        bool _extendWidthX3ForSubPixelLcdEffect;
+        public bool ExtendWidthX3ForSubPixelLcdEffect
         {
-            get { return _extendX3ForSubPixelRendering; }
+            get { return _extendWidthX3ForSubPixelLcdEffect; }
             set
             {
-                _extendX3ForSubPixelRendering = value;
+                _extendWidthX3ForSubPixelLcdEffect = value;
                 if (value)
                 {
                     //expand to 3 times
-                    m_vectorClipper.SetClipBoxForSubPixelRenderering(true);
+                    m_vectorClipper.SetClipBoxWidthX3ForSubPixelLcdEffect(true);
                 }
                 else
                 {
-                    m_vectorClipper.SetClipBoxForSubPixelRenderering(false);
+                    m_vectorClipper.SetClipBoxWidthX3ForSubPixelLcdEffect(false);
                 }
             }
         }
@@ -318,7 +319,7 @@ namespace PixelFarm.Agg
             int dbugVertexCount = 0;
 #endif
 
-            if (ExtendX3ForSubPixelRendering)
+            if (ExtendWidthX3ForSubPixelLcdEffect)
             {
 
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)

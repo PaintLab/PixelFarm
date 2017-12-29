@@ -203,7 +203,16 @@ namespace PixelFarm.DrawingBuffer
             c._a = a;
             return c;
         }
+        public static ColorInt FromArgb(int argb)
+        {
+            ColorInt c = new ColorInt();
+            c._a = (byte)((argb >> 24));
+            c._r = (byte)((argb >> 16) & 0xff);
+            c._g = (byte)((argb >> 8) & 0xff);
+            c._b = (byte)((argb >> 0) & 0xff);
 
+            return c;
+        }
         public static bool operator ==(ColorInt c1, ColorInt c2)
         {
             return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) ==

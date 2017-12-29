@@ -1,6 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.DrawingBuffer;
@@ -43,14 +44,26 @@ namespace PixelFarm.Agg
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
 
+
+        BitmapBuffer _bxt;
+
         public AggPainter(AggRenderSurface aggsx)
         {
+
+
+
             this._aggsx = aggsx;
             this.sclineRas = _aggsx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = aggsx.ScanlinePacked8;
             this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
             _orientation = DrawBoardOrientation.LeftBottom;
+
+            //from membuffer
+            _bxt = new BitmapBuffer(aggsx.Width,
+                aggsx.Height,
+                PixelFarm.Agg.ActualImage.GetBuffer(aggsx.DestActualImage));
+
         }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
@@ -115,10 +128,12 @@ namespace PixelFarm.Agg
                     case Drawing.SmoothingMode.AntiAlias:
                         //TODO: review here
                         //anti alias != lcd technique 
+                        this.RenderQuality = RenderQualtity.HighQuality;
                         _aggsx.UseSubPixelRendering = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
                     default:
+                        this.RenderQuality = RenderQualtity.Fast;
                         _aggsx.UseSubPixelRendering = false;
                         break;
                 }
@@ -159,13 +174,22 @@ namespace PixelFarm.Agg
         /// <param name="color"></param>
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
-            //coordinate system
+            //BitmapExt
             if (this.RenderQuality == RenderQualtity.Fast)
             {
+                this._bxt.DrawLine(
+                    (int)Math.Round(x1),
+                    (int)Math.Round(y1),
+                    (int)Math.Round(x2),
+                    (int)Math.Round(y2),
+                    this.strokeColor.ToARGB()
+                    );
 
-                //BitmapBufferExtensions.DrawLine()         
+                return;
             }
 
+            //----------------------------------------------------------
+            //Agg
             if (_orientation == DrawBoardOrientation.LeftBottom)
             {
                 //as original
@@ -223,20 +247,54 @@ namespace PixelFarm.Agg
         public override void DrawRect(double left, double top, double width, double height)
         {
 
-            double right = left + width;
-            double bottom = top - height;
+            //BitmapExt
+            if (this.RenderQuality == RenderQualtity.Fast)
+            {
 
+                if (this._orientation == DrawBoardOrientation.LeftBottom)
+                {
+
+                    this._bxt.DrawRectangle(
+                    (int)Math.Round(left),
+                    (int)Math.Round(top),
+                    (int)Math.Round(left + width),
+                    (int)Math.Round(top + height),
+
+                    ColorInt.FromArgb(this.strokeColor.ToARGB()));
+                }
+                else
+                {
+                    //TODO: review here
+                    throw new NotSupportedException();
+                    //int canvasH = this.Height; 
+                    ////_simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
+                    //this._bmpBuffer.DrawRectangle(
+                    //(int)Math.Round(left),
+                    //(int)Math.Round(top),
+                    //(int)Math.Round(left + width),
+                    //(int)Math.Round(top + height),
+                    //ColorInt.FromArgb(this.strokeColor.ToARGB()));
+                }
+                return; //exit
+            }
+
+            //----------------------------------------------------------
+            //Agg
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
+                double right = left + width;
+                double bottom = top + height;
                 _simpleRectVxsGen.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
             }
             else
             {
+                double right = left + width;
+                double bottom = top - height;
                 int canvasH = this.Height;
                 //_simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5), right - 0.5, canvasH - (top - 0.5));
                 _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
-            //----------------
+
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             //
@@ -248,6 +306,7 @@ namespace PixelFarm.Agg
 
         public override void DrawEllipse(double left, double top, double width, double height)
         {
+
             double ox = (left + width / 2);
             double oy = (top + height / 2);
             if (this._orientation == DrawBoardOrientation.LeftTop)
@@ -255,6 +314,23 @@ namespace PixelFarm.Agg
                 //modified
                 oy = this.Height - oy;
             }
+
+            //---------------------------------------------------------- 
+            //BitmapExt
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+
+                this._bxt.DrawEllipseCentered(
+                   (int)Math.Round(ox), (int)Math.Round(oy),
+                   (int)Math.Round(width / 2),
+                   (int)Math.Round(height / 2),
+                   this.strokeColor.ToARGB());
+
+                return;
+            }
+
+            //Agg
+            //---------------------------------------------------------- 
             ellipse.Reset(ox,
                          oy,
                          width / 2,
@@ -275,6 +351,21 @@ namespace PixelFarm.Agg
                 //modified
                 oy = this.Height - oy;
             }
+            //---------------------------------------------------------- 
+            //BitmapExt
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                this._bxt.FillEllipseCentered(
+                   (int)Math.Round(ox), (int)Math.Round(oy),
+                   (int)Math.Round(width / 2),
+                   (int)Math.Round(height / 2),
+                   this.fillColor.ToARGB());
+                return;
+            }
+
+
+            //Agg
+            //---------------------------------------------------------- 
             ellipse.Reset(ox,
                           oy,
                           width / 2,
@@ -286,25 +377,53 @@ namespace PixelFarm.Agg
         }
         public override void FillRect(double left, double top, double width, double height)
         {
-            double right = left + width;
-            double bottom = top - height;
-            if (right < left || top < bottom)
+
+
+            //---------------------------------------------------------- 
+            //BitmapExt
+            if (this._renderQuality == RenderQualtity.Fast)
             {
+                this._bxt.FillRectangle(
+                      (int)Math.Round(left),
+                      (int)Math.Round(top),
+                      (int)Math.Round(left + width),
+                      (int)Math.Round(top + height),
+
+                      ColorInt.FromArgb(this.fillColor.ToARGB()));
+                return;
+            }
+
+            //Agg
+            //---------------------------------------------------------- 
+            if (this._orientation == DrawBoardOrientation.LeftBottom)
+            {
+                double right = left + width;
+                double bottom = top - height;
+                if (right < left || top < bottom)
+                {
 #if DEBUG
-                throw new ArgumentException();
+                    throw new ArgumentException();
 #else
                 return;
 #endif
-            }
+                }
 
-
-
-            if (this._orientation == DrawBoardOrientation.LeftBottom)
-            {
-                _simpleRectVxsGen.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
+                _simpleRectVxsGen.SetRect(left + 0.5, (bottom + 0.5) + height, right - 0.5, (top - 0.5) + height);
             }
             else
             {
+
+                double right = left + width;
+                double bottom = top - height;
+                if (right < left || top < bottom)
+                {
+#if DEBUG
+                    throw new ArgumentException();
+#else
+                return;
+#endif
+                }
+
                 int canvasH = this.Height;
                 _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
@@ -392,7 +511,97 @@ namespace PixelFarm.Agg
                     _textPrinter.ChangeFont(this.currentFont);
                 }
             }
+        }
 
+
+        List<int> _reusablePolygonList = new List<int>();
+        /// <summary>
+        /// fill with BitmapBufferExtension lib
+        /// </summary>
+        void FillWithBxt(VertexStoreSnap snap)
+        {
+            //transate the vxs/snap to command
+            double x = 0;
+            double y = 0;
+            double offsetOrgX = this.OriginX;
+            double offsetOrgY = this.OriginY;
+
+            VertexSnapIter snapIter = snap.GetVertexSnapIter();
+            VertexCmd cmd;
+
+            int latestMoveToX = 0, latestMoveToY = 0;
+            int latestX = 0, latestY = 0;
+
+
+            bool closed = false;
+
+            _reusablePolygonList.Clear();
+
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+            {
+                x += offsetOrgX;
+                y += offsetOrgY;
+
+                switch (cmd)
+                {
+                    case VertexCmd.MoveTo:
+                        {
+                            if (_reusablePolygonList.Count > 0)
+                            {
+                                //no drawline
+                                _reusablePolygonList.Clear();
+                            }
+
+                            closed = false;
+                            _reusablePolygonList.Add(latestMoveToX = latestX = (int)Math.Round(x));
+                            _reusablePolygonList.Add(latestMoveToY = latestY = (int)Math.Round(y));
+
+                        }
+                        break;
+                    case VertexCmd.LineTo:
+                    case VertexCmd.P2c:
+                    case VertexCmd.P3c:
+                        {
+                            //collect to the polygon
+                            _reusablePolygonList.Add(latestX = (int)Math.Round(x));
+                            _reusablePolygonList.Add(latestY = (int)Math.Round(y));
+                        }
+                        break;
+                    case VertexCmd.Close:
+                    case VertexCmd.CloseAndEndFigure:
+                        {
+                            if (_reusablePolygonList.Count > 0)
+                            {
+                                //flush by draw line
+                                _reusablePolygonList.Add(latestX = latestMoveToX);
+                                _reusablePolygonList.Add(latestY = latestMoveToY);
+
+                                _bxt.FillPolygon(_reusablePolygonList.ToArray(),
+                                    this.fillColor.ToARGB());
+                            }
+
+                            _reusablePolygonList.Clear();
+                            closed = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            //---------------
+            if (!closed && (_reusablePolygonList.Count > 0) &&
+               (latestX == latestMoveToX) && (latestY == latestMoveToY))
+            {
+
+                //flush by draw line
+                _reusablePolygonList.Add(latestMoveToX);
+                _reusablePolygonList.Add(latestMoveToY);
+
+                _bxt.FillPolygon(_reusablePolygonList.ToArray(),
+                    this.fillColor.ToARGB());
+
+
+            }
         }
         /// <summary>
         /// fill vertex store, we do NOT store snap
@@ -401,6 +610,15 @@ namespace PixelFarm.Agg
         /// <param name="c"></param>
         public override void Fill(VertexStoreSnap snap)
         {
+
+            //BitmapExt
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                FillWithBxt(snap);
+                return;
+            }
+
+            //Agg
             sclineRas.AddPath(snap);
             sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
         }
@@ -410,35 +628,36 @@ namespace PixelFarm.Agg
         /// <param name="vxs"></param>
         public override void Fill(VertexStore vxs)
         {
-            sclineRas.AddPath(vxs);
-            try
+            //
+            if (this._renderQuality == RenderQualtity.Fast)
             {
-                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                FillWithBxt(new VertexStoreSnap(vxs));
+                return;
             }
-            catch (Exception ex)
-            {
 
-            }
+            //
+            sclineRas.AddPath(vxs);
+            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
         }
 
 
-        public override bool UseSubPixelRendering
+        public override bool UseSubPixelLcdEffect
         {
             get
             {
-                return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering;
+                return this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect;
             }
             set
             {
                 if (value)
                 {
                     //TODO: review here again             
-                    this.sclineRas.ExtendX3ForSubPixelRendering = true;
-                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRendering;
+                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = true;
+                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
                 }
                 else
                 {
-                    this.sclineRas.ExtendX3ForSubPixelRendering = false;
+                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = false;
                     this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
                 }
             }
@@ -475,15 +694,36 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, double left, double top)
         {
+
+
+
             //check image caching system
             if (img is ActualImage)
             {
-                this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+
+                ActualImage actualImg = (ActualImage)img;
+                if (this._renderQuality == RenderQualtity.Fast)
+                {
+                    //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
+                    //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
+                    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+                    this._bxt.CopyBlit(left, top, srcBmp);
+                    return;
+                }
+
+
+                this.sharedImageWriterReader.ReloadImage(actualImg);
+
+                bool useSubPix = UseSubPixelLcdEffect; //save, restore later...
+
+                //before render an image we turn off vxs subpixel rendering
+                this.UseSubPixelLcdEffect = false;
+                _aggsx.UseSubPixelRendering = false;
+
                 if (this._orientation == DrawBoardOrientation.LeftTop)
                 {
-                    //place left upper corner at specific x y
+                    //place left upper corner at specific x y                    
                     this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
-
                 }
                 else
                 {
@@ -491,6 +731,9 @@ namespace PixelFarm.Agg
                     //place left-lower of the img at specific (x,y)
                     this._aggsx.Render(this.sharedImageWriterReader, left, top);
                 }
+
+                this.UseSubPixelLcdEffect = useSubPix;
+                _aggsx.UseSubPixelRendering = useSubPix; //restore
 
             }
             else

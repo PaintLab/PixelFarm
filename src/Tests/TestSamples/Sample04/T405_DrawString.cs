@@ -26,7 +26,7 @@ namespace OpenTkEssTest
             //
             font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
              
-            painter.UseSubPixelRendering = true;
+            painter.UseSubPixelLcdEffect = true;
             painter.CurrentFont = font1;
         }
         public override void Draw(Painter p)
@@ -51,7 +51,7 @@ namespace OpenTkEssTest
             p.Clear(PixelFarm.Drawing.Color.White);
             // p.Clear(PixelFarm.Drawing.Color.Blue); 
             p.FillColor = PixelFarm.Drawing.Color.Red;
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelLcdEffect = true;
 
             int n = 50;
 
@@ -128,7 +128,7 @@ namespace OpenTkEssTest
         {
             font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11); 
             font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16); 
-            painter.UseSubPixelRendering = true;
+            painter.UseSubPixelLcdEffect = true;
             painter.CurrentFont = font1;
             //-------------- 
         }
@@ -149,7 +149,7 @@ namespace OpenTkEssTest
             p.Clear(PixelFarm.Drawing.Color.White);
             p.FillColor = PixelFarm.Drawing.Color.Red;
 
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelLcdEffect = true;
             int n = 50;
             for (int i = 0; i < n; i++)
             {

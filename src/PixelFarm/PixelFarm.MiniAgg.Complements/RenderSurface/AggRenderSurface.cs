@@ -44,8 +44,9 @@ namespace PixelFarm.Agg
         public AggRenderSurface(ActualImage destImage)
         {
             //create from actual image
-            this.destImage = destImage;
 
+
+            this.destImage = destImage;
             this.destActualImage = destImage;
             this.destImageReaderWriter = new MyImageReaderWriter();
             this.destImageReaderWriter.ReloadImage(destImage);
@@ -83,10 +84,7 @@ namespace PixelFarm.Agg
             {
                 return this.currentBlender;
             }
-            set
-            {
-                this.currentBlender = value;
-            }
+           
         }
         public ImageReaderWriterBase DestImage
         {

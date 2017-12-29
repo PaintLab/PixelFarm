@@ -95,6 +95,38 @@ namespace PixelFarm.DrawingBuffer
             Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.Alpha);
         }
 
+        //
+        //my extension
+        /// <summary>
+        /// Copies (blits) the pixels from the WriteableBitmap source to the destination WriteableBitmap (this).
+        /// </summary>
+        /// <param name="bmp">The destination WriteableBitmap.</param>
+        /// <param name="destRect">The rectangle that defines the destination region.</param>
+        /// <param name="source">The source WriteableBitmap.</param>
+        /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
+        public static void CopyBlit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect)
+        {
+            Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.None);
+        }
+        //
+        //my extension
+        /// <summary>
+        /// Copies (blits) the pixels from the WriteableBitmap source to the destination WriteableBitmap (this).
+        /// </summary>
+        /// <param name="bmp">The destination WriteableBitmap.</param>
+        /// <param name="destRect">The rectangle that defines the destination region.</param>
+        /// <param name="source">The source WriteableBitmap.</param>
+        /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
+        public static void CopyBlit(this BitmapBuffer bmp, double destX, double destY, BitmapBuffer source)
+        {
+            RectD sourceRect = new RectD(0, 0, source.PixelWidth, source.PixelHeight);
+            RectD destRect = new RectD(destX, destY, source.PixelWidth, source.PixelHeight);
+            Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.None);
+        }
+
+
+        ///
+
         /// <summary>
         /// Copies (blits) the pixels from the WriteableBitmap source to the destination WriteableBitmap (this).
         /// </summary>

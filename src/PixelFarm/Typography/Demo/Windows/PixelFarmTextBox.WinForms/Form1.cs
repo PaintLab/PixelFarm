@@ -113,7 +113,7 @@ namespace PixelFarmTextBox.WinForms
                     {
                         //clear previous draw
                         painter.Clear(PixelFarm.Drawing.Color.White);
-                        painter.UseSubPixelRendering = false;
+                        painter.UseSubPixelLcdEffect = false;
                         painter.FillColor = PixelFarm.Drawing.Color.Black;
 
                         selectedTextPrinter = _devVxsTextPrinter;
@@ -169,7 +169,7 @@ namespace PixelFarmTextBox.WinForms
 
             //-------------
             painter.Clear(PixelFarm.Drawing.Color.White);
-            painter.UseSubPixelRendering = false;
+            painter.UseSubPixelLcdEffect = false;
             painter.FillColor = PixelFarm.Drawing.Color.Black;
             _devVxsTextPrinter.TargetCanvasPainter = painter;
 
