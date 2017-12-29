@@ -261,7 +261,7 @@ namespace PixelFarm.Agg
             Affine sourceRectTransform = destRectTransform.CreateInvert();
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
-                Drawing.Color.Black,
+                Drawing.Color.Transparent,
                 new SpanInterpolatorLinear(sourceRectTransform));
             VertexStore v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
             Render(v2, imgSpanGen);
