@@ -18,11 +18,11 @@ using System;
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
-    public enum ScanlineRenderMode
+    public enum ScanlineRenderMode : byte
     {
         Default,
         Custom,
-        SubPixelRendering
+        SubPixelLcdEffect
     }
 
 
@@ -1457,7 +1457,7 @@ namespace PixelFarm.Agg
                         }
                     }
                     break;
-                case Agg.ScanlineRenderMode.SubPixelRendering:
+                case Agg.ScanlineRenderMode.SubPixelLcdEffect:
                     scSubPixRas.RenderScanlines(dest, sclineRas, scline, color);
                     break;
                 case Agg.ScanlineRenderMode.Custom:

@@ -111,7 +111,7 @@ namespace SampleWinForms.UI
             //----------------------------------------------------
 
             //----------------------------------------------------
-            painter.UseSubPixelRendering = this.UseLcdTechnique;
+            painter.UseSubPixelLcdEffect = this.UseLcdTechnique;
             //5. use PixelFarm's Agg to render to bitmap...
             //5.1 clear background
             painter.Clear(PixelFarm.Drawing.Color.White);

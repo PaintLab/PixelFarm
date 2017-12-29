@@ -63,10 +63,10 @@ namespace PixelFarm.DrawingGL
         }
         public bool UseSubPixelRendering
         {
-            get { return _aggPainter.UseSubPixelRendering; }
+            get { return _aggPainter.UseSubPixelLcdEffect; }
             set
             {
-                _aggPainter.UseSubPixelRendering = value;
+                _aggPainter.UseSubPixelLcdEffect = value;
             }
         }
         public void ChangeFont(RequestFont font)

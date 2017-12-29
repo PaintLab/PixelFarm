@@ -52,7 +52,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
             p.Clear(Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelLcdEffect = true;
             string teststr = "ABCDE pqyt 1230";
             p.FillColor = Color.Black;
             p.CurrentFont = new RequestFont("tahoma", 10);
