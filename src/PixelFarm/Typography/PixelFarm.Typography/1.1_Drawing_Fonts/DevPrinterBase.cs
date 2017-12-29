@@ -100,6 +100,7 @@ namespace Typography.Rendering
         }
         public void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, float x, float y)
         {
+            
             DrawFromGlyphPlans(glyphPlanList, 0, glyphPlanList.Count, x, y);
         }
 

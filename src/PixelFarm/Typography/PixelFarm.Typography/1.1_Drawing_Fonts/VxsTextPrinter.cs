@@ -317,8 +317,10 @@ namespace PixelFarm.Drawing.Fonts
             if (!hasColorGlyphs)
             {
 
-
-
+                bool savedUseLcdMode = painter.UseSubPixelLcdEffect; //save,restore later
+                RenderQualtity savedRederQuality = painter.RenderQuality;
+                painter.RenderQuality = RenderQualtity.HighQuality;
+                painter.UseSubPixelLcdEffect = true;
                 for (int i = startAt; i < endBefore; ++i)
                 {   //-----------------------------------
                     //TODO: review here ***
@@ -332,9 +334,7 @@ namespace PixelFarm.Drawing.Fonts
                     //-----------------------------------  
                     //invert each glyph 
                     //version 3:
-
                     painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
-
                     //version2; 
                     //VertexStore vsx = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
                     //_vxs1 = _invertY.TransformToVxs(vsx, _vxs1);
@@ -344,6 +344,10 @@ namespace PixelFarm.Drawing.Fonts
                     //version1
                     //painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
+                //restore
+                painter.RenderQuality = savedRederQuality;
+                painter.UseSubPixelLcdEffect = savedUseLcdMode;
+
             }
             else
             {

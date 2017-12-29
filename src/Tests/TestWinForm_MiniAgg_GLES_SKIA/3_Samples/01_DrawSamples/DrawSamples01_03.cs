@@ -62,6 +62,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //---red reference line--
             p.DrawLine(0, 400, 800, 400);
             p.DrawLine(0, 400, 800, 500); //test oblique line
+
             p.DrawString(teststr, 300, 400);
             //
             p.DrawRect(0.5, 400, 40, 40);
