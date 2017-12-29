@@ -748,6 +748,18 @@ namespace PixelFarm.Agg
                 return;
             }
 
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
+                //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+                //this._bxt.CopyBlit(left, top, srcBmp); 
+                //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.NewRotation(AggMath.rad2deg(45)));
+                DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
+                this._bxt.BlitRender(srcBmp, false, 1, null);
+                return;
+            }
+
 
             this.sharedImageWriterReader.ReloadImage((ActualImage)img);
 
