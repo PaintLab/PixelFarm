@@ -747,7 +747,14 @@ namespace PixelFarm.Agg
             if (img is ActualImage)
             {
                 this.sharedImageWriterReader.ReloadImage((ActualImage)img);
-                this._aggsx.Render(sharedImageWriterReader, affinePlans);
+                try
+                {
+                    this._aggsx.Render(sharedImageWriterReader, affinePlans);
+                }
+                catch (Exception ex1)
+                {
+
+                }
             }
             else
             {
@@ -755,32 +762,32 @@ namespace PixelFarm.Agg
             }
         }
 
-        ////----------------------
-        ///// <summary>
-        ///// do filter at specific area
-        ///// </summary>
-        ///// <param name="filter"></param>
-        ///// <param name="area"></param>
-        //public override void DoFilterBlurStack(RectInt area, int r)
-        //{
-        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-        //        area.Left, area.Bottom, area.Right, area.Top);
-        //    filterMan.DoStackBlur(img, r);
-        //}
-        //public override void DoFilterBlurRecursive(RectInt area, int r)
-        //{
-        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-        //        area.Left, area.Bottom, area.Right, area.Top);
-        //    filterMan.DoRecursiveBlur(img, r);
-        //}
-        //public override void DoFilter(RectInt area, int r)
-        //{
-        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-        //      area.Left, area.Top, area.Right, area.Bottom);
-        //    filterMan.DoSharpen(img, r);
-        //}
         public override void ApplyFilter(ImageFilter imgFilter)
         {
+            ////----------------------
+            ///// <summary>
+            ///// do filter at specific area
+            ///// </summary>
+            ///// <param name="filter"></param>
+            ///// <param name="area"></param>
+            //public override void DoFilterBlurStack(RectInt area, int r)
+            //{
+            //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+            //        area.Left, area.Bottom, area.Right, area.Top);
+            //    filterMan.DoStackBlur(img, r);
+            //}
+            //public override void DoFilterBlurRecursive(RectInt area, int r)
+            //{
+            //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+            //        area.Left, area.Bottom, area.Right, area.Top);
+            //    filterMan.DoRecursiveBlur(img, r);
+            //}
+            //public override void DoFilter(RectInt area, int r)
+            //{
+            //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+            //      area.Left, area.Top, area.Right, area.Bottom);
+            //    filterMan.DoSharpen(img, r);
+            //}
             //TODO: implement this
             //resolve internal img filter
             //switch (imgFilter.Name)
