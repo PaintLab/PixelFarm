@@ -84,7 +84,10 @@ namespace PixelFarm.Agg.Sample_Draw
             //---red reference line--
 
 
-             p.DrawImage(lionImg, 0, 0);
+            p.DrawImage(lionImg, 0, 0); //reference at 0,0
+            p.DrawImage(lionImg,
+               AffinePlan.Rotate(AggMath.deg2rad(45)));
+
         }
     }
 
