@@ -83,7 +83,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //---red reference line--
 
 
-            p.DrawImage(lionImg, 0, 0);
+             p.DrawImage(lionImg, 0, 0);
         }
     }
 

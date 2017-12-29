@@ -335,6 +335,8 @@ namespace PixelFarm.Agg
             }
 
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
+           
+
             VertexStore imgBoundsPath = GetFreeVxs();
             // this is the fast drawing path
             if (needSourceResampling)

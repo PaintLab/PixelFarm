@@ -537,6 +537,9 @@ namespace PixelFarm.Agg
 
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
             {
+                x += offsetOrgX;
+                y += offsetOrgY;
+
                 switch (cmd)
                 {
                     case VertexCmd.MoveTo:
