@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingBuffer
 {
     internal static class NativeMethods
     {
-        [TargetedPatchingOptOut("Internal method only, inlined across NGen boundaries for performance reasons")]
+        //[TargetedPatchingOptOut("Internal method only, inlined across NGen boundaries for performance reasons")]
         internal static unsafe void CopyUnmanagedMemory(byte* srcPtr, int srcOffset, byte* dstPtr, int dstOffset, int count)
         {
             srcPtr += srcOffset;
@@ -17,7 +17,7 @@ namespace PixelFarm.DrawingBuffer
             memcpy(dstPtr, srcPtr, count);
         }
 
-        [TargetedPatchingOptOut("Internal method only, inlined across NGen boundaries for performance reasons")]
+       // [TargetedPatchingOptOut("Internal method only, inlined across NGen boundaries for performance reasons")]
         internal static void SetUnmanagedMemory(IntPtr dst, int filler, int count)
         {
             memset(dst, filler, count);
