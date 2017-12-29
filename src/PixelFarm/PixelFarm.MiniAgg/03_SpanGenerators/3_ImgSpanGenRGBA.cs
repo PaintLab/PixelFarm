@@ -122,6 +122,9 @@ namespace PixelFarm.Agg.Imaging
         ImageReaderWriterBase srcRW;
         Drawing.Color m_bgcolor;
         int bytesBetweenPixelInclusive;
+        bool _mode0 = false;
+
+
         public ImgSpanGenRGBA_BilinearClip(IImageReaderWriter src,
             Drawing.Color back_color,
             ISpanInterpolator inter)
@@ -131,7 +134,7 @@ namespace PixelFarm.Agg.Imaging
             srcRW = (ImageReaderWriterBase)src;
             bytesBetweenPixelInclusive = srcRW.BytesBetweenPixelsInclusive;
         }
-        bool _mode0 = false;
+       
         public override void Prepare()
         {
             base.Prepare();
@@ -149,19 +152,19 @@ namespace PixelFarm.Agg.Imaging
 
         public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
-
+#if DEBUG
+            int tmp_len = len;
+#endif
             unsafe
             {
-                //TODO: review here
-               
-                int bufferIndex; 
-              
+                //TODO: review here 
+
                 if (_mode0)
-                { 
-                  
+                {
+
                     TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                     byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
-                    bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
+                    int bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
                     //unsafe
                     {
 #if true
@@ -199,196 +202,236 @@ namespace PixelFarm.Agg.Imaging
                 }
                 else
                 {
-                    ISpanInterpolator spanInterpolator = base.Interpolator;
-                    TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
-                    byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
-                    bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
 
 
-                    spanInterpolator.Begin(x + base.dx, y + base.dy, len);
-                    int accColor0, accColor1, accColor2, accColor3;
-                    int back_r = m_bgcolor.red;
-                    int back_g = m_bgcolor.green;
-                    int back_b = m_bgcolor.blue;
-                    int back_a = m_bgcolor.alpha;
-                    int maxx = srcRW.Width - 1;
-                    int maxy = srcRW.Height - 1;
-                    //srcBuffer = srcRW.GetBuffer();
-                    unchecked
+                    try
                     {
-                        do
+                        ISpanInterpolator spanInterpolator = base.Interpolator;
+                        TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                        byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
+
+                        spanInterpolator.Begin(x + base.dx, y + base.dy, len);
+                        int accColor0, accColor1, accColor2, accColor3;
+                        int back_r = m_bgcolor.red;
+                        int back_g = m_bgcolor.green;
+                        int back_b = m_bgcolor.blue;
+                        int back_a = m_bgcolor.alpha;
+                        int maxx = srcRW.Width - 1;
+                        int maxy = srcRW.Height - 1;
+
+                        unchecked
                         {
-                            int x_hr;
-                            int y_hr;
-                            spanInterpolator.GetCoord(out x_hr, out y_hr);
-                            x_hr -= base.dxInt;
-                            y_hr -= base.dyInt;
-                            int x_lr = x_hr >> img_subpix_const.SHIFT;
-                            int y_lr = y_hr >> img_subpix_const.SHIFT;
-                            int weight;
-                            if (x_lr >= 0 && y_lr >= 0 &&
-                               x_lr < maxx && y_lr < maxy)
+                            do
                             {
-                                accColor0 =
-                                accColor1 =
-                                accColor2 =
-                                accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
-                                x_hr &= (int)img_subpix_const.MASK;
-                                y_hr &= (int)img_subpix_const.MASK;
-                                bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
-                                weight = (((int)img_subpix_const.SCALE - x_hr) *
-                                         ((int)img_subpix_const.SCALE - y_hr));
-                                if (weight > BASE_MASK)
+                                int x_hr;
+                                int y_hr;
+                                spanInterpolator.GetCoord(out x_hr, out y_hr);
+                                x_hr -= base.dxInt;
+                                y_hr -= base.dyInt;
+                                int x_lr = x_hr >> img_subpix_const.SHIFT;
+                                int y_lr = y_hr >> img_subpix_const.SHIFT;
+                                int weight;
+                                if (x_lr >= 0 && y_lr >= 0 &&
+                                   x_lr < maxx && y_lr < maxy)
                                 {
-                                    accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                    accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                    accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                    accColor3 += weight * srcBuffer[bufferIndex + CO.A];
-                                }
+                                    int bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
+                                    if (bufferIndex < 0)
+                                    {
 
-                                weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
-                                if (weight > BASE_MASK)
-                                {
-                                    bufferIndex += bytesBetweenPixelInclusive;
-                                    accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                    accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                    accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                    accColor3 += weight * srcBuffer[bufferIndex + CO.A];
-                                }
+                                    }
 
-                                weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
-                                if (weight > BASE_MASK)
-                                {
-                                    ++y_lr;
-                                    bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
-                                    accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                    accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                    accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                    accColor3 += weight * srcBuffer[bufferIndex + CO.A];
-                                }
-                                weight = (x_hr * y_hr);
-                                if (weight > BASE_MASK)
-                                {
-                                    bufferIndex += bytesBetweenPixelInclusive;
-                                    accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                    accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                    accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                    accColor3 += weight * srcBuffer[bufferIndex + CO.A];
-                                }
-                                accColor0 >>= img_subpix_const.SHIFT * 2;
-                                accColor1 >>= img_subpix_const.SHIFT * 2;
-                                accColor2 >>= img_subpix_const.SHIFT * 2;
-                                accColor3 >>= img_subpix_const.SHIFT * 2;
-                            }
-                            else
-                            {
-                                if (x_lr < -1 || y_lr < -1 ||
-                                   x_lr > maxx || y_lr > maxy)
-                                {
-                                    accColor0 = back_r;
-                                    accColor1 = back_g;
-                                    accColor2 = back_b;
-                                    accColor3 = back_a;
-                                }
-                                else
-                                {
                                     accColor0 =
                                     accColor1 =
                                     accColor2 =
                                     accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
                                     x_hr &= (int)img_subpix_const.MASK;
                                     y_hr &= (int)img_subpix_const.MASK;
+                                    bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
                                     weight = (((int)img_subpix_const.SCALE - x_hr) *
                                              ((int)img_subpix_const.SCALE - y_hr));
                                     if (weight > BASE_MASK)
                                     {
+                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                                     }
 
-                                    x_lr++;
                                     weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                                     if (weight > BASE_MASK)
                                     {
-                                        if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
-                                        {
-                                            BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                                srcBuffer,
-                                                srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
-                                                weight);
-                                        }
-                                        else
-                                        {
-                                            accColor0 += back_r * weight;
-                                            accColor1 += back_g * weight;
-                                            accColor2 += back_b * weight;
-                                            accColor3 += back_a * weight;
-                                        }
+                                        bufferIndex += bytesBetweenPixelInclusive;
+                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                                     }
 
-                                    x_lr--;
-                                    y_lr++;
                                     weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                                     if (weight > BASE_MASK)
                                     {
-                                        if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
-                                        {
-                                            BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                                srcBuffer,
-                                                srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
-                                                weight);
-                                        }
-                                        else
-                                        {
-                                            accColor0 += back_r * weight;
-                                            accColor1 += back_g * weight;
-                                            accColor2 += back_b * weight;
-                                            accColor3 += back_a * weight;
-                                        }
+                                        ++y_lr;
+                                        bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
+                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                                     }
-
-                                    x_lr++;
                                     weight = (x_hr * y_hr);
                                     if (weight > BASE_MASK)
                                     {
-                                        if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
-                                        {
-                                            BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                               srcBuffer,
-                                               srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
-                                               weight);
-                                        }
-                                        else
-                                        {
-                                            accColor0 += back_r * weight;
-                                            accColor1 += back_g * weight;
-                                            accColor2 += back_b * weight;
-                                            accColor3 += back_a * weight;
-                                        }
+                                        bufferIndex += bytesBetweenPixelInclusive;
+                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                                     }
-
                                     accColor0 >>= img_subpix_const.SHIFT * 2;
                                     accColor1 >>= img_subpix_const.SHIFT * 2;
                                     accColor2 >>= img_subpix_const.SHIFT * 2;
                                     accColor3 >>= img_subpix_const.SHIFT * 2;
                                 }
-                            }
+                                else
+                                {
+                                    if (x_lr < -1 || y_lr < -1 ||
+                                       x_lr > maxx || y_lr > maxy)
+                                    {
+                                        accColor0 = back_r;
+                                        accColor1 = back_g;
+                                        accColor2 = back_b;
+                                        accColor3 = back_a;
+                                    }
+                                    else
+                                    {
+                                        accColor0 =
+                                        accColor1 =
+                                        accColor2 =
+                                        accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
+                                        x_hr &= (int)img_subpix_const.MASK;
+                                        y_hr &= (int)img_subpix_const.MASK;
+                                        weight = (((int)img_subpix_const.SCALE - x_hr) *
+                                                 ((int)img_subpix_const.SCALE - y_hr));
+                                        if (weight > BASE_MASK)
+                                        {
 
-                            outputColors[startIndex] = PixelFarm.Drawing.Color.FromArgb(
-                                (byte)accColor3,
-                                (byte)accColor0,
-                                (byte)accColor1,
-                                (byte)accColor2
-                                );
+                                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                                            {
+                                                BlendInFilterPixel(
+                                                    ref accColor0, ref accColor1, ref accColor2, ref accColor3,
+                                                    srcBuffer,
+                                                    srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    weight);
+                                            }
+                                            else
+                                            {
+                                                accColor0 += back_r * weight;
+                                                accColor1 += back_g * weight;
+                                                accColor2 += back_b * weight;
+                                                accColor3 += back_a * weight;
+                                            }
 
-                            //outputColors[startIndex].red = (byte)accColor0;
-                            //outputColors[startIndex].green = (byte)accColor1;
-                            //outputColors[startIndex].blue = (byte)accColor2;
-                            //outputColors[startIndex].alpha = (byte)accColor3;
-                            ++startIndex;
-                            spanInterpolator.Next();
-                        } while (--len != 0);
+                                        }
+
+                                        x_lr++;
+                                        weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
+                                        if (weight > BASE_MASK)
+                                        {
+                                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                                            {
+                                                BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
+                                                    srcBuffer,
+                                                    srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    weight);
+                                            }
+                                            else
+                                            {
+                                                accColor0 += back_r * weight;
+                                                accColor1 += back_g * weight;
+                                                accColor2 += back_b * weight;
+                                                accColor3 += back_a * weight;
+                                            }
+                                        }
+
+                                        x_lr--;
+                                        y_lr++;
+                                        weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
+                                        if (weight > BASE_MASK)
+                                        {
+                                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                                            {
+                                                BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
+                                                    srcBuffer,
+                                                    srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    weight);
+                                            }
+                                            else
+                                            {
+                                                accColor0 += back_r * weight;
+                                                accColor1 += back_g * weight;
+                                                accColor2 += back_b * weight;
+                                                accColor3 += back_a * weight;
+                                            }
+                                        }
+
+                                        x_lr++;
+                                        weight = (x_hr * y_hr);
+                                        if (weight > BASE_MASK)
+                                        {
+                                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                                            {
+                                                BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
+                                                   srcBuffer,
+                                                   srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                   weight);
+                                            }
+                                            else
+                                            {
+                                                accColor0 += back_r * weight;
+                                                accColor1 += back_g * weight;
+                                                accColor2 += back_b * weight;
+                                                accColor3 += back_a * weight;
+                                            }
+                                        }
+
+                                        accColor0 >>= img_subpix_const.SHIFT * 2;
+                                        accColor1 >>= img_subpix_const.SHIFT * 2;
+                                        accColor2 >>= img_subpix_const.SHIFT * 2;
+                                        accColor3 >>= img_subpix_const.SHIFT * 2;
+                                    }
+                                }
+
+#if DEBUG
+                                if (startIndex >= outputColors.Length)
+                                {
+
+                                }
+#endif
+                                outputColors[startIndex] = PixelFarm.Drawing.Color.FromArgb(
+                                    (byte)accColor3,
+                                    (byte)accColor0,
+                                    (byte)accColor1,
+                                    (byte)accColor2
+                                    );
+
+                                //outputColors[startIndex].red = (byte)accColor0;
+                                //outputColors[startIndex].green = (byte)accColor1;
+                                //outputColors[startIndex].blue = (byte)accColor2;
+                                //outputColors[startIndex].alpha = (byte)accColor3;
+                                ++startIndex;
+                                spanInterpolator.Next();
+                            } while (--len != 0);
+                        }
+
+                        srcBufferPtr.Release();
+
+                    }
+                    catch (Exception ex1)
+                    {
+
+
                     }
 
-                    srcBufferPtr.Release();
+
                 }
 
             }
@@ -409,6 +452,7 @@ namespace PixelFarm.Agg.Imaging
                 accColor3 += weight * srcBuffer[bufferIndex + CO.A];
             }
         }
+
     }
 }
 
