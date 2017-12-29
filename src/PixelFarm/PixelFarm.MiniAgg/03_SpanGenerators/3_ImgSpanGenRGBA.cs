@@ -131,6 +131,16 @@ namespace PixelFarm.Agg.Imaging
             srcRW = (ImageReaderWriterBase)src;
             bytesBetweenPixelInclusive = srcRW.BytesBetweenPixelsInclusive;
         }
+        bool _mode0 = false;
+        public override void Prepare()
+        {
+            base.Prepare();
+
+            ISpanInterpolator spanInterpolator = base.Interpolator;
+            _mode0 = (spanInterpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
+                && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
+                && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
+        }
         public Drawing.Color BackgroundColor
         {
             get { return this.m_bgcolor; }
@@ -142,15 +152,13 @@ namespace PixelFarm.Agg.Imaging
 
             unsafe
             {
-                ISpanInterpolator spanInterpolator = base.Interpolator;
-                int bufferIndex;
-
-
                 //TODO: review here
-                if (spanInterpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
-                 && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
-                 && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity())
-                {
+               
+                int bufferIndex; 
+              
+                if (_mode0)
+                { 
+                  
                     TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                     byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
                     bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
@@ -191,7 +199,7 @@ namespace PixelFarm.Agg.Imaging
                 }
                 else
                 {
-
+                    ISpanInterpolator spanInterpolator = base.Interpolator;
                     TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                     byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
                     bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
