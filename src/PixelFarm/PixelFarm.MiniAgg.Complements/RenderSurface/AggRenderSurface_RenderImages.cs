@@ -41,29 +41,30 @@ namespace PixelFarm.Agg
             double angleRad,
             VertexStore outputDestImgRect)
         {
-            AffinePlan[] plan = new AffinePlan[4];
+
+            AffinePlan[] plans = new AffinePlan[4];
             int i = 0;
             if (hotspotOffsetX != 0.0f || hotSpotOffsetY != 0.0f)
             {
-                plan[i] = AffinePlan.Translate(-hotspotOffsetX, -hotSpotOffsetY);
+                plans[i] = AffinePlan.Translate(-hotspotOffsetX, -hotSpotOffsetY);
                 i++;
             }
 
             if (scaleX != 1 || scaleY != 1)
             {
-                plan[i] = AffinePlan.Scale(scaleX, scaleY);
+                plans[i] = AffinePlan.Scale(scaleX, scaleY);
                 i++;
             }
 
             if (angleRad != 0)
             {
-                plan[i] = AffinePlan.Rotate(angleRad);
+                plans[i] = AffinePlan.Rotate(angleRad);
                 i++;
             }
 
             if (destX != 0 || destY != 0)
             {
-                plan[i] = AffinePlan.Translate(destX, destY);
+                plans[i] = AffinePlan.Translate(destX, destY);
                 i++;
             }
 
@@ -73,7 +74,7 @@ namespace PixelFarm.Agg
             outputDestImgRect.AddLineTo(srcW, srcH);
             outputDestImgRect.AddLineTo(0, srcH);
             outputDestImgRect.AddCloseFigure();
-            return Affine.NewMatix(plan);
+            return Affine.NewMatix(plans);
         }
         static Affine BuildImageBoundsPath(
             int srcW, int srcH,
@@ -280,8 +281,9 @@ namespace PixelFarm.Agg
             // exit early if the dest and source bounds don't touch.
             // TODO: <BUG> make this do rotation and scalling
             RectInt sourceBounds = source.GetBounds();
-            RectInt destBounds = this.destImageReaderWriter.GetBounds();
             sourceBounds.Offset((int)destX, (int)destY);
+
+            RectInt destBounds = this.destImageReaderWriter.GetBounds();
             if (!RectInt.DoIntersect(sourceBounds, destBounds))
             {
                 //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
