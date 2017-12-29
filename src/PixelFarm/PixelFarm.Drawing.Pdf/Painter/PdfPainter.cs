@@ -173,7 +173,7 @@ namespace PixelFarm.Drawing.Pdf
             }
         }
 
-        public override bool UseSubPixelRendering
+        public override bool UseSubPixelLcdEffect
         {
             get
             {

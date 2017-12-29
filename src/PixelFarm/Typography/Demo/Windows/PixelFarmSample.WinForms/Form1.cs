@@ -153,7 +153,7 @@ namespace SampleWinForms
                     {
                         //clear previous draw
                         painter.Clear(PixelFarm.Drawing.Color.White);
-                        painter.UseSubPixelRendering = _contourAnalysisOpts.LcdTechnique;
+                        painter.UseSubPixelLcdEffect = _contourAnalysisOpts.LcdTechnique;
                         painter.FillColor = PixelFarm.Drawing.Color.Black;
 
                         selectedTextPrinter = _devVxsTextPrinter;

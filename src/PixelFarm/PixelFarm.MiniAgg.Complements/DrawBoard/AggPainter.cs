@@ -636,25 +636,26 @@ namespace PixelFarm.Agg
             //
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
-
         }
-        public override bool UseSubPixelRendering
+
+
+        public override bool UseSubPixelLcdEffect
         {
             get
             {
-                return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering;
+                return this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect;                 
             }
             set
             {
                 if (value)
                 {
                     //TODO: review here again             
-                    this.sclineRas.ExtendX3ForSubPixelRendering = true;
-                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRendering;
+                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = true;
+                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
                 }
                 else
                 {
-                    this.sclineRas.ExtendX3ForSubPixelRendering = false;
+                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = false;
                     this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
                 }
             }
@@ -711,10 +712,10 @@ namespace PixelFarm.Agg
 
                 this.sharedImageWriterReader.ReloadImage(actualImg);
 
-                bool useSubPix = UseSubPixelRendering; //save, restore later...
+                bool useSubPix = UseSubPixelLcdEffect; //save, restore later...
 
                 //before render an image we turn off vxs subpixel rendering
-                this.UseSubPixelRendering = false;
+                this.UseSubPixelLcdEffect = false;
                 _aggsx.UseSubPixelRendering = false;
 
                 if (this._orientation == DrawBoardOrientation.LeftTop)
@@ -729,7 +730,7 @@ namespace PixelFarm.Agg
                     this._aggsx.Render(this.sharedImageWriterReader, left, top);
                 }
 
-                this.UseSubPixelRendering = useSubPix;
+                this.UseSubPixelLcdEffect = useSubPix;
                 _aggsx.UseSubPixelRendering = useSubPix; //restore
 
             }

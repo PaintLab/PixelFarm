@@ -79,7 +79,7 @@ namespace Typography.Rendering
                 glyphVxs.TranslateToNewVxs(dx + 0.33f, dy, vxs2); //offset to proper x of subpixel rendering  ***
                 glyphVxs = vxs2;
                 // 
-                painter.UseSubPixelRendering = true;
+                painter.UseSubPixelLcdEffect = true;
 
                 //we use white glyph on black bg for this texture                
                 painter.Clear(Color.Black);
@@ -96,7 +96,7 @@ namespace Typography.Rendering
                 glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
                 glyphVxs = vxs2;
 
-                painter.UseSubPixelRendering = false;
+                painter.UseSubPixelLcdEffect = false;
 
                 if (TextureKind == TextureKind.StencilGreyScale)
                 {

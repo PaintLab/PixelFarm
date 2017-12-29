@@ -173,7 +173,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public override bool UseSubPixelRendering
+        public override bool UseSubPixelLcdEffect
         {
             get
             {

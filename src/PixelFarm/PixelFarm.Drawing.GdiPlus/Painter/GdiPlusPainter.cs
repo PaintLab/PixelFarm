@@ -106,7 +106,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         bool _useSubPixelRendering;//for text
-        public override bool UseSubPixelRendering
+        public override bool UseSubPixelLcdEffect
         {
 
             get

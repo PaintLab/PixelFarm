@@ -275,21 +275,22 @@ namespace PixelFarm.Agg
             this.AddPath(new VertexStoreSnap(vxs));
         }
 
-        bool _extendX3ForSubPixelRendering;
-        public bool ExtendX3ForSubPixelRendering
+
+        bool _extendWidthX3ForSubPixelLcdEffect;
+        public bool ExtendWidthX3ForSubPixelLcdEffect
         {
-            get { return _extendX3ForSubPixelRendering; }
+            get { return _extendWidthX3ForSubPixelLcdEffect; }
             set
             {
-                _extendX3ForSubPixelRendering = value;
+                _extendWidthX3ForSubPixelLcdEffect = value;
                 if (value)
                 {
                     //expand to 3 times
-                    m_vectorClipper.SetClipBoxForSubPixelRenderering(true);
+                    m_vectorClipper.SetClipBoxWidthX3ForSubPixelLcdEffect(true);
                 }
                 else
                 {
-                    m_vectorClipper.SetClipBoxForSubPixelRenderering(false);
+                    m_vectorClipper.SetClipBoxWidthX3ForSubPixelLcdEffect(false);
                 }
             }
         }
@@ -318,7 +319,7 @@ namespace PixelFarm.Agg
             int dbugVertexCount = 0;
 #endif
 
-            if (ExtendX3ForSubPixelRendering)
+            if (ExtendWidthX3ForSubPixelLcdEffect)
             {
 
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
