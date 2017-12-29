@@ -710,11 +710,12 @@ namespace PixelFarm.Agg
 
 
                 this.sharedImageWriterReader.ReloadImage(actualImg);
+                bool useSubPix = _aggsx.UseSubPixelRendering; //save
+                _aggsx.UseSubPixelRendering = false;
                 if (this._orientation == DrawBoardOrientation.LeftTop)
                 {
-                    //place left upper corner at specific x y
+                    //place left upper corner at specific x y                    
                     this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
-
                 }
                 else
                 {
@@ -722,6 +723,7 @@ namespace PixelFarm.Agg
                     //place left-lower of the img at specific (x,y)
                     this._aggsx.Render(this.sharedImageWriterReader, left, top);
                 }
+                _aggsx.UseSubPixelRendering = useSubPix; //restore
 
             }
             else
