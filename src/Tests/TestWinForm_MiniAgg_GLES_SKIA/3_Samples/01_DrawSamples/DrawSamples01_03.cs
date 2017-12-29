@@ -50,43 +50,50 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
 
-
             p.Clear(Drawing.Color.White);
-            p.UseSubPixelLcdEffect = true;
-            string teststr = "ABCDE pqyt 1230";
-            p.FillColor = Color.Black;
-            p.CurrentFont = new RequestFont("tahoma", 10);
-            p.StrokeColor = Color.Red;
-
-            //
-            //---red reference line--
-            p.DrawLine(0, 400, 800, 400);
-            p.DrawLine(0, 400, 800, 500); //test oblique line
-
-            p.DrawString(teststr, 300, 400);
-            //
-            p.DrawRect(0.5, 400, 40, 40);
-            //
-
-            p.FillColor = Color.Yellow;
-            p.StrokeColor = Color.Blue;
-
-            p.FillEllipse(100.5, 400, 40, 60);
-            p.DrawEllipse(50.5, 400, 40, 60);
-
-            //---red reference line--
-            p.StrokeColor = Color.Red;
-            p.DrawLine(0, 500, 800, 500);
-
-            p.StrokeColor = Color.Blue;
-            p.FillColor = Color.Yellow;
-            p.FillRect(0.5, 500, 40, 40);
-            //---red reference line--
-
-
-            p.DrawImage(lionImg, 0, 0); //reference at 0,0
+            p.DrawImage(lionImg,300,0);
             p.DrawImage(lionImg,
-               AffinePlan.Rotate(AggMath.deg2rad(45)));
+               AffinePlan.Translate(-lionImg.Width / 2, -lionImg.Height / 2),
+               AffinePlan.Rotate(AggMath.deg2rad(45)),
+               AffinePlan.Translate(lionImg.Width / 2, lionImg.Height / 2));
+
+            //p.UseSubPixelLcdEffect = true;
+            //string teststr = "ABCDE pqyt 1230";
+            //p.FillColor = Color.Black;
+            //p.CurrentFont = new RequestFont("tahoma", 10);
+            //p.StrokeColor = Color.Red;
+
+            ////
+            ////---red reference line--
+            //p.DrawLine(0, 400, 800, 400);
+            //p.DrawLine(0, 400, 800, 500); //test oblique line
+
+            //p.DrawString(teststr, 300, 400);
+            ////
+            //p.DrawRect(0.5, 400, 40, 40);
+            ////
+
+            //p.FillColor = Color.Yellow;
+            //p.StrokeColor = Color.Blue;
+
+            //p.FillEllipse(100.5, 400, 40, 60);
+            //p.DrawEllipse(50.5, 400, 40, 60);
+
+            ////---red reference line--
+            //p.StrokeColor = Color.Red;
+            //p.DrawLine(0, 500, 800, 500);
+
+            //p.StrokeColor = Color.Blue;
+            //p.FillColor = Color.Yellow;
+            //p.FillRect(0.5, 500, 40, 40);
+            ////---red reference line--
+
+
+            //p.DrawImage(lionImg, 0, 0); //reference at 0,0
+
+            //p.DrawImage(lionImg,
+            //   AffinePlan.Rotate(AggMath.deg2rad(45)),
+            //   AffinePlan.Translate(400, 100));
 
         }
     }

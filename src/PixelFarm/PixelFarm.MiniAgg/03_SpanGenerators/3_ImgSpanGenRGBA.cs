@@ -134,7 +134,7 @@ namespace PixelFarm.Agg.Imaging
             srcRW = (ImageReaderWriterBase)src;
             bytesBetweenPixelInclusive = srcRW.BytesBetweenPixelsInclusive;
         }
-       
+
         public override void Prepare()
         {
             base.Prepare();
@@ -235,11 +235,8 @@ namespace PixelFarm.Agg.Imaging
                                    x_lr < maxx && y_lr < maxy)
                                 {
                                     int bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
-                                    if (bufferIndex < 0)
-                                    {
 
-                                    }
-
+ 
                                     accColor0 =
                                     accColor1 =
                                     accColor2 =
