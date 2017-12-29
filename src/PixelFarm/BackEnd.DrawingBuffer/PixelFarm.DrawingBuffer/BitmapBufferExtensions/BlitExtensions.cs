@@ -555,7 +555,7 @@ namespace PixelFarm.DrawingBuffer
 
             using (BitmapContext destContext = bmp.GetBitmapContext())
             {
-                if (transform == null) transform = new MatrixTransform();
+                if (transform == null) transform = new MatrixTransform(Affine.IdentityMatrix);
 
                 int[] destPixels = destContext.Pixels;
                 int destWidth = destContext.Width;

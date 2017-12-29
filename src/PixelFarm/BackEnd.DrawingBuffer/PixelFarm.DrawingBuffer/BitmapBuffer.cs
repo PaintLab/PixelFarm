@@ -4,41 +4,521 @@
 using System;
 namespace PixelFarm.DrawingBuffer
 {
+
+    public enum AffineMatrixCommand : byte
+    {
+        None,
+        Scale,
+        Skew,
+        Rotate,
+        Translate,
+        Invert
+    }
+
+    public struct AffinePlan
+    {
+        public readonly AffineMatrixCommand cmd;
+        public readonly double x;
+        public readonly double y;
+        public AffinePlan(AffineMatrixCommand cmd, double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+            this.cmd = cmd;
+        }
+        public AffinePlan(AffineMatrixCommand cmd, double x)
+        {
+            this.x = x;
+            this.y = 0;
+            this.cmd = cmd;
+        }
+
+
+        //----------------------------------------------------------------------------
+        public static AffinePlan Translate(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Translate, x, y);
+        }
+        public static AffinePlan Rotate(double radAngle)
+        {
+            return new AffinePlan(AffineMatrixCommand.Rotate, radAngle);
+        }
+        public static AffinePlan Skew(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Skew, x, y);
+        }
+        public static AffinePlan Scale(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Scale, x, y);
+        }
+        public static AffinePlan Scale(double both)
+        {
+            return new AffinePlan(AffineMatrixCommand.Scale, both, both);
+        }
+    }
+    public sealed class Affine
+    {
+        //agg's Affine
+
+        const double EPSILON = 1e-14;
+        public readonly double sx, shy, shx, sy, tx, ty;
+        bool isIdenHint;
+        public static readonly Affine IdentityMatrix = Affine.NewIdentity();
+        //------------------------------------------ Construction
+        private Affine(Affine copyFrom)
+        {
+            sx = copyFrom.sx;
+            shy = copyFrom.shy;
+            shx = copyFrom.shx;
+            sy = copyFrom.sy;
+            tx = copyFrom.tx;
+            ty = copyFrom.ty;
+        }
+        internal Affine(AffinePlan[] creationPlans)
+        {
+            //-----------------------
+            //start with identity matrix
+
+            sx = 1;
+            shy = 0;
+            shx = 0;
+            sy = 1;
+            tx = 0;
+            ty = 0;
+            //-----------------------
+            int j = creationPlans.Length;
+            for (int i = 0; i < j; ++i)
+            {
+                AffinePlan plan = creationPlans[i];
+                switch (plan.cmd)
+                {
+                    case AffineMatrixCommand.None:
+                        break;
+                    case AffineMatrixCommand.Rotate:
+                        {
+                            double angleRad = plan.x;
+                            double ca = Math.Cos(angleRad);
+                            double sa = Math.Sin(angleRad);
+                            double t0 = sx * ca - shy * sa;
+                            double t2 = shx * ca - sy * sa;
+                            double t4 = tx * ca - ty * sa;
+                            shy = sx * sa + shy * ca;
+                            sy = shx * sa + sy * ca;
+                            ty = tx * sa + ty * ca;
+                            sx = t0;
+                            shx = t2;
+                            tx = t4;
+                        }
+                        break;
+                    case AffineMatrixCommand.Scale:
+                        {
+                            double mm0 = plan.x;
+                            double mm3 = plan.y;
+                            sx *= mm0;
+                            shx *= mm0;
+                            tx *= mm0;
+                            shy *= mm3;
+                            sy *= mm3;
+                            ty *= mm3;
+                        }
+                        break;
+                    case AffineMatrixCommand.Translate:
+                        {
+                            tx += plan.x;
+                            ty += plan.y;
+                        }
+                        break;
+                    case AffineMatrixCommand.Skew:
+                        {
+                            double m_sx = 1;
+                            double m_sy = 1;
+                            double m_shx = Math.Tan(plan.x);
+                            double m_shy = Math.Tan(plan.y);
+                            double t0 = sx * m_sx + shy * m_shx;
+                            double t2 = shx * m_sx + sy * m_shx;
+                            double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
+                            shy = sx * m_shy + shy * m_sy;
+                            sy = shx * m_shy + sy * m_sy;
+                            ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
+                            sx = t0;
+                            shx = t2;
+                            tx = t4;
+                        }
+                        break;
+                    case AffineMatrixCommand.Invert:
+                        {
+                            double d = CalculateDeterminantReciprocal();
+                            double t0 = sy * d;
+                            sy = sx * d;
+                            shy = -shy * d;
+                            shx = -shx * d;
+                            double t4 = -tx * t0 - ty * shx;
+                            ty = -tx * shy - ty * sy;
+                            sx = t0;
+                            tx = t4;
+                        }
+                        break;
+                    default:
+                        {
+                            throw new NotSupportedException();
+                        }
+                }
+            }
+        }
+        // Custom matrix. Usually used in derived classes
+        private Affine(double v0_sx, double v1_shy,
+                       double v2_shx, double v3_sy,
+                       double v4_tx, double v5_ty)
+        {
+            sx = v0_sx;
+            shy = v1_shy;
+            shx = v2_shx;
+            sy = v3_sy;
+            tx = v4_tx;
+            ty = v5_ty;
+        }
+        public double m11 { get { return sx; } }
+        public double m12 { get { return shy; } }
+        public double m21 { get { return shx; } }
+        public double m22 { get { return sy; } }
+        public double dx { get { return tx; } }
+        public double dy { get { return ty; } }
+        // Custom matrix from m[6]
+        private Affine(double[] m)
+        {
+            sx = m[0];
+            shy = m[1];
+            shx = m[2];
+            sy = m[3];
+            tx = m[4];
+            ty = m[5];
+        }
+        private Affine(Affine a, Affine b)
+        {
+            //copy from a
+            //multiply with b
+            sx = a.sx;
+            shy = a.shy;
+            shx = a.shx;
+            sy = a.sy;
+            tx = a.tx;
+            ty = a.ty;
+            MultiplyMatrix(ref sx, ref sy, ref shx, ref shy, ref tx, ref ty, b);
+        }
+        private Affine(Affine copyFrom, AffinePlan creationPlan)
+        {
+            //-----------------------
+            sx = copyFrom.sx;
+            shy = copyFrom.shy;
+            shx = copyFrom.shx;
+            sy = copyFrom.sy;
+            tx = copyFrom.tx;
+            ty = copyFrom.ty;
+            //-----------------------
+            switch (creationPlan.cmd)
+            {
+                default:
+                    {
+                        throw new NotSupportedException();
+                    }
+                case AffineMatrixCommand.None:
+                    break;
+                case AffineMatrixCommand.Rotate:
+                    {
+                        double angleRad = creationPlan.x;
+                        double ca = Math.Cos(angleRad);
+                        double sa = Math.Sin(angleRad);
+                        double t0 = sx * ca - shy * sa;
+                        double t2 = shx * ca - sy * sa;
+                        double t4 = tx * ca - ty * sa;
+                        shy = sx * sa + shy * ca;
+                        sy = shx * sa + sy * ca;
+                        ty = tx * sa + ty * ca;
+                        sx = t0;
+                        shx = t2;
+                        tx = t4;
+                    }
+                    break;
+                case AffineMatrixCommand.Scale:
+                    {
+                        double mm0 = creationPlan.x;
+                        double mm3 = creationPlan.y;
+                        sx *= mm0;
+                        shx *= mm0;
+                        tx *= mm0;
+                        shy *= mm3;
+                        sy *= mm3;
+                        ty *= mm3;
+                    }
+                    break;
+                case AffineMatrixCommand.Skew:
+                    {
+                        double m_sx = 1;
+                        double m_sy = 1;
+                        double m_shx = Math.Tan(creationPlan.x);
+                        double m_shy = Math.Tan(creationPlan.y);
+                        double t0 = sx * m_sx + shy * m_shx;
+                        double t2 = shx * m_sx + sy * m_shx;
+                        double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
+                        shy = sx * m_shy + shy * m_sy;
+                        sy = shx * m_shy + sy * m_sy;
+                        ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
+                        sx = t0;
+                        shx = t2;
+                        tx = t4;
+                        //return new Affine(1.0, Math.Tan(y), Math.Tan(x), 1.0, 0.0, 0.0);
+
+                    }
+                    break;
+                case AffineMatrixCommand.Translate:
+                    {
+                        tx += creationPlan.x;
+                        ty += creationPlan.y;
+                    }
+                    break;
+                case AffineMatrixCommand.Invert:
+                    {
+                        double d = CalculateDeterminantReciprocal();
+                        double t0 = sy * d;
+                        sy = sx * d;
+                        shy = -shy * d;
+                        shx = -shx * d;
+                        double t4 = -tx * t0 - ty * shx;
+                        ty = -tx * shy - ty * sy;
+                        sx = t0;
+                        tx = t4;
+                    }
+                    break;
+            }
+        }
+
+
+        //----------------------------------------------------------
+        public static Affine operator *(Affine a, Affine b)
+        {
+            //new input
+            return new Affine(a, b);
+        }
+        //----------------------------------------------------------
+
+        // Identity matrix
+        static Affine NewIdentity()
+        {
+            var newIden = new Affine(
+                1, 0,
+                0, 1,
+                0, 0);
+            newIden.isIdenHint = true;
+            return newIden;
+        }
+
+        //====================================================trans_affine_rotation
+        // Rotation matrix. sin() and cos() are calculated twice for the same angle.
+        // There's no harm because the performance of sin()/cos() is very good on all
+        // modern processors. Besides, this operation is not going to be invoked too 
+        // often.
+        public static Affine NewRotation(double angRad)
+        {
+            double cos_rad, sin_rad;
+            return new Affine(
+               cos_rad = Math.Cos(angRad), sin_rad = Math.Sin(angRad),
+                -sin_rad, cos_rad,
+                0.0, 0.0);
+        }
+
+        //====================================================trans_affine_scaling
+        // Scaling matrix. x, y - scale coefficients by X and Y respectively
+        public static Affine NewScaling(double scale)
+        {
+            return new Affine(
+                scale, 0.0,
+                0.0, scale,
+                0.0, 0.0);
+        }
+
+        public static Affine NewScaling(double x, double y)
+        {
+            return new Affine(
+                x, 0.0,
+                0.0, y,
+                0.0, 0.0);
+        }
+
+        public static Affine NewTranslation(double x, double y)
+        {
+            return new Affine(
+                1.0, 0.0,
+                0.0, 1.0,
+                x, y);
+        }
+
+
+        public static Affine NewSkewing(double x, double y)
+        {
+            return new Affine(
+                1.0, Math.Tan(y),
+                Math.Tan(x), 1.0,
+                0.0, 0.0);
+        }
+
+        static void MultiplyMatrix(
+            ref double sx, ref double sy,
+            ref double shx, ref double shy,
+            ref double tx, ref double ty,
+            Affine m)
+        {
+            double t0 = sx * m.sx + shy * m.shx;
+            double t2 = shx * m.sx + sy * m.shx;
+            double t4 = tx * m.sx + ty * m.shx + m.tx;
+            shy = sx * m.shy + shy * m.sy;
+            sy = shx * m.shy + sy * m.sy;
+            ty = tx * m.shy + ty * m.sy + m.ty;
+            sx = t0;
+            shx = t2;
+            tx = t4;
+        }
+
+        // Invert matrix. Do not try to invert degenerate matrices, 
+        // there's no check for validity. If you set scale to 0 and 
+        // then try to invert matrix, expect unpredictable result.
+        public Affine CreateInvert()
+        {
+            return new Affine(this, new AffinePlan(AffineMatrixCommand.Invert, 0));
+        }
+        //-------------------------------------------- Transformations
+        // Direct transformation of x and y
+        public void Transform(ref double x, ref double y)
+        {
+            double tmp = x;
+            x = tmp * sx + y * shx + tx;
+            y = tmp * shy + y * sy + ty;
+        }
+
+
+        // Inverse transformation of x and y. It works slower than the 
+        // direct transformation. For massive operations it's better to 
+        // invert() the matrix and then use direct transformations. 
+        public void InverseTransform(ref double x, ref double y)
+        {
+            double d = CalculateDeterminantReciprocal();
+            double a = (x - tx) * d;
+            double b = (y - ty) * d;
+            x = a * sy - b * shx;
+            y = b * sx - a * shy;
+        }
+
+
+        // Calculate the reciprocal of the determinant
+        double CalculateDeterminantReciprocal()
+        {
+            return 1.0 / (sx * sy - shy * shx);
+        }
+
+        // Get the average scale (by X and Y). 
+        // Basically used to calculate the approximation_scale when
+        // decomposinting curves into line segments.
+        public double GetScale()
+        {
+            double x = 0.707106781 * sx + 0.707106781 * shx;
+            double y = 0.707106781 * shy + 0.707106781 * sy;
+            return Math.Sqrt(x * x + y * y);
+        }
+
+        // Check to see if the matrix is not degenerate
+        public bool IsNotDegenerated(double epsilon)
+        {
+            return Math.Abs(sx) > epsilon && Math.Abs(sy) > epsilon;
+        }
+
+        // Check to see if it's an identity matrix
+        public bool IsIdentity()
+        {
+            if (!isIdenHint)
+            {
+                return is_equal_eps(sx, 1.0) && is_equal_eps(shy, 0.0) &&
+                   is_equal_eps(shx, 0.0) && is_equal_eps(sy, 1.0) &&
+                   is_equal_eps(tx, 0.0) && is_equal_eps(ty, 0.0);
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        static bool is_equal_eps(double v1, double v2)
+        {
+            return Math.Abs(v1 - v2) <= (EPSILON);
+        }
+
+    }
+
+
     public abstract class GeneralTransform
     {
         public abstract RectD TransformBounds(RectD r1);
         public abstract PointD Transform(PointD p);
-        MatrixTransform _inverseVersion;
-        public MatrixTransform Inverse
+
+        public abstract MatrixTransform Inverse
         {
-            get
-            {
-                if (_inverseVersion == null)
-                {
-                    //create inverse version
-                    _inverseVersion = new MatrixTransform();
-                }
-                return _inverseVersion;
-            }
+            get;
         }
 
     }
     public class MatrixTransform : GeneralTransform
     {
-        //System.Drawing.Drawing2D.Matrix mm1 = new System.Drawing.Drawing2D.Matrix(); 
-        //System.Drawing.PointF[] _tmp = new System.Drawing.PointF[1]; 
+        MatrixTransform _inverseVersion;
+        Affine affine;
+        public MatrixTransform(AffinePlan[] affPlans)
+        {
+            affine = new Affine(affPlans);
+        }
+        public MatrixTransform(Affine affine)
+        {
+            this.affine = affine;
+        }
         public override PointD Transform(PointD p)
         {
-            throw new System.NotImplementedException();
-            //_tmp[0] = new System.Drawing.PointF((float)p.X, (float)p.Y);
-            //mm1.TransformPoints(_tmp);
-            //return new PointD(_tmp[0].X, _tmp[0].Y);
+            double p_x = p.X;
+            double p_y = p.Y;
+            affine.Transform(ref p_x, ref p_y);
+            return new PointD(p_x, p_y);
+        }
+        public override MatrixTransform Inverse
+        {
+            get
+            {
+                if (_inverseVersion == null)
+                {
+                    return _inverseVersion = new MatrixTransform(affine.CreateInvert());
+                }
+                return _inverseVersion;
+            }
         }
 
-        //System.Drawing.PointF[] _tmp2 = new System.Drawing.PointF[4];
+        class InternalPointD
+        {
+            public double X;
+            public double Y;
+            public InternalPointD(double x, double y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+        }
+
         public override RectD TransformBounds(RectD r1)
         {
-            throw new System.NotImplementedException();
+            InternalPointD tmp0 = new InternalPointD(r1.Left, r1.Top);
+            InternalPointD tmp1 = new InternalPointD(r1.Right, r1.Top);
+            InternalPointD tmp2 = new InternalPointD(r1.Right, r1.Bottom);
+            InternalPointD tmp3 = new InternalPointD(r1.Left, r1.Bottom);
+
+            affine.Transform(ref tmp0.X, ref tmp0.Y);
+            affine.Transform(ref tmp1.X, ref tmp1.Y);
+            affine.Transform(ref tmp2.X, ref tmp2.Y);
+            affine.Transform(ref tmp3.X, ref tmp3.Y);
+
+
             //_tmp2[0] = new System.Drawing.PointF((float)r1.Left, (float)r1.Top);
             //_tmp2[1] = new System.Drawing.PointF((float)r1.Right, (float)r1.Top);
             //_tmp2[2] = new System.Drawing.PointF((float)r1.Right, (float)r1.Bottom);
@@ -46,8 +526,21 @@ namespace PixelFarm.DrawingBuffer
             ////find a new bound
 
             //return new RectD(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);
+
+            return new RectD(tmp0.X, tmp0.Y, tmp2.X - tmp0.X, tmp2.Y - tmp1.Y);
         }
+
     }
+
+
+
+
+
+
+
+
+
+
     public struct RectD
     {
         public RectD(double left, double top, double width, double height)

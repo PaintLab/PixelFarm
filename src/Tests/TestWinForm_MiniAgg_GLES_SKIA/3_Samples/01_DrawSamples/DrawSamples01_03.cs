@@ -50,8 +50,8 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
 
-
             p.Clear(Drawing.Color.White);
+
             p.UseSubPixelLcdEffect = true;
             string teststr = "ABCDE pqyt 1230";
             p.FillColor = Color.Black;
@@ -62,6 +62,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //---red reference line--
             p.DrawLine(0, 400, 800, 400);
             p.DrawLine(0, 400, 800, 500); //test oblique line
+
             p.DrawString(teststr, 300, 400);
             //
             p.DrawRect(0.5, 400, 40, 40);
@@ -83,7 +84,20 @@ namespace PixelFarm.Agg.Sample_Draw
             //---red reference line--
 
 
-             p.DrawImage(lionImg, 0, 0);
+            //p.DrawImage(lionImg, 0, 0); //reference at 0,0 
+            p.DrawImage(lionImg, 300, 0);
+
+            int _imgW = lionImg.Width;
+            int _imgH = lionImg.Height;
+
+            p.RenderQuality = RenderQualtity.Fast;
+            p.DrawImage(lionImg,
+              //move to center of the image (hotspot x,y)
+              AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
+              AffinePlan.Rotate(AggMath.deg2rad(45)),
+              AffinePlan.Scale(0.75, 0.75),
+              //move to target
+              AffinePlan.Translate(400, 200));
         }
     }
 

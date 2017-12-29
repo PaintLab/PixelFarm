@@ -62,6 +62,6 @@ namespace PixelFarm.Agg
             m_dy_int = AggMath.iround(dy * img_subpix_const.SCALE);
         }
         public void SetFilterOffset(double d) { SetFilterOffset(d, d); }
-        public void Prepare() { }
+        public virtual void Prepare() { }
     }
 }
