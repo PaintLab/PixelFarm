@@ -387,6 +387,8 @@ namespace PixelFarm.Agg.Imaging
         }
         static MyColor GetApproximateColor_Bicubic(BufferReader4 reader, double cx, double cy)
         {
+            //TODO: review here,
+            //passing pointer to array or use stackalloc
             byte[] rBuffer = new byte[16];
             byte[] gBuffer = new byte[16];
             byte[] bBuffer = new byte[16];

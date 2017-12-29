@@ -694,93 +694,118 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, double left, double top)
         {
-
-
-
-            //check image caching system
-            if (img is ActualImage)
+            ActualImage actualImg = img as ActualImage;
+            if (actualImg == null)
             {
+                //? TODO
+                return;
+            }
+            //check image caching system 
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
+                //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+                this._bxt.CopyBlit(left, top, srcBmp);
+                return;
+            }
 
-                ActualImage actualImg = (ActualImage)img;
-                if (this._renderQuality == RenderQualtity.Fast)
-                {
-                    //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
-                    //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
-                    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
-                    this._bxt.CopyBlit(left, top, srcBmp);
-                    return;
-                }
+            this.sharedImageWriterReader.ReloadImage(actualImg);
 
+            //save, restore later... 
+            bool useSubPix = UseSubPixelLcdEffect;
+            //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+            _aggsx.UseSubPixelRendering = false;
 
-                this.sharedImageWriterReader.ReloadImage(actualImg);
-
-                bool useSubPix = UseSubPixelLcdEffect; //save, restore later...
-
-                //before render an image we turn off vxs subpixel rendering
-                this.UseSubPixelLcdEffect = false;
-                _aggsx.UseSubPixelRendering = false;
-
-                if (this._orientation == DrawBoardOrientation.LeftTop)
-                {
-                    //place left upper corner at specific x y                    
-                    this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
-                }
-                else
-                {
-                    //left-bottom as original
-                    //place left-lower of the img at specific (x,y)
-                    this._aggsx.Render(this.sharedImageWriterReader, left, top);
-                }
-
-                this.UseSubPixelLcdEffect = useSubPix;
-                _aggsx.UseSubPixelRendering = useSubPix; //restore
-
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //place left upper corner at specific x y                    
+                this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
             }
             else
             {
-                //TODO:
+                //left-bottom as original
+                //place left-lower of the img at specific (x,y)
+                this._aggsx.Render(this.sharedImageWriterReader, left, top);
             }
+
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+            _aggsx.UseSubPixelRendering = useSubPix;
+
+
 
         }
         public override void DrawImage(Image img, params Transform.AffinePlan[] affinePlans)
         {
-            if (img is ActualImage)
+            ActualImage actualImg = img as ActualImage;
+            if (actualImg == null)
             {
-                this.sharedImageWriterReader.ReloadImage((ActualImage)img);
-                this._aggsx.Render(sharedImageWriterReader, affinePlans);
+                //? TODO
+                return;
             }
-            else
-            {
-                //TODO:
-            }
+
+            //if (this._renderQuality == RenderQualtity.Fast)
+            //{
+            //    //todo, review here again
+            //    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+            //    //this._bxt.CopyBlit(left, top, srcBmp); 
+            //    DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
+            //        DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
+            //        DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
+            //        //DrawingBuffer.AffinePlan.Translate(100,100)
+            //    });
+            //    //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
+            //    this._bxt.BlitRender(srcBmp, false, 1, mx);
+            //    return;
+            //}
+
+
+            this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+
+            bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
+                                                   //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+            _aggsx.UseSubPixelRendering = false;
+
+
+            this._aggsx.Render(sharedImageWriterReader, affinePlans);
+
+
+
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+            _aggsx.UseSubPixelRendering = useSubPix;
+
         }
 
-        ////----------------------
-        ///// <summary>
-        ///// do filter at specific area
-        ///// </summary>
-        ///// <param name="filter"></param>
-        ///// <param name="area"></param>
-        //public override void DoFilterBlurStack(RectInt area, int r)
-        //{
-        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-        //        area.Left, area.Bottom, area.Right, area.Top);
-        //    filterMan.DoStackBlur(img, r);
-        //}
-        //public override void DoFilterBlurRecursive(RectInt area, int r)
-        //{
-        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-        //        area.Left, area.Bottom, area.Right, area.Top);
-        //    filterMan.DoRecursiveBlur(img, r);
-        //}
-        //public override void DoFilter(RectInt area, int r)
-        //{
-        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-        //      area.Left, area.Top, area.Right, area.Bottom);
-        //    filterMan.DoSharpen(img, r);
-        //}
         public override void ApplyFilter(ImageFilter imgFilter)
         {
+            ////----------------------
+            ///// <summary>
+            ///// do filter at specific area
+            ///// </summary>
+            ///// <param name="filter"></param>
+            ///// <param name="area"></param>
+            //public override void DoFilterBlurStack(RectInt area, int r)
+            //{
+            //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+            //        area.Left, area.Bottom, area.Right, area.Top);
+            //    filterMan.DoStackBlur(img, r);
+            //}
+            //public override void DoFilterBlurRecursive(RectInt area, int r)
+            //{
+            //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+            //        area.Left, area.Bottom, area.Right, area.Top);
+            //    filterMan.DoRecursiveBlur(img, r);
+            //}
+            //public override void DoFilter(RectInt area, int r)
+            //{
+            //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+            //      area.Left, area.Top, area.Right, area.Bottom);
+            //    filterMan.DoSharpen(img, r);
+            //}
             //TODO: implement this
             //resolve internal img filter
             //switch (imgFilter.Name)

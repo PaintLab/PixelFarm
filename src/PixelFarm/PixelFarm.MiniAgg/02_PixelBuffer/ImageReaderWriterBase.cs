@@ -421,8 +421,29 @@ namespace PixelFarm.Agg
         }
         public int GetByteBufferOffsetXY(int x, int y)
         {
+
+#if DEBUG
+            if (y >= yTableArray.Length ||
+                x >= xTableArray.Length)
+            {
+                return -1;
+                //throw new NotSupportedException();
+            }
+#endif
+
             return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) * 4;
 
+        }
+        public int GetBufferOffsetXY32Check(int x, int y)
+        {
+ 
+            if (y >= yTableArray.Length ||
+                x >= xTableArray.Length)
+            {
+                return -1;
+            }
+ 
+            return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public int GetBufferOffsetXY32(int x, int y)
         {
@@ -677,10 +698,24 @@ namespace PixelFarm.Agg
 
         public void BlendColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
+
+            int bufferOffset32 = GetBufferOffsetXY32Check(x, y);
+            if (bufferOffset32 > -1)
+            {
+                _recvBlender32.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
+            }
+            else
+            {
+
+            }
+
+
+            //int bufferOffset32 = GetBufferOffsetXY32(x, y);
+            //_recvBlender32.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
+
             //int bufferOffset = GetBufferOffsetXY(x, y);
-            int bufferOffset32 = GetBufferOffsetXY32(x, y);
             //_recvBlender32.BlendPixels(m_ByteBuffer, bufferOffset, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
-            _recvBlender32.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
+
         }
 
         public void BlendColorVSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
