@@ -79,20 +79,20 @@ namespace PixelFarm.Agg.SimplePainter
 
 
             //string test_str = "บ่ป่มีมี่อุอูญญูกินกิ่นก็โก้";
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelLcdEffect = true;
             p.DrawString(test_str, 5, 200);
             //p.DrawString("12345", 50, 200); 
-            p.UseSubPixelRendering = false;
+            p.UseSubPixelLcdEffect = false;
             p.DrawString(test_str, 5, 300);
             //--------------------------------------------------- 
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelLcdEffect = true;
             p.StrokeColor = Drawing.Color.Black;
             p.DrawLine(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;
             p.CurrentFont = font2;
             p.DrawString(test_str, 80, 100);
             //---------------------------------------------------              
-            p.UseSubPixelRendering = false;
+            p.UseSubPixelLcdEffect = false;
             p.DrawString(test_str, 80, 150);
             //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);

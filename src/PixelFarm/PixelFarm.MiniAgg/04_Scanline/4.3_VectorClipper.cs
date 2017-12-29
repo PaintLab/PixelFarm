@@ -54,14 +54,16 @@ namespace PixelFarm.Agg
                 m_clipping = true;
             }
 
-
-            bool _isInSubPixelExpandWidthMode = false; //default
+            /// <summary>
+            /// clip box width is extened 3 times for lcd-effect subpixel rendering
+            /// </summary>
+            bool _clipBoxWidthX3ForSubPixelLcdEffect = false; //default
 
             /// <summary>
             /// when we render in subpixel rendering, we extend a row length 3 times (expand RGB)
             /// </summary>
             /// <param name="value"></param>
-            public void SetClipBoxForSubPixelRenderering(bool value)
+            public void SetClipBoxWidthX3ForSubPixelLcdEffect(bool value)
             {
                 //-----------------------------------------------------------------------------
                 //if we don't want to expand our img buffer 3 times (larger than normal)
@@ -69,7 +71,7 @@ namespace PixelFarm.Agg
                 //-----------------------------------------------------------------------------
 
                 //special method for our need
-                if (value != _isInSubPixelExpandWidthMode)
+                if (value != _clipBoxWidthX3ForSubPixelLcdEffect)
                 {
                     //changed
                     if (value)
@@ -81,7 +83,7 @@ namespace PixelFarm.Agg
                         //set back
                         clipBox = new RectInt(clipBox.Left, clipBox.Bottom, clipBox.Left + (clipBox.Width / 3), clipBox.Height);
                     }
-                    _isInSubPixelExpandWidthMode = value;
+                    _clipBoxWidthX3ForSubPixelLcdEffect = value;
                 }
             }
 

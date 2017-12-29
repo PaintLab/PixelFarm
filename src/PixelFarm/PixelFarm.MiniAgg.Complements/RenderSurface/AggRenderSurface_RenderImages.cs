@@ -30,8 +30,8 @@ namespace PixelFarm.Agg
     {
         public bool UseSubPixelRendering
         {
-            get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
-            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
+            get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
+            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
         }
         static Affine BuildImageBoundsPath(
             int srcW, int srcH,

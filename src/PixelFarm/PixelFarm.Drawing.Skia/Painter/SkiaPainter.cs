@@ -166,7 +166,7 @@ namespace PixelFarm.Drawing.Skia
             }
         }
 
-        public override bool UseSubPixelRendering
+        public override bool UseSubPixelLcdEffect
         {
             get
             {
