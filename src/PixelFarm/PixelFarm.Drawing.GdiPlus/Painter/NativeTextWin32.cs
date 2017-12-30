@@ -385,7 +385,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return WinGdiTextService.MeasureString(buff, startAt, len, font);
         }
-
+        public void MeasureString(char[] str, int startAt, int len, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
+        {
+            WinGdiTextService.MeasureString(str, startAt, len, font, maxWidth, out charFit, out charFitWidth);
+        }
 
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len,
             RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
@@ -408,6 +411,9 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
+
+
+
         public bool SupportsWordBreak { get { return false; } }
 
     }

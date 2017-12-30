@@ -83,6 +83,8 @@ namespace PixelFarm.Drawing
             }
         }
 
+
+
         struct InternalFontKey
         {
 
@@ -153,6 +155,28 @@ namespace PixelFarm.Drawing
         internal WeakReference _latestResolved; //result of the actual font, we store it as weak reference
         internal int _whitespace_width;
         internal int _general_lineHeight;
+
+
+        public float SizeInPixels
+        {
+            //TODO: implement this again
+            get { return 0; }
+        }
+        public float DescentInPixels
+        {
+            //TODO: implement this again
+            get { return 0; }
+        }
+        public float AscentInPixels
+        {//TODO: implement this again
+            get { return 0; }
+        }
+        public float LineGapInPixels
+        {//TODO: implement this again
+            get { return 0; }
+        }
+
+
     }
 
     namespace Internal

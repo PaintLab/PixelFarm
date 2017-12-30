@@ -153,6 +153,15 @@ namespace LayoutFarm
             _typographyTxtServices.MeasureString(str, startAt, len, out w, out h);
             return new Size(w, h);
         }
+        public void MeasureString(char[] str, int startAt, int len, RequestFont font, int limitWidth, out int charFit, out int charFitWidth)
+        {
+            Typeface typeface = ResolveTypeface(font);
+            _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
+
+            charFit = 0;
+            _typographyTxtServices.MeasureString(str, startAt, len, limitWidth, out charFit, out charFitWidth);
+
+        }
         float ITextService.MeasureBlankLineHeight(RequestFont font)
         {
             LineSpacingChoice sel_linespcingChoice;

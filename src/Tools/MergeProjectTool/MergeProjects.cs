@@ -460,8 +460,16 @@ namespace BuildMergeProject
                 foreach (string filename in allAbsFiles)
                 {
                     string onlyFileName = Path.GetFileName(filename);
-                    if (onlyFileName == "ExtensionAttribute.cs")
+
+                    if (onlyFileName == "PORTING_NOTMERGE.cs")
                     {
+                        //our convention
+                        continue;//skip
+                    } 
+                    else if (onlyFileName == "ExtensionAttribute.cs")
+                    {    //this is our convention
+                         //... if we have ExtensionAttribute.cs
+                         //the 
                         if (foundFirstExtensionAttributeFile)
                         {
                             continue;
@@ -563,7 +571,15 @@ namespace BuildMergeProject
             foreach (var item in allItems)
             {
                 string filename = item.EvaluatedInclude;
-                absFilenames.Add(projectDirName + "\\" + filename);
+                if (!Path.IsPathRooted(filename))
+                {
+                    absFilenames.Add(projectDirName + "\\" + filename);
+                }
+                else
+                {
+                    absFilenames.Add(filename);
+                }
+
             }
 
             return absFilenames;

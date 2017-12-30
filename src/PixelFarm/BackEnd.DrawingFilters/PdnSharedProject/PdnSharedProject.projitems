@@ -64,7 +64,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PixelOps\HueAndSatRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PixelOps\InvertColorRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PixelOps\PosterizeRenderer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)00_Porting\Port1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)00_Porting\PORTING_NOTMERGE.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformMemory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Wrap\PolarInversionEffect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Wrap\WarpEdgeBehavior.cs" />
