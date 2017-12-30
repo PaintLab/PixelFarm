@@ -254,7 +254,8 @@ namespace PixelFarm.DrawingGL
         }
         public void ChangeFillColor(Color color)
         {
-            //called by owner painter   
+            //called by owner painter  
+            painter.FontFillColor = color;
             _glsx.FontFillColor = color;
         }
         public void ChangeStrokeColor(Color strokeColor)
@@ -339,7 +340,7 @@ namespace PixelFarm.DrawingGL
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
 
-            _glsx.FontFillColor = painter.FillColor;
+            _glsx.FontFillColor = painter.FontFillColor;
 
             int j = buffer.Length;
             TextBuffer textBuffer = new TextBuffer(buffer);
