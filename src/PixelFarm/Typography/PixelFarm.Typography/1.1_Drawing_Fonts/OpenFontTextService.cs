@@ -129,7 +129,24 @@ namespace LayoutFarm
                 _resolvedTypefaceCache.Add(font.FontKey, typeface);
             }
             //and cache into level-0
+
+            float pxSize = Typeface.ConvPointsToPixels(font.SizeInPoints);
+
+            float pxscale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+
+            float recommedLineSpacing = typeface.CalculateRecommendLineSpacing() * pxscale;
+            float descentInPx = typeface.Descender * pxscale;
+            float ascentInPx = typeface.Ascender * pxscale;
+            float lineGapInPx = typeface.LineGap * pxscale;
+
             PixelFarm.Drawing.Internal.RequestFontCacheAccess.SetActualFont(font, _system_id, typeface);
+            PixelFarm.Drawing.Internal.RequestFontCacheAccess.SetGeneralFontMetricInfo(font,
+                pxSize,
+                ascentInPx,
+                descentInPx,
+                lineGapInPx,
+                recommedLineSpacing);
+
             return typeface;
         }
         public float MeasureWhitespace(RequestFont f)
