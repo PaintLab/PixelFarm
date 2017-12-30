@@ -67,6 +67,28 @@ Hardware and Software 2D Rendering Library
 ![autofit_hfit01](https://cloud.githubusercontent.com/assets/7447159/26182259/282de0f4-3ba1-11e7-83ab-84ac1911526d.png)
 
  
+---
+
+The HtmlRenderer example!
+---
+
+
+![html_renderer_with_selection](https://user-images.githubusercontent.com/7447159/34452219-1a37545c-ed6d-11e7-969f-b0f5623e4802.png)
+_pic 1: HtmlRenderer on GLES2 surface, text are renderered with the Typography_
+
+
+
+also, please note the text selection on the Html Surface.
+
+
+(HtmlRender => https://github.com/LayoutFarm/HtmlRenderer,
+
+Typography => https://github.com/LayoutFarm/Typography)
+
+
+ 
+ 
+ 
 
 ---
  
