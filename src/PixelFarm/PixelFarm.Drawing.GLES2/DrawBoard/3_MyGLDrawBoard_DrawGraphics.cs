@@ -109,12 +109,13 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            painter1.DrawRectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
+            painter1.DrawRect(left, top, width, height);
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-            painter1.DrawLine(x1, this.Height - y1, x2, this.Height - y2);
+            painter1.DrawLine(x1, y1, x2, y2);
         }
+
 
 
         /// <summary>
