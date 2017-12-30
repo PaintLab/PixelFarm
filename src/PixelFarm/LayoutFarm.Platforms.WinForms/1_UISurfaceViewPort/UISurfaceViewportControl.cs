@@ -167,7 +167,7 @@ namespace LayoutFarm.UI
             this.panel1.BackColor = System.Drawing.Color.Gray;
             this.panel1.Location = new System.Drawing.Point(4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(851, 486);
+            this.panel1.Size = new System.Drawing.Size(851, 753);
             this.panel1.TabIndex = 0;
             // 
             // UISurfaceViewportControl
@@ -177,7 +177,7 @@ namespace LayoutFarm.UI
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.panel1);
             this.Name = "UISurfaceViewportControl";
-            this.Size = new System.Drawing.Size(863, 498);
+            this.Size = new System.Drawing.Size(863, 760);
             this.ResumeLayout(false);
 
         }
