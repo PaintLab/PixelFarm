@@ -49,6 +49,18 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
         }
+        Color _fontFillColor;
+        public Color FontFillColor
+        {
+            get
+            {
+                return _fontFillColor;
+            }
+            set
+            {
+                _fontFillColor = value; 
+            }
+        }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {
