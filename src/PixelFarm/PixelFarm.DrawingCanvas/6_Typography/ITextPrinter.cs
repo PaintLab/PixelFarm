@@ -27,8 +27,13 @@ namespace PixelFarm.Drawing
         ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len);
         //
         Size MeasureString(char[] str, int startAt, int len, RequestFont font);
+
+        void MeasureString(char[] str, int startAt, int len, RequestFont font, int maxWidth, out int charFit, out int charFitWidth);
+
+
         void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font,
             int[] outputXAdvances, out int outputTotalW, out int lineHeight);
+
 
         void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] outputXAdvances, out int outputTotalW, out int lineHeight);
     }
