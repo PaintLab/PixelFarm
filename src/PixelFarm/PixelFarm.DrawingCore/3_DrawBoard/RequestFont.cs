@@ -156,24 +156,31 @@ namespace PixelFarm.Drawing
         internal int _whitespace_width;
         internal int _general_lineHeight;
 
+        //------------------ 
+
+        //commonly used metricx
+        //TODO: review here again
+        internal float _sizeInPx;
+        internal float _descentInPx;
+        internal float _ascentInPx;
+        internal float _lineGapInPx;
 
         public float SizeInPixels
         {
-            //TODO: implement this again
-            get { return 0; }
+            get { return _sizeInPx; }
         }
         public float DescentInPixels
         {
-            //TODO: implement this again
-            get { return 0; }
+
+            get { return _descentInPx; }
         }
         public float AscentInPixels
-        {//TODO: implement this again
-            get { return 0; }
+        {
+            get { return _ascentInPx; }
         }
         public float LineGapInPixels
-        {//TODO: implement this again
-            get { return 0; }
+        {
+            get { return _lineGapInPx; }
         }
 
 
@@ -202,6 +209,19 @@ namespace PixelFarm.Drawing
                 reqFont._platform_id = platform_id;
                 reqFont._latestResolved = new WeakReference(platformFont);
             }
+            public static void SetGeneralFontMetricInfo(
+               RequestFont reqFont,
+               float sizeInPx, float ascentInPx,
+               float descentInPx, float lineGapInPx,
+               float lineHeight)
+            {
+                reqFont._sizeInPx = sizeInPx;
+                reqFont._ascentInPx = ascentInPx;
+                reqFont._descentInPx = descentInPx;
+                reqFont._lineGapInPx = lineGapInPx;
+                reqFont._general_lineHeight = (int)Math.Round(lineHeight);
+            }
+
             public static T GetActualFont<T>(RequestFont reqFont, int platform_id)
              where T : class
             {
