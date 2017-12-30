@@ -121,7 +121,7 @@ MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelse
 
 **Font**
 
-Apache2, 2016-2017, WinterDev, from https://github.com/LayoutFarm/Typography
+Apache2, 2016-2017, WinterDev, Samuel Carlsson, Sam Hocevar and others, from https://github.com/LayoutFarm/Typography
 
 Apache2, 2014-2016, Samuel Carlsson, from https://github.com/vidstige/NRasterizer
 
