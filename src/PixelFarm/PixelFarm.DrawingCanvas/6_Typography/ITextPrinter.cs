@@ -10,9 +10,36 @@ namespace PixelFarm.Drawing
     }
     public interface ILineSegment
     {
-        string GetText();
+
         int Length { get; }
         int StartAt { get; }
+    }
+
+    public struct TextBufferSpan
+    {
+        public readonly int start;
+        public readonly int len;
+
+        char[] _rawString;
+        public TextBufferSpan(char[] rawCharBuffer)
+        {
+            this._rawString = rawCharBuffer;
+            this.len = rawCharBuffer.Length;
+            this.start = 0;
+        }
+        public TextBufferSpan(char[] rawCharBuffer, int start, int len)
+        {
+            this.start = start;
+            this.len = len;
+            this._rawString = rawCharBuffer;
+        }
+        public override string ToString()
+        {
+            return start + ":" + len;
+        }
+
+
+        public char[] GetRawCharBuffer() { return _rawString; }
     }
 
     //implement this interface to handler font measurement/ glyph layout position
@@ -24,19 +51,24 @@ namespace PixelFarm.Drawing
         float MeasureBlankLineHeight(RequestFont f);
         //
         bool SupportsWordBreak { get; }
-        ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len);
+
+        ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan);
         //
-        Size MeasureString(char[] str, int startAt, int len, RequestFont font);
+        Size MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font);
 
-        void MeasureString(char[] str, int startAt, int len, RequestFont font, int maxWidth, out int charFit, out int charFitWidth);
+        void MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth);
 
+        void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
+            RequestFont font,
+            int[] outputXAdvances,
+            out int outputTotalW,
+            out int lineHeight);
 
-        void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font,
-            int[] outputXAdvances, out int outputTotalW, out int lineHeight);
-
-
-        void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] outputXAdvances, out int outputTotalW, out int lineHeight);
+        void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
+            RequestFont font, int[] outputXAdvances, out int outputTotalW, out int lineHeight);
     }
+
+
 
     /// <summary>
     /// for printing a string to target canvas

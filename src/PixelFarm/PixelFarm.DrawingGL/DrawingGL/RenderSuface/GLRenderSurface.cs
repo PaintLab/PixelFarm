@@ -879,7 +879,7 @@ namespace PixelFarm.DrawingGL
         //-------------------------------------------------------------------------------
 
         /// <summary>
-        /// reuseable rect coord
+        /// reusable rect coord
         /// </summary>
         float[] _rectCoords = new float[8];
         /// <summary>
