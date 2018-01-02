@@ -50,16 +50,16 @@ namespace LayoutFarm
             get { return _typographyTxtServices.CurrentScriptLang; }
         }
 
-        public void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
-            CalculateGlyphAdvancePos(ref textBufferSpan, this.BreakToLineSegments(ref textBufferSpan), font, outputGlyphAdvances, out outputTotalW, out outputLineHeight);
+            CalculateUserCharGlyphAdvancePos(ref textBufferSpan, this.BreakToLineSegments(ref textBufferSpan), font, outputGlyphAdvances, out outputTotalW, out outputLineHeight);
         }
 
         ReusableTextBuffer _reusableTextBuffer = new ReusableTextBuffer();
 
-        public void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs, RequestFont font,
-            int[] outputGlyphAdvances, out int outputTotalW, out int lineHeight)
+            int[] outputUserInputCharAdvance, out int outputTotalW, out int lineHeight)
         {
 
             //layout  
@@ -113,7 +113,7 @@ namespace LayoutFarm
                     double actualAdvX = glyphPlan.AdvanceX;
 
                     outputTotalW += 
-                        outputGlyphAdvances[pos + glyphPlan.input_cp_offset] += 
+                        outputUserInputCharAdvance[pos + glyphPlan.input_cp_offset] += 
                         (int)Math.Round(actualAdvX * scale);
                 }
                 pos += seqLen;

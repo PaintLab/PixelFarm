@@ -151,7 +151,7 @@ namespace LayoutFarm.Text
                     outputGlyphAdvanceList = new int[len];
 
                     int outputTotalW, outputLineHeight;
-                    txServices.CalculateGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
+                    txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
                         outputGlyphAdvanceList, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
 
@@ -164,7 +164,7 @@ namespace LayoutFarm.Text
                     outputGlyphAdvanceList = new int[len];
                     int outputTotalW, outputLineHeight;
                     var textBufferSpan = new TextBufferSpan(MyBuffer);
-                    txServices.CalculateGlyphAdvancePos(ref textBufferSpan, GetFont(),
+                    txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
                         outputGlyphAdvanceList, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
                 }

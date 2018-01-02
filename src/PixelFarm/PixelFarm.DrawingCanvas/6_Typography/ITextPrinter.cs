@@ -58,13 +58,13 @@ namespace PixelFarm.Drawing
 
         void MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth);
 
-        void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
+        void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
             RequestFont font,
             int[] outputXAdvances,
             out int outputTotalW,
             out int lineHeight);
 
-        void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
+        void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
             RequestFont font, int[] outputXAdvances, out int outputTotalW, out int lineHeight);
     }
 

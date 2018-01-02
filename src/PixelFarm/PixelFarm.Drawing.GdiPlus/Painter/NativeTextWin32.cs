@@ -400,7 +400,7 @@ namespace PixelFarm.Drawing.WinGdi
             WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
         }
 
-        public void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
 
@@ -417,7 +417,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
-        public void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
             ILineSegmentList lineSegs, 
             RequestFont font, 
             int[] glyphXAdvances, 
