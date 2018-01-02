@@ -14,7 +14,7 @@ namespace LayoutFarm.Text
 
         TextSpanStyle spanStyle;
 
-        int[] outputGlyphAdvanceList = null;//TODO: review here-> change this to caret stop position
+        int[] outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
         char[] _mybuffer;
         ILineSegmentList _lineSegs;
@@ -128,7 +128,7 @@ namespace LayoutFarm.Text
                 //we should not store this as a text run
                 //if this is a linebreak it should be encoded at the end of this visual line
                 size = new Size(0, (int)Math.Round(txServices.MeasureBlankLineHeight(GetFont())));
-                outputGlyphAdvanceList = null;
+                outputUserCharAdvances = null;
             }
             else
             {
@@ -148,11 +148,11 @@ namespace LayoutFarm.Text
                     //
                     _content_unparsed = false;
                     //output glyph position
-                    outputGlyphAdvanceList = new int[len];
+                    outputUserCharAdvances = new int[len];
 
                     int outputTotalW, outputLineHeight;
                     txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
-                        outputGlyphAdvanceList, out outputTotalW, out outputLineHeight);
+                        outputUserCharAdvances, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
 
                 }
@@ -161,11 +161,11 @@ namespace LayoutFarm.Text
 
                     _content_unparsed = false;
                     int len = MyBuffer.Length;
-                    outputGlyphAdvanceList = new int[len];
+                    outputUserCharAdvances = new int[len];
                     int outputTotalW, outputLineHeight;
                     var textBufferSpan = new TextBufferSpan(MyBuffer);
                     txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
-                        outputGlyphAdvanceList, out outputTotalW, out outputLineHeight);
+                        outputUserCharAdvances, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
                 }
 
@@ -230,11 +230,11 @@ namespace LayoutFarm.Text
                 {
                     //ca
                     int total = 0;
-                    if (outputGlyphAdvanceList != null)
+                    if (outputUserCharAdvances != null)
                     {
                         for (int i = 0; i < length; ++i)
                         {
-                            total += this.outputGlyphAdvanceList[i];
+                            total += this.outputUserCharAdvances[i];
                         }
                     }
                     return new Size(total, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
@@ -379,12 +379,12 @@ namespace LayoutFarm.Text
         {
             if (pixelOffset < Width)
             {
-                int j = outputGlyphAdvanceList.Length;
+                int j = outputUserCharAdvances.Length;
                 int accWidth = 0;
                 for (int i = 0; i < j; i++)
                 {
 
-                    int charW = outputGlyphAdvanceList[i];
+                    int charW = outputUserCharAdvances[i];
                     if (accWidth + charW > pixelOffset)
                     {
                         //stop at this
