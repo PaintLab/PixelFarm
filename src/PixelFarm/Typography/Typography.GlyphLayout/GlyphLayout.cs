@@ -13,9 +13,11 @@ namespace Typography.TextLayout
     public struct GlyphPlan
     {
 
+        public readonly short input_cp_offset;
         public readonly ushort glyphIndex;
-        public GlyphPlan(ushort glyphIndex, float exactX, float exactY, float exactAdvX)
+        public GlyphPlan(short input_cp_offset, ushort glyphIndex, float exactX, float exactY, float exactAdvX)
         {
+            this.input_cp_offset = input_cp_offset;
             this.glyphIndex = glyphIndex;
             this.ExactX = exactX;
             this.ExactY = exactY;
@@ -36,6 +38,9 @@ namespace Typography.TextLayout
 #endif
     }
 
+    /// <summary>
+    /// expandable list of glyph plan
+    /// </summary>
     public class GlyphPlanList
     {
         List<GlyphPlan> _glyphPlans = new List<GlyphPlan>();
@@ -67,7 +72,11 @@ namespace Typography.TextLayout
                 return _glyphPlans.Count;
             }
         }
-        
+
+        public GlyphPlanList()
+        {
+
+        }
     }
 
 
@@ -131,6 +140,16 @@ namespace Typography.TextLayout
 
 
 
+    struct CodePointFromUserChar
+    {
+        public readonly int codePoint;
+        public readonly ushort user_char_offset;
+        public CodePointFromUserChar(ushort user_char_offset, int codePoint)
+        {
+            this.user_char_offset = user_char_offset;
+            this.codePoint = codePoint;
+        }
+    }
 
 
     //TODO: rename this to ShapingEngine ?
@@ -148,8 +167,8 @@ namespace Typography.TextLayout
         GlyphSetPosition _gpos;
         bool _needPlanUpdate;
 
-        internal GlyphIndexList _inputGlyphs = new GlyphIndexList();
-        internal GlyphPosStream _glyphPositions = new GlyphPosStream();
+        GlyphIndexList _inputGlyphs = new GlyphIndexList();//reusable input glyph
+        GlyphPosStream _glyphPositions = new GlyphPosStream();
 
 
         public GlyphLayout()
@@ -177,6 +196,7 @@ namespace Typography.TextLayout
             }
         }
 
+
         public bool EnableLigature { get; set; }
         public bool EnableComposition { get; set; }
         public Typeface Typeface
@@ -191,10 +211,11 @@ namespace Typography.TextLayout
                 }
             }
         }
-        /// <summary>
-        /// reusable codepoint list buffer
-        /// </summary>
-        List<int> _codepoints = new List<int>();//not thread-safe*** 
+
+
+        //not thread-safe*** 
+
+        List<CodePointFromUserChar> _reusableCodePointFromUserCharList = new List<CodePointFromUserChar>();
 
         /// <summary>
         /// do glyph shaping and glyph out
@@ -212,6 +233,8 @@ namespace Typography.TextLayout
                 UpdateLayoutPlan();
             }
 
+
+            //[A]
             // this is important!
             // -----------------------
             //  from @samhocevar's PR: (https://github.com/LayoutFarm/Typography/pull/56/commits/b71c7cf863531ebf5caa478354d3249bde40b96e)
@@ -220,7 +243,7 @@ namespace Typography.TextLayout
             // we need to use "int".
             // This allows characters such as 🙌 or 𐐷 or to be treated as single codepoints even
             // though they are encoded as two "char"s in a C# string.
-            _codepoints.Clear();
+            _reusableCodePointFromUserCharList.Clear();
             for (int i = 0; i < len; ++i)
             {
                 char ch = str[startAt + i];
@@ -230,35 +253,47 @@ namespace Typography.TextLayout
                     char nextCh = str[startAt + i + 1];
                     if (nextCh >= 0xdc00 && nextCh <= 0xdfff)
                     {
+                        //please note: 
+                        //num of codepoint may be less than  original user input char 
                         ++i;
                         codepoint = char.ConvertToUtf32(ch, nextCh);
                     }
                 }
-                _codepoints.Add(codepoint);
+                _reusableCodePointFromUserCharList.Add(new CodePointFromUserChar((ushort)i, codepoint));
             }
 
+            //
+            //[B]
+            // convert codepoint-list to input glyph-list 
             // clear before use
             _inputGlyphs.Clear();
-
-            // convert codepoints to input glyphs
-            for (int i = 0; i < _codepoints.Count; ++i)
+            int codePointCount = _reusableCodePointFromUserCharList.Count;
+            for (int i = 0; i < codePointCount; ++i)
             {
-                int codepoint = _codepoints[i];
-                ushort glyphIndex = _typeface.LookupIndex(codepoint);
-                if (i + 1 < _codepoints.Count)
+                CodePointFromUserChar cp = _reusableCodePointFromUserCharList[i];
+                ushort glyphIndex = _typeface.LookupIndex(cp.codePoint);
+
+                if (i + 1 < codePointCount)
                 {
-                    // Maybe this is a UVS sequence; in that case, skip the second codepoint
-                    int nextCodepoint = _codepoints[i + 1];
-                    ushort variationGlyphIndex = _typeface.LookupIndex(codepoint, nextCodepoint);
+                    // Maybe this is a UVS sequence; in that case,
+                    //***SKIP*** the second codepoint
+                    CodePointFromUserChar nextCp = _reusableCodePointFromUserCharList[i + 1];
+                    ushort variationGlyphIndex = _typeface.LookupIndex(cp.codePoint, nextCp.codePoint);
                     if (variationGlyphIndex > 0)
                     {
-                        ++i;
+                        //user glyph index from next codepoint
                         glyphIndex = variationGlyphIndex;
+                        //but record as current code point i
+                        _inputGlyphs.AddGlyph(i, glyphIndex);
+
+                        ++i; //skip
+                        continue;//*** 
                     }
                 }
-                _inputGlyphs.AddGlyph(codepoint, glyphIndex);
+                _inputGlyphs.AddGlyph(i, glyphIndex);
             }
 
+            //[C]
             //----------------------------------------------  
             //glyph substitution            
             if (_gsub != null & len > 0)
@@ -267,15 +302,16 @@ namespace Typography.TextLayout
                 _gsub.EnableLigation = this.EnableLigature;
                 _gsub.EnableComposition = this.EnableComposition;
                 _gsub.DoSubstitution(_inputGlyphs);
-                //
-                _inputGlyphs.CreateMapFromUserCharToGlyphIndices();
             }
+
             //----------------------------------------------  
             //after glyph substitution,
             //number of input glyph MAY changed (increase or decrease).***
             //so count again.
             int finalGlyphCount = _inputGlyphs.Count;
             //----------------------------------------------  
+
+            //[D]
             //glyph position
             _glyphPositions.Clear();
             _glyphPositions.Typeface = _typeface;
@@ -283,11 +319,12 @@ namespace Typography.TextLayout
             {
                 //at this stage _inputGlyphs and _glyphPositions 
                 //has member 1:1
-                ushort glyIndex = _inputGlyphs[i];
+                ushort glyIndex, input_codepointOffset, input_mapLen;
+                _inputGlyphs.GetGlyphIndexAndMap(i, out glyIndex, out input_codepointOffset, out input_mapLen);
                 //
                 Glyph orgGlyph = _typeface.GetGlyphByIndex(glyIndex);
                 //this is original value WITHOUT fit-to-grid adjust
-                _glyphPositions.AddGlyph(glyIndex, orgGlyph);
+                _glyphPositions.AddGlyph((short)input_codepointOffset, glyIndex, orgGlyph);
             }
 
             PositionTechnique posTech = this.PositionTechnique;
@@ -296,12 +333,31 @@ namespace Typography.TextLayout
                 _gpos.DoGlyphPosition(_glyphPositions);
             }
             //----------------------------------------------  
-            //at this point, all position is layout at original scale ***
+            //at this point, all positions are layouted at its original scale ***
             //then we will scale it to target scale later 
-            //----------------------------------------------  
-
+            //----------------------------------------------   
         }
 
+
+        /// <summary>
+        /// generate map from user codepoint buffer to output glyph index, from latest layout result
+        /// </summary>
+        /// <param name="outputUserCharToGlyphIndexMapList"></param>
+        public void CreateMapFromUserCharToGlyphIndices(List<UserCodePointToGlyphIndex> outputUserCharToGlyphIndexMapList)
+        {
+            //1. get map from user-input-codepoint to glyph-index 
+            _inputGlyphs.CreateMapFromUserCodePointToGlyphIndices(outputUserCharToGlyphIndexMapList);
+
+            ////TODO:
+            ////2. 
+            ////since some user-input-codepoints may be skiped in codepoint-to-glyph index lookup (see this.Layout(), [A])    
+            //int j = outputUserCharToGlyphIndexMapList.Count;
+            //for (int i = 0; i < j; ++i)
+            //{ 
+            //    UserCodePointToGlyphIndex userCodePointToGlyphIndex = outputUserCharToGlyphIndexMapList[i];
+            //    CodePointFromUserChar codePointFromUserChar = _reusableCodePointFromUserCharList[userCodePointToGlyphIndex.userCodePointIndex]; 
+            //}
+        }
         void UpdateLayoutPlan()
         {
             GlyphLayoutPlanContext context = _layoutPlanCollection.GetPlanOrCreate(this._typeface, this._scriptLang);
@@ -335,26 +391,17 @@ namespace Typography.TextLayout
             int floor_value = (int)value;
             return floor_value + 1;
         }
-        /// <summary>
-        /// read latest layout output into outputGlyphPlanList
-        /// </summary>
-        /// <param name="glyphLayout"></param>
-        /// <param name="outputGlyphPlanList"></param>
-        public static void dbugReadOutput(this GlyphLayout glyphLayout, List<UserCharToGlyphIndexMap> outputGlyphPlanList)
-        {
-            //TODO: review here 
-            outputGlyphPlanList.AddRange(glyphLayout._inputGlyphs._mapUserCharToGlyphIndices);
-        }
-#endif 
+
+#endif
 
 
         /// <summary>
-        /// general scale, generate glyph plan, from unscale glyph size to specific scale
+        /// generate scaled from unscale glyph size to specific scale
         /// </summary>
         /// <param name="glyphPositions"></param>
         /// <param name="pxscale"></param>
         /// <param name="outputGlyphPlanList"></param>
-        public static void GenerateGlyphPlan(IGlyphPositions glyphPositions,
+        public static void GenerateGlyphPlans(IGlyphPositions glyphPositions,
             float pxscale,
             bool snapToGrid,
             GlyphPlanList outputGlyphPlanList)
@@ -370,8 +417,9 @@ namespace Typography.TextLayout
 
             for (int i = 0; i < finalGlyphCount; ++i)
             {
-                short offsetX, offsetY, advW; //all from pen-pos
-                ushort glyphIndex = glyphPositions.GetGlyph(i, out offsetX, out offsetY, out advW);
+
+                short input_offset, offsetX, offsetY, advW; //all from pen-pos
+                ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
 
                 float s_advW = advW * pxscale;
 
@@ -387,12 +435,13 @@ namespace Typography.TextLayout
                 float exact_y = (float)(cy + offsetY * pxscale);
 
                 outputGlyphPlanList.Append(new GlyphPlan(
-                   glyphIndex,
+                    input_offset,
+                    glyphIndex,
                     exact_x,
                     exact_y,
                     advW));
-                cx += s_advW;                
-                 
+                cx += s_advW;
+
             }
         }
 
@@ -403,7 +452,7 @@ namespace Typography.TextLayout
     /// </summary>
     class GlyphPosStream : IGlyphPositions
     {
-        List<GlyphPos> _glyphs = new List<GlyphPos>();
+        List<GlyphPos> _glyphPosList = new List<GlyphPos>();
 
         Typeface _typeface;
         public GlyphPosStream() { }
@@ -412,114 +461,93 @@ namespace Typography.TextLayout
         {
             get
             {
-                return _glyphs.Count;
+                return _glyphPosList.Count;
             }
         }
         public void Clear()
         {
             _typeface = null;
-            _glyphs.Clear();
+            _glyphPosList.Clear();
         }
         public Typeface Typeface
         {
             get { return this._typeface; }
             set { this._typeface = value; }
         }
-        public void AddGlyph(ushort glyphIndex, Glyph glyph)
+        public void AddGlyph(short o_offset, ushort glyphIndex, Glyph glyph)
         {
             if (!glyph.HasOriginalAdvancedWidth)
             {
                 glyph.OriginalAdvanceWidth = _typeface.GetHAdvanceWidthFromGlyphIndex(glyphIndex);
             }
-            _glyphs.Add(new GlyphPos(glyphIndex, glyph.GlyphClass, glyph.OriginalAdvanceWidth));
-
+            _glyphPosList.Add(new GlyphPos(o_offset, glyphIndex, glyph.GlyphClass, glyph.OriginalAdvanceWidth));
         }
         public void AppendGlyphOffset(int index, short appendOffsetX, short appendOffsetY)
         {
-            GlyphPos existing = _glyphs[index];
+            GlyphPos existing = _glyphPosList[index];
             existing.xoffset += appendOffsetX;
             existing.yoffset += appendOffsetY;
-            _glyphs[index] = existing;
+            _glyphPosList[index] = existing;
         }
         public GlyphPos this[int index]
         {
 
             get
             {
-                return _glyphs[index];
+                return _glyphPosList[index];
             }
         }
         public GlyphClassKind GetGlyphClassKind(int index)
         {
-            return _glyphs[index].classKind;
+            return _glyphPosList[index].classKind;
         }
         public ushort GetGlyph(int index, out ushort advW)
         {
-            GlyphPos pos = _glyphs[index];
+            GlyphPos pos = _glyphPosList[index];
             advW = (ushort)pos.advanceW;
             return pos.glyphIndex;
         }
-        public ushort GetGlyph(int index, out short offsetX, out short offsetY, out short advW)
+        public ushort GetGlyph(int index, out short inputOffset, out short offsetX, out short offsetY, out short advW)
         {
-            GlyphPos pos = _glyphs[index];
+            GlyphPos pos = _glyphPosList[index];
             offsetX = pos.xoffset;
             offsetY = pos.yoffset;
             advW = pos.advanceW;
+            inputOffset = pos.o_offset;
             return pos.glyphIndex;
         }
         public void GetOffset(int index, out short offsetX, out short offsetY)
         {
-            GlyphPos pos = _glyphs[index];
+            GlyphPos pos = _glyphPosList[index];
             offsetX = pos.xoffset;
             offsetY = pos.yoffset;
         }
 
         public void AppendGlyphAdvance(int index, short appendAdvX, short appendAdvY)
         {
-            GlyphPos pos = _glyphs[index];
+            GlyphPos pos = _glyphPosList[index];
             pos.advanceW += appendAdvX;//TODO: review for appendY
-            _glyphs[index] = pos;
+            _glyphPosList[index] = pos;
         }
-        //public void FlushNewGlyphAdvance()
-        //{
-        //    int lim = _glyphs.Count - 1;
-        //    short total_advW = 0;
-        //    InternalGlyphPos p_next;
-        //    for (int i = 0; i < lim; ++i)
-        //    {
-        //        //----------------------------------------
-        //        //update advance i => affect the pos of i+1
-        //        //----------------------------------------
-        //        short advW_update = _updateAdvanceWList[i];
-        //        p_next = _glyphs[i + 1];
-        //        //TODO: review offset Y for vertical writing direction
-        //        total_advW += advW_update;
-        //        p_next.xoffset += total_advW;
-        //        _glyphs[i + 1] = p_next;//set back
-        //        _updateAdvanceWList[i] = 0;//clear
-        //    }
-        //    //and the last one
-        //    p_next = _glyphs[lim];
-        //    p_next.xoffset += total_advW;
-        //    _glyphs[lim] = p_next;//set back
-        //}
+
     }
 
     struct GlyphPos
     {
-
-        public readonly GlyphClassKind glyphClass;
+        public readonly short o_offset; //original user offset
         public readonly ushort glyphIndex;
         public short xoffset;
         public short yoffset;
         public short advanceW; // actually this value is ushort, TODO: review here
+        public readonly GlyphClassKind glyphClass;
 
-        public GlyphPos(
+        public GlyphPos(short o_offset,
             ushort glyphIndex,
             GlyphClassKind glyphClass,
             ushort orgAdvanced
             )
         {
+            this.o_offset = o_offset;
             this.glyphClass = glyphClass;
             this.glyphIndex = glyphIndex;
             this.advanceW = (short)orgAdvanced;

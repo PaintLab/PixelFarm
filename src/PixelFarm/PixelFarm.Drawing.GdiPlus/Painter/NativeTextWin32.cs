@@ -145,11 +145,15 @@ namespace PixelFarm.Drawing.WinGdi
         }
         //==============================================
 
-        public static void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW)
+        public static void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+                RequestFont font, int[] outputGlyphAdvances, out int outputTotalW)
         {
+
+
             unsafe
             {
                 outputTotalW = 0;
+                int len = textBufferSpan.len;
                 if (len == 0)
                 {
                     return;
@@ -166,7 +170,12 @@ namespace PixelFarm.Drawing.WinGdi
                 //        glyhIndics,
                 //        0);
                 //}
-                byte[] encoding = s_en.GetBytes(str, startAt, len);
+
+
+                byte[] encoding = s_en.GetBytes(
+                    textBufferSpan.GetRawCharBuffer(),
+                    textBufferSpan.start,
+                    len);
                 NativeTextWin32.FontABC[] abcWidths = winfont.GetInteralABCArray();
                 int totalW = 0;
                 for (int i = 0; i < len; ++i)
@@ -381,20 +390,21 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return WinGdiTextService.MeasureWhitespace(f);
         }
-        public PixelFarm.Drawing.Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
+        public PixelFarm.Drawing.Size MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font)
         {
-            return WinGdiTextService.MeasureString(buff, startAt, len, font);
+
+            return WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font);
         }
-        public void MeasureString(char[] str, int startAt, int len, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
+        public void MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
         {
-            WinGdiTextService.MeasureString(str, startAt, len, font, maxWidth, out charFit, out charFitWidth);
+            WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
         }
 
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len,
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
 
-            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, outputGlyphAdvances, out outputTotalW);
+            WinGdiTextService.CalculateGlyphAdvancePos(ref textBufferSpan, font, outputGlyphAdvances, out outputTotalW);
             outputLineHeight = WinGdiTextService.MeasureBlankLineHeight(font);
         }
 
@@ -403,11 +413,16 @@ namespace PixelFarm.Drawing.WinGdi
             return WinGdiTextService.MeasureBlankLineHeight(f);
         }
 
-        public ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len)
+        public ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
         {
             throw new NotImplementedException();
         }
-        public void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int outputLineHeight)
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
+            ILineSegmentList lineSegs, 
+            RequestFont font, 
+            int[] glyphXAdvances, 
+            out int outputTotalW, 
+            out int outputLineHeight)
         {
             throw new NotImplementedException();
         }

@@ -23,7 +23,7 @@ namespace Typography.TextServices
         //it provide cache for previous 'used/ wellknown' Word-glyphPlans for a specific font 
         // 
 
-        GlyphPlanCacheForTypefaceAndScriptLang _currentShapingContext;
+        GlyphPlanCacheForTypefaceAndScriptLang _currentGlyphPlanSeqCache;
         Dictionary<TextShapingContextKey, GlyphPlanCacheForTypefaceAndScriptLang> _registerShapingContexts = new Dictionary<TextShapingContextKey, GlyphPlanCacheForTypefaceAndScriptLang>();
         GlyphLayout _glyphLayout;
 
@@ -33,15 +33,12 @@ namespace Typography.TextServices
         TypefaceStore typefaceStore;
         ScriptLang scLang;
 
-        //GlyphPlanList userGlyphPlanList;
-        //List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
 
         public TextServices()
         {
 
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
-
             _glyphLayout = new GlyphLayout();
         }
         public bool TrySettingScriptLangFromCurrentThreadCultureInfo()
@@ -79,14 +76,14 @@ namespace Typography.TextServices
         {
             //check if we have the cache-key or create a new one.
             var key = new TextShapingContextKey(typeface, _glyphLayout.ScriptLang);
-            if (!_registerShapingContexts.TryGetValue(key, out _currentShapingContext))
+            if (!_registerShapingContexts.TryGetValue(key, out _currentGlyphPlanSeqCache))
             {
                 //not found
                 //the create the new one 
                 var shapingContext = new GlyphPlanCacheForTypefaceAndScriptLang(typeface, _glyphLayout.ScriptLang);
                 //shaping context setup ...
                 _registerShapingContexts.Add(key, shapingContext);
-                _currentShapingContext = shapingContext;
+                _currentGlyphPlanSeqCache = shapingContext;
             }
 
             _currentTypeface = _glyphLayout.Typeface = typeface;
@@ -98,20 +95,13 @@ namespace Typography.TextServices
         {
             return typefaceStore.GetTypeface(name, installedFontStyle);
         }
-        /// <summary>
-        /// shaping input string with current font and current script         
-        /// </summary>
-        /// <param name="inputString"></param>
-        public GlyphPlanSequence LayoutText(string inputString)
+
+
+        public GlyphPlanSequence GetUnscaledGlyphPlanSequence(TextBuffer buffer, int start, int len)
         {
-            //output is glyph plan for this input string 
-            //input string need to be splited into 'words'. 
-            TextBuffer textBuffer = new TextBuffer(inputString.ToCharArray());
-            return _currentShapingContext.Layout(_glyphLayout, textBuffer, 0, textBuffer.Len);
-        }
-        public GlyphPlanSequence LayoutText(TextBuffer buffer, int start, int len)
-        {
-            return _currentShapingContext.Layout(_glyphLayout, buffer, start, len);
+            //under current typeface + scriptlang setting 
+            return _currentGlyphPlanSeqCache.GetUnscaledGlyphPlanSequence(_glyphLayout, buffer, start, len);
+
         }
 
 
@@ -119,8 +109,6 @@ namespace Typography.TextServices
         {
             _registerShapingContexts.Clear();
         }
-
-
 
         Typography.TextBreak.CustomBreaker _textBreaker;
         public IEnumerable<BreakSpan> BreakToLineSegments(char[] str, int startAt, int len)
@@ -185,9 +173,12 @@ namespace Typography.TextServices
 
         GlyphPlanList _reusableGlyphPlanList = new GlyphPlanList();
         List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
+
         public void MeasureString(char[] str, int startAt, int len, out int w, out int h)
         {
             //measure string 
+            //check if we use cache feature or not
+
             if (str.Length < 1)
             {
                 w = h = 0;
@@ -211,12 +202,10 @@ namespace Typography.TextServices
             foreach (BreakSpan breakSpan in BreakToLineSegments(str, startAt, len))
             {
 
-
-                //measure string at specific px scale 
                 _glyphLayout.Layout(str, breakSpan.startAt, breakSpan.len);
                 //
                 _reusableGlyphPlanList.Clear();
-                GlyphLayoutExtensions.GenerateGlyphPlan(
+                GlyphLayoutExtensions.GenerateGlyphPlans(
                     _glyphLayout.ResultUnscaledGlyphPositions,
                     pxscale,
                     true,
@@ -267,7 +256,7 @@ namespace Typography.TextServices
                 _glyphLayout.Layout(str, breakSpan.startAt, breakSpan.len);
                 //
                 _reusableGlyphPlanList.Clear();
-                GlyphLayoutExtensions.GenerateGlyphPlan(
+                GlyphLayoutExtensions.GenerateGlyphPlans(
                     _glyphLayout.ResultUnscaledGlyphPositions,
                     pxscale,
                     true,
@@ -390,72 +379,70 @@ namespace Typography.TextServices
     /// </summary>
     class GlyphPlanCacheForTypefaceAndScriptLang
     {
-        GlyphPlanBuffer _glyphPlanBuffer;
+
+
         Typeface _typeface;
         ScriptLang _scLang;
         GlyphPlanSeqSet _glyphPlanSeqSet;
+        GlyphPlanList _planList = new GlyphPlanList();
 
         public GlyphPlanCacheForTypefaceAndScriptLang(Typeface typeface, ScriptLang scLang)
         {
             _typeface = typeface;
             _scLang = scLang;
-            _glyphPlanBuffer = new GlyphPlanBuffer(new GlyphPlanList());
             _glyphPlanSeqSet = new GlyphPlanSeqSet();
 
         }
-        GlyphPlanSequence CreateGlyphPlanSeq(GlyphLayout glyphLayout, TextBuffer buffer, int startAt, int len)
-        {
-            //1. layout
-            glyphLayout.Typeface = _typeface;
-            glyphLayout.ScriptLang = _scLang;
-            glyphLayout.Layout(
-                TextBuffer.UnsafeGetCharBuffer(buffer),
-                startAt,
-                len);
-            //2. 
-            GlyphPlanList planList = GlyphPlanBuffer.UnsafeGetGlyphPlanList(_glyphPlanBuffer);
-            int pre_count = planList.Count;
-            //create glyph plan, UnScaled version
-            GlyphLayoutExtensions.GenerateGlyphPlan(glyphLayout.ResultUnscaledGlyphPositions, 1, false, planList);
 
-            int post_count = planList.Count;
-            return new GlyphPlanSequence(_glyphPlanBuffer, pre_count, post_count - pre_count);
-        }
+
         static int CalculateHash(TextBuffer buffer, int startAt, int len)
         {
             //reference,
             //https://stackoverflow.com/questions/2351087/what-is-the-best-32bit-hash-function-for-short-strings-tag-names
-            return CRC32.CalculateCRC32(TextBuffer.UnsafeGetCharBuffer(buffer), startAt, len);
+            return CRC32.CalculateCRC32(buffer.UnsafeGetInternalBuffer(), startAt, len);
         }
 
-        public GlyphPlanSequence Layout(GlyphLayout glyphLayout, TextBuffer buffer, int startAt, int len)
+
+       
+        public GlyphPlanSequence GetUnscaledGlyphPlanSequence(GlyphLayout glyphLayout,
+            TextBuffer buffer, int start, int seqLen)
         {
+            //UNSCALED VERSION
+            //use current typeface + scriptlang
+            int seqHashValue = CalculateHash(buffer, start, seqLen);
+
             //this func get the raw char from buffer
             //and create glyph list 
             //check if we have the string cache in specific value 
             //---------
-            if (len > _glyphPlanSeqSet.MaxCacheLen)
+            if (seqLen > _glyphPlanSeqSet.MaxCacheLen)
             {
                 //layout string is too long to be cache
                 //it need to split into small buffer 
             }
 
             GlyphPlanSequence planSeq = GlyphPlanSequence.Empty;
+            GlyphPlanSeqCollection seqCol = _glyphPlanSeqSet.GetSeqCollectionOrCreateIfNotExist(seqLen);
 
-            GlyphPlanSeqCollection seqCol = _glyphPlanSeqSet.GetSeqCollectionOrCreateIfNotExist(len);
-            int hashValue = CalculateHash(buffer, startAt, len);
-            if (!seqCol.TryGetCacheGlyphPlanSeq(hashValue, out planSeq))
-            {
-                ////not found then create glyph plan seq 
-                ////save 
-                //some font may have 'special' glyph x,y at some font size(eg. for subpixel-rendering position)
-                //but in general we store the new glyph plan seq with unscale glyph pos 
-                planSeq = CreateGlyphPlanSeq(glyphLayout, buffer, startAt, len);
+            if (!seqCol.TryGetCacheGlyphPlanSeq(seqHashValue, out planSeq))
+            {   
+                //create a new one if we don't has a cache
+                //1. layout 
+                glyphLayout.Layout(
+                    buffer.UnsafeGetInternalBuffer(),
+                    start,
+                    seqLen); 
 
-                seqCol.Register(hashValue, planSeq);
+                int pre_count = _planList.Count;
+                //create glyph-plan ( UnScaled version) and add it to planList                
+                GlyphLayoutExtensions.GenerateGlyphPlans(glyphLayout.ResultUnscaledGlyphPositions, 1, false, _planList); 
+                int post_count = _planList.Count;
+                planSeq = new GlyphPlanSequence(_planList, pre_count, post_count - pre_count);
+                //
+                seqCol.Register(seqHashValue, planSeq);
+                 
+
             }
-            //---
-            //on unscale font=> we use original  
             return planSeq;
         }
     }
@@ -467,6 +454,7 @@ namespace Typography.TextServices
         /// dic of hash string value and the cache seq
         /// </summary>
         Dictionary<int, GlyphPlanSequence> _knownSeqs = new Dictionary<int, GlyphPlanSequence>();
+       
         public GlyphPlanSeqCollection(int seqLen)
         {
             this._seqLen = seqLen;

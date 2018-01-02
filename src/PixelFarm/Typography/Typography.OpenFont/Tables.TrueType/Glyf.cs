@@ -185,13 +185,13 @@ namespace Typography.OpenFont.Tables
             //https://www.microsoft.com/typography/OTSPEC/glyf.htm
             //Simple Glyph Description
             //This is the table information needed if numberOfContours is greater than zero, that is, a glyph is not a composite.
-            //Type 	Name 	Description
-            //USHORT 	endPtsOfContours[n] 	Array of last points of each contour; n is the number of contours.
-            //USHORT 	instructionLength 	Total number of bytes for instructions.
-            //BYTE 	instructions[n] 	Array of instructions for each glyph; n is the number of instructions.
-            //BYTE 	flags[n] 	Array of flags for each coordinate in outline; n is the number of flags.
-            //BYTE or SHORT 	xCoordinates[ ] 	First coordinates relative to (0,0); others are relative to previous point.
-            //BYTE or SHORT 	yCoordinates[ ] 	First coordinates relative to (0,0); others are relative to previous point.
+            //Type 	            Name 	                Description
+            //USHORT 	        endPtsOfContours[n] 	Array of last points of each contour; n is the number of contours.
+            //USHORT 	        instructionLength 	    Total number of bytes for instructions.
+            //BYTE 	            instructions[n] 	    Array of instructions for each glyph; n is the number of instructions.
+            //BYTE 	            flags[n] 	            Array of flags for each coordinate in outline; n is the number of flags.
+            //BYTE or SHORT 	xCoordinates[ ] 	    First coordinates relative to (0,0); others are relative to previous point.
+            //BYTE or SHORT 	yCoordinates[ ] 	    First coordinates relative to (0,0); others are relative to previous point.
 
             ushort[] endPoints = Utils.ReadUInt16Array(reader, contourCount);
             //-------------------------------------------------------
@@ -222,14 +222,14 @@ namespace Typography.OpenFont.Tables
         enum CompositeGlyphFlags : ushort
         {
             //These are the constants for the flags field:
-            //Bit   Flags 	 	Description
+            //Bit   Flags 	 	            Description
             //0     ARG_1_AND_2_ARE_WORDS  	If this is set, the arguments are words; otherwise, they are bytes.
             //1     ARGS_ARE_XY_VALUES 	  	If this is set, the arguments are xy values; otherwise, they are points.
             //2     ROUND_XY_TO_GRID 	  	For the xy values if the preceding is true.
             //3     WE_HAVE_A_SCALE 	 	This indicates that there is a simple scale for the component. Otherwise, scale = 1.0.
             //4     RESERVED 	        	This bit is reserved. Set it to 0.
             //5     MORE_COMPONENTS 	    Indicates at least one more glyph after this one.
-            //6     WE_HAVE_AN_X_AND_Y_SCALE 	  	The x direction will use a different scale from the y direction.
+            //6     WE_HAVE_AN_X_AND_Y_SCALE 	The x direction will use a different scale from the y direction.
             //7     WE_HAVE_A_TWO_BY_TWO 	  	There is a 2 by 2 transformation that will be used to scale the component.
             //8     WE_HAVE_INSTRUCTIONS 	 	Following the last component are instructions for the composite character.
             //9     USE_MY_METRICS 	 	        If set, this forces the aw and lsb (and rsb) for the composite to be equal to those from this original glyph. This works for hinted and unhinted characters.
@@ -261,8 +261,8 @@ namespace Typography.OpenFont.Tables
             //This is the table information needed for composite glyphs (numberOfContours is -1). 
             //A composite glyph starts with two USHORT values (“flags” and “glyphIndex,” i.e. the index of the first contour in this composite glyph); 
             //the data then varies according to “flags”).
-            //Type 	Name 	Description
-            //USHORT 	flags 	component flag
+            //Type 	    Name 	    Description
+            //USHORT 	flags 	    component flag
             //USHORT 	glyphIndex 	glyph index of component
             //VARIABLE 	argument1 	x-offset for component or point number; type depends on bits 0 and 1 in component flags
             //VARIABLE 	argument2 	y-offset for component or point number; type depends on bits 0 and 1 in component flags

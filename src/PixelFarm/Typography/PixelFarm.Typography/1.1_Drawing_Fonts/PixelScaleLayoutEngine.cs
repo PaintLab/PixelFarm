@@ -390,7 +390,7 @@ namespace Typography.Contours
             if (!UseWithLcdSubPixelRenderingTechnique)
             {
                 //layout without fit to alignment direction
-                GlyphLayoutExtensions.GenerateGlyphPlan(posStream, pxscale, false, outputGlyphPlanList);
+                GlyphLayoutExtensions.GenerateGlyphPlans(posStream, pxscale, false, outputGlyphPlanList);
                 return; //early exit
             }
             //------------------------------
@@ -410,8 +410,8 @@ namespace Typography.Contours
 
             for (int i = 0; i < finalGlyphCount; ++i)
             {
-                short offsetX, offsetY, advW; //all from pen-pos
-                ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
+                short input_offset, offsetX, offsetY, advW; //all from pen-pos
+                ushort glyphIndex = posStream.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
                 GlyphControlParameters controlPars = _glyphMeshStore.GetControlPars(glyphIndex);
                 current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
                 //-------------------------------------------------------------
@@ -485,6 +485,7 @@ namespace Typography.Contours
                 }
 
                 outputGlyphPlanList.Append(new GlyphPlan(
+                    input_offset,
                     glyphIndex,
                     final_x,
                     exact_y,

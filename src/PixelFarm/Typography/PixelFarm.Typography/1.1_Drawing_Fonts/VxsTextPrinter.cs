@@ -428,7 +428,7 @@ namespace PixelFarm.Drawing.Fonts
 
                 //no custom engine
                 //then use default scale  
-                GlyphLayoutExtensions.GenerateGlyphPlan(
+                GlyphLayoutExtensions.GenerateGlyphPlans(
                     _glyphLayout.ResultUnscaledGlyphPositions,
                     _currentFontSizePxScale,
                     false,
