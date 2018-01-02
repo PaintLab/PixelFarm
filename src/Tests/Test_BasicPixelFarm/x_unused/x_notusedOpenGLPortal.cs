@@ -1,4 +1,4 @@
-﻿////Apache2, 2014-2017, WinterDev
+﻿////Apache2, 2014-2018, WinterDev
 //#if GL_ENABLE
 //using System;
 //using PixelFarm.Drawing;
@@ -89,7 +89,7 @@
 //#endif
 
 
-//////Apache2, 2014-2017, WinterDev
+//////Apache2, 2014-2018, WinterDev
 ////#if GL_ENABLE
 ////using PixelFarm.Drawing;
 ////using PixelFarm.Drawing.WinGdi;

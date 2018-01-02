@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2017, WinterDev 
+﻿//MIT, 2016-2018, WinterDev 
 
 using Typography.TextServices;
 namespace PixelFarm.Drawing.Fonts
