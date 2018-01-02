@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2017, WinterDev
+﻿//MIT, 2014-2018, WinterDev
 using PixelFarm.Agg;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;

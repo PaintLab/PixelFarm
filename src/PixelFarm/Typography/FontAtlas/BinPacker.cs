@@ -1,4 +1,4 @@
-﻿//MIT, 2017, WinterDev
+﻿//MIT, 2017-2018, WinterDev
 //MIT, 2015-2016, Michael Popoloski
 
 using System;

@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2017, WinterDev    
+﻿//MIT, 2014-2018, WinterDev    
 namespace Typography.TextServices
 {
     public class OpenFontStore : IFontLoader

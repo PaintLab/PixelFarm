@@ -1,4 +1,4 @@
-﻿//Apache2, 2017, WinterDev
+﻿//Apache2, 2017-2018, WinterDev
 //this file is not merged on merged project.
 //
 using System;
