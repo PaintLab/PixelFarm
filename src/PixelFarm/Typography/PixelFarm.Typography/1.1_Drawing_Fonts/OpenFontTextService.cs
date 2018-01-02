@@ -101,8 +101,8 @@ namespace LayoutFarm
                 //num of glyph may more or less than original user input char buffer
                 //
 
-                int seqLen = seq.len;
-                int endAt = seq.startAt + seqLen;
+               
+                int endAt = seq.startAt + seq.len;
                 int seq_startAt = seq.startAt;
 
                 for (int s = seq_startAt; s < endAt; ++s)
@@ -116,7 +116,7 @@ namespace LayoutFarm
                         outputUserInputCharAdvance[pos + glyphPlan.input_cp_offset] += 
                         (int)Math.Round(actualAdvX * scale);
                 }
-                pos += seqLen;
+                pos += lineSeg.Length;
             }
 
             //
