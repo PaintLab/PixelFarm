@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2017, WinterDev
+﻿//BSD, 2014-2018, WinterDev
 //ref:  adapt from snippetsfor.net/CSharp/StackBlur
 
 using System;

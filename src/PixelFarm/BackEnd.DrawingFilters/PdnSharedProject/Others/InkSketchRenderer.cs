@@ -35,7 +35,7 @@ THE SOFTWARE.
 */
 
 
-//Apache2, 2017, WinterDev
+//Apache2, 2017-2018, WinterDev
 
 using PixelFarm.Drawing.DrawingBuffer;
 

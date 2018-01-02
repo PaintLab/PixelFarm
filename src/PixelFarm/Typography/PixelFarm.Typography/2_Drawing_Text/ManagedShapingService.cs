@@ -1,7 +1,7 @@
-﻿//MIT, 2014-2017, WinterDev
+﻿//MIT, 2014-2018, WinterDev
 //-----------------------------------
 
-//MIT, 2016-2017, WinterDev
+//MIT, 2016-2018, WinterDev
 using System.Collections.Generic;
 using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;

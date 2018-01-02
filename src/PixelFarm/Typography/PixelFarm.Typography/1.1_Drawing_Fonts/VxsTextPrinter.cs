@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2017, WinterDev, Sam Hocevar
+﻿//MIT, 2016-2018, WinterDev, Sam Hocevar
 using System;
 using System.Collections.Generic;
 using System.IO;

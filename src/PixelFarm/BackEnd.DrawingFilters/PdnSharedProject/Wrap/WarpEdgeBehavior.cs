@@ -1,4 +1,4 @@
-//Apache2, 2017, WinterDev/////////////////////////////////////////////////////////////////////////////////
+//Apache2, 2017-2018, WinterDev/////////////////////////////////////////////////////////////////////////////////
 // Paint.NET                                                                   //
 // Copyright (C) dotPDN LLC, Rick Brewster, Tom Jackson, and contributors.     //
 // Portions Copyright (C) Microsoft Corporation. All Rights Reserved.          //
@@ -29,7 +29,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
 // THE SOFTWARE. 
 //
-//Apache2, 2017, WinterDev
+//Apache2, 2017-2018, WinterDev
 namespace PixelFarm.Drawing.Effects
 {
     public enum WarpEdgeBehavior
