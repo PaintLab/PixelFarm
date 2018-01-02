@@ -49,11 +49,17 @@ namespace LayoutFarm
         {
             get { return _typographyTxtServices.CurrentScriptLang; }
         }
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
+
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
-            CalculateGlyphAdvancePos(this.BreakToLineSegments(str, startAt, len), font, outputGlyphAdvances, out outputTotalW, out outputLineHeight);
+            CalculateUserCharGlyphAdvancePos(ref textBufferSpan, this.BreakToLineSegments(ref textBufferSpan), font, outputGlyphAdvances, out outputTotalW, out outputLineHeight);
         }
-        public void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int lineHeight)
+
+        ReusableTextBuffer _reusableTextBuffer = new ReusableTextBuffer();
+
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+            ILineSegmentList lineSegs, RequestFont font,
+            int[] outputUserInputCharAdvance, out int outputTotalW, out int lineHeight)
         {
 
             //layout  
@@ -63,49 +69,62 @@ namespace LayoutFarm
             Typeface typeface = ResolveTypeface(font);
             _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
 
+
             MyLineSegmentList mylineSegs = (MyLineSegmentList)lineSegs;
             float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
-
             outputTotalW = 0;
-            char[] str = mylineSegs._str;
-            TextBuffer textBuffer = new TextBuffer(str);
-
             int j = mylineSegs.Count;
-            int pos = 0;
+            int pos = 0; //start at 0
+
+            _reusableTextBuffer.SetRawCharBuffer(textBufferSpan.GetRawCharBuffer());
+
             for (int i = 0; i < j; ++i)
             {
-                //userGlyphPlanList.Clear();
-                //userCharToGlyphMapList.Clear();
 
+                //userGlyphPlanList.Clear();
+                //userCharToGlyphMapList.Clear(); 
                 //get each segment
                 MyLineSegment lineSeg = mylineSegs.GetSegment(i);
+                //each line seg may has different script lang
                 _typographyTxtServices.CurrentScriptLang = lineSeg.scriptLang;
-                _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
                 //
                 //CACHING ...., reduce number of GSUB/GPOS
                 //
                 //we cache used line segment for a while
-                //we ask for caching context for a specific typeface and font size 
-                GlyphPlanSequence seq = _typographyTxtServices.LayoutText(textBuffer, lineSeg.StartAt, lineSeg.Length);
+                //we ask for caching context for a specific typeface and font size   
+                GlyphPlanSequence seq = _typographyTxtServices.GetUnscaledGlyphPlanSequence(_reusableTextBuffer,
+                     lineSeg.StartAt,
+                     lineSeg.Length);
+
                 GlyphPlanList planList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq);
+                //IMPORTANT
+                //num of glyph may more or less than original user input char buffer
+                //
 
-                int seqLen = seq.len;
-                int endAt = seq.startAt + seqLen;
 
-                for (int s = seq.startAt; s < endAt; ++s)
+                int endAt = seq.startAt + seq.len;
+                int seq_startAt = seq.startAt;
+
+                for (int s = seq_startAt; s < endAt; ++s)
                 {
                     GlyphPlan glyphPlan = planList[s];
                     float tx = glyphPlan.ExactX;
                     float ty = glyphPlan.ExactY;
                     double actualAdvX = glyphPlan.AdvanceX;
-                    outputTotalW += outputGlyphAdvances[pos] = (int)Math.Round(actualAdvX * scale);
-                    pos++;
+
+                    outputTotalW +=
+                        outputUserInputCharAdvance[pos + glyphPlan.input_cp_offset] +=
+                        (int)Math.Round(actualAdvX * scale);
                 }
+                pos += lineSeg.Length;
             }
+
+            //
+
             lineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
+
+            _reusableTextBuffer.SetRawCharBuffer(null);
         }
-
-
 
         public Typeface ResolveTypeface(RequestFont font)
         {
@@ -154,29 +173,35 @@ namespace LayoutFarm
             throw new NotImplementedException();
         }
 
-        public GlyphPlanSequence CreateGlyphPlanSeq(TextBuffer textBuffer, int startAt, int len, RequestFont font)
+
+
+        public GlyphPlanSequence CreateGlyphPlanSeq(ref TextBufferSpan textBufferSpan, RequestFont font)
         {
+
             Typeface typeface = ResolveTypeface(font);
             _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
-            return _typographyTxtServices.LayoutText(textBuffer, startAt, len);
+
+            _reusableTextBuffer.SetRawCharBuffer(textBufferSpan.GetRawCharBuffer());
+
+            return _typographyTxtServices.GetUnscaledGlyphPlanSequence(_reusableTextBuffer, textBufferSpan.start, textBufferSpan.len);
         }
-        public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
+        public Size MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font)
         {
             Typeface typeface = ResolveTypeface(font);
             _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
-
-
             int w, h;
-            _typographyTxtServices.MeasureString(str, startAt, len, out w, out h);
+
+            //
+            _typographyTxtServices.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, out w, out h);
             return new Size(w, h);
         }
-        public void MeasureString(char[] str, int startAt, int len, RequestFont font, int limitWidth, out int charFit, out int charFitWidth)
+        public void MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font, int limitWidth, out int charFit, out int charFitWidth)
         {
             Typeface typeface = ResolveTypeface(font);
             _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
 
             charFit = 0;
-            _typographyTxtServices.MeasureString(str, startAt, len, limitWidth, out charFit, out charFitWidth);
+            _typographyTxtServices.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, limitWidth, out charFit, out charFitWidth);
 
         }
         float ITextService.MeasureBlankLineHeight(RequestFont font)
@@ -216,24 +241,24 @@ namespace LayoutFarm
             {
                 get { return startAt; }
             }
-            public string GetText()
-            {
-                return owner.GetSegmentText(this.startAt, len);
-            }
-            public int GetHashKey()
-            {
-                return owner.GetHashKey(this.startAt, len);
-            }
+            //public string GetText()
+            //{
+            //    return owner.GetSegmentText(this.startAt, len);
+            //}
+            //public int GetHashKey()
+            //{
+            //    return owner.GetHashKey(this.startAt, len);
+            //}
         }
         class MyLineSegmentList : ILineSegmentList
         {
             MyLineSegment[] _segments;
-            internal char[] _str;
+
             int _startAt;
             int _len;
-            public MyLineSegmentList(char[] str, int startAt, int len)
+            public MyLineSegmentList(int startAt, int len)
             {
-                this._str = str;
+                //this._str = str;
                 this._startAt = startAt;
                 this._len = len;
             }
@@ -253,33 +278,35 @@ namespace LayoutFarm
             {
                 return _segments[index];
             }
-            public string GetSegmentText(int segmentOffset, int len)
+
+            public int GetHashKey(char[] orgString, int segmentOffset, int len)
             {
-                //start at 
-                return new string(_str, _startAt + segmentOffset, len);
-            }
-            public int GetHashKey(int segmentOffset, int len)
-            {
-                return Typography.TextServices.CRC32.CalculateCRC32(_str, _startAt + segmentOffset, len);
+                return Typography.TextServices.CRC32.CalculateCRC32(orgString, _startAt + segmentOffset, len);
             }
         }
         List<MyLineSegment> _resuableLineSegments = new List<MyLineSegment>();
 
-        public ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len)
+        public ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
         {
             _resuableLineSegments.Clear();
 
-            MyLineSegmentList lineSegs = new MyLineSegmentList(str, startAt, len);
-            int cur_startAt = startAt;
-            foreach (Typography.TextServices.BreakSpan breakSpan in _typographyTxtServices.BreakToLineSegments(str, startAt, len))
+            //a text buffer span is separated into multiple line segment list
+
+            char[] str = textBufferSpan.GetRawCharBuffer();
+
+            MyLineSegmentList lineSegs = new MyLineSegmentList(textBufferSpan.start, textBufferSpan.len);
+            int cur_startAt = textBufferSpan.start;
+            foreach (Typography.TextServices.BreakSpan breakSpan in _typographyTxtServices.BreakToLineSegments(str, textBufferSpan.start, textBufferSpan.len))
             {
                 MyLineSegment lineSeg = new MyLineSegment(lineSegs, breakSpan.startAt, breakSpan.len);
                 lineSeg.scriptLang = breakSpan.scLang;
                 _resuableLineSegments.Add(lineSeg);
             }
 
-
+            //TODO: review here, 
+            //check if we need to create new array everytime?
             lineSegs.SetResultLineSegments(_resuableLineSegments.ToArray());
+            _resuableLineSegments.Clear();
             return lineSegs;
         }
         //-----------------------------------

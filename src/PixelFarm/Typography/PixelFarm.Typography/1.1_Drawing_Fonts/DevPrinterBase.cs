@@ -24,13 +24,16 @@ namespace Typography.Rendering
                   int startAt,
                   int len,
                   GlyphPlanList outputGlyphPlanList,
-                  List<UserCharToGlyphIndexMap> charToGlyphMapList)
+                  List<UserCodePointToGlyphIndex> charToGlyphMapList)
         {
 
-            this.GlyphLayoutMan.Layout(textBuffer, startAt, len);
-            GlyphLayoutExtensions.GenerateGlyphPlan(this.GlyphLayoutMan.ResultUnscaledGlyphPositions,
+            GlyphLayout glyphLayout = this.GlyphLayoutMan;
+            glyphLayout.Layout(textBuffer, startAt, len);
+
+            GlyphLayoutExtensions.GenerateGlyphPlans(
+                glyphLayout.ResultUnscaledGlyphPositions,
                 this.Typeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints),
-                false, outputGlyphPlanList); 
+                false, outputGlyphPlanList);
         }
 
         public bool FillBackground { get; set; }
@@ -100,7 +103,7 @@ namespace Typography.Rendering
         }
         public void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, float x, float y)
         {
-            
+
             DrawFromGlyphPlans(glyphPlanList, 0, glyphPlanList.Count, x, y);
         }
 

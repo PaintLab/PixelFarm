@@ -34,11 +34,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-
 namespace Typography.TextServices
 {
-    public static class IcuData
+
+    static class IcuData
     {
         //this data is a modified version from 
         //icu/icu4c-60_1-data/data/lang/en.txt

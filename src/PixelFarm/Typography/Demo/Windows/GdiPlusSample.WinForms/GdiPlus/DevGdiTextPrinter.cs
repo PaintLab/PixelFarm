@@ -96,9 +96,14 @@ namespace SampleWinForms
             this.TargetGraphics.DrawLine(Pens.Red, x, y, x, y + this.FontAscendingPx);
         }
 
-        GlyphPlanList _outputGlyphPlans = new GlyphPlanList();//for internal use
+        GlyphPlanList _resuableGlyphPlanList = new GlyphPlanList();//for internal use
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
+            //----------------
+            //TODO: use typography text service
+            //it should be faster since it has glyph-plan cache
+            //----------------
+
             //1. update
             UpdateGlyphLayoutSettings();
 
@@ -106,15 +111,15 @@ namespace SampleWinForms
             this._glyphLayout.Layout(textBuffer, startAt, len);
 
             //3. scale  to specific font size
-            _outputGlyphPlans.Clear();
+            _resuableGlyphPlanList.Clear();
 
-            GlyphLayoutExtensions.GenerateGlyphPlan(
+            GlyphLayoutExtensions.GenerateGlyphPlans(
                 _glyphLayout.ResultUnscaledGlyphPositions,
                 _currentTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints),
                 false,
-                _outputGlyphPlans);
+                _resuableGlyphPlanList);
 
-            DrawFromGlyphPlans(_outputGlyphPlans, x, y);
+            DrawFromGlyphPlans(_resuableGlyphPlanList, x, y);
         }
         public void UpdateGlyphLayoutSettings()
         {

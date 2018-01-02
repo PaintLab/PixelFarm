@@ -80,31 +80,16 @@ namespace Typography.TextLayout
 #endif
 
     }
-
-    public class GlyphPlanBuffer
-    {
-        GlyphPlanList _glyphPlans;
-        public GlyphPlanBuffer(GlyphPlanList glyphPlans)
-        {
-            this._glyphPlans = glyphPlans;
-        }
-        public int GlyphPlanCount { get { return _glyphPlans.Count; } }
-
-        public static GlyphPlanList UnsafeGetGlyphPlanList(GlyphPlanBuffer buffer)
-        {
-            return buffer._glyphPlans;
-        }
-    }
-
+     
     public struct GlyphPlanSequence
     {
         //
         public static GlyphPlanSequence Empty = new GlyphPlanSequence();
         //
-        readonly GlyphPlanBuffer glyphBuffer;
+        readonly GlyphPlanList glyphBuffer;
         public readonly int startAt;
         public readonly ushort len;
-        public GlyphPlanSequence(GlyphPlanBuffer glyphBuffer, int startAt, int len)
+        internal GlyphPlanSequence(GlyphPlanList glyphBuffer, int startAt, int len)
         {
             this.glyphBuffer = glyphBuffer;
             this.startAt = startAt;
@@ -112,7 +97,7 @@ namespace Typography.TextLayout
         }
         public float CalculateWidth()
         {
-            GlyphPlanList plans = UnsafeGetInteralGlyphPlanList(this);
+            GlyphPlanList plans = glyphBuffer;
             int end = startAt + len;
             float width = 0;
             for (int i = startAt; i < end; ++i)
@@ -127,7 +112,7 @@ namespace Typography.TextLayout
         }
         public static GlyphPlanList UnsafeGetInteralGlyphPlanList(GlyphPlanSequence planSeq)
         {
-            return GlyphPlanBuffer.UnsafeGetGlyphPlanList(planSeq.glyphBuffer);
+            return planSeq.glyphBuffer; 
         }
     }
 

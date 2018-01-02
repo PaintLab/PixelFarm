@@ -90,24 +90,24 @@ namespace LayoutFarm.Text
             {
                 throw new Exception("string must be null or zero length");
             }
-        } 
+        }
         public override int GetRunWidth(int charOffset)
-        { 
+        {
             return CalculateDrawingStringSize(mybuffer, charOffset).Width;
         }
         public override string GetText()
         {
             return new string(mybuffer);
         }
-       
 
-        
+
+
         internal override void UpdateRunWidth()
         {
             Size size;
             if (IsLineBreak)
             {
-                size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont()))); 
+                size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
             }
             else
             {
@@ -158,8 +158,8 @@ namespace LayoutFarm.Text
         }
         Size CalculateDrawingStringSize(char[] buffer, int length)
         {
-            return this.Root.TextServices.MeasureString(buffer, 0,
-                length, GetFont());
+            var textBufferSpan = new TextBufferSpan(buffer, 0, length);
+            return this.Root.TextServices.MeasureString(ref textBufferSpan, GetFont());
 
         }
         protected RequestFont GetFont()

@@ -75,9 +75,6 @@
     <Compile Include="..\Typography.TextFlow\Dom\TextRun.cs">
       <Link>Typography.TextFlow\Dom\TextRun.cs</Link>
     </Compile>
-    <Compile Include="..\Typography.TextFlow\Layout\SingleLineLayoutEngine.cs">
-      <Link>Typography.TextFlow\Layout\SingleLineLayoutEngine.cs</Link>
-    </Compile>
     <Compile Include="..\Typography.TextFlow\Simple\SmallLine.cs">
       <Link>Typography.TextFlow\Simple\SmallLine.cs</Link>
     </Compile>

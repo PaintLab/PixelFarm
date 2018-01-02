@@ -36,7 +36,6 @@
     <Compile Include="Dom\IRun.cs" />
     <Compile Include="Dom\EditableTextBlockLayoutEngine.cs" />
     <Compile Include="Dom\TextBuffer.cs" />
-    <Compile Include="Layout\SingleLineLayoutEngine.cs" />
     <Compile Include="Simple\SmallLine.cs" />
     <Compile Include="Dom\TextRun.cs" />
     <Compile Include="Dom\EditableTextLine.cs" />

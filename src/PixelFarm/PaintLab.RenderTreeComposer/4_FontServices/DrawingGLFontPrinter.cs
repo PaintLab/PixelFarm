@@ -343,9 +343,13 @@ namespace PixelFarm.DrawingGL
             _glsx.FontFillColor = painter.FontFillColor;
 
             int j = buffer.Length;
-            TextBuffer textBuffer = new TextBuffer(buffer);
 
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBuffer, startAt, len, font);
+            //create temp buffer span that describe the part of a whole char buffer
+            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            
+            //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
+            //with specific request font
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
 
             float scale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             int recommendLineSpacing = _typeface.CalculateRecommendLineSpacing();
