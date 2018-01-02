@@ -159,7 +159,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_MiniAppHost", "Tests\T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceGen", "Tools\InterfaceGen\InterfaceGen.csproj", "{0F4AD2A4-770D-4C6A-941B-B32A9AF12D18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTree.TextSurface", "PixelFarm\PaintLab.Text\PaintLab.RenderTree.TextSurface.csproj", "{E6078FC1-3AE0-4E33-AE7C-75E7AAAC7A02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTree.TextSurface", "PixelFarm\PaintLab.RenderTree.TextSurface\PaintLab.RenderTree.TextSurface.csproj", "{E6078FC1-3AE0-4E33-AE7C-75E7AAAC7A02}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_YourImplementation", "4_YourImplementation", "{8BE95464-61A5-4C0A-99F8-DA6E32C52B78}"
 EndProject
