@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
     class TextLineWriter : TextLineReader
-    { 
+    {
         public TextLineWriter(EditableTextFlowLayer textLayer)
             : base(textLayer)
         {
@@ -18,11 +18,11 @@ namespace LayoutFarm.Text
             {
                 return this.TextLayer.CurrentTextSpanStyle;
             }
-        } 
+        }
         public void Reload(IEnumerable<EditableRun> runs)
         {
             this.TextLayer.Reload(runs);
-        } 
+        }
         public void Clear()
         {
             this.MoveToLine(0);
@@ -297,6 +297,7 @@ namespace LayoutFarm.Text
             }
         }
 
+#if DEBUG
         int _i_charIndex;
         int charIndex
         {
@@ -306,6 +307,10 @@ namespace LayoutFarm.Text
                 _i_charIndex = value;
             }
         }
+#else
+         int charIndex;
+#endif
+
         protected RootGraphic Root
         {
             get { return this.visualFlowLayer.Root; }
