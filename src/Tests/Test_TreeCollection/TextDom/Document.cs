@@ -53,9 +53,7 @@ namespace PaintLab.DocumentPro
         }
 #endif
     }
-
-
-
+     
     public class TextSource
     {
         //immutatble text

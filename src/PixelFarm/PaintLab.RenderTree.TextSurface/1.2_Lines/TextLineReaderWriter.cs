@@ -7,8 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
     class TextLineWriter : TextLineReader
-    {
-        //BackGroundTextLineWriter backgroundWriter;
+    { 
         public TextLineWriter(EditableTextFlowLayer textLayer)
             : base(textLayer)
         {
@@ -19,23 +18,11 @@ namespace LayoutFarm.Text
             {
                 return this.TextLayer.CurrentTextSpanStyle;
             }
-        }
-        //        internal BackGroundTextLineWriter GetBackgroundWriter()
-        //        {
-        //            if (backgroundWriter == null)
-        //            {
-        //                backgroundWriter = new BackGroundTextLineWriter(this.TextLayer);
-        //#if DEBUG
-        //                backgroundWriter.dbugTextManRecorder = this.dbugTextManRecorder;
-        //#endif
-        //            }
-        //            return backgroundWriter;
-        //        }
+        } 
         public void Reload(IEnumerable<EditableRun> runs)
         {
             this.TextLayer.Reload(runs);
-        }
-
+        } 
         public void Clear()
         {
             this.MoveToLine(0);
@@ -295,6 +282,7 @@ namespace LayoutFarm.Text
         int rPixelOffset = 0;
         public TextLineReader(EditableTextFlowLayer flowlayer)
         {
+
 #if DEBUG
             this.dbug_MyId = dbugTotalId;
             dbugTotalId++;
@@ -315,7 +303,6 @@ namespace LayoutFarm.Text
             get { return _i_charIndex; }
             set
             {
-
                 _i_charIndex = value;
             }
         }
@@ -647,12 +634,6 @@ namespace LayoutFarm.Text
                     throw new NotSupportedException("index out of range");
                 }
 
-#if DEBUG
-                if (value > 10)
-                {
-
-                }
-#endif
 
                 if (value == -1)
                 {
