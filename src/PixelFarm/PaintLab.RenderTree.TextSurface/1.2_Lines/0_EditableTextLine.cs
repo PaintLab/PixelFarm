@@ -40,14 +40,20 @@ namespace LayoutFarm.Text
             dbugLineTotalCount++;
 #endif
         }
-        public int Count
+        public int RunCount
         {
             get { return _runs.Count; }
         }
+        /// <summary>
+        /// first run node
+        /// </summary>
         public LinkedListNode<EditableRun> First
         {
             get { return _runs.First; }
         }
+        /// <summary>
+        /// last run node
+        /// </summary>
         public LinkedListNode<EditableRun> Last
         {
             get { return _runs.Last; }
@@ -68,7 +74,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                if (this.Count > 0)
+                if (this.RunCount > 0)
                 {
                     return this.Last.Value;
                 }
@@ -95,7 +101,7 @@ namespace LayoutFarm.Text
             this.actualLineWidth = accumWidth;
             this.actualLineHeight = maxHeight;
 
-            if (this.Count == 0)
+            if (this.RunCount == 0)
             {
                 //no span
                 this.actualLineHeight = EditableTextLine.DEFAULT_LINE_HEIGHT;
@@ -106,7 +112,7 @@ namespace LayoutFarm.Text
             int testX;
             int testY;
             hitChain.GetTestPoint(out testX, out testY);
-            if (this.Count == 0)
+            if (this.RunCount == 0)
             {
                 return false;
             }
@@ -335,7 +341,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return Count == 0;
+                return RunCount == 0;
             }
         }
         public EditableTextLine Next
@@ -371,7 +377,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                if (this.Count > 0)
+                if (this.RunCount > 0)
                 {
                     return this.First.Value;
                 }
