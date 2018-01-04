@@ -391,25 +391,22 @@ namespace LayoutFarm.Text
             if (pixelOffset < Width)
             {
                 int j = outputUserCharAdvances.Length;
-                int accWidth = 0;
+                int accWidth = 0; //accummulate width
                 for (int i = 0; i < j; i++)
                 {
-
                     int charW = outputUserCharAdvances[i];
                     if (accWidth + charW > pixelOffset)
                     {
-                        //stop at this
-                        if (pixelOffset - accWidth > 3)
+                        //stop
+                        //then decide that if width > char/w => please consider stop at next char
+                        if (pixelOffset - accWidth > (charW / 2))
                         {
-                            //select this run
-                            return new EditableRunCharLocation(accWidth + charW, i);
+                            //this run is no select 
+                            return new EditableRunCharLocation(accWidth + charW, i + 1);
                         }
                         else
                         {
-                            //select prev run
-                            //if i=0=> this is first run
-                            //
-                            return new EditableRunCharLocation(accWidth, i - 1);
+                            return new EditableRunCharLocation(accWidth, i);
                         }
                     }
                     else
@@ -417,11 +414,15 @@ namespace LayoutFarm.Text
                         accWidth += charW;
                     }
                 }
-                return new EditableRunCharLocation(accWidth, j - 1);
+
+                //end of this run
+                return new EditableRunCharLocation(accWidth, j);
             }
             else
             {
-                return new EditableRunCharLocation(0, -1);
+                //pixelOffset>=width
+                //not in this run, may be next run
+                return new EditableRunCharLocation(0, 1);
             }
         }
         //-------------------------------------------

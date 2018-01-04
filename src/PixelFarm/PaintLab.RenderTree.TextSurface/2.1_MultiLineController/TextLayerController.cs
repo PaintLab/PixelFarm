@@ -377,7 +377,7 @@ namespace LayoutFarm.Text
             else
             {
                 int lineLength = textLineWriter.CharCount;
-                if (textLineWriter.ProperCharIndex >= lineLength - 1 && value > lineLength - 1)
+                if (textLineWriter.ProperCharIndex >= lineLength && value > lineLength)
                 {
                     if (textLineWriter.HasNextLine)
                     {

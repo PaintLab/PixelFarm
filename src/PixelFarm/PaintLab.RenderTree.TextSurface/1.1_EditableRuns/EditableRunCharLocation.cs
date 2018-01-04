@@ -4,17 +4,24 @@ namespace LayoutFarm.Text
 {
     public struct EditableRunCharLocation
     {
-
+        /// <summary>
+        /// pixel offset relative to current run
+        /// </summary>
         public readonly int pixelOffset;
         /// <summary>
-        /// begin selected charIndex =-1
+        /// character offset relative to current run
         /// </summary>
-        public readonly int XcharIndex;
+        public readonly int RunCharIndex;
 
         public EditableRunCharLocation(int pixelOffset, int charIndex)
         {
+            if (charIndex == -1)
+            {
+
+            }
+            //charIndex less than 0 ==> invalid pos 
             this.pixelOffset = pixelOffset;
-            this.XcharIndex = charIndex;
+            this.RunCharIndex = charIndex;
         }
     }
 }

@@ -214,7 +214,7 @@ namespace LayoutFarm.Text
                 {
                     EditableRun removedRun = (EditableRun)startPoint.TextRun;
                     EditableRun.InnerRemove(removedRun,
-                                    startPoint.LocalSelectedIndex + 1,
+                                    startPoint.LocalSelectedIndex,
                                     endPoint.LineCharIndex - startPoint.LineCharIndex, false);
                     if (removedRun.CharacterCount == 0)
                     {
@@ -777,7 +777,7 @@ namespace LayoutFarm.Text
                 {
                     EditableRunCharLocation localPointInfo = t.GetCharacterFromPixelOffset(caretX - thisTextRunWidth);
                     EditableVisualPointInfo pointInfo =
-                        new EditableVisualPointInfo(this, accTextRunCharCount + localPointInfo.charIndex);
+                        new EditableVisualPointInfo(this, accTextRunCharCount + localPointInfo.RunCharIndex);
                     pointInfo.SetAdditionVisualInfo(t, accTextRunCharCount, caretX, accTextRunWidth);
                     return pointInfo;
                 }

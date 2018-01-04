@@ -38,7 +38,7 @@ namespace LayoutFarm.Text
                 SetCurrentCharIndexToBegin();
                 if (index != -1)
                 {
-                    int limit = CurrentLine.CharCount - 1;
+                    int limit = CurrentLine.CharCount;
                     if (index > limit)
                     {
                         index = limit;
@@ -81,15 +81,17 @@ namespace LayoutFarm.Text
             }
             else
             {
-                if (ProperCharIndex < 0)
+                if (ProperCharIndex == 0)
                 {
                     return '\0';
                 }
 
-                char toBeRemovedChar = CurrentChar;
+                //move back 1 char and do delete 
                 EditableRun removingTextRun = CurrentTextRun;
                 int removeIndex = CurrentTextRunCharIndex;
                 SetCurrentCharStepLeft();
+                char toBeRemovedChar = CurrentChar;
+
                 EditableRun.InnerRemove(removingTextRun, removeIndex, 1, false);
                 if (removingTextRun.CharacterCount == 0)
                 {
@@ -204,7 +206,7 @@ namespace LayoutFarm.Text
         }
         public char DoDeleteOneChar()
         {
-            if (ProperCharIndex < CurrentLine.CharCount - 1)
+            if (ProperCharIndex < CurrentLine.CharCount)
             {
                 //simulate backspace keystroke
 
@@ -433,7 +435,7 @@ namespace LayoutFarm.Text
                     }
                     else
                     {
-                        return currentTextRun.GetChar(caret_char_index - rCharOffset + 1);
+                        return currentTextRun.GetChar(caret_char_index - rCharOffset);
                     }
                 }
                 else
@@ -524,6 +526,12 @@ namespace LayoutFarm.Text
                 else
                 {
                     //2.  
+                    if (currentTextRun.CharacterCount == caret_char_index - rCharOffset)
+                    {
+                        //end of this run
+                        return '\0';
+                    }
+
                     return currentTextRun.GetChar(caret_char_index - rCharOffset);
                 }
             }
@@ -546,7 +554,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return caret_char_index - rCharOffset;
+                return caret_char_index - rCharOffset - 1;
             }
         }
         /// <summary>
@@ -572,19 +580,22 @@ namespace LayoutFarm.Text
                     if (rPixelOffset + thisTextRunPixelLength > value)
                     {
                         EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
-                        if (foundLocation.charIndex == -1)
-                        {
-                            if (!(MoveToPreviousTextRun()))
-                            {
-                                caretXPos = 0;
-                                caret_char_index = 0;
-                            }
-                        }
-                        else
-                        {
-                            caretXPos = rPixelOffset + foundLocation.pixelOffset;
-                            caret_char_index = rCharOffset + foundLocation.charIndex;
-                        }
+                        caretXPos = rPixelOffset + foundLocation.pixelOffset;
+                        caret_char_index = rCharOffset + foundLocation.RunCharIndex;
+
+                        //if (foundLocation.charIndex == -1)
+                        //{
+                        //    if (!(MoveToPreviousTextRun()))
+                        //    {
+                        //        caretXPos = 0;
+                        //        caret_char_index = 0;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    caretXPos = rPixelOffset + foundLocation.pixelOffset;
+                        //    caret_char_index = rCharOffset + foundLocation.charIndex;
+                        //}
                         return;
                     }
                 } while (MoveToNextTextRun());
@@ -600,19 +611,22 @@ namespace LayoutFarm.Text
                     if (value >= rPixelOffset)
                     {
                         EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
-                        if (foundLocation.charIndex == -1)
-                        {
-                            if (!MoveToPreviousTextRun())
-                            {
-                                caret_char_index = 0;
-                                caretXPos = 0;
-                            }
-                        }
-                        else
-                        {
-                            caretXPos = rPixelOffset + foundLocation.pixelOffset;
-                            caret_char_index = rCharOffset + foundLocation.charIndex;
-                        }
+                        caretXPos = rPixelOffset + foundLocation.pixelOffset;
+                        caret_char_index = rCharOffset + foundLocation.RunCharIndex;
+
+                        //if (foundLocation.charIndex == -1)
+                        //{
+                        //    if (!MoveToPreviousTextRun())
+                        //    {
+                        //        caret_char_index = 0;
+                        //        caretXPos = 0;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    caretXPos = rPixelOffset + foundLocation.pixelOffset;
+                        //    caret_char_index = rCharOffset + foundLocation.RunCharIndex;
+                        //}
                         return;
                     }
                 } while (MoveToPreviousTextRun());//
@@ -667,7 +681,7 @@ namespace LayoutFarm.Text
                 dbugTextManRecorder.BeginContext();
             }
 #endif
-            if (newCharIndexPointTo < -1 || newCharIndexPointTo > currentLine.CharCount - 1)
+            if (newCharIndexPointTo < 0 || newCharIndexPointTo > currentLine.CharCount)
             {
                 throw new NotSupportedException("index out of range");
             }
