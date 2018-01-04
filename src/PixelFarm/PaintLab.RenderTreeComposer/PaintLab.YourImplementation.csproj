@@ -50,7 +50,7 @@
     <Compile Include="2_ContentManagers\ImageContentManager.cs" />
     <Compile Include="2_ContentManagers\TextContentManager.cs" />
     <Compile Include="2_ContentManagers\ClientBinder.cs" />
-    <Compile Include="4_FontServices\ActiveFontAtlasService.cs" />
+    <Compile Include="4_FontServices\MySimpleGLBitmapFontManager.cs" />
     <Compile Include="4_FontServices\DrawingGLFontPrinter.cs" />
     <Compile Include="4_FontServices\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -3,7 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+
+
+#if GL_ENABLE
 using PixelFarm.DrawingGL;
+#endif
+
 
 namespace LayoutFarm.UI
 {
