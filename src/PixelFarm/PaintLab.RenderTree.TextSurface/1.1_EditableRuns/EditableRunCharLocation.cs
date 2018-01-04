@@ -9,12 +9,12 @@ namespace LayoutFarm.Text
         /// <summary>
         /// begin selected charIndex =-1
         /// </summary>
-        public readonly int charIndex;
+        public readonly int XcharIndex;
 
         public EditableRunCharLocation(int pixelOffset, int charIndex)
         {
             this.pixelOffset = pixelOffset;
-            this.charIndex = charIndex;
+            this.XcharIndex = charIndex;
         }
     }
 }

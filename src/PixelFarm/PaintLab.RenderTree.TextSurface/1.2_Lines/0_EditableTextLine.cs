@@ -247,6 +247,7 @@ namespace LayoutFarm.Text
         {
             get
             {
+                //TODO: reimplement this again
                 int charCount = 0;
                 foreach (EditableRun r in this._runs)
                 {
