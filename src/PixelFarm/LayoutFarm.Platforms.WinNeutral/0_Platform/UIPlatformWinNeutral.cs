@@ -23,6 +23,7 @@ namespace LayoutFarm.UI
             // PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
             //gles2 
             //
+            PixelFarm.Drawing.GLES2.GLES2Platform.TextService = new OpenFontTextService();
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(s_fontStore);
             //skia
 

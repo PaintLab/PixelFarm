@@ -46,7 +46,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return LocalSelectedIndex == -1;
+                return RunLocalSelectedIndex == -1;
             }
         }
         public abstract int LineId
@@ -69,11 +69,12 @@ namespace LayoutFarm.Text
         {
             get;
         }
-        public int LocalSelectedIndex
+
+        public int RunLocalSelectedIndex
         {
             get
             {
-                return lineCharIndex - onTextRunCharOffset;
+                return lineCharIndex - onTextRunCharOffset ;
             }
         }
         public int X
@@ -96,11 +97,11 @@ namespace LayoutFarm.Text
         {
             if (onVisualElement == null)
             {
-                return "null " + " ,local[" + LocalSelectedIndex + "]";
+                return "null " + " ,local[" + RunLocalSelectedIndex + "]";
             }
             else
             {
-                return onVisualElement.ToString() + " ,local[" + LocalSelectedIndex + "]";
+                return onVisualElement.ToString() + " ,local[" + RunLocalSelectedIndex + "]";
             }
         }
 #endif

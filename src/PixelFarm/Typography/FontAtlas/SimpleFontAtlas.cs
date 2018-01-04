@@ -48,6 +48,40 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
+        //-----
+        //pre-calculate values 
+        public float SourceTextureScale { get; private set; }
+        public float TargetTextureScale { get; private set; }
+        public float FinalTextureScale { get; private set; }
+        //TODO: review here, or we should use scaled
+        //UNSCALED version
+        public int OriginalRecommendLineSpacing { get; private set; }
+        public int OriginalAscending { get; private set; }
+        public int OriginalDescending { get; private set; }
+        public int OriginalLineGap { get; private set; }
+       
+
+        public void SetTextureScaleInfo(float sourceTextureScale, float targetTextureScale)
+        {
+            this.SourceTextureScale = sourceTextureScale;
+            this.TargetTextureScale = targetTextureScale;
+            this.FinalTextureScale = targetTextureScale / sourceTextureScale;
+        }
+
+        public void SetCommonFontMetricValues(int ascending, int descending, int linegap, int recommendLineSpacing)
+        {
+            //TODO: review here, or we should use scaled
+            //UNSCALED version
+
+
+            this.OriginalAscending = ascending;
+            this.OriginalDescending = descending;
+            this.OriginalLineGap = linegap;
+            
+            this.OriginalRecommendLineSpacing = recommendLineSpacing;
+
+        }
+
     }
 
 }
