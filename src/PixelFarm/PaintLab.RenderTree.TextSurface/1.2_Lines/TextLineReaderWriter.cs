@@ -35,7 +35,7 @@ namespace LayoutFarm.Text
             if (run == null || !run.HasParent)
             {
 
-                SetCurrentCharIndex(-1);
+                SetCurrentCharIndexToBegin();
                 if (index != -1)
                 {
                     int limit = CurrentLine.CharCount - 1;
@@ -328,7 +328,7 @@ namespace LayoutFarm.Text
         void flowlayer_Reflow(object sender, EventArgs e)
         {
             int prevCharIndex = charIndex;
-            this.SetCurrentCharIndex(-1);
+            this.SetCurrentCharIndexToBegin();
             this.SetCurrentCharIndex(prevCharIndex);
         }
         protected EditableTextLine CurrentLine

@@ -152,7 +152,7 @@ namespace LayoutFarm.Text
                 _dbugActivityRecorder.BeginContext();
             }
 #endif
-            textLineWriter.SetCurrentCharIndex(textLineWriter.CharCount - 1);
+            textLineWriter.SetCurrentCharIndexToEnd();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -170,7 +170,7 @@ namespace LayoutFarm.Text
             }
 #endif
 
-            textLineWriter.SetCurrentCharIndex(-1);
+            textLineWriter.SetCurrentCharIndexToBegin();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
