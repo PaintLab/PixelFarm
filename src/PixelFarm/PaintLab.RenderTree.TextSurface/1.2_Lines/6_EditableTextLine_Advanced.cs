@@ -58,7 +58,7 @@ namespace LayoutFarm.Text
                 {
                     EditableRun elem =
                       startPoint.TextRun.Copy(
-                        startPoint.RunLocalSelectedIndex ,
+                        startPoint.RunLocalSelectedIndex,
                         endPoint.LineCharIndex - startPoint.LineCharIndex);
                     if (elem != null)
                     {
@@ -87,7 +87,7 @@ namespace LayoutFarm.Text
                     }
                     if (startLine == stopLine)
                     {
-                        EditableRun postCutTextRun = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex + 1);
+                        EditableRun postCutTextRun = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex);
                         if (postCutTextRun != null)
                         {
                             output.Add(postCutTextRun);
@@ -259,7 +259,7 @@ namespace LayoutFarm.Text
                         if (newStartPoint.TextRun != null)
                         {
                             LinkedList<EditableRun> tobeRemoveRuns = new LinkedList<EditableRun>();
-                            if (newStartPoint.LineCharIndex == -1)
+                            if (newStartPoint.LineCharIndex == 0)
                             {
                                 foreach (EditableRun t in editableFlowLayer.TextRunForward(
                                     (EditableRun)newStartPoint.TextRun,
@@ -597,7 +597,7 @@ namespace LayoutFarm.Text
             this.LocalSuspendLineReArrange();
             EditableVisualPointInfo result = null;
             EditableRun preCutTextRun = (EditableRun)tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
-            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex + 1);
+            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
             if (preCutTextRun != null)
             {
                 this.AddBefore(tobeCutRun, preCutTextRun);

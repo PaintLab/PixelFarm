@@ -155,7 +155,7 @@ namespace LayoutFarm.Text
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
                         selSnapshot.endColumnNum));
-                    textLineWriter.RemoveSelectedTextRuns(selectionRange);
+                    textLineWriter.RemoveSelectedTextRuns(selectionRange); 
                     updateJustCurrentLine = true;
                 }
             }
@@ -366,7 +366,7 @@ namespace LayoutFarm.Text
 
         public void TryMoveCaretTo(int value, bool backward = false)
         {
-            if (textLineWriter.ProperCharIndex < 0 && value < -1)
+            if (textLineWriter.ProperCharIndex < 1 && value < 0)
             {
                 if (textLineWriter.HasPrevLine)
                 {
