@@ -435,9 +435,9 @@ namespace LayoutFarm.Text
         }
         public override EditableRun LeftCopy(int index)
         {
-            if (index > -1)
+            if (index > 0)
             {
-                return MakeTextRun(0, index + 1);
+                return MakeTextRun(0, index);
             }
             else
             {
