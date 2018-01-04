@@ -203,12 +203,12 @@ namespace PixelFarm.DrawingGL
     }
 
 
+
+
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
 
         GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
-
-        //--------
         GLRenderSurface _glsx;
         GLPainter painter;
         SimpleFontAtlas simpleFontAtlas;
@@ -225,24 +225,21 @@ namespace PixelFarm.DrawingGL
         public GLBitmapGlyphTextPrinter(GLPainter painter, LayoutFarm.OpenFontTextService textServices)
         {
 
-            //create text printer for use with canvas painter              
-            
+            //create text printer for use with canvas painter           
             this._textServices = textServices;
             this.painter = painter;
             this._glsx = painter.Canvas;
-
-
             //test textures...
             //_currentTextureKind = TextureKind.Msdf; 
             //_currentTextureKind = TextureKind.StencilGreyScale;
             _currentTextureKind = TextureKind.StencilLcdEffect;
 
-
-
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
-            //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer; 
-
+            //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;  
             ChangeFont(painter.CurrentFont);
+
+
+            //glyph cahce for specific atlas
             _loadedGlyphs = new GLBitmapCache<SimpleFontAtlas>(atlas =>
             {
                 //create new one
@@ -254,8 +251,6 @@ namespace PixelFarm.DrawingGL
             });
 
         }
-
-
 
         public void ChangeFillColor(Color color)
         {
@@ -269,19 +264,13 @@ namespace PixelFarm.DrawingGL
 
         }
         public bool StartDrawOnLeftTop { get; set; }
-
-
-
         public void ChangeFont(RequestFont font)
         {
 
+            //we may transform this font 
             //check for resolved font
             int fontKey = font.FontKey;
-
-
-
-            //we resolve it to actual font 
-
+            //we resolve it to actual font  
             this.font = font;
 
             TextureFontCreationParams creationParams = new TextureFontCreationParams();
