@@ -129,10 +129,12 @@ namespace TestGlfw
 
         static Mini.GLDemoContext demoContext2 = null;
         static OpenFontStore s_fontstore;
-
+        static LayoutFarm.OpenFontTextService s_textServices;
         public GlfwGLES2()
         {
             s_fontstore = new OpenFontStore();
+            s_textServices = new LayoutFarm.OpenFontTextService();
+
         }
         public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
@@ -148,10 +150,9 @@ namespace TestGlfw
                 //var demo = new T42_ES2HelloTriangleDemo();
                 demoContext2 = new Mini.GLDemoContext(w, h);
                 demoContext2.SetTextPrinter(painter =>
-                {
+                { 
 
-
-                    var printer = new PixelFarm.DrawingGL.GLBitmapGlyphTextPrinter(painter);
+                    var printer = new PixelFarm.DrawingGL.GLBitmapGlyphTextPrinter(painter, s_textServices);
                     painter.TextPrinter = printer;
                     //create text printer for opengl 
                     //----------------------

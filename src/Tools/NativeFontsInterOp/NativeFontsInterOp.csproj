@@ -45,6 +45,7 @@
     <Compile Include="NativeFontImpl\NativeFontFace.cs" />
     <Compile Include="NativeFontImpl\NativeFontGlyphBuilder.cs" />
     <Compile Include="NativeFontImpl\NativeFonts.cs" />
+    <Compile Include="NativeFontStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
