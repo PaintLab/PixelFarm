@@ -7,7 +7,7 @@ namespace LayoutFarm.CustomWidgets
     public class CustomTextRun : RenderElement
     {
         char[] textBuffer;
-        Color textColor;
+        Color textColor = Color.Black;
         RequestFont _font;
 #if DEBUG
         public bool dbugBreak;
