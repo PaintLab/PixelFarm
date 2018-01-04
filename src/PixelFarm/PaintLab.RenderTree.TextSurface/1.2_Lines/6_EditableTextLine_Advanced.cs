@@ -293,7 +293,7 @@ namespace LayoutFarm.Text
                     {
                         int startLineId = newStartPoint.LineId;
                         int stopLineId = newStopPoint.LineId;
-                        if (newStopPoint.LineCharIndex > -1)
+                        if (newStopPoint.LineCharIndex > 0)
                         {
                             stopLine.RemoveLeft((EditableRun)newStopPoint.TextRun);
                         }
@@ -303,7 +303,7 @@ namespace LayoutFarm.Text
                             line.Clear();
                             line.JoinWithNextLine();
                         }
-                        if (newStartPoint.LineCharIndex == -1)
+                        if (newStartPoint.LineCharIndex == 0)
                         {
                             startLine.RemoveRight((EditableRun)newStartPoint.TextRun);
                         }
