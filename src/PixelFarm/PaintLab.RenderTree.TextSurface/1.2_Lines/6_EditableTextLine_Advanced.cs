@@ -58,7 +58,7 @@ namespace LayoutFarm.Text
                 {
                     EditableRun elem =
                       startPoint.TextRun.Copy(
-                        startPoint.LocalSelectedIndex + 1,
+                        startPoint.RunLocalSelectedIndex ,
                         endPoint.LineCharIndex - startPoint.LineCharIndex);
                     if (elem != null)
                     {
@@ -87,7 +87,7 @@ namespace LayoutFarm.Text
                     }
                     if (startLine == stopLine)
                     {
-                        EditableRun postCutTextRun = startPoint.TextRun.Copy(startPoint.LocalSelectedIndex + 1);
+                        EditableRun postCutTextRun = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex + 1);
                         if (postCutTextRun != null)
                         {
                             output.Add(postCutTextRun);
@@ -100,7 +100,7 @@ namespace LayoutFarm.Text
                             }
                         }
 
-                        EditableRun preCutTextRun = endPoint.TextRun.LeftCopy(endPoint.LocalSelectedIndex);
+                        EditableRun preCutTextRun = endPoint.TextRun.LeftCopy(endPoint.RunLocalSelectedIndex);
                         if (preCutTextRun != null)
                         {
                             output.Add(preCutTextRun);
@@ -156,7 +156,7 @@ namespace LayoutFarm.Text
                         {
                             output.Add(t.Clone());
                         }
-                        EditableRun postCutTextRun = endPoint.TextRun.Copy(endPoint.LocalSelectedIndex + 1);
+                        EditableRun postCutTextRun = endPoint.TextRun.Copy(endPoint.RunLocalSelectedIndex + 1);
                         if (postCutTextRun != null)
                         {
                             output.Add(postCutTextRun);
@@ -164,7 +164,7 @@ namespace LayoutFarm.Text
                     }
                     else
                     {
-                        EditableRun postCutTextRun = startPoint.TextRun.Copy(startPoint.LocalSelectedIndex + 1);
+                        EditableRun postCutTextRun = startPoint.TextRun.Copy(startPoint.RunLocalSelectedIndex + 1);
                         if (postCutTextRun != null)
                         {
                             output.Add(postCutTextRun);
@@ -175,7 +175,7 @@ namespace LayoutFarm.Text
                             output.Add(t.Clone());
                         }
 
-                        EditableRun preCutTextRun = endPoint.TextRun.LeftCopy(startPoint.LocalSelectedIndex);
+                        EditableRun preCutTextRun = endPoint.TextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
                         if (preCutTextRun != null)
                         {
                             output.Add(preCutTextRun);
@@ -214,7 +214,7 @@ namespace LayoutFarm.Text
                 {
                     EditableRun removedRun = (EditableRun)startPoint.TextRun;
                     EditableRun.InnerRemove(removedRun,
-                                    startPoint.LocalSelectedIndex,
+                                    startPoint.RunLocalSelectedIndex,
                                     endPoint.LineCharIndex - startPoint.LineCharIndex, false);
                     if (removedRun.CharacterCount == 0)
                     {
@@ -470,9 +470,9 @@ namespace LayoutFarm.Text
             if (startPoint.TextRun == endPoint.TextRun)
             {
                 EditableRun toBeCutTextRun = startPoint.TextRun;
-                EditableRun preCutTextRun = (EditableRun)toBeCutTextRun.LeftCopy(startPoint.LocalSelectedIndex);
-                EditableRun middleCutTextRun = (EditableRun)toBeCutTextRun.Copy(startPoint.LocalSelectedIndex + 1, endPoint.LineCharIndex - startPoint.LineCharIndex);
-                EditableRun postCutTextRun = (EditableRun)toBeCutTextRun.Copy(endPoint.LocalSelectedIndex + 1);
+                EditableRun preCutTextRun = (EditableRun)toBeCutTextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
+                EditableRun middleCutTextRun = (EditableRun)toBeCutTextRun.Copy(startPoint.RunLocalSelectedIndex + 1, endPoint.LineCharIndex - startPoint.LineCharIndex);
+                EditableRun postCutTextRun = (EditableRun)toBeCutTextRun.Copy(endPoint.RunLocalSelectedIndex + 1);
                 EditableVisualPointInfo newStartRangePointInfo = null;
                 EditableVisualPointInfo newEndRangePointInfo = null;
                 EditableTextLine line = this;
@@ -596,8 +596,8 @@ namespace LayoutFarm.Text
 
             this.LocalSuspendLineReArrange();
             EditableVisualPointInfo result = null;
-            EditableRun preCutTextRun = (EditableRun)tobeCutRun.LeftCopy(pointInfo.LocalSelectedIndex);
-            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.LocalSelectedIndex + 1);
+            EditableRun preCutTextRun = (EditableRun)tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
+            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex + 1);
             if (preCutTextRun != null)
             {
                 this.AddBefore(tobeCutRun, preCutTextRun);
@@ -715,7 +715,7 @@ namespace LayoutFarm.Text
             {
                 return;
             }
-            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.LocalSelectedIndex + 1);
+            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex + 1);
             if (postCutTextRun != null)
             {
                 output.Add(postCutTextRun);
@@ -749,7 +749,7 @@ namespace LayoutFarm.Text
                     break;
                 }
             }
-            EditableRun preCutTextRun = tobeCutRun.LeftCopy(pointInfo.LocalSelectedIndex);
+            EditableRun preCutTextRun = tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
             if (preCutTextRun != null)
             {
                 output.Add(preCutTextRun);
