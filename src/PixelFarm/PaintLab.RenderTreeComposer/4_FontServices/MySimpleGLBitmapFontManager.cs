@@ -58,7 +58,7 @@ namespace PixelFarm.DrawingGL
             out GLBitmap glBmp)
         {
 
-            int fontKey = reqFont.FontKey; 
+            int fontKey = reqFont.FontKey;
             SimpleFontAtlas fontAtlas;
             if (!_createdAtlases.TryGetValue(fontKey, out fontAtlas))
             {
@@ -88,8 +88,12 @@ namespace PixelFarm.DrawingGL
                 fontAtlas.TotalGlyph = totalGlyphsImg;
 #if DEBUG
                 //save glyph image for debug
-                //ActualImage.SaveImgBufferToPngFile(totalGlyphsImg.GetImageBuffer(), totalGlyphsImg.Width * 4, totalGlyphsImg.Width, totalGlyphsImg.Height, "d:\\WImageTest\\total.png");
-#endif
+                //PixelFarm.Agg.ActualImage.SaveImgBufferToPngFile(
+                //    totalGlyphsImg.GetImageBuffer(),
+                //    totalGlyphsImg.Width * 4,
+                //    totalGlyphsImg.Width, totalGlyphsImg.Height,
+                //    "d:\\WImageTest\\total_" + reqFont.Name + "_" + reqFont.SizeInPoints + ".png");
+#endif 
 
                 //cache the atlas
                 _createdAtlases.Add(fontKey, fontAtlas);
