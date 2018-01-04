@@ -62,13 +62,13 @@ namespace LayoutFarm.Text
                 }
                 EnableUndoHistoryRecording = true;
                 int startLineNum = textLineWriter.LineNumber;
-                int startCharIndex = textLineWriter.CharIndex;
+                int startCharIndex = textLineWriter.ProperCharIndex;
                 textLineWriter.AddTextSpan(newTextRun);
                 textLineWriter.EnsureCurrentTextRun();
                 commandHistory.AddDocAction(
                     new DocActionInsertRuns(
                         new EditableRun[] { newTextRun }, startLineNum, startCharIndex,
-                        textLineWriter.LineNumber, textLineWriter.CharIndex));
+                        textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
             }
         }
 
@@ -120,7 +120,7 @@ namespace LayoutFarm.Text
         {
             RemoveSelectedText();
             int startLineNum = textLineWriter.LineNumber;
-            int startCharIndex = textLineWriter.CharIndex;
+            int startCharIndex = textLineWriter.ProperCharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
             foreach (EditableRun t in textRuns)
@@ -138,7 +138,7 @@ namespace LayoutFarm.Text
             EnableUndoHistoryRecording = isRecordingHx;
             commandHistory.AddDocAction(
                 new DocActionInsertRuns(textRuns, startLineNum, startCharIndex,
-                    textLineWriter.LineNumber, textLineWriter.CharIndex));
+                    textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
             updateJustCurrentLine = false;
             TextEditRenderBox.NotifyTextContentSizeChanged(visualTextSurface);
         }
@@ -147,7 +147,7 @@ namespace LayoutFarm.Text
             updateJustCurrentLine = true;
             RemoveSelectedText();
             int startLineNum = textLineWriter.LineNumber;
-            int startCharIndex = textLineWriter.CharIndex;
+            int startCharIndex = textLineWriter.ProperCharIndex;
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
             if (t.IsLineBreak)
@@ -163,7 +163,7 @@ namespace LayoutFarm.Text
             EnableUndoHistoryRecording = isRecordingHx;
             commandHistory.AddDocAction(
                 new DocActionInsertRuns(t, startLineNum, startCharIndex,
-                    textLineWriter.LineNumber, textLineWriter.CharIndex));
+                    textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
             updateJustCurrentLine = false;
             TextEditRenderBox.NotifyTextContentSizeChanged(visualTextSurface);
         }
@@ -200,7 +200,7 @@ namespace LayoutFarm.Text
                 {
                     VisualPointInfo startPoint = selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
-                    textLineWriter.CharIndex = startPoint.LineCharIndex;
+                    textLineWriter.SetCurrentCharIndex(startPoint.LineCharIndex);
                     List<EditableRun> copyRuns = new List<EditableRun>();
                     textLineWriter.CopySelectedTextRuns(selectionRange, copyRuns);
                     foreach (EditableRun t in copyRuns)

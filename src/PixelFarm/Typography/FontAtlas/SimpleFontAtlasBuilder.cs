@@ -108,8 +108,11 @@ namespace Typography.Rendering
             // -------------------------------
             //compact image location
             // TODO: review performance here again***
+
+            int totalImgWidth = totalMaxLim;
             if (CompactGlyphSpace)
             {
+                totalImgWidth = 0;//reset
                 BinPacker binPacker = new BinPacker(totalMaxLim, currentY);
                 for (int i = glyphList.Count - 1; i >= 0; --i)
                 {
@@ -117,14 +120,20 @@ namespace Typography.Rendering
                     BinPackRect newRect = binPacker.Insert(g.img.Width, g.img.Height);
                     g.area = new Rectangle(newRect.X, newRect.Y,
                         g.img.Width, g.img.Height);
+
+
+                    //recalculate proper max midth again, after arrange and compact space
+                    if (newRect.Right > totalImgWidth)
+                    {
+                        totalImgWidth = newRect.Right;
+                    }
                 }
             }
 
-            // -------------------------------
 
-            //4. create array that can hold data
-
-            int[] totalBuffer = new int[totalMaxLim * imgH];
+            // ------------------------------- 
+            //4. create array that can hold data  
+            int[] totalBuffer = new int[totalImgWidth * imgH];
             if (CompactGlyphSpace)
             {
                 for (int i = glyphList.Count - 1; i >= 0; --i)
@@ -132,7 +141,7 @@ namespace Typography.Rendering
                     CacheGlyph g = glyphList[i];
                     //copy data to totalBuffer
                     GlyphImage img = g.img;
-                    CopyToDest(img.GetImageBuffer(), img.Width, img.Height, totalBuffer, g.area.Left, g.area.Top, totalMaxLim);
+                    CopyToDest(img.GetImageBuffer(), img.Width, img.Height, totalBuffer, g.area.Left, g.area.Top, totalImgWidth);
                 }
 
             }
@@ -144,11 +153,11 @@ namespace Typography.Rendering
                     CacheGlyph g = glyphList[i];
                     //copy data to totalBuffer
                     GlyphImage img = g.img;
-                    CopyToDest(img.GetImageBuffer(), img.Width, img.Height, totalBuffer, g.area.Left, g.area.Top, totalMaxLim);
+                    CopyToDest(img.GetImageBuffer(), img.Width, img.Height, totalBuffer, g.area.Left, g.area.Top, totalImgWidth);
                 }
             }
 
-            GlyphImage glyphImage = new GlyphImage(totalMaxLim, imgH);
+            GlyphImage glyphImage = new GlyphImage(totalImgWidth, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
             latestGenGlyphImage = glyphImage;
             return glyphImage;

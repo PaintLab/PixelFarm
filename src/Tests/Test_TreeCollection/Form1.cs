@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using PixelFarm.TreeCollection;
+using PaintLab.DocumentPro;
 
 namespace Test_TreeCollection
 {
@@ -43,6 +44,28 @@ namespace Test_TreeCollection
             HeightTests heightTest = new HeightTests();
             heightTest.Setup();
             heightTest.TestHeightChanged();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //string text = "hello\r\nIts me!";
+            string text = "123456\r\nIts me!\r\n";
+            TextSource textsource = new TextSource(text.ToCharArray());
+            char c = textsource.GetCharAt(1, 3);
+            if (c != '3')
+            {
+
+            }
+            //the text source is immutable!
+            //if we want to make a change 
+            //just create a new version of that
+
+
+        }
+
+        void AnotherTextDocumentTest()
+        {
+
         }
     }
 }

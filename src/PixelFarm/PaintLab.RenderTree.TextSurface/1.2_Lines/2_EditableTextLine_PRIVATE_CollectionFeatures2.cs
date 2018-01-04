@@ -31,7 +31,7 @@ namespace LayoutFarm.Text
             }
             else
             {
-                List<EditableRun> tempTextRuns = new List<EditableRun>(this.Count);
+                List<EditableRun> tempTextRuns = new List<EditableRun>(this.RunCount);
                 if (afterTextRun != null)
                 {
                     foreach (EditableRun t in GetVisualElementForward(afterTextRun.NextTextRun))

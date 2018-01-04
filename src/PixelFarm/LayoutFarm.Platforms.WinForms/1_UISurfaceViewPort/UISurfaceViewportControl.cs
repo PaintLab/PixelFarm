@@ -3,7 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+
+
+#if GL_ENABLE
 using PixelFarm.DrawingGL;
+#endif
+
 
 namespace LayoutFarm.UI
 {
@@ -115,10 +120,9 @@ namespace LayoutFarm.UI
                         //var printer = new AggTextSpanPrinter(canvasPainter, 400, 50);
                         //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
                         //printer.UseSubPixelRendering = true;
-                        //canvasPainter.TextPrinter = printer;
-
+                        //canvasPainter.TextPrinter = printer; 
                         //3 
-                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter);
+                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
                         canvasPainter.TextPrinter = printer;
 
                         //

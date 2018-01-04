@@ -315,35 +315,12 @@ namespace LayoutFarm.Text
         {
             if (pixelOffset < Width)
             {
-                return new EditableRunCharLocation(0, -1);
-                //char[] myBuffer = this.mybuffer;
-                //int j = myBuffer.Length;
-                //int accWidth = 0; for (int i = 0; i < j; i++)
-                //{
-                //    char c = myBuffer[i];
-
-                //    int charW = GetCharacterWidth(c);
-                //    if (accWidth + charW > pixelOffset)
-                //    {
-                //        if (pixelOffset - accWidth > 3)
-                //        {
-                //            return new VisualLocationInfo(accWidth + charW, i);
-                //        }
-                //        else
-                //        {
-                //            return new VisualLocationInfo(accWidth, i - 1);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        accWidth += charW;
-                //    }
-                //}
-                //return new VisualLocationInfo(accWidth, j - 1);
+                return new EditableRunCharLocation(0, 0);
             }
             else
             {
-                return new EditableRunCharLocation(0, -1);
+                //exceed than the bound of this run
+                return new EditableRunCharLocation(0, 1);
             }
         }
         //-------------------------------------------

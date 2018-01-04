@@ -57,11 +57,11 @@
     <Compile Include="..\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs">
       <Link>4_Skia\SkiaCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTreeComposer\4_FontServices\ActiveFontAtlasService.cs">
-      <Link>0_Platform\ActiveFontAtlasService.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs">
       <Link>0_Platform\DrawingGLFontPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTreeComposer\4_FontServices\MySimpleGLBitmapFontManager.cs">
+      <Link>0_Platform\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
     <Compile Include="..\Win32Utils\MyWin32.cs">
       <Link>MyWin32.cs</Link>
