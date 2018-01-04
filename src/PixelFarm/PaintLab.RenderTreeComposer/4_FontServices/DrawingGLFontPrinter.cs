@@ -256,7 +256,7 @@ namespace PixelFarm.DrawingGL
         {
             //called by owner painter  
             painter.FontFillColor = color;
-            _glsx.FontFillColor = color;
+            //_glsx.FontFillColor = color;
         }
         public void ChangeStrokeColor(Color strokeColor)
         {

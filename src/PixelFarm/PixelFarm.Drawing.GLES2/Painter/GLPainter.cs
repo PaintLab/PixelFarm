@@ -42,6 +42,7 @@ namespace PixelFarm.DrawingGL
             _glsx = glsx;
             _width = glsx.CanvasWidth;
             _height = glsx.CanvasHeight;
+            _fontFillColor = Color.Black;
             _clipBox = new RectInt(0, 0, _width, _height);
             _arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
@@ -58,7 +59,7 @@ namespace PixelFarm.DrawingGL
             }
             set
             {
-                _fontFillColor = value; 
+                _fontFillColor = value;
             }
         }
         DrawBoardOrientation _orientation;
@@ -148,7 +149,7 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _fillColor = value;
-                _glsx.FontFillColor = value;
+                //_glsx.FontFillColor = value;
             }
         }
         public override int Height
