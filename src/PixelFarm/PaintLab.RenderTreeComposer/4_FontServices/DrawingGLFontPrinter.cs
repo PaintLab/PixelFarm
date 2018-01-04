@@ -221,20 +221,22 @@ namespace PixelFarm.DrawingGL
         int _lineGap;
         int _lineHeight;
 
-        LayoutFarm.OpenFontTextService _textServices = new LayoutFarm.OpenFontTextService();
-        public GLBitmapGlyphTextPrinter(GLPainter painter)
+        LayoutFarm.OpenFontTextService _textServices;
+        public GLBitmapGlyphTextPrinter(GLPainter painter, LayoutFarm.OpenFontTextService textServices)
         {
 
-            //create text printer for use with canvas painter 
-            //use typography font service?
-
+            //create text printer for use with canvas painter              
+            
+            this._textServices = textServices;
             this.painter = painter;
             this._glsx = painter.Canvas;
-            //_currentTextureKind = TextureKind.Msdf;
 
+
+            //test textures...
+            //_currentTextureKind = TextureKind.Msdf; 
             //_currentTextureKind = TextureKind.StencilGreyScale;
             _currentTextureKind = TextureKind.StencilLcdEffect;
-            //_currentTextureKind = TextureKind.Msdf;
+
 
 
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
@@ -252,11 +254,14 @@ namespace PixelFarm.DrawingGL
             });
 
         }
+
+
+
         public void ChangeFillColor(Color color)
         {
             //called by owner painter  
             painter.FontFillColor = color;
-            
+
         }
         public void ChangeStrokeColor(Color strokeColor)
         {
@@ -264,10 +269,18 @@ namespace PixelFarm.DrawingGL
 
         }
         public bool StartDrawOnLeftTop { get; set; }
+
+
+
         public void ChangeFont(RequestFont font)
         {
-            //from request font
-            //we resolve it to actual font
+
+            //check for resolved font
+            int fontKey = font.FontKey;
+
+
+
+            //we resolve it to actual font 
 
             this.font = font;
 
@@ -296,6 +309,8 @@ namespace PixelFarm.DrawingGL
                 this.simpleFontAtlas = foundFontAtlas;
             }
 
+
+            //------------
             _typeface = (Typography.OpenFont.Typeface)fontImp.FontFace.GetInternalTypeface();
             float srcTextureScale = _typeface.CalculateScaleToPixelFromPointSize(simpleFontAtlas.OriginalFontSizePts);
             //scale at request
@@ -346,7 +361,7 @@ namespace PixelFarm.DrawingGL
 
             //create temp buffer span that describe the part of a whole char buffer
             TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
-            
+
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
