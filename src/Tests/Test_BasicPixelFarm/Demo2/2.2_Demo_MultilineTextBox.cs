@@ -21,8 +21,9 @@ namespace LayoutFarm
             var style2 = new Text.TextSpanStyle();
             style2.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             style2.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
-            textbox2.SetLocation(20, 120);
             textbox2.DefaultSpanStyle = style2;
+            textbox2.SetLocation(20, 120);
+            
 
             viewport.AddContent(textbox2);
             var textSplitter = new ContentTextSplitter();
