@@ -149,7 +149,6 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _fillColor = value;
-                //_glsx.FontFillColor = value;
             }
         }
         public override int Height
