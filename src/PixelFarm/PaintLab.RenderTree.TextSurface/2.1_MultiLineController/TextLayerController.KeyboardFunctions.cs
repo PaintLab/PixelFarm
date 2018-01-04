@@ -57,7 +57,7 @@ namespace LayoutFarm.Text
                     //end of this line
                     commandHistory.AddDocAction(
                         new DocActionJoinWithNextLine(
-                            textLineWriter.LineNumber, textLineWriter.CharIndex));
+                            textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
                     JoinWithNextLine();
                     updateJustCurrentLine = false;
                 }
@@ -65,7 +65,7 @@ namespace LayoutFarm.Text
                 {
                     commandHistory.AddDocAction(
                         new DocActionDeleteChar(
-                            deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
+                            deletedChar, textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
                     char nextChar = textLineWriter.NextChar;
 
                     if (nextChar != '\0')
@@ -123,7 +123,7 @@ namespace LayoutFarm.Text
                         DoEnd();
                         commandHistory.AddDocAction(
                             new DocActionJoinWithNextLine(
-                                textLineWriter.LineNumber, textLineWriter.CharIndex));
+                                textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
                         JoinWithNextLine();
                     }
 #if DEBUG
@@ -135,7 +135,7 @@ namespace LayoutFarm.Text
                 {
                     commandHistory.AddDocAction(
                             new DocActionDeleteChar(
-                                deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
+                                deletedChar, textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
@@ -152,7 +152,7 @@ namespace LayoutFarm.Text
                 _dbugActivityRecorder.BeginContext();
             }
 #endif
-            textLineWriter.CharIndex = textLineWriter.CharCount - 1;
+            textLineWriter.SetCurrentCharIndex(textLineWriter.CharCount - 1);
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -169,7 +169,8 @@ namespace LayoutFarm.Text
                 _dbugActivityRecorder.BeginContext();
             }
 #endif
-            textLineWriter.CharIndex = -1;
+
+            textLineWriter.SetCurrentCharIndex(-1);
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
