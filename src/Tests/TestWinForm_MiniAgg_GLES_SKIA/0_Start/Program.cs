@@ -35,16 +35,16 @@ namespace Mini
             YourImplementation.BootStrapWinGdi.SetupDefaultValues();
             //default text breaker, this bridge between              
 #if DEBUG
-            PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
-            {
+            //PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
+            //{
 
-                using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                {
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
-                    //save
-                    newBmp.Save(filename);
-                }
-            });
+            //    using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            //    {
+            //        PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
+            //        //save
+            //        newBmp.Save(filename);
+            //    }
+            //});
 #endif
 
             //---------------------------------------------------

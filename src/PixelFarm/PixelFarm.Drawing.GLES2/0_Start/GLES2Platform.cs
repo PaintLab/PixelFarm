@@ -10,11 +10,16 @@ namespace PixelFarm.Drawing.GLES2
     public static class GLES2Platform
     {
 
-        public static void AddTextureFont(string fontName, string xmlGlyphPos, string glypBitmap)
-        {
-            GLES2PlatformFontMx.AddTextureFontInfo(fontName, xmlGlyphPos, glypBitmap);
-        }
+        static LayoutFarm.OpenFontTextService _textService = new LayoutFarm.OpenFontTextService();
 
+        public static LayoutFarm.OpenFontTextService TextService
+        {
+            get { return _textService; }
+            set
+            {
+                _textService = value;
+            }
+        }
         public static GLRenderSurface CreateGLRenderSurface(int w, int h, int viewportW, int viewportH)
         {
             //the canvas may need some init modules

@@ -56,7 +56,7 @@ namespace LayoutFarm.Text
                 return;
             }
 
-            if (!this.EndWithLineBreak && this.Count == 0 && this.currentLineNumber > 0)
+            if (!this.EndWithLineBreak && this.RunCount == 0 && this.currentLineNumber > 0)
             {
                 if (!editableFlowLayer.GetTextLine(currentLineNumber - 1).EndWithLineBreak)
                 {

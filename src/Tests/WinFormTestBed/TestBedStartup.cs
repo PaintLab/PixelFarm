@@ -10,6 +10,17 @@ namespace YourImplementation
 #if GL_ENABLE 
             YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
 #endif
+            PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
+            {
+
+                using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
+                    //save
+                    newBmp.Save(filename);
+                }
+            });
+
             //you can use your font loader
             YourImplementation.BootStrapWinGdi.SetupDefaultValues();
             //default text breaker, this bridge between 
