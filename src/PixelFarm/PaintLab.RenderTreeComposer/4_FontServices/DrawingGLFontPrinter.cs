@@ -367,8 +367,11 @@ namespace PixelFarm.DrawingGL
 
                 //for sharp glyph
                 //we adjust g_x,g_y to integer value                
+                float g_y2 = (float)Math.Floor(g_y);
+
                 g_x = (float)Math.Round(g_x);
-                g_y = (float)Math.Floor(g_y);
+                g_y = (float)Math.Ceiling(g_y);
+                
 
                 switch (textureKind)
                 {
