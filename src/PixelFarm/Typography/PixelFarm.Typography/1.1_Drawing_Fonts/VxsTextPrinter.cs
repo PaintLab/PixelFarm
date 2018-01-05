@@ -321,6 +321,11 @@ namespace PixelFarm.Drawing.Fonts
                 RenderQualtity savedRederQuality = painter.RenderQuality;
                 painter.RenderQuality = RenderQualtity.HighQuality;
                 painter.UseSubPixelLcdEffect = true;
+
+                Agg.Transform.Affine flipY = Agg.Transform.Affine.NewMatix(
+                    Agg.Transform.AffinePlan.Scale(1, -1)); //flip Y
+                VertexStore reusableVxs = new VertexStore();
+                 
                 for (int i = startAt; i < endBefore; ++i)
                 {   //-----------------------------------
                     //TODO: review here ***
@@ -331,10 +336,18 @@ namespace PixelFarm.Drawing.Fonts
                     g_x = glyphPlan.ExactX + x;
                     g_y = glyphPlan.ExactY + y;
                     painter.SetOrigin(g_x, g_y);
+                  
                     //-----------------------------------  
+
                     //invert each glyph 
                     //version 3:
-                    painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+
+                    reusableVxs.Clear();
+                    VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
+                    flipY.TransformToVxs(vxs, reusableVxs);
+                    painter.Fill(reusableVxs);
+
+
                     //version2; 
                     //VertexStore vsx = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
                     //_vxs1 = _invertY.TransformToVxs(vsx, _vxs1);
