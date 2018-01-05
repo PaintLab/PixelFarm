@@ -113,27 +113,31 @@ namespace PixelFarm.Drawing.Fonts
             }
 
 
-            float pxscale = typeface.CalculateScaleToPixelFromPointSize(sizeInPoint);
+
             int j = glyphIndices.Length;
             for (int i = 0; i < j; ++i)
             {
                 //build glyph
                 ushort gindex = glyphIndices[i];
-                builder.BuildFromGlyphIndex(gindex, -1);
+
                 GlyphImage glyphImg = null;
-                if(textureKind == TextureKind.Msdf)
+                if (textureKind == TextureKind.Msdf)
                 {
+                    //create picture with unscaled version set scale=-1
+                    //(we will create glyph contours and analyze them)
+                    builder.BuildFromGlyphIndex(gindex, -1);
+                    //
                     var glyphToContour = new GlyphContourBuilder();
-                    //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
                     builder.ReadShapes(glyphToContour);
+                    //msdfgen with  scale the glyph to specific shapescale
                     msdfGenParams.shapeScale = 1f / 64; //as original
                     glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
                 }
                 else
                 {
-                    //create alpha channel texture                      
                     aggTextureGen.TextureKind = textureKind;
-                    glyphImg = aggTextureGen.CreateGlyphImage(builder, pxscale);
+                    builder.BuildFromGlyphIndex(gindex, sizeInPoint);
+                    glyphImg = aggTextureGen.CreateGlyphImage(builder, 1);
                 }
                 //
 
