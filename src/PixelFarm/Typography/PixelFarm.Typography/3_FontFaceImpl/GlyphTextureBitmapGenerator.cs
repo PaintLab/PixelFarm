@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-using System.IO;
+
 
 using Typography.OpenFont;
 using Typography.TextLayout;
@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing.Fonts
 
         public GlyphTextureBitmapGenerator()
         {
-            UseTrueTypeInstruction = true;
+            UseTrueTypeInstruction = false;
         }
         public bool UseTrueTypeInstruction { get; set; }
         public void CreateTextureFontFromScriptLangs(
