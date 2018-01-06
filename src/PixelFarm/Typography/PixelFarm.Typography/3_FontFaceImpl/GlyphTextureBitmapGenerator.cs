@@ -17,33 +17,11 @@ namespace PixelFarm.Drawing.Fonts
 
         public delegate void OnEachFinishTotal(int glyphIndex, GlyphImage glyphImage, SimpleFontAtlasBuilder atlasBuilder);
 
-        static ushort[] GetUniqueGlyphIndexList(List<ushort> inputGlyphIndexList)
-        {
-            Dictionary<ushort, bool> uniqueGlyphIndices = new Dictionary<ushort, bool>(inputGlyphIndexList.Count);
-            foreach (ushort glyphIndex in inputGlyphIndexList)
-            {
-                if (!uniqueGlyphIndices.ContainsKey(glyphIndex))
-                {
-                    uniqueGlyphIndices.Add(glyphIndex, true);
-                }
-            }
-            //
-            ushort[] uniqueGlyphIndexArray = new ushort[uniqueGlyphIndices.Count];
-            int i = 0;
-            foreach (ushort glyphIndex in uniqueGlyphIndices.Keys)
-            {
-                uniqueGlyphIndexArray[i] = glyphIndex;
-                i++;
-            }
-            return uniqueGlyphIndexArray;
-        }
-
-
+       
         public GlyphTextureBitmapGenerator()
-        {
-            UseTrueTypeInstruction = false;
+        { 
         }
-        public bool UseTrueTypeInstruction { get; set; }
+
         public void CreateTextureFontFromScriptLangs(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
@@ -195,6 +173,26 @@ namespace PixelFarm.Drawing.Fonts
             }
 
             return newImg;
+        }
+        static ushort[] GetUniqueGlyphIndexList(List<ushort> inputGlyphIndexList)
+        {
+            Dictionary<ushort, bool> uniqueGlyphIndices = new Dictionary<ushort, bool>(inputGlyphIndexList.Count);
+            foreach (ushort glyphIndex in inputGlyphIndexList)
+            {
+                if (!uniqueGlyphIndices.ContainsKey(glyphIndex))
+                {
+                    uniqueGlyphIndices.Add(glyphIndex, true);
+                }
+            }
+            //
+            ushort[] uniqueGlyphIndexArray = new ushort[uniqueGlyphIndices.Count];
+            int i = 0;
+            foreach (ushort glyphIndex in uniqueGlyphIndices.Keys)
+            {
+                uniqueGlyphIndexArray[i] = glyphIndex;
+                i++;
+            }
+            return uniqueGlyphIndexArray;
         }
     }
 }
