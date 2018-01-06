@@ -410,7 +410,39 @@ namespace LayoutFarm.Text
         {
             visualFlowLayer.CopyContentToStringBuilder(stBuilder);
         }
+        public char PrevChar
+        {
+            get
+            {
+                if (currentTextRun != null)
+                {
 
+                    if (caret_char_index == 0 && CharCount == 0)
+                    {
+                        return '\0';
+                    }
+                    if (caret_char_index == rCharOffset)
+                    {
+                        if (currentTextRun.PrevTextRun != null)
+                        {
+                            return (currentTextRun.PrevTextRun).GetChar(currentTextRun.PrevTextRun.CharacterCount - 1);
+                        }
+                        else
+                        {
+                            return '\0';
+                        }
+                    }
+                    else
+                    {
+                        return currentTextRun.GetChar(caret_char_index - rCharOffset);
+                    }
+                }
+                else
+                {
+                    return '\0';
+                }
+            }
+        }
         public char NextChar
         {
             get
