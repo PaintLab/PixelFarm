@@ -255,8 +255,8 @@ namespace LayoutFarm.Text
             {
                 VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
-                int localselIndex = pointInfo.RunLocalSelectedIndex;
-                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - localselIndex);
+                int local_sel_Index = pointInfo.RunLocalSelectedIndex;
+                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - local_sel_Index);
                 internalTextLayerController.StartSelect();
                 internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
                 internalTextLayerController.EndSelect();
