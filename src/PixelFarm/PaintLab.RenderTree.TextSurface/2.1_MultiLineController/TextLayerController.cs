@@ -15,6 +15,9 @@ namespace LayoutFarm.Text
         DocumentCommandCollection commandHistory;
         TextLineWriter textLineWriter;
         TextEditRenderBox visualTextSurface;
+
+        List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
+
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -36,6 +39,11 @@ namespace LayoutFarm.Text
                 _dbugActivityRecorder.Start(null);
             }
 #endif
+        }
+
+        internal List<VisualMarkerSelectionRange> VisualMarkers
+        {
+            get { return _visualMarkers; }
         }
 
         public bool EnableUndoHistoryRecording
@@ -257,6 +265,12 @@ namespace LayoutFarm.Text
             }
         }
 
+        public void AddMarkerSpan(VisualSelectionRangeSnapShot selectoinRangeSnapshot)
+        {
+
+
+        }
+
 
         public int CurrentLineCharCount
         {
@@ -425,7 +439,6 @@ namespace LayoutFarm.Text
                             while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
                             {
                                 textLineWriter.SetCurrentCharStepRight();
-
                                 nextChar = textLineWriter.NextChar;
                                 tmp_index++;
                             }

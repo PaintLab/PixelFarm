@@ -84,6 +84,22 @@ namespace LayoutFarm.Text
                 }
             }
         }
+        public float GetXOffsetAtCharIndex(int charIndex)
+        {
+            float xoffset = 0;
+            int acc_charCount = 0;
+            foreach (EditableRun r in _runs)
+            {
+                if (r.CharacterCount + acc_charCount >= charIndex)
+                {
+                    //found at this run
+                    return xoffset + r.GetRunWidth(charIndex - acc_charCount);
+                }
+                xoffset += r.Width;
+                acc_charCount += r.CharacterCount;
+            }
+            return 0;//?
+        }
         public void TextLineReCalculateActualLineSize()
         {
             EditableRun r = this.FirstRun;
@@ -264,7 +280,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        internal int CurrentWidth
+        internal int LineWidth
         {
             get
             {

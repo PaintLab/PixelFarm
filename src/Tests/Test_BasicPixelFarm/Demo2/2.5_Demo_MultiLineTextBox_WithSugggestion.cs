@@ -8,7 +8,7 @@ namespace LayoutFarm
 {
     [DemoNote("2.5 MultiLineText_WithSuggestion")]
     class Demo_MultiLineText_WithSuggestion : DemoBase
-    {   
+    {
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
@@ -88,7 +88,7 @@ namespace LayoutFarm
             e.PreventDefault = true;
         }
         static string GetString(char[] buffer, LayoutFarm.Composers.TextSplitBound bound)
-        {   
+        {
             return new string(buffer, bound.startIndex, bound.length);
         }
         string currentLocalText = null;
@@ -403,7 +403,7 @@ Zimbabwe");
             int j = seplist.Length;
             for (int i = 0; i < j; ++i)
             {
-                string sepWord = seplist[i];
+                string sepWord = seplist[i].Trim();
                 if (sepWord.StartsWith("'"))
                 {
                     sepWord = sepWord.Substring(1, sepWord.Length - 2);

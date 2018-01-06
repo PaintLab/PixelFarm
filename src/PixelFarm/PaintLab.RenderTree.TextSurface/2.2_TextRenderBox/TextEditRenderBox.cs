@@ -9,6 +9,7 @@ namespace LayoutFarm.Text
     {
         RenderSurfaceScrollRelation scrollRelation;
         CustomRenderSurface vscrollableSurface;
+
         public Color BackgroundColor { get; set; }
         public CustomRenderSurface ScrollableSurface
         {
@@ -34,9 +35,14 @@ namespace LayoutFarm.Text
                 //canvas.FillRectangle(BackgroundColor, 0, 0, updateArea.Width, updateArea.Height);
                 canvas.FillRectangle(BackgroundColor, 0, 0, this.Width, this.Height);
             }
+            //2.1 markers 
 
+            foreach (VisualMarkerSelectionRange marker in internalTextLayerController.VisualMarkers)
+            {
+                marker.Draw(canvas, updateArea);
+            }
 
-            //2. sub ground 
+            //2.2 selection
             if (internalTextLayerController.SelectionRange != null)
             {
                 internalTextLayerController.SelectionRange.Draw(canvas, updateArea);
@@ -49,6 +55,7 @@ namespace LayoutFarm.Text
             }
             else
             {
+                //draw text layer
                 this.textLayer.DrawChildContent(canvas, updateArea);
                 if (this.HasDefaultLayer)
                 {
