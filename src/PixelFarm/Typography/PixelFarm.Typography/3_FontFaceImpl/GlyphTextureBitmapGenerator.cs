@@ -67,7 +67,7 @@ namespace PixelFarm.Drawing.Fonts
             //since some chars are not good at TrueTypeInstruction_VerticalOnly, we replace it with another version
 
             CreateTextureFontFromGlyphIndices(typeface, sizeInPoint,
-                HintTechnique.CustomAutoFit, atlasBuilder, true,
+                HintTechnique.TrueTypeInstruction, atlasBuilder, true,
                 new ushort[] {
                     typeface.LookupIndex('x'),
                     typeface.LookupIndex('X'),
