@@ -11,68 +11,74 @@ using Typography.Rendering;
 
 namespace PixelFarm.Drawing.Fonts
 {
+    public class GlyphTextureBuildDetail
+    {
+        public ScriptLang ScriptLang;
+        public char[] OnlySelectedGlyphIndices;
+        public HintTechnique HintTechnique;
+        public bool DoFilter;
+    }
 
     public class GlyphTextureBitmapGenerator
     {
 
         public delegate void OnEachFinishTotal(int glyphIndex, GlyphImage glyphImage, SimpleFontAtlasBuilder atlasBuilder);
 
-        static ushort[] GetUniqueGlyphIndexList(List<ushort> inputGlyphIndexList)
-        {
-            Dictionary<ushort, bool> uniqueGlyphIndices = new Dictionary<ushort, bool>(inputGlyphIndexList.Count);
-            foreach (ushort glyphIndex in inputGlyphIndexList)
-            {
-                if (!uniqueGlyphIndices.ContainsKey(glyphIndex))
-                {
-                    uniqueGlyphIndices.Add(glyphIndex, true);
-                }
-            }
-            //
-            ushort[] uniqueGlyphIndexArray = new ushort[uniqueGlyphIndices.Count];
-            int i = 0;
-            foreach (ushort glyphIndex in uniqueGlyphIndices.Keys)
-            {
-                uniqueGlyphIndexArray[i] = glyphIndex;
-                i++;
-            }
-            return uniqueGlyphIndexArray;
-        }
-
 
         public GlyphTextureBitmapGenerator()
         {
-            UseTrueTypeInstruction = false;
+
+
         }
-        public bool UseTrueTypeInstruction { get; set; }
         public void CreateTextureFontFromScriptLangs(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
-            ScriptLang[] scLangs,
+            GlyphTextureBuildDetail[] details,
             OnEachFinishTotal onFinishTotal)
         {
-            //2. find associated glyph index base on input script langs
-            List<ushort> outputGlyphIndexList = new List<ushort>();
-            //
-            foreach (ScriptLang scLang in scLangs)
-            {
-                typeface.CollectAllAssociateGlyphIndex(outputGlyphIndexList, scLang);
-            }
-            //
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(textureKind, sizeInPoint);
-            //------------------------------------------------------------- 
-
-            CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, HintTechnique.TrueTypeInstruction_VerticalOnly, atlasBuilder, false, GetUniqueGlyphIndexList(outputGlyphIndexList));
-            //since some chars are not good at TrueTypeInstruction_VerticalOnly, we replace it with another version
-
-            CreateTextureFontFromGlyphIndices(typeface, sizeInPoint,
-                HintTechnique.TrueTypeInstruction, atlasBuilder, true,
-               new[] { 'x', 'X', '7' }
-            );
-
+            //-------------------------------------------------------------  
+            int j = details.Length;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphTextureBuildDetail detail = details[i];
+                if (detail.ScriptLang != null)
+                {
+                    //skip those script lang=null
+                    //2. find associated glyph index base on input script langs
+                    List<ushort> outputGlyphIndexList = new List<ushort>();
+                    typeface.CollectAllAssociateGlyphIndex(outputGlyphIndexList, detail.ScriptLang);
+                    CreateTextureFontFromGlyphIndices(typeface,
+                        sizeInPoint,
+                        detail.HintTechnique,
+                        atlasBuilder,
+                        detail.DoFilter,
+                        GetUniqueGlyphIndexList(outputGlyphIndexList)
+                        );
+                }
+            }
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphTextureBuildDetail detail = details[i];
+                if (detail.OnlySelectedGlyphIndices != null)
+                {
+                    //skip those script lang=null
+                    //2. find associated glyph index base on input script langs
+                   
+                    CreateTextureFontFromGlyphIndices(typeface,
+                        sizeInPoint,
+                        detail.HintTechnique,
+                        atlasBuilder,
+                        detail.DoFilter,
+                        detail.OnlySelectedGlyphIndices
+                        );
+                }
+            }
             onFinishTotal(0, null, atlasBuilder);
         }
+        
         public void CreateTextureFontFromInputChars(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
@@ -195,6 +201,26 @@ namespace PixelFarm.Drawing.Fonts
             }
 
             return newImg;
+        }
+        static ushort[] GetUniqueGlyphIndexList(List<ushort> inputGlyphIndexList)
+        {
+            Dictionary<ushort, bool> uniqueGlyphIndices = new Dictionary<ushort, bool>(inputGlyphIndexList.Count);
+            foreach (ushort glyphIndex in inputGlyphIndexList)
+            {
+                if (!uniqueGlyphIndices.ContainsKey(glyphIndex))
+                {
+                    uniqueGlyphIndices.Add(glyphIndex, true);
+                }
+            }
+            //
+            ushort[] uniqueGlyphIndexArray = new ushort[uniqueGlyphIndices.Count];
+            int i = 0;
+            foreach (ushort glyphIndex in uniqueGlyphIndices.Keys)
+            {
+                uniqueGlyphIndexArray[i] = glyphIndex;
+                i++;
+            }
+            return uniqueGlyphIndexArray;
         }
     }
 }
