@@ -256,7 +256,7 @@ namespace LayoutFarm.Text
                 VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
                 int localselIndex = pointInfo.RunLocalSelectedIndex;
-                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - localselIndex - 1);
+                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - localselIndex);
                 internalTextLayerController.StartSelect();
                 internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
                 internalTextLayerController.EndSelect();
@@ -903,7 +903,7 @@ namespace LayoutFarm.Text
             {
                 ScrollTo(this.InnerContentSize.Width - ViewportX, 0);
             }
-            
+
 
             if (internalTextLayerController.updateJustCurrentLine)
             {
