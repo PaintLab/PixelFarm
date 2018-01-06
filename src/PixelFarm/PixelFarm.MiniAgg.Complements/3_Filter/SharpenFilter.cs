@@ -38,7 +38,7 @@ namespace PixelFarm.Agg.Imaging
                     SharpenRenderer shRenderer1 = new SharpenRenderer();
                     shRenderer1.Amount = radius;
                     shRenderer1.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
-                            new PixelFarm.Drawing.Rectangle(0,0, w-1 ,h-1 )
+                            new PixelFarm.Drawing.Rectangle(0,0, w ,h )
                     }, 0, 1);
                 }
                 //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png"); 

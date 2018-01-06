@@ -23,6 +23,11 @@ namespace Typography.Rendering
         public TextureKind TextureKind { get; private set; }
         public float FontSizeInPoints { get; private set; }
 
+        /// <summary>
+        /// add or replace
+        /// </summary>
+        /// <param name="glyphIndex"></param>
+        /// <param name="img"></param>
         public void AddGlyph(int glyphIndex, GlyphImage img)
         {
             var glyphCache = new CacheGlyph();
