@@ -68,11 +68,8 @@ namespace PixelFarm.Drawing.Fonts
 
             CreateTextureFontFromGlyphIndices(typeface, sizeInPoint,
                 HintTechnique.TrueTypeInstruction, atlasBuilder, true,
-                new ushort[] {
-                    typeface.LookupIndex('x'),
-                    typeface.LookupIndex('X'),
-                    typeface.LookupIndex('7'),
-            });
+               new[] { 'x', 'X', '7' }
+            );
 
             onFinishTotal(0, null, atlasBuilder);
         }
@@ -96,8 +93,26 @@ namespace PixelFarm.Drawing.Fonts
             atlasBuilder.SetAtlasInfo(textureKind, sizeInPoint);
             //------------------------------------------------------------- 
             //we can specfic subset with special setting for each set 
-            CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, HintTechnique.TrueTypeInstruction_VerticalOnly, atlasBuilder, false, GetUniqueGlyphIndexList(glyphIndices));
+            CreateTextureFontFromGlyphIndices(typeface, sizeInPoint,
+                HintTechnique.TrueTypeInstruction_VerticalOnly, atlasBuilder, false, GetUniqueGlyphIndexList(glyphIndices));
             onFinishTotal(0, null, atlasBuilder);
+        }
+        void CreateTextureFontFromGlyphIndices(
+              Typeface typeface,
+              float sizeInPoint,
+              HintTechnique hintTechnique,
+              SimpleFontAtlasBuilder atlasBuilder,
+              bool applyFilter,
+              char[] chars)
+        {
+            int j = chars.Length;
+            ushort[] glyphIndices = new ushort[j];
+            for (int i = 0; i < j; ++i)
+            {
+                glyphIndices[i] = typeface.LookupIndex(chars[i]);
+            }
+
+            CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, hintTechnique, atlasBuilder, applyFilter, glyphIndices);
         }
         void CreateTextureFontFromGlyphIndices(
               Typeface typeface,
