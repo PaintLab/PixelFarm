@@ -14,7 +14,7 @@ namespace LayoutFarm
         IEventListener latestMouseDown;
         IEventListener draggingElement;
         DateTime lastTimeMouseUp;
-        int dblClickSense = 150;//ms         
+        int dblClickSense = 200;//ms         
         UIHoverMonitorTask hoverMonitoringTask;
         MouseCursorStyle mouseCursorStyle;
         bool isMouseDown;
@@ -127,7 +127,7 @@ namespace LayoutFarm
             this.isMouseDown = this.isDragging = false;
             DateTime snapMouseUpTime = DateTime.Now;
             TimeSpan timediff = snapMouseUpTime - lastTimeMouseUp;
-
+            this.lastTimeMouseUp = snapMouseUpTime;
 
             if (this.isDragging)
             {
@@ -157,9 +157,13 @@ namespace LayoutFarm
             else
             {
                 e.IsAlsoDoubleClick = timediff.Milliseconds < dblClickSense;
+                if (e.IsAlsoDoubleClick)
+                {
+
+                }
                 iTopBoxEventPortal.PortalMouseUp(e);
             }
-            this.lastTimeMouseUp = snapMouseUpTime;
+           
 
             this.localMouseDownX = this.localMouseDownY = 0;
             this.mouseCursorStyle = e.MouseCursorStyle;

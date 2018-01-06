@@ -440,10 +440,11 @@ namespace Typography.OpenFont
                 //The unitsPerEm value is from the 'head' table.
                 //The LineGap, Ascender and Descender values are from the 'hhea' table.
 
+                HorizontalHeader hhea = typeface.HheaTable;
                 int usWinAscent = typeface.OS2Table.usWinAscent;
                 int usWinDescent = typeface.OS2Table.usWinDescent;
                 int internal_leading = usWinAscent + usWinDescent - typeface.UnitsPerEm;
-                HorizontalHeader hhea = typeface.HheaTable;
+
                 int external_leading = System.Math.Max(0, hhea.LineGap - ((usWinAscent + usWinDescent) - (hhea.Ascent - hhea.Descent)));
                 return usWinAscent + usWinDescent + external_leading;
             }

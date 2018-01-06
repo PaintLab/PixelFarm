@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
         /// </summary> 
         static readonly LcdDistributionLut s_g9_3_2_1 = LcdDistributionLut.EasyLut(255, 3, 2, 1);
         static readonly LcdDistributionLut s_g_4_2_1 = LcdDistributionLut.EasyLut(64, 4f / 8, 2f / 8, 1f / 8);
-        static readonly LcdDistributionLut s_g_4_3_1 = LcdDistributionLut.EasyLut(64, 4f / 8, 3f / 8, 1f / 8);
+        static readonly LcdDistributionLut s_g_4_3_1 = LcdDistributionLut.EasyLut(64, 4f / 8, 3.5f / 8, 0.5f / 8);
         //---------------------------------
         //Mixim's:
         // Try to play with different coefficients for the primary,

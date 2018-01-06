@@ -477,9 +477,7 @@ namespace PixelFarm.DrawingGL
                 }
                 else
                 {
-                    int canvasH = _glsx.ViewportHeight;
-                    _textPrinter.DrawString(text, x, canvasH - y);
-
+                    _textPrinter.DrawString(text, x, _glsx.ViewportHeight - y); 
                 }
 
             }
