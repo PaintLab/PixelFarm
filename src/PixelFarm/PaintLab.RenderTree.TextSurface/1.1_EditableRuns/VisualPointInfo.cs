@@ -137,7 +137,7 @@ namespace LayoutFarm.Text
         }
         public override int CurrentWidth
         {
-            get { return this.line.CurrentWidth; }
+            get { return this.line.LineWidth; }
         }
         public override int ActualLineHeight
         {

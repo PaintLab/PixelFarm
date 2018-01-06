@@ -253,13 +253,13 @@ namespace LayoutFarm.Text
             EditableRun textRun = this.CurrentTextRun;
             if (textRun != null)
             {
-              
+
                 VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
                 int local_sel_Index = pointInfo.RunLocalSelectedIndex;
                 //default behaviour is select only a hit word under the caret
                 //so ask the text layer to find a hit word
-                int startAt, len; 
+                int startAt, len;
                 internalTextLayerController.FindUnderlyingWord(out startAt, out len);
                 if (len > 0)
                 {
@@ -425,6 +425,7 @@ namespace LayoutFarm.Text
                                 EnsureCaretVisible();
                             }
                         }
+
                     }
                     break;
             }
@@ -500,6 +501,22 @@ namespace LayoutFarm.Text
                         break;
                     case UIKeys.B:
                         {
+                            //
+                            //test add markers
+                            //
+                            if (internalTextLayerController.SelectionRange != null)
+                            {
+                                //
+                                VisualMarkerSelectionRange markerSelRange =
+                                    VisualMarkerSelectionRange.CreateFromSelectionRange(
+                                        internalTextLayerController.SelectionRange.GetSelectionRangeSnapshot());
+                                //then add to the marker layers
+                                markerSelRange.BindToTextLayer(textLayer);
+
+                                internalTextLayerController.VisualMarkers.Add(markerSelRange);
+                            }
+
+
                             //TextSpanStyle style = internalTextLayerController.GetFirstTextStyleInSelectedRange(); 
                             //TextSpanStyle textStyle = null;
 
