@@ -9,6 +9,8 @@ using System.Windows.Forms;
 
 using PixelFarm.Drawing.Fonts;
 using Typography.Rendering;
+using Typography.OpenFont;
+
 
 namespace TypographyTest.WinForms
 {
@@ -164,6 +166,9 @@ namespace TypographyTest.WinForms
             //    long ms = sss.ElapsedMilliseconds;
             //} 
         }
+
+
+
         private void cmdMakeFromScriptLangs_Click(object sender, EventArgs e)
         {
             //create a simple stencil texture font
@@ -187,13 +192,28 @@ namespace TypographyTest.WinForms
             string bitmapImgSaveFileName = "d:\\WImageTest\\sample_" + selectedTextureKind + "_" +
                System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
 
+            //------------
+            //TODO: review here again, this is not a good way, 
+            //it is only temp fix for Tahoma.
+
+            var _textureBuildDetails = new GlyphTextureBuildDetail[]
+            {
+                new GlyphTextureBuildDetail{ ScriptLang= ScriptLangs.Latin, DoFilter= false, HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly },
+                new GlyphTextureBuildDetail{ OnlySelectedGlyphIndices=new char[]{ 'x', 'X', '7' },
+                    DoFilter = true,  HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly},
+                //
+                new GlyphTextureBuildDetail{ ScriptLang= ScriptLangs.Thai, DoFilter= true, HintTechnique = Typography.Contours.HintTechnique.None},
+            };
+            //------------
+
+
             bool saveEachGlyphSeparatly = chkSaveEachGlyph.Checked;
             var textureGen = new GlyphTextureBitmapGenerator();
             textureGen.CreateTextureFontFromScriptLangs(
                _typeface,
                FontSizeInPoints,
                selectedTextureKind,
-               SelectedScriptLangs.ToArray(),
+               _textureBuildDetails,
                (gindex, glyphImg, atlasBuilder) =>
                {
                    if (atlasBuilder != null)
