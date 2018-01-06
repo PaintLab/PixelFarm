@@ -113,7 +113,7 @@ namespace LayoutFarm.Text
                 return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
             }
         }
-        public void OnKeyPress(UIKeyEventArgs e)
+        public void HandleKeyPress(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
             //------------------------

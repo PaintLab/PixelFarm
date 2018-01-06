@@ -264,7 +264,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnKeyPress(UIKeyEventArgs e)
         {
-            textEditRenderElement.OnKeyPress(e);
+            textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyDown(UIKeyEventArgs e)
