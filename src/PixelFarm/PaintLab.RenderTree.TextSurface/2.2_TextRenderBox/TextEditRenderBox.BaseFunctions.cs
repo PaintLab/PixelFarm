@@ -504,20 +504,20 @@ namespace LayoutFarm.Text
                             //
                             //test add markers
                             //
-                            if (internalTextLayerController.SelectionRange != null)
-                            {
-                                //
-                                internalTextLayerController.SelectionRange.SwapIfUnOrder();
-                                VisualMarkerSelectionRange markerSelRange =
-                                    VisualMarkerSelectionRange.CreateFromSelectionRange(
-                                        internalTextLayerController.SelectionRange.GetSelectionRangeSnapshot());
-                                //then add to the marker layers
-                                markerSelRange.BindToTextLayer(textLayer);
+                            //if (internalTextLayerController.SelectionRange != null)
+                            //{
+                            //    //
+                            //    internalTextLayerController.SelectionRange.SwapIfUnOrder();
+                            //    VisualMarkerSelectionRange markerSelRange =
+                            //        VisualMarkerSelectionRange.CreateFromSelectionRange(
+                            //            internalTextLayerController.SelectionRange.GetSelectionRangeSnapshot());
+                            //    //then add to the marker layers
+                            //    markerSelRange.BindToTextLayer(textLayer);
 
-                                internalTextLayerController.VisualMarkers.Add(markerSelRange);
-                            }
+                            //    internalTextLayerController.VisualMarkers.Add(markerSelRange);
+                            //}
 
-
+                            //
                             //TextSpanStyle style = internalTextLayerController.GetFirstTextStyleInSelectedRange(); 
                             //TextSpanStyle textStyle = null;
 

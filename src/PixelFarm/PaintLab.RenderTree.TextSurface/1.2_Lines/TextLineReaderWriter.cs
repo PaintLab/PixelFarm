@@ -314,7 +314,7 @@ namespace LayoutFarm.Text
             }
         }
 #else
-         int charIndex;
+         int caret_char_index;
 #endif
 
         protected RootGraphic Root
