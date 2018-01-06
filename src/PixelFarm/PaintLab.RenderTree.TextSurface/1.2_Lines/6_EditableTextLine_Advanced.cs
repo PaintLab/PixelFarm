@@ -715,7 +715,7 @@ namespace LayoutFarm.Text
             {
                 return;
             }
-            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex + 1);
+            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
             if (postCutTextRun != null)
             {
                 output.Add(postCutTextRun);

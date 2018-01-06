@@ -507,6 +507,7 @@ namespace LayoutFarm.Text
                             if (internalTextLayerController.SelectionRange != null)
                             {
                                 //
+                                internalTextLayerController.SelectionRange.SwapIfUnOrder();
                                 VisualMarkerSelectionRange markerSelRange =
                                     VisualMarkerSelectionRange.CreateFromSelectionRange(
                                         internalTextLayerController.SelectionRange.GetSelectionRangeSnapshot());
