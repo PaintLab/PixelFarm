@@ -363,6 +363,13 @@ namespace LayoutFarm.Text
             return textLineWriter.GetCurrentPointInfo();
         }
 
+        /// <summary>
+        /// find underlying word at current caret pos
+        /// </summary>
+        public void FindUnderlyingWord(out int startAt, out int len)
+        {
+            textLineWriter.FindCurrentHitWord(out startAt, out len);
+        }
 
         public void TryMoveCaretTo(int value, bool backward = false)
         {
