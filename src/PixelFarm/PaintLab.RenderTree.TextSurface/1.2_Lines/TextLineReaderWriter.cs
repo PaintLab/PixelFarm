@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
+
 namespace LayoutFarm.Text
 {
     class TextLineWriter : TextLineReader
@@ -49,7 +50,7 @@ namespace LayoutFarm.Text
         }
         public void EnsureCurrentTextRun()
         {
-            EnsureCurrentTextRun(ProperCharIndex);
+            EnsureCurrentTextRun(CharIndex);
         }
         public void RemoveSelectedTextRuns(VisualSelectionRange selectionRange)
         {
@@ -62,7 +63,7 @@ namespace LayoutFarm.Text
 
         public void ReplaceCurrentLine(IEnumerable<EditableRun> textRuns)
         {
-            int currentCharIndex = ProperCharIndex;
+            int currentCharIndex = CharIndex;
             CurrentLine.ReplaceAll(textRuns);
             CurrentLine.TextLineReCalculateActualLineSize();
             CurrentLine.RefreshInlineArrange();
@@ -81,7 +82,7 @@ namespace LayoutFarm.Text
             }
             else
             {
-                if (ProperCharIndex == 0)
+                if (CharIndex == 0)
                 {
                     return '\0';
                 }
@@ -161,7 +162,7 @@ namespace LayoutFarm.Text
                 CurrentLine.TextLineReCalculateActualLineSize();
                 CurrentLine.RefreshInlineArrange();
 
-                SetCurrentCharIndex(ProperCharIndex + textRun.CharacterCount);
+                SetCurrentCharIndex(CharIndex + textRun.CharacterCount);
             }
             else
             {
@@ -178,7 +179,7 @@ namespace LayoutFarm.Text
                     }
                     CurrentLine.TextLineReCalculateActualLineSize();
                     CurrentLine.RefreshInlineArrange();
-                    EnsureCurrentTextRun(ProperCharIndex + textRun.CharacterCount);
+                    EnsureCurrentTextRun(CharIndex + textRun.CharacterCount);
                 }
                 else
                 {
@@ -188,7 +189,7 @@ namespace LayoutFarm.Text
         }
         public void ReplaceAllLineContent(EditableRun[] runs)
         {
-            int charIndex = ProperCharIndex;
+            int charIndex = CharIndex;
             CurrentLine.Clear();
             int j = runs.Length;
             for (int i = 0; i < j; ++i)
@@ -206,7 +207,7 @@ namespace LayoutFarm.Text
         }
         public char DoDeleteOneChar()
         {
-            if (ProperCharIndex < CurrentLine.CharCount)
+            if (CharIndex < CurrentLine.CharCount)
             {
                 //simulate backspace keystroke
 
@@ -230,7 +231,7 @@ namespace LayoutFarm.Text
             }
             else
             {
-                if (ProperCharIndex == -1)
+                if (CharIndex == -1)
                 {
                     CurrentLine.AddFirst(lineBreakRun);
                     SetCurrentTextRun(null);
@@ -313,7 +314,7 @@ namespace LayoutFarm.Text
             }
         }
 #else
-         int charIndex;
+         int caret_char_index;
 #endif
 
         protected RootGraphic Root
@@ -351,6 +352,42 @@ namespace LayoutFarm.Text
         protected void SetCurrentTextRun(EditableRun r)
         {
             currentTextRun = r;
+        }
+        public void FindCurrentHitWord(out int startAt, out int len)
+        {
+            if (currentTextRun == null)
+            {
+                startAt = 0;
+                len = 0;
+                return;
+            }
+
+            //
+            //we read entire line 
+            //and send to line parser to parse a word
+            StringBuilder stbuilder = new StringBuilder();
+            currentLine.CopyLineContent(stbuilder);
+            string lineContent = stbuilder.ToString();
+            //find char at
+
+            TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
+            ILineSegmentList segmentList = this.Root.TextServices.BreakToLineSegments(ref textBufferSpan);
+            int segcount = segmentList.Count;
+            for (int i = 0; i < segcount; ++i)
+            {
+                ILineSegment seg = segmentList[i];
+                if (seg.StartAt + seg.Length >= caret_char_index)
+                {
+                    //stop at this segment
+                    startAt = seg.StartAt;
+                    len = seg.Length;
+                    return;
+                }
+            }
+            //?
+            startAt = 0;
+            len = 0;
+
         }
         bool MoveToPreviousTextRun()
         {
@@ -410,7 +447,39 @@ namespace LayoutFarm.Text
         {
             visualFlowLayer.CopyContentToStringBuilder(stBuilder);
         }
+        public char PrevChar
+        {
+            get
+            {
+                if (currentTextRun != null)
+                {
 
+                    if (caret_char_index == 0 && CharCount == 0)
+                    {
+                        return '\0';
+                    }
+                    if (caret_char_index == rCharOffset)
+                    {
+                        if (currentTextRun.PrevTextRun != null)
+                        {
+                            return (currentTextRun.PrevTextRun).GetChar(currentTextRun.PrevTextRun.CharacterCount - 1);
+                        }
+                        else
+                        {
+                            return '\0';
+                        }
+                    }
+                    else
+                    {
+                        return currentTextRun.GetChar(caret_char_index - rCharOffset);
+                    }
+                }
+                else
+                {
+                    return '\0';
+                }
+            }
+        }
         public char NextChar
         {
             get
@@ -644,11 +713,11 @@ namespace LayoutFarm.Text
 
         }
 
-        public int ProperCharIndex
+        public int CharIndex
         {
             get { return caret_char_index; }
         }
-        int CharIndex
+        int InternalCharIndex
         {
             get
             {
@@ -657,11 +726,11 @@ namespace LayoutFarm.Text
         }
         public void SetCurrentCharStepRight()
         {
-            SetCurrentCharIndex(CharIndex + 1);
+            SetCurrentCharIndex(InternalCharIndex + 1);
         }
         public void SetCurrentCharStepLeft()
         {
-            SetCurrentCharIndex(CharIndex - 1);
+            SetCurrentCharIndex(InternalCharIndex - 1);
         }
         public void SetCurrentCharIndexToEnd()
         {
@@ -806,7 +875,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return CharIndex == 0;
+                return InternalCharIndex == 0;
             }
         }
         public int CharCount

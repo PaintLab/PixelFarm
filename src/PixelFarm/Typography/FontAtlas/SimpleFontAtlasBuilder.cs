@@ -23,13 +23,18 @@ namespace Typography.Rendering
         public TextureKind TextureKind { get; private set; }
         public float FontSizeInPoints { get; private set; }
 
-        public void AddGlyph(int codePoint, GlyphImage img)
+        /// <summary>
+        /// add or replace
+        /// </summary>
+        /// <param name="glyphIndex"></param>
+        /// <param name="img"></param>
+        public void AddGlyph(int glyphIndex, GlyphImage img)
         {
             var glyphCache = new CacheGlyph();
-            glyphCache.codePoint = codePoint;
+            glyphCache.glyphIndex = glyphIndex;
             glyphCache.img = img;
 
-            glyphs[codePoint] = glyphCache;
+            glyphs[glyphIndex] = glyphCache;
         }
 
         public void SetAtlasInfo(TextureKind textureKind, float fontSizeInPts)
@@ -196,7 +201,7 @@ namespace Typography.Rendering
                 //convert char to hex
                 string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
                 Rectangle area = g.area;
-                gElem.SetAttribute("c", g.codePoint.ToString());
+                gElem.SetAttribute("c", g.glyphIndex.ToString());
                 gElem.SetAttribute("uc", unicode);//unicode char
                 gElem.SetAttribute("ltwh",
                     area.Left + " " + area.Top + " " + area.Width + " " + area.Height
@@ -246,7 +251,7 @@ namespace Typography.Rendering
                 glyphData.TextureXOffset = cacheGlyph.img.TextureOffsetX;
                 glyphData.TextureYOffset = cacheGlyph.img.TextureOffsetY;
 
-                simpleFontAtlas.AddGlyph(cacheGlyph.codePoint, glyphData);
+                simpleFontAtlas.AddGlyph(cacheGlyph.glyphIndex, glyphData);
             }
 
             return simpleFontAtlas;

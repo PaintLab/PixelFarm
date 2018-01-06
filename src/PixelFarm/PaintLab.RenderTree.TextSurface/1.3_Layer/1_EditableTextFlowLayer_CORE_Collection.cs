@@ -113,8 +113,9 @@ namespace LayoutFarm.Text
                 List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
                 for (int i = lines.Count - 1; i > -1; --i)
                 {
-                    lines[i].editableFlowLayer = null;
-                    lines[i].Clear();
+                    EditableTextLine line = lines[i];
+                    line.editableFlowLayer = null;
+                    line.Clear();
                 }
                 lines.Clear();
                 lineCollection = new EditableTextLine(this);
@@ -144,14 +145,21 @@ namespace LayoutFarm.Text
                 return;
             }
 
-            EditableTextLine tobeRemovedLine = lines[lineId];
-            tobeRemovedLine.editableFlowLayer = null;
-            int cy = tobeRemovedLine.Top;
-            lines.RemoveAt(lineId); int j = lines.Count;
+            EditableTextLine removedLine = lines[lineId];
+            int cy = removedLine.Top;
+          
+            //
+            lines.RemoveAt(lineId);
+            removedLine.editableFlowLayer = null;
+
+
+            int j = lines.Count;
             for (int i = lineId; i < j; ++i)
             {
                 EditableTextLine line = lines[i];
-                line.SetTop(cy); line.SetLineNumber(i); cy += line.ActualLineHeight;
+                line.SetTop(cy);
+                line.SetLineNumber(i);
+                cy += line.ActualLineHeight;
             }
 
             if (lines.Count == 1)

@@ -16,6 +16,11 @@ namespace LayoutFarm
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
             textbox.SetLocation(20, 20);
+            var style2 = new Text.TextSpanStyle();
+            style2.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+            style2.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
+            textbox.DefaultSpanStyle = style2;
+
             var textSplitter = new LayoutFarm.CustomWidgets.ContentTextSplitter();
             textbox.TextSplitter = textSplitter;
             listView = new CustomWidgets.ListView(300, 200);

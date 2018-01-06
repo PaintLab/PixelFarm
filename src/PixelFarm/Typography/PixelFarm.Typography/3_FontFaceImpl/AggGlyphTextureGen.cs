@@ -52,9 +52,15 @@ namespace Typography.Rendering
             {
                 h = 5;
             }
-            ////translate to positive quadrant 
+
+            //translate to positive quadrant 
+            //            
             double dx = (bounds.Left < 0) ? -bounds.Left : 0;
             double dy = (bounds.Bottom < 0) ? -bounds.Bottom : 0;
+
+            //
+            dx = Math.Ceiling(dx); //since we need to move it, then move it with integer value
+            dy = Math.Ceiling(dy); //since we need to move it, then move it with integer value
 
             //we need some borders
             int horizontal_margin = 1; //'margin' 1px
@@ -62,10 +68,8 @@ namespace Typography.Rendering
 
             dx += horizontal_margin; //+ left margin
             dy += vertical_margin; //+ top margin 
-                                   //-------------------------------------------- 
-                                   //create glyph img  
-
-
+                                   //--------------------------------------------  
+                                   //create glyph img   
             w = (int)Math.Ceiling(dx + w + horizontal_margin); //+right margin
             h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin 
 
