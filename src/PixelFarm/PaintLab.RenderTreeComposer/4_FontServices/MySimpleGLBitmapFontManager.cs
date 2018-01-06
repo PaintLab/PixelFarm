@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService textServices;
 
         ScriptLang[] _currentScriptLangs;
-       
+
 
         TextureKind _textureKind;
         public MySimpleGLBitmapFontManager(TextureKind textureKind, LayoutFarm.OpenFontTextService textServices)
@@ -57,10 +57,10 @@ namespace PixelFarm.DrawingGL
             _textureBuildDetails = new GlyphTextureBuildDetail[]
             {
                 new GlyphTextureBuildDetail{ ScriptLang= ScriptLangs.Latin, DoFilter= false, HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly },
-                new GlyphTextureBuildDetail{ OnlySelectedGlyphIndices=new char[]{ 'x', 'X', '7' },
-                    DoFilter = true,  HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly}, 
-                new GlyphTextureBuildDetail{ ScriptLang= ScriptLangs.Thai, DoFilter= false, HintTechnique = Typography.Contours.HintTechnique.None}, 
-            }; 
+                new GlyphTextureBuildDetail{ OnlySelectedGlyphIndices=new char[]{ 'x', 'X', '7','k','K','Z','z','R' },
+                    DoFilter = false ,  HintTechnique = Typography.Contours.HintTechnique.None},
+                new GlyphTextureBuildDetail{ ScriptLang= ScriptLangs.Thai, DoFilter= false, HintTechnique = Typography.Contours.HintTechnique.None},
+            };
         }
 
 
