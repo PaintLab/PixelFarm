@@ -232,7 +232,8 @@ namespace LayoutFarm.Text
         {
             if (!_content_unparsed)
             {
-                //the content is parsed
+                //the content is parsed ***
+
                 if (this.mybuffer.Length == length)
                 {
                     return this.Size;
