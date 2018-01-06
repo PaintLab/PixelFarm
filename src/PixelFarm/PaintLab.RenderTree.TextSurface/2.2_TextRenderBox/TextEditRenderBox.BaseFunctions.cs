@@ -253,13 +253,31 @@ namespace LayoutFarm.Text
             EditableRun textRun = this.CurrentTextRun;
             if (textRun != null)
             {
+              
                 VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
-                int localselIndex = pointInfo.RunLocalSelectedIndex;
-                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - localselIndex);
-                internalTextLayerController.StartSelect();
-                internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
-                internalTextLayerController.EndSelect();
+                int local_sel_Index = pointInfo.RunLocalSelectedIndex;
+                //default behaviour is select only a hit word under the caret
+                //so ask the text layer to find a hit word
+                int startAt, len; 
+                internalTextLayerController.FindUnderlyingWord(out startAt, out len);
+                if (len > 0)
+                {
+                    InvalidateGraphicOfCurrentLineArea();
+                    internalTextLayerController.TryMoveCaretTo(startAt, true);
+                    internalTextLayerController.StartSelect();
+                    internalTextLayerController.TryMoveCaretTo(startAt + len);
+                    internalTextLayerController.EndSelect();
+
+
+                    //internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - local_sel_Index, true);
+                    //internalTextLayerController.StartSelect();
+                    //internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
+                    //internalTextLayerController.EndSelect();
+
+                    InvalidateGraphicOfCurrentLineArea();
+                }
+
             }
         }
         public void HandleDrag(UIMouseEventArgs e)

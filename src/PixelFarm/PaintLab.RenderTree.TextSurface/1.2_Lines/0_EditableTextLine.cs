@@ -211,7 +211,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return new Rectangle(0, lineTop, this.editableFlowLayer.OwnerRenderElement.Width, 17);
+                return new Rectangle(0, lineTop, this.editableFlowLayer.OwnerRenderElement.Width, actualLineHeight);
             }
         }
         internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement)

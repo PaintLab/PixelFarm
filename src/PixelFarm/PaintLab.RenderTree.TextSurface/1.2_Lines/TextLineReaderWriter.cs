@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
+
 namespace LayoutFarm.Text
 {
     class TextLineWriter : TextLineReader
@@ -352,6 +353,42 @@ namespace LayoutFarm.Text
         {
             currentTextRun = r;
         }
+        public void FindCurrentHitWord(out int startAt, out int len)
+        {
+            if (currentTextRun == null)
+            {
+                startAt = 0;
+                len = 0;
+                return;
+            }
+
+            //
+            //we read entire line 
+            //and send to line parser to parse a word
+            StringBuilder stbuilder = new StringBuilder();
+            currentLine.CopyLineContent(stbuilder);
+            string lineContent = stbuilder.ToString();
+            //find char at
+
+            TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
+            ILineSegmentList segmentList = this.Root.TextServices.BreakToLineSegments(ref textBufferSpan);
+            int segcount = segmentList.Count;
+            for (int i = 0; i < segcount; ++i)
+            {
+                ILineSegment seg = segmentList[i];
+                if (seg.StartAt + seg.Length >= caret_char_index)
+                {
+                    //stop at this segment
+                    startAt = seg.StartAt;
+                    len = seg.Length;
+                    return;
+                }
+            }
+            //?
+            startAt = 0;
+            len = 0;
+            
+        }
         bool MoveToPreviousTextRun()
         {
 #if DEBUG
@@ -410,7 +447,39 @@ namespace LayoutFarm.Text
         {
             visualFlowLayer.CopyContentToStringBuilder(stBuilder);
         }
+        public char PrevChar
+        {
+            get
+            {
+                if (currentTextRun != null)
+                {
 
+                    if (caret_char_index == 0 && CharCount == 0)
+                    {
+                        return '\0';
+                    }
+                    if (caret_char_index == rCharOffset)
+                    {
+                        if (currentTextRun.PrevTextRun != null)
+                        {
+                            return (currentTextRun.PrevTextRun).GetChar(currentTextRun.PrevTextRun.CharacterCount - 1);
+                        }
+                        else
+                        {
+                            return '\0';
+                        }
+                    }
+                    else
+                    {
+                        return currentTextRun.GetChar(caret_char_index - rCharOffset);
+                    }
+                }
+                else
+                {
+                    return '\0';
+                }
+            }
+        }
         public char NextChar
         {
             get
