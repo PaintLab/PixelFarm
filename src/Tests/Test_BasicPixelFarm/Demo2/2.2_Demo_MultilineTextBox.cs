@@ -10,9 +10,9 @@ namespace LayoutFarm
 
             var textbox1 = new LayoutFarm.CustomWidgets.TextBox(400, 100, true);
             var style1 = new Text.TextSpanStyle();
-            style1.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 18);
+            style1.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             //test with various font style
-            style1.FontColor = new PixelFarm.Drawing.Color(255, 0, 0);
+            style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox1.DefaultSpanStyle = style1;
             viewport.AddContent(textbox1);
             //-------------------
