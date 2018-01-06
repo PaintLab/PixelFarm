@@ -1,5 +1,15 @@
-﻿using System;
-using PixelFarm.Drawing;
+﻿
+/////////////////////////////////////////////////////////////////////////////////
+// Paint.NET                                                                   //
+// Copyright (C) dotPDN LLC, Rick Brewster, Tom Jackson, and contributors.     //
+// Portions Copyright (C) Microsoft Corporation. All Rights Reserved.          //
+// See src/Resources/Files/License.txt for full licensing and attribution      //
+// details.                                                                    //
+// .                                                                           //
+/////////////////////////////////////////////////////////////////////////////////
+//Apache2, 2017-2018, WinterDev
+
+using System;
 using PixelFarm.Drawing.Effects;
 using PixelFarm.Drawing.DrawingBuffer;
 namespace PixelFarm.Agg.Imaging
@@ -9,16 +19,37 @@ namespace PixelFarm.Agg.Imaging
     /// </summary>
     public class ShapenFilterPdn
     {
-        public void Sharpen(IImageReaderWriter img, double radius)
+        public unsafe int[] Sharpen(int* srcBuffer1, int w, int h, int srcBufferStrideInBytes, int radius)
         {
-
-
             unsafe
             {
 
-                //byte[] buffer = img.GetBuffer();
-                //byte[] output2 = new byte[buffer.Length]; 
+                int[] output = new int[(srcBufferStrideInBytes / 4) * h]; //TODO: review here again 
+                fixed (int* outputPtr = &output[0])
+                {
+                    int* outputBuffer1 = (int*)outputPtr;
 
+                    MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, srcBufferStrideInBytes / 4);//
+                    Surface srcSurface = new Surface(srcBufferStrideInBytes, w, h, srcMemHolder);
+                    //
+                    MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, srcBufferStrideInBytes / 4);
+                    Surface destSurface = new Surface(srcBufferStrideInBytes, w, h, destMemHolder);
+                    //
+                    SharpenRenderer shRenderer1 = new SharpenRenderer();
+                    shRenderer1.Amount = radius;
+                    shRenderer1.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
+                            new PixelFarm.Drawing.Rectangle(0,0, w-1 ,h-1 )
+                    }, 0, 1);
+                }
+                //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png"); 
+                return output;
+            }
+
+        }
+        public void Sharpen(IImageReaderWriter img, int radius)
+        {
+            unsafe
+            {
                 TempMemPtr bufferPtr = img.GetBufferPtr();
                 int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -38,17 +69,15 @@ namespace PixelFarm.Agg.Imaging
                     Surface destSurface = new Surface(stride, w, h, destMemHolder);
                     //
                     SharpenRenderer shRenderer1 = new SharpenRenderer();
-                    shRenderer1.Amount = 1;
+                    shRenderer1.Amount = radius;
                     shRenderer1.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
                             new PixelFarm.Drawing.Rectangle(0,0,w,h)
                     }, 0, 1);
                 }
-
                 bufferPtr.Release();
                 //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
                 img.ReplaceBuffer(output);
             }
-
         }
     }
 

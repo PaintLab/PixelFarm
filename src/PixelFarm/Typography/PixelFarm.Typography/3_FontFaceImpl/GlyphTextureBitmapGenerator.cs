@@ -42,6 +42,7 @@ namespace PixelFarm.Drawing.Fonts
         public GlyphTextureBitmapGenerator()
         {
             UseTrueTypeInstruction = false;
+
         }
         public bool UseTrueTypeInstruction { get; set; }
         public void CreateTextureFontFromScriptLangs(
@@ -93,7 +94,11 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            builder.UseTrueTypeInstructions = this.UseTrueTypeInstruction;
+            //builder.UseTrueTypeInstructions = false;
+            //builder.UseTrueTypeInstructions = this.UseTrueTypeInstruction;
+            builder.UseTrueTypeInstructions = true;
+            builder.UseVerticalHinting = true;
+
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(textureKind, sizeInPoint);

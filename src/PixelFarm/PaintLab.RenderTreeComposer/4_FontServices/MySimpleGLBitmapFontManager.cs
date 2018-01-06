@@ -82,7 +82,12 @@ namespace PixelFarm.DrawingGL
                     }
                 );
 
+                //
                 GlyphImage totalGlyphsImg = atlasBuilder.BuildSingleImage();
+
+                //totalGlyphsImg = Sharpen(totalGlyphsImg, 1); //test shapen primary image
+                //-               
+                //
                 //create atlas
                 fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
                 fontAtlas.TotalGlyph = totalGlyphsImg;
@@ -113,6 +118,32 @@ namespace PixelFarm.DrawingGL
             glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
             return fontAtlas;
         }
+
+
+#if DEBUG
+        /// <summary>
+        /// test only, shapen org image with Paint.net sharpen filter
+        /// </summary>
+        /// <param name="org"></param>
+        /// <param name="radius"></param>
+        /// <returns></returns>
+        static GlyphImage Sharpen(GlyphImage org, int radius)
+        {
+            GlyphImage newImg = new GlyphImage(org.Width, org.Height);
+            Agg.Imaging.ShapenFilterPdn sharpen1 = new Agg.Imaging.ShapenFilterPdn();
+            int[] orgBuffer = org.GetImageBuffer();
+            unsafe
+            {
+                fixed (int* orgHeader = &orgBuffer[0])
+                {
+                    int[] output = sharpen1.Sharpen(orgHeader, org.Width, org.Height, org.Width * 4, radius);
+                    newImg.SetImageBuffer(output, org.IsBigEndian);
+                }
+            }
+
+            return newImg;
+        }
+#endif
         public void Clear()
         {
             _loadedGlyphs.Clear();
