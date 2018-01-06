@@ -253,13 +253,15 @@ namespace LayoutFarm.Text
             EditableRun textRun = this.CurrentTextRun;
             if (textRun != null)
             {
+                InvalidateGraphicOfCurrentLineArea();
                 VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
                 int local_sel_Index = pointInfo.RunLocalSelectedIndex;
-                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - local_sel_Index);
+                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - local_sel_Index, true);
                 internalTextLayerController.StartSelect();
                 internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
                 internalTextLayerController.EndSelect();
+                InvalidateGraphicOfCurrentLineArea();
             }
         }
         public void HandleDrag(UIMouseEventArgs e)
