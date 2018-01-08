@@ -127,6 +127,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "trans_polar", "trans_polar\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "truetype_test", "truetype_test\truetype_test.vcxproj", "{6BEA1F4C-AFD0-41D2-BC91-C2929AE642E9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "svg_test", "svg_test\svg_test.vcxproj", "{BFD50561-69CA-4820-96C0-B687806ACA79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -381,6 +383,10 @@ Global
 		{6BEA1F4C-AFD0-41D2-BC91-C2929AE642E9}.Debug|Win32.Build.0 = Debug|Win32
 		{6BEA1F4C-AFD0-41D2-BC91-C2929AE642E9}.Release|Win32.ActiveCfg = Release|Win32
 		{6BEA1F4C-AFD0-41D2-BC91-C2929AE642E9}.Release|Win32.Build.0 = Release|Win32
+		{BFD50561-69CA-4820-96C0-B687806ACA79}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BFD50561-69CA-4820-96C0-B687806ACA79}.Debug|Win32.Build.0 = Debug|Win32
+		{BFD50561-69CA-4820-96C0-B687806ACA79}.Release|Win32.ActiveCfg = Release|Win32
+		{BFD50561-69CA-4820-96C0-B687806ACA79}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
