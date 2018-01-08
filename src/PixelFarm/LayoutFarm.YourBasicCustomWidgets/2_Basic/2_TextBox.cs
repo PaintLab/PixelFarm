@@ -67,6 +67,10 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.textEditRenderElement.CurrentLineCharIndex; }
         }
+        public int CurrentRunCharIndex
+        {
+            get { return this.textEditRenderElement.CurrentTextRunCharIndex; }
+        }
         public string Text
         {
             get
@@ -213,6 +217,10 @@ namespace LayoutFarm.CustomWidgets
         public bool IsMultilineTextBox
         {
             get { return this._multiline; }
+        }
+        public void FindCurrentUnderlyingWord(out int startAt, out int len)
+        {
+            textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
         }
         public TextSurfaceEventListener TextEventListener
         {
