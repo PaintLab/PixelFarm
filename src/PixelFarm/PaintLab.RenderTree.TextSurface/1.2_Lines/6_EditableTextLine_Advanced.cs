@@ -286,7 +286,12 @@ namespace LayoutFarm.Text
                         }
                         else
                         {
-                            throw new NotSupportedException();
+                            //this may be the blank line
+#if DEBUG
+                            //TODO: review here again
+                            System.Diagnostics.Debug.WriteLine("EditableTextLine_adv1");
+                            //throw new NotSupportedException();
+#endif
                         }
                     }
                     else
