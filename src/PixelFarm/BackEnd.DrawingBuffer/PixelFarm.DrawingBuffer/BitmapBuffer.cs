@@ -79,12 +79,10 @@ namespace PixelFarm.DrawingBuffer
             //-----------------------
             //start with identity matrix
 
-            sx = 1;
-            shy = 0;
-            shx = 0;
-            sy = 1;
-            tx = 0;
-            ty = 0;
+            sx = 1; shy = 0;
+            shx = 0; sy = 1;
+            tx = 0; ty = 0;
+
             //-----------------------
             int j = creationPlans.Length;
             for (int i = 0; i < j; ++i)

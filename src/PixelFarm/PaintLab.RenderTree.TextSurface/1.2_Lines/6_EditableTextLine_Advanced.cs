@@ -290,7 +290,6 @@ namespace LayoutFarm.Text
 #if DEBUG
                             //TODO: review here again
                             System.Diagnostics.Debug.WriteLine("EditableTextLine_adv1");
-                            //throw new NotSupportedException();
 #endif
                         }
                     }

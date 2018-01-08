@@ -90,7 +90,7 @@ namespace PixelFarm.Agg.Transform
     // m *= agg::trans_affine_translation(100.0, 100.0);           // move back to (100,100)
     //----------------------------------------------------------------------
 
- 
+
 
     public sealed class Affine : ICoordTransformer
     {
@@ -114,12 +114,9 @@ namespace PixelFarm.Agg.Transform
                        double v2_shx, double v3_sy,
                        double v4_tx, double v5_ty)
         {
-            sx = v0_sx;
-            shy = v1_shy;
-            shx = v2_shx;
-            sy = v3_sy;
-            tx = v4_tx;
-            ty = v5_ty;
+            sx = v0_sx; shy = v1_shy;
+            shx = v2_shx; sy = v3_sy;
+            tx = v4_tx; ty = v5_ty;
         }
         public double m11 { get { return sx; } }
         public double m12 { get { return shy; } }
@@ -853,7 +850,7 @@ namespace PixelFarm.Agg.Transform
         {
             return Math.Abs(v1 - v2) <= (EPSILON);
         }
-      
+
 
 
 
