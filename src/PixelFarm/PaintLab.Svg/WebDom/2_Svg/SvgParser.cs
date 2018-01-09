@@ -47,6 +47,8 @@ namespace PaintLab.Svg
         Path
     }
 
+
+    
     public class SvgRenderVx
     {
         VertexStore _vxs;
@@ -225,12 +227,7 @@ namespace PaintLab.Svg
                         if (attr.Value != "none")
                         {
                             spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
-                        }
-                        else
-                        {
-                            
-                        }
-
+                        } 
                     }
                     break;
                 case "fill-opacity":
