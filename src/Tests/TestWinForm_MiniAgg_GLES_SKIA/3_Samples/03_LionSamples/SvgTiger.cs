@@ -22,6 +22,7 @@ namespace PixelFarm.Agg.Samples
             affine1 = Agg.Transform.Affine.NewTranslation(100, 0);
         }
         VertexStore tempVxs = new VertexStore();
+        Stack<TempRenderState> _renderStateContext = new Stack<TempRenderState>();
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
@@ -30,30 +31,111 @@ namespace PixelFarm.Agg.Samples
                 p.Clear(Drawing.Color.White);
                 //
                 int j = vxList.Length;
+
+                p.SetOrigin(300, 200);
+                p.StrokeColor = Color.Transparent;
+                p.StrokeWidth = 1;//svg standard, init stroke-width =1
+
+
+                TempRenderState renderState = new TempRenderState();
+                renderState.strokeColor = p.StrokeColor;
+                renderState.strokeWidth = (float)p.StrokeWidth;
+                renderState.fillColor = p.FillColor;
+                //
+
                 for (int i = 0; i < j; ++i)
                 {
                     SvgRenderVx vx = vxList[i];
                     switch (vx.Kind)
                     {
                         case SvgRenderVxKind.BeginGroup:
-                            if (vx.HasFillColor)
                             {
-                                p.FillColor = vx.FillColor;
+                                //1. save current state before enter new state
+                                _renderStateContext.Push(renderState);
+
+                                //2. enter new px context
+
+                                if (vx.HasFillColor)
+                                {
+                                    p.FillColor = renderState.fillColor = vx.FillColor;
+
+                                }
+                                if (vx.HasStrokeColor)
+                                {
+                                    p.StrokeColor = renderState.strokeColor = vx.StrokeColor;
+
+                                }
+                                if (vx.HasStrokeWidth)
+                                {
+                                    p.StrokeWidth = renderState.strokeWidth = vx.StrokeWidth;
+                                }
                             }
                             break;
                         case SvgRenderVxKind.EndGroup:
+                            {
+                                //restore to prev state
+                                renderState = _renderStateContext.Pop();
+                                p.FillColor = renderState.fillColor;
+                                p.StrokeColor = renderState.strokeColor;
+                                p.StrokeWidth = renderState.strokeWidth;
 
+                            }
                             break;
                         case SvgRenderVxKind.Path:
                             {
-                                //<path id = "path8" d = "m-122.3,84.285s0.1,1.894-0.73,1.875c-0.82-0.019-17.27-48.094-37.8-45.851,0,0,17.78-7.353,38.53,43.976z" />
 
                                 VertexStore vxs = vx.GetVxs();
+
                                 if (vx.HasFillColor)
                                 {
-                                    p.FillColor = vx.FillColor;
+                                    //has specific fill color
+                                    if (vx.FillColor.A > 0)
+                                    {
+                                        p.Fill(vxs, vx.FillColor);
+                                    }
                                 }
-                                p.Fill(vxs);
+                                else
+                                {
+                                    if (p.FillColor.A > 0)
+                                    {
+                                        p.Fill(vxs);
+                                    }
+                                }
+
+                                if (p.StrokeWidth > 0)
+                                {
+                                    //check if we have a stroke version of this render vx
+                                    //if not then request a new one 
+                                    VertexStore strokeVxs = vx.GetStrokeVxsOrCreateNew(p.StrokeWidth);
+                                    if (vx.HasStrokeColor)
+                                    {
+                                        //has speciic stroke color 
+                                        p.StrokeWidth = vx.StrokeWidth;
+                                        p.Fill(strokeVxs, vx.StrokeColor);
+                                    }
+                                    else if (p.StrokeColor.A > 0)
+                                    {
+                                        p.Fill(strokeVxs, p.StrokeColor);
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                                else
+                                {
+
+                                    if (vx.HasStrokeColor)
+                                    {
+                                        VertexStore strokeVxs = vx.GetStrokeVxsOrCreateNew(p.StrokeWidth);
+                                        p.Fill(strokeVxs);
+                                    }
+                                    else if (p.StrokeColor.A > 0)
+                                    {
+                                        VertexStore strokeVxs = vx.GetStrokeVxsOrCreateNew(p.StrokeWidth);
+                                        p.Fill(strokeVxs, p.StrokeColor);
+                                    }
+                                }
                             }
                             break;
                     }

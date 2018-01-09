@@ -52,12 +52,14 @@ namespace PaintLab.Svg
         VertexStore _vxs;
         Color _fillColor;
         Color _strokeColor;
+        float _strokeWidth;
         public SvgRenderVx(SvgRenderVxKind kind)
         {
             this.Kind = kind;
         }
         public bool HasFillColor { get; private set; }
         public bool HasStrokeColor { get; private set; }
+        public bool HasStrokeWidth { get; private set; }
         public Color FillColor
         {
             get { return _fillColor; }
@@ -86,13 +88,37 @@ namespace PaintLab.Svg
         }
         public float StrokeWidth
         {
-            get;
-            set;
+            get { return _strokeWidth; }
+            set
+            {
+                _strokeWidth = value;
+                HasStrokeWidth = true;
+            }
         }
         public SvgRenderVxKind Kind
         {
             get;
             private set;
+        }
+
+
+
+        VertexStore _strokeVxs;
+        double _strokeVxsStrokeWidth;
+        public VertexStore GetStrokeVxsOrCreateNew(double strokeWidth)
+        {
+            if (_strokeVxs != null && _strokeWidth == strokeWidth)
+            {
+                //use the cache
+                return _strokeVxs;
+            }
+
+            //if not create a new one,
+            //review here again
+            Stroke aggStrokeGen = new Stroke(_strokeVxsStrokeWidth = strokeWidth);
+            _strokeVxs = new VertexStore();
+            aggStrokeGen.MakeVxs(_vxs, _strokeVxs);
+            return _strokeVxs;
         }
 
     }
@@ -199,6 +225,10 @@ namespace PaintLab.Svg
                         if (attr.Value != "none")
                         {
                             spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
+                        }
+                        else
+                        {
+                            
                         }
 
                     }
@@ -324,16 +354,15 @@ namespace PaintLab.Svg
 
             SvgGroupElement group = new SvgGroupElement(spec, null);
 
-
+            //--------
             SvgRenderVx beginVx = new SvgRenderVx(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
             renderVxList.Add(beginVx);
-
             foreach (XmlElement child in elem.ChildNodes)
             {
                 ParseSvgElement(child);
             }
-
+            //--------
             renderVxList.Add(new SvgRenderVx(SvgRenderVxKind.EndGroup));
 
         }
@@ -429,6 +458,11 @@ namespace PaintLab.Svg
             if (pathDefAttr != null)
             {
 
+                SvgRenderVx svgRenderVx = new SvgRenderVx(SvgRenderVxKind.Path);
+                AssignValues(svgRenderVx, spec);
+
+
+
                 VertexStore vxs = new VertexStore();
                 PathWriter pathWriter = new PathWriter(vxs);
                 _svgPatgDataParser.SetPathWriter(pathWriter);
@@ -439,9 +473,16 @@ namespace PaintLab.Svg
                 VertexStore flattenVxs = new VertexStore();
                 curveFlattener.MakeVxs(vxs, flattenVxs);
 
-                SvgRenderVx svgRenderVx = new SvgRenderVx(SvgRenderVxKind.Path);
+
+                if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
+                {
+                    //generate stroke for this too
+
+                }
+
+
                 svgRenderVx.SetVxs(flattenVxs);
-                AssignValues(svgRenderVx, spec);
+
 
 
                 this.renderVxList.Add(svgRenderVx);

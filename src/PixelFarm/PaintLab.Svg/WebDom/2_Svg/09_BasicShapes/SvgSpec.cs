@@ -10,11 +10,7 @@ namespace LayoutFarm.Svg
     public class SvgVisualSpec
     {
         Color fillColor = Color.Black;
-        Color strokeColor = Color.Transparent;
-
-        CssColor cssFillColor;
-        CssColor cssStrokeColor;
-
+        Color strokeColor = Color.Transparent; 
         CssLength cssLen;
 
         public bool HasFillColor { get; set; }
