@@ -47,7 +47,7 @@ namespace PaintLab.Svg
     {
         BeginGroup,
         EndGroup,
-        Transform,
+
         Path
     }
 
@@ -268,13 +268,13 @@ namespace PaintLab.Svg
                 case "transform":
                     {
                         //parse trans
-                        ParseTransform(attr.Value);
+                        ParseTransform(attr.Value, spec);
                     }
                     break;
             }
             return true;
         }
-        void ParseTransform(string value)
+        void ParseTransform(string value, SvgVisualSpec spec)
         {
             int openParPos = value.IndexOf('(');
             if (openParPos > -1)
@@ -289,7 +289,12 @@ namespace PaintLab.Svg
                         {
                             //read matrix args
                             double[] matrixArgs = ParseMatrixArgs(right);
-                           
+                            //create affine matrix 
+                            spec.Transform = Affine.NewCustomMatrix(
+                                matrixArgs[0], matrixArgs[1],
+                                matrixArgs[2], matrixArgs[3],
+                                matrixArgs[4], matrixArgs[5]
+                                );
                         }
                         break;
                     case "translate":
@@ -349,7 +354,6 @@ namespace PaintLab.Svg
                 {
                     switch (attr.Name)
                     {
-
                         default:
                             break;
                     }
@@ -426,7 +430,10 @@ namespace PaintLab.Svg
                 //assume this is in pixel unit
                 svgRenderVx.StrokeWidth = spec.StrokeWidth.Number;
             }
-
+            if (spec.Transform != null)
+            {
+                svgRenderVx.AffineTx = spec.Transform;
+            }
         }
 
         CurveFlattener curveFlattener = new CurveFlattener();
@@ -486,7 +493,7 @@ namespace PaintLab.Svg
                 }
 
 
-                svgRenderVx.SetVxs(flattenVxs); 
+                svgRenderVx.SetVxs(flattenVxs);
                 this.renderVxList.Add(svgRenderVx);
             }
 
@@ -566,7 +573,7 @@ namespace PaintLab.Svg
             protected override void OnCloseFigure()
             {
                 _writer.CloseFigure();
-                
+
             }
             protected override void OnCurveToCubic(
                 float x1, float y1,
@@ -643,14 +650,14 @@ namespace PaintLab.Svg
             }
             protected override void OnMoveTo(float x, float y, bool relative)
             {
-                
+
                 if (relative)
                 {
                     _writer.MoveToRel(x, y);
                 }
                 else
                 {
-                   
+
 
                     _writer.MoveTo(x, y);
                 }
