@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace LayoutFarm.Svg.Transforms
 {
     /// <summary>
-    /// The class which applies custom transform to this Matrix (Required for projects created by the Inkscape).
+    /// The class which applies custom transform to this Matrix
     /// </summary>
     public sealed class SvgCustomTransformMatrix : SvgTransform
     {

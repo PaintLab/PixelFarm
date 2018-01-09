@@ -8,6 +8,11 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {
+
+
+    //TODO: review here again***
+    //move to SVG or renderVX
+
     public class SpriteShape
     {
         PathWriter path = new PathWriter();
@@ -77,8 +82,8 @@ namespace PixelFarm.Agg
             _lionVxs = path.Vxs;
             PixelFarm.Agg.BoundingRect.GetBoundingRect(_lionVxs, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0; 
-            
+            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
+
             ////since lion is bottom-up
             ////we invert it
             //Transform.Affine aff = Transform.Affine.NewMatix(

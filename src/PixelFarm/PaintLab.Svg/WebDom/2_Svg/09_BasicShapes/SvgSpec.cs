@@ -4,28 +4,54 @@
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.Css;
+using LayoutFarm.WebDom;
 namespace LayoutFarm.Svg
 {
     public class SvgVisualSpec
     {
         Color fillColor = Color.Black;
         Color strokeColor = Color.Transparent;
-        public Color ActualColor
+
+        CssColor cssFillColor;
+        CssColor cssStrokeColor;
+
+        CssLength cssLen;
+
+        public bool HasFillColor { get; set; }
+        public bool HasStrokeColor { get; set; }
+        public bool HasStrokeWidth { get; set; }
+
+
+        public Color FillColor
         {
             get { return this.fillColor; }
-            set { this.fillColor = value; }
+            set
+            {
+                this.fillColor = value;
+                this.HasFillColor = true;
+            }
         }
         public Color StrokeColor
         {
             get { return this.strokeColor; }
-            set { this.strokeColor = value; }
+            set
+            {
+                this.strokeColor = value;
+                this.HasStrokeColor = true;
+            }
         }
         public CssLength StrokeWidth
         {
-            get;
-            set;
+            get { return cssLen; }
+            set
+            {
+
+                cssLen = value;
+                this.HasStrokeWidth = true;
+            }
         }
         public string Id { get; set; }
+        public string Class { get; set; }
 
     }
     public class SvgRectSpec : SvgVisualSpec

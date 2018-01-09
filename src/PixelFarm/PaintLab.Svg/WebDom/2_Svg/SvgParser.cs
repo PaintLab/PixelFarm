@@ -26,31 +26,107 @@ using LayoutFarm.Svg;
 using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
 
+
 using LayoutFarm.Svg.Pathing;
+
+
+using PixelFarm;
+using PixelFarm.Drawing;
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
 
 namespace PaintLab.Svg
 {
     //very simple svg parser 
 
+
+    public enum SvgRenderVxKind
+    {
+        BeginGroup,
+        EndGroup,
+        Path
+    }
+
+    public class SvgRenderVx
+    {
+        VertexStore _vxs;
+        Color _fillColor;
+        Color _strokeColor;
+        public SvgRenderVx(SvgRenderVxKind kind)
+        {
+            this.Kind = kind;
+        }
+        public bool HasFillColor { get; private set; }
+        public bool HasStrokeColor { get; private set; }
+        public Color FillColor
+        {
+            get { return _fillColor; }
+            set
+            {
+                _fillColor = value;
+                HasFillColor = true;
+            }
+        }
+        public Color StrokeColor
+        {
+            get { return _strokeColor; }
+            set
+            {
+                _strokeColor = value;
+                HasStrokeColor = true;
+            }
+        }
+        public void SetVxs(VertexStore vxs)
+        {
+            this._vxs = vxs;
+        }
+        public VertexStore GetVxs()
+        {
+            return _vxs;
+        }
+        public float StrokeWidth
+        {
+            get;
+            set;
+        }
+        public SvgRenderVxKind Kind
+        {
+            get;
+            private set;
+        }
+
+    }
+
     public class SvgParser
     {
+
+        List<SvgRenderVx> renderVxList = new List<SvgRenderVx>();
+
         public void ReadSvgDocument(string svgFileName)
         {
+            renderVxList.Clear();
+
             //create simple svg dom
             //iterate all child
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(svgFileName);
             //
             XmlElement docElem = xmldoc.DocumentElement;
-            //then parse
+            //then parse 
             if (docElem.Name == "svg")
             {
                 //parse its content
+
                 foreach (XmlElement elem in docElem.ChildNodes)
                 {
                     ParseSvgElement(elem);
                 }
             }
+        }
+
+        public SvgRenderVx[] GetResult()
+        {
+            return renderVxList.ToArray();
         }
 
         void ParseSvgElement(XmlElement elem)
@@ -82,28 +158,36 @@ namespace PaintLab.Svg
                     break;
             }
         }
-        CssParser parser = new CssParser();
+
+        CssParser _cssParser = new CssParser();
         void ParseStyle(SvgVisualSpec spec, string value)
         {
             if (!String.IsNullOrEmpty(value))
             {
 
-                parser.ParseCssStyleSheet(value.ToCharArray());
+                _cssParser.ParseCssStyleSheet(value.ToCharArray());
                 //-----------------------------------
-                CssDocument cssDoc = parser.OutputCssDocument;
+                CssDocument cssDoc = _cssParser.OutputCssDocument;
                 CssActiveSheet cssActiveDoc = new CssActiveSheet();
                 cssActiveDoc.LoadCssDoc(cssDoc);
             }
         }
 
+
+        static PixelFarm.Drawing.Color ConvToActualColor(CssColor color)
+        {
+            return new Color(color.A, color.R, color.G, color.B);
+        }
         bool ParseAttribute(SvgVisualSpec spec, XmlAttribute attr)
         {
-
             switch (attr.Name)
             {
 
                 default:
                     return false;
+                case "class":
+                    spec.Id = attr.Value;
+                    break;
                 case "id":
                     spec.Id = attr.Value;
                     return true;
@@ -112,19 +196,33 @@ namespace PaintLab.Svg
                     break;
                 case "fill":
                     {
-                        LayoutFarm.WebDom.CssColor color =
-                            CssValueParser2.GetActualColor(attr.Value);
+                        if (attr.Value != "none")
+                        {
+                            spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
+                        }
+
                     }
                     break;
                 case "fill-opacity":
                     {
+                        //adjust fill opacity
                     }
                     break;
                 case "stroke-width":
+                    {
+                        spec.StrokeWidth = UserMapUtil.ParseGenericLength(attr.Value);
+                    }
                     break;
                 case "stroke":
+                    {
+                        if (attr.Value != "none")
+                        {
+                            spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
+                        }
+                    }
                     break;
                 case "stroke-linecap":
+                    //set line-cap and line join again
                     break;
                 case "stroke-linejoin":
                     break;
@@ -184,7 +282,6 @@ namespace PaintLab.Svg
                             double[] matrixArgs = ParseMatrixArgs(right);
                         }
                         break;
-
                 }
             }
             else
@@ -192,7 +289,8 @@ namespace PaintLab.Svg
                 //?
             }
         }
-        double[] ParseMatrixArgs(string matrixTransformArgs)
+
+        static double[] ParseMatrixArgs(string matrixTransformArgs)
         {
             int close_paren = matrixTransformArgs.IndexOf(')');
             matrixTransformArgs = matrixTransformArgs.Substring(0, close_paren);
@@ -225,10 +323,19 @@ namespace PaintLab.Svg
             }
 
             SvgGroupElement group = new SvgGroupElement(spec, null);
+
+
+            SvgRenderVx beginVx = new SvgRenderVx(SvgRenderVxKind.BeginGroup);
+            AssignValues(beginVx, spec);
+            renderVxList.Add(beginVx);
+
             foreach (XmlElement child in elem.ChildNodes)
             {
                 ParseSvgElement(child);
             }
+
+            renderVxList.Add(new SvgRenderVx(SvgRenderVxKind.EndGroup));
+
         }
         void ParseTitle(XmlElement elem)
         {
@@ -266,10 +373,36 @@ namespace PaintLab.Svg
             }
         }
 
-        SvgPathDataParser _svgPatgDataParser = new SvgPathDataParser();
+        MySvgPathDataParser _svgPatgDataParser = new MySvgPathDataParser();
+        static void AssignValues(SvgRenderVx svgRenderVx, SvgVisualSpec spec)
+        {
+
+            if (spec.HasFillColor)
+            {
+                svgRenderVx.FillColor = spec.FillColor;
+            }
+
+            if (spec.HasStrokeColor)
+            {
+                svgRenderVx.StrokeColor = spec.StrokeColor;
+            }
+
+            if (spec.HasStrokeWidth)
+            {
+                //assume this is in pixel unit
+                svgRenderVx.StrokeWidth = spec.StrokeWidth.Number;
+            }
+
+        }
+
+        CurveFlattener curveFlattener = new CurveFlattener();
+
         void ParsePath(XmlElement elem)
         {
             SvgVisualSpec spec = new SvgVisualSpec();
+            XmlAttribute pathDefAttr = null;
+
+
             foreach (XmlAttribute attr in elem.Attributes)
             {
                 //translate each attr 
@@ -281,13 +414,40 @@ namespace PaintLab.Svg
                     // attributes (see 'else' branch).
                     switch (attr.Name)
                     {
+                        default:
+
+                            break;
                         case "d":
-                            //tokenize the path definition data
-                            List<SvgPathSeg> pathSegs = _svgPatgDataParser.Parse(attr.Value.ToCharArray());
+                            //process later ..
+                            pathDefAttr = attr;
                             break;
                     }
                 }
             }
+            //--------------
+            //translate and evaluate values 
+            if (pathDefAttr != null)
+            {
+
+                VertexStore vxs = new VertexStore();
+                PathWriter pathWriter = new PathWriter(vxs);
+                _svgPatgDataParser.SetPathWriter(pathWriter);
+                //tokenize the path definition data
+                _svgPatgDataParser.Parse(pathDefAttr.Value.ToCharArray());
+
+                //
+                VertexStore flattenVxs = new VertexStore();
+                curveFlattener.MakeVxs(vxs, flattenVxs);
+
+                SvgRenderVx svgRenderVx = new SvgRenderVx(SvgRenderVxKind.Path);
+                svgRenderVx.SetVxs(flattenVxs);
+                AssignValues(svgRenderVx, spec);
+
+
+                this.renderVxList.Add(svgRenderVx);
+            }
+
+
             foreach (XmlElement child in elem.ChildNodes)
             {
                 ParseSvgElement(child);
@@ -339,6 +499,126 @@ namespace PaintLab.Svg
             foreach (XmlElement child in elem.ChildNodes)
             {
                 ParseSvgElement(child);
+            }
+        }
+
+
+
+
+        class MySvgPathDataParser : SvgPathDataParser
+        {
+            PathWriter _writer;
+            public void SetPathWriter(PathWriter writer)
+            {
+                this._writer = writer;
+                _writer.StartFigure();
+            }
+            protected override void OnArc(float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)
+            {
+
+                //TODO: implement arc again
+                throw new NotSupportedException();
+                //base.OnArc(r1, r2, xAxisRotation, largeArcFlag, sweepFlags, x, y, isRelative);
+            }
+            protected override void OnCloseFigure()
+            {
+                _writer.CloseFigure();
+                _writer.Stop();
+            }
+            protected override void OnCurveToCubic(
+                float x1, float y1,
+                float x2, float y2,
+                float x, float y, bool isRelative)
+            {
+
+                if (isRelative)
+                {
+                    _writer.Curve4Rel(x1, y1, x2, y2, x, y);
+                }
+                else
+                {
+                    _writer.Curve4(x1, y1, x2, y2, x, y);
+                }
+            }
+            protected override void OnCurveToCubicSmooth(float x2, float y2, float x, float y, bool isRelative)
+            {
+                if (isRelative)
+                {
+                    _writer.SmoothCurve4Rel(x2, y2, x, y);
+                }
+                else
+                {
+                    _writer.SmoothCurve4(x2, y2, x, y);
+                }
+
+            }
+            protected override void OnCurveToQuadratic(float x1, float y1, float x, float y, bool isRelative)
+            {
+                if (isRelative)
+                {
+                    _writer.Curve3Rel(x1, y1, x, y);
+                }
+                else
+                {
+                    _writer.Curve3(x1, y1, x, y);
+                }
+            }
+            protected override void OnCurveToQuadraticSmooth(float x, float y, bool isRelative)
+            {
+                if (isRelative)
+                {
+                    _writer.SmoothCurve3Rel(x, y);
+                }
+                else
+                {
+                    _writer.SmoothCurve3(x, y);
+                }
+
+            }
+            protected override void OnHLineTo(float x, bool relative)
+            {
+                if (relative)
+                {
+                    _writer.HorizontalLineToRel(x);
+                }
+                else
+                {
+                    _writer.HorizontalLineTo(x);
+                }
+            }
+
+            protected override void OnLineTo(float x, float y, bool relative)
+            {
+                if (relative)
+                {
+                    _writer.LineToRel(x, y);
+                }
+                else
+                {
+                    _writer.LineTo(x, y);
+                }
+            }
+            protected override void OnMoveTo(float x, float y, bool relative)
+            {
+                if (relative)
+                {
+                    _writer.MoveToRel(x, y);
+                }
+                else
+                {
+                    _writer.MoveTo(x, y);
+                }
+            }
+            protected override void OnVLineTo(float y, bool relative)
+            {
+                if (relative)
+                {
+                    _writer.VerticalLineToRel(y);
+                }
+                else
+                {
+                    _writer.VerticalLineTo(y);
+                }
             }
         }
     }

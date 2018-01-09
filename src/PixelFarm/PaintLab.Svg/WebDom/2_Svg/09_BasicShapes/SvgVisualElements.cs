@@ -116,7 +116,7 @@ namespace LayoutFarm.Svg
         public override void ReEvaluateComputeValue(ref ReEvaluateArgs args)
         {
             var myspec = this.rectSpec;
-            this.fillColor = myspec.ActualColor;
+            this.fillColor = myspec.FillColor;
             this.strokeColor = myspec.StrokeColor;
             this.ActualX = ConvertToPx(myspec.X, ref args);
             this.ActualY = ConvertToPx(myspec.Y, ref args);
@@ -259,7 +259,7 @@ namespace LayoutFarm.Svg
         public override void ReEvaluateComputeValue(ref ReEvaluateArgs args)
         {
             var myspec = this.spec;
-            this.fillColor = myspec.ActualColor;
+            this.fillColor = myspec.FillColor;
             this.strokeColor = myspec.StrokeColor;
             this.ActualX = ConvertToPx(myspec.X, ref args);
             this.ActualY = ConvertToPx(myspec.Y, ref args);
@@ -324,7 +324,7 @@ namespace LayoutFarm.Svg
         public override void ReEvaluateComputeValue(ref ReEvaluateArgs args)
         {
             var myspec = this.spec;
-            this.fillColor = myspec.ActualColor;
+            this.fillColor = myspec.FillColor;
             this.strokeColor = myspec.StrokeColor;
             this.ActualX = ConvertToPx(myspec.X, ref args);
             this.ActualY = ConvertToPx(myspec.Y, ref args);
@@ -365,7 +365,7 @@ namespace LayoutFarm.Svg
         public override void ReEvaluateComputeValue(ref ReEvaluateArgs args)
         {
             var myspec = this.spec;
-            this.fillColor = myspec.ActualColor;
+            this.fillColor = myspec.FillColor;
             this.strokeColor = myspec.StrokeColor;
             this.pointList = spec.Points.ToArray();
             this.ActualStrokeWidth = ConvertToPx(myspec.StrokeWidth, ref args);
@@ -425,7 +425,7 @@ namespace LayoutFarm.Svg
         public override void ReEvaluateComputeValue(ref ReEvaluateArgs args)
         {
             var myspec = this.spec;
-            this.fillColor = myspec.ActualColor;
+            this.fillColor = myspec.FillColor;
             this.strokeColor = myspec.StrokeColor;
             this.ActualStrokeWidth = ConvertToPx(myspec.StrokeWidth, ref args);
             this.pointList = spec.Points.ToArray();
@@ -488,7 +488,7 @@ namespace LayoutFarm.Svg
         public override void ReEvaluateComputeValue(ref ReEvaluateArgs args)
         {
             SvgLineSpec myspec = this.spec;
-            this.fillColor = myspec.ActualColor;
+            this.fillColor = myspec.FillColor;
             this.strokeColor = myspec.StrokeColor;
             this.ActualStrokeWidth = ConvertToPx(myspec.StrokeWidth, ref args);
             this.ActualX1 = ConvertToPx(myspec.X1, ref args);
@@ -526,7 +526,7 @@ namespace LayoutFarm.Svg
         }
         public override void ReEvaluateComputeValue(ref ReEvaluateArgs args)
         {
-            this.fillColor = spec.ActualColor;
+            this.fillColor = spec.FillColor;
             this.strokeColor = spec.StrokeColor;
             this.ActualStrokeWidth = ConvertToPx(spec.StrokeWidth, ref args);
             var node = this.GetFirstNode();
@@ -541,7 +541,7 @@ namespace LayoutFarm.Svg
         {
 
             p.UseCurrentContext = true;
-            p.CurrentContextFillColor = spec.ActualColor;
+            p.CurrentContextFillColor = spec.FillColor;
             p.CurrentContextPenColor = spec.StrokeColor;
             p.CurrentContextPenWidth = this.ActualStrokeWidth;
             var node = this.GetFirstNode();

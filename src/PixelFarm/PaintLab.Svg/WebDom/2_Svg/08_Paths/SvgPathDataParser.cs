@@ -10,12 +10,61 @@ namespace LayoutFarm.Svg.Pathing
 #if DEBUG
         static int dbugCounter = 0;
 #endif
+        protected virtual void OnMoveTo(float x, float y, bool relative)
+        {
+        }
+        protected virtual void OnLineTo(float x, float y, bool relative)
+        {
+        }
+        protected virtual void OnHLineTo(float x, bool relative)
+        {
+        }
+        protected virtual void OnVLineTo(float y, bool relative)
+        {
+        }
+        protected virtual void OnCloseFigure()
+        {
+        }
+        protected virtual void OnArc(float r1, float r2,
+            float xAxisRotation,
+            int largeArcFlag,
+            int sweepFlags, float x, float y, bool isRelative)
+        {
 
-        public List<SvgPathSeg> Parse(char[] pathDataBuffer)
+        }
+        protected virtual void OnCurveToCubic(
+            float x1, float y1,
+            float x2, float y2, 
+            float x, float y, bool isRelative)
+        {
+
+        }
+        protected virtual void OnCurveToCubicSmooth(
+            float x2, float y2,
+            float x, float y, bool isRelative)
+        {
+
+        }
+
+        protected virtual void OnCurveToQuadratic(
+            float x1, float y1, 
+            float x, float y, bool isRelative)
+        {
+
+        }
+        protected virtual void OnCurveToQuadraticSmooth(
+            float x, float y, bool isRelative)
+        {
+
+        }
+
+
+        List<float> _reusable_nums = new List<float>();
+        public void Parse(char[] pathDataBuffer)
         {
             //parse pathdata to pathsegments
-            List<SvgPathSeg> pathSegments = new List<SvgPathSeg>();
-            List<float> numbers = new List<float>();
+            //List<SvgPathSeg> pathSegments = new List<SvgPathSeg>();
+
             int j = pathDataBuffer.Length;
             int currentState = 0;
             for (int i = 0; i < j;)
@@ -33,22 +82,20 @@ namespace LayoutFarm.Svg.Pathing
                                 case 'm':
                                     {
                                         //move to 
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
 
-                                        int numCount = numbers.Count;
+                                        int numCount = _reusable_nums.Count;
                                         if ((numCount % 2) == 0)
                                         {
                                             bool isRelative = c == 'm';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var moveTo = new SvgPathSegMoveTo(
-                                                 numbers[m1],
-                                                 numbers[m1 + 1]);
-
-                                                moveTo.IsRelative = isRelative;
-
-                                                pathSegments.Add(moveTo);
-
+                                                //var moveTo = new SvgPathSegMoveTo(
+                                                // numbers[m1],
+                                                // numbers[m1 + 1]); 
+                                                //moveTo.IsRelative = isRelative; 
+                                                //pathSegments.Add(moveTo);
+                                                OnMoveTo(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
                                                 m1 += 2;
                                             }
                                         }
@@ -58,25 +105,26 @@ namespace LayoutFarm.Svg.Pathing
                                             throw new NotSupportedException();
                                         }
 
-                                        numbers.Clear();//reset
+                                        _reusable_nums.Clear();//reset
                                     }
                                     break;
                                 case 'L':
                                 case 'l':
                                     {
                                         //line to
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
 
-                                        int numCount = numbers.Count;
+                                        int numCount = _reusable_nums.Count;
                                         if ((numCount % 2) == 0)
                                         {
                                             bool isRelative = c == 'l';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var lineTo = new SvgPathSegLineTo(
-                                                 numbers[m1], numbers[m1 + 1]);
-                                                lineTo.IsRelative = isRelative;
-                                                pathSegments.Add(lineTo);
+                                                OnLineTo(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
+                                                //var lineTo = new SvgPathSegLineTo(
+                                                // numbers[m1], numbers[m1 + 1]);
+                                                //lineTo.IsRelative = isRelative;
+                                                //pathSegments.Add(lineTo);
                                                 m1 += 2;
                                             }
                                         }
@@ -86,24 +134,26 @@ namespace LayoutFarm.Svg.Pathing
                                             throw new NotSupportedException();
                                         }
 
-                                        numbers.Clear();//reset
+                                        _reusable_nums.Clear();//reset
                                     }
                                     break;
                                 case 'H':
                                 case 'h':
                                     {
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
 
-                                        int numCount = numbers.Count;
+                                        int numCount = _reusable_nums.Count;
                                         if (numCount > 0)
                                         {
                                             bool isRelative = c == 'h';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var v = new SvgPathSegLineToHorizontal(
-                                                numbers[m1]);
-                                                v.IsRelative = isRelative;
-                                                pathSegments.Add(v);
+                                                OnHLineTo(_reusable_nums[m1], isRelative);
+
+                                                //var v = new SvgPathSegLineToHorizontal(
+                                                //numbers[m1]);
+                                                //v.IsRelative = isRelative;
+                                                //pathSegments.Add(v);
                                                 m1++;
                                             }
 
@@ -112,23 +162,24 @@ namespace LayoutFarm.Svg.Pathing
                                         {  //error 
                                             throw new NotSupportedException();
                                         }
-                                        numbers.Clear();//reset
+                                        _reusable_nums.Clear();//reset
                                     }
                                     break;
                                 case 'V':
                                 case 'v':
                                     {
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
-                                        int numCount = numbers.Count;
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
+                                        int numCount = _reusable_nums.Count;
                                         if (numCount > 0)
                                         {
                                             bool isRelative = c == 'v';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var v = new SvgPathSegLineToVertical(
-                                                numbers[m1]);
-                                                v.IsRelative = isRelative;
-                                                pathSegments.Add(v);
+                                                OnVLineTo(_reusable_nums[m1], isRelative);
+                                                //var v = new SvgPathSegLineToVertical(
+                                                //numbers[m1]);
+                                                //v.IsRelative = isRelative;
+                                                //pathSegments.Add(v);
                                                 m1++;
                                             }
 
@@ -137,32 +188,37 @@ namespace LayoutFarm.Svg.Pathing
                                         {  //error 
                                             throw new NotSupportedException();
                                         }
-                                        numbers.Clear();//reset
+                                        _reusable_nums.Clear();//reset
                                     }
                                     break;
                                 case 'Z':
                                 case 'z':
                                     {
-                                        pathSegments.Add(new SvgPathSegClosePath());
+                                        OnCloseFigure();
+                                        //pathSegments.Add(new SvgPathSegClosePath());
                                         i++;
                                     }
                                     break;
                                 case 'A':
                                 case 'a':
                                     {
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
-                                        int numCount = numbers.Count;
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
+                                        int numCount = _reusable_nums.Count;
                                         if ((numCount % 7) == 0)
                                         {
                                             bool isRelative = c == 'a';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var arc = new SvgPathSegArc(
-                                                   numbers[m1], numbers[m1 + 1],
-                                                   numbers[m1 + 2], (int)numbers[m1 + 3], (int)numbers[m1 + 4],
-                                                   numbers[m1 + 5], numbers[m1 + 6]);
-                                                arc.IsRelative = isRelative;
-                                                pathSegments.Add(arc);
+                                                OnArc(_reusable_nums[m1], _reusable_nums[m1 + 1],
+                                                   _reusable_nums[m1 + 2], (int)_reusable_nums[m1 + 3], (int)_reusable_nums[m1 + 4],
+                                                   _reusable_nums[m1 + 5], _reusable_nums[m1 + 6], isRelative);
+
+                                                //var arc = new SvgPathSegArc(
+                                                //   numbers[m1], numbers[m1 + 1],
+                                                //   numbers[m1 + 2], (int)numbers[m1 + 3], (int)numbers[m1 + 4],
+                                                //   numbers[m1 + 5], numbers[m1 + 6]);
+                                                //arc.IsRelative = isRelative;
+                                                //pathSegments.Add(arc);
 
                                                 m1 += 7;
                                             }
@@ -174,7 +230,7 @@ namespace LayoutFarm.Svg.Pathing
                                         }
 
 
-                                        numbers.Clear();
+                                        _reusable_nums.Clear();
                                     }
                                     break;
                                 case 'C':
@@ -184,23 +240,24 @@ namespace LayoutFarm.Svg.Pathing
                                         dbugCounter++;
 #endif
 
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
-                                        int numCount = numbers.Count;
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
+                                        int numCount = _reusable_nums.Count;
                                         if ((numCount % 6) == 0)
                                         {
 
                                             bool isRelative = c == 'c';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var squadCurve = new SvgPathSegCurveToCubic(
-                                                  numbers[m1], numbers[m1 + 1],
-                                                  numbers[m1 + 2], numbers[m1 + 3],
-                                                  numbers[m1 + 4], numbers[m1 + 5]);
-
+                                                OnCurveToCubic(_reusable_nums[m1], _reusable_nums[m1 + 1],
+                                                  _reusable_nums[m1 + 2], _reusable_nums[m1 + 3],
+                                                  _reusable_nums[m1 + 4], _reusable_nums[m1 + 5], isRelative);
+                                                //var squadCurve = new SvgPathSegCurveToCubic(
+                                                //  numbers[m1], numbers[m1 + 1],
+                                                //  numbers[m1 + 2], numbers[m1 + 3],
+                                                //  numbers[m1 + 4], numbers[m1 + 5]);
+                                                //squadCurve.IsRelative = isRelative;
+                                                //pathSegments.Add(squadCurve);
                                                 m1 += 6;
-
-                                                squadCurve.IsRelative = isRelative;
-                                                pathSegments.Add(squadCurve);
                                             }
 
                                         }
@@ -208,27 +265,31 @@ namespace LayoutFarm.Svg.Pathing
                                         {
                                             throw new NotSupportedException();
                                         }
-                                        numbers.Clear();
+                                        _reusable_nums.Clear();
                                     }
                                     break;
                                 case 'Q':
                                 case 'q':
                                     {
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
-                                        int numCount = numbers.Count;
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
+                                        int numCount = _reusable_nums.Count;
                                         if ((numCount % 4) == 0)
                                         {
                                             bool isRelative = c == 'q';
 
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var quadCurve = new SvgPathSegCurveToQuadratic(
-                                                 numbers[m1], numbers[m1 + 1],
-                                                 numbers[m1 + 2], numbers[m1 + 3]);
+                                                //var quadCurve = new SvgPathSegCurveToQuadratic(
+                                                // numbers[m1], numbers[m1 + 1],
+                                                // numbers[m1 + 2], numbers[m1 + 3]);
+                                                //quadCurve.IsRelative = isRelative;
+                                                //pathSegments.Add(quadCurve);
+
+                                                OnCurveToQuadratic(_reusable_nums[m1], _reusable_nums[m1 + 1],
+                                                 _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
 
                                                 m1 += 4;
-                                                quadCurve.IsRelative = isRelative;
-                                                pathSegments.Add(quadCurve);
+
                                             }
 
                                         }
@@ -236,7 +297,7 @@ namespace LayoutFarm.Svg.Pathing
                                         {
                                             throw new NotSupportedException();
                                         }
-                                        numbers.Clear();
+                                        _reusable_nums.Clear();
                                     }
                                     break;
                                 case 'S':
@@ -246,18 +307,22 @@ namespace LayoutFarm.Svg.Pathing
                                         dbugCounter++;
 #endif
 
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
-                                        int numCount = numbers.Count;
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
+                                        int numCount = _reusable_nums.Count;
                                         if ((numCount % 4) == 0)
                                         {
                                             bool isRelative = c == 's';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var scubicCurve = new SvgPathSegCurveToCubicSmooth(
-                                                   numbers[m1], numbers[m1 + 1],
-                                                   numbers[m1 + 2], numbers[m1 + 3]);
-                                                scubicCurve.IsRelative = isRelative;
-                                                pathSegments.Add(scubicCurve);
+                                                //var scubicCurve = new SvgPathSegCurveToCubicSmooth(
+                                                //   numbers[m1], numbers[m1 + 1],
+                                                //   numbers[m1 + 2], numbers[m1 + 3]);
+                                                //scubicCurve.IsRelative = isRelative;
+                                                //pathSegments.Add(scubicCurve);
+
+                                                OnCurveToCubicSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1],
+                                                   _reusable_nums[m1 + 2], _reusable_nums[m1 + 3], isRelative);
+
 
                                                 m1 += 4;
                                             }
@@ -266,24 +331,26 @@ namespace LayoutFarm.Svg.Pathing
                                         {
                                             throw new NotSupportedException();
                                         }
-                                        numbers.Clear();
+                                        _reusable_nums.Clear();
 
                                     }
                                     break;
                                 case 'T':
                                 case 't':
                                     {
-                                        ParseNumberList(pathDataBuffer, i + 1, out i, numbers);
-                                        int numCount = numbers.Count;
+                                        ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
+                                        int numCount = _reusable_nums.Count;
                                         if ((numCount % 2) == 0)
                                         {
                                             bool isRelative = c == 't';
                                             for (int m1 = 0; m1 < numCount;)
                                             {
-                                                var squadCurve = new SvgPathSegCurveToQuadraticSmooth(
-                                                     numbers[m1], numbers[m1 + 1]);
-                                                squadCurve.IsRelative = isRelative;
-                                                pathSegments.Add(squadCurve);
+                                                OnCurveToQuadraticSmooth(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
+
+                                                //var squadCurve = new SvgPathSegCurveToQuadraticSmooth(
+                                                //     numbers[m1], numbers[m1 + 1]);
+                                                //squadCurve.IsRelative = isRelative;
+                                                //pathSegments.Add(squadCurve);
 
                                                 m1 += 2;
                                             }
@@ -293,7 +360,7 @@ namespace LayoutFarm.Svg.Pathing
                                             throw new NotSupportedException();
                                         }
 
-                                        numbers.Clear();
+                                        _reusable_nums.Clear();
                                     }
                                     break;
                                 default:
@@ -309,7 +376,7 @@ namespace LayoutFarm.Svg.Pathing
                         break;
                 }
             }
-            return pathSegments;
+
         }
         static void ParseNumberList(char[] pathDataBuffer, int startIndex, out int latestIndex, List<float> numbers)
         {

@@ -86,10 +86,7 @@ namespace LayoutFarm.WebDom
         public static readonly CssColor OrangeRed = new CssColor(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
         public static readonly CssColor DeepPink = new CssColor(0xFF, 0xFF, 0x14, 0x93);
         public static readonly CssColor Magenta = new CssColor(0xFF, 0xFF, 0, 0xFF);
-        //internal static Color ColorFromDrawingColor(System.Drawing.Color c)
-        //{
-        //    return new Color(c.A, c.R, c.G, c.B);
-        //}
+         
         public static CssColor FromName(string name)
         {
             var color = KnownColors.FromKnownColor(name);
