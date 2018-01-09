@@ -92,6 +92,26 @@ Typography => https://github.com/LayoutFarm/Typography)
 
 ---
  
+Ghost script's Tiger.svg
+---
+
+(https://commons.wikimedia.org/wiki/File:Ghostscript_Tiger.svg)
+
+
+![tiger](https://user-images.githubusercontent.com/7447159/34709205-cdf2a2de-f548-11e7-8075-1958c087a883.png)
+
+_pic 1: PixelFarm's Agg (1) vs Chrome (2)_
+
+
+![tiger2](https://user-images.githubusercontent.com/7447159/34709373-8e048286-f549-11e7-8cbc-2941b7b9fa4e.png)
+
+_pic 2: Agg's result, bitmap zoom-in to see fine details_ 
+ 
+ 
+ 
+ 
+---
+
 License:
 
 Source code from multiple projects,
