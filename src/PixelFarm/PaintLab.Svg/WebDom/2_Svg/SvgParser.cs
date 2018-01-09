@@ -34,6 +34,9 @@ using PixelFarm;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
+using LayoutFarm.Svg.Transforms;
+using PixelFarm.Agg.Transform;
+
 
 namespace PaintLab.Svg
 {
@@ -44,11 +47,12 @@ namespace PaintLab.Svg
     {
         BeginGroup,
         EndGroup,
+        Transform,
         Path
     }
 
 
-    
+
     public class SvgRenderVx
     {
         VertexStore _vxs;
@@ -104,7 +108,7 @@ namespace PaintLab.Svg
         }
 
 
-
+        public Affine AffineTx { get; set; }
         VertexStore _strokeVxs;
         double _strokeVxsStrokeWidth;
         public VertexStore GetStrokeVxsOrCreateNew(double strokeWidth)
@@ -227,7 +231,7 @@ namespace PaintLab.Svg
                         if (attr.Value != "none")
                         {
                             spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
-                        } 
+                        }
                     }
                     break;
                 case "fill-opacity":
@@ -250,12 +254,16 @@ namespace PaintLab.Svg
                     break;
                 case "stroke-linecap":
                     //set line-cap and line join again
+
                     break;
                 case "stroke-linejoin":
+
                     break;
                 case "stroke-miterlimit":
+
                     break;
                 case "stroke-opacity":
+
                     break;
                 case "transform":
                     {
@@ -281,7 +289,7 @@ namespace PaintLab.Svg
                         {
                             //read matrix args
                             double[] matrixArgs = ParseMatrixArgs(right);
-                            //create affine matrix 
+                           
                         }
                         break;
                     case "translate":
@@ -478,10 +486,7 @@ namespace PaintLab.Svg
                 }
 
 
-                svgRenderVx.SetVxs(flattenVxs);
-
-
-
+                svgRenderVx.SetVxs(flattenVxs); 
                 this.renderVxList.Add(svgRenderVx);
             }
 
@@ -561,7 +566,7 @@ namespace PaintLab.Svg
             protected override void OnCloseFigure()
             {
                 _writer.CloseFigure();
-                _writer.Stop();
+                
             }
             protected override void OnCurveToCubic(
                 float x1, float y1,
@@ -638,12 +643,15 @@ namespace PaintLab.Svg
             }
             protected override void OnMoveTo(float x, float y, bool relative)
             {
+                
                 if (relative)
                 {
                     _writer.MoveToRel(x, y);
                 }
                 else
                 {
+                   
+
                     _writer.MoveTo(x, y);
                 }
             }
