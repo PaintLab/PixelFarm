@@ -6,6 +6,7 @@ using Mini;
 using PaintLab.Svg;
 using PixelFarm.Drawing;
 
+using PixelFarm.Agg;
 namespace PixelFarm.Agg.Samples
 {
     [Info(OrderCode = "03")]
@@ -25,13 +26,13 @@ namespace PixelFarm.Agg.Samples
             SvgParser svg = new SvgParser();
             //svg.ReadSvgDocument("d:\\WImageTest\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\tiger.svg");
-            svg.ReadSvgString(lionSvg); 
-            _renderVx = svg.GetResultAsRenderVx(); 
+            svg.ReadSvgString(lionSvg);
+            _renderVx = svg.GetResultAsRenderVx();
         }
-       
+
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            p.Clear(Drawing.Color.White);         
+            p.Clear(Drawing.Color.White);
             p.StrokeColor = Color.Transparent;
             p.StrokeWidth = 1;//svg standard, init stroke-width =1
 
@@ -43,6 +44,6 @@ namespace PixelFarm.Agg.Samples
         }
 
 
-     
+
     }
 }
