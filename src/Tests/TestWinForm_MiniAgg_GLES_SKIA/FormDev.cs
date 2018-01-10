@@ -457,6 +457,15 @@ namespace Mini
             //formTestColorBlend.Show();
 
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            //read a lion file
+            //and create base64
+            //string lionSvg = System.IO.File.ReadAllText("d:\\WImageTest\\lion.svg");
+            //string base64 = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(lionSvg.ToCharArray()));
+
+        }
     }
 }
 

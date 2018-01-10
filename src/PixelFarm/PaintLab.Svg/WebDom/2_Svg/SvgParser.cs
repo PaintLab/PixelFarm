@@ -47,7 +47,6 @@ namespace PaintLab.Svg
     {
         BeginGroup,
         EndGroup,
-
         Path
     }
 
@@ -106,8 +105,6 @@ namespace PaintLab.Svg
             get;
             private set;
         }
-
-
         public Affine AffineTx { get; set; }
         VertexStore _strokeVxs;
         double _strokeVxsStrokeWidth;
@@ -134,10 +131,25 @@ namespace PaintLab.Svg
 
         List<SvgRenderVx> renderVxList = new List<SvgRenderVx>();
 
-        public void ReadSvgDocument(string svgFileName)
+        public void ReadSvgString(string svgString)
+        {
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.LoadXml(svgString);
+            XmlElement docElem = xmldoc.DocumentElement;
+            //then parse 
+            if (docElem.Name == "svg")
+            {
+                //parse its content
+
+                foreach (XmlElement elem in docElem.ChildNodes)
+                {
+                    ParseSvgElement(elem);
+                }
+            }
+        }
+        public void ReadSvgFile(string svgFileName)
         {
             renderVxList.Clear();
-
             //create simple svg dom
             //iterate all child
             XmlDocument xmldoc = new XmlDocument();
