@@ -230,6 +230,7 @@ namespace PixelFarm.Agg
     public class SvgVx
     {
         VertexStore _vxs;
+        VertexStore _vxs_org;
         Color _fillColor;
         Color _strokeColor;
         float _strokeWidth;
@@ -257,6 +258,16 @@ namespace PixelFarm.Agg
                 _strokeColor = value;
                 HasStrokeColor = true;
             }
+        }
+
+        public void SetVxsAsOriginal(VertexStore vxs)
+        {
+            this._vxs = vxs;
+            this._vxs_org = vxs;
+        }
+        public void RestoreOrg()
+        {
+            _vxs = _vxs_org;
         }
         public void SetVxs(VertexStore vxs)
         {

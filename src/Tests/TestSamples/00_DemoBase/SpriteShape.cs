@@ -87,19 +87,91 @@ namespace PixelFarm.Agg
             return _svgRenderVx;
         }
 
-        static string ColorToHex(Color c)
+        public void ApplyNewAlpha(byte alphaValue0_255)
+        {
+            //Temp fix,            
+
+            int elemCount = _svgRenderVx.SvgVxCount;
+            for (int i = 0; i < elemCount; ++i)
+            {
+                SvgVx vx = _svgRenderVx.GetInnerVx(i);
+                if (vx.HasFillColor)
+                {
+                    vx.FillColor = vx.FillColor.NewFromChangeAlpha(alphaValue0_255);
+                }
+                if (vx.HasStrokeColor)
+                {
+                    vx.StrokeColor = vx.StrokeColor.NewFromChangeAlpha(alphaValue0_255);
+                }
+            }
+
+        }
+        public void Paint(Painter p)
+        {
+            _svgRenderVx.Render(p);
+        }
+
+        public void Paint(Painter p, PixelFarm.Agg.Transform.Perspective tx)
+        {
+            _svgRenderVx.Render(p);
+        }
+        public void Paint(Painter p, PixelFarm.Agg.Transform.Affine tx)
         {
 
-            return "#" + c.R.ToString("X") + c.G.ToString("X") + c.B.ToString("X");
         }
+        public void DrawOutline(Painter p)
+        {
+            //walk all parts and draw only outline 
+            //not fill
+            int renderVxCount = _svgRenderVx.SvgVxCount;
+            for (int i = 0; i < renderVxCount; ++i)
+            {
+
+            }
+            //int j = lionShape.NumPaths;
+            //int[] pathList = lionShape.PathIndexList;
+            //Drawing.Color[] colors = lionShape.Colors;
+
+            //var vxs = GetFreeVxs();
+            //var vxs2 = stroke1.MakeVxs(affTx.TransformToVxs(lionShape.Vxs, vxs), GetFreeVxs());
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    p.StrokeColor = colors[i];
+            //    p.Draw(new PixelFarm.Drawing.VertexStoreSnap(vxs2, pathList[i]));
+
+            //}
+            ////not agg   
+            //Release(ref vxs);
+            //Release(ref vxs2);
+            //return; //**
+
+        }
+
         public void ParseLion()
         {
             _svgRenderVx = PixelFarm.Agg.LionDataStore.GetLion();
+            //find bound
+            int partCount = _svgRenderVx.SvgVxCount;
+            RectD rectTotal = new RectD();
+            for (int i = 0; i < partCount; ++i)
+            {
+                SvgVx vx = _svgRenderVx.GetInnerVx(i);
+                if (vx.Kind != SvgRenderVxKind.Path)
+                {
+                    continue;
+                }
+                VertexStore innerVxs = vx.GetVxs();
+                PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
+            }
+            this.boundingRect = rectTotal;
+
+            //find center
+
             //numPaths = PixelFarm.Agg.LionDataStore.LoadLionData(path, colors, pathIndexList);
             //_lionVxs = path.Vxs;
             //PixelFarm.Agg.BoundingRect.GetBoundingRect(_lionVxs, pathIndexList, numPaths, out boundingRect);
-            //center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-            //center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0; 
+            center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
+            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
         //public static void UnsafeDirectSetData(SpriteShape lion,
         //    int numPaths,
@@ -118,6 +190,10 @@ namespace PixelFarm.Agg
         //    PixelFarm.Agg.BoundingRect.GetBoundingRect(path.Vxs, pathIndexList, numPaths, out boundingRect);
         //    center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
         //    center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
+        //}  //static string ColorToHex(Color c)
+        //{
+
+        //    return "#" + c.R.ToString("X") + c.G.ToString("X") + c.B.ToString("X");
         //}
     }
 }

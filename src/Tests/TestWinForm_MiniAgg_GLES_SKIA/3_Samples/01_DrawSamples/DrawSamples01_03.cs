@@ -52,18 +52,19 @@ namespace PixelFarm.Agg.Sample_Draw
 
             p.Clear(Drawing.Color.White);
 
-            p.UseSubPixelLcdEffect = true;
-            string teststr = "ABCDE pqyt 1230";
-            p.FillColor = Color.Black;
-            p.CurrentFont = new RequestFont("tahoma", 10);
-            p.StrokeColor = Color.Red;
+            p.UseSubPixelLcdEffect = false;
+            //string teststr = "ABCDE pqyt 1230";
+            //p.FillColor = Color.Black;
+            //p.CurrentFont = new RequestFont("tahoma", 10);
+            //p.StrokeColor = Color.Red;
 
+            p.RenderQuality = RenderQualtity.Fast;
             //
             //---red reference line--
             p.DrawLine(0, 400, 800, 400);
             p.DrawLine(0, 400, 800, 500); //test oblique line
 
-            p.DrawString(teststr, 300, 400);
+            //p.DrawString(teststr, 300, 400);
             //
             p.DrawRect(0.5, 400, 40, 40);
             //

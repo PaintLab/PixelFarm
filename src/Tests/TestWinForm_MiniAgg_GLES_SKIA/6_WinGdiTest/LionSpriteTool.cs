@@ -25,13 +25,21 @@ namespace Mini.WinForms
             //---------------------------------------------------------------------------------------------
             {
                 g.TranslateTransform(offsetX, offSetY);
+
+                SvgRenderVx renderVx = null;
+
+
+
                 int j = spriteShape.NumPaths;
                 var myvxs = spriteShape.Vxs;
+
                 int[] pathList = spriteShape.PathIndexList;
+                
                 PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
-                    VxsHelper.FillVxsSnap(g, new PixelFarm.Drawing.VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                    VxsHelper.FillVxsSnap(g, 
+                        new PixelFarm.Drawing.VertexStoreSnap(myvxs, pathList[i]), colors[i]);
                 }
                 g.TranslateTransform(-offsetX, -offSetY);
             }

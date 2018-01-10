@@ -54,7 +54,7 @@ namespace OpenTkEssTest
                 MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
                 int j = lionShape.NumPaths;
                 int[] pathList = lionShape.PathIndexList;
-                Color[] colors = lionShape.Colors;
+                //Color[] colors = lionShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
                     //from lionvxs extract each part                      
@@ -85,25 +85,55 @@ namespace OpenTkEssTest
             if (tmpDrawVersion == 2)
             {
 
-                Color[] colors = lionShape.Colors;
                 if (multipartTessResult != null)
                 {
-                    int j = multipartTessResult.PartCount;
-                    for (int i = 0; i < j; ++i)
+                    SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
+                    int partCount = renderVx.SvgVxCount;
+
+                    int partIndex = 0;
+                    for (int i = 0; i < partCount; ++i)
                     {
-                        _glsx.FillRenderVx(colors[i], multipartTessResult, i);
+                        SvgVx vx = renderVx.GetInnerVx(i);
+                        if (vx.Kind != SvgRenderVxKind.Path)
+                        {
+                            continue;
+                        }
+                        _glsx.FillRenderVx(vx.FillColor, multipartTessResult, partIndex);
+                        partIndex++;
                     }
+
+                    //Color[] colors = lionShape.Colors;
+                    //int j = multipartTessResult.PartCount;
+                    //for (int i = 0; i < j; ++i)
+                    //{
+
+                    //}
                 }
 
             }
             else
             {
                 int j = lionRenderVxList.Count;
-                Color[] colors = lionShape.Colors;
-                for (int i = 0; i < j; ++i)
+                SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
+                int partCount = renderVx.SvgVxCount;
+                int partIndex = 0;
+                for (int i = 0; i < partCount; ++i)
                 {
-                    _glsx.FillRenderVx(colors[i], lionRenderVxList[i]);
+                    SvgVx vx = renderVx.GetInnerVx(i);
+                    if (vx.Kind != SvgRenderVxKind.Path)
+                    {
+                        continue;
+                    }
+                    _glsx.FillRenderVx(vx.FillColor, lionRenderVxList[partIndex]);
+                    partIndex++;
                 }
+
+
+                //Color[] colors = lionShape.Colors;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    _glsx.FillRenderVx(colors[i], lionRenderVxList[i]);
+                //}
             }
             //-------------------------------
             SwapBuffers();

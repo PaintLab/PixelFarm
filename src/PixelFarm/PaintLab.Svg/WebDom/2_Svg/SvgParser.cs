@@ -41,7 +41,7 @@ using PixelFarm.Agg.Transform;
 namespace PaintLab.Svg
 {
     //very simple svg parser 
- 
+
     public class SvgParser
     {
 
@@ -425,7 +425,7 @@ namespace PaintLab.Svg
                 }
 
 
-                svgRenderVx.SetVxs(flattenVxs);
+                svgRenderVx.SetVxsAsOriginal(flattenVxs);
                 this.renderVxList.Add(svgRenderVx);
             }
 
