@@ -52,13 +52,198 @@ namespace PaintLab.Svg
 
 
 
-    public class SvgRenderVx
+    public class SvgRenderVx : RenderVx
+    {
+
+        struct TempRenderState
+        {
+            public float strokeWidth;
+            public Color strokeColor;
+            public Color fillColor;
+            public PixelFarm.Agg.Transform.Affine affineTx;
+        } 
+        VertexStore tempVxs = new VertexStore();
+        Stack<TempRenderState> _renderStateContext = new Stack<TempRenderState>();
+
+        SvgVx[] vxList;
+        internal SvgRenderVx(SvgVx[] svgVxList)
+        {
+            this.vxList = svgVxList;
+        }
+        public void Render(Painter p)
+        {
+            //
+
+            int j = vxList.Length;
+            PixelFarm.Agg.Transform.Affine currentTx = null;
+            TempRenderState renderState = new TempRenderState();
+            renderState.strokeColor = p.StrokeColor;
+            renderState.strokeWidth = (float)p.StrokeWidth;
+            renderState.fillColor = p.FillColor;
+            renderState.affineTx = currentTx;
+
+            //
+
+            for (int i = 0; i < j; ++i)
+            {
+                SvgVx vx = vxList[i];
+                switch (vx.Kind)
+                {
+                    case SvgRenderVxKind.BeginGroup:
+                        {
+                            //1. save current state before enter new state
+                            _renderStateContext.Push(renderState);
+                            //2. enter new px context
+                            if (vx.HasFillColor)
+                            {
+                                p.FillColor = renderState.fillColor = vx.FillColor;
+                            }
+                            if (vx.HasStrokeColor)
+                            {
+                                p.StrokeColor = renderState.strokeColor = vx.StrokeColor;
+                            }
+                            if (vx.HasStrokeWidth)
+                            {
+                                p.StrokeWidth = renderState.strokeWidth = vx.StrokeWidth;
+                            }
+                            if (vx.AffineTx != null)
+                            {
+                                //apply this to current tx
+                                if (currentTx != null)
+                                {
+                                    currentTx = currentTx * vx.AffineTx;
+                                }
+                                else
+                                {
+                                    currentTx = vx.AffineTx;
+                                }
+                                renderState.affineTx = currentTx;
+                            }
+                        }
+                        break;
+                    case SvgRenderVxKind.EndGroup:
+                        {
+                            //restore to prev state
+                            renderState = _renderStateContext.Pop();
+                            p.FillColor = renderState.fillColor;
+                            p.StrokeColor = renderState.strokeColor;
+                            p.StrokeWidth = renderState.strokeWidth;
+                            currentTx = renderState.affineTx;
+                        }
+                        break;
+
+                    case SvgRenderVxKind.Path:
+                        {
+
+                            VertexStore vxs = vx.GetVxs();
+                            if (vx.HasFillColor)
+                            {
+                                //has specific fill color
+                                if (vx.FillColor.A > 0)
+                                {
+                                    if (currentTx == null)
+                                    {
+                                        p.Fill(vxs, vx.FillColor);
+                                    }
+                                    else
+                                    {
+                                        //have some tx
+                                        tempVxs.Clear();
+                                        currentTx.TransformToVxs(vxs, tempVxs);
+                                        p.Fill(tempVxs, vx.FillColor);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (p.FillColor.A > 0)
+                                {
+                                    if (currentTx == null)
+                                    {
+                                        p.Fill(vxs);
+                                    }
+                                    else
+                                    {
+                                        //have some tx
+                                        tempVxs.Clear();
+                                        currentTx.TransformToVxs(vxs, tempVxs);
+                                        p.Fill(tempVxs);
+                                    }
+
+                                }
+                            }
+
+                            if (p.StrokeWidth > 0)
+                            {
+                                //check if we have a stroke version of this render vx
+                                //if not then request a new one 
+                                VertexStore strokeVxs = vx.GetStrokeVxsOrCreateNew(p.StrokeWidth);
+                                if (vx.HasStrokeColor)
+                                {
+                                    //has speciic stroke color 
+                                    p.StrokeWidth = vx.StrokeWidth;
+                                    if (currentTx == null)
+                                    {
+                                        p.Fill(strokeVxs, vx.StrokeColor);
+                                    }
+                                    else
+                                    {
+                                        //have some tx
+                                        tempVxs.Clear();
+                                        currentTx.TransformToVxs(strokeVxs, tempVxs);
+                                        p.Fill(tempVxs, vx.StrokeColor);
+                                    }
+
+                                }
+                                else if (p.StrokeColor.A > 0)
+                                {
+                                    if (currentTx == null)
+                                    {
+                                        p.Fill(strokeVxs, p.StrokeColor);
+                                    }
+                                    else
+                                    {
+                                        tempVxs.Clear();
+                                        currentTx.TransformToVxs(strokeVxs, tempVxs);
+                                        p.Fill(tempVxs, p.StrokeColor);
+                                    }
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            else
+                            {
+
+                                if (vx.HasStrokeColor)
+                                {
+                                    VertexStore strokeVxs = vx.GetStrokeVxsOrCreateNew(p.StrokeWidth);
+                                    p.Fill(strokeVxs);
+                                }
+                                else if (p.StrokeColor.A > 0)
+                                {
+                                    VertexStore strokeVxs = vx.GetStrokeVxsOrCreateNew(p.StrokeWidth);
+                                    p.Fill(strokeVxs, p.StrokeColor);
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+
+
+        }
+    }
+
+
+    public class SvgVx
     {
         VertexStore _vxs;
         Color _fillColor;
         Color _strokeColor;
         float _strokeWidth;
-        public SvgRenderVx(SvgRenderVxKind kind)
+        public SvgVx(SvgRenderVxKind kind)
         {
             this.Kind = kind;
         }
@@ -129,7 +314,7 @@ namespace PaintLab.Svg
     public class SvgParser
     {
 
-        List<SvgRenderVx> renderVxList = new List<SvgRenderVx>();
+        List<SvgVx> renderVxList = new List<SvgVx>();
 
         public void ReadSvgString(string svgString)
         {
@@ -168,9 +353,13 @@ namespace PaintLab.Svg
             }
         }
 
-        public SvgRenderVx[] GetResult()
+        public SvgVx[] GetResult()
         {
             return renderVxList.ToArray();
+        }
+        public SvgRenderVx GetResultAsRenderVx()
+        {
+            return new SvgRenderVx(renderVxList.ToArray());
         }
 
         void ParseSvgElement(XmlElement elem)
@@ -376,7 +565,7 @@ namespace PaintLab.Svg
             SvgGroupElement group = new SvgGroupElement(spec, null);
 
             //--------
-            SvgRenderVx beginVx = new SvgRenderVx(SvgRenderVxKind.BeginGroup);
+            SvgVx beginVx = new SvgVx(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
             renderVxList.Add(beginVx);
             foreach (XmlElement child in elem.ChildNodes)
@@ -384,7 +573,7 @@ namespace PaintLab.Svg
                 ParseSvgElement(child);
             }
             //--------
-            renderVxList.Add(new SvgRenderVx(SvgRenderVxKind.EndGroup));
+            renderVxList.Add(new SvgVx(SvgRenderVxKind.EndGroup));
 
         }
         void ParseTitle(XmlElement elem)
@@ -424,7 +613,7 @@ namespace PaintLab.Svg
         }
 
         MySvgPathDataParser _svgPatgDataParser = new MySvgPathDataParser();
-        static void AssignValues(SvgRenderVx svgRenderVx, SvgVisualSpec spec)
+        static void AssignValues(SvgVx svgRenderVx, SvgVisualSpec spec)
         {
 
             if (spec.HasFillColor)
@@ -482,7 +671,7 @@ namespace PaintLab.Svg
             if (pathDefAttr != null)
             {
 
-                SvgRenderVx svgRenderVx = new SvgRenderVx(SvgRenderVxKind.Path);
+                SvgVx svgRenderVx = new SvgVx(SvgRenderVxKind.Path);
                 AssignValues(svgRenderVx, spec);
 
 
