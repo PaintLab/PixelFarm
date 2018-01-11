@@ -76,7 +76,7 @@ namespace OpenTkEssTest
             painter.FillColor = PixelFarm.Drawing.Color.Magenta;
             try
             {
-                painter.FillRenderVx(polygon3);
+                painter.FillRenderVx(polygon2);
                 SwapBuffers();
             }
             catch (Exception ex)

@@ -27,8 +27,10 @@ namespace PixelFarm.DrawingGL
         SingleChannelSdf sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
-
         //tools---------------------------------
+
+        SMAAColorEdgeDetectionShader _smaaEdgeDetectShader;
+
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
@@ -259,6 +261,12 @@ namespace PixelFarm.DrawingGL
             //draw frame buffer into specific position
             glesTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
         }
+        public void DrawImageWithSMAA(GLBitmap bmp, float x, float y)
+        {
+            DrawImageWithSMAA(bmp,
+                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+                   x, y, bmp.Width, bmp.Height);
+        }
         public void DrawImage(GLBitmap bmp, float x, float y)
         {
             DrawImage(bmp,
@@ -337,6 +345,31 @@ namespace PixelFarm.DrawingGL
                 msdfShader.RenderSubImages(bmp, coords, scale);
             }
         }
+        public void DrawImageWithSMAA(GLBitmap bmp,
+           Drawing.RectangleF srcRect,
+           float x, float y, float w, float h)
+        {
+
+            if (_smaaEdgeDetectShader == null)
+            {
+                _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
+            }
+
+            //_smaaEdgeDetectShader.LoadDiffuseTexture(bmp);
+            //
+            //_smaaEdgeDetectShader.SetResolution(1 / w, 1 / h);
+            _smaaEdgeDetectShader.Render(bmp, x, y, w, h);
+
+            //if (bmp.IsBigEndianPixel)
+            //{
+            //    glesTextureShader.Render(bmp, x, y, w, h);
+            //}
+            //else
+            //{
+            //    gdiImgTextureShader.Render(bmp, x, y, w, h);
+            //}
+        }
+
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
@@ -380,7 +413,7 @@ namespace PixelFarm.DrawingGL
             glyphStencilShader.SetColor(this.FontFillColor);
             if (bmp.IsBigEndianPixel)
             {
-                
+
                 glyphStencilShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
             }
             else
@@ -548,7 +581,7 @@ namespace PixelFarm.DrawingGL
         {
             GLRenderVx glRenderVx = renderVx as GLRenderVx;
             if (glRenderVx == null) return;
-            
+
             DrawGfxPath(color, glRenderVx.gxpth);
         }
         //------------------------------------------------------------------------------- 

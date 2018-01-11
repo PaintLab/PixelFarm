@@ -59,6 +59,7 @@ namespace PixelFarm.DrawingGL
         SMAABlendingWeightCalculationShader _blendWeight; //weight
         SMAANeighborhoodBlendingShader _nbBlending; //lend
 
+
         public SMAAPass(int width, int height, ShaderSharedResource shareRes)
         {
             _width = width;
@@ -85,12 +86,19 @@ namespace PixelFarm.DrawingGL
             });
 
             _edgeDetect = new SMAAColorEdgeDetectionShader(shareRes);
+            _edgeDetect.SetResolution(1 / width, 1 / height);
+            //
             _blendWeight = new SMAABlendingWeightCalculationShader(shareRes);
+            _blendWeight.SetResolution(1 / width, 1 / height);
+            //_blendWeight.LoadDiffuseTexture(null);
+            //_blendWeight.LoadAreaTexture(null);
+            //_blendWeight.LoadSearchTexture(null);
+
+
+            //
             _nbBlending = new SMAANeighborhoodBlendingShader(shareRes);
-
-
-
-
+            _nbBlending.SetResolution(1 / width, 1 / height);
+            //_nbBlending.LoadDiffuseTexture(null);
         }
         public void Render()
         {
@@ -101,7 +109,8 @@ namespace PixelFarm.DrawingGL
 
     abstract class SMAAShaderBase : ShaderBase
     {
-        protected ShaderUniformVar1 s_texture;
+        protected static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
+        protected ShaderUniformVar1 tDiffuse; //texture diffuse
         protected ShaderUniformMatrix4 u_matrix;
         protected float resolution_x = 1 / 1024f;
         protected float resolution_y = 1 / 512f;
@@ -120,7 +129,7 @@ namespace PixelFarm.DrawingGL
             //a_position = shaderProgram.GetAttrV3f("a_position");
             //a_texCoord = shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            s_texture = shaderProgram.GetUniform1("s_texture");
+            tDiffuse = shaderProgram.GetUniform1("tDiffuse");
             OnProgramBuilt();
             return true;
         }
@@ -132,15 +141,12 @@ namespace PixelFarm.DrawingGL
             this.resolution_x = resolution_x;
             this.resolution_y = resolution_y;
         }
-
-        public void Render()
-        {
-            OnSetVarsBeforeRenderer();
-        }
         protected virtual void OnSetVarsBeforeRenderer()
         {
-            SetCurrent();
+
         }
+
+
         int orthoviewVersion = -1;
         protected void CheckViewMatrix()
         {
@@ -152,6 +158,36 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+
+
+//        //-----------------------------------------
+//#if DEBUG
+//        float _latestBmpW;
+//        float _latestBmpH;
+//        bool _latestBmpInverted;
+//#endif
+//        /// <summary>
+//        /// load glbmp before draw
+//        /// </summary>
+//        /// <param name="bmp"></param>
+//        public void LoadDiffuseTexture(GLBitmap bmp)
+//        {
+//            //load before use with RenderSubImage
+//            SetCurrent();
+//            CheckViewMatrix();
+//            //-------------------------------------------------------------------------------------
+//            // Bind the texture...
+//            GL.ActiveTexture(TextureUnit.Texture0);
+//            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+//            // Set the texture sampler to texture unit to 0                  
+//            tDiffuse.SetValue(0);
+//#if DEBUG
+//            this._latestBmpW = bmp.Width;
+//            this._latestBmpH = bmp.Height;
+//            this._latestBmpInverted = bmp.IsInvert;
+//#endif
+//        }
+
     }
 
     /// <summary>
@@ -159,7 +195,8 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     class SMAAColorEdgeDetectionShader : SMAAShaderBase
     {
-
+        ShaderVtxAttrib3f position;
+        ShaderVtxAttrib2f uv;//uv texture coord
         ShaderUniformVar2 u_resolution;
         public SMAAColorEdgeDetectionShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -168,7 +205,15 @@ namespace PixelFarm.DrawingGL
             //vertex shader
             string vertexShader = new[] {
                 "#define SMAA_THRESHOLD 0.1",
+                "precision mediump float;",
+
+                "attribute vec3 position;",
+                "attribute vec2 uv;",
+
                 "uniform vec2 resolution;",
+                "uniform sampler2D tDiffuse;",
+                "uniform mat4 u_mvpMatrix;",
+
                 "varying vec2 vUv;",
                 "varying vec4 vOffset[ 3 ];",
 
@@ -184,7 +229,9 @@ namespace PixelFarm.DrawingGL
 
                     "SMAAEdgeDetectionVS( vUv );",
 
-                    "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+                     "gl_Position = u_mvpMatrix * vec4( position, 1.0 );",
+                    
+                    //"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
 
                 "}"
 
@@ -192,6 +239,9 @@ namespace PixelFarm.DrawingGL
 
 
             string fragmentShader = new[] {
+                "#define SMAA_THRESHOLD 0.1",
+                "precision mediump float;",
+
                 "uniform sampler2D tDiffuse;",
 
                 "varying vec2 vUv;",
@@ -259,12 +309,83 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
+            position = shaderProgram.GetAttrV3f("position");
+            uv = shaderProgram.GetAttrV2f("uv");
+
             u_resolution = shaderProgram.GetUniform2("resolution");
+
             base.OnProgramBuilt();
         }
         protected override void OnSetVarsBeforeRenderer()
         {
             u_resolution.SetValue(resolution_x, resolution_y);
+        }
+
+
+
+        public void Render(GLBitmap bmp, float left, float top, float w, float h)
+        {
+            unsafe
+            {
+                if (bmp.IsInvert)
+                {
+
+                    float* imgVertices = stackalloc float[5 * 4];
+                    {
+                        imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)
+                        imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
+                        //imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+
+                        //---------------------
+                        imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
+                        imgVertices[8] = 0; imgVertices[9] = 1; //texture coord 1  (left,top)
+
+                        //---------------------
+                        imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
+                        imgVertices[13] = 1; imgVertices[14] = 0; //texture coord 2  (right,bottom)
+
+                        //---------------------
+                        imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
+                        imgVertices[18] = 1; imgVertices[19] = 1; //texture coord 3 (right,top)
+                    }
+                    position.UnsafeLoadMixedV3f(imgVertices, 5);
+                    uv.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                }
+                else
+                {
+                    float* imgVertices = stackalloc float[5 * 4];
+                    {
+                        imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                        imgVertices[3] = 0; imgVertices[4] = 1; //texture coord 0 (left,top)
+
+                        //---------------------
+                        imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
+                        imgVertices[8] = 0; imgVertices[9] = 0; //texture coord 1 (left,bottom)
+
+                        //---------------------
+                        imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
+                        imgVertices[13] = 1; imgVertices[14] = 1; //texture coord 2 (right,top)
+
+                        //---------------------
+                        imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
+                        imgVertices[18] = 1; imgVertices[19] = 0; //texture coord 3  (right,bottom)
+                    }
+                    position.UnsafeLoadMixedV3f(imgVertices, 5);
+                    uv.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                }
+            }
+
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+            // Set the texture sampler to texture unit to 0     
+           
+            tDiffuse.SetValue(0);
+            OnSetVarsBeforeRenderer();
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
     }
 
@@ -274,6 +395,9 @@ namespace PixelFarm.DrawingGL
     class SMAABlendingWeightCalculationShader : SMAAShaderBase
     {
         ShaderUniformVar2 u_resolution;
+        ShaderUniformVar1 tArea; //texture diffuse
+        ShaderUniformVar1 tSearch; //texture diffuse
+
         public SMAABlendingWeightCalculationShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -283,7 +407,11 @@ namespace PixelFarm.DrawingGL
                 "#define SMAA_AREATEX_MAX_DISTANCE 16",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
 
+                "uniform sampler2D tDiffuse;",
+                "uniform sampler2D tArea;",
+                "uniform sampler2D tSearch;",
                 "uniform vec2 resolution;",
+                //
 
                 "varying vec2 vUv;",
                 "varying vec4 vOffset[ 3 ];",
@@ -519,11 +647,65 @@ namespace PixelFarm.DrawingGL
         protected override void OnProgramBuilt()
         {
             u_resolution = shaderProgram.GetUniform2("resolution");
+            tArea = shaderProgram.GetUniform1("tArea");
+            tSearch = shaderProgram.GetUniform1("tSearch");
+
         }
+
 
         protected override void OnSetVarsBeforeRenderer()
         {
             u_resolution.SetValue(resolution_x, resolution_y);
+        }
+
+
+        //-----------------------------------------
+#if DEBUG
+        float _latestBmpW;
+        float _latestBmpH;
+        bool _latestBmpInverted;
+#endif
+        /// <summary>
+        /// load glbmp before draw
+        /// </summary>
+        /// <param name="bmp"></param>
+        public void LoadAreaTexture(GLBitmap bmp)
+        {
+            //load before use with RenderSubImage
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+            // Set the texture sampler to texture unit to 0                  
+            tDiffuse.SetValue(0);
+#if DEBUG
+            this._latestBmpW = bmp.Width;
+            this._latestBmpH = bmp.Height;
+            this._latestBmpInverted = bmp.IsInvert;
+#endif
+        }
+        /// <summary>
+        /// load glbmp before draw
+        /// </summary>
+        /// <param name="bmp"></param>
+        public void LoadSearchTexture(GLBitmap bmp)
+        {
+            //load before use with RenderSubImage
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+            // Set the texture sampler to texture unit to 0                  
+            tDiffuse.SetValue(0);
+#if DEBUG
+            this._latestBmpW = bmp.Width;
+            this._latestBmpH = bmp.Height;
+            this._latestBmpInverted = bmp.IsInvert;
+#endif
         }
     }
 

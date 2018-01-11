@@ -23,12 +23,10 @@ namespace OpenTK.Graphics.ES20
                 string infolog;
                 GL.GetShaderInfoLog(shader, out infolog);
                 GL.DeleteShader(shader);
-                //std::vector<GLchar> infoLog(infoLogLength);
-                //glGetShaderInfoLog(shader, infoLog.size(), NULL, &infoLog[0]);
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("shader compilation failed:  " + infolog);
+#endif
 
-                //std::cerr << "shader compilation failed: " << &infoLog[0];
-
-                //glDeleteShader(shader);
                 shader = 0;
             }
 

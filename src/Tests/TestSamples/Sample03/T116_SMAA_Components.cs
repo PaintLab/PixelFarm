@@ -4,11 +4,13 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
+using OpenTK.Graphics.ES20;
+
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "112")]
-    [Info("T112_FrameBuffer")]
-    public class T112_FrameBuffer : DemoBase
+    [Info(OrderCode = "116")]
+    [Info("T116_SMAA_Components")]
+    public class T116_SMAA_Components : DemoBase
     {
         GLRenderSurface _glsx;
         GLPainter painter;
@@ -41,7 +43,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lines.png");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)
@@ -54,7 +56,8 @@ namespace OpenTkEssTest
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Red);
-                    _glsx.DrawImage(glbmp, 0, 300);
+                    //_glsx.DrawImage(glbmp, 0, 300);
+                    _glsx.DrawImageWithSMAA(glbmp, 0, 300);
                     //------------------------------------------------------------------------------------  
                     _glsx.DetachFrameBuffer();
                     //after release current, we move back to default frame buffer again***
