@@ -76,6 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DrawingGL\GLShader\SMAAPass.js" />
     <Content Include="DrawingGL\GLShader\SMAAShader.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
