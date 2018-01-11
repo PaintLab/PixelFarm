@@ -65,6 +65,9 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SimpleRectTextureShader.cs">
       <Link>DrawingGL\GLShader\SimpleRectTextureShader.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SMAAShader.cs">
+      <Link>DrawingGL\GLShader\SMAAShader.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs">
       <Link>DrawingGL\GLShader\SmoothLineShader.cs</Link>
     </Compile>

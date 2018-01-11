@@ -46,6 +46,59 @@ namespace PixelFarm.DrawingGL
     }
 
 
+
+    class SMAAPass
+    {
+        int _width;
+        int _height;
+
+        FrameBuffer _edgesRT;//edge render target
+        FrameBuffer _weightsRT; //weight render target
+
+        SMAAColorEdgeDetectionShader _edgeDetect; //edge
+        SMAABlendingWeightCalculationShader _blendWeight; //weight
+        SMAANeighborhoodBlendingShader _nbBlending; //lend
+
+        public SMAAPass(int width, int height, ShaderSharedResource shareRes)
+        {
+            _width = width;
+            _height = height;
+
+
+            this._edgesRT = new FrameBuffer(width, height, new FrameBufferCreationParameters()
+            {
+                depthBuffer = false,
+                stencilBuffer = false,
+                generateMipMaps = false,
+                minFilter = TextureMinFilter.Linear,
+                pixelFormat = PixelFormat.Rgb//*** RGB
+            });
+            //
+            this._weightsRT = new FrameBuffer(width, height, new FrameBufferCreationParameters()
+            {
+                depthBuffer = false,
+                stencilBuffer = false,
+                generateMipMaps = false,
+                minFilter = TextureMinFilter.Linear,
+                pixelFormat = PixelFormat.Rgba//*** RGBA
+
+            });
+
+            _edgeDetect = new SMAAColorEdgeDetectionShader(shareRes);
+            _blendWeight = new SMAABlendingWeightCalculationShader(shareRes);
+            _nbBlending = new SMAANeighborhoodBlendingShader(shareRes);
+
+
+
+
+        }
+        public void Render()
+        {
+
+        }
+
+    }
+
     abstract class SMAAShaderBase : ShaderBase
     {
         protected ShaderUniformVar1 s_texture;
@@ -108,8 +161,6 @@ namespace PixelFarm.DrawingGL
     {
 
         ShaderUniformVar2 u_resolution;
-
-
         public SMAAColorEdgeDetectionShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
