@@ -46,8 +46,10 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
-    class SMAAShader_EdgeDetect : ShaderBase
+    /// <summary>
+    /// SMAA EdgeDetection shader
+    /// </summary>
+    class SMAAColorEdgeDetectionShader : ShaderBase
     {
 
         ShaderUniformVar2 u_resolution;
@@ -55,7 +57,7 @@ namespace PixelFarm.DrawingGL
         float resolution_x = 1 / 1024f;
         float resolution_y = 1 / 512f;
 
-        public SMAAShader_EdgeDetect(ShaderSharedResource shareRes)
+        public SMAAColorEdgeDetectionShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
 
@@ -163,14 +165,18 @@ namespace PixelFarm.DrawingGL
 
 
     }
-    class SMAAShader_PixelBlend : ShaderBase
+
+    /// <summary>
+    /// SMAA BlendingWeightCalculation shader
+    /// </summary>
+    class SMAABlendingWeightCalculationShader : ShaderBase
     {
         ShaderUniformVar2 u_resolution;
 
         float resolution_x = 1 / 1024f;
         float resolution_y = 1 / 512f;
 
-        public SMAAShader_PixelBlend(ShaderSharedResource shareRes)
+        public SMAABlendingWeightCalculationShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vertexShader = new[]
@@ -419,16 +425,19 @@ namespace PixelFarm.DrawingGL
         public void Render()
         {
             u_resolution.SetValue(resolution_x, resolution_y);
-        } 
+        }
     }
 
-    class SMAAShader_NBBlendingPs : ShaderBase
+    /// <summary>
+    /// SMAA Neighborhood shader
+    /// </summary>
+    class SMAANeighborhoodBlendingShader : ShaderBase
     {
         ShaderUniformVar2 u_resolution;
 
         float resolution_x = 1 / 1024f;
         float resolution_y = 1 / 512f;
-        public SMAAShader_NBBlendingPs(ShaderSharedResource shareRes)
+        public SMAANeighborhoodBlendingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vertexShader = new[] {
@@ -509,7 +518,7 @@ namespace PixelFarm.DrawingGL
             if (this.shaderProgram.Build(vertexShader, fragmentShader))
             {
                 u_resolution = shaderProgram.GetUniform2("resolution");
-            } 
+            }
         }
 
 
