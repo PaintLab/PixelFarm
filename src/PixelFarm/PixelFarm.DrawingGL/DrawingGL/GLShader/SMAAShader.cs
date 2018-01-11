@@ -3,8 +3,7 @@
 ///**
 // * @author mpk / http://polko.me/
 // *
-// * WebGL port of Subpixel Morphological Antialiasing (SMAA) v2.8
-// * Preset: SMAA 1x Medium (with color edge detection)
+// * WebGL port of Subpixel Morphological Antialiasing (SMAA) v2.8 
 // * https://github.com/iryoku/smaa/releases/tag/v2.8
 // */
 //
@@ -46,16 +45,70 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
+    abstract class SMAAShaderBase : ShaderBase
+    {
+        protected ShaderUniformVar1 s_texture;
+        protected ShaderUniformMatrix4 u_matrix;
+        protected float resolution_x = 1 / 1024f;
+        protected float resolution_y = 1 / 512f;
+        public SMAAShaderBase(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+        }
+        protected bool BuildProgram(string vs, string fs)
+        {
+            //---------------------
+            if (!shaderProgram.Build(vs, fs))
+            {
+                return false;
+            }
+            //-----------------------
+            //a_position = shaderProgram.GetAttrV3f("a_position");
+            //a_texCoord = shaderProgram.GetAttrV2f("a_texCoord");
+            u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
+            s_texture = shaderProgram.GetUniform1("s_texture");
+            OnProgramBuilt();
+            return true;
+        }
+        protected virtual void OnProgramBuilt()
+        {
+        }
+        public void SetResolution(float resolution_x, float resolution_y)
+        {
+            this.resolution_x = resolution_x;
+            this.resolution_y = resolution_y;
+        }
+
+        public void Render()
+        {
+            OnSetVarsBeforeRenderer();
+        }
+        protected virtual void OnSetVarsBeforeRenderer()
+        {
+            SetCurrent();
+        }
+        int orthoviewVersion = -1;
+        protected void CheckViewMatrix()
+        {
+            int version = 0;
+            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
+            {
+                orthoviewVersion = version;
+                u_matrix.SetData(_shareRes.OrthoView.data);
+            }
+        }
+
+    }
+
     /// <summary>
     /// SMAA EdgeDetection shader
     /// </summary>
-    class SMAAColorEdgeDetectionShader : ShaderBase
+    class SMAAColorEdgeDetectionShader : SMAAShaderBase
     {
 
         ShaderUniformVar2 u_resolution;
 
-        float resolution_x = 1 / 1024f;
-        float resolution_y = 1 / 512f;
 
         public SMAAColorEdgeDetectionShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -151,31 +204,25 @@ namespace PixelFarm.DrawingGL
 
                 "}"
             }.JoinWithNewLine();
-
-            if (this.shaderProgram.Build(vertexShader, fragmentShader))
-            {
-                u_resolution = shaderProgram.GetUniform2("resolution");
-            }
+            BuildProgram(vertexShader, fragmentShader);
         }
-        public void Render()
+        protected override void OnProgramBuilt()
+        {
+            u_resolution = shaderProgram.GetUniform2("resolution");
+            base.OnProgramBuilt();
+        }
+        protected override void OnSetVarsBeforeRenderer()
         {
             u_resolution.SetValue(resolution_x, resolution_y);
         }
-
-
-
     }
 
     /// <summary>
     /// SMAA BlendingWeightCalculation shader
     /// </summary>
-    class SMAABlendingWeightCalculationShader : ShaderBase
+    class SMAABlendingWeightCalculationShader : SMAAShaderBase
     {
         ShaderUniformVar2 u_resolution;
-
-        float resolution_x = 1 / 1024f;
-        float resolution_y = 1 / 512f;
-
         public SMAABlendingWeightCalculationShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -415,14 +462,15 @@ namespace PixelFarm.DrawingGL
                 "}"
             }.JoinWithNewLine();
 
+            BuildProgram(vertexShader, fragmentShader);
 
-            if (this.shaderProgram.Build(vertexShader, fragmentShader))
-            {
-                u_resolution = shaderProgram.GetUniform2("resolution");
-            }
+        }
+        protected override void OnProgramBuilt()
+        {
+            u_resolution = shaderProgram.GetUniform2("resolution");
         }
 
-        public void Render()
+        protected override void OnSetVarsBeforeRenderer()
         {
             u_resolution.SetValue(resolution_x, resolution_y);
         }
@@ -431,12 +479,11 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// SMAA Neighborhood shader
     /// </summary>
-    class SMAANeighborhoodBlendingShader : ShaderBase
+    class SMAANeighborhoodBlendingShader : SMAAShaderBase
     {
         ShaderUniformVar2 u_resolution;
 
-        float resolution_x = 1 / 1024f;
-        float resolution_y = 1 / 512f;
+
         public SMAANeighborhoodBlendingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -515,14 +562,16 @@ namespace PixelFarm.DrawingGL
                 "}"
             }.JoinWithNewLine();
 
-            if (this.shaderProgram.Build(vertexShader, fragmentShader))
-            {
-                u_resolution = shaderProgram.GetUniform2("resolution");
-            }
+            BuildProgram(vertexShader, fragmentShader);
+
+        }
+        protected override void OnProgramBuilt()
+        {
+            u_resolution = shaderProgram.GetUniform2("resolution");
         }
 
 
-        public void Render()
+        protected override void OnSetVarsBeforeRenderer()
         {
             u_resolution.SetValue(resolution_x, resolution_y);
         }
