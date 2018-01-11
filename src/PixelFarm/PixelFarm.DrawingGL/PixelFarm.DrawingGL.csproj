@@ -36,6 +36,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawingGL\GLShader\SMAAShader.cs" />
     <Compile Include="DrawingGL\RenderSuface\GLRenderSurface.cs" />
     <Compile Include="DrawingGL\RenderSuface\SmoothMode.cs" />
     <Compile Include="DrawingGL\RenderSuface\ShaderSharedResource.cs" />
@@ -73,6 +74,9 @@
       <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
       <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DrawingGL\GLShader\SMAAShader.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
