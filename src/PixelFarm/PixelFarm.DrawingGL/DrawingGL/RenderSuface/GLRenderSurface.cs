@@ -30,6 +30,7 @@ namespace PixelFarm.DrawingGL
         //tools---------------------------------
 
         SMAAColorEdgeDetectionShader _smaaEdgeDetectShader;
+        SMAABlendingWeightCalculationShader _smaaBlendingWeightShader;
 
 
         int canvasOriginX = 0;
@@ -350,16 +351,25 @@ namespace PixelFarm.DrawingGL
            float x, float y, float w, float h)
         {
 
+
+
+            if (_smaaBlendingWeightShader == null)
+            {
+                _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
+            }
+
+
+            //step 1
             if (_smaaEdgeDetectShader == null)
             {
                 _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
             }
 
-            //_smaaEdgeDetectShader.LoadDiffuseTexture(bmp);
-            //
-            //_smaaEdgeDetectShader.SetResolution(1 / w, 1 / h);
             _smaaEdgeDetectShader.Render(bmp, x, y, w, h);
 
+           
+
+            ////for debug
             //if (bmp.IsBigEndianPixel)
             //{
             //    glesTextureShader.Render(bmp, x, y, w, h);

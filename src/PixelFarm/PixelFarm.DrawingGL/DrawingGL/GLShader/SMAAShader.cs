@@ -160,33 +160,33 @@ namespace PixelFarm.DrawingGL
 
 
 
-//        //-----------------------------------------
-//#if DEBUG
-//        float _latestBmpW;
-//        float _latestBmpH;
-//        bool _latestBmpInverted;
-//#endif
-//        /// <summary>
-//        /// load glbmp before draw
-//        /// </summary>
-//        /// <param name="bmp"></param>
-//        public void LoadDiffuseTexture(GLBitmap bmp)
-//        {
-//            //load before use with RenderSubImage
-//            SetCurrent();
-//            CheckViewMatrix();
-//            //-------------------------------------------------------------------------------------
-//            // Bind the texture...
-//            GL.ActiveTexture(TextureUnit.Texture0);
-//            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
-//            // Set the texture sampler to texture unit to 0                  
-//            tDiffuse.SetValue(0);
-//#if DEBUG
-//            this._latestBmpW = bmp.Width;
-//            this._latestBmpH = bmp.Height;
-//            this._latestBmpInverted = bmp.IsInvert;
-//#endif
-//        }
+        //        //-----------------------------------------
+        //#if DEBUG
+        //        float _latestBmpW;
+        //        float _latestBmpH;
+        //        bool _latestBmpInverted;
+        //#endif
+        //        /// <summary>
+        //        /// load glbmp before draw
+        //        /// </summary>
+        //        /// <param name="bmp"></param>
+        //        public void LoadDiffuseTexture(GLBitmap bmp)
+        //        {
+        //            //load before use with RenderSubImage
+        //            SetCurrent();
+        //            CheckViewMatrix();
+        //            //-------------------------------------------------------------------------------------
+        //            // Bind the texture...
+        //            GL.ActiveTexture(TextureUnit.Texture0);
+        //            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+        //            // Set the texture sampler to texture unit to 0                  
+        //            tDiffuse.SetValue(0);
+        //#if DEBUG
+        //            this._latestBmpW = bmp.Width;
+        //            this._latestBmpH = bmp.Height;
+        //            this._latestBmpInverted = bmp.IsInvert;
+        //#endif
+        //        }
 
     }
 
@@ -205,14 +205,16 @@ namespace PixelFarm.DrawingGL
             //vertex shader
             string vertexShader = new[] {
                 "#define SMAA_THRESHOLD 0.1",
-                "precision mediump float;",
+                "precision mediump float;", //**
 
-                "attribute vec3 position;",
-                "attribute vec2 uv;",
+                "attribute vec3 position;", //**
+                "attribute vec2 uv;",//**
+                "uniform mat4 u_mvpMatrix;",//**
+
 
                 "uniform vec2 resolution;",
                 "uniform sampler2D tDiffuse;",
-                "uniform mat4 u_mvpMatrix;",
+               
 
                 "varying vec2 vUv;",
                 "varying vec4 vOffset[ 3 ];",
@@ -240,7 +242,7 @@ namespace PixelFarm.DrawingGL
 
             string fragmentShader = new[] {
                 "#define SMAA_THRESHOLD 0.1",
-                "precision mediump float;",
+                "precision mediump float;", //**
 
                 "uniform sampler2D tDiffuse;",
 
@@ -266,8 +268,10 @@ namespace PixelFarm.DrawingGL
 			        "vec2 edges = step( threshold, delta.xy );",
 
 			        // Then discard if there is no edge:
-			        "if ( dot( edges, vec2( 1.0, 1.0 ) ) == 0.0 )",
+			        "if ( dot( edges, vec2( 1.0, 1.0 ) ) == 0.0 ){",
+                        //"return vec4( 0.0,0.0, 0.0, 1.0 );", //for debug
                         "discard;",
+                    "}",
 
 			        // Calculate right and bottom deltas:
 			        "vec3 Cright = texture2D( colorTex, offset[1].xy ).rgb;",
@@ -296,13 +300,13 @@ namespace PixelFarm.DrawingGL
 			        // Local contrast adaptation in action:
 			        "edges.xy *= step( 0.5 * maxDelta, delta.xy );",
 
-                    "return vec4( edges, 0.0, 0.0 );",
+                    "return vec4( edges, 0.0, 0.0 );", //original
+                    //"return vec4( 1.0,1.0, 0.0, 1.0 );", //for debug             
+                    //"return vec4(edges, 0.0, 1.0 );", //for debug
                 "}",
 
                 "void main() {",
-
                     "gl_FragColor = SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse );",
-
                 "}"
             }.JoinWithNewLine();
             BuildProgram(vertexShader, fragmentShader);
@@ -382,7 +386,7 @@ namespace PixelFarm.DrawingGL
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
             // Set the texture sampler to texture unit to 0     
-           
+
             tDiffuse.SetValue(0);
             OnSetVarsBeforeRenderer();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
@@ -406,7 +410,13 @@ namespace PixelFarm.DrawingGL
                 "#define SMAA_MAX_SEARCH_STEPS 8",
                 "#define SMAA_AREATEX_MAX_DISTANCE 16",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
+                "precision mediump float;", //**
 
+                "attribute vec3 position;", //**
+                "attribute vec2 uv;",//**
+                "uniform mat4 u_mvpMatrix;",//**
+                
+                
                 "uniform sampler2D tDiffuse;",
                 "uniform sampler2D tArea;",
                 "uniform sampler2D tSearch;",
@@ -435,7 +445,8 @@ namespace PixelFarm.DrawingGL
 
                     "SMAABlendingWeightCalculationVS( vUv );",
 
-                    "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+                    //"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+                    "gl_Position = u_mvpMatrix * vec4( position, 1.0 );",
 
                 "}"
             }.JoinWithNewLine();
@@ -443,7 +454,8 @@ namespace PixelFarm.DrawingGL
             string fragmentShader = new[]
             {
                 "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution, 0.0 )",
-
+                "precision mediump float;",
+                 
                 "uniform sampler2D tDiffuse;",
                 "uniform sampler2D tArea;",
                 "uniform sampler2D tSearch;",
