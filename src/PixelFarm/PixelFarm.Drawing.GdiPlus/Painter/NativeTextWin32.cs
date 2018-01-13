@@ -188,7 +188,7 @@ namespace PixelFarm.Drawing.WinGdi
                     }
                     totalW += outputGlyphAdvances[i] = abcWidths[enc_index].Sum;
                 }
-
+                outputTotalW = totalW;
             }
             //unsafe
             //{
@@ -417,11 +417,11 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
-        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
-            ILineSegmentList lineSegs, 
-            RequestFont font, 
-            int[] glyphXAdvances, 
-            out int outputTotalW, 
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+            ILineSegmentList lineSegs,
+            RequestFont font,
+            int[] glyphXAdvances,
+            out int outputTotalW,
             out int outputLineHeight)
         {
             throw new NotImplementedException();
