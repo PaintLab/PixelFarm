@@ -63,7 +63,9 @@ namespace PixelFarm.DrawingGL
             };
         }
 
-
+#if DEBUG
+        System.Diagnostics.Stopwatch _dbugStopWatch = new System.Diagnostics.Stopwatch();
+#endif
         /// <summary>
         /// get from cache or create a new one
         /// </summary>
@@ -72,6 +74,11 @@ namespace PixelFarm.DrawingGL
         public SimpleFontAtlas GetFontAtlas(RequestFont reqFont,
             out GLBitmap glBmp)
         {
+
+#if DEBUG
+            _dbugStopWatch.Reset();
+            _dbugStopWatch.Start();
+#endif
 
             int fontKey = reqFont.FontKey;
             SimpleFontAtlas fontAtlas;
@@ -131,6 +138,12 @@ namespace PixelFarm.DrawingGL
             }
 
             glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
+
+#if DEBUG
+            _dbugStopWatch.Stop();
+            System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
+#endif
+
             return fontAtlas;
         }
 
