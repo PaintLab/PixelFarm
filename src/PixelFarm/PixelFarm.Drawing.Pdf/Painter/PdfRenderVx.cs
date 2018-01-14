@@ -14,9 +14,15 @@ namespace PixelFarm.Drawing.Pdf
     }
     class PdfRenderVxFormattedString : RenderVxFormattedString
     {
+        string _userString;
         public PdfRenderVxFormattedString(string str)
         {
-            this.OriginalString = str;
+            this._userString = str;
         }
+        public override string OriginalString
+        {
+            get { return _userString; }
+        }
+
     }
 }

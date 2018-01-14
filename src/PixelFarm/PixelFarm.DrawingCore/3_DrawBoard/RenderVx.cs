@@ -1,15 +1,16 @@
 ﻿//MIT, 2014-2018, WinterDev
 
-
+using System;
 namespace PixelFarm.Drawing
 {
     using Fonts;
-    public abstract class RenderVx
+    public abstract class RenderVx : IDisposable
     {
+        public virtual void Dispose() { }
     }
-    public abstract class RenderVxFormattedString
+    public abstract class RenderVxFormattedString : RenderVx
     {
-        public string OriginalString { get; set; }
+        public abstract string OriginalString { get; }
         public RenderVxGlyphPlan[] glyphList { get; set; }
     }
 

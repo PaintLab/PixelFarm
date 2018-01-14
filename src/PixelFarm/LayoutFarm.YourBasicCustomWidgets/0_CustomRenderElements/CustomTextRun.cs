@@ -9,6 +9,7 @@ namespace LayoutFarm.CustomWidgets
         char[] textBuffer;
         Color textColor = Color.Black;
         RequestFont _font;
+        RenderVxFormattedString renderVxFormattedString;
 #if DEBUG
         public bool dbugBreak;
 #endif
@@ -26,6 +27,7 @@ namespace LayoutFarm.CustomWidgets
             get { return new string(this.textBuffer); }
             set
             {
+
                 if (value == null)
                 {
                     this.textBuffer = null;
@@ -34,6 +36,8 @@ namespace LayoutFarm.CustomWidgets
                 {
                     this.textBuffer = value.ToCharArray();
                 }
+
+                renderVxFormattedString = null;
             }
         }
         public Color TextColor
@@ -56,7 +60,15 @@ namespace LayoutFarm.CustomWidgets
                 var prevColor = canvas.CurrentTextColor;
                 canvas.CurrentTextColor = textColor;
                 canvas.CurrentFont = _font;
-                canvas.DrawText(this.textBuffer, this.X, this.Y);
+
+                //for faster text drawing
+                //we create a formatted-text 
+                //canvas.DrawText(this.textBuffer, this.X, this.Y);
+                if (renderVxFormattedString == null)
+                {
+                    renderVxFormattedString = canvas.CreateFormattedString(textBuffer, 0, textBuffer.Length);
+                }
+                canvas.DrawRenderVx(renderVxFormattedString, this.X, this.Y);
                 canvas.CurrentTextColor = prevColor;
             }
         }
