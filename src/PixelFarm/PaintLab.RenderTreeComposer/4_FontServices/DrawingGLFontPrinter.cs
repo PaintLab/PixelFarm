@@ -622,7 +622,9 @@ namespace PixelFarm.DrawingGL
             int n = glyphPlanSeq.len;
             int endBefore = glyphPlanSeq.startAt + n;
 
-            _glsx.LoadTexture1(_glBmp);
+
+            _glsx.SetAssociatedTextureInfo(_glBmp);
+
             List<float> vboBufferList = new List<float>();
             List<ushort> indexList = new List<ushort>();
 

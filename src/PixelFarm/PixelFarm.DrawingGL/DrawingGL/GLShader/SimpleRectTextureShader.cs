@@ -50,6 +50,12 @@ namespace PixelFarm.DrawingGL
             this._latestBmpH = bmp.Height;
             this._latestBmpInverted = bmp.IsInvert;
         }
+        internal void SetAssociatedTextureInfo(GLBitmap bmp)
+        {
+            this._latestBmpW = bmp.Width;
+            this._latestBmpH = bmp.Height;
+            this._latestBmpInverted = bmp.IsInvert;
+        }
         internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
 
@@ -517,7 +523,9 @@ namespace PixelFarm.DrawingGL
         public void WriteVboStream(
             System.Collections.Generic.List<float> vboList,
             bool duplicateFirst,
-            float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+            float srcLeft, float srcTop,
+            float srcW, float srcH,
+            float targetLeft, float targetTop)
         {
 
             //TODO: review float array here,use buffer instead

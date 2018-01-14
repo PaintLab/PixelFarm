@@ -396,6 +396,10 @@ namespace PixelFarm.DrawingGL
             textureSubPixRendering.SetColor(this.FontFillColor);
             textureSubPixRendering.SetIntensity(1f);
         }
+        public void SetAssociatedTextureInfo(GLBitmap bmp)
+        {
+            textureSubPixRendering.SetAssociatedTextureInfo(bmp);
+        }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
            ref PixelFarm.Drawing.Rectangle srcRect,
            float targetLeft,
@@ -489,7 +493,7 @@ namespace PixelFarm.DrawingGL
             //x = 100;
             //y = 400;
             //this.SetCanvasOrigin((int)x, (int)y);
-            
+
             textureSubPixRendering.NewDrawSubImage4FromCurrentLoadedVBO(count, x, y);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
