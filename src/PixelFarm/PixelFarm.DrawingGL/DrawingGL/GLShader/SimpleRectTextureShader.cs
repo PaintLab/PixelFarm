@@ -437,40 +437,6 @@ namespace PixelFarm.DrawingGL
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
-
-
-            ////in fs, angle on windows 
-            ////we need to switch color component
-            ////because we store value in memory as BGRA
-            ////and gl expect input in RGBA
-            //string fs = @"
-            //          precision mediump float;
-
-            //          uniform sampler2D s_texture;
-            //          uniform int isBigEndian;
-            //          uniform int c_compo;
-            //          uniform vec4 d_color;
-            //          uniform float c_intensity;
-
-            //          varying vec2 v_texCoord; 
-            //          void main()
-            //          {                        
-            //             float v_texCoord0 =v_texCoord[0];
-            //             float v_texCoord1= v_texCoord[1]; 
-
-
-            //             vec4 c= texture2D(s_texture,vec2(v_texCoord0 ,v_texCoord1));                          
-            //             if(c_compo==0){
-            //                gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[0]* d_color[3])*c_intensity);
-            //             }else if(c_compo==1){
-            //                gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[1]* d_color[3])*c_intensity);
-            //             }else{
-            //                gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],(c[2]* d_color[3])*c_intensity);
-            //             }
-            //          }
-            //    ";
-
-
             //in fs, angle on windows 
             //we need to switch color component
             //because we store value in memory as BGRA
@@ -571,60 +537,58 @@ namespace PixelFarm.DrawingGL
                     if (_latestBmpInverted)
                     {
 
-
-                        //float* imgVertices = stackalloc float[5 * 4];
+                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
+                        if (duplicateFirst)
                         {
+                            //for creating degenerative triangle
+                            //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
                             vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
                             vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
-
-                            if (duplicateFirst)
-                            {
-                                vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
-                                vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
-                            }
-
-                            //---------------------
-                            vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 1  (left,top)
-
-                            //---------------------
-                            vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                            vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
-
-                            //---------------------
-                            vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 3 (right, bottom)
-                            vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 3 (right,top)
                         }
-                        //a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                        //a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+
+                        //---------------------
+                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 1  (left,top)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 3 (right, bottom)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 3 (right,top)
+
                     }
                     else
                     {
-                        //float* imgVertices = stackalloc float[5 * 4];
+
+
+                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
+
+                        if (duplicateFirst)
                         {
+                            //for creating degenerative triangle
+
+
                             vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
                             vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
 
-                            if (duplicateFirst)
-                            {
-                                vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                                vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                            }
-                            //---------------------
-                            vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
-
-                            //---------------------
-                            vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                            vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
-
-                            //---------------------
-                            vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
-                            vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom)
                         }
-                        //a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                        //a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                        //---------------------
+                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom)
+
                     }
                 }
             }
@@ -653,7 +617,7 @@ namespace PixelFarm.DrawingGL
             GL.ColorMask(false, true, false, false);
             this.SetCompo(1);
             OnSetVarsBeforeRenderer();
-           // u_matrix.SetData(mm2.data);
+            // u_matrix.SetData(mm2.data);
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, 0);
 
             //1. R , cyan result 

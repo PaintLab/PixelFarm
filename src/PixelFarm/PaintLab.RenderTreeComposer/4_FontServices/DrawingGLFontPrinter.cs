@@ -591,14 +591,16 @@ namespace PixelFarm.DrawingGL
 
             float scale = _fontAtlas.TargetTextureScale;
             int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
+
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
             float x = 0;
             float y = 0;
-            y -= ((_fontAtlas.OriginalRecommendLineSpacing) * scale);
 
+            y -= ((recommendLineSpacing) * scale);
+            renderVx.RecommmendLineSpacing = (int)(recommendLineSpacing * scale);
 
             // 
             float scaleFromTexture = _finalTextureScale;
