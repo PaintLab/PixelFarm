@@ -97,11 +97,7 @@ namespace SampleWinForms
             //----------------
             this.txtInputChar.Text = inputstr;
             _readyToRender = true;
-        }
-
-
-
-
+        } 
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";

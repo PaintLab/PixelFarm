@@ -19,6 +19,7 @@ namespace LayoutFarm.UI.OpenGL
             : base(root, topWinEventRoot)
         {
 
+
         }
         public void SetCanvas(DrawBoard canvas)
         {
@@ -43,7 +44,8 @@ namespace LayoutFarm.UI.OpenGL
             this.windowControl = myGLControl;
             SetBaseCanvasViewport(this.openGLViewport = new OpenGLCanvasViewport(this.RootGfx, this.windowControl.Size.ToSize(), 4));
             RootGfx.SetPaintDelegates(
-                (r) => {
+                (r) =>
+                {
 
                 }, //still do nothing
                 this.PaintToOutputWindow);
@@ -81,6 +83,10 @@ namespace LayoutFarm.UI.OpenGL
         //{
         //    throw new NotImplementedException();
         //}
+
+#if DEBUG
+        System.Diagnostics.Stopwatch dbugStopWatch = new System.Diagnostics.Stopwatch();
+#endif
         public override void PaintToOutputWindow()
         {
             if (!isInitGLControl)
@@ -90,9 +96,20 @@ namespace LayoutFarm.UI.OpenGL
             //var innumber = dbugCount;
             //dbugCount++;
             //Console.WriteLine(">" + innumber);
+
+#if DEBUG
+            //dbugStopWatch.Reset();
+            //dbugStopWatch.Start();
+#endif
             windowControl.MakeCurrent();
             this.openGLViewport.PaintMe();
             windowControl.SwapBuffers();
+#if DEBUG
+            //dbugStopWatch.Stop();
+            //long millisec_per_frame = dbugStopWatch.ElapsedMilliseconds;
+            //int fps = (int)(1000.0f / millisec_per_frame);
+            //System.Diagnostics.Debug.WriteLine(fps); 
+#endif
             //Console.WriteLine("<" + innumber); 
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
