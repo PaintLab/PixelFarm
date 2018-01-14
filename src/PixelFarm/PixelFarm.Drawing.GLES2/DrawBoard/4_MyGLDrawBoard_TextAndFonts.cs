@@ -46,19 +46,6 @@ namespace PixelFarm.Drawing.GLES2
                 painter1.TextPrinter.ChangeFillColor(value);
             }
         }
-        public override void DrawRenderVx(RenderVx renderVx, float x, float y)
-        {
-            if (renderVx is DrawingGL.GLRenderVxFormattedString)
-            {
-                DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
-               
-                var prevColor = painter1.FillColor;
-                painter1.FillColor = PixelFarm.Drawing.Color.Black;
-              
-                painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
-                painter1.FillColor = prevColor;
-            }
-        }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
         {
             char[] copy = new char[len];
@@ -72,6 +59,20 @@ namespace PixelFarm.Drawing.GLES2
             }
             return renderVxFmtStr;
         }
+        public override void DrawRenderVx(RenderVx renderVx, float x, float y)
+        {
+            if (renderVx is DrawingGL.GLRenderVxFormattedString)
+            {
+                DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
+               
+                var prevColor = painter1.FillColor;
+                painter1.FillColor = PixelFarm.Drawing.Color.Black;
+              
+                painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
+                painter1.FillColor = prevColor;
+            }
+        }
+       
         public override void DrawText(char[] buffer, int x, int y)
         {
             var prevColor = painter1.FillColor;
