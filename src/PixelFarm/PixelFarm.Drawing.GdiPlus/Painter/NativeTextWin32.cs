@@ -403,7 +403,7 @@ namespace PixelFarm.Drawing.WinGdi
         public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
-
+            
             WinGdiTextService.CalculateGlyphAdvancePos(ref textBufferSpan, font, outputGlyphAdvances, out outputTotalW);
             outputLineHeight = WinGdiTextService.MeasureBlankLineHeight(font);
         }

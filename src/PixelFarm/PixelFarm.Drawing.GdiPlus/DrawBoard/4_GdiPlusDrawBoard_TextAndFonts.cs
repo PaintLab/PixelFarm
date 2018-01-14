@@ -32,8 +32,11 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
-            //temp 
-            //
+            //TODO: review here
+            //temp here          
+            var vxFormattedString = renderVx as WinGdiRenderVxFormattedString;
+            if (vxFormattedString == null) return;
+            _gdigsx.DrawText(vxFormattedString.InternalBuffer, (int)x, (int)y);
         }
 
         public override void DrawText(char[] buffer, int x, int y)

@@ -23,6 +23,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get { return new string(_buffer); }
         }
+        public char[] InternalBuffer
+        {
+            get { return _buffer; }
+        }
 
     }
 }
