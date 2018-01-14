@@ -38,36 +38,55 @@ namespace OpenTK.Platform.Egl
         IntPtr display;
         IntPtr surface;
         bool disposed;
-
-
         public EglWindowInfo(IntPtr handle, IntPtr display)
         {
             Handle = handle;
             Display = display;
         }
-
         public EglWindowInfo(IntPtr handle, IntPtr display, IntPtr surface)
         {
             Handle = handle;
             Display = display;
             Surface = surface;
         }
-
-
-
         public IntPtr Handle { get { return handle; } private set { handle = value; } }
 
         public IntPtr Display { get { return display; } private set { display = value; } }
 
         public IntPtr Surface { get { return surface; } private set { surface = value; } }
 
+
+
+        //my extension
+        static int[] eglSurfaceConfigs = null;
+
         public void CreateWindowSurface(IntPtr config)
         {
-            int[] eglSurfaceConfigs = new int[]{ 
-                //key,value
-                AngleProjectEglConfig.EGL_POST_SUB_BUFFER_SUPPORTED_NV,1,
-                Egl.NONE//end config array with zero
-            };
+            //some gles2 implementation may supports more eglSurfaceConfig 
+            //we 
+            if (eglSurfaceConfigs == null)
+            {
+                IntPtr vendor = Egl.QueryString(display, Egl.EXTENSIONS);
+                string eglVendor = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(vendor);
+                if (eglVendor.Contains("EGL_NV_post_sub_buffer"))
+                {
+                    //we want some extensions ...
+                    eglSurfaceConfigs = new int[]{ 
+                        //key,                                                   value
+                        AngleProjectEglConfig.EGL_POST_SUB_BUFFER_SUPPORTED_NV,1,
+                        Egl.NONE//end config array with zero
+                    };
+                }
+                else
+                {
+                    //blank config
+                    eglSurfaceConfigs = new int[]{ 
+                        //key,                                                   value                        
+                        Egl.NONE//end config array with zero
+                    };
+                }
+            }
+
             Surface = Egl.CreateWindowSurface(Display, config, Handle, eglSurfaceConfigs);
             int error = Egl.GetError();
             if (error != Egl.SUCCESS)
