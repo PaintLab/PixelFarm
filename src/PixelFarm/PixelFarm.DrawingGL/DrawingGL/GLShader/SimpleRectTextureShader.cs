@@ -454,7 +454,7 @@ namespace PixelFarm.DrawingGL
                       uniform int isBigEndian;
                       uniform int c_compo;
                       uniform vec4 d_color;
-                      uniform float c_intensity;
+                     
   
                       varying vec2 v_texCoord; 
                       void main()
@@ -462,11 +462,11 @@ namespace PixelFarm.DrawingGL
                          
                          vec4 c= texture2D(s_texture,v_texCoord);    
                          if(c_compo==0){ 
-                            gl_FragColor = vec4(0,0,d_color[2],(c[0]* d_color[3])*c_intensity);
+                            gl_FragColor = vec4(0,0,d_color[2],(c[0]* d_color[3]) );
                          }else if(c_compo==1){ 
-                            gl_FragColor = vec4(0,d_color[1],0,(c[1]* d_color[3])*c_intensity);
+                            gl_FragColor = vec4(0,d_color[1],0,(c[1]* d_color[3]) );
                          }else{ 
-                            gl_FragColor = vec4(d_color[0],0,0,(c[2]* d_color[3])*c_intensity);
+                            gl_FragColor = vec4(d_color[0],0,0,(c[2]* d_color[3]) );
                          } 
                       }
                 ";
@@ -479,7 +479,7 @@ namespace PixelFarm.DrawingGL
         float _color_g;
         float _color_b;
         int _use_color_compo;//0,1,2
-        float _use_intensity = 1.2f; //default
+
         public void SetColor(PixelFarm.Drawing.Color c)
         {
             this._color_a = c.A / 255f;
@@ -503,7 +503,7 @@ namespace PixelFarm.DrawingGL
         }
         public void SetIntensity(float intensity)
         {
-            _use_intensity = intensity;
+             
         }
         protected override void OnProgramBuilt()
         {
@@ -517,7 +517,7 @@ namespace PixelFarm.DrawingGL
             _isBigEndian.SetValue(IsBigEndian);
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
             _c_compo.SetValue(this._use_color_compo);
-            _c_intensity.SetValue(_use_intensity);
+         
         }
 
         public void WriteVboStream(
