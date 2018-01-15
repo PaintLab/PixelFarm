@@ -15,12 +15,13 @@ using Typography.Rendering;
 using Typography.OpenFont.Extensions;
 
 
+
 namespace PixelFarm.DrawingGL
 {
     class MySimpleGLBitmapFontManager
     {
-        GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
-        Dictionary<int, SimpleFontAtlas> _createdAtlases = new Dictionary<int, SimpleFontAtlas>();
+        static GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
+        static Dictionary<int, SimpleFontAtlas> _createdAtlases = new Dictionary<int, SimpleFontAtlas>();
 
         LayoutFarm.OpenFontTextService textServices;
 
@@ -66,14 +67,18 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
         System.Diagnostics.Stopwatch _dbugStopWatch = new System.Diagnostics.Stopwatch();
 #endif
+
+
+
+
         /// <summary>
         /// get from cache or create a new one
         /// </summary>
         /// <param name="reqFont"></param>
         /// <returns></returns>
-        public SimpleFontAtlas GetFontAtlas(RequestFont reqFont,
-            out GLBitmap glBmp)
+        public SimpleFontAtlas GetFontAtlas(RequestFont reqFont, out GLBitmap glBmp)
         {
+
 
 #if DEBUG
             _dbugStopWatch.Reset();
@@ -82,11 +87,17 @@ namespace PixelFarm.DrawingGL
 
             int fontKey = reqFont.FontKey;
             SimpleFontAtlas fontAtlas;
+            GlyphImage totalGlyphsImg = null;
             if (!_createdAtlases.TryGetValue(fontKey, out fontAtlas))
             {
-                Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
+
+                //check from pre-built cache (if availiable)
+                //
+
                 //if we don't have 
                 //the create it 
+
+                Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
                 SimpleFontAtlasBuilder atlasBuilder = null;
                 var textureGen = new GlyphTextureBitmapGenerator();
                 textureGen.CreateTextureFontFromScriptLangs(
@@ -105,8 +116,7 @@ namespace PixelFarm.DrawingGL
                 );
 
                 //
-                GlyphImage totalGlyphsImg = atlasBuilder.BuildSingleImage();
-
+                totalGlyphsImg = atlasBuilder.BuildSingleImage();
                 //totalGlyphsImg = Sharpen(totalGlyphsImg, 1); //test shapen primary image
                 //-               
                 //
@@ -135,11 +145,16 @@ namespace PixelFarm.DrawingGL
                     resolvedTypeface.Descender,
                     resolvedTypeface.LineGap,
                     resolvedTypeface.CalculateRecommendLineSpacing());
+
+#if DEBUG
+                SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\test1.png");
+#endif
             }
 
             glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
 
 #if DEBUG
+
             _dbugStopWatch.Stop();
             System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
 #endif
@@ -147,7 +162,46 @@ namespace PixelFarm.DrawingGL
             return fontAtlas;
         }
 
+        static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
+        {
+            //-------------
+            int[] intBuffer = glyphImg.GetImageBuffer();
+            //byte[] imgBuff = new byte[intBuffer.Length * 4];
+            //Buffer.BlockCopy(intBuffer, 0, imgBuff, 0, imgBuff.Length);
+            //PixelFarm.Agg.ExternalImageService.SaveImage(imgBuff, glyphImg.Width, glyphImg.Height);
+            ////-------------
 
+
+            //ImageTools.IO.Png.PngEncoder enc = new ImageTools.IO.Png.PngEncoder();
+            //ImageTools.ExtendedImage extImage = new ImageTools.ExtendedImage(glyphImg.Width, glyphImg.Height);
+            //extImage.SetPixels(glyphImg.Width, glyphImg.Height, imgBuff);
+
+
+            using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
+            {
+
+                int imgW = glyphImg.Width;
+                int imgH = glyphImg.Height;
+
+                Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
+                Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(fs, imgInfo);
+
+
+                Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo);
+                int startReadAt = 0; 
+        
+                for (int row = 0; row < imgH; row++)
+                {
+                    int[] scline = iline.Scanline;
+                    Array.Copy(intBuffer, startReadAt, scline, 0, imgW);
+                    startReadAt += imgW; 
+                    writer.WriteRow(iline, row);
+                }
+                writer.End();
+
+            }
+
+        }
 #if DEBUG
         /// <summary>
         /// test only, shapen org image with Paint.net sharpen filter

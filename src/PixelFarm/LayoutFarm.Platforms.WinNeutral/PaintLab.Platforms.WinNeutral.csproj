@@ -79,6 +79,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackEnd.PngCs\Hjg.Pngcs\Hjg.Pngcs.csproj">
+      <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
+      <Name>Hjg.Pngcs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>
@@ -94,6 +98,10 @@
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
