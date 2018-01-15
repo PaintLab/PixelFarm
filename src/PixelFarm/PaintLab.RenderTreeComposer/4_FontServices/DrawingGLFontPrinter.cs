@@ -424,6 +424,9 @@ namespace PixelFarm.DrawingGL
         //        }
         //    }
         //}
+
+        List<float> _vboBufferList = new List<float>();
+        List<ushort> _indexList = new List<ushort>();
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
 
@@ -471,8 +474,7 @@ namespace PixelFarm.DrawingGL
             _glsx.LoadTexture1(_glBmp);
             //-------------------------------------
 
-            List<float> vboBufferList = new List<float>();
-            List<ushort> indexList = new List<ushort>();
+
 
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
@@ -541,8 +543,8 @@ namespace PixelFarm.DrawingGL
                         //    g_y,
                         //    scaleFromTexture);
                         _glsx.WriteVboToList(
-                          vboBufferList,
-                          indexList,
+                          _vboBufferList,
+                          _indexList,
                           ref srcRect,
                           g_x,
                           g_y,
@@ -559,7 +561,7 @@ namespace PixelFarm.DrawingGL
             //-------
             //we create vbo first 
             //then render 
-            _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(vboBufferList, indexList);
+            _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
 
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
@@ -688,12 +690,7 @@ namespace PixelFarm.DrawingGL
                         //    ref srcRect,
                         //    g_x,
                         //    g_y,
-                        //    scaleFromTexture);
-                        //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique2(
-                        //    ref srcRect,
-                        //    g_x,
-                        //    g_y,
-                        //    scaleFromTexture);
+                        //    scaleFromTexture); 
                         _glsx.WriteVboToList(
                           vboBufferList,
                           indexList,

@@ -431,6 +431,7 @@ namespace Typography.TextLayout
                     //
                     s_advW += (int)Math.Round(s_advW);
                 }
+
                 float exact_x = (float)(cx + offsetX * pxscale);
                 float exact_y = (float)(cy + offsetY * pxscale);
 
@@ -440,6 +441,7 @@ namespace Typography.TextLayout
                     exact_x,
                     exact_y,
                     advW));
+
                 cx += s_advW;
 
             }
