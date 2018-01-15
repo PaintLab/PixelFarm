@@ -143,7 +143,11 @@ namespace PixelFarm.DrawingGL
                     resolvedTypeface.CalculateRecommendLineSpacing());
 
                 ///
+#if DEBUG
 
+                _dbugStopWatch.Stop();
+                System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
+#endif
 
                 //#if DEBUG
                 //                //save image to cache
@@ -155,11 +159,7 @@ namespace PixelFarm.DrawingGL
 
             glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
 
-#if DEBUG
 
-            _dbugStopWatch.Stop();
-            System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
-#endif
 
             return fontAtlas;
         }
