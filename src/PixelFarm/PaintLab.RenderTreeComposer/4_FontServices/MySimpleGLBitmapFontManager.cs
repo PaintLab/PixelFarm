@@ -1,7 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
-
-
-
+﻿//MIT, 2016-2018, WinterDev 
 #if GL_ENABLE
 using System;
 using System.Collections.Generic;
@@ -66,11 +63,7 @@ namespace PixelFarm.DrawingGL
 
 #if DEBUG
         System.Diagnostics.Stopwatch _dbugStopWatch = new System.Diagnostics.Stopwatch();
-#endif
-
-
-
-
+#endif 
         /// <summary>
         /// get from cache or create a new one
         /// </summary>
@@ -93,11 +86,14 @@ namespace PixelFarm.DrawingGL
 
                 //check from pre-built cache (if availiable)
                 //
+                Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
+                //GlyphImage cacheImage = ReadGlyphImages("d:\\WImageTest\\test1.png");
+
 
                 //if we don't have 
                 //the create it 
 
-                Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
+
                 SimpleFontAtlasBuilder atlasBuilder = null;
                 var textureGen = new GlyphTextureBitmapGenerator();
                 textureGen.CreateTextureFontFromScriptLangs(
@@ -146,9 +142,15 @@ namespace PixelFarm.DrawingGL
                     resolvedTypeface.LineGap,
                     resolvedTypeface.CalculateRecommendLineSpacing());
 
-#if DEBUG
-                SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\test1.png");
-#endif
+                ///
+
+
+                //#if DEBUG
+                //                //save image to cache
+                //                SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\test1.png");
+                //                //save font info to cache
+                //                atlasBuilder.SaveFontInfo("d:\\WImageTest\\test002.info");
+                //#endif
             }
 
             glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
@@ -162,6 +164,33 @@ namespace PixelFarm.DrawingGL
             return fontAtlas;
         }
 
+        static GlyphImage ReadGlyphImages(string filename)
+        {
+            using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Open))
+            {
+                Hjg.Pngcs.PngReader reader = new Hjg.Pngcs.PngReader(fs, filename);
+                Hjg.Pngcs.ImageInfo imgInfo = reader.ImgInfo;
+                int imgH = imgInfo.Rows;
+                int imgW = imgInfo.Cols;
+                int bytesPerRow = imgInfo.BytesPerRow;
+                int widthPx = imgInfo.Cols;
+
+                int[] buffer = new int[(bytesPerRow / 4) * imgH];
+                //read each row 
+                //and fill the glyph image 
+                int startWriteAt = 0;
+                for (int row = 0; row < imgH; row++)
+                {
+                    Hjg.Pngcs.ImageLine iline = reader.ReadRowByte(row);
+                    byte[] scline = iline.ScanlineB;
+                    Buffer.BlockCopy(scline, 0, buffer, startWriteAt, bytesPerRow);
+                    startWriteAt += bytesPerRow;
+                }
+
+
+            }
+            return null;
+        }
         static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
         {
             //-------------
@@ -188,13 +217,13 @@ namespace PixelFarm.DrawingGL
 
 
                 Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo);
-                int startReadAt = 0; 
-        
+                int startReadAt = 0;
+
                 for (int row = 0; row < imgH; row++)
                 {
                     int[] scline = iline.Scanline;
                     Array.Copy(intBuffer, startReadAt, scline, 0, imgW);
-                    startReadAt += imgW; 
+                    startReadAt += imgW;
                     writer.WriteRow(iline, row);
                 }
                 writer.End();
