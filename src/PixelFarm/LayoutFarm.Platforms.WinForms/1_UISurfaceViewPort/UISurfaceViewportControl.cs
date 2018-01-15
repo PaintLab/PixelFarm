@@ -23,10 +23,13 @@ namespace LayoutFarm.UI
 
 
 
+
         public UISurfaceViewportControl()
         {
             InitializeComponent();
             this.panel1.Visible = false;
+
+
         }
         public UIPlatform Platform
         {
@@ -226,10 +229,18 @@ namespace LayoutFarm.UI
                     var topWinBox = owner as ITopWindowBox;
                     if (topWinBox.PlatformWinBox == null)
                     {
+
+                        FormPopupShadow2 popupShadow1 = new FormPopupShadow2();
+                        IntPtr handle1 = popupShadow1.Handle;
+
+
                         //create platform winbox 
                         var newForm = new AbstractCompletionWindow();
                         newForm.LinkedParentForm = this.FindForm();
                         newForm.LinkedParentControl = this;
+                        newForm.PopupShadow = popupShadow1;
+
+
                         UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);

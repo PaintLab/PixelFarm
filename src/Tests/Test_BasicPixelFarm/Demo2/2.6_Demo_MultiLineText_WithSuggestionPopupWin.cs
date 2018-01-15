@@ -181,7 +181,7 @@ namespace LayoutFarm
             }
             if (sgBox.ItemCount > 0)
             {
-                sgBox.Show();
+                
                 //TODO: implement selectedIndex suggestion hint here
                 sgBox.SelectedIndex = 0;
 
@@ -196,6 +196,7 @@ namespace LayoutFarm
                 }
 
                 sgBox.SetLocation(textBoxGlobalOffset.X + caretPos.X, caretPos.Y + 70);
+                sgBox.Show();
                 sgBox.EnsureSelectedItemVisible();
             }
             else

@@ -71,6 +71,13 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs" />
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs" />
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
+      <DependentUpon>FormPopupShadow2.cs</DependentUpon>
+    </Compile>
     <Compile Include="4_GdiPlus\Conv.cs" />
     <Compile Include="4_GdiPlus\CanvasCollection.cs" />
     <Compile Include="4_GdiPlus\QuadPages.cs" />
