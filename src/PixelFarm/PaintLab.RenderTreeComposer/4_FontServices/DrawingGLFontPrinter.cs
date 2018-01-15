@@ -474,7 +474,8 @@ namespace PixelFarm.DrawingGL
             _glsx.LoadTexture1(_glBmp);
             //-------------------------------------
 
-
+            _vboBufferList.Clear(); //clear before use
+            _indexList.Clear(); //clear before use
 
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {

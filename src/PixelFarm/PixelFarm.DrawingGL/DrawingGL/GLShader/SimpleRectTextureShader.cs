@@ -655,7 +655,7 @@ namespace PixelFarm.DrawingGL
             }
 
             
-            int count1 = indices.Length;
+            int count1 = indexList.Length;
             ////version 1
             ////1. B , yellow  result
             GL.ColorMask(false, false, true, false);
