@@ -60,7 +60,7 @@ namespace LayoutFarm.CustomWidgets
                 var prevColor = canvas.CurrentTextColor;
                 canvas.CurrentTextColor = textColor;
                 canvas.CurrentFont = _font;
-
+                
                 //for faster text drawing
                 //we create a formatted-text 
                 //canvas.DrawText(this.textBuffer, this.X, this.Y);

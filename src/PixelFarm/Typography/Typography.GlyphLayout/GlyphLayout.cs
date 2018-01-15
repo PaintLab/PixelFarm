@@ -429,7 +429,7 @@ namespace Typography.TextLayout
                     //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
                     //we can do it here,this produces a predictable caret position result
                     //
-                    s_advW += (int)Math.Round(s_advW);
+                    s_advW = (int)Math.Round(s_advW);
                 }
 
                 float exact_x = (float)(cx + offsetX * pxscale);

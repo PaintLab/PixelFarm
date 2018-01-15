@@ -492,6 +492,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
+                // g_x = (float)(x + (glyph.ExactX * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
                 g_x = (float)(x + (glyph.ExactX * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
                 g_y = (float)(y + (glyph.ExactY * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
 
@@ -625,7 +626,7 @@ namespace PixelFarm.DrawingGL
             int n = glyphPlanSeq.len;
             int endBefore = glyphPlanSeq.startAt + n;
 
-
+            //***
             _glsx.SetAssociatedTextureInfo(_glBmp);
 
             List<float> vboBufferList = new List<float>();
@@ -642,6 +643,10 @@ namespace PixelFarm.DrawingGL
                     //if no glyph data, we should render a missing glyph ***
                     continue;
                 }
+                //if (scaleFromTexture != 1)
+                //{
+
+                //}
                 //--------------------------------------
                 //TODO: review precise height in float
                 //-------------------------------------- 
@@ -652,7 +657,7 @@ namespace PixelFarm.DrawingGL
 
                 //for sharp glyph
                 //we adjust g_x,g_y to integer value                
-                float g_y2 = (float)Math.Floor(g_y);
+                //float g_y2 = (float)Math.Floor(g_y);
 
                 g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
@@ -687,11 +692,6 @@ namespace PixelFarm.DrawingGL
                             scaleFromTexture);
                         break;
                     case TextureKind.StencilLcdEffect:
-                        //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique(
-                        //    ref srcRect,
-                        //    g_x,
-                        //    g_y,
-                        //    scaleFromTexture); 
                         _glsx.WriteVboToList(
                           vboBufferList,
                           indexList,
@@ -699,12 +699,6 @@ namespace PixelFarm.DrawingGL
                           g_x,
                           g_y,
                           scaleFromTexture);
-                        //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
-                        //     ref srcRect,
-                        //     g_x,
-                        //     g_y,
-                        //     scaleFromTexture);
-
                         break;
                 }
             }

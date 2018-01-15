@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
