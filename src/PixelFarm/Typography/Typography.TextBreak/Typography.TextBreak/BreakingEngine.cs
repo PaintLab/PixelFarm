@@ -261,6 +261,8 @@ namespace Typography.TextBreak
                                             while (candi_count > 0)
                                             {
                                                 int candi1 = candidate.Pop();
+                                                candi_count--;
+
                                                 //try
                                                 visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                                 //check if we can use this candidate
