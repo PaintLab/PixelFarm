@@ -19,10 +19,10 @@ namespace LayoutFarm
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             textbox.SetLocation(20, 20);
             var style1 = new Text.TextSpanStyle();
-            style1.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+            style1.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 16);
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox.DefaultSpanStyle = style1;
-            
+
             var textSplitter = new CustomWidgets.ContentTextSplitter();
             textbox.TextSplitter = textSplitter;
             sgBox = new SuggestionWindowMx(300, 200);
