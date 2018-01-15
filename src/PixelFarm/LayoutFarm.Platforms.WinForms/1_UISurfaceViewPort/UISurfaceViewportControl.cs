@@ -220,6 +220,8 @@ namespace LayoutFarm.UI
             this.rootgfx.TopWindowRenderBox.AddChild(vi);
         }
 
+
+        static IntPtr s_tmpHandle;
         public void AddContent(RenderElement vi, object owner)
         {
             if (vi is RenderBoxBase)
@@ -247,11 +249,16 @@ namespace LayoutFarm.UI
                         vi.ResetRootGraphics(newSurfaceViewport.RootGfx);
                         vi.SetLocation(0, 0);
                         newSurfaceViewport.AddContent(vi);
-                        //------------------------------------------------------                       
+                        //-----------------------------------------------------                        
+                        s_tmpHandle = newForm.Handle;//force newform to create window handle
+                        //----------
+
                         var platformWinBox = new PlatformWinBoxForm(newForm);
                         topWinBox.PlatformWinBox = platformWinBox;
                         platformWinBox.UseRelativeLocationToParent = true;
                         subForms.Add(newForm);
+                        s_tmpHandle = IntPtr.Zero;
+
                     }
                 }
                 else
@@ -349,6 +356,10 @@ namespace LayoutFarm.UI
         {
             if (this.UseRelativeLocationToParent)
             {
+                if (!form.IsHandleCreated)
+                {
+
+                }
                 //1. find parent form/control 
                 var parentLoca = form.LinkedParentForm.Location;
                 form.Location = new System.Drawing.Point(parentLoca.X + x, parentLoca.Y + y);
