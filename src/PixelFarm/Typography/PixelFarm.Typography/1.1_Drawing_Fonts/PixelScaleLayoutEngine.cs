@@ -471,6 +471,10 @@ namespace Typography.Contours
                     }
                 }
                 //------------------------------------------------------------- 
+
+                //TODO: review here again***
+
+
                 float exact_x = (float)(cx + current_ABC.s_offsetX);
                 float exact_y = (float)(cy + current_ABC.s_offsetY);
 
@@ -487,9 +491,10 @@ namespace Typography.Contours
                 outputGlyphPlanList.Append(new GlyphPlan(
                     input_offset,
                     glyphIndex,
-                    final_x,
-                    exact_y,
-                    current_ABC.final_advW));
+                    current_ABC.final_advW,
+                    current_ABC.s_offsetX,
+                    current_ABC.s_offsetY
+                    ));
                 // 
                 //
                 cx += current_ABC.final_advW;

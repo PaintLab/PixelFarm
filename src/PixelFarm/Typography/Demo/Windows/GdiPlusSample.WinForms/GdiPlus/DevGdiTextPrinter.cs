@@ -1,5 +1,5 @@
 ﻿//MIT, 2016-2018, WinterDev
-
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
@@ -152,6 +152,13 @@ namespace SampleWinForms
             int endBefore = startAt + len;
 
             Graphics g = this.TargetGraphics;
+
+            float acc_x = 0;
+            float acc_y = 0;
+
+            float g_x = 0;
+            float g_y = 0;
+
             for (int i = startAt; i < endBefore; ++i)
             {
                 GlyphPlan glyphPlan = glyphPlanList[i];
@@ -173,9 +180,18 @@ namespace SampleWinForms
                 }
                 //------
                 //then move pen point to the position we want to draw a glyph
-                float tx = x + glyphPlan.ExactX;
-                float ty = y + glyphPlan.ExactY;
-                g.TranslateTransform(tx, ty);
+
+                float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
+                float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
+
+                g_x = (x + (ngx));
+                g_y = (y + (ngy));
+
+                acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
+
+                //g_x = (float)Math.Round(g_x);
+                g_y = (float)Math.Floor(g_y);
+                g.TranslateTransform(g_x, g_y);
 
                 if (FillBackground)
                 {
@@ -186,7 +202,7 @@ namespace SampleWinForms
                     g.DrawPath(_outlinePen, foundPath);
                 }
                 //and then we reset back ***
-                g.TranslateTransform(-tx, -ty);
+                g.TranslateTransform(-g_x, -g_y);
             }
         }
     }

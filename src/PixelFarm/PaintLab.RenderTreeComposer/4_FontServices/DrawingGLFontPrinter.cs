@@ -454,16 +454,6 @@ namespace PixelFarm.DrawingGL
             float scaleFromTexture = _finalTextureScale;
             TextureKind textureKind = _fontAtlas.TextureKind;
 
-            //--------------------------
-
-            //TODO: review render steps 
-            //NOTE:
-            // -glyphData.TextureXOffset => restore to original pos
-            // -glyphData.TextureYOffset => restore to original pos
-            // ideal_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture);
-            // ideal_y = (float)(y + (glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-            //--------------------------
-
             float g_x = 0;
             float g_y = 0;
             int baseY = (int)Math.Round(y);
@@ -476,6 +466,10 @@ namespace PixelFarm.DrawingGL
 
             _vboBufferList.Clear(); //clear before use
             _indexList.Clear(); //clear before use
+
+
+            float acc_x = 0;
+            float acc_y = 0;
 
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
@@ -492,16 +486,21 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
-                // g_x = (float)(x + (glyph.ExactX * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                g_x = (float)(x + (glyph.ExactX * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                g_y = (float)(y + (glyph.ExactY * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
 
 
-                //for sharp glyph
-                //we adjust g_x,g_y to integer value                
-                float g_y2 = (float)Math.Floor(g_y);
+                float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
+                float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);
+                //NOTE:
+                // -glyphData.TextureXOffset => restore to original pos
+                // -glyphData.TextureYOffset => restore to original pos 
+                //--------------------------
+                g_x = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
+                g_y = (float)(y + (ngy - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
 
-                g_x = (float)Math.Round(g_x);
+
+                acc_x += (float)Math.Round(glyph.AdvanceX * scale);
+
+                //g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
 
 
@@ -534,16 +533,7 @@ namespace PixelFarm.DrawingGL
                             scaleFromTexture);
                         break;
                     case TextureKind.StencilLcdEffect:
-                        //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique(
-                        //    ref srcRect,
-                        //    g_x,
-                        //    g_y,
-                        //    scaleFromTexture);
-                        //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique2(
-                        //    ref srcRect,
-                        //    g_x,
-                        //    g_y,
-                        //    scaleFromTexture);
+
                         _glsx.WriteVboToList(
                           _vboBufferList,
                           _indexList,
@@ -551,11 +541,6 @@ namespace PixelFarm.DrawingGL
                           g_x,
                           g_y,
                           scaleFromTexture);
-                        //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
-                        //     ref srcRect,
-                        //     g_x,
-                        //     g_y,
-                        //     scaleFromTexture);
 
                         break;
                 }
@@ -632,6 +617,9 @@ namespace PixelFarm.DrawingGL
             List<float> vboBufferList = new List<float>();
             List<ushort> indexList = new List<ushort>();
 
+            float acc_x = 0;
+            float acc_y = 0;
+
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
                 GlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
@@ -643,24 +631,28 @@ namespace PixelFarm.DrawingGL
                     //if no glyph data, we should render a missing glyph ***
                     continue;
                 }
-                //if (scaleFromTexture != 1)
-                //{
 
-                //}
                 //--------------------------------------
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
-                g_x = (float)(x + (glyph.ExactX * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                g_y = (float)(y + (glyph.ExactY * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
+
+                float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
+                float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);
+
+                //NOTE:
+                // -glyphData.TextureXOffset => restore to original pos
+                // -glyphData.TextureYOffset => restore to original pos 
+                //--------------------------
+                g_x = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
+                g_y = (float)(y + (ngy - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
 
 
-                //for sharp glyph
-                //we adjust g_x,g_y to integer value                
-                //float g_y2 = (float)Math.Floor(g_y);
+                acc_x += (float)Math.Round(glyph.AdvanceX * scale);
 
-                g_x = (float)Math.Round(g_x);
+                //g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
+
 
 
                 switch (textureKind)

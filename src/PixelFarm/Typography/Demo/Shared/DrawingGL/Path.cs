@@ -117,17 +117,9 @@ namespace DrawingGL
         {
             this.glyphPlan = glyphPlan;
             this.tessData = tessData;
-            this.nTessElements = nTessElements;
-
+            this.nTessElements = nTessElements; 
         }
-        public float OffsetX
-        {
-            get { return glyphPlan.ExactX; }
-        }
-        public float OffsetY
-        {
-            get { return glyphPlan.ExactY; }
-        }
+        
 
     }
     public class TextRun

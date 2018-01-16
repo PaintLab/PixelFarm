@@ -1,4 +1,5 @@
 ﻿//MIT, 2014-2018, WinterDev    
+using System;
 using System.Collections.Generic;
 using Typography.OpenFont;
 using Typography.TextLayout;
@@ -264,10 +265,33 @@ namespace Typography.TextServices
                 //measure each glyph
                 //limit at specific width
                 int glyphCount = _reusableGlyphPlanList.Count;
+
+
+                float acc_x = 0;//accum_x
+                float acc_y = 0;//accum_y
+                float g_x = 0;
+                float g_y = 0;
+                float x = 0;
+                float y = 0;
                 for (int i = 0; i < glyphCount; ++i)
                 {
                     GlyphPlan glyphPlan = _reusableGlyphPlanList[i];
-                    float right = glyphPlan.ExactRight * pxscale;
+
+                    float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * pxscale);
+                    float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * pxscale);
+                    //NOTE:
+                    // -glyphData.TextureXOffset => restore to original pos
+                    // -glyphData.TextureYOffset => restore to original pos 
+                    //--------------------------
+                    g_x = (float)(x + (ngx)); //ideal x
+                    g_y = (float)(y + (ngy));
+                    float g_w = (float)Math.Round(glyphPlan.AdvanceX * pxscale);
+                    acc_x += g_w;
+                    //g_x = (float)Math.Round(g_x);
+                    g_y = (float)Math.Floor(g_y);
+
+                    float right = g_x + g_w;
+                    
                     if (right >= accumW)
                     {
                         //stop here at this glyph
@@ -403,7 +427,7 @@ namespace Typography.TextServices
         }
 
 
-       
+
         public GlyphPlanSequence GetUnscaledGlyphPlanSequence(GlyphLayout glyphLayout,
             TextBuffer buffer, int start, int seqLen)
         {
@@ -425,22 +449,22 @@ namespace Typography.TextServices
             GlyphPlanSeqCollection seqCol = _glyphPlanSeqSet.GetSeqCollectionOrCreateIfNotExist(seqLen);
 
             if (!seqCol.TryGetCacheGlyphPlanSeq(seqHashValue, out planSeq))
-            {   
+            {
                 //create a new one if we don't has a cache
                 //1. layout 
                 glyphLayout.Layout(
                     buffer.UnsafeGetInternalBuffer(),
                     start,
-                    seqLen); 
+                    seqLen);
 
                 int pre_count = _planList.Count;
                 //create glyph-plan ( UnScaled version) and add it to planList                
-                GlyphLayoutExtensions.GenerateGlyphPlans(glyphLayout.ResultUnscaledGlyphPositions, 1, false, _planList); 
+                GlyphLayoutExtensions.GenerateGlyphPlans(glyphLayout.ResultUnscaledGlyphPositions, 1, false, _planList);
                 int post_count = _planList.Count;
                 planSeq = new GlyphPlanSequence(_planList, pre_count, post_count - pre_count);
                 //
                 seqCol.Register(seqHashValue, planSeq);
-                 
+
 
             }
             return planSeq;
@@ -454,7 +478,7 @@ namespace Typography.TextServices
         /// dic of hash string value and the cache seq
         /// </summary>
         Dictionary<int, GlyphPlanSequence> _knownSeqs = new Dictionary<int, GlyphPlanSequence>();
-       
+
         public GlyphPlanSeqCollection(int seqLen)
         {
             this._seqLen = seqLen;

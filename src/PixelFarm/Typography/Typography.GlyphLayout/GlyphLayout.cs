@@ -15,25 +15,36 @@ namespace Typography.TextLayout
 
         public readonly short input_cp_offset;
         public readonly ushort glyphIndex;
-        public GlyphPlan(short input_cp_offset, ushort glyphIndex, float exactX, float exactY, float exactAdvX)
+
+
+        public GlyphPlan(short input_cp_offset, ushort glyphIndex, float exactAdvX, float offsetX, float offsetY)
         {
             this.input_cp_offset = input_cp_offset;
             this.glyphIndex = glyphIndex;
-            this.ExactX = exactX;
-            this.ExactY = exactY;
+            this.OffsetX = offsetX;
+            this.OffsetY = offsetY;
+
             this.AdvanceX = exactAdvX;
         }
         public float AdvanceX { get; set; }
-        public float ExactY { get; set; }
-        public float ExactX { get; set; }
 
-        public float ExactRight { get { return ExactX + AdvanceX; } }
+
+
+        /// <summary>
+        /// x offset from current position
+        /// </summary>
+        public float OffsetX { get; set; }
+        /// <summary>
+        /// y offset from current position
+        /// </summary>
+        public float OffsetY { get; set; }
+
         public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
 
 #if DEBUG
         public override string ToString()
         {
-            return "(" + ExactX + "," + ExactY + "), adv:" + AdvanceX;
+            return " adv:" + AdvanceX;
         }
 #endif
     }
@@ -407,12 +418,13 @@ namespace Typography.TextLayout
             GlyphPlanList outputGlyphPlanList)
         {
             //user can implement this with some 'PixelScaleEngine'
+            if (pxscale != 1)
+            {
 
-            //double cx = 0;
-            //short cy = 0;
-            //the default OpenFont layout without fit-to-writing alignment
+            }
             int finalGlyphCount = glyphPositions.Count;
-            double cx = 0;
+
+            float cx = 0;
             short cy = 0;
 
             for (int i = 0; i < finalGlyphCount; ++i)
@@ -432,15 +444,14 @@ namespace Typography.TextLayout
                     s_advW = (int)Math.Round(s_advW);
                 }
 
-                float exact_x = (float)(cx + offsetX * pxscale);
-                float exact_y = (float)(cy + offsetY * pxscale);
-
+               
                 outputGlyphPlanList.Append(new GlyphPlan(
                     input_offset,
-                    glyphIndex,
-                    exact_x,
-                    exact_y,
-                    advW));
+                    glyphIndex, 
+                    advW,
+                    offsetX * pxscale,
+                    offsetY * pxscale
+                    ));
 
                 cx += s_advW;
 

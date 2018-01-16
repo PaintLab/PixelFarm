@@ -196,8 +196,7 @@ namespace LayoutFarm
                 for (int s = seq_startAt; s < endAt; ++s)
                 {
                     GlyphPlan glyphPlan = planList[s];
-                    float tx = glyphPlan.ExactX;
-                    float ty = glyphPlan.ExactY;
+ 
                     double actualAdvX = glyphPlan.AdvanceX;
 
                     outputTotalW +=

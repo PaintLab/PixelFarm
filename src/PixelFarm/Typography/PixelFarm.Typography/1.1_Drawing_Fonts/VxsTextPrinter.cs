@@ -325,7 +325,10 @@ namespace PixelFarm.Drawing.Fonts
                 Agg.Transform.Affine flipY = Agg.Transform.Affine.NewMatix(
                     Agg.Transform.AffinePlan.Scale(1, -1)); //flip Y
                 VertexStore reusableVxs = new VertexStore();
-                 
+
+                float acc_x = 0; //acummulate x
+                float acc_y = 0; //acummulate y
+
                 for (int i = startAt; i < endBefore; ++i)
                 {   //-----------------------------------
                     //TODO: review here ***
@@ -333,10 +336,17 @@ namespace PixelFarm.Drawing.Fonts
                     //if we have create a vxs we can cache it for later use?
                     //-----------------------------------   
                     GlyphPlan glyphPlan = glyphPlanList[i];
-                    g_x = glyphPlan.ExactX + x;
-                    g_y = glyphPlan.ExactY + y;
+
+                    float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
+                    float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
+
+                    acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
+
+
+                    g_x = ngx;
+                    g_y = ngy;
                     painter.SetOrigin(g_x, g_y);
-                  
+
                     //-----------------------------------  
 
                     //invert each glyph 
@@ -369,12 +379,22 @@ namespace PixelFarm.Drawing.Fonts
                 //-------------
                 Color originalFillColor = painter.FillColor;
 
+                float acc_x = 0;
+                float acc_y = 0;
                 for (int i = startAt; i < endBefore; ++i)
                 {
                     GlyphPlan glyphPlan = glyphPlanList[i];
-                    g_x = glyphPlan.ExactX + x;
-                    g_y = glyphPlan.ExactY + y;
+
+                    float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
+                    float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
+
+                    g_x = ngx;
+                    g_y = ngy;
+
+                    acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
                     painter.SetOrigin(g_x, g_y);
+
+
                     //-----------------------------------  
                     ushort colorLayerStart;
                     if (colrTable.LayerIndices.TryGetValue(glyphPlan.glyphIndex, out colorLayerStart))
@@ -461,14 +481,40 @@ namespace PixelFarm.Drawing.Fonts
             int n = glyphPlans.Count;
             //copy 
             var renderVxGlyphPlans = new RenderVxGlyphPlan[n];
+            float acc_x = 0;
+            float acc_y = 0;
+            float x = 0;
+            float y = 0;
+            float g_x = 0;
+            float g_y = 0;
+
             for (int i = 0; i < n; ++i)
             {
                 GlyphPlan glyphPlan = glyphPlans[i];
+
+
+                float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
+                float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
+                //NOTE:
+                // -glyphData.TextureXOffset => restore to original pos
+                // -glyphData.TextureYOffset => restore to original pos 
+                //--------------------------
+                g_x = (float)(x + ngx); //ideal x
+                g_y = (float)(y + ngy);
+
+
+                float g_w = (float)Math.Round(glyphPlan.AdvanceX * scale);
+                acc_x += g_w;
+
+                //g_x = (float)Math.Round(g_x);
+                g_y = (float)Math.Floor(g_y); 
+
+
                 renderVxGlyphPlans[i] = new RenderVxGlyphPlan(
                     glyphPlan.glyphIndex,
-                    glyphPlan.ExactX,
-                    glyphPlan.ExactY,
-                    glyphPlan.AdvanceX
+                    g_x,
+                    g_y,
+                    g_w
                     );
             }
             renderVx.glyphList = renderVxGlyphPlans;
