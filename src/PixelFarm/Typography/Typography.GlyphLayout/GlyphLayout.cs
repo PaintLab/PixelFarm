@@ -7,42 +7,69 @@ namespace Typography.TextLayout
     public interface IPixelScaleLayout
     {
         void SetFont(Typeface typeface, float fontSizeInPoints);
-        void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList);
+        void Layout(IGlyphPositions posStream, UnscaledGlyphPlanList outputGlyphPlanList);
     }
-     
+
     /// <summary>
-    /// scaled glyph plan
+    /// scaled glyph plan to specfic font size.
+    /// offsetX,offsetY,advanceX are adjusted to fit with specific font size    
     /// </summary>
     public struct PixelScaledGlyphPlan
     {
-
-    }
-
-
-
-    public struct GlyphPlan
-    {
-
         public readonly short input_cp_offset;
         public readonly ushort glyphIndex;
-
-        public GlyphPlan(short input_cp_offset, ushort glyphIndex, short exactAdvX, short offsetX, short offsetY)
+        public PixelScaledGlyphPlan(short input_cp_offset, ushort glyphIndex, short advanceW, short offsetX, short offsetY)
         {
             this.input_cp_offset = input_cp_offset;
             this.glyphIndex = glyphIndex;
             this.OffsetX = offsetX;
             this.OffsetY = offsetY;
-            this.AdvanceX = exactAdvX;
+            this.AdvanceX = advanceW;
         }
-        public float AdvanceX { get; private set; }
+        public short AdvanceX { get; private set; }
         /// <summary>
         /// x offset from current position
         /// </summary>
-        public float OffsetX { get; private set; }
+        public short OffsetX { get; private set; }
         /// <summary>
         /// y offset from current position
         /// </summary>
-        public float OffsetY { get; private set; }
+        public short OffsetY { get; private set; }
+
+        public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return " adv:" + AdvanceX;
+        }
+#endif
+    }
+
+    /// <summary>
+    /// unscaled glyph-plan
+    /// </summary>
+    public struct UnscaledGlyphPlan
+    {
+        public readonly short input_cp_offset;
+        public readonly ushort glyphIndex;
+        public UnscaledGlyphPlan(short input_cp_offset, ushort glyphIndex, short advanceW, short offsetX, short offsetY)
+        {
+            this.input_cp_offset = input_cp_offset;
+            this.glyphIndex = glyphIndex;
+            this.OffsetX = offsetX;
+            this.OffsetY = offsetY;
+            this.AdvanceX = advanceW;
+        }
+        public short AdvanceX { get; private set; }
+        /// <summary>
+        /// x offset from current position
+        /// </summary>
+        public short OffsetX { get; private set; }
+        /// <summary>
+        /// y offset from current position
+        /// </summary>
+        public short OffsetY { get; private set; }
 
         public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
 
@@ -57,9 +84,9 @@ namespace Typography.TextLayout
     /// <summary>
     /// expandable list of glyph plan
     /// </summary>
-    public class GlyphPlanList
+    public class UnscaledGlyphPlanList
     {
-        List<GlyphPlan> _glyphPlans = new List<GlyphPlan>();
+        List<UnscaledGlyphPlan> _glyphPlans = new List<UnscaledGlyphPlan>();
         float _accumAdvanceX;
 
         public void Clear()
@@ -67,14 +94,14 @@ namespace Typography.TextLayout
             _glyphPlans.Clear();
             _accumAdvanceX = 0;
         }
-        public void Append(GlyphPlan glyphPlan)
+        public void Append(UnscaledGlyphPlan glyphPlan)
         {
             _glyphPlans.Add(glyphPlan);
             _accumAdvanceX += glyphPlan.AdvanceX;
         }
         public float AccumAdvanceX { get { return _accumAdvanceX; } }
 
-        public GlyphPlan this[int index]
+        public UnscaledGlyphPlan this[int index]
         {
             get
             {
@@ -90,7 +117,7 @@ namespace Typography.TextLayout
         }
 
 #if DEBUG
-        public GlyphPlanList()
+        public UnscaledGlyphPlanList()
         {
 
         }
@@ -418,7 +445,7 @@ namespace Typography.TextLayout
         /// <param name="glyphPositions"></param>
         /// <param name="pxscale"></param>
         /// <param name="outputGlyphPlanList"></param>
-        public static void GenerateUnscaledGlyphPlans(IGlyphPositions glyphPositions, GlyphPlanList outputGlyphPlanList)
+        public static void GenerateUnscaledGlyphPlans(IGlyphPositions glyphPositions, UnscaledGlyphPlanList outputGlyphPlanList)
         {
             //user can implement this with some 'PixelScaleEngine'
 
@@ -428,7 +455,7 @@ namespace Typography.TextLayout
                 short input_offset, offsetX, offsetY, advW; //all from pen-pos
                 ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
 
-                outputGlyphPlanList.Append(new GlyphPlan(
+                outputGlyphPlanList.Append(new UnscaledGlyphPlan(
                     input_offset,
                     glyphIndex,
                     advW,
@@ -446,7 +473,7 @@ namespace Typography.TextLayout
         public static void GenerateGlyphPlans(IGlyphPositions glyphPositions,
             float pxscale,
             bool snapToGrid,
-            GlyphPlanList outputGlyphPlanList)
+            UnscaledGlyphPlanList outputGlyphPlanList)
         {
             //user can implement this with some 'PixelScaleEngine'
             if (pxscale != 1)

@@ -473,8 +473,8 @@ namespace PixelFarm.DrawingGL
 
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
-                GlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
-                GlyphPlan glyph = glyphPlanList[i];
+                UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
+                UnscaledGlyphPlan glyph = glyphPlanList[i];
 
                 Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
@@ -623,8 +623,8 @@ namespace PixelFarm.DrawingGL
 
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
-                GlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
-                GlyphPlan glyph = glyphPlanList[i];
+                UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
+                UnscaledGlyphPlan glyph = glyphPlanList[i];
 
                 Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))

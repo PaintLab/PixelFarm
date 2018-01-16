@@ -172,7 +172,7 @@ namespace Typography.TextServices
 
         }
 
-        GlyphPlanList _reusableGlyphPlanList = new GlyphPlanList();
+        UnscaledGlyphPlanList _reusableGlyphPlanList = new UnscaledGlyphPlanList();
         List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
 
         public void MeasureString(char[] str, int startAt, int len, out int w, out int h)
@@ -275,7 +275,7 @@ namespace Typography.TextServices
                 float y = 0;
                 for (int i = 0; i < glyphCount; ++i)
                 {
-                    GlyphPlan glyphPlan = _reusableGlyphPlanList[i];
+                    UnscaledGlyphPlan glyphPlan = _reusableGlyphPlanList[i];
 
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * pxscale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * pxscale);
@@ -408,7 +408,7 @@ namespace Typography.TextServices
         Typeface _typeface;
         ScriptLang _scLang;
         GlyphPlanSeqSet _glyphPlanSeqSet;
-        GlyphPlanList _planList = new GlyphPlanList();
+        UnscaledGlyphPlanList _planList = new UnscaledGlyphPlanList();
 
         public GlyphPlanCacheForTypefaceAndScriptLang(Typeface typeface, ScriptLang scLang)
         {

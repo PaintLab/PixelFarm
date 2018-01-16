@@ -383,7 +383,7 @@ namespace Typography.Contours
         }
 
 
-        public void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
+        public void Layout(IGlyphPositions posStream, UnscaledGlyphPlanList outputGlyphPlanList)
         {
 
             float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
@@ -488,7 +488,7 @@ namespace Typography.Contours
                     final_x += 0.33f;
                 }
 
-                outputGlyphPlanList.Append(new GlyphPlan(
+                outputGlyphPlanList.Append(new UnscaledGlyphPlan(
                     input_offset,
                     glyphIndex,
                     (short)current_ABC.final_advW,

@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing.Fonts
         RequestFont _reqFont;
         //----------------------------------------------------------- 
         GlyphLayout _glyphLayout = new GlyphLayout();
-        GlyphPlanList _outputGlyphPlans = new GlyphPlanList();
+        UnscaledGlyphPlanList _outputGlyphPlans = new UnscaledGlyphPlanList();
         Typeface _currentTypeface;
         PixelScaleLayoutEngine _pxScaleEngine;
         GlyphMeshStore _glyphMeshStore;
@@ -279,7 +279,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
 
-        public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
             Painter painter = this.TargetCanvasPainter;
             if (StartDrawOnLeftTop)
@@ -335,7 +335,7 @@ namespace PixelFarm.Drawing.Fonts
                     //PERFORMANCE revisit here 
                     //if we have create a vxs we can cache it for later use?
                     //-----------------------------------   
-                    GlyphPlan glyphPlan = glyphPlanList[i];
+                    UnscaledGlyphPlan glyphPlan = glyphPlanList[i];
 
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
@@ -383,7 +383,7 @@ namespace PixelFarm.Drawing.Fonts
                 float acc_y = 0;
                 for (int i = startAt; i < endBefore; ++i)
                 {
-                    GlyphPlan glyphPlan = glyphPlanList[i];
+                    UnscaledGlyphPlan glyphPlan = glyphPlanList[i];
 
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
@@ -476,7 +476,7 @@ namespace PixelFarm.Drawing.Fonts
 
     public static class TextPrinterHelper
     {
-        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, GlyphPlanList glyphPlans, float scale)
+        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, UnscaledGlyphPlanList glyphPlans, float scale)
         {
             int n = glyphPlans.Count;
             //copy 
@@ -490,7 +490,7 @@ namespace PixelFarm.Drawing.Fonts
 
             for (int i = 0; i < n; ++i)
             {
-                GlyphPlan glyphPlan = glyphPlans[i];
+                UnscaledGlyphPlan glyphPlan = glyphPlans[i];
 
 
                 float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);

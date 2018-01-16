@@ -96,7 +96,7 @@ namespace SampleWinForms
             this.TargetGraphics.DrawLine(Pens.Red, x, y, x, y + this.FontAscendingPx);
         }
 
-        GlyphPlanList _resuableGlyphPlanList = new GlyphPlanList();//for internal use
+        UnscaledGlyphPlanList _resuableGlyphPlanList = new UnscaledGlyphPlanList();//for internal use
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             //----------------
@@ -135,7 +135,7 @@ namespace SampleWinForms
             _fillBrush.Color = this.FillColor;
             _outlinePen.Color = this.OutlineColor;
         }
-        public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
             UpdateVisualOutputSettings();
 
@@ -161,7 +161,7 @@ namespace SampleWinForms
 
             for (int i = startAt; i < endBefore; ++i)
             {
-                GlyphPlan glyphPlan = glyphPlanList[i];
+                UnscaledGlyphPlan glyphPlan = glyphPlanList[i];
 
                 //check if we have a cache of this glyph
                 //if not -> create it

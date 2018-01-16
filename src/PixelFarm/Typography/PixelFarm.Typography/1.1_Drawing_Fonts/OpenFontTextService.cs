@@ -96,7 +96,7 @@ namespace LayoutFarm
                      lineSeg.StartAt,
                      lineSeg.Length);
 
-                GlyphPlanList planList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq);
+                UnscaledGlyphPlanList planList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq);
                 //IMPORTANT
                 //num of glyph may more or less than original user input char buffer
                 // 
@@ -195,7 +195,7 @@ namespace LayoutFarm
 
                 for (int s = seq_startAt; s < endAt; ++s)
                 {
-                    GlyphPlan glyphPlan = planList[s];
+                    UnscaledGlyphPlan glyphPlan = planList[s];
  
                     double actualAdvX = glyphPlan.AdvanceX;
 
