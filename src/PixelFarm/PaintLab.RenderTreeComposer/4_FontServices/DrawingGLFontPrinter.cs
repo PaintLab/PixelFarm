@@ -564,7 +564,8 @@ namespace PixelFarm.DrawingGL
             vbo.UnBind();
 
         }
-
+        List<float> vboBufferList2 = new List<float>();
+        List<ushort> indexList2 = new List<ushort>();
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
         {
 
@@ -613,9 +614,9 @@ namespace PixelFarm.DrawingGL
 
             //***
             _glsx.SetAssociatedTextureInfo(_glBmp);
-
-            List<float> vboBufferList = new List<float>();
-            List<ushort> indexList = new List<ushort>();
+            //
+            vboBufferList2.Clear();
+            indexList2.Clear();
 
             float acc_x = 0;
             float acc_y = 0;
@@ -685,8 +686,8 @@ namespace PixelFarm.DrawingGL
                         break;
                     case TextureKind.StencilLcdEffect:
                         _glsx.WriteVboToList(
-                          vboBufferList,
-                          indexList,
+                          vboBufferList2,
+                          indexList2,
                           ref srcRect,
                           g_x,
                           g_y,
@@ -694,13 +695,12 @@ namespace PixelFarm.DrawingGL
                         break;
                 }
             }
-            //---------
-
+            //--------- 
 
             DrawingGL.GLRenderVxFormattedString renderVxFormattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
-            renderVxFormattedString.IndexArray = indexList.ToArray();
-            renderVxFormattedString.VertexCoords = vboBufferList.ToArray();
-            renderVxFormattedString.VertexCount = indexList.Count;
+            renderVxFormattedString.IndexArray = indexList2.ToArray();
+            renderVxFormattedString.VertexCoords = vboBufferList2.ToArray();
+            renderVxFormattedString.VertexCount = indexList2.Count;
         }
     }
 
