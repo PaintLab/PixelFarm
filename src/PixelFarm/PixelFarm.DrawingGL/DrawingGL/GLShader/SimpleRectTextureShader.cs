@@ -640,10 +640,9 @@ namespace PixelFarm.DrawingGL
 
             u_matrix.SetData(backup.data);
         }
-        public void NewDrawSubImage3(float[] vboList,
-            ushort[] indexList)
+        public void NewDrawSubImage3(float[] vboList, ushort[] indexList)
         {
-             
+
             int fieldCount = vboList.Length;
             unsafe
             {
@@ -654,16 +653,16 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-            
+
             int count1 = indexList.Length;
-            ////version 1
-            ////1. B , yellow  result
+            //version 1
+            //1. B , yellow  result
             GL.ColorMask(false, false, true, false);
             this.SetCompo(0);
             OnSetVarsBeforeRenderer();
             GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
-            ////2. G , magenta result
+            //2. G , magenta result
             GL.ColorMask(false, true, false, false);
             this.SetCompo(1);
             OnSetVarsBeforeRenderer();
