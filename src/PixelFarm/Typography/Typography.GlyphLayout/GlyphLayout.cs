@@ -7,18 +7,18 @@ namespace Typography.TextLayout
     public interface IPixelScaleLayout
     {
         void SetFont(Typeface typeface, float fontSizeInPoints);
-        void Layout(IGlyphPositions posStream, UnscaledGlyphPlanList outputGlyphPlanList);
+        void Layout(IGlyphPositions posStream, PxScaledGlyphPlanList outputGlyphPlanList);
     }
 
     /// <summary>
     /// scaled glyph plan to specfic font size.
     /// offsetX,offsetY,advanceX are adjusted to fit with specific font size    
     /// </summary>
-    public struct PixelScaledGlyphPlan
+    public struct PxScaledGlyphPlan
     {
         public readonly short input_cp_offset;
         public readonly ushort glyphIndex;
-        public PixelScaledGlyphPlan(short input_cp_offset, ushort glyphIndex, short advanceW, short offsetX, short offsetY)
+        public PxScaledGlyphPlan(short input_cp_offset, ushort glyphIndex, float advanceW, float offsetX, float offsetY)
         {
             this.input_cp_offset = input_cp_offset;
             this.glyphIndex = glyphIndex;
@@ -26,15 +26,15 @@ namespace Typography.TextLayout
             this.OffsetY = offsetY;
             this.AdvanceX = advanceW;
         }
-        public short AdvanceX { get; private set; }
+        public float AdvanceX { get; private set; }
         /// <summary>
         /// x offset from current position
         /// </summary>
-        public short OffsetX { get; private set; }
+        public float OffsetX { get; private set; }
         /// <summary>
         /// y offset from current position
         /// </summary>
-        public short OffsetY { get; private set; }
+        public float OffsetY { get; private set; }
 
         public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
 
@@ -45,6 +45,51 @@ namespace Typography.TextLayout
         }
 #endif
     }
+
+
+    /// <summary>
+    /// expandable list of glyph plan
+    /// </summary>
+    public class PxScaledGlyphPlanList
+    {
+        List<PxScaledGlyphPlan> _glyphPlans = new List<PxScaledGlyphPlan>();
+        float _accumAdvanceX;
+
+        public void Clear()
+        {
+            _glyphPlans.Clear();
+            _accumAdvanceX = 0;
+        }
+        public void Append(PxScaledGlyphPlan glyphPlan)
+        {
+            _glyphPlans.Add(glyphPlan);
+            _accumAdvanceX += glyphPlan.AdvanceX;
+        }
+        public float AccumAdvanceX { get { return _accumAdvanceX; } }
+
+        public PxScaledGlyphPlan this[int index]
+        {
+            get
+            {
+                return _glyphPlans[index];
+            }
+        }
+        public int Count
+        {
+            get
+            {
+                return _glyphPlans.Count;
+            }
+        }
+
+#if DEBUG
+        public PxScaledGlyphPlanList()
+        {
+
+        }
+#endif
+    }
+
 
     /// <summary>
     /// unscaled glyph-plan
@@ -80,6 +125,8 @@ namespace Typography.TextLayout
         }
 #endif
     }
+
+
 
     /// <summary>
     /// expandable list of glyph plan
@@ -473,49 +520,47 @@ namespace Typography.TextLayout
         public static void GenerateGlyphPlans(IGlyphPositions glyphPositions,
             float pxscale,
             bool snapToGrid,
-            UnscaledGlyphPlanList outputGlyphPlanList)
+            PxScaledGlyphPlanList outputGlyphPlanList)
         {
-            //user can implement this with some 'PixelScaleEngine'
-            if (pxscale != 1)
+            //user can implement this with some 'PixelScaleEngine' 
+            if (snapToGrid)
             {
 
+                int finalGlyphCount = glyphPositions.Count;
+                for (int i = 0; i < finalGlyphCount; ++i)
+                {
+                    short input_offset, offsetX, offsetY, advW; //all from pen-pos
+                    ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
+
+                    outputGlyphPlanList.Append(new PxScaledGlyphPlan(
+                        input_offset,
+                        glyphIndex,
+                        (short)Math.Round(advW * pxscale),
+                        (short)Math.Round(offsetX * pxscale),
+                        (short)Math.Round(offsetY * pxscale)
+                        ));
+                }
             }
-            int finalGlyphCount = glyphPositions.Count;
-
-            float cx = 0;
-            short cy = 0;
-
-            for (int i = 0; i < finalGlyphCount; ++i)
+            else
             {
+                //not snap to grid
+                //scaled but not snap to grid
+                int finalGlyphCount = glyphPositions.Count;
+                for (int i = 0; i < finalGlyphCount; ++i)
+                {
+                    short input_offset, offsetX, offsetY, advW; //all from pen-pos
+                    ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
 
-
-
-                //short input_offset, offsetX, offsetY, advW; //all from pen-pos
-                //ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
-
-                //float s_advW = advW * pxscale;
-
-                //if (snapToGrid)
-                //{
-                //    //TEST, 
-                //    //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
-                //    //we can do it here,this produces a predictable caret position result
-                //    //
-                //    s_advW = (int)Math.Round(s_advW);
-                //}
-
-
-                //outputGlyphPlanList.Append(new GlyphPlan(
-                //    input_offset,
-                //    glyphIndex,
-                //    advW,
-                //    offsetX * pxscale,
-                //    offsetY * pxscale
-                //    ));
-
-                //cx += s_advW;
-
+                    outputGlyphPlanList.Append(new PxScaledGlyphPlan(
+                        input_offset,
+                        glyphIndex,
+                        advW * pxscale,
+                        offsetX * pxscale,
+                        offsetY * pxscale
+                        ));
+                }
             }
+
         }
 
     }

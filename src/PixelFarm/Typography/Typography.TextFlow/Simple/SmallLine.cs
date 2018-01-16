@@ -10,7 +10,8 @@ namespace Typography.TextLayout
         int _caretCharIndex = 0;//default  
         //TODO: temp public, review accessibility here again
         public List<char> _charBuffer = new List<char>();
-        public UnscaledGlyphPlanList _glyphPlans = new UnscaledGlyphPlanList();
+        public PxScaledGlyphPlanList _glyphPlans = new PxScaledGlyphPlanList();
+
         public List<UserCodePointToGlyphIndex> _userCodePointToGlyphIndexMap = new List<UserCodePointToGlyphIndex>();
 
         bool _contentChanged = true;
@@ -102,7 +103,7 @@ namespace Typography.TextLayout
                     }
                     //-------------------------
                     //we -1 ***
-                    UnscaledGlyphPlan glyphPlan = _glyphPlans[userCodePointToGlyphIndex.glyphIndexListOffset_plus1 - 1];
+                    PxScaledGlyphPlan glyphPlan = _glyphPlans[userCodePointToGlyphIndex.glyphIndexListOffset_plus1 - 1];
                     if (!glyphPlan.AdvanceMoveForward)
                     {
                         //caret can't rest here
@@ -148,7 +149,7 @@ namespace Typography.TextLayout
                     }
                     //-------------------------
                     //we -1 ***
-                    UnscaledGlyphPlan glyphPlan = _glyphPlans[userCodePointToGlyphIndex.glyphIndexListOffset_plus1 - 1];
+                    PxScaledGlyphPlan glyphPlan = _glyphPlans[userCodePointToGlyphIndex.glyphIndexListOffset_plus1 - 1];
                     if (!glyphPlan.AdvanceMoveForward)
                     {
                         //caret can't rest here

@@ -173,6 +173,7 @@ namespace Typography.TextServices
         }
 
         UnscaledGlyphPlanList _reusableGlyphPlanList = new UnscaledGlyphPlanList();
+        PxScaledGlyphPlanList _reusableScaledGlyphPlanList = new PxScaledGlyphPlanList();
         List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
 
         public void MeasureString(char[] str, int startAt, int len, out int w, out int h)
@@ -210,10 +211,10 @@ namespace Typography.TextServices
                     _glyphLayout.ResultUnscaledGlyphPositions,
                     pxscale,
                     true,
-                    _reusableGlyphPlanList);
+                    _reusableScaledGlyphPlanList);
                 //measure string size
                 var result = new MeasuredStringBox(
-                    _reusableGlyphPlanList.AccumAdvanceX * pxscale,
+                    _reusableGlyphPlanList.AccumAdvanceX,
                     _currentTypeface.Ascender * pxscale,
                     _currentTypeface.Descender * pxscale,
                     _currentTypeface.LineGap * pxscale,
@@ -256,12 +257,13 @@ namespace Typography.TextServices
                 //measure string at specific px scale 
                 _glyphLayout.Layout(str, breakSpan.startAt, breakSpan.len);
                 //
-                _reusableGlyphPlanList.Clear();
+                 
+                _reusableScaledGlyphPlanList.Clear();
                 GlyphLayoutExtensions.GenerateGlyphPlans(
                     _glyphLayout.ResultUnscaledGlyphPositions,
                     pxscale,
                     true,
-                    _reusableGlyphPlanList);
+                    _reusableScaledGlyphPlanList);
                 //measure each glyph
                 //limit at specific width
                 int glyphCount = _reusableGlyphPlanList.Count;

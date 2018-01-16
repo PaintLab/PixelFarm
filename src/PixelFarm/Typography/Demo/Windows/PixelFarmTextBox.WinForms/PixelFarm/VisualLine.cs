@@ -34,7 +34,7 @@ namespace SampleWinForms.UI
         public void Draw()
         {
 
-            UnscaledGlyphPlanList glyphPlans = _line._glyphPlans;
+            PxScaledGlyphPlanList glyphPlans = _line._glyphPlans;
             List<UserCodePointToGlyphIndex> userCharToGlyphIndexMap = _line._userCodePointToGlyphIndexMap;
             if (_line.ContentChanged)
             {

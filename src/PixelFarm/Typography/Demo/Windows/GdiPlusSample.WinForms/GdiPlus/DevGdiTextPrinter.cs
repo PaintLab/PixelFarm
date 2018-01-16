@@ -97,6 +97,8 @@ namespace SampleWinForms
         }
 
         UnscaledGlyphPlanList _resuableGlyphPlanList = new UnscaledGlyphPlanList();//for internal use
+        PxScaledGlyphPlanList _reusablePxScaleGlyphPlanList = new PxScaledGlyphPlanList();
+
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             //----------------
@@ -117,7 +119,7 @@ namespace SampleWinForms
                 _glyphLayout.ResultUnscaledGlyphPositions,
                 _currentTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints),
                 false,
-                _resuableGlyphPlanList);
+                _reusablePxScaleGlyphPlanList);
 
             DrawFromGlyphPlans(_resuableGlyphPlanList, x, y);
         }
@@ -134,6 +136,79 @@ namespace SampleWinForms
             _currentGlyphPathBuilder.SetHintTechnique(this.HintTechnique);
             _fillBrush.Color = this.FillColor;
             _outlinePen.Color = this.OutlineColor;
+        }
+        public override void DrawFromGlyphPlans(PxScaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
+        {
+            UpdateVisualOutputSettings();
+
+            //draw data in glyph plan 
+            //3. render each glyph 
+
+            float sizeInPoints = this.FontSizeInPoints;
+            float scale = _currentTypeface.CalculateScaleToPixelFromPointSize(sizeInPoints);
+            //
+            _glyphMeshCollections.SetCacheInfo(this.Typeface, sizeInPoints, this.HintTechnique);
+
+
+            //this draw a single line text span***
+            int endBefore = startAt + len;
+
+            Graphics g = this.TargetGraphics;
+
+            float acc_x = 0;
+            float acc_y = 0;
+
+            float g_x = 0;
+            float g_y = 0;
+
+            for (int i = startAt; i < endBefore; ++i)
+            {
+                PxScaledGlyphPlan glyphPlan = glyphPlanList[i];
+
+                //check if we have a cache of this glyph
+                //if not -> create it
+
+                GraphicsPath foundPath;
+                if (!_glyphMeshCollections.TryGetCacheGlyph(glyphPlan.glyphIndex, out foundPath))
+                {
+                    //if not found then create a new one
+                    _currentGlyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, sizeInPoints);
+                    _txToGdiPath.Reset();
+                    _currentGlyphPathBuilder.ReadShapes(_txToGdiPath);
+                    foundPath = _txToGdiPath.ResultGraphicsPath;
+
+                    //register
+                    _glyphMeshCollections.RegisterCachedGlyph(glyphPlan.glyphIndex, foundPath);
+                }
+                //------
+                //then move pen point to the position we want to draw a glyph
+
+                float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
+                float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
+
+                g_x = (x + (ngx));
+                g_y = (y + (ngy));
+
+                acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
+
+                //g_x = (float)Math.Round(g_x);
+                g_y = (float)Math.Floor(g_y);
+                g.TranslateTransform(g_x, g_y);
+
+                if (FillBackground)
+                {
+                    g.FillPath(_fillBrush, foundPath);
+                }
+                if (DrawOutline)
+                {
+                    g.DrawPath(_outlinePen, foundPath);
+                }
+                //and then we reset back ***
+                g.TranslateTransform(-g_x, -g_y);
+            }
+
+
+
         }
         public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
