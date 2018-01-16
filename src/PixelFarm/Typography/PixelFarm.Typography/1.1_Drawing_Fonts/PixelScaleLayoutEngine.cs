@@ -491,9 +491,9 @@ namespace Typography.Contours
                 outputGlyphPlanList.Append(new GlyphPlan(
                     input_offset,
                     glyphIndex,
-                    current_ABC.final_advW,
-                    current_ABC.s_offsetX,
-                    current_ABC.s_offsetY
+                    (short)current_ABC.final_advW,
+                    (short)Math.Round(current_ABC.s_offsetX),
+                    (short)Math.Round(current_ABC.s_offsetY)
                     ));
                 // 
                 //

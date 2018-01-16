@@ -33,7 +33,8 @@ namespace Typography.Rendering
             GlyphLayoutExtensions.GenerateGlyphPlans(
                 glyphLayout.ResultUnscaledGlyphPositions,
                 this.Typeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints),
-                false, outputGlyphPlanList);
+                false, 
+                outputGlyphPlanList);
         }
 
         public bool FillBackground { get; set; }

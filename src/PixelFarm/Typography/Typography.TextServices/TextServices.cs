@@ -291,7 +291,7 @@ namespace Typography.TextServices
                     g_y = (float)Math.Floor(g_y);
 
                     float right = g_x + g_w;
-                    
+
                     if (right >= accumW)
                     {
                         //stop here at this glyph
@@ -459,7 +459,7 @@ namespace Typography.TextServices
 
                 int pre_count = _planList.Count;
                 //create glyph-plan ( UnScaled version) and add it to planList                
-                GlyphLayoutExtensions.GenerateGlyphPlans(glyphLayout.ResultUnscaledGlyphPositions, 1, false, _planList);
+                GlyphLayoutExtensions.GenerateUnscaledGlyphPlans(glyphLayout.ResultUnscaledGlyphPositions, _planList);
                 int post_count = _planList.Count;
                 planSeq = new GlyphPlanSequence(_planList, pre_count, post_count - pre_count);
                 //

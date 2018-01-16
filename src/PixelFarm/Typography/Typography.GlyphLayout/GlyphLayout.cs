@@ -9,6 +9,16 @@ namespace Typography.TextLayout
         void SetFont(Typeface typeface, float fontSizeInPoints);
         void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList);
     }
+     
+    /// <summary>
+    /// scaled glyph plan
+    /// </summary>
+    public struct PixelScaledGlyphPlan
+    {
+
+    }
+
+
 
     public struct GlyphPlan
     {
@@ -16,28 +26,23 @@ namespace Typography.TextLayout
         public readonly short input_cp_offset;
         public readonly ushort glyphIndex;
 
-
-        public GlyphPlan(short input_cp_offset, ushort glyphIndex, float exactAdvX, float offsetX, float offsetY)
+        public GlyphPlan(short input_cp_offset, ushort glyphIndex, short exactAdvX, short offsetX, short offsetY)
         {
             this.input_cp_offset = input_cp_offset;
             this.glyphIndex = glyphIndex;
             this.OffsetX = offsetX;
             this.OffsetY = offsetY;
-
             this.AdvanceX = exactAdvX;
         }
-        public float AdvanceX { get; set; }
-
-
-
+        public float AdvanceX { get; private set; }
         /// <summary>
         /// x offset from current position
         /// </summary>
-        public float OffsetX { get; set; }
+        public float OffsetX { get; private set; }
         /// <summary>
         /// y offset from current position
         /// </summary>
-        public float OffsetY { get; set; }
+        public float OffsetY { get; private set; }
 
         public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
 
@@ -84,10 +89,12 @@ namespace Typography.TextLayout
             }
         }
 
+#if DEBUG
         public GlyphPlanList()
         {
 
         }
+#endif
     }
 
 
@@ -405,7 +412,31 @@ namespace Typography.TextLayout
 
 #endif
 
+        /// <summary>
+        /// generate scaled from unscale glyph size to specific scale
+        /// </summary>
+        /// <param name="glyphPositions"></param>
+        /// <param name="pxscale"></param>
+        /// <param name="outputGlyphPlanList"></param>
+        public static void GenerateUnscaledGlyphPlans(IGlyphPositions glyphPositions, GlyphPlanList outputGlyphPlanList)
+        {
+            //user can implement this with some 'PixelScaleEngine'
 
+            int finalGlyphCount = glyphPositions.Count;
+            for (int i = 0; i < finalGlyphCount; ++i)
+            {
+                short input_offset, offsetX, offsetY, advW; //all from pen-pos
+                ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
+
+                outputGlyphPlanList.Append(new GlyphPlan(
+                    input_offset,
+                    glyphIndex,
+                    advW,
+                    offsetX,
+                    offsetY
+                    ));
+            }
+        }
         /// <summary>
         /// generate scaled from unscale glyph size to specific scale
         /// </summary>
@@ -430,30 +461,32 @@ namespace Typography.TextLayout
             for (int i = 0; i < finalGlyphCount; ++i)
             {
 
-                short input_offset, offsetX, offsetY, advW; //all from pen-pos
-                ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
 
-                float s_advW = advW * pxscale;
 
-                if (snapToGrid)
-                {
-                    //TEST, 
-                    //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
-                    //we can do it here,this produces a predictable caret position result
-                    //
-                    s_advW = (int)Math.Round(s_advW);
-                }
+                //short input_offset, offsetX, offsetY, advW; //all from pen-pos
+                //ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
 
-               
-                outputGlyphPlanList.Append(new GlyphPlan(
-                    input_offset,
-                    glyphIndex, 
-                    advW,
-                    offsetX * pxscale,
-                    offsetY * pxscale
-                    ));
+                //float s_advW = advW * pxscale;
 
-                cx += s_advW;
+                //if (snapToGrid)
+                //{
+                //    //TEST, 
+                //    //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
+                //    //we can do it here,this produces a predictable caret position result
+                //    //
+                //    s_advW = (int)Math.Round(s_advW);
+                //}
+
+
+                //outputGlyphPlanList.Append(new GlyphPlan(
+                //    input_offset,
+                //    glyphIndex,
+                //    advW,
+                //    offsetX * pxscale,
+                //    offsetY * pxscale
+                //    ));
+
+                //cx += s_advW;
 
             }
         }
