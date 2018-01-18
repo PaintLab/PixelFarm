@@ -170,7 +170,7 @@ namespace LayoutFarm
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
-                    if (choice.StartsWith(currentLocalText))
+                    if (StringStartsWithChars(choice, currentLocalText))
                     {
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = Color.LightGray;
@@ -181,7 +181,7 @@ namespace LayoutFarm
             }
             if (sgBox.ItemCount > 0)
             {
-                
+
                 //TODO: implement selectedIndex suggestion hint here
                 sgBox.SelectedIndex = 0;
 
@@ -204,7 +204,36 @@ namespace LayoutFarm
                 sgBox.Hide();
             }
         }
-
+        static bool StringStartsWithChars(string srcString, string value)
+        {
+            int findingLen = value.Length;
+            if (findingLen > srcString.Length)
+            {
+                return false;
+            }
+            //
+            unsafe
+            {
+                fixed (char* srcStringBuff = srcString)
+                fixed (char* findingChar = value)
+                {
+                    char* srcBuff1 = srcStringBuff;
+                    char* findChar1 = findingChar;
+                    for (int i = 0; i < findingLen; ++i)
+                    {
+                        //compare by values
+                        if (*srcBuff1 != *findChar1)
+                        {
+                            return false;
+                        }
+                        srcBuff1++;
+                        findChar1++;
+                    }
+                    //MATCH all
+                    return true;
+                }
+            }
+        }
         void BuildSampleCountryList()
         {
             AddKeywordList(@"

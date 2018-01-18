@@ -83,7 +83,7 @@ namespace PixelFarm.Drawing.WinGdi
         public static int MeasureBlankLineHeight(RequestFont font)
         {
             WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(font);
-            return (int)winFont.RecommendedLineSpacingInPixels;
+            return (int)System.Math.Ceiling(winFont.RecommendedLineSpacingInPixels);
         }
         public static PixelFarm.Drawing.Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
         {
@@ -233,6 +233,8 @@ namespace PixelFarm.Drawing.WinGdi
         float ascendInPixels;
         float descentInPixels;
         float linegapInPixels;
+        float recommenedLineHeight;
+
         WinGdiFontFace fontFace;
         int[] charWidths;
         NativeTextWin32.FontABC[] charAbcWidths;
@@ -257,7 +259,7 @@ namespace PixelFarm.Drawing.WinGdi
             ascendInPixels = fontFace.AscentInDzUnit * scale;
             descentInPixels = fontFace.DescentInDzUnit * scale;
             linegapInPixels = fontFace.LineGapInDzUnit * scale;
-
+            recommenedLineHeight = fontFace.RecommendedLineHeight * scale;
             //------------------------------------------------------------------
 
 
@@ -361,7 +363,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override float RecommendedLineSpacingInPixels
         {
-            get { return AscentInPixels - DescentInPixels + LineGapInPixels; }
+            get { return recommenedLineHeight; }
         }
         public override float DescentInPixels
         {
@@ -403,7 +405,7 @@ namespace PixelFarm.Drawing.WinGdi
         public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
-            
+
             WinGdiTextService.CalculateGlyphAdvancePos(ref textBufferSpan, font, outputGlyphAdvances, out outputTotalW);
             outputLineHeight = WinGdiTextService.MeasureBlankLineHeight(font);
         }
@@ -417,11 +419,11 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
-        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
-            ILineSegmentList lineSegs, 
-            RequestFont font, 
-            int[] glyphXAdvances, 
-            out int outputTotalW, 
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+            ILineSegmentList lineSegs,
+            RequestFont font,
+            int[] glyphXAdvances,
+            out int outputTotalW,
             out int outputLineHeight)
         {
             throw new NotImplementedException();
@@ -508,7 +510,13 @@ namespace PixelFarm.Drawing.WinGdi
             //TODO: review 
             this.nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
         }
-
+        public override int RecommendedLineHeight
+        {
+            get
+            {
+                return nopenTypeFontFace.RecommendedLineHeight;
+            }
+        }
         public static void SetFontLoader(IFontLoader fontLoader)
         {
             //warning if duplicate

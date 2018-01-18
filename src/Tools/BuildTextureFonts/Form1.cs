@@ -780,7 +780,7 @@ namespace BuildTextureFonts
 
             var g1 = font.GetGlyph('C');
 
-            var plans = new List<Typography.TextLayout.GlyphPlan>();
+            var plans = new List<Typography.TextLayout.UnscaledGlyphPlan>();
             PixelFarm.Drawing.Text.TextShapingService.GetGlyphPos(font, "ABC".ToCharArray(), 0, 3, plans);
 
 
