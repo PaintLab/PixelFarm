@@ -91,6 +91,8 @@ namespace PixelFarm.Drawing.Fonts
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
         VertexStorePool vxsPool = new VertexStorePool();
+        float _recommendLineSpacing;
+
         public NOpenFont(NOpenFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
@@ -99,6 +101,8 @@ namespace PixelFarm.Drawing.Fonts
             this.typeFace = ownerFace.Typeface;
             //calculate scale *** 
             scale = typeFace.CalculateScaleToPixelFromPointSize(sizeInPoints);
+            _recommendLineSpacing = typeFace.CalculateRecommendLineSpacing() * scale;
+
         }
         public override float SizeInPoints
         {
@@ -122,11 +126,11 @@ namespace PixelFarm.Drawing.Fonts
             get { return typeFace.LineGap * scale; }
         }
         public override float RecommendedLineSpacingInPixels
-        { 
+        {
             get
             {
-                return typeFace.CalculateRecommendLineSpacing() * scale;
-            } 
+                return _recommendLineSpacing;
+            }
         }
         public override FontFace FontFace
         {
