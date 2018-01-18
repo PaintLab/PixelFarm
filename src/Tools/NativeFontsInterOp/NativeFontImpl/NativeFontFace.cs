@@ -55,6 +55,13 @@ namespace PixelFarm.Drawing.Fonts
                 }
             }
         }
+        public override int RecommendedLineHeight
+        {
+            get
+            {
+                throw new NotSupportedException();
+            }
+        }
         public override float GetScale(float pointSize)
         {
             return 1 / 64;
