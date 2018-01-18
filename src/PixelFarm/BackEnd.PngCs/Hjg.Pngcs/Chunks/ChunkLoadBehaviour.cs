@@ -1,16 +1,12 @@
-namespace Hjg.Pngcs.Chunks {
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
+﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+namespace Hjg.Pngcs.Chunks
+{
 
     /// <summary>
     /// Defines what to do with non critical chunks when reading
     /// </summary>
-    public enum ChunkLoadBehaviour {
+    public enum ChunkLoadBehaviour
+    {
         /// <summary>
         /// all non-critical chunks are skippped
         /// </summary>

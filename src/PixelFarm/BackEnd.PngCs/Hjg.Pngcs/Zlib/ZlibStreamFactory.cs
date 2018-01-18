@@ -1,13 +1,17 @@
-﻿using System;
+﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Hjg.Pngcs.Zlib {
+namespace Hjg.Pngcs.Zlib
+{
 
 
-    public class ZlibStreamFactory {        
-        public static AZlibInputStream createZlibInputStream(Stream st, bool leaveOpen) {
+    public class ZlibStreamFactory
+    {
+        public static AZlibInputStream createZlibInputStream(Stream st, bool leaveOpen)
+        {
 #if NET45
                 return new ZlibInputStreamMs(st,leaveOpen);
 #endif
@@ -16,11 +20,13 @@ namespace Hjg.Pngcs.Zlib {
 #endif
         }
 
-        public static AZlibInputStream createZlibInputStream(Stream st) {
+        public static AZlibInputStream createZlibInputStream(Stream st)
+        {
             return createZlibInputStream(st, false);
         }
 
-        public static AZlibOutputStream createZlibOutputStream(Stream st, int compressLevel, EDeflateCompressStrategy strat, bool leaveOpen) {
+        public static AZlibOutputStream createZlibOutputStream(Stream st, int compressLevel, EDeflateCompressStrategy strat, bool leaveOpen)
+        {
 #if NET45
                 return new ZlibOutputStreamMs( st, compressLevel,strat, leaveOpen);
 #endif
@@ -29,11 +35,13 @@ namespace Hjg.Pngcs.Zlib {
 #endif
         }
 
-        public static AZlibOutputStream createZlibOutputStream(Stream st) {
+        public static AZlibOutputStream createZlibOutputStream(Stream st)
+        {
             return createZlibOutputStream(st, false);
         }
 
-        public static AZlibOutputStream createZlibOutputStream(Stream st, bool leaveOpen) {
+        public static AZlibOutputStream createZlibOutputStream(Stream st, bool leaveOpen)
+        {
             return createZlibOutputStream(st, DeflateCompressLevel.DEFAULT, EDeflateCompressStrategy.Default, leaveOpen);
         }
     }

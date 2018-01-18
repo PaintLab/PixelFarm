@@ -1,10 +1,12 @@
-﻿using System;
+﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
 // ONLY FOR .NET 4.5
-namespace Hjg.Pngcs.Zlib {
+namespace Hjg.Pngcs.Zlib
+{
 
 #if NET45
 
@@ -88,5 +90,5 @@ namespace Hjg.Pngcs.Zlib {
         }
 #endif
 
-    
+
 }

@@ -1,13 +1,11 @@
+﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
 namespace Hjg.Pngcs
 {
 
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.IO;
 
-    using System.Runtime.CompilerServices;
     using Chunks;
     using Hjg.Pngcs.Zlib;
 

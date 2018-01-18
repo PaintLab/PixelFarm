@@ -1,12 +1,8 @@
+﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
 namespace Hjg.Pngcs.Chunks {
 
     using Hjg.Pngcs;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
+    using System; 
 
     /// <summary>
     /// sRGB chunk: http://www.w3.org/TR/PNG/#11sRGB
