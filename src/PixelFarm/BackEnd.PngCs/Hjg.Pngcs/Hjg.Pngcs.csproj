@@ -132,68 +132,6 @@
     <Compile Include="PngWriter.cs" />
     <Compile Include="ProgressiveOutputStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharpZipLib\BZip2\BZip2.cs" />
-    <Compile Include="SharpZipLib\BZip2\BZip2Constants.cs" />
-    <Compile Include="SharpZipLib\BZip2\BZip2Exception.cs" />
-    <Compile Include="SharpZipLib\BZip2\BZip2InputStream.cs" />
-    <Compile Include="SharpZipLib\BZip2\BZip2OutputStream.cs" />
-    <Compile Include="SharpZipLib\Checksum\Adler32.cs" />
-    <Compile Include="SharpZipLib\Checksum\BZip2Crc.cs" />
-    <Compile Include="SharpZipLib\Checksum\Crc32.cs" />
-    <Compile Include="SharpZipLib\Checksum\IChecksum.cs" />
-    <Compile Include="SharpZipLib\Core\FileSystemScanner.cs" />
-    <Compile Include="SharpZipLib\Core\INameTransform.cs" />
-    <Compile Include="SharpZipLib\Core\IScanFilter.cs" />
-    <Compile Include="SharpZipLib\Core\NameFilter.cs" />
-    <Compile Include="SharpZipLib\Core\PathFilter.cs" />
-    <Compile Include="SharpZipLib\Core\StreamUtils.cs" />
-    <Compile Include="SharpZipLib\Core\WindowsPathUtils.cs" />
-    <Compile Include="SharpZipLib\Encryption\PkzipClassic.cs" />
-    <Compile Include="SharpZipLib\Encryption\ZipAESStream.cs" />
-    <Compile Include="SharpZipLib\Encryption\ZipAESTransform.cs" />
-    <Compile Include="SharpZipLib\GZip\GZip.cs" />
-    <Compile Include="SharpZipLib\GZip\GZipConstants.cs" />
-    <Compile Include="SharpZipLib\GZip\GZipException.cs" />
-    <Compile Include="SharpZipLib\GZip\GzipInputStream.cs" />
-    <Compile Include="SharpZipLib\GZip\GzipOutputStream.cs" />
-    <Compile Include="SharpZipLib\Lzw\LzwConstants.cs" />
-    <Compile Include="SharpZipLib\Lzw\LzwException.cs" />
-    <Compile Include="SharpZipLib\Lzw\LzwInputStream.cs" />
-    <Compile Include="SharpZipLib\SharpZipBaseException.cs" />
-    <Compile Include="SharpZipLib\Tar\InvalidHeaderException.cs" />
-    <Compile Include="SharpZipLib\Tar\TarArchive.cs" />
-    <Compile Include="SharpZipLib\Tar\TarBuffer.cs" />
-    <Compile Include="SharpZipLib\Tar\TarEntry.cs" />
-    <Compile Include="SharpZipLib\Tar\TarException.cs" />
-    <Compile Include="SharpZipLib\Tar\TarHeader.cs" />
-    <Compile Include="SharpZipLib\Tar\TarInputStream.cs" />
-    <Compile Include="SharpZipLib\Tar\TarOutputStream.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\Deflater.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\DeflaterConstants.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\DeflaterEngine.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\DeflaterHuffman.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\DeflaterPending.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\Inflater.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\InflaterDynHeader.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\InflaterHuffmanTree.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\PendingBuffer.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\Streams\DeflaterOutputStream.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\Streams\InflaterInputStream.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\Streams\OutputWindow.cs" />
-    <Compile Include="SharpZipLib\Zip\Compression\Streams\StreamManipulator.cs" />
-    <Compile Include="SharpZipLib\Zip\FastZip.cs" />
-    <Compile Include="SharpZipLib\Zip\IEntryFactory.cs" />
-    <Compile Include="SharpZipLib\Zip\WindowsNameTransform.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipConstants.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipEntry.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipEntryFactory.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipException.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipExtraData.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipFile.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipHelperStream.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipInputStream.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipNameTransform.cs" />
-    <Compile Include="SharpZipLib\Zip\ZipOutputStream.cs" />
     <Compile Include="Zlib\Adler32.cs" />
     <Compile Include="Zlib\ZlibOutputStreamIs.cs" />
     <Compile Include="Zlib\ZlibInputStreamIs.cs" />
@@ -205,6 +143,12 @@
     <Compile Include="Zlib\AZlibOutputStream.cs" />
     <Compile Include="Zlib\ZlibOutputStreamMs.cs" />
     <Compile Include="Zlib\ZlibStreamFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharpZipLib\SharpZipLib.csproj">
+      <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>
+      <Name>SharpZipLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
