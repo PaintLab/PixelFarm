@@ -86,6 +86,12 @@ namespace PixelFarm.DrawingGL
 
                 //check from pre-built cache (if availiable)
                 //
+
+                if (reqFont.SizeInPoints == 14)
+                {
+                    GlyphImage cacheImg = ReadGlyphImages("d:\\WImageTest\\total_tahoma_n_14.png");
+
+                }
                 Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
                 //GlyphImage cacheImage = ReadGlyphImages("d:\\WImageTest\\test1.png");
 
@@ -121,13 +127,13 @@ namespace PixelFarm.DrawingGL
                 fontAtlas.TotalGlyph = totalGlyphsImg;
 #if DEBUG
                 //save glyph image for debug
-                PixelFarm.Agg.ActualImage.SaveImgBufferToPngFile(
-                    totalGlyphsImg.GetImageBuffer(),
-                    totalGlyphsImg.Width * 4,
-                    totalGlyphsImg.Width, totalGlyphsImg.Height,
-                    "d:\\WImageTest\\total_" + reqFont.Name + "_" + reqFont.SizeInPoints + ".png");
-                //save image to cache
-                SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\total_" + reqFont.Name + "_n_" + reqFont.SizeInPoints + ".png");
+                //PixelFarm.Agg.ActualImage.SaveImgBufferToPngFile(
+                //    totalGlyphsImg.GetImageBuffer(),
+                //    totalGlyphsImg.Width * 4,
+                //    totalGlyphsImg.Width, totalGlyphsImg.Height,
+                //    "d:\\WImageTest\\total_" + reqFont.Name + "_" + reqFont.SizeInPoints + ".png");
+                ////save image to cache
+                //SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\total_" + reqFont.Name + "_n_" + reqFont.SizeInPoints + ".png");
 #endif 
 
                 //cache the atlas
@@ -171,26 +177,44 @@ namespace PixelFarm.DrawingGL
             {
                 Hjg.Pngcs.PngReader reader = new Hjg.Pngcs.PngReader(fs, filename);
                 Hjg.Pngcs.ImageInfo imgInfo = reader.ImgInfo;
+                Hjg.Pngcs.ImageLine iline2 = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
+
                 int imgH = imgInfo.Rows;
                 int imgW = imgInfo.Cols;
-                int bytesPerRow = imgInfo.BytesPerRow;
+                int stride = imgInfo.BytesPerRow;
                 int widthPx = imgInfo.Cols;
 
-                int[] buffer = new int[(bytesPerRow / 4) * imgH];
+                int[] buffer = new int[(stride / 4) * imgH];
                 //read each row 
                 //and fill the glyph image 
                 int startWriteAt = 0;
+                int destIndex = 0;
                 for (int row = 0; row < imgH; row++)
                 {
                     Hjg.Pngcs.ImageLine iline = reader.ReadRowByte(row);
                     byte[] scline = iline.ScanlineB;
-                    Buffer.BlockCopy(scline, 0, buffer, startWriteAt, bytesPerRow);
-                    startWriteAt += bytesPerRow;
+
+                    int b_src = 0;
+                    destIndex = startWriteAt;
+
+                    for (int mm = 0; mm < imgW; ++mm)
+                    {
+                        byte b = scline[b_src];
+                        byte g = scline[b_src + 1];
+                        byte r = scline[b_src + 2];
+                        byte a = scline[b_src + 3];
+                        b_src += 4;
+                        buffer[destIndex] = (b << 16) & (g << 8) & (r) & (a << 24);
+                        destIndex++;
+                    }
+                    startWriteAt += imgW;
                 }
 
-
+                GlyphImage img = new GlyphImage(imgW, imgH);
+                img.SetImageBuffer(buffer, true);
+                return img;
             }
-            return null;
+
         }
         static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
         {
