@@ -1,9 +1,9 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs.Chunks
 {
 
     using Hjg.Pngcs;
-    using System;
+    using System; 
 
     /// <summary>
     /// oFFs chunk: http://www.libpng.org/pub/png/spec/register/pngext-1.3.0-pdg.html#C.oFFs

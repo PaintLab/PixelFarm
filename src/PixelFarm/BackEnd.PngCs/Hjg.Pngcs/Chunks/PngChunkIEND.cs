@@ -1,10 +1,9 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs.Chunks
 {
 
     using Hjg.Pngcs;
     using System;
-
     /// <summary>
     /// IEND chunk  http://www.w3.org/TR/PNG/#11IEND
     /// </summary>

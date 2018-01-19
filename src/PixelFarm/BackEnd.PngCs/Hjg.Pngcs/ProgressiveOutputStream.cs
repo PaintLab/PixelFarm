@@ -1,9 +1,11 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs
 {
 
     using System;
     using System.IO;
+
+
     /// <summary>
     /// stream that outputs to memory and allows to flush fragments every 'size'
     /// bytes to some other destination

@@ -1,5 +1,6 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
     using System; 
@@ -8,27 +9,33 @@ namespace Hjg.Pngcs.Chunks {
     /// 
     /// This object is dummy placeholder - We treat this chunk in a very different way than ancillary chnks
     /// </summary>
-    public class PngChunkIDAT : PngChunkMultiple {
+    public class PngChunkIDAT : PngChunkMultiple
+    {
         public const String ID = ChunkHelper.IDAT;
 
-        public PngChunkIDAT(ImageInfo i,int len, long offset)
-            : base(ID, i) {
+        public PngChunkIDAT(ImageInfo i, int len, long offset)
+            : base(ID, i)
+        {
             this.Length = len;
             this.Offset = offset;
         }
 
-        public override ChunkOrderingConstraint GetOrderingConstraint() {
+        public override ChunkOrderingConstraint GetOrderingConstraint()
+        {
             return ChunkOrderingConstraint.NA;
         }
 
-        public override ChunkRaw CreateRawChunk() {// does nothing
+        public override ChunkRaw CreateRawChunk()
+        {// does nothing
             return null;
         }
 
-        public override void ParseFromRaw(ChunkRaw c) { // does nothing
+        public override void ParseFromRaw(ChunkRaw c)
+        { // does nothing
         }
 
-        public override void CloneDataFromRead(PngChunk other) {
+        public override void CloneDataFromRead(PngChunk other)
+        {
         }
     }
 }

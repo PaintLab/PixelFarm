@@ -1,4 +1,4 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +12,7 @@ namespace Hjg.Pngcs.Zlib
     {
         public static AZlibInputStream createZlibInputStream(Stream st, bool leaveOpen)
         {
+            return new ZlibInputStreamMs(st, leaveOpen);
 #if NET45
                 return new ZlibInputStreamMs(st,leaveOpen);
 #endif
@@ -27,6 +28,7 @@ namespace Hjg.Pngcs.Zlib
 
         public static AZlibOutputStream createZlibOutputStream(Stream st, int compressLevel, EDeflateCompressStrategy strat, bool leaveOpen)
         {
+            return new ZlibOutputStreamMs(st, compressLevel, strat, leaveOpen);
 #if NET45
                 return new ZlibOutputStreamMs( st, compressLevel,strat, leaveOpen);
 #endif

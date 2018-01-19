@@ -1,9 +1,11 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs.Chunks
 {
 
     using Hjg.Pngcs;
     using System;
+
+
     /// <summary>
     /// hIST chunk, see http://www.w3.org/TR/PNG/#11hIST
     /// Only for palette images

@@ -1,7 +1,6 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs
 {
-
     /// <summary>
     /// Internal PNG predictor filter, or a strategy to select it.
     /// </summary>

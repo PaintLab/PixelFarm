@@ -1,6 +1,5 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 using System;
-
 namespace Hjg.Pngcs.Chunks
 {
     /// <summary>

@@ -121,11 +121,13 @@ namespace PixelFarm.DrawingGL
                 fontAtlas.TotalGlyph = totalGlyphsImg;
 #if DEBUG
                 //save glyph image for debug
-                //PixelFarm.Agg.ActualImage.SaveImgBufferToPngFile(
-                //    totalGlyphsImg.GetImageBuffer(),
-                //    totalGlyphsImg.Width * 4,
-                //    totalGlyphsImg.Width, totalGlyphsImg.Height,
-                //    "d:\\WImageTest\\total_" + reqFont.Name + "_" + reqFont.SizeInPoints + ".png");
+                PixelFarm.Agg.ActualImage.SaveImgBufferToPngFile(
+                    totalGlyphsImg.GetImageBuffer(),
+                    totalGlyphsImg.Width * 4,
+                    totalGlyphsImg.Width, totalGlyphsImg.Height,
+                    "d:\\WImageTest\\total_" + reqFont.Name + "_" + reqFont.SizeInPoints + ".png");
+                //save image to cache
+                SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\total_" + reqFont.Name + "_n_" + reqFont.SizeInPoints + ".png");
 #endif 
 
                 //cache the atlas
@@ -149,12 +151,11 @@ namespace PixelFarm.DrawingGL
                 System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
 #endif
 
-                //#if DEBUG
-                //                //save image to cache
-                //                SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\test1.png");
-                //                //save font info to cache
-                //                atlasBuilder.SaveFontInfo("d:\\WImageTest\\test002.info");
-                //#endif
+#if DEBUG
+
+                //save font info to cache
+                atlasBuilder.SaveFontInfo("d:\\WImageTest\\test002.info");
+#endif
             }
 
             glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);

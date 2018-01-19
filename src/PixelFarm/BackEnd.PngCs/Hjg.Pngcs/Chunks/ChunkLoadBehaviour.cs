@@ -1,7 +1,8 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs.Chunks
 {
 
+ 
     /// <summary>
     /// Defines what to do with non critical chunks when reading
     /// </summary>

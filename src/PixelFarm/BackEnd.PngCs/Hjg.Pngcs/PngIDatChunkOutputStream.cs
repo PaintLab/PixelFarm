@@ -1,10 +1,9 @@
-﻿//Apache2, 2012,  Hernán J. González, (https://github.com/leonbloy/pngcs)
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs
 {
 
     using Hjg.Pngcs.Chunks;
     using System.IO;
-
     /// <summary>
     /// outputs the stream for IDAT chunk , fragmented at fixed size (32k default).
     /// </summary>
