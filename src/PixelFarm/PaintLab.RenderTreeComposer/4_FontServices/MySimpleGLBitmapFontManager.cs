@@ -196,17 +196,6 @@ namespace PixelFarm.DrawingGL
         {
             //-------------
             int[] intBuffer = glyphImg.GetImageBuffer();
-            //byte[] imgBuff = new byte[intBuffer.Length * 4];
-            //Buffer.BlockCopy(intBuffer, 0, imgBuff, 0, imgBuff.Length);
-            //PixelFarm.Agg.ExternalImageService.SaveImage(imgBuff, glyphImg.Width, glyphImg.Height);
-            ////-------------
-
-
-            //ImageTools.IO.Png.PngEncoder enc = new ImageTools.IO.Png.PngEncoder();
-            //ImageTools.ExtendedImage extImage = new ImageTools.ExtendedImage(glyphImg.Width, glyphImg.Height);
-            //extImage.SetPixels(glyphImg.Width, glyphImg.Height, imgBuff);
-
-
             using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
             {
 
@@ -215,16 +204,30 @@ namespace PixelFarm.DrawingGL
 
                 Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
                 Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(fs, imgInfo);
-
-
-                Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo);
+                Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
                 int startReadAt = 0;
+
+                int imgStride = imgW * 4;
+
+                int srcIndex = 0;
+                int srcIndexRowHead = intBuffer.Length - imgW;
 
                 for (int row = 0; row < imgH; row++)
                 {
-                    int[] scline = iline.Scanline;
-                    Array.Copy(intBuffer, startReadAt, scline, 0, imgW);
-                    startReadAt += imgW;
+                    byte[] scanlineBuffer = iline.ScanlineB;
+                    srcIndex = srcIndexRowHead;
+                    for (int b = 0; b < imgStride;)
+                    {
+                        int srcInt = intBuffer[srcIndex];
+                        srcIndex++;
+                        scanlineBuffer[b] = (byte)((srcInt >> 16) & 0xff);
+                        scanlineBuffer[b + 1] = (byte)((srcInt >> 8) & 0xff);
+                        scanlineBuffer[b + 2] = (byte)((srcInt) & 0xff);
+                        scanlineBuffer[b + 3] = (byte)((srcInt >> 24) & 0xff);
+                        b += 4;
+                    }
+                    srcIndexRowHead -= imgW;
+                    startReadAt += imgStride;
                     writer.WriteRow(iline, row);
                 }
                 writer.End();
