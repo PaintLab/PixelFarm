@@ -260,6 +260,7 @@ namespace Typography.Rendering
         public SimpleFontAtlas LoadFontInfo(string filename)
         {
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
+
             simpleFontAtlas.TextureKind = this.TextureKind;
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(filename);
@@ -270,6 +271,7 @@ namespace Typography.Rendering
 
                 foreach (XmlElement xmlelem in xmldoc.GetElementsByTagName("total_img"))
                 {
+                    
                     simpleFontAtlas.Width = total_W = int.Parse(xmlelem.GetAttribute("w"));
                     simpleFontAtlas.Height = total_H = int.Parse(xmlelem.GetAttribute("h"));
                     //only 1...
