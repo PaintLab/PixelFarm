@@ -81,6 +81,7 @@ namespace PixelFarm.DrawingGL
             int fontKey = reqFont.FontKey;
             SimpleFontAtlas fontAtlas;
             GlyphImage totalGlyphsImg = null;
+            GlyphImage cacheImg = null;
             if (!_createdAtlases.TryGetValue(fontKey, out fontAtlas))
             {
 
@@ -89,7 +90,7 @@ namespace PixelFarm.DrawingGL
 
                 if (reqFont.SizeInPoints == 14)
                 {
-                    GlyphImage cacheImg = ReadGlyphImages("d:\\WImageTest\\total_tahoma_n_14.png");
+                    cacheImg = ReadGlyphImages("d:\\WImageTest\\total_tahoma_n_14.png");
 
                 }
                 Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
@@ -119,6 +120,10 @@ namespace PixelFarm.DrawingGL
 
                 //
                 totalGlyphsImg = atlasBuilder.BuildSingleImage();
+                if (reqFont.SizeInPoints == 14 && cacheImg != null)
+                {
+                    totalGlyphsImg = cacheImg;
+                }
                 //totalGlyphsImg = Sharpen(totalGlyphsImg, 1); //test shapen primary image
                 //-               
                 //
@@ -187,8 +192,9 @@ namespace PixelFarm.DrawingGL
                 int[] buffer = new int[(stride / 4) * imgH];
                 //read each row 
                 //and fill the glyph image 
-                int startWriteAt = 0;
-                int destIndex = 0;
+                int startWriteAt = (imgW * (imgH - 1));
+                int destIndex = startWriteAt;
+
                 for (int row = 0; row < imgH; row++)
                 {
                     Hjg.Pngcs.ImageLine iline = reader.ReadRowByte(row);
@@ -204,10 +210,10 @@ namespace PixelFarm.DrawingGL
                         byte r = scline[b_src + 2];
                         byte a = scline[b_src + 3];
                         b_src += 4;
-                        buffer[destIndex] = (b << 16) & (g << 8) & (r) & (a << 24);
+                        buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
                         destIndex++;
                     }
-                    startWriteAt += imgW;
+                    startWriteAt -= imgW;
                 }
 
                 GlyphImage img = new GlyphImage(imgW, imgH);
