@@ -1,4 +1,6 @@
 ﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+using System;
+using System.IO;
 
 #if SHARPZIPLIB
 
