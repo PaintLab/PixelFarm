@@ -29,7 +29,7 @@ namespace OpenTkEssTest
 
             //---------------------  
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-            fontAtlas = atlasBuilder.LoadFontInfo(RootDemoPath.Path + @"\a_total.xml");
+            fontAtlas = atlasBuilder.LoadAtlasInfo(RootDemoPath.Path + @"\a_total.xml");
 
 
             var actualImg = DemoHelper.LoadImage(RootDemoPath.Path + @"\a_total.png");
