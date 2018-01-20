@@ -25,8 +25,8 @@ namespace PixelFarm.Agg.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgParser svg = new SvgParser();
             //svg.ReadSvgDocument("d:\\WImageTest\\lion.svg");
-            //svg.ReadSvgFile("d:\\WImageTest\\tiger.svg");
-            svg.ReadSvgString(lionSvg);
+            svg.ReadSvgFile("d:\\WImageTest\\tiger002.svg");
+           // svg.ReadSvgString(lionSvg);
             _renderVx = svg.GetResultAsRenderVx();
         }
 

@@ -107,10 +107,10 @@
     <Compile Include="..\LayoutFarm.Platforms.WinForms\4_GdiPlus\QuadPages.cs">
       <Link>4_GdiPlus\QuadPages.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs">
+    <Compile Include="..\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
       <Link>0_Platform\DrawingGLFontPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTreeComposer\4_FontServices\MySimpleGLBitmapFontManager.cs">
+    <Compile Include="..\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
       <Link>0_Platform\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
   </ItemGroup>
