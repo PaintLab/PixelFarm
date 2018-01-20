@@ -29,20 +29,21 @@ namespace YourImplementation
 
 
         internal static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
+        internal static FileDBStorageProvider s_filedb = new FileDBStorageProvider("localdb");
 
         public static void SetupDefaultValues()
         {
             //--------
             if (s_isInit) return;
             //--------
-            PixelFarm.Platforms.StorageService.RegisterProvider(s_localFileStorageProvider);
+            PixelFarm.Platforms.StorageService.RegisterProvider(s_filedb);
             myFontLoader = new OpenFontStore();
             //test Typography's custom text break, 
             //check if we have that data?
 
             //string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
             string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu60/brkitr_src/dictionaries";
-            s_icuDataProvider = new MyIcuDataProvider(); 
+            s_icuDataProvider = new MyIcuDataProvider();
             s_icuDataProvider.icuDir = typographyDir;
 
             Typography.TextBreak.CustomBreakerBuilder.Setup(s_icuDataProvider);

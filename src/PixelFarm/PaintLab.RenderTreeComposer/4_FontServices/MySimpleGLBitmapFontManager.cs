@@ -72,7 +72,6 @@ namespace PixelFarm.DrawingGL
         public SimpleFontAtlas GetFontAtlas(RequestFont reqFont, out GLBitmap glBmp)
         {
 
-
 #if DEBUG
             _dbugStopWatch.Reset();
             _dbugStopWatch.Start();
@@ -91,8 +90,7 @@ namespace PixelFarm.DrawingGL
                 string resolveFontFile = "d:\\WImageTest\\" + fontTextureFile + ".info";
                 string fontTextureInfoFile = "d:\\WImageTest\\total_tahoma_n_" + reqFont.SizeInPoints + ".info";
                 string fontTextureImg = "d:\\WImageTest\\" + fontTextureFile + ".png";
-                //----------
-
+                //---------- 
 
 
                 if (StorageService.Provider.DataExists(fontTextureInfoFile))
@@ -191,13 +189,12 @@ namespace PixelFarm.DrawingGL
                     System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
 #endif
 
-#if DEBUG
                     //save font info to cache
                     using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
                     {
+                        atlasBuilder.SaveAtlasInfo(ms);
                         StorageService.Provider.SaveData(fontTextureInfoFile, ms.ToArray());
-                    }
-#endif
+                    } 
                 }
             }
 
