@@ -71,6 +71,13 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs" />
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs" />
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
+      <DependentUpon>FormPopupShadow2.cs</DependentUpon>
+    </Compile>
     <Compile Include="4_GdiPlus\Conv.cs" />
     <Compile Include="4_GdiPlus\CanvasCollection.cs" />
     <Compile Include="4_GdiPlus\QuadPages.cs" />
@@ -125,6 +132,10 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
       <Name>BackEnd.MiniOpenTK</Name>
@@ -138,7 +149,7 @@
       <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
-      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
+      <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">

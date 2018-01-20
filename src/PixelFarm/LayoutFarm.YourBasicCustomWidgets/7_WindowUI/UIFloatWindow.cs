@@ -19,9 +19,11 @@ namespace LayoutFarm.CustomWidgets
                 this.platformWindowBox = value;
                 if (isFirstTime)
                 {
-                    platformWindowBox.Visible = this.Visible;
+                   
                     platformWindowBox.SetLocation(this.Left, this.Top);
                     platformWindowBox.SetSize(this.Width, this.Height);
+                    platformWindowBox.Visible = this.Visible;
+
                 }
             }
         }

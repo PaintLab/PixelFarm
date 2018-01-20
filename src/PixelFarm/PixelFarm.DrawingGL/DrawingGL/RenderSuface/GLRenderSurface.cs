@@ -433,7 +433,10 @@ namespace PixelFarm.DrawingGL
           float targetTop,
           float scale)
         {
-            textureSubPixRendering.NewDrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            textureSubPixRendering.NewDrawSubImage(srcRect.Left,
+                srcRect.Top,
+                srcRect.Width,
+                srcRect.Height, targetLeft, targetTop);
 
         }
         public void WriteVboToList(
@@ -480,8 +483,8 @@ namespace PixelFarm.DrawingGL
 
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique3(
-           System.Collections.Generic.List<float> buffer,
-           System.Collections.Generic.List<ushort> indexList)
+             float[] buffer,
+             ushort[] indexList)
         {
 
             //version 3            

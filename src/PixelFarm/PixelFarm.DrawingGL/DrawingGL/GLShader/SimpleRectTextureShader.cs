@@ -503,7 +503,7 @@ namespace PixelFarm.DrawingGL
         }
         public void SetIntensity(float intensity)
         {
-             
+
         }
         protected override void OnProgramBuilt()
         {
@@ -517,7 +517,7 @@ namespace PixelFarm.DrawingGL
             _isBigEndian.SetValue(IsBigEndian);
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
             _c_compo.SetValue(this._use_color_compo);
-         
+
         }
 
         public void WriteVboStream(
@@ -640,40 +640,39 @@ namespace PixelFarm.DrawingGL
 
             u_matrix.SetData(backup.data);
         }
-        public void NewDrawSubImage3(System.Collections.Generic.List<float> vboList,
-            System.Collections.Generic.List<ushort> indexList)
+        public void NewDrawSubImage3(float[] vboList, ushort[] indexList)
         {
-            float[] toList = vboList.ToArray();
-            int fieldCount = toList.Length;
+
+            int fieldCount = vboList.Length;
             unsafe
             {
-                fixed (float* imgVertices = &toList[0])
+                fixed (float* imgVertices = &vboList[0])
                 {
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
             }
 
-            ushort[] indices = indexList.ToArray();
-            int count1 = indices.Length;
-            ////version 1
-            ////1. B , yellow  result
+
+            int count1 = indexList.Length;
+            //version 1
+            //1. B , yellow  result
             GL.ColorMask(false, false, true, false);
             this.SetCompo(0);
             OnSetVarsBeforeRenderer();
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indices);
+            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
-            ////2. G , magenta result
+            //2. G , magenta result
             GL.ColorMask(false, true, false, false);
             this.SetCompo(1);
             OnSetVarsBeforeRenderer();
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indices);
+            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //1. R , cyan result 
             GL.ColorMask(true, false, false, false);//     
             this.SetCompo(2);
             OnSetVarsBeforeRenderer();
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indices);
+            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
 
             //restore
             GL.ColorMask(true, true, true, true);

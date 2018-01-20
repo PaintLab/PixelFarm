@@ -383,7 +383,7 @@ namespace Typography.Contours
         }
 
 
-        public void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
+        public void Layout(IGlyphPositions posStream, PxScaledGlyphPlanList outputGlyphPlanList)
         {
 
             float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
@@ -471,6 +471,10 @@ namespace Typography.Contours
                     }
                 }
                 //------------------------------------------------------------- 
+
+                //TODO: review here again***
+
+
                 float exact_x = (float)(cx + current_ABC.s_offsetX);
                 float exact_y = (float)(cy + current_ABC.s_offsetY);
 
@@ -484,12 +488,13 @@ namespace Typography.Contours
                     final_x += 0.33f;
                 }
 
-                outputGlyphPlanList.Append(new GlyphPlan(
+                outputGlyphPlanList.Append(new PxScaledGlyphPlan(
                     input_offset,
                     glyphIndex,
-                    final_x,
-                    exact_y,
-                    current_ABC.final_advW));
+                    (short)current_ABC.final_advW,
+                    (short)Math.Round(current_ABC.s_offsetX),
+                    (short)Math.Round(current_ABC.s_offsetY)
+                    ));
                 // 
                 //
                 cx += current_ABC.final_advW;

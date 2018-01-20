@@ -820,6 +820,7 @@
     <Compile Include="..\tesselate\Tesselator.cs">
       <Link>2_DrawingCanvas\1_Vectors\6_Tesselate\Tesselator.cs</Link>
     </Compile>
+    <Compile Include="4_PlatformServices\StorageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
