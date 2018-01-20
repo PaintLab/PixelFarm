@@ -173,7 +173,7 @@ namespace Typography.Rendering
         /// save font info into xml document
         /// </summary>
         /// <param name="filename"></param>
-        public void SaveAtlasInfo(string filename)
+        public void SaveAtlasInfo(System.IO.Stream outputStream)
         {
             //save font info as xml 
             //save position of each font
@@ -217,7 +217,9 @@ namespace Typography.Rendering
                 }
                 root.AppendChild(gElem);
             }
-            xmldoc.Save(filename);
+
+            //save to stream
+            xmldoc.Save(outputStream);
         }
 
         public SimpleFontAtlas CreateSimpleFontAtlas()
@@ -246,13 +248,13 @@ namespace Typography.Rendering
             return simpleFontAtlas;
         }
         //read font info from xml document
-        public SimpleFontAtlas LoadAtlasInfo(string filename)
+        public SimpleFontAtlas LoadAtlasInfo(System.IO.Stream inputStream)
         {
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
 
             simpleFontAtlas.TextureKind = this.TextureKind;
             XmlDocument xmldoc = new XmlDocument();
-            xmldoc.Load(filename);
+            xmldoc.Load(inputStream);
             //read
             int total_W = 0;
             int total_H = 0;

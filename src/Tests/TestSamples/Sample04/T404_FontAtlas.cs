@@ -4,7 +4,7 @@ using System;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
-using Typography.Contours; 
+using Typography.Contours;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
@@ -29,7 +29,11 @@ namespace OpenTkEssTest
 
             //---------------------  
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-            fontAtlas = atlasBuilder.LoadAtlasInfo(RootDemoPath.Path + @"\a_total.xml");
+
+            using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.xml", System.IO.FileMode.Open))
+            {
+                fontAtlas = atlasBuilder.LoadAtlasInfo(fs);
+            }
 
 
             var actualImg = DemoHelper.LoadImage(RootDemoPath.Path + @"\a_total.png");

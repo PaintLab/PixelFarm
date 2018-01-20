@@ -11,7 +11,7 @@ using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.OpenFont.Extensions;
 
-
+using PixelFarm.Platforms;
 
 namespace PixelFarm.DrawingGL
 {
@@ -85,31 +85,46 @@ namespace PixelFarm.DrawingGL
                 //check from pre-built cache (if availiable) 
                 Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
 
+
+                //--------
                 string fontTextureFile = "total_tahoma_n_" + reqFont.SizeInPoints;
                 string resolveFontFile = "d:\\WImageTest\\" + fontTextureFile + ".info";
-                string fontTextureInfo = "d:\\WImageTest\\total_tahoma_n_" + reqFont.SizeInPoints + ".info";
+                string fontTextureInfoFile = "d:\\WImageTest\\total_tahoma_n_" + reqFont.SizeInPoints + ".info";
                 string fontTextureImg = "d:\\WImageTest\\" + fontTextureFile + ".png";
-                if (System.IO.File.Exists(fontTextureInfo))
+                //----------
+
+
+
+                if (StorageService.Provider.DataExists(fontTextureInfoFile))
                 {
-
                     SimpleFontAtlasBuilder atlasBuilder2 = new SimpleFontAtlasBuilder();
-                    fontAtlas = atlasBuilder2.LoadAtlasInfo(fontTextureInfo);
-                    fontAtlas.TotalGlyph = ReadGlyphImages(fontTextureImg);
-                    fontAtlas.OriginalFontSizePts = reqFont.SizeInPoints;
 
+                    using (System.IO.Stream dataStream = StorageService.Provider.ReadDataStream(fontTextureInfoFile))
+                    {
+                        try
+                        {
+                            fontAtlas = atlasBuilder2.LoadAtlasInfo(dataStream);
+                            fontAtlas.TotalGlyph = ReadGlyphImages(fontTextureImg);
+                            fontAtlas.OriginalFontSizePts = reqFont.SizeInPoints;
+                            _createdAtlases.Add(fontKey, fontAtlas);
+                            //
+                            //calculate some commonly used values
+                            fontAtlas.SetTextureScaleInfo(
+                                resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
+                                resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
+                            //TODO: review here, use scaled or unscaled values
+                            fontAtlas.SetCommonFontMetricValues(
+                                resolvedTypeface.Ascender,
+                                resolvedTypeface.Descender,
+                                resolvedTypeface.LineGap,
+                                resolvedTypeface.CalculateRecommendLineSpacing());
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
 
-                    _createdAtlases.Add(fontKey, fontAtlas);
-                    //
-                    //calculate some commonly used values
-                    fontAtlas.SetTextureScaleInfo(
-                        resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
-                        resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
-                    //TODO: review here, use scaled or unscaled values
-                    fontAtlas.SetCommonFontMetricValues(
-                        resolvedTypeface.Ascender,
-                        resolvedTypeface.Descender,
-                        resolvedTypeface.LineGap,
-                        resolvedTypeface.CalculateRecommendLineSpacing());
                 }
                 else
                 {
@@ -178,7 +193,10 @@ namespace PixelFarm.DrawingGL
 
 #if DEBUG
                     //save font info to cache
-                    atlasBuilder.SaveAtlasInfo(fontTextureInfo);
+                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                    {
+                        StorageService.Provider.SaveData(fontTextureInfoFile, ms.ToArray());
+                    }
 #endif
                 }
             }
