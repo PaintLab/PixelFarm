@@ -84,14 +84,10 @@ namespace PixelFarm.DrawingGL
                 //check from pre-built cache (if availiable) 
                 Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
 
-
-                //--------
-                string fontTextureFile = "total_tahoma_n_" + reqFont.SizeInPoints;
-                string resolveFontFile = "d:\\WImageTest\\" + fontTextureFile + ".info";
-                string fontTextureInfoFile = "d:\\WImageTest\\total_tahoma_n_" + reqFont.SizeInPoints + ".info";
-                string fontTextureImg = "d:\\WImageTest\\" + fontTextureFile + ".png";
-                //---------- 
-
+                string fontTextureFile = reqFont.Name + " " + fontKey;
+                string resolveFontFile = fontTextureFile + ".info";
+                string fontTextureInfoFile = resolveFontFile;
+                string fontTextureImg = fontTextureInfoFile + ".png";
 
                 if (StorageService.Provider.DataExists(fontTextureInfoFile))
                 {
@@ -194,7 +190,7 @@ namespace PixelFarm.DrawingGL
                     {
                         atlasBuilder.SaveAtlasInfo(ms);
                         StorageService.Provider.SaveData(fontTextureInfoFile, ms.ToArray());
-                    } 
+                    }
                 }
             }
 
