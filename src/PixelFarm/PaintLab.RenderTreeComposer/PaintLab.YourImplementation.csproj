@@ -60,10 +60,6 @@
       <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
       <Name>FileDB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BackEnd.PngCs\Hjg.Pngcs\Hjg.Pngcs.csproj">
-      <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
-      <Name>Hjg.Pngcs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>
@@ -112,6 +108,9 @@
       <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
       <Name>Typography.TextServices</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="0_Bootstrap\StorageProviderImpl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

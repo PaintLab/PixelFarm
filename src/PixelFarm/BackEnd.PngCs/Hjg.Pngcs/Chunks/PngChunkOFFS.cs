@@ -1,17 +1,15 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
+    using System; 
 
     /// <summary>
     /// oFFs chunk: http://www.libpng.org/pub/png/spec/register/pngext-1.3.0-pdg.html#C.oFFs
     /// </summary>
-    public class PngChunkOFFS : PngChunkSingle {
+    public class PngChunkOFFS : PngChunkSingle
+    {
         public const String ID = "oFFs";
 
         private long posX;
@@ -22,11 +20,13 @@ namespace Hjg.Pngcs.Chunks {
             : base(ID, info) { }
 
 
-        public override ChunkOrderingConstraint GetOrderingConstraint() {
+        public override ChunkOrderingConstraint GetOrderingConstraint()
+        {
             return ChunkOrderingConstraint.BEFORE_IDAT;
         }
 
-        public override ChunkRaw CreateRawChunk() {
+        public override ChunkRaw CreateRawChunk()
+        {
             ChunkRaw c = createEmptyChunk(9, true);
             PngHelperInternal.WriteInt4tobytes((int)posX, c.Data, 0);
             PngHelperInternal.WriteInt4tobytes((int)posY, c.Data, 4);
@@ -34,7 +34,8 @@ namespace Hjg.Pngcs.Chunks {
             return c;
         }
 
-        public override void ParseFromRaw(ChunkRaw chunk) {
+        public override void ParseFromRaw(ChunkRaw chunk)
+        {
             if (chunk.Len != 9)
                 throw new PngjException("bad chunk length " + chunk);
             posX = PngHelperInternal.ReadInt4fromBytes(chunk.Data, 0);
@@ -46,18 +47,20 @@ namespace Hjg.Pngcs.Chunks {
             units = PngHelperInternal.ReadInt1fromByte(chunk.Data, 8);
         }
 
-        public override void CloneDataFromRead(PngChunk other) {
+        public override void CloneDataFromRead(PngChunk other)
+        {
             PngChunkOFFS otherx = (PngChunkOFFS)other;
             this.posX = otherx.posX;
             this.posY = otherx.posY;
             this.units = otherx.units;
         }
-        
+
         /// <summary>
         /// 0: pixel, 1:micrometer
         /// </summary>
         /// <returns></returns>
-        public int GetUnits() {
+        public int GetUnits()
+        {
             return units;
         }
 
@@ -65,23 +68,28 @@ namespace Hjg.Pngcs.Chunks {
         /// 0: pixel, 1:micrometer
         /// </summary>
         /// <param name="units"></param>
-        public void SetUnits(int units) {
+        public void SetUnits(int units)
+        {
             this.units = units;
         }
 
-        public long GetPosX() {
+        public long GetPosX()
+        {
             return posX;
         }
 
-        public void SetPosX(long posX) {
+        public void SetPosX(long posX)
+        {
             this.posX = posX;
         }
 
-        public long GetPosY() {
+        public long GetPosY()
+        {
             return posY;
         }
 
-        public void SetPosY(long posY) {
+        public void SetPosY(long posY)
+        {
             this.posY = posY;
         }
     }

@@ -1,10 +1,9 @@
-﻿using Hjg.Pngcs;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 
-namespace Hjg.Pngcs {
-    class PngDeinterlacer {
+namespace Hjg.Pngcs
+{
+    class PngDeinterlacer
+    {
         private readonly ImageInfo imi;
         private int pass; // 1-7
         private int rows, cols, dY, dX, oY, oX, oXsamples, dXsamples; // at current pass
@@ -18,10 +17,12 @@ namespace Hjg.Pngcs {
         private int[][] imageInt; // FULL image -only used for PngReader as temporary storage
         private byte[][] imageByte;
 
-        internal PngDeinterlacer(ImageInfo iminfo) {
+        internal PngDeinterlacer(ImageInfo iminfo)
+        {
             this.imi = iminfo;
             pass = 0;
-            if (imi.Packed) {
+            if (imi.Packed)
+            {
                 packedValsPerPixel = 8 / imi.BitDepth;
                 packedShift = imi.BitDepth;
                 if (imi.BitDepth == 1)
@@ -30,7 +31,9 @@ namespace Hjg.Pngcs {
                     packedMask = 0xc0;
                 else
                     packedMask = 0xf0;
-            } else {
+            }
+            else
+            {
                 packedMask = packedShift = packedValsPerPixel = 1;// dont care
             }
             setPass(1);
@@ -39,18 +42,21 @@ namespace Hjg.Pngcs {
 
 
         /** this refers to the row currRowSubimg */
-        internal void setRow(int n) {
+        internal void setRow(int n)
+        {
             currRowSubimg = n;
             currRowReal = n * dY + oY;
             if (currRowReal < 0 || currRowReal >= imi.Rows)
                 throw new PngjExceptionInternal("bad row - this should not happen");
         }
 
-        internal void setPass(int p) {
+        internal void setPass(int p)
+        {
             if (this.pass == p)
                 return;
             pass = p;
-            switch (pass) {
+            switch (pass)
+            {
                 case 1:
                     dY = dX = 8;
                     oX = oY = 0;
@@ -104,7 +110,8 @@ namespace Hjg.Pngcs {
         }
 
         // notice that this is a "partial" deinterlace, it will be called several times for the same row!
-        internal void deinterlaceInt(int[] src, int[] dst, bool readInPackedFormat) {
+        internal void deinterlaceInt(int[] src, int[] dst, bool readInPackedFormat)
+        {
             if (!(imi.Packed && readInPackedFormat))
                 for (int i = 0, j = oXsamples; i < cols * imi.Channels; i += imi.Channels, j += dXsamples)
                     for (int k = 0; k < imi.Channels; k++)
@@ -114,14 +121,16 @@ namespace Hjg.Pngcs {
         }
 
         // interlaced+packed = monster; this is very clumsy!
-        private void deinterlaceIntPacked(int[] src, int[] dst) {
+        private void deinterlaceIntPacked(int[] src, int[] dst)
+        {
             int spos, smod, smask; // source byte position, bits to shift to left (01,2,3,4
             int tpos, tmod, p, d;
             spos = 0;
             smask = packedMask;
             smod = -1;
             // can this really work?
-            for (int i = 0, j = oX; i < cols; i++, j += dX) {
+            for (int i = 0, j = oX; i < cols; i++, j += dX)
+            {
                 spos = i / packedValsPerPixel;
                 smod += 1;
                 if (smod >= packedValsPerPixel)
@@ -142,7 +151,8 @@ namespace Hjg.Pngcs {
         }
 
         // yes, duplication of code is evil, normally
-        internal void deinterlaceByte(byte[] src, byte[] dst, bool readInPackedFormat) {
+        internal void deinterlaceByte(byte[] src, byte[] dst, bool readInPackedFormat)
+        {
             if (!(imi.Packed && readInPackedFormat))
                 for (int i = 0, j = oXsamples; i < cols * imi.Channels; i += imi.Channels, j += dXsamples)
                     for (int k = 0; k < imi.Channels; k++)
@@ -151,7 +161,8 @@ namespace Hjg.Pngcs {
                 deinterlacePackedByte(src, dst);
         }
 
-        private void deinterlacePackedByte(byte[] src, byte[] dst) {
+        private void deinterlacePackedByte(byte[] src, byte[] dst)
+        {
             int spos, smod, smask; // source byte position, bits to shift to left (01,2,3,4
             int tpos, tmod, p, d;
             // what the heck are you reading here? I told you would not enjoy this. Try Dostoyevsky or Simone Weil instead
@@ -159,7 +170,8 @@ namespace Hjg.Pngcs {
             smask = packedMask;
             smod = -1;
             // Arrays.fill(dst, 0);
-            for (int i = 0, j = oX; i < cols; i++, j += dX) {
+            for (int i = 0, j = oX; i < cols; i++, j += dX)
+            {
                 spos = i / packedValsPerPixel;
                 smod += 1;
                 if (smod >= packedValsPerPixel)
@@ -182,62 +194,73 @@ namespace Hjg.Pngcs {
         /**
          * Is current row the last row for the lass pass??
          */
-        internal bool isAtLastRow() {
+        internal bool isAtLastRow()
+        {
             return pass == 7 && currRowSubimg == rows - 1;
         }
 
         /**
          * current row number inside the "sub image"
          */
-        internal int getCurrRowSubimg() {
+        internal int getCurrRowSubimg()
+        {
             return currRowSubimg;
         }
 
         /**
          * current row number inside the "real image"
          */
-        internal int getCurrRowReal() {
+        internal int getCurrRowReal()
+        {
             return currRowReal;
         }
 
         /**
          * current pass number (1-7)
          */
-        internal int getPass() {
+        internal int getPass()
+        {
             return pass;
         }
 
         /**
          * How many rows has the current pass?
          **/
-        internal int getRows() {
+        internal int getRows()
+        {
             return rows;
         }
 
         /**
          * How many columns (pixels) are there in the current row
          */
-        internal int getCols() {
+        internal int getCols()
+        {
             return cols;
         }
 
-        internal int getPixelsToRead() {
+        internal int getPixelsToRead()
+        {
             return getCols();
         }
 
-        internal int[][] getImageInt() {
+        internal int[][] getImageInt()
+        {
             return imageInt;
         }
 
-        internal void setImageInt(int[][] imageInt) {
+        internal void setImageInt(int[][] imageInt)
+        {
             this.imageInt = imageInt;
         }
 
-        internal byte[][] getImageByte() {
+        internal byte[][] getImageByte()
+        {
             return imageByte;
         }
 
-        internal void setImageByte(byte[][] imageByte) {
+        internal void setImageByte(byte[][] imageByte)
+        {
             this.imageByte = imageByte;
         }
 

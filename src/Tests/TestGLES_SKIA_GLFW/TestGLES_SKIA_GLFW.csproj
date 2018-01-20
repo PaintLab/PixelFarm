@@ -71,10 +71,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.PngCs\Hjg.Pngcs\Hjg.Pngcs.csproj">
-      <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
-      <Name>Hjg.Pngcs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>

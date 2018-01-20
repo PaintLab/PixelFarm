@@ -1,30 +1,31 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// tIME chunk: http://www.w3.org/TR/PNG/#11tIME
     /// </summary>
-    public class PngChunkTIME : PngChunkSingle {
+    public class PngChunkTIME : PngChunkSingle
+    {
         public const String ID = ChunkHelper.tIME;
-    
+
         private int year, mon, day, hour, min, sec;
 
         public PngChunkTIME(ImageInfo info)
-            : base(ID, info) {
+            : base(ID, info)
+        {
         }
 
-        public override ChunkOrderingConstraint GetOrderingConstraint() {
+        public override ChunkOrderingConstraint GetOrderingConstraint()
+        {
             return ChunkOrderingConstraint.NONE;
         }
 
-        public override ChunkRaw CreateRawChunk() {
+        public override ChunkRaw CreateRawChunk()
+        {
             ChunkRaw c = createEmptyChunk(7, true);
             Hjg.Pngcs.PngHelperInternal.WriteInt2tobytes(year, c.Data, 0);
             c.Data[2] = (byte)mon;
@@ -35,7 +36,8 @@ namespace Hjg.Pngcs.Chunks {
             return c;
         }
 
-        public override void ParseFromRaw(ChunkRaw chunk) {
+        public override void ParseFromRaw(ChunkRaw chunk)
+        {
             if (chunk.Len != 7)
                 throw new PngjException("bad chunk " + chunk);
             year = Hjg.Pngcs.PngHelperInternal.ReadInt2fromBytes(chunk.Data, 0);
@@ -46,7 +48,8 @@ namespace Hjg.Pngcs.Chunks {
             sec = Hjg.Pngcs.PngHelperInternal.ReadInt1fromByte(chunk.Data, 6);
         }
 
-        public override void CloneDataFromRead(PngChunk other) {
+        public override void CloneDataFromRead(PngChunk other)
+        {
             PngChunkTIME x = (PngChunkTIME)other;
             year = x.year;
             mon = x.mon;
@@ -56,7 +59,8 @@ namespace Hjg.Pngcs.Chunks {
             sec = x.sec;
         }
 
-        public void SetNow(int secsAgo) {
+        public void SetNow(int secsAgo)
+        {
             DateTime d1 = DateTime.Now;
             year = d1.Year;
             mon = d1.Month;
@@ -66,7 +70,8 @@ namespace Hjg.Pngcs.Chunks {
             sec = d1.Second;
         }
 
-        internal void SetYMDHMS(int yearx, int monx, int dayx, int hourx, int minx, int secx) {
+        internal void SetYMDHMS(int yearx, int monx, int dayx, int hourx, int minx, int secx)
+        {
             year = yearx;
             mon = monx;
             day = dayx;
@@ -75,12 +80,14 @@ namespace Hjg.Pngcs.Chunks {
             sec = secx;
         }
 
-        public int[] GetYMDHMS() {
+        public int[] GetYMDHMS()
+        {
             return new int[] { year, mon, day, hour, min, sec };
         }
 
         /** format YYYY/MM/DD HH:mm:SS */
-        public String GetAsString() {
+        public String GetAsString()
+        {
             return String.Format("%04d/%02d/%02d %02d:%02d:%02d", year, mon, day, hour, min, sec);
         }
 

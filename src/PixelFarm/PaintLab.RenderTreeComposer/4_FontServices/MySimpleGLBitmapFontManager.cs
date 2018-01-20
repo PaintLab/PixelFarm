@@ -11,7 +11,7 @@ using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.OpenFont.Extensions;
 
-
+using PixelFarm.Platforms;
 
 namespace PixelFarm.DrawingGL
 {
@@ -72,7 +72,6 @@ namespace PixelFarm.DrawingGL
         public SimpleFontAtlas GetFontAtlas(RequestFont reqFont, out GLBitmap glBmp)
         {
 
-
 #if DEBUG
             _dbugStopWatch.Reset();
             _dbugStopWatch.Start();
@@ -80,87 +79,122 @@ namespace PixelFarm.DrawingGL
 
             int fontKey = reqFont.FontKey;
             SimpleFontAtlas fontAtlas;
-            GlyphImage totalGlyphsImg = null;
             if (!_createdAtlases.TryGetValue(fontKey, out fontAtlas))
             {
-
-                //check from pre-built cache (if availiable)
-                //
+                //check from pre-built cache (if availiable) 
                 Typeface resolvedTypeface = textServices.ResolveTypeface(reqFont);
-                //GlyphImage cacheImage = ReadGlyphImages("d:\\WImageTest\\test1.png");
 
+                string fontTextureFile = reqFont.Name + " " + fontKey;
+                string resolveFontFile = fontTextureFile + ".info";
+                string fontTextureInfoFile = resolveFontFile;
+                string fontTextureImg = fontTextureInfoFile + ".png";
 
-                //if we don't have 
-                //the create it 
+                if (StorageService.Provider.DataExists(fontTextureInfoFile))
+                {
+                    SimpleFontAtlasBuilder atlasBuilder2 = new SimpleFontAtlasBuilder();
 
-
-                SimpleFontAtlasBuilder atlasBuilder = null;
-                var textureGen = new GlyphTextureBitmapGenerator();
-                textureGen.CreateTextureFontFromScriptLangs(
-                    resolvedTypeface,
-                    reqFont.SizeInPoints,
-                   _textureKind,
-                   _textureBuildDetails,
-                    (glyphIndex, glyphImage, outputAtlasBuilder) =>
+                    using (System.IO.Stream dataStream = StorageService.Provider.ReadDataStream(fontTextureInfoFile))
                     {
-                        if (outputAtlasBuilder != null)
+                        try
                         {
-                            //finish
-                            atlasBuilder = outputAtlasBuilder;
+                            fontAtlas = atlasBuilder2.LoadAtlasInfo(dataStream);
+                            fontAtlas.TotalGlyph = ReadGlyphImages(fontTextureImg);
+                            fontAtlas.OriginalFontSizePts = reqFont.SizeInPoints;
+                            _createdAtlases.Add(fontKey, fontAtlas);
+                            //
+                            //calculate some commonly used values
+                            fontAtlas.SetTextureScaleInfo(
+                                resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
+                                resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
+                            //TODO: review here, use scaled or unscaled values
+                            fontAtlas.SetCommonFontMetricValues(
+                                resolvedTypeface.Ascender,
+                                resolvedTypeface.Descender,
+                                resolvedTypeface.LineGap,
+                                resolvedTypeface.CalculateRecommendLineSpacing());
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
                         }
                     }
-                );
 
-                //
-                totalGlyphsImg = atlasBuilder.BuildSingleImage();
-                //totalGlyphsImg = Sharpen(totalGlyphsImg, 1); //test shapen primary image
-                //-               
-                //
-                //create atlas
-                fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
-                fontAtlas.TotalGlyph = totalGlyphsImg;
+                }
+                else
+                {
+
+                    GlyphImage totalGlyphsImg = null;
+                    SimpleFontAtlasBuilder atlasBuilder = null;
+                    var textureGen = new GlyphTextureBitmapGenerator();
+                    textureGen.CreateTextureFontFromScriptLangs(
+                        resolvedTypeface,
+                        reqFont.SizeInPoints,
+                       _textureKind,
+                       _textureBuildDetails,
+                        (glyphIndex, glyphImage, outputAtlasBuilder) =>
+                        {
+                            if (outputAtlasBuilder != null)
+                            {
+                                //finish
+                                atlasBuilder = outputAtlasBuilder;
+                            }
+                        }
+                    );
+
+                    //
+                    totalGlyphsImg = atlasBuilder.BuildSingleImage();
+                    //if (reqFont.SizeInPoints == 14 && cacheImg != null)
+                    //{
+                    //    totalGlyphsImg = cacheImg;
+                    //}
+                    //totalGlyphsImg = Sharpen(totalGlyphsImg, 1); //test shapen primary image
+                    //-               
+                    //
+                    //create atlas
+                    fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
+                    fontAtlas.TotalGlyph = totalGlyphsImg;
 #if DEBUG
-                //save glyph image for debug
-                //PixelFarm.Agg.ActualImage.SaveImgBufferToPngFile(
-                //    totalGlyphsImg.GetImageBuffer(),
-                //    totalGlyphsImg.Width * 4,
-                //    totalGlyphsImg.Width, totalGlyphsImg.Height,
-                //    "d:\\WImageTest\\total_" + reqFont.Name + "_" + reqFont.SizeInPoints + ".png");
-#endif 
-
-                //cache the atlas
-                _createdAtlases.Add(fontKey, fontAtlas);
-                //
-                //calculate some commonly used values
-                fontAtlas.SetTextureScaleInfo(
-                    resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
-                    resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
-                //TODO: review here, use scaled or unscaled values
-                fontAtlas.SetCommonFontMetricValues(
-                    resolvedTypeface.Ascender,
-                    resolvedTypeface.Descender,
-                    resolvedTypeface.LineGap,
-                    resolvedTypeface.CalculateRecommendLineSpacing());
-
-                ///
-#if DEBUG
-
-                _dbugStopWatch.Stop();
-                System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
+                    //save glyph image for debug
+                    //PixelFarm.Agg.ActualImage.SaveImgBufferToPngFile(
+                    //    totalGlyphsImg.GetImageBuffer(),
+                    //    totalGlyphsImg.Width * 4,
+                    //    totalGlyphsImg.Width, totalGlyphsImg.Height,
+                    //    "d:\\WImageTest\\total_" + reqFont.Name + "_" + reqFont.SizeInPoints + ".png");
+                    ////save image to cache
+                    SaveImgBufferToFile(totalGlyphsImg, fontTextureImg);
 #endif
 
-                //#if DEBUG
-                //                //save image to cache
-                //                SaveImgBufferToFile(totalGlyphsImg, "d:\\WImageTest\\test1.png");
-                //                //save font info to cache
-                //                atlasBuilder.SaveFontInfo("d:\\WImageTest\\test002.info");
-                //#endif
+                    //cache the atlas
+                    _createdAtlases.Add(fontKey, fontAtlas);
+                    //
+                    //calculate some commonly used values
+                    fontAtlas.SetTextureScaleInfo(
+                        resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
+                        resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
+                    //TODO: review here, use scaled or unscaled values
+                    fontAtlas.SetCommonFontMetricValues(
+                        resolvedTypeface.Ascender,
+                        resolvedTypeface.Descender,
+                        resolvedTypeface.LineGap,
+                        resolvedTypeface.CalculateRecommendLineSpacing());
+
+                    ///
+#if DEBUG
+
+                    _dbugStopWatch.Stop();
+                    System.Diagnostics.Debug.WriteLine("build font atlas: " + _dbugStopWatch.ElapsedMilliseconds + " ms");
+#endif
+
+                    //save font info to cache
+                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                    {
+                        atlasBuilder.SaveAtlasInfo(ms);
+                        StorageService.Provider.SaveData(fontTextureInfoFile, ms.ToArray());
+                    }
+                }
             }
 
             glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
-
-
-
             return fontAtlas;
         }
 
@@ -170,42 +204,50 @@ namespace PixelFarm.DrawingGL
             {
                 Hjg.Pngcs.PngReader reader = new Hjg.Pngcs.PngReader(fs, filename);
                 Hjg.Pngcs.ImageInfo imgInfo = reader.ImgInfo;
+                Hjg.Pngcs.ImageLine iline2 = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
+
                 int imgH = imgInfo.Rows;
                 int imgW = imgInfo.Cols;
-                int bytesPerRow = imgInfo.BytesPerRow;
+                int stride = imgInfo.BytesPerRow;
                 int widthPx = imgInfo.Cols;
 
-                int[] buffer = new int[(bytesPerRow / 4) * imgH];
+                int[] buffer = new int[(stride / 4) * imgH];
                 //read each row 
                 //and fill the glyph image 
-                int startWriteAt = 0;
+                int startWriteAt = (imgW * (imgH - 1));
+                int destIndex = startWriteAt;
+
                 for (int row = 0; row < imgH; row++)
                 {
                     Hjg.Pngcs.ImageLine iline = reader.ReadRowByte(row);
                     byte[] scline = iline.ScanlineB;
-                    Buffer.BlockCopy(scline, 0, buffer, startWriteAt, bytesPerRow);
-                    startWriteAt += bytesPerRow;
+
+                    int b_src = 0;
+                    destIndex = startWriteAt;
+
+                    for (int mm = 0; mm < imgW; ++mm)
+                    {
+                        byte b = scline[b_src];
+                        byte g = scline[b_src + 1];
+                        byte r = scline[b_src + 2];
+                        byte a = scline[b_src + 3];
+                        b_src += 4;
+                        buffer[destIndex] = (b << 16) | (g << 8) | (r) | (a << 24);
+                        destIndex++;
+                    }
+                    startWriteAt -= imgW;
                 }
 
-
+                GlyphImage img = new GlyphImage(imgW, imgH);
+                img.SetImageBuffer(buffer, true);
+                return img;
             }
-            return null;
+
         }
         static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
         {
             //-------------
             int[] intBuffer = glyphImg.GetImageBuffer();
-            //byte[] imgBuff = new byte[intBuffer.Length * 4];
-            //Buffer.BlockCopy(intBuffer, 0, imgBuff, 0, imgBuff.Length);
-            //PixelFarm.Agg.ExternalImageService.SaveImage(imgBuff, glyphImg.Width, glyphImg.Height);
-            ////-------------
-
-
-            //ImageTools.IO.Png.PngEncoder enc = new ImageTools.IO.Png.PngEncoder();
-            //ImageTools.ExtendedImage extImage = new ImageTools.ExtendedImage(glyphImg.Width, glyphImg.Height);
-            //extImage.SetPixels(glyphImg.Width, glyphImg.Height, imgBuff);
-
-
             using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
             {
 
@@ -214,16 +256,30 @@ namespace PixelFarm.DrawingGL
 
                 Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
                 Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(fs, imgInfo);
-
-
-                Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo);
+                Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
                 int startReadAt = 0;
+
+                int imgStride = imgW * 4;
+
+                int srcIndex = 0;
+                int srcIndexRowHead = intBuffer.Length - imgW;
 
                 for (int row = 0; row < imgH; row++)
                 {
-                    int[] scline = iline.Scanline;
-                    Array.Copy(intBuffer, startReadAt, scline, 0, imgW);
-                    startReadAt += imgW;
+                    byte[] scanlineBuffer = iline.ScanlineB;
+                    srcIndex = srcIndexRowHead;
+                    for (int b = 0; b < imgStride;)
+                    {
+                        int srcInt = intBuffer[srcIndex];
+                        srcIndex++;
+                        scanlineBuffer[b] = (byte)((srcInt >> 16) & 0xff);
+                        scanlineBuffer[b + 1] = (byte)((srcInt >> 8) & 0xff);
+                        scanlineBuffer[b + 2] = (byte)((srcInt) & 0xff);
+                        scanlineBuffer[b + 3] = (byte)((srcInt >> 24) & 0xff);
+                        b += 4;
+                    }
+                    srcIndexRowHead -= imgW;
+                    startReadAt += imgStride;
                     writer.WriteRow(iline, row);
                 }
                 writer.End();

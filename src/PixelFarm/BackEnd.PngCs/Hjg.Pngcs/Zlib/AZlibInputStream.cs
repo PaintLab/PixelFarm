@@ -1,60 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+using System;
 using System.IO;
 
-namespace Hjg.Pngcs.Zlib {
+namespace Hjg.Pngcs.Zlib
+{
 
-    public abstract class AZlibInputStream : Stream {
+    public abstract class AZlibInputStream : Stream
+    {
         readonly protected Stream rawStream;
         readonly protected bool leaveOpen;
 
-        public AZlibInputStream(Stream st, bool leaveOpen) {
+        public AZlibInputStream(Stream st, bool leaveOpen)
+        {
             rawStream = st;
             this.leaveOpen = leaveOpen;
         }
 
-        public override bool CanRead {
+        public override bool CanRead
+        {
             get { return true; }
         }
 
-        public override bool CanWrite {
+        public override bool CanWrite
+        {
             get { return false; }
         }
 
-        public override void SetLength(long value) {
+        public override void SetLength(long value)
+        {
             throw new NotImplementedException();
         }
 
 
-        public override bool CanSeek {
+        public override bool CanSeek
+        {
             get { return false; }
         }
 
-        public override long Seek(long offset, SeekOrigin origin) {
+        public override long Seek(long offset, SeekOrigin origin)
+        {
             throw new NotImplementedException();
         }
 
-        public override long Position {
-            get {
+        public override long Position
+        {
+            get
+            {
                 throw new NotImplementedException();
             }
-            set {
+            set
+            {
                 throw new NotImplementedException();
             }
         }
 
-        public override long Length {
+        public override long Length
+        {
             get { throw new NotImplementedException(); }
         }
 
 
-        public override void Write(byte[] buffer, int offset, int count) {
+        public override void Write(byte[] buffer, int offset, int count)
+        {
             throw new NotImplementedException();
         }
 
-        public override bool CanTimeout {
-            get {
+        public override bool CanTimeout
+        {
+            get
+            {
                 return false;
             }
         }

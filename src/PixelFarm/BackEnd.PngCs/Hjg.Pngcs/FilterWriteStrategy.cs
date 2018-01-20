@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+using System;
 
-using System.Text;
-
-namespace Hjg.Pngcs {
+namespace Hjg.Pngcs
+{
     /// <summary>
     /// Manages the writer strategy for selecting the internal png predictor filter
     /// </summary>
-    internal class FilterWriteStrategy {
+    internal class FilterWriteStrategy
+    {
         private static readonly int COMPUTE_STATS_EVERY_N_LINES = 8;
 
         private readonly ImageInfo imgInfo;
@@ -20,16 +20,20 @@ namespace Hjg.Pngcs {
         private int discoverEachLines = -1;
         private double[] histogram1 = new double[256];
 
-        internal FilterWriteStrategy(ImageInfo imgInfo, FilterType configuredType) {
+        internal FilterWriteStrategy(ImageInfo imgInfo, FilterType configuredType)
+        {
             this.imgInfo = imgInfo;
             this.configuredType = configuredType;
-            if (configuredType < 0) { // first guess
+            if (configuredType < 0)
+            { // first guess
                 if ((imgInfo.Rows < 8 && imgInfo.Cols < 8) || imgInfo.Indexed
                         || imgInfo.BitDepth < 8)
                     currentType = FilterType.FILTER_NONE;
                 else
                     currentType = FilterType.FILTER_PAETH;
-            } else {
+            }
+            else
+            {
                 currentType = configuredType;
             }
             if (configuredType == FilterType.FILTER_AGGRESSIVE)
@@ -38,31 +42,39 @@ namespace Hjg.Pngcs {
                 discoverEachLines = 1;
         }
 
-        internal bool shouldTestAll(int rown) {
-            if (discoverEachLines > 0 && lastRowTested + discoverEachLines <= rown) {
+        internal bool shouldTestAll(int rown)
+        {
+            if (discoverEachLines > 0 && lastRowTested + discoverEachLines <= rown)
+            {
                 currentType = FilterType.FILTER_UNKNOWN;
                 return true;
-            } else
+            }
+            else
                 return false;
         }
 
-        internal void setPreference(double none, double sub, double up, double ave, double paeth) {
+        internal void setPreference(double none, double sub, double up, double ave, double paeth)
+        {
             preference = new double[] { none, sub, up, ave, paeth };
         }
 
-        internal bool computesStatistics() {
+        internal bool computesStatistics()
+        {
             return (discoverEachLines > 0);
         }
 
-        internal void fillResultsForFilter(int rown, FilterType type, double sum, int[] histo, bool tentative) {
+        internal void fillResultsForFilter(int rown, FilterType type, double sum, int[] histo, bool tentative)
+        {
             lastRowTested = rown;
             lastSums[(int)type] = sum;
-            if (histo != null) {
+            if (histo != null)
+            {
                 double v, alfa, beta, e;
                 alfa = rown == 0 ? 0.0 : 0.3;
                 beta = 1 - alfa;
                 e = 0.0;
-                for (int i = 0; i < 256; i++) {
+                for (int i = 0; i < 256; i++)
+                {
                     v = ((double)histo[i]) / imgInfo.Cols;
                     v = histogram1[i] * alfa + v * beta;
                     if (tentative)
@@ -74,24 +86,30 @@ namespace Hjg.Pngcs {
             }
         }
 
-        internal FilterType gimmeFilterType(int rown, bool useEntropy) {
-            if (currentType == FilterType.FILTER_UNKNOWN) { // get better
+        internal FilterType gimmeFilterType(int rown, bool useEntropy)
+        {
+            if (currentType == FilterType.FILTER_UNKNOWN)
+            { // get better
                 if (rown == 0)
                     currentType = FilterType.FILTER_SUB;
-                else {
+                else
+                {
                     double bestval = Double.MaxValue;
                     double val;
-                    for (int i = 0; i < 5; i++) {
+                    for (int i = 0; i < 5; i++)
+                    {
                         val = useEntropy ? lastEntropies[i] : lastSums[i];
                         val /= preference[i];
-                        if (val <= bestval) {
+                        if (val <= bestval)
+                        {
                             bestval = val;
                             currentType = (FilterType)i;
                         }
                     }
                 }
             }
-            if (configuredType == FilterType.FILTER_CYCLIC) {
+            if (configuredType == FilterType.FILTER_CYCLIC)
+            {
                 currentType = (FilterType)(((int)currentType + 1) % 5);
             }
             return currentType;

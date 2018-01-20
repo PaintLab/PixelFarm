@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 
-namespace Hjg.Pngcs.Zlib {
+namespace Hjg.Pngcs.Zlib
+{
     // DEFLATE compression strategy
-    public enum EDeflateCompressStrategy {
+    public enum EDeflateCompressStrategy
+    {
         Filtered,
         Huffman,
         Default

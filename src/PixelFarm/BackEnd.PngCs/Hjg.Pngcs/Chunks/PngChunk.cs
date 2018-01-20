@@ -1,12 +1,11 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.IO;
-    using System.Runtime.CompilerServices;
 
 
     /// <summary>
@@ -21,7 +20,8 @@ namespace Hjg.Pngcs.Chunks {
     /// 
     /// Ref: http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
     /// </remarks>
-    public abstract class PngChunk {
+    public abstract class PngChunk
+    {
         /// <summary>
         /// 4 letters. The Id almost determines the concrete type (except for PngUKNOWN)
         /// </summary>
@@ -51,7 +51,8 @@ namespace Hjg.Pngcs.Chunks {
         /// <summary>
         /// Restrictions for chunk ordering, for ancillary chunks
         /// </summary>
-        public enum ChunkOrderingConstraint {
+        public enum ChunkOrderingConstraint
+        {
             /// <summary>
             /// No constraint, the chunk can go anywhere
             /// </summary>
@@ -67,7 +68,7 @@ namespace Hjg.Pngcs.Chunks {
             /// <summary>
             /// Before IDAT (before or after PLTE)
             /// </summary>
-            BEFORE_IDAT, 
+            BEFORE_IDAT,
             /// <summary>
             /// Does not apply
             /// </summary>
@@ -79,7 +80,8 @@ namespace Hjg.Pngcs.Chunks {
         /// </summary>
         /// <param name="id"></param>
         /// <param name="imgInfo"></param>
-        protected PngChunk(String id, ImageInfo imgInfo) {
+        protected PngChunk(String id, ImageInfo imgInfo)
+        {
             this.Id = id;
             this.ImgInfo = imgInfo;
             this.Crit = Hjg.Pngcs.Chunks.ChunkHelper.IsCritical(id);
@@ -93,7 +95,8 @@ namespace Hjg.Pngcs.Chunks {
 
         private static Dictionary<String, Type> factoryMap = initFactory();
 
-        private static Dictionary<String, Type> initFactory() {
+        private static Dictionary<String, Type> initFactory()
+        {
             Dictionary<String, Type> f = new Dictionary<string, System.Type>();
             f.Add(ChunkHelper.IDAT, typeof(PngChunkIDAT));
             f.Add(ChunkHelper.IHDR, typeof(PngChunkIHDR));
@@ -127,28 +130,34 @@ namespace Hjg.Pngcs.Chunks {
         /// </remarks>
         /// <param name="chunkId"></param>
         /// <param name="type">should extend PngChunkSingle or PngChunkMultiple</param>
-        public static void FactoryRegister(String chunkId, Type type) {
+        public static void FactoryRegister(String chunkId, Type type)
+        {
             factoryMap.Add(chunkId, type);
         }
 
-        internal static bool isKnown(String id) {
+        internal static bool isKnown(String id)
+        {
             return factoryMap.ContainsKey(id);
         }
 
-        internal bool mustGoBeforePLTE() {
+        internal bool mustGoBeforePLTE()
+        {
             return GetOrderingConstraint() == ChunkOrderingConstraint.BEFORE_PLTE_AND_IDAT;
         }
 
-        internal bool mustGoBeforeIDAT() {
+        internal bool mustGoBeforeIDAT()
+        {
             ChunkOrderingConstraint oc = GetOrderingConstraint();
             return oc == ChunkOrderingConstraint.BEFORE_IDAT || oc == ChunkOrderingConstraint.BEFORE_PLTE_AND_IDAT || oc == ChunkOrderingConstraint.AFTER_PLTE_BEFORE_IDAT;
         }
 
-        internal bool mustGoAfterPLTE() {
+        internal bool mustGoAfterPLTE()
+        {
             return GetOrderingConstraint() == ChunkOrderingConstraint.AFTER_PLTE_BEFORE_IDAT;
         }
 
-        internal static PngChunk Factory(ChunkRaw chunk, ImageInfo info) {
+        internal static PngChunk Factory(ChunkRaw chunk, ImageInfo info)
+        {
             PngChunk c = FactoryFromId(Hjg.Pngcs.Chunks.ChunkHelper.ToString(chunk.IdBytes), info);
             c.Length = chunk.Len;
             c.ParseFromRaw(chunk);
@@ -160,10 +169,12 @@ namespace Hjg.Pngcs.Chunks {
         /// <param name="cid">Chunk Id</param>
         /// <param name="info"></param>
         /// <returns></returns>
-        internal static PngChunk FactoryFromId(String cid, ImageInfo info) {
+        internal static PngChunk FactoryFromId(String cid, ImageInfo info)
+        {
             PngChunk chunk = null;
             if (factoryMap == null) initFactory();
-            if (isKnown(cid)) {
+            if (isKnown(cid))
+            {
                 Type t = factoryMap[cid];
                 if (t == null) Console.Error.WriteLine("What?? " + cid);
                 System.Reflection.ConstructorInfo cons = t.GetConstructor(new Type[] { typeof(ImageInfo) });
@@ -176,13 +187,15 @@ namespace Hjg.Pngcs.Chunks {
             return chunk;
         }
 
-        public ChunkRaw createEmptyChunk(int len, bool alloc) {
+        public ChunkRaw createEmptyChunk(int len, bool alloc)
+        {
             ChunkRaw c = new ChunkRaw(len, ChunkHelper.ToBytes(Id), alloc);
             return c;
         }
 
         /* @SuppressWarnings("unchecked")*/
-        public static T CloneChunk<T>(T chunk, ImageInfo info) where T : PngChunk {
+        public static T CloneChunk<T>(T chunk, ImageInfo info) where T : PngChunk
+        {
             PngChunk cn = FactoryFromId(chunk.Id, info);
             if ((Object)cn.GetType() != (Object)chunk.GetType())
                 throw new PngjException("bad class cloning chunk: " + cn.GetType() + " "
@@ -191,7 +204,8 @@ namespace Hjg.Pngcs.Chunks {
             return (T)cn;
         }
 
-        internal void write(Stream os) {
+        internal void write(Stream os)
+        {
             ChunkRaw c = CreateRawChunk();
             if (c == null)
                 throw new PngjException("null chunk ! creation failed for " + this);
@@ -201,8 +215,9 @@ namespace Hjg.Pngcs.Chunks {
         /// Basic info: Id, length, Type name
         /// </summary>
         /// <returns></returns>
-        public override String ToString() {
-            return "chunk id= " + Id + " (len=" + Length + " off=" + Offset +") c=" + GetType().Name;
+        public override String ToString()
+        {
+            return "chunk id= " + Id + " (len=" + Length + " off=" + Offset + ") c=" + GetType().Name;
         }
 
         /// <summary>

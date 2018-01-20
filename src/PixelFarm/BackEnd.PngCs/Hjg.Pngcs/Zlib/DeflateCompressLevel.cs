@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 
-namespace Hjg.Pngcs.Zlib {
+namespace Hjg.Pngcs.Zlib
+{
     // DEFLATE compression levels 0-9
-    public class DeflateCompressLevel {
+    public class DeflateCompressLevel
+    {
         public const int NO_COMPRESSION = 0;
         public const int FASTEST = 3;
         public const int DEFAULT = 6;

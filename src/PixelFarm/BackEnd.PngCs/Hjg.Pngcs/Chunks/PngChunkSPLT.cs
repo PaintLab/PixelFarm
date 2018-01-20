@@ -1,17 +1,15 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
-
+    using System; 
+    using System.IO; 
     /// <summary>
     /// sPLT chunk: http://www.w3.org/TR/PNG/#11sPLT
     /// </summary>
-    public class PngChunkSPLT : PngChunkMultiple {
+    public class PngChunkSPLT : PngChunkMultiple
+    {
         public const String ID = ChunkHelper.sPLT;
         /// <summary>
         /// Must be unique in image
@@ -27,22 +25,27 @@ namespace Hjg.Pngcs.Chunks {
         public int[] Palette { get; set; }
 
         public PngChunkSPLT(ImageInfo info)
-            : base(ID, info) {
-                PalName = "";
+            : base(ID, info)
+        {
+            PalName = "";
         }
 
 
-        public override ChunkOrderingConstraint GetOrderingConstraint() {
+        public override ChunkOrderingConstraint GetOrderingConstraint()
+        {
             return ChunkOrderingConstraint.BEFORE_IDAT;
         }
-        public override ChunkRaw CreateRawChunk() {
+        public override ChunkRaw CreateRawChunk()
+        {
             MemoryStream ba = new MemoryStream();
             ChunkHelper.WriteBytesToStream(ba, ChunkHelper.ToBytes(PalName));
             ba.WriteByte(0); // separator
             ba.WriteByte((byte)SampleDepth);
             int nentries = GetNentries();
-            for (int n = 0; n < nentries; n++) {
-                for (int i = 0; i < 4; i++) {
+            for (int n = 0; n < nentries; n++)
+            {
+                for (int i = 0; i < 4; i++)
+                {
                     if (SampleDepth == 8)
                         PngHelperInternal.WriteByte(ba, (byte)Palette[n * 5 + i]);
                     else
@@ -56,10 +59,13 @@ namespace Hjg.Pngcs.Chunks {
             return chunk;
         }
 
-        public override void ParseFromRaw(ChunkRaw c) {
+        public override void ParseFromRaw(ChunkRaw c)
+        {
             int t = -1;
-            for (int i = 0; i < c.Data.Length; i++) { // look for first zero
-                if (c.Data[i] == 0) {
+            for (int i = 0; i < c.Data.Length; i++)
+            { // look for first zero
+                if (c.Data[i] == 0)
+                {
                     t = i;
                     break;
                 }
@@ -73,13 +79,17 @@ namespace Hjg.Pngcs.Chunks {
             Palette = new int[nentries * 5];
             int r, g, b, a, f, ne;
             ne = 0;
-            for (int i = 0; i < nentries; i++) {
-                if (SampleDepth == 8) {
+            for (int i = 0; i < nentries; i++)
+            {
+                if (SampleDepth == 8)
+                {
                     r = PngHelperInternal.ReadInt1fromByte(c.Data, t++);
                     g = PngHelperInternal.ReadInt1fromByte(c.Data, t++);
                     b = PngHelperInternal.ReadInt1fromByte(c.Data, t++);
                     a = PngHelperInternal.ReadInt1fromByte(c.Data, t++);
-                } else {
+                }
+                else
+                {
                     r = PngHelperInternal.ReadInt2fromBytes(c.Data, t);
                     t += 2;
                     g = PngHelperInternal.ReadInt2fromBytes(c.Data, t);
@@ -99,7 +109,8 @@ namespace Hjg.Pngcs.Chunks {
             }
         }
 
-        public override void CloneDataFromRead(PngChunk other) {
+        public override void CloneDataFromRead(PngChunk other)
+        {
             PngChunkSPLT otherx = (PngChunkSPLT)other;
             PalName = otherx.PalName;
             SampleDepth = otherx.SampleDepth;
@@ -108,7 +119,8 @@ namespace Hjg.Pngcs.Chunks {
 
         }
 
-        public int GetNentries() {
+        public int GetNentries()
+        {
             return Palette.Length / 5;
         }
 

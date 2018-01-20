@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+using System;
+using System.Collections.Generic; 
 
-namespace Hjg.Pngcs.Chunks {
+namespace Hjg.Pngcs.Chunks
+{
 
 
     /// <summary>Image Metadata, wrapper over a ChunksList</summary>
@@ -12,15 +13,20 @@ namespace Hjg.Pngcs.Chunks {
     /// This class provides a wrapper over the collection of chunks of a image (read or to write) and provides some high
     /// level methods to access them
     /// </remarks>
-    public class PngMetadata {
+    public class PngMetadata
+    {
         private readonly ChunksList chunkList;
         private readonly bool ReadOnly; // readonly
 
-        internal PngMetadata(ChunksList chunks) {
+        internal PngMetadata(ChunksList chunks)
+        {
             this.chunkList = chunks;
-            if (chunks is ChunksListForWrite) {
+            if (chunks is ChunksListForWrite)
+            {
                 this.ReadOnly = false;
-            } else {
+            }
+            else
+            {
                 this.ReadOnly = true;
             }
         }
@@ -31,11 +37,13 @@ namespace Hjg.Pngcs.Chunks {
         /// <remarks>Warning: the overwriting applies to equivalent chunks, see <c>ChunkPredicateEquiv</c>
         /// and will only make sense for queued (not yet writen) chunks
         /// </remarks>
-        public void QueueChunk(PngChunk chunk, bool lazyOverwrite) {
+        public void QueueChunk(PngChunk chunk, bool lazyOverwrite)
+        {
             ChunksListForWrite cl = getChunkListW();
             if (ReadOnly)
                 throw new PngjException("cannot set chunk : readonly metadata");
-            if (lazyOverwrite) {
+            if (lazyOverwrite)
+            {
                 ChunkHelper.TrimList(cl.GetQueuedChunks(), new ChunkPredicateEquiv(chunk));
             }
             cl.Queue(chunk);
@@ -43,11 +51,13 @@ namespace Hjg.Pngcs.Chunks {
 
         /// <summary>Queues the chunk at the writer</summary>
         /// <param name="chunk">Chunk, ready for write</param>
-        public void QueueChunk(PngChunk chunk) {
+        public void QueueChunk(PngChunk chunk)
+        {
             QueueChunk(chunk, true);
         }
 
-        private ChunksListForWrite getChunkListW() {
+        private ChunksListForWrite getChunkListW()
+        {
             return (ChunksListForWrite)chunkList;
         }
 
@@ -58,7 +68,8 @@ namespace Hjg.Pngcs.Chunks {
         /// Returns physical resolution, in DPI, in both coordinates
         /// </summary>
         /// <returns>[dpix,dpiy], -1 if not set or unknown dimensions</returns>
-        public double[] GetDpi() {
+        public double[] GetDpi()
+        {
             PngChunk c = chunkList.GetById1(ChunkHelper.pHYs, true);
             if (c == null)
                 return new double[] { -1, -1 };
@@ -72,7 +83,8 @@ namespace Hjg.Pngcs.Chunks {
         /// <remarks>This is a utility method that creates and enqueues a PHYS chunk</remarks>
         /// <param name="dpix">Resolution in x</param>
         /// <param name="dpiy">Resolution in y</param>
-        public void SetDpi(double dpix, double dpiy) {
+        public void SetDpi(double dpix, double dpiy)
+        {
             PngChunkPHYS c = new PngChunkPHYS(chunkList.imageInfo);
             c.SetAsDpi2(dpix, dpiy);
             QueueChunk(c);
@@ -83,7 +95,8 @@ namespace Hjg.Pngcs.Chunks {
         /// </summary>
         /// <remarks>This is a utility method that creates and enqueues a PHYS chunk</remarks>
         /// <param name="dpi">Resolution in dpi</param>
-        public void SetDpi(double dpi) {
+        public void SetDpi(double dpi)
+        {
             SetDpi(dpi, dpi);
         }
 
@@ -92,7 +105,8 @@ namespace Hjg.Pngcs.Chunks {
         /// </summary>
         /// <param name="nsecs">Seconds in the past. If negative, it's a future time</param>
         /// <returns>The created and queued chunk</returns>
-        public PngChunkTIME SetTimeNow(int nsecs) {
+        public PngChunkTIME SetTimeNow(int nsecs)
+        {
             PngChunkTIME c = new PngChunkTIME(chunkList.imageInfo);
             c.SetNow(nsecs);
             QueueChunk(c);
@@ -103,7 +117,8 @@ namespace Hjg.Pngcs.Chunks {
         ///Creates a TIME chunk with current time.
         /// </summary>
         /// <returns>The created and queued chunk</returns>
-        public PngChunkTIME SetTimeNow() {
+        public PngChunkTIME SetTimeNow()
+        {
             return SetTimeNow(0);
         }
 
@@ -117,7 +132,8 @@ namespace Hjg.Pngcs.Chunks {
         /// <param name="min">Minute (0-59)</param>
         /// <param name="sec">Seconds (0-59)</param>
         /// <returns>The created and queued chunk</returns>
-        public PngChunkTIME SetTimeYMDHMS(int year, int mon, int day, int hour, int min, int sec) {
+        public PngChunkTIME SetTimeYMDHMS(int year, int mon, int day, int hour, int min, int sec)
+        {
             PngChunkTIME c = new PngChunkTIME(chunkList.imageInfo);
             c.SetYMDHMS(year, mon, day, hour, min, sec);
             QueueChunk(c, true);
@@ -128,7 +144,8 @@ namespace Hjg.Pngcs.Chunks {
         /// Gets image timestamp, TIME chunk
         /// </summary>
         /// <returns>TIME chunk, null if not present</returns>
-        public PngChunkTIME GetTime() {
+        public PngChunkTIME GetTime()
+        {
             return (PngChunkTIME)chunkList.GetById1(ChunkHelper.tIME);
         }
 
@@ -136,7 +153,8 @@ namespace Hjg.Pngcs.Chunks {
         /// Gets image timestamp, TIME chunk, as a String
         /// </summary>
         /// <returns>Formated TIME, empty string if not present</returns>
-        public String GetTimeAsString() {
+        public String GetTimeAsString()
+        {
             PngChunkTIME c = GetTime();
             return c == null ? "" : c.GetAsString();
         }
@@ -151,17 +169,24 @@ namespace Hjg.Pngcs.Chunks {
         /// <param name="useLatin1">Flag. If false, will use UTF-8 (iTXt)</param>
         /// <param name="compress">Flag. Uses zTXt chunk.</param>
         /// <returns>The created and enqueued chunk</returns>
-        public PngChunkTextVar SetText(String key, String val, bool useLatin1, bool compress) {
+        public PngChunkTextVar SetText(String key, String val, bool useLatin1, bool compress)
+        {
             if (compress && !useLatin1)
                 throw new PngjException("cannot compress non latin text");
             PngChunkTextVar c;
-            if (useLatin1) {
-                if (compress) {
+            if (useLatin1)
+            {
+                if (compress)
+                {
                     c = new PngChunkZTXT(chunkList.imageInfo);
-                } else {
+                }
+                else
+                {
                     c = new PngChunkTEXT(chunkList.imageInfo);
                 }
-            } else {
+            }
+            else
+            {
                 c = new PngChunkITXT(chunkList.imageInfo);
                 ((PngChunkITXT)c).SetLangtag(key); // we use the same orig tag (this is not quite right)
             }
@@ -176,7 +201,8 @@ namespace Hjg.Pngcs.Chunks {
         /// <param name="key">Key</param>
         /// <param name="val">Text</param>
         /// <returns>The created and enqueued chunk</returns>
-        public PngChunkTextVar SetText(String key, String val) {
+        public PngChunkTextVar SetText(String key, String val)
+        {
             return SetText(key, val, false, false);
         }
 
@@ -186,7 +212,8 @@ namespace Hjg.Pngcs.Chunks {
         /// <param name="key">Key</param>
         /// <returns>Empty list if nothing found</returns>
         /// <remarks>Can mix tEXt zTXt and iTXt chunks</remarks>
-        public List<PngChunkTextVar> GetTxtsForKey(String key) {
+        public List<PngChunkTextVar> GetTxtsForKey(String key)
+        {
             List<PngChunkTextVar> li = new List<PngChunkTextVar>();
             foreach (PngChunk c in chunkList.GetById(ChunkHelper.tEXt, key))
                 li.Add((PngChunkTextVar)c);
@@ -203,7 +230,8 @@ namespace Hjg.Pngcs.Chunks {
         /// <param name="key">Key</param>
         /// <returns>Concatenated (with newlines) if several found, empty string if none</returns>
         /// <remarks>You'd perhaps prefer GetTxtsForKey</remarks>
-        public String GetTxtForKey(String key) {
+        public String GetTxtForKey(String key)
+        {
             String t = "";
             List<PngChunkTextVar> li = GetTxtsForKey(key);
             if (li.Count == 0)
@@ -213,11 +241,13 @@ namespace Hjg.Pngcs.Chunks {
             return t.Trim();
         }
 
-        public PngChunkPLTE GetPLTE() {
+        public PngChunkPLTE GetPLTE()
+        {
             return (PngChunkPLTE)chunkList.GetById1(PngChunkPLTE.ID);
         }
 
-        public PngChunkPLTE CreatePLTEChunk() {
+        public PngChunkPLTE CreatePLTEChunk()
+        {
             PngChunkPLTE plte = new PngChunkPLTE(chunkList.imageInfo);
             QueueChunk(plte);
             return plte;
@@ -228,14 +258,16 @@ namespace Hjg.Pngcs.Chunks {
          * 
          * @return null if not present
          */
-        public PngChunkTRNS GetTRNS() {
+        public PngChunkTRNS GetTRNS()
+        {
             return (PngChunkTRNS)chunkList.GetById1(PngChunkTRNS.ID);
         }
 
         /**
          * Creates a new empty TRNS chunk, queues it for write and return it to the caller, who should fill its entries
          */
-        public PngChunkTRNS CreateTRNSChunk() {
+        public PngChunkTRNS CreateTRNSChunk()
+        {
             PngChunkTRNS trns = new PngChunkTRNS(chunkList.imageInfo);
             QueueChunk(trns);
             return trns;

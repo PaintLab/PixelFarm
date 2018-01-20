@@ -1,24 +1,25 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
+    using System; 
+    using System.IO; 
     /// <summary>
     /// zTXt chunk: http://www.w3.org/TR/PNG/#11zTXt
     /// 
     /// </summary>
-    public class PngChunkZTXT : PngChunkTextVar {
+    public class PngChunkZTXT : PngChunkTextVar
+    {
         public const String ID = ChunkHelper.zTXt;
 
         public PngChunkZTXT(ImageInfo info)
-            : base(ID, info) {
+            : base(ID, info)
+        {
         }
 
-        public override ChunkRaw CreateRawChunk() {
+        public override ChunkRaw CreateRawChunk()
+        {
             if (key.Length == 0)
                 throw new PngjException("Text chunk key must be non empty");
             MemoryStream ba = new MemoryStream();
@@ -33,9 +34,11 @@ namespace Hjg.Pngcs.Chunks {
             return chunk;
         }
 
-        public override void ParseFromRaw(ChunkRaw c) {
+        public override void ParseFromRaw(ChunkRaw c)
+        {
             int nullsep = -1;
-            for (int i = 0; i < c.Data.Length; i++) { // look for first zero
+            for (int i = 0; i < c.Data.Length; i++)
+            { // look for first zero
                 if (c.Data[i] != 0)
                     continue;
                 nullsep = i;
@@ -51,7 +54,8 @@ namespace Hjg.Pngcs.Chunks {
             val = ChunkHelper.ToString(uncomp);
         }
 
-        public override void CloneDataFromRead(PngChunk other) {
+        public override void CloneDataFromRead(PngChunk other)
+        {
             PngChunkZTXT otherx = (PngChunkZTXT)other;
             key = otherx.key;
             val = otherx.val;

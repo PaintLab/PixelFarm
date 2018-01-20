@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+using System;
 using System.IO;
-using System.IO.Compression;
 
 #if SHARPZIPLIB
 

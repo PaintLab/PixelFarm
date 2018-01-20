@@ -1,21 +1,20 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
     /// <summary>
     /// general class for textual chunks
     /// </summary>
-    public abstract class PngChunkTextVar : PngChunkMultiple {
+    public abstract class PngChunkTextVar : PngChunkMultiple
+    {
         protected internal String key; // key/val: only for tEXt. lazy computed
         protected internal String val;
 
         protected internal PngChunkTextVar(String id, ImageInfo info)
-            : base(id, info) {
+            : base(id, info)
+        {
         }
 
         public const String KEY_Title = "Title"; // Short (one line) title or caption for image
@@ -29,7 +28,8 @@ namespace Hjg.Pngcs.Chunks {
         public const String KEY_Source = "Source"; // Device used to create the image
         public const String KEY_Comment = "Comment"; // Miscellaneous comment
 
-        public class PngTxtInfo {
+        public class PngTxtInfo
+        {
             public String title;
             public String author;
             public String description;
@@ -41,7 +41,8 @@ namespace Hjg.Pngcs.Chunks {
             public String comment;
         }
 
-        public override ChunkOrderingConstraint GetOrderingConstraint() {
+        public override ChunkOrderingConstraint GetOrderingConstraint()
+        {
             return ChunkOrderingConstraint.NONE;
         }
 
@@ -49,15 +50,18 @@ namespace Hjg.Pngcs.Chunks {
         /// 
         /// </summary>
         /// <returns></returns>
-        public String GetKey() {
+        public String GetKey()
+        {
             return key;
         }
 
-        public String GetVal() {
+        public String GetVal()
+        {
             return val;
         }
 
-        public void SetKeyVal(String key, String val) {
+        public void SetKeyVal(String key, String val)
+        {
             this.key = key;
             this.val = val;
         }

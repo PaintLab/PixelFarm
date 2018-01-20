@@ -1,17 +1,14 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
-
     /// <summary>
     /// sRGB chunk: http://www.w3.org/TR/PNG/#11sRGB
     /// </summary>
-    public class PngChunkSRGB : PngChunkSingle {
+    public class PngChunkSRGB : PngChunkSingle
+    {
         public const String ID = ChunkHelper.sRGB;
 
         public const int RENDER_INTENT_Perceptual = 0;
@@ -22,28 +19,33 @@ namespace Hjg.Pngcs.Chunks {
         public int Intent { get; set; }
 
         public PngChunkSRGB(ImageInfo info)
-            : base(ID, info) {
+            : base(ID, info)
+        {
         }
 
-        public override ChunkOrderingConstraint GetOrderingConstraint() {
+        public override ChunkOrderingConstraint GetOrderingConstraint()
+        {
             return ChunkOrderingConstraint.BEFORE_PLTE_AND_IDAT;
         }
 
-        public override ChunkRaw CreateRawChunk() {
+        public override ChunkRaw CreateRawChunk()
+        {
             ChunkRaw c = null;
             c = createEmptyChunk(1, true);
             c.Data[0] = (byte)Intent;
             return c;
         }
 
-        public override void ParseFromRaw(ChunkRaw c) {
+        public override void ParseFromRaw(ChunkRaw c)
+        {
             if (c.Len != 1)
                 throw new PngjException("bad chunk length " + c);
             Intent = PngHelperInternal.ReadInt1fromByte(c.Data, 0);
         }
 
 
-        public override void CloneDataFromRead(PngChunk other) {
+        public override void CloneDataFromRead(PngChunk other)
+        {
             PngChunkSRGB otherx = (PngChunkSRGB)other;
             Intent = otherx.Intent;
         }

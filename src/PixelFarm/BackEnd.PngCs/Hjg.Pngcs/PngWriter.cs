@@ -1,13 +1,10 @@
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
 namespace Hjg.Pngcs
 {
 
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.IO;
-
-    using System.Runtime.CompilerServices;
     using Chunks;
     using Hjg.Pngcs.Zlib;
 
@@ -281,26 +278,12 @@ namespace Hjg.Pngcs
             if (row.Length == ImgInfo.SamplesPerRowPacked && !needsPack)
             {
                 // some duplication of code - because this case is typical and it works faster this way
-                int j = 0;
+                int j = 1;
                 if (ImgInfo.BitDepth <= 8)
                 {
-                    //foreach (int x in row) { // optimized
-                    //    rowb[j++] = (byte)x;
-                    //}
-                    int lim = row.Length / 4;
-
                     foreach (int x in row)
-                    {
-                        rowb[j] = (byte)(x >> 24);
-                        rowb[j + 1] = (byte)((x >> 16) & 0xff);
-                        rowb[j + 2] = (byte)((x >> 8) & 0xff);
-                        rowb[j + 3] = (byte)(x & 0xff);
-                        j += 4;
-
-                        if (j >= lim)
-                        {
-                            break;
-                        }
+                    { // optimized
+                        rowb[j++] = (byte)x;
                     }
                 }
                 else

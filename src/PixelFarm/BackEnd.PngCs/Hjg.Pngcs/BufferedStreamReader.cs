@@ -17,13 +17,16 @@
 //        private bool failIfNoFeed = false;
 //        private const int DEFAULTSIZE = 8192;
 
-//       	public BufferedStreamFeeder(Stream ist) : this(ist,DEFAULTSIZE) {
-//	    }
+//        public BufferedStreamFeeder(Stream ist)
+//            : this(ist, DEFAULTSIZE)
+//        {
+//        }
 
-//    	public BufferedStreamFeeder(Stream ist, int bufsize) {
-//	    	this._stream = ist;
-//	    	buf = new byte[bufsize];
-//	    }
+//        public BufferedStreamFeeder(Stream ist, int bufsize)
+//        {
+//            this._stream = ist;
+//            buf = new byte[bufsize];
+//        }
 
 
 //        /// <summary>
@@ -88,7 +91,7 @@
 //            {
 //                // try to read
 //                offset = 0;
-//                pendinglen = _stream.Read(buf,0,buf.Length);
+//                pendinglen = _stream.Read(buf, 0, buf.Length);
 //                if (pendinglen < 0)
 //                {
 //                    close();
@@ -135,10 +138,11 @@
 //            _stream = null;
 //        }
 
-//       	public void setInputStream(Stream ist) { // to reuse this object
-//		    this._stream = ist;
-//		    eof = false;
-//	    }
+//        public void setInputStream(Stream ist)
+//        { // to reuse this object
+//            this._stream = ist;
+//            eof = false;
+//        }
 
 //        public bool isEof()
 //        {

@@ -1,16 +1,11 @@
-namespace Hjg.Pngcs {
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
-
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs
+{
     /// <summary>
     /// Internal PNG predictor filter, or a strategy to select it.
     /// </summary>
-    public enum FilterType {
+    public enum FilterType
+    {
         /// <summary>
         /// No filtering 
         /// </summary>

@@ -1,11 +1,8 @@
-namespace Hjg.Pngcs {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs
+{
 
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Simple immutable wrapper for basic image info
@@ -15,7 +12,8 @@ namespace Hjg.Pngcs {
     /// The constructor requires an 'ortogonal' subset
     /// http://www.w3.org/TR/PNG/#11IHDR
     /// </remarks>
-    public class ImageInfo {
+    public class ImageInfo
+    {
         private const int MAX_COLS_ROWS_VAL = 400000; // very big value, but no so ridiculous as 2^32
 
         /// <summary>
@@ -103,7 +101,8 @@ namespace Hjg.Pngcs {
         /// Simple constructor: only for RGB/RGBA
         /// </summary>
         public ImageInfo(int cols, int rows, int bitdepth, bool alpha)
-            : this(cols, rows, bitdepth, alpha, false, false) {
+            : this(cols, rows, bitdepth, alpha, false, false)
+        {
         }
 
         /// <summary>
@@ -116,7 +115,8 @@ namespace Hjg.Pngcs {
         /// <param name="grayscale">Is grayscale</param>
         /// <param name="palette">Has palette</param>
         public ImageInfo(int cols, int rows, int bitdepth, bool alpha, bool grayscale,
-                bool palette) {
+                bool palette)
+        {
             this.Cols = cols;
             this.Rows = rows;
             this.Alpha = alpha;
@@ -134,7 +134,8 @@ namespace Hjg.Pngcs {
             this.SamplesPerRow = Channels * this.Cols;
             this.SamplesPerRowPacked = (Packed) ? BytesPerRow : SamplesPerRow;
             // checks
-            switch (this.BitDepth) {
+            switch (this.BitDepth)
+            {
                 case 1:
                 case 2:
                 case 4:
@@ -161,7 +162,8 @@ namespace Hjg.Pngcs {
         /// General information, for debugging
         /// </summary>
         /// <returns>Summary</returns>
-        public override String ToString() {
+        public override String ToString()
+        {
             return "ImageInfo [cols=" + Cols + ", rows=" + Rows + ", bitDepth=" + BitDepth
                     + ", channels=" + Channels + ", bitspPixel=" + BitspPixel + ", bytesPixel="
                     + BytesPixel + ", bytesPerRow=" + BytesPerRow + ", samplesPerRow="
@@ -170,7 +172,8 @@ namespace Hjg.Pngcs {
                     + "]";
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             int prime = 31;
             int result = 1;
             result = prime * result + ((Alpha) ? 1231 : 1237);
@@ -183,7 +186,8 @@ namespace Hjg.Pngcs {
             return result;
         }
 
-        public override bool Equals(Object obj) {
+        public override bool Equals(Object obj)
+        {
             if ((Object)this == obj)
                 return true;
             if (obj == null)

@@ -1,16 +1,14 @@
-namespace Hjg.Pngcs.Chunks {
+//Apache2, 2012, Hernan J Gonzalez, https://github.com/leonbloy/pngcs
+namespace Hjg.Pngcs.Chunks
+{
 
     using Hjg.Pngcs;
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.CompilerServices;
     /// <summary>
     /// pHYs chunk: http://www.w3.org/TR/PNG/#11pHYs
     /// </summary>
-    public class PngChunkPHYS : PngChunkSingle {
+    public class PngChunkPHYS : PngChunkSingle
+    {
         public const String ID = ChunkHelper.pHYs;
 
         public long PixelsxUnitX { get; set; }
@@ -21,14 +19,17 @@ namespace Hjg.Pngcs.Chunks {
         public int Units { get; set; }
 
         public PngChunkPHYS(ImageInfo info)
-            : base(ID, info) {
+            : base(ID, info)
+        {
         }
 
-        public override ChunkOrderingConstraint GetOrderingConstraint() {
+        public override ChunkOrderingConstraint GetOrderingConstraint()
+        {
             return ChunkOrderingConstraint.BEFORE_IDAT;
         }
 
-        public override ChunkRaw CreateRawChunk() {
+        public override ChunkRaw CreateRawChunk()
+        {
             ChunkRaw c = createEmptyChunk(9, true);
             Hjg.Pngcs.PngHelperInternal.WriteInt4tobytes((int)PixelsxUnitX, c.Data, 0);
             Hjg.Pngcs.PngHelperInternal.WriteInt4tobytes((int)PixelsxUnitY, c.Data, 4);
@@ -36,14 +37,16 @@ namespace Hjg.Pngcs.Chunks {
             return c;
         }
 
-        public override void CloneDataFromRead(PngChunk other) {
+        public override void CloneDataFromRead(PngChunk other)
+        {
             PngChunkPHYS otherx = (PngChunkPHYS)other;
             this.PixelsxUnitX = otherx.PixelsxUnitX;
             this.PixelsxUnitY = otherx.PixelsxUnitY;
             this.Units = otherx.Units;
         }
 
-        public override void ParseFromRaw(ChunkRaw chunk) {
+        public override void ParseFromRaw(ChunkRaw chunk)
+        {
             if (chunk.Len != 9)
                 throw new PngjException("bad chunk length " + chunk);
             PixelsxUnitX = Hjg.Pngcs.PngHelperInternal.ReadInt4fromBytes(chunk.Data, 0);
@@ -59,7 +62,8 @@ namespace Hjg.Pngcs.Chunks {
         /// returns -1 if not in meters, or not equal
         /// </summary>
         /// <returns></returns>
-        public double GetAsDpi() {
+        public double GetAsDpi()
+        {
             if (Units != 1 || PixelsxUnitX != PixelsxUnitY)
                 return -1;
             return ((double)PixelsxUnitX) * 0.0254d;
@@ -69,7 +73,8 @@ namespace Hjg.Pngcs.Chunks {
         /// returns -1 if the physicial unit is unknown
         /// </summary>
         /// <returns></returns>
-        public double[] GetAsDpi2() {
+        public double[] GetAsDpi2()
+        {
             if (Units != 1)
                 return new double[] { -1, -1 };
             return new double[] { ((double)PixelsxUnitX) * 0.0254, ((double)PixelsxUnitY) * 0.0254 };
@@ -79,18 +84,20 @@ namespace Hjg.Pngcs.Chunks {
         /// same in both directions
         /// </summary>
         /// <param name="dpi"></param>
-        public void SetAsDpi(double dpi) {
+        public void SetAsDpi(double dpi)
+        {
             Units = 1;
             PixelsxUnitX = (long)(dpi / 0.0254d + 0.5d);
             PixelsxUnitY = PixelsxUnitX;
         }
 
-        public void SetAsDpi2(double dpix, double dpiy) {
+        public void SetAsDpi2(double dpix, double dpiy)
+        {
             Units = 1;
             PixelsxUnitX = (long)(dpix / 0.0254 + 0.5);
             PixelsxUnitY = (long)(dpiy / 0.0254 + 0.5);
         }
 
-     
+
     }
 }
