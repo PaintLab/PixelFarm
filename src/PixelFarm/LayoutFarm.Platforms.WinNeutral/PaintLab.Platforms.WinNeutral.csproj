@@ -49,7 +49,7 @@
       <Link>0_Shared\dbugHelper.cs</Link>
     </Compile>
     <Compile Include="..\LayoutFarm.PlatformBase\InnerViewportKind.cs">
-      <Link>0_Shared\InnerViewportKind.cs</Link>
+      <Link>0_Platform\InnerViewportKind.cs</Link>
     </Compile>
     <Compile Include="..\LayoutFarm.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
@@ -57,10 +57,10 @@
     <Compile Include="..\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs">
       <Link>4_Skia\SkiaCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs">
+    <Compile Include="..\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
       <Link>0_Platform\DrawingGLFontPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTreeComposer\4_FontServices\MySimpleGLBitmapFontManager.cs">
+    <Compile Include="..\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
       <Link>0_Platform\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
     <Compile Include="..\Win32Utils\MyWin32.cs">

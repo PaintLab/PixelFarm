@@ -40,10 +40,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs">
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
       <Link>Impl\DrawingGL\DrawingGLFontPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\MySimpleGLBitmapFontManager.cs">
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
       <Link>Impl\DrawingGL\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
     <Compile Include="GLFWProgram.cs" />
