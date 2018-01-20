@@ -20,7 +20,7 @@ namespace YourImplementation
     }
 
 
-  
+
     static class CommonTextServiceSetup
     {
         static bool s_isInit;
@@ -42,11 +42,9 @@ namespace YourImplementation
 
             //string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
             string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu60/brkitr_src/dictionaries";
-            s_icuDataProvider = new MyIcuDataProvider();
-            if (System.IO.Directory.Exists(typographyDir))
-            {
-                s_icuDataProvider.icuDir = typographyDir;
-            }
+            s_icuDataProvider = new MyIcuDataProvider(); 
+            s_icuDataProvider.icuDir = typographyDir;
+
             Typography.TextBreak.CustomBreakerBuilder.Setup(s_icuDataProvider);
             s_isInit = true;
         }

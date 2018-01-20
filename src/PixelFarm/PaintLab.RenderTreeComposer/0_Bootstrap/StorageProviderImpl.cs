@@ -1,5 +1,6 @@
 ﻿//MIT, 2018, WinterDev
 
+
 namespace YourImplementation
 {
     class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
