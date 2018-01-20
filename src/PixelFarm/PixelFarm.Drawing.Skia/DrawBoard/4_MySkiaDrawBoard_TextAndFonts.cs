@@ -7,7 +7,15 @@ namespace PixelFarm.Drawing.Skia
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
 
-
+        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
+        {
+            throw new System.NotImplementedException();
+        }
+        public override void DrawRenderVx(RenderVx renderVx, float x, float y)
+        {
+            throw new System.NotImplementedException();
+        }
+        
         public override void DrawText(char[] buffer, int x, int y)
         {
             SKRect clipRect = currentClipRect;

@@ -34,104 +34,38 @@ using PixelFarm;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
+using LayoutFarm.Svg.Transforms;
+using PixelFarm.Agg.Transform;
+
 
 namespace PaintLab.Svg
 {
     //very simple svg parser 
 
-
-    public enum SvgRenderVxKind
-    {
-        BeginGroup,
-        EndGroup,
-        Path
-    }
-
-    public class SvgRenderVx
-    {
-        VertexStore _vxs;
-        Color _fillColor;
-        Color _strokeColor;
-        float _strokeWidth;
-        public SvgRenderVx(SvgRenderVxKind kind)
-        {
-            this.Kind = kind;
-        }
-        public bool HasFillColor { get; private set; }
-        public bool HasStrokeColor { get; private set; }
-        public bool HasStrokeWidth { get; private set; }
-        public Color FillColor
-        {
-            get { return _fillColor; }
-            set
-            {
-                _fillColor = value;
-                HasFillColor = true;
-            }
-        }
-        public Color StrokeColor
-        {
-            get { return _strokeColor; }
-            set
-            {
-                _strokeColor = value;
-                HasStrokeColor = true;
-            }
-        }
-        public void SetVxs(VertexStore vxs)
-        {
-            this._vxs = vxs;
-        }
-        public VertexStore GetVxs()
-        {
-            return _vxs;
-        }
-        public float StrokeWidth
-        {
-            get { return _strokeWidth; }
-            set
-            {
-                _strokeWidth = value;
-                HasStrokeWidth = true;
-            }
-        }
-        public SvgRenderVxKind Kind
-        {
-            get;
-            private set;
-        }
-
-
-
-        VertexStore _strokeVxs;
-        double _strokeVxsStrokeWidth;
-        public VertexStore GetStrokeVxsOrCreateNew(double strokeWidth)
-        {
-            if (_strokeVxs != null && _strokeWidth == strokeWidth)
-            {
-                //use the cache
-                return _strokeVxs;
-            }
-
-            //if not create a new one,
-            //review here again
-            Stroke aggStrokeGen = new Stroke(_strokeVxsStrokeWidth = strokeWidth);
-            _strokeVxs = new VertexStore();
-            aggStrokeGen.MakeVxs(_vxs, _strokeVxs);
-            return _strokeVxs;
-        }
-
-    }
-
     public class SvgParser
     {
 
-        List<SvgRenderVx> renderVxList = new List<SvgRenderVx>();
+        List<SvgVx> renderVxList = new List<SvgVx>();
 
-        public void ReadSvgDocument(string svgFileName)
+        public void ReadSvgString(string svgString)
+        {
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.LoadXml(svgString);
+            XmlElement docElem = xmldoc.DocumentElement;
+            //then parse 
+            if (docElem.Name == "svg")
+            {
+                //parse its content
+
+                foreach (XmlElement elem in docElem.ChildNodes)
+                {
+                    ParseSvgElement(elem);
+                }
+            }
+        }
+        public void ReadSvgFile(string svgFileName)
         {
             renderVxList.Clear();
-
             //create simple svg dom
             //iterate all child
             XmlDocument xmldoc = new XmlDocument();
@@ -150,9 +84,13 @@ namespace PaintLab.Svg
             }
         }
 
-        public SvgRenderVx[] GetResult()
+        public SvgVx[] GetResult()
         {
             return renderVxList.ToArray();
+        }
+        public SvgRenderVx GetResultAsRenderVx()
+        {
+            return new SvgRenderVx(renderVxList.ToArray());
         }
 
         void ParseSvgElement(XmlElement elem)
@@ -226,11 +164,6 @@ namespace PaintLab.Svg
                         {
                             spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
                         }
-                        else
-                        {
-                            
-                        }
-
                     }
                     break;
                 case "fill-opacity":
@@ -253,23 +186,27 @@ namespace PaintLab.Svg
                     break;
                 case "stroke-linecap":
                     //set line-cap and line join again
+
                     break;
                 case "stroke-linejoin":
+
                     break;
                 case "stroke-miterlimit":
+
                     break;
                 case "stroke-opacity":
+
                     break;
                 case "transform":
                     {
                         //parse trans
-                        ParseTransform(attr.Value);
+                        ParseTransform(attr.Value, spec);
                     }
                     break;
             }
             return true;
         }
-        void ParseTransform(string value)
+        void ParseTransform(string value, SvgVisualSpec spec)
         {
             int openParPos = value.IndexOf('(');
             if (openParPos > -1)
@@ -285,6 +222,11 @@ namespace PaintLab.Svg
                             //read matrix args
                             double[] matrixArgs = ParseMatrixArgs(right);
                             //create affine matrix 
+                            spec.Transform = Affine.NewCustomMatrix(
+                                matrixArgs[0], matrixArgs[1],
+                                matrixArgs[2], matrixArgs[3],
+                                matrixArgs[4], matrixArgs[5]
+                                );
                         }
                         break;
                     case "translate":
@@ -344,7 +286,6 @@ namespace PaintLab.Svg
                 {
                     switch (attr.Name)
                     {
-
                         default:
                             break;
                     }
@@ -355,7 +296,7 @@ namespace PaintLab.Svg
             SvgGroupElement group = new SvgGroupElement(spec, null);
 
             //--------
-            SvgRenderVx beginVx = new SvgRenderVx(SvgRenderVxKind.BeginGroup);
+            SvgVx beginVx = new SvgVx(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
             renderVxList.Add(beginVx);
             foreach (XmlElement child in elem.ChildNodes)
@@ -363,7 +304,7 @@ namespace PaintLab.Svg
                 ParseSvgElement(child);
             }
             //--------
-            renderVxList.Add(new SvgRenderVx(SvgRenderVxKind.EndGroup));
+            renderVxList.Add(new SvgVx(SvgRenderVxKind.EndGroup));
 
         }
         void ParseTitle(XmlElement elem)
@@ -403,7 +344,7 @@ namespace PaintLab.Svg
         }
 
         MySvgPathDataParser _svgPatgDataParser = new MySvgPathDataParser();
-        static void AssignValues(SvgRenderVx svgRenderVx, SvgVisualSpec spec)
+        static void AssignValues(SvgVx svgRenderVx, SvgVisualSpec spec)
         {
 
             if (spec.HasFillColor)
@@ -421,7 +362,10 @@ namespace PaintLab.Svg
                 //assume this is in pixel unit
                 svgRenderVx.StrokeWidth = spec.StrokeWidth.Number;
             }
-
+            if (spec.Transform != null)
+            {
+                svgRenderVx.AffineTx = spec.Transform;
+            }
         }
 
         CurveFlattener curveFlattener = new CurveFlattener();
@@ -458,7 +402,7 @@ namespace PaintLab.Svg
             if (pathDefAttr != null)
             {
 
-                SvgRenderVx svgRenderVx = new SvgRenderVx(SvgRenderVxKind.Path);
+                SvgVx svgRenderVx = new SvgVx(SvgRenderVxKind.Path);
                 AssignValues(svgRenderVx, spec);
 
 
@@ -481,10 +425,7 @@ namespace PaintLab.Svg
                 }
 
 
-                svgRenderVx.SetVxs(flattenVxs);
-
-
-
+                svgRenderVx.SetVxsAsOriginal(flattenVxs);
                 this.renderVxList.Add(svgRenderVx);
             }
 
@@ -564,7 +505,7 @@ namespace PaintLab.Svg
             protected override void OnCloseFigure()
             {
                 _writer.CloseFigure();
-                _writer.Stop();
+
             }
             protected override void OnCurveToCubic(
                 float x1, float y1,
@@ -641,12 +582,15 @@ namespace PaintLab.Svg
             }
             protected override void OnMoveTo(float x, float y, bool relative)
             {
+
                 if (relative)
                 {
                     _writer.MoveToRel(x, y);
                 }
                 else
                 {
+
+
                     _writer.MoveTo(x, y);
                 }
             }

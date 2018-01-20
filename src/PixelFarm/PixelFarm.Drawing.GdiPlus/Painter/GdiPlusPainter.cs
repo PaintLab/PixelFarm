@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         GdiPlusRenderSurface _renderSurface;
 
-   
+
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
             this._renderSurface = renderSurface;
@@ -170,10 +170,9 @@ namespace PixelFarm.Drawing.WinGdi
             renderVx.path = VxsHelper.CreateGraphicsPath(snap);
             return renderVx;
         }
-
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
-            return new WinGdiRenderVxFormattedString(textspan);
+            return new WinGdiRenderVxFormattedString(textspan.ToCharArray());
         }
 
         //public override void DoFilterBlurRecursive(RectInt area, int r)
@@ -257,7 +256,7 @@ namespace PixelFarm.Drawing.WinGdi
             //        {
             //            VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
             //        }
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public override void Draw(VertexStoreSnap vxs)

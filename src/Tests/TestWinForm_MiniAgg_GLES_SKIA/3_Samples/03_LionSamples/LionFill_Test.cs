@@ -123,12 +123,14 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             {
                 this.alpha = value;
                 //change alpha value
-                int j = lionShape.NumPaths;
-                var colorBuffer = lionShape.Colors;
-                for (int i = lionShape.NumPaths - 1; i >= 0; --i)
-                {
-                    colorBuffer[i] = colorBuffer[i].NewFromChangeAlpha(alpha);
-                }
+                lionShape.ApplyNewAlpha(value);
+                //int j = lionShape.NumPaths;
+
+                //var colorBuffer = lionShape.Colors;
+                //for (int i = lionShape.NumPaths - 1; i >= 0; --i)
+                //{
+                //    colorBuffer[i] = colorBuffer[i].NewFromChangeAlpha(alpha);
+                //}
             }
         }
 
@@ -163,15 +165,17 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
 
             //-----------------------------------------------------------------------------------
             {
-                int j = lionShape.NumPaths;
-                int[] pathList = lionShape.PathIndexList;
-                Drawing.Color[] colors = lionShape.Colors;
-                for (int i = 0; i < j; ++i)
-                {
-                    p.FillColor = colors[i];
-                    p.Fill(new PixelFarm.Drawing.VertexStoreSnap(vxStorage, pathList[i]));
-                    //graphics2D.Render(new VertexStoreSnap(vxStorage, pathList[i]), colors[i]);
-                }
+                lionShape.Paint(p);
+
+                //int j = lionShape.NumPaths;
+                //int[] pathList = lionShape.PathIndexList;
+                //Drawing.Color[] colors = lionShape.Colors;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    p.FillColor = colors[i];
+                //    p.Fill(new PixelFarm.Drawing.VertexStoreSnap(vxStorage, pathList[i]));
+                //    //graphics2D.Render(new VertexStoreSnap(vxStorage, pathList[i]), colors[i]);
+                //}
             }
             //-----------------------------------------------------------------------------------
 

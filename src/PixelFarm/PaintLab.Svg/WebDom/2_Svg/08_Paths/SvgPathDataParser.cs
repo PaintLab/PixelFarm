@@ -34,7 +34,7 @@ namespace LayoutFarm.Svg.Pathing
         }
         protected virtual void OnCurveToCubic(
             float x1, float y1,
-            float x2, float y2, 
+            float x2, float y2,
             float x, float y, bool isRelative)
         {
 
@@ -47,7 +47,7 @@ namespace LayoutFarm.Svg.Pathing
         }
 
         protected virtual void OnCurveToQuadratic(
-            float x1, float y1, 
+            float x1, float y1,
             float x, float y, bool isRelative)
         {
 
@@ -78,6 +78,29 @@ namespace LayoutFarm.Svg.Pathing
                             //init state
                             switch (c)
                             {
+
+                                case '\r':
+                                    if (i < j - 1)
+                                    {
+                                        char nextC = pathDataBuffer[i + 1];
+                                        if (nextC == '\n')
+                                        {
+                                            i += 2;
+                                        }
+                                        else
+                                        {
+                                            i++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        i++;
+                                    }
+                                    break;
+                                case '\n':
+                                    i++;
+                                    break;
+
                                 case 'M':
                                 case 'm':
                                     {

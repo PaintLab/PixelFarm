@@ -15,16 +15,26 @@ BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri
 
 SGI, 2000, Eric Veach, Tesselate.
 
-MIT, 2009-2015, Rene Schulte, https://github.com/teichgraf/WriteableBitmapEx
+**Image Processing**
+
+BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
+
+MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+
+MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelsey, Brandon Ortiz, Craig Taylor, Chris Trevino, and Luke Walker., from OpenPDN v 3.36 (Paint.NET), https://github.com/rivy/OpenPDN
+
+Apache2, 2012,  Hernán J. González, pngcs, https://github.com/leonbloy/pngcs
+
+Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. 
  
 
 **Font**
 
-Apache2, 2016-2017, WinterDev, from https://github.com/LayoutFarm/Typography
+Apache2, 2016-2017, WinterDev, Samuel Carlsson, Sam Hocevar and others, from https://github.com/LayoutFarm/Typography
 
 Apache2, 2014-2016, Samuel Carlsson, from https://github.com/vidstige/NRasterizer
 
-MIT, 2015, Michael Popoloski MIT, from https://github.com/MikePopoloski/SharpFont
+MIT, 2015, Michael Popoloski, from https://github.com/MikePopoloski/SharpFont
 
 The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robert Wilhelm, and Werner Lemberg and others, from https://www.freetype.org/
 
@@ -38,11 +48,10 @@ MIT, 2006-2009,  Stefanos Apostolopoulos and other Open Tool Kit Contributors, f
 
 MIT, 2013, Antonie Blom, from  https://github.com/andykorth/Pencil.Gaming
 
-MIT, 2004,2007, Novell Inc., for System.Drawing 
+MIT, 2015, Mauricio David, FileDB, https://github.com/mbdavid/FileDB
 
 **Demo**
 
 MIT, 2017, Wiesław Šoltés, ColorBlender, https://github.com/wieslawsoltes/ColorBlender
 
 BSD, 2015, Darren David darren-code@lookorfeel.com, https://github.com/nobutaka/EasingCurvePresets
----

@@ -41,6 +41,7 @@
             this.cmdSignedDistance = new System.Windows.Forms.Button();
             this.cmdTestColorBlend = new System.Windows.Forms.Button();
             this.lstBackEndRenderer = new System.Windows.Forms.ListBox();
+            this.button8 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -178,11 +179,22 @@
             this.lstBackEndRenderer.Size = new System.Drawing.Size(234, 121);
             this.lstBackEndRenderer.TabIndex = 16;
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(573, 527);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(150, 32);
+            this.button8.TabIndex = 17;
+            this.button8.Text = "Test Color Blend";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(738, 588);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.lstBackEndRenderer);
             this.Controls.Add(this.cmdTestColorBlend);
             this.Controls.Add(this.cmdSignedDistance);
@@ -220,5 +232,6 @@
         private System.Windows.Forms.Button cmdSignedDistance;
         private System.Windows.Forms.Button cmdTestColorBlend;
         private System.Windows.Forms.ListBox lstBackEndRenderer;
+        private System.Windows.Forms.Button button8;
     }
 }

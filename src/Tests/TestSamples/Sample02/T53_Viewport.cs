@@ -36,6 +36,7 @@ namespace OpenTkEssTest
             //----------------
             //vertex shader source
             string vs = @"        
+            precision mediump float;
             attribute vec2 a_position;
             attribute vec3 a_color; 
             attribute vec2 a_texcoord;
@@ -50,15 +51,14 @@ namespace OpenTkEssTest
             void main()
             {
                 
-                gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);
+                gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0.0,1.0);
                 if(u_useSolidColor !=0)
                 {
-                    v_color= u_solidColor;                   
-                    
+                    v_color= u_solidColor;                                       
                 }
                 else
                 {
-                    v_color = a_color;
+                    v_color = vec4(a_color,1.0);
                 } 
                 v_texcoord= a_texcoord;
             }

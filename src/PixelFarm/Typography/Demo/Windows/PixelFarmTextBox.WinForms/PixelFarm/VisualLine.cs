@@ -34,7 +34,7 @@ namespace SampleWinForms.UI
         public void Draw()
         {
 
-            GlyphPlanList glyphPlans = _line._glyphPlans;
+            PxScaledGlyphPlanList glyphPlans = _line._glyphPlans;
             List<UserCodePointToGlyphIndex> userCharToGlyphIndexMap = _line._userCodePointToGlyphIndexMap;
             if (_line.ContentChanged)
             {
@@ -67,9 +67,9 @@ namespace SampleWinForms.UI
                 }
                 else
                 {
-                    UserCodePointToGlyphIndex map = userCharToGlyphIndexMap[caret_index - 1];
-                    GlyphPlan p = glyphPlans[map.glyphIndexListOffset_plus1 + map.len - 2];
-                    _printer.DrawCaret(X + (p.ExactX + p.AdvanceX), this.Y);
+                    //UserCodePointToGlyphIndex map = userCharToGlyphIndexMap[caret_index - 1];
+                    //GlyphPlan p = glyphPlans[map.glyphIndexListOffset_plus1 + map.len - 2];
+                    //_printer.DrawCaret(X + (p.ExactX + p.AdvanceX), this.Y);
                 }
             }
             else

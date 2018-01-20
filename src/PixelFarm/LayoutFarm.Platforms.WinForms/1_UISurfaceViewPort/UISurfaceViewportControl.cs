@@ -23,10 +23,13 @@ namespace LayoutFarm.UI
 
 
 
+
         public UISurfaceViewportControl()
         {
             InitializeComponent();
             this.panel1.Visible = false;
+
+
         }
         public UIPlatform Platform
         {
@@ -217,6 +220,8 @@ namespace LayoutFarm.UI
             this.rootgfx.TopWindowRenderBox.AddChild(vi);
         }
 
+
+        static IntPtr s_tmpHandle;
         public void AddContent(RenderElement vi, object owner)
         {
             if (vi is RenderBoxBase)
@@ -226,21 +231,34 @@ namespace LayoutFarm.UI
                     var topWinBox = owner as ITopWindowBox;
                     if (topWinBox.PlatformWinBox == null)
                     {
+
+                        FormPopupShadow2 popupShadow1 = new FormPopupShadow2();
+                        IntPtr handle1 = popupShadow1.Handle;
+
+
                         //create platform winbox 
                         var newForm = new AbstractCompletionWindow();
                         newForm.LinkedParentForm = this.FindForm();
                         newForm.LinkedParentControl = this;
+                        newForm.PopupShadow = popupShadow1;
+
+
                         UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
                         vi.ResetRootGraphics(newSurfaceViewport.RootGfx);
                         vi.SetLocation(0, 0);
                         newSurfaceViewport.AddContent(vi);
-                        //------------------------------------------------------                       
+                        //-----------------------------------------------------                        
+                        s_tmpHandle = newForm.Handle;//force newform to create window handle
+                        //----------
+
                         var platformWinBox = new PlatformWinBoxForm(newForm);
                         topWinBox.PlatformWinBox = platformWinBox;
                         platformWinBox.UseRelativeLocationToParent = true;
                         subForms.Add(newForm);
+                        s_tmpHandle = IntPtr.Zero;
+
                     }
                 }
                 else
@@ -338,6 +356,10 @@ namespace LayoutFarm.UI
         {
             if (this.UseRelativeLocationToParent)
             {
+                if (!form.IsHandleCreated)
+                {
+
+                }
                 //1. find parent form/control 
                 var parentLoca = form.LinkedParentForm.Location;
                 form.Location = new System.Drawing.Point(parentLoca.X + x, parentLoca.Y + y);

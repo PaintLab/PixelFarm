@@ -30,13 +30,7 @@ namespace PixelFarm.DrawingGL
         {
             isLittleEndian = BitConverter.IsLittleEndian;
         }
-        //public GLBitmap(int w, int h, byte[] rawBuffer, bool isInvertImage)
-        //{
-        //    this.width = w;
-        //    this.height = h;
-        //    this.rawBuffer = rawBuffer;
-        //    this.isInvertImage = isInvertImage;
-        //}
+      
         public GLBitmap(int w, int h, int[] rawIntBuffer, bool isInvertImage)
         {
             this.width = w;
