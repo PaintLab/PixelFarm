@@ -11,13 +11,15 @@ namespace YourImplementation
         public Stream GetDataStream(string strmUrl)
         {
             string fullname = icuDir + "/" + strmUrl;
-            if (File.Exists(fullname))
+            if (PixelFarm.Platforms.StorageService.Provider.DataExists(fullname))
             {
-                return new FileStream(fullname, FileMode.Open);
+                return PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fullname);
             }
             return null;
         }
     }
+
+
 
     static class CommonTextServiceSetup
     {
@@ -26,24 +28,25 @@ namespace YourImplementation
         internal static IFontLoader myFontLoader;
 
 
+        internal static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
+        internal static FileDBStorageProvider s_filedb = new FileDBStorageProvider("textservicedb");
+
         public static void SetupDefaultValues()
         {
+            //--------
             if (s_isInit) return;
-
-            //
+            //--------
+            PixelFarm.Platforms.StorageService.RegisterProvider(s_filedb);
             myFontLoader = new OpenFontStore();
             //test Typography's custom text break, 
-            //check if we have that data?
-
-            //string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
-            string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu60/brkitr_src/dictionaries";
+            //check if we have that data? 
+            
+            string typographyDir = @"/icu/brkitr_src/dictionaries";
             s_icuDataProvider = new MyIcuDataProvider();
-            if (System.IO.Directory.Exists(typographyDir))
-            {
-                s_icuDataProvider.icuDir = typographyDir;
-            }
+            s_icuDataProvider.icuDir = typographyDir;
+
             Typography.TextBreak.CustomBreakerBuilder.Setup(s_icuDataProvider);
-            s_isInit = true;            
+            s_isInit = true;
         }
     }
 

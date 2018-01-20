@@ -13,9 +13,15 @@ namespace PixelFarm.Agg
     }
     class AggRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
+        string str;
         public AggRenderVxFormattedString(string str)
         {
-            this.OriginalString = str;
+            this.str = str;
+
+        }
+        public override string OriginalString
+        {
+            get { return this.str; }
         }
     }
 }

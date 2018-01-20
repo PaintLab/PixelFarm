@@ -80,16 +80,16 @@ namespace Typography.TextLayout
 #endif
 
     }
-     
+
     public struct GlyphPlanSequence
     {
         //
         public static GlyphPlanSequence Empty = new GlyphPlanSequence();
         //
-        readonly GlyphPlanList glyphBuffer;
+        readonly UnscaledGlyphPlanList glyphBuffer;
         public readonly int startAt;
         public readonly ushort len;
-        internal GlyphPlanSequence(GlyphPlanList glyphBuffer, int startAt, int len)
+        internal GlyphPlanSequence(UnscaledGlyphPlanList glyphBuffer, int startAt, int len)
         {
             this.glyphBuffer = glyphBuffer;
             this.startAt = startAt;
@@ -97,7 +97,7 @@ namespace Typography.TextLayout
         }
         public float CalculateWidth()
         {
-            GlyphPlanList plans = glyphBuffer;
+            UnscaledGlyphPlanList plans = glyphBuffer;
             int end = startAt + len;
             float width = 0;
             for (int i = startAt; i < end; ++i)
@@ -110,9 +110,9 @@ namespace Typography.TextLayout
         {
             return glyphBuffer == null;
         }
-        public static GlyphPlanList UnsafeGetInteralGlyphPlanList(GlyphPlanSequence planSeq)
+        public static UnscaledGlyphPlanList UnsafeGetInteralGlyphPlanList(GlyphPlanSequence planSeq)
         {
-            return planSeq.glyphBuffer; 
+            return planSeq.glyphBuffer;
         }
     }
 

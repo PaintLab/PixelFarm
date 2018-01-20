@@ -484,10 +484,10 @@ namespace PixelFarm.DrawingGL
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
-            var renderVxFmtStr = new GLRenderVxFormattedString(textspan);
+            char[] buffer = textspan.ToCharArray();
+            var renderVxFmtStr = new GLRenderVxFormattedString(buffer);
             if (_textPrinter != null)
-            {
-                char[] buffer = textspan.ToCharArray();
+            {   
                 _textPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
 
             }

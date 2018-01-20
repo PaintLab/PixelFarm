@@ -17,8 +17,27 @@
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
+
+
     partial class GdiPlusDrawBoard
     {
+
+        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
+        {
+            //TODO: review here
+            //copy
+            char[] copy1 = new char[len];
+            System.Array.Copy(buffer, startAt, copy1, 0, len);
+            return new WinGdiRenderVxFormattedString(copy1);
+        }
+        public override void DrawRenderVx(RenderVx renderVx, float x, float y)
+        {
+            //TODO: review here
+            //temp here          
+            var vxFormattedString = renderVx as WinGdiRenderVxFormattedString;
+            if (vxFormattedString == null) return;
+            _gdigsx.DrawText(vxFormattedString.InternalBuffer, (int)x, (int)y);
+        }
 
         public override void DrawText(char[] buffer, int x, int y)
         {
@@ -31,7 +50,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
-            _gdigsx.DrawText(str, startAt, len, logicalTextBox, textAlignment); 
+            _gdigsx.DrawText(str, startAt, len, logicalTextBox, textAlignment);
         }
         //====================================================
         public override RequestFont CurrentFont

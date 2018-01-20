@@ -137,7 +137,7 @@ namespace PixelFarm.Agg
         {
             return img.pixelBuffer;
         }
-       
+
         public static void ReplaceBuffer(ActualImage img, int[] pixelBuffer)
         {
             img.pixelBuffer = pixelBuffer;
@@ -296,9 +296,6 @@ namespace PixelFarm.Agg
 
     public static class ActualImageExtensions
     {
-
-
-
         public static int[] CopyImgBuffer(ActualImage img, int width)
         {
             //calculate stride for the width
@@ -330,6 +327,39 @@ namespace PixelFarm.Agg
             }
 
             return buff2;
+        }
+    }
+
+    public delegate void ImageEncodeDelegate(byte[] img, int pixelWidth, int pixelHeight);
+    public delegate void ImageDecodeDelegate(byte[] img);
+
+    public static class ExternalImageService
+    {
+        static ImageEncodeDelegate s_imgEncodeDel;
+        static ImageDecodeDelegate s_imgDecodeDel;
+
+        public static bool HasExternalImgCodec
+        {
+            get
+            {
+                return s_imgEncodeDel != null;
+            }
+        }
+        public static void RegisterExternalImageEncodeDelegate(ImageEncodeDelegate imgEncodeDel)
+        {
+            s_imgEncodeDel = imgEncodeDel;
+        }
+        public static void RegisterExternalImageDecodeDelegate(ImageDecodeDelegate imgDecodeDel)
+        {
+            s_imgDecodeDel = imgDecodeDel;
+        }
+        public static void SaveImage(byte[] img, int pixelWidth, int pixelHeight)
+        {
+            //temp, save as png image
+            if (s_imgEncodeDel != null)
+            {
+                s_imgEncodeDel(img, pixelWidth, pixelHeight);
+            }
         }
     }
 }

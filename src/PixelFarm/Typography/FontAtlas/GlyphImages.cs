@@ -67,11 +67,10 @@ namespace Typography.Rendering
     {
         public int borderX;
         public int borderY;
-        public GlyphImage img;
+        internal GlyphImage img;
         public Rectangle area;
-        public char character;
+        public char character; //TODO: this should be code point(int32)
         public int glyphIndex;
-        // public GlyphMatrix2 glyphMatrix;
 
     }
 

@@ -12,12 +12,18 @@ namespace LayoutFarm
         LayoutFarm.UI.UISurfaceViewportControl vw;
         int primaryScreenWorkingAreaW;
         int primaryScreenWorkingAreaH;
+        int _formTitleBarHeight;
         public SampleViewport(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
             this.vw = vw;
-            var workingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-            this.primaryScreenWorkingAreaW = workingArea.Width;
-            this.primaryScreenWorkingAreaH = workingArea.Height;
+            System.Windows.Forms.Form ownerForm = this.vw.FindForm();
+            System.Drawing.Rectangle screenRectangle = ownerForm.RectangleToScreen(ownerForm.ClientRectangle);
+            _formTitleBarHeight = screenRectangle.Top - ownerForm.Top;
+
+
+            var primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+            this.primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
+            this.primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
 
             //--------------
             imageContentMan = new ImageContentManager(vw.Platform);
@@ -26,6 +32,8 @@ namespace LayoutFarm
                 e.SetResultImage(LoadBitmap(e.ImagSource));
             };
         }
+        public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
+
         public static Image LoadBitmap(string filename)
         {
             System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename); 

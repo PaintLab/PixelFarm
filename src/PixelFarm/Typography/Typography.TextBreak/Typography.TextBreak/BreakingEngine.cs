@@ -49,7 +49,7 @@ namespace Typography.TextBreak
             char c_last = this.LastUnicodeChar;
             int endAt = startAt + len;
 
-            Stack<int> candidate = visitor.GetTempCandidateBreaks();
+            Stack<int> candidates = visitor.GetTempCandidateBreaks();
 
             for (int i = startAt; i < endAt;)
             {
@@ -83,13 +83,13 @@ namespace Typography.TextBreak
                     }
                     //---------------------
                     WordGroup c_wordgroup = wordgroup;
-                    candidate.Clear();
+                    candidates.Clear();
 
                     int candidateLen = 1;
 
                     if (c_wordgroup.PrefixIsWord)
                     {
-                        candidate.Push(candidateLen);
+                        candidates.Push(candidateLen);
                     }
 
                     bool continueRead = true;
@@ -112,7 +112,7 @@ namespace Typography.TextBreak
                                 //accept 
                                 if (next1.PrefixIsWord)
                                 {
-                                    candidate.Push(candidateLen);
+                                    candidates.Push(candidateLen);
                                 }
                             }
                             else
@@ -126,7 +126,7 @@ namespace Typography.TextBreak
                                     {
                                         visitor.AddWordBreakAt(p2);
                                         visitor.SetCurrentIndex(p2);
-                                        candidate.Clear();
+                                        candidates.Clear();
                                     }
                                 }
                             }
@@ -134,10 +134,10 @@ namespace Typography.TextBreak
                             i = endAt; //temp fix, TODO: review here
 
                             //choose best match 
-                            if (candidate.Count > 0)
+                            if (candidates.Count > 0)
                             {
 
-                                int candi1 = candidate.Pop();
+                                int candi1 = candidates.Pop();
                                 //try
                                 visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                 //use this
@@ -157,7 +157,7 @@ namespace Typography.TextBreak
 
                             if (next.PrefixIsWord)
                             {
-                                candidate.Push(candidateLen);
+                                candidates.Push(candidateLen);
                             }
                             c_wordgroup = next;
                             i = visitor.CurrentIndex;
@@ -167,10 +167,9 @@ namespace Typography.TextBreak
                                 i = endAt; //temp fix, TODO: review here
                                 bool foundCandidate = false;
                                 //choose best match 
-                                while (candidate.Count > 0)
+                                while (candidates.Count > 0)
                                 {
-
-                                    int candi1 = candidate.Pop();
+                                    int candi1 = candidates.Pop();
                                     //try
                                     visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                     if (visitor.State != VisitorState.End)
@@ -221,8 +220,8 @@ namespace Typography.TextBreak
                                     else
                                     {
                                         bool foundCandidate = false;
-                                        int candi_count = candidate.Count;
-                                        if (candi_count == 0)
+
+                                        if (candidates.Count == 0)
                                         {
                                             //no candidate 
                                             //need to step back
@@ -258,9 +257,9 @@ namespace Typography.TextBreak
                                         }
                                         else
                                         {
-                                            while (candi_count > 0)
+                                            while (candidates.Count > 0)
                                             {
-                                                int candi1 = candidate.Pop();
+                                                int candi1 = candidates.Pop();
                                                 //try
                                                 visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                                 //check if we can use this candidate
@@ -311,10 +310,10 @@ namespace Typography.TextBreak
                             {
 
                                 bool foundCandidate = false;
-                                while (candidate.Count > 0)
+                                while (candidates.Count > 0)
                                 {
 
-                                    int candi1 = candidate.Pop();
+                                    int candi1 = candidates.Pop();
                                     //try
                                     visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                     if (visitor.State == VisitorState.End)

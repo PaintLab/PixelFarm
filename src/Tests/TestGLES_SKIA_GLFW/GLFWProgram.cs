@@ -150,7 +150,7 @@ namespace TestGlfw
                 //var demo = new T42_ES2HelloTriangleDemo();
                 demoContext2 = new Mini.GLDemoContext(w, h);
                 demoContext2.SetTextPrinter(painter =>
-                { 
+                {
 
                     var printer = new PixelFarm.DrawingGL.GLBitmapGlyphTextPrinter(painter, s_textServices);
                     painter.TextPrinter = printer;
@@ -229,11 +229,33 @@ namespace TestGlfw
             actualImg.IsBigEndian = true;
             return actualImg;
         }
+
+
+        class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
+        {
+            public override bool DataExists(string dataName)
+            {
+                //implement with file
+                return System.IO.File.Exists(dataName);
+            }
+            public override byte[] ReadData(string dataName)
+            {
+                return System.IO.File.ReadAllBytes(dataName);
+            }
+            public override void SaveData(string dataName, byte[] content)
+            {
+                System.IO.File.WriteAllBytes(dataName, content);
+            }
+        }
+
+
+        static LocalFileStorageProvider file_storageProvider = new LocalFileStorageProvider();
         public static void Start()
         {
             //---------------------------------------------------
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
+            PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
             //---------------------------------------------------
             if (!Glfw.Init())
             {
