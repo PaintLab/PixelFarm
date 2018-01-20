@@ -34,9 +34,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawingGL\GLShader\SMAAShader.cs" />
+    <Compile Include="DrawingGL\GLShader\SMAA_AreaTex.cs" />
+    <Compile Include="DrawingGL\GLShader\SMAA_SearchTex.cs" />
     <Compile Include="DrawingGL\RenderSuface\GLRenderSurface.cs" />
     <Compile Include="DrawingGL\RenderSuface\SmoothMode.cs" />
     <Compile Include="DrawingGL\RenderSuface\ShaderSharedResource.cs" />

@@ -68,6 +68,12 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SMAAShader.cs">
       <Link>DrawingGL\GLShader\SMAAShader.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SMAA_AreaTex.cs">
+      <Link>DrawingGL\GLShader\SMAA_AreaTex.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SMAA_SearchTex.cs">
+      <Link>DrawingGL\GLShader\SMAA_SearchTex.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs">
       <Link>DrawingGL\GLShader\SmoothLineShader.cs</Link>
     </Compile>

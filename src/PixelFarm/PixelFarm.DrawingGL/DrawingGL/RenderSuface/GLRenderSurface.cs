@@ -268,6 +268,12 @@ namespace PixelFarm.DrawingGL
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
+        public void DrawImageWithSMAA2(FrameBuffer bmp, float x, float y)
+        {
+            DrawImageWithSMAA2(bmp,
+                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+                   x, y, bmp.Width, bmp.Height);
+        }
         public void DrawImage(GLBitmap bmp, float x, float y)
         {
             DrawImage(bmp,
@@ -352,23 +358,86 @@ namespace PixelFarm.DrawingGL
         {
 
 
-
-            if (_smaaBlendingWeightShader == null)
-            {
-                _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
-            }
-
-
             //step 1
             if (_smaaEdgeDetectShader == null)
             {
                 _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
             }
-
             _smaaEdgeDetectShader.Render(bmp, x, y, w, h);
 
-           
+            ////2.  
+            //if (_smaaBlendingWeightShader == null)
+            //{
+            //    _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
+            //}
+            //////for debug
+            ////if (bmp.IsBigEndianPixel)
+            ////{
+            ////    glesTextureShader.Render(bmp, x, y, w, h);
+            ////}
+            ////else
+            ////{
+            ////    gdiImgTextureShader.Render(bmp, x, y, w, h);
+            ////}
+        }
 
+
+
+
+
+        //--------------
+
+
+
+
+        //--------------
+        InternalGLBitmapTexture _smaaAreaTex;
+        InternalGLBitmapTexture _smaaSearchTex;
+        public void DrawImageWithSMAA2(FrameBuffer frmBuffer,
+           Drawing.RectangleF srcRect,
+           float x, float y, float w, float h)
+        {
+
+
+            ////step 1
+            //if (_smaaEdgeDetectShader == null)
+            //{
+            //    _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
+            //}
+            //_smaaEdgeDetectShader.Render(bmp, x, y, w, h);
+
+
+            if (_smaaAreaTex == null)
+            {
+                _smaaAreaTex = new InternalGLBitmapTexture(
+                    SMAAAreaTex.AREATEX_WIDTH,
+                    SMAAAreaTex.AREATEX_HEIGHT,
+                    SMAAAreaTex.areaTexBytes,
+                    PixelFormat.LuminanceAlpha,
+                    PixelInternalFormat.LuminanceAlpha,
+                    TextureMinFilter.Linear,
+                    TextureMagFilter.Linear);
+            }
+            if (_smaaSearchTex == null)
+            {
+                _smaaSearchTex = new InternalGLBitmapTexture(
+                    SMAASearchTex.SEARCHTEX_WIDTH,
+                    SMAASearchTex.SEARCHTEX_HEIGHT,
+                    SMAASearchTex.searchTexBytes,
+                    PixelFormat.Luminance,
+                    PixelInternalFormat.Luminance,
+                    TextureMinFilter.Linear,
+                    TextureMagFilter.Linear);
+            }
+
+            //2.  
+            if (_smaaBlendingWeightShader == null)
+            {
+                _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
+                _smaaBlendingWeightShader.LoadAreaTexture(_smaaAreaTex);
+                _smaaBlendingWeightShader.LoadSearchTexture(_smaaSearchTex);
+            }
+            _smaaBlendingWeightShader.Render(frmBuffer, x, y, w, h);
             ////for debug
             //if (bmp.IsBigEndianPixel)
             //{
@@ -379,7 +448,6 @@ namespace PixelFarm.DrawingGL
             //    gdiImgTextureShader.Render(bmp, x, y, w, h);
             //}
         }
-
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)

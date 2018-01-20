@@ -14,7 +14,10 @@ namespace OpenTkEssTest
     {
         GLRenderSurface _glsx;
         GLPainter painter;
-        FrameBuffer frameBuffer;
+        FrameBuffer frameBuffer1;
+        FrameBuffer frameBuffer2;
+        FrameBuffer frameBuffer3;
+
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
@@ -26,7 +29,10 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            frameBuffer = _glsx.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer1 = _glsx.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer2 = _glsx.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer3 = _glsx.CreateFrameBuffer(this.Width, this.Height);
+
             frameBufferNeedUpdate = true;
             //------------ 
         }
@@ -46,11 +52,11 @@ namespace OpenTkEssTest
                 glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lines.png");
                 isInit = true;
             }
-            if (frameBuffer.FrameBufferId > 0)
+            if (frameBuffer1.FrameBufferId > 0)
             {
                 if (frameBufferNeedUpdate)
                 {
-                    _glsx.AttachFrameBuffer(frameBuffer);
+                    _glsx.AttachFrameBuffer(frameBuffer1);
                     //------------------------------------------------------------------------------------  
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
@@ -61,9 +67,15 @@ namespace OpenTkEssTest
                     //------------------------------------------------------------------------------------  
                     _glsx.DetachFrameBuffer();
                     //after release current, we move back to default frame buffer again***
+
+                    //------------------------------------------------------------------------------------   
+                    _glsx.AttachFrameBuffer(frameBuffer2);
+                    _glsx.DrawImageWithSMAA2(frameBuffer1, 0, 300);
+                    _glsx.DetachFrameBuffer();
+                    //------------------------------------------------------------------------------------   
                     frameBufferNeedUpdate = false;
                 }
-                _glsx.DrawFrameBuffer(frameBuffer, 15, 400);
+                _glsx.DrawFrameBuffer(frameBuffer2, 15, 400);
             }
             else
             {
