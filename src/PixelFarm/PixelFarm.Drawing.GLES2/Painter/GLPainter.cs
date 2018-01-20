@@ -1030,11 +1030,19 @@ namespace PixelFarm.DrawingGL
                             break;
                         case PixelFarm.Agg.VertexCmd.Close:
                             //from current point 
-                            xylist.Add((float)prevMoveToX);
-                            xylist.Add((float)prevMoveToY);
-                            prevX = prevMoveToX;
-                            prevY = prevMoveToY;
-
+                            { 
+                                xylist.Add((float)prevMoveToX);
+                                xylist.Add((float)prevMoveToY);
+                                prevX = prevMoveToX;
+                                prevY = prevMoveToY; 
+                                //-----------
+                                Figure newfig = new Figure(xylist.ToArray());
+                                newfig.SupportVertexBuffer = buildForRenderVx;
+                                figures.Add(newfig);
+                                //-----------
+                                xylist.Clear();
+                                isAddToList = false; 
+                            } 
                             break;
                         case VertexCmd.CloseAndEndFigure:
                             //from current point 
