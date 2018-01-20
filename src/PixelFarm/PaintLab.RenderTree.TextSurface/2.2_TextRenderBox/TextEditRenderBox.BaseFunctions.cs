@@ -277,7 +277,24 @@ namespace LayoutFarm.Text
 
                     InvalidateGraphicOfCurrentLineArea();
                 }
+            }
+        }
+        public void FindCurrentUnderlyingWord(out int startAt, out int len)
+        {
+            EditableRun textRun = this.CurrentTextRun;
+            if (textRun != null)
+            {
 
+                VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
+                int lineCharacterIndex = pointInfo.LineCharIndex;
+                int local_sel_Index = pointInfo.RunLocalSelectedIndex;
+                //default behaviour is select only a hit word under the caret
+                //so ask the text layer to find a hit word                 
+                internalTextLayerController.FindUnderlyingWord(out startAt, out len);
+            }
+            else
+            {
+                startAt = len = 0;
             }
         }
         public void HandleDrag(UIMouseEventArgs e)

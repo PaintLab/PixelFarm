@@ -95,6 +95,10 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
       <Name>BackEnd.MiniOpenTK</Name>

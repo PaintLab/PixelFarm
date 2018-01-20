@@ -38,7 +38,19 @@ namespace LayoutFarm.CustomWidgets
             this.desiredHeight = height;
             this.desiredWidth = width;
         }
-        public bool NeedClipArea { get; set;}
+        bool _needClipArea;
+        public bool NeedClipArea
+        {
+            get { return _needClipArea; }
+            set
+            {
+                _needClipArea = value;
+                if (primElement != null)
+                {
+                    primElement.NeedClipArea = value;
+                }
+            }
+        }
 
         protected override bool HasReadyRenderElement
         {

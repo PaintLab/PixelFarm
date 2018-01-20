@@ -55,6 +55,7 @@ namespace OpenTK.Graphics.ES20
         /// </summary>
         public void LoadLatest(int offset = 0)
         {
+          
             GL.VertexAttribPointer(this.location,
                 2,
                 VertexAttribPointerType.Float,
@@ -64,7 +65,20 @@ namespace OpenTK.Graphics.ES20
             GL.EnableVertexAttribArray(this.location);
 
         }
-
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest(int totalFieldCount, int offset = 0)
+        {
+            
+            GL.VertexAttribPointer(this.location,
+                2,
+                VertexAttribPointerType.Float,
+                false,
+                totalFieldCount * sizeof(float),
+                offset);
+            GL.EnableVertexAttribArray(this.location);
+        }
     }
     public struct ShaderVtxAttrib3f
     {
@@ -92,14 +106,29 @@ namespace OpenTK.Graphics.ES20
         /// <summary>
         /// load latest server side data
         /// </summary>
-        public void LoadLatest()
+        public void LoadLatest(int totalFieldCount,  int offset = 0)
         {
+           
+            GL.VertexAttribPointer(this.location,
+                3,
+                VertexAttribPointerType.Float,
+                false,
+                totalFieldCount * sizeof(float),
+                offset);
+            GL.EnableVertexAttribArray(this.location);
+        }
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest(int offset = 0)
+        {
+          
             GL.VertexAttribPointer(this.location,
                 3,
                 VertexAttribPointerType.Float,
                 false,
                 3 * sizeof(float),
-                0);
+                offset);
             GL.EnableVertexAttribArray(this.location);
         }
     }

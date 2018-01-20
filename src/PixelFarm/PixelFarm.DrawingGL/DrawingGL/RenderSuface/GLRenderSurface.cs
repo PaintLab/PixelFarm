@@ -380,7 +380,7 @@ namespace PixelFarm.DrawingGL
             glyphStencilShader.SetColor(this.FontFillColor);
             if (bmp.IsBigEndianPixel)
             {
-                
+
                 glyphStencilShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
             }
             else
@@ -389,9 +389,119 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        public void LoadTexture1(GLBitmap bmp)
+        {
+            textureSubPixRendering.LoadGLBitmap(bmp);
+            textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
+            textureSubPixRendering.SetColor(this.FontFillColor);
+            textureSubPixRendering.SetIntensity(1f);
+        }
+        public void SetAssociatedTextureInfo(GLBitmap bmp)
+        {
+            textureSubPixRendering.SetAssociatedTextureInfo(bmp);
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique(
+           ref PixelFarm.Drawing.Rectangle srcRect,
+           float targetLeft,
+           float targetTop,
+           float scale)
+        {
+            //TODO: review performance here *** 
+            //1. B , cyan result
+            GL.ColorMask(false, false, true, false);
+            textureSubPixRendering.SetCompo(0);
+            textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //float subpixel_shift = 1 / 9f;
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
+            //---------------------------------------------------
+            //2. G , magenta result
+            GL.ColorMask(false, true, false, false);
+            textureSubPixRendering.SetCompo(1);
+            textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
+            //1. R , yellow result 
+            textureSubPixRendering.SetCompo(2);
+            GL.ColorMask(true, false, false, false);//             
+            textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
+            //enable all color component
+            GL.ColorMask(true, true, true, true);
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique2(
+          ref PixelFarm.Drawing.Rectangle srcRect,
+          float targetLeft,
+          float targetTop,
+          float scale)
+        {
+            textureSubPixRendering.NewDrawSubImage(srcRect.Left,
+                srcRect.Top,
+                srcRect.Width,
+                srcRect.Height, targetLeft, targetTop);
+
+        }
+        public void WriteVboToList(
+           System.Collections.Generic.List<float> buffer,
+           System.Collections.Generic.List<ushort> indexList,
+           ref PixelFarm.Drawing.Rectangle srcRect,
+           float targetLeft,
+           float targetTop,
+           float scale)
+        {
+            // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+            ushort indexCount = (ushort)indexList.Count;
+
+            if (indexCount > 0)
+            {
+
+                //add degenerative triangle
+                float prev_5 = buffer[buffer.Count - 5];
+                float prev_4 = buffer[buffer.Count - 4];
+                float prev_3 = buffer[buffer.Count - 3];
+                float prev_2 = buffer[buffer.Count - 2];
+                float prev_1 = buffer[buffer.Count - 1];
+
+                buffer.Add(prev_5); buffer.Add(prev_4); buffer.Add(prev_3);
+                buffer.Add(prev_2); buffer.Add(prev_1);
+
+
+                indexList.Add((ushort)(indexCount));
+                indexList.Add((ushort)(indexCount + 1));
+
+                indexCount += 2;
+            }
+
+            //version 3            
+            textureSubPixRendering.WriteVboStream(buffer, indexCount > 0, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+
+            indexList.Add(indexCount);
+            indexList.Add((ushort)(indexCount + 1));
+            indexList.Add((ushort)(indexCount + 2));
+            indexList.Add((ushort)(indexCount + 3));
+            //---
+            //add degenerate rect
+
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique3(
+             float[] buffer,
+             ushort[] indexList)
+        {
+
+            //version 3            
+            textureSubPixRendering.NewDrawSubImage3(buffer, indexList);
+            //textureSubPixRendering.WriteVboStream(buffer, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
+        {
+            //x = 100;
+            //y = 400;
+            //this.SetCanvasOrigin((int)x, (int)y);
+
+            textureSubPixRendering.NewDrawSubImage4FromCurrentLoadedVBO(count, x, y);
+        }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
-            ref PixelFarm.Drawing.Rectangle r,
+            ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
             float scale)
@@ -416,19 +526,19 @@ namespace PixelFarm.DrawingGL
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
                 textureSubPixRendering.SetCompo(0);
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
                 textureSubPixRendering.SetCompo(1);
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
                 //1. R , yellow result 
                 textureSubPixRendering.SetCompo(2);
                 GL.ColorMask(true, false, false, false);//             
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
@@ -519,12 +629,16 @@ namespace PixelFarm.DrawingGL
         //RenderVx
         public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            if (glRenderVx == null) return;
+            //
             FillGfxPath(brush, glRenderVx.gxpth);
         }
         public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            if (glRenderVx == null) return;
+            //
             if (glRenderVx.multipartTessResult != null)
             {
                 FillGfxPath(color, glRenderVx.multipartTessResult);
@@ -542,7 +656,9 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            if (glRenderVx == null) return;
+
             DrawGfxPath(color, glRenderVx.gxpth);
         }
         //------------------------------------------------------------------------------- 

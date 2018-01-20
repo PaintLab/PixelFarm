@@ -10,15 +10,15 @@ namespace PixelFarm.Drawing.Fonts
 {
     public enum TextureKind
     {
-        Msdf,
-        StencilGreyScale,
         StencilLcdEffect,
+        StencilGreyScale,
+        Msdf,
         Bitmap,
     }
     public class SimpleFontAtlas
     {
         GlyphImage totalGlyphImage;
-        Dictionary<int, TextureFontGlyphData> codePointLocations = new Dictionary<int, TextureFontGlyphData>();
+        Dictionary<int, TextureFontGlyphData> glyphLocations = new Dictionary<int, TextureFontGlyphData>();
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -27,9 +27,9 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         public float OriginalFontSizePts { get; set; }
         public TextureKind TextureKind { get; set; }
-        public void AddGlyph(int codePoint, TextureFontGlyphData glyphData)
+        public void AddGlyph(int glyphIndex, TextureFontGlyphData glyphData)
         {
-            codePointLocations.Add(codePoint, glyphData);
+            glyphLocations.Add(glyphIndex, glyphData);
         }
 
         public GlyphImage TotalGlyph
@@ -37,9 +37,9 @@ namespace PixelFarm.Drawing.Fonts
             get { return totalGlyphImage; }
             set { totalGlyphImage = value; }
         }
-        public bool TryGetGlyphDataByCodePoint(int codepoint, out TextureFontGlyphData glyphdata)
+        public bool TryGetGlyphDataByGlyphIndex(int glyphIndex, out TextureFontGlyphData glyphdata)
         {
-            if (!codePointLocations.TryGetValue(codepoint, out glyphdata))
+            if (!glyphLocations.TryGetValue(glyphIndex, out glyphdata))
             {
                 glyphdata = null;
                 return false;
@@ -59,7 +59,7 @@ namespace PixelFarm.Drawing.Fonts
         public int OriginalAscending { get; private set; }
         public int OriginalDescending { get; private set; }
         public int OriginalLineGap { get; private set; }
-       
+
 
         public void SetTextureScaleInfo(float sourceTextureScale, float targetTextureScale)
         {
@@ -77,7 +77,7 @@ namespace PixelFarm.Drawing.Fonts
             this.OriginalAscending = ascending;
             this.OriginalDescending = descending;
             this.OriginalLineGap = linegap;
-            
+
             this.OriginalRecommendLineSpacing = recommendLineSpacing;
 
         }

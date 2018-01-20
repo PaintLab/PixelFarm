@@ -105,6 +105,10 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
+      <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
+      <Name>PaintLab.Svg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
       <Name>PixelFarm.Drawing.GLES2</Name>
@@ -146,7 +150,6 @@
       <Name>Typography.TextServices</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

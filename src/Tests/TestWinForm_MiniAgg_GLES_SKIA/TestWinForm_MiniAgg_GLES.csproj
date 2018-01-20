@@ -54,6 +54,7 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
+    <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
@@ -228,6 +229,10 @@
     <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\PaintLab.YourImplementation.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
       <Name>PaintLab.YourImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
+      <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
+      <Name>PaintLab.Svg</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>

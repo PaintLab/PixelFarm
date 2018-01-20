@@ -112,7 +112,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingBuffer\BackEnd.DrawingBuffer.csproj">
       <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
-      <Name>PixelFarm.DrawingBuffer</Name>
+      <Name>BackEnd.DrawingBuffer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

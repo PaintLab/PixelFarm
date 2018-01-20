@@ -82,6 +82,16 @@
     <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
     </Compile>
+    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs">
+      <Link>3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs</Link>
+    </Compile>
+    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
+      <Link>3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
+      <Link>3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
+    </Compile>
     <Compile Include="..\LayoutFarm.Platforms.WinForms\4_GdiPlus\1_GdiPlusCanvasViewport.cs">
       <Link>4_GdiPlus\1_GdiPlusCanvasViewport.cs</Link>
     </Compile>

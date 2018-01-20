@@ -4,7 +4,7 @@
 using System;
 namespace PixelFarm.Drawing.Fonts
 {
-    
+
     public abstract class FontFace : IDisposable
     {
         public bool HasKerning { get; set; }
@@ -25,6 +25,7 @@ namespace PixelFarm.Drawing.Fonts
         public abstract int DescentInDzUnit { get; }
         public abstract int LineGapInDzUnit { get; }
         public abstract object GetInternalTypeface();
+        public abstract int RecommendedLineHeight { get; }
     }
 
 }

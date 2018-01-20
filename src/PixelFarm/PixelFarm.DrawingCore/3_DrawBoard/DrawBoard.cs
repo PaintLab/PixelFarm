@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
-        
+
 
         ////////////////////////////////////////////////////////////////////////////
         //states
@@ -106,13 +106,21 @@ namespace PixelFarm.Drawing
         public abstract void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment);
         public abstract void DrawText(char[] buffer, int startAt, int len, Rectangle logicalTextBox, int textAlignment);
         //-------------------------------------------------------
+        /// <summary>
+        /// create formatted string base on current font,font-size, font style
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len);
+        public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
+
     }
 
 
     public enum RenderQualtity
     {
         HighQuality,
-        Fast, 
+        Fast,
     }
 
     /// <summary>

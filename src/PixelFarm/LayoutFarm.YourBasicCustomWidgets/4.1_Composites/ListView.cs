@@ -40,6 +40,7 @@ namespace LayoutFarm.CustomWidgets
             simpleBox.MouseDoubleClick += panel_MouseDoubleClick;
             simpleBox.AcceptKeyboardFocus = true;
             simpleBox.KeyDown += simpleBox_KeyDown;
+            simpleBox.NeedClipArea = true;
 
             this.panel = simpleBox;
             uiList.AddUI(panel);
@@ -320,6 +321,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             this.TransparentAllMouseEvents = true;
+            
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
@@ -354,9 +356,11 @@ namespace LayoutFarm.CustomWidgets
                 listItemText.TransparentForAllEvents = true;
                 if (this.itemText != null)
                 {
+                    listItemText.NeedClipArea = true;
                     listItemText.Text = this.itemText;
                 }
 
+                element.NeedClipArea = true;
                 this.primElement = element;
             }
             return primElement;
