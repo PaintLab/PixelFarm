@@ -279,9 +279,9 @@ namespace PixelFarm.DrawingGL
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithSMAA3(FrameBuffer bmp, float x, float y)
+        public void DrawImageWithSMAA3(FrameBuffer bmp, GLBitmap srcImg, float x, float y)
         {
-            DrawImageWithSMAA3(bmp,
+            DrawImageWithSMAA3(bmp, srcImg,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
@@ -363,6 +363,9 @@ namespace PixelFarm.DrawingGL
                 msdfShader.RenderSubImages(bmp, coords, scale);
             }
         }
+
+        float smaa_imgW = 0;
+        float smaa_imgH = 0;
         public void DrawImageWithSMAA(GLBitmap bmp,
            Drawing.RectangleF srcRect,
            float x, float y, float w, float h)
@@ -373,10 +376,12 @@ namespace PixelFarm.DrawingGL
             if (_smaaEdgeDetectShader == null)
             {
                 _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
+                _smaaEdgeDetectShader.SetResolution(1f / this._width, 1f / this._height);
             }
 
             _smaaEdgeDetectShader.Render(bmp, x, y, w, h);
-
+            smaa_imgW = w;
+            smaa_imgH = h;
             ////2.  
             //if (_smaaBlendingWeightShader == null)
             //{
@@ -438,8 +443,8 @@ namespace PixelFarm.DrawingGL
                     SMAASearchTex.searchTexBytes,
                     PixelFormat.Luminance,
                     PixelInternalFormat.Luminance,
-                    TextureMinFilter.Linear,
-                    TextureMagFilter.Linear);
+                    TextureMinFilter.Nearest,
+                    TextureMagFilter.Nearest);
             }
 
             //2.  
@@ -448,9 +453,10 @@ namespace PixelFarm.DrawingGL
                 _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
                 _smaaBlendingWeightShader.LoadAreaTexture(_smaaAreaTex);
                 _smaaBlendingWeightShader.LoadSearchTexture(_smaaSearchTex);
-                _smaaBlendingWeightShader.SetResolution(1f / frmBuffer.Width, 1f / frmBuffer.Height);
+                _smaaBlendingWeightShader.SetResolution(1f / this._width, 1f / this._height);
             }
-            _smaaBlendingWeightShader.Render(frmBuffer, x, y, w, h);
+            //_smaaBlendingWeightShader.Render(frmBuffer, x, y, w, h);
+            _smaaBlendingWeightShader.Render(frmBuffer, x, y, smaa_imgW, smaa_imgH);
             ////for debug
             //if (bmp.IsBigEndianPixel)
             //{
@@ -462,7 +468,7 @@ namespace PixelFarm.DrawingGL
             //}
         }
 
-        public void DrawImageWithSMAA3(FrameBuffer frmBuffer,
+        public void DrawImageWithSMAA3(FrameBuffer frmBuffer, GLBitmap srcImg,
            Drawing.RectangleF srcRect,
            float x, float y, float w, float h)
         {
@@ -478,9 +484,11 @@ namespace PixelFarm.DrawingGL
             if (_smaaNbBlendingShader == null)
             {
                 _smaaNbBlendingShader = new SMAANeighborhoodBlendingShader(this._shareRes);
-                _smaaNbBlendingShader.SetResolution(1f / frmBuffer.Width, 1f / frmBuffer.Height);
+                _smaaNbBlendingShader.SetResolution(1f / this._width, 1f / this._height);
             }
-            _smaaNbBlendingShader.Render(frmBuffer, x, y, w, h);
+            _smaaNbBlendingShader.LoadColorTexture(srcImg);
+            //_smaaNbBlendingShader.Render(frmBuffer, x, y, srcImg.Width, srcImg.Height);
+            _smaaNbBlendingShader.Render(frmBuffer, x, y, smaa_imgW, smaa_imgH);
             ////for debug
             //if (bmp.IsBigEndianPixel)
             //{

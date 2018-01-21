@@ -49,7 +49,8 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lines.png");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lion001.png");
+                glbmp.IsBigEndianPixel = false;
                 isInit = true;
             }
             if (frameBuffer1.FrameBufferId > 0)
@@ -71,20 +72,21 @@ namespace OpenTkEssTest
                     //------------------------------------------------------------------------------------   
                     //step2: draw framebuffer 1 to frameBuffer2
                     _glsx.AttachFrameBuffer(frameBuffer2);
-                    _glsx.Clear(PixelFarm.Drawing.Color.Empty); 
+                    _glsx.Clear(PixelFarm.Drawing.Color.Empty);
 
-                    _glsx.DrawImageWithSMAA2(frameBuffer1, 0, 300);
+                    _glsx.DrawImageWithSMAA2(frameBuffer1, 0,400);
                     _glsx.DetachFrameBuffer();
                     //------------------------------------------------------------------------------------   
                     //step3
                     _glsx.AttachFrameBuffer(frameBuffer3);
                     _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                    _glsx.DrawImageWithSMAA3(frameBuffer2, 0, 300);
+                    _glsx.DrawImageWithSMAA3(frameBuffer2, glbmp, 0, 400);
                     _glsx.DetachFrameBuffer();
                     //-------------------------------------------------------------------------------------
                     frameBufferNeedUpdate = false;
                 }
-                _glsx.DrawFrameBuffer(frameBuffer3, 15, 400);
+
+                _glsx.DrawFrameBuffer(frameBuffer3, 0, 400);
             }
             else
             {

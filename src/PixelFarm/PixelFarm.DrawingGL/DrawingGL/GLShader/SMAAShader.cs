@@ -202,9 +202,8 @@ namespace PixelFarm.DrawingGL
     {
         ShaderVtxAttrib3f position;
         ShaderVtxAttrib2f uv;//uv texture coord
-        ShaderUniformVar2 u_resolution;
         public SMAAColorEdgeDetectionShader(ShaderSharedResource shareRes)
-            : base(shareRes)
+           : base(shareRes)
         {
 
             //vertex shader
@@ -305,9 +304,9 @@ namespace PixelFarm.DrawingGL
 			        // Local contrast adaptation in action:
 			        "edges.xy *= step( 0.5 * maxDelta, delta.xy );",
 
-                    "return vec4( edges, 0.0, 0.0 );", //original
+                    //"return vec4( edges, 0.0, 0.0 );", //original
                     //"return vec4( 1.0,1.0, 0.0, 1.0 );", //for debug             
-                    //"return vec4(edges, 0.0, 1.0 );", //for debug
+                   "return vec4(edges, 0.0, 1.0 );", //for debug
                 "}",
 
                 "void main() {",
@@ -320,14 +319,14 @@ namespace PixelFarm.DrawingGL
         {
             position = shaderProgram.GetAttrV3f("position");
             uv = shaderProgram.GetAttrV2f("uv");
-            u_resolution = shaderProgram.GetUniform2("resolution");
+            //u_resolution = shaderProgram.GetUniform2("resolution");
 
             base.OnProgramBuilt();
         }
-        protected override void OnSetVarsBeforeRenderer()
-        {
-            u_resolution.SetValue(resolution_x, resolution_y);
-        }
+        //protected override void OnSetVarsBeforeRenderer()
+        //{
+        //    u_resolution.SetValue(resolution_x, resolution_y);
+        //}
 
 
 
@@ -664,7 +663,7 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "void main() {",
-                    //"gl_FragColor =vec4(1,0,0,1);",
+                    //"gl_FragColor =vec4(1,0,0,1);",//debug
                     "gl_FragColor = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, ivec4( 0.0 ) );",
 
                 "}"
@@ -677,9 +676,9 @@ namespace PixelFarm.DrawingGL
         {
             u_resolution = shaderProgram.GetUniform2("resolution");
             tArea = shaderProgram.GetUniform1("tArea");
-            tSearch = shaderProgram.GetUniform1("tSearch"); 
+            tSearch = shaderProgram.GetUniform1("tSearch");
             position = shaderProgram.GetAttrV3f("position");
-            uv = shaderProgram.GetAttrV2f("uv"); 
+            uv = shaderProgram.GetAttrV2f("uv");
         }
 
 
@@ -800,10 +799,10 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     class SMAANeighborhoodBlendingShader : SMAAShaderBase
     {
-        ShaderUniformVar2 u_resolution;
+
         ShaderVtxAttrib3f position;
         ShaderVtxAttrib2f uv;//uv texture coord
-
+        ShaderUniformVar1 tColor; //color texture
         public SMAANeighborhoodBlendingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -895,17 +894,24 @@ namespace PixelFarm.DrawingGL
         protected override void OnProgramBuilt()
         {
 
-            u_resolution = shaderProgram.GetUniform2("resolution");
+
             position = shaderProgram.GetAttrV3f("position");
             uv = shaderProgram.GetAttrV2f("uv");
+            tColor = shaderProgram.GetUniform1("tColor");
         }
 
-
-        protected override void OnSetVarsBeforeRenderer()
+        public void LoadColorTexture(GLBitmap bmp)
         {
-            u_resolution.SetValue(resolution_x, resolution_y);
+            //load before use with RenderSubImage
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            GL.ActiveTexture(TextureUnit.Texture2);
+            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+            // Set the texture sampler to texture unit to 0                  
+            tColor.SetValue(2);
         }
-
 
         public void Render(FrameBuffer frmBuffer, float left, float top, float w, float h)
         {
