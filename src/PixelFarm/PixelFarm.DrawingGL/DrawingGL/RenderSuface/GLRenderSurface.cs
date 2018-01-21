@@ -373,6 +373,7 @@ namespace PixelFarm.DrawingGL
             if (_smaaEdgeDetectShader == null)
             {
                 _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
+                _smaaEdgeDetectShader.SetResolution(1f / 800, 1f / 800);
             }
 
             _smaaEdgeDetectShader.Render(bmp, x, y, w, h);

@@ -86,10 +86,10 @@ namespace PixelFarm.DrawingGL
             });
 
             _edgeDetect = new SMAAColorEdgeDetectionShader(shareRes);
-            _edgeDetect.SetResolution(1 / width, 1 / height);
+            _edgeDetect.SetResolution(1f / width, 1f / height);
             //
             _blendWeight = new SMAABlendingWeightCalculationShader(shareRes);
-            _blendWeight.SetResolution(1 / width, 1 / height);
+            _blendWeight.SetResolution(1f / width, 1f / height);
 
 
 
@@ -305,9 +305,9 @@ namespace PixelFarm.DrawingGL
 			        // Local contrast adaptation in action:
 			        "edges.xy *= step( 0.5 * maxDelta, delta.xy );",
 
-                    "return vec4( edges, 0.0, 0.0 );", //original
+                    //"return vec4( edges, 0.0, 0.0 );", //original
                     //"return vec4( 1.0,1.0, 0.0, 1.0 );", //for debug             
-                    //"return vec4(edges, 0.0, 1.0 );", //for debug
+                    "return vec4(edges, 0.0, 1.0 );", //for debug
                 "}",
 
                 "void main() {",
