@@ -448,7 +448,7 @@ namespace PixelFarm.DrawingGL
                 _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
                 _smaaBlendingWeightShader.LoadAreaTexture(_smaaAreaTex);
                 _smaaBlendingWeightShader.LoadSearchTexture(_smaaSearchTex);
-                _smaaBlendingWeightShader.SetResolution(1 / frmBuffer.Width, 1 / frmBuffer.Height);
+                _smaaBlendingWeightShader.SetResolution(1f / frmBuffer.Width, 1f / frmBuffer.Height);
             }
             _smaaBlendingWeightShader.Render(frmBuffer, x, y, w, h);
             ////for debug
@@ -478,7 +478,7 @@ namespace PixelFarm.DrawingGL
             if (_smaaNbBlendingShader == null)
             {
                 _smaaNbBlendingShader = new SMAANeighborhoodBlendingShader(this._shareRes);
-                _smaaNbBlendingShader.SetResolution(1 / frmBuffer.Width, 1 / frmBuffer.Height);
+                _smaaNbBlendingShader.SetResolution(1f / frmBuffer.Width, 1f / frmBuffer.Height);
             }
             _smaaNbBlendingShader.Render(frmBuffer, x, y, w, h);
             ////for debug
