@@ -305,8 +305,8 @@ namespace PixelFarm.DrawingGL
 			        "edges.xy *= step( 0.5 * maxDelta, delta.xy );",
 
                     //"return vec4( edges, 0.0, 0.0 );", //original
-                    //"return vec4( 1.0,1.0, 0.0, 1.0 );", //for debug             
-                   "return vec4(edges, 0.0, 1.0 );", //for debug
+                    "return vec4( 1.0,1.0, 0.0, 1.0 );", //for debug             
+                    //"return vec4(edges, 0.0, 1.0 );", //for debug
                 "}",
 
                 "void main() {",

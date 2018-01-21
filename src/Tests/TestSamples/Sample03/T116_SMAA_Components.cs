@@ -29,9 +29,9 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            frameBuffer1 = _glsx.CreateFrameBuffer(this.Width, this.Height);
-            frameBuffer2 = _glsx.CreateFrameBuffer(this.Width, this.Height);
-            frameBuffer3 = _glsx.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer1 = _glsx.CreateFrameBuffer(800, 800);
+            frameBuffer2 = _glsx.CreateFrameBuffer(800, 800);
+            frameBuffer3 = _glsx.CreateFrameBuffer(800, 800);
 
             frameBufferNeedUpdate = true;
             //------------ 
@@ -64,29 +64,28 @@ namespace OpenTkEssTest
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                    _glsx.DrawImageWithSMAA(glbmp, 0, 300);
-                    //------------------------------------------------------------------------------------  
+                    _glsx.DrawImageWithSMAA(glbmp, 0, 300);                     
                     _glsx.DetachFrameBuffer();
-                    //after release current, we move back to default frame buffer again***
+                    ////after release current, we move back to default frame buffer again***
 
-                    //------------------------------------------------------------------------------------   
-                    //step2: draw framebuffer 1 to frameBuffer2
-                    _glsx.AttachFrameBuffer(frameBuffer2);
-                    _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                    ////------------------------------------------------------------------------------------   
+                    ////step2: draw framebuffer 1 to frameBuffer2
+                    //_glsx.AttachFrameBuffer(frameBuffer2);
+                    //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
 
-                    _glsx.DrawImageWithSMAA2(frameBuffer1, 0,400);
-                    _glsx.DetachFrameBuffer();
-                    //------------------------------------------------------------------------------------   
-                    //step3
-                    _glsx.AttachFrameBuffer(frameBuffer3);
-                    _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                    _glsx.DrawImageWithSMAA3(frameBuffer2, glbmp, 0, 400);
-                    _glsx.DetachFrameBuffer();
+                    //_glsx.DrawImageWithSMAA2(frameBuffer1, 0,400);
+                    //_glsx.DetachFrameBuffer();
+                    ////------------------------------------------------------------------------------------   
+                    ////step3
+                    //_glsx.AttachFrameBuffer(frameBuffer3);
+                    //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                    //_glsx.DrawImageWithSMAA3(frameBuffer2, glbmp, 0, 400);
+                    //_glsx.DetachFrameBuffer();
                     //-------------------------------------------------------------------------------------
                     frameBufferNeedUpdate = false;
                 }
 
-                _glsx.DrawFrameBuffer(frameBuffer3, 0, 400);
+                _glsx.DrawFrameBuffer(frameBuffer1, 0, 400);
             }
             else
             {
