@@ -45,7 +45,7 @@ namespace InterfaceGen
             StringBuilder stbuilder = new StringBuilder();
             foreach (Type publicType in onlyPublicTypes)
             {
-                
+
                 stbuilder.Append("public interface ");
                 stbuilder.AppendLine(publicType.Name);
                 stbuilder.AppendLine("{");
@@ -75,5 +75,43 @@ namespace InterfaceGen
 
         }
 
+        private void cmd3_Click(object sender, EventArgs e)
+        {
+            byte[] dataBuffer = null;
+            using (System.Drawing.Bitmap bmp = new Bitmap("d:\\WImageTest\\smaa_textureArea.png"))
+            {
+                var bmpdata = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                      System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+                dataBuffer = new byte[bmpdata.Stride * bmpdata.Height];
+                System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, dataBuffer, 0, dataBuffer.Length);
+                bmp.UnlockBits(bmpdata);
+            }
+
+            string base64 = Convert.ToBase64String(dataBuffer);
+            //int j = dataBuffer.Length;
+            //StringBuilder stbuilder = new StringBuilder();
+
+            //int m = 0;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    if ((i % 3) == 0)
+            //    {
+            //        continue; //skip
+            //    }
+
+            //    if (i > 0)
+            //    {
+            //        stbuilder.Append(',');
+            //    }
+            //    if ((m % 12) == 0)
+            //    {
+            //        stbuilder.Append("\r\n");
+            //    }
+            //    m++;
+            //    stbuilder.Append(dataBuffer[i].ToString("X"));
+            //}
+            //string total = stbuilder.ToString();
+        }
     }
 }

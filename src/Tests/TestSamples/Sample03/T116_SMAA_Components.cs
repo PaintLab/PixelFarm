@@ -56,26 +56,35 @@ namespace OpenTkEssTest
             {
                 if (frameBufferNeedUpdate)
                 {
+                    //step1 : draw input glbmp into frameBuffer1
                     _glsx.AttachFrameBuffer(frameBuffer1);
-                    //------------------------------------------------------------------------------------  
+                    //------------------------------------------------------------------------------------                     
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    _glsx.Clear(PixelFarm.Drawing.Color.Red);
-                    //_glsx.DrawImage(glbmp, 0, 300);
+                    _glsx.Clear(PixelFarm.Drawing.Color.Empty);
                     _glsx.DrawImageWithSMAA(glbmp, 0, 300);
                     //------------------------------------------------------------------------------------  
                     _glsx.DetachFrameBuffer();
                     //after release current, we move back to default frame buffer again***
 
                     //------------------------------------------------------------------------------------   
+                    //step2: draw framebuffer 1 to frameBuffer2
                     _glsx.AttachFrameBuffer(frameBuffer2);
+                    _glsx.Clear(PixelFarm.Drawing.Color.Empty); 
+
                     _glsx.DrawImageWithSMAA2(frameBuffer1, 0, 300);
                     _glsx.DetachFrameBuffer();
                     //------------------------------------------------------------------------------------   
+                    //step3
+                    _glsx.AttachFrameBuffer(frameBuffer3);
+                    _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                    _glsx.DrawImageWithSMAA3(frameBuffer2, 0, 300);
+                    _glsx.DetachFrameBuffer();
+                    //-------------------------------------------------------------------------------------
                     frameBufferNeedUpdate = false;
                 }
-                _glsx.DrawFrameBuffer(frameBuffer2, 15, 400);
+                _glsx.DrawFrameBuffer(frameBuffer1, 15, 400);
             }
             else
             {
