@@ -85,7 +85,7 @@ THREE.SMAAPass = function ( width, height ) {
 		fragmentShader: THREE.SMAAShader[1].fragmentShader
 	} );
 
-	// materials - pass 3
+	/** materials - pass 3*/
 
 	this.uniformsBlend = THREE.UniformsUtils.clone( THREE.SMAAShader[2].uniforms );
 
