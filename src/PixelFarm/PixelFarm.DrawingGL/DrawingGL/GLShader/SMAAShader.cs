@@ -210,6 +210,7 @@ namespace PixelFarm.DrawingGL
             //vertex shader
             string vertexShader = new[] {
                 "#define SMAA_THRESHOLD 0.1",
+                "#define mad(a, b, c) (a * b + c)",
                 "precision mediump float;", //**
 
                 "attribute vec3 position;", //**
@@ -225,10 +226,15 @@ namespace PixelFarm.DrawingGL
                 "varying vec4 vOffset[ 3 ];",
 
                 "void SMAAEdgeDetectionVS( vec2 texcoord ) {",
-                    "vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -1.0, 0.0, 0.0,  1.0 );", // WebGL port note: Changed sign in W component
-			        "vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4(  1.0, 0.0, 0.0, -1.0 );", // WebGL port note: Changed sign in W component
-			        "vOffset[ 2 ] = texcoord.xyxy + resolution.xyxy * vec4( -2.0, 0.0, 0.0,  2.0 );", // WebGL port note: Changed sign in W component
-		        "}",
+                    //"vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -1.0, 0.0, 0.0,  -1.0 );", // WebGL port note: Changed sign in W component
+			        //"vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4(  1.0, 0.0, 0.0,  1.0 );", // WebGL port note: Changed sign in W component
+			        //"vOffset[ 2 ] = texcoord.xyxy + resolution.xyxy * vec4( -2.0, 0.0, 0.0,  -2.0 );", // WebGL port note: Changed sign in W component
+
+                    "vOffset[ 0 ] = mad(resolution.xyxy, vec4( -1.0, 0.0, 0.0, -1.0 ),  texcoord.xyxy);",
+                    "vOffset[ 1 ] = mad(resolution.xyxy, vec4( 1.0, 0.0, 0.0,   1.0 ),  texcoord.xyxy);",
+                    "vOffset[ 2 ] = mad(resolution.xyxy, vec4( -2.0, 0.0, 0.0, -2.0 ),  texcoord.xyxy);",
+
+                "}",
 
                 "void main() {",
 
@@ -247,6 +253,7 @@ namespace PixelFarm.DrawingGL
 
             string fragmentShader = new[] {
                 "#define SMAA_THRESHOLD 0.1",
+                "#define SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR 2",
                 "precision mediump float;", //**
 
                 "uniform sampler2D tDiffuse;",
@@ -288,7 +295,8 @@ namespace PixelFarm.DrawingGL
                     "delta.w = max( max( t.r, t.g ), t.b );",
 
 			        // Calculate the maximum delta in the direct neighborhood:
-			        "float maxDelta = max( max( max( delta.x, delta.y ), delta.z ), delta.w );",
+			        //"float maxDelta = max( max( max( delta.x, delta.y ), delta.z ), delta.w );",
+                    "vec2 maxDelta= max(delta.xy, delta.zw);",
 
 			        // Calculate left-left and top-top deltas:
 			        "vec3 Cleftleft  = texture2D( colorTex, offset[2].xy ).rgb;",
@@ -300,10 +308,13 @@ namespace PixelFarm.DrawingGL
                     "delta.w = max( max( t.r, t.g ), t.b );",
 
 			        // Calculate the final maximum delta:
-			        "maxDelta = max( max( maxDelta, delta.z ), delta.w );",
+			        //"maxDelta = max( max( maxDelta, delta.z ), delta.w );",
+                    "maxDelta = max(maxDelta.xy, delta.zw);",
+                    "float finalDelta = max(maxDelta.x, maxDelta.y);",
 
 			        // Local contrast adaptation in action:
-			        "edges.xy *= step( 0.5 * maxDelta, delta.xy );",
+			        //"edges.xy *= step( 0.5 * maxDelta, delta.xy );",
+                    "edges.xy *= step(finalDelta, float(SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR) * delta.xy);",
 
                     //"return vec4( edges, 0.0, 0.0 );", //original
                     //"return vec4( 1.0,1.0, 0.0, 1.0 );", //for debug             
@@ -419,10 +430,13 @@ namespace PixelFarm.DrawingGL
 
             string vertexShader = new[]
             {
+                "#define mad(a, b, c) (a * b + c)",
                 "#define SMAA_MAX_SEARCH_STEPS 8",
                 "#define SMAA_AREATEX_MAX_DISTANCE 16",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
                 "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution, 0.0 )",
+
+
                 "precision mediump float;", //**
 
                 "attribute vec3 position;", //**
@@ -443,14 +457,24 @@ namespace PixelFarm.DrawingGL
                 "void SMAABlendingWeightCalculationVS( vec2 texcoord ) {",
                     "vPixcoord = texcoord / resolution;",
 
-			        // We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
-			        "vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -0.25, 0.125, 1.25, 0.125 );", // WebGL port note: Changed sign in Y and W components
-			        "vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4( -0.125, 0.25, -0.125, -1.25 );", // WebGL port note: Changed sign in Y and W components
+			        //// We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
+			        //"vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -0.25, -0.125, 1.25, -0.125 );", // WebGL port note: Changed sign in Y and W components
+			        //"vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4( -0.125, -0.25, -0.125, 1.25 );", // WebGL port note: Changed sign in Y and W components
 
-			        // And these for the searches, they indicate the ends of the loops:
-			        "vOffset[ 2 ] = vec4( vOffset[ 0 ].xz, vOffset[ 1 ].yw ) + vec4( -2.0, 2.0, -2.0, 2.0 ) * resolution.xxyy * float( SMAA_MAX_SEARCH_STEPS );",
+			        //// And these for the searches, they indicate the ends of the loops:
+			        //"vOffset[ 2 ] = vec4( vOffset[ 0 ].xz, vOffset[ 1 ].yw ) + vec4( -2.0, 2.0, -2.0, 2.0 ) * resolution.xxyy * float( SMAA_MAX_SEARCH_STEPS );",
 
-                "}",
+                     "vOffset[0] = mad(resolution.xyxy, vec4(-0.25, -0.125,  1.25, -0.125), texcoord.xyxy);",
+
+                     "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, -0.25, -0.125, 1.25), texcoord.xyxy);",
+
+
+                     // And these for the searches, they indicate the ends of the loops:
+                     "vOffset[2] = mad(resolution.xxyy,",
+                            "vec4(-2.0, 2.0, -2.0, 2.0) * float(SMAA_MAX_SEARCH_STEPS),",
+                            "vec4(vOffset[0].xz, vOffset[1].yw));",
+
+                 "}",
 
                 "void main() {",
 
@@ -546,13 +570,13 @@ namespace PixelFarm.DrawingGL
 
                     "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
 				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord += vec2( 0.0, 2.0 ) * resolution;", // WebGL port note: Changed sign
+                        "texcoord += vec2( -0.0,-2.0 ) * resolution;", // WebGL port note: Changed sign
 				        "if ( ! ( texcoord.y > end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
                     "}",
 
-                    "texcoord.y -= 0.25 * resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y -= resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y -= 2.0 * resolution.y;", // WebGL port note: Changed sign
+                    "texcoord.y += 0.25 * resolution.y;", // WebGL port note: Changed sign
+			        "texcoord.y += resolution.y;", // WebGL port note: Changed sign
+			        "texcoord.y += 2.0 * resolution.y;", // WebGL port note: Changed sign
 			        "texcoord.y += resolution.y * SMAASearchLength( searchTex, e.gr, 0.0, 0.5 );", // WebGL port note: Changed sign
 
 			        "return texcoord.y;",
@@ -563,13 +587,13 @@ namespace PixelFarm.DrawingGL
 
                     "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
 				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord -= vec2( 0.0, 2.0 ) * resolution;", // WebGL port note: Changed sign
+                        "texcoord += vec2( 0.0, 2.0 ) * resolution;", // WebGL port note: Changed sign
 				        "if ( ! ( texcoord.y < end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
                     "}",
 
-                    "texcoord.y += 0.25 * resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y += resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y += 2.0 * resolution.y;", // WebGL port note: Changed sign
+                    "texcoord.y -= 0.25 * resolution.y;", // WebGL port note: Changed sign
+			        "texcoord.y -= resolution.y;", // WebGL port note: Changed sign
+			        "texcoord.y -= 2.0 * resolution.y;", // WebGL port note: Changed sign
 			        "texcoord.y -= resolution.y * SMAASearchLength( searchTex, e.gr, 0.5, 0.5 );", // WebGL port note: Changed sign
 
 			        "return texcoord.y;",
@@ -818,15 +842,13 @@ namespace PixelFarm.DrawingGL
                 "varying vec2 vUv;",
                 "varying vec4 vOffset[ 2 ];",
                 "void SMAANeighborhoodBlendingVS( vec2 texcoord ) {",
-                    "vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -1.0, 0.0, 0.0, 1.0 );", // WebGL port note: Changed sign in W component
-			        "vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4( 1.0, 0.0, 0.0, -1.0 );", // WebGL port note: Changed sign in W component
+                    "vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( 1.0, 0.0, 0.0, 1.0 );", // WebGL port note: Changed sign in W component
+			        "vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4( 1.0, 0.0, 0.0, 1.0 );", // WebGL port note: Changed sign in W component 
 		        "}",
                 "void main() {",
 
                     "vUv = uv;",
-
-                    "SMAANeighborhoodBlendingVS( vUv );",
-
+                    "SMAANeighborhoodBlendingVS( vUv );", 
                     //"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
                      "gl_Position = u_mvpMatrix * vec4( position, 1.0 );",
 

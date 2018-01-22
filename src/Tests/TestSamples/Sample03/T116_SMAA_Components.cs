@@ -102,29 +102,31 @@ namespace OpenTkEssTest
                 _glsx.DetachFrameBuffer();
                 //after release current, we move back to default frame buffer again***
 
-                ////------------------------------------------------------------------------------------   
-                ////step2: draw framebuffer 1 to frameBuffer2
-                //_glsx.AttachFrameBuffer(_weightFrameBuffRT);
-                //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                //------------------------------------------------------------------------------------   
+                //step2: draw framebuffer 1 to frameBuffer2
+                _glsx.AttachFrameBuffer(_weightFrameBuffRT);
+                _glsx.Clear(PixelFarm.Drawing.Color.Empty);
 
-                //_glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
-                //_glsx.DetachFrameBuffer();
+                _glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
+                _glsx.DetachFrameBuffer();
 
-                ////////------------------------------------------------------------------------------------   
-                ////////step3
-                ////_glsx.AttachFrameBuffer(frameBuffer3);
-                ////_glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                ////_glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
-                ////_glsx.DetachFrameBuffer();
+                //////------------------------------------------------------------------------------------   
+                //////step3
+                _glsx.AttachFrameBuffer(frameBuffer3);
+                _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                _glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
+                _glsx.DetachFrameBuffer();
                 ////-------------------------------------------------------------------------------------
                 //frameBufferNeedUpdate = false;
                 //}
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 //_glsx.dbugDrawSMAATextArea();
+                //_glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+                // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
+
                 _glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
-                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
-                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
-               // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
             }
             else
             {
