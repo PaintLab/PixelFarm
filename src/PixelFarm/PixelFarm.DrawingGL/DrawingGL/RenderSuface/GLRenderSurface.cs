@@ -373,7 +373,7 @@ namespace PixelFarm.DrawingGL
             if (_smaaEdgeDetectShader == null)
             {
                 _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
-                _smaaEdgeDetectShader.SetResolution(1f / 800, 1f / 800);
+                _smaaEdgeDetectShader.SetResolution(800, 800);
             }
 
             _smaaEdgeDetectShader.Render(bmp, x, y, w, h);
@@ -439,7 +439,7 @@ namespace PixelFarm.DrawingGL
            Drawing.RectangleF srcRect,
            float x, float y, float w, float h)
         {
-             
+
 
             if (_smaaAreaTex == null)
             {
@@ -468,7 +468,7 @@ namespace PixelFarm.DrawingGL
             if (_smaaBlendingWeightShader == null)
             {
                 _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
-                _smaaBlendingWeightShader.SetResolution(1f / frmBuffer.Width, 1f / frmBuffer.Height);
+                _smaaBlendingWeightShader.SetResolution(frmBuffer.Width, frmBuffer.Height);
             }
             _smaaBlendingWeightShader.LoadAreaTexture(_smaaAreaTex);
             _smaaBlendingWeightShader.LoadSearchTexture(_smaaSearchTex);
@@ -500,7 +500,7 @@ namespace PixelFarm.DrawingGL
             if (_smaaNbBlendingShader == null)
             {
                 _smaaNbBlendingShader = new SMAANeighborhoodBlendingShader(this._shareRes);
-                _smaaNbBlendingShader.SetResolution(1f / frmBuffer.Width, 1f / frmBuffer.Height);
+                _smaaNbBlendingShader.SetResolution(frmBuffer.Width, frmBuffer.Height);
             }
             _smaaNbBlendingShader.LoadColorTexure(colorFrameBuffer);
             _smaaNbBlendingShader.Render(frmBuffer, x, y, w, h);

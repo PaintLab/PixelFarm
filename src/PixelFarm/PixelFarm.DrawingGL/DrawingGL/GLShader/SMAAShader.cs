@@ -1,4 +1,6 @@
-﻿//MIT, 2018, mpk (http://polko.me/)
+﻿//MIT, 2018,  https://github.com/iryoku/smaa/releases/tag/v2.8
+
+//MIT, 2018, mpk (http://polko.me/)
 //from three.js
 ///**
 // * @author mpk / http://polko.me/
@@ -7,8 +9,7 @@
 // * https://github.com/iryoku/smaa/releases/tag/v2.8
 // */
 //
-//MIT, 2018,  https://github.com/iryoku/smaa/releases/tag/v2.8
-//
+
 
 using System;
 using System.Text;
@@ -86,10 +87,10 @@ namespace PixelFarm.DrawingGL
             });
 
             _edgeDetect = new SMAAColorEdgeDetectionShader(shareRes);
-            _edgeDetect.SetResolution(1f / width, 1f / height);
+            _edgeDetect.SetResolution(width, height);
             //
             _blendWeight = new SMAABlendingWeightCalculationShader(shareRes);
-            _blendWeight.SetResolution(1f / width, 1f / height);
+            _blendWeight.SetResolution(width, height);
 
 
 
@@ -102,7 +103,7 @@ namespace PixelFarm.DrawingGL
 
             //
             _nbBlending = new SMAANeighborhoodBlendingShader(shareRes);
-            _nbBlending.SetResolution(1 / width, 1 / height);
+            _nbBlending.SetResolution(width, height);
             //_nbBlending.LoadDiffuseTexture(null);
         }
         public void Render()
@@ -119,6 +120,9 @@ namespace PixelFarm.DrawingGL
         protected ShaderUniformMatrix4 u_matrix;
         protected float resolution_x = 1 / 1024f;
         protected float resolution_y = 1 / 512f;
+        protected float resolution_z = 1024;
+        protected float resolution_w = 512;
+
         public SMAAShaderBase(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -141,10 +145,12 @@ namespace PixelFarm.DrawingGL
         protected virtual void OnProgramBuilt()
         {
         }
-        public void SetResolution(float resolution_x, float resolution_y)
+        public void SetResolution(float rs_x, float rs_y)
         {
-            this.resolution_x = resolution_x;
-            this.resolution_y = resolution_y;
+            this.resolution_x = 1f / rs_x;
+            this.resolution_y = 1f / rs_y;
+            this.resolution_z = rs_x;
+            this.resolution_w = rs_y;
         }
         protected virtual void OnSetVarsBeforeRenderer()
         {
@@ -415,7 +421,7 @@ namespace PixelFarm.DrawingGL
     class SMAABlendingWeightCalculationShader : SMAAShaderBase
     {
         ShaderVtxAttrib3f position;
-        ShaderUniformVar2 u_resolution;
+        ShaderUniformVar4 u_resolution;
         ShaderUniformVar1 tArea; //texture diffuse
         ShaderUniformVar1 tSearch; //texture diffuse 
         ShaderVtxAttrib2f uv;//uv texture coord
@@ -434,7 +440,7 @@ namespace PixelFarm.DrawingGL
                 "#define SMAA_MAX_SEARCH_STEPS 8",
                 "#define SMAA_AREATEX_MAX_DISTANCE 16",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
-                "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution, 0.0 )",
+                "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord+ float( offset ) * resolution.xy, 0.0 )",
 
 
                 "precision mediump float;", //**
@@ -447,7 +453,7 @@ namespace PixelFarm.DrawingGL
                 "uniform sampler2D tDiffuse;",
                 "uniform sampler2D tArea;",
                 "uniform sampler2D tSearch;",
-                "uniform vec2 resolution;",
+                "uniform vec4 resolution;",
                 //
 
                 "varying vec2 vUv;",
@@ -455,7 +461,7 @@ namespace PixelFarm.DrawingGL
                 "varying vec2 vPixcoord;",
 
                 "void SMAABlendingWeightCalculationVS( vec2 texcoord ) {",
-                    "vPixcoord = texcoord / resolution;",
+                    "vPixcoord = texcoord * resolution.zw;",
 
 			        //// We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
 			        //"vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -0.25, -0.125, 1.25, -0.125 );", // WebGL port note: Changed sign in Y and W components
@@ -489,18 +495,28 @@ namespace PixelFarm.DrawingGL
             }.JoinWithNewLine();
             //
             string fragmentShader = new[]
-            {   "#define SMAA_MAX_SEARCH_STEPS 8",
+            {
+                "#define mad(a, b, c) (a * b + c)",
+                "#define SMAA_SEARCHTEX_SIZE vec2(66.0, 33.0)",
+                "#define SMAA_SEARCHTEX_PACKED_SIZE vec2(64.0, 16.0)",
+                "#define SMAA_MAX_SEARCH_STEPS 8",
                 "#define SMAA_AREATEX_MAX_DISTANCE 16",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
                 "#define SMAA_AREATEX_SUBTEX_SIZE ( 1.0 / 7.0 )",
+                "#define SMAA_AREATEX_SELECT(sample) sample.rg",
+                "#define SMAA_SEARCHTEX_SELECT(sample) sample.r",
+                //
+                "#define SMAASampleLevelZero( tex, coord) texture2D( tex, coord, 0.0 )",
+                "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution.xy, 0.0 )",
 
-                "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution, 0.0 )",
+
+
                 "precision mediump float;",
 
                 "uniform sampler2D tDiffuse;",
                 "uniform sampler2D tArea;",
                 "uniform sampler2D tSearch;",
-                "uniform vec2 resolution;",
+                "uniform vec4 resolution;",
 
                 "varying vec2 vUv;",
                 "varying vec4 vOffset[3];",
@@ -509,16 +525,35 @@ namespace PixelFarm.DrawingGL
                 "vec2 round( vec2 x ) {",
                     "return sign( x ) * floor( abs( x ) + 0.5 );",
                 "}",
+                 
+                //-----------------------------------------------------------------------------
+                // Horizontal/Vertical Search Functions
+                /**
+                * This allows to determine how much length should we add in the last step
+                * of the searches. It takes the bilinearly interpolated edge (see 
+                * @PSEUDO_GATHER4), and adds 0, 1 or 2, depending on which edges and
+                * crossing edges are active.
+                */
+                "float SMAASearchLength( sampler2D searchTex, vec2 e, float offset ){",
+                    // The texture is flipped vertically, with left and right cases taking half
+                    // of the space horizontally:
+                    "vec2 scale = SMAA_SEARCHTEX_SIZE * vec2(0.5, -1.0);",
+                    "vec2 bias = SMAA_SEARCHTEX_SIZE * vec2(offset, 1.0);",
+                    // Scale and bias to access texel centers:
+                    "scale += vec2(-1.0, 1.0);",
+                    "bias += vec2(0.5, -0.5);", 
+                   // Convert from pixel coordinates to texcoords:
+                   // (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
+                    "scale *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;",
+                    "bias *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;",
 
-                "float SMAASearchLength( sampler2D searchTex, vec2 e, float bias, float scale ) {",
-			        // Not required if searchTex accesses are set to point:
-			        // float2 SEARCH_TEX_PIXEL_SIZE = 1.0 / float2(66.0, 33.0);
-			        // e = float2(bias, 0.0) + 0.5 * SEARCH_TEX_PIXEL_SIZE +
-			        //     e * float2(scale, 1.0) * float2(64.0, 32.0) * SEARCH_TEX_PIXEL_SIZE;
-			        "e.r = bias + e.r * scale;",
-                    "return 255.0 * texture2D( searchTex, e, 0.0 ).r;",
+                   // Lookup the search texture:
+                   "return SMAA_SEARCHTEX_SELECT(SMAASampleLevelZero(searchTex, mad(scale, e, bias)));",
                 "}",
 
+                /**
+                * Horizontal/vertical search functions for the 2nd pass.
+                */
                 "float SMAASearchXLeft( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
 			        /**
 			        * @PSEUDO_GATHER4
@@ -531,21 +566,22 @@ namespace PixelFarm.DrawingGL
 
                     "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
 				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord -= vec2( 2.0, 0.0 ) * resolution;",
+                        "texcoord = mad(-vec2(2.0, 0.0), resolution.xy, texcoord);",
                         "if ( ! ( texcoord.x > end && e.g > 0.8281 && e.r == 0.0 ) ) break;",
                     "}",
 
-			        // We correct the previous (-0.25, -0.125) offset we applied:
-			        "texcoord.x += 0.25 * resolution.x;",
-
-			        // The searches are bias by 1, so adjust the coords accordingly:
-			        "texcoord.x += resolution.x;",
-
-			        // Disambiguate the length added by the last step:
-			        "texcoord.x += 2.0 * resolution.x;", // Undo last step
-			        "texcoord.x -= resolution.x * SMAASearchLength(searchTex, e, 0.0, 0.5);",
-
-                    "return texcoord.x;",
+                    //
+                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.0), 3.25);",
+                    " return mad(resolution.x, offset, texcoord.x);",
+                    // Non-optimized version:
+                    // We correct the previous (-0.25, -0.125) offset we applied:
+                    //"texcoord.x += 0.25 * resolution.x;",
+			        //// The searches are bias by 1, so adjust the coords accordingly:
+			        //"texcoord.x += resolution.x;",
+			        //// Disambiguate the length added by the last step:
+			        //"texcoord.x += 2.0 * resolution.x;", // Undo last step
+			        //"texcoord.x -= resolution.x * SMAASearchLength(searchTex, e, 0.0, 0.5);",
+                    //"return texcoord.x;",
                 "}",
 
                 "float SMAASearchXRight( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
@@ -553,16 +589,16 @@ namespace PixelFarm.DrawingGL
 
                     "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
 				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord += vec2( 2.0, 0.0 ) * resolution;",
+                        "texcoord = mad(vec2(2.0, 0.0), resolution.xy, texcoord);",
                         "if ( ! ( texcoord.x < end && e.g > 0.8281 && e.r == 0.0 ) ) break;",
                     "}",
-
-                    "texcoord.x -= 0.25 * resolution.x;",
-                    "texcoord.x -= resolution.x;",
-                    "texcoord.x -= 2.0 * resolution.x;",
-                    "texcoord.x += resolution.x * SMAASearchLength( searchTex, e, 0.5, 0.5 );",
-
-                    "return texcoord.x;",
+                    "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.5), 3.25);",
+                    "return mad(-resolution.x, offset, texcoord.x);",
+                    //"texcoord.x -= 0.25 * resolution.x;",
+                    //"texcoord.x -= resolution.x;",
+                    //"texcoord.x -= 2.0 * resolution.x;",
+                    //"texcoord.x += resolution.x * SMAASearchLength( searchTex, e, 0.5, 0.5 );", 
+                    //"return texcoord.x;",
                 "}",
 
                 "float SMAASearchYUp( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
@@ -570,16 +606,17 @@ namespace PixelFarm.DrawingGL
 
                     "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
 				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord += vec2( -0.0,-2.0 ) * resolution;", // WebGL port note: Changed sign
-				        "if ( ! ( texcoord.y > end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
+                        "texcoord = mad(-vec2(0.0, 2.0), resolution.xy, texcoord);",
+                        "if ( ! ( texcoord.y > end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
                     "}",
+                    "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e.gr, 0.0), 3.25);",
+                    "return mad(resolution.y, offset, texcoord.y);",
+                    //"texcoord.y += 0.25 * resolution.y;", // WebGL port note: Changed sign
+			        //"texcoord.y += resolution.y;", // WebGL port note: Changed sign
+			        //"texcoord.y += 2.0 * resolution.y;", // WebGL port note: Changed sign
+			        //"texcoord.y += resolution.y * SMAASearchLength( searchTex, e.gr, 0.0, 0.5 );", // WebGL port note: Changed sign
 
-                    "texcoord.y += 0.25 * resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y += resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y += 2.0 * resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y += resolution.y * SMAASearchLength( searchTex, e.gr, 0.0, 0.5 );", // WebGL port note: Changed sign
-
-			        "return texcoord.y;",
+			        //"return texcoord.y;",
                 "}",
 
                 "float SMAASearchYDown( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
@@ -587,17 +624,25 @@ namespace PixelFarm.DrawingGL
 
                     "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
 				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord += vec2( 0.0, 2.0 ) * resolution;", // WebGL port note: Changed sign
-				        "if ( ! ( texcoord.y < end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
+                        "texcoord = mad(vec2(0.0, 2.0), resolution.xy, texcoord);",
+                        "if ( ! ( texcoord.y < end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
                     "}",
 
-                    "texcoord.y -= 0.25 * resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y -= resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y -= 2.0 * resolution.y;", // WebGL port note: Changed sign
-			        "texcoord.y -= resolution.y * SMAASearchLength( searchTex, e.gr, 0.5, 0.5 );", // WebGL port note: Changed sign
+                    "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e.gr, 0.5), 3.25);",
+                    "return mad(-resolution.y, offset, texcoord.y);",
 
-			        "return texcoord.y;",
+                     //"texcoord.y -= 0.25 * resolution.y;", // WebGL port note: Changed sign
+			        //"texcoord.y -= resolution.y;", // WebGL port note: Changed sign
+			        //"texcoord.y -= 2.0 * resolution.y;", // WebGL port note: Changed sign
+			        //"texcoord.y -= resolution.y * SMAASearchLength( searchTex, e.gr, 0.5, 0.5 );", // WebGL port note: Changed sign
+
+			        //"return texcoord.y;",
                 "}",
+
+ /** 
+ * Ok, we have the distance and both crossing edges. So, what are the areas
+ * at each side of current edge?
+ */
 
                 "vec2 SMAAArea( sampler2D areaTex, vec2 dist, float e1, float e2, float offset ) {",
 			        // Rounding prevents precision errors of bilinear filtering:
@@ -608,20 +653,64 @@ namespace PixelFarm.DrawingGL
 
 			        // Move to proper place, according to the subpixel offset:
 			        "texcoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;",
-
+                        
+                    // Do it!
                     "return texture2D( areaTex, texcoord, 0.0 ).rg;",
                 "}",
 
-                "vec4 SMAABlendingWeightCalculationPS( vec2 texcoord, vec2 pixcoord, vec4 offset[ 3 ], sampler2D edgesTex, sampler2D areaTex, sampler2D searchTex, ivec4 subsampleIndices ) {",
+                //-----------------------------------------------------------------------------
+                // Corner Detection Functions
+                //"void SMAADetectVerticalCornerPattern(sampler2D edgesTex){", 
+                //"}", 
+//                void SMAADetectVerticalCornerPattern(SMAATexture2D(edgesTex), inout float2 weights, float4 texcoord, float2 d)
+//            {
+//#if !defined(SMAA_DISABLE_CORNER_DETECTION)
+//                float2 leftRight = step(d.xy, d.yx);
+//                float2 rounding = (1.0 - SMAA_CORNER_ROUNDING_NORM) * leftRight;
+
+//                rounding /= leftRight.x + leftRight.y;
+
+//                float2 factor = float2(1.0, 1.0);
+//                factor.x -= rounding.x * SMAASampleLevelZeroOffset(edgesTex, texcoord.xy, int2(1, 0)).g;
+//                factor.x -= rounding.y * SMAASampleLevelZeroOffset(edgesTex, texcoord.zw, int2(1, 1)).g;
+//                factor.y -= rounding.x * SMAASampleLevelZeroOffset(edgesTex, texcoord.xy, int2(-2, 0)).g;
+//                factor.y -= rounding.y * SMAASampleLevelZeroOffset(edgesTex, texcoord.zw, int2(-2, 1)).g;
+
+//                weights *= saturate(factor);
+//#endif
+//            }
+
+
+
+
+
+            "vec4 SMAABlendingWeightCalculationPS( vec2 texcoord, vec2 pixcoord, vec4 offset[ 3 ], sampler2D edgesTex, sampler2D areaTex, sampler2D searchTex, ivec4 subsampleIndices ) {",
+                    // subsampleIndices => Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
+
                     "vec4 weights = vec4( 0.0, 0.0, 0.0, 0.0 );",
 
                     "vec2 e = texture2D( edgesTex, texcoord ).rg;",
 
+                    //SMAA_BRANCH
                     "if ( e.g > 0.0 ) {", // Edge at north
-				        "vec2 d;",
+
+                            //  #if !defined(SMAA_DISABLE_DIAG_DETECTION)
+                            //        // Diagonals have both north and west edges, so searching for them in
+                            //        // one of the boundaries is enough.
+                            //        weights.rg = SMAACalculateDiagWeights(SMAATexturePass2D(edgesTex), SMAATexturePass2D(areaTex), texcoord, e, subsampleIndices);
+
+                            //            // We give priority to diagonals, so if we find a diagonal we skip 
+                            //            // horizontal/vertical processing.
+                            //            SMAA_BRANCH
+                            //        if (weights.r == -weights.g)
+                            //            { // weights.r + weights.g == 0.0
+                            //#endif
+
+                        
+                        "vec2 d;",
 
 				        // Find the distance to the left:
-				        "vec2 coords;",
+				        "vec3 coords;",
                         "coords.x = SMAASearchXLeft( edgesTex, searchTex, offset[ 0 ].xy, offset[ 2 ].x );",
                         "coords.y = offset[ 1 ].y;", // offset[1].y = texcoord.y - 0.25 * resolution.y (@CROSSING_OFFSET)
 				        "d.x = coords.x;",
@@ -629,59 +718,71 @@ namespace PixelFarm.DrawingGL
 				        // Now fetch the left crossing edges, two at a time using bilinear
 				        // filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to
 				        // discern what value each edge has:
-				        "float e1 = texture2D( edgesTex, coords, 0.0 ).r;",
+				        "float e1 = texture2D( edgesTex, coords.xy, 0.0 ).r;",
 
 				        // Find the distance to the right:
-				        "coords.x = SMAASearchXRight( edgesTex, searchTex, offset[ 0 ].zw, offset[ 2 ].y );",
-                        "d.y = coords.x;",
+				        "coords.z = SMAASearchXRight( edgesTex, searchTex, offset[ 0 ].zw, offset[ 2 ].y );",
+                        "d.y = coords.z;",
 
 				        // We want the distances to be in pixel units (doing this here allow to
 				        // better interleave arithmetic and memory accesses):
-				        "d = d / resolution.x - pixcoord.x;",
+				        //"d = d / resolution.x - pixcoord.x;",
+                        "d = abs(round(mad(resolution.zz, d, -pixcoord.xx)));",
 
 				        // SMAAArea below needs a sqrt, as the areas texture is compressed
 				        // quadratically:
-				        "vec2 sqrt_d = sqrt( abs( d ) );",
+				        "vec2 sqrt_d = sqrt(d);",
 
 				        // Fetch the right crossing edges:
-				        "coords.y -= 1.0 * resolution.y;", // WebGL port note: Added
-				        "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords, ivec2( 1, 0 ) ).r;",
+				        //"coords.y -= 1.0 * resolution.y;", // WebGL port note: Added
+				        "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.zy, vec2( 1.0, 0.0 ) ).r;",
 
 				        // Ok, we know how this pattern looks like, now it is time for getting
 				        // the actual area:
 				        "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
+
+                         // Fix corners:
+                         "coords.y = texcoord.y;",
+                         //"SMAADetectHorizontalCornerPattern(edgesTex, weights.rg, coords.xyzy, d);",
                     "}",
 
+                    // SMAA_BRANCH
                     "if ( e.r > 0.0 ) {", // Edge at west
 				        "vec2 d;",
 
 				        // Find the distance to the top:
-				        "vec2 coords;",
+				        "vec3 coords;",
 
                         "coords.y = SMAASearchYUp( edgesTex, searchTex, offset[ 1 ].xy, offset[ 2 ].z );",
                         "coords.x = offset[ 0 ].x;", // offset[1].x = texcoord.x - 0.25 * resolution.x;
 				        "d.x = coords.y;",
 
 				        // Fetch the top crossing edges:
-				        "float e1 = texture2D( edgesTex, coords, 0.0 ).g;",
+				        "float e1 = texture2D( edgesTex, coords.xy, 0.0 ).g;",
 
 				        // Find the distance to the bottom:
 				        "coords.y = SMAASearchYDown( edgesTex, searchTex, offset[ 1 ].zw, offset[ 2 ].w );",
-                        "d.y = coords.y;",
+                        "d.y = coords.z;",
 
 				        // We want the distances to be in pixel units:
-				        "d = d / resolution.y - pixcoord.y;",
+				        //"d = d / resolution.y - pixcoord.y;",
+                        "d = abs(round(mad(resolution.ww, d, -pixcoord.yy)));",
 
 				        // SMAAArea below needs a sqrt, as the areas texture is compressed
 				        // quadratically:
-				        "vec2 sqrt_d = sqrt( abs( d ) );",
+				        //"vec2 sqrt_d = sqrt( abs( d ) );",
+                        "vec2 sqrt_d = sqrt(d);",
 
 				        // Fetch the bottom crossing edges:
-				        "coords.y -= 1.0 * resolution.y;", // WebGL port note: Added
-				        "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords, ivec2( 0, 1 ) ).g;",
+				        //"coords.y -= 1.0 * resolution.y;", // WebGL port note: Added
+				        "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.xz, vec2( 0.0, 1.0 ) ).g;",
 
 				        // Get the area for this direction:
 				        "weights.ba = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.x ) );",
+                         
+                        // Fix corners:
+                        "coords.x = texcoord.x;",
+                        //"SMAADetectVerticalCornerPattern(SMAATexturePass2D(edgesTex), weights.ba, coords.xyxz, d);"
                     "}",
 
                     "return weights;",
@@ -698,7 +799,7 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnProgramBuilt()
         {
-            u_resolution = shaderProgram.GetUniform2("resolution");
+            u_resolution = shaderProgram.GetUniform4("resolution");
             tArea = shaderProgram.GetUniform1("tArea");
             tSearch = shaderProgram.GetUniform1("tSearch");
             position = shaderProgram.GetAttrV3f("position");
@@ -708,7 +809,7 @@ namespace PixelFarm.DrawingGL
 
         protected override void OnSetVarsBeforeRenderer()
         {
-            u_resolution.SetValue(resolution_x, resolution_y);
+            u_resolution.SetValue(resolution_x, resolution_y, resolution_z, resolution_w);
         }
 
 

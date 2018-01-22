@@ -110,12 +110,12 @@ namespace OpenTkEssTest
                 _glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
                 _glsx.DetachFrameBuffer();
 
-                //////------------------------------------------------------------------------------------   
-                //////step3
-                _glsx.AttachFrameBuffer(frameBuffer3);
-                _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                _glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
-                _glsx.DetachFrameBuffer();
+                //------------------------------------------------------------------------------------   
+                //step3
+                //_glsx.AttachFrameBuffer(frameBuffer3);
+                //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                //_glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
+                //_glsx.DetachFrameBuffer();
                 ////-------------------------------------------------------------------------------------
                 //frameBufferNeedUpdate = false;
                 //}
@@ -126,7 +126,8 @@ namespace OpenTkEssTest
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
 
-                _glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
+                _glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
             }
             else
             {
