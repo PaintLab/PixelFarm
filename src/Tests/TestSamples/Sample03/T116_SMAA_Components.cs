@@ -90,7 +90,7 @@ namespace OpenTkEssTest
                 //post-processing AA
 
 
-                //step1 : draw input glbmp into frameBuffer1
+                ////step1 : draw input glbmp into frameBuffer1
                 _glsx.AttachFrameBuffer(_edgeFrameBuffRT);
                 //------------------------------------------------------------------------------------                     
                 //after make the frameBuffer current
@@ -102,20 +102,20 @@ namespace OpenTkEssTest
                 _glsx.DetachFrameBuffer();
                 //after release current, we move back to default frame buffer again***
 
-                //------------------------------------------------------------------------------------   
-                //step2: draw framebuffer 1 to frameBuffer2
+                ////------------------------------------------------------------------------------------   
+                ////step2: draw framebuffer 1 to frameBuffer2
                 _glsx.AttachFrameBuffer(_weightFrameBuffRT);
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
 
                 _glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
                 _glsx.DetachFrameBuffer();
 
-                //------------------------------------------------------------------------------------   
-                //step3
-                //_glsx.AttachFrameBuffer(frameBuffer3);
-                //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                //_glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
-                //_glsx.DetachFrameBuffer();
+                ////------------------------------------------------------------------------------------
+                ////step3
+                _glsx.AttachFrameBuffer(frameBuffer3);
+                _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                _glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
+                _glsx.DetachFrameBuffer();
                 ////-------------------------------------------------------------------------------------
                 //frameBufferNeedUpdate = false;
                 //}
@@ -128,6 +128,7 @@ namespace OpenTkEssTest
 
                 //_glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
                 _glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+                //_glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
             }
             else
             {

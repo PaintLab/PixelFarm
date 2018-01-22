@@ -274,7 +274,12 @@ namespace InterfaceGen
 
         private void button3_Click(object sender, EventArgs e)
         {
+            string base64Str = Convert.ToBase64String(AreaTex.areaTexBytes);
+
+
 
         }
+
+
     }
 }

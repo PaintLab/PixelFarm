@@ -407,17 +407,17 @@ namespace PixelFarm.DrawingGL
             // Drawing.RectangleF srcRect,
             //float x, float y, float w, float h
 
-            if (_smaaAreaTex == null)
-            {
-                _smaaAreaTex = new InternalGLBitmapTexture(
-                    SMAAAreaTex.AREATEX_WIDTH,
-                    SMAAAreaTex.AREATEX_HEIGHT,
-                    SMAAAreaTex.areaTexBytes,
-                    PixelFormat.Rgb, //for compat  with WebGL version, we use RGB
-                    PixelInternalFormat.Rgb, //for compat  with WebGL version, we use RGB
-                    TextureMinFilter.Linear,
-                    TextureMagFilter.Linear);
-            }
+            //if (_smaaAreaTex == null)
+            //{
+            //    _smaaAreaTex = new InternalGLBitmapTexture(
+            //        SMAAAreaTex.AREATEX_WIDTH,
+            //        SMAAAreaTex.AREATEX_HEIGHT,
+            //        SMAAAreaTex.areaTexBytes,
+            //        PixelFormat.Rgb, //for compat  with WebGL version, we use RGB
+            //        PixelInternalFormat.Rgb, //for compat  with WebGL version, we use RGB
+            //        TextureMinFilter.Linear,
+            //        TextureMagFilter.Linear);
+            //}
             //if (_smaaSearchTex == null)
             //{
             //    _smaaSearchTex = new InternalGLBitmapTexture(
@@ -447,8 +447,8 @@ namespace PixelFarm.DrawingGL
                     SMAAAreaTex.AREATEX_WIDTH,
                     SMAAAreaTex.AREATEX_HEIGHT,
                     SMAAAreaTex.areaTexBytes,
-                    PixelFormat.Rgb, //for compat  with WebGL version, we use RGB
-                    PixelInternalFormat.Rgb, //for compat  with WebGL version, we use RGB
+                    PixelFormat.LuminanceAlpha, //for compat  with WebGL version, we use RGB
+                    PixelInternalFormat.LuminanceAlpha, //for compat  with WebGL version, we use RGB
                     TextureMinFilter.Linear,
                     TextureMagFilter.Linear);
             }
