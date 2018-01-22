@@ -14,9 +14,10 @@ namespace OpenTkEssTest
     {
         GLRenderSurface _glsx;
         GLPainter painter;
-        FrameBuffer frameBuffer1;
-        FrameBuffer frameBuffer2;
+        FrameBuffer _edgeFrameBuffRT;
+        FrameBuffer _weightFrameBuffRT;
         FrameBuffer frameBuffer3;
+        FrameBuffer _colorBuffer;
 
         GLBitmap glbmp;
         bool isInit;
@@ -31,12 +32,33 @@ namespace OpenTkEssTest
 
             //frameBuffer1 = _glsx.CreateFrameBuffer(this.Width, this.Height);
             //frameBuffer2 = _glsx.CreateFrameBuffer(this.Width, this.Height);
-            //frameBuffer3 = _glsx.CreateFrameBuffer(this.Width, this.Height);
-            frameBuffer1 = _glsx.CreateFrameBuffer(this.Width, this.Width);
-            frameBuffer2 = _glsx.CreateFrameBuffer(this.Width, this.Width);
-            frameBuffer3 = _glsx.CreateFrameBuffer(this.Width, this.Width);
+            //frameBuffer3 = _glsx.CreateFrameBuffer(this.Width, this.Height); 
+            int frameBufferW = 800;
+            int frameBufferH = 800;
+
+            _colorBuffer = new FrameBuffer(frameBufferW, frameBufferH);
+
+            _edgeFrameBuffRT = new FrameBuffer(frameBufferW, frameBufferH, new FrameBufferCreationParameters()
+            {
+                minFilter = TextureMinFilter.Linear,
+                pixelFormat = PixelFormat.Rgb, //**
+                pixelInternalFormat = PixelInternalFormat.Rgb
+            });
+            //
+            _weightFrameBuffRT = new FrameBuffer(frameBufferW, frameBufferH, new FrameBufferCreationParameters()
+            {
+                minFilter = TextureMinFilter.Linear,
+                pixelFormat = PixelFormat.Rgba
+            });
+            //
+            frameBuffer3 = _glsx.CreateFrameBuffer(frameBufferW, frameBufferH);
             frameBufferNeedUpdate = true;
             //------------ 
+
+
+            //FrameBuffer _edgesRT;//edge render target
+            //FrameBuffer _weightsRT; //weight render target
+
         }
         protected override void DemoClosing()
         {
@@ -51,43 +73,58 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lines.png");
+                //glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lines.png");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lion_no_aa.png");
                 isInit = true;
             }
-            if (frameBuffer1.FrameBufferId > 0)
+            if (_edgeFrameBuffRT.FrameBufferId > 0)
             {
-                if (frameBufferNeedUpdate)
-                {
-                    //step1 : draw input glbmp into frameBuffer1
-                    _glsx.AttachFrameBuffer(frameBuffer1);
-                    //------------------------------------------------------------------------------------                     
-                    //after make the frameBuffer current
-                    //then all drawing command will apply to frameBuffer
-                    //do draw to frame buffer here                                        
-                    _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                    _glsx.DrawImageWithSMAA(glbmp, 0, this.Height);
-                    //------------------------------------------------------------------------------------  
-                    _glsx.DetachFrameBuffer();
-                    //after release current, we move back to default frame buffer again***
+                //if (frameBufferNeedUpdate)
+                //{
+                //draw input glbmp into frameBuffer1
+                _glsx.AttachFrameBuffer(_colorBuffer);
+                _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                _glsx.DrawImage(glbmp, 0, this.Height);
+                _glsx.DetachFrameBuffer();
+                //-------------------------
+                //post-processing AA
 
-                    ////------------------------------------------------------------------------------------   
-                    ////step2: draw framebuffer 1 to frameBuffer2
-                    //_glsx.AttachFrameBuffer(frameBuffer2);
-                    //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
 
-                    //_glsx.DrawImageWithSMAA2(frameBuffer1, 0, 300);
-                    //_glsx.DetachFrameBuffer();
-                    ////------------------------------------------------------------------------------------   
-                    ////step3
-                    //_glsx.AttachFrameBuffer(frameBuffer3);
-                    //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                    //_glsx.DrawImageWithSMAA3(frameBuffer2, 0, 300);
-                    //_glsx.DetachFrameBuffer();
-                    //-------------------------------------------------------------------------------------
-                    frameBufferNeedUpdate = false;
-                }
-                _glsx.DrawFrameBuffer(frameBuffer1, 0, this.Height);
-                //_glsx.DrawFrameBuffer(frameBuffer3, 15, 400);
+                //step1 : draw input glbmp into frameBuffer1
+                _glsx.AttachFrameBuffer(_edgeFrameBuffRT);
+                //------------------------------------------------------------------------------------                     
+                //after make the frameBuffer current
+                //then all drawing command will apply to frameBuffer
+                //do draw to frame buffer here                                        
+                _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                _glsx.DrawImageWithSMAA(_colorBuffer, 0, 800);
+                //------------------------------------------------------------------------------------  
+                _glsx.DetachFrameBuffer();
+                //after release current, we move back to default frame buffer again***
+
+                ////------------------------------------------------------------------------------------   
+                ////step2: draw framebuffer 1 to frameBuffer2
+                //_glsx.AttachFrameBuffer(_weightFrameBuffRT);
+                //_glsx.Clear(PixelFarm.Drawing.Color.Empty);
+
+                //_glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
+                //_glsx.DetachFrameBuffer();
+
+                ////////------------------------------------------------------------------------------------   
+                ////////step3
+                ////_glsx.AttachFrameBuffer(frameBuffer3);
+                ////_glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                ////_glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
+                ////_glsx.DetachFrameBuffer();
+                ////-------------------------------------------------------------------------------------
+                //frameBufferNeedUpdate = false;
+                //}
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+                //_glsx.dbugDrawSMAATextArea();
+                _glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+               // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
             }
             else
             {

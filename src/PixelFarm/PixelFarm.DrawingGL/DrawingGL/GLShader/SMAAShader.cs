@@ -331,56 +331,56 @@ namespace PixelFarm.DrawingGL
 
 
 
-        public void Render(GLBitmap bmp, float left, float top, float w, float h)
+        public void Render(FrameBuffer bmp, float left, float top, float w, float h)
         {
             unsafe
             {
-                if (bmp.IsInvert)
+                //if (bmp.IsInvert)
+                //{
+
+                //    float* imgVertices = stackalloc float[5 * 4];
+                //    {
+                //        imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)
+                //        imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
+                //        //imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+
+                //        //---------------------
+                //        imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
+                //        imgVertices[8] = 0; imgVertices[9] = 1; //texture coord 1  (left,top)
+
+                //        //---------------------
+                //        imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
+                //        imgVertices[13] = 1; imgVertices[14] = 0; //texture coord 2  (right,bottom)
+
+                //        //---------------------
+                //        imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
+                //        imgVertices[18] = 1; imgVertices[19] = 1; //texture coord 3 (right,top)
+                //    }
+                //    position.UnsafeLoadMixedV3f(imgVertices, 5);
+                //    uv.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                //}
+                //else
+                //{
+                float* imgVertices = stackalloc float[5 * 4];
                 {
+                    imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                    imgVertices[3] = 0; imgVertices[4] = 1; //texture coord 0 (left,top)
 
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)
-                        imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
-                        //imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+                    //---------------------
+                    imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
+                    imgVertices[8] = 0; imgVertices[9] = 0; //texture coord 1 (left,bottom)
 
-                        //---------------------
-                        imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = 0; imgVertices[9] = 1; //texture coord 1  (left,top)
+                    //---------------------
+                    imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
+                    imgVertices[13] = 1; imgVertices[14] = 1; //texture coord 2 (right,top)
 
-                        //---------------------
-                        imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = 1; imgVertices[14] = 0; //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = 1; imgVertices[19] = 1; //texture coord 3 (right,top)
-                    }
-                    position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    uv.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                    //---------------------
+                    imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
+                    imgVertices[18] = 1; imgVertices[19] = 0; //texture coord 3  (right,bottom)
                 }
-                else
-                {
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                        imgVertices[3] = 0; imgVertices[4] = 1; //texture coord 0 (left,top)
-
-                        //---------------------
-                        imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = 0; imgVertices[9] = 0; //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = 1; imgVertices[14] = 1; //texture coord 2 (right,top)
-
-                        //---------------------
-                        imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = 1; imgVertices[19] = 0; //texture coord 3  (right,bottom)
-                    }
-                    position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    uv.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
+                position.UnsafeLoadMixedV3f(imgVertices, 5);
+                uv.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                //}
             }
 
             SetCurrent();
@@ -388,7 +388,7 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------
             // Bind the texture...
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+            GL.BindTexture(TextureTarget.Texture2D, bmp.FrameBufferId);
             // Set the texture sampler to texture unit to 0     
 
             tDiffuse.SetValue(0);
@@ -664,7 +664,6 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "void main() {",
-                    //"gl_FragColor =vec4(1,0,0,1);",
                     "gl_FragColor = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, ivec4( 0.0 ) );",
 
                 "}"
@@ -677,9 +676,9 @@ namespace PixelFarm.DrawingGL
         {
             u_resolution = shaderProgram.GetUniform2("resolution");
             tArea = shaderProgram.GetUniform1("tArea");
-            tSearch = shaderProgram.GetUniform1("tSearch"); 
+            tSearch = shaderProgram.GetUniform1("tSearch");
             position = shaderProgram.GetAttrV3f("position");
-            uv = shaderProgram.GetAttrV2f("uv"); 
+            uv = shaderProgram.GetAttrV2f("uv");
         }
 
 
@@ -708,6 +707,7 @@ namespace PixelFarm.DrawingGL
             // Bind the texture...
             GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+
             // Set the texture sampler to texture unit
             tArea.SetValue(1);
         }
@@ -803,6 +803,7 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar2 u_resolution;
         ShaderVtxAttrib3f position;
         ShaderVtxAttrib2f uv;//uv texture coord
+        ShaderUniformVar1 tColor;
 
         public SMAANeighborhoodBlendingShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -898,6 +899,7 @@ namespace PixelFarm.DrawingGL
             u_resolution = shaderProgram.GetUniform2("resolution");
             position = shaderProgram.GetAttrV3f("position");
             uv = shaderProgram.GetAttrV2f("uv");
+            tColor = shaderProgram.GetUniform1("tColor");
         }
 
 
@@ -906,7 +908,19 @@ namespace PixelFarm.DrawingGL
             u_resolution.SetValue(resolution_x, resolution_y);
         }
 
+        public void LoadColorTexure(FrameBuffer frmBuffer)
+        {
+            //load before use with RenderSubImage
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, frmBuffer.FrameBufferId);
 
+            // Set the texture sampler to texture unit
+            tColor.SetValue(1);
+        }
         public void Render(FrameBuffer frmBuffer, float left, float top, float w, float h)
         {
             unsafe

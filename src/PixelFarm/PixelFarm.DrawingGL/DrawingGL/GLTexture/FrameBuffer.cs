@@ -12,6 +12,8 @@ namespace PixelFarm.DrawingGL
         public bool depthBuffer;
         public bool stencilBuffer;
         public bool generateMipMaps;
+
+        public PixelInternalFormat pixelInternalFormat = PixelInternalFormat.Rgba;
         public PixelFormat pixelFormat = PixelFormat.Rgba;
         public TextureMagFilter magFilter = TextureMagFilter.Linear;
         public TextureMinFilter minFilter = TextureMinFilter.LinearMipmapNearest;
@@ -71,7 +73,9 @@ namespace PixelFarm.DrawingGL
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)creationParams.magFilter);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)creationParams.minFilter);
             //GL.GenerateMipmap(TextureTarget.Texture2D);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, creationParams.pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0,creationParams.pixelInternalFormat, w, h, 0, creationParams.pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
+
             //render buffer
             GL.GenRenderbuffers(1, out renderBufferId);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderBufferId);
