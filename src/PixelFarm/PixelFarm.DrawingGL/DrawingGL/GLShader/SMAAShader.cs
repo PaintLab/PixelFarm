@@ -243,7 +243,7 @@ namespace PixelFarm.DrawingGL
 
 			        // Local contrast adaptation in action: 
                     "edges.xy *= step(finalDelta, float(SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR) * delta.xy);",
-                    "return edges;",                     
+                    "return edges;",
                 "}",
 
                 "void main() {",
@@ -413,7 +413,10 @@ namespace PixelFarm.DrawingGL
                 "#define saturate(a) clamp(a, 0.0, 1.0)",
                 "#define SMAA_MAX_SEARCH_STEPS 8",
                 "#define SMAA_MAX_SEARCH_STEPS_DIAG 8",
-            
+                
+                
+              
+      
 
                 //-----------------------------------------------------------------------------
                 // Non-Configurable Defines
@@ -421,19 +424,17 @@ namespace PixelFarm.DrawingGL
                 "#define SMAA_AREATEX_MAX_DISTANCE_DIAG 20",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
                 "#define SMAA_AREATEX_SUBTEX_SIZE ( 1.0 / 7.0 )",
-                "#define SMAA_AREATEX_SELECT(sample) sample.rg",
+                "#define SMAA_AREATEX_SELECT(sample) sample.ra", // *** since we load the original textarea as LuminanceApha
                 "#define SMAA_SEARCHTEX_SIZE vec2(66.0, 33.0)",
                 "#define SMAA_SEARCHTEX_PACKED_SIZE vec2(64.0, 16.0)",
                 "#define SMAA_CORNER_ROUNDING_NORM (float(SMAA_CORNER_ROUNDING) / 100.0)",
                 //-----------------------------------------------------------------------------
 
 
-                "#define SMAA_SEARCHTEX_SELECT(sample) sample.r",
+                "#define SMAA_SEARCHTEX_SELECT(sample) sample.r", //since we load the original seach area as Luminance
                 //
-                "#define SMAASampleLevelZero( tex, coord) texture2D( tex, coord, 0.0 )",
-                "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution.xy, 0.0 )",
-
-
+                @"#define SMAASampleLevelZero( tex, coord) texture2D( tex, coord, 0.0 )",
+                " #define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution.xy, 0.0 )",
 
                 "precision mediump float;",
 
@@ -576,23 +577,7 @@ namespace PixelFarm.DrawingGL
 			        //"return texcoord.y;",
                 "}", 
  
-               //Ok, we have the distance and both crossing edges. So, what are the areas
-               //at each side of current edge? 
-
-                "vec2 SMAAArea( sampler2D areaTex, vec2 dist, float e1, float e2, float offset ) {",
-			        // Rounding prevents precision errors of bilinear filtering:
-			        "vec2 texcoord = float( SMAA_AREATEX_MAX_DISTANCE ) * round( 4.0 * vec2( e1, e2 ) ) + dist;",
-
-			        // We do a scale and bias for mapping to texel space:
-			        "texcoord = SMAA_AREATEX_PIXEL_SIZE * texcoord + ( 0.5 * SMAA_AREATEX_PIXEL_SIZE );",
-
-			        // Move to proper place, according to the subpixel offset:
-			        "texcoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;",
-                        
-                    // Do it!
-                    "return texture2D( areaTex, texcoord, 0.0 ).rg;",
-                "}",
-
+           
 
                 //-----------------------------------------------------------------------------
                 // Diagonal Search Functions               
@@ -743,7 +728,24 @@ namespace PixelFarm.DrawingGL
                     return weights;
                 }",
 
+               //-------------------
+               //Ok, we have the distance and both crossing edges. So, wSMAASampleLevelZerohat are the areas
+               //at each side of current edge? 
 
+                "vec2 SMAAArea( sampler2D areaTex, vec2 dist, float e1, float e2, float offset ) {",
+			        // Rounding prevents precision errors of bilinear filtering:
+			        //"vec2 texcoord = float( SMAA_AREATEX_MAX_DISTANCE ) * round( 4.0 * vec2( e1, e2 ) ) + dist;",
+                    "vec2 texcoord = mad(vec2(SMAA_AREATEX_MAX_DISTANCE, SMAA_AREATEX_MAX_DISTANCE), round(4.0 * vec2(e1, e2)), dist);",
+
+			        // We do a scale and bias for mapping to texel space:
+			        "texcoord = SMAA_AREATEX_PIXEL_SIZE * texcoord + ( 0.5 * SMAA_AREATEX_PIXEL_SIZE );",
+
+			        // Move to proper place, according to the subpixel offset:
+			        "texcoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;",
+                        
+                    // Do it!
+                    "return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));",
+                "}",
 
                 //-----------------------------------------------------------------------------
                 // Corner Detection Functions
