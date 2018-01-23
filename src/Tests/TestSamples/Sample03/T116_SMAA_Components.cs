@@ -101,7 +101,6 @@ namespace OpenTkEssTest
                 //then all drawing command will apply to frameBuffer
                 //do draw to frame buffer here                                        
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                GL.ClearStencil(0);
                 GL.Disable(EnableCap.Blend);
 
                 // We will be creating the stencil buffer for later usage. 
@@ -120,7 +119,7 @@ namespace OpenTkEssTest
                 ////step2: draw framebuffer 1 to frameBuffer2
                 _glsx.AttachFrameBuffer(_weightFrameBuffRT);
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                GL.ClearStencil(0);
+
                 //
                 GL.Disable(EnableCap.Blend);
 
@@ -141,7 +140,7 @@ namespace OpenTkEssTest
                 GL.Disable(EnableCap.Blend);
 
                 // Here we want to process all the pixels.
-                GL.Disable(EnableCap.StencilTest);               
+                GL.Disable(EnableCap.StencilTest);
                 _glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
                 _glsx.DetachFrameBuffer();
 

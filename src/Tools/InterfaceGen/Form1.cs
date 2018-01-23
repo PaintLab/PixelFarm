@@ -274,9 +274,45 @@ namespace InterfaceGen
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string base64Str = Convert.ToBase64String(AreaTex.areaTexBytes);
+            //original areaText is RG 
+            //so we extend is to RGB
+            //internal const int AREATEX_WIDTH = 160;
+            //internal const int AREATEX_HEIGHT = 560;
+            //internal const int AREATEX_PITCH = AREATEX_WIDTH;
+            //internal const int AREATEX_SIZE = (AREATEX_HEIGHT * AREATEX_PITCH);
 
 
+            byte[] rgbBuffer = new byte[160 * 3 * 560];
+
+
+            int readIndex = 0;
+            int writeIndex = 0;
+            int pixelCount = 160 * 560;
+            for (int i = 0; i < pixelCount; ++i)
+            {
+                rgbBuffer[writeIndex] = AreaTex.areaTexBytes[readIndex];
+                rgbBuffer[writeIndex + 1] = AreaTex.areaTexBytes[readIndex + 1];
+                rgbBuffer[writeIndex + 2] = 0;
+                writeIndex += 3;
+                readIndex += 2;
+            }
+
+            //finish
+            //string base64Str = Convert.ToBase64String(AreaTex.areaTexBytes);
+            string base64StrOfRGB = Convert.ToBase64String(rgbBuffer);
+
+            using (System.Drawing.Bitmap bmp = new Bitmap(160, 560, System.Drawing.Imaging.PixelFormat.Format24bppRgb))
+            {
+
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                System.Runtime.InteropServices.Marshal.Copy(
+                  rgbBuffer, 0,
+                  bmpdata.Scan0, rgbBuffer.Length);
+                bmp.UnlockBits(bmpdata);
+
+
+                bmp.Save("d:\\WImageTest\\AreaTex_n3.png");
+            }
 
         }
 

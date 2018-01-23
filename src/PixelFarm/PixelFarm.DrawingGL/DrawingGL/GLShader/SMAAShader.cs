@@ -992,6 +992,8 @@ namespace PixelFarm.DrawingGL
 
     }
 
+
+    // Neighborhood Blending Pixel Shader (Third Pass)
     /// <summary>
     /// SMAA Neighborhood shader
     /// </summary>
@@ -1056,7 +1058,7 @@ namespace PixelFarm.DrawingGL
                 "vec4 SMAANeighborhoodBlendingPS( vec2 texcoord, vec4 offset, sampler2D colorTex, sampler2D blendTex ) {",
 			        // Fetch the blending weights for current pixel:
 			        "vec4 a;",
-                    "a.x = texture2D( blendTex,vOffset.xy ).a;",// Right
+                    "a.x = texture2D( blendTex, offset.xy ).a;",// Right
                     "a.y = texture2D( blendTex, offset.zw ).g;",// Top
                     "a.wz = texture2D( blendTex, texcoord ).xz;",// Bottom / Left
 
