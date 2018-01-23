@@ -551,22 +551,7 @@ namespace PixelFarm.DrawingGL
                      if (cond.x) variable.x = value.x;
                      if (cond.y) variable.y = value.y;
                  }",
-
-//                /**
-// * Conditional move:
-// */
-//void SMAAMovc(bool2 cond, inout float2 variable, float2 value)
-//            {
-//                SMAA_FLATTEN if (cond.x) variable.x = value.x;
-//                SMAA_FLATTEN if (cond.y) variable.y = value.y;
-//            }
-
-//            void SMAAMovc(bool4 cond, inout float4 variable, float4 value)
-//            {
-//                SMAAMovc(cond.xy, variable.xy, value.xy);
-//                SMAAMovc(cond.zw, variable.zw, value.zw);
-//            }
-
+    
             //-----------------------------------------------------------------------------
             // Horizontal/Vertical Search Functions
             /**
@@ -678,12 +663,10 @@ namespace PixelFarm.DrawingGL
 			        //"texcoord.y -= resolution.y * SMAASearchLength( searchTex, e.gr, 0.5, 0.5 );", // WebGL port note: Changed sign
 
 			        //"return texcoord.y;",
-                "}",
-
- /** 
- * Ok, we have the distance and both crossing edges. So, what are the areas
- * at each side of current edge?
- */
+                "}", 
+ 
+               //Ok, we have the distance and both crossing edges. So, what are the areas
+               //at each side of current edge? 
 
                 "vec2 SMAAArea( sampler2D areaTex, vec2 dist, float e1, float e2, float offset ) {",
 			        // Rounding prevents precision errors of bilinear filtering:

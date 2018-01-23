@@ -41,6 +41,7 @@ namespace OpenTkEssTest
             _edgeFrameBuffRT = new FrameBuffer(frameBufferW, frameBufferH, new FrameBufferCreationParameters()
             {
                 minFilter = TextureMinFilter.Linear,
+                magFilter = TextureMagFilter.Linear,
                 pixelFormat = PixelFormat.Rgb, //**
                 pixelInternalFormat = PixelInternalFormat.Rgb
             });
@@ -48,6 +49,7 @@ namespace OpenTkEssTest
             _weightFrameBuffRT = new FrameBuffer(frameBufferW, frameBufferH, new FrameBufferCreationParameters()
             {
                 minFilter = TextureMinFilter.Linear,
+                magFilter = TextureMagFilter.Linear,
                 pixelFormat = PixelFormat.Rgba
             });
             //
@@ -97,6 +99,13 @@ namespace OpenTkEssTest
                 //then all drawing command will apply to frameBuffer
                 //do draw to frame buffer here                                        
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                GL.ClearStencil(0x01);
+                GL.Enable(EnableCap.StencilTest);
+                //place a 1 where rendered
+                GL.StencilFunc(StencilFunction.Always, 1, 1);
+                //replace where rendered
+                GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
+                GL.Disable(EnableCap.Blend);
                 _glsx.DrawImageWithSMAA(_colorBuffer, 0, 800);
                 //------------------------------------------------------------------------------------  
                 _glsx.DetachFrameBuffer();
@@ -107,6 +116,12 @@ namespace OpenTkEssTest
                 _glsx.AttachFrameBuffer(_weightFrameBuffRT);
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
 
+                GL.Enable(EnableCap.StencilTest);
+                //place a 1 where rendered
+                GL.StencilOp(StencilOp.Zero, StencilOp.Zero, StencilOp.Keep);
+                //replace where rendered
+                GL.StencilFunc(StencilFunction.Equal, 1, 1);
+                GL.Disable(EnableCap.Blend);
                 _glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
                 _glsx.DetachFrameBuffer();
 
@@ -114,8 +129,11 @@ namespace OpenTkEssTest
                 ////step3
                 _glsx.AttachFrameBuffer(frameBuffer3);
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
+                GL.Disable(EnableCap.StencilTest);
+                GL.Disable(EnableCap.Blend);
                 _glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
                 _glsx.DetachFrameBuffer();
+
                 ////-------------------------------------------------------------------------------------
                 //frameBufferNeedUpdate = false;
                 //}
@@ -125,8 +143,8 @@ namespace OpenTkEssTest
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
-
                 //_glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 _glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
             }
