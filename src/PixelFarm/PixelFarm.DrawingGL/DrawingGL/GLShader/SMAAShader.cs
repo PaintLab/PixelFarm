@@ -1,14 +1,38 @@
 ﻿//MIT, 2018,  https://github.com/iryoku/smaa/releases/tag/v2.8
+/**
+ * Copyright (C) 2013 Jorge Jimenez (jorge@iryoku.com)
+ * Copyright (C) 2013 Jose I. Echevarria (joseignacioechevarria@gmail.com)
+ * Copyright (C) 2013 Belen Masia (bmasia@unizar.es)
+ * Copyright (C) 2013 Fernando Navarro (fernandn@microsoft.com)
+ * Copyright (C) 2013 Diego Gutierrez (diegog@unizar.es)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to
+ * do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software. As clarification, there
+ * is no requirement that the copyright notice and permission be included in
+ * binary distributions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
+//some parts are from  WebGL port of Subpixel Morphological Antialiasing (SMAA) v2.8 
 //MIT, 2018, mpk (http://polko.me/)
 //from three.js
-///**
-// * @author mpk / http://polko.me/
-// *
-// * WebGL port of Subpixel Morphological Antialiasing (SMAA) v2.8 
-// * https://github.com/iryoku/smaa/releases/tag/v2.8
-// */
-//
+
+//MIT, 2018, WinterDev
+//-----------------------------------------------------------------------------------
 
 
 using System;
@@ -46,73 +70,6 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
-
-    class SMAAPass
-    {
-        int _width;
-        int _height;
-
-        FrameBuffer _edgesRT;//edge render target
-        FrameBuffer _weightsRT; //weight render target
-
-        SMAAColorEdgeDetectionShader _edgeDetect; //edge
-        SMAABlendingWeightCalculationShader _blendWeight; //weight
-        SMAANeighborhoodBlendingShader _nbBlending; //lend
-
-
-        public SMAAPass(int width, int height, ShaderSharedResource shareRes)
-        {
-            _width = width;
-            _height = height;
-
-
-            this._edgesRT = new FrameBuffer(width, height, new FrameBufferCreationParameters()
-            {
-                depthBuffer = false,
-                stencilBuffer = false,
-                generateMipMaps = false,
-                minFilter = TextureMinFilter.Linear,
-                pixelFormat = PixelFormat.Rgb//*** RGB
-            });
-            //
-            this._weightsRT = new FrameBuffer(width, height, new FrameBufferCreationParameters()
-            {
-                depthBuffer = false,
-                stencilBuffer = false,
-                generateMipMaps = false,
-                minFilter = TextureMinFilter.Linear,
-                pixelFormat = PixelFormat.Rgba//*** RGBA
-
-            });
-
-            _edgeDetect = new SMAAColorEdgeDetectionShader(shareRes);
-            _edgeDetect.SetResolution(width, height);
-            //
-            _blendWeight = new SMAABlendingWeightCalculationShader(shareRes);
-            _blendWeight.SetResolution(width, height);
-
-
-
-
-
-            //_blendWeight.LoadDiffuseTexture(null);
-            //_blendWeight.LoadAreaTexture(null);
-            //_blendWeight.LoadSearchTexture(null);
-
-
-            //
-            _nbBlending = new SMAANeighborhoodBlendingShader(shareRes);
-            _nbBlending.SetResolution(width, height);
-            //_nbBlending.LoadDiffuseTexture(null);
-        }
-        public void Render()
-        {
-
-        }
-
-    }
-
     abstract class SMAAShaderBase : ShaderBase
     {
         protected static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
@@ -134,9 +91,8 @@ namespace PixelFarm.DrawingGL
             {
                 return false;
             }
-            //-----------------------
-            //a_position = shaderProgram.GetAttrV3f("a_position");
-            //a_texCoord = shaderProgram.GetAttrV2f("a_texCoord");
+
+
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             tDiffuse = shaderProgram.GetUniform1("tDiffuse");
             OnProgramBuilt();
@@ -168,37 +124,6 @@ namespace PixelFarm.DrawingGL
                 u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
-
-
-
-        //        //-----------------------------------------
-        //#if DEBUG
-        //        float _latestBmpW;
-        //        float _latestBmpH;
-        //        bool _latestBmpInverted;
-        //#endif
-        //        /// <summary>
-        //        /// load glbmp before draw
-        //        /// </summary>
-        //        /// <param name="bmp"></param>
-        //        public void LoadDiffuseTexture(GLBitmap bmp)
-        //        {
-        //            //load before use with RenderSubImage
-        //            SetCurrent();
-        //            CheckViewMatrix();
-        //            //-------------------------------------------------------------------------------------
-        //            // Bind the texture...
-        //            GL.ActiveTexture(TextureUnit.Texture0);
-        //            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
-        //            // Set the texture sampler to texture unit to 0                  
-        //            tDiffuse.SetValue(0);
-        //#if DEBUG
-        //            this._latestBmpW = bmp.Width;
-        //            this._latestBmpH = bmp.Height;
-        //            this._latestBmpInverted = bmp.IsInvert;
-        //#endif
-        //        }
-
     }
 
     /// <summary>
@@ -212,10 +137,9 @@ namespace PixelFarm.DrawingGL
         public SMAAColorEdgeDetectionShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-
-            //vertex shader
+            //Edge Detection Vertex Shader 
             string vertexShader = new[] {
-                "#define SMAA_THRESHOLD 0.1",
+
                 "#define mad(a, b, c) (a * b + c)",
                 "precision mediump float;", //**
 
@@ -232,9 +156,6 @@ namespace PixelFarm.DrawingGL
                 "varying vec4 vOffset[ 3 ];",
 
                 "void SMAAEdgeDetectionVS( vec2 texcoord ) {",
-                    //"vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -1.0, 0.0, 0.0,  -1.0 );", // WebGL port note: Changed sign in W component
-			        //"vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4(  1.0, 0.0, 0.0,  1.0 );", // WebGL port note: Changed sign in W component
-			        //"vOffset[ 2 ] = texcoord.xyxy + resolution.xyxy * vec4( -2.0, 0.0, 0.0,  -2.0 );", // WebGL port note: Changed sign in W component
 
                     "vOffset[ 0 ] = mad(resolution.xyxy, vec4( -1.0, 0.0, 0.0, -1.0 ),  texcoord.xyxy);",
                     "vOffset[ 1 ] = mad(resolution.xyxy, vec4( 1.0, 0.0, 0.0,   1.0 ),  texcoord.xyxy);",
@@ -256,6 +177,10 @@ namespace PixelFarm.DrawingGL
 
             }.JoinWithNewLine();
 
+            //Edge Detection Pixel Shaders (First Pass)
+            //Color Edge Detection
+            //IMPORTANT NOTICE: color edge detection requires gamma - corrected colors, and
+            //thus 'colorTex' should be a non-sRGB texture.
 
             string fragmentShader = new[] {
                 "#define SMAA_THRESHOLD 0.1",
@@ -267,7 +192,7 @@ namespace PixelFarm.DrawingGL
                 "varying vec2 vUv;",
                 "varying vec4 vOffset[ 3 ];",
 
-                "vec4 SMAAColorEdgeDetectionPS( vec2 texcoord, vec4 offset[3], sampler2D colorTex ) {",
+                "vec2 SMAAColorEdgeDetectionPS( vec2 texcoord, vec4 offset[3], sampler2D colorTex ) {",
                     "vec2 threshold = vec2( SMAA_THRESHOLD, SMAA_THRESHOLD );",
 
 			        // Calculate color deltas:
@@ -300,8 +225,7 @@ namespace PixelFarm.DrawingGL
                     "t = abs( C - Cbottom );",
                     "delta.w = max( max( t.r, t.g ), t.b );",
 
-			        // Calculate the maximum delta in the direct neighborhood:
-			        //"float maxDelta = max( max( max( delta.x, delta.y ), delta.z ), delta.w );",
+			        // Calculate the maximum delta in the direct neighborhood:			         
                     "vec2 maxDelta= max(delta.xy, delta.zw);",
 
 			        // Calculate left-left and top-top deltas:
@@ -313,22 +237,17 @@ namespace PixelFarm.DrawingGL
                     "t = abs( C - Ctoptop );",
                     "delta.w = max( max( t.r, t.g ), t.b );",
 
-			        // Calculate the final maximum delta:
-			        //"maxDelta = max( max( maxDelta, delta.z ), delta.w );",
+			        // Calculate the final maximum delta: 
                     "maxDelta = max(maxDelta.xy, delta.zw);",
                     "float finalDelta = max(maxDelta.x, maxDelta.y);",
 
-			        // Local contrast adaptation in action:
-			        //"edges.xy *= step( 0.5 * maxDelta, delta.xy );",
+			        // Local contrast adaptation in action: 
                     "edges.xy *= step(finalDelta, float(SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR) * delta.xy);",
-
-                    //"return vec4( edges, 0.0, 0.0 );", //original
-                    //"return vec4( 1.0,1.0, 0.0, 1.0 );", //for debug             
-                    "return vec4(edges, 0.0, 1.0 );", //for debug
+                    "return edges;",                     
                 "}",
 
                 "void main() {",
-                    "gl_FragColor = SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse );",
+                    "gl_FragColor =vec4(SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse ),0.0,1.0);",
                 "}"
             }.JoinWithNewLine();
             BuildProgram(vertexShader, fragmentShader);
@@ -433,7 +352,7 @@ namespace PixelFarm.DrawingGL
         {
 
 
-
+            //Blend Weight Calculation Vertex Shader
             string vertexShader = new[]
             {
                 "#define mad(a, b, c) (a * b + c)",
@@ -461,19 +380,11 @@ namespace PixelFarm.DrawingGL
                 "varying vec2 vPixcoord;",
 
                 "void SMAABlendingWeightCalculationVS( vec2 texcoord ) {",
-                    "vPixcoord = texcoord * resolution.zw;",
+                    "vPixcoord = texcoord * resolution.zw;", 
 
-			        //// We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
-			        //"vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( -0.25, -0.125, 1.25, -0.125 );", // WebGL port note: Changed sign in Y and W components
-			        //"vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4( -0.125, -0.25, -0.125, 1.25 );", // WebGL port note: Changed sign in Y and W components
-
-			        //// And these for the searches, they indicate the ends of the loops:
-			        //"vOffset[ 2 ] = vec4( vOffset[ 0 ].xz, vOffset[ 1 ].yw ) + vec4( -2.0, 2.0, -2.0, 2.0 ) * resolution.xxyy * float( SMAA_MAX_SEARCH_STEPS );",
-
+                    // We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
                      "vOffset[0] = mad(resolution.xyxy, vec4(-0.25, -0.125,  1.25, -0.125), texcoord.xyxy);",
-
-                     "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, -0.25, -0.125, 1.25), texcoord.xyxy);",
-
+                     "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, -0.25, -0.125, 1.25), texcoord.xyxy);", 
 
                      // And these for the searches, they indicate the ends of the loops:
                      "vOffset[2] = mad(resolution.xxyy,",
@@ -911,15 +822,14 @@ namespace PixelFarm.DrawingGL
 
 				            // We want the distances to be in pixel units (doing this here allow to
 				            // better interleave arithmetic and memory accesses):
-				            //"d = d / resolution.x - pixcoord.x;",
+				        
                             "d = abs(round(mad(resolution.zz, d, -pixcoord.xx)));",
 
 				            // SMAAArea below needs a sqrt, as the areas texture is compressed
 				            // quadratically:
 				            "vec2 sqrt_d = sqrt(d);",
 
-				            // Fetch the right crossing edges:
-				            //"coords.y -= 1.0 * resolution.y;", // WebGL port note: Added
+				            // Fetch the right crossing edges: 
 				            "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.zy, vec2( 1.0, 0.0 ) ).r;",
 
 				            // Ok, we know how this pattern looks like, now it is time for getting
@@ -950,20 +860,17 @@ namespace PixelFarm.DrawingGL
 				            "float e1 = texture2D( edgesTex, coords.xy, 0.0 ).g;",
 
 				            // Find the distance to the bottom:
-				            "coords.y = SMAASearchYDown( edgesTex, searchTex, offset[ 1 ].zw, offset[ 2 ].w );",
+				            "coords.z = SMAASearchYDown( edgesTex, searchTex, offset[ 1 ].zw, offset[ 2 ].w );",
                             "d.y = coords.z;",
 
-				            // We want the distances to be in pixel units:
-				            //"d = d / resolution.y - pixcoord.y;",
+				            // We want the distances to be in pixel units: 
                             "d = abs(round(mad(resolution.ww, d, -pixcoord.yy)));",
 
 				            // SMAAArea below needs a sqrt, as the areas texture is compressed
-				            // quadratically:
-				            //"vec2 sqrt_d = sqrt( abs( d ) );",
+				            // quadratically: 
                             "vec2 sqrt_d = sqrt(d);",
 
-				            // Fetch the bottom crossing edges:
-				            //"coords.y -= 1.0 * resolution.y;", // WebGL port note: Added
+				            // Fetch the bottom crossing edges: 
 				            "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.xz, vec2( 0.0, 1.0 ) ).g;",
 
 				            // Get the area for this direction:
@@ -1123,6 +1030,7 @@ namespace PixelFarm.DrawingGL
         public SMAANeighborhoodBlendingShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
+            //Neighborhood Blending Vertex Shader
             string vertexShader = new[] {
                 "#define mad(a, b, c) (a * b + c)",
                 "precision mediump float;", //**
