@@ -92,36 +92,45 @@ namespace OpenTkEssTest
                 //post-processing AA
 
 
-                ////step1 : draw input glbmp into frameBuffer1
+                //------------------------------------------------------------------------------------                     
+                //step 1: ColorEdgeDetection
+                //step1 : draw input glbmp into frameBuffer1
                 _glsx.AttachFrameBuffer(_edgeFrameBuffRT);
                 //------------------------------------------------------------------------------------                     
                 //after make the frameBuffer current
                 //then all drawing command will apply to frameBuffer
                 //do draw to frame buffer here                                        
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                GL.ClearStencil(0x01);
-                GL.Enable(EnableCap.StencilTest);
-                //place a 1 where rendered
-                GL.StencilFunc(StencilFunction.Always, 1, 1);
-                //replace where rendered
-                GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
+                GL.ClearStencil(0);
                 GL.Disable(EnableCap.Blend);
+
+                // We will be creating the stencil buffer for later usage. 
+                //replace where rendered
+                GL.StencilFunc(StencilFunction.Gequal, 1, 1);
+                GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
+                GL.Enable(EnableCap.StencilTest);
+
                 _glsx.DrawImageWithSMAA(_colorBuffer, 0, 800);
                 //------------------------------------------------------------------------------------  
                 _glsx.DetachFrameBuffer();
                 //after release current, we move back to default frame buffer again***
 
                 ////------------------------------------------------------------------------------------   
+                //step 2: BlendWeightCalculation
                 ////step2: draw framebuffer 1 to frameBuffer2
                 _glsx.AttachFrameBuffer(_weightFrameBuffRT);
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-
-                GL.Enable(EnableCap.StencilTest);
-                //place a 1 where rendered
-                GL.StencilOp(StencilOp.Zero, StencilOp.Zero, StencilOp.Keep);
-                //replace where rendered
-                GL.StencilFunc(StencilFunction.Equal, 1, 1);
+                GL.ClearStencil(0);
+                //
                 GL.Disable(EnableCap.Blend);
+
+                // Here we want to process only marked pixels.
+                GL.Enable(EnableCap.StencilTest);
+                //place a 1 where rendered                
+                GL.StencilFunc(StencilFunction.Equal, 1, 1);
+                GL.StencilOp(StencilOp.Zero, StencilOp.Zero, StencilOp.Keep);
+                //replace where rendered                 
+
                 _glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
                 _glsx.DetachFrameBuffer();
 
@@ -129,8 +138,10 @@ namespace OpenTkEssTest
                 ////step3
                 _glsx.AttachFrameBuffer(frameBuffer3);
                 _glsx.Clear(PixelFarm.Drawing.Color.Empty);
-                GL.Disable(EnableCap.StencilTest);
                 GL.Disable(EnableCap.Blend);
+
+                // Here we want to process all the pixels.
+                GL.Disable(EnableCap.StencilTest);               
                 _glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
                 _glsx.DetachFrameBuffer();
 
