@@ -497,7 +497,7 @@ namespace PixelFarm.DrawingGL
             string fragmentShader = new[]
             {
                 "#define SMAA_CORNER_ROUNDING 25",
-                
+
                 "#define mad(a, b, c) (a * b + c)",
                 "#define saturate(a) clamp(a, 0.0, 1.0)",
                 "#define SMAA_MAX_SEARCH_STEPS 8",
@@ -988,8 +988,8 @@ namespace PixelFarm.DrawingGL
                          
                             // Fix corners:
                             "coords.x = texcoord.x;",
-                            "SMAADetectVerticalCornerPattern( edgesTex, weights.ba, coords.xyxz, d);", 
-                           
+                            "SMAADetectVerticalCornerPattern( edgesTex, weights.ba, coords.xyxz, d);",
+
                         "}",
 
                     "return weights;",
@@ -1141,6 +1141,7 @@ namespace PixelFarm.DrawingGL
             : base(shareRes)
         {
             string vertexShader = new[] {
+                "#define mad(a, b, c) (a * b + c)",
                 "precision mediump float;", //**
                 "attribute vec3 position;", //**
                 "attribute vec2 uv;",//**
@@ -1148,11 +1149,10 @@ namespace PixelFarm.DrawingGL
 
                 "uniform vec2 resolution;",
                 "varying vec2 vUv;",
-                "varying vec4 vOffset[ 2 ];",
+                "varying vec4 vOffset;",
                 "void SMAANeighborhoodBlendingVS( vec2 texcoord ) {",
-                    "vOffset[ 0 ] = texcoord.xyxy + resolution.xyxy * vec4( 1.0, 0.0, 0.0, 1.0 );", // WebGL port note: Changed sign in W component
-			        "vOffset[ 1 ] = texcoord.xyxy + resolution.xyxy * vec4( 1.0, 0.0, 0.0, 1.0 );", // WebGL port note: Changed sign in W component 
-		        "}",
+                     "vOffset = mad(resolution.xyxy, vec4( 1.0, 0.0, 0.0,  1.0), texcoord.xyxy);",
+                "}",
                 "void main() {",
 
                     "vUv = uv;",
@@ -1162,54 +1162,69 @@ namespace PixelFarm.DrawingGL
 
                 "}"}.JoinWithNewLine();
 
+            //-----------------------------------------------------------------------------
+            // Neighborhood Blending Pixel Shader (Third Pass)
             string fragmentShader = new[]
             {
+                "#define mad(a, b, c) (a * b + c)",
+                "#define SMAASampleLevelZero( tex, coord) texture2D( tex, coord, 0.0 )",
                 "precision mediump float;", //**
                 "uniform sampler2D tDiffuse;",
                 "uniform sampler2D tColor;",
                 "uniform vec2 resolution;",
 
                 "varying vec2 vUv;",
-                "varying vec4 vOffset[ 2 ];",
+                "varying vec4 vOffset;",
 
-                "vec4 SMAANeighborhoodBlendingPS( vec2 texcoord, vec4 offset[ 2 ], sampler2D colorTex, sampler2D blendTex ) {",
+                @"
+                 void SMAAMovc(bvec2 cond, inout vec2 variable, vec2 value)
+                 {
+                     if (cond.x) variable.x = value.x;
+                     if (cond.y) variable.y = value.y;
+                 }
+                 void SMAAMovc(bvec4 cond, inout vec4 variable, vec4 value) {
+                    SMAAMovc(cond.xy, variable.xy, value.xy);
+                    SMAAMovc(cond.zw, variable.zw, value.zw);
+                 }",
+
+                "vec4 SMAANeighborhoodBlendingPS( vec2 texcoord, vec4 offset, sampler2D colorTex, sampler2D blendTex ) {",
 			        // Fetch the blending weights for current pixel:
 			        "vec4 a;",
-                    "a.xz = texture2D( blendTex, texcoord ).xz;",
-                    "a.y = texture2D( blendTex, offset[ 1 ].zw ).g;",
-                    "a.w = texture2D( blendTex, offset[ 1 ].xy ).a;",
+                    "a.x = texture2D( blendTex,vOffset.xy ).a;",// Right
+                    "a.y = texture2D( blendTex, offset.zw ).g;",// Top
+                    "a.wz = texture2D( blendTex, texcoord ).xz;",// Bottom / Left
 
 			        // Is there any blending weight with a value greater than 0.0?
+                    //SMAA_BRANCH
 			        "if ( dot(a, vec4( 1.0, 1.0, 1.0, 1.0 )) < 1e-5 ) {",
-                        "return texture2D( colorTex, texcoord, 0.0 );",
+                        @" vec4 color = SMAASampleLevelZero(colorTex, texcoord);
+                           return color;
+                        ",
                     "} else {",
-				        // Up to 4 lines can be crossing a pixel (one through each edge). We
-				        // favor blending by choosing the line with the maximum weight for each
-				        // direction:
-				        "vec2 offset;",
-                        "offset.x = a.a > a.b ? a.a : -a.b;", // left vs. right
-				        "offset.y = a.g > a.r ? -a.g : a.r;", // top vs. bottom // WebGL port note: Changed signs
+                        @"
+                            bool h = max(a.x, a.z) > max(a.y, a.w); // max(horizontal) > max(vertical)
 
-				        // Then we go in the direction that has the maximum weight:
-				        "if ( abs( offset.x ) > abs( offset.y )) {", // horizontal vs. vertical
-					        "offset.y = 0.0;",
-                        "} else {",
-                            "offset.x = 0.0;",
-                        "}",
+                            // Calculate the blending offsets:
+                            vec4 blendingOffset = vec4(0.0, a.y, 0.0, a.w);
+                            vec2 blendingWeight = a.yw;
+                            SMAAMovc(bvec4(h, h, h, h), blendingOffset, vec4(a.x, 0.0, a.z, 0.0));
+                            SMAAMovc(bvec2(h, h), blendingWeight, a.xz);
+                            blendingWeight /= dot(blendingWeight, vec2(1.0, 1.0));
 
-				        // Fetch the opposite color and lerp by hand:
-				        "vec4 C = texture2D( colorTex, texcoord, 0.0 );",
-                        "texcoord += sign( offset ) * resolution;",
-                        "vec4 Cop = texture2D( colorTex, texcoord, 0.0 );",
-                        "float s = abs( offset.x ) > abs( offset.y ) ? abs( offset.x ) : abs( offset.y );",
+                            // Calculate the texture coordinates:
+                            vec4 blendingCoord = mad(blendingOffset, vec4(resolution.xy, -resolution.xy), texcoord.xyxy);
 
-				        // WebGL port note: Added gamma correction
-				        "C.xyz = pow(C.xyz, vec3(2.2));",
-                        "Cop.xyz = pow(Cop.xyz, vec3(2.2));",
-                        "vec4 mixed = mix(C, Cop, s);",
-                        "mixed.xyz = pow(mixed.xyz, vec3(1.0 / 2.2));",
+                            // We exploit bilinear filtering to mix current pixel with the chosen
+                            // neighbor:
+                            vec4 color = blendingWeight.x * SMAASampleLevelZero(colorTex, blendingCoord.xy);
+                            color += blendingWeight.y * SMAASampleLevelZero(colorTex, blendingCoord.zw);
 
-                        "return mixed;",
+                            //#if SMAA_REPROJECTION
+                                //.....
+                            //#endif
+
+                            return color;
+                        ",
                     "}",
                 "}",
 
