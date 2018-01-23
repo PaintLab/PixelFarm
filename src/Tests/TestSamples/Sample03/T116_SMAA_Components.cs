@@ -127,8 +127,8 @@ namespace OpenTkEssTest
                 // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
 
                 //_glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
-                _glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
-                //_glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+                _glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
             }
             else
             {
