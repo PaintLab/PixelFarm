@@ -624,7 +624,7 @@ namespace PixelFarm.DrawingGL
             * @PSEUDO_GATHER4), and adds 0, 1 or 2, depending on which edges and
             * crossing edges are active.
             */
-            "float SMAASearchLength( sampler2D searchTex, vec2 e, float offset ){",
+                "float SMAASearchLength( sampler2D searchTex, vec2 e, float offset ){",
                     // The texture is flipped vertically, with left and right cases taking half
                     // of the space horizontally:
                     "vec2 scale = SMAA_SEARCHTEX_SIZE * vec2(0.5, -1.0);",
@@ -662,16 +662,7 @@ namespace PixelFarm.DrawingGL
 
                     //
                      "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.0), 3.25);",
-                    " return mad(resolution.x, offset, texcoord.x);",
-                    // Non-optimized version:
-                    // We correct the previous (-0.25, -0.125) offset we applied:
-                    //"texcoord.x += 0.25 * resolution.x;",
-			        //// The searches are bias by 1, so adjust the coords accordingly:
-			        //"texcoord.x += resolution.x;",
-			        //// Disambiguate the length added by the last step:
-			        //"texcoord.x += 2.0 * resolution.x;", // Undo last step
-			        //"texcoord.x -= resolution.x * SMAASearchLength(searchTex, e, 0.0, 0.5);",
-                    //"return texcoord.x;",
+                    " return mad(resolution.x, offset, texcoord.x);", 
                 "}",
 
                 "float SMAASearchXRight( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
@@ -683,12 +674,7 @@ namespace PixelFarm.DrawingGL
                         "if ( ! ( texcoord.x < end && e.g > 0.8281 && e.r == 0.0 ) ) break;",
                     "}",
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.5), 3.25);",
-                    "return mad(-resolution.x, offset, texcoord.x);",
-                    //"texcoord.x -= 0.25 * resolution.x;",
-                    //"texcoord.x -= resolution.x;",
-                    //"texcoord.x -= 2.0 * resolution.x;",
-                    //"texcoord.x += resolution.x * SMAASearchLength( searchTex, e, 0.5, 0.5 );", 
-                    //"return texcoord.x;",
+                    "return mad(-resolution.x, offset, texcoord.x);", 
                 "}",
 
                 "float SMAASearchYUp( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
@@ -700,13 +686,7 @@ namespace PixelFarm.DrawingGL
                         "if ( ! ( texcoord.y > end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
                     "}",
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e.gr, 0.0), 3.25);",
-                    "return mad(resolution.y, offset, texcoord.y);",
-                    //"texcoord.y += 0.25 * resolution.y;", // WebGL port note: Changed sign
-			        //"texcoord.y += resolution.y;", // WebGL port note: Changed sign
-			        //"texcoord.y += 2.0 * resolution.y;", // WebGL port note: Changed sign
-			        //"texcoord.y += resolution.y * SMAASearchLength( searchTex, e.gr, 0.0, 0.5 );", // WebGL port note: Changed sign
-
-			        //"return texcoord.y;",
+                    "return mad(resolution.y, offset, texcoord.y);", 
                 "}",
 
                 "float SMAASearchYDown( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
@@ -719,14 +699,7 @@ namespace PixelFarm.DrawingGL
                     "}",
 
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e.gr, 0.5), 3.25);",
-                    "return mad(-resolution.y, offset, texcoord.y);",
-
-                     //"texcoord.y -= 0.25 * resolution.y;", // WebGL port note: Changed sign
-			        //"texcoord.y -= resolution.y;", // WebGL port note: Changed sign
-			        //"texcoord.y -= 2.0 * resolution.y;", // WebGL port note: Changed sign
-			        //"texcoord.y -= resolution.y * SMAASearchLength( searchTex, e.gr, 0.5, 0.5 );", // WebGL port note: Changed sign
-
-			        //"return texcoord.y;",
+                    "return mad(-resolution.y, offset, texcoord.y);", 
                 "}", 
                //-------------------
                //Ok, we have the distance and both crossing edges. So, wSMAASampleLevelZerohat are the areas
