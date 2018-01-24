@@ -282,23 +282,41 @@ namespace InterfaceGen
             //internal const int AREATEX_SIZE = (AREATEX_HEIGHT * AREATEX_PITCH);
 
 
-            byte[] rgbBuffer = new byte[160 * 3 * 560];
+
+            int stride = 160 * 2;
+            byte[] rgbBuffer = new byte[stride * 560];
 
 
             int readIndex = 0;
             int writeIndex = 0;
-            int pixelCount = 160 * 560;
-            for (int i = 0; i < pixelCount; ++i)
+           
+             
+            int writeRowNo = 560 - 1;
+
+            for (int row = 0; row < 560; ++row)
             {
-                rgbBuffer[writeIndex] = AreaTex.areaTexBytes[readIndex];
-                rgbBuffer[writeIndex + 1] = AreaTex.areaTexBytes[readIndex + 1];
-                rgbBuffer[writeIndex + 2] = 0;
-                writeIndex += 3;
-                readIndex += 2;
+                writeIndex = writeRowNo * stride;
+                for (int col = 0; col < 160; ++col)
+                {
+                    rgbBuffer[writeIndex] = AreaTex.areaTexBytes[readIndex];
+                    rgbBuffer[writeIndex + 1] = AreaTex.areaTexBytes[readIndex + 1];
+                    readIndex += 2;
+                    writeIndex += 2;
+
+                }
+                writeRowNo--;
             }
 
-            //finish
-            //string base64Str = Convert.ToBase64String(AreaTex.areaTexBytes);
+            //for (int i = 0; i < pixelCount; ++i)
+            //{
+            //    rgbBuffer[writeIndex] = AreaTex.areaTexBytes[readIndex];
+            //    rgbBuffer[writeIndex + 1] = AreaTex.areaTexBytes[readIndex + 1];
+            //    writeIndex += 2;
+            //    readIndex += 2;
+            //}
+
+            ////finish
+            ////string base64Str = Convert.ToBase64String(AreaTex.areaTexBytes);
             string base64StrOfRGB = Convert.ToBase64String(rgbBuffer);
 
             using (System.Drawing.Bitmap bmp = new Bitmap(160, 560, System.Drawing.Imaging.PixelFormat.Format24bppRgb))

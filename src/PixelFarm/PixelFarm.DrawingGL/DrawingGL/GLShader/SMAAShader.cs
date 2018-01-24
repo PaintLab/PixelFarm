@@ -1,4 +1,6 @@
 ﻿//MIT, 2018,  https://github.com/iryoku/smaa/releases/tag/v2.8
+//from SMAA.hlsl
+
 /**
  * Copyright (C) 2013 Jorge Jimenez (jorge@iryoku.com)
  * Copyright (C) 2013 Jose I. Echevarria (joseignacioechevarria@gmail.com)
@@ -150,29 +152,22 @@ namespace PixelFarm.DrawingGL
 
                 "uniform vec2 resolution;",
                 "uniform sampler2D tDiffuse;",
-
-
                 "varying vec2 vUv;",
-                "varying vec4 vOffset[ 3 ];",
 
+
+                "varying vec4 vOffset[ 3 ];",
                 "void SMAAEdgeDetectionVS( vec2 texcoord ) {",
 
                     "vOffset[ 0 ] = mad(resolution.xyxy, vec4( -1.0, 0.0, 0.0, -1.0 ),  texcoord.xyxy);",
-                    "vOffset[ 1 ] = mad(resolution.xyxy, vec4( 1.0, 0.0, 0.0,   1.0 ),  texcoord.xyxy);",
+                    "vOffset[ 1 ] = mad(resolution.xyxy, vec4(  1.0, 0.0, 0.0,  1.0 ),  texcoord.xyxy);",
                     "vOffset[ 2 ] = mad(resolution.xyxy, vec4( -2.0, 0.0, 0.0, -2.0 ),  texcoord.xyxy);",
-
                 "}",
 
                 "void main() {",
 
                     "vUv = uv;",
-
                     "SMAAEdgeDetectionVS( vUv );",
-
-                     "gl_Position = u_mvpMatrix * vec4( position, 1.0 );",
-                    
-                    //"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-
+                    "gl_Position = u_mvpMatrix * vec4( position, 1.0 );",
                 "}"
 
             }.JoinWithNewLine();
@@ -184,7 +179,7 @@ namespace PixelFarm.DrawingGL
 
             string fragmentShader = new[] {
                 "#define SMAA_THRESHOLD 0.1",
-                "#define SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR 2",
+                "#define SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR 2.0",
                 "precision mediump float;", //**
 
                 "uniform sampler2D tDiffuse;",
@@ -413,10 +408,11 @@ namespace PixelFarm.DrawingGL
                 "#define saturate(a) clamp(a, 0.0, 1.0)",
                 "#define SMAA_MAX_SEARCH_STEPS 8",
                 "#define SMAA_MAX_SEARCH_STEPS_DIAG 8",
-                
-                
-              
-      
+            
+                //-----------------------------------------------------------------------------
+               // Texture Access Defines
+                "#define SMAA_AREATEX_SELECT(sample) sample.ra", // *** since we load the original textarea as LuminanceApha
+                "#define SMAA_SEARCHTEX_SELECT(sample) sample.r", //since we load the original seach area as Luminance
 
                 //-----------------------------------------------------------------------------
                 // Non-Configurable Defines
@@ -424,14 +420,13 @@ namespace PixelFarm.DrawingGL
                 "#define SMAA_AREATEX_MAX_DISTANCE_DIAG 20",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
                 "#define SMAA_AREATEX_SUBTEX_SIZE ( 1.0 / 7.0 )",
-                "#define SMAA_AREATEX_SELECT(sample) sample.ra", // *** since we load the original textarea as LuminanceApha
                 "#define SMAA_SEARCHTEX_SIZE vec2(66.0, 33.0)",
                 "#define SMAA_SEARCHTEX_PACKED_SIZE vec2(64.0, 16.0)",
                 "#define SMAA_CORNER_ROUNDING_NORM (float(SMAA_CORNER_ROUNDING) / 100.0)",
                 //-----------------------------------------------------------------------------
 
 
-                "#define SMAA_SEARCHTEX_SELECT(sample) sample.r", //since we load the original seach area as Luminance
+               
                 //
                 @"#define SMAASampleLevelZero( tex, coord) texture2D( tex, coord, 0.0 )",
                 " #define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord + float( offset ) * resolution.xy, 0.0 )",
@@ -468,7 +463,8 @@ namespace PixelFarm.DrawingGL
            
 
                 //-----------------------------------------------------------------------------
-                // Diagonal Search Functions               
+                // Diagonal Search Functions       
+                //
                 // Allows to decode two binary values from a bilinear-filtered access. 
                 //
                 @"vec2 SMAADecodeDiagBilinearAccess(vec2 e) {
@@ -652,54 +648,56 @@ namespace PixelFarm.DrawingGL
 			        * Sampling with different offsets in each direction allows to disambiguate
 			        * which edges are active from the four fetched ones.
 			        */
-			        "vec2 e = vec2( 0.0, 1.0 );",
-
-                    "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
-				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord = mad(-vec2(2.0, 0.0), resolution.xy, texcoord);",
-                        "if ( ! ( texcoord.x > end && e.g > 0.8281 && e.r == 0.0 ) ) break;",
-                    "}",
-
+			        "vec2 e = vec2( 0.0, 1.0 );", 
+                    @"while (texcoord.x > end && 
+                        e.g > 0.8281 && // Is there some edge not activated?
+                        e.r == 0.0) { // Or is there a crossing edge that breaks the line?
+                        e = texture2D(edgesTex, texcoord).rg;
+                        texcoord = mad(-vec2(2.0, 0.0), resolution.xy, texcoord);
+                    }
+                    ",
                     //
                      "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.0), 3.25);",
-                    " return mad(resolution.x, offset, texcoord.x);", 
+                    " return mad(resolution.x, offset, texcoord.x);",
                 "}",
 
                 "float SMAASearchXRight( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
-                    "vec2 e = vec2( 0.0, 1.0 );",
-
-                    "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
-				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord = mad(vec2(2.0, 0.0), resolution.xy, texcoord);",
-                        "if ( ! ( texcoord.x < end && e.g > 0.8281 && e.r == 0.0 ) ) break;",
-                    "}",
+                    "vec2 e = vec2( 0.0, 1.0 );", 
+                    @"while (texcoord.x < end && 
+                          e.g > 0.8281 && // Is there some edge not activated?
+                          e.r == 0.0) { // Or is there a crossing edge that breaks the line?
+                            e = texture2D(edgesTex, texcoord).rg;
+                            texcoord = mad(vec2(2.0, 0.0), resolution.xy, texcoord);
+                     }",
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.5), 3.25);",
-                    "return mad(-resolution.x, offset, texcoord.x);", 
+                    "return mad(-resolution.x, offset, texcoord.x);",
                 "}",
 
                 "float SMAASearchYUp( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
-                    "vec2 e = vec2( 1.0, 0.0 );",
+                    "vec2 e = vec2( 1.0, 0.0 );", 
+                    @" while (texcoord.y > end && 
+                         e.r > 0.8281 && // Is there some edge not activated?
+                         e.g == 0.0) { // Or is there a crossing edge that breaks the line?
+                         e = texture2D(edgesTex, texcoord).rg;
+                         texcoord = mad(-vec2(0.0, 2.0), resolution.xy, texcoord);
+                    }",
 
-                    "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
-				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord = mad(-vec2(0.0, 2.0), resolution.xy, texcoord);",
-                        "if ( ! ( texcoord.y > end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
-                    "}",
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e.gr, 0.0), 3.25);",
-                    "return mad(resolution.y, offset, texcoord.y);", 
+                    "return mad(resolution.y, offset, texcoord.y);",
                 "}",
 
                 "float SMAASearchYDown( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
                     "vec2 e = vec2( 1.0, 0.0 );",
 
-                    "for ( int i = 0; i < SMAA_MAX_SEARCH_STEPS; i ++ ) {", // WebGL port note: Changed while to for
-				        "e = texture2D( edgesTex, texcoord, 0.0 ).rg;",
-                        "texcoord = mad(vec2(0.0, 2.0), resolution.xy, texcoord);",
-                        "if ( ! ( texcoord.y < end && e.r > 0.8281 && e.g == 0.0 ) ) break;",
-                    "}",
+                    @"  while (texcoord.y < end && 
+                            e.r > 0.8281 && // Is there some edge not activated?
+                            e.g == 0.0) { // Or is there a crossing edge that breaks the line?
+                            e = texture2D(edgesTex, texcoord).rg;
+                            texcoord = mad(vec2(0.0, 2.0), resolution.xy, texcoord);
+                    }",
 
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e.gr, 0.5), 3.25);",
-                    "return mad(-resolution.y, offset, texcoord.y);", 
+                    "return mad(-resolution.y, offset, texcoord.y);",
                 "}", 
                //-------------------
                //Ok, we have the distance and both crossing edges. So, wSMAASampleLevelZerohat are the areas
@@ -1024,9 +1022,8 @@ namespace PixelFarm.DrawingGL
                 "void main() {",
 
                     "vUv = uv;",
-                    "SMAANeighborhoodBlendingVS( vUv );", 
-                    //"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-                     "gl_Position = u_mvpMatrix * vec4( position, 1.0 );",
+                    "SMAANeighborhoodBlendingVS( vUv );",
+                    "gl_Position = u_mvpMatrix * vec4( position, 1.0 );",
 
                 "}"}.JoinWithNewLine();
 
