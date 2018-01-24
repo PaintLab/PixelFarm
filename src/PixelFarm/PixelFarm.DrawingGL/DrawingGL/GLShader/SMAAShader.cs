@@ -247,7 +247,7 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "void main() {",
-                    "gl_FragColor =vec4(SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse ),0.0,1.0);",
+                    "gl_FragColor =vec4(SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse ),0.0,0.0);",
                 "}"
             }.JoinWithNewLine();
             BuildProgram(vertexShader, fragmentShader);
