@@ -198,7 +198,7 @@ namespace OpenTkEssTest
             //      //
             //      // The value in the stencil buffer for these pixels will be 0x7.
             //      glStencilFunc(GL_LESS, 0x7, 0x3);
-            GL.StencilFunc(StencilFunction.Lequal, 0x7, 0x3);
+            GL.StencilFunc(StencilFunction.Less, 0x7, 0x3);
             //      glStencilOp(GL_REPLACE, GL_DECR, GL_DECR);
             GL.StencilOp(StencilOp.Replace, StencilOp.Decr, StencilOp.Decr);
             //      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices[0]);
@@ -279,7 +279,7 @@ namespace OpenTkEssTest
                 GL.StencilFunc(StencilFunction.Equal, stencilValues[i], 0xff);
                 GL.Uniform4(mColorLoc, 1, colors[i]);
                 GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[4]);
-                GL.StencilFunc(StencilFunction.Equal, stencilValues[i], 0xff);
+                //GL.StencilFunc(StencilFunction.Equal, stencilValues[i], 0xff);
             }
             //      // Reset the stencil mask
             //      glStencilMask(0xFF);

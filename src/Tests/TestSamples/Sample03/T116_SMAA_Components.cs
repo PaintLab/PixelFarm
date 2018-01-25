@@ -50,7 +50,6 @@ namespace OpenTkEssTest
             {
                 minFilter = TextureMinFilter.Linear,
                 magFilter = TextureMagFilter.Linear,
-                pixelFormat = PixelFormat.Rgba
             });
             //
             frameBuffer3 = _glsx.CreateFrameBuffer(frameBufferW, frameBufferH);
@@ -123,7 +122,7 @@ namespace OpenTkEssTest
                 GL.Disable(EnableCap.Blend);
                 GL.Disable(EnableCap.DepthTest);
                 // Here we want to process only marked pixels.
-                GL.Enable(EnableCap.StencilTest);                      
+                GL.Enable(EnableCap.StencilTest);
                 GL.StencilFunc(StencilFunction.Equal, 1, 0xff);
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
                 //replace where rendered                 
@@ -152,9 +151,9 @@ namespace OpenTkEssTest
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
                 //_glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
-                _glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
-                //_glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
+                _glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+               // _glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
             }
             else
             {
