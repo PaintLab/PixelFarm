@@ -143,6 +143,11 @@ namespace PixelFarm.DrawingGL
             string vertexShader = new[] {
 
                 "#define mad(a, b, c) (a * b + c)",
+                @"#define API_V_DIR(v) -(v)
+                  #define API_V_COORD(v) (1.0 - v)  
+                  #define API_V_BELOW(v1, v2)	v1 < v2
+                  #define API_V_ABOVE(v1, v2)	v1 > v2
+                ",
                 "precision mediump float;", //**
 
                 "attribute vec3 position;", //**
@@ -158,9 +163,9 @@ namespace PixelFarm.DrawingGL
                 "varying vec4 vOffset[ 3 ];",
                 "void SMAAEdgeDetectionVS( vec2 texcoord ) {",
 
-                    "vOffset[ 0 ] = mad(resolution.xyxy, vec4( -1.0, 0.0, 0.0, -1.0 ),  texcoord.xyxy);",
-                    "vOffset[ 1 ] = mad(resolution.xyxy, vec4(  1.0, 0.0, 0.0,  1.0 ),  texcoord.xyxy);",
-                    "vOffset[ 2 ] = mad(resolution.xyxy, vec4( -2.0, 0.0, 0.0, -2.0 ),  texcoord.xyxy);",
+                    "vOffset[ 0 ] = mad(resolution.xyxy, vec4( -1.0, 0.0, 0.0, API_V_DIR(-1.0) ),  texcoord.xyxy);",
+                    "vOffset[ 1 ] = mad(resolution.xyxy, vec4(  1.0, 0.0, 0.0, API_V_DIR(1.0) ),  texcoord.xyxy);",
+                    "vOffset[ 2 ] = mad(resolution.xyxy, vec4( -2.0, 0.0, 0.0, API_V_DIR(-2.0) ),  texcoord.xyxy);",
                 "}",
 
                 "void main() {",
@@ -242,7 +247,9 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "void main() {",
-                    "gl_FragColor =vec4(SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse ),0.0,0.0);",
+                    //pow(color.rgb, vec3(1.0 / 2.2));
+                    "gl_FragColor = vec4(SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse ),0.0,1.0);",
+                    //"gl_FragColor =pow(vec4(SMAAColorEdgeDetectionPS( vUv, vOffset, tDiffuse ),0.0,1.0),vec4(1.0/2.2));",
                 "}"
             }.JoinWithNewLine();
             BuildProgram(vertexShader, fragmentShader);
@@ -345,16 +352,24 @@ namespace PixelFarm.DrawingGL
         public SMAABlendingWeightCalculationShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-
+            //#define SMAA_THRESHOLD 0.1
+            //#define SMAA_MAX_SEARCH_STEPS 16
+            //#define SMAA_MAX_SEARCH_STEPS_DIAG 8
 
             //Blend Weight Calculation Vertex Shader
             string vertexShader = new[]
             {
                 "#define mad(a, b, c) (a * b + c)",
-                "#define SMAA_MAX_SEARCH_STEPS 8",
+                @"#define API_V_DIR(v) -(v)
+                  #define API_V_COORD(v) (1.0 - v)  
+                  #define API_V_BELOW(v1, v2)	v1 < v2
+                  #define API_V_ABOVE(v1, v2)	v1 > v2
+                 ",
+
+                "#define SMAA_MAX_SEARCH_STEPS 16",
+                "#define SMAA_MAX_SEARCH_STEPS_DIAG 8",
                 "#define SMAA_AREATEX_MAX_DISTANCE 16",
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
-                "#define SMAASampleLevelZeroOffset( tex, coord, offset ) texture2D( tex, coord+ float( offset ) * resolution.xy, 0.0 )",
 
 
                 "precision mediump float;", //**
@@ -375,15 +390,15 @@ namespace PixelFarm.DrawingGL
                 "varying vec2 vPixcoord;",
 
                 "void SMAABlendingWeightCalculationVS( vec2 texcoord ) {",
-                    "vPixcoord = texcoord * resolution.zw;", 
+                     "vPixcoord = texcoord * resolution.zw;", 
 
-                    // We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
-                     "vOffset[0] = mad(resolution.xyxy, vec4(-0.25, -0.125,  1.25, -0.125), texcoord.xyxy);",
-                     "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, -0.25, -0.125, 1.25), texcoord.xyxy);", 
-
+                    // We will use these offsets for the searches later on (see @PSEUDO_GATHER4):                      
+                     "vOffset[0] = mad(resolution.xyxy, vec4(-0.25, API_V_DIR(-0.125),  1.25, API_V_DIR(-0.125)), texcoord.xyxy);",
+                     "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, API_V_DIR(-0.25), -0.125, API_V_DIR(1.25)), texcoord.xyxy);", 
+                    
                      // And these for the searches, they indicate the ends of the loops:
                      "vOffset[2] = mad(resolution.xxyy,",
-                            "vec4(-2.0, 2.0, -2.0, 2.0) * float(SMAA_MAX_SEARCH_STEPS),",
+                            "vec4(-2.0, 2.0, API_V_DIR(-2.0), API_V_DIR(2.0)) * float(SMAA_MAX_SEARCH_STEPS),",
                             "vec4(vOffset[0].xz, vOffset[1].yw));",
 
                  "}",
@@ -403,10 +418,14 @@ namespace PixelFarm.DrawingGL
             string fragmentShader = new[]
             {
                 "#define SMAA_CORNER_ROUNDING 25",
-
+                @"#define API_V_DIR(v) -(v)
+                  #define API_V_COORD(v) (1.0 - v)  
+                  #define API_V_BELOW(v1, v2)	v1 < v2
+                  #define API_V_ABOVE(v1, v2)	v1 > v2
+                 ",
                 "#define mad(a, b, c) (a * b + c)",
                 "#define saturate(a) clamp(a, 0.0, 1.0)",
-                "#define SMAA_MAX_SEARCH_STEPS 8",
+                "#define SMAA_MAX_SEARCH_STEPS 16",
                 "#define SMAA_MAX_SEARCH_STEPS_DIAG 8",
             
                 //-----------------------------------------------------------------------------
@@ -491,6 +510,8 @@ namespace PixelFarm.DrawingGL
                 //
                 // These functions allows to perform diagonal pattern searches. 
                 @"vec2 SMAASearchDiag1(sampler2D edgesTex, vec2 texcoord, vec2 dir, out vec2 e) {
+                    dir.y = API_V_DIR(dir.y);
+
                     vec4 coord = vec4(texcoord, -1.0, 1.0);
                     vec3 t = vec3(resolution.xy, 1.0);
                     while (coord.z < float(SMAA_MAX_SEARCH_STEPS_DIAG - 1) &&
@@ -502,6 +523,8 @@ namespace PixelFarm.DrawingGL
                   return coord.zw;
                 }",
                 @"vec2 SMAASearchDiag2(sampler2D edgesTex, vec2 texcoord, vec2 dir, out vec2 e) {
+                    dir.y = API_V_DIR(dir.y);
+
                     vec4 coord = vec4(texcoord, -1.0, 1.0);
                     coord.x += 0.25 * resolution.x; // See @SearchDiag2Optimization
                     vec3 t = vec3(resolution.xy, 1.0);
@@ -634,7 +657,9 @@ namespace PixelFarm.DrawingGL
                     "bias *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;",
 
                    // Lookup the search texture:
-                   "return SMAA_SEARCHTEX_SELECT(SMAASampleLevelZero(searchTex, mad(scale, e, bias)));",
+                   "vec2 coord = mad(scale, e, bias);",
+                   "coord.y = API_V_COORD(coord.y);",
+                   "return SMAA_SEARCHTEX_SELECT(SMAASampleLevelZero(searchTex, coord));",
                 "}",
 
                
@@ -648,11 +673,11 @@ namespace PixelFarm.DrawingGL
 			        * Sampling with different offsets in each direction allows to disambiguate
 			        * which edges are active from the four fetched ones.
 			        */
-			        "vec2 e = vec2( 0.0, 1.0 );", 
+			        "vec2 e = vec2( 0.0, 1.0 );",
                     @"while (texcoord.x > end && 
                         e.g > 0.8281 && // Is there some edge not activated?
                         e.r == 0.0) { // Or is there a crossing edge that breaks the line?
-                        e = texture2D(edgesTex, texcoord).rg;
+                        e = SMAASampleLevelZero(edgesTex, texcoord).rg;
                         texcoord = mad(-vec2(2.0, 0.0), resolution.xy, texcoord);
                     }
                     ",
@@ -662,11 +687,11 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "float SMAASearchXRight( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
-                    "vec2 e = vec2( 0.0, 1.0 );", 
+                    "vec2 e = vec2( 0.0, 1.0 );",
                     @"while (texcoord.x < end && 
                           e.g > 0.8281 && // Is there some edge not activated?
                           e.r == 0.0) { // Or is there a crossing edge that breaks the line?
-                            e = texture2D(edgesTex, texcoord).rg;
+                            e = SMAASampleLevelZero(edgesTex, texcoord).rg;
                             texcoord = mad(vec2(2.0, 0.0), resolution.xy, texcoord);
                      }",
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.5), 3.25);",
@@ -674,12 +699,12 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "float SMAASearchYUp( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
-                    "vec2 e = vec2( 1.0, 0.0 );", 
+                    "vec2 e = vec2( 1.0, 0.0 );",
                     @" while (texcoord.y > end && 
                          e.r > 0.8281 && // Is there some edge not activated?
                          e.g == 0.0) { // Or is there a crossing edge that breaks the line?
                          e = texture2D(edgesTex, texcoord).rg;
-                         texcoord = mad(-vec2(0.0, 2.0), resolution.xy, texcoord);
+                         texcoord = mad(vec2(0.0, 2.0), resolution.xy, texcoord);
                     }",
 
                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e.gr, 0.0), 3.25);",
@@ -700,20 +725,19 @@ namespace PixelFarm.DrawingGL
                     "return mad(-resolution.y, offset, texcoord.y);",
                 "}", 
                //-------------------
-               //Ok, we have the distance and both crossing edges. So, wSMAASampleLevelZerohat are the areas
+               //Ok, we have the distance and both crossing edges. So, what are the areas
                //at each side of current edge? 
 
                 "vec2 SMAAArea( sampler2D areaTex, vec2 dist, float e1, float e2, float offset ) {",
-			        // Rounding prevents precision errors of bilinear filtering:
-			        //"vec2 texcoord = float( SMAA_AREATEX_MAX_DISTANCE ) * round( 4.0 * vec2( e1, e2 ) ) + dist;",
+			        // Rounding prevents precision errors of bilinear filtering:			       
                     "vec2 texcoord = mad(vec2(SMAA_AREATEX_MAX_DISTANCE, SMAA_AREATEX_MAX_DISTANCE), round(4.0 * vec2(e1, e2)), dist);",
 
 			        // We do a scale and bias for mapping to texel space:
-			        "texcoord = SMAA_AREATEX_PIXEL_SIZE * texcoord + ( 0.5 * SMAA_AREATEX_PIXEL_SIZE );",
+			        "texcoord = mad(SMAA_AREATEX_PIXEL_SIZE, texcoord, 0.5 * SMAA_AREATEX_PIXEL_SIZE);",
 
 			        // Move to proper place, according to the subpixel offset:
-			        "texcoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;",
-                        
+			        "texcoord.y = mad(SMAA_AREATEX_SUBTEX_SIZE, offset, texcoord.y);",
+                    "texcoord.y = API_V_COORD(texcoord.y);",    
                     // Do it!
                     "return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));",
                 "}",
@@ -732,9 +756,10 @@ namespace PixelFarm.DrawingGL
                     factor.y -= rounding.x * SMAASampleLevelZeroOffset(edgesTex, texcoord.xy, ivec2(0, -2)).r;
                     factor.y -= rounding.y * SMAASampleLevelZeroOffset(edgesTex, texcoord.zw, ivec2(1, -2)).r;
                     weights *= saturate(factor);       
+                    
                 }",
 
-                @"void  SMAADetectVerticalCornerPattern(sampler2D edgesTex, inout vec2 weights, vec4 texcoord, vec2 d){
+                @"void  SMAADetectVerticalCornerPattern(sampler2D edgesTex,inout vec2 weights, vec4 texcoord, vec2 d){
                 
                     vec2 leftRight = step(d.xy, d.yx);
                     vec2 rounding = (1.0 - SMAA_CORNER_ROUNDING_NORM) * leftRight;
@@ -747,6 +772,7 @@ namespace PixelFarm.DrawingGL
                     factor.y -= rounding.x * SMAASampleLevelZeroOffset(edgesTex, texcoord.xy, ivec2(-2, 0)).g;
                     factor.y -= rounding.y * SMAASampleLevelZeroOffset(edgesTex, texcoord.zw, ivec2(-2, 1)).g;
                     weights *= saturate(factor); 
+                    
                 }",
                   
 
@@ -757,110 +783,104 @@ namespace PixelFarm.DrawingGL
                     // subsampleIndices => Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 
                     "vec4 weights = vec4( 0.0, 0.0, 0.0, 0.0 );",
-
                     "vec2 e = texture2D( edgesTex, texcoord ).rg;",
+                    //"return vec4(e.x,e.y,0,1); ",
+                    //@"
+                    //    if(e.g ==0.0 && e.r== 0.0){ weights.b =1.0; return weights;}
+                    //    return weights;
+                    //",
 
                     //SMAA_BRANCH
                     "if ( e.g > 0.0 ) {", // Edge at north
 
-                            //  #if !defined(SMAA_DISABLE_DIAG_DETECTION)
-                            //        // Diagonals have both north and west edges, so searching for them in
-                            //        // one of the boundaries is enough.
-                           "weights.rg = SMAACalculateDiagWeights(edgesTex, areaTex, texcoord, e, subsampleIndices);",
+                                //"weights.rg = SMAACalculateDiagWeights(edgesTex, areaTex, texcoord, e, subsampleIndices);",
 
-                            //            // We give priority to diagonals, so if we find a diagonal we skip 
-                            //            // horizontal/vertical processing.
-                            //            SMAA_BRANCH
-                            //        if (weights.r == -weights.g)
-                            //            { // weights.r + weights.g == 0.0
-                            //#endif
-                            "if (weights.r == -weights.g) { // weights.r + weights.g == 0.0",
+                                "vec2 d;", 
+				                // Find the distance to the left:
+				                "vec3 coords;",
+                                "coords.x = SMAASearchXLeft( edgesTex, searchTex, offset[ 0 ].xy, offset[ 2 ].x );",
+                                "coords.y = offset[ 1 ].y;", // offset[1].y = texcoord.y - 0.25 * resolution.y (@CROSSING_OFFSET)
+				                "d.x = coords.x;",
 
-                            "vec2 d;",
+				                // Now fetch the left crossing edges, two at a time using bilinear
+				                // filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to
+				                // discern what value each edge has:
+				                "float e1  = SMAASampleLevelZero( edgesTex, coords.xy).r;",
 
-				            // Find the distance to the left:
-				            "vec3 coords;",
-                            "coords.x = SMAASearchXLeft( edgesTex, searchTex, offset[ 0 ].xy, offset[ 2 ].x );",
-                            "coords.y = offset[ 1 ].y;", // offset[1].y = texcoord.y - 0.25 * resolution.y (@CROSSING_OFFSET)
-				            "d.x = coords.x;",
+				                // Find the distance to the right:
+				                "coords.z = SMAASearchXRight( edgesTex, searchTex, offset[ 0 ].zw, offset[ 2 ].y );",
+                                "d.y = coords.z;",
 
-				            // Now fetch the left crossing edges, two at a time using bilinear
-				            // filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to
-				            // discern what value each edge has:
-				            "float e1 = texture2D( edgesTex, coords.xy, 0.0 ).r;",
-
-				            // Find the distance to the right:
-				            "coords.z = SMAASearchXRight( edgesTex, searchTex, offset[ 0 ].zw, offset[ 2 ].y );",
-                            "d.y = coords.z;",
-
-				            // We want the distances to be in pixel units (doing this here allow to
-				            // better interleave arithmetic and memory accesses):
+				                // We want the distances to be in pixel units (doing this here allow to
+				                // better interleave arithmetic and memory accesses):
 				        
-                            "d = abs(round(mad(resolution.zz, d, -pixcoord.xx)));",
+                                "d = abs(round(mad(resolution.zz, d, -pixcoord.xx)));",
 
-				            // SMAAArea below needs a sqrt, as the areas texture is compressed
-				            // quadratically:
-				            "vec2 sqrt_d = sqrt(d);",
+				                // SMAAArea below needs a sqrt, as the areas texture is compressed
+				                // quadratically:
+				                "vec2 sqrt_d = sqrt(d);",
 
-				            // Fetch the right crossing edges: 
-				            "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.zy, vec2( 1.0, 0.0 ) ).r;",
+				                // Fetch the right crossing edges: 
+				                "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.zy, vec2( 1.0, 0.0 ) ).r;",
 
-				            // Ok, we know how this pattern looks like, now it is time for getting
-				            // the actual area:
-				            "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
+				                // Ok, we know how this pattern looks like, now it is time for getting
+				                // the actual area:
+				                "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
+                                 //"weights.r=1.0;",
+                                 // Fix corners:
+                                "coords.y = texcoord.y;",
+                               
+                                //"weights.rg= vec2(e1,e2);",
+                                 //"SMAADetectHorizontalCornerPattern(edgesTex, weights.rg, coords.xyzy, d);",
+                             //"}",
+                             //"else {",
+                             //   "e.r = 0.0;} // Skip vertical processing.",
 
-                             // Fix corners:
-                             "coords.y = texcoord.y;",
-                             "SMAADetectHorizontalCornerPattern(edgesTex, weights.rg, coords.xyzy, d);",
-                             "}",
-                             "else{",
-                                "e.r = 0.0; // Skip vertical processing.",
-                             "}",
-                        "}",
+                       "}", // close e.g> 0.0
+
 
                         // SMAA_BRANCH
                         "if ( e.r > 0.0 ) {", // Edge at west
-				            "vec2 d;",
+				            //"vec2 d;",
 
-				            // Find the distance to the top:
-				            "vec3 coords;",
+				            //// Find the distance to the top:
+				            //"vec3 coords;",
 
-                            "coords.y = SMAASearchYUp( edgesTex, searchTex, offset[ 1 ].xy, offset[ 2 ].z );",
-                            "coords.x = offset[ 0 ].x;", // offset[1].x = texcoord.x - 0.25 * resolution.x;
-				            "d.x = coords.y;",
+                //            "coords.y = SMAASearchYUp( edgesTex, searchTex, offset[ 1 ].xy, offset[ 2 ].z );",
+                //            "coords.x = offset[ 0 ].x;", // offset[1].x = texcoord.x - 0.25 * resolution.x;
+				            //"d.x = coords.y;", 
+				            //// Fetch the top crossing edges:
+				            //"float e1 = texture2D( edgesTex, coords.xy, 0.0 ).g;",  //from g to r
+				            //// Find the distance to the bottom:
+				            //"coords.z = SMAASearchYDown( edgesTex, searchTex, offset[ 1 ].zw, offset[ 2 ].w );",
+                //            "d.y = coords.z;",
 
-				            // Fetch the top crossing edges:
-				            "float e1 = texture2D( edgesTex, coords.xy, 0.0 ).g;",
+				            //// We want the distances to be in pixel units: 
+                //            "d = abs(round(mad(resolution.ww, d, -pixcoord.yy)));",
 
-				            // Find the distance to the bottom:
-				            "coords.z = SMAASearchYDown( edgesTex, searchTex, offset[ 1 ].zw, offset[ 2 ].w );",
-                            "d.y = coords.z;",
+				            //// SMAAArea below needs a sqrt, as the areas texture is compressed
+				            //// quadratically: 
+                //            "vec2 sqrt_d = sqrt(d);",
 
-				            // We want the distances to be in pixel units: 
-                            "d = abs(round(mad(resolution.ww, d, -pixcoord.yy)));",
+				            //// Fetch the bottom crossing edges: 
+				            //"float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.xz, vec2( 0.0, 1.0 ) ).g;", //from g to r
 
-				            // SMAAArea below needs a sqrt, as the areas texture is compressed
-				            // quadratically: 
-                            "vec2 sqrt_d = sqrt(d);",
-
-				            // Fetch the bottom crossing edges: 
-				            "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.xz, vec2( 0.0, 1.0 ) ).g;",
-
-				            // Get the area for this direction:
-				            "weights.ba = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.x ) );",
+				            //// Get the area for this direction:
+				            //"weights.ba = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.x ) );",
                          
-                            // Fix corners:
-                            "coords.x = texcoord.x;",
-                            "SMAADetectVerticalCornerPattern( edgesTex, weights.ba, coords.xyxz, d);",
+                //            // Fix corners:
+                //             "coords.x = texcoord.x;",
+                //            "SMAADetectVerticalCornerPattern( edgesTex, weights.ba, coords.xyxz, d);",
 
-                        "}",
+                        "} ",
 
-                    "return weights;",
+                        //
+                        "return weights;",
                 "}",
 
                 "void main() {",
-                    "gl_FragColor = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, vec4( 0.0 ) );",
-
+                    "gl_FragColor = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, vec4( 0.0 ) );",                     
+                    //"gl_FragColor = vec4(1,0,0,1);",
                 "}"
             }.JoinWithNewLine();
 

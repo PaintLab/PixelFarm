@@ -75,7 +75,8 @@ namespace OpenTkEssTest
             if (!isInit)
             {
                 //glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lines.png");
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lion_no_aa.png");
+                //glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lion_no_aa.png");
+                glbmp = DemoHelper.LoadTexture("d:\\WImageTest\\ref_02.png");
                 isInit = true;
             }
             if (_edgeFrameBuffRT.FrameBufferId > 0)
@@ -103,7 +104,7 @@ namespace OpenTkEssTest
                 GL.Disable(EnableCap.Blend);
                 GL.Disable(EnableCap.DepthTest);
                 // We will be creating the stencil buffer for later usage.  
-                GL.StencilFunc(StencilFunction.Always, 1, 0xff);
+                GL.StencilFunc(StencilFunction.Always, 1, 0xffffffff);
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
                 GL.Enable(EnableCap.StencilTest);
 
@@ -123,7 +124,7 @@ namespace OpenTkEssTest
                 GL.Disable(EnableCap.DepthTest);
                 // Here we want to process only marked pixels.
                 GL.Enable(EnableCap.StencilTest);
-                GL.StencilFunc(StencilFunction.Equal, 1, 0xff);
+                GL.StencilFunc(StencilFunction.Gequal, 1, 0xffffffff);
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
                 //replace where rendered                 
 
@@ -151,9 +152,9 @@ namespace OpenTkEssTest
                 //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 // _glsx.DrawFrameBuffer(_colorBuffer, 0, this.Height);
                 //_glsx.DrawFrameBuffer(_edgeFrameBuffRT, 0, this.Height);
-                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
                 _glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
-               // _glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
+                //_glsx.DrawFrameBuffer(_weightFrameBuffRT, 0, this.Height);
+              //_glsx.DrawFrameBuffer(frameBuffer3, 0, this.Height);
             }
             else
             {
