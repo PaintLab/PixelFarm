@@ -1052,6 +1052,19 @@ namespace OpenTK
 
             result = new Vector3(x / w, y / w, z / w);
         }
+        public static Vector3d TransformNormals(Vector3d vec, Matrix4d mat)
+        {
+            //var x = (vector.x * transformation.m[0]) + (vector.y * transformation.m[4]) + (vector.z * transformation.m[8]);
+            //var y = (vector.x * transformation.m[1]) + (vector.y * transformation.m[5]) + (vector.z * transformation.m[9]);
+            //var z = (vector.x * transformation.m[2]) + (vector.y * transformation.m[6]) + (vector.z * transformation.m[10]);
+            double x = vec.X * mat.Row0.X + vec.Y * mat.Row1.X + vec.Z * mat.Row2.X;
+            double y = vec.X * mat.Row0.Y + vec.Y * mat.Row1.Y + vec.Z * mat.Row2.Y;
+            double z = vec.X * mat.Row0.Z + vec.Y * mat.Row1.Z + vec.Z * mat.Row2.Z;
+            return new Vector3d(x, y, z);
+
+            //mat.Invert();
+            //return TransformNormalInverse(norm, mat);
+        }
         /// <summary>
         /// Transforms a vector by a quaternion rotation.
         /// </summary>
