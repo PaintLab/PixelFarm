@@ -530,14 +530,7 @@ namespace PixelFarm.DrawingBuffer
 
     }
 
-
-
-
-
-
-
-
-
+     
 
     public struct RectD
     {

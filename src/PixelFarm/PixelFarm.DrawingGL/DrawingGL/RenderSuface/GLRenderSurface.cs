@@ -447,8 +447,8 @@ namespace PixelFarm.DrawingGL
                     SMAAAreaTex.AREATEX_WIDTH,
                     SMAAAreaTex.AREATEX_HEIGHT,
                     SMAAAreaTex.areaTexBytes,
-                    PixelFormat.LuminanceAlpha, //for compat  with WebGL version, we use RGB
-                    PixelInternalFormat.LuminanceAlpha, //for compat  with WebGL version, we use RGB
+                    PixelFormat.Rgb, //for compat  with WebGL version, we use RGB
+                    PixelInternalFormat.Rgb, //for compat  with WebGL version, we use RGB
                     TextureMinFilter.Linear,
                     TextureMagFilter.Linear);
             }

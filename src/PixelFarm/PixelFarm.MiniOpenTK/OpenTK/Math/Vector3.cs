@@ -742,7 +742,10 @@ namespace OpenTK
         {
             return left.X * right.X + left.Y * right.Y + left.Z * right.Z;
         }
-
+        public static double Dot(Vector3d left, Vector3d right)
+        {
+            return left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+        }
         /// <summary>
         /// Calculate the dot (scalar) product of two vectors
         /// </summary>
@@ -899,7 +902,11 @@ namespace OpenTK
             mat.Invert();
             return TransformNormalInverse(norm, mat);
         }
-
+        public static Vector3d TransformNormal(Vector3d norm, Matrix4d mat)
+        {
+            mat.Invert();
+            return TransformNormalInverse(norm, mat);
+        }
         /// <summary>Transform a Normal by the given Matrix</summary>
         /// <remarks>
         /// This calculates the inverse of the given matrix, use TransformNormalInverse if you
@@ -930,7 +937,14 @@ namespace OpenTK
             n.Z = Vector3.Dot(norm, new Vector3(invMat.Row2));
             return n;
         }
-
+        public static Vector3d TransformNormalInverse(Vector3d norm, Matrix4d invMat)
+        {
+            Vector3d n;
+            n.X = Vector3d.Dot(norm, new Vector3d(invMat.Row0));
+            n.Y = Vector3d.Dot(norm, new Vector3d(invMat.Row1));
+            n.Z = Vector3d.Dot(norm, new Vector3d(invMat.Row2));
+            return n;
+        }
         /// <summary>Transform a Normal by the (transpose of the) given Matrix</summary>
         /// <remarks>
         /// This version doesn't calculate the inverse matrix.
@@ -1019,7 +1033,25 @@ namespace OpenTK
             Transform(ref vec, ref quat, out result);
             return result;
         }
+        public static void TransformCoordinate(ref Vector3 vec, ref Matrix4 mat, out Vector3 result)
+        {
+            //Vector4 vector = new Vector4();
+            //vector.X = (coordinate.X * transform.M11) + (coordinate.Y * transform.M21) + (coordinate.Z * transform.M31) + transform.M41;
+            //vector.Y = (coordinate.X * transform.M12) + (coordinate.Y * transform.M22) + (coordinate.Z * transform.M32) + transform.M42;
+            //vector.Z = (coordinate.X * transform.M13) + (coordinate.Y * transform.M23) + (coordinate.Z * transform.M33) + transform.M43;
+            //vector.W = 1f / ((coordinate.X * transform.M14) + (coordinate.Y * transform.M24) + (coordinate.Z * transform.M34) + transform.M44);
 
+            //result = new Vector3(vector.X * vector.W, vector.Y * vector.W, vector.Z * vector.W);
+
+
+
+            float x = vec.X * mat.Row0.X + vec.Y * mat.Row1.X + vec.Z * mat.Row2.X + mat.Row3.X;
+            float y = vec.X * mat.Row0.Y + vec.Y * mat.Row1.Y + vec.Z * mat.Row2.Y + mat.Row3.Y;
+            float z = vec.X * mat.Row0.Z + vec.Y * mat.Row1.Z + vec.Z * mat.Row2.Z + mat.Row3.Z;
+            float w = vec.X * mat.Row0.W + vec.Y * mat.Row1.W + vec.Z * mat.Row2.W + mat.Row3.W;
+
+            result = new Vector3(x / w, y / w, z / w);
+        }
         /// <summary>
         /// Transforms a vector by a quaternion rotation.
         /// </summary>
@@ -1257,6 +1289,23 @@ namespace OpenTK
                 Y == other.Y &&
                 Z == other.Z;
         }
+
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return X;
+                    case 1: return Y;
+                    case 2: return Z;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+        }
+
 
     }
 }

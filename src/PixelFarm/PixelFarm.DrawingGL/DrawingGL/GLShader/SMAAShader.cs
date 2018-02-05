@@ -143,10 +143,7 @@ namespace PixelFarm.DrawingGL
             string vertexShader = new[] {
 
                 "#define mad(a, b, c) (a * b + c)",
-                @"#define API_V_DIR(v) -(v)
-                  #define API_V_COORD(v) (1.0 - v)  
-                  #define API_V_BELOW(v1, v2)	v1 < v2
-                  #define API_V_ABOVE(v1, v2)	v1 > v2
+                @"#define API_V_DIR(v) (v)
                 ",
                 "precision mediump float;", //**
 
@@ -349,19 +346,28 @@ namespace PixelFarm.DrawingGL
 
 
 
+
         public SMAABlendingWeightCalculationShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-            //#define SMAA_THRESHOLD 0.1
-            //#define SMAA_MAX_SEARCH_STEPS 16
-            //#define SMAA_MAX_SEARCH_STEPS_DIAG 8
+            //-------------------------------
+            //from textbook... GPU Pro
+            //to calculate the blending weight
+            //1. search distances to the ends of the line the 'edgel' belongs to (edgel from step1)
+            //2. use both distances (from 1) to fetch the 'crossing edges' at both ends of the lines.
+            //   These crossing edges indicate the type of pattern we are dealing with.
+            //3. the distances to the ends of the line AND the type of pttern are used to access the
+            //   precalculated texture in which we store the areas that are used as blending weights
+            //   for the final pass
+            //-------------------------------
 
-            //Blend Weight Calculation Vertex Shader
+
+
             string vertexShader = new[]
             {
                 "#define mad(a, b, c) (a * b + c)",
-                @"#define API_V_DIR(v) -(v)
-                  #define API_V_COORD(v) (1.0 - v)  
+                @"#define API_V_DIR(v)  -(v)
+                  #define API_V_COORD(v) (v)  
                   #define API_V_BELOW(v1, v2)	v1 < v2
                   #define API_V_ABOVE(v1, v2)	v1 > v2
                  ",
@@ -392,7 +398,15 @@ namespace PixelFarm.DrawingGL
                 "void SMAABlendingWeightCalculationVS( vec2 texcoord ) {",
                      "vPixcoord = texcoord * resolution.zw;", 
 
-                    // We will use these offsets for the searches later on (see @PSEUDO_GATHER4):                      
+                    // We will use these offsets for the searches later on (see @PSEUDO_GATHER4):   
+                    
+                    //notes
+                    //    # e[0]       e[1]
+                    //    #
+                    //    #          x <-------- Sample position:    (-0.25,-0.125)
+                    //    # e[2]       e[3] <--- Current pixel [3]:  (  0.0, 0.0  )
+
+
                      "vOffset[0] = mad(resolution.xyxy, vec4(-0.25, API_V_DIR(-0.125),  1.25, API_V_DIR(-0.125)), texcoord.xyxy);",
                      "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, API_V_DIR(-0.25), -0.125, API_V_DIR(1.25)), texcoord.xyxy);", 
                     
@@ -418,8 +432,8 @@ namespace PixelFarm.DrawingGL
             string fragmentShader = new[]
             {
                 "#define SMAA_CORNER_ROUNDING 25",
-                @"#define API_V_DIR(v) -(v)
-                  #define API_V_COORD(v) (1.0 - v)  
+                @"#define API_V_DIR(v)  -(v)
+                  #define API_V_COORD(v) (v)  
                   #define API_V_BELOW(v1, v2)	v1 < v2
                   #define API_V_ABOVE(v1, v2)	v1 > v2
                  ",
@@ -430,7 +444,7 @@ namespace PixelFarm.DrawingGL
             
                 //-----------------------------------------------------------------------------
                // Texture Access Defines
-                "#define SMAA_AREATEX_SELECT(sample) sample.ra", // *** since we load the original textarea as LuminanceApha
+                "#define SMAA_AREATEX_SELECT(sample) sample.rg", // *** since we load the original textarea as LuminanceApha
                 "#define SMAA_SEARCHTEX_SELECT(sample) sample.r", //since we load the original seach area as Luminance
 
                 //-----------------------------------------------------------------------------
@@ -440,7 +454,8 @@ namespace PixelFarm.DrawingGL
                 "#define SMAA_AREATEX_PIXEL_SIZE (1.0 / vec2(160.0, 560.0))",
                 "#define SMAA_AREATEX_SUBTEX_SIZE ( 1.0 / 7.0 )",
                 "#define SMAA_SEARCHTEX_SIZE vec2(66.0, 33.0)",
-                "#define SMAA_SEARCHTEX_PACKED_SIZE vec2(64.0, 16.0)",
+                //"#define SMAA_SEARCHTEX_PACKED_SIZE vec2(64.0, 16.0)",
+                "#define SMAA_SEARCHTEX_PACKED_SIZE vec2(66.0, 33.0)",
                 "#define SMAA_CORNER_ROUNDING_NORM (float(SMAA_CORNER_ROUNDING) / 100.0)",
                 //-----------------------------------------------------------------------------
 
@@ -523,7 +538,7 @@ namespace PixelFarm.DrawingGL
                   return coord.zw;
                 }",
                 @"vec2 SMAASearchDiag2(sampler2D edgesTex, vec2 texcoord, vec2 dir, out vec2 e) {
-                    dir.y = API_V_DIR(dir.y);
+                   dir.y = API_V_DIR(dir.y);
 
                     vec4 coord = vec4(texcoord, -1.0, 1.0);
                     coord.x += 0.25 * resolution.x; // See @SearchDiag2Optimization
@@ -562,6 +577,7 @@ namespace PixelFarm.DrawingGL
                     texcoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;
 
                     // Do it!
+                    return texcoord.xy;
                     return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));
                 }",
 
@@ -646,11 +662,12 @@ namespace PixelFarm.DrawingGL
                 "float SMAASearchLength( sampler2D searchTex, vec2 e, float offset ){",
                     // The texture is flipped vertically, with left and right cases taking half
                     // of the space horizontally:
-                    "vec2 scale = SMAA_SEARCHTEX_SIZE * vec2(0.5, -1.0);",
+
+                    "vec2 scale = SMAA_SEARCHTEX_SIZE * vec2(0.5,  1.0);",
                     "vec2 bias = SMAA_SEARCHTEX_SIZE * vec2(offset, 1.0);",
                     // Scale and bias to access texel centers:
                     "scale += vec2(-1.0, 1.0);",
-                    "bias += vec2(0.5, -0.5);", 
+                    "bias += vec2(0.5, 0.5);", 
                    // Convert from pixel coordinates to texcoords:
                    // (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
                     "scale *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;",
@@ -658,7 +675,7 @@ namespace PixelFarm.DrawingGL
 
                    // Lookup the search texture:
                    "vec2 coord = mad(scale, e, bias);",
-                   "coord.y = API_V_COORD(coord.y);",
+
                    "return SMAA_SEARCHTEX_SELECT(SMAASampleLevelZero(searchTex, coord));",
                 "}",
 
@@ -666,6 +683,8 @@ namespace PixelFarm.DrawingGL
                  // Horizontal/vertical search functions for the 2nd pass.
                  
                 "float SMAASearchXLeft( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
+
+
 			        /**
 			        * @PSEUDO_GATHER4
 			        * This texcoord has been offset by (-0.25, -0.125) in the vertex shader to
@@ -673,6 +692,14 @@ namespace PixelFarm.DrawingGL
 			        * Sampling with different offsets in each direction allows to disambiguate
 			        * which edges are active from the four fetched ones.
 			        */
+
+                    //notes
+                    //    # e[0]       e[1]
+                    //    #
+                    //    #          x <-------- Sample position:    (-0.25,-0.125)
+                    //    # e[2]       e[3] <--- Current pixel [3]:  (  0.0, 0.0  )
+
+
 			        "vec2 e = vec2( 0.0, 1.0 );",
                     @"while (texcoord.x > end && 
                         e.g > 0.8281 && // Is there some edge not activated?
@@ -684,6 +711,18 @@ namespace PixelFarm.DrawingGL
                     //
                      "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.0), 3.25);",
                     " return mad(resolution.x, offset, texcoord.x);",
+
+                    // Non-optimized version:
+                    // We correct the previous (-0.25, -0.125) offset we applied:
+                    // texcoord.x += 0.25 * SMAA_RT_METRICS.x;
+
+                    // The searches are bias by 1, so adjust the coords accordingly:
+                    // texcoord.x += SMAA_RT_METRICS.x;
+
+                    // Disambiguate the length added by the last step:
+                    // texcoord.x += 2.0 * SMAA_RT_METRICS.x; // Undo last step
+                    // texcoord.x -= SMAA_RT_METRICS.x * (255.0 / 127.0) * SMAASearchLength(SMAATexturePass2D(searchTex), e, 0.0);
+                    // return mad(SMAA_RT_METRICS.x, offset, texcoord.x);
                 "}",
 
                 "float SMAASearchXRight( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
@@ -793,8 +832,25 @@ namespace PixelFarm.DrawingGL
                     //SMAA_BRANCH
                     "if ( e.g > 0.0 ) {", // Edge at north
 
-                                //"weights.rg = SMAACalculateDiagWeights(edgesTex, areaTex, texcoord, e, subsampleIndices);",
-
+                               //@"if(e.g >0.0 && e.r >0.0){
+                               //     weights.rg = vec2(1,1);
+                               //     return weights;
+                               //  }else{
+                               //     //only green
+                               //     weights.rg = vec2(0,1);
+                               //     return weights;
+                               //  }
+                               // ",
+                               
+                                //notes
+                                //    # e[0]       e[1]
+                                //    #
+                                //    #          x <-------- Sample position:    (-0.25,-0.125)
+                                //    # e[2]       e[3] <--- Current pixel [3]:  (  0.0, 0.0  ) 
+                               
+                               
+                               //"weights.rg = SMAACalculateDiagWeights(edgesTex, areaTex, texcoord, e, subsampleIndices);",
+                                
                                 "vec2 d;", 
 				                // Find the distance to the left:
 				                "vec3 coords;",
@@ -828,7 +884,7 @@ namespace PixelFarm.DrawingGL
 				                "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
                                  //"weights.r=1.0;",
                                  // Fix corners:
-                                "coords.y = texcoord.y;",
+                                //"coords.y = texcoord.y;",
                                
                                 //"weights.rg= vec2(e1,e2);",
                                  //"SMAADetectHorizontalCornerPattern(edgesTex, weights.rg, coords.xyzy, d);",
@@ -879,7 +935,8 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "void main() {",
-                    "gl_FragColor = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, vec4( 0.0 ) );",                     
+                    "vec4 tmp_color = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, vec4( 0.0 ) );",
+                    "gl_FragColor = vec4(pow(tmp_color.x,1.0/2.2), pow(tmp_color.y,1.0/2.2),0.0,1.0);",                     
                     //"gl_FragColor = vec4(1,0,0,1);",
                 "}"
             }.JoinWithNewLine();

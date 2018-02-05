@@ -325,8 +325,8 @@ namespace InterfaceGen
                     for (int col = 0; col < 160; ++col)
                     {
                         //BGRA
+                        rgbBuffer[writeIndex + 0] = AreaTex.areaTexBytes[readIndex];
                         rgbBuffer[writeIndex + 1] = AreaTex.areaTexBytes[readIndex + 1];
-                        rgbBuffer[writeIndex + 2] = AreaTex.areaTexBytes[readIndex + 0];
 
                         readIndex += 2;
                         writeIndex += 3;
