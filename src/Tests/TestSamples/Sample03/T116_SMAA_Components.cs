@@ -109,7 +109,7 @@ namespace OpenTkEssTest
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
                 GL.Enable(EnableCap.StencilTest);
 
-                _glsx.DrawImageWithSMAA(_colorBuffer, 0, 800);
+                _glsx.DrawImageWithSMAA_Step1(_colorBuffer, 0, 800);
                 //------------------------------------------------------------------------------------  
                 _glsx.DetachFrameBuffer();
                 //after release current, we move back to default frame buffer again***
@@ -129,7 +129,7 @@ namespace OpenTkEssTest
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
                 //replace where rendered                 
 
-                _glsx.DrawImageWithSMAA2(_edgeFrameBuffRT, 0, 800);
+                _glsx.DrawImageWithSMAA_Step2(_edgeFrameBuffRT, 0, 800);
                 _glsx.DetachFrameBuffer();
 
                 ////------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ namespace OpenTkEssTest
 
                 // Here we want to process all the pixels.
                 GL.Disable(EnableCap.StencilTest);
-                _glsx.DrawImageWithSMAA3(_weightFrameBuffRT, _colorBuffer, 0, 800);
+                _glsx.DrawImageWithSMAA_Step3(_weightFrameBuffRT, _colorBuffer, 0, 800);
                 _glsx.DetachFrameBuffer();
 
                 ////-------------------------------------------------------------------------------------

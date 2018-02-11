@@ -267,19 +267,19 @@ namespace PixelFarm.DrawingGL
             //draw frame buffer into specific position
             glesTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
         }
-        public void DrawImageWithSMAA(FrameBuffer bmp, float x, float y)
+        public void DrawImageWithSMAA_Step1(FrameBuffer bmp, float x, float y)
         {
             DrawImageWithSMAA(bmp,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithSMAA2(FrameBuffer bmp, float x, float y)
+        public void DrawImageWithSMAA_Step2(FrameBuffer bmp, float x, float y)
         {
             DrawImageWithSMAA2(bmp,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithSMAA3(FrameBuffer bmp, FrameBuffer colorFrameBuffer, float x, float y)
+        public void DrawImageWithSMAA_Step3(FrameBuffer bmp, FrameBuffer colorFrameBuffer, float x, float y)
         {
             DrawImageWithSMAA3(bmp, colorFrameBuffer,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
