@@ -269,19 +269,19 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithSMAA_Step1(FrameBuffer bmp, float x, float y)
         {
-            DrawImageWithSMAA(bmp,
+            DrawImageWithSMAA_Step1(bmp,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithSMAA_Step2(FrameBuffer bmp, float x, float y)
         {
-            DrawImageWithSMAA2(bmp,
+            DrawImageWithSMAA_Step2(bmp,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithSMAA_Step3(FrameBuffer bmp, FrameBuffer colorFrameBuffer, float x, float y)
         {
-            DrawImageWithSMAA3(bmp, colorFrameBuffer,
+            DrawImageWithSMAA_Step3(bmp, colorFrameBuffer,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
@@ -363,7 +363,7 @@ namespace PixelFarm.DrawingGL
                 msdfShader.RenderSubImages(bmp, coords, scale);
             }
         }
-        public void DrawImageWithSMAA(FrameBuffer bmp,
+        public void DrawImageWithSMAA_Step1(FrameBuffer bmp,
            Drawing.RectangleF srcRect,
            float x, float y, float w, float h)
         {
@@ -435,7 +435,7 @@ namespace PixelFarm.DrawingGL
         //--------------
         InternalGLBitmapTexture _smaaAreaTex;
         InternalGLBitmapTexture _smaaSearchTex;
-        public void DrawImageWithSMAA2(FrameBuffer frmBuffer,
+        public void DrawImageWithSMAA_Step2(FrameBuffer frmBuffer,
            Drawing.RectangleF srcRect,
            float x, float y, float w, float h)
         {
@@ -484,7 +484,7 @@ namespace PixelFarm.DrawingGL
             //}
         }
 
-        public void DrawImageWithSMAA3(FrameBuffer frmBuffer, FrameBuffer colorFrameBuffer,
+        public void DrawImageWithSMAA_Step3(FrameBuffer frmBuffer, FrameBuffer colorFrameBuffer,
            Drawing.RectangleF srcRect,
            float x, float y, float w, float h)
         {
