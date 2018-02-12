@@ -77,7 +77,7 @@ namespace OpenTkEssTest
                 //glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lines.png");
                 //glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lion_no_aa.png");
                 //glbmp = DemoHelper.LoadTexture("d:\\WImageTest\\ref_02.png");
-                glbmp = DemoHelper.LoadTexture("d:\\WImageTest\\smaa\\ref_05_1.png");
+                glbmp = DemoHelper.LoadTexture("d:\\WImageTest\\smaa\\ref_05.png");
                 isInit = true;
             }
             if (_edgeFrameBuffRT.FrameBufferId > 0)

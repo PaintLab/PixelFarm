@@ -363,6 +363,7 @@ namespace PixelFarm.DrawingGL
 
             string vertexShader = new[]
             {
+                "#define V(a) -(a)",
                 "#define mad(a, b, c) (a * b + c)",
                 "#define SMAA_MAX_SEARCH_STEPS 16",
                 "#define SMAA_MAX_SEARCH_STEPS_DIAG 8",
@@ -398,11 +399,14 @@ namespace PixelFarm.DrawingGL
                     //    # e[2]       e[3] <--- Current pixel [3]:  (  0.0, 0.0  )
 
                     "vPixcoord = texcoord * resolution.zw;",
-                    "vOffset[0] = mad(resolution.xyxy, vec4(-0.25,  -0.125,  1.25,   -0.125), texcoord.xyxy);",
-                    "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, -0.25,  -0.125,   1.25), texcoord.xyxy);", 
+                    //"vOffset[0] = mad(resolution.xyxy, vec4(-0.25,  -0.125,  1.25,   -0.125), texcoord.xyxy);",
+                    //"vOffset[1] = mad(resolution.xyxy, vec4(-0.125, -0.25,  -0.125,   1.25), texcoord.xyxy);",
+
+                    "vOffset[0] = mad(resolution.xyxy, vec4(-0.25,  V(-0.125),  1.25,   V(-0.125)), texcoord.xyxy);",
+                    "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, V(-0.25),  -0.125,   1.25), texcoord.xyxy);", 
                     
                      // And these for the searches, they indicate the ends of the loops:
-                    "vOffset[2] = mad(resolution.xxyy,",
+                    "vOffset[2] = mad(resolution.xxyy,",                            
                             "vec4(-2.0, 2.0,-2.0 , 2.0) * float(SMAA_MAX_SEARCH_STEPS),",
                             "vec4(vOffset[0].xz, vOffset[1].yw));",
                  "}",
@@ -725,7 +729,7 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "float SMAASearchYDown( sampler2D edgesTex, sampler2D searchTex, vec2 texcoord, float end ) {",
-                    "vec2 e = vec2( 1.0, 0.0 );", 
+                    "vec2 e = vec2( 1.0, 0.0 );",
                     @"  while (texcoord.y < end && 
                             e.r > 0.8281 && // Is there some edge not activated?
                             e.g == 0.0) { // Or is there a crossing edge that breaks the line?
@@ -749,7 +753,8 @@ namespace PixelFarm.DrawingGL
 
 			        // Move to proper place, according to the subpixel offset:
 			        "texcoord.y = mad(SMAA_AREATEX_SUBTEX_SIZE, offset, texcoord.y);",
-                     
+
+                     "return texcoord.xy;",
                     // Do it!
                     "return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));",
                 "}",
@@ -795,12 +800,7 @@ namespace PixelFarm.DrawingGL
                     // subsampleIndices => Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 
                     "vec4 weights = vec4( 0.0, 0.0, 0.0, 0.0 );",
-                    "vec2 e = texture2D( edgesTex, texcoord ).rg;",
-                    //"return vec4(e.x,e.y,0,1); ",
-                    //@"
-                    //    if(e.g ==0.0 && e.r== 0.0){ weights.b =1.0; return weights;}
-                    //    return weights;
-                    //",
+                    "vec2 e = texture2D( edgesTex, texcoord ).rg;", 
 
                     //SMAA_BRANCH
                     "if ( e.g > 0.0 ) {", // Edge at north
@@ -854,10 +854,11 @@ namespace PixelFarm.DrawingGL
 
 				                // Ok, we know how this pattern looks like, now it is time for getting
 				                // the actual area:
-				                "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
-                                 //"weights.r=1.0;",
-                                 // Fix corners:
-                                //"coords.y = texcoord.y;",
+				               "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
+                                
+                               //"weights.r=1.0;",
+                               // Fix corners:
+                               //"coords.y = texcoord.y;",
                                
                                 //"weights.rg= vec2(e1,e2);",
                                  //"SMAADetectHorizontalCornerPattern(edgesTex, weights.rg, coords.xyzy, d);",
