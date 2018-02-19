@@ -340,6 +340,7 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar4 u_resolution;
         ShaderUniformVar1 tArea; //texture diffuse
         ShaderUniformVar1 tSearch; //texture diffuse 
+        ShaderUniformVar2 texOffset;
         ShaderVtxAttrib2f uv;//uv texture coord
 
 
@@ -381,6 +382,7 @@ namespace PixelFarm.DrawingGL
                 "uniform sampler2D tArea;",
                 "uniform sampler2D tSearch;",
                 "uniform vec4 resolution;",
+                "uniform vec2 texOffset;",
                 //
 
                 "varying vec2 vUv;",
@@ -398,15 +400,16 @@ namespace PixelFarm.DrawingGL
                     //    #          x <-------- Sample position:    (-0.25,-0.125)
                     //    # e[2]       e[3] <--- Current pixel [3]:  (  0.0, 0.0  )
 
-                    "vPixcoord = texcoord * resolution.zw;",
+                    "vPixcoord = texcoord * resolution.zw;", //
                     //"vOffset[0] = mad(resolution.xyxy, vec4(-0.25,  -0.125,  1.25,   -0.125), texcoord.xyxy);",
                     //"vOffset[1] = mad(resolution.xyxy, vec4(-0.125, -0.25,  -0.125,   1.25), texcoord.xyxy);",
 
-                    "vOffset[0] = mad(resolution.xyxy, vec4(-0.25,  V(-0.125),  1.25,   V(-0.125)), texcoord.xyxy);",
-                    "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, V(-0.25),  -0.125,   1.25), texcoord.xyxy);", 
-                    
+                    "vOffset[0] = mad(resolution.xyxy, vec4(-0.25,  0.125,  1.25,   -0.125), texcoord.xyxy);",
+                    "vOffset[1] = mad(resolution.xyxy, vec4(-0.125, 1.25,  -0.125,   -1.25), texcoord.xyxy);",
+
+
                      // And these for the searches, they indicate the ends of the loops:
-                    "vOffset[2] = mad(resolution.xxyy,",                            
+                    "vOffset[2] = mad(resolution.xxyy,",
                             "vec4(-2.0, 2.0,-2.0 , 2.0) * float(SMAA_MAX_SEARCH_STEPS),",
                             "vec4(vOffset[0].xz, vOffset[1].yw));",
                  "}",
@@ -455,6 +458,8 @@ namespace PixelFarm.DrawingGL
                 "uniform sampler2D tArea;",
                 "uniform sampler2D tSearch;",
                 "uniform vec4 resolution;",
+                "uniform vec2 texOffset;",
+
 
                 "varying vec2 vUv;",
                 "varying vec4 vOffset[3];",
@@ -636,26 +641,48 @@ namespace PixelFarm.DrawingGL
             * @PSEUDO_GATHER4), and adds 0, 1 or 2, depending on which edges and
             * crossing edges are active.
             */
-                "float SMAASearchLength( sampler2D searchTex, vec2 e, float offset ){",
-                    // The texture is flipped vertically, with left and right cases taking half
-                    // of the space horizontally:
 
-                    //note in this version we don't Y-flip / don't crop / don't scale the SearchTex img
-                     
-                    "vec2 scale = SMAA_SEARCHTEX_SIZE * vec2(0.5,  1.0);",
-                    "vec2 bias = SMAA_SEARCHTEX_SIZE * vec2(offset, 1.0);",
+                // The texture is flipped vertically, with left and right cases taking half
+                // of the space horizontally:
+                //@"                
+                //float SMAASearchLength(SMAATexture2D(searchTex), float2 e, float offset) {
+                
+                //    float2 scale = SMAA_SEARCHTEX_SIZE * float2(0.5, -1.0);
+                //    float2 bias = SMAA_SEARCHTEX_SIZE * float2(offset, 1.0);
+
+                //    // Scale and bias to access texel centers:
+                //    scale += float2(-1.0,  1.0);
+                //    bias  += float2( 0.5, -0.5);
+
+                //    // Convert from pixel coordinates to texcoords:
+                //    // (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
+                //    scale *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;
+                //    bias *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;
+
+                //    // Lookup the search texture:
+                //    return SMAA_SEARCHTEX_SELECT(SMAASampleLevelZero(searchTex, mad(scale, e, bias)));
+                //}",
+                 @"                
+                float SMAASearchLength(sampler2D  searchTex, vec2 e, float offset) {
+                
+                    float scaleX=0.5; 
+                    vec2 pos= vec2( (e.x *scaleX)+ offset, e.y );
+                    return texture2D( searchTex, pos, 0.0 ).r;
+
+                    //float2 bias = SMAA_SEARCHTEX_SIZE * float2(offset, 1.0);
+
                     // Scale and bias to access texel centers:
-                    "scale += vec2(-1.0, 1.0);",
-                    "bias += vec2(0.5, 0.5);", 
-                   // Convert from pixel coordinates to texcoords:
-                   // (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
-                    "scale *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;",
-                    "bias *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;",
+                    //scale += float2(-1.0,  1.0);
+                    //bias  += float2( 0.5, -0.5);
 
-                   // Lookup the search texture: 
+                    // Convert from pixel coordinates to texcoords:
+                    // (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
+                    //scale *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;
+                    //bias *= 1.0 / SMAA_SEARCHTEX_PACKED_SIZE;
 
-                   "return SMAA_SEARCHTEX_SELECT(SMAASampleLevelZero(searchTex, mad(scale, e, bias)));",
-                "}", 
+                    // Lookup the search texture:
+                    //return SMAA_SEARCHTEX_SELECT(SMAASampleLevelZero(searchTex, mad(scale, e, bias)));
+                }", 
 
                  //
                  // Horizontal/vertical search functions for the 2nd pass. 
@@ -686,9 +713,11 @@ namespace PixelFarm.DrawingGL
                         texcoord = mad(-vec2(2.0, 0.0), resolution.xy, texcoord);
                     }
                     ",
-                    //
-                     "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.0), 3.25);",
-                    " return mad(resolution.x, offset, texcoord.x);",
+                    //pixel unit
+                    "float offset = mad(-(255.0 / 127.0), SMAASearchLength(searchTex, e, 0.0), 3.25);",
+                    //convert to float unit
+                    //"return resolution.x * 20.0;",
+                    "return mad(resolution.x, offset, texcoord.x);",
 
                     // Non-optimized version:
                     // We correct the previous (-0.25, -0.125) offset we applied:
@@ -754,7 +783,7 @@ namespace PixelFarm.DrawingGL
 			        // Move to proper place, according to the subpixel offset:
 			        "texcoord.y = mad(SMAA_AREATEX_SUBTEX_SIZE, offset, texcoord.y);",
 
-                     "return texcoord.xy;",
+                    "return texcoord.xy;",
                     // Do it!
                     "return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));",
                 "}",
@@ -799,9 +828,31 @@ namespace PixelFarm.DrawingGL
               "vec4 SMAABlendingWeightCalculationPS( vec2 texcoord, vec2 pixcoord, vec4 offset[ 3 ], sampler2D edgesTex, sampler2D areaTex, sampler2D searchTex, vec4 subsampleIndices ) {",
                     // subsampleIndices => Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 
-                    "vec4 weights = vec4( 0.0, 0.0, 0.0, 0.0 );",
-                    "vec2 e = texture2D( edgesTex, texcoord ).rg;", 
+                     @" //return texture2D(edgesTex,texcoord);
+                        
+                        vec4 weights = vec4( 0.0, 0.0, 0.0, 0.0 );
+                        if(texcoord.x >= 1.0 || texcoord.y >= 1.0){ 
+                            return vec4(0.0,0.0,0.0,1.0);
+                        }
+                        vec2 e = texture2D( edgesTex, texcoord ).rg;
+                        if(e.g> 0.0){
+                            return vec4(texcoord.x * resolution.z *1.0/255.0,(resolution.z-texcoord.y * resolution.z) *1.0/255.0 ,0.0 ,1.0);
+                        }else{
+                            return vec4(0.0,0.0,0.0,1.0);
+                        }
 
+                        ",
+
+                    //"if ( e.g > 0.0 ) {", // Edge at north
+                    //   "weights = texture2D(edgesTex,texcoord); ",
+                    //    "return weights;",
+                    //"}else{",
+                    //    //"return vec4(pixcoord.x , pixcoord.y  ,0.0 ,1.0);", //
+                    //    "return vec4(texcoord.x * resolution.z *1.0/255.0,  texcoord.y * resolution.z *1.0/255.0 ,0.0 ,1.0);", //
+                    //"}",
+                    //"weights = texture2D(edgesTex,texcoord); ",
+                    //"return weights;",
+                    
                     //SMAA_BRANCH
                     "if ( e.g > 0.0 ) {", // Edge at north
 
@@ -828,17 +879,27 @@ namespace PixelFarm.DrawingGL
 				                // Find the distance to the left:
 				                "vec3 coords;",
                                 "coords.x = SMAASearchXLeft( edgesTex, searchTex, offset[0].xy, offset[2].x);",
-                                "coords.y = offset[ 1 ].y;", // offset[1].y = texcoord.y - 0.25 * resolution.y (@CROSSING_OFFSET)
-				                "d.x = coords.x;",
+
+                                "return vec4(0.0,texcoord.y * resolution.z /255.0, 0.0,1.0);",
+
+                                "return vec4(coords.x * resolution.z *1.0/255.0, 0 ,1.0,1.0);", //
+                                "coords.y = texcoord.y - 0.25 * resolution.y;", // offset[1].y = texcoord.y - 0.25 * resolution.y (@CROSSING_OFFSET)
+                                //"return vec4(coords.x * resolution.z *1.0/255.0, coords.y * resolution.z *1.0/(255.0*8.0) ,1.0,1.0);",
+
+
+                                "d.x = coords.x;",
 
 				                // Now fetch the left crossing edges, two at a time using bilinear
 				                // filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to
 				                // discern what value each edge has:
-				                "float e1  = SMAASampleLevelZero( edgesTex, coords.xy).r;",
-
+				                "float e1 = SMAASampleLevelZero( edgesTex, coords.xy).r;",
+                                //"return vec4(e1 /2.0, 0 ,1.0,1.0);",
+                                "return vec4(e1/2.0, 0 ,1.0,1.0);",
 				                // Find the distance to the right:
 				                "coords.z = SMAASearchXRight( edgesTex, searchTex, offset[0].zw, offset[2].y );",
                                 "d.y = coords.z;",
+
+                                //"return vec4(coords.x * resolution.z *1.0/255.0,coords.z * resolution.z *1.0/255.0,1.0,1.0);",
 
 				                // We want the distances to be in pixel units (doing this here allow to
 				                // better interleave arithmetic and memory accesses):
@@ -852,10 +913,12 @@ namespace PixelFarm.DrawingGL
 				                // Fetch the right crossing edges: 
 				                "float e2 = SMAASampleLevelZeroOffset( edgesTex, coords.zy, vec2( 1.0, 0.0 ) ).r;",
 
-				                // Ok, we know how this pattern looks like, now it is time for getting
-				                // the actual area:
-				               "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
+				                //Ok, we know how this pattern looks like, now it is time for getting
+				                //the actual area:
+				                //"weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
                                 
+                                //"weights.rg = vec2(e1/2.0,e2/2.0);",
+
                                //"weights.r=1.0;",
                                // Fix corners:
                                //"coords.y = texcoord.y;",
@@ -909,8 +972,10 @@ namespace PixelFarm.DrawingGL
                 "}",
 
                 "void main() {",
+                    //"vPixcoord = texcoord * resolution.zw;",
                     "vec4 tmp_color = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, vec4( 0.0 ) );",
-                    "gl_FragColor = vec4(pow(tmp_color.x,1.0/2.2), pow(tmp_color.y,1.0/2.2),0.0,1.0);",                     
+                    //"gl_FragColor = vec4(pow(tmp_color.x,1.0/2.2), pow(tmp_color.y,1.0/2.2),0.0,1.0);",//gamma correct                                     
+                    "gl_FragColor = vec4(pow(tmp_color.x,1.0), pow(tmp_color.y,1.0 ),0.0,1.0);",//gamma correct                                     
                     //"gl_FragColor = vec4(1,0,0,1);",
                 "}"
             }.JoinWithNewLine();
