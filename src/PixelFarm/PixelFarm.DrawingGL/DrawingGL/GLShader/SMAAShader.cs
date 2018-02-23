@@ -386,7 +386,7 @@ namespace PixelFarm.DrawingGL
                 //
 
                 "varying vec2 vUv;",
-                "varying vec4 vOffset[ 3 ];",
+                "varying vec4 vOffset[3];",
                 "varying vec2 vPixcoord;",
 
                 "void SMAABlendingWeightCalculationVS( vec2 texcoord ) {",
@@ -783,7 +783,7 @@ namespace PixelFarm.DrawingGL
 			        // Move to proper place, according to the subpixel offset:
 			        "texcoord.y = mad(SMAA_AREATEX_SUBTEX_SIZE, offset, texcoord.y);",
 
-                    "return texcoord.xy;",
+                    //"return texcoord.xy;",
                     // Do it!
                     "return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));",
                 "}",
@@ -828,20 +828,25 @@ namespace PixelFarm.DrawingGL
               "vec4 SMAABlendingWeightCalculationPS( vec2 texcoord, vec2 pixcoord, vec4 offset[ 3 ], sampler2D edgesTex, sampler2D areaTex, sampler2D searchTex, vec4 subsampleIndices ) {",
                     // subsampleIndices => Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 
-                     @" //return texture2D(edgesTex,texcoord);
-                        
-                        vec4 weights = vec4( 0.0, 0.0, 0.0, 0.0 );
-                        if(texcoord.x >= 1.0 || texcoord.y >= 1.0){ 
-                            return vec4(0.0,0.0,0.0,1.0);
-                        }
-                        vec2 e = texture2D( edgesTex, texcoord ).rg;
-                        if(e.g> 0.0){
-                            return vec4(texcoord.x * resolution.z *1.0/255.0,(resolution.z-texcoord.y * resolution.z) *1.0/255.0 ,0.0 ,1.0);
-                        }else{
-                            return vec4(0.0,0.0,0.0,1.0);
-                        }
+                    @" vec4 weights = vec4( 0.0, 0.0, 0.0, 0.0 );                        
+                       vec2 e = texture2D( edgesTex, texcoord ).rg;",
+                       //"return vec4(e.r,e.g,0.0,1.0);",
+                     //@"   
+                     //   if(texcoord.x >= 1.0 || texcoord.y >= 1.0){ 
+                     //       return vec4(0.0,0.0,0.0,1.0);
+                     //   }
+                     //  // vec2 e = texture2D( edgesTex, texcoord ).rg;
+                     //   return vec4(texcoord.x * resolution.z *1.0/255.0,( (texcoord.y) * resolution.z) *1.0/255.0 ,0.0 ,1.0);
 
-                        ",
+                     //   //return vec4(texcoord.x * resolution.z *1.0/255.0,(resolution.z-texcoord.y * resolution.z) *1.0/255.0 ,0.0 ,1.0);
+
+                     //   if(e.g> 0.0){
+                     //       return vec4(texcoord.x * resolution.z *1.0/255.0,(resolution.z-texcoord.y * resolution.z) *1.0/255.0 ,0.0 ,1.0);
+                     //   }else{
+                     //       return vec4(0.0,0.0,0.0,1.0);
+                     //   }
+
+                     //   ",
 
                     //"if ( e.g > 0.0 ) {", // Edge at north
                     //   "weights = texture2D(edgesTex,texcoord); ",
@@ -880,9 +885,9 @@ namespace PixelFarm.DrawingGL
 				                "vec3 coords;",
                                 "coords.x = SMAASearchXLeft( edgesTex, searchTex, offset[0].xy, offset[2].x);",
 
-                                "return vec4(0.0,texcoord.y * resolution.z /255.0, 0.0,1.0);",
+                                //"return vec4(0.0,texcoord.y * resolution.z /255.0, 0.0,1.0);",
 
-                                "return vec4(coords.x * resolution.z *1.0/255.0, 0 ,1.0,1.0);", //
+                                //"return vec4(coords.x * resolution.z *1.0/255.0, 0 ,1.0,1.0);", //
                                 "coords.y = texcoord.y - 0.25 * resolution.y;", // offset[1].y = texcoord.y - 0.25 * resolution.y (@CROSSING_OFFSET)
                                 //"return vec4(coords.x * resolution.z *1.0/255.0, coords.y * resolution.z *1.0/(255.0*8.0) ,1.0,1.0);",
 
@@ -894,7 +899,7 @@ namespace PixelFarm.DrawingGL
 				                // discern what value each edge has:
 				                "float e1 = SMAASampleLevelZero( edgesTex, coords.xy).r;",
                                 //"return vec4(e1 /2.0, 0 ,1.0,1.0);",
-                                "return vec4(e1/2.0, 0 ,1.0,1.0);",
+                                //"return vec4(e1/2.0, 0 ,1.0,1.0);",
 				                // Find the distance to the right:
 				                "coords.z = SMAASearchXRight( edgesTex, searchTex, offset[0].zw, offset[2].y );",
                                 "d.y = coords.z;",
@@ -915,8 +920,9 @@ namespace PixelFarm.DrawingGL
 
 				                //Ok, we know how this pattern looks like, now it is time for getting
 				                //the actual area:
-				                //"weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
-                                
+				                 "weights.rg = SMAAArea( areaTex, sqrt_d, e1, e2, float( subsampleIndices.y ) );",
+                                 //"weights.rg =vec2(1.0,1.0);",
+
                                 //"weights.rg = vec2(e1/2.0,e2/2.0);",
 
                                //"weights.r=1.0;",
@@ -974,8 +980,8 @@ namespace PixelFarm.DrawingGL
                 "void main() {",
                     //"vPixcoord = texcoord * resolution.zw;",
                     "vec4 tmp_color = SMAABlendingWeightCalculationPS( vUv, vPixcoord, vOffset, tDiffuse, tArea, tSearch, vec4( 0.0 ) );",
-                    //"gl_FragColor = vec4(pow(tmp_color.x,1.0/2.2), pow(tmp_color.y,1.0/2.2),0.0,1.0);",//gamma correct                                     
-                    "gl_FragColor = vec4(pow(tmp_color.x,1.0), pow(tmp_color.y,1.0 ),0.0,1.0);",//gamma correct                                     
+                    "gl_FragColor = vec4(pow(tmp_color.x,1.0/2.2), pow(tmp_color.y,1.0/2.2),0.0,1.0);",//gamma correct                                     
+                    //"gl_FragColor = vec4(pow(tmp_color.x,1.0), pow(tmp_color.y,1.0 ),0.0,1.0);",//gamma correct                                     
                     //"gl_FragColor = vec4(1,0,0,1);",
                 "}"
             }.JoinWithNewLine();
