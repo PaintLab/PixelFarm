@@ -124,12 +124,20 @@ namespace PaintLab.Svg
         }
 
         CssParser _cssParser = new CssParser();
+
+#if DEBUG
+        static int s_dbugIdCount;
+#endif
         void ParseStyle(SvgVisualSpec spec, string value)
         {
             if (!String.IsNullOrEmpty(value))
             {
 
-                _cssParser.ParseCssStyleSheet(value.ToCharArray());
+#if DEBUG
+                s_dbugIdCount++;
+
+#endif
+                _cssParser.ParseCssPropertyDeclarationList(value.ToCharArray());
                 //-----------------------------------
                 CssDocument cssDoc = _cssParser.OutputCssDocument;
                 CssActiveSheet cssActiveDoc = new CssActiveSheet();
