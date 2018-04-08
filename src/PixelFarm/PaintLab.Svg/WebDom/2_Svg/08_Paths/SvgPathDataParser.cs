@@ -620,10 +620,8 @@ namespace LayoutFarm.Svg.Pathing
                                     currentState = 1;//negative
                                     startCollectNumber = latestIndex;
                                 }
-                                else
-                                {
+                                numLexAccum.AddMinusBeforeIntegerPart();
 
-                                }
                             }
                             else
                             {
@@ -669,10 +667,7 @@ namespace LayoutFarm.Svg.Pathing
                                     currentState = 1;//negative
                                     startCollectNumber = latestIndex;
                                 }
-                                else
-                                {
-
-                                }
+                                numLexAccum.AddMinusBeforeIntegerPart();
                             }
                             else
                             {
@@ -686,10 +681,6 @@ namespace LayoutFarm.Svg.Pathing
                                     numbers.Add(numLexAccum.PopValueAsFloat());
                                     startCollectNumber = -1;
                                     currentState = 0;//reset
-                                }
-                                else
-                                {
-
                                 }
 
                                 return;
@@ -765,7 +756,7 @@ namespace LayoutFarm.Svg.Pathing
                 currentState = 0;//reset
             }
         }
-        //static void ParseNumberList(char[] pathDataBuffer, int startIndex, out int latestIndex, List<float> numbers)
+        //static void ParseNumberListY(char[] pathDataBuffer, int startIndex, out int latestIndex, List<float> numbers)
         //{
         //    latestIndex = startIndex;
         //    //parse coordinate
@@ -989,6 +980,6 @@ namespace LayoutFarm.Svg.Pathing
         //        startCollectNumber = -1;
         //        currentState = 0;//reset
         //    }
-        //}
+        //} 
     }
 }
