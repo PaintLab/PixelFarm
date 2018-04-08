@@ -100,7 +100,7 @@ namespace PaintLab.Svg
 #if DEBUG
                     Console.WriteLine("unimplemented element: " + elem.Name);
 #endif
-                    break; 
+                    break;
                 case "g":
                     ParseGroup(elem);
                     break;
@@ -139,11 +139,9 @@ namespace PaintLab.Svg
                 s_dbugIdCount++;
 
 #endif
+                //***                
                 CssRuleSet cssRuleSet = _cssParser.ParseCssPropertyDeclarationList(cssStyle.ToCharArray());
-                //-----------------------------------
-                //CssDocument cssDoc = _cssParser.OutputCssDocument;
-                //CssActiveSheet cssActiveDoc = new CssActiveSheet();
-                //cssActiveDoc.LoadCssDoc(cssDoc);
+
                 foreach (CssPropertyDeclaration propDecl in cssRuleSet.GetAssignmentIter())
                 {
                     switch (propDecl.UnknownRawName)
@@ -367,7 +365,7 @@ namespace PaintLab.Svg
                 }
             }
 
-            SvgGroupElement group = new SvgGroupElement(spec, null); 
+            SvgGroupElement group = new SvgGroupElement(spec, null);
             //--------
             SvgVx beginVx = new SvgVx(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
@@ -416,7 +414,7 @@ namespace PaintLab.Svg
             }
         }
 
-        MySvgPathDataParser _svgPatgDataParser = new MySvgPathDataParser();
+        MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
         static void AssignValues(SvgVx svgRenderVx, SvgVisualSpec spec)
         {
 
@@ -477,20 +475,22 @@ namespace PaintLab.Svg
 
                 SvgVx svgRenderVx = new SvgVx(SvgRenderVxKind.Path);
                 AssignValues(svgRenderVx, spec);
-                 
+
+                //TODO: review here, reused resource
+
                 VertexStore vxs = new VertexStore();
                 PathWriter pathWriter = new PathWriter(vxs);
-                _svgPatgDataParser.SetPathWriter(pathWriter);
+                _svgPathDataParser.SetPathWriter(pathWriter);
                 //tokenize the path definition data
-                _svgPatgDataParser.Parse(pathDefAttr.Value.ToCharArray());
+                _svgPathDataParser.Parse(pathDefAttr.Value.ToCharArray());
 
                 //
                 VertexStore flattenVxs = new VertexStore();
-                curveFlattener.MakeVxs(vxs, flattenVxs); 
+                curveFlattener.MakeVxs(vxs, flattenVxs);
                 if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
                 {
                     //TODO: implement stroke rendering 
-                } 
+                }
                 svgRenderVx.SetVxsAsOriginal(flattenVxs);
                 this.renderVxList.Add(svgRenderVx);
             }
