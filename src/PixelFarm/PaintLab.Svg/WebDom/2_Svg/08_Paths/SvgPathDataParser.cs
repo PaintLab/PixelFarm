@@ -426,8 +426,8 @@ namespace LayoutFarm.Svg.Pathing
             public void Clear()
             {
                 _isMinus = _epart_signIsMinus = false;
-                _intgerAccumValue = _fractionPartAccumValue = 0;
-                _integer_partCount = _fractional_partCount = 0;
+                _ePartAccumValue = _intgerAccumValue = _fractionPartAccumValue =
+                    _e_partCount = _integer_partCount = _fractional_partCount = 0;
             }
             public void AddMinusBeforeIntegerPart()
             {
@@ -475,6 +475,8 @@ namespace LayoutFarm.Svg.Pathing
             }
             public double PopValueAsDouble()
             {
+
+
                 double total = (_isMinus ? -1 : 1) * (_intgerAccumValue + ((double)_fractionPartAccumValue / Math.Pow(10, _fractional_partCount)));
                 if (_e_partCount > 0)
                 {
@@ -500,8 +502,6 @@ namespace LayoutFarm.Svg.Pathing
             int j = pathDataBuffer.Length;
             int currentState = 0;
             int startCollectNumber = -1;
-
-
             NumberLexerAccum numLexAccum = new NumberLexerAccum();
 
             for (; latestIndex < j; ++latestIndex)
@@ -564,7 +564,7 @@ namespace LayoutFarm.Svg.Pathing
                         break;
                     case 1:
                         {
-                            //after negative expect first number
+                            //after negative => we expect first number
                             if (char.IsNumber(c))
                             {
                                 //ok collect next
@@ -756,230 +756,230 @@ namespace LayoutFarm.Svg.Pathing
                 currentState = 0;//reset
             }
         }
-        //static void ParseNumberListY(char[] pathDataBuffer, int startIndex, out int latestIndex, List<float> numbers)
-        //{
-        //    latestIndex = startIndex;
-        //    //parse coordinate
-        //    int j = pathDataBuffer.Length;
-        //    int currentState = 0;
-        //    int startCollectNumber = -1;
-        //    for (; latestIndex < j; ++latestIndex)
-        //    {
-        //        //lex and parse
-        //        char c = pathDataBuffer[latestIndex];
-        //        if (c == ',' || char.IsWhiteSpace(c))
-        //        {
-        //            if (startCollectNumber >= 0)
-        //            {
+        static void ParseNumberListX(char[] pathDataBuffer, int startIndex, out int latestIndex, List<float> numbers)
+        {
+            latestIndex = startIndex;
+            //parse coordinate
+            int j = pathDataBuffer.Length;
+            int currentState = 0;
+            int startCollectNumber = -1;
+            for (; latestIndex < j; ++latestIndex)
+            {
+                //lex and parse
+                char c = pathDataBuffer[latestIndex];
+                if (c == ',' || char.IsWhiteSpace(c))
+                {
+                    if (startCollectNumber >= 0)
+                    {
 
-        //                //string test = new string(pathDataBuffer, startCollectNumber, 100);
-        //                ////collect latest number
-        //                string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                float number;
-        //                float.TryParse(str, out number);
-        //                numbers.Add(number);
-        //                startCollectNumber = -1;
-        //                currentState = 0;//reset
-        //            }
-        //            continue;
-        //        }
+                        //string test = new string(pathDataBuffer, startCollectNumber, 100);
+                        ////collect latest number
+                        string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                        float number;
+                        float.TryParse(str, out number);
+                        numbers.Add(number);
+                        startCollectNumber = -1;
+                        currentState = 0;//reset
+                    }
+                    continue;
+                }
 
-        //        switch (currentState)
-        //        {
-        //            case 0:
-        //                {
-        //                    //--------------------------
-        //                    if (c == '-')
-        //                    {
-        //                        currentState = 1;//negative
-        //                        startCollectNumber = latestIndex;
-        //                    }
-        //                    else if (char.IsNumber(c))
-        //                    {
-        //                        currentState = 2;//number found
-        //                        startCollectNumber = latestIndex;
-        //                    }
-        //                    else
-        //                    {
-        //                        if (startCollectNumber >= 0)
-        //                        {
-        //                            //collect latest number
-        //                            string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                            float number;
-        //                            float.TryParse(str, out number);
-        //                            numbers.Add(number);
-        //                            startCollectNumber = -1;
-        //                            currentState = 0;//reset
-        //                        }
-        //                        return;
-        //                    }
-        //                }
-        //                break;
-        //            case 1:
-        //                {
-        //                    //after negative expect first number
-        //                    if (char.IsNumber(c))
-        //                    {
-        //                        //ok collect next
-        //                        currentState = 2;
-        //                    }
-        //                    else
-        //                    {
-        //                        //must found number
-        //                        if (startCollectNumber >= 0)
-        //                        {
-        //                            //collect latest number
-        //                            string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                            float number;
-        //                            float.TryParse(str, out number);
-        //                            numbers.Add(number);
-        //                            startCollectNumber = -1;
-        //                            currentState = 0;//reset
-        //                        }
-        //                        return;
-        //                    }
-        //                }
-        //                break;
-        //            case 2:
-        //                {
-        //                    //number state
-        //                    if (char.IsNumber(c))
-        //                    {
-        //                        //ok collect next
-        //                    }
-        //                    else if (c == 'e' || c == 'E')
-        //                    {
-        //                        currentState = 4;
-        //                    }
-        //                    else if (c == '.')
-        //                    {
-        //                        //collect next
-        //                        currentState = 3;
-        //                    }
-        //                    else if (c == '-')
-        //                    {
-        //                        if (startCollectNumber >= 0)
-        //                        {
-        //                            //collect latest number
-        //                            string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                            float number;
-        //                            float.TryParse(str, out number);
-        //                            numbers.Add(number);
+                switch (currentState)
+                {
+                    case 0:
+                        {
+                            //--------------------------
+                            if (c == '-')
+                            {
+                                currentState = 1;//negative
+                                startCollectNumber = latestIndex;
+                            }
+                            else if (char.IsNumber(c))
+                            {
+                                currentState = 2;//number found
+                                startCollectNumber = latestIndex;
+                            }
+                            else
+                            {
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
+                                    startCollectNumber = -1;
+                                    currentState = 0;//reset
+                                }
+                                return;
+                            }
+                        }
+                        break;
+                    case 1:
+                        {
+                            //after negative => we expect first number
+                            if (char.IsNumber(c))
+                            {
+                                //ok collect next
+                                currentState = 2;
+                            }
+                            else
+                            {
+                                //must found number
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
+                                    startCollectNumber = -1;
+                                    currentState = 0;//reset
+                                }
+                                return;
+                            }
+                        }
+                        break;
+                    case 2:
+                        {
+                            //number state
+                            if (char.IsNumber(c))
+                            {
+                                //ok collect next
+                            }
+                            else if (c == 'e' || c == 'E')
+                            {
+                                currentState = 4;
+                            }
+                            else if (c == '.')
+                            {
+                                //collect next
+                                currentState = 3;
+                            }
+                            else if (c == '-')
+                            {
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
 
-        //                            currentState = 1;//negative
-        //                            startCollectNumber = latestIndex;
+                                    currentState = 1;//negative
+                                    startCollectNumber = latestIndex;
 
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        //must found number
-        //                        if (startCollectNumber >= 0)
-        //                        {
-        //                            //collect latest number
-        //                            string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                            float number;
-        //                            float.TryParse(str, out number);
-        //                            numbers.Add(number);
-        //                            startCollectNumber = -1;
-        //                            currentState = 0;//reset
-        //                        }
-        //                        return;
-        //                    }
-        //                }
-        //                break;
-        //            case 3:
-        //                {
-        //                    //after .
-        //                    if (char.IsNumber(c))
-        //                    {
-        //                        //ok collect next
-        //                    }
-        //                    else if (c == 'e' || c == 'E')
-        //                    {
-        //                        currentState = 4;
-        //                    }
-        //                    else if (c == '-')
-        //                    {
-        //                        if (startCollectNumber >= 0)
-        //                        {
-        //                            //collect latest number
-        //                            string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                            float number;
-        //                            float.TryParse(str, out number);
-        //                            numbers.Add(number);
-        //                            currentState = 1;//negative
-        //                            startCollectNumber = latestIndex;
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if (startCollectNumber >= 0)
-        //                        {
-        //                            //collect latest number
-        //                            string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                            float number;
-        //                            float.TryParse(str, out number);
-        //                            numbers.Add(number);
-        //                            startCollectNumber = -1;
-        //                            currentState = 0;//reset
-        //                        }
-        //                        return;
-        //                        //break here
-        //                    }
-        //                }
-        //                break;
-        //            case 4:
-        //                {
-        //                    //after e 
-        //                    //must be -
-        //                    if (c != '-')
-        //                    {
-        //                        throw new NotSupportedException();
-        //                    }
-        //                    else
-        //                    {
-        //                        currentState = 5;
-        //                    }
-        //                }
-        //                break;
-        //            case 5:
-        //                {
-        //                    //after e-
-        //                    if (char.IsNumber(c))
-        //                    {
-        //                        //ok collect next
-        //                        //collect more
-        //                    }
-        //                    else
-        //                    {
-        //                        if (startCollectNumber >= 0)
-        //                        {
-        //                            //collect latest number
-        //                            string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //                            float number;
-        //                            float.TryParse(str, out number);
-        //                            numbers.Add(number);
-        //                            startCollectNumber = -1;
-        //                            currentState = 0;//reset
-        //                        }
-        //                        return;
-        //                    }
-        //                }
-        //                break;
-        //        }
-        //    }
-        //    //-------------------
-        //    if (startCollectNumber >= 0)
-        //    {
-        //        //collect latest number
-        //        string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
-        //        float number;
-        //        float.TryParse(str, out number);
-        //        numbers.Add(number);
-        //        startCollectNumber = -1;
-        //        currentState = 0;//reset
-        //    }
-        //} 
+                                }
+                            }
+                            else
+                            {
+                                //must found number
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
+                                    startCollectNumber = -1;
+                                    currentState = 0;//reset
+                                }
+                                return;
+                            }
+                        }
+                        break;
+                    case 3:
+                        {
+                            //after .
+                            if (char.IsNumber(c))
+                            {
+                                //ok collect next
+                            }
+                            else if (c == 'e' || c == 'E')
+                            {
+                                currentState = 4;
+                            }
+                            else if (c == '-')
+                            {
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
+                                    currentState = 1;//negative
+                                    startCollectNumber = latestIndex;
+                                }
+                            }
+                            else
+                            {
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
+                                    startCollectNumber = -1;
+                                    currentState = 0;//reset
+                                }
+                                return;
+                                //break here
+                            }
+                        }
+                        break;
+                    case 4:
+                        {
+                            //after e 
+                            //must be -
+                            if (c != '-')
+                            {
+                                throw new NotSupportedException();
+                            }
+                            else
+                            {
+                                currentState = 5;
+                            }
+                        }
+                        break;
+                    case 5:
+                        {
+                            //after e-
+                            if (char.IsNumber(c))
+                            {
+                                //ok collect next
+                                //collect more
+                            }
+                            else
+                            {
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
+                                    startCollectNumber = -1;
+                                    currentState = 0;//reset
+                                }
+                                return;
+                            }
+                        }
+                        break;
+                }
+            }
+            //-------------------
+            if (startCollectNumber >= 0)
+            {
+                //collect latest number
+                string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                float number;
+                float.TryParse(str, out number);
+                numbers.Add(number);
+                startCollectNumber = -1;
+                currentState = 0;//reset
+            }
+        }
     }
 }
