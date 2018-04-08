@@ -30,9 +30,9 @@ namespace PixelFarm.Agg.VertexSource
         }
 
         //static readonly double CURVE_DISTANCE_EPSILON = 1e-30;
-        internal static readonly double CURVE_COLLINEARITY_EPSILON = 1e-30;
-        internal static readonly double CURVE_ANGLE_TOLERANCE_EPSILON = 0.01;
-        internal static readonly int CURVE_RECURSION_LIMIT = 32;
+        internal const double CURVE_COLLINEARITY_EPSILON = 1e-30;
+        internal const double CURVE_ANGLE_TOLERANCE_EPSILON = 0.01;
+        internal const int CURVE_RECURSION_LIMIT = 32;
         //-------------------------------------------------------catrom_to_bezier
         public static Curve4Points CatromToBezier(double x1, double y1,
                                               double x2, double y2,
