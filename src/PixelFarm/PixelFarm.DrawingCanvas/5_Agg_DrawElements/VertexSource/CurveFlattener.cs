@@ -257,7 +257,7 @@ namespace PixelFarm.Agg.VertexSource
                             lasty = lastMoveY;
                         }
                         break;
-                     
+
                     default:
                         {
                             //move to, and end command
