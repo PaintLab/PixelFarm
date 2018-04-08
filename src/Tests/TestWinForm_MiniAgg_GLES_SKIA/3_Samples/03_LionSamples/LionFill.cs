@@ -91,6 +91,107 @@ namespace PixelFarm.Agg.Samples
         }
     }
 
-    //--------------------------------------------------
+
+
+    public enum LionMoveOption
+    {
+        ZoomAndRotate,
+        Move,
+    }
+    //----------
+    [Info(OrderCode = "03.1")]
+    [Info("HitTest and Selection")]
+    public class LionFillExample_HitTest : DemoBase
+    {
+        LionFillSprite lionFill;
+        bool hitOnLion;
+        public override void Init()
+        {
+            lionFill = new LionFillSprite();
+            //lionFill.AutoFlipY = true;           
+        }
+
+        public override void Draw(PixelFarm.Drawing.Painter p)
+        {
+            p.Clear(Drawing.Color.White);
+
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = Drawing.RenderQualtity.Fast;
+            }
+            else
+            {
+                p.RenderQuality = Drawing.RenderQualtity.HighQuality;
+            }
+
+            lionFill.Draw(p);
+        }
+        public override void MouseDown(int x, int y, bool isRightButton)
+        {
+
+            //check if we hit a lion or not 
+            hitOnLion = lionFill.HitTest(x, y);
+            base.MouseDown(x, y, isRightButton);
+        }
+        public override void MouseUp(int x, int y)
+        {
+            hitOnLion = false;
+            base.MouseUp(x, y);
+        }
+        public override void MouseDrag(int x, int y)
+        {
+            if (hitOnLion)
+            {
+                lionFill.Move(x, y);
+            }
+        }
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
+
+        LionMoveOption _moveOption;
+        [DemoConfig]
+        public LionMoveOption LionMoveOption
+        {
+            get
+            {
+                return _moveOption;
+            }
+            set
+            {
+                switch (_moveOption = value)
+                {
+                    default: break;
+                    case LionMoveOption.Move:
+                        lionFill.JustMove = true;
+                        break;
+                    case LionMoveOption.ZoomAndRotate:
+                        lionFill.JustMove = false;
+                        break;
+                }
+            }
+        }
+        //[DemoConfig(MaxValue = 20)]
+        //public int SharpRadius
+        //{
+        //    //test
+        //    get { return lionFill.SharpenRadius; }
+        //    set { lionFill.SharpenRadius = value; }
+
+        //}
+        //[DemoConfig(MaxValue = 255)]
+        //public int AlphaValue
+        //{
+        //    get { return lionFill.AlphaValue; }
+        //    set
+        //    {
+        //        lionFill.AlphaValue = (byte)value;
+        //    }
+        //}
+    }
+
 }
 

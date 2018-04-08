@@ -75,8 +75,7 @@ namespace PaintLab.Svg
             //then parse 
             if (docElem.Name == "svg")
             {
-                //parse its content
-
+                //parse its content 
                 foreach (XmlElement elem in docElem.ChildNodes)
                 {
                     ParseSvgElement(elem);
@@ -98,7 +97,10 @@ namespace PaintLab.Svg
             switch (elem.Name)
             {
                 default:
-                    throw new NotSupportedException();
+#if DEBUG
+                    Console.WriteLine("unimplemented element: " + elem.Name);
+#endif
+                    break;
                 case "g":
                     ParseGroup(elem);
                     break;
@@ -124,16 +126,86 @@ namespace PaintLab.Svg
         }
 
         CssParser _cssParser = new CssParser();
-        void ParseStyle(SvgVisualSpec spec, string value)
+
+#if DEBUG
+        static int s_dbugIdCount;
+#endif
+        void ParseStyle(SvgVisualSpec spec, string cssStyle)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!String.IsNullOrEmpty(cssStyle))
             {
 
-                _cssParser.ParseCssStyleSheet(value.ToCharArray());
-                //-----------------------------------
-                CssDocument cssDoc = _cssParser.OutputCssDocument;
-                CssActiveSheet cssActiveDoc = new CssActiveSheet();
-                cssActiveDoc.LoadCssDoc(cssDoc);
+#if DEBUG
+                s_dbugIdCount++;
+
+#endif
+                //***                
+                CssRuleSet cssRuleSet = _cssParser.ParseCssPropertyDeclarationList(cssStyle.ToCharArray());
+
+                foreach (CssPropertyDeclaration propDecl in cssRuleSet.GetAssignmentIter())
+                {
+                    switch (propDecl.UnknownRawName)
+                    {
+
+                        default:
+                            break;
+                        case "fill":
+                            {
+
+                                int valueCount = propDecl.ValueCount;
+                                //1
+                                string value = propDecl.GetPropertyValue(0).ToString();
+                                if (value != "none")
+                                {
+                                    spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
+                                }
+                            }
+                            break;
+                        case "fill-opacity":
+                            {
+                                //TODO:
+                                //adjust fill opacity
+                            }
+                            break;
+                        case "stroke-width":
+                            {
+                                int valueCount = propDecl.ValueCount;
+                                //1
+                                string value = propDecl.GetPropertyValue(0).ToString();
+
+                                spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
+                            }
+                            break;
+                        case "stroke":
+                            {
+                                //TODO:
+                                //if (attr.Value != "none")
+                                //{
+                                //    spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
+                                //}
+                            }
+                            break;
+                        case "stroke-linecap":
+                            //set line-cap and line join again
+                            //TODO:
+                            break;
+                        case "stroke-linejoin":
+                            //TODO:
+                            break;
+                        case "stroke-miterlimit":
+                            //TODO:
+                            break;
+                        case "stroke-opacity":
+                            //TODO:
+                            break;
+                        case "transform":
+                            {
+                                ////parse trans
+                                //ParseTransform(attr.Value, spec);
+                            }
+                            break;
+                    }
+                }
             }
         }
 
@@ -294,7 +366,6 @@ namespace PaintLab.Svg
             }
 
             SvgGroupElement group = new SvgGroupElement(spec, null);
-
             //--------
             SvgVx beginVx = new SvgVx(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
@@ -343,7 +414,7 @@ namespace PaintLab.Svg
             }
         }
 
-        MySvgPathDataParser _svgPatgDataParser = new MySvgPathDataParser();
+        MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
         static void AssignValues(SvgVx svgRenderVx, SvgVisualSpec spec)
         {
 
@@ -405,26 +476,21 @@ namespace PaintLab.Svg
                 SvgVx svgRenderVx = new SvgVx(SvgRenderVxKind.Path);
                 AssignValues(svgRenderVx, spec);
 
-
+                //TODO: review here, reused resource
 
                 VertexStore vxs = new VertexStore();
                 PathWriter pathWriter = new PathWriter(vxs);
-                _svgPatgDataParser.SetPathWriter(pathWriter);
+                _svgPathDataParser.SetPathWriter(pathWriter);
                 //tokenize the path definition data
-                _svgPatgDataParser.Parse(pathDefAttr.Value.ToCharArray());
+                _svgPathDataParser.Parse(pathDefAttr.Value.ToCharArray());
 
                 //
                 VertexStore flattenVxs = new VertexStore();
                 curveFlattener.MakeVxs(vxs, flattenVxs);
-
-
                 if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
                 {
-                    //generate stroke for this too
-
+                    //TODO: implement stroke rendering 
                 }
-
-
                 svgRenderVx.SetVxsAsOriginal(flattenVxs);
                 this.renderVxList.Add(svgRenderVx);
             }
