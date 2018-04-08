@@ -100,7 +100,9 @@ namespace LayoutFarm.Svg.Pathing
                                 case '\n':
                                     i++;
                                     break;
-
+                                case ' ':
+                                    i++;
+                                    break;
                                 case 'M':
                                 case 'm':
                                     {
@@ -261,6 +263,10 @@ namespace LayoutFarm.Svg.Pathing
                                     {
 #if DEBUG
                                         dbugCounter++;
+                                        //if (dbugCounter == 15)
+                                        //{
+
+                                        //}
 #endif
 
                                         ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
@@ -416,7 +422,9 @@ namespace LayoutFarm.Svg.Pathing
                 {
                     if (startCollectNumber >= 0)
                     {
-                        //collect latest number
+
+                        //string test = new string(pathDataBuffer, startCollectNumber, 100);
+                        ////collect latest number
                         string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
                         float number;
                         float.TryParse(str, out number);
@@ -490,6 +498,10 @@ namespace LayoutFarm.Svg.Pathing
                             {
                                 //ok collect next
                             }
+                            else if (c == 'e' || c == 'E')
+                            {
+                                currentState = 4;
+                            }
                             else if (c == '.')
                             {
                                 //collect next
@@ -534,6 +546,10 @@ namespace LayoutFarm.Svg.Pathing
                             {
                                 //ok collect next
                             }
+                            else if (c == 'e' || c == 'E')
+                            {
+                                currentState = 4;
+                            }
                             else if (c == '-')
                             {
                                 if (startCollectNumber >= 0)
@@ -543,10 +559,8 @@ namespace LayoutFarm.Svg.Pathing
                                     float number;
                                     float.TryParse(str, out number);
                                     numbers.Add(number);
-
                                     currentState = 1;//negative
                                     startCollectNumber = latestIndex;
-
                                 }
                             }
                             else
@@ -562,7 +576,45 @@ namespace LayoutFarm.Svg.Pathing
                                     currentState = 0;//reset
                                 }
                                 return;
-                                //break hear
+                                //break here
+                            }
+                        }
+                        break;
+                    case 4:
+                        {
+                            //after e 
+                            //must be -
+                            if (c != '-')
+                            {
+                                throw new NotSupportedException();
+                            }
+                            else
+                            {
+                                currentState = 5;
+                            }
+                        }
+                        break;
+                    case 5:
+                        {
+                            //after e-
+                            if (char.IsNumber(c))
+                            {
+                                //ok collect next
+                                //collect more
+                            }
+                            else
+                            {
+                                if (startCollectNumber >= 0)
+                                {
+                                    //collect latest number
+                                    string str = new string(pathDataBuffer, startCollectNumber, latestIndex - startCollectNumber);
+                                    float number;
+                                    float.TryParse(str, out number);
+                                    numbers.Add(number);
+                                    startCollectNumber = -1;
+                                    currentState = 0;//reset
+                                }
+                                return;
                             }
                         }
                         break;
