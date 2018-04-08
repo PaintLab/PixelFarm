@@ -98,7 +98,10 @@ namespace PaintLab.Svg
             switch (elem.Name)
             {
                 default:
-                    throw new NotSupportedException();
+#if DEBUG
+                    Console.WriteLine("unimplemented element: " + elem.Name);
+#endif
+                    break; 
                 case "g":
                     ParseGroup(elem);
                     break;
@@ -493,7 +496,7 @@ namespace PaintLab.Svg
                 if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
                 {
                     //TODO: implement stroke rendering
-                     
+
 
                 }
 
