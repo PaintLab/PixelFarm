@@ -128,20 +128,84 @@ namespace PaintLab.Svg
 #if DEBUG
         static int s_dbugIdCount;
 #endif
-        void ParseStyle(SvgVisualSpec spec, string value)
+        void ParseStyle(SvgVisualSpec spec, string cssStyle)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!String.IsNullOrEmpty(cssStyle))
             {
 
 #if DEBUG
                 s_dbugIdCount++;
 
 #endif
-                _cssParser.ParseCssPropertyDeclarationList(value.ToCharArray());
+                CssRuleSet cssRuleSet = _cssParser.ParseCssPropertyDeclarationList(cssStyle.ToCharArray());
                 //-----------------------------------
-                CssDocument cssDoc = _cssParser.OutputCssDocument;
-                CssActiveSheet cssActiveDoc = new CssActiveSheet();
-                cssActiveDoc.LoadCssDoc(cssDoc);
+                //CssDocument cssDoc = _cssParser.OutputCssDocument;
+                //CssActiveSheet cssActiveDoc = new CssActiveSheet();
+                //cssActiveDoc.LoadCssDoc(cssDoc);
+                foreach (CssPropertyDeclaration propDecl in cssRuleSet.GetAssignmentIter())
+                {
+                    switch (propDecl.UnknownRawName)
+                    {
+
+                        default:
+                            break;
+                        case "fill":
+                            {
+
+                                int valueCount = propDecl.ValueCount;
+                                //1
+                                string value = propDecl.GetPropertyValue(0).ToString();
+                                if (value != "none")
+                                {
+                                    spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
+                                }
+                            }
+                            break;
+                        case "fill-opacity":
+                            {
+                                //TODO:
+                                //adjust fill opacity
+                            }
+                            break;
+                        case "stroke-width":
+                            {
+                                int valueCount = propDecl.ValueCount;
+                                //1
+                                string value = propDecl.GetPropertyValue(0).ToString();
+
+                                spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
+                            }
+                            break;
+                        case "stroke":
+                            {
+                                //TODO:
+                                //if (attr.Value != "none")
+                                //{
+                                //    spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
+                                //}
+                            }
+                            break;
+                        case "stroke-linecap":
+                            //set line-cap and line join again
+                            //TODO:
+                            break;
+                        case "stroke-linejoin":
+                            //TODO:
+                            break;
+                        case "stroke-miterlimit":
+                            //TODO:
+                            break;
+                        case "stroke-opacity":
+                            //TODO:
+                            break;
+                        case "transform":
+                            {
+                                ////parse trans
+                                //ParseTransform(attr.Value, spec);
+                            }
+                            break;
+                    }
+                }
             }
         }
 
@@ -428,7 +492,8 @@ namespace PaintLab.Svg
 
                 if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
                 {
-                    //generate stroke for this too
+                    //TODO: implement stroke rendering
+                     
 
                 }
 
