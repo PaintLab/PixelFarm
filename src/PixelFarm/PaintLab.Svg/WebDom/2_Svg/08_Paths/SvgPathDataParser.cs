@@ -468,7 +468,7 @@ namespace LayoutFarm.Svg.Pathing
             public void AddMinusAfterEPart()
             {
                 _epart_signIsMinus = true;
-            } 
+            }
             public float PopValueAsFloat()
             {
                 return (float)PopValueAsDouble();
@@ -609,8 +609,6 @@ namespace LayoutFarm.Svg.Pathing
                             }
                             else if (c == '-')
                             {
-
-                                throw new NotSupportedException();
                                 if (startCollectNumber >= 0)
                                 {
                                     //collect latest number
@@ -621,6 +619,10 @@ namespace LayoutFarm.Svg.Pathing
                                     numbers.Add(numLexAccum.PopValueAsFloat());
                                     currentState = 1;//negative
                                     startCollectNumber = latestIndex;
+                                }
+                                else
+                                {
+
                                 }
                             }
                             else
@@ -655,7 +657,7 @@ namespace LayoutFarm.Svg.Pathing
                             }
                             else if (c == '-')
                             {
-                                throw new NotSupportedException();
+
                                 if (startCollectNumber >= 0)
                                 {
                                     //collect latest number
@@ -666,6 +668,10 @@ namespace LayoutFarm.Svg.Pathing
                                     numbers.Add(numLexAccum.PopValueAsFloat());
                                     currentState = 1;//negative
                                     startCollectNumber = latestIndex;
+                                }
+                                else
+                                {
+
                                 }
                             }
                             else
@@ -681,6 +687,11 @@ namespace LayoutFarm.Svg.Pathing
                                     startCollectNumber = -1;
                                     currentState = 0;//reset
                                 }
+                                else
+                                {
+
+                                }
+
                                 return;
                                 //break here
                             }

@@ -75,8 +75,7 @@ namespace PaintLab.Svg
             //then parse 
             if (docElem.Name == "svg")
             {
-                //parse its content
-
+                //parse its content 
                 foreach (XmlElement elem in docElem.ChildNodes)
                 {
                     ParseSvgElement(elem);
@@ -368,8 +367,7 @@ namespace PaintLab.Svg
                 }
             }
 
-            SvgGroupElement group = new SvgGroupElement(spec, null);
-
+            SvgGroupElement group = new SvgGroupElement(spec, null); 
             //--------
             SvgVx beginVx = new SvgVx(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
@@ -479,9 +477,7 @@ namespace PaintLab.Svg
 
                 SvgVx svgRenderVx = new SvgVx(SvgRenderVxKind.Path);
                 AssignValues(svgRenderVx, spec);
-
-
-
+                 
                 VertexStore vxs = new VertexStore();
                 PathWriter pathWriter = new PathWriter(vxs);
                 _svgPatgDataParser.SetPathWriter(pathWriter);
@@ -490,17 +486,11 @@ namespace PaintLab.Svg
 
                 //
                 VertexStore flattenVxs = new VertexStore();
-                curveFlattener.MakeVxs(vxs, flattenVxs);
-
-
+                curveFlattener.MakeVxs(vxs, flattenVxs); 
                 if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
                 {
-                    //TODO: implement stroke rendering
-
-
-                }
-
-
+                    //TODO: implement stroke rendering 
+                } 
                 svgRenderVx.SetVxsAsOriginal(flattenVxs);
                 this.renderVxList.Add(svgRenderVx);
             }

@@ -1,11 +1,20 @@
-﻿using System;
+﻿//BSD, 2014-2018, WinterDev
+//MattersHackers
+//AGG 2.4
+
+using System;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
+
+
     public class LionFillSprite : BasicSprite
     {
         SpriteShape lionShape;
+
+        float _posX, _posY;
+        float _mouseDownX, _mouseDownY;
 
         byte alpha;
         public LionFillSprite()
@@ -49,16 +58,53 @@ namespace PixelFarm.Agg
                 //}
             }
         }
-
         bool recreatePathAgain = true;
+
+        public bool JustMove { get; set; }
+
         public override bool Move(int mouseX, int mouseY)
         {
-            bool result = base.Move(mouseX, mouseY);
-            recreatePathAgain = true;
-            return result;
+
+            if (JustMove)
+            {
+                _posX += mouseX - _mouseDownX;
+                _posY += mouseY - _mouseDownY;
+
+                _mouseDownX = mouseX;
+                _mouseDownY = mouseY;
+                return true;
+            }
+            else
+            {
+                bool result = base.Move(mouseX, mouseY);
+                recreatePathAgain = true;
+                return result;
+            }
         }
+        public bool HitTest(float x, float y)
+        {
+            RectD bounds = lionShape.Bounds;
+            bounds.Offset(_posX, _posY);
+            if (bounds.Contains(x, y))
+            {
 
+                _mouseDownX = x;
+                _mouseDownY = y;
 
+                //                //find capture point relative to the bounds
+
+                //                _capY = (float)bounds.Top - y;
+                //#if DEBUG
+                //                //Console.WriteLine("hit");
+                //#endif
+                return true;
+            }
+            else
+            {
+                _mouseDownX = _mouseDownY = 0;
+            }
+            return false;
+        }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
@@ -98,7 +144,7 @@ namespace PixelFarm.Agg
                     transform.TransformToVxs(vxvxs, newVxs);
                     vx.SetVxs(newVxs);
                 }
-
+                lionShape.UpdateBounds();
 
                 //if (AutoFlipY)
                 //{
@@ -114,7 +160,37 @@ namespace PixelFarm.Agg
             }
             //---------------------------------------------------------------------------------------------
             {
+
+                float ox = p.OriginX;
+                float oy = p.OriginY;
+                p.SetOrigin(ox + _posX, oy + _posY);
                 lionShape.Paint(p);
+#if DEBUG
+                RectD bounds = lionShape.Bounds;
+                bounds.Offset(_posX, _posY);
+                //draw lion bounds
+                var savedStrokeColor = p.StrokeColor;
+                var savedFillColor = p.FillColor;
+                var savedSmoothMode = p.SmoothingMode;
+
+                p.SmoothingMode = SmoothingMode.HighSpeed;
+                p.StrokeColor = Color.Black;
+                p.DrawRect(bounds.Left, bounds.Top - bounds.Height, bounds.Width, bounds.Height);
+
+                p.StrokeColor = Color.Red;
+                p.DrawRect(_mouseDownX, _mouseDownY, 4, 4);
+
+
+                //restore
+                p.SmoothingMode = savedSmoothMode;
+                p.StrokeColor = savedStrokeColor;
+                p.FillColor = savedFillColor;
+
+
+#endif
+
+                p.SetOrigin(ox, oy);
+
 
                 //int j = lionShape.NumPaths;
                 //int[] pathList = lionShape.PathIndexList;
