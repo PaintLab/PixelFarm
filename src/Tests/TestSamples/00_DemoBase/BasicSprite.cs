@@ -42,7 +42,7 @@ namespace PixelFarm.Agg
         public int Width { get; set; }
         public int Height { get; set; }
 
-     
+
         public virtual void Draw(PixelFarm.Drawing.Painter p)
         {
         }
@@ -56,11 +56,8 @@ namespace PixelFarm.Agg
 
         public virtual bool Move(int mouseX, int mouseY)
         {
-            double x = mouseX;
-            double y = mouseY;
-            int width = (int)Width;
-            int height = (int)Height;
-            UpdateTransform(width, height, x, y);
+            
+            UpdateTransform((int)Width, (int)Height, mouseX, mouseY);
             return true;
         }
         VertexStorePool _vxsPool = new VertexStorePool();

@@ -24,19 +24,31 @@ namespace PixelFarm.Agg.Samples
 
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgParser svg = new SvgParser();
-            //svg.ReadSvgDocument("d:\\WImageTest\\lion.svg");
+            //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
             svg.ReadSvgFile("d:\\WImageTest\\tiger002.svg");
-           // svg.ReadSvgString(lionSvg);
+
             _renderVx = svg.GetResultAsRenderVx();
         }
-
+#if DEBUG
+        System.Diagnostics.Stopwatch _dbugSW = new System.Diagnostics.Stopwatch();
+#endif
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
             p.StrokeColor = Color.Transparent;
             p.StrokeWidth = 1;//svg standard, init stroke-width =1
 
+            //#if DEBUG
+            //            _dbugSW.Reset();
+            //            _dbugSW.Start();
+            //#endif
             _renderVx.Render(p);
+
+            //#if DEBUG
+            //            _dbugSW.Stop();
+            //            long ms = _dbugSW.ElapsedMilliseconds;
+            //#endif
+
         }
         public override void MouseDrag(int x, int y)
         {
