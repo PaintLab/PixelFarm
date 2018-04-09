@@ -98,18 +98,14 @@ namespace PixelFarm.Agg
             vxs.AddLineTo(start.x, start.y);
             float eachstep = (float)1 / NSteps;
             float stepSum = eachstep;//start
-            for (int i = 1; i < NSteps; ++i)
+            for (int i = NSteps - 1; i >= 0; --i)
             {
                 var vector2 = curve.CalculatePoint(stepSum);
                 vxs.AddLineTo(vector2.x, vector2.y);
                 stepSum += eachstep;
             }
             vxs.AddLineTo(end.x, end.y);
-            //------------------------------------------------------
-            //convert c3 to c4
-            //Vector2 c4p2, c4p3;
-            //Curve3GetControlPoints(start, control1, end, out c4p2, out c4p3);
-            //CreateBezierVxs4(vxs, start, end, c4p2, c4p3); 
+
         }
         public static void CreateBezierVxs4(VertexStore vxs, Vector2 start, Vector2 end,
            Vector2 control1, Vector2 control2)
@@ -120,7 +116,7 @@ namespace PixelFarm.Agg
             vxs.AddLineTo(start.x, start.y);
             float eachstep = (float)1 / NSteps;
             float stepSum = eachstep;//start
-            for (int i = 1; i < NSteps; ++i)
+            for (int i = NSteps - 1; i >= 0; --i)
             {
                 var vector2 = curve.CalculatePoint(stepSum);
                 vxs.AddLineTo(vector2.x, vector2.y);
