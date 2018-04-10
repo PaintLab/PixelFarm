@@ -111,13 +111,15 @@ namespace PixelFarm.Agg
         static Curve4Div s_curve4Div = new Curve4Div();
 
         public static void CreateBezierVxs4(VertexStore vxs,
-           Vector2 start, Vector2 end,
-           Vector2 control1, Vector2 control2)
+          double x0, double y0,
+          double x1, double y1,
+          double x2, double y2,
+          double x3, double y3)
         {
 
             //eg use subdiv technique
 
-            s_curve4Div.Init(start.x, start.y, control1.x, control1.y, control2.x, control2.y, end.x, end.y);
+            s_curve4Div.Init(x0, y0, x1, y1, x2, y2, x3, y3);
             ArrayList<Vector2> points = s_curve4Div.GetInternalPoints();
 
             int n = 0;
@@ -152,10 +154,10 @@ namespace PixelFarm.Agg
             double x2, double y2)
         {
             CreateBezierVxs4(vxs,
-             new PixelFarm.VectorMath.Vector2(x1, y1),
-             new PixelFarm.VectorMath.Vector2(x2, y2),
-             new PixelFarm.VectorMath.Vector2(p2x, p2y),
-             new PixelFarm.VectorMath.Vector2(p3x, p3y));
+                x1, y1,
+                p2x, p2y,
+                p3x, p3y,
+                x2, y2);
         }
         /// <summary>
         /// create lines from curve
