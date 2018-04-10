@@ -1,5 +1,4 @@
-﻿
-//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-2018, WinterDev
 //MattersHackers
 //AGG 2.4
 
@@ -150,7 +149,17 @@ namespace PixelFarm.Agg
         public void ParseLion()
         {
             _svgRenderVx = PixelFarm.Agg.LionDataStore.GetLion();
-            //find bound
+            UpdateBounds();
+            //find center
+
+            //numPaths = PixelFarm.Agg.LionDataStore.LoadLionData(path, colors, pathIndexList);
+            //_lionVxs = path.Vxs;
+            //PixelFarm.Agg.BoundingRect.GetBoundingRect(_lionVxs, pathIndexList, numPaths, out boundingRect);
+            center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
+            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
+        }
+        public void UpdateBounds()
+        {  //find bound
             int partCount = _svgRenderVx.SvgVxCount;
             RectD rectTotal = new RectD();
             for (int i = 0; i < partCount; ++i)
@@ -165,13 +174,8 @@ namespace PixelFarm.Agg
             }
             this.boundingRect = rectTotal;
 
-            //find center
+            
 
-            //numPaths = PixelFarm.Agg.LionDataStore.LoadLionData(path, colors, pathIndexList);
-            //_lionVxs = path.Vxs;
-            //PixelFarm.Agg.BoundingRect.GetBoundingRect(_lionVxs, pathIndexList, numPaths, out boundingRect);
-            center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
         //public static void UnsafeDirectSetData(SpriteShape lion,
         //    int numPaths,

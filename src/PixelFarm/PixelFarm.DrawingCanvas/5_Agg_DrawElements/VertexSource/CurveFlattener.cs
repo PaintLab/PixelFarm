@@ -173,17 +173,8 @@ namespace PixelFarm.Agg.VertexSource
                                     break;
                                 case CurvePointMode.P3:
                                     {
-                                        // vxs.AddVertex(x, y, cmd);
                                         c4p3.x = x;
                                         c4p3.y = y;
-                                        //m_curve4.MakeLines(vxs,
-                                        //    lastX, lasty,
-                                        //    c3p2.X, c3p2.Y,
-                                        //    c4p2.x, c4p2.y,
-                                        //    x, y);
-
-                                        // vxs.AddVertex(x, y, cmd);
-
                                     }
                                     break;
                                 case CurvePointMode.NotCurve:
@@ -213,8 +204,7 @@ namespace PixelFarm.Agg.VertexSource
                                     break;
                                 case CurvePointMode.P3:
                                     {
-                                        //from curve4
-                                        // vxs.AddVertex(x, y, cmd);
+
                                         m_curve4.MakeLines(vxs,
                                             lastX, lasty,
                                             c4p2.x, c4p2.y,
@@ -257,7 +247,7 @@ namespace PixelFarm.Agg.VertexSource
                             lasty = lastMoveY;
                         }
                         break;
-                     
+
                     default:
                         {
                             //move to, and end command
