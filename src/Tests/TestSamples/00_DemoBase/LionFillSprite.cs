@@ -81,7 +81,7 @@ namespace PixelFarm.Agg
                 return result;
             }
         }
-        public bool HitTest(float x, float y)
+        public bool HitTest(float x, float y, bool withSubPathTest)
         {
             RectD bounds = lionShape.Bounds;
             bounds.Offset(_posX, _posY);
@@ -91,6 +91,11 @@ namespace PixelFarm.Agg
                 _mouseDownX = x;
                 _mouseDownY = y;
 
+
+                if (withSubPathTest && lionShape.HitTestOnSubPart(x, y))
+                {
+
+                }
                 //                //find capture point relative to the bounds
 
                 //                _capY = (float)bounds.Top - y;

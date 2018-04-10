@@ -130,7 +130,7 @@ namespace PixelFarm.Agg.Samples
         {
 
             //check if we hit a lion or not 
-            hitOnLion = lionFill.HitTest(x, y);
+            hitOnLion = lionFill.HitTest(x, y, isRightButton);
             base.MouseDown(x, y, isRightButton);
         }
         public override void MouseUp(int x, int y)
@@ -174,23 +174,7 @@ namespace PixelFarm.Agg.Samples
                 }
             }
         }
-        //[DemoConfig(MaxValue = 20)]
-        //public int SharpRadius
-        //{
-        //    //test
-        //    get { return lionFill.SharpenRadius; }
-        //    set { lionFill.SharpenRadius = value; }
 
-        //}
-        //[DemoConfig(MaxValue = 255)]
-        //public int AlphaValue
-        //{
-        //    get { return lionFill.AlphaValue; }
-        //    set
-        //    {
-        //        lionFill.AlphaValue = (byte)value;
-        //    }
-        //}
     }
 
 }

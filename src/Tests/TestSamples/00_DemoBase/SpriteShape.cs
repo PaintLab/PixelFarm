@@ -159,7 +159,9 @@ namespace PixelFarm.Agg
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
         public void UpdateBounds()
-        {  //find bound
+        {
+            //find bound
+            //TODO: review here
             int partCount = _svgRenderVx.SvgVxCount;
             RectD rectTotal = new RectD();
             for (int i = 0; i < partCount; ++i)
@@ -173,9 +175,39 @@ namespace PixelFarm.Agg
                 PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
             }
             this.boundingRect = rectTotal;
+        }
 
-            
+        VertexStore _selectedVxs = null;
+        public bool HitTestOnSubPart(float x, float y)
+        {
+            int partCount = _svgRenderVx.SvgVxCount;
 
+            _selectedVxs = null;//reset
+            for (int i = 0; i < partCount; ++i)
+            {
+                SvgVx vx = _svgRenderVx.GetInnerVx(i);
+                if (vx.Kind != SvgRenderVxKind.Path)
+                {
+                    continue;
+                }
+                VertexStore innerVxs = vx.GetVxs();
+                //fine tune
+                //hit test ***
+                if (VertexHitTester.IsPointInVxs(innerVxs, x, y))
+                {
+
+                    if (_selectedVxs != null)
+                    {
+                        //de-selected this first
+                    }
+
+
+                    _selectedVxs = innerVxs;
+                    vx.FillColor = Color.Black;
+                    return true;
+                }
+            }
+            return false;
         }
         //public static void UnsafeDirectSetData(SpriteShape lion,
         //    int numPaths,
