@@ -44,7 +44,7 @@ namespace PixelFarm.VectorMath
         /// <param name="startAnchor">The start anchor.</param>
         /// <param name="endAnchor">The end anchor.</param>
         /// <param name="controlPoint">The control point.</param>
-        public BezierCurveQuadric(Vector2 startAnchor, Vector2 endAnchor, Vector2 controlPoint)
+        public BezierCurveQuadric(Vector2 startAnchor, Vector2 controlPoint, Vector2 endAnchor)
         {
             this.StartAnchor = startAnchor;
             this.EndAnchor = endAnchor;

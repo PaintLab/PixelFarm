@@ -89,35 +89,55 @@ namespace PixelFarm.Agg
 
 
         static int NSteps = 20;
-        public static void CreateBezierVxs3(VertexStore vxs, Vector2 start, Vector2 end,
-           Vector2 control1)
+        public static void CreateBezierVxs3(VertexStore vxs,
+            double x0, double y0,
+            double x1, double y1,
+            double x2, double y2)
         {
-            var curve = new VectorMath.BezierCurveQuadric(
-                start, end,
-                control1);
-            vxs.AddLineTo(start.x, start.y);
-            float eachstep = (float)1 / NSteps;
-            float stepSum = eachstep;//start
-            for (int i = NSteps - 1; i >= 0; --i)
+
+            //1. subdiv technique
+            s_curve3Div.Init(x0, y0, x1, y1, x2, y2);
+
+           
+            ArrayList<Vector2> points = s_curve3Div.GetInternalPoints();
+            int n = 0;
+            for (int i = points.Length - 1; i >= 0; --i)
             {
-                var vector2 = curve.CalculatePoint(stepSum);
-                vxs.AddLineTo(vector2.x, vector2.y);
-                stepSum += eachstep;
+                Vector2 p = points[n++];
+                vxs.AddLineTo(p.x, p.y);
             }
-            vxs.AddLineTo(end.x, end.y);
+
+
+            //2. old tech --  use incremental
+            //var curve = new VectorMath.BezierCurveQuadric(
+            //    new Vector2(x0, y0),
+            //    new Vector2(x1, y1),
+            //    new Vector2(x2, y2));
+
+            //vxs.AddLineTo(x0, y0);
+            //float eachstep = (float)1 / NSteps;
+            //float stepSum = eachstep;//start
+            //for (int i = NSteps - 1; i >= 0; --i)
+            //{
+            //    var vector2 = curve.CalculatePoint(stepSum);
+            //    vxs.AddLineTo(vector2.x, vector2.y);
+            //    stepSum += eachstep;
+            //}
+            //vxs.AddLineTo(x2, y2);
 
         }
 
         static Curve4Div s_curve4Div = new Curve4Div();
+        static Curve3Div s_curve3Div = new Curve3Div();
 
-        public static void CreateBezierVxs4(VertexStore vxs,
-          double x0, double y0,
-          double x1, double y1,
-          double x2, double y2,
-          double x3, double y3)
+        static void CreateBezierVxs4(VertexStore vxs,
+        double x0, double y0,
+        double x1, double y1,
+        double x2, double y2,
+        double x3, double y3)
         {
 
-            //eg use subdiv technique
+            //1. subdiv technique
 
             s_curve4Div.Init(x0, y0, x1, y1, x2, y2, x3, y3);
             ArrayList<Vector2> points = s_curve4Div.GetInternalPoints();
@@ -131,7 +151,7 @@ namespace PixelFarm.Agg
 
 
             //----------------------------------------
-            //old tech --  use incremental
+            //2. old tech --  use incremental
             //var curve = new VectorMath.BezierCurveCubic(
             //    start, end,
             //    control1, control2);
@@ -148,6 +168,19 @@ namespace PixelFarm.Agg
 
 
         }
+        /// <summary>
+        /// create lines from curve
+        /// </summary>
+        /// <param name="curve"></param>
+        /// <param name="vxs"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="p2x"></param>
+        /// <param name="p2y"></param>
+        /// <param name="p3x"></param>
+        /// <param name="p3y"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
         public static void MakeLines(this Curve4 curve, VertexStore vxs, double x1, double y1,
             double p2x, double p2y,
             double p3x, double p3y,
@@ -168,9 +201,9 @@ namespace PixelFarm.Agg
                double x2, double y2)
         {
             CreateBezierVxs3(vxs,
-               new PixelFarm.VectorMath.Vector2(x1, y1),
-               new PixelFarm.VectorMath.Vector2(x2, y2),
-               new PixelFarm.VectorMath.Vector2(cx, cy));
+                x1, y1,
+                cx, cy,
+                x2, y2);
         }
         public static void MakeLines(this Curve3Div curve, VertexStore vxs)
         {
