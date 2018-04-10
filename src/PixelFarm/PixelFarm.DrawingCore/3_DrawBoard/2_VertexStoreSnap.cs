@@ -40,10 +40,7 @@ namespace PixelFarm.Drawing
         {
             get { return this.startAt; }
         }
-        //public bool VxsHasMoreThanOnePart
-        //{
-        //    get { return this.vxs.HasMoreThanOnePart; }
-        //}
+         
         public VertexSnapIter GetVertexSnapIter()
         {
             return new VertexSnapIter(this);
