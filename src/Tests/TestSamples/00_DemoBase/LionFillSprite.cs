@@ -91,11 +91,13 @@ namespace PixelFarm.Agg
                 _mouseDownX = x;
                 _mouseDownY = y;
 
-
+                x -= _posX; //offset x to the coordinate of the sprite
+                y -= _posY;
                 if (withSubPathTest && lionShape.HitTestOnSubPart(x, y))
                 {
 
                 }
+
                 //                //find capture point relative to the bounds
 
                 //                _capY = (float)bounds.Top - y;
