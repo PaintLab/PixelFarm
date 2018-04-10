@@ -183,8 +183,10 @@ namespace PixelFarm.Agg
             int partCount = _svgRenderVx.SvgVxCount;
 
             _selectedVxs = null;//reset
-            for (int i = 0; i < partCount; ++i)
-            {
+            for (int i = partCount - 1; i >= 0; --i)
+            { 
+                //we do hittest top to bottom => (so => iter backward)
+
                 SvgVx vx = _svgRenderVx.GetInnerVx(i);
                 if (vx.Kind != SvgRenderVxKind.Path)
                 {
