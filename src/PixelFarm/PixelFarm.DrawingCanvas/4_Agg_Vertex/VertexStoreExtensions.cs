@@ -107,22 +107,44 @@ namespace PixelFarm.Agg
             vxs.AddLineTo(end.x, end.y);
 
         }
-        public static void CreateBezierVxs4(VertexStore vxs, Vector2 start, Vector2 end,
+
+        static Curve4Div s_curve4Div = new Curve4Div();
+
+        public static void CreateBezierVxs4(VertexStore vxs,
+           Vector2 start, Vector2 end,
            Vector2 control1, Vector2 control2)
         {
-            var curve = new VectorMath.BezierCurveCubic(
-                start, end,
-                control1, control2);
-            vxs.AddLineTo(start.x, start.y);
-            float eachstep = (float)1 / NSteps;
-            float stepSum = eachstep;//start
-            for (int i = NSteps - 1; i >= 0; --i)
+
+            //eg use subdiv technique
+
+            s_curve4Div.Init(start.x, start.y, control1.x, control1.y, control2.x, control2.y, end.x, end.y);
+            ArrayList<Vector2> points = s_curve4Div.GetInternalPoints();
+
+            int n = 0;
+            for (int i = points.Length - 1; i >= 0; --i)
             {
-                var vector2 = curve.CalculatePoint(stepSum);
-                vxs.AddLineTo(vector2.x, vector2.y);
-                stepSum += eachstep;
+                Vector2 p = points[n++];
+                vxs.AddLineTo(p.x, p.y);
             }
-            vxs.AddLineTo(end.x, end.y);
+
+
+            //----------------------------------------
+            //old tech --  use incremental
+            //var curve = new VectorMath.BezierCurveCubic(
+            //    start, end,
+            //    control1, control2);
+            //vxs.AddLineTo(start.x, start.y);
+            //float eachstep = (float)1 / NSteps;
+            //float stepSum = eachstep;//start
+            //for (int i = NSteps - 1; i >= 0; --i)
+            //{
+            //    var vector2 = curve.CalculatePoint(stepSum);
+            //    vxs.AddLineTo(vector2.x, vector2.y);
+            //    stepSum += eachstep;
+            //}
+            //vxs.AddLineTo(end.x, end.y); 
+
+
         }
         public static void MakeLines(this Curve4 curve, VertexStore vxs, double x1, double y1,
             double p2x, double p2y,
@@ -147,56 +169,6 @@ namespace PixelFarm.Agg
                new PixelFarm.VectorMath.Vector2(x1, y1),
                new PixelFarm.VectorMath.Vector2(x2, y2),
                new PixelFarm.VectorMath.Vector2(cx, cy));
-            return;
-            //if (this.m_approximation_method == Curves.CurveApproximationMethod.Inc)
-            //{
-            //    //m_curve_inc.Init(x1, y1, cx, cy, x2, y2);
-            //    //bool isFirst = true;
-            //    //foreach (VertexData currentVertextData in m_curve_inc.GetVertexIter())
-            //    //{
-            //    //    if (isFirst)
-            //    //    {
-            //    //        isFirst = false;
-            //    //        continue;
-            //    //    }
-
-            //    //    if (ShapePath.IsEmpty(currentVertextData.command))
-            //    //    {
-            //    //        break;
-            //    //    }
-
-            //    //    VertexData vertexData = new VertexData(
-            //    //       NxCmdAndFlags.LineTo,
-            //    //       currentVertextData.position);
-
-            //    //    vxs.AddVertex(vertexData);
-            //    //}
-            //}
-            //else
-            //{
-            //    m_curve_div.Init(x1, y1, cx, cy, x2, y2);
-            //    m_curve_div.MakeLines(vxs);
-            //}
-
-            ////---------------------------------------------------------------------
-            //IEnumerator<VertexData> curveIterator = this.GetVertexIter().GetEnumerator();
-            //curveIterator.MoveNext(); // First call returns path_cmd_move_to
-            //do
-            //{
-            //    curveIterator.MoveNext();
-            //    VertexData currentVertextData = curveIterator.Current;
-            //    if (ShapePath.IsEmpty(currentVertextData.command))
-            //    {
-            //        break;
-            //    }
-
-            //    VertexData vertexData = new VertexData(
-            //       NxCmdAndFlags.LineTo,
-            //       currentVertextData.position);
-
-            //    vxs.AddVertex(vertexData);
-
-            //} while (!ShapePath.IsEmpty(curveIterator.Current.command));
         }
         public static void MakeLines(this Curve3Div curve, VertexStore vxs)
         {
