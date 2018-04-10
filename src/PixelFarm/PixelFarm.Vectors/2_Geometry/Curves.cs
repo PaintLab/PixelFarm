@@ -30,9 +30,9 @@ namespace PixelFarm.Agg.VertexSource
         }
 
         //static readonly double CURVE_DISTANCE_EPSILON = 1e-30;
-        internal static readonly double CURVE_COLLINEARITY_EPSILON = 1e-30;
-        internal static readonly double CURVE_ANGLE_TOLERANCE_EPSILON = 0.01;
-        internal static readonly int CURVE_RECURSION_LIMIT = 32;
+        internal const double CURVE_COLLINEARITY_EPSILON = 1e-30;
+        internal const double CURVE_ANGLE_TOLERANCE_EPSILON = 0.01;
+        internal const int CURVE_RECURSION_LIMIT = 32;
         //-------------------------------------------------------catrom_to_bezier
         public static Curve4Points CatromToBezier(double x1, double y1,
                                               double x2, double y2,
@@ -194,14 +194,14 @@ namespace PixelFarm.Agg.VertexSource
                 m_num_steps = 4;
             }
 
-            double subdivide_step = 1.0 / m_num_steps;
-            double subdivide_step2 = subdivide_step * subdivide_step;
-            double tmpx = (x1 - cx * 2.0 + x2) * subdivide_step2;
-            double tmpy = (y1 - cy * 2.0 + y2) * subdivide_step2;
+            double eachIncStep = 1.0 / m_num_steps;
+            double eachIncStep2 = eachIncStep * eachIncStep;
+            double tmpx = (x1 - cx * 2.0 + x2) * eachIncStep2;
+            double tmpy = (y1 - cy * 2.0 + y2) * eachIncStep2;
             m_saved_fx = m_fx = x1;
             m_saved_fy = m_fy = y1;
-            m_saved_dfx = m_dfx = tmpx + (cx - x1) * (2.0 * subdivide_step);
-            m_saved_dfy = m_dfy = tmpy + (cy - y1) * (2.0 * subdivide_step);
+            m_saved_dfx = m_dfx = tmpx + (cx - x1) * (2.0 * eachIncStep);
+            m_saved_dfy = m_dfy = tmpy + (cy - y1) * (2.0 * eachIncStep);
             m_ddfx = tmpx * 2.0;
             m_ddfy = tmpy * 2.0;
             m_step = m_num_steps;
@@ -479,21 +479,21 @@ namespace PixelFarm.Agg.VertexSource
                 m_num_steps = 4;
             }
 
-            double subdivide_step = 1.0 / m_num_steps;
-            double subdivide_step2 = subdivide_step * subdivide_step;
-            double subdivide_step3 = subdivide_step * subdivide_step * subdivide_step;
-            double pre1 = 3.0 * subdivide_step;
-            double pre2 = 3.0 * subdivide_step2;
-            double pre4 = 6.0 * subdivide_step2;
-            double pre5 = 6.0 * subdivide_step3;
+            double eachIncStep = 1.0 / m_num_steps;
+            double eachIncStep2 = eachIncStep * eachIncStep;
+            double eachIncStep3 = eachIncStep * eachIncStep * eachIncStep;
+            double pre1 = 3.0 * eachIncStep;
+            double pre2 = 3.0 * eachIncStep2;
+            double pre4 = 6.0 * eachIncStep2;
+            double pre5 = 6.0 * eachIncStep3;
             double tmp1x = x1 - cx1 * 2.0 + cx2;
             double tmp1y = y1 - cy1 * 2.0 + cy2;
             double tmp2x = (cx1 - cx2) * 3.0 - x1 + x2;
             double tmp2y = (cy1 - cy2) * 3.0 - y1 + y2;
             m_saved_fx = m_fx = x1;
             m_saved_fy = m_fy = y1;
-            m_saved_dfx = m_dfx = (cx1 - x1) * pre1 + tmp1x * pre2 + tmp2x * subdivide_step3;
-            m_saved_dfy = m_dfy = (cy1 - y1) * pre1 + tmp1y * pre2 + tmp2y * subdivide_step3;
+            m_saved_dfx = m_dfx = (cx1 - x1) * pre1 + tmp1x * pre2 + tmp2x * eachIncStep3;
+            m_saved_dfy = m_dfy = (cy1 - y1) * pre1 + tmp1y * pre2 + tmp2y * eachIncStep3;
             m_saved_ddfx = m_ddfx = tmp1x * pre4 + tmp2x * pre5;
             m_saved_ddfy = m_ddfy = tmp1y * pre4 + tmp2y * pre5;
             m_dddfx = tmp2x * pre5;
