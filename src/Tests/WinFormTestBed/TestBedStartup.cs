@@ -1,4 +1,4 @@
-﻿#define GL_ENABLE
+﻿//#define GL_ENABLE
 using System;
 using System.Windows.Forms;
 using LayoutFarm.UI;
