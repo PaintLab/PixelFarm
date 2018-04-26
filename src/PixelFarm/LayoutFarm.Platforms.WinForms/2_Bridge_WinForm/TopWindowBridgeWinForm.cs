@@ -196,7 +196,7 @@ namespace LayoutFarm.UI
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
-        public void HandleMouseDown(MouseEventArgs e)
+        public void HandleMouseDown(System.Windows.Forms.MouseEventArgs e)
         {
             canvasViewport.FullMode = false;
             this.topWinEventRoot.RootMouseDown(
@@ -220,7 +220,7 @@ namespace LayoutFarm.UI
 #endif
 
         }
-        public void HandleMouseMove(MouseEventArgs e)
+        public void HandleMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
             this.topWinEventRoot.RootMouseMove(
                     e.X + this.canvasViewport.ViewportX,
@@ -246,7 +246,7 @@ namespace LayoutFarm.UI
                     return UIMouseButtons.Left;
             }
         }
-        public void HandleMouseUp(MouseEventArgs e)
+        public void HandleMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
             canvasViewport.FullMode = false;
             topWinEventRoot.RootMouseUp(
@@ -259,7 +259,7 @@ namespace LayoutFarm.UI
             }
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleMouseWheel(MouseEventArgs e)
+        public void HandleMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             canvasViewport.FullMode = true;
             this.topWinEventRoot.RootMouseWheel(e.Delta);
@@ -269,7 +269,7 @@ namespace LayoutFarm.UI
             }
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleKeyDown(KeyEventArgs e)
+        public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
 #if DEBUG
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
@@ -280,13 +280,13 @@ namespace LayoutFarm.UI
             this.topWinEventRoot.RootKeyDown(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleKeyUp(KeyEventArgs e)
+        public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             canvasViewport.FullMode = false;
             this.topWinEventRoot.RootKeyUp(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleKeyPress(KeyPressEventArgs e)
+        public void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
         {
             if (char.IsControl(e.KeyChar))
             {
