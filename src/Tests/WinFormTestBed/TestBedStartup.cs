@@ -8,9 +8,11 @@ namespace YourImplementation
     {
         public static void Setup()
         {
-#if GL_ENABLE 
+#if GL_ENABLE
             YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
-#endif
+#else
+            CommonTextServiceSetup.SetupDefaultValues();
+#endif 
             PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 

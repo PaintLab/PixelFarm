@@ -11,6 +11,12 @@ namespace YourImplementation
         public Stream GetDataStream(string strmUrl)
         {
             string fullname = icuDir + "/" + strmUrl;
+            //temp fix
+            if (File.Exists(fullname))
+            {
+                return new FileStream(fullname, FileMode.Open);
+            }
+            
             if (PixelFarm.Platforms.StorageService.Provider.DataExists(fullname))
             {
                 return PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fullname);
@@ -40,11 +46,14 @@ namespace YourImplementation
             myFontLoader = new OpenFontStore();
             //test Typography's custom text break, 
             //check if we have that data? 
-            
-            string typographyDir = @"/icu/brkitr_src/dictionaries";
-            s_icuDataProvider = new MyIcuDataProvider();
-            s_icuDataProvider.icuDir = typographyDir;
 
+            //string typographyDir = @"/icu/brkitr_src/dictionaries";
+            string typographyDir = @"d:/test/icu60/brkitr_src/dictionaries";
+            s_icuDataProvider = new MyIcuDataProvider();
+            if (System.IO.Directory.Exists(typographyDir))
+            {
+                s_icuDataProvider.icuDir = typographyDir;
+            }
             Typography.TextBreak.CustomBreakerBuilder.Setup(s_icuDataProvider);
             s_isInit = true;
         }
