@@ -665,6 +665,7 @@ namespace LayoutFarm.UI
             canvas.StrokeColor = prevColor;
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
+            Rectangle uArea = updateArea;
             do
             {
                 for (int i = startRowId; i < stopRowId; i++)
@@ -675,14 +676,18 @@ namespace LayoutFarm.UI
                         int x = gridItem.X;
                         int y = gridItem.Y;
                         canvas.OffsetCanvasOrigin(x, y);
+
+                        updateArea = uArea;//reset
                         updateArea.Offset(-x, -y);
                         var renderContent = gridItem.ContentElement as RenderElement;
                         if (renderContent != null)
                         {
+
                             if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                             {
                                 renderContent.DrawToThisCanvas(canvas, updateArea);
                             }
+
                             canvas.PopClipAreaRect();
                         }
 
