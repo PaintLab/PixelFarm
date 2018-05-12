@@ -69,6 +69,7 @@ namespace LayoutFarm.CustomWidgets
                 if (HasReadyRenderElement)
                 {
                     this.primElement.BackColor = value;
+                     
                 }
             }
         }

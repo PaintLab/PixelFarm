@@ -57,6 +57,8 @@ namespace LayoutFarm.CustomWidgets
         GridBoxRenderElement gridBoxRenderE;
         GridTable gridTable = new GridTable();
         CellSizeStyle cellSizeStyle;
+
+
         public GridBox(int width, int height)
             : base(width, height)
         {
@@ -80,6 +82,53 @@ namespace LayoutFarm.CustomWidgets
             {
                 rows.Add(new GridRow(1));
             }
+        }
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            //check if cell content
+            //find grid item
+            int nrows = gridTable.RowCount;
+            int colCount = gridTable.ColumnCount;
+            var rows = gridTable.Rows;
+            GridLayer layer = gridBoxRenderE.GridLayer;
+
+            bool found = false;
+            for (int n = 0; !found && n < nrows; ++n)
+            {
+                for (int cc = 0; !found && cc < colCount; ++cc)
+                {
+
+                    GridCell gridCell = gridTable.GetCell(n, cc);
+                    if (gridCell != null && gridCell.ContentElement != null)
+                    {
+                        //check if the content is on the hit
+                        GridCell gridCell1 = layer.GetCell(n, cc);
+                        var content = gridCell.ContentElement as UIElement;
+                        if (content != null)
+                        {
+                            var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
+                            if (re.ContainPoint(e.X - gridCell1.X, e.Y - gridCell1.Y))
+                            {
+                                //hit on this elem too!
+                                IEventListener evenListener = (IEventListener)content;
+
+                                int tmpX = e.X;
+                                int tmpY = e.Y;
+                                e.SetLocation(tmpX - gridCell1.X, tmpY - gridCell1.Y);
+                                evenListener.ListenMouseDown(e);
+                                e.SetLocation(tmpX, tmpY);
+                                found = true;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
+
+            base.OnMouseDown(e);
         }
         public override void SetSize(int width, int height)
         {
@@ -140,10 +189,56 @@ namespace LayoutFarm.CustomWidgets
                 gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
                 if (this.gridBoxRenderE != null)
                 {
-                    gridBoxRenderE.SetContent(rowIndex, colIndex, ui.GetPrimaryRenderElement(gridBoxRenderE.Root));
+                    RenderElement re = ui.GetPrimaryRenderElement(gridBoxRenderE.Root);
+                    gridBoxRenderE.SetContent(rowIndex, colIndex, re);
+
+
+                    GridLayer layer = gridBoxRenderE.GridLayer;
+                    GridCell gridCell = layer.GetCell(rowIndex, colIndex);
+
+                    GridCellParentLink parentLink = new GridCellParentLink(gridCell, gridBoxRenderE);
+                    RenderElement.SetParentLink(re, parentLink);
                 }
             }
         }
+
+        class GridCellParentLink : RenderBoxes.IParentLink
+        {
+            RenderElement _parentRenderE;
+            GridCell _gridCell;
+            public GridCellParentLink(GridCell gridCell, RenderElement parentRenderE)
+            {
+                _parentRenderE = parentRenderE;
+                _gridCell = gridCell;
+            }
+            public RenderElement ParentRenderElement
+            {
+                get
+                {
+                    return _parentRenderE;
+                }
+            }
+
+            public void AdjustLocation(ref Point p)
+            {
+                p.X += _gridCell.X;
+                p.Y += _gridCell.Y;
+            }
+
+#if DEBUG
+            public string dbugGetLinkInfo()
+            {
+                return "";
+            }
+#endif
+
+            public RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
+            {
+                return null;
+            }
+        }
+
+
         public CellSizeStyle CellSizeStyle
         {
             get { return this.cellSizeStyle; }
@@ -163,6 +258,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 var myGridBox = new GridBoxRenderElement(rootgfx, this.Width, this.Height);
                 myGridBox.SetLocation(this.Left, this.Top);
+                myGridBox.SetController(this);
                 this.SetPrimaryRenderElement(myGridBox);
                 this.gridBoxRenderE = myGridBox;
                 //create layers
