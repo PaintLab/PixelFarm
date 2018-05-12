@@ -8,6 +8,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
+    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -254,6 +255,81 @@
     <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs">
       <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Engine\Engine.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Engine\Engine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Exceptions\FileDBException.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Exceptions\FileDBException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\ExtensionAttribute.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\ExtensionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\DataFactory.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\DataFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\FileFactory.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\FileFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\HeaderFactory.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\HeaderFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\IndexFactory.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\IndexFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\PageFactory.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\PageFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\FileDB.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\FileDB.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryReaderExtensions.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryReaderExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryWriterExtensions.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryWriterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\CacheIndexPage.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\CacheIndexPage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\DebugFile.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\DebugFile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\FileDBExtensions.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\FileDBExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\IOExceptionExtensions.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\IOExceptionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\MimeTypeConverter.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\MimeTypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\SomeLinq.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\SomeLinq.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Stream\FileDBStream.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Stream\FileDBStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\BasePage.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\BasePage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\DataPage.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\DataPage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\EntryInfo.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\EntryInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\Header.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\Header.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexLink.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexLink.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexNode.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexPage.cs">
+      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexPage.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.PlatformBase\BootStrapSkia.cs">
       <Link>PixelFarm\LayoutFarm.PlatformBase\BootStrapSkia.cs</Link>
     </Compile>
@@ -272,17 +348,18 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs">
       <Link>PixelFarm\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\ActiveFontAtlasService.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\ActiveFontAtlasService.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -304,15 +381,27 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs">
+      <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
+      <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
+      <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\4_GdiPlus\1_GdiPlusCanvasViewport.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\4_GdiPlus\1_GdiPlusCanvasViewport.cs</Link>
@@ -461,9 +550,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
-      <Link>PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs</Link>
     </Compile>
@@ -493,6 +579,99 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRun.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRun.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRunCharLocation.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableRunCharLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableTextRun.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\EditableTextRun.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\SolidTextRun.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\TextSpanSytle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualPointInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualSelectionRange.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_EditableRuns\VisualSelectionRange.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\0_EditableTextLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_EditableTextLine_CORE_Collection.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_EditableTextLine_CORE_Collection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\6_EditableTextLine_Advanced.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\6_EditableTextLine_Advanced.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineReaderWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextLayerController.TextFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CaretRenderElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CustomRenderSurface.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\CustomRenderSurface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\GlobalCaretController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\RenderSurfaceScrollRelation.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\RenderSurfaceScrollRelation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StyleHelper.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\StyleHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\VisualPaintEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs">
       <Link>PixelFarm\PaintLab.RenderTree\1_Root\1_RootGraphic.cs</Link>
@@ -584,152 +763,59 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs">
       <Link>PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.1_EditableRuns\EditableRun.cs">
-      <Link>PixelFarm\PaintLab.Text\1.1_EditableRuns\EditableRun.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.1_EditableRuns\EditableRunCharLocation.cs">
-      <Link>PixelFarm\PaintLab.Text\1.1_EditableRuns\EditableRunCharLocation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.1_EditableRuns\EditableTextRun.cs">
-      <Link>PixelFarm\PaintLab.Text\1.1_EditableRuns\EditableTextRun.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.1_EditableRuns\SolidTextRun.cs">
-      <Link>PixelFarm\PaintLab.Text\1.1_EditableRuns\SolidTextRun.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.1_EditableRuns\TextSpanSytle.cs">
-      <Link>PixelFarm\PaintLab.Text\1.1_EditableRuns\TextSpanSytle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.1_EditableRuns\VisualPointInfo.cs">
-      <Link>PixelFarm\PaintLab.Text\1.1_EditableRuns\VisualPointInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.1_EditableRuns\VisualSelectionRange.cs">
-      <Link>PixelFarm\PaintLab.Text\1.1_EditableRuns\VisualSelectionRange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\0_EditableTextLine.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\0_EditableTextLine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\1_EditableTextLine_CORE_Collection.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\1_EditableTextLine_CORE_Collection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\6_EditableTextLine_Advanced.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\6_EditableTextLine_Advanced.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\debugActivityRecorder.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\debugActivityRecorder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.2_Lines\TextLineReaderWriter.cs">
-      <Link>PixelFarm\PaintLab.Text\1.2_Lines\TextLineReaderWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.3_Layer\1_EditableTextFlowLayer.cs">
-      <Link>PixelFarm\PaintLab.Text\1.3_Layer\1_EditableTextFlowLayer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs">
-      <Link>PixelFarm\PaintLab.Text\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.1_MultiLineController\DocumentActions.cs">
-      <Link>PixelFarm\PaintLab.Text\2.1_MultiLineController\DocumentActions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.1_MultiLineController\TextLayerController.cs">
-      <Link>PixelFarm\PaintLab.Text\2.1_MultiLineController\TextLayerController.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs">
-      <Link>PixelFarm\PaintLab.Text\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.1_MultiLineController\TextLayerController.TextFunctions.cs">
-      <Link>PixelFarm\PaintLab.Text\2.1_MultiLineController\TextLayerController.TextFunctions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.1_MultiLineController\TextSurfaceEventListener.cs">
-      <Link>PixelFarm\PaintLab.Text\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\CaretRenderElement.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\CaretRenderElement.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\CustomRenderSurface.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\CustomRenderSurface.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\GlobalCaretController.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\GlobalCaretController.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\RenderSurfaceScrollRelation.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\RenderSurfaceScrollRelation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\StyleHelper.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\StyleHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Text\2.2_TextRenderBox\VisualPaintEventArgs.cs">
-      <Link>PixelFarm\PaintLab.Text\2.2_TextRenderBox\VisualPaintEventArgs.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs">
       <Link>PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\0_Bootstrap\BootStrapOpenGLES2.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\0_Bootstrap\BootStrapOpenGLES2.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\0_Bootstrap\BootStrapWinGdi.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\0_Bootstrap\BootStrapWinGdi.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapWinGdi.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapWinGdi.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\0_Bootstrap\CommonTextServiceSetup.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\0_Bootstrap\CommonTextServiceSetup.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\CommonTextServiceSetup.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\CommonTextServiceSetup.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\1_Events\GraphicsTimerTasksManager.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\1_Events\GraphicsTimerTasksManager.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\1_Events\MyIntervalTaskEventArgs.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\1_Events\MyIntervalTaskEventArgs.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\1_Events\RenderElementEventPortal.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\1_Events\RenderElementEventPortal.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\MyIntervalTaskEventArgs.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\1_Events\MyIntervalTaskEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\1_Events\ToNotifySizeChangedEvent.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\1_Events\ToNotifySizeChangedEvent.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\RenderElementEventPortal.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\1_Events\RenderElementEventPortal.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\1_Events\TopWindowEventRoot.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\1_Events\TopWindowEventRoot.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\ToNotifySizeChangedEvent.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\1_Events\ToNotifySizeChangedEvent.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\1_Events\UIHoverMonitor.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\1_Events\UIHoverMonitor.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\TopWindowEventRoot.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\1_Events\TopWindowEventRoot.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\ClientBinder.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\ClientBinder.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\UIHoverMonitor.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\1_Events\UIHoverMonitor.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\ImageCacheSystem.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\ImageCacheSystem.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ClientBinder.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ClientBinder.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\ImageContentManager.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\ImageContentManager.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageCacheSystem.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageCacheSystem.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\TextContentManager.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\2_ContentManagers\TextContentManager.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageContentManager.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\2_ContentManagers\ImageContentManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\3_RenderTreeRoot\0_MyRootGraphic.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\3_RenderTreeRoot\0_MyRootGraphic.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\2_ContentManagers\TextContentManager.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\2_ContentManagers\TextContentManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\3_RenderTreeRoot\TopWindowRenderBox.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\3_RenderTreeRoot\TopWindowRenderBox.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot\0_MyRootGraphic.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot\0_MyRootGraphic.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.Gdi.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.Gdi.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot\TopWindowRenderBox.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot\TopWindowRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\NativeFontStore.cs">
-      <Link>PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\NativeFontStore.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\win32utils\MyWin32.cs">
       <Link>PixelFarm\win32utils\MyWin32.cs</Link>
@@ -1151,6 +1237,9 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\rendersurface\AggRenderSurface_RenderImages.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\rendersurface\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs</Link>
     </Compile>
@@ -1483,6 +1572,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\tesselate\Tesselator.cs">
       <Link>PixelFarm\tesselate\Tesselator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs">
       <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs</Link>
@@ -1975,6 +2067,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
@@ -1987,6 +2080,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
@@ -2423,9 +2517,6 @@
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs">
-      <Link>PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs">
       <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs</Link>
     </Compile>
@@ -2522,9 +2613,6 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextFlow\Dom\TextRun.cs">
       <Link>PixelFarm\Typography\Typography.TextFlow\Dom\TextRun.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Typography.TextFlow\Layout\SingleLineLayoutEngine.cs">
-      <Link>PixelFarm\Typography\Typography.TextFlow\Layout\SingleLineLayoutEngine.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextFlow\Simple\SmallLine.cs">
       <Link>PixelFarm\Typography\Typography.TextFlow\Simple\SmallLine.cs</Link>
     </Compile>
@@ -2551,6 +2639,71 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\Win32Utils\Win32_NotUsed.cs">
       <Link>PixelFarm\Win32Utils\Win32_NotUsed.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\Interfaces\Interfaces.cs">
+      <Link>Tests\WinFormTestBed\Interfaces\Interfaces.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs">
+      <Link>Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\SampleViewportExtension.cs">
+      <Link>Tests\WinFormTestBed\SampleViewportExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\SimpleDelegates.cs">
+      <Link>Tests\WinFormTestBed\SimpleDelegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\TestBedStartup.cs">
+      <Link>Tests\WinFormTestBed\TestBedStartup.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\DemoBase.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\DemoBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormCanvasHelper.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormCanvasHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopShadowHelper.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormPopShadowHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\MyTextBreaker.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\MyTextBreaker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\SampleViewport.cs">
+      <Link>Tests\WinFormTestBed\YourImplementation\SampleViewport.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -57,17 +57,17 @@ namespace LayoutFarm.UI
             base.OnLostFocus(e);
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs e)
         {
             this.winBridge.HandleMouseDown(e);
             base.OnMouseDown(e);
         }
-        protected override void OnMouseMove(MouseEventArgs e)
+        protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
             this.winBridge.HandleMouseMove(e);
             base.OnMouseMove(e);
         }
-        protected override void OnMouseUp(MouseEventArgs e)
+        protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
             this.winBridge.HandleMouseUp(e);
             base.OnMouseUp(e);
@@ -80,17 +80,17 @@ namespace LayoutFarm.UI
             base.OnPaint(e);
         }
 
-        protected override void OnMouseWheel(MouseEventArgs e)
+        protected override void OnMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             this.winBridge.HandleMouseWheel(e);
             //not call to base class
         }
-        protected override void OnKeyDown(KeyEventArgs e)
+        protected override void OnKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
             this.winBridge.HandleKeyDown(e);
             base.OnKeyDown(e);
         }
-        protected override void OnKeyUp(KeyEventArgs e)
+        protected override void OnKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             this.winBridge.HandleKeyUp(e);
             base.OnKeyUp(e);
@@ -108,7 +108,7 @@ namespace LayoutFarm.UI
             return base.ProcessDialogKey(keyData);
         }
 
-        void CpuGdiPlusSurfaceView_MouseWheel(object sender, MouseEventArgs e)
+        void CpuGdiPlusSurfaceView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             this.winBridge.HandleMouseWheel(e);
         }

@@ -59,6 +59,13 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
+        public int CurrentLineHeight
+        {
+            get
+            {
+                return this.textEditRenderElement.CurrentLineHeight;
+            }
+        }
         public Point CaretPosition
         {
             get { return this.textEditRenderElement.CurrentCaretPos; }
