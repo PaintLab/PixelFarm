@@ -8,7 +8,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{6A6B34CA-81DD-418E-96D9-C69885845A56}</ProjectGuid>
+    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

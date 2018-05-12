@@ -16,7 +16,7 @@ namespace YourImplementation
             {
                 return new FileStream(fullname, FileMode.Open);
             }
-            
+
             if (PixelFarm.Platforms.StorageService.Provider.DataExists(fullname))
             {
                 return PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fullname);
@@ -27,7 +27,7 @@ namespace YourImplementation
 
 
 
-    static class CommonTextServiceSetup
+    public static class CommonTextServiceSetup
     {
         static bool s_isInit;
         internal static MyIcuDataProvider s_icuDataProvider;
