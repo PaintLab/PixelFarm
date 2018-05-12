@@ -14,14 +14,17 @@ namespace LayoutFarm.UI
         int uniformCellHeight;
         CellSizeStyle cellSizeStyle;
         GridTable gridTable;
-        public GridLayer(RenderElement owner, int nColumns, int nRows, CellSizeStyle cellSizeStyle)
+        public GridLayer(RenderElement owner, CellSizeStyle cellSizeStyle, GridTable gridTable)
             : base(owner)
         {
             this.cellSizeStyle = cellSizeStyle;
-            this.gridTable = new GridTable();
+            this.gridTable = gridTable;
+
             gridRows = gridTable.Rows;
             gridCols = gridTable.Columns;
             int columnWidth = owner.Width;
+
+            int nColumns = gridTable.ColumnCount;
             if (nColumns > 0)
             {
                 columnWidth = columnWidth / nColumns;
@@ -43,7 +46,7 @@ namespace LayoutFarm.UI
                 gridCols.Add(col);
             }
             //------------------------------------------------------------
-
+            int nRows = gridTable.RowCount;
             if (nRows > 0)
             {
                 int rowHeight = owner.Height / nRows;

@@ -11,9 +11,9 @@ namespace LayoutFarm.CustomWidgets
             : base(rootgfx, w, h)
         {
         }
-        public void BuildGrid(int nCols, int nRows, CellSizeStyle cellSizeStyle)
+        public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
-            this.gridLayer = new GridLayer(this, nCols, nRows, cellSizeStyle);
+            this.gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
         }
         public GridLayer GridLayer
         {
@@ -55,14 +55,15 @@ namespace LayoutFarm.CustomWidgets
     public class GridBox : EaseBox
     {
         GridBoxRenderElement gridBoxRenderE;
-        GridTable gridTable = new GridTable();
+
         CellSizeStyle cellSizeStyle;
-
-
+        SimpleBox _dragController;
+        GridTable gridTable;
         public GridBox(int width, int height)
             : base(width, height)
         {
             //has special grid layer
+            gridTable = new GridTable();
 
         }
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
@@ -83,6 +84,15 @@ namespace LayoutFarm.CustomWidgets
                 rows.Add(new GridRow(1));
             }
         }
+
+        protected override void OnMouseMove(UIMouseEventArgs e)
+        {
+            if (e.IsDragging)
+            {
+
+            }
+            base.OnMouseMove(e);
+        }
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
             //check if cell content
@@ -91,6 +101,27 @@ namespace LayoutFarm.CustomWidgets
             int colCount = gridTable.ColumnCount;
             var rows = gridTable.Rows;
             GridLayer layer = gridBoxRenderE.GridLayer;
+
+            GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+            if (hitCell != null)
+            {
+                var content = hitCell.ContentElement as UIElement;
+                if (content != null)
+                {
+                    var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
+                    if (re.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
+                    {
+                        //hit on this elem too!
+                        IEventListener evenListener = (IEventListener)content;
+
+                        int tmpX = e.X;
+                        int tmpY = e.Y;
+                        e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                        evenListener.ListenMouseDown(e);
+                        e.SetLocation(tmpX, tmpY);
+                    }
+                }
+            }
 
             bool found = false;
             for (int n = 0; !found && n < nrows; ++n)
@@ -121,12 +152,9 @@ namespace LayoutFarm.CustomWidgets
                                 break;
                             }
                         }
-
                     }
                 }
             }
-
-
 
             base.OnMouseDown(e);
         }
@@ -266,7 +294,7 @@ namespace LayoutFarm.CustomWidgets
                 int ncols = this.gridTable.ColumnCount;
                 //----------------------------------------        
 
-                myGridBox.BuildGrid(ncols, nrows, this.CellSizeStyle);
+                myGridBox.BuildGrid(gridTable, this.CellSizeStyle);
                 //add grid content
                 for (int c = 0; c < ncols; ++c)
                 {
@@ -280,6 +308,9 @@ namespace LayoutFarm.CustomWidgets
                         }
                     }
                 }
+
+                _dragController = new SimpleBox(10, 10);
+
             }
             return gridBoxRenderE;
         }
