@@ -39,11 +39,11 @@ namespace LayoutFarm.UI
             int cx = 0;
             for (int c = 0; c < nColumns; c++)
             {
-                GridColumn col = new GridColumn(columnWidth);
+                GridColumn col = gridCols.GetColumn(c);
                 col.Width = columnWidth;
                 col.Left = cx;
                 cx += columnWidth;
-                gridCols.Add(col);
+
             }
             //------------------------------------------------------------
             int nRows = gridTable.RowCount;
@@ -53,8 +53,7 @@ namespace LayoutFarm.UI
                 int cy = 0;
                 for (int r = 0; r < nRows; r++)
                 {
-                    var row = new GridRow(rowHeight);
-                    gridRows.Add(row);
+                    GridRow row = gridRows.GetRow(r);
                     row.Height = rowHeight;
                     row.Top = cy;
                     cy += rowHeight;

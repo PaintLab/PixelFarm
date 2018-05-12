@@ -707,7 +707,10 @@ namespace LayoutFarm.UI
             {
                 cols.Clear();
             }
-
+            public GridColumn GetColumn(int index)
+            {
+                return cols[index];
+            }
             public void Add(GridColumn newColumnDef)
             {
                 int j = cols.Count;
@@ -893,6 +896,10 @@ namespace LayoutFarm.UI
             internal GridRowCollection(GridTable table)
             {
                 this.table = table;
+            }
+            public GridRow GetRow(int index)
+            {
+                return rows[index];
             }
             public void MoveRowAfter(GridRow fromRow, GridRow toRow)
             {

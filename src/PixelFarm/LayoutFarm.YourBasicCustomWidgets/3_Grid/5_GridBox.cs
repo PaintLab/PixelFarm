@@ -105,56 +105,68 @@ namespace LayoutFarm.CustomWidgets
             GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
             if (hitCell != null)
             {
-                var content = hitCell.ContentElement as UIElement;
-                if (content != null)
+                var box = hitCell.ContentElement as RenderBoxBase;
+                if (box != null)
                 {
-                    var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
-                    if (re.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
+                    if (box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
                     {
-                        //hit on this elem too!
-                        IEventListener evenListener = (IEventListener)content;
-
-                        int tmpX = e.X;
-                        int tmpY = e.Y;
-                        e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
-                        evenListener.ListenMouseDown(e);
-                        e.SetLocation(tmpX, tmpY);
-                    }
-                }
-            }
-
-            bool found = false;
-            for (int n = 0; !found && n < nrows; ++n)
-            {
-                for (int cc = 0; !found && cc < colCount; ++cc)
-                {
-
-                    GridCell gridCell = gridTable.GetCell(n, cc);
-                    if (gridCell != null && gridCell.ContentElement != null)
-                    {
-                        //check if the content is on the hit
-                        GridCell gridCell1 = layer.GetCell(n, cc);
-                        var content = gridCell.ContentElement as UIElement;
-                        if (content != null)
+                        IEventListener evenListener = box.GetController() as IEventListener;
+                        if (evenListener != null)
                         {
-                            var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
-                            if (re.ContainPoint(e.X - gridCell1.X, e.Y - gridCell1.Y))
-                            {
-                                //hit on this elem too!
-                                IEventListener evenListener = (IEventListener)content;
-
-                                int tmpX = e.X;
-                                int tmpY = e.Y;
-                                e.SetLocation(tmpX - gridCell1.X, tmpY - gridCell1.Y);
-                                evenListener.ListenMouseDown(e);
-                                e.SetLocation(tmpX, tmpY);
-                                found = true;
-                                break;
-                            }
-                        }
+                            int tmpX = e.X;
+                            int tmpY = e.Y;
+                            e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                            evenListener.ListenMouseDown(e);
+                            e.SetLocation(tmpX, tmpY);
+                        } 
                     }
+                    //var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
+                    //if (re.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
+                    //{
+                    //    //hit on this elem too!
+                    //    IEventListener evenListener = (IEventListener)content;
+
+                    //    int tmpX = e.X;
+                    //    int tmpY = e.Y;
+                    //    e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
+                    //    evenListener.ListenMouseDown(e);
+                    //    e.SetLocation(tmpX, tmpY);
+                    //}
                 }
             }
+
+            //bool found = false;
+            //for (int n = 0; !found && n < nrows; ++n)
+            //{
+            //    for (int cc = 0; !found && cc < colCount; ++cc)
+            //    {
+
+            //        GridCell gridCell = gridTable.GetCell(n, cc);
+            //        if (gridCell != null && gridCell.ContentElement != null)
+            //        {
+            //            //check if the content is on the hit
+            //            GridCell gridCell1 = layer.GetCell(n, cc);
+            //            var content = gridCell.ContentElement as UIElement;
+            //            if (content != null)
+            //            {
+            //                var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
+            //                if (re.ContainPoint(e.X - gridCell1.X, e.Y - gridCell1.Y))
+            //                {
+            //                    //hit on this elem too!
+            //                    IEventListener evenListener = (IEventListener)content;
+
+            //                    int tmpX = e.X;
+            //                    int tmpY = e.Y;
+            //                    e.SetLocation(tmpX - gridCell1.X, tmpY - gridCell1.Y);
+            //                    evenListener.ListenMouseDown(e);
+            //                    e.SetLocation(tmpX, tmpY);
+            //                    found = true;
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             base.OnMouseDown(e);
         }
