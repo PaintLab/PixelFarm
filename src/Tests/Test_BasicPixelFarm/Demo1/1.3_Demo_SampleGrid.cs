@@ -15,6 +15,9 @@ namespace LayoutFarm
                 gridBox.SetLocation(50, 50);
                 gridBox.BuildGrid(2, 4, CellSizeStyle.UniformCell);
                 viewport.AddContent(gridBox);
+                gridBox.MouseDown += (s1, e1) =>
+                {
+                };
             }
             //grid1
             {
@@ -25,9 +28,19 @@ namespace LayoutFarm
                 var simpleButton = new LayoutFarm.CustomWidgets.SimpleBox(20, 20);
                 simpleButton.BackColor = KnownColors.FromKnownColor(KnownColor.OliveDrab);
                 gridBox.AddUI(simpleButton, 1, 1);
+                gridBox.MouseDown += (s1, e1) =>
+                {
+
+
+                };
+
+                simpleButton.MouseDown += (s1, e1) =>
+                {
+                    var box = (LayoutFarm.CustomWidgets.SimpleBox)s1;
+                    box.BackColor = KnownColors.FromKnownColor(KnownColor.OrangeRed);
+
+                };
             }
-
-
             //-----
             //grid2
             {
@@ -37,5 +50,6 @@ namespace LayoutFarm
                 viewport.AddContent(gridBox);
             }
         }
+
     }
 }

@@ -693,7 +693,7 @@ namespace LayoutFarm.UI
 #if DEBUG
                     else
                     {
-                        canvas.DrawText(new char[] { '.' }, gridItem.X, gridItem.Y);
+                        //canvas.DrawText(new char[] { '.' }, gridItem.X, gridItem.Y);
                     }
 #endif
                 }

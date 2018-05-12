@@ -977,7 +977,13 @@ namespace LayoutFarm.Text
                 return internalTextLayerController.updateJustCurrentLine;
             }
         }
-
+        public int CurrentLineHeight
+        {
+            get
+            {
+                return internalTextLayerController.CurrentLineArea.Height;
+            }
+        }
         public int CurrentLineCharIndex
         {
             get
