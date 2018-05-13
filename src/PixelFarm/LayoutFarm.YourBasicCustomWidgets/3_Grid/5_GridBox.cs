@@ -65,7 +65,7 @@ namespace LayoutFarm.CustomWidgets
 
         GridCell _latestHitCell;
         GridCell _beginSelectedCell;
-        GridCell _endSelectedCell;
+
 
 
 
@@ -118,7 +118,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             //same row
                             _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-                            _endSelectedCell = hitCell;
+
 
                         }
                         else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
@@ -126,15 +126,13 @@ namespace LayoutFarm.CustomWidgets
                             //move upper
                             _gridSelectController.SetLocation(_beginSelectedCell.X, hitCell.Y);
                             _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, _beginSelectedCell.Bottom - hitCell.Y);
-                            _endSelectedCell = hitCell;
+
 
                         }
                         else
                         {
                             //move to lower
                             _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-                            _endSelectedCell = hitCell;
-
                         }
 
                     }
@@ -155,7 +153,7 @@ namespace LayoutFarm.CustomWidgets
 
                             _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
                             _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
-                            _endSelectedCell = hitCell;
+
 
                         }
                         else
@@ -163,7 +161,6 @@ namespace LayoutFarm.CustomWidgets
                             //select to lower
                             _gridSelectController.SetLocation(hitCell.X, _beginSelectedCell.Y);
                             _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-                            _endSelectedCell = hitCell;
 
                         }
                     }
@@ -178,20 +175,14 @@ namespace LayoutFarm.CustomWidgets
                         }
                         else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
                         {
-                            //move upper
-
+                            //move upper 
                             _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
                             _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
-                            _endSelectedCell = hitCell;
-
                         }
                         else
                         {
-
                             //select to lower
                             _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-                            _endSelectedCell = hitCell;
-
                         }
                     }
                 }
@@ -203,7 +194,7 @@ namespace LayoutFarm.CustomWidgets
                         _gridSelectController.SetSize(hitCell.Width, hitCell.Height);
                         _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
                         _moreThan1Cell = false;
-                        _endSelectedCell = hitCell;
+                        //_endSelectedCell = hitCell;
                     }
 
                 }
@@ -248,7 +239,7 @@ namespace LayoutFarm.CustomWidgets
 
                 _moreThan1Cell = false;
 
-                _beginSelectedCell = _endSelectedCell = _latestHitCell = hitCell;
+                _beginSelectedCell = _latestHitCell = hitCell;
 
             }
 
