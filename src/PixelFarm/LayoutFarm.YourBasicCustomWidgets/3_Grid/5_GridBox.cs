@@ -7,6 +7,7 @@ namespace LayoutFarm.CustomWidgets
     class GridBoxRenderElement : CustomRenderBox
     {
         GridLayer gridLayer;
+
         public GridBoxRenderElement(RootGraphic rootgfx, int w, int h)
             : base(rootgfx, w, h)
         {
@@ -52,13 +53,22 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
+
+
     public class GridBox : EaseBox
     {
         GridBoxRenderElement gridBoxRenderE;
 
         CellSizeStyle cellSizeStyle;
-        SimpleBox _dragController;
+        SimpleBox _gridSelectController;
         GridTable gridTable;
+
+        GridCell _latestHitCell;
+        GridCell _beginSelectedCell;
+        GridCell _endSelectedCell;
+
+
+
         public GridBox(int width, int height)
             : base(width, height)
         {
@@ -85,11 +95,119 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+
+
+        bool _moreThan1Cell;
+
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
             if (e.IsDragging)
             {
+                GridLayer layer = gridBoxRenderE.GridLayer;
+                GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
 
+                if (hitCell != _beginSelectedCell)
+                {
+
+                    _moreThan1Cell = true;
+
+                    if (hitCell.ColumnIndex > _beginSelectedCell.ColumnIndex)
+                    {
+                        //select next to right side of the begin
+                        if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                        {
+                            //same row
+                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                            _endSelectedCell = hitCell;
+
+                        }
+                        else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                        {
+                            //move upper
+                            _gridSelectController.SetLocation(_beginSelectedCell.X, hitCell.Y);
+                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+                            _endSelectedCell = hitCell;
+
+                        }
+                        else
+                        {
+                            //move to lower
+                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                            _endSelectedCell = hitCell;
+
+                        }
+
+                    }
+                    else if (hitCell.ColumnIndex < _beginSelectedCell.ColumnIndex)
+                    {
+                        //select to left side
+                        //move  
+                        if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                        {
+                            //same row
+                            _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
+                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - _beginSelectedCell.Y);
+
+                        }
+                        else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                        {
+                            //move upper
+
+                            _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
+                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+                            _endSelectedCell = hitCell;
+
+                        }
+                        else
+                        {
+                            //select to lower
+                            _gridSelectController.SetLocation(hitCell.X, _beginSelectedCell.Y);
+                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                            _endSelectedCell = hitCell;
+
+                        }
+                    }
+                    else
+                    {
+                        //same column 
+
+                        if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                        {
+                            //same row
+
+                        }
+                        else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                        {
+                            //move upper
+
+                            _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
+                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+                            _endSelectedCell = hitCell;
+
+                        }
+                        else
+                        {
+
+                            //select to lower
+                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                            _endSelectedCell = hitCell;
+
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (_moreThan1Cell)
+                    {
+                        _gridSelectController.SetSize(hitCell.Width, hitCell.Height);
+                        _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
+                        _moreThan1Cell = false;
+                        _endSelectedCell = hitCell;
+                    }
+
+                }
+                _latestHitCell = hitCell;
             }
             base.OnMouseMove(e);
         }
@@ -97,11 +215,8 @@ namespace LayoutFarm.CustomWidgets
         {
             //check if cell content
             //find grid item
-            int nrows = gridTable.RowCount;
-            int colCount = gridTable.ColumnCount;
-            var rows = gridTable.Rows;
-            GridLayer layer = gridBoxRenderE.GridLayer;
 
+            GridLayer layer = gridBoxRenderE.GridLayer;
             GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
             if (hitCell != null)
             {
@@ -118,55 +233,25 @@ namespace LayoutFarm.CustomWidgets
                             e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
                             evenListener.ListenMouseDown(e);
                             e.SetLocation(tmpX, tmpY);
-                        } 
+                        }
                     }
-                    //var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
-                    //if (re.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
-                    //{
-                    //    //hit on this elem too!
-                    //    IEventListener evenListener = (IEventListener)content;
-
-                    //    int tmpX = e.X;
-                    //    int tmpY = e.Y;
-                    //    e.SetLocation(tmpX - hitCell.X, tmpY - hitCell.Y);
-                    //    evenListener.ListenMouseDown(e);
-                    //    e.SetLocation(tmpX, tmpY);
-                    //}
                 }
+                //
+                //move _dragController to the selected cell?
+
+
+
+                //
+                _gridSelectController.SetSize(hitCell.Width, hitCell.Height);
+                _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
+                _gridSelectController.Visible = true;
+
+                _moreThan1Cell = false;
+
+                _beginSelectedCell = _endSelectedCell = _latestHitCell = hitCell;
+
             }
 
-            //bool found = false;
-            //for (int n = 0; !found && n < nrows; ++n)
-            //{
-            //    for (int cc = 0; !found && cc < colCount; ++cc)
-            //    {
-
-            //        GridCell gridCell = gridTable.GetCell(n, cc);
-            //        if (gridCell != null && gridCell.ContentElement != null)
-            //        {
-            //            //check if the content is on the hit
-            //            GridCell gridCell1 = layer.GetCell(n, cc);
-            //            var content = gridCell.ContentElement as UIElement;
-            //            if (content != null)
-            //            {
-            //                var re = content.GetPrimaryRenderElement(gridBoxRenderE.Root);
-            //                if (re.ContainPoint(e.X - gridCell1.X, e.Y - gridCell1.Y))
-            //                {
-            //                    //hit on this elem too!
-            //                    IEventListener evenListener = (IEventListener)content;
-
-            //                    int tmpX = e.X;
-            //                    int tmpY = e.Y;
-            //                    e.SetLocation(tmpX - gridCell1.X, tmpY - gridCell1.Y);
-            //                    evenListener.ListenMouseDown(e);
-            //                    e.SetLocation(tmpX, tmpY);
-            //                    found = true;
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
 
             base.OnMouseDown(e);
         }
@@ -297,14 +382,17 @@ namespace LayoutFarm.CustomWidgets
             if (gridBoxRenderE == null)
             {
                 var myGridBox = new GridBoxRenderElement(rootgfx, this.Width, this.Height);
+                myGridBox.HasSpecificSize = true;//***
                 myGridBox.SetLocation(this.Left, this.Top);
                 myGridBox.SetController(this);
+                myGridBox.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
                 this.SetPrimaryRenderElement(myGridBox);
                 this.gridBoxRenderE = myGridBox;
                 //create layers
                 int nrows = this.gridTable.RowCount;
                 int ncols = this.gridTable.ColumnCount;
                 //----------------------------------------        
+
 
                 myGridBox.BuildGrid(gridTable, this.CellSizeStyle);
                 //add grid content
@@ -321,7 +409,12 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
 
-                _dragController = new SimpleBox(10, 10);
+
+                _gridSelectController = new SimpleBox(10, 10);
+                _gridSelectController.BackColor = new Color(100, 255, 0, 0);
+                _gridSelectController.Visible = false;
+                _gridSelectController.TransparentAllMouseEvents = true;
+                myGridBox.AddChild(_gridSelectController);
 
             }
             return gridBoxRenderE;

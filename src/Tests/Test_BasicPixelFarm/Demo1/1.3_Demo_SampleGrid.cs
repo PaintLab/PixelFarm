@@ -41,12 +41,12 @@ namespace LayoutFarm
 
                 };
             }
-            //-----
+            ////-----
             //grid2
             {
-                var gridBox = new LayoutFarm.CustomWidgets.GridBox(100, 100);
+                var gridBox = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 gridBox.SetLocation(350, 50);
-                gridBox.BuildGrid(3, 8, CellSizeStyle.UniformCell);
+                gridBox.BuildGrid(10, 8, CellSizeStyle.UniformCell);
                 viewport.AddContent(gridBox);
             }
         }
