@@ -468,6 +468,16 @@ namespace LayoutFarm.UI
             }
         }
 
+
+        public int RowIndex
+        {
+            get { return row.RowIndex; }
+        }
+        public int ColumnIndex
+        {
+            get { return column.ColumnIndex; }
+        }
+
 #if DEBUG
         public string dbugGetLinkInfo()
         {
@@ -635,7 +645,7 @@ namespace LayoutFarm.UI
 #if DEBUG
         public override string ToString()
         {
-            return column.ColumnIndex.ToString() + "," + row.RowIndex.ToString() + " " + base.ToString();
+            return row.RowIndex.ToString() + "," + column.ColumnIndex.ToString() + " " + base.ToString();
         }
 #endif
 
