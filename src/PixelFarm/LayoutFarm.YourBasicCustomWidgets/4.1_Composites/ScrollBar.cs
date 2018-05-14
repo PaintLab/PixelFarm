@@ -121,7 +121,7 @@ namespace LayoutFarm.CustomWidgets
         public SliderBox(int width, int height)
             : base(width, height)
         {
-            
+
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
@@ -342,7 +342,8 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupVerticalScrollButtonProperties(RenderElement container)
         {
-            var scroll_button = new ScrollBarButton(this.Width+10, SCROLL_BOX_SIZE_LIMIT, this); //create with default value
+            //var scroll_button = new ScrollBarButton(this.Width+10, SCROLL_BOX_SIZE_LIMIT, this); //for test
+            var scroll_button = new ScrollBarButton(this.Width, SCROLL_BOX_SIZE_LIMIT, this); //create with default value
             scroll_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkBlue);
             int thumbPosY = CalculateThumbPosition();
             scroll_button.SetLocation(0, thumbPosY);
@@ -743,12 +744,12 @@ namespace LayoutFarm.CustomWidgets
 
 
         public void StepSmallToMax()
-        { 
-            slideBox.StepSmallToMax(); 
+        {
+            slideBox.StepSmallToMax();
         }
         public void StepSmallToMin()
         {
-            slideBox.StepSmallToMin(); 
+            slideBox.StepSmallToMin();
         }
 
         //--------------------------------------------------------------------------
@@ -914,7 +915,7 @@ namespace LayoutFarm.CustomWidgets
                 slideBox.ScrollValue = value;
             }
         }
-      
+
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             if (e.Delta < 0)
