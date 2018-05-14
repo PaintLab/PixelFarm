@@ -175,32 +175,39 @@ namespace LayoutFarm.CustomWidgets
     {
         //grid view + scollable view+ header
         GridView _gridView;
+        SimpleBox _scrollableViewPanel;
         public GridBox(int width, int height)
             : base(width, height)
         {
+            //this grid box acts as viewport
             this.HasSpecificHeight = true;
             this.HasSpecificWidth = true;
             this.NeedClipArea = true;
 
-            _gridView = new GridView(this.Width - 20, this.Height - 20);
+            //scrollable content box is inside this grid box
+            _scrollableViewPanel = new SimpleBox(this.Width, this.Height);
+
+            _gridView = new GridView(this.Width - 20, this.Height * 2);
             _gridView.SetLocation(10, 10);
             _gridView.HasSpecificHeight = true;
-            _gridView.HasSpecificHeight = true;
+            _gridView.HasSpecificWidth = true;
+            _gridView.NeedClipArea = true;
 
             _gridView.BuildGrid(4, 4, CellSizeStyle.UniformCell);
-
-            this.AddChild(_gridView);
+            _scrollableViewPanel.AddChild(_gridView);
+            
+            this.AddChild(_scrollableViewPanel);
 
             {
                 //vertical scrollbar
-                var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, 200);
+                var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, this.Height);
                 vscbar.SetLocation(10, 10);
                 vscbar.MinValue = 0;
-                vscbar.MaxValue = 0;
+                vscbar.MaxValue = this.Height;
                 vscbar.SmallChange = 20;
                 this.AddChild(vscbar);
-                //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, this);
+                //add relation between _scrollableViewPanel and scroll bar 
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, _scrollableViewPanel);
             }
             //-------------------------  
             {
@@ -209,12 +216,13 @@ namespace LayoutFarm.CustomWidgets
                 hscbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
                 hscbar.SetLocation(30, 10);
                 hscbar.MinValue = 0;
-                hscbar.MaxValue = 170;
+                hscbar.MaxValue = this.Width - 20;
                 hscbar.SmallChange = 20;
                 this.AddChild(hscbar);
-                //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, this);
+                //add relation between _scrollableViewPanel and scroll bar 
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, _scrollableViewPanel);
             }
+            _scrollableViewPanel.PerformContentLayout();
         }
 
         public override void Walk(UIVisitor visitor)
@@ -240,6 +248,7 @@ namespace LayoutFarm.CustomWidgets
             gridTable = new GridTable();
 
         }
+
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
             this.cellSizeStyle = cellSizeStyle;
