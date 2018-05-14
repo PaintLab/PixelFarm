@@ -54,6 +54,122 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
+    struct GridSelectionSession
+    {
+        public GridCell _latestHitCell;
+        public GridCell _beginSelectedCell;
+        public SimpleBox _highlightBox;
+
+        bool _moreThan1Cell;
+
+        public void SetHighlightBox(SimpleBox gridSelectController)
+        {
+            _highlightBox = gridSelectController;
+        }
+        public void StartAt(GridCell hitCell)
+        {
+            
+            _moreThan1Cell = false;       
+            _beginSelectedCell = _latestHitCell = hitCell;
+        }
+        public void SetLatestHit(GridCell hitCell)
+        {
+
+            if (hitCell != _beginSelectedCell)
+            {
+
+                _moreThan1Cell = true;
+
+                if (hitCell.ColumnIndex > _beginSelectedCell.ColumnIndex)
+                {
+                    //select next to right side of the begin
+                    if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                    {
+                        //same row
+                        _highlightBox.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+
+
+                    }
+                    else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                    {
+                        //move upper
+                        _highlightBox.SetLocation(_beginSelectedCell.X, hitCell.Y);
+                        _highlightBox.SetSize(hitCell.Right - _beginSelectedCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+
+
+                    }
+                    else
+                    {
+                        //move to lower
+                        _highlightBox.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                    }
+
+                }
+                else if (hitCell.ColumnIndex < _beginSelectedCell.ColumnIndex)
+                {
+                    //select to left side
+                    //move  
+                    if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                    {
+                        //same row
+                        _highlightBox.SetLocation(hitCell.X, hitCell.Y);
+                        _highlightBox.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - _beginSelectedCell.Y);
+
+                    }
+                    else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                    {
+                        //move upper
+
+                        _highlightBox.SetLocation(hitCell.X, hitCell.Y);
+                        _highlightBox.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+
+
+                    }
+                    else
+                    {
+                        //select to lower
+                        _highlightBox.SetLocation(hitCell.X, _beginSelectedCell.Y);
+                        _highlightBox.SetSize(_beginSelectedCell.Right - hitCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+
+                    }
+                }
+                else
+                {
+                    //same column 
+
+                    if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                    {
+                        //same row
+
+                    }
+                    else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                    {
+                        //move upper 
+                        _highlightBox.SetLocation(hitCell.X, hitCell.Y);
+                        _highlightBox.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+                    }
+                    else
+                    {
+                        //select to lower
+                        _highlightBox.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                    }
+                }
+            }
+            else
+            {
+
+                if (_moreThan1Cell)
+                {
+                    _highlightBox.SetSize(hitCell.Width, hitCell.Height);
+                    _highlightBox.SetLocation(hitCell.X, hitCell.Y);
+                    _moreThan1Cell = false;
+                    //_endSelectedCell = hitCell;
+                }
+
+            }
+            _latestHitCell = hitCell;
+        }
+    }
 
     public class GridBox : EaseBox
     {
@@ -63,9 +179,8 @@ namespace LayoutFarm.CustomWidgets
         SimpleBox _gridSelectController;
         GridTable gridTable;
 
-        GridCell _latestHitCell;
-        GridCell _beginSelectedCell;
 
+        GridSelectionSession _gridSelectionSession;
 
 
 
@@ -97,108 +212,14 @@ namespace LayoutFarm.CustomWidgets
 
 
 
-        bool _moreThan1Cell;
-
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
             if (e.IsDragging)
             {
                 GridLayer layer = gridBoxRenderE.GridLayer;
                 GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+                _gridSelectionSession.SetLatestHit(hitCell);
 
-                if (hitCell != _beginSelectedCell)
-                {
-
-                    _moreThan1Cell = true;
-
-                    if (hitCell.ColumnIndex > _beginSelectedCell.ColumnIndex)
-                    {
-                        //select next to right side of the begin
-                        if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
-                        {
-                            //same row
-                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-
-
-                        }
-                        else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
-                        {
-                            //move upper
-                            _gridSelectController.SetLocation(_beginSelectedCell.X, hitCell.Y);
-                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, _beginSelectedCell.Bottom - hitCell.Y);
-
-
-                        }
-                        else
-                        {
-                            //move to lower
-                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-                        }
-
-                    }
-                    else if (hitCell.ColumnIndex < _beginSelectedCell.ColumnIndex)
-                    {
-                        //select to left side
-                        //move  
-                        if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
-                        {
-                            //same row
-                            _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
-                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - _beginSelectedCell.Y);
-
-                        }
-                        else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
-                        {
-                            //move upper
-
-                            _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
-                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
-
-
-                        }
-                        else
-                        {
-                            //select to lower
-                            _gridSelectController.SetLocation(hitCell.X, _beginSelectedCell.Y);
-                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-
-                        }
-                    }
-                    else
-                    {
-                        //same column 
-
-                        if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
-                        {
-                            //same row
-
-                        }
-                        else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
-                        {
-                            //move upper 
-                            _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
-                            _gridSelectController.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
-                        }
-                        else
-                        {
-                            //select to lower
-                            _gridSelectController.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
-                        }
-                    }
-                }
-                else
-                {
-
-                    if (_moreThan1Cell)
-                    {
-                        _gridSelectController.SetSize(hitCell.Width, hitCell.Height);
-                        _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
-                        _moreThan1Cell = false;
-                        //_endSelectedCell = hitCell;
-                    }
-
-                }
-                _latestHitCell = hitCell;
             }
             base.OnMouseMove(e);
         }
@@ -228,18 +249,13 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
                 //
-                //move _dragController to the selected cell?
-
-
-
+                //move _dragController to the selected cell? 
                 //
                 _gridSelectController.SetSize(hitCell.Width, hitCell.Height);
                 _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
                 _gridSelectController.Visible = true;
 
-                _moreThan1Cell = false;
-
-                _beginSelectedCell = _latestHitCell = hitCell;
+                _gridSelectionSession.StartAt(hitCell); 
 
             }
 
@@ -405,6 +421,9 @@ namespace LayoutFarm.CustomWidgets
                 _gridSelectController.BackColor = new Color(100, 255, 0, 0);
                 _gridSelectController.Visible = false;
                 _gridSelectController.TransparentAllMouseEvents = true;
+
+                _gridSelectionSession.SetHighlightBox(_gridSelectController);
+
                 myGridBox.AddChild(_gridSelectController);
 
             }
