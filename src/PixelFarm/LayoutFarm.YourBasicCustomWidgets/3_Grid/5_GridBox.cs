@@ -71,10 +71,39 @@ namespace LayoutFarm.CustomWidgets
         GridView _targetGridView;
         public GridSelectionSession()
         {
+
+            _gridSelectionStyle = GridSelectionStyle.RectBox;
         }
         public void SetTargetGridView(GridView targetGridView)
         {
             _targetGridView = targetGridView;
+
+            _bodyBox = SetupHighlightBox();
+
+            //----
+            targetGridView.AddChild(_bodyBox);
+
+            if (_gridSelectionStyle == GridSelectionStyle.FlowBox)
+            {
+                //prepare 3 box
+                //head, body, tail
+                _headBox = SetupHighlightBox();
+                _tailBox = SetupHighlightBox();
+                // 
+                targetGridView.AddChild(_headBox);
+                targetGridView.AddChild(_tailBox);
+            }
+
+        }
+
+        static SimpleBox SetupHighlightBox()
+        {
+            var box = new SimpleBox(10, 10);
+            box.BackColor = new Color(100, 255, 0, 0);
+            box.Visible = false;
+            box.TransparentAllMouseEvents = true;
+            return box;
+
         }
         public GridSelectionStyle GridSelectionStyle
         {
@@ -82,19 +111,19 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _gridSelectionStyle = value;
+
             }
         }
 
-
-        public void SetHighlistBox(SimpleBox gridSelectController)
-        {
-            _bodyBox = gridSelectController;
-        }
         public void StartAt(GridCell hitCell)
         {
 
             _moreThan1Cell = false;
             _beginSelectedCell = _latestHitCell = hitCell;
+
+            _bodyBox.SetSize(hitCell.Width, hitCell.Height);
+            _bodyBox.SetLocation(hitCell.X, hitCell.Y);
+            _bodyBox.Visible = true;
         }
 
         void SetLatestHit_RectBoxModel(GridCell hitCell)
@@ -197,6 +226,145 @@ namespace LayoutFarm.CustomWidgets
         void SetLatestHit_FlowBoxModel(GridCell hitCell)
         {
 
+            if (hitCell != _beginSelectedCell)
+            {
+
+                _moreThan1Cell = true;
+
+                if (hitCell.ColumnIndex > _beginSelectedCell.ColumnIndex)
+                {
+                    //select next to right side of the begin
+                    if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                    {
+                        //same row
+                        _bodyBox.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                        _bodyBox.Visible = true;
+                        _headBox.Visible = _tailBox.Visible = false;
+                    }
+                    else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                    {
+                        //move upper
+                        int rowDiff = _beginSelectedCell.RowIndex - hitCell.RowIndex;
+                        if (rowDiff == 1)
+                        {
+                            //just head and tail 
+                            //select to end of the row 
+                            int colCount = _targetGridView.ColumnCount;
+                            {
+                                //
+                                GridCell lastCellOfHeadRow = _targetGridView.GetCell(hitCell.RowIndex, _targetGridView.ColumnCount - 1);
+                                _headBox.SetLocation(hitCell.X, hitCell.Y);
+                                _headBox.SetSize(lastCellOfHeadRow.Right - hitCell.X, lastCellOfHeadRow.Height);
+                            }
+                            //-----
+                            {
+                                GridCell lastCellOfTailRow = _targetGridView.GetCell(_beginSelectedCell.RowIndex, 0);
+                                _tailBox.SetLocation(0, _beginSelectedCell.Y);
+                                _tailBox.SetSize(hitCell.Right, lastCellOfTailRow.Height);
+                            }
+
+
+                            _headBox.Visible = _tailBox.Visible = true;
+                            _bodyBox.Visible = false;
+                        }
+                        else
+                        {
+                            //more than 2 row
+                            //so set head-body-tail
+
+                            int colCount = _targetGridView.ColumnCount;
+                            {
+                                //
+                                GridCell lastCellOfHeadRow = _targetGridView.GetCell(hitCell.RowIndex, _targetGridView.ColumnCount - 1);
+                                _headBox.SetLocation(hitCell.X, hitCell.Y);
+                                _headBox.SetSize(lastCellOfHeadRow.Right - _headBox.Left, lastCellOfHeadRow.Height);
+                            }
+                            //-----
+                            //in between
+
+
+                            //-----
+                            {
+                                GridCell lastCellOfTailRow = _targetGridView.GetCell(_beginSelectedCell.RowIndex, 0);
+                                _headBox.SetLocation(0, _beginSelectedCell.Y);
+                                _headBox.SetSize(_beginSelectedCell.X, lastCellOfTailRow.Height);
+                            }
+
+
+                            _headBox.Visible = _tailBox.Visible = true;
+                            _bodyBox.Visible = false;
+                        }
+                    }
+                    else
+                    {
+                        //move to lower
+                        _bodyBox.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                    }
+
+                }
+                else if (hitCell.ColumnIndex < _beginSelectedCell.ColumnIndex)
+                {
+                    //select to left side
+                    //move  
+                    if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                    {
+                        //same row
+                        _bodyBox.SetLocation(hitCell.X, hitCell.Y);
+                        _bodyBox.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - _beginSelectedCell.Y);
+
+                    }
+                    else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                    {
+                        //move upper
+
+                        _bodyBox.SetLocation(hitCell.X, hitCell.Y);
+                        _bodyBox.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+
+
+                    }
+                    else
+                    {
+                        //select to lower
+                        _bodyBox.SetLocation(hitCell.X, _beginSelectedCell.Y);
+                        _bodyBox.SetSize(_beginSelectedCell.Right - hitCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+
+                    }
+                }
+                else
+                {
+                    //same column 
+
+                    if (hitCell.RowIndex == _beginSelectedCell.RowIndex)
+                    {
+                        //same row
+
+                    }
+                    else if (hitCell.RowIndex < _beginSelectedCell.RowIndex)
+                    {
+                        //move upper 
+                        _bodyBox.SetLocation(hitCell.X, hitCell.Y);
+                        _bodyBox.SetSize(_beginSelectedCell.Right - hitCell.X, _beginSelectedCell.Bottom - hitCell.Y);
+                    }
+                    else
+                    {
+                        //select to lower
+                        _bodyBox.SetSize(hitCell.Right - _beginSelectedCell.X, hitCell.Bottom - _beginSelectedCell.Y);
+                    }
+                }
+            }
+            else
+            {
+
+                if (_moreThan1Cell)
+                {
+                    _bodyBox.SetSize(hitCell.Width, hitCell.Height);
+                    _bodyBox.SetLocation(hitCell.X, hitCell.Y);
+                    _moreThan1Cell = false;
+                    //_endSelectedCell = hitCell;
+                }
+
+            }
+            _latestHitCell = hitCell;
 
         }
         public void SetLatestHit(GridCell hitCell)
@@ -279,7 +447,7 @@ namespace LayoutFarm.CustomWidgets
         GridViewRenderElement _gridViewRenderE;
 
         CellSizeStyle cellSizeStyle;
-        SimpleBox _gridSelectController;
+
         GridTable gridTable;
 
         GridSelectionSession _gridSelectionSession;
@@ -312,7 +480,19 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        public int RowCount
+        {
+            get { return gridTable.RowCount; }
+        }
+        public int ColumnCount
+        {
+            get { return gridTable.ColumnCount; }
+        }
 
+        internal GridCell GetCell(int row, int col)
+        {
+            return gridTable.GetCell(row, col);
+        }
 
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
@@ -362,22 +542,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         _gridSelectionSession = new GridSelectionSession();
                         _gridSelectionSession.SetTargetGridView(this);
-
-                        _gridSelectController = new SimpleBox(10, 10);
-                        _gridSelectController.BackColor = new Color(100, 255, 0, 0);
-                        _gridSelectController.Visible = false;
-                        _gridSelectController.TransparentAllMouseEvents = true;
-                        _gridSelectionSession.SetHighlistBox(_gridSelectController);
-
-                        this._gridViewRenderE.AddChild(_gridSelectController);
-                         
                     }
-
-
-
-                    _gridSelectController.SetSize(hitCell.Width, hitCell.Height);
-                    _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
-                    _gridSelectController.Visible = true;
                     _gridSelectionSession.StartAt(hitCell);
                 }
             }
@@ -539,7 +704,7 @@ namespace LayoutFarm.CustomWidgets
                 }
 
 
-               
+
 
             }
             return _gridViewRenderE;
