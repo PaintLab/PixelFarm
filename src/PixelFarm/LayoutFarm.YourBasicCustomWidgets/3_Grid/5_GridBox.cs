@@ -68,8 +68,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public void StartAt(GridCell hitCell)
         {
-            
-            _moreThan1Cell = false;       
+
+            _moreThan1Cell = false;
             _beginSelectedCell = _latestHitCell = hitCell;
         }
         public void SetLatestHit(GridCell hitCell)
@@ -173,18 +173,67 @@ namespace LayoutFarm.CustomWidgets
 
     public class GridBox : EaseBox
     {
+        //grid view + scollable view+ header
+        GridView _gridView;
+        public GridBox(int width, int height)
+            : base(width, height)
+        {
+            this.HasSpecificHeight = true;
+            this.HasSpecificWidth = true;
+            this.NeedClipArea = true;
+
+            _gridView = new GridView(this.Width - 20, this.Height - 20);
+            _gridView.SetLocation(10, 10);
+            _gridView.HasSpecificHeight = true;
+            _gridView.HasSpecificHeight = true;
+
+            _gridView.BuildGrid(4, 4, CellSizeStyle.UniformCell);
+
+            this.AddChild(_gridView);
+
+            {
+                //vertical scrollbar
+                var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, 200);
+                vscbar.SetLocation(10, 10);
+                vscbar.MinValue = 0;
+                vscbar.MaxValue = 0;
+                vscbar.SmallChange = 20;
+                this.AddChild(vscbar);
+                //add relation between viewpanel and scroll bar 
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, this);
+            }
+            //-------------------------  
+            {
+                //horizontal scrollbar
+                var hscbar = new LayoutFarm.CustomWidgets.ScrollBar(150, 15);
+                hscbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
+                hscbar.SetLocation(30, 10);
+                hscbar.MinValue = 0;
+                hscbar.MaxValue = 170;
+                hscbar.SmallChange = 20;
+                this.AddChild(hscbar);
+                //add relation between viewpanel and scroll bar 
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, this);
+            }
+        }
+
+        public override void Walk(UIVisitor visitor)
+        {
+
+        }
+    }
+
+    public class GridView : EaseBox
+    {
         GridBoxRenderElement gridBoxRenderE;
 
         CellSizeStyle cellSizeStyle;
         SimpleBox _gridSelectController;
         GridTable gridTable;
 
-
         GridSelectionSession _gridSelectionSession;
 
-
-
-        public GridBox(int width, int height)
+        public GridView(int width, int height)
             : base(width, height)
         {
             //has special grid layer
@@ -255,7 +304,7 @@ namespace LayoutFarm.CustomWidgets
                 _gridSelectController.SetLocation(hitCell.X, hitCell.Y);
                 _gridSelectController.Visible = true;
 
-                _gridSelectionSession.StartAt(hitCell); 
+                _gridSelectionSession.StartAt(hitCell);
 
             }
 
@@ -437,4 +486,10 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
+
+
+
+
+
+
 }
