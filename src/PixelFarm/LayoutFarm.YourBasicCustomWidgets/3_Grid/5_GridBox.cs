@@ -20,6 +20,7 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.gridLayer; }
         }
+
         public void SetContent(int r, int c, RenderElement re)
         {
             gridLayer.GetCell(r, c).ContentElement = re;
@@ -403,8 +404,11 @@ namespace LayoutFarm.CustomWidgets
             _gridView.HasSpecificHeight = true;
             _gridView.HasSpecificWidth = true;
             _gridView.NeedClipArea = true;
-
+            
             _gridView.BuildGrid(4, 4, CellSizeStyle.UniformCell);
+            //
+            
+
             _scrollableViewPanel.AddChild(_gridView);
 
             this.AddChild(_scrollableViewPanel);
@@ -436,6 +440,7 @@ namespace LayoutFarm.CustomWidgets
             _scrollableViewPanel.PerformContentLayout();
         }
 
+        
         public override void Walk(UIVisitor visitor)
         {
 
@@ -716,6 +721,8 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
+
+        
     }
 
 
