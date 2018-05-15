@@ -399,24 +399,14 @@ namespace LayoutFarm.CustomWidgets
             //scrollable content box is inside this grid box
             _scrollableViewPanel = new SimpleBox(this.Width, this.Height);
 
-            _gridView = new GridView(this.Width - 20, this.Height * 2);
-            _gridView.SetLocation(10, 10);
-            _gridView.HasSpecificHeight = true;
-            _gridView.HasSpecificWidth = true;
-            _gridView.NeedClipArea = true;
-            
-            _gridView.BuildGrid(4, 4, CellSizeStyle.UniformCell);
-            //
-            
-
-            _scrollableViewPanel.AddChild(_gridView);
+          
 
             this.AddChild(_scrollableViewPanel);
 
             {
                 //vertical scrollbar
                 var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, this.Height);
-                vscbar.SetLocation(10, 10);
+                vscbar.SetLocation(this.Width - 15, 0);
                 vscbar.MinValue = 0;
                 vscbar.MaxValue = this.Height;
                 vscbar.SmallChange = 20;
@@ -439,8 +429,12 @@ namespace LayoutFarm.CustomWidgets
             }
             _scrollableViewPanel.PerformContentLayout();
         }
+        public void SetGridView(GridView gridView)
+        {
+            _gridView = gridView;
+            _scrollableViewPanel.AddChild(gridView);
+        }
 
-        
         public override void Walk(UIVisitor visitor)
         {
 
@@ -722,7 +716,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
 
-        
+
     }
 
 

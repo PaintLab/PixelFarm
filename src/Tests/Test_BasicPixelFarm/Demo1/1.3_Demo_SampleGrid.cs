@@ -63,8 +63,18 @@ namespace LayoutFarm
             ////-----
             //grid4
             {
-                var gridBox = new LayoutFarm.CustomWidgets.GridBox(400,200);
-                gridBox.SetLocation(300, 250); 
+                var gridView = new LayoutFarm.CustomWidgets.GridView(800, 400);
+                gridView.SetLocation(10, 10);
+                gridView.HasSpecificHeight = true;
+                gridView.HasSpecificWidth = true;
+                gridView.NeedClipArea = true;
+                gridView.BuildGrid(4, 4, CellSizeStyle.UniformCell);
+
+
+
+                var gridBox = new LayoutFarm.CustomWidgets.GridBox(400, 200);
+                gridBox.SetLocation(300, 250);
+                gridBox.SetGridView(gridView);
                 viewport.AddContent(gridBox);
                 gridBox.PerformContentLayout();
             }
