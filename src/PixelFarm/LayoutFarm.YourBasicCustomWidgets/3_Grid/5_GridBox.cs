@@ -69,6 +69,8 @@ namespace LayoutFarm.CustomWidgets
         public SimpleBox _tailBox;
         GridSelectionStyle _gridSelectionStyle;
         bool _moreThan1Cell;
+
+
         GridView _targetGridView;
         public GridSelectionSession()
         {
@@ -116,6 +118,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+
         public void StartAt(GridCell hitCell)
         {
 
@@ -125,8 +128,10 @@ namespace LayoutFarm.CustomWidgets
             _bodyBox.SetSize(hitCell.Width, hitCell.Height);
             _bodyBox.SetLocation(hitCell.X, hitCell.Y);
             _bodyBox.Visible = true;
+            Started = true;
         }
 
+        public bool Started { get; private set; }
         void SetLatestHit_RectBoxModel(GridCell hitCell)
         {
 
@@ -380,6 +385,115 @@ namespace LayoutFarm.CustomWidgets
                     break;
             }
         }
+        public void ClearSelection()
+        {
+            _bodyBox.Visible = false;
+            if (_headBox != null) _headBox.Visible = false;
+            if (_tailBox != null) _tailBox.Visible = false;
+            _moreThan1Cell = false;
+            _latestHitCell = _beginSelectedCell = null;
+            Started = false;
+        }
+
+        public void MoveRight()
+        {
+            //check if we can move to right side
+            if (_moreThan1Cell)
+            {
+
+            }
+            else
+            {
+                //single cell
+                if (_latestHitCell != null && _latestHitCell.ColumnIndex < _targetGridView.ColumnCount - 1)
+                {
+                    StartAt(_targetGridView.GetCell(_latestHitCell.RowIndex, _latestHitCell.ColumnIndex + 1));
+                }
+
+            }
+        }
+        public void MoveLeft()
+        {
+            if (_moreThan1Cell)
+            {
+
+            }
+            else
+            {
+                //single cell
+                if (_latestHitCell != null && _latestHitCell.ColumnIndex > 0)
+                {
+                    StartAt(_targetGridView.GetCell(_latestHitCell.RowIndex, _latestHitCell.ColumnIndex - 1));
+                }
+            }
+        }
+        public void MoveUp()
+        {
+            if (_moreThan1Cell)
+            {
+
+            }
+            else
+            {
+                //single cell
+                if (_latestHitCell != null && _latestHitCell.RowIndex > 0)
+                {
+                    StartAt(_targetGridView.GetCell(_latestHitCell.RowIndex - 1, _latestHitCell.ColumnIndex));
+                }
+            }
+        }
+        public void MoveDown()
+        {
+            if (_moreThan1Cell)
+            {
+
+            }
+            else
+            {
+                //single cell
+                if (_latestHitCell != null && _latestHitCell.RowIndex < _targetGridView.RowCount - 1)
+                {
+                    StartAt(_targetGridView.GetCell(_latestHitCell.RowIndex + 1, _latestHitCell.ColumnIndex));
+                }
+            }
+        }
+        public void MoveHome()
+        {
+            if (_moreThan1Cell)
+            {
+
+            }
+            else
+            {
+                //single cell
+                if (_latestHitCell != null)
+                {
+                    StartAt(_targetGridView.GetCell(_latestHitCell.RowIndex, 0));
+                }
+            }
+        }
+        public void MoveEnd()
+        {
+            if (_moreThan1Cell)
+            {
+
+            }
+            else
+            {
+                //single cell 
+                if (_latestHitCell != null)
+                {
+                    StartAt(_targetGridView.GetCell(_latestHitCell.RowIndex, _targetGridView.ColumnCount - 1));
+                }
+
+            }
+        }
+        public void SelectAll()
+        {
+
+            StartAt(_targetGridView.GetCell(0, 0));
+            SetLatestHit_RectBoxModel(_targetGridView.GetCell(_targetGridView.RowCount - 1, _targetGridView.ColumnCount - 1));
+        }
     }
 
     public class GridBox : EaseBox
@@ -399,7 +513,7 @@ namespace LayoutFarm.CustomWidgets
             //scrollable content box is inside this grid box
             _scrollableViewPanel = new SimpleBox(this.Width, this.Height);
 
-          
+
 
             this.AddChild(_scrollableViewPanel);
 
@@ -457,9 +571,11 @@ namespace LayoutFarm.CustomWidgets
             //has special grid layer
             gridTable = new GridTable();
             EnableGridCellSelection = true;
+            ClearSelectionWhenLostFocus = true;
+            AcceptKeyboardFocus = true;
         }
 
-        public bool EnableGridCellSelection { get; set; }
+
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
             this.cellSizeStyle = cellSizeStyle;
@@ -657,6 +773,62 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
+        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        {
+            //check if 
+            if (ClearSelectionWhenLostFocus)
+            {
+                ClearSelection();
+            }
+
+            base.OnLostMouseFocus(e);
+        }
+        protected override void OnKeyDown(UIKeyEventArgs e)
+        {
+            if (_gridSelectionSession != null && _gridSelectionSession.Started)
+            {
+                switch (e.KeyCode)
+                {
+                    case UIKeys.Home:
+                        _gridSelectionSession.MoveHome();
+                        break;
+                    case UIKeys.End:
+                        _gridSelectionSession.MoveEnd();
+                        break;
+                    case UIKeys.A:
+                        if (e.Ctrl)
+                        {
+                            //ctrl+a
+                            _gridSelectionSession.SelectAll();
+                        }
+                        break;
+                }
+            }
+            base.OnKeyDown(e);
+        }
+        protected override bool OnProcessDialogKey(UIKeyEventArgs e)
+        {
+            if (_gridSelectionSession != null && _gridSelectionSession.Started)
+            {
+                switch (e.KeyCode)
+                {
+                    case UIKeys.Left:
+                        _gridSelectionSession.MoveLeft();
+                        break;
+                    case UIKeys.Right:
+                        _gridSelectionSession.MoveRight();
+                        break;
+                    case UIKeys.Up:
+                        _gridSelectionSession.MoveUp();
+                        break;
+                    case UIKeys.Down:
+                        _gridSelectionSession.MoveDown();
+                        break;
+                }
+            }
+            return false;
+        }
+
         public CellSizeStyle CellSizeStyle
         {
             get { return this.cellSizeStyle; }
@@ -716,6 +888,18 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
 
+
+        //--------------------------------------------------
+        //selection
+        public bool EnableGridCellSelection { get; set; }
+        public void ClearSelection()
+        {
+            if (_gridSelectionSession != null)
+            {
+                _gridSelectionSession.ClearSelection();
+            }
+        }
+        public bool ClearSelectionWhenLostFocus { get; set; }
 
     }
 
