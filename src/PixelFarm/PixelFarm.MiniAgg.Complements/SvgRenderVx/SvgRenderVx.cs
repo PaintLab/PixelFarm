@@ -31,6 +31,7 @@ namespace PixelFarm.Agg
             public PixelFarm.Agg.Transform.Affine affineTx;
         }
 
+        Image _backimg;
         SvgVx[] _vxList;//woring vxs
         SvgVx[] _originalVxs; //original definition
 
@@ -42,21 +43,21 @@ namespace PixelFarm.Agg
         }
         public bool HasBitmapSnapshot { get; internal set; }
 
-
-
-        Image _backimg;
         public void SetBitmapSnapshot(Image img)
         {
             this._backimg = img;
             HasBitmapSnapshot = img != null;
         }
+
+
+        public float X { get; set; }
+        public float Y { get; set; }
         public void Render(Painter p)
         {
             //
             if (HasBitmapSnapshot)
             {
-
-                p.DrawImage(_backimg);
+                p.DrawImage(_backimg, X, Y);
                 return;
             }
             PixelFarm.Agg.Transform.Affine currentTx = null;
@@ -234,16 +235,36 @@ namespace PixelFarm.Agg
         {
             get { return _vxList.Length; }
         }
-        public void ApplyTransform(Transform.Affine affine)
+        public void ApplyTransform(Transform.Affine transform)
         {
             //apply transform to each elements
-            int j = _originalVxs.Length;
 
-            for (int i = 0; i < j; ++i)
+            int count = _originalVxs.Length;
+            _vxList = new SvgVx[count];
+
+            for (int i = 0; i < count; ++i)
             {
                 SvgVx vx = _originalVxs[i];
-                //_vxList[i] = 
+                if (vx.Kind != SvgRenderVxKind.Path)
+                {
+                    _vxList[i] = vx;
+                    continue;
+                }
+
+                //Temp fix 
+                //TODO: review here,
+                //permanent transform each part?
+                //or create a copy. 
+                vx.RestoreOrg();
+                VertexStore vxvxs = vx.GetVxs();
+                VertexStore newVxs = new VertexStore();
+                transform.TransformToVxs(vxvxs, newVxs);
+
+                SvgVx newVx = new SvgVx(vx.Kind);
+                newVx.SetVxs(newVxs);
+                _vxList[i] = newVx;
             }
+
         }
     }
 

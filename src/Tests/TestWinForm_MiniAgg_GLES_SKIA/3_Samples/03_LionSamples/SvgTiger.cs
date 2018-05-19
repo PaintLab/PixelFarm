@@ -25,7 +25,8 @@ namespace PixelFarm.Agg.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgParser svg = new SvgParser();
             //svg.ReadSvgFile("Samples\\lion.svg");
-            svg.ReadSvgFile("Samples\\tiger002.svg");
+            //svg.ReadSvgFile("Samples\\tiger002.svg");
+            svg.ReadSvgFile("d:\\WImageTest\\x_04.svg");
             _renderVx = svg.GetResultAsRenderVx();
 
 
@@ -65,7 +66,8 @@ namespace PixelFarm.Agg.Samples
     {
 
 
-        SvgRenderVx _renderVx;
+        List<SvgRenderVx> _renderVxList = new List<SvgRenderVx>();
+
         public override void Init()
         {
             char[] lionSvgBase64 =
@@ -74,18 +76,40 @@ namespace PixelFarm.Agg.Samples
 
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgParser svg = new SvgParser();
-            svg.ReadSvgFile("Samples\\lion.svg");
+            //svg.ReadSvgFile("Samples\\lion.svg");
+            svg.ReadSvgFile("d:\\WImageTest\\x_04.svg");
             //svg.ReadSvgFile("Samples\\tiger002.svg");
-            _renderVx = svg.GetResultAsRenderVx();
 
-            if (!_renderVx.HasBitmapSnapshot)
+            SvgRenderVx renderVx = svg.GetResultAsRenderVx();
+            renderVx.ApplyTransform(Transform.Affine.NewScaling(0.1, 0.1));
+
+            for (int i = 0; i < 1; ++i)
             {
-                ActualImage backimg = new ActualImage(500, 500);
-                AggRenderSurface renderSurface = new AggRenderSurface(backimg);
-                AggPainter painter = new AggPainter(renderSurface);
-                _renderVx.Render(painter);
-                _renderVx.SetBitmapSnapshot(backimg);
+                renderVx.X = i * 20;
+                renderVx.Y = i * 20;
+                _renderVxList.Add(renderVx);
             }
+
+            foreach (RenderVx vx in _renderVxList)
+            {
+                SvgRenderVx svgVx = vx as SvgRenderVx;
+                if (svgVx != null && !svgVx.HasBitmapSnapshot)
+                {
+                    ActualImage backimg = new ActualImage(500, 500);
+                    AggRenderSurface renderSurface = new AggRenderSurface(backimg);
+                    AggPainter painter = new AggPainter(renderSurface);
+                    svgVx.Render(painter);
+                    svgVx.SetBitmapSnapshot(backimg);
+                }
+            }
+            //if (!_renderVx.HasBitmapSnapshot)
+            //{
+            //    ActualImage backimg = new ActualImage(500, 500);
+            //    AggRenderSurface renderSurface = new AggRenderSurface(backimg);
+            //    AggPainter painter = new AggPainter(renderSurface);
+            //    _renderVx.Render(painter);
+            //    _renderVx.SetBitmapSnapshot(backimg);
+            //}
         }
 #if DEBUG
         System.Diagnostics.Stopwatch _dbugSW = new System.Diagnostics.Stopwatch();
@@ -101,7 +125,14 @@ namespace PixelFarm.Agg.Samples
             //            _dbugSW.Start();
             //#endif
 
-            _renderVx.Render(p);
+
+            for (int i = 0; i < _renderVxList.Count; ++i)
+            {
+
+                _renderVxList[i].Render(p);
+            }
+
+
 
             //#if DEBUG
             //            _dbugSW.Stop();
