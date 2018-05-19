@@ -31,31 +31,33 @@ namespace PixelFarm.Agg
             public PixelFarm.Agg.Transform.Affine affineTx;
         }
 
-        VertexStore tempVxs = new VertexStore();
 
 
-        SvgVx[] _vxList;
-        SvgVx[] _originalVxs;
+
+        SvgVx[] _vxList;//woring vxs
+        SvgVx[] _originalVxs; //original definition
+
         public SvgRenderVx(SvgVx[] svgVxList)
         {
             //this is original version of the element
             this._originalVxs = svgVxList;
             this._vxList = svgVxList;
         }
+
         public void Render(Painter p)
         {
             //
             int j = _vxList.Length;
+            PixelFarm.Agg.Transform.Affine currentTx = null;
 
-
-            PixelFarm.Agg.Transform.Affine currentTx = null; 
-
-            TempRenderState renderState = new TempRenderState();
+            var renderState = new TempRenderState();
             renderState.strokeColor = p.StrokeColor;
             renderState.strokeWidth = (float)p.StrokeWidth;
             renderState.fillColor = p.FillColor;
             renderState.affineTx = currentTx;
 
+            //------------------
+            VertexStore tempVxs = p.GetTempVxsStore();
 
             for (int i = 0; i < j; ++i)
             {
@@ -209,6 +211,8 @@ namespace PixelFarm.Agg
             }
 
 
+            //------------------
+            p.ReleaseTempVxsStore(tempVxs);
         }
 
 

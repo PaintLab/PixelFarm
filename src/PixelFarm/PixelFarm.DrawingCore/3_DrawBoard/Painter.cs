@@ -106,8 +106,9 @@ namespace PixelFarm.Drawing
 
 
         //////////////////////////////////////////////////////////////////////////////
-
+        //user's object 
         internal Stack<object> _userObjectStack = new Stack<object>();
+        internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
 
     }
 
@@ -126,6 +127,21 @@ namespace PixelFarm.Drawing
             public static void StackClearUserObject(this Painter p)
             {
                 p._userObjectStack.Clear();
+            }
+            public static VertexStore GetTempVxsStore(this Painter p)
+            {
+                if (p._tempVxsStack.Count == 0)
+                {
+                    return new VertexStore();
+                }
+                else
+                {
+                    return p._tempVxsStack.Pop();
+                }
+            }
+            public static void ReleaseTempVxsStore(this Painter p, VertexStore vxs)
+            {
+                p._tempVxsStack.Push(vxs);
             }
         }
     }
