@@ -51,17 +51,7 @@ namespace PaintLab.Svg
         {
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.LoadXml(svgString);
-            XmlElement docElem = xmldoc.DocumentElement;
-            //then parse 
-            if (docElem.Name == "svg")
-            {
-                //parse its content
-
-                foreach (XmlElement elem in docElem.ChildNodes)
-                {
-                    ParseSvgElement(elem);
-                }
-            }
+            ReadSvgDocument(xmldoc);
         }
         public void ReadSvgFile(string svgFileName)
         {
@@ -70,7 +60,10 @@ namespace PaintLab.Svg
             //iterate all child
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(svgFileName);
-            //
+            ReadSvgDocument(xmldoc);
+        }
+        public void ReadSvgDocument(XmlDocument xmldoc)
+        {
             XmlElement docElem = xmldoc.DocumentElement;
             //then parse 
             if (docElem.Name == "svg")
@@ -82,7 +75,6 @@ namespace PaintLab.Svg
                 }
             }
         }
-
         public SvgVx[] GetResult()
         {
             return renderVxList.ToArray();
