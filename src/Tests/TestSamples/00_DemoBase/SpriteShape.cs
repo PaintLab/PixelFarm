@@ -93,7 +93,7 @@ namespace PixelFarm.Agg
             int elemCount = _svgRenderVx.SvgVxCount;
             for (int i = 0; i < elemCount; ++i)
             {
-                SvgVx vx = _svgRenderVx.GetInnerVx(i);
+                SvgPart vx = _svgRenderVx.GetInnerVx(i);
                 if (vx.HasFillColor)
                 {
                     vx.FillColor = vx.FillColor.NewFromChangeAlpha(alphaValue0_255);
@@ -166,7 +166,7 @@ namespace PixelFarm.Agg
             RectD rectTotal = new RectD();
             for (int i = 0; i < partCount; ++i)
             {
-                SvgVx vx = _svgRenderVx.GetInnerVx(i);
+                SvgPart vx = _svgRenderVx.GetInnerVx(i);
                 if (vx.Kind != SvgRenderVxKind.Path)
                 {
                     continue;
@@ -187,7 +187,7 @@ namespace PixelFarm.Agg
             { 
                 //we do hittest top to bottom => (so => iter backward)
 
-                SvgVx vx = _svgRenderVx.GetInnerVx(i);
+                SvgPart vx = _svgRenderVx.GetInnerVx(i);
                 if (vx.Kind != SvgRenderVxKind.Path)
                 {
                     continue;

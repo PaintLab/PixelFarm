@@ -32,10 +32,10 @@ namespace PixelFarm.Agg
         }
 
         Image _backimg;
-        SvgVx[] _vxList;//woring vxs
-        SvgVx[] _originalVxs; //original definition
+        SvgPart[] _vxList;//woring vxs
+        SvgPart[] _originalVxs; //original definition
 
-        public SvgRenderVx(SvgVx[] svgVxList)
+        public SvgRenderVx(SvgPart[] svgVxList)
         {
             //this is original version of the element
             this._originalVxs = svgVxList;
@@ -74,7 +74,7 @@ namespace PixelFarm.Agg
             int j = _vxList.Length;
             for (int i = 0; i < j; ++i)
             {
-                SvgVx vx = _vxList[i];
+                SvgPart vx = _vxList[i];
                 switch (vx.Kind)
                 {
                     case SvgRenderVxKind.BeginGroup:
@@ -227,7 +227,7 @@ namespace PixelFarm.Agg
         }
 
 
-        public SvgVx GetInnerVx(int index)
+        public SvgPart GetInnerVx(int index)
         {
             return _vxList[index];
         }
@@ -240,11 +240,11 @@ namespace PixelFarm.Agg
             //apply transform to each elements
 
             int count = _originalVxs.Length;
-            _vxList = new SvgVx[count];
+            _vxList = new SvgPart[count];
 
             for (int i = 0; i < count; ++i)
             {
-                SvgVx vx = _originalVxs[i];
+                SvgPart vx = _originalVxs[i];
                 if (vx.Kind != SvgRenderVxKind.Path)
                 {
                     _vxList[i] = vx;
@@ -260,7 +260,7 @@ namespace PixelFarm.Agg
                 VertexStore newVxs = new VertexStore();
                 transform.TransformToVxs(vxvxs, newVxs);
 
-                SvgVx newVx = new SvgVx(vx.Kind);
+                SvgPart newVx = new SvgPart(vx.Kind);
                 newVx.SetVxs(newVxs);
                 _vxList[i] = newVx;
             }
@@ -269,7 +269,7 @@ namespace PixelFarm.Agg
     }
 
 
-    public class SvgVx
+    public class SvgPart
     {
         VertexStore _vxs;
         VertexStore _vxs_org;
@@ -279,7 +279,7 @@ namespace PixelFarm.Agg
         VertexStore _strokeVxs;
         double _strokeVxsStrokeWidth;
 
-        public SvgVx(SvgRenderVxKind kind)
+        public SvgPart(SvgRenderVxKind kind)
         {
             this.Kind = kind;
         }
@@ -355,9 +355,9 @@ namespace PixelFarm.Agg
         }
 
         //
-        public static SvgVx TransformToNew(SvgVx originalSvgVx, Affine affineTx)
+        public static SvgPart TransformToNew(SvgPart originalSvgVx, Affine affineTx)
         {
-            SvgVx newSx = new SvgVx(originalSvgVx.Kind);
+            SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (newSx._vxs != null)
             {
                 VertexStore vxs = new VertexStore();

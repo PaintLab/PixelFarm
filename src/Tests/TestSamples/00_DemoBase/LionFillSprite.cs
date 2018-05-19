@@ -135,7 +135,7 @@ namespace PixelFarm.Agg
                 int count = renderVx.SvgVxCount;
                 for (int i = 0; i < count; ++i)
                 {
-                    SvgVx vx = renderVx.GetInnerVx(i);
+                    SvgPart vx = renderVx.GetInnerVx(i);
                     if (vx.Kind != SvgRenderVxKind.Path)
                     {
                         continue;

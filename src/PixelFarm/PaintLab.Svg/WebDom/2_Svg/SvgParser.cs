@@ -45,7 +45,10 @@ namespace PaintLab.Svg
     public class SvgParser
     {
 
-        List<SvgVx> renderVxList = new List<SvgVx>();
+        List<SvgPart> renderVxList = new List<SvgPart>();
+        CurveFlattener curveFlattener = new CurveFlattener();
+        MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
+        CssParser _cssParser = new CssParser();
 
         public void ReadSvgString(string svgString)
         {
@@ -75,7 +78,7 @@ namespace PaintLab.Svg
                 }
             }
         }
-        public SvgVx[] GetResult()
+        public SvgPart[] GetResult()
         {
             return renderVxList.ToArray();
         }
@@ -117,7 +120,7 @@ namespace PaintLab.Svg
             }
         }
 
-        CssParser _cssParser = new CssParser();
+
 
 #if DEBUG
         static int s_dbugIdCount;
@@ -359,7 +362,7 @@ namespace PaintLab.Svg
 
             SvgGroupElement group = new SvgGroupElement(spec, null);
             //--------
-            SvgVx beginVx = new SvgVx(SvgRenderVxKind.BeginGroup);
+            SvgPart beginVx = new SvgPart(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
             renderVxList.Add(beginVx);
             foreach (XmlElement child in elem.ChildNodes)
@@ -367,7 +370,7 @@ namespace PaintLab.Svg
                 ParseSvgElement(child);
             }
             //--------
-            renderVxList.Add(new SvgVx(SvgRenderVxKind.EndGroup));
+            renderVxList.Add(new SvgPart(SvgRenderVxKind.EndGroup));
 
         }
         void ParseTitle(XmlElement elem)
@@ -406,8 +409,7 @@ namespace PaintLab.Svg
             }
         }
 
-        MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
-        static void AssignValues(SvgVx svgRenderVx, SvgVisualSpec spec)
+        static void AssignValues(SvgPart svgRenderVx, SvgVisualSpec spec)
         {
 
             if (spec.HasFillColor)
@@ -431,7 +433,7 @@ namespace PaintLab.Svg
             }
         }
 
-        CurveFlattener curveFlattener = new CurveFlattener();
+
 
         void ParsePath(XmlElement elem)
         {
@@ -465,8 +467,8 @@ namespace PaintLab.Svg
             if (pathDefAttr != null)
             {
 
-                SvgVx svgRenderVx = new SvgVx(SvgRenderVxKind.Path);
-                AssignValues(svgRenderVx, spec);
+                SvgPart svgPart = new SvgPart(SvgRenderVxKind.Path);
+                AssignValues(svgPart, spec);
 
                 //TODO: review here, reused resource
 
@@ -479,12 +481,12 @@ namespace PaintLab.Svg
                 //
                 VertexStore flattenVxs = new VertexStore();
                 curveFlattener.MakeVxs(vxs, flattenVxs);
-                if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
+                if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
                 {
                     //TODO: implement stroke rendering 
                 }
-                svgRenderVx.SetVxsAsOriginal(flattenVxs);
-                this.renderVxList.Add(svgRenderVx);
+                svgPart.SetVxsAsOriginal(flattenVxs);
+                this.renderVxList.Add(svgPart);
             }
 
 

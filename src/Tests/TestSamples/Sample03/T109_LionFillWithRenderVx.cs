@@ -93,7 +93,7 @@ namespace OpenTkEssTest
                     int partIndex = 0;
                     for (int i = 0; i < partCount; ++i)
                     {
-                        SvgVx vx = renderVx.GetInnerVx(i);
+                        SvgPart vx = renderVx.GetInnerVx(i);
                         if (vx.Kind != SvgRenderVxKind.Path)
                         {
                             continue;
@@ -119,7 +119,7 @@ namespace OpenTkEssTest
                 int partIndex = 0;
                 for (int i = 0; i < partCount; ++i)
                 {
-                    SvgVx vx = renderVx.GetInnerVx(i);
+                    SvgPart vx = renderVx.GetInnerVx(i);
                     if (vx.Kind != SvgRenderVxKind.Path)
                     {
                         continue;
