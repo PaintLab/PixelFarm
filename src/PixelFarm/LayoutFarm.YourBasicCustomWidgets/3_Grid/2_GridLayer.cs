@@ -581,22 +581,20 @@ namespace LayoutFarm.UI
 
 #endif
 
+        Color _gridBorderColor = Color.Gray;
 
+        public Color GridBorderColor
+        {
+            get { return _gridBorderColor; }
+            set
+            {
+                _gridBorderColor = value;
+                //invalidate?
+            }
+        }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
-            //GridCell leftTopGridItem = GetGridItemByPosition(updateArea.Left, updateArea.Top);
-            //if (leftTopGridItem == null)
-            //{
-            //    return;
-
-            //}
-            //GridCell rightBottomGridItem = GetGridItemByPosition(updateArea.Right, updateArea.Bottom);
-            //if (rightBottomGridItem == null)
-            //{
-            //    return;
-            //}
-
-
+             
             //TODO: temp fixed, review here again,
             GridCell leftTopGridItem = this.GetCell(0, 0);
             if (leftTopGridItem == null)
@@ -624,19 +622,10 @@ namespace LayoutFarm.UI
             {
                 stopRowId = stopRow.RowIndex;
             }
+
             int n = 0;
             var prevColor = canvas.StrokeColor;
-            canvas.StrokeColor = Color.Gray;
-            //canvas.DrawLine(0, 0, 100, 100);
-            //canvas.DrawLine(0, 100, 100, 0);
-
-            //if (startRowId > 0)
-            //{
-            //    Console.WriteLine(startRowId);
-            //}
-
-            //canvas.DrawRectangle(Color.Red, updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height);
-
+            canvas.StrokeColor = _gridBorderColor;
             do
             {
                 GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
@@ -647,6 +636,7 @@ namespace LayoutFarm.UI
                     startGridItemInColumn.Y,
                     stopGridItemInColumn.Right,
                     stopGridItemInColumn.Bottom);
+
                 if (n == 0)
                 {
                     //draw horizontal line
@@ -664,6 +654,8 @@ namespace LayoutFarm.UI
                 }
                 currentColumn = currentColumn.NextColumn;
             } while (currentColumn != stopColumn);
+
+
             canvas.StrokeColor = prevColor;
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
