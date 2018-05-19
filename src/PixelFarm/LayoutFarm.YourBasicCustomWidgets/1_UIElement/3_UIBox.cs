@@ -10,6 +10,10 @@ namespace LayoutFarm.UI
         int _top;
         int _width;
         int _height;
+
+        int _innerContentW;
+        int _innerContentH;
+
         bool _hide;
         bool specificWidth;
         bool specificHeight;
@@ -213,6 +217,14 @@ namespace LayoutFarm.UI
         {
         }
 
+        bool _userSpecificInnerContentSize = false;
+        public virtual void SetInnerContentSize(int w, int h)
+        {
+            _userSpecificInnerContentSize = true;
+
+        }
+
+
         public virtual bool Visible
         {
             get { return !this._hide; }
@@ -231,11 +243,32 @@ namespace LayoutFarm.UI
         }
         public virtual int DesiredHeight
         {
-            get { return this.Height; }
+            get
+            {
+                if (_userSpecificInnerContentSize)
+                {
+                    return _innerContentH;
+                }
+                else
+                {
+                    return this.Height;
+                }
+
+            }
         }
         public virtual int DesiredWidth
         {
-            get { return this.Width; }
+            get
+            {
+                if (_userSpecificInnerContentSize)
+                {
+                    return _innerContentW;
+                }
+                else
+                {
+                    return this.Width;
+                }
+            }
         }
 
         //----------------------------------- 

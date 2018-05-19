@@ -69,7 +69,7 @@ namespace LayoutFarm.CustomWidgets
                 if (HasReadyRenderElement)
                 {
                     this.primElement.BackColor = value;
-                     
+
                 }
             }
         }
@@ -311,6 +311,7 @@ namespace LayoutFarm.CustomWidgets
         {
             get
             {
+
                 return this.desiredHeight;
             }
         }

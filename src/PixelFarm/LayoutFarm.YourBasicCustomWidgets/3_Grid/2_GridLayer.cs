@@ -14,14 +14,17 @@ namespace LayoutFarm.UI
         int uniformCellHeight;
         CellSizeStyle cellSizeStyle;
         GridTable gridTable;
-        public GridLayer(RenderElement owner, int nColumns, int nRows, CellSizeStyle cellSizeStyle)
+        public GridLayer(RenderElement owner, CellSizeStyle cellSizeStyle, GridTable gridTable)
             : base(owner)
         {
             this.cellSizeStyle = cellSizeStyle;
-            this.gridTable = new GridTable();
+            this.gridTable = gridTable;
+
             gridRows = gridTable.Rows;
             gridCols = gridTable.Columns;
             int columnWidth = owner.Width;
+
+            int nColumns = gridTable.ColumnCount;
             if (nColumns > 0)
             {
                 columnWidth = columnWidth / nColumns;
@@ -36,22 +39,21 @@ namespace LayoutFarm.UI
             int cx = 0;
             for (int c = 0; c < nColumns; c++)
             {
-                GridColumn col = new GridColumn(columnWidth);
+                GridColumn col = gridCols.GetColumn(c);
                 col.Width = columnWidth;
                 col.Left = cx;
                 cx += columnWidth;
-                gridCols.Add(col);
+
             }
             //------------------------------------------------------------
-
+            int nRows = gridTable.RowCount;
             if (nRows > 0)
             {
                 int rowHeight = owner.Height / nRows;
                 int cy = 0;
                 for (int r = 0; r < nRows; r++)
                 {
-                    var row = new GridRow(rowHeight);
-                    gridRows.Add(row);
+                    GridRow row = gridRows.GetRow(r);
                     row.Height = rowHeight;
                     row.Top = cy;
                     cy += rowHeight;
@@ -579,22 +581,20 @@ namespace LayoutFarm.UI
 
 #endif
 
+        Color _gridBorderColor = Color.Gray;
 
+        public Color GridBorderColor
+        {
+            get { return _gridBorderColor; }
+            set
+            {
+                _gridBorderColor = value;
+                //invalidate?
+            }
+        }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
-            //GridCell leftTopGridItem = GetGridItemByPosition(updateArea.Left, updateArea.Top);
-            //if (leftTopGridItem == null)
-            //{
-            //    return;
-
-            //}
-            //GridCell rightBottomGridItem = GetGridItemByPosition(updateArea.Right, updateArea.Bottom);
-            //if (rightBottomGridItem == null)
-            //{
-            //    return;
-            //}
-
-
+             
             //TODO: temp fixed, review here again,
             GridCell leftTopGridItem = this.GetCell(0, 0);
             if (leftTopGridItem == null)
@@ -622,19 +622,10 @@ namespace LayoutFarm.UI
             {
                 stopRowId = stopRow.RowIndex;
             }
+
             int n = 0;
             var prevColor = canvas.StrokeColor;
-            canvas.StrokeColor = Color.Gray;
-            //canvas.DrawLine(0, 0, 100, 100);
-            //canvas.DrawLine(0, 100, 100, 0);
-
-            //if (startRowId > 0)
-            //{
-            //    Console.WriteLine(startRowId);
-            //}
-
-            //canvas.DrawRectangle(Color.Red, updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height);
-
+            canvas.StrokeColor = _gridBorderColor;
             do
             {
                 GridCell startGridItemInColumn = currentColumn.GetCell(startRowId);
@@ -645,6 +636,7 @@ namespace LayoutFarm.UI
                     startGridItemInColumn.Y,
                     stopGridItemInColumn.Right,
                     stopGridItemInColumn.Bottom);
+
                 if (n == 0)
                 {
                     //draw horizontal line
@@ -662,9 +654,12 @@ namespace LayoutFarm.UI
                 }
                 currentColumn = currentColumn.NextColumn;
             } while (currentColumn != stopColumn);
+
+
             canvas.StrokeColor = prevColor;
             currentColumn = startColumn;
             //----------------------------------------------------------------------------
+            Rectangle uArea = updateArea;
             do
             {
                 for (int i = startRowId; i < stopRowId; i++)
@@ -675,14 +670,18 @@ namespace LayoutFarm.UI
                         int x = gridItem.X;
                         int y = gridItem.Y;
                         canvas.OffsetCanvasOrigin(x, y);
+
+                        updateArea = uArea;//reset
                         updateArea.Offset(-x, -y);
                         var renderContent = gridItem.ContentElement as RenderElement;
                         if (renderContent != null)
                         {
+
                             if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                             {
                                 renderContent.DrawToThisCanvas(canvas, updateArea);
                             }
+
                             canvas.PopClipAreaRect();
                         }
 

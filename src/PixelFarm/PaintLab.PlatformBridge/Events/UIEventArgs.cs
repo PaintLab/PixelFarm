@@ -66,7 +66,7 @@ namespace LayoutFarm.UI
                 return (UIKeys)this.KeyData & UIKeys.KeyCode;
             }
         }
-       
+
     }
     public abstract class UIEventArgs : EventArgs
     {
@@ -144,7 +144,7 @@ namespace LayoutFarm.UI
                 return y;
             }
         }
- 
+
         public bool IsCanceled
         {
             get;
@@ -313,12 +313,14 @@ namespace LayoutFarm.UI
         {
             get;
             set;
-        }
+        } 
+
         public IEventListener PreviousMouseDown
         {
             get;
             set;
         }
+
         public bool IsAlsoDoubleClick { get; set; }
 
         public int CapturedMouseX { get; set; }
@@ -332,8 +334,6 @@ namespace LayoutFarm.UI
             get { return this.Y - this.CapturedMouseY; }
         }
     }
-
-
 
     public enum MouseCursorStyle
     {
