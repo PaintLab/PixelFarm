@@ -130,6 +130,7 @@ namespace PixelFarm.Agg.Samples
         {
 
             //check if we hit a lion or not 
+            //this is example => if right button=>test with path
             hitOnLion = lionFill.HitTest(x, y, isRightButton);
             base.MouseDown(x, y, isRightButton);
         }

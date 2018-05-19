@@ -93,10 +93,11 @@ namespace PixelFarm.Agg
 
                 x -= _posX; //offset x to the coordinate of the sprite
                 y -= _posY;
-                if (withSubPathTest && lionShape.HitTestOnSubPart(x, y))
+                if (withSubPathTest)
                 {
-
+                    return lionShape.HitTestOnSubPart(x, y); 
                 }
+               
 
                 //                //find capture point relative to the bounds
 
