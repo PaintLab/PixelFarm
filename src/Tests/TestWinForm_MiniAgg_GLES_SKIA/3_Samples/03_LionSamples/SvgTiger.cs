@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Samples
 
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgParser svg = new SvgParser();
-           // svg.ReadSvgFile("Samples\\lion.svg");
+            //svg.ReadSvgFile("Samples\\lion.svg");
             svg.ReadSvgFile("Samples\\tiger002.svg");
             _renderVx = svg.GetResultAsRenderVx();
 
@@ -74,8 +74,8 @@ namespace PixelFarm.Agg.Samples
 
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgParser svg = new SvgParser();
-            //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
-            svg.ReadSvgFile("d:\\WImageTest\\tiger002.svg");
+            svg.ReadSvgFile("Samples\\lion.svg");
+            //svg.ReadSvgFile("Samples\\tiger002.svg");
             _renderVx = svg.GetResultAsRenderVx();
 
             if (!_renderVx.HasBitmapSnapshot)
