@@ -19,6 +19,7 @@
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
@@ -64,7 +65,7 @@ namespace PixelFarm.Drawing
         public abstract void FillEllipse(double left, double top, double width, double height);
         public abstract void DrawEllipse(double left, double top, double width, double height);
         //
- 
+
         /// <summary>
         /// draw image, not scale
         /// </summary>
@@ -76,7 +77,7 @@ namespace PixelFarm.Drawing
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
 
-      
+
         ////////////////////////////////////////////////////////////////////////////
         //vertext store/snap/rendervx
         public abstract void Fill(VertexStoreSnap snap);
@@ -101,9 +102,32 @@ namespace PixelFarm.Drawing
            double x,
            double y);
         public abstract void DrawString(RenderVxFormattedString renderVx, double x, double y);
+
+
+
+        //////////////////////////////////////////////////////////////////////////////
+
+        internal Stack<object> _userObjectStack = new Stack<object>();
+
     }
 
-
-
+    namespace PainterExtensions
+    {
+        public static class PainterExt
+        {
+            public static void StackPushUserObject(this Painter p, object o)
+            {
+                p._userObjectStack.Push(o);
+            }
+            public static object StackPopUserObject(this Painter p)
+            {
+                return p._userObjectStack.Pop();
+            }
+            public static void StackClearUserObject(this Painter p)
+            {
+                p._userObjectStack.Clear();
+            }
+        }
+    }
 
 }

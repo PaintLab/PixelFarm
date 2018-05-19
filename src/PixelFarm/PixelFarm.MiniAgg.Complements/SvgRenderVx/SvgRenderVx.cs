@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm;
 using PixelFarm.Drawing;
+using PixelFarm.Drawing.PainterExtensions;
 using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Agg
@@ -29,29 +30,32 @@ namespace PixelFarm.Agg
             public Color fillColor;
             public PixelFarm.Agg.Transform.Affine affineTx;
         }
+
         VertexStore tempVxs = new VertexStore();
-        Stack<TempRenderState> _renderStateContext = new Stack<TempRenderState>();
+
 
         SvgVx[] _vxList;
         SvgVx[] _originalVxs;
         public SvgRenderVx(SvgVx[] svgVxList)
         {
             //this is original version of the element
-            this._vxList = svgVxList;
             this._originalVxs = svgVxList;
+            this._vxList = svgVxList;
         }
         public void Render(Painter p)
         {
             //
             int j = _vxList.Length;
-            PixelFarm.Agg.Transform.Affine currentTx = null;
+
+
+            PixelFarm.Agg.Transform.Affine currentTx = null; 
+
             TempRenderState renderState = new TempRenderState();
             renderState.strokeColor = p.StrokeColor;
             renderState.strokeWidth = (float)p.StrokeWidth;
             renderState.fillColor = p.FillColor;
             renderState.affineTx = currentTx;
 
-            //
 
             for (int i = 0; i < j; ++i)
             {
@@ -61,7 +65,10 @@ namespace PixelFarm.Agg
                     case SvgRenderVxKind.BeginGroup:
                         {
                             //1. save current state before enter new state
-                            _renderStateContext.Push(renderState);
+
+
+                            p.StackPushUserObject(renderState);
+
                             //2. enter new px context
                             if (vx.HasFillColor)
                             {
@@ -93,7 +100,7 @@ namespace PixelFarm.Agg
                     case SvgRenderVxKind.EndGroup:
                         {
                             //restore to prev state
-                            renderState = _renderStateContext.Pop();
+                            renderState = (TempRenderState)p.StackPopUserObject();
                             p.FillColor = renderState.fillColor;
                             p.StrokeColor = renderState.strokeColor;
                             p.StrokeWidth = renderState.strokeWidth;
@@ -234,6 +241,9 @@ namespace PixelFarm.Agg
         Color _fillColor;
         Color _strokeColor;
         float _strokeWidth;
+        VertexStore _strokeVxs;
+        double _strokeVxsStrokeWidth;
+
         public SvgVx(SvgRenderVxKind kind)
         {
             this.Kind = kind;
@@ -292,8 +302,7 @@ namespace PixelFarm.Agg
             private set;
         }
         public Affine AffineTx { get; set; }
-        VertexStore _strokeVxs;
-        double _strokeVxsStrokeWidth;
+
         public VertexStore GetStrokeVxsOrCreateNew(double strokeWidth)
         {
             if (_strokeVxs != null && _strokeWidth == strokeWidth)

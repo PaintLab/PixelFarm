@@ -866,5 +866,6 @@ namespace PixelFarm.Agg
             set { this._lineDashGen = value; }
         }
 
+ 
     }
 }
