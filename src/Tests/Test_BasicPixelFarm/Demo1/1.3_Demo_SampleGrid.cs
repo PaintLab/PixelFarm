@@ -27,7 +27,7 @@ namespace LayoutFarm
                 viewport.AddContent(gridView);
                 var simpleButton = new LayoutFarm.CustomWidgets.SimpleBox(20, 20);
                 simpleButton.BackColor = KnownColors.FromKnownColor(KnownColor.OliveDrab);
-                gridView.AddUI(simpleButton, 1, 1);
+                gridView.SetCellContent(simpleButton, 1, 1);
                 gridView.MouseDown += (s1, e1) =>
                 {
 
@@ -78,7 +78,16 @@ namespace LayoutFarm
                 viewport.AddContent(gridBox);
                 gridBox.PerformContentLayout();
             }
-        }
+            ////-----
+            //grid5
+            {
 
+                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                gridView.SetLocation(50, 500);
+                gridView.BuildGrid(10, 8, CellSizeStyle.ColumnAndRow);
+                viewport.AddContent(gridView);
+
+            }
+        }
     }
 }

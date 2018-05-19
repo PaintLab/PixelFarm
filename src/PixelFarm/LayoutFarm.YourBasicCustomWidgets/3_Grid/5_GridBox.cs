@@ -609,6 +609,8 @@ namespace LayoutFarm.CustomWidgets
             return gridTable.GetCell(row, col);
         }
 
+
+
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
             if (e.IsDragging)
@@ -716,13 +718,16 @@ namespace LayoutFarm.CustomWidgets
                 rowTop += eachRowHeight;
             }
         }
-        public void AddUI(UIElement ui, int rowIndex, int colIndex)
+
+
+        public void SetCellContent(UIElement ui, int rowIndex, int colIndex)
         {
             if (rowIndex < gridTable.RowCount && colIndex < gridTable.ColumnCount)
             {
                 gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
                 if (this._gridViewRenderE != null)
                 {
+
                     RenderElement re = ui.GetPrimaryRenderElement(_gridViewRenderE.Root);
                     _gridViewRenderE.SetContent(rowIndex, colIndex, re);
 
@@ -735,6 +740,9 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+
+
 
         class GridCellParentLink : RenderBoxes.IParentLink
         {
