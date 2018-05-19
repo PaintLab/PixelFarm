@@ -43,27 +43,21 @@ namespace PixelFarm.Agg
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
-
-
         BitmapBuffer _bxt;
 
         public AggPainter(AggRenderSurface aggsx)
         {
-
-
-
+            //painter paint to target surface
             this._aggsx = aggsx;
             this.sclineRas = _aggsx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = aggsx.ScanlinePacked8;
             this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
             _orientation = DrawBoardOrientation.LeftBottom;
-
             //from membuffer
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
                 PixelFarm.Agg.ActualImage.GetBuffer(aggsx.DestActualImage));
-
         }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
@@ -866,6 +860,6 @@ namespace PixelFarm.Agg
             set { this._lineDashGen = value; }
         }
 
- 
+
     }
 }

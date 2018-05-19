@@ -42,6 +42,19 @@ namespace PixelFarm.Agg.Samples
             //            _dbugSW.Reset();
             //            _dbugSW.Start();
             //#endif
+
+            if (!_renderVx.HasBitmapSnapshot)
+            {
+
+                ActualImage backimg = new ActualImage(500, 500);
+                AggRenderSurface renderSurface = new AggRenderSurface(backimg);
+                AggPainter painter = new AggPainter(renderSurface);
+                _renderVx.Render(painter);
+                _renderVx.SetBitmapSnapshot(backimg);
+                
+            }
+
+
             _renderVx.Render(p);
 
             //#if DEBUG

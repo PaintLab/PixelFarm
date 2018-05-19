@@ -31,9 +31,6 @@ namespace PixelFarm.Agg
             public PixelFarm.Agg.Transform.Affine affineTx;
         }
 
-
-
-
         SvgVx[] _vxList;//woring vxs
         SvgVx[] _originalVxs; //original definition
 
@@ -43,11 +40,25 @@ namespace PixelFarm.Agg
             this._originalVxs = svgVxList;
             this._vxList = svgVxList;
         }
+        public bool HasBitmapSnapshot { get; internal set; }
 
+
+
+        Image _backimg;
+        public void SetBitmapSnapshot(Image img)
+        {
+            this._backimg = img;
+            HasBitmapSnapshot = img != null;
+        }
         public void Render(Painter p)
         {
             //
-            int j = _vxList.Length;
+            if (HasBitmapSnapshot)
+            {
+
+                p.DrawImage(_backimg);
+                return;
+            }
             PixelFarm.Agg.Transform.Affine currentTx = null;
 
             var renderState = new TempRenderState();
@@ -59,6 +70,7 @@ namespace PixelFarm.Agg
             //------------------
             VertexStore tempVxs = p.GetTempVxsStore();
 
+            int j = _vxList.Length;
             for (int i = 0; i < j; ++i)
             {
                 SvgVx vx = _vxList[i];
@@ -66,9 +78,7 @@ namespace PixelFarm.Agg
                 {
                     case SvgRenderVxKind.BeginGroup:
                         {
-                            //1. save current state before enter new state
-
-
+                            //1. save current state before enter new state 
                             p.StackPushUserObject(renderState);
 
                             //2. enter new px context
