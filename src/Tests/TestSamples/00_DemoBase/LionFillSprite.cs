@@ -95,9 +95,9 @@ namespace PixelFarm.Agg
                 y -= _posY;
                 if (withSubPathTest)
                 {
-                    return lionShape.HitTestOnSubPart(x, y); 
+                    return lionShape.HitTestOnSubPart(x, y);
                 }
-               
+
 
                 //                //find capture point relative to the bounds
 
@@ -140,9 +140,7 @@ namespace PixelFarm.Agg
                     {
                         continue;
                     }
-
-                    //Temp fix,
-
+                    //Temp fix, 
                     //TODO: review here,
                     //permanent transform each part?
                     //or create a copy. 

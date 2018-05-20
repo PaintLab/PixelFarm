@@ -3,6 +3,7 @@
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.Pdf
 {
@@ -24,7 +25,7 @@ namespace PixelFarm.Drawing.Pdf
         //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
 
-
+        PixelFarm.Agg.VectorTool _vectorTool;
         Agg.VertexSource.RoundedRect roundRect;
 
 
@@ -32,8 +33,12 @@ namespace PixelFarm.Drawing.Pdf
 
         public PdfPainter()
         {
+            _vectorTool = new PixelFarm.Agg.VectorTool();
         }
-
+        public override PainterExtensions.VectorTool VectorTool
+        {
+            get { return _vectorTool; }
+        }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {

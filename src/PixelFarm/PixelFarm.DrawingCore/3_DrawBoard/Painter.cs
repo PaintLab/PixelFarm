@@ -109,11 +109,18 @@ namespace PixelFarm.Drawing
         //user's object 
         internal Stack<object> _userObjectStack = new Stack<object>();
         internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
-        
+
+
+        public abstract PainterExtensions.VectorTool VectorTool { get; }
     }
 
     namespace PainterExtensions
     {
+        public abstract class VectorTool
+        {
+            public abstract void CreateStroke(VertexStore orgVxs, float strokeW, VertexStore output);
+        }
+
         public static class PainterExt
         {
             public static void StackPushUserObject(this Painter p, object o)
@@ -143,7 +150,8 @@ namespace PixelFarm.Drawing
             {
                 p._tempVxsStack.Push(vxs);
             }
-             
+
+
         }
     }
 

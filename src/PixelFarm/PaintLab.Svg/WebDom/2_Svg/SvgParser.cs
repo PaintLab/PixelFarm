@@ -517,7 +517,7 @@ namespace PaintLab.Svg
                 VertexStore flattenVxs = GetFreeVxs();
                 _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
 
-                ReleasePathWriter(pathWriter);
+              
                 //------------------------------------------------- 
                 if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
                 {
@@ -528,6 +528,8 @@ namespace PaintLab.Svg
                 svgPart.SetVxsAsOriginal(flattenVxs.CreateTrim());
 
                 ReleaseVertexStore(flattenVxs);
+                ReleasePathWriter(pathWriter);
+
 
                 this._renderVxList.Add(svgPart);
             }

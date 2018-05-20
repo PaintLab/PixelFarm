@@ -170,7 +170,7 @@ namespace PixelFarm.Agg
                                 //check if we have a stroke version of this render vx
                                 //if not then request a new one 
 
-                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, (float)p.StrokeWidth);
+                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
                                 if (vx.HasStrokeColor)
                                 {
                                     //has speciic stroke color 
@@ -211,12 +211,12 @@ namespace PixelFarm.Agg
 
                                 if (vx.HasStrokeColor)
                                 {
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, (float)p.StrokeWidth);
+                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
                                     p.Fill(strokeVxs);
                                 }
                                 else if (p.StrokeColor.A > 0)
                                 {
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, (float)p.StrokeWidth);
+                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
                                     p.Fill(strokeVxs, p.StrokeColor);
                                 }
                             }
@@ -229,9 +229,9 @@ namespace PixelFarm.Agg
             p.ReleaseTempVxsStore(tempVxs);
         }
 
-        Stroke aggStrokeGen = new Stroke(1);
 
-        VertexStore GetStrokeVxsOrCreateNew(SvgPart s, float strokeW)
+
+        VertexStore GetStrokeVxsOrCreateNew(SvgPart s, Painter p, float strokeW)
         {
             VertexStore strokeVxs = s.StrokeVxs;
             if (strokeVxs != null && s.StrokeWidth == strokeW)
@@ -239,11 +239,10 @@ namespace PixelFarm.Agg
                 return strokeVxs;
             }
 
-
-            aggStrokeGen.Width = strokeW;
             var new_output = new VertexStore();
-            aggStrokeGen.MakeVxs(s.GetVxs(), new_output);
+            p.VectorTool.CreateStroke(s.GetVxs(), strokeW, new_output);
             s.StrokeVxs = new_output;
+
             return new_output;
         }
 

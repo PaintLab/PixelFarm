@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
-
+using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.DrawingGL
 {
@@ -36,6 +36,8 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         RenderQualtity _renderQuality;
 
+        PixelFarm.Agg.VectorTool _vectorTool;
+
 
         public GLPainter(GLRenderSurface glsx)
         {
@@ -49,6 +51,13 @@ namespace PixelFarm.DrawingGL
             UseVertexBufferObjectForRenderVx = true;
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
+
+            _vectorTool = new Agg.VectorTool();
+        }
+
+        public override Drawing.PainterExtensions.VectorTool VectorTool
+        {
+            get { return _vectorTool; }
         }
         Color _fontFillColor;
         public Color FontFillColor
@@ -477,7 +486,7 @@ namespace PixelFarm.DrawingGL
                 }
                 else
                 {
-                    _textPrinter.DrawString(text, x, _glsx.ViewportHeight - y); 
+                    _textPrinter.DrawString(text, x, _glsx.ViewportHeight - y);
                 }
 
             }
@@ -487,7 +496,7 @@ namespace PixelFarm.DrawingGL
             char[] buffer = textspan.ToCharArray();
             var renderVxFmtStr = new GLRenderVxFormattedString(buffer);
             if (_textPrinter != null)
-            {   
+            {
                 _textPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
 
             }
@@ -1030,19 +1039,19 @@ namespace PixelFarm.DrawingGL
                             break;
                         case PixelFarm.Agg.VertexCmd.Close:
                             //from current point 
-                            { 
+                            {
                                 xylist.Add((float)prevMoveToX);
                                 xylist.Add((float)prevMoveToY);
                                 prevX = prevMoveToX;
-                                prevY = prevMoveToY; 
+                                prevY = prevMoveToY;
                                 //-----------
                                 Figure newfig = new Figure(xylist.ToArray());
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
                                 //-----------
                                 xylist.Clear();
-                                isAddToList = false; 
-                            } 
+                                isAddToList = false;
+                            }
                             break;
                         case VertexCmd.CloseAndEndFigure:
                             //from current point 

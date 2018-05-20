@@ -3,6 +3,7 @@
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -14,7 +15,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _currentFillBrush;
 
         GdiPlusRenderSurface _renderSurface;
-
+        PixelFarm.Agg.VectorTool _vectorTool;
 
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
@@ -22,8 +23,13 @@ namespace PixelFarm.Drawing.WinGdi
 
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-
+            _vectorTool = new PixelFarm.Agg.VectorTool();
         }
+        public override PainterExtensions.VectorTool VectorTool
+        {
+            get { return _vectorTool; }
+        }
+
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
             get { return _renderSurface.gx.CompositingMode; }

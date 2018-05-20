@@ -5,9 +5,23 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.DrawingBuffer;
+using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Agg
 {
+
+    public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
+    {
+        Stroke _stroke = new Stroke(1);
+        public override void CreateStroke(VertexStore orgVxs, float strokeW, VertexStore output)
+        {
+            _stroke.Width = strokeW;
+            _stroke.MakeVxs(orgVxs, output);
+
+        }
+    }
+
+
     public class AggPainter : Painter
     {
         AggRenderSurface _aggsx; //target rendering surface
@@ -44,6 +58,8 @@ namespace PixelFarm.Agg
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
         BitmapBuffer _bxt;
+        VectorTool _vectorTool;
+
 
         public AggPainter(AggRenderSurface aggsx)
         {
@@ -58,6 +74,13 @@ namespace PixelFarm.Agg
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
                 PixelFarm.Agg.ActualImage.GetBuffer(aggsx.DestActualImage));
+
+
+            _vectorTool = new VectorTool();
+        }
+        public override Drawing.PainterExtensions.VectorTool VectorTool
+        {
+            get { return _vectorTool; }
         }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
