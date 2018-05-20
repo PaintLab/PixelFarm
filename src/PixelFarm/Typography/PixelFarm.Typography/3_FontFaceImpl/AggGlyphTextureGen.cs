@@ -73,7 +73,7 @@ namespace Typography.Rendering
             w = (int)Math.Ceiling(dx + w + horizontal_margin); //+right margin
             h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin 
 
-            ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
+            ActualImage img = new ActualImage(w, h);
             AggRenderSurface aggsx = new AggRenderSurface(img);
             AggPainter painter = new AggPainter(aggsx);
 

@@ -103,7 +103,6 @@ namespace PixelFarm.Agg
                     vx.StrokeColor = vx.StrokeColor.NewFromChangeAlpha(alphaValue0_255);
                 }
             }
-
         }
         public void Paint(Painter p)
         {

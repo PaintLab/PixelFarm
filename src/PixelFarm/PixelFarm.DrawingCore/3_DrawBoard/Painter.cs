@@ -109,7 +109,7 @@ namespace PixelFarm.Drawing
         //user's object 
         internal Stack<object> _userObjectStack = new Stack<object>();
         internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
-
+        
     }
 
     namespace PainterExtensions
@@ -143,6 +143,7 @@ namespace PixelFarm.Drawing
             {
                 p._tempVxsStack.Push(vxs);
             }
+             
         }
     }
 

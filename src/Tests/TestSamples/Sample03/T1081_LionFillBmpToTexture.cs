@@ -42,12 +42,12 @@ namespace OpenTkEssTest
             lionShape.ParseLion();
             RectD lionBounds = lionShape.Bounds;
             //-------------
-            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
+            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height);
             _aggsx = new AggRenderSurface(aggImage);
             aggPainter = new AggPainter(_aggsx);
 
 
-            DrawLion(aggPainter, lionShape, lionShape.Vxs);
+            DrawLion(aggPainter, lionShape);
             //convert affImage to texture 
             glBmp = DemoHelper.LoadTexture(aggImage);
         }
@@ -55,7 +55,7 @@ namespace OpenTkEssTest
         {
             _glsx.Dispose();
         }
-        static void DrawLion(Painter p, SpriteShape shape, VertexStore myvxs)
+        static void DrawLion(Painter p, SpriteShape shape)
         {
             shape.Paint(p);
 
