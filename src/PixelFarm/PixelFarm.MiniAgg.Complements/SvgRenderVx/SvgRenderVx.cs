@@ -346,8 +346,9 @@ namespace PixelFarm.Agg
                 return _strokeVxs;
             }
 
-            //if not create a new one,
+            //if not => create a new one,
             //review here again
+
             Stroke aggStrokeGen = new Stroke(_strokeVxsStrokeWidth = strokeWidth);
             _strokeVxs = new VertexStore();
             aggStrokeGen.MakeVxs(_vxs, _strokeVxs);

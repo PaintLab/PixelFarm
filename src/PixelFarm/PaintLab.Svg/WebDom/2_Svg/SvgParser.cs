@@ -49,6 +49,9 @@ namespace PaintLab.Svg
         CurveFlattener curveFlattener = new CurveFlattener();
         MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
         CssParser _cssParser = new CssParser();
+        Queue<PathWriter> _resuablePathWriterQueue = new Queue<PathWriter>();
+
+
 
         public void ReadSvgString(string svgString)
         {
@@ -435,6 +438,22 @@ namespace PaintLab.Svg
 
 
 
+        PathWriter GetFreePathWriter()
+        {
+            if (_resuablePathWriterQueue.Count > 0)
+            {
+                return _resuablePathWriterQueue.Dequeue();
+            }
+            else
+            {
+                return new PathWriter(new VertexStore());
+            }
+        }
+        void ReleasePathWriter(PathWriter p)
+        {
+            p.Clear();
+            _resuablePathWriterQueue.Enqueue(p);
+        }
         void ParsePath(XmlElement elem)
         {
             SvgVisualSpec spec = new SvgVisualSpec();
@@ -466,21 +485,25 @@ namespace PaintLab.Svg
             //translate and evaluate values 
             if (pathDefAttr != null)
             {
-
+                //create new path
                 SvgPart svgPart = new SvgPart(SvgRenderVxKind.Path);
                 AssignValues(svgPart, spec);
 
-                //TODO: review here, reused resource
+                //-------------------------------------------------
+                PathWriter pathWriter = GetFreePathWriter(); 
 
-                VertexStore vxs = new VertexStore();
-                PathWriter pathWriter = new PathWriter(vxs);
                 _svgPathDataParser.SetPathWriter(pathWriter);
                 //tokenize the path definition data
                 _svgPathDataParser.Parse(pathDefAttr.Value.ToCharArray());
 
                 //
                 VertexStore flattenVxs = new VertexStore();
-                curveFlattener.MakeVxs(vxs, flattenVxs);
+                curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
+
+                ReleasePathWriter(pathWriter);
+                //-------------------------------------------------
+
+
                 if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
                 {
                     //TODO: implement stroke rendering 

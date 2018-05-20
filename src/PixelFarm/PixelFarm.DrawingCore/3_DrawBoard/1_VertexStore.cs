@@ -23,6 +23,9 @@
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
+     
+
+
     public sealed class VertexStore
     {
         int m_num_vertices;
