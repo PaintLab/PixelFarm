@@ -99,7 +99,7 @@ namespace Mini
                 }
                 else
                 {
-                    var actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
+                    var actualImage = new ActualImage(width, height);
                     bitmapBackBuffer.Initialize(width, height, bitDepth, actualImage);
                     return new AggRenderSurface(actualImage);
                 }

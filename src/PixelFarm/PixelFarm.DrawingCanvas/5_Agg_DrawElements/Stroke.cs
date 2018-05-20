@@ -27,10 +27,10 @@ namespace PixelFarm.Agg
     public sealed class Stroke
     {
         StrokeGenerator _strokeGen;
-        public Stroke(double inWidth)
+        public Stroke(double initWidth)
         {
             this._strokeGen = new StrokeGenerator();
-            this.Width = inWidth;
+            this.Width = initWidth;
         }
 
         public LineCap LineCap

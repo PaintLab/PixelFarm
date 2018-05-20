@@ -94,7 +94,7 @@ namespace PixelFarm.DrawingGL
 
 
             memdc.MeasureTextSize(textBuffer, out bmpWidth, out bmpHeight);
-            var actualImg = new Agg.ActualImage(bmpWidth, bmpHeight, Agg.PixelFormat.ARGB32);
+            var actualImg = new Agg.ActualImage(bmpWidth, bmpHeight);
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   

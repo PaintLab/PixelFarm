@@ -95,9 +95,9 @@ namespace PixelFarm.Agg
                 y -= _posY;
                 if (withSubPathTest)
                 {
-                    return lionShape.HitTestOnSubPart(x, y); 
+                    return lionShape.HitTestOnSubPart(x, y);
                 }
-               
+
 
                 //                //find capture point relative to the bounds
 
@@ -135,14 +135,12 @@ namespace PixelFarm.Agg
                 int count = renderVx.SvgVxCount;
                 for (int i = 0; i < count; ++i)
                 {
-                    SvgVx vx = renderVx.GetInnerVx(i);
+                    SvgPart vx = renderVx.GetInnerVx(i);
                     if (vx.Kind != SvgRenderVxKind.Path)
                     {
                         continue;
                     }
-
-                    //Temp fix,
-
+                    //Temp fix, 
                     //TODO: review here,
                     //permanent transform each part?
                     //or create a copy. 

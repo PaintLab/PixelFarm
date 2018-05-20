@@ -66,7 +66,7 @@ namespace PixelFarmTextBox.WinForms
             //share text printer to our sample textbox
             //but you can create another text printer that specific to text textbox control
 
-            destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
+            destImg = new ActualImage(800, 600);
             aggsx = new AggRenderSurface(destImg); //no platform
             painter = new AggPainter(aggsx);
             winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);

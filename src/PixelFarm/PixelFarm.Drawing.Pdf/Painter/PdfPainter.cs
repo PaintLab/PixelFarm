@@ -3,6 +3,7 @@
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.Pdf
 {
@@ -24,7 +25,7 @@ namespace PixelFarm.Drawing.Pdf
         //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
 
-
+        PixelFarm.Agg.VectorTool _vectorTool;
         Agg.VertexSource.RoundedRect roundRect;
 
 
@@ -32,8 +33,12 @@ namespace PixelFarm.Drawing.Pdf
 
         public PdfPainter()
         {
+            _vectorTool = new PixelFarm.Agg.VectorTool();
         }
-
+        public override PainterExtensions.VectorTool VectorTool
+        {
+            get { return _vectorTool; }
+        }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {
@@ -479,14 +484,7 @@ namespace PixelFarm.Drawing.Pdf
             //_gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
 
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            //for (int i = 0; i < numPath; ++i)
-            //{
-            //    VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
-            //}
-        }
-
+     
         public override void DrawRect(double left, double bottom, double right, double top)
         {
             //_gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));

@@ -83,8 +83,7 @@ namespace PixelFarm.Drawing
         public abstract void Fill(VertexStoreSnap snap);
         public abstract void Fill(VertexStore vxs);
 
-        //TODO: remove paint series, 
-        public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
+     
         public abstract void Draw(VertexStore vxs);
         public abstract void Draw(VertexStoreSnap vxs);
         public abstract RenderVx CreateRenderVx(VertexStoreSnap snap);
@@ -110,10 +109,17 @@ namespace PixelFarm.Drawing
         internal Stack<object> _userObjectStack = new Stack<object>();
         internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
 
+
+        public abstract PainterExtensions.VectorTool VectorTool { get; }
     }
 
     namespace PainterExtensions
     {
+        public abstract class VectorTool
+        {
+            public abstract void CreateStroke(VertexStore orgVxs, float strokeW, VertexStore output);
+        }
+
         public static class PainterExt
         {
             public static void StackPushUserObject(this Painter p, object o)
@@ -143,6 +149,8 @@ namespace PixelFarm.Drawing
             {
                 p._tempVxsStack.Push(vxs);
             }
+
+
         }
     }
 

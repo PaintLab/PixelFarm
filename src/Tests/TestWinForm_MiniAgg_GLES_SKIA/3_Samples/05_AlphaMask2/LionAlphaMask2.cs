@@ -259,9 +259,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             using (System.Drawing.Bitmap lionBmp = new System.Drawing.Bitmap(w, h))
             using (System.Drawing.Graphics lionGfx = System.Drawing.Graphics.FromImage(lionBmp))
             {
-                lionGfx.Clear(System.Drawing.Color.White);
-                int n = lionShape.NumPaths;
-                int[] indexList = lionShape.PathIndexList;
+                //lionGfx.Clear(System.Drawing.Color.White);
+                //int n = lionShape.NumPaths;
+                //int[] indexList = lionShape.PathIndexList;
 
 
                 //TODO: review here again
@@ -391,15 +391,19 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             ////trans.DoTransform(vxlist); 
 
             var tmpVxs1 = new VertexStore();
-            transform.TransformToVxs(lionShape.Vxs, tmpVxs1);
 
-            sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
-                   rasterizer,
-                   scline,
-                   tmpVxs1,
-                   lionShape.Colors,
-                   lionShape.PathIndexList,
-                   lionShape.NumPaths);
+            lionShape.ApplyTransform(transform);
+
+            throw new NotImplementedException();
+
+            //sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
+            //       rasterizer,
+            //       scline,
+            //       tmpVxs1,
+            //       lionShape.Colors,
+            //       lionShape.PathIndexList,
+            //       lionShape.NumPaths);
+
             ///*
             //// Render random Bresenham lines and markers
             //agg::renderer_markers<amask_ren_type> m(r);

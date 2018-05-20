@@ -103,10 +103,11 @@ namespace PixelFarm.Agg.Sample_Perspective
                 if (txBilinear.IsValid)
                 {
                     var v3 = GetFreeVxs();
-                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Vxs, v3),
-                        lionShape.Colors,
-                        lionShape.PathIndexList,
-                        lionShape.NumPaths);
+
+                    lionShape.ApplyTransform(txBilinear);
+                    lionShape.Paint(painter); 
+                  
+
                     RectD lionBound = lionShape.Bounds;
                     Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
                                      (lionBound.Bottom + lionBound.Top) * 0.5,

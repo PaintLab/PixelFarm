@@ -17,6 +17,8 @@ namespace PixelFarm.Agg.VertexSource
     {
         public static List<VertexStore> CombinePaths(VertexStoreSnap a, VertexStoreSnap b, VxsClipperType vxsClipType, bool separateIntoSmallSubPaths)
         {
+            //TODO: optimize here
+
             ClipType clipType = (ClipType)vxsClipType;
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -76,7 +78,7 @@ namespace PixelFarm.Agg.VertexSource
                             }
                         }
                         output.CloseFigure();
-                    } 
+                    }
                 }
 
                 //TODO: review here
