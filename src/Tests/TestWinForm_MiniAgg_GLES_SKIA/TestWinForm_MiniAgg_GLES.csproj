@@ -117,11 +117,6 @@
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageHelper2.cs" />
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageSpan.cs" />
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_PixelBlenderFloat.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontStore.cs" />
-    <Compile Include="Experiment_AggFonts\Font\MyTypeFacePrinter.cs" />
     <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
