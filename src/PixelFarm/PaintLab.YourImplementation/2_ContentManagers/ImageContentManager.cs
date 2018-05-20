@@ -40,7 +40,7 @@ namespace LayoutFarm.ContentManagers
         object outputListSync = new object();
         object inputListSync = new object();
         bool working = false;
-        public ImageContentManager(UIPlatform platform)
+        public ImageContentManager()
         {
             //TODO: review here**** 
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);

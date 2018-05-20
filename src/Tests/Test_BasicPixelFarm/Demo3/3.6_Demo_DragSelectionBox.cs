@@ -26,7 +26,7 @@ namespace LayoutFarm
         protected override void OnStartDemo(SampleViewport viewport)
         {
             this.viewport = viewport;
-            this.rootgfx = viewport.Root;
+            this.rootgfx = viewport.RootGfx;
             //--------------------------------
 
             bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
