@@ -45,8 +45,8 @@ namespace PaintLab.Svg
     public class SvgParser
     {
 
-        List<SvgPart> renderVxList = new List<SvgPart>();
-        CurveFlattener curveFlattener = new CurveFlattener();
+        List<SvgPart> _renderVxList = new List<SvgPart>();
+        CurveFlattener _curveFlattener = new CurveFlattener();
         MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
         CssParser _cssParser = new CssParser();
         Queue<PathWriter> _resuablePathWriterQueue = new Queue<PathWriter>();
@@ -61,7 +61,7 @@ namespace PaintLab.Svg
         }
         public void ReadSvgFile(string svgFileName)
         {
-            renderVxList.Clear();
+            _renderVxList.Clear();
             //create simple svg dom
             //iterate all child
             XmlDocument xmldoc = new XmlDocument();
@@ -83,11 +83,11 @@ namespace PaintLab.Svg
         }
         public SvgPart[] GetResult()
         {
-            return renderVxList.ToArray();
+            return _renderVxList.ToArray();
         }
         public SvgRenderVx GetResultAsRenderVx()
         {
-            return new SvgRenderVx(renderVxList.ToArray());
+            return new SvgRenderVx(_renderVxList.ToArray());
         }
 
         void ParseSvgElement(XmlElement elem)
@@ -367,13 +367,13 @@ namespace PaintLab.Svg
             //--------
             SvgPart beginVx = new SvgPart(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
-            renderVxList.Add(beginVx);
+            _renderVxList.Add(beginVx);
             foreach (XmlElement child in elem.ChildNodes)
             {
                 ParseSvgElement(child);
             }
             //--------
-            renderVxList.Add(new SvgPart(SvgRenderVxKind.EndGroup));
+            _renderVxList.Add(new SvgPart(SvgRenderVxKind.EndGroup));
 
         }
         void ParseTitle(XmlElement elem)
@@ -412,27 +412,27 @@ namespace PaintLab.Svg
             }
         }
 
-        static void AssignValues(SvgPart svgRenderVx, SvgVisualSpec spec)
+        static void AssignValues(SvgPart svgPart, SvgVisualSpec spec)
         {
 
             if (spec.HasFillColor)
             {
-                svgRenderVx.FillColor = spec.FillColor;
+                svgPart.FillColor = spec.FillColor;
             }
 
             if (spec.HasStrokeColor)
             {
-                svgRenderVx.StrokeColor = spec.StrokeColor;
+                svgPart.StrokeColor = spec.StrokeColor;
             }
 
             if (spec.HasStrokeWidth)
             {
                 //assume this is in pixel unit
-                svgRenderVx.StrokeWidth = spec.StrokeWidth.Number;
+                svgPart.StrokeWidth = spec.StrokeWidth.Number;
             }
             if (spec.Transform != null)
             {
-                svgRenderVx.AffineTx = spec.Transform;
+                svgPart.AffineTx = spec.Transform;
             }
         }
 
@@ -490,26 +490,23 @@ namespace PaintLab.Svg
                 AssignValues(svgPart, spec);
 
                 //-------------------------------------------------
-                PathWriter pathWriter = GetFreePathWriter(); 
-
+                PathWriter pathWriter = GetFreePathWriter();
                 _svgPathDataParser.SetPathWriter(pathWriter);
                 //tokenize the path definition data
                 _svgPathDataParser.Parse(pathDefAttr.Value.ToCharArray());
 
                 //
                 VertexStore flattenVxs = new VertexStore();
-                curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
+                _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
 
                 ReleasePathWriter(pathWriter);
-                //-------------------------------------------------
-
-
+                //------------------------------------------------- 
                 if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
                 {
                     //TODO: implement stroke rendering 
                 }
                 svgPart.SetVxsAsOriginal(flattenVxs);
-                this.renderVxList.Add(svgPart);
+                this._renderVxList.Add(svgPart);
             }
 
 
