@@ -23,7 +23,7 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-           
+
             lionShape = new SpriteShape();
             lionShape.ParseLion();
 
@@ -31,8 +31,7 @@ namespace OpenTkEssTest
             PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
                  PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
-            lionVxs = new VertexStore();
-            aff.TransformToVxs(lionShape.Vxs, lionVxs);
+            lionShape.ApplyTransform(aff);
 
 
         }

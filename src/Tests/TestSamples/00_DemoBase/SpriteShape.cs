@@ -20,34 +20,12 @@ namespace PixelFarm.Agg
     {
 
         SvgRenderVx _svgRenderVx;
-
         PathWriter path = new PathWriter();
-        Color[] colors = new Color[100];
-        int[] pathIndexList = new int[100];
-        int numPaths = 0;
-        RectD boundingRect;
         Vector2 center;
+        RectD boundingRect;
 
-        VertexStore _lionVxs;
         public SpriteShape()
         {
-        }
-
-
-        public VertexStore Vxs
-        {
-            get
-            {
-                return _lionVxs;
-
-            }
-        }
-        public int NumPaths
-        {
-            get
-            {
-                return numPaths;
-            }
         }
 
         public RectD Bounds
@@ -58,22 +36,31 @@ namespace PixelFarm.Agg
             }
         }
 
-        public Color[] Colors
+        public void ResetTransform()
         {
-            get
+            int elemCount = _svgRenderVx.SvgVxCount;
+            for (int i = 0; i < elemCount; ++i)
             {
-                return colors;
+                _svgRenderVx.ResetTransform();
+            }
+        }
+        public void ApplyTransform(Agg.Transform.Affine tx)
+        {
+            int elemCount = _svgRenderVx.SvgVxCount;
+            for (int i = 0; i < elemCount; ++i)
+            {
+                _svgRenderVx.SetInnerVx(i, SvgPart.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             }
         }
 
-        public int[] PathIndexList
+        public void ApplyTransform(Agg.Transform.Bilinear tx)
         {
-            get
+            int elemCount = _svgRenderVx.SvgVxCount;
+            for (int i = 0; i < elemCount; ++i)
             {
-                return pathIndexList;
+                _svgRenderVx.SetInnerVx(i, SvgPart.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             }
         }
-
         public Vector2 Center
         {
             get
@@ -183,7 +170,7 @@ namespace PixelFarm.Agg
 
             _selectedVxs = null;//reset
             for (int i = partCount - 1; i >= 0; --i)
-            { 
+            {
                 //we do hittest top to bottom => (so => iter backward)
 
                 SvgPart vx = _svgRenderVx.GetInnerVx(i);

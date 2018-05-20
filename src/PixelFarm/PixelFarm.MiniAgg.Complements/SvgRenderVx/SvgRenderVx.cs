@@ -63,6 +63,7 @@ namespace PixelFarm.Agg
                 p.DrawImage(_backimg, X, Y);
                 return;
             }
+
             PixelFarm.Agg.Transform.Affine currentTx = null;
 
             var renderState = new TempRenderState();
@@ -254,6 +255,15 @@ namespace PixelFarm.Agg
         {
             get { return _vxList.Length; }
         }
+
+        public void SetInnerVx(int index, SvgPart p)
+        {
+            _vxList[index] = p;
+        }
+        public void ResetTransform()
+        {
+            _vxList = _originalVxs;
+        }
         //public void ApplyTransform(Transform.Affine transform)
         //{
         //    //apply transform to each elements
@@ -298,8 +308,13 @@ namespace PixelFarm.Agg
 
         double _strokeVxsStrokeWidth;
 
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+#endif
         public SvgPart(SvgRenderVxKind kind)
         {
+            
             this.Kind = kind;
         }
         public bool HasFillColor { get; private set; }
@@ -365,13 +380,37 @@ namespace PixelFarm.Agg
         }
 
 
-        public static SvgPart TransformToNew(SvgPart originalSvgVx, Affine affineTx)
+        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.Agg.Transform.Affine tx)
+        {
+            SvgPart newSx = new SvgPart(originalSvgVx.Kind);
+            if (originalSvgVx._vxs != null)
+            {
+                VertexStore vxs = new VertexStore();
+                tx.TransformToVxs(originalSvgVx._vxs, vxs);
+                newSx._vxs = vxs;
+            }
+
+            if (originalSvgVx.HasFillColor)
+            {
+                newSx._fillColor = originalSvgVx._fillColor;
+            }
+            if (originalSvgVx.HasStrokeColor)
+            {
+                newSx.StrokeColor = originalSvgVx.StrokeColor;
+            }
+            if (originalSvgVx.HasStrokeWidth)
+            {
+                newSx.StrokeWidth = originalSvgVx.StrokeWidth;
+            }
+            return newSx;
+        }
+        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.Agg.Transform.Bilinear tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (newSx._vxs != null)
             {
                 VertexStore vxs = new VertexStore();
-                affineTx.TransformToVxs(originalSvgVx._vxs, vxs);
+                tx.TransformToVxs(originalSvgVx._vxs, vxs);
                 newSx._vxs = vxs;
             }
 

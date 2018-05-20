@@ -689,16 +689,7 @@ namespace PixelFarm.Agg
             get { return strokeColor; }
             set { this.strokeColor = value; }
         }
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            sclineRasToBmp.RenderSolidAllPaths(this._aggsx.DestImage,
-                this.sclineRas,
-                this.scline,
-                vxs,
-                colors,
-                pathIndexs,
-                numPath);
-        }
+      
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
