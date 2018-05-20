@@ -45,32 +45,31 @@ namespace PaintLab.Svg
     public class SvgParser
     {
 
-        List<SvgVx> renderVxList = new List<SvgVx>();
+        List<SvgPart> _renderVxList = new List<SvgPart>();
+        CurveFlattener _curveFlattener = new CurveFlattener();
+        MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
+        CssParser _cssParser = new CssParser();
+        Queue<PathWriter> _resuablePathWriterQueue = new Queue<PathWriter>();
+        Queue<VertexStore> _reusableVertexStore = new Queue<VertexStore>();
+
 
         public void ReadSvgString(string svgString)
         {
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.LoadXml(svgString);
-            XmlElement docElem = xmldoc.DocumentElement;
-            //then parse 
-            if (docElem.Name == "svg")
-            {
-                //parse its content
-
-                foreach (XmlElement elem in docElem.ChildNodes)
-                {
-                    ParseSvgElement(elem);
-                }
-            }
+            ReadSvgDocument(xmldoc);
         }
         public void ReadSvgFile(string svgFileName)
         {
-            renderVxList.Clear();
+            _renderVxList.Clear();
             //create simple svg dom
             //iterate all child
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(svgFileName);
-            //
+            ReadSvgDocument(xmldoc);
+        }
+        public void ReadSvgDocument(XmlDocument xmldoc)
+        {
             XmlElement docElem = xmldoc.DocumentElement;
             //then parse 
             if (docElem.Name == "svg")
@@ -82,14 +81,13 @@ namespace PaintLab.Svg
                 }
             }
         }
-
-        public SvgVx[] GetResult()
+        public SvgPart[] GetResult()
         {
-            return renderVxList.ToArray();
+            return _renderVxList.ToArray();
         }
         public SvgRenderVx GetResultAsRenderVx()
         {
-            return new SvgRenderVx(renderVxList.ToArray());
+            return new SvgRenderVx(_renderVxList.ToArray());
         }
 
         void ParseSvgElement(XmlElement elem)
@@ -125,7 +123,7 @@ namespace PaintLab.Svg
             }
         }
 
-        CssParser _cssParser = new CssParser();
+
 
 #if DEBUG
         static int s_dbugIdCount;
@@ -367,15 +365,15 @@ namespace PaintLab.Svg
 
             SvgGroupElement group = new SvgGroupElement(spec, null);
             //--------
-            SvgVx beginVx = new SvgVx(SvgRenderVxKind.BeginGroup);
+            SvgPart beginVx = new SvgPart(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
-            renderVxList.Add(beginVx);
+            _renderVxList.Add(beginVx);
             foreach (XmlElement child in elem.ChildNodes)
             {
                 ParseSvgElement(child);
             }
             //--------
-            renderVxList.Add(new SvgVx(SvgRenderVxKind.EndGroup));
+            _renderVxList.Add(new SvgPart(SvgRenderVxKind.EndGroup));
 
         }
         void ParseTitle(XmlElement elem)
@@ -414,32 +412,65 @@ namespace PaintLab.Svg
             }
         }
 
-        MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
-        static void AssignValues(SvgVx svgRenderVx, SvgVisualSpec spec)
+        static void AssignValues(SvgPart svgPart, SvgVisualSpec spec)
         {
 
             if (spec.HasFillColor)
             {
-                svgRenderVx.FillColor = spec.FillColor;
+                svgPart.FillColor = spec.FillColor;
             }
 
             if (spec.HasStrokeColor)
             {
-                svgRenderVx.StrokeColor = spec.StrokeColor;
+                svgPart.StrokeColor = spec.StrokeColor;
             }
 
             if (spec.HasStrokeWidth)
             {
                 //assume this is in pixel unit
-                svgRenderVx.StrokeWidth = spec.StrokeWidth.Number;
+                svgPart.StrokeWidth = spec.StrokeWidth.Number;
             }
             if (spec.Transform != null)
             {
-                svgRenderVx.AffineTx = spec.Transform;
+                svgPart.AffineTx = spec.Transform;
             }
         }
 
-        CurveFlattener curveFlattener = new CurveFlattener();
+
+
+        PathWriter GetFreePathWriter()
+        {
+            if (_resuablePathWriterQueue.Count > 0)
+            {
+                return _resuablePathWriterQueue.Dequeue();
+            }
+            else
+            {
+                return new PathWriter(new VertexStore());
+            }
+        }
+        void ReleasePathWriter(PathWriter p)
+        {
+            p.Clear();
+            _resuablePathWriterQueue.Enqueue(p);
+        }
+        VertexStore GetFreeVxs()
+        {
+            if (_reusableVertexStore.Count > 0)
+            {
+                return _reusableVertexStore.Dequeue();
+            }
+            else
+            {
+                return new VertexStore();
+            }
+        }
+        void ReleaseVertexStore(VertexStore vxs)
+        {
+            vxs.Clear();
+            _reusableVertexStore.Enqueue(vxs);
+        }
+
 
         void ParsePath(XmlElement elem)
         {
@@ -472,27 +503,35 @@ namespace PaintLab.Svg
             //translate and evaluate values 
             if (pathDefAttr != null)
             {
+                //create new path
+                SvgPart svgPart = new SvgPart(SvgRenderVxKind.Path);
+                AssignValues(svgPart, spec);
 
-                SvgVx svgRenderVx = new SvgVx(SvgRenderVxKind.Path);
-                AssignValues(svgRenderVx, spec);
-
-                //TODO: review here, reused resource
-
-                VertexStore vxs = new VertexStore();
-                PathWriter pathWriter = new PathWriter(vxs);
+                //-------------------------------------------------
+                PathWriter pathWriter = GetFreePathWriter();
                 _svgPathDataParser.SetPathWriter(pathWriter);
                 //tokenize the path definition data
                 _svgPathDataParser.Parse(pathDefAttr.Value.ToCharArray());
 
                 //
-                VertexStore flattenVxs = new VertexStore();
-                curveFlattener.MakeVxs(vxs, flattenVxs);
-                if (svgRenderVx.HasStrokeWidth && svgRenderVx.StrokeWidth > 0)
+                VertexStore flattenVxs = GetFreeVxs();
+                _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
+
+              
+                //------------------------------------------------- 
+                if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
                 {
                     //TODO: implement stroke rendering 
                 }
-                svgRenderVx.SetVxsAsOriginal(flattenVxs);
-                this.renderVxList.Add(svgRenderVx);
+
+                //create a small copy of the vxs
+                svgPart.SetVxsAsOriginal(flattenVxs.CreateTrim());
+
+                ReleaseVertexStore(flattenVxs);
+                ReleasePathWriter(pathWriter);
+
+
+                this._renderVxList.Add(svgPart);
             }
 
 

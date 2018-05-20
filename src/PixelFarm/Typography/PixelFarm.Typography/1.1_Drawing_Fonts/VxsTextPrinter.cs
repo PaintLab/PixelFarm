@@ -325,6 +325,7 @@ namespace PixelFarm.Drawing.Fonts
 
                 Agg.Transform.Affine flipY = Agg.Transform.Affine.NewMatix(
                     Agg.Transform.AffinePlan.Scale(1, -1)); //flip Y
+
                 VertexStore reusableVxs = new VertexStore();
 
                 float acc_x = 0; //acummulate x
