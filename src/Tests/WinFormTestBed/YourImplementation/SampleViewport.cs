@@ -26,7 +26,7 @@ namespace LayoutFarm
             this.primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
 
             //--------------
-            imageContentMan = new ImageContentManager(vw.Platform);
+            imageContentMan = new ImageContentManager();
             imageContentMan.ImageLoadingRequest += (s, e) =>
             {
                 e.SetResultImage(LoadBitmap(e.ImagSource));
@@ -63,7 +63,7 @@ namespace LayoutFarm
         {
             get { return this.vw; }
         }
-        public RootGraphic Root
+        public RootGraphic RootGfx
         {
             get { return this.vw.RootGfx; }
         }
