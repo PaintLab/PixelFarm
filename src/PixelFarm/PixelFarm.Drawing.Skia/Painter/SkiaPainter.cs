@@ -513,16 +513,7 @@ namespace PixelFarm.Drawing.Skia
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
 
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            var prevColor = FillColor;
-            for (int i = 0; i < numPath; ++i)
-            {
-                _fill.Color = ConvToSkColor(colors[i]);
-                VxsHelper.FillVxsSnap(_skCanvas, new VertexStoreSnap(vxs, pathIndexs[i]), _fill);
-            }
-            FillColor = prevColor;
-        }
+        
 
         public override void DrawRect(double left, double bottom, double right, double top)
         {

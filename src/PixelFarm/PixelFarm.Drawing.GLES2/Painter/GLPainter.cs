@@ -591,17 +591,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            //TODO: review here.
-            //
-            for (int i = 0; i < numPath; ++i)
-            {
-                _glsx.FillGfxPath(colors[i],
-                    _igfxPathBuilder.CreateGraphicsPath(
-                        new VertexStoreSnap(vxs, pathIndexs[i])));
-            }
-        }
+       
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
         }

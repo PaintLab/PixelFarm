@@ -491,12 +491,7 @@ namespace PixelFarm.Drawing.WinGdi
             WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
             VxsHelper.FillPath(_renderSurface.gx, wRenderVx.path, this.FillColor);
         }
-
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            throw new NotImplementedException();
-        }
-
+ 
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
 
