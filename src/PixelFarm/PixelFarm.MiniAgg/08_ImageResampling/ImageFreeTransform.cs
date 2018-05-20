@@ -165,7 +165,7 @@ namespace PixelFarm.Agg.Imaging
         static BicubicInterpolator2 myInterpolator = new BicubicInterpolator2();
         ActualImage GetTransformedBitmapNoInterpolation()
         {
-            var destCB = new ActualImage(rect.Width, rect.Height, PixelFormat.ARGB32);
+            var destCB = new ActualImage(rect.Width, rect.Height);
             var destWriter = new MyImageReaderWriter();
             destWriter.ReloadImage(destCB);
             PointF ptInPlane = new PointF();
@@ -208,7 +208,7 @@ namespace PixelFarm.Agg.Imaging
         {
             //4 points sampling
             //weight between four point
-            ActualImage destCB = new ActualImage(rect.Width, rect.Height, PixelFormat.ARGB32);
+            ActualImage destCB = new ActualImage(rect.Width, rect.Height);
             MyImageReaderWriter destWriter = new MyImageReaderWriter();
             destWriter.ReloadImage(destCB);
             PointF ptInPlane = new PointF();
@@ -308,7 +308,7 @@ namespace PixelFarm.Agg.Imaging
             //    System.Drawing.Imaging.ImageLockMode.ReadWrite, outputbmp.PixelFormat);
             ////-----------------------------------------
 
-            ActualImage destCB = new ActualImage(rect.Width, rect.Height, PixelFormat.ARGB32);
+            ActualImage destCB = new ActualImage(rect.Width, rect.Height);
             MyImageReaderWriter destWriter = new MyImageReaderWriter();
             destWriter.ReloadImage(destCB);
             //PointF ptInPlane = new PointF();

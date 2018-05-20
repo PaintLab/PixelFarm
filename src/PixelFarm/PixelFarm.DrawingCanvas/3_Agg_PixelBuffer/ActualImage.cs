@@ -78,7 +78,7 @@ namespace PixelFarm.Agg
         PixelFormat pixelFormat;
         int[] pixelBuffer;
 
-        public ActualImage(int width, int height, PixelFormat format)
+        public ActualImage(int width, int height, PixelFormat format = PixelFormat.ARGB32)
         {
             //width and height must >0 
             this.width = width;

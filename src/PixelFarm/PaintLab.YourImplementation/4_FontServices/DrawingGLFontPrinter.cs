@@ -45,7 +45,7 @@ namespace PixelFarm.DrawingGL
             bmpWidth = w;
             bmpHeight = h;
 
-            _actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
+            _actualImage = new ActualImage(bmpWidth, bmpHeight);
             _aggsx = new AggRenderSurface(_actualImage);
             _aggPainter = new AggPainter(_aggsx);
             _aggPainter.FillColor = Color.Black;

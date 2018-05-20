@@ -24,7 +24,7 @@ namespace SampleWinForms.UI
         {
             g = hostControlGraphics;
             //
-            destImg = new ActualImage(400, 300, PixelFormat.ARGB32);
+            destImg = new ActualImage(400, 300);
             aggsx = new AggRenderSurface(destImg); //no platform
             p = new AggPainter(aggsx);
             winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
