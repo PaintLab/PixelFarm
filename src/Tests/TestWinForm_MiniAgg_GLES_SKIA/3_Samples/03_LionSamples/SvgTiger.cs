@@ -79,8 +79,8 @@ namespace PixelFarm.Agg.Samples
             SvgParser svg = new SvgParser();
             //svg.ReadSvgFile("Samples\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\x_04.svg");
-            svg.ReadSvgFile("Samples\\tiger002.svg");
-            //svg.ReadSvgFile("Samples\\arrow2.svg");
+            //svg.ReadSvgFile("Samples\\tiger002.svg");
+            svg.ReadSvgFile("Samples\\arrow2.svg");
 
             SvgRenderVx renderVx = svg.GetResultAsRenderVx();
             //renderVx.ApplyTransform(Transform.Affine.NewScaling(0.1, 0.1));
@@ -97,7 +97,9 @@ namespace PixelFarm.Agg.Samples
                 SvgRenderVx svgVx = vx as SvgRenderVx;
                 if (svgVx != null && !svgVx.HasBitmapSnapshot)
                 {
-                    ActualImage backimg = new ActualImage(500, 500);
+                    RectD bound = svgVx.GetBounds();
+
+                    ActualImage backimg = new ActualImage((int)bound.Width, (int)bound.Height);
                     AggRenderSurface renderSurface = new AggRenderSurface(backimg);
                     AggPainter painter = new AggPainter(renderSurface);
                     svgVx.Render(painter);

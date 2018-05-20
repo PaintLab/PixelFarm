@@ -28,19 +28,52 @@ namespace PixelFarm.Agg
             public float strokeWidth;
             public Color strokeColor;
             public Color fillColor;
-            public PixelFarm.Agg.Transform.Affine affineTx;
+            public Affine affineTx;
         }
 
         Image _backimg;
         SvgPart[] _vxList;//woring vxs
         SvgPart[] _originalVxs; //original definition
 
+        RectD _boundRect;
+        bool _needBoundUpdate;
+
         public SvgRenderVx(SvgPart[] svgVxList)
         {
             //this is original version of the element
             this._originalVxs = svgVxList;
             this._vxList = svgVxList;
+            _needBoundUpdate = true;
         }
+
+        public RectD GetBounds()
+        {
+            //find bound
+            //TODO: review here
+            if (_needBoundUpdate)
+            {
+                int partCount = _vxList.Length;
+
+                for (int i = 0; i < partCount; ++i)
+                {
+                    SvgPart vx = _vxList[i];
+                    if (vx.Kind != SvgRenderVxKind.Path)
+                    {
+                        continue;
+                    }
+
+                    RectD rectTotal = new RectD();
+                    VertexStore innerVxs = vx.GetVxs();
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
+
+                    _boundRect.ExpandToInclude(rectTotal);
+                }
+                
+                _needBoundUpdate = false;
+            }
+            return _boundRect;
+        }
+
         public bool HasBitmapSnapshot { get; internal set; }
 
         public void SetBitmapSnapshot(Image img)
@@ -52,8 +85,6 @@ namespace PixelFarm.Agg
 
         public float X { get; set; }
         public float Y { get; set; }
-
-
 
         public void Render(Painter p)
         {
@@ -230,8 +261,6 @@ namespace PixelFarm.Agg
             p.ReleaseTempVxsStore(tempVxs);
         }
 
-
-
         VertexStore GetStrokeVxsOrCreateNew(SvgPart s, Painter p, float strokeW)
         {
             VertexStore strokeVxs = s.StrokeVxs;
@@ -264,37 +293,7 @@ namespace PixelFarm.Agg
         {
             _vxList = _originalVxs;
         }
-        //public void ApplyTransform(Transform.Affine transform)
-        //{
-        //    //apply transform to each elements
 
-        //    int count = _originalVxs.Length;
-        //    _vxList = new SvgPart[count];
-
-        //    for (int i = 0; i < count; ++i)
-        //    {
-        //        SvgPart vx = _originalVxs[i];
-        //        if (vx.Kind != SvgRenderVxKind.Path)
-        //        {
-        //            _vxList[i] = vx;
-        //            continue;
-        //        }
-
-        //        //Temp fix 
-        //        //TODO: review here,
-        //        //permanent transform each part?
-        //        //or create a copy. 
-        //        vx.RestoreOrg();
-        //        VertexStore vxvxs = vx.GetVxs();
-        //        VertexStore newVxs = new VertexStore();
-        //        transform.TransformToVxs(vxvxs, newVxs);
-
-        //        SvgPart newVx = new SvgPart(vx.Kind);
-        //        newVx.SetVxs(newVxs);
-        //        _vxList[i] = newVx;
-        //    }
-
-        //}
     }
 
 
@@ -314,7 +313,7 @@ namespace PixelFarm.Agg
 #endif
         public SvgPart(SvgRenderVxKind kind)
         {
-            
+
             this.Kind = kind;
         }
         public bool HasFillColor { get; private set; }
