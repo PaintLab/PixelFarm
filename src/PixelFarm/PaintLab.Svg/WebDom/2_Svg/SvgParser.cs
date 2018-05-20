@@ -50,7 +50,7 @@ namespace PaintLab.Svg
         MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
         CssParser _cssParser = new CssParser();
         Queue<PathWriter> _resuablePathWriterQueue = new Queue<PathWriter>();
-
+        Queue<VertexStore> _reusableVertexStore = new Queue<VertexStore>();
 
 
         public void ReadSvgString(string svgString)
@@ -454,6 +454,24 @@ namespace PaintLab.Svg
             p.Clear();
             _resuablePathWriterQueue.Enqueue(p);
         }
+        VertexStore GetFreeVxs()
+        {
+            if (_reusableVertexStore.Count > 0)
+            {
+                return _reusableVertexStore.Dequeue();
+            }
+            else
+            {
+                return new VertexStore();
+            }
+        }
+        void ReleaseVertexStore(VertexStore vxs)
+        {
+            vxs.Clear();
+            _reusableVertexStore.Enqueue(vxs);
+        }
+
+
         void ParsePath(XmlElement elem)
         {
             SvgVisualSpec spec = new SvgVisualSpec();
@@ -496,7 +514,7 @@ namespace PaintLab.Svg
                 _svgPathDataParser.Parse(pathDefAttr.Value.ToCharArray());
 
                 //
-                VertexStore flattenVxs = new VertexStore();
+                VertexStore flattenVxs = GetFreeVxs();
                 _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
 
                 ReleasePathWriter(pathWriter);
@@ -505,7 +523,12 @@ namespace PaintLab.Svg
                 {
                     //TODO: implement stroke rendering 
                 }
-                svgPart.SetVxsAsOriginal(flattenVxs);
+
+                //create a small copy of the vxs
+                svgPart.SetVxsAsOriginal(flattenVxs.CreateTrim());
+
+                ReleaseVertexStore(flattenVxs);
+
                 this._renderVxList.Add(svgPart);
             }
 
