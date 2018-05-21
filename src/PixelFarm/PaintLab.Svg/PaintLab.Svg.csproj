@@ -96,9 +96,6 @@
     <Compile Include="..\PaintLab.WebDom\1_Css\WellknownCssPropertyName.cs">
       <Link>REF_WebDom\1_Css\WellknownCssPropertyName.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.WebDom\2_Svg\05_SvgDoms\SvgElements.cs">
-      <Link>REF_WebDom\2_Svg\05_SvgDoms\SvgElements.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.WebDom\2_Svg\07_Coords_Transforms\SvgMatrix.cs">
       <Link>REF_WebDom\2_Svg\07_Coords_Transforms\SvgMatrix.cs</Link>
     </Compile>
@@ -120,23 +117,14 @@
     <Compile Include="..\PaintLab.WebDom\2_Svg\07_Coords_Transforms\SvgTranslate.cs">
       <Link>REF_WebDom\2_Svg\07_Coords_Transforms\SvgTranslate.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.WebDom\2_Svg\08_Paths\SvgPath.cs">
-      <Link>REF_WebDom\2_Svg\08_Paths\SvgPath.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.WebDom\2_Svg\08_Paths\SvgPathDataParser.cs">
       <Link>REF_WebDom\2_Svg\08_Paths\SvgPathDataParser.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.WebDom\2_Svg\08_Paths\SvgPathSegments.cs">
       <Link>REF_WebDom\2_Svg\08_Paths\SvgPathSegments.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.WebDom\2_Svg\09_BasicShapes\SvgImageBinder.cs">
-      <Link>REF_WebDom\2_Svg\09_BasicShapes\SvgImageBinder.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.WebDom\2_Svg\09_BasicShapes\SvgSpec.cs">
       <Link>REF_WebDom\2_Svg\09_BasicShapes\SvgSpec.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.WebDom\2_Svg\09_BasicShapes\SvgVisualElements.cs">
-      <Link>REF_WebDom\2_Svg\09_BasicShapes\SvgVisualElements.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.WebDom\2_Svg\SvgParser.cs">
       <Link>REF_WebDom\2_Svg\SvgParser.cs</Link>
@@ -149,15 +137,6 @@
     </Compile>
     <Compile Include="..\PaintLab.WebLexer\dbugLexerReport.cs">
       <Link>REF_WebLexer\dbugLexerReport.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.WebLexer\HtmlLexer.cs">
-      <Link>REF_WebLexer\HtmlLexer.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.WebLexer\MyHtmlLexer.cs">
-      <Link>REF_WebLexer\MyHtmlLexer.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.WebLexer\MyHtmlLexer_dbug.cs">
-      <Link>REF_WebLexer\MyHtmlLexer_dbug.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.WebLexer\TextSnapshot.cs">
       <Link>REF_WebLexer\TextSnapshot.cs</Link>

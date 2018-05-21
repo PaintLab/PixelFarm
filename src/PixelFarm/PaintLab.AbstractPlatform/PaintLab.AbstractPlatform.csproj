@@ -247,18 +247,13 @@
     <Compile Include="..\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs">
       <Link>RenderTree\6_debug\IdbugOutputWindow.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree\7_ContentMx\1_ImageBinder.cs">
-      <Link>RenderTree\7_ContentMx\1_ImageBinder.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs">
       <Link>RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
     </Compile>
     <Compile Include="Accessories\KnownColors.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IO\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
