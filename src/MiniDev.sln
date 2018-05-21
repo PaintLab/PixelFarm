@@ -209,7 +209,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hjg.Pngcs", "PixelFarm\Back
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpZipLib", "PixelFarm\SharpZipLib\SharpZipLib.csproj", "{1EC4200D-E955-4617-9558-B859BB6B5AF2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.3_Platform_WebEssential", "3.3_Platform_WebEssential", "{B8B57320-63FF-453D-9892-671E48F8F084}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_YourImplementation_Svg", "4_YourImplementation_Svg", "{B8B57320-63FF-453D-9892-671E48F8F084}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.CssBase", "PixelFarm\PaintLab.CssBase\PaintLab.CssBase.csproj", "{BF5F9590-F680-403D-932A-7CDD12AF89FB}"
 EndProject

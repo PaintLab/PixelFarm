@@ -34,7 +34,6 @@ using PixelFarm;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
-using LayoutFarm.Svg.Transforms;
 using PixelFarm.Agg.Transform;
 
 
@@ -517,7 +516,7 @@ namespace PaintLab.Svg
                 VertexStore flattenVxs = GetFreeVxs();
                 _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
 
-              
+
                 //------------------------------------------------- 
                 if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
                 {

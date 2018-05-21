@@ -274,7 +274,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\6_debug\dbugVisualInvalidationTracer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\6_debug\dbugVisualLayoutTracer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\7_ContentMx\1_ImageBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs" />

@@ -27,7 +27,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -756,9 +756,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs">
       <Link>PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\7_ContentMx\1_ImageBinder.cs">
-      <Link>PixelFarm\PaintLab.RenderTree\7_ContentMx\1_ImageBinder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs">
       <Link>PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
