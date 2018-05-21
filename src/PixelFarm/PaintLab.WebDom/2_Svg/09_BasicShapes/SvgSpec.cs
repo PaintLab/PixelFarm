@@ -126,11 +126,11 @@ namespace LayoutFarm.Svg
     }
     public class SvgPolygonSpec : SvgVisualSpec
     {
-        public List<PointF> Points { get; set; }
+        public PointF[] Points { get; set; }
     }
     public class SvgPolylineSpec : SvgVisualSpec
     {
-        public List<PointF> Points { get; set; }
+        public PointF[] Points { get; set; }
     }
 
     public class SvgPathSpec : SvgVisualSpec
