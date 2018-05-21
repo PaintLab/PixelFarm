@@ -117,7 +117,6 @@
     <Compile Include="..\PaintLab.WebLexer\TextSnapshot.cs">
       <Link>REF_WebLexer\TextSnapshot.cs</Link>
     </Compile>
-    <Compile Include="ForNet20.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
