@@ -58,7 +58,6 @@
     <Compile Include="2_Svg\08_Paths\SvgPath.cs" />
     <Compile Include="2_Svg\08_Paths\SvgPathDataParser.cs" />
     <Compile Include="2_Svg\08_Paths\SvgPathSegments.cs" />
-    <Compile Include="2_Svg\09_BasicShapes\SvgImage.cs" />
     <Compile Include="2_Svg\09_BasicShapes\SvgImageBinder.cs" />
     <Compile Include="2_Svg\09_BasicShapes\SvgSpec.cs" />
     <Compile Include="2_Svg\09_BasicShapes\SvgVisualElements.cs" />
