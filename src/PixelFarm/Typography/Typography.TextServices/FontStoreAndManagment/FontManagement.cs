@@ -339,7 +339,41 @@ namespace Typography.TextServices
                 case InstalledFontStyle.Italic: selectedFontGroup = _italic; break;
                 case (InstalledFontStyle.Bold | InstalledFontStyle.Italic): selectedFontGroup = _bold_italic; break;
             }
-            selectedFontGroup.TryGetValue(fontName.ToUpper(), out _found);
+            if (selectedFontGroup.TryGetValue(fontName.ToUpper(), out _found))
+            {
+                return _found;
+            }
+            //-------------------------------------------
+
+            //retry ....
+            if (wellknownSubFam == InstalledFontStyle.Bold)
+            {
+                //try get from Gras?
+                //eg. tahoma
+                if (_subFamToFontGroup.TryGetValue("GRAS", out selectedFontGroup))
+                {
+
+                    if (selectedFontGroup.TryGetValue(fontName.ToUpper(), out _found))
+                    {
+                        return _found;
+                    }
+
+                }
+            }
+            else if (wellknownSubFam == InstalledFontStyle.Italic)
+            {
+                //TODO: simulate oblique (italic) font???
+                selectedFontGroup = _normal;
+
+                if (selectedFontGroup.TryGetValue(fontName.ToUpper(), out _found))
+                {
+                    return _found;
+                }
+
+            }
+
+
+
             return _found;
         }
         //public FindResult GetFont(string fontName, InstalledFontStyle style, out InstalledFont found)

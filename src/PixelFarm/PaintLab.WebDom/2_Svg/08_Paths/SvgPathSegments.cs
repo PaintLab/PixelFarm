@@ -233,7 +233,7 @@ namespace LayoutFarm.Svg.Pathing
                 fixedPoint.X - (mirrorPoint.X - fixedPoint.X),
                 fixedPoint.Y - (mirrorPoint.Y - fixedPoint.Y));
         }
-        internal static void MakeBezierCurveFromArc(ref PointF start,
+        public static void MakeBezierCurveFromArc(ref PointF start,
             ref PointF end,
             float rx,
             float ry,

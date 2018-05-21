@@ -4,13 +4,12 @@
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.Css;
-using LayoutFarm.WebDom;
 namespace LayoutFarm.Svg
 {
     public class SvgVisualSpec
     {
         Color fillColor = Color.Black;
-        Color strokeColor = Color.Transparent; 
+        Color strokeColor = Color.Transparent;
         CssLength cssLen;
 
         public bool HasFillColor { get; set; }

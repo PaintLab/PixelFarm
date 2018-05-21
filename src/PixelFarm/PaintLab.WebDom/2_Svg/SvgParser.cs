@@ -363,7 +363,7 @@ namespace PaintLab.Svg
                 }
             }
 
-            SvgGroupElement group = new SvgGroupElement(spec, null);
+            //SvgGroupElement group = new SvgGroupElement(spec, null);
             //--------
             SvgPart beginVx = new SvgPart(SvgRenderVxKind.BeginGroup);
             AssignValues(beginVx, spec);
