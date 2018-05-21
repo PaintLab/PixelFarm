@@ -468,6 +468,16 @@ namespace LayoutFarm.UI
             }
         }
 
+
+        public int RowIndex
+        {
+            get { return row.RowIndex; }
+        }
+        public int ColumnIndex
+        {
+            get { return column.ColumnIndex; }
+        }
+
 #if DEBUG
         public string dbugGetLinkInfo()
         {
@@ -635,7 +645,7 @@ namespace LayoutFarm.UI
 #if DEBUG
         public override string ToString()
         {
-            return column.ColumnIndex.ToString() + "," + row.RowIndex.ToString() + " " + base.ToString();
+            return row.RowIndex.ToString() + "," + column.ColumnIndex.ToString() + " " + base.ToString();
         }
 #endif
 
@@ -707,7 +717,10 @@ namespace LayoutFarm.UI
             {
                 cols.Clear();
             }
-
+            public GridColumn GetColumn(int index)
+            {
+                return cols[index];
+            }
             public void Add(GridColumn newColumnDef)
             {
                 int j = cols.Count;
@@ -893,6 +906,10 @@ namespace LayoutFarm.UI
             internal GridRowCollection(GridTable table)
             {
                 this.table = table;
+            }
+            public GridRow GetRow(int index)
+            {
+                return rows[index];
             }
             public void MoveRowAfter(GridRow fromRow, GridRow toRow)
             {

@@ -8,7 +8,7 @@ namespace LayoutFarm
 {
     [DemoNote("2.5 MultiLineText_WithSuggestion")]
     class Demo_MultiLineText_WithSuggestion : DemoBase
-    {   
+    {
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
@@ -88,16 +88,35 @@ namespace LayoutFarm
             e.PreventDefault = true;
         }
         static string GetString(char[] buffer, LayoutFarm.Composers.TextSplitBound bound)
-        {   
+        {
             return new string(buffer, bound.startIndex, bound.length);
         }
         string currentLocalText = null;
+
+        List<LayoutFarm.Composers.TextSplitBound> _textSplitBoundsList = new List<Composers.TextSplitBound>();
+
+        static int GetProperSplitBoundIndex(List<LayoutFarm.Composers.TextSplitBound> _textSplitBoundsList, int charIndex)
+        {
+            int j = _textSplitBoundsList.Count;
+            int accumChar = 0;
+            for (int i = 0; i < j; ++i)
+            {
+                LayoutFarm.Composers.TextSplitBound splittedBound = _textSplitBoundsList[i];
+                if (accumChar + splittedBound.length >= charIndex)
+                {
+                    return i;
+                }
+                accumChar += splittedBound.length;
+            }
+            return -1;//not found?
+        }
         void UpdateSuggestionList()
         {
             //find suggestion words 
             this.currentLocalText = null;
             listView.ClearItems();
-            if (textbox.CurrentTextSpan == null)
+            Text.EditableRun currentSpan = textbox.CurrentTextSpan;
+            if (currentSpan == null)
             {
                 listView.Visible = false;
                 return;
@@ -105,20 +124,36 @@ namespace LayoutFarm
             //-------------------------------------------------------------------------
             //sample parse ...
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = textbox.CurrentTextSpan.GetText().ToUpper();
+
+            //try to get underlining text
+
+            //int startAt, len;
+            //textbox.FindCurrentUnderlyingWord(out startAt, out len);
+
+            string currentTextSpanText = currentSpan.GetText().ToUpper();
             //analyze content
-            var textBuffer = currentTextSpanText.ToCharArray();
-            var results = new List<LayoutFarm.Composers.TextSplitBound>();
-            results.AddRange(textbox.TextSplitter.ParseWordContent(textBuffer, 0, textBuffer.Length));
+            char[] textBuffer = currentTextSpanText.ToCharArray();
+            _textSplitBoundsList.Clear();
+            _textSplitBoundsList.AddRange(textbox.TextSplitter.ParseWordContent(textBuffer, 0, textBuffer.Length));
+
             //get last part of splited text
-            int m = results.Count;
+            int m = _textSplitBoundsList.Count;
             if (m < 1)
             {
                 return;
             }
-            Composers.TextSplitBound lastSplitPart = results[m - 1];
-            this.currentLocalText = GetString(textBuffer, lastSplitPart);
-            //char firstChar = currentTextSpanText[0];
+
+            int splitBoundIndex = GetProperSplitBoundIndex(_textSplitBoundsList, textbox.CurrentLineCharIndex);
+            if (splitBoundIndex < 0)
+            {
+                return;
+            }
+
+            //find current split bounds
+            Composers.TextSplitBound selectBounds = _textSplitBoundsList[splitBoundIndex];
+            this.currentLocalText = GetString(textBuffer, selectBounds);
+
+
             char firstChar = currentLocalText[0];
             List<string> keywords;
             if (words.TryGetValue(firstChar, out keywords))
@@ -128,7 +163,7 @@ namespace LayoutFarm
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
-                    if (choice.StartsWith(currentLocalText))
+                    if (StringStartsWithChars(choice, currentLocalText))
                     {
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = Color.LightGray;
@@ -156,7 +191,37 @@ namespace LayoutFarm
 
             //-------------------------------------------------------------------------
         }
-
+        static bool StringStartsWithChars(string srcString, string value)
+        {
+            int findingLen = value.Length;
+            if (findingLen > srcString.Length)
+            {
+                return false;
+            }
+            //
+            unsafe
+            {
+                fixed (char* srcStringBuff = srcString)
+                fixed (char* findingChar = value)
+                {
+                    char* srcBuff1 = srcStringBuff;
+                    char* findChar1 = findingChar;
+                    for (int i = 0; i < findingLen; ++i)
+                    {
+                        //compare by values
+                        if (*srcBuff1 != *findChar1)
+                        {
+                            return false;
+                        }
+                        srcBuff1++;
+                        findChar1++;
+                    }
+                    //MATCH all
+                    return true;
+                }
+            }
+        }
+        
         void BuildSampleCountryList()
         {
             AddKeywordList(@"
@@ -403,7 +468,7 @@ Zimbabwe");
             int j = seplist.Length;
             for (int i = 0; i < j; ++i)
             {
-                string sepWord = seplist[i];
+                string sepWord = seplist[i].Trim();
                 if (sepWord.StartsWith("'"))
                 {
                     sepWord = sepWord.Substring(1, sepWord.Length - 2);

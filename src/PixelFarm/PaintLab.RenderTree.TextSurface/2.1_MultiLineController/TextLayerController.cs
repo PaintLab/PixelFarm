@@ -15,6 +15,9 @@ namespace LayoutFarm.Text
         DocumentCommandCollection commandHistory;
         TextLineWriter textLineWriter;
         TextEditRenderBox visualTextSurface;
+
+        List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
+
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -36,6 +39,11 @@ namespace LayoutFarm.Text
                 _dbugActivityRecorder.Start(null);
             }
 #endif
+        }
+
+        internal List<VisualMarkerSelectionRange> VisualMarkers
+        {
+            get { return _visualMarkers; }
         }
 
         public bool EnableUndoHistoryRecording
@@ -79,7 +87,7 @@ namespace LayoutFarm.Text
             else
             {
                 commandHistory.AddDocAction(
-                  new DocActionCharTyping(c, textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
+                  new DocActionCharTyping(c, textLineWriter.LineNumber, textLineWriter.CharIndex));
             }
 
             textLineWriter.AddCharacter(c);
@@ -155,7 +163,7 @@ namespace LayoutFarm.Text
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
                         selSnapshot.endColumnNum));
-                    textLineWriter.RemoveSelectedTextRuns(selectionRange); 
+                    textLineWriter.RemoveSelectedTextRuns(selectionRange);
                     updateJustCurrentLine = true;
                 }
             }
@@ -211,7 +219,7 @@ namespace LayoutFarm.Text
         {
             RemoveSelectedText();
             commandHistory.AddDocAction(
-                 new DocActionSplitToNewLine(textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
+                 new DocActionSplitToNewLine(textLineWriter.LineNumber, textLineWriter.CharIndex));
             textLineWriter.SplitToNewLine();
             CurrentLineNumber++;
             updateJustCurrentLine = false;
@@ -239,7 +247,7 @@ namespace LayoutFarm.Text
         public void DoFormatSelection(TextSpanStyle textStyle)
         {
             int startLineNum = textLineWriter.LineNumber;
-            int startCharIndex = textLineWriter.ProperCharIndex;
+            int startCharIndex = textLineWriter.CharIndex;
             SplitSelectedText();
             VisualSelectionRange selRange = SelectionRange;
             if (selRange != null)
@@ -255,6 +263,12 @@ namespace LayoutFarm.Text
                 //CharIndex++;
                 //CharIndex--;
             }
+        }
+
+        public void AddMarkerSpan(VisualSelectionRangeSnapShot selectoinRangeSnapshot)
+        {
+
+
         }
 
 
@@ -277,7 +291,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return textLineWriter.ProperCharIndex;
+                return textLineWriter.CharIndex;
             }
         }
         public int CurrentTextRunCharIndex
@@ -363,10 +377,17 @@ namespace LayoutFarm.Text
             return textLineWriter.GetCurrentPointInfo();
         }
 
+        /// <summary>
+        /// find underlying word at current caret pos
+        /// </summary>
+        public void FindUnderlyingWord(out int startAt, out int len)
+        {
+            textLineWriter.FindCurrentHitWord(out startAt, out len);
+        }
 
         public void TryMoveCaretTo(int value, bool backward = false)
         {
-            if (textLineWriter.ProperCharIndex < 1 && value < 0)
+            if (textLineWriter.CharIndex < 1 && value < 0)
             {
                 if (textLineWriter.HasPrevLine)
                 {
@@ -377,7 +398,7 @@ namespace LayoutFarm.Text
             else
             {
                 int lineLength = textLineWriter.CharCount;
-                if (textLineWriter.ProperCharIndex >= lineLength && value > lineLength)
+                if (textLineWriter.CharIndex >= lineLength && value > lineLength)
                 {
                     if (textLineWriter.HasNextLine)
                     {
@@ -390,15 +411,15 @@ namespace LayoutFarm.Text
                     //check if we can stop at this char or not
                     if (backward)
                     {
-                        char nextChar = textLineWriter.NextChar;
-                        if (nextChar != '\0' && !CanCaretStopOnThisChar(nextChar))
+                        char prevChar = textLineWriter.PrevChar;
+                        if (prevChar != '\0' && !CanCaretStopOnThisChar(prevChar))
                         {
 
-                            int tmp_index = value + 1;
-                            while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index > 0)
+                            int tmp_index = value - 1;
+                            while ((prevChar != '\0' && !CanCaretStopOnThisChar(prevChar)) && tmp_index > 0)
                             {
                                 textLineWriter.SetCurrentCharStepLeft();
-                                nextChar = textLineWriter.NextChar;
+                                prevChar = textLineWriter.PrevChar;
                                 tmp_index--;
                             }
                         }
@@ -406,14 +427,18 @@ namespace LayoutFarm.Text
                     else
                     {
                         char nextChar = textLineWriter.NextChar;
-                        if (nextChar != '\0' && !CanCaretStopOnThisChar(nextChar))
+                        if (nextChar == '\0')
+                        {
+                            //end 
+                            //textLineWriter.SetCurrentCharStepRight();
+                        }
+                        else if (!CanCaretStopOnThisChar(nextChar))
                         {
                             int lineCharCount = textLineWriter.CharCount;
                             int tmp_index = value + 1;
                             while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
                             {
                                 textLineWriter.SetCurrentCharStepRight();
-
                                 nextChar = textLineWriter.NextChar;
                                 tmp_index++;
                             }
@@ -427,17 +452,17 @@ namespace LayoutFarm.Text
         public void TryMoveCaretForward()
         {
             //move caret forward 1 key stroke
-            TryMoveCaretTo(textLineWriter.ProperCharIndex + 1);
+            TryMoveCaretTo(textLineWriter.CharIndex + 1);
         }
         public void TryMoveCaretBackward()
         {
-            TryMoveCaretTo(textLineWriter.ProperCharIndex - 1, true);
+            TryMoveCaretTo(textLineWriter.CharIndex - 1, true);
         }
         public int CharIndex
         {
             get
             {
-                return textLineWriter.ProperCharIndex;
+                return textLineWriter.CharIndex;
             }
         }
         public bool IsOnEndOfLine

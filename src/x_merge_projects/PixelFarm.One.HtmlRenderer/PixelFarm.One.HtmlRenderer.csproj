@@ -47,6 +47,10 @@
       <Project>{9a7db6ea-7f85-4420-9e42-f0f277524fb7}</Project>
       <Name>BackEnd.FilterFx</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\FileDB.csproj">
+      <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
+      <Name>FileDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>PaintLab.Platforms.WinForms</Name>
@@ -59,7 +63,7 @@
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\PaintLab.YourImplementation.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
       <Name>PaintLab.YourImplementation</Name>
     </ProjectReference>
@@ -138,6 +142,10 @@
     <ProjectReference Include="..\..\PixelFarm\Win32Utils\BackEnd.Win32Utils.csproj">
       <Project>{b9c23586-913d-4ee8-b266-bd58fbd0133b}</Project>
       <Name>BackEnd.Win32Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tests\WinFormTestBed\WinFormTestBed.csproj">
+      <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>
+      <Name>WinFormTestBed</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

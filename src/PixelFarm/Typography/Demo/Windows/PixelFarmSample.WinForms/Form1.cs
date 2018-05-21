@@ -97,11 +97,7 @@ namespace SampleWinForms
             //----------------
             this.txtInputChar.Text = inputstr;
             _readyToRender = true;
-        }
-
-
-
-
+        } 
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
@@ -113,7 +109,7 @@ namespace SampleWinForms
             //
             if (g == null)
             {
-                destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
+                destImg = new ActualImage(800, 600);
                 _aggsx = new AggRenderSurface(destImg); //no platform
                 painter = new AggPainter(_aggsx);
                 winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);

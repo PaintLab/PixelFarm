@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Sample_Perspective
         {
             lionShape = new SpriteShape();
             lionShape.ParseLion();
-            
+
             quadPolygonControl = new PixelFarm.Agg.UI.PolygonEditWidget(4, 5.0);
             quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
             quadPolygonControl.SetYN(0, lionShape.Bounds.Top);
@@ -103,10 +103,11 @@ namespace PixelFarm.Agg.Sample_Perspective
                 if (txBilinear.IsValid)
                 {
                     var v3 = GetFreeVxs();
-                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Vxs, v3),
-                        lionShape.Colors,
-                        lionShape.PathIndexList,
-                        lionShape.NumPaths);
+
+                    lionShape.ApplyTransform(txBilinear);
+                    lionShape.Paint(painter); 
+                  
+
                     RectD lionBound = lionShape.Bounds;
                     Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
                                      (lionBound.Bottom + lionBound.Top) * 0.5,
@@ -142,10 +143,13 @@ namespace PixelFarm.Agg.Sample_Perspective
                 if (txPerspective.IsValid)
                 {
                     var v1 = GetFreeVxs();
-                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Vxs, v1),
-                      lionShape.Colors,
-                      lionShape.PathIndexList,
-                      lionShape.NumPaths);
+
+                    lionShape.Paint(p, txPerspective); //transform -> paint
+
+                    //painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Vxs, v1),
+                    //  lionShape.Colors,
+                    //  lionShape.PathIndexList,
+                    //  lionShape.NumPaths);
                     //--------------------------------------------------------------------------------------
                     //filled Ellipse
                     //1. create original fill ellipse

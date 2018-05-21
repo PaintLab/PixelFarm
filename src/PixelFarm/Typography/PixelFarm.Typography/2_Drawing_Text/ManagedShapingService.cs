@@ -9,7 +9,7 @@ namespace PixelFarm.Drawing.Text
 {
     public class ManagedShapingService : TextShapingService
     {
-        protected override void GetGlyphPosImpl(ActualFont actualFont, char[] buffer, int startAt, int len, List<GlyphPlan> properGlyphs)
+        protected override void GetGlyphPosImpl(ActualFont actualFont, char[] buffer, int startAt, int len, List<UnscaledGlyphPlan> properGlyphs)
         {
             //do shaping and set text layout
         }

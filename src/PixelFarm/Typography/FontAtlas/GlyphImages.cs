@@ -48,22 +48,30 @@ namespace Typography.Rendering
         /// texture offset X from original glyph
         /// </summary>
         public double TextureOffsetX { get; set; }
+
+        double _textureOffsetY;
         /// <summary>
         /// texture offset Y from original glyph 
         /// </summary>
-        public double TextureOffsetY { get; set; }
+        public double TextureOffsetY
+        {
+            get { return _textureOffsetY; }
+            set
+            {
+                _textureOffsetY = value;
+            }
+        }
     }
 
     public class CacheGlyph
     {
         public int borderX;
         public int borderY;
-        public GlyphImage img;
+        internal GlyphImage img;
         public Rectangle area;
-        public char character;
-        public int codePoint;
-       // public GlyphMatrix2 glyphMatrix;
-    
+        public char character; //TODO: this should be code point(int32)
+        public int glyphIndex;
+
     }
 
     public class TextureFontGlyphData
@@ -97,5 +105,5 @@ namespace Typography.Rendering
         }
 
     }
-     
+
 }

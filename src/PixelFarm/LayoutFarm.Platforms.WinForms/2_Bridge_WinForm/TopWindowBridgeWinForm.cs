@@ -20,9 +20,29 @@ namespace LayoutFarm.UI
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
         public TopWindowBridgeWinForm(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
+
+#if DEBUG
+            if (!PixelFarm.Agg.ExternalImageService.HasExternalImgCodec)
+            {
+                PixelFarm.Agg.ExternalImageService.RegisterExternalImageEncodeDelegate(SaveImage);
+            }
+
+#endif
             this.topWinEventRoot = topWinEventRoot;
             this.rootGraphic = rootGraphic;
         }
+
+        static void SaveImage(byte[] imgBuffer, int pixelWidth, int pixelHeight)
+        {
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(pixelWidth, pixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, pixelWidth, pixelHeight), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                System.Runtime.InteropServices.Marshal.Copy(imgBuffer, 0, bmpdata.Scan0, imgBuffer.Length);
+                bmp.UnlockBits(bmpdata);
+                bmp.Save("d:\\WImageTest\\test002.png");
+            }
+        }
+
         public abstract void BindWindowControl(Control windowControl);
         public abstract void InvalidateRootArea(Rectangle r);
         public RootGraphic RootGfx
@@ -176,7 +196,7 @@ namespace LayoutFarm.UI
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
-        public void HandleMouseDown(MouseEventArgs e)
+        public void HandleMouseDown(System.Windows.Forms.MouseEventArgs e)
         {
             canvasViewport.FullMode = false;
             this.topWinEventRoot.RootMouseDown(
@@ -200,7 +220,7 @@ namespace LayoutFarm.UI
 #endif
 
         }
-        public void HandleMouseMove(MouseEventArgs e)
+        public void HandleMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
             this.topWinEventRoot.RootMouseMove(
                     e.X + this.canvasViewport.ViewportX,
@@ -226,7 +246,7 @@ namespace LayoutFarm.UI
                     return UIMouseButtons.Left;
             }
         }
-        public void HandleMouseUp(MouseEventArgs e)
+        public void HandleMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
             canvasViewport.FullMode = false;
             topWinEventRoot.RootMouseUp(
@@ -239,7 +259,7 @@ namespace LayoutFarm.UI
             }
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleMouseWheel(MouseEventArgs e)
+        public void HandleMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             canvasViewport.FullMode = true;
             this.topWinEventRoot.RootMouseWheel(e.Delta);
@@ -249,7 +269,7 @@ namespace LayoutFarm.UI
             }
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleKeyDown(KeyEventArgs e)
+        public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
 #if DEBUG
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
@@ -260,13 +280,13 @@ namespace LayoutFarm.UI
             this.topWinEventRoot.RootKeyDown(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleKeyUp(KeyEventArgs e)
+        public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
             canvasViewport.FullMode = false;
             this.topWinEventRoot.RootKeyUp(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
-        public void HandleKeyPress(KeyPressEventArgs e)
+        public void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
         {
             if (char.IsControl(e.KeyChar))
             {

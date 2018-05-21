@@ -26,7 +26,7 @@ namespace LayoutFarm
         protected override void OnStartDemo(SampleViewport viewport)
         {
             this.viewport = viewport;
-            this.rootgfx = viewport.Root;
+            this.rootgfx = viewport.RootGfx;
             //--------------------------------
 
             bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
@@ -487,7 +487,7 @@ namespace LayoutFarm
         //-----------------------------------------------------------------
         class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
         {
-            LayoutFarm.CustomWidgets.GridBox gridBox;
+            LayoutFarm.CustomWidgets.GridView gridBox;
             //small controller box
             LayoutFarm.CustomWidgets.EaseBox boxLeftTop;
             LayoutFarm.CustomWidgets.EaseBox boxRightTop;
@@ -538,7 +538,7 @@ namespace LayoutFarm
                         gridH = 3;
                     }
 
-                    gridBox = new LayoutFarm.CustomWidgets.GridBox(gridW, gridH);
+                    gridBox = new LayoutFarm.CustomWidgets.GridView(gridW, gridH);
                     gridBox.SetLocation(5, 5);
                     gridBox.BuildGrid(3, 3, CellSizeStyle.UniformCell);
                     var renderE = base.GetPrimaryRenderElement(rootgfx);

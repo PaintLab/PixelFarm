@@ -154,9 +154,13 @@ namespace ImageTools
             _pixelHeight = height;
             _pixels = pixels;
 
+           
             IsFilled = true;
         }
-
+        public int BitDepth
+        {
+            get; set;
+        }
         public ExtraImageInfo ExtraImageInfo { get; set; }
     }
 }

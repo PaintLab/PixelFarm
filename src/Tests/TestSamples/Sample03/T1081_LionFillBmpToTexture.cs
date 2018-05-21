@@ -42,12 +42,12 @@ namespace OpenTkEssTest
             lionShape.ParseLion();
             RectD lionBounds = lionShape.Bounds;
             //-------------
-            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
+            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height);
             _aggsx = new AggRenderSurface(aggImage);
             aggPainter = new AggPainter(_aggsx);
 
 
-            DrawLion(aggPainter, lionShape, lionShape.Vxs);
+            DrawLion(aggPainter, lionShape);
             //convert affImage to texture 
             glBmp = DemoHelper.LoadTexture(aggImage);
         }
@@ -55,16 +55,18 @@ namespace OpenTkEssTest
         {
             _glsx.Dispose();
         }
-        static void DrawLion(Painter p, SpriteShape shape, VertexStore myvxs)
+        static void DrawLion(Painter p, SpriteShape shape)
         {
-            int j = shape.NumPaths;
-            int[] pathList = shape.PathIndexList;
-            Color[] colors = shape.Colors;
-            for (int i = 0; i < j; ++i)
-            {
-                p.FillColor = colors[i];
-                p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-            }
+            shape.Paint(p);
+
+            //int j = shape.NumPaths;
+            //int[] pathList = shape.PathIndexList;
+            //Color[] colors = shape.Colors;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    p.FillColor = colors[i];
+            //    p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
+            //}
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {

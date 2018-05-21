@@ -161,7 +161,7 @@ namespace PixelFarm.DrawingGL
             expandCoords.Clear();
             //
             return result;
-        } 
+        }
         static void CreateSmoothLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create with no line join
@@ -468,11 +468,38 @@ namespace PixelFarm.DrawingGL
             this.multipartTessResult = multipartTessResult;
         }
     }
-    class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
+    public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        public GLRenderVxFormattedString(string str)
+        char[] _charBuffer;
+        DrawingGL.VertexBufferObject2 _vbo2;
+
+        internal GLRenderVxFormattedString(char[] charBuffer)
         {
-            this.OriginalString = str;
+            this._charBuffer = charBuffer;
+        }
+        public override string OriginalString
+        {
+            get { return new string(_charBuffer); }
+        }
+        public float[] VertexCoords { get; set; }
+        public ushort[] IndexArray { get; set; }
+        public int VertexCount { get; set; }
+
+        public DrawingGL.VertexBufferObject2 GetVbo()
+        {
+            if (_vbo2 != null)
+            {
+                return _vbo2;
+            }
+
+            _vbo2 = new VertexBufferObject2();
+            _vbo2.CreateBuffers(this.VertexCoords, this.IndexArray);
+            return _vbo2;
+        }
+        public override void Dispose()
+        {
+            //
+            base.Dispose();
         }
     }
 }

@@ -303,6 +303,7 @@ namespace PixelFarm.Agg.VertexSource
             this.latestSVGPathCmd = SvgPathCommand.CurveTo;
             myvxs.AddP3c(x1, y1);
             myvxs.AddP3c(x2, y2);
+            this.c2 = new Vector2(x2, y2);
             myvxs.AddLineTo(this.latest_x = x3, this.latest_y = y3);
         }
 
@@ -313,6 +314,8 @@ namespace PixelFarm.Agg.VertexSource
             this.latestSVGPathCmd = SvgPathCommand.CurveTo;
             myvxs.AddP3c(this.latest_x + dx1, this.latest_y + dy1);
             myvxs.AddP3c(this.latest_x + dx2, this.latest_y + dy2);
+            this.c2 = new Vector2(this.latest_x + dx2, this.latest_y + dy2);
+
             myvxs.AddLineTo(this.latest_x += dx3, this.latest_y += dy3);
         }
 
@@ -323,6 +326,7 @@ namespace PixelFarm.Agg.VertexSource
         {
             switch (this.latestSVGPathCmd)
             {
+
                 case SvgPathCommand.QuadraticBezierCurve:
                 case SvgPathCommand.TSmoothQuadraticBezierCurveTo:
                     {

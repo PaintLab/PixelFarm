@@ -53,7 +53,7 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
-    <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
+    <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
@@ -117,11 +117,6 @@
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageHelper2.cs" />
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageSpan.cs" />
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_PixelBlenderFloat.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontStore.cs" />
-    <Compile Include="Experiment_AggFonts\Font\MyTypeFacePrinter.cs" />
     <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -225,7 +220,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\PaintLab.YourImplementation.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
+      <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
+      <Name>PaintLab.Svg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
       <Name>PaintLab.YourImplementation</Name>
     </ProjectReference>
@@ -287,6 +286,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="Samples\arrow2.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\lion.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\tiger002.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

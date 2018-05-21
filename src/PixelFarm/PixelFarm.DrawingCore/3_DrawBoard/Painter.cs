@@ -19,6 +19,7 @@
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
@@ -64,7 +65,7 @@ namespace PixelFarm.Drawing
         public abstract void FillEllipse(double left, double top, double width, double height);
         public abstract void DrawEllipse(double left, double top, double width, double height);
         //
- 
+
         /// <summary>
         /// draw image, not scale
         /// </summary>
@@ -76,14 +77,13 @@ namespace PixelFarm.Drawing
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
 
-      
+
         ////////////////////////////////////////////////////////////////////////////
         //vertext store/snap/rendervx
         public abstract void Fill(VertexStoreSnap snap);
         public abstract void Fill(VertexStore vxs);
 
-        //TODO: remove paint series, 
-        public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
+     
         public abstract void Draw(VertexStore vxs);
         public abstract void Draw(VertexStoreSnap vxs);
         public abstract RenderVx CreateRenderVx(VertexStoreSnap snap);
@@ -101,9 +101,57 @@ namespace PixelFarm.Drawing
            double x,
            double y);
         public abstract void DrawString(RenderVxFormattedString renderVx, double x, double y);
+
+
+
+        //////////////////////////////////////////////////////////////////////////////
+        //user's object 
+        internal Stack<object> _userObjectStack = new Stack<object>();
+        internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
+
+
+        public abstract PainterExtensions.VectorTool VectorTool { get; }
     }
 
+    namespace PainterExtensions
+    {
+        public abstract class VectorTool
+        {
+            public abstract void CreateStroke(VertexStore orgVxs, float strokeW, VertexStore output);
+        }
+
+        public static class PainterExt
+        {
+            public static void StackPushUserObject(this Painter p, object o)
+            {
+                p._userObjectStack.Push(o);
+            }
+            public static object StackPopUserObject(this Painter p)
+            {
+                return p._userObjectStack.Pop();
+            }
+            public static void StackClearUserObject(this Painter p)
+            {
+                p._userObjectStack.Clear();
+            }
+            public static VertexStore GetTempVxsStore(this Painter p)
+            {
+                if (p._tempVxsStack.Count == 0)
+                {
+                    return new VertexStore();
+                }
+                else
+                {
+                    return p._tempVxsStack.Pop();
+                }
+            }
+            public static void ReleaseTempVxsStore(this Painter p, VertexStore vxs)
+            {
+                p._tempVxsStack.Push(vxs);
+            }
 
 
+        }
+    }
 
 }

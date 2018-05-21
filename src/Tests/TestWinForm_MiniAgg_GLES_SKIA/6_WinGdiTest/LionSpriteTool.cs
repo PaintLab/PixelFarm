@@ -25,14 +25,22 @@ namespace Mini.WinForms
             //---------------------------------------------------------------------------------------------
             {
                 g.TranslateTransform(offsetX, offSetY);
-                int j = spriteShape.NumPaths;
-                var myvxs = spriteShape.Vxs;
-                int[] pathList = spriteShape.PathIndexList;
-                PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
-                for (int i = 0; i < j; ++i)
-                {
-                    VxsHelper.FillVxsSnap(g, new PixelFarm.Drawing.VertexStoreSnap(myvxs, pathList[i]), colors[i]);
-                }
+                throw new NotImplementedException();
+
+                //SvgRenderVx renderVx = null;
+                //int j = spriteShape.NumPaths;
+                //var myvxs = spriteShape.Vxs;
+
+                //int[] pathList = spriteShape.PathIndexList;
+
+                //PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    VxsHelper.FillVxsSnap(g,
+                //        new PixelFarm.Drawing.VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                //}
+
+
                 g.TranslateTransform(-offsetX, -offSetY);
             }
         }
@@ -74,19 +82,19 @@ namespace Mini.WinForms
         }
         public override bool HitTest(int x, int y)
         {
-            if (!validBoundingRect)
-            {
-                var spriteShape = lionFill.GetSpriteShape();
-                PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(spriteShape.Vxs), ref boundingRect);
-                validBoundingRect = true;
-            }
-            if (this.boundingRect.Contains(x, y))
-            {
-                //fine tune
-                //hit test ***
-                var spriteShape = lionFill.GetSpriteShape();
-                return VertexHitTester.IsPointInVxs(spriteShape.Vxs, x, y);
-            }
+            //if (!validBoundingRect)
+            //{
+            //    var spriteShape = lionFill.GetSpriteShape();
+            //    PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(spriteShape.Vxs), ref boundingRect);
+            //    validBoundingRect = true;
+            //}
+            //if (this.boundingRect.Contains(x, y))
+            //{
+            //    //fine tune
+            //    //hit test ***
+            //    var spriteShape = lionFill.GetSpriteShape();
+            //    return VertexHitTester.IsPointInVxs(spriteShape.Vxs, x, y);
+            //}
             return false;
         }
     }

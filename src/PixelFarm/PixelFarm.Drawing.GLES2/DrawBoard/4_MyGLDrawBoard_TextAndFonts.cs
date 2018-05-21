@@ -46,9 +46,40 @@ namespace PixelFarm.Drawing.GLES2
                 painter1.TextPrinter.ChangeFillColor(value);
             }
         }
+        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
+        {
+            char[] copy = new char[len];
+            System.Array.Copy(buffer, startAt, copy, 0, len);
+
+            var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString(copy);
+            if (painter1.TextPrinter != null)
+            {
+                painter1.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+
+            }
+            return renderVxFmtStr;
+        }
+        public override void DrawRenderVx(RenderVx renderVx, float x, float y)
+        {
+            if (renderVx is DrawingGL.GLRenderVxFormattedString)
+            {
+                DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
+               
+                var prevColor = painter1.FillColor;
+                painter1.FillColor = PixelFarm.Drawing.Color.Black;
+              
+                painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
+                painter1.FillColor = prevColor;
+            }
+        }
+       
         public override void DrawText(char[] buffer, int x, int y)
         {
             var prevColor = painter1.FillColor;
+
+            //TODO: review here
+            //use font color for fill the glyphs
+
             painter1.FillColor = PixelFarm.Drawing.Color.Black;
             painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
             painter1.FillColor = prevColor;

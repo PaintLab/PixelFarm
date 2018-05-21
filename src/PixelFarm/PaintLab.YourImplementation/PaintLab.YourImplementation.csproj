@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D88D86CD-6732-45E7-8FC9-49449EA9C737}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PaintLab.RenderTreeComposer</RootNamespace>
+    <AssemblyName>PaintLab.RenderTreeComposer</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;GL_ENABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;GL_ENABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="0_Bootstrap\CommonTextServiceSetup.cs" />
+    <Compile Include="0_Bootstrap\BootStrapOpenGLES2.cs" />
+    <Compile Include="0_Bootstrap\BootStrapWinGdi.cs" />
+    <Compile Include="3_RenderTreeRoot\0_MyRootGraphic.cs" />
+    <Compile Include="3_RenderTreeRoot\TopWindowRenderBox.cs" />
+    <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
+    <Compile Include="1_Events\MyIntervalTaskEventArgs.cs" />
+    <Compile Include="1_Events\RenderElementEventPortal.cs" />
+    <Compile Include="1_Events\ToNotifySizeChangedEvent.cs" />
+    <Compile Include="1_Events\TopWindowEventRoot.cs" />
+    <Compile Include="1_Events\UIHoverMonitor.cs" />
+    <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
+    <Compile Include="2_ContentManagers\ImageContentManager.cs" />
+    <Compile Include="2_ContentManagers\TextContentManager.cs" />
+    <Compile Include="2_ContentManagers\ClientBinder.cs" />
+    <Compile Include="4_FontServices\MySimpleGLBitmapFontManager.cs" />
+    <Compile Include="4_FontServices\DrawingGLFontPrinter.cs" />
+    <Compile Include="4_FontServices\DrawingGLFontPrinter.Gdi.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BackEnd.FileDB\FileDB\FileDB.csproj">
+      <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
+      <Name>FileDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
+      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
+      <Name>PaintLab.AbstractPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
+      <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
+      <Name>PixelFarm.Drawing.GdiPlus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
+      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
+      <Name>PixelFarm.Drawing.GLES2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
+      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
+      <Name>BackEnd.MiniOpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
+      <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
+      <Name>BackEnd.OpenTKWinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
+      <Name>Typography.GlyphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{f7d71e61-9342-4dd7-9afd-69045f2ec98b}</Project>
+      <Name>Typography.OpenFont</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.Contours\Typography.Contours.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Contours</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.TextServices\Typography.TextServices.csproj">
+      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
+      <Name>Typography.TextServices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="0_Bootstrap\StorageProviderImpl.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

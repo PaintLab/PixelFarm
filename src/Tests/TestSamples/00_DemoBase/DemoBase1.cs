@@ -17,8 +17,8 @@ namespace Mini
     {
         public DemoBase()
         {
-            this.Width = 800;
-            this.Height = 600;
+            this.Width = 900;
+            this.Height = 700;
         }
 
         //when we use with opengl

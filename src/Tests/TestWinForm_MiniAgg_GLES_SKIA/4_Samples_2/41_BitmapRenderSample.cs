@@ -54,7 +54,7 @@ namespace PixelFarm.Agg.Sample_Images
                 //read to image buffer 
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
-                ActualImage img = new ActualImage(bmpW, bmpH, PixelFormat.ARGB32);
+                ActualImage img = new ActualImage(bmpW, bmpH);
                 BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
                 return img;
             }

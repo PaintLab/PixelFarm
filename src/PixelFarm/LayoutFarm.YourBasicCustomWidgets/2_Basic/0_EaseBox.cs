@@ -38,7 +38,19 @@ namespace LayoutFarm.CustomWidgets
             this.desiredHeight = height;
             this.desiredWidth = width;
         }
-        public bool NeedClipArea { get; set;}
+        bool _needClipArea;
+        public bool NeedClipArea
+        {
+            get { return _needClipArea; }
+            set
+            {
+                _needClipArea = value;
+                if (primElement != null)
+                {
+                    primElement.NeedClipArea = value;
+                }
+            }
+        }
 
         protected override bool HasReadyRenderElement
         {
@@ -57,6 +69,7 @@ namespace LayoutFarm.CustomWidgets
                 if (HasReadyRenderElement)
                 {
                     this.primElement.BackColor = value;
+
                 }
             }
         }
@@ -298,6 +311,7 @@ namespace LayoutFarm.CustomWidgets
         {
             get
             {
+
                 return this.desiredHeight;
             }
         }

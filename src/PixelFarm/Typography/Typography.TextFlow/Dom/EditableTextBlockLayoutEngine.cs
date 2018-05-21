@@ -100,7 +100,7 @@ namespace Typography.TextLayout
 
 
 
-        GlyphPlanList _outputGlyphPlan = new GlyphPlanList();
+        UnscaledGlyphPlanList _outputGlyphPlan = new UnscaledGlyphPlanList();
         public void DoLayout()
         {
 

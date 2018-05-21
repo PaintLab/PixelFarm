@@ -32,9 +32,17 @@ namespace LayoutFarm
         {
             get { return ""; }
         }
+
+
+        public static Image LoadBitmap(string filename)
+        {
+            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
+            DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+            return bmp;
+        }
     }
 
-    sealed class DemoBitmap : Image
+    public sealed class DemoBitmap : Image
     {
         int width;
         int height;
@@ -97,7 +105,7 @@ namespace LayoutFarm
         }
         public string Message { get; set; }
     }
-    class DemoInfo
+    public class DemoInfo
     {
         public readonly Type DemoType;
         public readonly string DemoNote;

@@ -92,6 +92,26 @@ Typography => https://github.com/LayoutFarm/Typography)
 
 ---
  
+Ghost script's Tiger.svg
+---
+
+(https://commons.wikimedia.org/wiki/File:Ghostscript_Tiger.svg)
+
+
+![tiger](https://user-images.githubusercontent.com/7447159/34709205-cdf2a2de-f548-11e7-8075-1958c087a883.png)
+
+_pic 1: PixelFarm's Agg (1) vs Chrome (2)_
+
+
+![tiger2](https://user-images.githubusercontent.com/7447159/34709373-8e048286-f549-11e7-8cbc-2941b7b9fa4e.png)
+
+_pic 2: Agg's result, bitmap zoom-in to see fine details_ 
+ 
+ 
+ 
+ 
+---
+
 License:
 
 Source code from multiple projects,
@@ -119,6 +139,11 @@ MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, htt
 
 MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelsey, Brandon Ortiz, Craig Taylor, Chris Trevino, and Luke Walker., from OpenPDN v 3.36 (Paint.NET), https://github.com/rivy/OpenPDN
 
+Apache2, 2012,  Hernán J. González, pngcs, https://github.com/leonbloy/pngcs
+
+Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. 
+ 
+
 **Font**
 
 Apache2, 2016-2017, WinterDev, Samuel Carlsson, Sam Hocevar and others, from https://github.com/LayoutFarm/Typography
@@ -138,6 +163,8 @@ MIT, 2015-2015, Xamarin, Inc., from https://github.com/mono/SkiaSharp
 MIT, 2006-2009,  Stefanos Apostolopoulos and other Open Tool Kit Contributors, from https://github.com/opentk/opentk
 
 MIT, 2013, Antonie Blom, from  https://github.com/andykorth/Pencil.Gaming
+
+MIT, 2015, Mauricio David, FileDB, https://github.com/mbdavid/FileDB
 
 **Demo**
 

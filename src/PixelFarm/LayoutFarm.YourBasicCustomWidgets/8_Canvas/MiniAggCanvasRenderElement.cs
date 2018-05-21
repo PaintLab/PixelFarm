@@ -17,7 +17,7 @@ namespace LayoutFarm.CustomWidgets
             : base(rootgfx, width, height)
         {
 
-            this.actualImage = new ActualImage(width, height, PixelFarm.Agg.PixelFormat.ARGB32);
+            this.actualImage = new ActualImage(width, height);
             this._aggsx = new AggRenderSurface(actualImage);
             this.painter = new AggPainter((AggRenderSurface)_aggsx);
             needUpdate = true;

@@ -113,7 +113,7 @@ namespace LayoutFarm.Text
                 return new Rectangle(beginPoint.X, beginLine.Top, endPoint.X, beginLine.ActualLineHeight);
             }
         }
-        public void OnKeyPress(UIKeyEventArgs e)
+        public void HandleKeyPress(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
             //------------------------
@@ -253,13 +253,48 @@ namespace LayoutFarm.Text
             EditableRun textRun = this.CurrentTextRun;
             if (textRun != null)
             {
+
                 VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
-                int localselIndex = pointInfo.RunLocalSelectedIndex;
-                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - localselIndex - 1);
-                internalTextLayerController.StartSelect();
-                internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
-                internalTextLayerController.EndSelect();
+                int local_sel_Index = pointInfo.RunLocalSelectedIndex;
+                //default behaviour is select only a hit word under the caret
+                //so ask the text layer to find a hit word
+                int startAt, len;
+                internalTextLayerController.FindUnderlyingWord(out startAt, out len);
+                if (len > 0)
+                {
+                    InvalidateGraphicOfCurrentLineArea();
+                    internalTextLayerController.TryMoveCaretTo(startAt, true);
+                    internalTextLayerController.StartSelect();
+                    internalTextLayerController.TryMoveCaretTo(startAt + len);
+                    internalTextLayerController.EndSelect();
+
+
+                    //internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - local_sel_Index, true);
+                    //internalTextLayerController.StartSelect();
+                    //internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
+                    //internalTextLayerController.EndSelect();
+
+                    InvalidateGraphicOfCurrentLineArea();
+                }
+            }
+        }
+        public void FindCurrentUnderlyingWord(out int startAt, out int len)
+        {
+            EditableRun textRun = this.CurrentTextRun;
+            if (textRun != null)
+            {
+
+                VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
+                int lineCharacterIndex = pointInfo.LineCharIndex;
+                int local_sel_Index = pointInfo.RunLocalSelectedIndex;
+                //default behaviour is select only a hit word under the caret
+                //so ask the text layer to find a hit word                 
+                internalTextLayerController.FindUnderlyingWord(out startAt, out len);
+            }
+            else
+            {
+                startAt = len = 0;
             }
         }
         public void HandleDrag(UIMouseEventArgs e)
@@ -407,6 +442,7 @@ namespace LayoutFarm.Text
                                 EnsureCaretVisible();
                             }
                         }
+
                     }
                     break;
             }
@@ -482,6 +518,23 @@ namespace LayoutFarm.Text
                         break;
                     case UIKeys.B:
                         {
+                            //
+                            //test add markers
+                            //
+                            //if (internalTextLayerController.SelectionRange != null)
+                            //{
+                            //    //
+                            //    internalTextLayerController.SelectionRange.SwapIfUnOrder();
+                            //    VisualMarkerSelectionRange markerSelRange =
+                            //        VisualMarkerSelectionRange.CreateFromSelectionRange(
+                            //            internalTextLayerController.SelectionRange.GetSelectionRangeSnapshot());
+                            //    //then add to the marker layers
+                            //    markerSelRange.BindToTextLayer(textLayer);
+
+                            //    internalTextLayerController.VisualMarkers.Add(markerSelRange);
+                            //}
+
+                            //
                             //TextSpanStyle style = internalTextLayerController.GetFirstTextStyleInSelectedRange(); 
                             //TextSpanStyle textStyle = null;
 
@@ -903,7 +956,7 @@ namespace LayoutFarm.Text
             {
                 ScrollTo(this.InnerContentSize.Width - ViewportX, 0);
             }
-            
+
 
             if (internalTextLayerController.updateJustCurrentLine)
             {
@@ -924,7 +977,13 @@ namespace LayoutFarm.Text
                 return internalTextLayerController.updateJustCurrentLine;
             }
         }
-
+        public int CurrentLineHeight
+        {
+            get
+            {
+                return internalTextLayerController.CurrentLineArea.Height;
+            }
+        }
         public int CurrentLineCharIndex
         {
             get

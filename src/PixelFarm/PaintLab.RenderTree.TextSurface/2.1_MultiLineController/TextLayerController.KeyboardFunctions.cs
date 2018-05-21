@@ -57,7 +57,7 @@ namespace LayoutFarm.Text
                     //end of this line
                     commandHistory.AddDocAction(
                         new DocActionJoinWithNextLine(
-                            textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
+                            textLineWriter.LineNumber, textLineWriter.CharIndex));
                     JoinWithNextLine();
                     updateJustCurrentLine = false;
                 }
@@ -65,7 +65,7 @@ namespace LayoutFarm.Text
                 {
                     commandHistory.AddDocAction(
                         new DocActionDeleteChar(
-                            deletedChar, textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
+                            deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
                     char nextChar = textLineWriter.NextChar;
 
                     if (nextChar != '\0')
@@ -123,7 +123,7 @@ namespace LayoutFarm.Text
                         DoEnd();
                         commandHistory.AddDocAction(
                             new DocActionJoinWithNextLine(
-                                textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
+                                textLineWriter.LineNumber, textLineWriter.CharIndex));
                         JoinWithNextLine();
                     }
 #if DEBUG
@@ -135,7 +135,7 @@ namespace LayoutFarm.Text
                 {
                     commandHistory.AddDocAction(
                             new DocActionDeleteChar(
-                                deletedChar, textLineWriter.LineNumber, textLineWriter.ProperCharIndex));
+                                deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif

@@ -23,6 +23,9 @@
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
+
+
+
     public sealed class VertexStore
     {
         int m_num_vertices;
@@ -229,32 +232,58 @@ namespace PixelFarm.Drawing
             m_CommandAndFlags = vstore.m_cmds;
         }
 
-        private VertexStore(VertexStore src)
+        private VertexStore(VertexStore src, bool trim)
         {
             //for copy from src to this instance
 
             this.m_allocated_vertices = src.m_allocated_vertices;
             this.m_num_vertices = src.m_num_vertices;
 
-            int coord_len = src.m_coord_xy.Length;
-            int cmds_len = src.m_cmds.Length;
+            if (trim)
+            {
+                int coord_len = m_num_vertices;
+                int cmds_len = m_num_vertices;
 
-            this.m_coord_xy = new double[coord_len];
-            this.m_cmds = new byte[cmds_len];
+                this.m_coord_xy = new double[coord_len << 1];//*2
+                this.m_cmds = new byte[cmds_len];
 
-            System.Array.Copy(
-                 src.m_coord_xy,
-                 0,
-                 this.m_coord_xy,
-                 0,
-                 coord_len);
+                System.Array.Copy(
+                     src.m_coord_xy,
+                     0,
+                     this.m_coord_xy,
+                     0,
+                     coord_len << 1); //*2
 
-            System.Array.Copy(
-                 src.m_cmds,
-                 0,
-                 this.m_cmds,
-                 0,
-                 cmds_len);
+                System.Array.Copy(
+                     src.m_cmds,
+                     0,
+                     this.m_cmds,
+                     0,
+                     cmds_len);
+            }
+            else
+            {
+                int coord_len = src.m_coord_xy.Length;
+                int cmds_len = src.m_cmds.Length;
+
+                this.m_coord_xy = new double[coord_len];
+                this.m_cmds = new byte[cmds_len];
+
+                System.Array.Copy(
+                     src.m_coord_xy,
+                     0,
+                     this.m_coord_xy,
+                     0,
+                     coord_len);
+
+                System.Array.Copy(
+                     src.m_cmds,
+                     0,
+                     this.m_cmds,
+                     0,
+                     cmds_len);
+            }
+
         }
 
         /// <summary>
@@ -264,8 +293,16 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public static VertexStore CreateCopy(VertexStore src)
         {
-            return new VertexStore(src);
+            return new VertexStore(src, false);
+        }
 
+        /// <summary>
+        /// trim to new vertex store
+        /// </summary>
+        /// <returns></returns>
+        public VertexStore CreateTrim()
+        {
+            return new VertexStore(this, true);
         }
     }
 
@@ -337,5 +374,6 @@ namespace PixelFarm.Drawing
         }
     }
 
+    
 
 }

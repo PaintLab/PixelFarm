@@ -27,49 +27,50 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            int max = Math.Max(this.Width, this.Height);
+            //int max = Math.Max(this.Width, this.Height);
 
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
-            //flip this lion vertically before use with openGL
-            PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
-                 PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
-                 PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
-            lionVxs = new VertexStore();
-            aff.TransformToVxs(lionShape.Vxs, lionVxs);
-            //convert lion vxs to renderVx
+            //lionShape = new SpriteShape();
+            //lionShape.ParseLion();
+            ////flip this lion vertically before use with openGL
+            //PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
+            //     PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
+            //     PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
 
-            ////-------------
-            ////version 1:
-            //int j = lionShape.NumPaths;
-            //int[] pathList = lionShape.PathIndexList;
-            //for (int i = 0; i < j; ++i)
+            //lionVxs = new VertexStore();
+            //aff.TransformToVxs(lionShape.Vxs, lionVxs);
+            ////convert lion vxs to renderVx
+
+            //////-------------
+            //////version 1:
+            ////int j = lionShape.NumPaths;
+            ////int[] pathList = lionShape.PathIndexList;
+            ////for (int i = 0; i < j; ++i)
+            ////{
+            ////    lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
+            ////}
+            //////------------- 
+            ////version 2:
             //{
-            //    lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
+            //    tmpDrawVersion = 2;
+            //    MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
+            //    int j = lionShape.NumPaths;
+            //    int[] pathList = lionShape.PathIndexList;
+            //    //Color[] colors = lionShape.Colors;
+            //    for (int i = 0; i < j; ++i)
+            //    {
+            //        //from lionvxs extract each part                      
+            //        //fetch data and add to multipart polygon
+            //        //if (i != 4) continue;
+            //        //if (i > 1)
+            //        //{
+            //        //    break;
+            //        //}
+            //        mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
+            //    }
+            //    //then create single render vx
+            //    this.multipartTessResult = painter.CreateMultiPartTessResult(mutiPartPolygon);
+            //    //create render vx for the multipart test result                 
             //}
-            ////------------- 
-            //version 2:
-            {
-                tmpDrawVersion = 2;
-                MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
-                int j = lionShape.NumPaths;
-                int[] pathList = lionShape.PathIndexList;
-                Color[] colors = lionShape.Colors;
-                for (int i = 0; i < j; ++i)
-                {
-                    //from lionvxs extract each part                      
-                    //fetch data and add to multipart polygon
-                    //if (i != 4) continue;
-                    //if (i > 1)
-                    //{
-                    //    break;
-                    //}
-                    mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
-                }
-                //then create single render vx
-                this.multipartTessResult = painter.CreateMultiPartTessResult(mutiPartPolygon);
-                //create render vx for the multipart test result                 
-            }
 
         }
         protected override void DemoClosing()
@@ -85,25 +86,55 @@ namespace OpenTkEssTest
             if (tmpDrawVersion == 2)
             {
 
-                Color[] colors = lionShape.Colors;
                 if (multipartTessResult != null)
                 {
-                    int j = multipartTessResult.PartCount;
-                    for (int i = 0; i < j; ++i)
+                    SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
+                    int partCount = renderVx.SvgVxCount;
+
+                    int partIndex = 0;
+                    for (int i = 0; i < partCount; ++i)
                     {
-                        _glsx.FillRenderVx(colors[i], multipartTessResult, i);
+                        SvgPart vx = renderVx.GetInnerVx(i);
+                        if (vx.Kind != SvgRenderVxKind.Path)
+                        {
+                            continue;
+                        }
+                        _glsx.FillRenderVx(vx.FillColor, multipartTessResult, partIndex);
+                        partIndex++;
                     }
+
+                    //Color[] colors = lionShape.Colors;
+                    //int j = multipartTessResult.PartCount;
+                    //for (int i = 0; i < j; ++i)
+                    //{
+
+                    //}
                 }
 
             }
             else
             {
                 int j = lionRenderVxList.Count;
-                Color[] colors = lionShape.Colors;
-                for (int i = 0; i < j; ++i)
+                SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
+                int partCount = renderVx.SvgVxCount;
+                int partIndex = 0;
+                for (int i = 0; i < partCount; ++i)
                 {
-                    _glsx.FillRenderVx(colors[i], lionRenderVxList[i]);
+                    SvgPart vx = renderVx.GetInnerVx(i);
+                    if (vx.Kind != SvgRenderVxKind.Path)
+                    {
+                        continue;
+                    }
+                    _glsx.FillRenderVx(vx.FillColor, lionRenderVxList[partIndex]);
+                    partIndex++;
                 }
+
+
+                //Color[] colors = lionShape.Colors;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    _glsx.FillRenderVx(colors[i], lionRenderVxList[i]);
+                //}
             }
             //-------------------------------
             SwapBuffers();

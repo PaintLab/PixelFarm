@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -39,10 +40,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs">
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
       <Link>Impl\DrawingGL\DrawingGLFontPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\MySimpleGLBitmapFontManager.cs">
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
       <Link>Impl\DrawingGL\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
     <Compile Include="GLFWProgram.cs" />
@@ -95,7 +96,7 @@
       <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
-      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
+      <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">

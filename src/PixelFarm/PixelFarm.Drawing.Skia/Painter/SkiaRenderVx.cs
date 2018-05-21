@@ -14,9 +14,14 @@ namespace PixelFarm.Drawing.Skia
     }
     class SkiaRenerVxFormattedString : RenderVxFormattedString
     {
+        string str;
         public SkiaRenerVxFormattedString(string str)
         {
-            this.OriginalString = str;
+            this.str = str;
+        }
+        public override string OriginalString
+        {
+            get { return str; }
         }
     }
 }

@@ -59,6 +59,13 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
+        public int CurrentLineHeight
+        {
+            get
+            {
+                return this.textEditRenderElement.CurrentLineHeight;
+            }
+        }
         public Point CaretPosition
         {
             get { return this.textEditRenderElement.CurrentCaretPos; }
@@ -66,6 +73,10 @@ namespace LayoutFarm.CustomWidgets
         public int CurrentLineCharIndex
         {
             get { return this.textEditRenderElement.CurrentLineCharIndex; }
+        }
+        public int CurrentRunCharIndex
+        {
+            get { return this.textEditRenderElement.CurrentTextRunCharIndex; }
         }
         public string Text
         {
@@ -214,6 +225,10 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._multiline; }
         }
+        public void FindCurrentUnderlyingWord(out int startAt, out int len)
+        {
+            textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
+        }
         public TextSurfaceEventListener TextEventListener
         {
             get { return this.textSurfaceListener; }
@@ -264,7 +279,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnKeyPress(UIKeyEventArgs e)
         {
-            textEditRenderElement.OnKeyPress(e);
+            textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyDown(UIKeyEventArgs e)

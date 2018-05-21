@@ -286,7 +286,11 @@ namespace LayoutFarm.Text
                         }
                         else
                         {
-                            throw new NotSupportedException();
+                            //this may be the blank line
+#if DEBUG
+                            //TODO: review here again
+                            System.Diagnostics.Debug.WriteLine("EditableTextLine_adv1");
+#endif
                         }
                     }
                     else
@@ -715,7 +719,7 @@ namespace LayoutFarm.Text
             {
                 return;
             }
-            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex + 1);
+            EditableRun postCutTextRun = (EditableRun)tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
             if (postCutTextRun != null)
             {
                 output.Add(postCutTextRun);

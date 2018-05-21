@@ -2,6 +2,7 @@
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing.PainterExtensions;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
@@ -24,6 +25,7 @@ namespace PixelFarm.Drawing.Skia
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
+        PixelFarm.Agg.VectorTool _vectorTool;
         public SkiaPainter(int w, int h)
         {
 
@@ -32,7 +34,14 @@ namespace PixelFarm.Drawing.Skia
             _stroke.IsStroke = true;
             _width = w;
             _height = h;
+
+            _vectorTool = new PixelFarm.Agg.VectorTool();
         }
+        public override PainterExtensions.VectorTool VectorTool
+        {
+            get { return _vectorTool; }
+        }
+
         public SKCanvas Canvas
         {
             get { return _skCanvas; }
@@ -504,16 +513,7 @@ namespace PixelFarm.Drawing.Skia
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
 
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            var prevColor = FillColor;
-            for (int i = 0; i < numPath; ++i)
-            {
-                _fill.Color = ConvToSkColor(colors[i]);
-                VxsHelper.FillVxsSnap(_skCanvas, new VertexStoreSnap(vxs, pathIndexs[i]), _fill);
-            }
-            FillColor = prevColor;
-        }
+        
 
         public override void DrawRect(double left, double bottom, double right, double top)
         {
