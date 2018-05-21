@@ -33,9 +33,6 @@
   <ItemGroup>
     <Compile Include="CssLexer.cs" />
     <Compile Include="dbugLexerReport.cs" />
-    <Compile Include="HtmlLexer.cs" />
-    <Compile Include="MyHtmlLexer.cs" />
-    <Compile Include="MyHtmlLexer_dbug.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextSnapshot.cs" />
   </ItemGroup>
