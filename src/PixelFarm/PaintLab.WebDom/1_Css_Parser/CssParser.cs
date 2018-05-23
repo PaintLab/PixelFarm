@@ -80,8 +80,7 @@ namespace LayoutFarm.WebDom.Parser
                 default:
                     {
                         throw new NotSupportedException();
-                    }
-                    break;
+                    } 
                 case CssParseState.Init:
                     {
                         switch (tkname)

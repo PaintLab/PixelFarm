@@ -34,9 +34,9 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_WebDom.Parser\CssParser.cs" />
-    <Compile Include="0_WebDom.Parser\CssParserHelper.cs" />
-    <Compile Include="0_WebDom.Parser\CssValueParser.cs" />
+    <Compile Include="1_Css_Parser\CssParser.cs" />
+    <Compile Include="1_Css_Parser\CssParserHelper.cs" />
+    <Compile Include="1_Css_Parser\CssValueParser.cs" />
     <Compile Include="1_Css\CssActiveSheet.cs" />
     <Compile Include="1_Css\CssAttributeSelector.cs" />
     <Compile Include="1_Css\CssCodeValueExpressions.cs" />
