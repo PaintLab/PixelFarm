@@ -298,7 +298,8 @@ namespace PaintLab.Svg
     }
 
 
-    //TODO: optimize and refactor here
+    //TODO: optimize and refactor here 
+
 
 
     public class SvgParser : XmlParserBase
@@ -332,6 +333,11 @@ namespace PaintLab.Svg
         public void ReadSvgString(string svgString)
         {
             _textSnapshot = new TextSnapshot(svgString);
+            ParseDocument(_textSnapshot);
+        }
+        public void ReadSvgCharBuffer(char[] svgBuffer)
+        {
+            _textSnapshot = new TextSnapshot(svgBuffer);
             ParseDocument(_textSnapshot);
         }
         public void ReadSvgFile(string svgFileName)
@@ -659,6 +665,71 @@ namespace PaintLab.Svg
                 base.EnterContent();
             }
         }
+
+        //------------------------------------
+
+        public VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
+        {
+
+            PathWriter pathWriter = GetFreePathWriter();
+            _svgPathDataParser.SetPathWriter(pathWriter);
+            //tokenize the path definition data
+            _svgPathDataParser.Parse(buffer);
+
+            //
+            VertexStore flattenVxs = GetFreeVxs();
+            _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
+            //------------------------------------------------- 
+
+            //create a small copy of the vxs 
+            VertexStore vxs = flattenVxs.CreateTrim();
+
+            ReleaseVertexStore(flattenVxs);
+            ReleasePathWriter(pathWriter);
+
+
+            return vxs;
+        }
+
+        PathWriter GetFreePathWriter()
+        {
+            if (_resuablePathWriterQueue.Count > 0)
+            {
+                return _resuablePathWriterQueue.Dequeue();
+            }
+            else
+            {
+                return new PathWriter(new VertexStore());
+            }
+        }
+        void ReleasePathWriter(PathWriter p)
+        {
+            p.Clear();
+            _resuablePathWriterQueue.Enqueue(p);
+        }
+        VertexStore GetFreeVxs()
+        {
+            if (_reusableVertexStore.Count > 0)
+            {
+                return _reusableVertexStore.Dequeue();
+            }
+            else
+            {
+                return new VertexStore();
+            }
+        }
+        void ReleaseVertexStore(VertexStore vxs)
+        {
+            vxs.Clear();
+            _reusableVertexStore.Enqueue(vxs);
+        }
+
+
+        //------------------------------------
+
+
+
+
         class SvgPathContext : ParsingContext
         {
             SvgPart svgPart;
@@ -668,14 +739,17 @@ namespace PaintLab.Svg
             {
 
             }
+            public override void VisitContext()
+            {
+                svgPart = new SvgPart(SvgRenderVxKind.Path);
+                _ownerParser._renderVxList.Add(svgPart);
+                base.VisitContext();
+            }
             public override bool AddAttribute(string name, string value)
             {
                 if (name == "d")
                 {
                     d_attribute = value;
-                    svgPart = new SvgPart(SvgRenderVxKind.Path);
-                    _ownerParser._renderVxList.Add(svgPart);
-
                     return true;
                 }
                 return base.AddAttribute(name, value);
@@ -692,28 +766,15 @@ namespace PaintLab.Svg
                     //create new path 
                     AssignValues(svgPart, spec);
 
-                    //-------------------------------------------------
-                    PathWriter pathWriter = GetFreePathWriter();
-                    _ownerParser._svgPathDataParser.SetPathWriter(pathWriter);
-                    //tokenize the path definition data
-                    _ownerParser._svgPathDataParser.Parse(d_attribute.ToCharArray());
-
-                    //
-                    VertexStore flattenVxs = GetFreeVxs();
-                    _ownerParser._curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
+                    svgPart.SetVxsAsOriginal(
+                        _ownerParser.ParseSvgPathDefinitionToVxs(d_attribute.ToCharArray()));
 
 
-                    //------------------------------------------------- 
                     if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
                     {
                         //TODO: implement stroke rendering 
                     }
 
-                    //create a small copy of the vxs
-                    svgPart.SetVxsAsOriginal(flattenVxs.CreateTrim());
-
-                    ReleaseVertexStore(flattenVxs);
-                    ReleasePathWriter(pathWriter);
 
                     d_attribute = null;
                 }
@@ -724,40 +785,6 @@ namespace PaintLab.Svg
                 EvaluatePathDefinition();
                 base.EnterContent();
             }
-
-            PathWriter GetFreePathWriter()
-            {
-                if (_ownerParser._resuablePathWriterQueue.Count > 0)
-                {
-                    return _ownerParser._resuablePathWriterQueue.Dequeue();
-                }
-                else
-                {
-                    return new PathWriter(new VertexStore());
-                }
-            }
-            void ReleasePathWriter(PathWriter p)
-            {
-                p.Clear();
-                _ownerParser._resuablePathWriterQueue.Enqueue(p);
-            }
-            VertexStore GetFreeVxs()
-            {
-                if (_ownerParser._reusableVertexStore.Count > 0)
-                {
-                    return _ownerParser._reusableVertexStore.Dequeue();
-                }
-                else
-                {
-                    return new VertexStore();
-                }
-            }
-            void ReleaseVertexStore(VertexStore vxs)
-            {
-                vxs.Clear();
-                _ownerParser._reusableVertexStore.Enqueue(vxs);
-            }
-
         }
 
 
@@ -834,127 +861,125 @@ namespace PaintLab.Svg
                 currentContex = openElemStack.Pop();
             }
         }
+    }
 
-
-        class MySvgPathDataParser : SvgPathDataParser
+    class MySvgPathDataParser : SvgPathDataParser
+    {
+        PathWriter _writer;
+        public void SetPathWriter(PathWriter writer)
         {
-            PathWriter _writer;
-            public void SetPathWriter(PathWriter writer)
-            {
-                this._writer = writer;
-                _writer.StartFigure();
-            }
-            protected override void OnArc(float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)
-            {
+            this._writer = writer;
+            _writer.StartFigure();
+        }
+        protected override void OnArc(float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)
+        {
 
-                //TODO: implement arc again
-                throw new NotSupportedException();
-                //base.OnArc(r1, r2, xAxisRotation, largeArcFlag, sweepFlags, x, y, isRelative);
-            }
-            protected override void OnCloseFigure()
-            {
-                _writer.CloseFigure();
+            //TODO: implement arc again
+            throw new NotSupportedException();
+            //base.OnArc(r1, r2, xAxisRotation, largeArcFlag, sweepFlags, x, y, isRelative);
+        }
+        protected override void OnCloseFigure()
+        {
+            _writer.CloseFigure();
 
-            }
-            protected override void OnCurveToCubic(
-                float x1, float y1,
-                float x2, float y2,
-                float x, float y, bool isRelative)
-            {
+        }
+        protected override void OnCurveToCubic(
+            float x1, float y1,
+            float x2, float y2,
+            float x, float y, bool isRelative)
+        {
 
-                if (isRelative)
-                {
-                    _writer.Curve4Rel(x1, y1, x2, y2, x, y);
-                }
-                else
-                {
-                    _writer.Curve4(x1, y1, x2, y2, x, y);
-                }
-            }
-            protected override void OnCurveToCubicSmooth(float x2, float y2, float x, float y, bool isRelative)
+            if (isRelative)
             {
-                if (isRelative)
-                {
-                    _writer.SmoothCurve4Rel(x2, y2, x, y);
-                }
-                else
-                {
-                    _writer.SmoothCurve4(x2, y2, x, y);
-                }
-
+                _writer.Curve4Rel(x1, y1, x2, y2, x, y);
             }
-            protected override void OnCurveToQuadratic(float x1, float y1, float x, float y, bool isRelative)
+            else
             {
-                if (isRelative)
-                {
-                    _writer.Curve3Rel(x1, y1, x, y);
-                }
-                else
-                {
-                    _writer.Curve3(x1, y1, x, y);
-                }
+                _writer.Curve4(x1, y1, x2, y2, x, y);
             }
-            protected override void OnCurveToQuadraticSmooth(float x, float y, bool isRelative)
+        }
+        protected override void OnCurveToCubicSmooth(float x2, float y2, float x, float y, bool isRelative)
+        {
+            if (isRelative)
             {
-                if (isRelative)
-                {
-                    _writer.SmoothCurve3Rel(x, y);
-                }
-                else
-                {
-                    _writer.SmoothCurve3(x, y);
-                }
-
+                _writer.SmoothCurve4Rel(x2, y2, x, y);
             }
-            protected override void OnHLineTo(float x, bool relative)
+            else
             {
-                if (relative)
-                {
-                    _writer.HorizontalLineToRel(x);
-                }
-                else
-                {
-                    _writer.HorizontalLineTo(x);
-                }
+                _writer.SmoothCurve4(x2, y2, x, y);
             }
 
-            protected override void OnLineTo(float x, float y, bool relative)
+        }
+        protected override void OnCurveToQuadratic(float x1, float y1, float x, float y, bool isRelative)
+        {
+            if (isRelative)
             {
-                if (relative)
-                {
-                    _writer.LineToRel(x, y);
-                }
-                else
-                {
-                    _writer.LineTo(x, y);
-                }
+                _writer.Curve3Rel(x1, y1, x, y);
             }
-            protected override void OnMoveTo(float x, float y, bool relative)
+            else
             {
-
-                if (relative)
-                {
-                    _writer.MoveToRel(x, y);
-                }
-                else
-                {
-
-
-                    _writer.MoveTo(x, y);
-                }
+                _writer.Curve3(x1, y1, x, y);
             }
-            protected override void OnVLineTo(float y, bool relative)
+        }
+        protected override void OnCurveToQuadraticSmooth(float x, float y, bool isRelative)
+        {
+            if (isRelative)
             {
-                if (relative)
-                {
-                    _writer.VerticalLineToRel(y);
-                }
-                else
-                {
-                    _writer.VerticalLineTo(y);
-                }
+                _writer.SmoothCurve3Rel(x, y);
+            }
+            else
+            {
+                _writer.SmoothCurve3(x, y);
+            }
+
+        }
+        protected override void OnHLineTo(float x, bool relative)
+        {
+            if (relative)
+            {
+                _writer.HorizontalLineToRel(x);
+            }
+            else
+            {
+                _writer.HorizontalLineTo(x);
+            }
+        }
+
+        protected override void OnLineTo(float x, float y, bool relative)
+        {
+            if (relative)
+            {
+                _writer.LineToRel(x, y);
+            }
+            else
+            {
+                _writer.LineTo(x, y);
+            }
+        }
+        protected override void OnMoveTo(float x, float y, bool relative)
+        {
+
+            if (relative)
+            {
+                _writer.MoveToRel(x, y);
+            }
+            else
+            {
+
+
+                _writer.MoveTo(x, y);
+            }
+        }
+        protected override void OnVLineTo(float y, bool relative)
+        {
+            if (relative)
+            {
+                _writer.VerticalLineToRel(y);
+            }
+            else
+            {
+                _writer.VerticalLineTo(y);
             }
         }
     }
-
 }
