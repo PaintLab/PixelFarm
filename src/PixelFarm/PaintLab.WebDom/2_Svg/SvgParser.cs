@@ -298,6 +298,9 @@ namespace PaintLab.Svg
     }
 
 
+    //TODO: optimize and refactor here
+
+
     public class SvgParser : XmlParserBase
     {
 
@@ -350,9 +353,7 @@ namespace PaintLab.Svg
         abstract class ParsingContext
         {
             protected SvgVisualSpec spec;
-
             internal SvgParser _ownerParser;
-
             public ParsingContext()
             {
 
@@ -521,7 +522,7 @@ namespace PaintLab.Svg
                 return new Color(color.A, color.R, color.G, color.B);
             }
 
-            void ParseTransform(string value, SvgVisualSpec spec)
+            static void ParseTransform(string value, SvgVisualSpec spec)
             {
                 int openParPos = value.IndexOf('(');
                 if (openParPos > -1)
@@ -768,7 +769,6 @@ namespace PaintLab.Svg
         protected override void OnVisitNewElement(TextSpan ns, TextSpan localName)
         {
             throw new NotSupportedException();
-            //base.OnVisitNewElement(ns, localName);
         }
         protected override void OnVisitNewElement(TextSpan localName)
         {
