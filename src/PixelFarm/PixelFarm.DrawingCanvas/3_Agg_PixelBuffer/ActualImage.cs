@@ -240,23 +240,7 @@ namespace PixelFarm.Agg
 
             return buff2;
         }
-
-        //
-
-        public static void SaveImgBufferToPngFile(byte[] imgBuffer, int stride, int width, int height, string filename)
-        {
-            if (s_saveToPngFileDel != null)
-            {
-                unsafe
-                {
-                    fixed (byte* head = &imgBuffer[0])
-                    {
-                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
-                    }
-                }
-
-            }
-        }
+    
         public static void SaveImgBufferToPngFile(int[] imgBuffer, int stride, int width, int height, string filename)
         {
             if (s_saveToPngFileDel != null)

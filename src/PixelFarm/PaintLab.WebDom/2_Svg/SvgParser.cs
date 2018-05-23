@@ -530,6 +530,8 @@ namespace PaintLab.Svg
 
             static void ParseTransform(string value, SvgVisualSpec spec)
             {
+                //TODO: ....
+
                 int openParPos = value.IndexOf('(');
                 if (openParPos > -1)
                 {
@@ -726,8 +728,6 @@ namespace PaintLab.Svg
 
 
         //------------------------------------
-
-
 
 
         class SvgPathContext : ParsingContext

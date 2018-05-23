@@ -99,10 +99,12 @@ namespace PixelFarm.Agg.Samples
                 {
                     RectD bound = svgVx.GetBounds();
 
+                    //create 
                     ActualImage backimg = new ActualImage((int)bound.Width, (int)bound.Height);
                     AggRenderSurface renderSurface = new AggRenderSurface(backimg);
                     AggPainter painter = new AggPainter(renderSurface);
-                    svgVx.Render(painter);
+                    svgVx.Render(painter); 
+
                     svgVx.SetBitmapSnapshot(backimg);
                 }
             }
