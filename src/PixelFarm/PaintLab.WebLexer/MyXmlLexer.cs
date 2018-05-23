@@ -64,7 +64,7 @@ namespace LayoutFarm.WebDom.Parser
                             {
                                 //flush existing content 
                                 //switch to content  tag mode 
-                                FlushExisingBuffer(i, HtmlLexerEvent.FromContentPart);
+                                FlushExisingBuffer(i, XmlLexerEvent.FromContentPart);
                                 currentState = 1;
                                 //not need whitespace in this mode 
                             }
@@ -100,7 +100,7 @@ namespace LayoutFarm.WebDom.Parser
                                 case '/':
                                     {
                                         //close tag 
-                                        RaiseStateChanged(HtmlLexerEvent.VisitOpenSlashAngle, i, 1);
+                                        RaiseStateChanged(XmlLexerEvent.VisitOpenSlashAngle, i, 1);
                                         currentState = 5;//collect node name 
                                     }
                                     break;
@@ -126,7 +126,7 @@ namespace LayoutFarm.WebDom.Parser
                                     if (sourceBuffer[i + 1] == '-' && sourceBuffer[i + 2] == '>')
                                     {
                                         //end comment node  
-                                        FlushExisingBuffer(i, HtmlLexerEvent.CommentContent);
+                                        FlushExisingBuffer(i, XmlLexerEvent.CommentContent);
                                         i += 2;
                                         currentState = 0;
                                         continue;
@@ -151,8 +151,8 @@ namespace LayoutFarm.WebDom.Parser
                                     break;
                                 case '>':
                                     {
-                                        FlushExisingBuffer(i, HtmlLexerEvent.NodeNameOrAttribute);
-                                        RaiseStateChanged(HtmlLexerEvent.VisitCloseAngle, i, 1);
+                                        FlushExisingBuffer(i, XmlLexerEvent.NodeNameOrAttribute);
+                                        RaiseStateChanged(XmlLexerEvent.VisitCloseAngle, i, 1);
                                         //flush 
                                         currentState = 0;
                                         //goto content mode
@@ -161,7 +161,7 @@ namespace LayoutFarm.WebDom.Parser
                                 case ':':
                                     {
                                         //flush node name
-                                        FlushExisingBuffer(i, HtmlLexerEvent.NodeNameOrAttribute);
+                                        FlushExisingBuffer(i, XmlLexerEvent.NodeNameOrAttribute);
                                         //start new node name
 
                                     }
@@ -169,14 +169,14 @@ namespace LayoutFarm.WebDom.Parser
                                 case ' ':
                                     {
                                         //flush node name
-                                        FlushExisingBuffer(i, HtmlLexerEvent.NodeNameOrAttribute);
+                                        FlushExisingBuffer(i, XmlLexerEvent.NodeNameOrAttribute);
                                     }
                                     break;
                                 case '=':
                                     {
                                         //flush name
-                                        FlushExisingBuffer(i, HtmlLexerEvent.Attribute);
-                                        RaiseStateChanged(HtmlLexerEvent.VisitAttrAssign, i, 1);
+                                        FlushExisingBuffer(i, XmlLexerEvent.Attribute);
+                                        RaiseStateChanged(XmlLexerEvent.VisitAttrAssign, i, 1);
                                         //start collect value of attr 
                                     }
                                     break;
@@ -201,7 +201,7 @@ namespace LayoutFarm.WebDom.Parser
 
                                         if (char.IsWhiteSpace(c))
                                         {
-                                            FlushExisingBuffer(i, HtmlLexerEvent.NodeNameOrAttribute);
+                                            FlushExisingBuffer(i, XmlLexerEvent.NodeNameOrAttribute);
                                         }
                                         else
                                         {
@@ -219,7 +219,7 @@ namespace LayoutFarm.WebDom.Parser
                             {
                                 //stop string escape
                                 //flush 
-                                FlushExisingBuffer(i, HtmlLexerEvent.AttributeValueAsLiteralString);
+                                FlushExisingBuffer(i, XmlLexerEvent.AttributeValueAsLiteralString);
                                 currentState = 5;
                             }
                             else
@@ -233,8 +233,8 @@ namespace LayoutFarm.WebDom.Parser
                             //after /   //must be >
                             if (c == '>')
                             {
-                                FlushExisingBuffer(i, HtmlLexerEvent.NodeNameOrAttribute);
-                                RaiseStateChanged(HtmlLexerEvent.VisitCloseSlashAngle, i, 1);
+                                FlushExisingBuffer(i, XmlLexerEvent.NodeNameOrAttribute);
+                                RaiseStateChanged(XmlLexerEvent.VisitCloseSlashAngle, i, 1);
                                 currentState = 0;
                             }
                             else
@@ -307,7 +307,7 @@ namespace LayoutFarm.WebDom.Parser
                                         //doc type?
                                         if (char.IsLetter(sourceBuffer[i + 1]))
                                         {
-                                            RaiseStateChanged(HtmlLexerEvent.VisitOpenAngleExclimation, i, 2);
+                                            RaiseStateChanged(XmlLexerEvent.VisitOpenAngleExclimation, i, 2);
                                             AppendBuffer(c, i);
                                             currentState = 5;
                                         }
@@ -330,7 +330,7 @@ namespace LayoutFarm.WebDom.Parser
 
 
 
-        void FlushExisingBuffer(int lastFlushAtIndex, HtmlLexerEvent lexerEvent)
+        void FlushExisingBuffer(int lastFlushAtIndex, XmlLexerEvent lexerEvent)
         {
             //raise lexer event
             if (_appendCount > 0)

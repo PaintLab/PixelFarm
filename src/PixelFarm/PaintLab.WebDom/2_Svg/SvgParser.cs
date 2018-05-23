@@ -67,7 +67,7 @@ namespace PaintLab.Svg
         {
             myXmlLexer.LexStateChanged += MyXmlLexer_LexStateChanged;
         }
-        private void MyXmlLexer_LexStateChanged(HtmlLexerEvent lexEvent, int startIndex, int len)
+        private void MyXmlLexer_LexStateChanged(XmlLexerEvent lexEvent, int startIndex, int len)
         {
 
             switch (lexEvent)
@@ -76,23 +76,23 @@ namespace PaintLab.Svg
                     {
                         throw new NotSupportedException();
                     }
-                case HtmlLexerEvent.VisitOpenAngle:
+                case XmlLexerEvent.VisitOpenAngle:
                     {
 
                     }
                     break;
-                case HtmlLexerEvent.CommentContent:
+                case XmlLexerEvent.CommentContent:
                     {
 
                     }
                     break;
-                case HtmlLexerEvent.FromContentPart:
+                case XmlLexerEvent.FromContentPart:
                     {
                         //text content of the element 
                         OnTextNode(new TextSpan(startIndex, len));
                     }
                     break;
-                case HtmlLexerEvent.AttributeValueAsLiteralString:
+                case XmlLexerEvent.AttributeValueAsLiteralString:
                     {
                         //assign value and add to parent
                         //string attrValue = textSnapshot.Substring(startIndex, len);
@@ -108,14 +108,14 @@ namespace PaintLab.Svg
                         }
                     }
                     break;
-                case HtmlLexerEvent.Attribute:
+                case XmlLexerEvent.Attribute:
                     {
                         //create attribute node and wait for its value
                         attrName = new TextSpan(startIndex, len);
                         //string attrName = textSnapshot.Substring(startIndex, len);
                     }
                     break;
-                case HtmlLexerEvent.NodeNameOrAttribute:
+                case XmlLexerEvent.NodeNameOrAttribute:
                     {
                         //the lexer dose not store state of element name or attribute name
                         //so we use parseState to decide here
@@ -208,7 +208,7 @@ namespace PaintLab.Svg
                         }
                     }
                     break;
-                case HtmlLexerEvent.VisitCloseAngle:
+                case XmlLexerEvent.VisitCloseAngle:
                     {
                         //close angle of current new node
                         //enter into its content 
@@ -224,17 +224,17 @@ namespace PaintLab.Svg
                         parseState = 0;
                     }
                     break;
-                case HtmlLexerEvent.VisitAttrAssign:
+                case XmlLexerEvent.VisitAttrAssign:
                     {
                         parseState = 4;
                     }
                     break;
-                case HtmlLexerEvent.VisitOpenSlashAngle:
+                case XmlLexerEvent.VisitOpenSlashAngle:
                     {
                         parseState = 2;
                     }
                     break;
-                case HtmlLexerEvent.VisitCloseSlashAngle:
+                case XmlLexerEvent.VisitCloseSlashAngle:
                     {
                         //   />
                         if (openEltStack.Count > 0)
@@ -248,7 +248,7 @@ namespace PaintLab.Svg
                         parseState = 0;
                     }
                     break;
-                case HtmlLexerEvent.VisitOpenAngleExclimation:
+                case XmlLexerEvent.VisitOpenAngleExclimation:
                     {
                         parseState = 10;
                     }

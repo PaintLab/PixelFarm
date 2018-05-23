@@ -3,7 +3,7 @@
 using LayoutFarm.WebLexer;
 namespace LayoutFarm.WebDom.Parser
 {
-    public enum HtmlLexerEvent
+    public enum XmlLexerEvent
     {
         /// <summary>
         /// &lt;a
@@ -57,17 +57,17 @@ namespace LayoutFarm.WebDom.Parser
         CommentContent
     }
 
-    enum HtmlLexState
+    enum XmlLexState
     {
         Init,
         AfterOpenAngle
     }
 
-    public delegate void HtmlLexerEventHandler(HtmlLexerEvent lexEvent, int startIndex, int len);
+    public delegate void XmlLexerEventHandler(XmlLexerEvent lexEvent, int startIndex, int len);
     public abstract partial class XmlLexer
     {
-        public event HtmlLexerEventHandler LexStateChanged;
-        protected void RaiseStateChanged(HtmlLexerEvent lexEvent, int startIndex, int len)
+        public event XmlLexerEventHandler LexStateChanged;
+        protected void RaiseStateChanged(XmlLexerEvent lexEvent, int startIndex, int len)
         {
             LexStateChanged(lexEvent, startIndex, len);
         }
