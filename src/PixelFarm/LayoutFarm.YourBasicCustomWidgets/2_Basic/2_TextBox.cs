@@ -130,7 +130,8 @@ namespace LayoutFarm.CustomWidgets
                             //TODO: review here ***
                             //we should encapsulte the detail of this ?
                             //1.technique, 2. performance
-                            char[] buffer = value.ToCharArray();
+                            //char[] buffer = value.ToCharArray();
+                            char[] buffer = line.ToCharArray();
                             foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
                             {
                                 int startIndex = splitBound.startIndex;
