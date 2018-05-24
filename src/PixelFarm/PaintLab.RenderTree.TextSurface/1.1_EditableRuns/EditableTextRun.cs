@@ -57,12 +57,11 @@ namespace LayoutFarm.Text
             }
             else
             {
+                //TODO: review here
                 throw new Exception("string must be null or zero length");
             }
         }
         //each editable run has it own (dynamic) char buffer 
-
-
 #if DEBUG
         char[] _mybuffer;
         char[] mybuffer

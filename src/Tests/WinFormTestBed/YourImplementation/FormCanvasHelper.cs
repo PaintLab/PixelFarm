@@ -21,9 +21,18 @@ namespace LayoutFarm.UI
             s_fontstore = new OpenFontStore();
         }
         public static Form CreateNewFormCanvas(
-            int w, int h,
-            InnerViewportKind internalViewportKind,
-            out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+           int w, int h,
+           InnerViewportKind internalViewportKind,
+           out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+        {
+
+            return CreateNewFormCanvas(0, 0, w, h, internalViewportKind, out canvasViewport);
+        }
+        public static Form CreateNewFormCanvas(
+        int xpos, int ypos,
+        int w, int h,
+        InnerViewportKind internalViewportKind,
+        out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
         {
             //1. init
             InitWinform();
@@ -60,7 +69,7 @@ namespace LayoutFarm.UI
 
             canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind);
             canvasViewport.Bounds =
-                new System.Drawing.Rectangle(10, 10,
+                new System.Drawing.Rectangle(xpos, ypos,
                     screenClientAreaRect.Width,
                     screenClientAreaRect.Height);
             //---------------------- 
@@ -117,5 +126,5 @@ namespace LayoutFarm.UI
     }
 
 
-  
+
 }
