@@ -65,7 +65,7 @@ namespace YourImplementation
             _latestviewport.PaintMe();
           
 
-            _latestviewport.PaintMe();
+            //_latestviewport.PaintMe();
 
             //formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();

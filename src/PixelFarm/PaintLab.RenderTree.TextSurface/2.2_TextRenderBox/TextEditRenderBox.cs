@@ -65,7 +65,8 @@ namespace LayoutFarm.Text
 
 #if DEBUG
             //for debug
-            canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
+            //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
+            
 #endif  
             //4. caret 
             if (this.stateShowCaret)
