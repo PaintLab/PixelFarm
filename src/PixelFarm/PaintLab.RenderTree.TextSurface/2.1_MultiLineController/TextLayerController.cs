@@ -389,11 +389,15 @@ namespace LayoutFarm.Text
         {
             if (textLineWriter.CharIndex < 1 && value < 0)
             {
-                if (textLineWriter.HasPrevLine)
+                if (backward)
                 {
-                    textLineWriter.MoveToPrevLine();
-                    DoEnd();
+                    if (textLineWriter.HasPrevLine)
+                    {
+                        textLineWriter.MoveToPrevLine();
+                        DoEnd();
+                    }
                 }
+                
             }
             else
             {

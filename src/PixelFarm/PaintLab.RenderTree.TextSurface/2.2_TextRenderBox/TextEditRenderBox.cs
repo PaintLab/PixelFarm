@@ -24,6 +24,7 @@ namespace LayoutFarm.Text
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             var enterFont = canvas.CurrentFont;
+
             canvas.CurrentFont = this.CurrentTextSpanStyle.FontInfo;
             if (vscrollableSurface != null)
             {
@@ -32,7 +33,7 @@ namespace LayoutFarm.Text
             //1. bg 
             if (BackgroundColor.A > 0)
             {
-                //canvas.FillRectangle(BackgroundColor, 0, 0, updateArea.Width, updateArea.Height);
+
                 canvas.FillRectangle(BackgroundColor, 0, 0, this.Width, this.Height);
             }
             //2.1 markers 
@@ -66,8 +67,8 @@ namespace LayoutFarm.Text
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
-            
-#endif  
+
+#endif
             //4. caret 
             if (this.stateShowCaret)
             {

@@ -11,7 +11,7 @@ namespace LayoutFarm.Text
     {
         object lineCollection;
         public event EventHandler Reflow;
-
+        int _defaultLineHeight;
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
@@ -19,6 +19,16 @@ namespace LayoutFarm.Text
             //start with single line per layer
             //and can be changed to multiline
             lineCollection = new EditableTextLine(this);
+
+            _defaultLineHeight = 24;//temp
+        }
+        public int DefaultLineHeight
+        {
+            get
+            {
+                return _defaultLineHeight;//test
+            }
+
         }
         public TextSpanStyle CurrentTextSpanStyle
         {
@@ -114,7 +124,11 @@ namespace LayoutFarm.Text
                     {
                         debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
                     }
+
+                    canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
+
 #endif
+
 
                     int y = line.Top;
                     LinkedListNode<EditableRun> curNode = line.First;
@@ -409,7 +423,7 @@ namespace LayoutFarm.Text
             bool lastestIsBlock = false;
             int maxWidth = 0;
             int curY_fromTop = ownerClientTop;
-            int maxHeightInRow = EditableTextLine.DEFAULT_LINE_HEIGHT;
+            int maxHeightInRow = this.DefaultLineHeight;
             int lineCount = lines.Count;
             for (int i = 0; i < lineCount; ++i)
             {
@@ -427,7 +441,7 @@ namespace LayoutFarm.Text
                 }
                 else
                 {
-                    maxHeightInRow = EditableTextLine.DEFAULT_LINE_HEIGHT;
+                    maxHeightInRow = this.DefaultLineHeight;
                     EditableTextLine newLine = null;
                     line.ValidateContentArrangement();
                     bool isFirstRunInThisLine = true;
@@ -470,7 +484,7 @@ namespace LayoutFarm.Text
                                 newLine.AddLast(currentRun);
                                 curY = curY_fromTop + maxHeightInRow;
                                 curY_fromTop = curY;
-                                maxHeightInRow = EditableTextLine.DEFAULT_LINE_HEIGHT;
+                                maxHeightInRow = this.DefaultLineHeight;
                                 EditableRun nextR = currentRun.NextTextRun;
                                 while (nextR != null)
                                 {
