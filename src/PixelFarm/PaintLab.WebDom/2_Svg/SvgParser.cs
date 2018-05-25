@@ -43,12 +43,19 @@ namespace PaintLab.Svg
     public abstract class XmlParserBase
     {
         int parseState = 0;
-        TextSnapshot textSnapshot;
+        protected TextSnapshot _textSnapshot;
         MyXmlLexer myXmlLexer = new MyXmlLexer();
         string waitingAttrName;
         string currentNodeName;
         Stack<string> openEltStack = new Stack<string>();
+
+        TextSpan nodeNamePrefix;
+        bool hasNodeNamePrefix;
+
         TextSpan attrName;
+        TextSpan attrPrefix;
+        bool hasAttrPrefix;
+
         protected struct TextSpan
         {
             public readonly int startIndex;
@@ -58,7 +65,12 @@ namespace PaintLab.Svg
                 this.startIndex = startIndex;
                 this.len = len;
             }
-
+#if DEBUG
+            public override string ToString()
+            {
+                return startIndex + "," + len;
+            }
+#endif
             public static readonly TextSpan Empty = new TextSpan();
         }
 
@@ -67,6 +79,7 @@ namespace PaintLab.Svg
         {
             myXmlLexer.LexStateChanged += MyXmlLexer_LexStateChanged;
         }
+
         private void MyXmlLexer_LexStateChanged(XmlLexerEvent lexEvent, int startIndex, int len)
         {
 
@@ -78,7 +91,7 @@ namespace PaintLab.Svg
                     }
                 case XmlLexerEvent.VisitOpenAngle:
                     {
-
+                        //enter new context
                     }
                     break;
                 case XmlLexerEvent.CommentContent:
@@ -86,8 +99,37 @@ namespace PaintLab.Svg
 
                     }
                     break;
+                case XmlLexerEvent.NamePrefix:
+                    {
+                        //name prefix of 
+
+#if DEBUG
+                        string testStr = _textSnapshot.Substring(startIndex, len);
+#endif
+
+                        switch (parseState)
+                        {
+                            default:
+                                throw new NotSupportedException();
+                            case 0:
+                                nodeNamePrefix = new TextSpan(startIndex, len);
+                                hasNodeNamePrefix = true;
+                                break;
+                            case 1:
+                                //attribute part
+                                attrPrefix = new TextSpan(startIndex, len);
+                                hasAttrPrefix = true;
+                                break;
+                            case 2: //   </a
+                                nodeNamePrefix = new TextSpan(startIndex, len);
+                                hasNodeNamePrefix = true;
+                                break;
+                        }
+                    }
+                    break;
                 case XmlLexerEvent.FromContentPart:
                     {
+
                         //text content of the element 
                         OnTextNode(new TextSpan(startIndex, len));
                     }
@@ -104,6 +146,7 @@ namespace PaintLab.Svg
                         else
                         {
                             //add value to current attribute node
+                            parseState = 1;
                             OnAttribute(attrName, new TextSpan(startIndex, len));
                         }
                     }
@@ -120,7 +163,7 @@ namespace PaintLab.Svg
                         //the lexer dose not store state of element name or attribute name
                         //so we use parseState to decide here
 
-                        string name = textSnapshot.Substring(startIndex, len);
+                        string name = _textSnapshot.Substring(startIndex, len);
                         switch (parseState)
                         {
                             case 0:
@@ -191,13 +234,12 @@ namespace PaintLab.Svg
                             case 10:
                                 {
                                     //eg <! 
-
                                     parseState = 11;
                                 }
                                 break;
                             case 11:
                                 {
-                                    //doc 
+                                    //comment node
 
                                 }
                                 break;
@@ -226,6 +268,7 @@ namespace PaintLab.Svg
                     break;
                 case XmlLexerEvent.VisitAttrAssign:
                     {
+
                         parseState = 4;
                     }
                     break;
@@ -259,6 +302,9 @@ namespace PaintLab.Svg
 
         public virtual void ParseDocument(TextSnapshot textSnapshot)
         {
+            this._textSnapshot = textSnapshot;
+
+
             OnBegin();
             //reset
             openEltStack.Clear();
@@ -267,7 +313,7 @@ namespace PaintLab.Svg
             parseState = 0;
 
             //
-            this.textSnapshot = textSnapshot;
+
             myXmlLexer.BeginLex();
             myXmlLexer.Analyze(textSnapshot);
             myXmlLexer.EndLex();
@@ -329,16 +375,16 @@ namespace PaintLab.Svg
 
         }
 
-        TextSnapshot _textSnapshot;
+
         public void ReadSvgString(string svgString)
         {
-            _textSnapshot = new TextSnapshot(svgString);
-            ParseDocument(_textSnapshot);
+
+            ParseDocument(new TextSnapshot(svgString));
         }
         public void ReadSvgCharBuffer(char[] svgBuffer)
         {
-            _textSnapshot = new TextSnapshot(svgBuffer);
-            ParseDocument(_textSnapshot);
+
+            ParseDocument(new TextSnapshot(svgBuffer));
         }
         public void ReadSvgFile(string svgFileName)
         {

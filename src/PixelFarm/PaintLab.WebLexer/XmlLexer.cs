@@ -45,8 +45,8 @@ namespace LayoutFarm.WebDom.Parser
         /// ?&gt;
         /// </summary>
         CloseProcessInstruction, //  ?>
-        NodeNameOrAttribute,
-        NodeNamePrefix,
+        NodeNameOrAttribute, 
+        NamePrefix,
         NodeNameLocal,
         Attribute,
         AttributeNameLocal,
