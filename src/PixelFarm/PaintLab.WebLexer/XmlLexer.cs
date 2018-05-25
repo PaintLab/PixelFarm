@@ -41,6 +41,7 @@ namespace LayoutFarm.WebDom.Parser
         /// &lt;?
         /// </summary>
         OpenProcessInstruction,  //  <?
+        ProcessInstructionContent,
         /// <summary>
         /// ?&gt;
         /// </summary>
@@ -54,7 +55,7 @@ namespace LayoutFarm.WebDom.Parser
         AttributeValueAsLiteralString,
         SwitchToContentPart,
         FromContentPart,
-        CommentContent
+        CommentContent,        
     }
 
     enum XmlLexState

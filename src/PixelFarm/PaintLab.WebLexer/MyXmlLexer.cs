@@ -257,8 +257,9 @@ namespace LayoutFarm.WebDom.Parser
                         {
                             if (c == '>')
                             {
-                                currentState = 0;
-
+                                //flush xml processing instruction 
+                                FlushExisingBuffer(i, XmlLexerEvent.ProcessInstructionContent);
+                                currentState = 0; //back to content mode
                             }
                         }
                         break;
