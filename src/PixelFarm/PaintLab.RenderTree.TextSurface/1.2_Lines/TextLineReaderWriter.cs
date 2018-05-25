@@ -446,9 +446,7 @@ namespace LayoutFarm.Text
             currentLineY = currentLine.Top;
 
             //if current line is a blank line
-            //not first run => currentTextRun= null
-           
-
+            //not first run => currentTextRun= null 
             currentTextRun = (EditableRun)currentLine.FirstRun;
 
             rCharOffset = 0;
