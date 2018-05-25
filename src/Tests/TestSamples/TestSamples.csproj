@@ -41,7 +41,7 @@
     <Compile Include="00_DemoBase\DemoBase1.cs" />
     <Compile Include="00_DemoBase\DemoHelper.cs" />
     <Compile Include="00_DemoBase\ES2Utils2.cs" />
-    <Compile Include="00_DemoBase\LionDataStore.cs" />
+    <Compile Include="00_DemoBase\SvgRenderVxLoader.cs" />
     <Compile Include="00_DemoBase\LionFillSprite.cs" />
     <Compile Include="00_DemoBase\SimpleSprite.cs" />
     <Compile Include="00_DemoBase\SpriteShape.cs" />

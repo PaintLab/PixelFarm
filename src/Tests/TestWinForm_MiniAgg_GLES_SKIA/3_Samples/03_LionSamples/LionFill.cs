@@ -42,10 +42,10 @@ namespace PixelFarm.Agg.Samples
       + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : DemoBase
     {
-        TestFillSprite lionFill;
+        MyTestSprite lionFill;
         public override void Init()
         {
-            lionFill = new TestFillSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg")));
+            lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg")));
             lionFill.AutoFlipY = true;
         }
 
@@ -106,21 +106,21 @@ namespace PixelFarm.Agg.Samples
     public class LionFillExample_HitTest : DemoBase
     {
 
-        TestFillSprite _hitLion;
+        MyTestSprite _hitLion;
         bool hitOnLion;
-        List<TestFillSprite> lionList = new List<TestFillSprite>();
+        List<MyTestSprite> lionList = new List<MyTestSprite>();
         public override void Init()
         {
             // lion
             SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow02.svg"));
-            lionList.Add(new TestFillSprite(s));
+            lionList.Add(new MyTestSprite(s));
             //
             //lionFill.AutoFlipY = true;           
         }
         public override void KeyDown(int keycode)
         {
             SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow02.svg"));
-            lionList.Add(new TestFillSprite(s) { JustMove = true });
+            lionList.Add(new MyTestSprite(s) { JustMove = true });
             base.KeyDown(keycode);
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -166,7 +166,7 @@ namespace PixelFarm.Agg.Samples
 
             for (int i = lionList.Count - 1; i >= 0; --i)
             {
-                TestFillSprite lion = lionList[i];
+                MyTestSprite lion = lionList[i];
                 if (lion.HitTest(x, y, isRightButton))
                 {
                     hitOnLion = true;

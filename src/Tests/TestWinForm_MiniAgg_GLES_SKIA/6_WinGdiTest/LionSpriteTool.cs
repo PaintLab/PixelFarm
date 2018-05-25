@@ -7,7 +7,7 @@ namespace Mini.WinForms
 {
     class MyLionSpriteTool : PixelToolController
     {
-        PixelFarm.Agg.TestFillSprite lionFill;
+        PixelFarm.Agg.MyTestSprite lionFill;
         List<PixelToolController> prevPixTools;
         int _latest_mouseX, _latest_mouseY;
         bool validBoundingRect;
@@ -15,7 +15,7 @@ namespace Mini.WinForms
         int offsetX, offSetY;
         public MyLionSpriteTool()
         {
-            lionFill = new TestFillSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg")));
+            lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg")));
         }
         public override bool IsDrawingTool { get { return true; } }
         public override void Draw(Graphics g)

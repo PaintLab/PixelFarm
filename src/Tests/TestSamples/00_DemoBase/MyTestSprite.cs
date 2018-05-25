@@ -9,7 +9,7 @@ namespace PixelFarm.Agg
 {
 
 
-    public class TestFillSprite : BasicSprite
+    public class MyTestSprite : BasicSprite
     {
         SpriteShape _spriteShape;
 
@@ -17,7 +17,7 @@ namespace PixelFarm.Agg
         float _mouseDownX, _mouseDownY;
 
         byte alpha;
-        public TestFillSprite(SpriteShape spriteShape)
+        public MyTestSprite(SpriteShape spriteShape)
         {
             _spriteShape = spriteShape;
 
