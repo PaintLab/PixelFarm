@@ -444,7 +444,13 @@ namespace LayoutFarm.Text
         {
             currentLine = visualFlowLayer.GetTextLine(lineNumber);
             currentLineY = currentLine.Top;
+
+            //if current line is a blank line
+            //not first run => currentTextRun= null
+           
+
             currentTextRun = (EditableRun)currentLine.FirstRun;
+
             rCharOffset = 0;
             rPixelOffset = 0;
 
