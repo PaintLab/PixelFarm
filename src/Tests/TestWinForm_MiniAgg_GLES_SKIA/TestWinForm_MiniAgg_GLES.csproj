@@ -163,7 +163,6 @@
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
     <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Samples\SampleStore.cs" />
     <Compile Include="SoftAggControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -286,7 +285,6 @@
       <Name>TestSamples</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Samples\arrow2.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
