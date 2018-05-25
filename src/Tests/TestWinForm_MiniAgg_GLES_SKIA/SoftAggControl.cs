@@ -115,7 +115,11 @@ namespace Mini
             }
             //exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
         }
-
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            exampleBase.KeyDown((int)e.KeyCode);
+            base.OnKeyDown(e);
+        }
         protected override void OnMouseDown(MouseEventArgs e)
         {
             this.isMouseDown = true;

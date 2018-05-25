@@ -38,8 +38,11 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+
+
+            var _svgRenderVx = PixelFarm.Agg.SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/lion.svg");
+            lionShape = new SpriteShape(_svgRenderVx);
+
             RectD lionBounds = lionShape.Bounds;
             //-------------
             aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height);

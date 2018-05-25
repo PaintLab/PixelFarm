@@ -23,11 +23,8 @@ namespace PixelFarm.Agg.Samples
 
 
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
-            SvgParser svg = new SvgParser();
-            //svg.ReadSvgFile("Samples\\lion.svg");
-            svg.ReadSvgFile("Samples\\tiger002.svg");
-            //svg.ReadSvgFile("d:\\WImageTest\\x_04.svg");
-            //svg.ReadSvgFile("Samples\\arrow2.svg");
+            SvgParser svg = new SvgParser(); 
+            svg.ReadSvgFile("Samples\\tiger002.svg"); 
             _renderVx = svg.GetResultAsRenderVx();
 
 
@@ -77,8 +74,7 @@ namespace PixelFarm.Agg.Samples
 
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgParser svg = new SvgParser();
-            //svg.ReadSvgFile("Samples\\lion.svg");
-            //svg.ReadSvgFile("d:\\WImageTest\\x_04.svg");
+            //svg.ReadSvgFile("Samples\\lion.svg"); 
             //svg.ReadSvgFile("Samples\\tiger002.svg");
             svg.ReadSvgFile("Samples\\arrow2.svg");
 
@@ -103,7 +99,7 @@ namespace PixelFarm.Agg.Samples
                     ActualImage backimg = new ActualImage((int)bound.Width, (int)bound.Height);
                     AggRenderSurface renderSurface = new AggRenderSurface(backimg);
                     AggPainter painter = new AggPainter(renderSurface);
-                    svgVx.Render(painter); 
+                    svgVx.Render(painter);
 
                     svgVx.SetBitmapSnapshot(backimg);
                 }

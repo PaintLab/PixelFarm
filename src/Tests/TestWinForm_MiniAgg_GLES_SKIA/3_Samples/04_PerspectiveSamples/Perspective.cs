@@ -22,8 +22,8 @@ namespace PixelFarm.Agg.Sample_Perspective
         private SpriteShape lionShape;
         public perspective_application()
         {
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+
+            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
 
             quadPolygonControl = new PixelFarm.Agg.UI.PolygonEditWidget(4, 5.0);
             quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
@@ -105,8 +105,8 @@ namespace PixelFarm.Agg.Sample_Perspective
                     var v3 = GetFreeVxs();
 
                     lionShape.ApplyTransform(txBilinear);
-                    lionShape.Paint(painter); 
-                  
+                    lionShape.Paint(painter);
+
 
                     RectD lionBound = lionShape.Bounds;
                     Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,

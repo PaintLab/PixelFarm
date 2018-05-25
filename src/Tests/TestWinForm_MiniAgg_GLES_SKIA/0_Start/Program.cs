@@ -25,7 +25,9 @@ namespace Mini
         [STAThread]
         static void Main()
         {
-           
+            PaintLab.Svg.SvgParser parser = new PaintLab.Svg.SvgParser();
+            string svgContent = System.IO.File.ReadAllText("Samples/arrow2.svg");
+            parser.ParseDocument(new LayoutFarm.WebLexer.TextSnapshot(svgContent));
 
             RootDemoPath.Path = @"..\Data";
 #if GL_ENABLE

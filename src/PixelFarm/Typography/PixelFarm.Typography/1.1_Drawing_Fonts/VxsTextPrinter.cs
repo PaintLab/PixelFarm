@@ -159,6 +159,7 @@ namespace PixelFarm.Drawing.Fonts
             {
 
                 if (_currentTypeface == value) return;
+                //
                 _currentTypeface = value;
                 OnFontSizeChanged();
             }

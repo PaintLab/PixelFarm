@@ -21,9 +21,20 @@ namespace LayoutFarm.UI
             s_fontstore = new OpenFontStore();
         }
         public static Form CreateNewFormCanvas(
-            int w, int h,
-            InnerViewportKind internalViewportKind,
-            out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+           int w, int h,
+           InnerViewportKind internalViewportKind,
+           out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+        {
+            return CreateNewFormCanvas(0, 0, w, h, internalViewportKind, out canvasViewport);
+        }
+
+
+
+        public static Form CreateNewFormCanvas(
+        int xpos, int ypos,
+        int w, int h,
+        InnerViewportKind internalViewportKind,
+        out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
         {
             //1. init
             InitWinform();
@@ -60,7 +71,7 @@ namespace LayoutFarm.UI
 
             canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind);
             canvasViewport.Bounds =
-                new System.Drawing.Rectangle(10, 10,
+                new System.Drawing.Rectangle(xpos, ypos,
                     screenClientAreaRect.Width,
                     screenClientAreaRect.Height);
             //---------------------- 
@@ -113,9 +124,67 @@ namespace LayoutFarm.UI
             return Screen.PrimaryScreen;
         }
 
-        //
+        public static void CreateConvasControlOnExistingControl(
+          Control landingControl,
+          int xpos, int ypos,
+          int w, int h,
+          InnerViewportKind internalViewportKind,
+          out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+        {
+            //1. init
+            InitWinform();
+            IFontLoader fontLoader = s_fontstore;
+            //2. 
+            PixelFarm.Drawing.ITextService ifont = null;
+            switch (internalViewportKind)
+            {
+                default:
+                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetIFonts();
+                    //ifont = new OpenFontTextService();
+                    break;
+                case InnerViewportKind.GL:
+                    ifont = new OpenFontTextService();
+                    break;
+
+            }
+
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
+
+            //
+
+            //---------------------------------------------------------------------------
+
+            MyRootGraphic myRootGfx = new MyRootGraphic(
+               w, h,
+               ifont
+               );
+
+            //---------------------------------------------------------------------------
+
+            var innerViewport = canvasViewport = new LayoutFarm.UI.UISurfaceViewportControl();
+            Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
+
+            canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind);
+            canvasViewport.Bounds =
+                new System.Drawing.Rectangle(xpos, ypos,
+                    screenClientAreaRect.Width,
+                    screenClientAreaRect.Height);
+
+            landingControl.Controls.Add(canvasViewport);
+            //
+            Form ownerForm = landingControl.FindForm();
+            if (ownerForm != null)
+            {
+                ownerForm.FormClosing += (s, e) =>
+                {
+                    innerViewport.Close();
+                };
+
+            }
+
+        }
     }
 
 
-  
+
 }

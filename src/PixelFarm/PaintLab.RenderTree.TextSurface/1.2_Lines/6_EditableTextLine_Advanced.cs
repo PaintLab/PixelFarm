@@ -403,6 +403,7 @@ namespace LayoutFarm.Text
                     }
                     else
                     {
+                        //TODO newStartPoint.TextRun == null???
                         EditableRun nextRun = newStartPoint.TextRun.NextTextRun;
                         if (nextRun != null && !nextRun.IsLineBreak)
                         {

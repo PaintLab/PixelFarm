@@ -84,6 +84,8 @@ namespace Typography.TextBreak
 #if DEBUG
             if (index == latestBreakAt)
             {
+                Console.WriteLine("BUG!");
+                return;                
                 throw new NotSupportedException();
             }
 #endif

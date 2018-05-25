@@ -9,26 +9,28 @@ namespace PixelFarm.Agg
 {
 
 
-    public class LionFillSprite : BasicSprite
+    public class MyTestSprite : BasicSprite
     {
-        SpriteShape lionShape;
+        SpriteShape _spriteShape;
 
         float _posX, _posY;
         float _mouseDownX, _mouseDownY;
 
         byte alpha;
-        public LionFillSprite()
+        public MyTestSprite(SpriteShape spriteShape)
         {
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+            _spriteShape = spriteShape;
+
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
         }
-        public SpriteShape LionShape
+
+
+        public SpriteShape SpriteShape
         {
-            get { return lionShape; }
-            set { lionShape = value; }
+            get { return _spriteShape; }
+            set { _spriteShape = value; }
         }
 
         public bool AutoFlipY
@@ -49,7 +51,7 @@ namespace PixelFarm.Agg
             {
                 this.alpha = value;
                 //change alpha value
-                lionShape.ApplyNewAlpha(value);
+                _spriteShape.ApplyNewAlpha(value);
                 //int j = lionShape.NumPaths;
                 //var colorBuffer = lionShape.Colors;
                 //for (int i = lionShape.NumPaths - 1; i >= 0; --i)
@@ -83,7 +85,7 @@ namespace PixelFarm.Agg
         }
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
-            RectD bounds = lionShape.Bounds;
+            RectD bounds = _spriteShape.Bounds;
             bounds.Offset(_posX, _posY);
             if (bounds.Contains(x, y))
             {
@@ -95,7 +97,7 @@ namespace PixelFarm.Agg
                 y -= _posY;
                 if (withSubPathTest)
                 {
-                    return lionShape.HitTestOnSubPart(x, y);
+                    return _spriteShape.HitTestOnSubPart(x, y);
                 }
 
 
@@ -121,7 +123,7 @@ namespace PixelFarm.Agg
                 recreatePathAgain = false;
 
                 var transform = Affine.NewMatix(
-                        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                        AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
                         AffinePlan.Scale(spriteScale, spriteScale),
                         AffinePlan.Rotate(angle + Math.PI),
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
@@ -131,7 +133,7 @@ namespace PixelFarm.Agg
 
 
                 //temp fix
-                SvgRenderVx renderVx = lionShape.GetRenderVx();
+                SvgRenderVx renderVx = _spriteShape.GetRenderVx();
                 int count = renderVx.SvgVxCount;
                 for (int i = 0; i < count; ++i)
                 {
@@ -150,7 +152,7 @@ namespace PixelFarm.Agg
                     transform.TransformToVxs(vxvxs, newVxs);
                     vx.SetVxs(newVxs);
                 }
-                lionShape.UpdateBounds();
+                _spriteShape.UpdateBounds();
 
                 //if (AutoFlipY)
                 //{
@@ -170,30 +172,30 @@ namespace PixelFarm.Agg
                 float ox = p.OriginX;
                 float oy = p.OriginY;
                 p.SetOrigin(ox + _posX, oy + _posY);
-                lionShape.Paint(p);
-#if DEBUG
-                RectD bounds = lionShape.Bounds;
-                bounds.Offset(_posX, _posY);
-                //draw lion bounds
-                var savedStrokeColor = p.StrokeColor;
-                var savedFillColor = p.FillColor;
-                var savedSmoothMode = p.SmoothingMode;
+                _spriteShape.Paint(p);
+                //#if DEBUG
+                //                RectD bounds = lionShape.Bounds;
+                //                bounds.Offset(_posX, _posY);
+                //                //draw lion bounds
+                //                var savedStrokeColor = p.StrokeColor;
+                //                var savedFillColor = p.FillColor;
+                //                var savedSmoothMode = p.SmoothingMode;
 
-                p.SmoothingMode = SmoothingMode.HighSpeed;
-                p.StrokeColor = Color.Black;
-                p.DrawRect(bounds.Left, bounds.Top - bounds.Height, bounds.Width, bounds.Height);
+                //                p.SmoothingMode = SmoothingMode.HighSpeed;
+                //                p.StrokeColor = Color.Black;
+                //                p.DrawRect(bounds.Left, bounds.Top - bounds.Height, bounds.Width, bounds.Height);
 
-                p.StrokeColor = Color.Red;
-                p.DrawRect(_mouseDownX, _mouseDownY, 4, 4);
-
-
-                //restore
-                p.SmoothingMode = savedSmoothMode;
-                p.StrokeColor = savedStrokeColor;
-                p.FillColor = savedFillColor;
+                //                p.StrokeColor = Color.Red;
+                //                p.DrawRect(_mouseDownX, _mouseDownY, 4, 4);
 
 
-#endif
+                //                //restore
+                //                p.SmoothingMode = savedSmoothMode;
+                //                p.StrokeColor = savedStrokeColor;
+                //                p.FillColor = savedFillColor;
+
+
+                //#endif
 
                 p.SetOrigin(ox, oy);
 
@@ -218,7 +220,7 @@ namespace PixelFarm.Agg
 
         public SpriteShape GetSpriteShape()
         {
-            return lionShape;
+            return _spriteShape;
         }
     }
 }

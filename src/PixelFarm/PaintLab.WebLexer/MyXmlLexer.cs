@@ -82,7 +82,7 @@ namespace LayoutFarm.WebDom.Parser
                             {
                                 case '!':
                                     {
-                                        currentState = 11;
+                                        currentState = 11; //<!
                                     }
                                     break;
                                 case '?':
@@ -161,7 +161,7 @@ namespace LayoutFarm.WebDom.Parser
                                 case ':':
                                     {
                                         //flush node name
-                                        FlushExisingBuffer(i, XmlLexerEvent.NodeNameOrAttribute);
+                                        FlushExisingBuffer(i, XmlLexerEvent.NamePrefix);
                                         //start new node name
 
                                     }
@@ -257,8 +257,9 @@ namespace LayoutFarm.WebDom.Parser
                         {
                             if (c == '>')
                             {
-                                currentState = 0;
-
+                                //flush xml processing instruction 
+                                FlushExisingBuffer(i, XmlLexerEvent.ProcessInstructionContent);
+                                currentState = 0; //back to content mode
                             }
                         }
                         break;
@@ -284,6 +285,7 @@ namespace LayoutFarm.WebDom.Parser
                                         {
                                             if (sourceBuffer[i + 1] == '-')
                                             {
+                                                i++;//consume
                                                 currentState = 2;
                                                 continue;
                                             }

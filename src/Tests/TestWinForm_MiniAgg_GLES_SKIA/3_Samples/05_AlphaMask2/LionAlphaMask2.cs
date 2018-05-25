@@ -29,8 +29,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         System.Drawing.Bitmap a_alphaBmp;
         public alpha_mask2_application()
         {
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples\arrow2.svg"));
             this.Width = 800;
             this.Height = 600;
             //AnchorAll();
