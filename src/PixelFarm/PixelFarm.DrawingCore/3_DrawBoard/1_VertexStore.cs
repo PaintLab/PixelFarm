@@ -98,8 +98,11 @@ namespace PixelFarm.Drawing
 
         public void Clear()
         {
+            //we clear only command part!
+            //clear only latest
+            //System.Array.Clear(m_cmds, 0, m_cmds.Length);
+            System.Array.Clear(m_cmds, 0, m_num_vertices); //only latest 
             m_num_vertices = 0;
-            System.Array.Clear(m_cmds, 0, m_cmds.Length);
         }
         public void AddVertex(double x, double y, VertexCmd cmd)
         {

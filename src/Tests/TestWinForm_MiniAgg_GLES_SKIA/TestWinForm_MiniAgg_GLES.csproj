@@ -67,6 +67,7 @@
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\21_HandPaint\MyBrushPath.cs" />
     <Compile Include="3_Samples\21_HandPaint\SmoothBrush2.cs" />
+    <Compile Include="3_Samples\21_HandPaint\SmoothBrush3.cs" />
     <Compile Include="3_Samples\21_HandPaint\SmoothDippingBrush.cs" />
     <Compile Include="3_Samples\21_HandPaint\DrippingBrush.cs" />
     <Compile Include="3_Samples\21_HandPaint\HandPaint.cs" />

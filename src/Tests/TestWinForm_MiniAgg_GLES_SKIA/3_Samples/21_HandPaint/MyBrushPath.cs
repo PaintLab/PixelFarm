@@ -7,10 +7,13 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
 using burningmime.curves; //for curve fit
 using PixelFarm.Drawing;
+
 namespace PixelFarm.Agg.Samples
 {
     class MyBrushPath
     {
+
+
         bool validBoundingRect;
         VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();
@@ -31,7 +34,13 @@ namespace PixelFarm.Agg.Samples
             contPoints.Insert(0, new Vector2(x, y));
             isValidSmooth = false;
         }
-        public VertexStore Vxs { get { return vxs; } }
+        public VertexStore Vxs
+        {
+            get
+            {
+                return vxs;
+            }
+        }
         public void SetVxs(VertexStore vxs)
         {
             this.vxs = vxs;
@@ -100,18 +109,62 @@ namespace PixelFarm.Agg.Samples
             get;
             set;
         }
-        public void MakeSmoothPath()
+
+
+
+        Stroke _stroke1 = new Stroke(1);
+
+        public void MakeRegularPath(float strokeW)
         {
+
             if (this.isValidSmooth)
             {
                 return;
             }
             this.isValidSmooth = true;
             //--------
+
             if (contPoints.Count == 0)
             {
                 return;
             }
+
+            //SimplifyPaths();
+            _stroke1.Width = strokeW*2;
+            _stroke1.LineCap = LineCap.Round;
+            _stroke1.LineJoin = LineJoin.Round;
+
+            var tmpVxs = new VertexStore();
+            int j = contPoints.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //TODO: review here
+                //
+                Vector2 v = contPoints[i];
+                if (i == 0)
+                {
+                    tmpVxs.AddMoveTo(v.x, v.y);
+                }
+                else
+                {
+                    tmpVxs.AddLineTo(v.x, v.y);
+                }
+            }
+            ////
+
+            VertexStore v2 = new VertexStore();
+            _stroke1.MakeVxs(tmpVxs, v2);
+
+
+
+            vxs = v2;
+
+            //release vxs to pool
+        }
+
+        void SimplifyPaths()
+        {
+
             //return;
             //--------
             //lets smooth it 
@@ -157,7 +210,7 @@ namespace PixelFarm.Agg.Samples
                     {
                         vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
                     }
-                    
+
                 }
                 //-------------------------------
                 //close
@@ -169,7 +222,7 @@ namespace PixelFarm.Agg.Samples
             {
                 CubicBezier bz0 = cubicBzs[0];
                 vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
-               
+
                 if (!bz0.HasSomeNanComponent)
                 {
                     vxs.AddCurve4To(
@@ -182,7 +235,7 @@ namespace PixelFarm.Agg.Samples
                     vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
                 }
 
-                 
+
 
             }
             else
@@ -190,11 +243,26 @@ namespace PixelFarm.Agg.Samples
                 // = 0
             }
 
-
             //TODO: review here
             VertexStore v2 = new VertexStore();
             cflat.MakeVxs(vxs, v2);
             vxs = v2;
+        }
+        public void MakeSmoothPath()
+        {
+            if (this.isValidSmooth)
+            {
+                return;
+            }
+            this.isValidSmooth = true;
+            //--------
+            if (contPoints.Count == 0)
+            {
+                return;
+            }
+            SimplifyPaths();
+
+
         }
         public void Close()
         {
