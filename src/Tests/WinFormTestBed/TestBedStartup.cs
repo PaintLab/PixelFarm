@@ -57,14 +57,15 @@ namespace YourImplementation
                workingArea.Height,
                innerViewportKind,
                out _latestviewport);
+            formCanvas.Text = "PixelFarm" + innerViewportKind;
 
             demo.StartDemo(new LayoutFarm.SampleViewport(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
             _latestviewport.PaintMe();
-            formCanvas.Text = "PixelFarm" + innerViewportKind;
+          
 
-            _latestviewport.PaintMe();
+            //_latestviewport.PaintMe();
 
             //formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();

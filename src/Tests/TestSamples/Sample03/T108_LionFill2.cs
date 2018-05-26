@@ -14,7 +14,7 @@ namespace OpenTkEssTest
     {
         GLRenderSurface _glsx;
         SpriteShape lionShape;
-        VertexStore lionVxs;
+
         GLPainter painter;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
@@ -24,8 +24,9 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+            SvgRenderVx svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile("d:\\WImageTest\\lion.svg");
+            lionShape = new SpriteShape(svgRenderVx);
+            
 
             //flip this lion vertically before use with openGL
             PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(

@@ -81,7 +81,6 @@ namespace LayoutFarm.WebDom.Parser
                     {
                         throw new NotSupportedException();
                     }
-                    break;
                 case CssParseState.Init:
                     {
                         switch (tkname)
@@ -237,7 +236,7 @@ namespace LayoutFarm.WebDom.Parser
                                 }
                                 break;
                             //----------------------------------------------------
-                               
+
                             //element combinator operators
                             case CssTokenName.Comma:
                                 {
@@ -246,7 +245,8 @@ namespace LayoutFarm.WebDom.Parser
                                 break;
                             case CssTokenName.Star:
                                 {
-                                }break;
+                                }
+                                break;
 
                             case CssTokenName.RAngle:
                                 {
@@ -532,6 +532,7 @@ namespace LayoutFarm.WebDom.Parser
                                 break;
                             case CssTokenName.LiteralString:
                                 {
+                                    //TODO: review css
                                     var literalValue = new string(this.textBuffer, start, len);
                                     throw new NotSupportedException();
                                 }

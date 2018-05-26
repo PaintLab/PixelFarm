@@ -31,18 +31,20 @@ namespace LayoutFarm.ContentManagers
     public class ImageContentManager
     {
         public event EventHandler<ImageRequestEventArgs> ImageLoadingRequest;
+
         LinkedList<ImageBinder> inputList = new LinkedList<ImageBinder>();
         LinkedList<ImageBinder> outputList = new LinkedList<ImageBinder>();
         ImageCacheSystem imageCacheLevel0 = new ImageCacheSystem();
 
         bool hasSomeInputHint;
-        //bool hasSomeOutputHint;
+       
         object outputListSync = new object();
         object inputListSync = new object();
         bool working = false;
         public ImageContentManager()
         {
             //TODO: review here**** 
+
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
         }
 
@@ -59,34 +61,40 @@ namespace LayoutFarm.ContentManagers
                     return;
                 }
                 working = true;
-            }
-
-
-
+            } 
+             
             int j = inputList.Count;
             //load image in this list
-            List<ImageBinder> tmploadingList = new List<ImageBinder>();
+
             //copy data out 
             for (int i = 0; i < j; ++i)
             {
                 var firstNode = inputList.First;
                 inputList.RemoveFirst();
                 ImageBinder binder = firstNode.Value;
-                //wait until finish this  .... 
-
+                //wait until finish this  ....  
 
                 //1. check from cache if not found
                 //then send request to external ... 
 
                 Image foundImage;
-                if (!this.imageCacheLevel0.TryGetCacheImage(
+                if (this.imageCacheLevel0.TryGetCacheImage(
                     binder.ImageSource,
                     out foundImage))
                 {
+                    //process image infomation
+                    //....  
+                    binder.SetImage(foundImage);
+                }
+                else
+                {
+                    //not found in cache => request image loader
+                    //image load/waiting should be done on another thread
+
                     this.ImageLoadingRequest(
                         this,
-                        new ContentManagers.ImageRequestEventArgs(
-                        binder));
+                        new ImageRequestEventArgs(binder));
+                    
                     //....
                     //process image infomation
                     //.... 
@@ -97,12 +105,6 @@ namespace LayoutFarm.ContentManagers
                         imageCacheLevel0.AddCacheImage(binder.ImageSource, binder.Image);
                     }
                 }
-                else
-                {
-                    //process image infomation
-                    //....  
-                    binder.SetImage(foundImage);
-                }
 
                 //next image
             }
@@ -110,22 +112,9 @@ namespace LayoutFarm.ContentManagers
             {
                 hasSomeInputHint = false;
             }
-
-
-            //if (hasSomeOutputHint)
-            //{
-            //    lock (outputListSync)
-            //    {
-            //        if (outputList.Count > 0)
-            //        {
-            //        }
-            //    }
-            //}
+             
             working = false;
-        }
-
-
-
+        } 
         public void AddRequestImage(ImageBinder contentReq)
         {
             if (contentReq.ImageSource == null && !contentReq.HasLazyFunc)

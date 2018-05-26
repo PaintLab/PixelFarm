@@ -88,6 +88,7 @@ namespace LayoutFarm
                 }
                 else
                 {
+                    //default?
                     return 16;
                 }
             }
@@ -101,7 +102,7 @@ namespace LayoutFarm
                     return this._image.Height;
                 }
                 else
-                {
+                {   //default?
                     return 16;
                 }
             }
@@ -109,6 +110,7 @@ namespace LayoutFarm
 
         public void SetImage(PixelFarm.Drawing.Image image)
         {
+            //set image to this binder
             if (image != null)
             {
                 this._image = image;
@@ -136,6 +138,8 @@ namespace LayoutFarm
                 this.lazyLoadImgFunc(this);
             }
         }
+
+        //
         public static readonly ImageBinder NoImage = new NoImageImageBinder();
         class NoImageImageBinder : ImageBinder
         {

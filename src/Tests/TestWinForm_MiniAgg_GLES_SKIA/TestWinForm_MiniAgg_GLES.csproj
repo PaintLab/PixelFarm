@@ -285,7 +285,6 @@
       <Name>TestSamples</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Samples\arrow2.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

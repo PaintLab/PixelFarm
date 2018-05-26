@@ -372,17 +372,25 @@ namespace LayoutFarm.Text
 
             TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
             ILineSegmentList segmentList = this.Root.TextServices.BreakToLineSegments(ref textBufferSpan);
-            int segcount = segmentList.Count;
-            for (int i = 0; i < segcount; ++i)
+            if (segmentList != null)
             {
-                ILineSegment seg = segmentList[i];
-                if (seg.StartAt + seg.Length >= caret_char_index)
+                int segcount = segmentList.Count;
+                for (int i = 0; i < segcount; ++i)
                 {
-                    //stop at this segment
-                    startAt = seg.StartAt;
-                    len = seg.Length;
-                    return;
+                    ILineSegment seg = segmentList[i];
+                    if (seg.StartAt + seg.Length >= caret_char_index)
+                    {
+                        //stop at this segment
+                        startAt = seg.StartAt;
+                        len = seg.Length;
+                        return;
+                    }
                 }
+            }
+            else
+            {
+                //TODO: review here
+                //this is a bug!!!
             }
             //?
             startAt = 0;
@@ -436,7 +444,11 @@ namespace LayoutFarm.Text
         {
             currentLine = visualFlowLayer.GetTextLine(lineNumber);
             currentLineY = currentLine.Top;
+
+            //if current line is a blank line
+            //not first run => currentTextRun= null 
             currentTextRun = (EditableRun)currentLine.FirstRun;
+
             rCharOffset = 0;
             rPixelOffset = 0;
 

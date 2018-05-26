@@ -108,8 +108,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
         //special option 
         public LionOutlineSprite()
         {
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
             this.Width = 500;
             this.Height = 500;
         }

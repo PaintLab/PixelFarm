@@ -24,8 +24,9 @@ namespace PixelFarm.Agg
         Vector2 center;
         RectD boundingRect;
 
-        public SpriteShape()
+        public SpriteShape(SvgRenderVx svgRenderVx)
         {
+            _svgRenderVx = svgRenderVx;
         }
 
         public RectD Bounds
@@ -132,18 +133,15 @@ namespace PixelFarm.Agg
 
         }
 
-        public void ParseLion()
+        public void LoadFromSvg(SvgRenderVx svgRenderVx)
         {
-            _svgRenderVx = PixelFarm.Agg.LionDataStore.GetLion();
+            _svgRenderVx = svgRenderVx;
             UpdateBounds();
-            //find center
-
-            //numPaths = PixelFarm.Agg.LionDataStore.LoadLionData(path, colors, pathIndexList);
-            //_lionVxs = path.Vxs;
-            //PixelFarm.Agg.BoundingRect.GetBoundingRect(_lionVxs, pathIndexList, numPaths, out boundingRect);
+            //find center 
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
+
         public void UpdateBounds()
         {
             //find bound
@@ -197,27 +195,6 @@ namespace PixelFarm.Agg
             }
             return false;
         }
-        //public static void UnsafeDirectSetData(SpriteShape lion,
-        //    int numPaths,
-        //    PathWriter pathStore,
-        //    Color[] colors,
-        //    int[] pathIndice)
-        //{
-        //    lion.path = pathStore;
-        //    lion.colors = colors;
-        //    lion.pathIndexList = pathIndice;
-        //    lion.numPaths = numPaths;
-        //    lion.UpdateBoundingRect();
-        //}
-        //void UpdateBoundingRect()
-        //{
-        //    PixelFarm.Agg.BoundingRect.GetBoundingRect(path.Vxs, pathIndexList, numPaths, out boundingRect);
-        //    center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-        //    center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
-        //}  //static string ColorToHex(Color c)
-        //{
 
-        //    return "#" + c.R.ToString("X") + c.G.ToString("X") + c.B.ToString("X");
-        //}
     }
 }
