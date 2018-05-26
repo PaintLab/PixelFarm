@@ -128,10 +128,23 @@ namespace PixelFarm.Agg.VertexSource
             double lasty = 0;
             double lastMoveX = 0;
             double lastMoveY = 0;
+
+
             do
             {
                 //this vertex
                 cmd = snapIter.GetNextVertex(out x, out y);
+#if DEBUG
+                if (VertexStore.dbugCheckNANs(x, y))
+                {
+                    int dbugIter = snapIter.dbugIterIndex;
+                }
+
+                //if (VertexStore.dbugCheckIfNAN(x, y))
+                //{
+                //    
+                //}
+#endif
                 switch (cmd)
                 {
                     case VertexCmd.P2c:

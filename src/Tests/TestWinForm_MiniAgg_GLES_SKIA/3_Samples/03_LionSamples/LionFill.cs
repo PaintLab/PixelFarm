@@ -112,14 +112,14 @@ namespace PixelFarm.Agg.Samples
         public override void Init()
         {
             // lion
-            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow02.svg"));
+            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
             lionList.Add(new MyTestSprite(s));
             //
             //lionFill.AutoFlipY = true;           
         }
         public override void KeyDown(int keycode)
         {
-            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow02.svg"));
+            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
             lionList.Add(new MyTestSprite(s) { JustMove = true });
             base.KeyDown(keycode);
         }

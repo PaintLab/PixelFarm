@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.VectorMath; 
+using PixelFarm.VectorMath;
 using Mini;
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Samples
@@ -68,11 +68,14 @@ namespace PixelFarm.Agg.Samples
                                 //TODO: review PixelCache here
                                 p.FillColor = brushPath.FillColor;
                                 p.Fill(brushPath.Vxs);
-                                if (brushPath.StrokeColor.alpha > 0)
-                                {
-                                    p.StrokeColor = Drawing.Color.Red;
-                                    p.Draw(brushPath.Vxs);
-                                }
+
+#if DEBUG
+                                //if (brushPath.StrokeColor.alpha > 0)
+                                //{
+                                //    p.StrokeColor = Drawing.Color.Red;
+                                //    p.Draw(brushPath.Vxs);
+                                //}
+#endif
                             }
                             break;
                     }
@@ -219,10 +222,16 @@ namespace PixelFarm.Agg.Samples
                         currentBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
                         currentBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
                         latestMousePoint = new PixelFarm.Drawing.Point(x, y);
+
+
+                        //
+                        // currentBrushPath.MakeSmoothPath();
                     }
                     break;
             }
         }
+
+
         public override void MouseDown(int x, int y, bool isRightButton)
         {
             this.lastMousePosX = x;

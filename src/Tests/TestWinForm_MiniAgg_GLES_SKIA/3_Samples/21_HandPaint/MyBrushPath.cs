@@ -118,37 +118,80 @@ namespace PixelFarm.Agg.Samples
             //string str1 = dbugDumpPointsToString(contPoints);
             //string str2 = dbugDumpPointsToString2(contPoints); 
             //var data2 = CurvePreprocess.RdpReduce(contPoints, 2);
-            var data2 = contPoints;
+            List<Vector2> data2 = contPoints;
             CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
             vxs = new VertexStore();
             int j = cubicBzs.Length;
             //1. 
-            if (j > 0)
+            if (j > 1)
             {
                 //1st
                 CubicBezier bz0 = cubicBzs[0];
                 vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
                 vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
-                vxs.AddCurve4To(
-                    bz0.p1.x, bz0.p1.y,
-                    bz0.p2.x, bz0.p2.y,
-                    bz0.p3.x, bz0.p3.y);
+                if (!bz0.HasSomeNanComponent)
+                {
+                    vxs.AddCurve4To(
+                        bz0.p1.x, bz0.p1.y,
+                        bz0.p2.x, bz0.p2.y,
+                        bz0.p3.x, bz0.p3.y);
+                }
+                else
+                {
+                    vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                }
+
 
                 //-------------------------------
                 for (int i = 1; i < j; ++i) //start at 1
                 {
                     CubicBezier bz = cubicBzs[i];
-                    vxs.AddCurve4To(
-                        bz.p1.x, bz.p1.y,
-                        bz.p2.x, bz.p2.y,
-                        bz.p3.x, bz.p3.y);
+                    if (!bz.HasSomeNanComponent)
+                    {
+                        vxs.AddCurve4To(
+                            bz.p1.x, bz.p1.y,
+                            bz.p2.x, bz.p2.y,
+                            bz.p3.x, bz.p3.y);
+                    }
+                    else
+                    {
+                        vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                    }
+                    
                 }
                 //-------------------------------
                 //close
                 //TODO: we not need this AddLineTo()
                 vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                vxs.AddCloseFigure();
             }
-            vxs.AddCloseFigure();
+            else if (j == 1)
+            {
+                CubicBezier bz0 = cubicBzs[0];
+                vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
+               
+                if (!bz0.HasSomeNanComponent)
+                {
+                    vxs.AddCurve4To(
+                        bz0.p1.x, bz0.p1.y,
+                        bz0.p2.x, bz0.p2.y,
+                        bz0.p3.x, bz0.p3.y);
+                }
+                else
+                {
+                    vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                }
+
+                 
+
+            }
+            else
+            {
+                // = 0
+            }
+
+
+            //TODO: review here
             VertexStore v2 = new VertexStore();
             cflat.MakeVxs(vxs, v2);
             vxs = v2;
