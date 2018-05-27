@@ -285,6 +285,10 @@
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
       <Name>TestSamples</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WinFormTestBed\WinFormTestBed.csproj">
+      <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>
+      <Name>WinFormTestBed</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Samples\arrow2.svg">

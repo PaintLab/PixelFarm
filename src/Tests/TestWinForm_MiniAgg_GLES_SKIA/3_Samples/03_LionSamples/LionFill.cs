@@ -119,8 +119,26 @@ namespace PixelFarm.Agg.Samples
         }
         public override void KeyDown(int keycode)
         {
-            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
-            lionList.Add(new MyTestSprite(s) { JustMove = true });
+            //temp 
+            System.Windows.Forms.Keys k = (System.Windows.Forms.Keys)keycode;
+            switch (k)
+            {
+                case System.Windows.Forms.Keys.A:
+                    {
+                        SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
+                        lionList.Add(new MyTestSprite(s) { JustMove = true });
+                    }
+                    break;
+                case System.Windows.Forms.Keys.Q:
+                    {
+                        //test add box control ...
+
+
+                    }
+                    break;
+            }
+
+
             base.KeyDown(keycode);
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
