@@ -76,55 +76,86 @@ namespace LayoutFarm
             };
         }
 
-        //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
-        {
-            public UIControllerBox(int w, int h)
-                : base(w, h)
-            {
-            }
-            public LayoutFarm.UI.UIBox TargetBox
-            {
-                get;
-                set;
-            }
-            public override void Walk(UIVisitor visitor)
-            {
-                visitor.BeginElement(this, "ctrlbox");
-                this.Describe(visitor);
-                visitor.EndElement();
-            }
-        }
+
     }
 
-
-
-    [DemoNote("3.2.1 DemoControllerBox")]
-    class Demo_ControllerBoxs3_1 : DemoBase
+    //-----------------------------------------------------------------
+    class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
     {
-        UIControllerBox controllerBox1;
-
-
-        UIControllerBox _boxLeftTop;
-        UIControllerBox _boxLeftBottom;
-        UIControllerBox _boxRightTop;
-        UIControllerBox _boxRightBottom;
-
-        List<UIControllerBox> _cornerControllers = new List<UIControllerBox>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        public UIControllerBox(int w, int h)
+            : base(w, h)
         {
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
-            box1.BackColor = Color.Red;
-            box1.SetLocation(10, 10);
-            //box1.dbugTag = 1;
-            SetupActiveBoxProperties(box1);
-            viewport.AddContent(box1);
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
-            box2.SetLocation(50, 50);
-            //box2.dbugTag = 2;
-            SetupActiveBoxProperties(box2);
-            viewport.AddContent(box2);
+        }
+        public LayoutFarm.UI.UIBox TargetBox
+        {
+            get;
+            set;
+        }
+        public override void Walk(UIVisitor visitor)
+        {
+            visitor.BeginElement(this, "ctrlbox");
+            this.Describe(visitor);
+            visitor.EndElement();
+        }
+    }
+    class RectBoxController
+    {
+        UIControllerBox _boxLeftTop = new UIControllerBox(20, 20);
+        UIControllerBox _boxLeftBottom = new UIControllerBox(20, 20);
+        UIControllerBox _boxRightTop = new UIControllerBox(20, 20);
+        UIControllerBox _boxRightBottom = new UIControllerBox(20, 20);
+        UIControllerBox controllerBox1 = new UIControllerBox(40, 40);
+        List<UIControllerBox> _cornerControllers = new List<UIControllerBox>();
 
+        public RectBoxController()
+        {
+
+        }
+
+
+
+        public void UpdateControllerBoxes(LayoutFarm.UI.UIBox box)
+        {
+
+            //move controller here 
+            controllerBox1.SetBounds(box.Left - 5, box.Top - 5,
+                                     box.Width + 10, box.Height + 10);
+            controllerBox1.Visible = true;
+            controllerBox1.TargetBox = box;
+
+            {
+                //left-top
+                UIControllerBox ctrlBox = _boxLeftTop;
+                ctrlBox.SetBounds(box.Left - 5, box.Top - 5, 5, 5);
+                ctrlBox.TargetBox = box;
+                ctrlBox.Visible = true;
+            }
+            {
+                //right-top
+                UIControllerBox ctrlBox = _boxRightTop;
+                ctrlBox.SetBounds(box.Left + box.Width, box.Top - 5, 5, 5);
+                ctrlBox.TargetBox = box;
+                ctrlBox.Visible = true;
+            }
+            {
+                //left-bottom
+                UIControllerBox ctrlBox = _boxLeftBottom;
+                ctrlBox.SetBounds(box.Left - 5, box.Top + box.Height, 5, 5);
+                ctrlBox.TargetBox = box;
+                ctrlBox.Visible = true;
+            }
+            {
+                //right-bottom
+                UIControllerBox ctrlBox = _boxRightBottom;
+                ctrlBox.SetBounds(box.Left + box.Width, box.Top + box.Height, 5, 5);
+                ctrlBox.TargetBox = box;
+                ctrlBox.Visible = true;
+            }
+        }
+
+
+        public void Init(SampleViewport viewport)
+        {
             //------------
             controllerBox1 = new UIControllerBox(40, 40);
             {
@@ -198,83 +229,15 @@ namespace LayoutFarm
                 //update other controller
                 UpdateControllerBoxes(target1);
             };
-
-            //------------
         }
-        void UpdateControllerBoxes(LayoutFarm.UI.UIBox box)
+
+        public UIControllerBox ControllerBoxMain
         {
-
-            //move controller here 
-            controllerBox1.SetBounds(box.Left - 5, box.Top - 5,
-                                     box.Width + 10, box.Height + 10);
-            controllerBox1.Visible = true;
-            controllerBox1.TargetBox = box;
-
-            {
-                //left-top
-                UIControllerBox ctrlBox = _boxLeftTop;
-                ctrlBox.SetBounds(box.Left - 5, box.Top - 5, 5, 5);
-                ctrlBox.TargetBox = box;
-                ctrlBox.Visible = true;
-            }
-            {
-                //right-top
-                UIControllerBox ctrlBox = _boxRightTop;
-                ctrlBox.SetBounds(box.Left + box.Width, box.Top - 5, 5, 5);
-                ctrlBox.TargetBox = box;
-                ctrlBox.Visible = true;
-            }
-            {
-                //left-bottom
-                UIControllerBox ctrlBox = _boxLeftBottom;
-                ctrlBox.SetBounds(box.Left - 5, box.Top + box.Height, 5, 5);
-                ctrlBox.TargetBox = box;
-                ctrlBox.Visible = true;
-            }
-            {
-                //right-bottom
-                UIControllerBox ctrlBox = _boxRightBottom;
-                ctrlBox.SetBounds(box.Left + box.Width, box.Top + box.Height, 5, 5);
-                ctrlBox.TargetBox = box;
-                ctrlBox.Visible = true;
-            }
+            get { return controllerBox1; }
         }
-        void SetupCornerBoxController(SampleViewport viewport, UIControllerBox box)
-        {
-            Color c = KnownColors.FromKnownColor(KnownColor.Orange);
-            box.BackColor = new Color(100, c.R, c.G, c.B);
-            box.SetLocation(200, 200);
-            //controllerBox1.dbugTag = 3;
-            box.Visible = false;
-            SetupControllerBoxProperties2(box);
-            viewport.AddContent(box);
-            //
-            _cornerControllers.Add(box);
-        }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
-        {
-            //1. mouse down         
-            box.MouseDown += (s, e) =>
-            {
-                box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
-                e.MouseCursorStyle = MouseCursorStyle.Pointer;
-                //--------------------------------------------
-                e.SetMouseCapture(controllerBox1);
 
-              
-                //--------------------------------------------
-                //move corner controllers
-                UpdateControllerBoxes(box);
-            };
-            //2. mouse up
-            box.MouseUp += (s, e) =>
-            {
-                e.MouseCursorStyle = MouseCursorStyle.Default;
-                box.BackColor = Color.LightGray;
-                controllerBox1.Visible = false;
-                controllerBox1.TargetBox = null;
-            };
-        }
+
+
 
 
         void SetupControllerBoxProperties(UIControllerBox controllerBox)
@@ -326,25 +289,67 @@ namespace LayoutFarm
                 e.CancelBubbling = true;
             };
         }
-        //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+        void SetupCornerBoxController(SampleViewport viewport, UIControllerBox box)
         {
-            public UIControllerBox(int w, int h)
-                : base(w, h)
-            {
-            }
-            public LayoutFarm.UI.UIBox TargetBox
-            {
-                get;
-                set;
-            }
-            public override void Walk(UIVisitor visitor)
-            {
-                visitor.BeginElement(this, "ctrlbox");
-                this.Describe(visitor);
-                visitor.EndElement();
-            }
+            Color c = KnownColors.FromKnownColor(KnownColor.Orange);
+            box.BackColor = new Color(100, c.R, c.G, c.B);
+            box.SetLocation(200, 200);
+            //controllerBox1.dbugTag = 3;
+            box.Visible = false;
+            SetupControllerBoxProperties2(box);
+            viewport.AddContent(box);
+            //
+            _cornerControllers.Add(box);
         }
+    }
+
+    [DemoNote("3.2.1 DemoControllerBox")]
+    class Demo_ControllerBoxs3_1 : DemoBase
+    {
+        RectBoxController rectBoxController = new RectBoxController();
+
+
+
+        protected override void OnStartDemo(SampleViewport viewport)
+        {
+            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            box1.BackColor = Color.Red;
+            box1.SetLocation(10, 10);
+            //box1.dbugTag = 1;
+            SetupActiveBoxProperties(box1);
+            viewport.AddContent(box1);
+            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
+            box2.SetLocation(50, 50);
+            //box2.dbugTag = 2;
+            SetupActiveBoxProperties(box2);
+            viewport.AddContent(box2);
+            rectBoxController.Init(viewport);
+            //------------
+        }
+
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        {
+            //1. mouse down         
+            box.MouseDown += (s, e) =>
+            {
+                box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
+                e.MouseCursorStyle = MouseCursorStyle.Pointer;
+                //--------------------------------------------
+                e.SetMouseCapture(rectBoxController.ControllerBoxMain);
+                rectBoxController.UpdateControllerBoxes(box);
+
+            };
+            //2. mouse up
+            box.MouseUp += (s, e) =>
+            {
+                e.MouseCursorStyle = MouseCursorStyle.Default;
+                box.BackColor = Color.LightGray;
+                //controllerBox1.Visible = false;
+                //controllerBox1.TargetBox = null;
+            };
+        }
+
+
     }
 }
 
