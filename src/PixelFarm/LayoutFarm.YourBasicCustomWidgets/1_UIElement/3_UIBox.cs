@@ -140,6 +140,15 @@ namespace LayoutFarm.UI
                 }
             }
         }
+        public int Right
+        {
+            get { return this.Left + Width; }
+        }
+        public int Bottom
+        {
+            get { return this.Top + Height; }
+        }
+
         public Point Position
         {
             get
