@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-2017, WinterDev
 // some code from icu-project
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
@@ -27,7 +27,9 @@ namespace Typography.TextBreak
         }
         public char FirstChar { get { return firstChar; } }
         public char LastChar { get { return lastChar; } }
-        public void LoadFromDataStream(Stream dataStream)
+
+
+        public void LoadFromTextfile(string filename)
         {
             //once only            
             if (textBuffer != null)
@@ -38,21 +40,19 @@ namespace Typography.TextBreak
             {
                 throw new NotSupportedException();
             }
-            if (dataStream == null)
-                return;
 
             //---------------
             Dictionary<char, DevelopingWordGroup> wordGroups = new Dictionary<char, DevelopingWordGroup>();
-
-            using (StreamReader reader = new StreamReader(dataStream))
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            using (StreamReader reader = new StreamReader(fs))
             {
                 //init with filesize
-                textBuffer = new TextBuffer((int)dataStream.Length);
+                textBuffer = new TextBuffer((int)fs.Length);
                 string line = reader.ReadLine();
                 while (line != null)
                 {
-                    line = line.Trim();
-                    char[] lineBuffer = line.ToCharArray();
+                    
+                    char[] lineBuffer = line.Trim().ToCharArray();
                     int lineLen = lineBuffer.Length;
                     char c0;
                     if (lineLen > 0 && (c0 = lineBuffer[0]) != '#')
@@ -84,7 +84,7 @@ namespace Typography.TextBreak
                 }
 
                 reader.Close();
-
+                fs.Close();
             }
             //------------------------------------------------------------------
             textBuffer.Freeze();
@@ -171,8 +171,7 @@ namespace Typography.TextBreak
                 }
                 return true;
             }
-            return false;
-            //return this.startAt == another.startAt && this.len == another.len;
+            return false; 
         }
     }
 
@@ -214,7 +213,6 @@ namespace Typography.TextBreak
     {
         public int startAt;
         public ushort len;
-
     }
 
 

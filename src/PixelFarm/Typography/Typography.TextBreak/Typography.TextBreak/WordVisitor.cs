@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-2017, WinterDev
 // some code from icu-project
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
@@ -19,7 +19,11 @@ namespace Typography.TextBreak
     public class WordVisitor
     {
         CustomBreaker ownerBreak;
+        //
         List<int> breakAtList = new List<int>();
+        List<ushort> _breakerEngineCode = new List<ushort>();
+
+        //
         char[] buffer;
         int bufferLen;
         int startIndex;
@@ -41,21 +45,7 @@ namespace Typography.TextBreak
             this.startIndex = currentIndex = index;
             this.currentChar = buffer[currentIndex];
             breakAtList.Clear();
-            tempCandidateBreaks.Clear();
             latestBreakAt = 0;
-        }
-        static char[] s_empty = new char[0];
-        public void ResetText()
-        {
-            
-            buffer = s_empty;
-            this.bufferLen = 0;        
-            startIndex = 0;
-            this.currentChar = '\0';
-            breakAtList.Clear();
-            tempCandidateBreaks.Clear();
-            latestBreakAt = 0;
-
         }
         public VisitorState State
         {
@@ -72,20 +62,17 @@ namespace Typography.TextBreak
         }
 
 
+
         public bool IsEnd
         {
             get { return currentIndex >= bufferLen - 1; }
-        }
-
-
+        } 
         public void AddWordBreakAt(int index)
         {
-
+            
 #if DEBUG
             if (index == latestBreakAt)
             {
-                Console.WriteLine("BUG!");
-                return;                
                 throw new NotSupportedException();
             }
 #endif

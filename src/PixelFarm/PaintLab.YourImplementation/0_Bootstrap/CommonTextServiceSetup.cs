@@ -4,7 +4,7 @@ using System.IO;
 using Typography.TextServices;
 namespace YourImplementation
 {
-    class MyIcuDataProvider : Typography.TextBreak.IIcuDataProvider
+    class MyIcuDataProvider 
     {
         public string icuDir;
 
@@ -55,7 +55,7 @@ namespace YourImplementation
             {
                 s_icuDataProvider.icuDir = typographyDir;
             }
-            Typography.TextBreak.CustomBreakerBuilder.Setup(s_icuDataProvider);
+            Typography.TextBreak.CustomBreakerBuilder.Setup(typographyDir);
             s_isInit = true;
         }
     }

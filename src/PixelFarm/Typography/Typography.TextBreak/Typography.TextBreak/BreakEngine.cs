@@ -1,16 +1,31 @@
-﻿//MIT, 2014-2016, WinterDev
+﻿//MIT, 2016-2017, WinterDev
+//some code from ICU project with BSD license
 
- 
-namespace Typography.TextBreak.ICU
+namespace Typography.TextBreak
 {
-
     public enum TextBreakKind
     {
         Word,
         Sentence,
     }
 
-    public delegate void OnBreak(SplitBound splitBound);
+    public delegate void OnBreak(BreakBounds breakBounds);
+
+    public class BreakBounds
+    {
+        public int startIndex;
+        public int length;
+        public bool stopNext;
+        public WorkKind kind;
+    }
+    public enum WorkKind
+    {
+        Whitespace,
+        NewLine,
+        Text,
+        Number,
+        Punc
+    }
     public abstract class TextBreaker
     {
         public abstract void DoBreak(char[] input, int start, int len, OnBreak onbreak);
@@ -19,20 +34,13 @@ namespace Typography.TextBreak.ICU
             get;
             set;
         }
-        public void DoBreak(string input, OnBreak onbreak)
+        public void DoBreak(char[] charBuff, OnBreak onbreak)
         {
-            IsCanceled = false;//reset
-            char[] charBuff = input.ToCharArray();
+            IsCanceled = false;//reset 
             //to end
             DoBreak(charBuff, 0, charBuff.Length, onbreak);
         }
-        public void DoBreak(string input, int start, int len, OnBreak onbreak)
-        {
-            IsCanceled = false;//reset
-            char[] charBuff = input.ToCharArray();
-            //
-            DoBreak(charBuff, start, len, onbreak);
-        }
+       
         protected bool IsCanceled { get; set; }
         /// <summary>
         /// cancel current breaking task
@@ -55,4 +63,5 @@ namespace Typography.TextBreak.ICU
         }
 #endif
     }
+
 }

@@ -1,46 +1,26 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-2017, WinterDev
 // some code from icu-project
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 
 
-using System.IO;
 namespace Typography.TextBreak
 {
-    public interface IIcuDataProvider
-    {
-        Stream GetDataStream(string strmUrl);
-    }
     public static class CustomBreakerBuilder
     {
         static ThaiDictionaryBreakingEngine thaiDicBreakingEngine;
         static LaoDictionaryBreakingEngine laoDicBreakingEngine;
         static bool isInit;
-        static IIcuDataProvider s_dataProvider;
-        public static void Setup(IIcuDataProvider dataProvider)
-        {
-            if (isInit) return;
 
-            s_dataProvider = dataProvider;
-            InitAllDics();
-
-            isInit = true;
-        }
         static void InitAllDics()
         {
-             
-
             if (thaiDicBreakingEngine == null)
             {
                 var customDic = new CustomDic();
                 thaiDicBreakingEngine = new ThaiDictionaryBreakingEngine();
                 thaiDicBreakingEngine.SetDictionaryData(customDic);//add customdic to the breaker
                 customDic.SetCharRange(thaiDicBreakingEngine.FirstUnicodeChar, thaiDicBreakingEngine.LastUnicodeChar);
-
-                using (Stream data = s_dataProvider.GetDataStream("thaidict.txt"))
-                {
-                    customDic.LoadFromDataStream(data);
-                }
+                customDic.LoadFromTextfile(DataDir + "/thaidict.txt"); 
             }
             if (laoDicBreakingEngine == null)
             {
@@ -48,14 +28,24 @@ namespace Typography.TextBreak
                 laoDicBreakingEngine = new LaoDictionaryBreakingEngine();
                 laoDicBreakingEngine.SetDictionaryData(customDic);//add customdic to the breaker
                 customDic.SetCharRange(laoDicBreakingEngine.FirstUnicodeChar, laoDicBreakingEngine.LastUnicodeChar);
-                using (Stream data = s_dataProvider.GetDataStream("laodict.txt"))
-                {
-                    customDic.LoadFromDataStream(data);
-                }
+                customDic.LoadFromTextfile(DataDir + "/laodict.txt");
             }
-
         }
-         
+
+        static string DataDir
+        {
+            get;
+            set;
+        }
+        public static void Setup(string dataDir)
+        {
+            if (isInit) return;
+
+            DataDir = dataDir;
+            InitAllDics();
+
+            isInit = true;
+        }
         public static CustomBreaker NewCustomBreaker()
         {
             if (!isInit)
