@@ -84,11 +84,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return "visible_clip" + this.gx.VisibleClipBounds.ToString();
         }
-#endif
-
-
-
-
+#endif 
         public void CloseCanvas()
         {
             if (isDisposed)

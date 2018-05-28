@@ -41,6 +41,11 @@ namespace PixelFarm.Drawing.GLES2
             this.StrokeWidth = 1;
         }
 
+        public override void Dispose()
+        {
+
+            //TODO: review here
+        }
         public override string ToString()
         {
             return "visible_clip?";

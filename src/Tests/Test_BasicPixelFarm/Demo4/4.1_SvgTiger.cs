@@ -50,7 +50,7 @@ namespace LayoutFarm
 
 
 
-            
+
 
             //-------- 
             rectBoxController.Init();
@@ -81,12 +81,22 @@ namespace LayoutFarm
                 {
                     //test copy back image buffer from current rect area
 
-                    DrawBoard gdiDrawBoard = DrawBoardCreator.CreateNewDrawBoard(1, 50, 50);
-                    _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, 50, 50));
-                    var img2 = new ActualImage(50, 50);
-                    //copy content from drawboard to target image and save
-                    gdiDrawBoard.RenderTo(img2, 0, 0, 50, 50);
-                    img2.dbugSaveToPngFile("d:\\WImageTest\\ddd001.png");
+#if DEBUG
+                    //test save some area
+                    int w = rectBoxController.ControllerBoxMain.Width;
+                    int h = rectBoxController.ControllerBoxMain.Height;
+
+                    using (DrawBoard gdiDrawBoard = DrawBoardCreator.CreateNewDrawBoard(1, w, h))
+                    {
+                        gdiDrawBoard.OffsetCanvasOrigin(rectBoxController.ControllerBoxMain.Left, rectBoxController.ControllerBoxMain.Top);
+                        _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, w, h));
+                        var img2 = new ActualImage(w, h);
+                        //copy content from drawboard to target image and save
+                        gdiDrawBoard.RenderTo(img2, 0, 0, w, h);
+
+                        img2.dbugSaveToPngFile("d:\\WImageTest\\ddd001.png");
+                    }
+#endif                    
 
                 }
             };

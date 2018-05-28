@@ -71,13 +71,27 @@ namespace PixelFarm.Drawing.WinGdi
             unsafe
             {
                 Agg.ActualImage img = destImg as Agg.ActualImage;
-                var tmpPtr = Agg.ActualImage.GetBufferPtr(img);
-                byte* head = (byte*)tmpPtr.Ptr;
-                _gdigsx.RenderTo(head);
-                tmpPtr.Release();
+                if (img != null)
+                {
+                    var tmpPtr = Agg.ActualImage.GetBufferPtr(img);
+                    byte* head = (byte*)tmpPtr.Ptr;
+                    _gdigsx.RenderTo(head);
+                    tmpPtr.Release();
+                }
+            }
+        }
+        public override void Dispose()
+        {
+            if (_gdigsx != null)
+            {
+                _gdigsx.CloseCanvas();
+                _gdigsx = null;
             }
 
-
+            if (_painter != null)
+            {
+                _painter = null;
+            }
         }
 
         Agg.AggPainter _painter;
