@@ -19,6 +19,10 @@ namespace PixelFarm.Drawing
         {
             return vxs.GetVertex(currentIterIndex++, out x, out y);
         }
+
+#if DEBUG
+        public int dbugIterIndex { get { return currentIterIndex; } }
+#endif
     }
 
     public struct VertexStoreSnap
@@ -40,7 +44,7 @@ namespace PixelFarm.Drawing
         {
             get { return this.startAt; }
         }
-         
+
         public VertexSnapIter GetVertexSnapIter()
         {
             return new VertexSnapIter(this);

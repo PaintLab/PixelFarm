@@ -36,11 +36,7 @@ namespace PixelFarm.Agg
     {
         int _lenInBytes; //in bytes
         System.Runtime.InteropServices.GCHandle handle1;
-        //public TempMemPtr(byte[] buffer)
-        //{
-        //    handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
-        //    this._lenInBytes = buffer.Length;
-        //}
+
         public TempMemPtr(int[] buffer) //in element count
         {
             handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
@@ -240,7 +236,7 @@ namespace PixelFarm.Agg
 
             return buff2;
         }
-    
+
         public static void SaveImgBufferToPngFile(int[] imgBuffer, int stride, int width, int height, string filename)
         {
             if (s_saveToPngFileDel != null)
@@ -300,6 +296,41 @@ namespace PixelFarm.Agg
                 {
                     byte* destHead2 = (byte*)destHead;
                     for (int line = 0; line < h; ++line)
+                    {
+                        //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
+                        NaitveMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
+                        srcIndex += srcStride;
+                        destHead2 += destStride;
+                    }
+                }
+                srcBufferPtr.Release();
+            }
+            return buff2;
+        }
+
+        public static int[] CopyImgBuffer(ActualImage src, int srcX, int srcY, int srcW, int srcH)
+        {
+            //calculate stride for the width 
+            int destStride = ActualImage.CalculateStride(srcW, PixelFormat.ARGB32);
+            int newBmpW = destStride / 4;
+
+            int[] buff2 = new int[newBmpW * srcH];
+            unsafe
+            {
+
+                TempMemPtr srcBufferPtr = ActualImage.GetBufferPtr(src);
+                byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
+                int srcIndex = 0;
+                int srcStride = src.Stride;
+                fixed (int* destHead = &buff2[0])
+                {
+                    byte* destHead2 = (byte*)destHead;
+
+                    //move to specific src line
+                    srcIndex += srcStride * srcY;
+
+                    int lineEnd = srcY + srcH;
+                    for (int line = srcY; line < lineEnd; ++line)
                     {
                         //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
                         NaitveMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);

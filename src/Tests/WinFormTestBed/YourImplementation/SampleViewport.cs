@@ -3,6 +3,7 @@
 using PaintLab;
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
+using LayoutFarm.UI;
 
 namespace LayoutFarm
 {
@@ -84,11 +85,6 @@ namespace LayoutFarm
             imageContentMan.AddRequestImage(clientImgBinder);
             return clientImgBinder;
         }
-
-        public Image LoadImage(string imgName)
-        {
-            return LoadBitmap(imgName);
-        }
         public ImageBinder GetImageBinder2(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
@@ -97,6 +93,11 @@ namespace LayoutFarm
             return clientImgBinder;
         }
 
+        public Image LoadImage(string imgName)
+        {
+            return LoadBitmap(imgName);
+        }
+        
         //----------------------------------------
 
         UIRootElement _uiRootElement;

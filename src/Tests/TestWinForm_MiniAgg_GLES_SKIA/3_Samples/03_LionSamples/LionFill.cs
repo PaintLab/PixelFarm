@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Samples
         public override void Init()
         {
             lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg")));
-            lionFill.AutoFlipY = true;
+            //lionFill.AutoFlipY = true;
         }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -109,18 +109,38 @@ namespace PixelFarm.Agg.Samples
         MyTestSprite _hitLion;
         bool hitOnLion;
         List<MyTestSprite> lionList = new List<MyTestSprite>();
+
+
         public override void Init()
         {
             // lion
-            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow02.svg"));
+            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
             lionList.Add(new MyTestSprite(s));
             //
             //lionFill.AutoFlipY = true;           
         }
         public override void KeyDown(int keycode)
         {
-            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow02.svg"));
-            lionList.Add(new MyTestSprite(s) { JustMove = true });
+            //temp 
+            System.Windows.Forms.Keys k = (System.Windows.Forms.Keys)keycode;
+            switch (k)
+            {
+                case System.Windows.Forms.Keys.A:
+                    {
+                        SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
+                        lionList.Add(new MyTestSprite(s) { JustMove = true });
+                    }
+                    break;
+                case System.Windows.Forms.Keys.Q:
+                    {
+                        //test add box control ...
+
+
+                    }
+                    break;
+            }
+
+
             base.KeyDown(keycode);
         }
         public override void Draw(PixelFarm.Drawing.Painter p)

@@ -4,7 +4,7 @@
 namespace PixelFarm.Drawing
 {
 
-    public abstract class DrawBoard
+    public abstract class DrawBoard : System.IDisposable
     {
 
         //------------------------------
@@ -75,6 +75,7 @@ namespace PixelFarm.Drawing
         //buffer
         public abstract void Clear(Color c);
         public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
+        public virtual void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH) { }
         //------------------------------------------------------- 
 
         //lines         
@@ -113,6 +114,7 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len);
         public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
+        public abstract void Dispose();
 
     }
 
@@ -174,6 +176,31 @@ namespace PixelFarm.Drawing
         {
             //TODO: review offset function
             drawBoard.OffsetCanvasOrigin(0, dy);
+        }
+    }
+
+
+
+
+    public static class DrawBoardCreator
+    {
+        public delegate DrawBoard CreateNewDrawBoardDelegate(int w, int h);
+        static System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate> _s_creators = new System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate>();
+        public static void RegisterCreator(int creatorName, CreateNewDrawBoardDelegate del)
+        {
+            _s_creators.Add(creatorName, del);
+        }
+        public static DrawBoard CreateNewDrawBoard(int name, int w, int h)
+        {
+            if (_s_creators.TryGetValue(name, out CreateNewDrawBoardDelegate foundCreator))
+            {
+                return foundCreator(w, h);
+            }
+            else
+            {
+                //not found this creator
+                return null;
+            }
         }
     }
 }

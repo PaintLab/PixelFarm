@@ -77,10 +77,9 @@ namespace PixelFarm.Agg.Imaging
             if (width > 0 && height > 0)
             {
                 this.width = width;
-                this.height = height;
-
-                this.actualImage = actualImage;
+                this.height = height; 
                 nativeWin32Dc = new Win32.NativeWin32MemoryDc(width, height, false);
+                this.actualImage = actualImage;
 
                 return;
             }

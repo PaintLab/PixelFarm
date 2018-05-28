@@ -47,6 +47,46 @@ namespace PixelFarm.Drawing.Skia
 
             this.StrokeWidth = 1;
         }
+        public override void Dispose()
+        {
+
+
+            //TODO: implement this
+
+            if (stroke != null)
+            {
+                stroke.Dispose();
+                stroke = null;
+            }
+
+
+            if (fill != null)
+            {
+                fill.Dispose();
+                fill = null;
+            }
+
+
+            if (textFill != null)
+            {
+                textFill.Dispose();
+                textFill = null;
+            }
+
+            if (skCanvas != null)
+            {
+                this.skCanvas.Dispose();
+                skCanvas = null;
+            }
+
+            if (skBitmap != null)
+            {
+                this.skBitmap.Dispose();
+                skBitmap = null;
+            }
+
+
+        }
         public SKBitmap BackBmp
         {
             get { return this.skBitmap; }
@@ -67,7 +107,7 @@ namespace PixelFarm.Drawing.Skia
             textFill = new SKPaint();
             textFill.IsAntialias = true;
             //---------------------------------------            
-              
+
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
             //---------------------------------------

@@ -60,6 +60,7 @@
     <Compile Include="4.1_Composites\HingeRelation.cs" />
     <Compile Include="4.1_Composites\ListView.cs" />
     <Compile Include="4.1_Composites\Menu.cs" />
+    <Compile Include="4.1_Composites\RectBoxController.cs" />
     <Compile Include="4.1_Composites\ScrollBar.cs" />
     <Compile Include="4.1_Composites\TextBoxContainer.cs" />
     <Compile Include="4.1_Composites\TreeView.cs" />

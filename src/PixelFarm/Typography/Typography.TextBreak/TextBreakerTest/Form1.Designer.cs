@@ -30,7 +30,6 @@
         {
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.cmdReadDict = new System.Windows.Forms.Button();
             this.cmdManagedBreaker = new System.Windows.Forms.Button();
             this.cmdIcuTest = new System.Windows.Forms.Button();
             this.cmdPerformace1 = new System.Windows.Forms.Button();
@@ -52,19 +51,9 @@
             this.textBox1.Size = new System.Drawing.Size(264, 188);
             this.textBox1.TabIndex = 2;
             // 
-            // cmdReadDict
-            // 
-            this.cmdReadDict.Location = new System.Drawing.Point(283, 456);
-            this.cmdReadDict.Name = "cmdReadDict";
-            this.cmdReadDict.Size = new System.Drawing.Size(130, 35);
-            this.cmdReadDict.TabIndex = 3;
-            this.cmdReadDict.Text = "ReadDict not complete!";
-            this.cmdReadDict.UseVisualStyleBackColor = true;
-            this.cmdReadDict.Click += new System.EventHandler(this.cmdReadDict_Click);
-            // 
             // cmdManagedBreaker
             // 
-            this.cmdManagedBreaker.Location = new System.Drawing.Point(283, 44);
+            this.cmdManagedBreaker.Location = new System.Drawing.Point(283, 238);
             this.cmdManagedBreaker.Name = "cmdManagedBreaker";
             this.cmdManagedBreaker.Size = new System.Drawing.Size(130, 35);
             this.cmdManagedBreaker.TabIndex = 4;
@@ -74,7 +63,7 @@
             // 
             // cmdIcuTest
             // 
-            this.cmdIcuTest.Location = new System.Drawing.Point(12, 44);
+            this.cmdIcuTest.Location = new System.Drawing.Point(283, 279);
             this.cmdIcuTest.Name = "cmdIcuTest";
             this.cmdIcuTest.Size = new System.Drawing.Size(130, 35);
             this.cmdIcuTest.TabIndex = 5;
@@ -84,7 +73,7 @@
             // 
             // cmdPerformace1
             // 
-            this.cmdPerformace1.Location = new System.Drawing.Point(431, 85);
+            this.cmdPerformace1.Location = new System.Drawing.Point(499, 238);
             this.cmdPerformace1.Name = "cmdPerformace1";
             this.cmdPerformace1.Size = new System.Drawing.Size(130, 35);
             this.cmdPerformace1.TabIndex = 6;
@@ -100,7 +89,6 @@
             this.Controls.Add(this.cmdPerformace1);
             this.Controls.Add(this.cmdIcuTest);
             this.Controls.Add(this.cmdManagedBreaker);
-            this.Controls.Add(this.cmdReadDict);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.listBox1);
             this.Name = "Form1";
@@ -115,7 +103,6 @@
 
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button cmdReadDict;
         private System.Windows.Forms.Button cmdManagedBreaker;
         private System.Windows.Forms.Button cmdIcuTest;
         private System.Windows.Forms.Button cmdPerformace1;

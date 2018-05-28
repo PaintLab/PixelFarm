@@ -33,11 +33,11 @@ namespace PixelFarm.Agg
             set { _spriteShape = value; }
         }
 
-        public bool AutoFlipY
-        {
-            get;
-            set;
-        }
+        //public bool AutoFlipY
+        //{
+        //    get;
+        //    set;
+        //}
         public int SharpenRadius
         {
             get;

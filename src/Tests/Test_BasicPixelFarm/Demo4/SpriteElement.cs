@@ -2,32 +2,99 @@
 
 using System;
 using PixelFarm.Drawing;
+using PixelFarm.Agg;
+
 namespace LayoutFarm.UI
 {
-    public abstract class UIBox : UIElement, IScrollable, IBoxElement
+    public class SvgRenderElement : RenderElement
+    {
+        public SvgRenderElement(RootGraphic rootGfx, int width, int height)
+            : base(rootGfx, width, height)
+        {
+
+        }
+        public SvgRenderVx RenderVx { get; set; }
+        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        {
+            if (RenderVx != null)
+            {
+                canvas.DrawRenderVx(RenderVx, this.X, this.Y);
+            }
+        }
+        public override void ResetRootGraphics(RootGraphic rootgfx)
+        {
+
+        }
+    }
+
+
+
+    public class UISprite : UIElement
     {
         int _left;
         int _top;
         int _width;
         int _height;
 
-        int _innerContentW;
-        int _innerContentH;
-
         bool _hide;
         bool specificWidth;
         bool specificHeight;
-        public event EventHandler LayoutFinished;
+
+        SvgRenderElement _svgRenderElement;
+        SvgRenderVx _svgRenderVx;
+
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public UIBox(int width, int height)
+        public UISprite(int width, int height)
         {
             this._width = width;
             this._height = height;
             //default for box
             this.AutoStopMouseEventPropagation = true;
+        }
+        public void LoadSvg(SvgRenderVx renderVx)
+        {
+            _svgRenderVx = renderVx;
+            if (_svgRenderElement != null)
+            {
+                _svgRenderElement.RenderVx = renderVx;
+                RectD bound = renderVx.GetBounds();
+                this.SetSize((int)bound.Width, (int)bound.Height);
+            }
+        }
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+        }
+        public override void Walk(UIVisitor visitor)
+        {
+
+        }
+        protected override bool HasReadyRenderElement
+        {
+            get { return _svgRenderElement != null; }
+        }
+        public override RenderElement CurrentPrimaryRenderElement
+        {
+            get { return _svgRenderElement; }
+        }
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (_svgRenderElement == null)
+            {
+                _svgRenderElement = new SvgRenderElement(rootgfx, 10, 10);
+                _svgRenderElement.SetController(this);
+                if (_svgRenderVx != null)
+                {
+                    _svgRenderElement.RenderVx = _svgRenderVx;
+                    RectD bound = _svgRenderVx.GetBounds();
+                    this.SetSize((int)bound.Width, (int)bound.Height);
+                }
+            }
+            return _svgRenderElement;
+
         }
         public virtual void Focus()
         {
@@ -70,13 +137,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        protected void RaiseLayoutFinished()
-        {
-            if (this.LayoutFinished != null)
-            {
-                this.LayoutFinished(this, EventArgs.Empty);
-            }
-        }
+
         public virtual void SetLocation(int left, int top)
         {
             this._left = left;
@@ -250,35 +311,6 @@ namespace LayoutFarm.UI
         public virtual void PerformContentLayout()
         {
         }
-        public virtual int DesiredHeight
-        {
-            get
-            {
-                if (_userSpecificInnerContentSize)
-                {
-                    return _innerContentH;
-                }
-                else
-                {
-                    return this.Height;
-                }
-
-            }
-        }
-        public virtual int DesiredWidth
-        {
-            get
-            {
-                if (_userSpecificInnerContentSize)
-                {
-                    return _innerContentW;
-                }
-                else
-                {
-                    return this.Width;
-                }
-            }
-        }
 
         //----------------------------------- 
         public object Tag { get; set; }
@@ -292,24 +324,71 @@ namespace LayoutFarm.UI
             visitor.Attribute("width", this.Width);
             visitor.Attribute("height", this.Height);
         }
-
-
-
         public Rectangle Bounds
         {
             get { return new Rectangle(this.Left, this.Top, this.Width, this.Height); }
         }
-        void IBoxElement.ChangeElementSize(int w, int h)
+        //void IBoxElement.ChangeElementSize(int w, int h)
+        //{
+        //    this.SetSize(w, h);
+        //}
+        //int IBoxElement.MinHeight
+        //{
+        //    get
+        //    {
+        //        //TODO: use mimimum current font height ***
+        //        return this.Height;
+        //    }
+        //}
+    }
+
+    class BackBoardRenderElement : LayoutFarm.CustomWidgets.CustomRenderBox
+    {
+
+        DrawBoard _canvas;
+        public BackBoardRenderElement(RootGraphic rootgfx, int width, int height)
+           : base(rootgfx, width, height)
         {
-            this.SetSize(w, h);
+
         }
-        int IBoxElement.MinHeight
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-            get
-            {
-                //TODO: use mimimum current font height ***
-                return this.Height;
-            }
+            _canvas = canvas;
+            base.DrawBoxContent(canvas, updateArea);
+
         }
     }
+    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.EaseBox
+    {
+        BackBoardRenderElement _backboardRenderE;
+        public BackDrawBoardUI(int w, int h)
+            : base(w, h)
+        {
+
+        }
+        public override void Walk(UIVisitor visitor)
+        {
+
+        }
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (_backboardRenderE != null)
+            {
+                return _backboardRenderE;
+            }
+            _backboardRenderE = new BackBoardRenderElement(rootgfx, this.Width, this.Height);
+            _backboardRenderE.NeedClipArea = true;
+
+            SetPrimaryRenderElement(_backboardRenderE);
+            BuildChildrenRenderElement(_backboardRenderE);
+
+            return _backboardRenderE;
+        }
+        public void CopyImageBuffer(DrawBoard canvas, int x, int y, int w, int h)
+        {
+            //copy content image to specific img buffer
+
+        }
+    }
+
 }

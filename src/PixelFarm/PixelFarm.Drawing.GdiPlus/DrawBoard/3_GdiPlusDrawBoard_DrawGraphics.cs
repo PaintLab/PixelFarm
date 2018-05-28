@@ -53,6 +53,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override void Clear(PixelFarm.Drawing.Color c)
         {
             _gdigsx.Clear(c);
+          
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {

@@ -499,6 +499,9 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\Menu.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\Menu.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\RectBoxController.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\RectBoxController.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ScrollBar.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ScrollBar.cs</Link>
     </Compile>
@@ -2568,8 +2571,8 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs">
       <Link>PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs">
-      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs</Link>
@@ -2583,14 +2586,23 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\BurmeseBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\BurmeseBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\CjBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\CjBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\LaoDictionaryBreakingEngine.cs">
-      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\LaoDictionaryBreakingEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\ThaiDictionaryBreakingEngine.cs">
-      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\ThaiDictionaryBreakingEngine.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs</Link>

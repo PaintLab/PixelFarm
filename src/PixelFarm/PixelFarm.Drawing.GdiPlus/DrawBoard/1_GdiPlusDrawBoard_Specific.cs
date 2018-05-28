@@ -14,6 +14,8 @@
 // "The Art of War"
 
 using System;
+using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Drawing.WinGdi
 {
 
@@ -24,10 +26,20 @@ namespace PixelFarm.Drawing.WinGdi
         bool isDisposed;
 
         GdiPlusRenderSurface _gdigsx;
+
+
+        static Typography.TextServices.OpenFontStore openFontStore;
+        static GdiPlusDrawBoard()
+        {
+            DrawBoardCreator.RegisterCreator(1, (w, h) => new GdiPlusDrawBoard(0, 0, w, h));
+        }
+
         public GdiPlusDrawBoard(int left, int top, int width, int height)
             : this(0, 0, left, top, width, height)
         {
+
         }
+
         internal GdiPlusDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
@@ -50,6 +62,65 @@ namespace PixelFarm.Drawing.WinGdi
             return _gdigsx.ToString();
         }
 #endif
+
+        public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
+        {
+
+            //render back buffer to target image
+
+            unsafe
+            {
+                Agg.ActualImage img = destImg as Agg.ActualImage;
+                if (img != null)
+                {
+                    var tmpPtr = Agg.ActualImage.GetBufferPtr(img);
+                    byte* head = (byte*)tmpPtr.Ptr;
+                    _gdigsx.RenderTo(head);
+                    tmpPtr.Release();
+                }
+            }
+        }
+        public override void Dispose()
+        {
+            if (_gdigsx != null)
+            {
+                _gdigsx.CloseCanvas();
+                _gdigsx = null;
+            }
+
+            if (_painter != null)
+            {
+                _painter = null;
+            }
+        }
+
+        Agg.AggPainter _painter;
+        Agg.ActualImage _aggActualImg;
+        Agg.AggRenderSurface _aggRenderSurface;
+
+
+        public Painter GetAggPainter()
+        {
+            if (_painter == null)
+            {
+
+                _aggActualImg = new Agg.ActualImage(this.Width, this.Height);
+                _aggRenderSurface = new Agg.AggRenderSurface(_aggActualImg);
+                var aggPainter = new Agg.AggPainter(_aggRenderSurface);
+                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+
+                //ifont loader
+                if (openFontStore == null)
+                {
+                    openFontStore = new Typography.TextServices.OpenFontStore();
+                }
+
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, openFontStore);
+                aggPainter.TextPrinter = textPrinter;
+                _painter = aggPainter;
+            }
+            return _painter;
+        }
 
         public override void CloseCanvas()
         {
