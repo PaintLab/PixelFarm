@@ -45,11 +45,12 @@ namespace PixelFarm.Drawing.WinGdi
                 var svgRenderVx = renderVx as Agg.SvgRenderVx;
                 //request painter for this svg
                 Agg.AggPainter painter = (Agg.AggPainter)this.GetAggPainter();
+                painter.Clear(Color.Transparent);//clear with transparent color
                 //paint with painter
                 svgRenderVx.Render(painter);
                 //
                 Agg.ActualImage img = painter.RenderSurface.DestActualImage;
-               // img.dbugSaveToPngFile("d:\\WImageTest\\a001.png");
+                // img.dbugSaveToPngFile("d:\\WImageTest\\a001.png");
 
                 this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
             }
