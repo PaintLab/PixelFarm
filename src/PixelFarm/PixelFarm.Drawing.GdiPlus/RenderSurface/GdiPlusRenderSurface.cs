@@ -41,6 +41,12 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //-------------------------------
 
+
+
+
+
+
+
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
 #if DEBUG

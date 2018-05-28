@@ -28,7 +28,7 @@ namespace PixelFarm.Drawing.WinGdi
         GdiPlusRenderSurface _gdigsx;
 
 
-
+        static Typography.TextServices.OpenFontStore openFontStore;
         static GdiPlusDrawBoard()
         {
             DrawBoardCreator.RegisterCreator(1, (w, h) => new GdiPlusDrawBoard(0, 0, w, h));
@@ -98,6 +98,7 @@ namespace PixelFarm.Drawing.WinGdi
         Agg.ActualImage _aggActualImg;
         Agg.AggRenderSurface _aggRenderSurface;
 
+
         public Painter GetAggPainter()
         {
             if (_painter == null)
@@ -108,9 +109,15 @@ namespace PixelFarm.Drawing.WinGdi
                 var aggPainter = new Agg.AggPainter(_aggRenderSurface);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
-                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
-                _painter = aggPainter;
+                //ifont loader
+                if (openFontStore == null)
+                {
+                    openFontStore = new Typography.TextServices.OpenFontStore();
+                }
 
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, openFontStore);
+                aggPainter.TextPrinter = textPrinter;
+                _painter = aggPainter;
             }
             return _painter;
         }
