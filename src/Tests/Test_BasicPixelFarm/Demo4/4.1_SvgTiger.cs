@@ -24,6 +24,7 @@ namespace LayoutFarm
 
             PaintLab.Svg.SvgParser parser = new SvgParser();
             _backBoard = new BackDrawBoardUI(400, 400);
+            _backBoard.BackColor = Color.White;
             viewport.AddContent(_backBoard);
 
 
