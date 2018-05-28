@@ -41,6 +41,12 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //-------------------------------
 
+
+
+
+
+
+
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
 #if DEBUG
@@ -84,11 +90,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return "visible_clip" + this.gx.VisibleClipBounds.ToString();
         }
-#endif
-
-
-
-
+#endif 
         public void CloseCanvas()
         {
             if (isDisposed)

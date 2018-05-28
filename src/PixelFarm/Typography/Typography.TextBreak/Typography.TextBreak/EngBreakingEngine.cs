@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-2017, WinterDev
 // some code from icu-project
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
@@ -192,13 +192,15 @@ namespace Typography.TextBreak
                 }
 
             }
-            if (breakBounds.startIndex < start + len)
+
+            if (lexState != LexState.Init && 
+                breakBounds.startIndex < start + len)
             {
                 //some remaining data
                 breakBounds.length = (start + len) - breakBounds.startIndex;
-                onbreak(breakBounds);              
+                onbreak(breakBounds);             
             }
-            visitor.State = VisitorState.End;//
+            visitor.State = VisitorState.End;
         }
     }
 }
