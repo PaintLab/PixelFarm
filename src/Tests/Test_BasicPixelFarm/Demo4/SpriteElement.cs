@@ -53,6 +53,8 @@ namespace LayoutFarm.UI
             this._height = height;
             //default for box
             this.AutoStopMouseEventPropagation = true;
+
+            
         }
         public void LoadSvg(SvgRenderVx renderVx)
         {
@@ -60,7 +62,13 @@ namespace LayoutFarm.UI
             if (_svgRenderElement != null)
             {
                 _svgRenderElement.RenderVx = renderVx;
+                RectD bound = renderVx.GetBounds();
+                this.SetSize((int)bound.Width, (int)bound.Height); 
             }
+        }
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            base.OnMouseDown(e);
         }
         public override void Walk(UIVisitor visitor)
         {
@@ -79,11 +87,13 @@ namespace LayoutFarm.UI
             if (_svgRenderElement == null)
             {
                 _svgRenderElement = new SvgRenderElement(rootgfx, 10, 10);
+                _svgRenderElement.SetController(this);
                 if (_svgRenderVx != null)
                 {
                     _svgRenderElement.RenderVx = _svgRenderVx;
+                    RectD bound = _svgRenderVx.GetBounds();
+                    this.SetSize((int)bound.Width, (int)bound.Height);
                 }
-
             }
             return _svgRenderElement;
 
