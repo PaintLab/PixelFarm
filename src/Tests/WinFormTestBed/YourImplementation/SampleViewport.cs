@@ -3,6 +3,7 @@
 using PaintLab;
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
+using LayoutFarm.UI;
 
 namespace LayoutFarm
 {
