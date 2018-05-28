@@ -14,6 +14,8 @@
 // "The Art of War"
 
 using System;
+using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Drawing.WinGdi
 {
 
@@ -27,6 +29,7 @@ namespace PixelFarm.Drawing.WinGdi
         public GdiPlusDrawBoard(int left, int top, int width, int height)
             : this(0, 0, left, top, width, height)
         {
+
         }
         internal GdiPlusDrawBoard(
             int horizontalPageNum,
@@ -51,6 +54,29 @@ namespace PixelFarm.Drawing.WinGdi
         }
 #endif
 
+
+
+        Agg.AggPainter _painter;
+        Agg.ActualImage _aggActualImg;
+        Agg.AggRenderSurface _aggRenderSurface;
+
+        public Painter GetAggPainter()
+        {
+            if (_painter == null)
+            {
+
+                _aggActualImg = new Agg.ActualImage(this.Width, this.Height);
+                _aggRenderSurface = new Agg.AggRenderSurface(_aggActualImg);
+                var aggPainter = new Agg.AggPainter(_aggRenderSurface); 
+                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+
+                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
+                _painter = aggPainter;
+
+            }
+            return _painter;
+        }
+  
         public override void CloseCanvas()
         {
             if (isDisposed)

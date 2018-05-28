@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Samples
         public override void Init()
         {
             lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg")));
-            lionFill.AutoFlipY = true;
+            //lionFill.AutoFlipY = true;
         }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -109,6 +109,8 @@ namespace PixelFarm.Agg.Samples
         MyTestSprite _hitLion;
         bool hitOnLion;
         List<MyTestSprite> lionList = new List<MyTestSprite>();
+
+
         public override void Init()
         {
             // lion

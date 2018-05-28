@@ -76,7 +76,7 @@ namespace Mini
             }
             else
             {
-                AggRenderSurface aggsx = Initialize(myWidth, myHeight, 32);
+                AggRenderSurface aggsx = CreateAggRenderSurface(myWidth, myHeight, 32);
                 AggPainter aggPainter = new AggPainter(aggsx);
                 //set text printer for agg canvas painter
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
@@ -88,7 +88,7 @@ namespace Mini
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
         }
-        AggRenderSurface Initialize(int width, int height, int bitDepth)
+        AggRenderSurface CreateAggRenderSurface(int width, int height, int bitDepth)
         {
             if (width > 0 && height > 0)
             {

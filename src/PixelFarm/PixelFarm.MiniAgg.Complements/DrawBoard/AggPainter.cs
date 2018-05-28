@@ -82,16 +82,17 @@ namespace PixelFarm.Agg
         {
             get { return _vectorTool; }
         }
+       
+        public AggRenderSurface RenderSurface
+        {
+            get { return this._aggsx; }
+        }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {
             get { return _orientation; }
             set
             { _orientation = value; }
-        }
-        public AggRenderSurface RenderSurface
-        {
-            get { return this._aggsx; }
         }
         public override int Width
         {
