@@ -11,32 +11,105 @@ namespace LayoutFarm
     [DemoNote("4.1 DemoSvgTiger")]
     class Demo_SvgTiger : DemoBase
     {
+        LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
+        LayoutFarm.CustomWidgets.SimpleBox box1;
+        BackDrawBoardUI _backBoard;
+
+
+
+
         protected override void OnStartDemo(SampleViewport viewport)
         {
+
+
             PaintLab.Svg.SvgParser parser = new SvgParser();
+            _backBoard = new BackDrawBoardUI(400, 400);
+            viewport.AddContent(_backBoard);
+
+
+
+            box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            box1.BackColor = Color.Red;
+            box1.SetLocation(10, 10);
+            //box1.dbugTag = 1;
+            SetupActiveBoxProperties(box1);
+            _backBoard.AddChild(box1);
+
+            //----------------------
 
             //load lion svg
             string file = @"d:\\WImageTest\\lion.svg";
             string svgContent = System.IO.File.ReadAllText(file);
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
-
             //
             SvgRenderVx svgRenderVx = parser.GetResultAsRenderVx();
-
             var uiSprite = new UISprite(10, 10);
             uiSprite.LoadSvg(svgRenderVx);
-            viewport.AddContent(uiSprite);
+            _backBoard.AddChild(uiSprite);
 
+
+
+            
+
+            //-------- 
+            rectBoxController.Init();
+            //------------
+            foreach (var ui in rectBoxController.GetControllerIter())
+            {
+                viewport.AddContent(ui);
+            }
+
+            //--------
             var evListener = new GeneralEventListener();
             uiSprite.AttachExternalEventListener(evListener);
-
-            int count = 0;
 
             IUIEventListener uiEvListener = (IUIEventListener)evListener;
             uiEvListener.MouseDown += (e) =>
             {
-                System.Console.WriteLine("click :" + (count++));
+
+                //e.MouseCursorStyle = MouseCursorStyle.Pointer;
+                ////--------------------------------------------
+                //e.SetMouseCapture(rectBoxController.ControllerBoxMain);
+                rectBoxController.UpdateControllerBoxes(box1);
+                rectBoxController.Focus();
+                //System.Console.WriteLine("click :" + (count++));
+            };
+            rectBoxController.ControllerBoxMain.KeyDown += (s1, e1) =>
+            {
+                if (e1.Ctrl && e1.KeyCode == UIKeys.X)
+                {
+                    //test copy back image buffer from current rect area
+
+                    DrawBoard gdiDrawBoard = DrawBoardCreator.CreateNewDrawBoard(1, 50, 50);
+                    _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, 50, 50));
+                    var img2 = new ActualImage(50, 50);
+                    //copy content from drawboard to target image and save
+                    gdiDrawBoard.RenderTo(img2, 0, 0, 50, 50);
+                    img2.dbugSaveToPngFile("d:\\WImageTest\\ddd001.png");
+
+                }
+            };
+        }
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        {
+            //1. mouse down         
+            box.MouseDown += (s, e) =>
+            {
+                box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
+                e.MouseCursorStyle = MouseCursorStyle.Pointer;
+                //--------------------------------------------
+                e.SetMouseCapture(rectBoxController.ControllerBoxMain);
+                rectBoxController.UpdateControllerBoxes(box);
+
+            };
+            //2. mouse up
+            box.MouseUp += (s, e) =>
+            {
+                e.MouseCursorStyle = MouseCursorStyle.Default;
+                box.BackColor = Color.LightGray;
+                //controllerBox1.Visible = false;
+                //controllerBox1.TargetBox = null;
             };
         }
     }
@@ -120,6 +193,8 @@ namespace LayoutFarm
             get { return _uiKeyEventArgs.Y; }
         }
     }
+
+
 
     class GeneralEventListener : IUIEventListener, UI.IEventListener
     {

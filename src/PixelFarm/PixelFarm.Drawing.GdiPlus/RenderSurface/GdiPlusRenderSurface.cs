@@ -471,7 +471,12 @@ namespace PixelFarm.Drawing.WinGdi
                 destHdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, //dest
                 win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
             MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
-
+        }
+        public unsafe void RenderTo(byte* outputBuffer)
+        {
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, canvasOriginX, canvasOriginY, IntPtr.Zero);
+            win32MemDc.CopyPixelBitsToOutput(outputBuffer);
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {

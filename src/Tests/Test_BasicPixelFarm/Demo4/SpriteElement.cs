@@ -29,7 +29,7 @@ namespace LayoutFarm.UI
 
 
 
-    public class UISprite : UIElement, IBoxElement
+    public class UISprite : UIElement
     {
         int _left;
         int _top;
@@ -53,8 +53,6 @@ namespace LayoutFarm.UI
             this._height = height;
             //default for box
             this.AutoStopMouseEventPropagation = true;
-
-            
         }
         public void LoadSvg(SvgRenderVx renderVx)
         {
@@ -63,7 +61,7 @@ namespace LayoutFarm.UI
             {
                 _svgRenderElement.RenderVx = renderVx;
                 RectD bound = renderVx.GetBounds();
-                this.SetSize((int)bound.Width, (int)bound.Height); 
+                this.SetSize((int)bound.Width, (int)bound.Height);
             }
         }
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -326,24 +324,71 @@ namespace LayoutFarm.UI
             visitor.Attribute("width", this.Width);
             visitor.Attribute("height", this.Height);
         }
-
-
-
         public Rectangle Bounds
         {
             get { return new Rectangle(this.Left, this.Top, this.Width, this.Height); }
         }
-        void IBoxElement.ChangeElementSize(int w, int h)
+        //void IBoxElement.ChangeElementSize(int w, int h)
+        //{
+        //    this.SetSize(w, h);
+        //}
+        //int IBoxElement.MinHeight
+        //{
+        //    get
+        //    {
+        //        //TODO: use mimimum current font height ***
+        //        return this.Height;
+        //    }
+        //}
+    }
+
+    class BackBoardRenderElement : LayoutFarm.CustomWidgets.CustomRenderBox
+    {
+
+        DrawBoard _canvas;
+        public BackBoardRenderElement(RootGraphic rootgfx, int width, int height)
+           : base(rootgfx, width, height)
         {
-            this.SetSize(w, h);
+
         }
-        int IBoxElement.MinHeight
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-            get
-            {
-                //TODO: use mimimum current font height ***
-                return this.Height;
-            }
+            _canvas = canvas;
+            base.DrawBoxContent(canvas, updateArea);
+
         }
     }
+    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.EaseBox
+    {
+        BackBoardRenderElement _backboardRenderE;
+        public BackDrawBoardUI(int w, int h)
+            : base(w, h)
+        {
+
+        }
+        public override void Walk(UIVisitor visitor)
+        {
+
+        }
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (_backboardRenderE != null)
+            {
+                return _backboardRenderE;
+            }
+            _backboardRenderE = new BackBoardRenderElement(rootgfx, this.Width, this.Height);
+            _backboardRenderE.NeedClipArea = true;
+
+            SetPrimaryRenderElement(_backboardRenderE);
+            BuildChildrenRenderElement(_backboardRenderE);
+
+            return _backboardRenderE;
+        }
+        public void CopyImageBuffer(DrawBoard canvas, int x, int y, int w, int h)
+        {
+            //copy content image to specific img buffer
+
+        }
+    }
+
 }

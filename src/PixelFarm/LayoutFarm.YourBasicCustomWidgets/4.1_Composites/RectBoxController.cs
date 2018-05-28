@@ -39,8 +39,11 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
-
-
+        public void Focus()
+        {
+            controllerBox1.AcceptKeyboardFocus = true;
+            controllerBox1.Focus();
+        }
 
         public void UpdateControllerBoxes(LayoutFarm.UI.UIBox box)
         {
@@ -50,6 +53,8 @@ namespace LayoutFarm.CustomWidgets
                                      box.Width + 10, box.Height + 10);
             controllerBox1.Visible = true;
             controllerBox1.TargetBox = box;
+
+
 
             {
                 //left-top
@@ -88,6 +93,7 @@ namespace LayoutFarm.CustomWidgets
                 yield return box;
             }
         }
+
         public void Init()
         {
             //------------
@@ -102,6 +108,7 @@ namespace LayoutFarm.CustomWidgets
                 //viewport.AddContent(controllerBox1);
                 _controls.Add(controllerBox1);
             }
+
             //------------
 
             _boxLeftTop = new UIControllerBox(20, 20);
@@ -166,7 +173,7 @@ namespace LayoutFarm.CustomWidgets
             };
         }
 
-        public UIBox ControllerBoxMain
+        public EaseBox ControllerBoxMain
         {
             get { return controllerBox1; }
         }
