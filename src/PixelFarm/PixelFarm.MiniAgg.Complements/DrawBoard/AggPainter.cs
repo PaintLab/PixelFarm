@@ -82,16 +82,17 @@ namespace PixelFarm.Agg
         {
             get { return _vectorTool; }
         }
+       
+        public AggRenderSurface RenderSurface
+        {
+            get { return this._aggsx; }
+        }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {
             get { return _orientation; }
             set
             { _orientation = value; }
-        }
-        public AggRenderSurface RenderSurface
-        {
-            get { return this._aggsx; }
         }
         public override int Width
         {
@@ -243,7 +244,6 @@ namespace PixelFarm.Agg
         {
             if (_lineDashGen == null)
             {
-                //no line dash
                 var v1 = GetFreeVxs();
                 _aggsx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
                 ReleaseVxs(ref v1);
@@ -252,6 +252,7 @@ namespace PixelFarm.Agg
             {
                 var v1 = GetFreeVxs();
                 var v2 = GetFreeVxs();
+
                 _lineDashGen.CreateDash(vxs, v1);
                 stroke.MakeVxs(v1, v2);
                 _aggsx.Render(v2, this.strokeColor);
@@ -689,7 +690,7 @@ namespace PixelFarm.Agg
             get { return strokeColor; }
             set { this.strokeColor = value; }
         }
-      
+
         /// <summary>
         /// we do NOT store vxs
         /// </summary>

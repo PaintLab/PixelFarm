@@ -35,8 +35,25 @@ namespace PixelFarm.Drawing.WinGdi
             //TODO: review here
             //temp here          
             var vxFormattedString = renderVx as WinGdiRenderVxFormattedString;
-            if (vxFormattedString == null) return;
-            _gdigsx.DrawText(vxFormattedString.InternalBuffer, (int)x, (int)y);
+            if (vxFormattedString != null)
+            {
+                _gdigsx.DrawText(vxFormattedString.InternalBuffer, (int)x, (int)y);
+            }
+            else
+            {
+
+                var svgRenderVx = renderVx as Agg.SvgRenderVx;
+                //request painter for this svg
+                Agg.AggPainter painter = (Agg.AggPainter)this.GetAggPainter();
+                //paint with painter
+                svgRenderVx.Render(painter);
+                //
+                Agg.ActualImage img = painter.RenderSurface.DestActualImage;
+               // img.dbugSaveToPngFile("d:\\WImageTest\\a001.png");
+
+                this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
+            }
+
         }
 
         public override void DrawText(char[] buffer, int x, int y)

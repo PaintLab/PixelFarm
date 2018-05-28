@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-2018, WinterDev
-
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm
@@ -76,7 +76,6 @@ namespace LayoutFarm
             };
         }
 
-        //-----------------------------------------------------------------
         class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
         {
             public UIControllerBox(int w, int h)
@@ -96,4 +95,60 @@ namespace LayoutFarm
             }
         }
     }
+
+
+    [DemoNote("3.2.1 DemoControllerBox")]
+    class Demo_ControllerBoxs3_1 : DemoBase
+    {
+        LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
+
+        protected override void OnStartDemo(SampleViewport viewport)
+        {
+            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            box1.BackColor = Color.Red;
+            box1.SetLocation(10, 10);
+            //box1.dbugTag = 1;
+            SetupActiveBoxProperties(box1);
+            viewport.AddContent(box1);
+            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
+            box2.SetLocation(50, 50);
+            //box2.dbugTag = 2;
+            SetupActiveBoxProperties(box2);
+            viewport.AddContent(box2);
+            rectBoxController.Init();
+            //------------
+            foreach (var ui in rectBoxController.GetControllerIter())
+            {
+                viewport.AddContent(ui);
+            }
+
+        }
+
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        {
+            //1. mouse down         
+            box.MouseDown += (s, e) =>
+            {
+                box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
+                e.MouseCursorStyle = MouseCursorStyle.Pointer;
+                //--------------------------------------------
+                e.SetMouseCapture(rectBoxController.ControllerBoxMain);
+                rectBoxController.UpdateControllerBoxes(box);
+
+            };
+            //2. mouse up
+            box.MouseUp += (s, e) =>
+            {
+                e.MouseCursorStyle = MouseCursorStyle.Default;
+                box.BackColor = Color.LightGray;
+                //controllerBox1.Visible = false;
+                //controllerBox1.TargetBox = null;
+            };
+        }
+
+
+    }
 }
+
+
+

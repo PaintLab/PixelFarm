@@ -8,31 +8,31 @@ using Mini;
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Samples
 {
-    public enum SmoothBrushMode
-    {
-        SolidBrush,
-        EraseBrush,
-        CutBrush
-    }
-    public enum EditMode
-    {
-        Draw,
-        Select
-    }
-
     [Info(OrderCode = "22")]
-    [Info("SmoothBrush2")]
-    public class SmoothBrush2 : DemoBase
+    [Info("SmoothBrush3")]
+    public class SmoothBrush3 : DemoBase
     {
         PixelFarm.Drawing.Point latestMousePoint;
         List<MyBrushPath> myBrushPathList = new List<MyBrushPath>();
-        //CanvasPainter p;
+
         MyBrushPath currentBrushPath;
         MyBrushPath currentSelectedPath;
+
         int lastMousePosX;
         int lastMousePosY;
+        Stroke _stroke1;
+        public SmoothBrush3()
+        {
+            _stroke1 = new Stroke(10);
+            _stroke1.LineCap = LineCap.Round;
+            _stroke1.LineJoin = LineJoin.Round;
+
+
+
+        }
         public override void Init()
         {
+
         }
 
         [DemoConfig]
@@ -110,14 +110,12 @@ namespace PixelFarm.Agg.Samples
 
             if (currentBrushPath != null)
             {
-                //1. close current path
-
-
+                //1. close current path 
                 switch (currentBrushPath.BrushMode)
                 {
                     case SmoothBrushMode.CutBrush:
                         {
-                            currentBrushPath.MakeSmoothPath();
+                            currentBrushPath.MakeRegularPath(5);
                             if (myBrushPathList.Count > 0)
                             {
                                 //1. remove 
@@ -178,7 +176,7 @@ namespace PixelFarm.Agg.Samples
                         {
                             //create close point
                             currentBrushPath.AddPointAtLast(x, y);
-                            currentBrushPath.MakeSmoothPath();
+                            currentBrushPath.MakeRegularPath(5);
                         }
                         break;
                 }
@@ -210,20 +208,9 @@ namespace PixelFarm.Agg.Samples
                         //find diff 
                         Vector newPoint = new Vector(x, y);
                         //find distance
-                        Vector oldPoint = new Vector(latestMousePoint.x, latestMousePoint.y);
-                        Vector delta = (newPoint - oldPoint) / 2; // 2,4 etc 
-                        //midpoint
-                        Vector midPoint = (newPoint + oldPoint) / 2;
-                        delta = delta.NewLength(5);
-                        delta.Rotate(90);
-                        Vector newTopPoint = midPoint + delta;
-                        Vector newBottomPoint = midPoint - delta;
-                        //bottom point
-                        currentBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
-                        currentBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
+
+                        currentBrushPath.AddPointAtLast((int)newPoint.X, (int)newPoint.Y);
                         latestMousePoint = new PixelFarm.Drawing.Point(x, y);
-
-
                         //
                         // currentBrushPath.MakeSmoothPath();
                     }
@@ -310,8 +297,4 @@ namespace PixelFarm.Agg.Samples
         }
     }
 
-
-
-
 }
-

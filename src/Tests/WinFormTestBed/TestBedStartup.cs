@@ -73,4 +73,32 @@ namespace YourImplementation
             Application.Run(formCanvas);
         }
     }
+
+
+    public static class DemoFormCreatorHelper
+    {
+        public static void CreateReadyForm(
+         out LayoutFarm.UI.UISurfaceViewportControl viewport,
+         out Form formCanvas)
+        {
+
+            //1. select view port kind
+            InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
+
+            var workingArea = Screen.PrimaryScreen.WorkingArea;
+
+            formCanvas = FormCanvasHelper.CreateNewFormCanvas(
+              workingArea.Width,
+              workingArea.Height,
+              innerViewportKind,
+              out viewport);
+
+            formCanvas.Text = "FormCanvas 1 :" + innerViewportKind;
+
+            viewport.PaintMe();
+
+            formCanvas.WindowState = FormWindowState.Maximized;
+            formCanvas.Show();
+        }
+    }
 }
