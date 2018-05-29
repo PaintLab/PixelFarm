@@ -144,6 +144,17 @@ namespace Typography.TextBreak
                                         continue;
                                     }
                                 }
+                                else if (c == '.')
+                                {
+                                    if (i < endBefore - 1 &&
+                                      char.IsNumber(input[i + 1]))
+                                    {
+                                        breakBounds.startIndex = i;
+                                        breakBounds.kind = WorkKind.Number;
+                                        lexState = LexState.Number;
+                                        continue;
+                                    }
+                                }
 
                                 breakBounds.startIndex = i;
                                 breakBounds.length = 1;
@@ -165,11 +176,11 @@ namespace Typography.TextBreak
                     case LexState.Number:
                         {
                             //in number state
-                            if (!char.IsNumber(c))
+                            if (!char.IsNumber(c) && c != '.')
                             {
+                                
                                 //if number then continue collect
                                 //if not
-
                                 //flush current state 
                                 breakBounds.length = i - breakBounds.startIndex;
                                 onbreak(breakBounds);
