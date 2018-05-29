@@ -13,10 +13,7 @@ namespace LayoutFarm
     {
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
         LayoutFarm.CustomWidgets.SimpleBox box1;
-        BackDrawBoardUI _backBoard;
-
-
-
+        BackDrawBoardUI _backBoard; 
 
         protected override void OnStartDemo(SampleViewport viewport)
         {

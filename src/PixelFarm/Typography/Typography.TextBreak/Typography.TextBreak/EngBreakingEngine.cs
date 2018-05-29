@@ -166,7 +166,7 @@ namespace Typography.TextBreak
                         break;
                     case LexState.Text:
                         {
-                            if (!char.IsLetter(c))
+                            if (!char.IsLetter(c) && !char.IsNumber(c))
                             {
                                 //flush
                                 breakBounds.length = i - breakBounds.startIndex;
