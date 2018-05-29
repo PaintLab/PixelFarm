@@ -14,15 +14,15 @@ namespace Typography.TextBreak
         Parsing,
         OutOfRangeChar,
         End,
-
     }
+
+
 
     class WordVisitor
     {
         CustomBreaker ownerBreak;
         //
-        List<int> breakAtList = new List<int>();
-        List<ushort> _breakerEngineCode = new List<ushort>();
+        List<BreakAtInfo> breakAtList = new List<BreakAtInfo>();
 
         //
         char[] buffer;
@@ -68,7 +68,7 @@ namespace Typography.TextBreak
         {
             get { return currentIndex >= bufferLen - 1; }
         }
-        public void AddWordBreakAt(int index)
+        public void AddWordBreakAt(int index, WordKind wordKind)
         {
 
 #if DEBUG
@@ -78,8 +78,14 @@ namespace Typography.TextBreak
             }
 #endif
             this.latestBreakAt = index;
-            breakAtList.Add(index);
+
+            breakAtList.Add(new BreakAtInfo(index, wordKind));
         }
+        public void AddWordBreakAtCurrentIndex(WordKind wordKind= WordKind.Text)
+        {
+            AddWordBreakAt(this.CurrentIndex, wordKind);
+        }
+
         public int LatestBreakAt
         {
             get { return this.latestBreakAt; }
@@ -99,7 +105,7 @@ namespace Typography.TextBreak
             }
         }
 
-        public List<int> GetBreakList()
+        public List<BreakAtInfo> GetBreakList()
         {
             return breakAtList;
         }

@@ -32,6 +32,7 @@ namespace Typography.TextBreak
         int _len;
         int _endAt;
 
+        public bool DontMergeLastIncompleteWord { get; set; }
         internal override void BreakWord(WordVisitor visitor, char[] charBuff, int startAt, int len)
         {
             visitor.State = VisitorState.Parsing;
@@ -64,7 +65,7 @@ namespace Typography.TextBreak
                 {
                     //continue next char
                     ++i;
-                    visitor.AddWordBreakAt(i);
+                    visitor.AddWordBreakAt(i, WordKind.Text);
                     visitor.SetCurrentIndex(visitor.LatestBreakAt);
                 }
                 else
@@ -101,6 +102,7 @@ namespace Typography.TextBreak
                             //----------------------------------------
                             WordGroup next1 = GetSubGroup(visitor, c_wordgroup);
 
+                            bool latest_candidate_isNotWord = false;
                             if (next1 != null)
                             {
                                 //accept 
@@ -112,11 +114,16 @@ namespace Typography.TextBreak
 
                                 if (next1.PrefixIsWord)
                                 {
+
                                     candidateBreakList.Push(candidateLen);
                                 }
                                 else
                                 {
-                                    candidateBreakList.Push(candidateLen);
+                                    if (!DontMergeLastIncompleteWord)
+                                    {
+                                        latest_candidate_isNotWord = true;//word may has error
+                                        candidateBreakList.Push(candidateLen);
+                                    }
                                 }
                                 //---------------------
                             }
@@ -129,7 +136,7 @@ namespace Typography.TextBreak
                                     int p2 = FindInWordSpans(visitor, c_wordgroup);
                                     if (p2 - p1 > 0)
                                     {
-                                        visitor.AddWordBreakAt(p2);
+                                        visitor.AddWordBreakAt(p2, WordKind.Text);
                                         visitor.SetCurrentIndex(p2);
                                         candidateBreakList.Clear();
                                     }
@@ -144,10 +151,21 @@ namespace Typography.TextBreak
 
                                 int candi1 = candidateBreakList.Pop();
                                 //try
+
                                 visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
-                                //use this
-                                //use this candidate if possible
-                                visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                if (latest_candidate_isNotWord)
+                                {
+                                    //use this
+                                    //use this candidate if possible
+                                    visitor.AddWordBreakAtCurrentIndex(WordKind.TextIncomplete);
+                                }
+                                else
+                                {
+                                    //use this
+                                    //use this candidate if possible
+                                    visitor.AddWordBreakAtCurrentIndex();
+                                }
+
                                 break;
                             }
                             continueRead = false;
@@ -185,14 +203,14 @@ namespace Typography.TextBreak
                                         {
                                             //use this
                                             //use this candidate if possible
-                                            visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                            visitor.AddWordBreakAtCurrentIndex();
                                             foundCandidate = true;
                                             break;
                                         }
                                     }
                                     else
                                     {
-                                        visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                        visitor.AddWordBreakAtCurrentIndex();
                                         foundCandidate = true;
                                         break;
                                     }
@@ -212,7 +230,7 @@ namespace Typography.TextBreak
                                 int p2 = FindInWordSpans(visitor, c_wordgroup);
                                 if (p2 - p1 > 0)
                                 {
-                                    visitor.AddWordBreakAt(p2);
+                                    visitor.AddWordBreakAt(p2, WordKind.Text);
                                     visitor.SetCurrentIndex(p2);
                                 }
                                 else
@@ -220,6 +238,7 @@ namespace Typography.TextBreak
                                     //on the same pos
                                     if (visitor.State == VisitorState.OutOfRangeChar)
                                     {
+                                        visitor.AddWordBreakAtCurrentIndex();
                                         return;
                                     }
                                     else
@@ -275,14 +294,14 @@ namespace Typography.TextBreak
                                                     {
                                                         //use this
                                                         //use this candidate if possible
-                                                        visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                                        visitor.AddWordBreakAtCurrentIndex();
                                                         foundCandidate = true;
                                                         break;
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                                    visitor.AddWordBreakAtCurrentIndex();
                                                     foundCandidate = true;
                                                 }
                                             }
@@ -296,7 +315,7 @@ namespace Typography.TextBreak
                                             {
                                                 //use this
                                                 //use this candidate if possible
-                                                visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                                visitor.AddWordBreakAtCurrentIndex();
                                                 foundCandidate = true;
                                                 break;
                                             }
@@ -304,7 +323,7 @@ namespace Typography.TextBreak
                                             {
                                                 //TODO: review here
                                                 visitor.SetCurrentIndex(visitor.LatestBreakAt + 1);
-                                                visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                                visitor.AddWordBreakAtCurrentIndex();
                                                 visitor.SetCurrentIndex(visitor.LatestBreakAt);
                                             }
                                         }
@@ -323,7 +342,7 @@ namespace Typography.TextBreak
                                     visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                     if (visitor.State == VisitorState.End)
                                     {
-                                        visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                        visitor.AddWordBreakAtCurrentIndex();
                                         return;
                                     }
                                     //check if we can use this candidate
@@ -332,7 +351,7 @@ namespace Typography.TextBreak
                                     {
                                         //use this
                                         //use this candidate if possible
-                                        visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                        visitor.AddWordBreakAtCurrentIndex();
                                         foundCandidate = true;
                                         break;
                                     }
@@ -340,7 +359,7 @@ namespace Typography.TextBreak
                                     {
                                         //use this
                                         //use this candidate if possible
-                                        visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                        visitor.AddWordBreakAtCurrentIndex();
                                         foundCandidate = true;
                                         break;
                                     }
@@ -350,7 +369,7 @@ namespace Typography.TextBreak
                                     if (candidateLen > 0)
                                     {
                                         //use that candidate len
-                                        visitor.AddWordBreakAt(visitor.CurrentIndex);
+                                        visitor.AddWordBreakAtCurrentIndex();
                                         visitor.SetCurrentIndex(visitor.LatestBreakAt);
                                     }
                                 }

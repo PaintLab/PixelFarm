@@ -4,7 +4,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Text;
 
 namespace Typography.TextBreak
@@ -83,7 +83,7 @@ namespace Typography.TextBreak
             wordGroups.Clear();
 
         }
-    
+
         int TransformCharToIndex(char c)
         {
             return c - this.firstChar;
@@ -202,8 +202,8 @@ namespace Typography.TextBreak
     {
         public int startAt;
         public ushort len;
+        public WordKind wordKind;
     }
-
 
     class DevelopingWordGroup
     {

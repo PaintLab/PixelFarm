@@ -22,7 +22,7 @@ namespace Typography.TextBreak
             visitor.State = VisitorState.Parsing;
             DoBreak(visitor, charBuff, startAt, len, bb =>
             {
-                visitor.AddWordBreakAt(bb.startIndex + bb.length);
+                visitor.AddWordBreakAt(bb.startIndex + bb.length, bb.kind);
                 visitor.SetCurrentIndex(visitor.LatestBreakAt);
 
             });
@@ -227,7 +227,7 @@ namespace Typography.TextBreak
                 breakBounds.startIndex < start + len)
             {
                 //some remaining data
-                
+
                 breakBounds.length = (start + len) - breakBounds.startIndex;
                 //
                 onBreak(breakBounds);

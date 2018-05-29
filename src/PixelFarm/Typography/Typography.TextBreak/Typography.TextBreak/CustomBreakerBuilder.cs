@@ -12,8 +12,10 @@ namespace Typography.TextBreak
     {
         static ThaiDictionaryBreakingEngine thaiDicBreakingEngine;
         static LaoDictionaryBreakingEngine laoDicBreakingEngine;
+
         static bool isInit;
-        static DictionaryProvider s_dicProvider;
+        static DictionaryProvider s_dicProvider; 
+
         static void InitAllDics()
         {
             if (thaiDicBreakingEngine == null)
@@ -24,6 +26,7 @@ namespace Typography.TextBreak
                 customDic.SetCharRange(thaiDicBreakingEngine.FirstUnicodeChar, thaiDicBreakingEngine.LastUnicodeChar);
                 customDic.LoadSortedUniqueWordList(s_dicProvider.GetSortedUniqueWordList("thai"));
             }
+
             if (laoDicBreakingEngine == null)
             {
                 var customDic = new CustomDic();
@@ -37,10 +40,8 @@ namespace Typography.TextBreak
 
         public static void Setup(string dataDir)
         {
-            Setup(new SimpleTextFileDictionaryProvider() { DataDir = dataDir });
+            Setup(new IcuSimpleTextFileDictionaryProvider() { DataDir = dataDir });
         }
-
-
         public static void Setup(DictionaryProvider dicProvider)
         {
             if (isInit) return;
@@ -69,7 +70,9 @@ namespace Typography.TextBreak
         public abstract IEnumerable<string> GetSortedUniqueWordList(string dicName);
     }
 
-    class SimpleTextFileDictionaryProvider : DictionaryProvider
+
+
+    public class IcuSimpleTextFileDictionaryProvider : DictionaryProvider
     {
         //read from original ICU's dictionary
         //.. 

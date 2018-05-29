@@ -29,7 +29,8 @@ namespace Typography.TextBreak
             otherEngines.Add(engine);
             breakingEngine = engine;
         }
-        BreakingEngine SelectEngine(char c)
+
+        protected BreakingEngine SelectEngine(char c)
         {
             if (breakingEngine.CanHandle(c))
             {
@@ -106,7 +107,7 @@ namespace Typography.TextBreak
             char[] buffer = inputstr.ToCharArray();
             BreakWords(buffer, 0, inputstr.Length); //all
         }
-        public void LoadBreakAtList(List<int> outputList)
+        public void LoadBreakAtList(List<BreakAtInfo> outputList)
         {
             outputList.AddRange(visitor.GetBreakList());
         }
@@ -121,14 +122,18 @@ namespace Typography.TextBreak
         }
         public IEnumerable<BreakSpan> GetBreakSpanIter()
         {
-            List<int> breakAtList = visitor.GetBreakList();
+            List<BreakAtInfo> breakAtList = visitor.GetBreakList();
             int c_index = 0;
             int count = breakAtList.Count;
             for (int i = 0; i < count; ++i)
             {
+
+                BreakAtInfo brkInfo = breakAtList[i];
                 BreakSpan sp = new BreakSpan();
                 sp.startAt = c_index;
-                sp.len = (ushort)(breakAtList[i] - c_index);
+                sp.len = (ushort)(brkInfo.breakAt - c_index);
+                sp.wordKind = brkInfo.wordKind;
+
                 c_index += sp.len;
 
                 yield return sp;
@@ -142,6 +147,9 @@ namespace Typography.TextBreak
                 yield return sp;
             }
         }
+
+
+        //
     }
 
 

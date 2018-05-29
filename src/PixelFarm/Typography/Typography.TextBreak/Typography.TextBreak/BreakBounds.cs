@@ -14,13 +14,27 @@ namespace Typography.TextBreak
         public WordKind kind;
     }
 
-    enum WordKind : byte
+    public enum WordKind : byte
     {
+        Unknown,
+        //
         Whitespace,
         NewLine,
-        Text,
         Number,
-        Punc
-    } 
+        Punc,
+        //
+        Text,
+        TextIncomplete,
+    }
+    public struct BreakAtInfo
+    {
+        public readonly int breakAt;
+        public readonly WordKind wordKind;
+        public BreakAtInfo(int breakAt, WordKind w)
+        {
+            this.breakAt = breakAt;
+            this.wordKind = w;
+        }
+    }
 
 }
