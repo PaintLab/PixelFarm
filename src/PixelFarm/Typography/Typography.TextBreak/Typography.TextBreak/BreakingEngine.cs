@@ -10,7 +10,7 @@ namespace Typography.TextBreak
 {
     public abstract class BreakingEngine
     {
-        public abstract void BreakWord(WordVisitor visitor, char[] charBuff, int startAt, int len);
+        internal abstract void BreakWord(WordVisitor visitor, char[] charBuff, int startAt, int len);
         public abstract bool CanBeStartChar(char c);
         public abstract bool CanHandle(char c);
     }
@@ -32,7 +32,7 @@ namespace Typography.TextBreak
         int _len;
         int _endAt;
 
-        public override void BreakWord(WordVisitor visitor, char[] charBuff, int startAt, int len)
+        internal override void BreakWord(WordVisitor visitor, char[] charBuff, int startAt, int len)
         {
             visitor.State = VisitorState.Parsing;
             this._startAt = startAt;
@@ -43,7 +43,7 @@ namespace Typography.TextBreak
             char c_last = this.LastUnicodeChar;
             int endAt = startAt + len;
 
-            Stack<int> candidate = visitor.GetTempCandidateBreaks();
+            Stack<int> candidateBreakList = visitor.GetTempCandidateBreaks();
 
             for (int i = startAt; i < endAt;)
             {
@@ -77,13 +77,13 @@ namespace Typography.TextBreak
                     }
                     //---------------------
                     WordGroup c_wordgroup = wordgroup;
-                    candidate.Clear();
+                    candidateBreakList.Clear();
 
                     int candidateLen = 1;
 
                     if (c_wordgroup.PrefixIsWord)
                     {
-                        candidate.Push(candidateLen);
+                        candidateBreakList.Push(candidateLen);
                     }
 
                     bool continueRead = true;
@@ -104,19 +104,21 @@ namespace Typography.TextBreak
                             if (next1 != null)
                             {
                                 //accept 
+
+                                //---------------------
                                 //since this is end word ...
                                 //and next1 != null=> this has a link to next word group
                                 //but it may be incomplete so => we need decision ***
 
-
                                 if (next1.PrefixIsWord)
                                 {
-                                    candidate.Push(candidateLen);
+                                    candidateBreakList.Push(candidateLen);
                                 }
                                 else
                                 {
-                                    candidate.Push(candidateLen);
+                                    candidateBreakList.Push(candidateLen);
                                 }
+                                //---------------------
                             }
                             else
                             {
@@ -129,7 +131,7 @@ namespace Typography.TextBreak
                                     {
                                         visitor.AddWordBreakAt(p2);
                                         visitor.SetCurrentIndex(p2);
-                                        candidate.Clear();
+                                        candidateBreakList.Clear();
                                     }
                                 }
                             }
@@ -137,10 +139,10 @@ namespace Typography.TextBreak
                             i = endAt; //temp fix, TODO: review here
 
                             //choose best match 
-                            if (candidate.Count > 0)
+                            if (candidateBreakList.Count > 0)
                             {
 
-                                int candi1 = candidate.Pop();
+                                int candi1 = candidateBreakList.Pop();
                                 //try
                                 visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                 //use this
@@ -160,7 +162,7 @@ namespace Typography.TextBreak
 
                             if (next.PrefixIsWord)
                             {
-                                candidate.Push(candidateLen);
+                                candidateBreakList.Push(candidateLen);
                             }
                             c_wordgroup = next;
                             i = visitor.CurrentIndex;
@@ -170,10 +172,10 @@ namespace Typography.TextBreak
                                 i = endAt; //temp fix, TODO: review here
                                 bool foundCandidate = false;
                                 //choose best match 
-                                while (candidate.Count > 0)
+                                while (candidateBreakList.Count > 0)
                                 {
 
-                                    int candi1 = candidate.Pop();
+                                    int candi1 = candidateBreakList.Pop();
                                     //try
                                     visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                     if (visitor.State != VisitorState.End)
@@ -195,7 +197,6 @@ namespace Typography.TextBreak
                                         break;
                                     }
                                 }
-
                                 continueRead = false;
                             }
                         }
@@ -224,7 +225,7 @@ namespace Typography.TextBreak
                                     else
                                     {
                                         bool foundCandidate = false;
-                                        int candi_count = candidate.Count;
+                                        int candi_count = candidateBreakList.Count;
                                         if (candi_count == 0)
                                         {
                                             //no candidate 
@@ -263,7 +264,7 @@ namespace Typography.TextBreak
                                         {
                                             while (candi_count > 0)
                                             {
-                                                int candi1 = candidate.Pop();
+                                                int candi1 = candidateBreakList.Pop();
                                                 //try
                                                 visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                                 //check if we can use this candidate
@@ -314,10 +315,10 @@ namespace Typography.TextBreak
                             {
 
                                 bool foundCandidate = false;
-                                while (candidate.Count > 0)
+                                while (candidateBreakList.Count > 0)
                                 {
 
-                                    int candi1 = candidate.Pop();
+                                    int candi1 = candidateBreakList.Pop();
                                     //try
                                     visitor.SetCurrentIndex(visitor.LatestBreakAt + candi1);
                                     if (visitor.State == VisitorState.End)

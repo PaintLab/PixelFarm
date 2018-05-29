@@ -123,14 +123,14 @@ namespace Typography.TextBreak
         {
             List<int> breakAtList = visitor.GetBreakList();
             int c_index = 0;
-            int i = 0;
-            foreach (int breakAt in breakAtList)
+            int count = breakAtList.Count;
+            for (int i = 0; i < count; ++i)
             {
                 BreakSpan sp = new BreakSpan();
                 sp.startAt = c_index;
                 sp.len = (ushort)(breakAtList[i] - c_index);
                 c_index += sp.len;
-                i++;
+
                 yield return sp;
             }
             //-------------------

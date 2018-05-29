@@ -878,7 +878,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\MyMath.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\Rect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextServices\..\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextServices\..\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextServices\..\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextServices\..\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextServices\..\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs" />

@@ -197,6 +197,7 @@ namespace Typography.TextBreak
             return new string(this.charBuffer, index, len);
         }
     }
+
     public struct BreakSpan
     {
         public int startAt;

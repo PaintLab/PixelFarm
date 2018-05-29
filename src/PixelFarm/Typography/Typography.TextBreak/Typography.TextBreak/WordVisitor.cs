@@ -16,7 +16,8 @@ namespace Typography.TextBreak
         End,
 
     }
-    public class WordVisitor
+
+    class WordVisitor
     {
         CustomBreaker ownerBreak;
         //
@@ -66,10 +67,10 @@ namespace Typography.TextBreak
         public bool IsEnd
         {
             get { return currentIndex >= bufferLen - 1; }
-        } 
+        }
         public void AddWordBreakAt(int index)
         {
-            
+
 #if DEBUG
             if (index == latestBreakAt)
             {
