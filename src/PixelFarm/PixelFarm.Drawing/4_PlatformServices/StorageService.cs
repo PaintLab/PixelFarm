@@ -175,6 +175,7 @@ namespace LayoutFarm
                 this.startIndex = startIndex;
                 this.length = length;
             }
+            public int RightIndex { get { return startIndex + length; } }
         }
         //TODO: review here
         public static class Default
