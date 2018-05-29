@@ -37,13 +37,10 @@ namespace Typography.TextBreak
 
         public static void Setup(string dataDir)
         {
-            Setup(new SimpleTextFileDictionaryProvider()
-            {
-                DataDir = dataDir
-            });
+            Setup(new SimpleTextFileDictionaryProvider() { DataDir = dataDir });
         }
 
-        
+
         public static void Setup(DictionaryProvider dicProvider)
         {
             if (isInit) return;
@@ -64,7 +61,7 @@ namespace Typography.TextBreak
             breaker.AddBreakingEngine(thaiDicBreakingEngine);
             breaker.AddBreakingEngine(laoDicBreakingEngine);
             return breaker;
-        } 
+        }
     }
 
     public abstract class DictionaryProvider
