@@ -27,7 +27,7 @@ namespace Typography.TextBreak
         protected abstract WordGroup GetWordGroupForFirstChar(char c);
 
 
-        
+
         int _startAt;
         int _len;
         int _endAt;
@@ -96,7 +96,7 @@ namespace Typography.TextBreak
                         visitor.SetCurrentIndex(i + 1);
                         if (visitor.IsEnd)
                         {
-                            //end  
+                            //end  ***
                             visitor.State = VisitorState.End;
                             //----------------------------------------
                             WordGroup next1 = GetSubGroup(visitor, c_wordgroup);
@@ -104,7 +104,16 @@ namespace Typography.TextBreak
                             if (next1 != null)
                             {
                                 //accept 
+                                //since this is end word ...
+                                //and next1 != null=> this has a link to next word group
+                                //but it may be incomplete so => we need decision ***
+
+
                                 if (next1.PrefixIsWord)
+                                {
+                                    candidate.Push(candidateLen);
+                                }
+                                else
                                 {
                                     candidate.Push(candidateLen);
                                 }
