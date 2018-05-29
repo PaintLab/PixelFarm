@@ -3,7 +3,7 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 
- 
+
 
 namespace Typography.TextBreak
 {
@@ -130,6 +130,21 @@ namespace Typography.TextBreak
                             }
                             else if (char.IsPunctuation(c) || char.IsSymbol(c))
                             {
+
+                                //for eng -
+                                if (c == '-')
+                                {
+                                    //check next char is number or not
+                                    if (i < endBefore - 1 &&
+                                       char.IsNumber(input[i + 1]))
+                                    {
+                                        breakBounds.startIndex = i;
+                                        breakBounds.kind = WorkKind.Number;
+                                        lexState = LexState.Number;
+                                        continue;
+                                    }
+                                }
+
                                 breakBounds.startIndex = i;
                                 breakBounds.length = 1;
                                 breakBounds.kind = WorkKind.Punc;
@@ -193,12 +208,12 @@ namespace Typography.TextBreak
 
             }
 
-            if (lexState != LexState.Init && 
+            if (lexState != LexState.Init &&
                 breakBounds.startIndex < start + len)
             {
                 //some remaining data
                 breakBounds.length = (start + len) - breakBounds.startIndex;
-                onbreak(breakBounds);             
+                onbreak(breakBounds);
             }
             visitor.State = VisitorState.End;
         }
