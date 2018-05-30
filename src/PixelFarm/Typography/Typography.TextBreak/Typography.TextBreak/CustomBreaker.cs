@@ -111,6 +111,16 @@ namespace Typography.TextBreak
         {
             outputList.AddRange(visitor.GetBreakList());
         }
+        public void LoadBreakAtList(List<int> outputList)
+        {  
+            List<BreakAtInfo> breakAtList = visitor.GetBreakList();
+            int j = breakAtList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                BreakAtInfo brk = breakAtList[i];
+                outputList.Add(brk.breakAt);
+            }
+        }
         public bool CanBeStartChar(char c)
         {
             return breakingEngine.CanBeStartChar(c);
