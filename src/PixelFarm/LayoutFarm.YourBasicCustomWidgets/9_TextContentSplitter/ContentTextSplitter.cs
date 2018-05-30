@@ -22,41 +22,30 @@ namespace LayoutFarm.CustomWidgets
         }
         public IEnumerable<TextSplitBound> ParseWordContent(char[] textBuffer, int startIndex, int appendLength)
         {
-
-            int s_index = startIndex;
-            textBreaker.DoBreak(textBuffer, startIndex, appendLength, breakAtList);
-
-            int j = breakAtList.Count;
-            int pos = 0;
-            for (int i = 0; i < j; ++i)
+            if (appendLength > 0)
             {
-                int sepAt = breakAtList[i];
-                int len = sepAt - pos;
-                yield return new TextSplitBound(s_index, len);
-                s_index = startIndex + sepAt;
-                pos = sepAt;
+                int s_index = startIndex;
+
+                textBreaker.DoBreak(textBuffer, startIndex, appendLength, breakAtList);
+
+                int j = breakAtList.Count;
+                int pos = 0;
+                for (int i = 0; i < j; ++i)
+                {
+                    int sepAt = breakAtList[i];
+                    int len = sepAt - pos;
+                    yield return new TextSplitBound(s_index, len);
+                    s_index = startIndex + sepAt;
+                    pos = sepAt;
+                }
+
+                if (s_index < textBuffer.Length)
+                {
+                    yield return new TextSplitBound(s_index, textBuffer.Length - s_index);
+                }
+                breakAtList.Clear();
             }
 
-            if (s_index < textBuffer.Length)
-            {
-                yield return new TextSplitBound(s_index, textBuffer.Length - s_index);
-            }
-            breakAtList.Clear();
-            //foreach (var splitBound in runlist)
-            //{
-            //    //need consecutive bound
-            //    if (splitBound.startIndex != s_index)
-            //    {
-            //        yield return new TextSplitBound(s_index, splitBound.startIndex - s_index);
-            //        s_index = splitBound.startIndex;
-            //    }
-            //    s_index += splitBound.length;
-            //    yield return new TextSplitBound(splitBound.startIndex, splitBound.length);
-            //}
-            //if (s_index < textBuffer.Length)
-            //{
-            //    yield return new TextSplitBound(s_index, textBuffer.Length - s_index);
-            //}
         }
     }
 }
