@@ -227,6 +227,8 @@ namespace LayoutFarm.UI
                             prevMouseDownElement = null;//clear
                         }
                         //------------------------------------------------------- 
+                        //retrun true to stop this loop (no further bubble up)
+                        //return false to bubble this to upper control       
                         return e.CancelBubbling || !listener.BypassAllMouseEvents;
 
                     });
@@ -393,6 +395,9 @@ namespace LayoutFarm.UI
                         ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
                         {
                             listener.ListenMouseClick(e);
+
+                            //retrun true to stop this loop (no further bubble up)
+                            //return false to bubble this to upper control       
                             return e.CancelBubbling || !listener.BypassAllMouseEvents;
                         });
                     }
