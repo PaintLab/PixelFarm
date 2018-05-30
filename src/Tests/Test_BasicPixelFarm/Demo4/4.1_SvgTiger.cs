@@ -199,24 +199,24 @@ namespace LayoutFarm
 
 
 
-    class GeneralEventListener : IEventListener, UI.IUIEventListener
+    class GeneralEventListener : IEventListener
     {
 
-        internal UI.IUIEventListener uiElement;// bind to owner
+        //internal UI.IUIEventListener uiElement;// bind to owner
 
-        public bool BypassAllMouseEvents
-        {
-            get { return uiElement.BypassAllMouseEvents; }
-        }
-        public bool AutoStopMouseEventPropagation
-        {
-            get { return uiElement.AutoStopMouseEventPropagation; ; }
-        }
+        //public bool BypassAllMouseEvents
+        //{
+        //    get { return uiElement.BypassAllMouseEvents; }
+        //}
+        //public bool AutoStopMouseEventPropagation
+        //{
+        //    get { return uiElement.AutoStopMouseEventPropagation; ; }
+        //}
 
-        public void GetGlobalLocation(out int x, out int y)
-        {
-            uiElement.GetGlobalLocation(out x, out y);
-        }
+        //public void GetGlobalLocation(out int x, out int y)
+        //{
+        //    uiElement.GetGlobalLocation(out x, out y);
+        //}
         public void HandleContentLayout()
         {
 

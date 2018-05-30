@@ -4,8 +4,8 @@ namespace LayoutFarm.UI
 {
     partial class UIElement
     {
-        IUIEventListener _externalEventListener;
-        public bool AttachExternalEventListener(IUIEventListener externalEventListener)
+        IEventListener _externalEventListener;
+        public bool AttachExternalEventListener(IEventListener externalEventListener)
         {
             if (_externalEventListener == null)
             {
