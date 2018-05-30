@@ -9,18 +9,18 @@ namespace LayoutFarm.UI
     }
     public interface IUIElement
     {
-        bool AttachEventListener(IUIEventListener eventListener); 
+        bool AttachEventListener(IEventListener eventListener); 
     }
     public interface IUIRootElement
     {
-        IUIEventListener CreateEventListener();
+        IEventListener CreateEventListener();
         IUIElement CreateElement(string elemName);
         void AddContent(IUIElement uiElement); 
     }
     /// <summary>
     /// can listen to some event
     /// </summary>
-    public interface IUIEventListener
+    public interface IEventListener
     {
         event UIEventHandler<IEventArgs> MouseDown;
         event UIEventHandler<IEventArgs> MouseUp;

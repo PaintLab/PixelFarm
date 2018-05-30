@@ -21,7 +21,7 @@ namespace LayoutFarm
             textbox.SetLocation(20, 60);
             textbox.SetSize(100, 24);
 
-            IUIEventListener evListener = root.CreateEventListener();
+            IEventListener evListener = root.CreateEventListener();
             int count = 0;
             evListener.MouseDown += (e) =>
             {

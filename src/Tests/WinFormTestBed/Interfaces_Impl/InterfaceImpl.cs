@@ -69,7 +69,7 @@ namespace LayoutFarm
             if (box == null) return;
             box.SetSize(w, h);
         }
-        public bool AttachEventListener(IUIEventListener uiEventListener)
+        public bool AttachEventListener(IEventListener uiEventListener)
         {
             GeneralEventListener genEventListener = uiEventListener as GeneralEventListener;
             if (genEventListener != null)
@@ -162,10 +162,10 @@ namespace LayoutFarm
         }
     }
 
-    class GeneralEventListener : IUIEventListener, UI.IEventListener
+    class GeneralEventListener : IEventListener, UI.IUIEventListener
     {
 
-        internal UI.IEventListener uiElement;// bind to owner
+        internal UI.IUIEventListener uiElement;// bind to owner
 
         public bool BypassAllMouseEvents
         {
@@ -285,7 +285,7 @@ namespace LayoutFarm
         UIEventHandler<IEventArgs> _keydown;
         UIEventHandler<IEventArgs> _keypress;
         UIEventHandler<IEventArgs> _keyup;
-        event UIEventHandler<IEventArgs> IUIEventListener.MouseDown
+        event UIEventHandler<IEventArgs> IEventListener.MouseDown
         {
             add
             {
@@ -298,7 +298,7 @@ namespace LayoutFarm
                 this._mouseDown = null;
             }
         }
-        event UIEventHandler<IEventArgs> IUIEventListener.MouseMove
+        event UIEventHandler<IEventArgs> IEventListener.MouseMove
         {
             add
             {
@@ -311,7 +311,7 @@ namespace LayoutFarm
                 this._mouseMove = null;
             }
         }
-        event UIEventHandler<IEventArgs> IUIEventListener.MouseUp
+        event UIEventHandler<IEventArgs> IEventListener.MouseUp
         {
             add
             {
@@ -325,7 +325,7 @@ namespace LayoutFarm
             }
         }
 
-        event UIEventHandler<IEventArgs> IUIEventListener.KeyDown
+        event UIEventHandler<IEventArgs> IEventListener.KeyDown
         {
             add
             {
@@ -338,7 +338,7 @@ namespace LayoutFarm
                 this._keydown = null;
             }
         }
-        event UIEventHandler<IEventArgs> IUIEventListener.KeyPress
+        event UIEventHandler<IEventArgs> IEventListener.KeyPress
         {
             add
             {
@@ -351,7 +351,7 @@ namespace LayoutFarm
                 this._keypress = null;
             }
         }
-        event UIEventHandler<IEventArgs> IUIEventListener.KeyUp
+        event UIEventHandler<IEventArgs> IEventListener.KeyUp
         {
             add
             {
@@ -374,7 +374,7 @@ namespace LayoutFarm
             var myUI = (MyUIElement)uiElement;
             _viewport.AddContent(myUI.uiElem);
         }
-        public IUIEventListener CreateEventListener()
+        public IEventListener CreateEventListener()
         {
             //create new event listener
             var eventListener = new GeneralEventListener();

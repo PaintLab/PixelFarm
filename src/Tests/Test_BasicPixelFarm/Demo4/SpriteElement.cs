@@ -53,6 +53,7 @@ namespace LayoutFarm.UI
             this._height = height;
             //default for box
             this.AutoStopMouseEventPropagation = true;
+            
         }
         public void LoadSvg(SvgRenderVx renderVx)
         {
@@ -61,7 +62,7 @@ namespace LayoutFarm.UI
             {
                 _svgRenderElement.RenderVx = renderVx;
                 RectD bound = renderVx.GetBounds();
-                this.SetSize((int)bound.Width, (int)bound.Height);
+                this.SetSize((int)bound.Width, (int)bound.Height); 
             }
         }
         protected override void OnMouseDown(UIMouseEventArgs e)

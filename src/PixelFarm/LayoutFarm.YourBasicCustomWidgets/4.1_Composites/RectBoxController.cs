@@ -55,7 +55,6 @@ namespace LayoutFarm.CustomWidgets
             controllerBox1.TargetBox = box;
 
 
-
             {
                 //left-top
                 UIControllerBox ctrlBox = _boxLeftTop;
@@ -242,4 +241,62 @@ namespace LayoutFarm.CustomWidgets
             _controls.Add(box);
         }
     }
+
+
+    public class PolygonController
+    {
+
+        List<UIControllerBox> _controls = new List<UIControllerBox>();
+        public void UpdateControlPoints(List<PointF> polygonPoints)
+        {
+            _controls.Clear();
+            int j = polygonPoints.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                PointF loca = polygonPoints[i];
+                var ctrlPoint = new UIControllerBox(20, 20);
+                ctrlPoint.SetLocation((int)loca.X, (int)loca.Y);
+
+                SetupCornerBoxController(ctrlPoint);
+            }
+        }
+        void SetupCornerBoxController(UIControllerBox box)
+        {
+            Color c = KnownColors.FromKnownColor(KnownColor.Orange);
+            box.BackColor = new Color(100, c.R, c.G, c.B);
+
+            //controllerBox1.dbugTag = 3;
+            box.Visible = true;
+            SetupControllerBoxProperties2(box);
+            //viewport.AddContent(box);
+            //
+            _controls.Add(box);
+        }
+        public IEnumerable<UIBox> GetControllerIter()
+        {
+            foreach (var box in _controls)
+            {
+                yield return box;
+            }
+        }
+        static void SetupControllerBoxProperties2(UIControllerBox cornerBox)
+        {
+            //for controller box  
+            cornerBox.MouseDrag += (s, e) =>
+            {
+                Point pos = cornerBox.Position;
+                int newX = pos.X + e.XDiff;
+                int newY = pos.Y + e.YDiff;
+                cornerBox.SetLocation(newX, newY);
+                //var targetBox = cornerBox.TargetBox;
+                //if (targetBox != null)
+                //{
+                //    //move target box too
+                //    targetBox.SetLocation(newX + 5, newY + 5);
+                //}
+                e.CancelBubbling = true;
+            };
+        }
+    }
+
 }
