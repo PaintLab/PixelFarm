@@ -46,25 +46,26 @@ namespace LayoutFarm.UI
         IUIElement CreateElement(string elemName);
         void AddContent(IUIElement uiElement);
     }
+
     /// <summary>
     /// can listen to some event
     /// </summary>
     public interface IEventListener
     {
-        event UIEventHandler<IEventArgs> MouseDown;
-        event UIEventHandler<IEventArgs> MouseUp;
-        event UIEventHandler<IEventArgs> MouseMove;
+        event UIEventHandler<UIMouseEventArgs> MouseDown;
+        event UIEventHandler<UIMouseEventArgs> MouseUp;
+        event UIEventHandler<UIMouseEventArgs> MouseMove;
         //
-        event UIEventHandler<IEventArgs> KeyDown;
-        event UIEventHandler<IEventArgs> KeyPress;
-        event UIEventHandler<IEventArgs> KeyUp;
+        event UIEventHandler<UIKeyEventArgs> KeyDown;
+        event UIEventHandler<UIKeyEventArgs> KeyPress;
+        event UIEventHandler<UIKeyEventArgs> KeyUp;
 
 
         //--------------------------------------------------------------------------
-        void ListenKeyPress(UIKeyEventArgs args);
+        void ListenKeyPress(UIKeyEventArgs e);
         void ListenKeyDown(UIKeyEventArgs e);
         void ListenKeyUp(UIKeyEventArgs e);
-        bool ListenProcessDialogKey(UIKeyEventArgs args);
+        bool ListenProcessDialogKey(UIKeyEventArgs e);
         //--------------------------------------------------------------------------
         void ListenMouseDown(UIMouseEventArgs e);
         void ListenMouseMove(UIMouseEventArgs e);
@@ -83,35 +84,8 @@ namespace LayoutFarm.UI
         void ListenGuestTalk(UIGuestTalkEventArgs e);
         //-------------------------------------------------------------------------- 
 
-
-        void HandleContentLayout();
-        void HandleContentUpdate();
-        void HandleElementUpdate();
     }
 
-
-
-    public interface IEventArgs
-    {
-        IEventName EventName { get; }
-        int X { get; }
-        int Y { get; }
-    }
-    public enum IEventName
-    {
-        Custom,
-
-        MouseDown,
-        MouseMove,
-        MouseUp,
-        //Focus
-        //
-        KeyDown,
-        KeyPress,
-        KeyUp
-
-    }
-
-    public delegate void UIEventHandler<T>(T e)
-        where T : IEventArgs;
+     
+    public delegate void UIEventHandler<T>(T e) where T : System.EventArgs;
 }
