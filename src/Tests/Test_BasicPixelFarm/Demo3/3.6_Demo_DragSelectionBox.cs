@@ -384,7 +384,7 @@ namespace LayoutFarm
                         //TODO: review here
                         //this version we select the first one
 
-                        var listener = dragOverElements[0] as IEventListener;
+                        var listener = dragOverElements[0] as IUIEventListener;
                         if (listener != null)
                         {
                             var talkMsg = new UIGuestTalkEventArgs();
@@ -411,7 +411,7 @@ namespace LayoutFarm
                     {
                         foreach (var leavingElement in prevDragOverElements.Keys)
                         {
-                            var listener = leavingElement as IEventListener;
+                            var listener = leavingElement as IUIEventListener;
                             if (listener != null)
                             {
                                 var talkMsg = new UIGuestTalkEventArgs();
@@ -450,7 +450,7 @@ namespace LayoutFarm
                         //remaining elements
                         foreach (var leavingElement in prevDragOverElements.Keys)
                         {
-                            var listener = leavingElement as IEventListener;
+                            var listener = leavingElement as IUIEventListener;
                             if (listener != null)
                             {
                                 var talkMsg = new UIGuestTalkEventArgs();
@@ -471,7 +471,7 @@ namespace LayoutFarm
                     controllerBox.LastestDragOverElements = latestDragOverElements;
                     foreach (var drgElement in latestDragOverElements.Keys)
                     {
-                        var listener = drgElement as IEventListener;
+                        var listener = drgElement as IUIEventListener;
                         if (listener != null)
                         {
                             var talkMsg = new UIGuestTalkEventArgs();

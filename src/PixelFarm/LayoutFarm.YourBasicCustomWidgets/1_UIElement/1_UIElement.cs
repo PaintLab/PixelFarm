@@ -28,7 +28,7 @@ namespace LayoutFarm.UI
         }
     }
 
-    public abstract partial class UIElement : IEventListener
+    public abstract partial class UIElement : IUIEventListener
     {
 
 #if DEBUG

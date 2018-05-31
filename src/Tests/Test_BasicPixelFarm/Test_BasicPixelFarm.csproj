@@ -75,6 +75,7 @@
     <Compile Include="Demo1\1.8_Demo_Hinge.cs" />
     <Compile Include="Demo1\1.9_Demo_TreeView.cs" />
     <Compile Include="Demo4\4.1_SvgTiger.cs" />
+    <Compile Include="Demo4\4.2_ShapeControls.cs" />
     <Compile Include="Demo4\SpriteElement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
