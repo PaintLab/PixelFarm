@@ -68,7 +68,7 @@ namespace PixelFarm.Agg
 
                     _boundRect.ExpandToInclude(rectTotal);
                 }
-                
+
                 _needBoundUpdate = false;
             }
             return _boundRect;
@@ -88,6 +88,7 @@ namespace PixelFarm.Agg
 
         public void Render(Painter p)
         {
+
             //
             if (HasBitmapSnapshot)
             {
@@ -353,6 +354,12 @@ namespace PixelFarm.Agg
         }
         public VertexStore GetVxs()
         {
+#if DEBUG
+            if (_vxs._dbugIsChanged)
+            {
+
+            }
+#endif
             return _vxs;
         }
         public float StrokeWidth

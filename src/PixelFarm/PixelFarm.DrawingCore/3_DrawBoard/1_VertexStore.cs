@@ -132,8 +132,11 @@ namespace PixelFarm.Drawing
             }
 
         }
-        internal void ReplaceVertex(int index, double x, double y)
+        public void ReplaceVertex(int index, double x, double y)
         {
+#if DEBUG
+            _dbugIsChanged = true;
+#endif
             m_coord_xy[index << 1] = x;
             m_coord_xy[(index << 1) + 1] = y;
         }
@@ -157,6 +160,7 @@ namespace PixelFarm.Drawing
 
 
 #if DEBUG
+        public bool _dbugIsChanged;
         public static bool dbugCheckNANs(double x, double y)
         {
             if (double.IsNaN(x))

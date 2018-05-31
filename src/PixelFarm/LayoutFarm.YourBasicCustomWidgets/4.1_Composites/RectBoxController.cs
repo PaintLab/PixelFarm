@@ -25,6 +25,7 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
+        public int Index { get; set; }
     }
 
 
@@ -277,6 +278,8 @@ namespace LayoutFarm.CustomWidgets
         List<PointF> _points = new List<PointF>();
         List<UIControllerBox> _controls = new List<UIControllerBox>();
 
+        VertexStore _vxs;
+
 
         public PolygonController()
         {
@@ -326,6 +329,7 @@ namespace LayoutFarm.CustomWidgets
         public void UpdateControlPoints(VertexStore vxs)
         {
             //1. we remove existing point from root
+            _vxs = vxs;
             int m = _controls.Count;
             for (int n = 0; n < m; ++n)
             {
@@ -344,7 +348,9 @@ namespace LayoutFarm.CustomWidgets
                 {
                     case PixelFarm.Agg.VertexCmd.MoveTo:
                         {
+
                             var ctrlPoint = new UIControllerBox(8, 8);
+                            ctrlPoint.Index = i;
                             ctrlPoint.SetLocation((int)x, (int)y);
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
@@ -354,6 +360,7 @@ namespace LayoutFarm.CustomWidgets
                     case PixelFarm.Agg.VertexCmd.LineTo:
                         {
                             var ctrlPoint = new UIControllerBox(8, 8);
+                            ctrlPoint.Index = i;
                             ctrlPoint.SetLocation((int)x, (int)y);
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
@@ -373,13 +380,13 @@ namespace LayoutFarm.CustomWidgets
 
             //controllerBox1.dbugTag = 3;
             box.Visible = true;
-            SetupControllerBoxProperties2(box);
+            SetupCornerProperties(box);
             //viewport.AddContent(box);
             //
             _controls.Add(box);
         }
 
-        static void SetupControllerBoxProperties2(UIControllerBox cornerBox)
+        void SetupCornerProperties(UIControllerBox cornerBox)
         {
             //for controller box  
             cornerBox.MouseDrag += (s, e) =>
@@ -395,6 +402,10 @@ namespace LayoutFarm.CustomWidgets
                 //    targetBox.SetLocation(newX + 5, newY + 5);
                 //}
                 e.CancelBubbling = true;
+
+                //then update the vxs shape
+                _vxs.ReplaceVertex(cornerBox.Index, newX, newY);
+
             };
         }
     }
