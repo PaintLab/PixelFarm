@@ -11,7 +11,7 @@ using PixelFarm.Agg;
 namespace LayoutFarm
 {
     [DemoNote("4.2 ShapeControls")]
-    class DemoShaprControl : DemoBase
+    class DemoShapeControl : DemoBase
     {
         LayoutFarm.CustomWidgets.PolygonController polygonController = new CustomWidgets.PolygonController();
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
@@ -20,7 +20,7 @@ namespace LayoutFarm
 
         protected override void OnStartDemo(SampleViewport viewport)
         {
-           
+
 
             SvgPart svgPart = new SvgPart(SvgRenderVxKind.Path);
             VertexStore vxs = new VertexStore();
@@ -34,9 +34,14 @@ namespace LayoutFarm
             SvgRenderVx svgRenderVx = new SvgRenderVx(new SvgPart[] { svgPart });
 
             var uiSprite = new UISprite(200, 200);
-
             uiSprite.LoadSvg(svgRenderVx);
             viewport.AddContent(uiSprite);
+
+
+
+            var evListener = new GeneralEventListener();
+            uiSprite.AttachExternalEventListener(evListener);
+
 
 
             box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
@@ -47,28 +52,40 @@ namespace LayoutFarm
             viewport.AddContent(box1);
             //-------- 
             rectBoxController.Init();
-            //------------
+            viewport.AddContent(polygonController);
+            //-------------------------------------------
+            viewport.AddContent(rectBoxController);
 
-            //
-
-
-            ////-------------------------------------------
-            foreach (var ui in rectBoxController.GetControllerIter())
-            {
-                viewport.AddContent(ui);
-            }
-
-
-            //List<PointF> ctrlPoints = new List<PointF>();
-            //ctrlPoints.Add(new PointF(10, 20));
-            //ctrlPoints.Add(new PointF(50, 50));
-            //ctrlPoints.Add(new PointF(10, 80));
-            //polygonController.UpdateControlPoints(ctrlPoints);
-
-            //foreach (var ui in polygonController.GetControllerIter())
+            //foreach (var ui in rectBoxController.GetControllerIter())
             //{
             //    viewport.AddContent(ui);
             //}
+
+            evListener.MouseDown += e1 =>
+            {
+                //mousedown on ui sprite
+                polygonController.SetPosition(uiSprite.Left, uiSprite.Top);
+                polygonController.UpdateControlPoints(vxs);
+
+                 
+            };
+            evListener.MouseMove += e1 =>
+            {
+                if (e1.IsDragging)
+                {
+                    //drag event on uisprite
+
+                    int left = uiSprite.Left;
+                    int top = uiSprite.Top;
+
+                    int new_left = left + e1.DiffCapturedX;
+                    int new_top = top + e1.DiffCapturedY;
+                    uiSprite.SetLocation(new_left, new_top);
+                    //-----
+                    //also update controller position
+                    polygonController.SetPosition(new_left, new_top);
+                }
+            };
 
         }
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)

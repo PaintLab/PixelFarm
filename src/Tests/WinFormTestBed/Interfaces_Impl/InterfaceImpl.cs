@@ -71,17 +71,17 @@ namespace LayoutFarm
         }
         public bool AttachEventListener(IEventListener uiEventListener)
         {
-            
+
             GeneralEventListener genEventListener = uiEventListener as GeneralEventListener;
             if (genEventListener != null)
-            {  
+            {
                 uiElem.AttachExternalEventListener(genEventListener);
             }
             return false;
         }
     }
 
-    
+
     class UIRootElement : IUIRootElement
     {
         internal SampleViewport _viewport;
@@ -143,80 +143,80 @@ namespace LayoutFarm
         public event UIEventHandler<UIKeyEventArgs> KeyPress;
         public event UIEventHandler<UIKeyEventArgs> KeyUp;
 
-        public void ListenGotKeyboardFocus(UIFocusEventArgs e)
+        void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
 
         }
 
-        public void ListenGuestTalk(UIGuestTalkEventArgs e)
+        void IEventListener.ListenGuestTalk(UIGuestTalkEventArgs e)
         {
 
         }
 
-        public void ListenInterComponentMsg(object sender, int msgcode, string msg)
+        void IEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
         {
 
         }
 
-        public void ListenKeyDown(UIKeyEventArgs e)
+        void IEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
             KeyDown?.Invoke(e);
         }
 
-        public void ListenKeyPress(UIKeyEventArgs e)
+        void IEventListener.ListenKeyPress(UIKeyEventArgs e)
         {
             KeyPress?.Invoke(e);
         }
 
-        public void ListenKeyUp(UIKeyEventArgs e)
+        void IEventListener.ListenKeyUp(UIKeyEventArgs e)
         {
             KeyUp?.Invoke(e);
         }
 
-        public void ListenLostKeyboardFocus(UIFocusEventArgs e)
+        void IEventListener.ListenLostKeyboardFocus(UIFocusEventArgs e)
         {
 
         }
 
-        public void ListenLostMouseFocus(UIMouseEventArgs e)
+        void IEventListener.ListenLostMouseFocus(UIMouseEventArgs e)
         {
 
         }
 
-        public void ListenMouseClick(UIMouseEventArgs e)
+        void IEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
 
         }
 
-        public void ListenMouseDoubleClick(UIMouseEventArgs e)
+        void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
 
         }
 
-        public void ListenMouseDown(UIMouseEventArgs e)
+        void IEventListener.ListenMouseDown(UIMouseEventArgs e)
         {
             MouseDown?.Invoke(e);
         }
 
-        public void ListenMouseLeave(UIMouseEventArgs e)
+        void IEventListener.ListenMouseLeave(UIMouseEventArgs e)
         {
 
         }
 
-        public void ListenMouseMove(UIMouseEventArgs e)
+        void IEventListener.ListenMouseMove(UIMouseEventArgs e)
         {
             MouseMove?.Invoke(e);
         }
 
-        public void ListenMouseUp(UIMouseEventArgs e)
+        void IEventListener.ListenMouseUp(UIMouseEventArgs e)
         {
             MouseUp?.Invoke(e);
         }
-        public void ListenMouseWheel(UIMouseEventArgs e)
+        void IEventListener.ListenMouseWheel(UIMouseEventArgs e)
         {
 
         }
-        public bool ListenProcessDialogKey(UIKeyEventArgs args)
+        bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
         {
             return false;
         }

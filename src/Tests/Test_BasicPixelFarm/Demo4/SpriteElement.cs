@@ -28,17 +28,13 @@ namespace LayoutFarm.UI
     }
 
 
-
     public class UISprite : UIElement
     {
         int _left;
         int _top;
         int _width;
         int _height;
-
         bool _hide;
-        bool specificWidth;
-        bool specificHeight;
 
         SvgRenderElement _svgRenderElement;
         SvgRenderVx _svgRenderVx;
@@ -53,7 +49,7 @@ namespace LayoutFarm.UI
             this._height = height;
             //default for box
             this.AutoStopMouseEventPropagation = true;
-            
+
         }
         public void LoadSvg(SvgRenderVx renderVx)
         {
@@ -62,7 +58,7 @@ namespace LayoutFarm.UI
             {
                 _svgRenderElement.RenderVx = renderVx;
                 RectD bound = renderVx.GetBounds();
-                this.SetSize((int)bound.Width, (int)bound.Height); 
+                this.SetSize((int)bound.Width, (int)bound.Height);
             }
         }
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -97,6 +93,8 @@ namespace LayoutFarm.UI
             return _svgRenderElement;
 
         }
+
+
         public virtual void Focus()
         {
             //make this keyboard focusable
@@ -112,30 +110,6 @@ namespace LayoutFarm.UI
             {
                 //focus
                 this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
-            }
-        }
-        public bool HasSpecificWidth
-        {
-            get { return this.specificWidth; }
-            set
-            {
-                this.specificWidth = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
-        }
-        public bool HasSpecificHeight
-        {
-            get { return this.specificHeight; }
-            set
-            {
-                this.specificHeight = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                }
             }
         }
 
@@ -165,10 +139,7 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.SetSize(_width, _height);
             }
         }
-        public virtual void SetFont(RequestFont font)
-        {
 
-        }
         public void SetBounds(int left, int top, int width, int height)
         {
             SetLocation(left, top);
@@ -268,32 +239,7 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
             }
         }
-        public virtual int ViewportX
-        {
-            get { return 0; }
-        }
-        public virtual int ViewportY
-        {
-            get { return 0; }
-        }
-        public virtual int ViewportWidth
-        {
-            get { return this.Width; }
-        }
-        public virtual int ViewportHeight
-        {
-            get { return this.Height; }
-        }
-        public virtual void SetViewport(int x, int y)
-        {
-        }
 
-        bool _userSpecificInnerContentSize = false;
-        public virtual void SetInnerContentSize(int w, int h)
-        {
-            _userSpecificInnerContentSize = true;
-
-        }
 
 
         public virtual bool Visible
@@ -329,18 +275,7 @@ namespace LayoutFarm.UI
         {
             get { return new Rectangle(this.Left, this.Top, this.Width, this.Height); }
         }
-        //void IBoxElement.ChangeElementSize(int w, int h)
-        //{
-        //    this.SetSize(w, h);
-        //}
-        //int IBoxElement.MinHeight
-        //{
-        //    get
-        //    {
-        //        //TODO: use mimimum current font height ***
-        //        return this.Height;
-        //    }
-        //}
+
     }
 
     class BackBoardRenderElement : LayoutFarm.CustomWidgets.CustomRenderBox

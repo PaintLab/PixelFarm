@@ -26,7 +26,10 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
-    public class RectBoxController
+
+
+
+    public class RectBoxController : UIElement
     {
         UIControllerBox _boxLeftTop = new UIControllerBox(20, 20);
         UIControllerBox _boxLeftBottom = new UIControllerBox(20, 20);
@@ -35,10 +38,39 @@ namespace LayoutFarm.CustomWidgets
         UIControllerBox controllerBox1 = new UIControllerBox(40, 40);
         List<UIControllerBox> _controls = new List<UIControllerBox>();
 
+        SimpleBox _simpleBox;
+        bool _hasPrimRenderE;
         public RectBoxController()
+        {
+            _simpleBox = new SimpleBox(10, 10);
+            _simpleBox.BackColor = Color.Transparent;//*** 
+        }
+        //-------------
+        public override void InvalidateGraphics()
+        {
+            if (this.HasReadyRenderElement)
+            {
+                this.CurrentPrimaryRenderElement.InvalidateGraphics();
+            }
+        }
+        protected override bool HasReadyRenderElement
+        {
+            get { return _hasPrimRenderE; }
+        }
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            _hasPrimRenderE = true;
+            return _simpleBox.GetPrimaryRenderElement(rootgfx);
+        }
+        public override void Walk(UIVisitor visitor)
         {
 
         }
+        public override RenderElement CurrentPrimaryRenderElement
+        {
+            get { return _simpleBox.CurrentPrimaryRenderElement; }
+        }
+        //-------------
         public void Focus()
         {
             controllerBox1.AcceptKeyboardFocus = true;
@@ -85,14 +117,6 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public IEnumerable<UIBox> GetControllerIter()
-        {
-            foreach (var box in _controls)
-            {
-                yield return box;
-            }
-        }
-
         public void Init()
         {
             //------------
@@ -107,7 +131,7 @@ namespace LayoutFarm.CustomWidgets
                 //viewport.AddContent(controllerBox1);
                 _controls.Add(controllerBox1);
             }
-
+            _simpleBox.AddChild(controllerBox1);
             //------------
 
             _boxLeftTop = new UIControllerBox(20, 20);
@@ -125,6 +149,7 @@ namespace LayoutFarm.CustomWidgets
                 UpdateControllerBoxes(target1);
 
             };
+            _simpleBox.AddChild(_boxLeftTop);
             //------------
             _boxLeftBottom = new UIControllerBox(20, 20);
             SetupCornerBoxController(_boxLeftBottom);
@@ -139,6 +164,7 @@ namespace LayoutFarm.CustomWidgets
                 //update other controller
                 UpdateControllerBoxes(target1);
             };
+            _simpleBox.AddChild(_boxLeftBottom);
             //------------ 
 
             _boxRightTop = new UIControllerBox(20, 20);
@@ -154,7 +180,7 @@ namespace LayoutFarm.CustomWidgets
                 //update other controller
                 UpdateControllerBoxes(target1);
             };
-
+            _simpleBox.AddChild(_boxRightTop);
 
             //------------ 
             _boxRightBottom = new UIControllerBox(20, 20);
@@ -170,6 +196,7 @@ namespace LayoutFarm.CustomWidgets
                 //update other controller
                 UpdateControllerBoxes(target1);
             };
+            _simpleBox.AddChild(_boxRightBottom);
         }
 
         public EaseBox ControllerBoxMain
@@ -243,22 +270,95 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class PolygonController
+    public class PolygonController : UIElement
     {
-
+        SimpleBox _simpleBox;
+        bool _hasPrimRenderE;
+        List<PointF> _points = new List<PointF>();
         List<UIControllerBox> _controls = new List<UIControllerBox>();
-        public void UpdateControlPoints(List<PointF> polygonPoints)
+
+
+        public PolygonController()
         {
-            _controls.Clear();
-            int j = polygonPoints.Count;
+
+            _simpleBox = new SimpleBox(10, 10);
+            _simpleBox.NeedClipArea = false;
+            _simpleBox.BackColor = Color.Transparent;//*** 
+
+        }
+        //-------------
+        public override void InvalidateGraphics()
+        {
+            if (this.HasReadyRenderElement)
+            {
+                this.CurrentPrimaryRenderElement.InvalidateGraphics();
+            }
+        }
+        protected override bool HasReadyRenderElement
+        {
+            get { return _hasPrimRenderE; }
+        }
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            _hasPrimRenderE = true;
+            return _simpleBox.GetPrimaryRenderElement(rootgfx);
+        }
+        public override void Walk(UIVisitor visitor)
+        {
+
+        }
+        public override RenderElement CurrentPrimaryRenderElement
+        {
+            get { return _simpleBox.CurrentPrimaryRenderElement; }
+        }
+
+        public void SetPosition(int x, int y)
+        {
+
+            _simpleBox.SetLocation(x, y);
+        }
+        public void UpdateControlPoints(VertexStore vxs)
+        {
+            //1. we remove existing point from root
+            int m = _controls.Count;
+            for (int n = 0; n < m; ++n)
+            {
+                _controls[n].RemoveSelf();
+            }
+            _controls.Clear(); //***
+            _points.Clear();
+
+            //2. create new control points...
+
+            int j = vxs.Count;
             for (int i = 0; i < j; ++i)
             {
-                PointF loca = polygonPoints[i];
-                var ctrlPoint = new UIControllerBox(20, 20);
-                ctrlPoint.SetLocation((int)loca.X, (int)loca.Y);
-
-                SetupCornerBoxController(ctrlPoint);
+                var cmd = vxs.GetVertex(i, out double x, out double y);
+                switch (cmd)
+                {
+                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                        {
+                            var ctrlPoint = new UIControllerBox(8, 8);
+                            ctrlPoint.SetLocation((int)x, (int)y);
+                            SetupCornerBoxController(ctrlPoint);
+                            _controls.Add(ctrlPoint);
+                            _simpleBox.AddChild(ctrlPoint);
+                        }
+                        break;
+                    case PixelFarm.Agg.VertexCmd.LineTo:
+                        {
+                            var ctrlPoint = new UIControllerBox(8, 8);
+                            ctrlPoint.SetLocation((int)x, (int)y);
+                            SetupCornerBoxController(ctrlPoint);
+                            _controls.Add(ctrlPoint);
+                            _simpleBox.AddChild(ctrlPoint);
+                        }
+                        break;
+                    case PixelFarm.Agg.VertexCmd.Close:
+                        break;
+                }
             }
+
         }
         void SetupCornerBoxController(UIControllerBox box)
         {
@@ -272,13 +372,7 @@ namespace LayoutFarm.CustomWidgets
             //
             _controls.Add(box);
         }
-        public IEnumerable<UIBox> GetControllerIter()
-        {
-            foreach (var box in _controls)
-            {
-                yield return box;
-            }
-        }
+
         static void SetupControllerBoxProperties2(UIControllerBox cornerBox)
         {
             //for controller box  

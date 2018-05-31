@@ -48,10 +48,12 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //------------
-            foreach (var ui in rectBoxController.GetControllerIter())
-            {
-                viewport.AddContent(ui);
-            }
+            viewport.AddContent(rectBoxController);
+
+            //foreach (var ui in rectBoxController.GetControllerIter())
+            //{
+            //    viewport.AddContent(ui);
+            //}
 
             //--------
             var evListener = new GeneralEventListener();
