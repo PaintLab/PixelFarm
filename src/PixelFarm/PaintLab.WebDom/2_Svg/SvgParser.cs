@@ -757,6 +757,7 @@ namespace PaintLab.Svg
         }
         VertexStore GetFreeVxs()
         {
+            
             if (_reusableVertexStore.Count > 0)
             {
                 return _reusableVertexStore.Dequeue();
