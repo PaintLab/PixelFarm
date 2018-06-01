@@ -178,9 +178,7 @@ namespace PixelFarm.Drawing
             drawBoard.OffsetCanvasOrigin(0, dy);
         }
     }
-
-
-
+     
 
     public static class DrawBoardCreator
     {

@@ -77,6 +77,15 @@ namespace PixelFarm.Agg
 
         public ActualImage(int width, int height, PixelFormat format = PixelFormat.ARGB32)
         {
+
+#if DEBUG
+
+            if (format != PixelFormat.ARGB32)
+            {
+                throw new NotSupportedException();
+            }
+
+#endif
             //width and height must >0 
             this.width = width;
             this.height = height;
@@ -158,23 +167,6 @@ namespace PixelFarm.Agg
             }
             return img;
         }
-        //public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, byte[] buffer)
-        //{
-        //    if (format != PixelFormat.ARGB32 && format != PixelFormat.RGB24)
-        //    {
-        //        throw new NotSupportedException();
-        //    }
-        //    //
-        //    var img = new ActualImage(width, height, format);
-        //    unsafe
-        //    {
-        //        fixed (byte* header = &img.pixelBuffer[0])
-        //        {
-        //            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
-        //        }
-        //    }
-        //    return img;
-        //}
 
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {

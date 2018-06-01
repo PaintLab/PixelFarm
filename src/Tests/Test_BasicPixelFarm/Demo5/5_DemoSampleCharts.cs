@@ -78,11 +78,16 @@ namespace LayoutFarm.ColorBlenderSample
                 else
                 {
                     float prevW = canvas.StrokeWidth; //save
+                    var smoothMode = canvas.SmoothingMode;//save prev
+
+                    canvas.SmoothingMode = SmoothingMode.AntiAlias;
 
                     canvas.StrokeWidth = 3;
-                    canvas.DrawLine(X0, Y0, X1, Y1); //restore
+                    canvas.DrawLine(X0, Y0, X1, Y1);
 
-                    canvas.StrokeWidth = prevW;
+                    canvas.StrokeWidth = prevW;//restore
+                    canvas.SmoothingMode = smoothMode; //restore
+
                 }
 
             }
@@ -188,7 +193,7 @@ namespace LayoutFarm.ColorBlenderSample
                     //---
 
                     _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
-                    _lineRendeE.gfxPath = ConvToGraphicPath(strokeVxs);
+                    //_lineRendeE.gfxPath = ConvToGraphicPath(strokeVxs);
 
                     _lineRendeE.X0 = p0.Left;
                     _lineRendeE.Y0 = p0.Top;
