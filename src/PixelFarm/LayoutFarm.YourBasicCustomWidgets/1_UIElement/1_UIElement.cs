@@ -22,8 +22,9 @@ namespace LayoutFarm.UI
             for (int i = count - 1; i >= 0; --i)
             {
                 UIElement ui = s_layoutQueue.Dequeue();
-                UIElement.InvokeContentLayout(ui);
                 ui.IsInLayoutQueue = false;
+                UIElement.InvokeContentLayout(ui);
+
             }
         }
     }

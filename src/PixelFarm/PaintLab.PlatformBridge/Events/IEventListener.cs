@@ -36,16 +36,16 @@ namespace LayoutFarm.UI
         //--------------------------------------------------------------------------  
     }
 
-    public interface IUIElement
-    {
-        bool AttachEventListener(IEventListener eventListener);
-    }
-    public interface IUIRootElement
-    {
-        IEventListener CreateEventListener();
-        IUIElement CreateElement(string elemName);
-        void AddContent(IUIElement uiElement);
-    }
+    //public interface IUIElement
+    //{
+    //    bool AttachEventListener(IEventListener eventListener);
+    //}
+    //public interface IUIRootElement
+    //{
+    //    IEventListener CreateEventListener();
+    //    IUIElement CreateElement(string elemName);
+    //    void AddContent(IUIElement uiElement);
+    //}
 
     /// <summary>
     /// can listen to some event
