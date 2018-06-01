@@ -44,11 +44,7 @@ namespace PixelFarm.Drawing
         {
             AllocIfRequired(2);
         }
-        public VertexStore(int initsize)
-        {
-            AllocIfRequired(initsize);
-        }
-
+        
 
         /// <summary>
         /// num of vertex

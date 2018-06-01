@@ -29,7 +29,8 @@ namespace PixelFarm.Agg.VertexSource
             clipper.Execute(clipType, intersectedPolys);
             List<VertexStore> resultList = new List<VertexStore>();
 
-            PathWriter output = new PathWriter();
+            PathWriter outputPathWriter = new PathWriter();
+
             if (separateIntoSmallSubPaths)
             {
                 foreach (List<IntPoint> polygon in intersectedPolys)
@@ -39,22 +40,22 @@ namespace PixelFarm.Agg.VertexSource
                     {
                         //first one
                         IntPoint point = polygon[0];
-                        output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
+                        outputPathWriter.MoveTo(point.X / 1000.0, point.Y / 1000.0);
                         //next others ...
                         if (j > 1)
                         {
                             for (int i = 1; i < j; ++i)
                             {
                                 point = polygon[i];
-                                output.LineTo(point.X / 1000.0, point.Y / 1000.0);
+                                outputPathWriter.LineTo(point.X / 1000.0, point.Y / 1000.0);
                             }
                         }
 
-                        output.CloseFigure();
-                        resultList.Add(output.Vxs);
+                        outputPathWriter.CloseFigure();
+                        resultList.Add(outputPathWriter.Vxs);
                         //---
                         //clear 
-                        output.ClearAndStartNewVxs(new VertexStore());
+                        outputPathWriter.ClearAndStartNewVxs(new VertexStore());
                     }
                 }
             }
@@ -67,23 +68,23 @@ namespace PixelFarm.Agg.VertexSource
                     {
                         //first one
                         IntPoint point = polygon[0];
-                        output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
+                        outputPathWriter.MoveTo(point.X / 1000.0, point.Y / 1000.0);
                         //next others ...
                         if (j > 1)
                         {
                             for (int i = 1; i < j; ++i)
                             {
                                 point = polygon[i];
-                                output.LineTo(point.X / 1000.0, point.Y / 1000.0);
+                                outputPathWriter.LineTo(point.X / 1000.0, point.Y / 1000.0);
                             }
                         }
-                        output.CloseFigure();
+                        outputPathWriter.CloseFigure();
                     }
                 }
 
                 //TODO: review here
-                output.Stop();
-                resultList.Add(output.Vxs);
+                outputPathWriter.Stop();
+                resultList.Add(outputPathWriter.Vxs);
             }
 
             return resultList;

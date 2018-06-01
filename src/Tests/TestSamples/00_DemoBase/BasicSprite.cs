@@ -60,14 +60,6 @@ namespace PixelFarm.Agg
             UpdateTransform((int)Width, (int)Height, mouseX, mouseY);
             return true;
         }
-        VertexStorePool _vxsPool = new VertexStorePool();
-        protected VertexStore GetFreeVxs()
-        {
-            return _vxsPool.GetFreeVxs();
-        }
-        protected void Release(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+       
     }
 }
