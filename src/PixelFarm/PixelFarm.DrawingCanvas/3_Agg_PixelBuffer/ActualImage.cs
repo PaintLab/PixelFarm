@@ -72,6 +72,7 @@ namespace PixelFarm.Agg
         int stride;
         int bitDepth;
         PixelFormat pixelFormat;
+
         int[] pixelBuffer;
 
         public ActualImage(int width, int height, PixelFormat format = PixelFormat.ARGB32)
@@ -90,6 +91,8 @@ namespace PixelFarm.Agg
         }
         public override void Dispose()
         {
+
+
 
         }
         public override int Width

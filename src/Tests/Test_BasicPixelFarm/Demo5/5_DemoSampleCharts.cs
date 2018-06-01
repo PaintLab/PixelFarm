@@ -173,25 +173,32 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 if (_lineRendeE == null)
                 {
-                    PixelFarm.Agg.Stroke stroke = new PixelFarm.Agg.Stroke(3);
 
-                    VertexStore vxs = new VertexStore();
+
+
+                    VectorToolBox.GetFreeVxs(out var vxs, out var strokeVxs);
+                    VectorToolBox.GetFreeStroke(out var stroke, 3);
+
                     vxs.AddMoveTo(p0.Left, p0.Top);
                     vxs.AddLineTo(p1.Left, p1.Top);
 
-                    VertexStore strokeShape = new VertexStore();
-                    stroke.MakeVxs(vxs, strokeShape);
-
+                    stroke.MakeVxs(vxs, strokeVxs);
                     //---
                     //convert data in vxs to GraphicPath 
                     //---
 
                     _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
-                    _lineRendeE.gfxPath = ConvToGraphicPath(strokeShape);
+                    _lineRendeE.gfxPath = ConvToGraphicPath(strokeVxs);
+
                     _lineRendeE.X0 = p0.Left;
                     _lineRendeE.Y0 = p0.Top;
                     _lineRendeE.X1 = p1.Left;
                     _lineRendeE.Y1 = p1.Top;
+
+
+                    VectorToolBox.ReleaseVxs(ref vxs);
+                    VectorToolBox.ReleaseVxs(ref strokeVxs);
+                    VectorToolBox.ReleaseStroke(ref stroke);
                 }
                 return _lineRendeE;
             }
