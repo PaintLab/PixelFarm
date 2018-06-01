@@ -17,110 +17,110 @@ namespace LayoutFarm.UI
                 return false;
             }
         }
-        void IEventListener.ListenKeyPress(UIKeyEventArgs e)
+        void IUIEventListener.ListenKeyPress(UIKeyEventArgs e)
         {
             OnKeyPress(e);
             _externalEventListener?.ListenKeyPress(e);
         }
-        void IEventListener.ListenKeyDown(UIKeyEventArgs e)
+        void IUIEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
             OnKeyDown(e);
             _externalEventListener?.ListenKeyDown(e);
         }
-        void IEventListener.ListenKeyUp(UIKeyEventArgs e)
+        void IUIEventListener.ListenKeyUp(UIKeyEventArgs e)
         {
             OnKeyUp(e);
             _externalEventListener?.ListenKeyUp(e);
         }
-        bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs e)
+        bool IUIEventListener.ListenProcessDialogKey(UIKeyEventArgs e)
         {
             return OnProcessDialogKey(e);
         }
-        void IEventListener.ListenMouseDown(UIMouseEventArgs e)
+        void IUIEventListener.ListenMouseDown(UIMouseEventArgs e)
         {
             OnMouseDown(e);
             _externalEventListener?.ListenMouseDown(e);
         }
-        void IEventListener.ListenMouseMove(UIMouseEventArgs e)
+        void IUIEventListener.ListenMouseMove(UIMouseEventArgs e)
         {
             OnMouseMove(e);
             _externalEventListener?.ListenMouseMove(e);
         }
-        void IEventListener.ListenMouseUp(UIMouseEventArgs e)
+        void IUIEventListener.ListenMouseUp(UIMouseEventArgs e)
         {
             OnMouseUp(e);
             _externalEventListener?.ListenMouseUp(e);
         }
-        void IEventListener.ListenLostMouseFocus(UIMouseEventArgs e)
+        void IUIEventListener.ListenLostMouseFocus(UIMouseEventArgs e)
         {
             OnLostMouseFocus(e);
             _externalEventListener?.ListenLostMouseFocus(e);
         }
-        void IEventListener.ListenMouseClick(UIMouseEventArgs e)
+        void IUIEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
 
         }
-        void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
+        void IUIEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
             OnDoubleClick(e);
             _externalEventListener?.ListenMouseDoubleClick(e);
         }
-        void IEventListener.ListenMouseWheel(UIMouseEventArgs e)
+        void IUIEventListener.ListenMouseWheel(UIMouseEventArgs e)
         {
             OnMouseWheel(e);
             _externalEventListener?.ListenMouseWheel(e);
         }
-        void IEventListener.ListenMouseLeave(UIMouseEventArgs e)
+        void IUIEventListener.ListenMouseLeave(UIMouseEventArgs e)
         {
             OnMouseLeave(e);
             _externalEventListener?.ListenMouseLeave(e);
         }
-        void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
+        void IUIEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
             OnGotKeyboardFocus(e);
             _externalEventListener?.ListenGotKeyboardFocus(e);
         }
-        void IEventListener.ListenLostKeyboardFocus(UIFocusEventArgs e)
+        void IUIEventListener.ListenLostKeyboardFocus(UIFocusEventArgs e)
         {
             OnLostKeyboardFocus(e);
             _externalEventListener?.ListenLostKeyboardFocus(e);
         }
-        void IEventListener.HandleContentLayout()
+        void IUIEventListener.HandleContentLayout()
         {
             OnContentLayout();
         }
-        void IEventListener.HandleContentUpdate()
+        void IUIEventListener.HandleContentUpdate()
         {
             OnContentUpdate();
         }
-        void IEventListener.HandleElementUpdate()
+        void IUIEventListener.HandleElementUpdate()
         {
             OnElementChanged();
         }
-        bool IEventListener.BypassAllMouseEvents
+        bool IUIEventListener.BypassAllMouseEvents
         {
             get
             {
                 return this.TransparentAllMouseEvents;
             }
         }
-        bool IEventListener.AutoStopMouseEventPropagation
+        bool IUIEventListener.AutoStopMouseEventPropagation
         {
             get
             {
                 return this.AutoStopMouseEventPropagation;
             }
         }
-        void IEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
+        void IUIEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
         {
             this.OnInterComponentMsg(sender, msgcode, msg);
         }
 
-        void IEventListener.ListenGuestTalk(UIGuestTalkEventArgs e)
+        void IUIEventListener.ListenGuestTalk(UIGuestTalkEventArgs e)
         {
             this.OnGuestTalk(e);
         }
-        void IEventListener.GetGlobalLocation(out int x, out int y)
+        void IUIEventListener.GetGlobalLocation(out int x, out int y)
         {
             var globalLoca = this.CurrentPrimaryRenderElement.GetGlobalLocation();
             x = globalLoca.X;

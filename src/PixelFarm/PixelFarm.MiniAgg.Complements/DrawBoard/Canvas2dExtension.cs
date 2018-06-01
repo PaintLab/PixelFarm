@@ -30,7 +30,7 @@ namespace PixelFarm.Agg
         //helper tools, run in render thread***
         //not thread safe ***
 
-      
+
         static Stroke stroke = new Stroke(1);
         static RoundedRect roundRect = new RoundedRect();
         static SimpleRect simpleRect = new SimpleRect();
@@ -71,13 +71,13 @@ namespace PixelFarm.Agg
             stroke.Width = strokeWidth;
             simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
 
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out VertexStore v1, out VertexStore v2);
 
             gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), color);
 
-            RelaseVxs(ref v1);
-            RelaseVxs(ref v2);
+            VectorToolBox.ReleaseVxs(ref v1, ref v2);
+
         }
         public static void Rectangle(this AggRenderSurface gx, RectD rect, Color color, double strokeWidth = 1)
         {
@@ -115,16 +115,17 @@ namespace PixelFarm.Agg
             }
 
             simpleRect.SetRect(left, bottom, right, top);
-            var v1 = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out var v1);
             gx.Render(simpleRect.MakeVertexSnap(v1), fillColor);
-            RelaseVxs(ref v1);
+            VectorToolBox.ReleaseVxs(ref v1);
         }
         public static void Circle(this AggRenderSurface g, double x, double y, double radius, Color color)
         {
             ellipse.Set(x, y, radius, radius);
-            var v1 = GetFreeVxs();
+            VectorToolBox.GetFreeVxs(out var v1);
             g.Render(ellipse.MakeVxs(v1), color);
-            RelaseVxs(ref v1);
+            VectorToolBox.ReleaseVxs(ref v1);
         }
         public static void Circle(this AggRenderSurface g, Vector2 origin, double radius, Color color)
         {
@@ -132,17 +133,6 @@ namespace PixelFarm.Agg
         }
 
 
-        //this is not thread safe ****
-        static VertexStorePool s_vxsPool = new VertexStorePool();
-
-        static VertexStore GetFreeVxs()
-        {
-            return s_vxsPool.GetFreeVxs();
-        }
-        static void RelaseVxs(ref VertexStore vxs)
-        {
-            s_vxsPool.Release(ref vxs);
-        }
 
     }
 }

@@ -638,7 +638,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     if (box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y))
                     {
-                        IEventListener evenListener = box.GetController() as IEventListener;
+                        IUIEventListener evenListener = box.GetController() as IUIEventListener;
                         if (evenListener != null)
                         {
                             int tmpX = e.X;

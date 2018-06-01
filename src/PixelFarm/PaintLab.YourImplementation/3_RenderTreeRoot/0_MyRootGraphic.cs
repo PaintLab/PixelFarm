@@ -206,7 +206,7 @@ namespace LayoutFarm.UI
                 return;
             }
 
-            var owner = renderElement.GetController() as IEventListener;
+            var owner = renderElement.GetController() as IUIEventListener;
             if (owner != null)
             {
                 this.topWindowEventRoot.CurrentKeyboardFocusedElement = owner;

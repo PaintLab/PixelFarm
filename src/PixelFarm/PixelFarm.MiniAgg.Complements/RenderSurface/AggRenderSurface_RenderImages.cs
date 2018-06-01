@@ -180,7 +180,9 @@ namespace PixelFarm.Agg
             }
 
             bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
-            VertexStore imgBoundsPath = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out VertexStore imgBoundsPath);
+
             // this is the fast drawing path
             if (renderRequriesSourceSampling)
             {
@@ -211,10 +213,10 @@ namespace PixelFarm.Agg
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
 
-
-                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+                VectorToolBox.GetFreeVxs(out var v1);
+                destRectTransform.TransformToVxs(imgBoundsPath, v1);
                 Render(v1, imgSpanGen);
-                ReleaseVxs(ref v1);
+                VectorToolBox.ReleaseVxs(ref v1);
                 // this is some debug you can enable to visualize the dest bounding box
                 //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
                 //LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -245,18 +247,23 @@ namespace PixelFarm.Agg
                 }
 
 
-                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+                VectorToolBox.GetFreeVxs(out var v1);
+
+                destRectTransform.TransformToVxs(imgBoundsPath, v1);
                 Render(v1, imgSpanGen);
-                ReleaseVxs(ref v1);
+                VectorToolBox.ReleaseVxs(ref v1);
                 unchecked { destImageChanged++; };
             }
-            ReleaseVxs(ref imgBoundsPath);
+            VectorToolBox.ReleaseVxs(ref imgBoundsPath);
         }
 
         int destImageChanged = 0;
         public void Render(IImageReaderWriter source, AffinePlan[] affinePlans)
         {
-            VertexStore v1 = GetFreeVxs();
+
+
+            VectorToolBox.GetFreeVxs(out var v1, out var v2);
+
             Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1);
             // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
             Affine sourceRectTransform = destRectTransform.CreateInvert();
@@ -264,11 +271,12 @@ namespace PixelFarm.Agg
                 source,
                 Drawing.Color.Transparent,
                 new SpanInterpolatorLinear(sourceRectTransform));
-            VertexStore v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
+            destRectTransform.TransformToVxs(v1, v2);
             Render(v2, imgSpanGen);
             //
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
+
+            VectorToolBox.ReleaseVxs(ref v1, ref v2);
+
         }
         public void Render(IImageReaderWriter source, double destX, double destY)
         {
@@ -340,7 +348,8 @@ namespace PixelFarm.Agg
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
 
-            VertexStore imgBoundsPath = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out VertexStore imgBoundsPath);
             // this is the fast drawing path
             if (needSourceResampling)
             {
@@ -374,9 +383,10 @@ namespace PixelFarm.Agg
                     Drawing.Color.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
 
-                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+                VectorToolBox.GetFreeVxs(out VertexStore v1);
+                destRectTransform.TransformToVxs(imgBoundsPath, v1);
                 Render(v1, imgSpanGen);
-                ReleaseVxs(ref v1);
+                VectorToolBox.ReleaseVxs(ref v1);
 #if false // this is some debug you can enable to visualize the dest bounding box
 		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
 		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -407,12 +417,16 @@ namespace PixelFarm.Agg
                         throw new NotImplementedException();
                 }
 
-                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+
+                VectorToolBox.GetFreeVxs(out VertexStore v1);
+
+                destRectTransform.TransformToVxs(imgBoundsPath, v1);
                 Render(v1, imgSpanGen);
-                ReleaseVxs(ref v1);
+
+                VectorToolBox.ReleaseVxs(ref v1);
                 unchecked { destImageChanged++; };
             }
-            ReleaseVxs(ref imgBoundsPath);
+            VectorToolBox.ReleaseVxs(ref imgBoundsPath);
         }
     }
 }

@@ -4,6 +4,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
 
+
     public class CustomTextRun : RenderElement
     {
         char[] textBuffer;

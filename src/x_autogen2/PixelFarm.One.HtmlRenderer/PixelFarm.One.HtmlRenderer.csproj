@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -359,7 +358,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -381,14 +379,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
@@ -398,7 +394,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
@@ -1077,6 +1072,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\StrokeMath.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\StrokeMath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VectorToolBox.cs">
+      <Link>PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VectorToolBox.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\CurveFlattener.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\CurveFlattener.cs</Link>
@@ -2067,7 +2065,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
@@ -2080,7 +2077,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
@@ -2571,8 +2567,8 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs">
       <Link>PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs">
-      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs</Link>
@@ -2672,21 +2668,18 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs</Link>
@@ -2696,14 +2689,12 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs</Link>

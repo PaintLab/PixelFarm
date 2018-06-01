@@ -68,7 +68,7 @@ namespace PixelFarm.Agg
 
                     _boundRect.ExpandToInclude(rectTotal);
                 }
-                
+
                 _needBoundUpdate = false;
             }
             return _boundRect;
@@ -88,6 +88,7 @@ namespace PixelFarm.Agg
 
         public void Render(Painter p)
         {
+
             //
             if (HasBitmapSnapshot)
             {
@@ -200,13 +201,13 @@ namespace PixelFarm.Agg
                             if (p.StrokeWidth > 0)
                             {
                                 //check if we have a stroke version of this render vx
-                                //if not then request a new one 
-
-                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                                //if not then request a new one  
                                 if (vx.HasStrokeColor)
                                 {
-                                    //has speciic stroke color 
-                                    p.StrokeWidth = vx.StrokeWidth;
+                                    //has specific stroke color 
+                                    p.StrokeWidth = vx.StrokeWidth; 
+                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+
                                     if (currentTx == null)
                                     {
                                         p.Fill(strokeVxs, vx.StrokeColor);
@@ -222,6 +223,7 @@ namespace PixelFarm.Agg
                                 }
                                 else if (p.StrokeColor.A > 0)
                                 {
+                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
                                     if (currentTx == null)
                                     {
                                         p.Fill(strokeVxs, p.StrokeColor);
@@ -353,6 +355,12 @@ namespace PixelFarm.Agg
         }
         public VertexStore GetVxs()
         {
+#if DEBUG
+            if (_vxs._dbugIsChanged)
+            {
+
+            }
+#endif
             return _vxs;
         }
         public float StrokeWidth

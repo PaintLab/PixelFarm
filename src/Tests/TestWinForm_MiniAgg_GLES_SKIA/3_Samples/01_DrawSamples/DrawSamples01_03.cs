@@ -166,9 +166,8 @@ namespace PixelFarm.Agg.Sample_Draw
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
 
-                var v1 = GetFreeVxs();
-                var v2 = GetFreeVxs();
-                var v3 = GetFreeVxs();
+
+                VectorToolBox.GetFreeVxs(out var v1, out var v2, out var v3);
                 mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
 
                 p.FillColor = Drawing.Color.Yellow;
@@ -180,9 +179,7 @@ namespace PixelFarm.Agg.Sample_Draw
                 stroke.Width = 3;
                 p.Fill(stroke.MakeVxs(v2, v3));
                 //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
-                ReleaseVxs(ref v1);
-                ReleaseVxs(ref v2);
-                ReleaseVxs(ref v3);
+                VectorToolBox.ReleaseVxs(ref v1, ref v2, ref v3);
             }
 
             // and a little polygon

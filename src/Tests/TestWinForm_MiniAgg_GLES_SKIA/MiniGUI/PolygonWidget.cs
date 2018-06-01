@@ -190,14 +190,14 @@ namespace PixelFarm.Agg.UI
             this.RewindZero();
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
-            VertexStore s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs(v1), v2);
-            int j = s_vxs.Count;
+
+            VectorToolBox.GetFreeVxs(out var v1, out var v2);
+            this.m_stroke.MakeVxs(this.m_vs.MakeVxs(v1), v2);
+            int j = v2.Count;
             double x, y;
             for (int i = 0; i < j; ++i)
             {
-                var cmd = s_vxs.GetVertex(i, out x, out y);
+                var cmd = v2.GetVertex(i, out x, out y);
                 if (cmd == VertexCmd.NoMore)
                 {
                     break;
@@ -207,15 +207,16 @@ namespace PixelFarm.Agg.UI
                     vxs.AddVertex(x, y, cmd);
                 }
             }
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
+
+            VectorToolBox.ReleaseVxs(ref v1, ref v2);
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
             if (m_node >= 0 && m_node == (int)(m_status)) { r *= 1.2; }
 
             int n_count = m_polygon.Length / 2;
-            var v3 = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out var v3);
             for (int m = 0; m < n_count; ++m)
             {
                 m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
@@ -236,7 +237,7 @@ namespace PixelFarm.Agg.UI
                 //reuse
                 v3.Clear();
             }
-            ReleaseVxs(ref v3);
+            VectorToolBox.ReleaseVxs(ref v3);
             //------------------------------------------------------------
 
             //close with stop
@@ -248,7 +249,8 @@ namespace PixelFarm.Agg.UI
             RectD localBounds = new RectD(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
             this.RewindZero();
 
-            var v1 = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out VertexStore v1);
             this.MakeVxs(v1);
             int j = v1.Count;
             for (int i = 0; i < j; ++i)
@@ -257,7 +259,7 @@ namespace PixelFarm.Agg.UI
                 v1.GetVertexXY(i, out x, out y);
                 localBounds.ExpandToInclude(x, y);
             }
-            ReleaseVxs(ref v1);
+            VectorToolBox.ReleaseVxs(ref v1);
             return localBounds;
             throw new NotImplementedException();
         }
@@ -530,9 +532,10 @@ namespace PixelFarm.Agg.UI
         public override void OnDraw(Painter p)
         {
             p.FillColor = LineColor;
-            var v1 = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out var v1);
             p.Draw(new VertexStoreSnap(this.MakeVxs(v1)));
-            ReleaseVxs(ref v1);
+            VectorToolBox.ReleaseVxs(ref v1);
         }
     }
 }
