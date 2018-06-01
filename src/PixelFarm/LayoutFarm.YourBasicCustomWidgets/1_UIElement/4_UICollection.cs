@@ -8,9 +8,9 @@ namespace LayoutFarm.UI
     {
         List<UIElement> uiList = new List<UIElement>();
         UIElement owner;
-        public UICollection(UIElement owner)
+        public UICollection( )
         {
-            this.owner = owner;
+             
         }
         public void AddUI(UIElement ui)
         {
@@ -18,7 +18,7 @@ namespace LayoutFarm.UI
             if (this.owner == ui)
                 throw new Exception("cyclic!");
 #endif
-            ui.ParentUI = this.owner;
+           
             uiList.Add(ui);
         }
         public int Count

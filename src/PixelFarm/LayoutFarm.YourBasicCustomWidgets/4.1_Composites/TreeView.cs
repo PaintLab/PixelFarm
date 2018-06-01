@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
             panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             panel.BackColor = Color.LightGray;
             panel.NeedClipArea = true;
-            uiList = new UICollection(this);
+            uiList = new UICollection();
             uiList.AddUI(panel);
         }
 

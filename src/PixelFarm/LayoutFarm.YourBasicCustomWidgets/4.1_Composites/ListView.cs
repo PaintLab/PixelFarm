@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
         public ListView(int width, int height)
             : base(width, height)
         {
-            uiList = new UICollection(this);
+            uiList = new UICollection();
 
             var simpleBox = new SimpleBox(width, height);
             simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;

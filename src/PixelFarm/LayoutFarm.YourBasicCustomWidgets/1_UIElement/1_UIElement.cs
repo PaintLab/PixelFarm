@@ -52,7 +52,7 @@ namespace LayoutFarm.UI
             get;
             set;
         }
-        public UIElement ParentUI { get; set; }
+
         public abstract RenderElement CurrentPrimaryRenderElement
         {
             get;
