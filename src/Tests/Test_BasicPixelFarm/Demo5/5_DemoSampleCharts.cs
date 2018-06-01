@@ -73,7 +73,12 @@ namespace LayoutFarm.ColorBlenderSample
 
                 if (gfxPath != null)
                 {
+                    var smoothMode = canvas.SmoothingMode;//save prev
+
+                    canvas.SmoothingMode = SmoothingMode.AntiAlias;
                     canvas.FillPath(canvas.StrokeColor, gfxPath);
+
+                    canvas.SmoothingMode = smoothMode; //restore
                 }
                 else
                 {
@@ -193,7 +198,7 @@ namespace LayoutFarm.ColorBlenderSample
                     //---
 
                     _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
-                    //_lineRendeE.gfxPath = ConvToGraphicPath(strokeVxs);
+                    _lineRendeE.gfxPath = ConvToGraphicPath(strokeVxs);
 
                     _lineRendeE.X0 = p0.Left;
                     _lineRendeE.Y0 = p0.Top;
