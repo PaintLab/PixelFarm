@@ -28,16 +28,16 @@ namespace PixelFarm.Agg
 {
     public static class BoundingRect
     {
-        public static bool GetBoundingRect(VertexStore vxs, int[] gi,
-                           int num,
-                           out RectD boundingRect)
-        {
-            return GetBoundingRect(vxs, gi, num,
-                out boundingRect.Left,
-                out boundingRect.Bottom,
-                out boundingRect.Right,
-                out boundingRect.Top);
-        }
+        //public static bool GetBoundingRect(VertexStore vxs,
+        //                   int num,
+        //                   out RectD boundingRect)
+        //{
+        //    return GetBoundingRect(vxs, num,
+        //        out boundingRect.Left,
+        //        out boundingRect.Bottom,
+        //        out boundingRect.Right,
+        //        out boundingRect.Top);
+        //}
         public static bool GetBoundingRect(VertexStoreSnap vs, ref RectD rect)
         {
             double x1, y1, x2, y2;
@@ -50,7 +50,7 @@ namespace PixelFarm.Agg
         }
 
         //----------------------------------
-        static bool GetBoundingRect(VertexStore vxs, int[] gi,
+        static bool GetBoundingRect(VertexStore vxs,
                          int num,
                          out double x1,
                          out double y1,
@@ -65,11 +65,10 @@ namespace PixelFarm.Agg
             y1 = 1;
             x2 = 0;
             y2 = 0;
-            int iterindex = 0;
             for (i = 0; i < num; i++)
             {
                 VertexCmd flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != VertexCmd.NoMore)
+                while ((flags = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
                 {
                     switch (flags)
                     {
