@@ -81,8 +81,9 @@ namespace PixelFarm.Agg.Sample_Draw
             builder.Build(character, size);
             var txToVxs = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs);
-            VertexStore v0 = _vxsPool.GetFreeVxs();
-            txToVxs.WriteOutput(v0 );
+
+            VectorToolBox.GetFreeVxs(out VertexStore v0, out VertexStore v1);
+            txToVxs.WriteOutput(v0);
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                  //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
@@ -92,17 +93,15 @@ namespace PixelFarm.Agg.Sample_Draw
                      PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
                      );
 
-            VertexStore v1 = _vxsPool.GetFreeVxs();
+
             VertexStore v2 = new VertexStore();
             mat.TransformToVxs(v0, v1);
             curveFlattener.MakeVxs(v0, v2);
 
-            _vxsPool.Release(ref v0);
-            _vxsPool.Release(ref v1);
-
+            VectorToolBox.ReleaseVxs(ref v0, ref v1);
             return v2;
         }
-        VertexStorePool _vxsPool = new VertexStorePool();
+
         [DemoConfig]
         public bool FillBG
         {

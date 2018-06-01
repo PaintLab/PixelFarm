@@ -65,7 +65,7 @@ namespace PixelFarm.Agg
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 //
-                var v1 = GetFreeVxs();
+                VectorToolBox.GetFreeVxs(out var v1);
                 sclineRas.AddPath(er.MakeVxs(v1));
                 v1.Clear();
                 sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
@@ -80,7 +80,7 @@ namespace PixelFarm.Agg
                 v1.Clear();
                 sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
 
-                ReleaseVxs(ref v1);
+                VectorToolBox.ReleaseVxs(ref v1);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

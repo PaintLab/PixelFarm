@@ -132,7 +132,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
 
-        VertexStore vxs = new VertexStore();
+        VertexStore _vxs;
         public override void Init()
         {
             base.Init();
@@ -151,7 +151,7 @@ namespace PixelFarm.Agg.Sample_Draw
             CurveFlattener flattener = new CurveFlattener();
             VertexStore output = new VertexStore();
             flattener.MakeVxs(myvxs, output);
-            this.vxs = output;
+            this._vxs = output;
 
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -176,7 +176,7 @@ namespace PixelFarm.Agg.Sample_Draw
             aggPainter.LineJoin = this.LineJoin;
             aggPainter.LineCap = this.LineCap;
             //
-            aggPainter.Draw(vxs);
+            aggPainter.Draw(_vxs);
         }
     }
 }

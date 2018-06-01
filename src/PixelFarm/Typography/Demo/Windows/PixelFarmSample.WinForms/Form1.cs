@@ -357,10 +357,7 @@ namespace SampleWinForms
 
 
 
-
-
-
-        VertexStorePool _vxsPool2 = new VertexStorePool();
+         
         int _gridSize = 5;//default 
 
 

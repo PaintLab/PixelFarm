@@ -413,9 +413,10 @@ namespace PixelFarm.Agg.Imaging
         }
 
 
-        public void BlendPixels(int[] destBuffer, int arrayElemOffset,
-           Color[] sourceColors, int sourceColorsOffset,
-           byte[] covers, int coversIndex, bool firstCoverForAll, int count)
+        public void BlendPixels(
+            int[] destBuffer, int arrayElemOffset,
+            Color[] sourceColors, int sourceColorsOffset,
+            byte[] covers, int coversIndex, bool firstCoverForAll, int count)
         {
             if (firstCoverForAll)
             {

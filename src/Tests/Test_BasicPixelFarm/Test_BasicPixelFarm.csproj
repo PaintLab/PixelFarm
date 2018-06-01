@@ -56,6 +56,7 @@
     <Compile Include="Demo1.2\ColorBlender\IAlgorithm.cs" />
     <Compile Include="Demo1.2\ColorBlender\MathHelpers.cs" />
     <Compile Include="Demo1.2\ColorBlender\RGB.cs" />
+    <Compile Include="Demo5\5_DemoSampleCharts.cs" />
     <Compile Include="Demo3\3.1_Demo_Visible.cs" />
     <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
     <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />
