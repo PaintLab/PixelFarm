@@ -322,6 +322,9 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\StrokeMath.cs">
       <Link>2_DrawingCanvas\5_AggDrawingElements\StrokeMath.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VectorToolBox.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\VectorToolBox.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\CurveFlattener.cs">
       <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\CurveFlattener.cs</Link>
     </Compile>
