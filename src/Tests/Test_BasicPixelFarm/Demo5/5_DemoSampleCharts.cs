@@ -74,10 +74,8 @@ namespace LayoutFarm.ColorBlenderSample
                 if (gfxPath != null)
                 {
 
-                    var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias);
-
-                    canvas.FillPath(canvas.StrokeColor, gfxPath);
-
+                    var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias); 
+                    canvas.FillPath(canvas.StrokeColor, gfxPath); 
                     savedSmoothingMode.Restore();//restore
 
                 }
@@ -110,9 +108,7 @@ namespace LayoutFarm.ColorBlenderSample
         static GraphicsPath ConvToGraphicPath(VertexStore vxs)
         {
             GraphicsPath gpath = new GraphicsPath();
-            int j = vxs.Count;
-
-
+            int j = vxs.Count; 
             float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
             bool isOpen = false;
             for (int i = 0; i < j; ++i)
@@ -183,8 +179,6 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 if (_lineRendeE == null)
                 {
-
-
 
                     VectorToolBox.GetFreeVxs(out var vxs, out var strokeVxs);
                     VectorToolBox.GetFreeStroke(out var stroke, 3);
