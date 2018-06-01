@@ -58,7 +58,7 @@ namespace PixelFarm.Drawing
     /// <summary>
     /// for vertex store pool mx
     /// </summary>
-    public class VertexStorePool
+    class VertexStorePool
     {
         Stack<VertexStore> _stack = new Stack<VertexStore>();
         public VertexStore GetFreeVxs()

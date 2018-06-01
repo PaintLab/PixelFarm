@@ -511,16 +511,16 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
-        {
+        //VertexStorePool _vxsPool = new VertexStorePool();
+        //VertexStore GetFreeVxs()
+        //{
 
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+        //    return _vxsPool.GetFreeVxs();
+        //}
+        //void ReleaseVxs(ref VertexStore vxs)
+        //{
+        //    _vxsPool.Release(ref vxs);
+        //}
 
     }
 

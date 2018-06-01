@@ -103,15 +103,6 @@ namespace PixelFarm.Agg.UI
                 parentToChildTransform = value;
             }
         }
-        VertexStorePool _vxsPool = new VertexStorePool();
-
-        public VertexStore GetFreeVxs()
-        {
-            return _vxsPool.GetFreeVxs();
-        }
-        public void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+         
     }
 }

@@ -90,7 +90,7 @@ namespace PixelFarm.Drawing.Fonts
         Typeface typeFace;
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
-        VertexStorePool vxsPool = new VertexStorePool();
+         
         float _recommendLineSpacing;
 
         public NOpenFont(NOpenFontFace ownerFace, float sizeInPoints, FontStyle style)

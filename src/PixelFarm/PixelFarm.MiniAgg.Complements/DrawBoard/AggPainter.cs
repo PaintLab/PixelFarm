@@ -82,7 +82,7 @@ namespace PixelFarm.Agg
         {
             get { return _vectorTool; }
         }
-       
+
         public AggRenderSurface RenderSurface
         {
             get { return this._aggsx; }
@@ -167,15 +167,7 @@ namespace PixelFarm.Agg
             this._aggsx.SetClippingRect(new RectInt(x1, y1, x2, y2));
         }
 
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
-        {
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
@@ -315,6 +307,7 @@ namespace PixelFarm.Agg
 
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
+
             //
             _aggsx.Render(stroke.MakeVxs(_simpleRectVxsGen.MakeVxs(v1), v2), this.strokeColor);
             //
@@ -450,7 +443,16 @@ namespace PixelFarm.Agg
             _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
+        VertexStore GetFreeVxs()
+        {
 
+            VectorToolBox.GetFreeVxs(out VertexStore v);
+            return v;
+        }
+        void ReleaseVxs(ref VertexStore v)
+        {
+            VectorToolBox.ReleaseVxs(ref v);
+        }
         public override RequestFont CurrentFont
         {
             get
