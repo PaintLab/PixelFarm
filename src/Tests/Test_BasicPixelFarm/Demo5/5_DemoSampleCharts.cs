@@ -59,6 +59,7 @@ namespace LayoutFarm.ColorBlenderSample
 
         class LineRenderElement : RenderElement
         {
+            internal GraphicsPath gfxPath;
             public LineRenderElement(RootGraphic rootGfx, int width, int height)
                 : base(rootGfx, width, height)
             {
@@ -68,11 +69,22 @@ namespace LayoutFarm.ColorBlenderSample
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
                 //draw line
-                //we can use vxs/path to render a complex line part
-                int prevW = canvas.StrokeWidth;
-                canvas.StrokeWidth = 3;
-                canvas.DrawLine(X0, Y0, X1, Y1);
-                canvas.StrokeWidth = prevW;
+                //we can use vxs/path to render a complex line part 
+
+                if (gfxPath != null)
+                {
+                    canvas.FillPath(canvas.StrokeColor, gfxPath);
+                }
+                else
+                {
+                    float prevW = canvas.StrokeWidth; //save
+
+                    canvas.StrokeWidth = 3;
+                    canvas.DrawLine(X0, Y0, X1, Y1); //restore
+
+                    canvas.StrokeWidth = prevW;
+                }
+
             }
             public override void ResetRootGraphics(RootGraphic rootgfx)
             {
@@ -82,6 +94,51 @@ namespace LayoutFarm.ColorBlenderSample
             public float Y0;
             public float X1;
             public float Y1;
+        }
+
+
+        static GraphicsPath ConvToGraphicPath(VertexStore vxs)
+        {
+            GraphicsPath gpath = new GraphicsPath();
+            int j = vxs.Count;
+
+
+            float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
+            bool isOpen = false;
+            for (int i = 0; i < j; ++i)
+            {
+                var cmd = vxs.GetVertex(i, out double x, out double y);
+                switch (cmd)
+                {
+                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                        {
+                            latestMoveX = latestX = (float)x;
+                            latestMoveY = latestY = (float)y;
+                        }
+                        break;
+                    case PixelFarm.Agg.VertexCmd.LineTo:
+                        {
+                            isOpen = true;
+                            gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
+                        }
+                        break;
+                    case PixelFarm.Agg.VertexCmd.Close:
+                        {
+                            latestX = latestMoveX;
+                            latestY = latestMoveY;
+
+                            gpath.CloseFigure();
+                            isOpen = false;
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                        break;
+
+                }
+            }
+
+            return gpath;
         }
 
         class PlotLine : UIElement
@@ -116,7 +173,21 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 if (_lineRendeE == null)
                 {
+                    PixelFarm.Agg.Stroke stroke = new PixelFarm.Agg.Stroke(3);
+
+                    VertexStore vxs = new VertexStore();
+                    vxs.AddMoveTo(p0.Left, p0.Top);
+                    vxs.AddLineTo(p1.Left, p1.Top);
+
+                    VertexStore strokeShape = new VertexStore();
+                    stroke.MakeVxs(vxs, strokeShape);
+
+                    //---
+                    //convert data in vxs to GraphicPath 
+                    //---
+
                     _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
+                    _lineRendeE.gfxPath = ConvToGraphicPath(strokeShape);
                     _lineRendeE.X0 = p0.Left;
                     _lineRendeE.Y0 = p0.Top;
                     _lineRendeE.X1 = p1.Left;
