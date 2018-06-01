@@ -177,6 +177,43 @@ namespace PixelFarm.Drawing
             //TODO: review offset function
             drawBoard.OffsetCanvasOrigin(0, dy);
         }
+
+
+        //--------------------------------------------------
+
+        public static SmoothingModeState SaveSmoothMode(this DrawBoard drawBoard)
+        {
+            //TODO: review offset function
+            return new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+        }
+        public static SmoothingModeState SetSmoothMode(this DrawBoard drawBoard, SmoothingMode value)
+        {
+            //TODO: review offset function
+            var saveState = new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+            drawBoard.SmoothingMode = value;
+            return saveState;
+        }
+
+
+
+
+
+        public struct SmoothingModeState
+        {
+            readonly DrawBoard drawBoard;
+            readonly SmoothingMode _latestSmoothMode;
+            internal SmoothingModeState(DrawBoard drawBoard, SmoothingMode state)
+            {
+                _latestSmoothMode = state;
+                this.drawBoard = drawBoard;
+            }
+            public void Restore()
+            {
+                drawBoard.SmoothingMode = _latestSmoothMode;
+            }
+        }
+
+
     }
 
 

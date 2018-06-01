@@ -73,25 +73,25 @@ namespace LayoutFarm.ColorBlenderSample
 
                 if (gfxPath != null)
                 {
-                    var smoothMode = canvas.SmoothingMode;//save prev
 
-                    canvas.SmoothingMode = SmoothingMode.AntiAlias;
+                    var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias);
+
                     canvas.FillPath(canvas.StrokeColor, gfxPath);
 
-                    canvas.SmoothingMode = smoothMode; //restore
+                    savedSmoothingMode.Restore();//restore
+
                 }
                 else
                 {
                     float prevW = canvas.StrokeWidth; //save
-                    var smoothMode = canvas.SmoothingMode;//save prev
-
-                    canvas.SmoothingMode = SmoothingMode.AntiAlias;
+                    var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias);
 
                     canvas.StrokeWidth = 3;
                     canvas.DrawLine(X0, Y0, X1, Y1);
 
                     canvas.StrokeWidth = prevW;//restore
-                    canvas.SmoothingMode = smoothMode; //restore
+
+                    savedSmoothingMode.Restore();
 
                 }
 
