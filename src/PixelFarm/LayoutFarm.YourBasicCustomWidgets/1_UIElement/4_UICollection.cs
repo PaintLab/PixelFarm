@@ -7,18 +7,18 @@ namespace LayoutFarm.UI
     public class UICollection
     {
         List<UIElement> uiList = new List<UIElement>();
-         
-        public UICollection( )
+
+        public UICollection()
         {
-             
+
         }
         public void AddUI(UIElement ui)
         {
-//#if DEBUG
-//            if (this.owner == ui)
-//                throw new Exception("cyclic!");
-//#endif
-           
+            //#if DEBUG
+            //            if (this.owner == ui)
+            //                throw new Exception("cyclic!");
+            //#endif
+
             uiList.Add(ui);
         }
         public int Count

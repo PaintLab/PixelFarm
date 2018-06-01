@@ -35,12 +35,16 @@ namespace LayoutFarm.UI
 #if DEBUG
         public bool dbugBreakMe;
 #endif
+        bool _hide;
         public UIElement()
         {
         }
+        //----------------------------------- 
+        public object Tag { get; set; }
+        //----------------------------------- 
 
-        internal bool IsInLayoutQueue { get; set; }
 
+       
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public bool TransparentAllMouseEvents
         {
@@ -68,6 +72,21 @@ namespace LayoutFarm.UI
         }
 
         //-------------------------------------------------------
+        internal bool IsInLayoutQueue { get; set; }
+        public virtual bool Visible
+        {
+            get { return !this._hide; }
+            set
+            {
+                this._hide = !value;
+                if (this.HasReadyRenderElement)
+                {
+                    this.CurrentPrimaryRenderElement.SetVisible(value);
+                }
+            }
+        }
+        //-------------------------------------------------------
+
         protected virtual void OnShown()
         {
         }
@@ -129,6 +148,11 @@ namespace LayoutFarm.UI
             //add to layout queue
             UISystem.AddToLayoutQueue(this);
         }
+        internal static void InvokeContentLayout(UIElement ui)
+        {
+            ui.OnContentLayout();
+        }
+
         protected virtual void OnContentLayout()
         {
         }
@@ -146,11 +170,7 @@ namespace LayoutFarm.UI
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
         {
         }
-        internal static void InvokeContentLayout(UIElement ui)
-        {
-            ui.OnContentLayout();
-        }
-
+        
 #if DEBUG
         object dbugTagObject;
         public object dbugTag

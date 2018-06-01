@@ -222,29 +222,7 @@ namespace LayoutFarm.UI
         }
         public virtual void SetViewport(int x, int y)
         {
-        }
-
-        //bool _userSpecificInnerContentSize = false;
-        //public virtual void SetInnerContentSize(int w, int h)
-        //{
-        //    _userSpecificInnerContentSize = true;
-
-        //}
-
-
-        public virtual bool Visible
-        {
-            get { return !this._hide; }
-            set
-            {
-                this._hide = !value;
-                if (this.HasReadyRenderElement)
-                {
-                    this.CurrentPrimaryRenderElement.SetVisible(value);
-                }
-            }
-        }
-
+        } 
         public virtual void PerformContentLayout()
         {
         }
@@ -253,15 +231,6 @@ namespace LayoutFarm.UI
             get
             {
                 return this.Height;
-                //if (_userSpecificInnerContentSize)
-                //{
-                //    return _innerContentH;
-                //}
-                //else
-                //{
-                //    return this.Height;
-                //}
-
             }
         }
         public virtual int DesiredWidth
@@ -269,22 +238,10 @@ namespace LayoutFarm.UI
             get
             {
                 return this.Width;
-                //if (_userSpecificInnerContentSize)
-                //{
-                //    return _innerContentW;
-                //}
-                //else
-                //{
-                //    return this.Width;
-                //}
             }
         }
 
-        //----------------------------------- 
-        public object Tag { get; set; }
-        //----------------------------------- 
-
-
+      
         protected virtual void Describe(UIVisitor visitor)
         {
             visitor.Attribute("left", this.Left);
