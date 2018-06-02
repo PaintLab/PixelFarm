@@ -27,6 +27,10 @@ namespace LayoutFarm.UI
                 this.LayoutFinished(this, EventArgs.Empty);
             }
         }
+        public virtual void SetFont(RequestFont font)
+        {
+
+        }
         public virtual void SetLocation(int left, int top)
         {
             SetElementBoundsLT(left, top);
@@ -46,10 +50,7 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.SetSize(width, height);
             }
         }
-        public virtual void SetFont(RequestFont font)
-        {
-
-        }
+        
         public void SetLocationAndSize(int left, int top, int width, int height)
         {
             SetLocation(left, top);
@@ -149,6 +150,8 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
             }
         }
+
+        //------------------------------
         public virtual int ViewportX
         {
             get { return 0; }
@@ -168,9 +171,11 @@ namespace LayoutFarm.UI
         public virtual void SetViewport(int x, int y)
         {
         }
+        //------------------------------
         public virtual void PerformContentLayout()
         {
         }
+
         public virtual int DesiredHeight
         {
             get

@@ -156,6 +156,9 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBoundsLT(float left, float top)
         {
+
+            _bottom = top + (_bottom - _top);
+            _right = left + (_right - _left);
             _left = left;
             _top = top;
         }
