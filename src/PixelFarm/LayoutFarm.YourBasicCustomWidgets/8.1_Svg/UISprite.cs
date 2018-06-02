@@ -191,17 +191,9 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
             }
         }
-
-
         public virtual void PerformContentLayout()
         {
         }
-
-        //----------------------------------- 
-        public object Tag { get; set; }
-        //----------------------------------- 
-
-
         protected virtual void Describe(UIVisitor visitor)
         {
             visitor.Attribute("left", this.Left);

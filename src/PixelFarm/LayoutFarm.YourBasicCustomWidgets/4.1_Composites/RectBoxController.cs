@@ -72,12 +72,12 @@ namespace LayoutFarm.CustomWidgets
             get { return _simpleBox.CurrentPrimaryRenderElement; }
         }
         //-------------
-        public void Focus()
+        
+        public override void Focus()
         {
             controllerBox1.AcceptKeyboardFocus = true;
             controllerBox1.Focus();
         }
-
         public void UpdateControllerBoxes(LayoutFarm.UI.UIBox box)
         {
 
