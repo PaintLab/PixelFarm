@@ -42,19 +42,13 @@ namespace LayoutFarm.ColorBlenderSample
             public PlotBox(int w, int h)
                 : base(w, h)
             {
-            }
-            public LayoutFarm.UI.UIBox TargetBox
-            {
-                get;
-                set;
+
             }
             public override void Walk(UIVisitor visitor)
             {
-                visitor.BeginElement(this, "ctrlbox");
-                this.Describe(visitor);
-                visitor.EndElement();
             }
             public int Index { get; set; }
+
         }
 
         class LineRenderElement : RenderElement
@@ -75,9 +69,7 @@ namespace LayoutFarm.ColorBlenderSample
                 {
 
                     var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias);
-
                     canvas.FillPath(canvas.StrokeColor, gfxPath);
-
                     savedSmoothingMode.Restore();//restore
 
                 }
@@ -111,8 +103,6 @@ namespace LayoutFarm.ColorBlenderSample
         {
             GraphicsPath gpath = new GraphicsPath();
             int j = vxs.Count;
-
-
             float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
             bool isOpen = false;
             for (int i = 0; i < j; ++i)
@@ -183,8 +173,6 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 if (_lineRendeE == null)
                 {
-
-
 
                     VectorToolBox.GetFreeVxs(out var vxs, out var strokeVxs);
                     VectorToolBox.GetFreeStroke(out var stroke, 3);

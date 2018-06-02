@@ -69,7 +69,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 this.SetDesiredSize(this.imageBinder.ImageWidth, this.imageBinder.ImageHeight);
                 this.SetSize(this.imageBinder.ImageWidth, this.imageBinder.ImageHeight);
-                this.ParentUI.InvalidateLayout();
+               
             }
         }
         public override void Walk(UIVisitor visitor)

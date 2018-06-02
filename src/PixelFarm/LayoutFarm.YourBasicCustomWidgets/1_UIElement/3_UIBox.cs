@@ -6,17 +6,8 @@ namespace LayoutFarm.UI
 {
     public abstract class UIBox : UIElement, IScrollable, IBoxElement
     {
-        int _left;
-        int _top;
-        int _width;
-        int _height;
 
-        int _innerContentW;
-        int _innerContentH;
-
-        bool _hide;
-        bool specificWidth;
-        bool specificHeight;
+        bool specificWidth, specificHeight;
         public event EventHandler LayoutFinished;
 #if DEBUG
         static int dbugTotalId;
@@ -24,52 +15,11 @@ namespace LayoutFarm.UI
 #endif
         public UIBox(int width, int height)
         {
-            this._width = width;
-            this._height = height;
+            SetElementBoundsWH(width, height);
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
-        public virtual void Focus()
-        {
-            //make this keyboard focusable
-            if (this.HasReadyRenderElement)
-            {
-                //focus
-                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
-            }
-        }
-        public virtual void Blur()
-        {
-            if (this.HasReadyRenderElement)
-            {
-                //focus
-                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
-            }
-        }
-        public bool HasSpecificWidth
-        {
-            get { return this.specificWidth; }
-            set
-            {
-                this.specificWidth = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
-        }
-        public bool HasSpecificHeight
-        {
-            get { return this.specificHeight; }
-            set
-            {
-                this.specificHeight = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                }
-            }
-        }
+
         protected void RaiseLayoutFinished()
         {
             if (this.LayoutFinished != null)
@@ -79,35 +29,28 @@ namespace LayoutFarm.UI
         }
         public virtual void SetLocation(int left, int top)
         {
-            this._left = left;
-            this._top = top;
+            SetElementBoundsLT(left, top);
             if (this.HasReadyRenderElement)
             {
+                //TODO: review here
                 this.CurrentPrimaryRenderElement.SetLocation(left, top);
             }
         }
-        public Point GetGlobalLocation()
-        {
-            if (this.CurrentPrimaryRenderElement != null)
-            {
-                return this.CurrentPrimaryRenderElement.GetGlobalLocation();
-            }
-            return new Point(this.Left, this.Top);
-        }
+
         public virtual void SetSize(int width, int height)
         {
-            this._width = width;
-            this._height = height;
+
+            SetElementBoundsWH(width, height);
             if (this.HasReadyRenderElement)
             {
-                this.CurrentPrimaryRenderElement.SetSize(_width, _height);
+                this.CurrentPrimaryRenderElement.SetSize(width, height);
             }
         }
         public virtual void SetFont(RequestFont font)
         {
 
         }
-        public void SetBounds(int left, int top, int width, int height)
+        public void SetLocationAndSize(int left, int top, int width, int height)
         {
             SetLocation(left, top);
             SetSize(width, height);
@@ -122,7 +65,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    return this._left;
+                    return (int)this.BoundLeft;
                 }
             }
         }
@@ -136,7 +79,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    return this._top;
+                    return (int)this.BoundTop;
                 }
             }
         }
@@ -159,7 +102,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    return new Point(this._left, this._top);
+                    return new Point((int)BoundLeft, (int)BoundTop);
                 }
             }
         }
@@ -173,7 +116,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    return this._width;
+                    return (int)BoundWidth;
                 }
             }
         }
@@ -187,7 +130,7 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    return this._height;
+                    return (int)BoundHeight;
                 }
             }
         }
@@ -225,28 +168,6 @@ namespace LayoutFarm.UI
         public virtual void SetViewport(int x, int y)
         {
         }
-
-        bool _userSpecificInnerContentSize = false;
-        public virtual void SetInnerContentSize(int w, int h)
-        {
-            _userSpecificInnerContentSize = true;
-
-        }
-
-
-        public virtual bool Visible
-        {
-            get { return !this._hide; }
-            set
-            {
-                this._hide = !value;
-                if (this.HasReadyRenderElement)
-                {
-                    this.CurrentPrimaryRenderElement.SetVisible(value);
-                }
-            }
-        }
-
         public virtual void PerformContentLayout()
         {
         }
@@ -254,35 +175,16 @@ namespace LayoutFarm.UI
         {
             get
             {
-                if (_userSpecificInnerContentSize)
-                {
-                    return _innerContentH;
-                }
-                else
-                {
-                    return this.Height;
-                }
-
+                return this.Height;
             }
         }
         public virtual int DesiredWidth
         {
             get
             {
-                if (_userSpecificInnerContentSize)
-                {
-                    return _innerContentW;
-                }
-                else
-                {
-                    return this.Width;
-                }
+                return this.Width;
             }
         }
-
-        //----------------------------------- 
-        public object Tag { get; set; }
-        //----------------------------------- 
 
 
         protected virtual void Describe(UIVisitor visitor)
@@ -294,19 +196,46 @@ namespace LayoutFarm.UI
         }
 
 
-
+        public bool HasSpecificWidth
+        {
+            get { return this.specificWidth; }
+            set
+            {
+                this.specificWidth = value;
+                if (this.CurrentPrimaryRenderElement != null)
+                {
+                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
+                }
+            }
+        }
+        public bool HasSpecificHeight
+        {
+            get { return this.specificHeight; }
+            set
+            {
+                this.specificHeight = value;
+                if (this.CurrentPrimaryRenderElement != null)
+                {
+                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
+                }
+            }
+        }
         public Rectangle Bounds
         {
             get { return new Rectangle(this.Left, this.Top, this.Width, this.Height); }
         }
+
+        //-----------------------
         void IBoxElement.ChangeElementSize(int w, int h)
         {
+            //for css interface
             this.SetSize(w, h);
         }
         int IBoxElement.MinHeight
         {
             get
             {
+                //for css interface
                 //TODO: use mimimum current font height ***
                 return this.Height;
             }

@@ -16,19 +16,19 @@ namespace PaintLab
     public interface IViewport
     {
         IAppHost AppHost { get; }
-        IUIRootElement Root { get; }
+        //IUIRootElement Root { get; }
     }
      
 
-    public interface IUIBoxElement : IUIElement
-    {
-        int Width { get; }
-        int Height { get; }
-        int Top { get; }
-        int Left { get; }
-        void SetSize(int w, int h);
-        void SetLocation(int left, int top);
-    }
+    //public interface IUIBoxElement : IUIElement
+    //{
+    //    int Width { get; }
+    //    int Height { get; }
+    //    int Top { get; }
+    //    int Left { get; }
+    //    void SetSize(int w, int h);
+    //    void SetLocation(int left, int top);
+    //}
 
 
 
@@ -47,23 +47,23 @@ namespace PaintLab
         public const string h_scroll_bar = "h_scroll_bar";
         public const string textbox = "textbox";
     }
-    public static class UIRootElementExtensions
-    {
-        public static IUIElement CreateElement2(this IUIRootElement rootElem, BasicUIElementKind elemKind)
-        {
-            switch (elemKind)
-            {
-                default:
-                case BasicUIElementKind.SimpleBox:
-                    return rootElem.CreateElement(UIElemNameConst.simple_box);
-                case BasicUIElementKind.VScrollBar:
-                    return rootElem.CreateElement(UIElemNameConst.simple_box);
-                case BasicUIElementKind.HScrollBar:
-                    return rootElem.CreateElement(UIElemNameConst.h_scroll_bar);
-                case BasicUIElementKind.TextBox:
-                    return rootElem.CreateElement(UIElemNameConst.textbox);
-            }
-        }
-    }
+    //public static class UIRootElementExtensions
+    //{
+    //    public static IUIElement CreateElement2(this IUIRootElement rootElem, BasicUIElementKind elemKind)
+    //    {
+    //        switch (elemKind)
+    //        {
+    //            default:
+    //            case BasicUIElementKind.SimpleBox:
+    //                return rootElem.CreateElement(UIElemNameConst.simple_box);
+    //            case BasicUIElementKind.VScrollBar:
+    //                return rootElem.CreateElement(UIElemNameConst.simple_box);
+    //            case BasicUIElementKind.HScrollBar:
+    //                return rootElem.CreateElement(UIElemNameConst.h_scroll_bar);
+    //            case BasicUIElementKind.TextBox:
+    //                return rootElem.CreateElement(UIElemNameConst.textbox);
+    //        }
+    //    }
+    //}
 }
 

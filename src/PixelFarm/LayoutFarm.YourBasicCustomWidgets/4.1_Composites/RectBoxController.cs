@@ -82,7 +82,7 @@ namespace LayoutFarm.CustomWidgets
         {
 
             //move controller here 
-            controllerBox1.SetBounds(box.Left - 5, box.Top - 5,
+            controllerBox1.SetLocationAndSize(box.Left - 5, box.Top - 5,
                                      box.Width + 10, box.Height + 10);
             controllerBox1.Visible = true;
             controllerBox1.TargetBox = box;
@@ -91,28 +91,28 @@ namespace LayoutFarm.CustomWidgets
             {
                 //left-top
                 UIControllerBox ctrlBox = _boxLeftTop;
-                ctrlBox.SetBounds(box.Left - 5, box.Top - 5, 5, 5);
+                ctrlBox.SetLocationAndSize(box.Left - 5, box.Top - 5, 5, 5);
                 ctrlBox.TargetBox = box;
                 ctrlBox.Visible = true;
             }
             {
                 //right-top
                 UIControllerBox ctrlBox = _boxRightTop;
-                ctrlBox.SetBounds(box.Left + box.Width, box.Top - 5, 5, 5);
+                ctrlBox.SetLocationAndSize(box.Left + box.Width, box.Top - 5, 5, 5);
                 ctrlBox.TargetBox = box;
                 ctrlBox.Visible = true;
             }
             {
                 //left-bottom
                 UIControllerBox ctrlBox = _boxLeftBottom;
-                ctrlBox.SetBounds(box.Left - 5, box.Top + box.Height, 5, 5);
+                ctrlBox.SetLocationAndSize(box.Left - 5, box.Top + box.Height, 5, 5);
                 ctrlBox.TargetBox = box;
                 ctrlBox.Visible = true;
             }
             {
                 //right-bottom
                 UIControllerBox ctrlBox = _boxRightBottom;
-                ctrlBox.SetBounds(box.Left + box.Width, box.Top + box.Height, 5, 5);
+                ctrlBox.SetLocationAndSize(box.Left + box.Width, box.Top + box.Height, 5, 5);
                 ctrlBox.TargetBox = box;
                 ctrlBox.Visible = true;
             }
@@ -142,7 +142,7 @@ namespace LayoutFarm.CustomWidgets
                 //move other boxes ...
                 UIBox target1 = _boxLeftTop.TargetBox;
                 //update target
-                target1.SetBounds(_boxLeftTop.Right,
+                target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
                                       _boxRightTop.Left - _boxLeftTop.Right,
                                       _boxRightBottom.Top - _boxLeftTop.Bottom);
@@ -158,7 +158,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 UIBox target1 = _boxLeftBottom.TargetBox;
                 //update target
-                target1.SetBounds(_boxLeftBottom.Right,
+                target1.SetLocationAndSize(_boxLeftBottom.Right,
                                       _boxLeftTop.Bottom,
                                       _boxRightTop.Left - _boxLeftBottom.Right,
                                       _boxLeftBottom.Top - _boxLeftTop.Bottom);
@@ -174,7 +174,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 UIBox target1 = _boxRightTop.TargetBox;
                 //update target
-                target1.SetBounds(_boxLeftTop.Right,
+                target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxRightTop.Bottom,
                                       _boxRightTop.Left - _boxLeftTop.Right,
                                       _boxRightBottom.Top - _boxRightTop.Bottom);
@@ -190,7 +190,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 UIBox target1 = _boxRightBottom.TargetBox;
                 //update target
-                target1.SetBounds(_boxLeftTop.Right,
+                target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
                                       _boxRightBottom.Left - _boxLeftTop.Right,
                                       _boxRightBottom.Top - _boxLeftTop.Bottom);

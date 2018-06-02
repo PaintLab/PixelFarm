@@ -64,10 +64,10 @@ namespace LayoutFarm
             evListener.MouseDown += e1 =>
             {
                 //mousedown on ui sprite
-                polygonController.SetPosition(uiSprite.Left, uiSprite.Top);
+                polygonController.SetPosition((int)uiSprite.Left, (int)uiSprite.Top);
                 polygonController.UpdateControlPoints(vxs);
 
-                 
+
             };
             evListener.MouseMove += e1 =>
             {
@@ -75,8 +75,8 @@ namespace LayoutFarm
                 {
                     //drag event on uisprite
 
-                    int left = uiSprite.Left;
-                    int top = uiSprite.Top;
+                    int left = (int)uiSprite.Left;
+                    int top = (int)uiSprite.Top;
 
                     int new_left = left + e1.DiffCapturedX;
                     int new_top = top + e1.DiffCapturedY;

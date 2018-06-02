@@ -59,8 +59,8 @@ namespace LayoutFarm
             var evListener = new GeneralEventListener();
             uiSprite.AttachExternalEventListener(evListener);
 
-            IEventListener uiEvListener = (IEventListener)evListener;
-            uiEvListener.MouseDown += (e) =>
+
+            evListener.MouseDown += (e) =>
             {
 
                 //e.MouseCursorStyle = MouseCursorStyle.Pointer;

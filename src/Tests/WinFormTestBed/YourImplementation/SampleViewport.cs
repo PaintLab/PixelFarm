@@ -100,20 +100,20 @@ namespace LayoutFarm
         
         //----------------------------------------
 
-        UIRootElement _uiRootElement;
+        //UIRootElement _uiRootElement;
 
-        IUIRootElement IViewport.Root
-        {
-            get
-            {
-                if (_uiRootElement == null)
-                {
-                    _uiRootElement = new UIRootElement();
-                    _uiRootElement._viewport = this;
-                }
-                return _uiRootElement;
-            }
-        }
+        //IUIRootElement IViewport.Root
+        //{
+        //    get
+        //    {
+        //        if (_uiRootElement == null)
+        //        {
+        //            _uiRootElement = new UIRootElement();
+        //            _uiRootElement._viewport = this;
+        //        }
+        //        return _uiRootElement;
+        //    }
+        //}
         MyAppHost _myAppHost;
         IAppHost IViewport.AppHost
         {
