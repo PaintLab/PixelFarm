@@ -36,6 +36,16 @@ namespace LayoutFarm.UI
         public bool dbugBreakMe;
 #endif
         bool _hide;
+
+        //bounds
+        float _left;
+        float _top;
+        float _right;
+        float _bottom;
+
+
+        //~
+
         public UIElement()
         {
         }
@@ -51,9 +61,39 @@ namespace LayoutFarm.UI
         public abstract void InvalidateGraphics();
 
 
+        System.WeakReference _tag;
+        /// <summary>
+        /// general purpose element
+        /// </summary>
+        public object Tag
+        {
+            get { return (_tag != null && _tag.IsAlive) ? _tag.Target : null; }
+            set
+            {
+                _tag = (value != null) ? new System.WeakReference(value) : null;
+            }
+        }
         //----------------------------------- 
-        public object Tag { get; set; }
-        //----------------------------------- 
+
+        public virtual void Focus()
+        {
+            //make this keyboard focusable
+            if (this.HasReadyRenderElement)
+            {
+                //focus
+                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
+            }
+        }
+        public virtual void Blur()
+        {
+            if (this.HasReadyRenderElement)
+            {
+                //focus
+                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
+            }
+        }
+
+
         System.WeakReference _parent;
         public UIElement ParentUI
         {
@@ -75,15 +115,65 @@ namespace LayoutFarm.UI
                 }
             }
         }
+        public PixelFarm.Drawing.Point GetGlobalLocation()
+        {
+            if (this.CurrentPrimaryRenderElement != null)
+            {
+                return this.CurrentPrimaryRenderElement.GetGlobalLocation();
+            }
+            return new PixelFarm.Drawing.Point((int)_left, (int)_top);
+        }
+        public void GetElementBounds(
+           out float left,
+           out float top,
+           out float right,
+           out float bottom)
+        {
+            left = _left;
+            top = _top;
+            right = _right;
+            bottom = _bottom;
+        }
+        protected void SetElementBoundsWH(float width, float height)
+        {
+            _right = _left + width;
+            _bottom = _top + height;
+        }
+        protected void SetElementBoundsLTWH(float left, float top, float width, float height)
+        {
+            //change 'TransparentBounds' => not effect visual presentation
+            _left = left;
+            _top = top;
+            _right = left + width;
+            _bottom = top + height;
+        }
+        protected void SetElementBounds(float left, float top, float right, float bottom)
+        {   //change 'TransparentBounds' => not effect visual presentation
+            _left = left;
+            _top = top;
+            _right = right;
+            _bottom = bottom;
+        }
+        protected void SetElementBoundsLT(float left, float top)
+        {
+            _left = left;
+            _top = top;
+        }
+        protected float BoundWidth { get { return _right - _left; } }
+        protected float BoundHeight { get { return _bottom - _top; } }
+        protected float BoundTop { get { return _top; } }
+        protected float BoundLeft { get { return _left; } }
+
+        //-------------------------------------------------------
+        //layout ...
         public virtual bool NeedContentLayout
         {
             get { return false; }
         }
-
-        //-------------------------------------------------------
         internal bool IsInLayoutQueue { get; set; }
 
         //-------------------------------------------------------
+        //events ...
         public bool TransparentAllMouseEvents
         {
             get;
@@ -173,6 +263,9 @@ namespace LayoutFarm.UI
         protected virtual void OnElementChanged()
         {
         }
+
+
+        //
         public abstract void Walk(UIVisitor visitor);
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
         {

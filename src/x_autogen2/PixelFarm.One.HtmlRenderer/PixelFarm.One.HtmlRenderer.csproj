@@ -541,11 +541,14 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\7_WindowUI\UIFloatWindow.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\7_WindowUI\UIFloatWindow.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasBox.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.1_Svg\UISprite.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.1_Svg\UISprite.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasRenderElement.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasRenderElement.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasRenderElement.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasRenderElement.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\9_TextContentSplitter\ContentTextSplitter.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\9_TextContentSplitter\ContentTextSplitter.cs</Link>
