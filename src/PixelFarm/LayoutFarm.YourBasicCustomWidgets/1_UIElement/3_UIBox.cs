@@ -149,6 +149,8 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
             }
         }
+
+        //------------------------------
         public virtual int ViewportX
         {
             get { return 0; }
@@ -168,9 +170,11 @@ namespace LayoutFarm.UI
         public virtual void SetViewport(int x, int y)
         {
         }
+        //------------------------------
         public virtual void PerformContentLayout()
         {
         }
+
         public virtual int DesiredHeight
         {
             get
