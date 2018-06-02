@@ -40,10 +40,9 @@ namespace LayoutFarm.UI
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public UISprite(int width, int height)
+        public UISprite(float width, float height)
         {
             SetElementBoundsWH(width, height);
-            //default for box
             this.AutoStopMouseEventPropagation = true;
 
         }
@@ -54,7 +53,7 @@ namespace LayoutFarm.UI
             {
                 _svgRenderElement.RenderVx = renderVx;
                 RectD bound = renderVx.GetBounds();
-                this.SetSize((int)bound.Width, (int)bound.Height);
+                this.SetSize((float)bound.Width, (float)bound.Height);
             }
         }
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -87,30 +86,27 @@ namespace LayoutFarm.UI
                 }
             }
             return _svgRenderElement;
-
         }
-
-
-
-        public virtual void SetLocation(int left, int top)
+        public virtual void SetLocation(float left, float top)
         {
             SetElementBoundsLT(left, top);
             if (this.HasReadyRenderElement)
             {
-                this.CurrentPrimaryRenderElement.SetLocation(left, top);
+                //TODO: review rounding here
+                this.CurrentPrimaryRenderElement.SetLocation((int)left, (int)top);
             }
         }
 
-        public virtual void SetSize(int width, int height)
+        public virtual void SetSize(float width, float height)
         {
             SetElementBoundsWH(width, height);
             if (this.HasReadyRenderElement)
             {
-                this.CurrentPrimaryRenderElement.SetSize(width, height);
+                this.CurrentPrimaryRenderElement.SetSize((int)width, (int)height);
             }
         }
 
-        public void SetBounds(int left, int top, int width, int height)
+        public void SetBounds(float left, float top, float width, float height)
         {
             SetLocation(left, top);
             SetSize(width, height);
@@ -152,20 +148,6 @@ namespace LayoutFarm.UI
             get { return this.Top + Height; }
         }
 
-        public Point Position
-        {
-            get
-            {
-                if (this.HasReadyRenderElement)
-                {
-                    return new Point(CurrentPrimaryRenderElement.X, CurrentPrimaryRenderElement.Y);
-                }
-                else
-                {
-                    return new Point((int)this.BoundLeft, (int)this.BoundTop);
-                }
-            }
-        }
         public float Width
         {
             get
