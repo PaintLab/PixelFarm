@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-namespace MiniCollection
+namespace Tesselate
 {
 
     //TODO: review this again....
@@ -10,8 +10,8 @@ namespace MiniCollection
     //design for our tess only
     //not for general use.
     //----- 
-    public class RefItem<T>
-        where T : IComparable<T>
+    class RefItem<T>
+      where T : IComparable<T>
     {
         public RefItem(T data)
         {
@@ -25,10 +25,10 @@ namespace MiniCollection
             return this.Data.ToString();
         }
 #endif
-    } 
+    }
 
-    public class MaxFirstList<T>
-        where T : IComparable<T>
+    class MaxFirstList<T>
+      where T : IComparable<T>
     {
         List<RefItem<T>> innerList = new List<RefItem<T>>();
         bool isSorted = false;

@@ -95,7 +95,7 @@ namespace Tesselate
         public Mesh mesh;		/* stores the input contours, and eventually the tessellation itself */
         public WindingRuleType windingRule;	// rule for determining polygon interior
         public Dictionary edgeDictionary;		/* edge dictionary for sweep line */
-        public MiniCollection.MaxFirstList<ContourVertex> vertexPriorityQue = new MiniCollection.MaxFirstList<ContourVertex>();
+        internal MaxFirstList<ContourVertex> vertexPriorityQue = new MaxFirstList<ContourVertex>();
         public ContourVertex currentSweepVertex;        /* current sweep event being processed */
 
         public delegate void CallCombineDelegate(
