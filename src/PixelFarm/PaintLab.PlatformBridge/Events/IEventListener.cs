@@ -47,5 +47,5 @@ namespace LayoutFarm.UI
         //--------------------------------------------------------------------------  
     }
 
-    public delegate void UIEventHandler<T>(T e) where T : System.EventArgs;
+    public delegate void UIEventHandler<T>(T e);
 }

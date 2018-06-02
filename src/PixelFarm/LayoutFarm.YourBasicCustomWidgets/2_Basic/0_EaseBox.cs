@@ -337,7 +337,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (this.uiList == null)
             {
-                this.uiList = new UICollection();
+                this.uiList = new UICollection(this);
             }
 
             needContentLayout = true;

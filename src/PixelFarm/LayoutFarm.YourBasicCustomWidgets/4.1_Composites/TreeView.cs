@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
             panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             panel.BackColor = Color.LightGray;
             panel.NeedClipArea = true;
-            uiList = new UICollection();
+            uiList = new UICollection(this);
             uiList.AddUI(panel);
         }
 
@@ -152,7 +152,7 @@ namespace LayoutFarm.CustomWidgets
         public TreeNode(int width, int height)
             : base(width, height)
         {
-            
+
         }
         public ImageBinder NodeIconImage
         {

@@ -11,8 +11,7 @@ namespace LayoutFarm.UI
         int _width;
         int _height;
 
-
-        bool _hide;
+ 
         bool specificWidth;
         bool specificHeight;
         public event EventHandler LayoutFinished;

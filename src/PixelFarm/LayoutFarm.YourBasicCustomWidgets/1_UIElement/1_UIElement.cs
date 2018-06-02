@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
-    public static class UISystem
+    static class UISystem
     {
         static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
         static UISystem()
@@ -39,24 +39,7 @@ namespace LayoutFarm.UI
         public UIElement()
         {
         }
-        //----------------------------------- 
-        public object Tag { get; set; }
-        //----------------------------------- 
-
-
-       
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
-        public bool TransparentAllMouseEvents
-        {
-            get;
-            set;
-        }
-        public bool AutoStopMouseEventPropagation
-        {
-            get;
-            set;
-        }
-
         public abstract RenderElement CurrentPrimaryRenderElement
         {
             get;
@@ -66,13 +49,20 @@ namespace LayoutFarm.UI
             get;
         }
         public abstract void InvalidateGraphics();
-        public virtual bool NeedContentLayout
-        {
-            get { return false; }
-        }
 
-        //-------------------------------------------------------
-        internal bool IsInLayoutQueue { get; set; }
+
+        //----------------------------------- 
+        public object Tag { get; set; }
+        //----------------------------------- 
+        System.WeakReference _parent;
+        public UIElement ParentUI
+        {
+            get { return (_parent != null && _parent.IsAlive) ? (UIElement)_parent.Target : null; }
+            set
+            {
+                _parent = (value != null) ? new System.WeakReference(value) : null;
+            }
+        }
         public virtual bool Visible
         {
             get { return !this._hide; }
@@ -85,8 +75,25 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        //-------------------------------------------------------
+        public virtual bool NeedContentLayout
+        {
+            get { return false; }
+        }
 
+        //-------------------------------------------------------
+        internal bool IsInLayoutQueue { get; set; }
+
+        //-------------------------------------------------------
+        public bool TransparentAllMouseEvents
+        {
+            get;
+            set;
+        }
+        public bool AutoStopMouseEventPropagation
+        {
+            get;
+            set;
+        }
         protected virtual void OnShown()
         {
         }
@@ -170,7 +177,7 @@ namespace LayoutFarm.UI
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
         {
         }
-        
+
 #if DEBUG
         object dbugTagObject;
         public object dbugTag
