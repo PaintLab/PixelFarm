@@ -20,6 +20,26 @@ namespace PixelFarm.Agg
         Path
     }
 
+    public class VxsRenderVx : RenderVx
+    {
+        public VertexStore _vxs;
+        public VxsRenderVx(VertexStore vxs)
+        {
+            _vxs = vxs;
+        }
+
+        object _resolvedObject;
+        public static object GetResolvedObject(VxsRenderVx vxsRenerVx)
+        {
+            return vxsRenerVx._resolvedObject;
+        }
+        public static void SetResolvedObject(VxsRenderVx vxsRenerVx, object obj)
+        {
+            vxsRenerVx._resolvedObject = obj;
+        }
+
+    }
+
     public class SvgRenderVx : RenderVx
     {
 
@@ -32,7 +52,7 @@ namespace PixelFarm.Agg
         }
 
         Image _backimg;
-        SvgPart[] _vxList;//woring vxs
+        SvgPart[] _vxList;//working vxs
         SvgPart[] _originalVxs; //original definition
 
         RectD _boundRect;
@@ -205,7 +225,7 @@ namespace PixelFarm.Agg
                                 if (vx.HasStrokeColor)
                                 {
                                     //has specific stroke color 
-                                    p.StrokeWidth = vx.StrokeWidth; 
+                                    p.StrokeWidth = vx.StrokeWidth;
                                     VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
 
                                     if (currentTx == null)
@@ -263,7 +283,7 @@ namespace PixelFarm.Agg
             p.ReleaseTempVxsStore(tempVxs);
         }
 
-        VertexStore GetStrokeVxsOrCreateNew(SvgPart s, Painter p, float strokeW)
+        static VertexStore GetStrokeVxsOrCreateNew(SvgPart s, Painter p, float strokeW)
         {
             VertexStore strokeVxs = s.StrokeVxs;
             if (strokeVxs != null && s.StrokeWidth == strokeW)
@@ -295,6 +315,7 @@ namespace PixelFarm.Agg
         {
             _vxList = _originalVxs;
         }
+
 
     }
 

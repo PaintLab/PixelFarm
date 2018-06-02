@@ -709,6 +709,105 @@ namespace PixelFarm.Drawing.WinGdi
             gx.FillPath(internalSolidBrush, innerPath);
             internalSolidBrush.Color = prevColor;
         }
+        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        {
+
+            var gpath = PixelFarm.Agg.VxsRenderVx.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
+            if (gpath != null) return gpath;
+            //
+            //elsse create a new one 
+            gpath = new System.Drawing.Drawing2D.GraphicsPath();
+            VertexStore vxs = vxsRenderVx._vxs;
+            int j = vxs.Count;
+            float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
+            bool isOpen = false;
+            for (int i = 0; i < j; ++i)
+            {
+                var cmd = vxs.GetVertex(i, out double x, out double y);
+                switch (cmd)
+                {
+                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                        {
+                            latestMoveX = latestX = (float)x;
+                            latestMoveY = latestY = (float)y;
+                        }
+                        break;
+                    case PixelFarm.Agg.VertexCmd.LineTo:
+                        {
+                            isOpen = true;
+                            gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
+                        }
+                        break;
+                    case PixelFarm.Agg.VertexCmd.Close:
+                        {
+                            latestX = latestMoveX;
+                            latestY = latestMoveY;
+
+                            gpath.CloseFigure();
+                            isOpen = false;
+                        }
+                        break;
+                    default:
+                        throw new System.NotSupportedException();
+                }
+            }
+            PixelFarm.Agg.VxsRenderVx.SetResolvedObject(vxsRenderVx, gpath);
+            return gpath;
+        }
+
+        public void FillPath(Color color, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        {
+
+            //solid color
+            var prevColor = internalSolidBrush.Color;
+            internalSolidBrush.Color = ConvColor(color);
+            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+            gx.FillPath(internalSolidBrush, innerPath);
+            internalSolidBrush.Color = prevColor;
+        }
+        public void FillPath(PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        {
+
+            //solid color 
+            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+            gx.FillPath(internalSolidBrush, innerPath);
+            
+        }
+        public void FillPath(Brush brush, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        {
+
+            switch (brush.BrushKind)
+            {
+                case BrushKind.Solid:
+                    {
+                        SolidBrush solidBrush = (SolidBrush)brush;
+                        var prevColor = internalSolidBrush.Color;
+                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        //
+                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+                        gx.FillPath(internalSolidBrush, innerPath);
+                        //
+                        internalSolidBrush.Color = prevColor;
+                    }
+                    break;
+                case BrushKind.LinearGradient:
+                    {
+                        LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
+                        var prevColor = internalSolidBrush.Color;
+                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        //
+                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+                        gx.FillPath(internalSolidBrush, innerPath);
+                        //
+                        internalSolidBrush.Color = prevColor;
+                    }
+                    break;
+                default:
+                    {
+                    }
+                    break;
+            }
+        }
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
         /// </summary>

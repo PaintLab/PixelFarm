@@ -90,7 +90,7 @@ namespace PixelFarm.Drawing
         //path,  polygons,ellipse spline,contour,   
         public abstract void FillPath(Color color, GraphicsPath gfxPath);
         public abstract void FillPath(Brush brush, GraphicsPath gfxPath);
-        public abstract void DrawPath(GraphicsPath gfxPath);
+        public abstract void DrawPath(GraphicsPath gfxPath); 
         public abstract void FillPolygon(Brush brush, PointF[] points);
         public abstract void FillPolygon(Color color, PointF[] points);
         //-------------------------------------------------------  
