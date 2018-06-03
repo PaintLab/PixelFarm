@@ -284,8 +284,9 @@ namespace LayoutFarm.CustomWidgets
             _simpleBox.TransparentAllMouseEvents = true;
             _simpleBox.NeedClipArea = false;
             //_simpleBox.BackColor = Color.Transparent;//*** 
-            _simpleBox.BackColor = Color.Blue;//*** 
-
+#if DEBUG
+            _simpleBox.BackColor = Color.Blue;//***  
+#endif
         }
         //-------------
         public override void InvalidateGraphics()
