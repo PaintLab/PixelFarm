@@ -111,12 +111,14 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------------
 
         }
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.NeedClipArea = this.NeedClipArea;
+                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
                 BuildChildrenRenderElement(renderE);
                 this.primElement = renderE;
             }
@@ -218,6 +220,9 @@ namespace LayoutFarm.CustomWidgets
 
         public void RemoveSelf()
         {
+            if (CurrentPrimaryRenderElement == null) { return; }
+            //
+
             var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
             if (parentBox != null)
             {

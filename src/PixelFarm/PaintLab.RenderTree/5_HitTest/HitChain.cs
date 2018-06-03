@@ -69,6 +69,8 @@ namespace LayoutFarm.RenderBoxes
                 return new Point(testPointX, testPointY);
             }
         }
+        public int TextPointX { get { return testPointX; } }
+        public int TextPointY { get { return testPointY; } }
         public void GetTestPoint(out int x, out int y)
         {
             x = this.testPointX;

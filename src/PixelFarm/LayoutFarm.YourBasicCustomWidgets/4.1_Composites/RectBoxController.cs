@@ -281,6 +281,7 @@ namespace LayoutFarm.CustomWidgets
         {
 
             _simpleBox = new SimpleBox(10, 10);
+            _simpleBox.TransparentAllMouseEvents = true;
             _simpleBox.NeedClipArea = false;
             //_simpleBox.BackColor = Color.Transparent;//*** 
             _simpleBox.BackColor = Color.Blue;//*** 

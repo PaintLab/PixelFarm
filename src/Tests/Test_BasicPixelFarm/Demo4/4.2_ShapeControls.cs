@@ -35,12 +35,9 @@ namespace LayoutFarm
             svgRenderVx.DisableBackingImage = true;
 
 
-            var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0)
-
+            var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0) 
             uiSprite.LoadSvg(svgRenderVx);
-            viewport.AddContent(uiSprite);
-
-
+            viewport.AddContent(uiSprite); 
 
             var spriteEvListener = new GeneralEventListener();
             uiSprite.AttachExternalEventListener(spriteEvListener);
@@ -55,6 +52,7 @@ namespace LayoutFarm
             //viewport.AddContent(box1);
             //-------- 
             rectBoxController.Init();
+            //polygonController.Visible = false;
             viewport.AddContent(polygonController);
             //-------------------------------------------
             viewport.AddContent(rectBoxController);

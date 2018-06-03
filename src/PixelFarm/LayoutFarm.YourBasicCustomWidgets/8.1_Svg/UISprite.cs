@@ -29,10 +29,38 @@ namespace LayoutFarm.UI
 
             if (bound.Contains(hitChain.TestPoint.x, hitChain.TestPoint.y))
             {
-                hitChain.AddHitObject(this);
+                //check exact hit or the vxs part
+                if (HitTestOnSubPart(RenderVx, hitChain.TextPointX, hitChain.TextPointY))
+                {
+                    hitChain.AddHitObject(this);
+                }
             }
 
             base.ChildrenHitTestCore(hitChain);
+        }
+        static bool HitTestOnSubPart(SvgRenderVx _svgRenderVx, float x, float y)
+        {
+            int partCount = _svgRenderVx.SvgVxCount;
+
+
+            for (int i = partCount - 1; i >= 0; --i)
+            {
+                //we do hittest top to bottom => (so => iter backward)
+
+                SvgPart vx = _svgRenderVx.GetInnerVx(i);
+                if (vx.Kind != SvgRenderVxKind.Path)
+                {
+                    continue;
+                }
+                VertexStore innerVxs = vx.GetVxs();
+                //fine tune
+                //hit test ***
+                if (VertexHitTester.IsPointInVxs(innerVxs, x, y))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
