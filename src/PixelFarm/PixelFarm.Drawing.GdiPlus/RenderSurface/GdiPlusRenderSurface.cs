@@ -709,15 +709,31 @@ namespace PixelFarm.Drawing.WinGdi
             gx.FillPath(internalSolidBrush, innerPath);
             internalSolidBrush.Color = prevColor;
         }
+        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.Agg.SvgPart vxsRenderVx)
+        {
+            var gpath = PixelFarm.Agg.SvgPart.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
+            if (gpath != null) return gpath;
+
+            gpath = CreateGraphicsPath(vxsRenderVx.GetVxs());
+            PixelFarm.Agg.SvgPart.SetResolvedObject(vxsRenderVx, gpath);
+            return gpath;
+        }
         static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.Agg.VxsRenderVx vxsRenderVx)
         {
 
             var gpath = PixelFarm.Agg.VxsRenderVx.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
             if (gpath != null) return gpath;
+
+            gpath = CreateGraphicsPath(vxsRenderVx._vxs);
+            PixelFarm.Agg.VxsRenderVx.SetResolvedObject(vxsRenderVx, gpath);
+            return gpath;
+        }
+        static System.Drawing.Drawing2D.GraphicsPath CreateGraphicsPath(VertexStore vxs)
+        {
             //
             //elsse create a new one 
-            gpath = new System.Drawing.Drawing2D.GraphicsPath();
-            VertexStore vxs = vxsRenderVx._vxs;
+            var gpath = new System.Drawing.Drawing2D.GraphicsPath();
+
             int j = vxs.Count;
             float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
             bool isOpen = false;
@@ -751,10 +767,9 @@ namespace PixelFarm.Drawing.WinGdi
                         throw new System.NotSupportedException();
                 }
             }
-            PixelFarm.Agg.VxsRenderVx.SetResolvedObject(vxsRenderVx, gpath);
+
             return gpath;
         }
-
         public void FillPath(Color color, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
         {
 
@@ -771,7 +786,21 @@ namespace PixelFarm.Drawing.WinGdi
             //solid color 
             System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
             gx.FillPath(internalSolidBrush, innerPath);
-            
+
+        }
+        public void FillPath(PixelFarm.Agg.SvgRenderVx svgRenderVx)
+        {
+
+            //solid color 
+            int j = svgRenderVx.SvgVxCount;
+            for (int i = 0; i < j; ++i)
+            {
+                Agg.SvgPart part = svgRenderVx.GetInnerVx(i);
+                System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(part);
+                gx.FillPath(System.Drawing.Brushes.Black, innerPath);
+            }
+
+
         }
         public void FillPath(Brush brush, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
         {

@@ -46,25 +46,29 @@ namespace PixelFarm.Drawing.WinGdi
                 if (svxRenderVx != null)
                 {
                     //TODO: review fill color here
-                    _gdigsx.FillPath(Color.Black, svxRenderVx); 
+                    _gdigsx.FillPath(svxRenderVx);
                 }
                 else
                 {
                     var svgRenderVx = renderVx as Agg.SvgRenderVx;
-                    //request painter for this svg
-                    Agg.AggPainter painter = (Agg.AggPainter)this.GetAggPainter();
-                    Agg.ActualImage img = painter.RenderSurface.DestActualImage;
-                    //TODO: optimize this again*** 
-                    //temp fix, clear img
-                    Agg.ActualImage.ClearCache(img); //temp fix*** 
-                    painter.Clear(Color.Transparent);//clear with transparent color
-                                                     //paint with painter
-                    svgRenderVx.Render(painter);
-                    //
-                    img = painter.RenderSurface.DestActualImage;
-                    //img.dbugSaveToPngFile("d:\\WImageTest\\a001.png");
+                    _gdigsx.FillPath(svgRenderVx);
 
-                    this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
+
+
+                    ////request painter for this svg
+                    //Agg.AggPainter painter = (Agg.AggPainter)this.GetAggPainter();
+                    //Agg.ActualImage img = painter.RenderSurface.DestActualImage;
+                    ////TODO: optimize this again*** 
+                    ////temp fix, clear img
+                    //Agg.ActualImage.ClearCache(img); //temp fix*** 
+                    //painter.Clear(Color.Transparent);//clear with transparent color
+                    //                                 //paint with painter
+                    //svgRenderVx.Render(painter);
+                    ////
+                    //img = painter.RenderSurface.DestActualImage;
+                    ////img.dbugSaveToPngFile("d:\\WImageTest\\a001.png");
+
+                    //this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
                 }
 
             }

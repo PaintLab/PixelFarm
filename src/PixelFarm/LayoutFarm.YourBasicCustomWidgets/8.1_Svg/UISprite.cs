@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
-
+using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.UI
 {
@@ -15,8 +15,25 @@ namespace LayoutFarm.UI
             : base(rootGfx, width, height)
         {
 
+            //this.dbug_ObjectNote = "AAA";
+            //this.NeedClipArea = false;
+            this.MayHasChild = true;
+            this.TransparentForAllEvents = true;
+
         }
         public SvgRenderVx RenderVx { get; set; }
+
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            RectD bound = RenderVx.GetBounds();
+
+            if (bound.Contains(hitChain.TestPoint.x, hitChain.TestPoint.y))
+            {
+                hitChain.AddHitObject(this);
+            }
+
+            base.ChildrenHitTestCore(hitChain);
+        }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (RenderVx != null)
@@ -54,6 +71,23 @@ namespace LayoutFarm.UI
                 _svgRenderElement.RenderVx = renderVx;
                 RectD bound = renderVx.GetBounds();
                 this.SetSize((float)bound.Width, (float)bound.Height);
+            }
+        }
+        protected override void OnElementChanged()
+        {
+
+            if (_svgRenderElement != null)
+            {
+                _svgRenderElement.RenderVx = _svgRenderVx;
+
+                RectD bound0 = _svgRenderVx.GetBounds();
+                _svgRenderVx.InvalidateBounds();
+
+                RectD bound1 = _svgRenderVx.GetBounds();
+                //_svgRenderElement.SetBounds(0, 0, (int)bound1.Width, (int)bound1.Height);
+
+
+
             }
         }
         protected override void OnMouseDown(UIMouseEventArgs e)

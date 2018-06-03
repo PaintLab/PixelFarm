@@ -41,7 +41,15 @@ namespace LayoutFarm.RenderBoxes
 #endif
     }
 
-
+#if DEBUG
+    public enum dbugHitChainPhase
+    {
+        Unknown,
+        MouseDown,
+        MouseMove,
+        MouseUp
+    }
+#endif
 
     public class HitChain
     {
@@ -81,6 +89,9 @@ namespace LayoutFarm.RenderBoxes
         }
         public void ClearAll()
         {
+#if DEBUG
+            dbugHitPhase = dbugHitChainPhase.Unknown;
+#endif
             testPointX = 0;
             testPointY = 0;
             hitList.Clear();
@@ -92,6 +103,17 @@ namespace LayoutFarm.RenderBoxes
             set;
         }
 #if DEBUG
+        dbugHitChainPhase _dbugHitChainPhase;
+        public dbugHitChainPhase dbugHitPhase
+        {
+            get { return _dbugHitChainPhase; }
+            set
+            {
+
+                _dbugHitChainPhase = value;
+
+            }
+        }
         public dbugHitTestTracker dbugHitTracker;
 #endif
         public int Count { get { return this.hitList.Count; } }
@@ -114,6 +136,15 @@ namespace LayoutFarm.RenderBoxes
         {
             hitList.Add(new HitInfo(hitObject, new Point(testPointX, testPointY)));
 #if DEBUG
+            //if (hitObject.dbug_ObjectNote == "AAA")
+            //{
+
+            //}
+            //if (this.dbugHitPhase == dbugHitChainPhase.MouseDown)
+            //{
+
+            //}
+
             if (dbugHitTracker != null)
             {
                 dbugHitTracker.WriteTrackNode(hitList.Count,

@@ -190,6 +190,10 @@ namespace LayoutFarm.UI
 
 
             HitChain hitPointChain = GetFreeHitChain();
+#if DEBUG
+            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseDown;
+#endif
+
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             int hitCount = hitPointChain.Count;
             RenderElement hitElement = hitPointChain.TopMostElement;
@@ -217,6 +221,8 @@ namespace LayoutFarm.UI
                     ForEachEventListenerBubbleUp(e, hitPointChain, (listener) =>
                     {
                         currentMouseDown = listener;
+                       
+
                         listener.ListenMouseDown(e);
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e.CancelBubbling;
@@ -279,6 +285,9 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseMove(UIMouseEventArgs e)
         {
             HitChain hitPointChain = GetFreeHitChain();
+#if DEBUG
+            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseMove;
+#endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             this._previousChain.ClearAll();
             SetEventOrigin(e, hitPointChain);
@@ -344,6 +353,9 @@ namespace LayoutFarm.UI
 #endif
 
             HitChain hitPointChain = GetFreeHitChain();
+#if DEBUG
+            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseUp;
+#endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             int hitCount = hitPointChain.Count;
             if (hitCount > 0)

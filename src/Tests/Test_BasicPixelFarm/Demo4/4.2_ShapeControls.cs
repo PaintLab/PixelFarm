@@ -33,23 +33,25 @@ namespace LayoutFarm
             svgPart.FillColor = Color.Red;
             SvgRenderVx svgRenderVx = new SvgRenderVx(new SvgPart[] { svgPart });
 
-            var uiSprite = new UISprite(200, 200);
+
+            var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0)
+
             uiSprite.LoadSvg(svgRenderVx);
             viewport.AddContent(uiSprite);
 
 
 
-            var evListener = new GeneralEventListener();
-            uiSprite.AttachExternalEventListener(evListener);
+            var spriteEvListener = new GeneralEventListener();
+            uiSprite.AttachExternalEventListener(spriteEvListener);
 
 
 
-            box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
-            box1.BackColor = Color.Red;
-            box1.SetLocation(10, 10);
-            //box1.dbugTag = 1;
-            SetupActiveBoxProperties(box1);
-            viewport.AddContent(box1);
+            //box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            //box1.BackColor = Color.Red;
+            //box1.SetLocation(10, 10);
+            ////box1.dbugTag = 1;
+            //SetupActiveBoxProperties(box1);
+            //viewport.AddContent(box1);
             //-------- 
             rectBoxController.Init();
             viewport.AddContent(polygonController);
@@ -61,15 +63,15 @@ namespace LayoutFarm
             //    viewport.AddContent(ui);
             //}
 
-            evListener.MouseDown += e1 =>
+            spriteEvListener.MouseDown += e1 =>
             {
                 //mousedown on ui sprite
                 polygonController.SetPosition((int)uiSprite.Left, (int)uiSprite.Top);
-                polygonController.UpdateControlPoints(vxs);
-
+                polygonController.SetTargetUISprite(uiSprite);
+                polygonController.UpdateControlPoints(svgPart);
 
             };
-            evListener.MouseMove += e1 =>
+            spriteEvListener.MouseMove += e1 =>
             {
                 if (e1.IsDragging)
                 {

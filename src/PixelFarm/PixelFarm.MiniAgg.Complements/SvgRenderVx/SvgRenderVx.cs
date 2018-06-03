@@ -26,6 +26,7 @@ namespace PixelFarm.Agg
         public VxsRenderVx(VertexStore vxs)
         {
             _vxs = vxs;
+            
         }
 
         object _resolvedObject;
@@ -64,8 +65,13 @@ namespace PixelFarm.Agg
             this._originalVxs = svgVxList;
             this._vxList = svgVxList;
             _needBoundUpdate = true;
+            
         }
-
+        public void InvalidateBounds()
+        {
+            _needBoundUpdate = true;
+            _boundRect = new RectD(this.X, this.Y, 2, 2);
+        }
         public RectD GetBounds()
         {
             //find bound
@@ -105,6 +111,7 @@ namespace PixelFarm.Agg
 
         public float X { get; set; }
         public float Y { get; set; }
+
 
         public void Render(Painter p)
         {
@@ -317,6 +324,7 @@ namespace PixelFarm.Agg
         }
 
 
+
     }
 
 
@@ -457,6 +465,18 @@ namespace PixelFarm.Agg
 
 
             return newSx;
+        }
+
+
+        //
+        object _resolvedObject; //platform's object
+        public static object GetResolvedObject(SvgPart vxsRenerVx)
+        {
+            return vxsRenerVx._resolvedObject;
+        }
+        public static void SetResolvedObject(SvgPart vxsRenerVx, object obj)
+        {
+            vxsRenerVx._resolvedObject = obj;
         }
     }
 
