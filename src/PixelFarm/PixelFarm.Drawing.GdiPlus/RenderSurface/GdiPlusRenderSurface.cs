@@ -763,6 +763,7 @@ namespace PixelFarm.Drawing.WinGdi
                             isOpen = false;
                         }
                         break;
+                    case Agg.VertexCmd.NoMore:break;
                     default:
                         throw new System.NotSupportedException();
                 }
@@ -796,11 +797,12 @@ namespace PixelFarm.Drawing.WinGdi
             for (int i = 0; i < j; ++i)
             {
                 Agg.SvgPart part = svgRenderVx.GetInnerVx(i);
-                System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(part);
-                gx.FillPath(System.Drawing.Brushes.Black, innerPath);
-            }
-
-
+                if (part.Kind == Agg.SvgRenderVxKind.Path)
+                {
+                    System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(part);
+                    gx.FillPath(System.Drawing.Brushes.Black, innerPath);
+                } 
+            } 
         }
         public void FillPath(Brush brush, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
         {

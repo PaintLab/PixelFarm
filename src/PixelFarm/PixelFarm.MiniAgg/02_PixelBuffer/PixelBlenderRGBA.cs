@@ -571,7 +571,7 @@ namespace PixelFarm.Agg.Imaging
                     fixed (int* ptr_byte = &buffer[arrayOffset])
                     {
                         //TODO: consider use memcpy() impl***
-                        int* ptr = (int*)(IntPtr)ptr_byte;
+                        int* ptr = ptr_byte;
                         int argb = sourceColor.ToARGB();
 
                         //---------
