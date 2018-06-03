@@ -78,15 +78,11 @@ namespace LayoutFarm.UI
 
             if (_svgRenderElement != null)
             {
+                _svgRenderVx.SetBitmapSnapshot(null);
+
                 _svgRenderElement.RenderVx = _svgRenderVx;
-
-                RectD bound0 = _svgRenderVx.GetBounds();
                 _svgRenderVx.InvalidateBounds();
-
                 RectD bound1 = _svgRenderVx.GetBounds();
-                //_svgRenderElement.SetBounds(0, 0, (int)bound1.Width, (int)bound1.Height);
-
-
 
             }
         }

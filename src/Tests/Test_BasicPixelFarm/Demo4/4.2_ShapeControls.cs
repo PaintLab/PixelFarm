@@ -32,6 +32,7 @@ namespace LayoutFarm
             svgPart.SetVxsAsOriginal(vxs);
             svgPart.FillColor = Color.Red;
             SvgRenderVx svgRenderVx = new SvgRenderVx(new SvgPart[] { svgPart });
+            svgRenderVx.DisableBackingImage = true;
 
 
             var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0)

@@ -40,13 +40,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Pen internalPen;
         System.Drawing.SolidBrush internalSolidBrush;
         System.Drawing.Rectangle currentClipRect;
-        //-------------------------------
-
-
-
-
-
-
+        //------------------------------- 
 
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
@@ -818,39 +812,51 @@ namespace PixelFarm.Drawing.WinGdi
             return _painter;
         }
 
+
+        GdiPlusPainter _gdiPlusPainter;
         public void FillPath(PixelFarm.Agg.SvgRenderVx svgVx)
         {
+            if (svgVx == null) return;
+            //-------------------------
 
 
-            if (svgVx != null)
+            if (svgVx.DisableBackingImage)
             {
-                if (!svgVx.HasBitmapSnapshot)
-                {
-                    Agg.RectD bound = svgVx.GetBounds();
 
-                    //create 
-                    Agg.ActualImage backimg = new Agg.ActualImage((int)bound.Width, (int)bound.Height);
-                    Agg.AggRenderSurface renderSurface = new Agg.AggRenderSurface(backimg);
-                    Agg.AggPainter painter = new Agg.AggPainter(renderSurface);
-                    svgVx.Render(painter);
+                //solid color 
+                if (_gdiPlusPainter == null)
+                {
+                    _gdiPlusPainter = new GdiPlusPainter(this);
+                }
+                svgVx.Render(_gdiPlusPainter);
+
+            }
+            else if (!svgVx.HasBitmapSnapshot)
+            {
+                Agg.RectD bound = svgVx.GetBounds();
+
+                //create 
+                Agg.ActualImage backimg = new Agg.ActualImage((int)bound.Width, (int)bound.Height);
+                Agg.AggRenderSurface renderSurface = new Agg.AggRenderSurface(backimg);
+                Agg.AggPainter painter = new Agg.AggPainter(renderSurface);
+                svgVx.Render(painter);
 
 #if DEBUG
-                    //test
-                    //int[] rgba32Buffer = ActualImageExtensions.CopyImgBuffer(backimg, 0 + 20, 0 + 20, backimg.Width - 20, backimg.Height - 20);
-                    //ActualImage newImg = ActualImage.CreateFromBuffer(backimg.Width - 20, backimg.Height - 20, PixelFormat.ARGB32, rgba32Buffer);
-                    //newImg.dbugSaveToPngFile("d:\\WImageTest\\subimg1.png");
+                //test
+                //int[] rgba32Buffer = ActualImageExtensions.CopyImgBuffer(backimg, 0 + 20, 0 + 20, backimg.Width - 20, backimg.Height - 20);
+                //ActualImage newImg = ActualImage.CreateFromBuffer(backimg.Width - 20, backimg.Height - 20, PixelFormat.ARGB32, rgba32Buffer);
+                //newImg.dbugSaveToPngFile("d:\\WImageTest\\subimg1.png");
 
 #endif
 
 
-                    svgVx.SetBitmapSnapshot(backimg);
-                    this.DrawImage(backimg, new RectangleF(0, 0, backimg.Width, backimg.Height));
-                }
-                else
-                {
-                    Image img = svgVx.BackingImage;
-                    this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
-                }
+                svgVx.SetBitmapSnapshot(backimg);
+                this.DrawImage(backimg, new RectangleF(0, 0, backimg.Width, backimg.Height));
+            }
+            else
+            {
+                Image img = svgVx.BackingImage;
+                this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
             }
 
 
@@ -872,19 +878,6 @@ namespace PixelFarm.Drawing.WinGdi
 
 
 
-            ////solid color 
-            //int j = svgRenderVx.SvgVxCount;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    Agg.SvgPart part = svgRenderVx.GetInnerVx(i);
-            //    if (part.Kind == Agg.SvgRenderVxKind.Path)
-            //    {
-            //        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(part);
-            //        //1. fill
-
-            //        gx.FillPath(System.Drawing.Brushes.Black, innerPath);
-            //    }
-            //}
         }
         public void FillPath(Brush brush, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
         {

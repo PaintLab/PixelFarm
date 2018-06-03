@@ -103,6 +103,8 @@ namespace PixelFarm.Agg
         public bool HasBitmapSnapshot { get; internal set; }
 
         public Image BackingImage { get { return _backimg; } }
+        public bool DisableBackingImage { get; set; }
+
         public void SetBitmapSnapshot(Image img)
         {
             this._backimg = img;
