@@ -26,7 +26,7 @@ namespace PixelFarm.Agg
         public VxsRenderVx(VertexStore vxs)
         {
             _vxs = vxs;
-            
+
         }
 
         object _resolvedObject;
@@ -65,7 +65,7 @@ namespace PixelFarm.Agg
             this._originalVxs = svgVxList;
             this._vxList = svgVxList;
             _needBoundUpdate = true;
-            
+
         }
         public void InvalidateBounds()
         {
@@ -102,6 +102,7 @@ namespace PixelFarm.Agg
 
         public bool HasBitmapSnapshot { get; internal set; }
 
+        public Image BackingImage { get { return _backimg; } }
         public void SetBitmapSnapshot(Image img)
         {
             this._backimg = img;

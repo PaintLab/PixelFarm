@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using Win32;
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
 
@@ -763,7 +764,7 @@ namespace PixelFarm.Drawing.WinGdi
                             isOpen = false;
                         }
                         break;
-                    case Agg.VertexCmd.NoMore:break;
+                    case Agg.VertexCmd.NoMore: break;
                     default:
                         throw new System.NotSupportedException();
                 }
@@ -789,20 +790,101 @@ namespace PixelFarm.Drawing.WinGdi
             gx.FillPath(internalSolidBrush, innerPath);
 
         }
-        public void FillPath(PixelFarm.Agg.SvgRenderVx svgRenderVx)
+
+        Agg.AggPainter _painter;
+        Agg.ActualImage _aggActualImg;
+        Agg.AggRenderSurface _aggRenderSurface;
+        static Typography.TextServices.OpenFontStore openFontStore;
+        Painter GetAggPainter()
+        {
+            if (_painter == null)
+            {
+
+                _aggActualImg = new Agg.ActualImage(this.Width, this.Height);
+                _aggRenderSurface = new Agg.AggRenderSurface(_aggActualImg);
+                var aggPainter = new Agg.AggPainter(_aggRenderSurface);
+                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+
+                //ifont loader
+                if (openFontStore == null)
+                {
+                    openFontStore = new Typography.TextServices.OpenFontStore();
+                }
+
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, openFontStore);
+                aggPainter.TextPrinter = textPrinter;
+                _painter = aggPainter;
+            }
+            return _painter;
+        }
+
+        public void FillPath(PixelFarm.Agg.SvgRenderVx svgVx)
         {
 
-            //solid color 
-            int j = svgRenderVx.SvgVxCount;
-            for (int i = 0; i < j; ++i)
+
+            if (svgVx != null)
             {
-                Agg.SvgPart part = svgRenderVx.GetInnerVx(i);
-                if (part.Kind == Agg.SvgRenderVxKind.Path)
+                if (!svgVx.HasBitmapSnapshot)
                 {
-                    System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(part);
-                    gx.FillPath(System.Drawing.Brushes.Black, innerPath);
-                } 
-            } 
+                    Agg.RectD bound = svgVx.GetBounds();
+
+                    //create 
+                    Agg.ActualImage backimg = new Agg.ActualImage((int)bound.Width, (int)bound.Height);
+                    Agg.AggRenderSurface renderSurface = new Agg.AggRenderSurface(backimg);
+                    Agg.AggPainter painter = new Agg.AggPainter(renderSurface);
+                    svgVx.Render(painter);
+
+#if DEBUG
+                    //test
+                    //int[] rgba32Buffer = ActualImageExtensions.CopyImgBuffer(backimg, 0 + 20, 0 + 20, backimg.Width - 20, backimg.Height - 20);
+                    //ActualImage newImg = ActualImage.CreateFromBuffer(backimg.Width - 20, backimg.Height - 20, PixelFormat.ARGB32, rgba32Buffer);
+                    //newImg.dbugSaveToPngFile("d:\\WImageTest\\subimg1.png");
+
+#endif
+
+
+                    svgVx.SetBitmapSnapshot(backimg);
+                    this.DrawImage(backimg, new RectangleF(0, 0, backimg.Width, backimg.Height));
+                }
+                else
+                {
+                    Image img = svgVx.BackingImage;
+                    this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
+                }
+            }
+
+
+            ////use bitmap cache or realtime path
+            ////request painter for this svg
+            //Agg.AggPainter painter = (Agg.AggPainter)this.GetAggPainter();
+            //Agg.ActualImage img = painter.RenderSurface.DestActualImage;
+            ////TODO: optimize this again*** 
+            ////temp fix, clear img
+            //Agg.ActualImage.ClearCache(img); //temp fix*** 
+            //painter.Clear(Color.Transparent);//clear with transparent color
+            //                                 //paint with painter
+            //svgVx.Render(painter);
+            ////
+            //img = painter.RenderSurface.DestActualImage;
+            ////img.dbugSaveToPngFile("d:\\WImageTest\\a001.png"); 
+            //this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
+
+
+
+
+            ////solid color 
+            //int j = svgRenderVx.SvgVxCount;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    Agg.SvgPart part = svgRenderVx.GetInnerVx(i);
+            //    if (part.Kind == Agg.SvgRenderVxKind.Path)
+            //    {
+            //        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(part);
+            //        //1. fill
+
+            //        gx.FillPath(System.Drawing.Brushes.Black, innerPath);
+            //    }
+            //}
         }
         public void FillPath(Brush brush, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
         {
