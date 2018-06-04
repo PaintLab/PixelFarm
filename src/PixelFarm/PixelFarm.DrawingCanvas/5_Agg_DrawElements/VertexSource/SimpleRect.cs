@@ -24,10 +24,7 @@
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
-    //------------------------------------------------------------rounded_rect
-    //
-    // See Implemantation agg_rounded_rect.cpp
-    //
+ 
     public class SimpleRect
     {
         RectD bounds;

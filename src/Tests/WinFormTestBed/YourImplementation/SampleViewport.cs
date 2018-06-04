@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-2018, WinterDev
 
-using PaintLab;
+ 
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
 using LayoutFarm.UI;
@@ -100,33 +100,33 @@ namespace LayoutFarm
         
         //----------------------------------------
 
-        UIRootElement _uiRootElement;
+        //UIRootElement _uiRootElement;
 
-        IUIRootElement IViewport.Root
-        {
-            get
-            {
-                if (_uiRootElement == null)
-                {
-                    _uiRootElement = new UIRootElement();
-                    _uiRootElement._viewport = this;
-                }
-                return _uiRootElement;
-            }
-        }
-        MyAppHost _myAppHost;
-        IAppHost IViewport.AppHost
-        {
-            get
-            {
-                if (_myAppHost == null)
-                {
-                    _myAppHost = new MyAppHost();
-                    _myAppHost.clientViewport = this;
-                }
-                return _myAppHost;
-            }
-        }
+        //IUIRootElement IViewport.Root
+        //{
+        //    get
+        //    {
+        //        if (_uiRootElement == null)
+        //        {
+        //            _uiRootElement = new UIRootElement();
+        //            _uiRootElement._viewport = this;
+        //        }
+        //        return _uiRootElement;
+        //    }
+        //}
+        //MyAppHost _myAppHost;
+        //IAppHost IViewport.AppHost
+        //{
+        //    get
+        //    {
+        //        if (_myAppHost == null)
+        //        {
+        //            _myAppHost = new MyAppHost();
+        //            _myAppHost.clientViewport = this;
+        //        }
+        //        return _myAppHost;
+        //    }
+        //}
     }
 
 

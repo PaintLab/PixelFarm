@@ -40,8 +40,9 @@ namespace LayoutFarm
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 //--------------------------------------------
                 //move controller here 
-                controllerBox1.SetBounds(box.Left - 5, box.Top - 5,
-                                         box.Width + 10, box.Height + 10);
+                controllerBox1.SetLocationAndSize(
+                    box.Left - 5, box.Top - 5,
+                    box.Width + 10, box.Height + 10);
                 controllerBox1.Visible = true;
                 controllerBox1.TargetBox = box;
                 e.SetMouseCapture(controllerBox1);

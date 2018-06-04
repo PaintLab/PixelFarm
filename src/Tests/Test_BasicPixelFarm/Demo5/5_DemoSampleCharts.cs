@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.CustomWidgets;
 using LayoutFarm.UI;
+using PixelFarm.Agg;
 
 namespace LayoutFarm.ColorBlenderSample
 {
@@ -42,42 +43,33 @@ namespace LayoutFarm.ColorBlenderSample
             public PlotBox(int w, int h)
                 : base(w, h)
             {
-            }
-            public LayoutFarm.UI.UIBox TargetBox
-            {
-                get;
-                set;
+
             }
             public override void Walk(UIVisitor visitor)
             {
-                visitor.BeginElement(this, "ctrlbox");
-                this.Describe(visitor);
-                visitor.EndElement();
             }
             public int Index { get; set; }
         }
 
         class LineRenderElement : RenderElement
         {
-            internal GraphicsPath gfxPath;
+            internal VxsRenderVx _stroke;
+
             public LineRenderElement(RootGraphic rootGfx, int width, int height)
                 : base(rootGfx, width, height)
             {
 
             }
-
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
                 //draw line
                 //we can use vxs/path to render a complex line part 
 
-                if (gfxPath != null)
+                if (_stroke != null)
                 {
 
                     var savedSmoothingMode = canvas.SetSmoothMode(SmoothingMode.AntiAlias);
-
-                    canvas.FillPath(canvas.StrokeColor, gfxPath);
-
+                    canvas.DrawRenderVx(_stroke, X0, Y0);//?
                     savedSmoothingMode.Restore();//restore
 
                 }
@@ -107,49 +99,47 @@ namespace LayoutFarm.ColorBlenderSample
         }
 
 
-        static GraphicsPath ConvToGraphicPath(VertexStore vxs)
-        {
-            GraphicsPath gpath = new GraphicsPath();
-            int j = vxs.Count;
+        //static GraphicsPath ConvToGraphicPath(VertexStore vxs)
+        //{
+        //    GraphicsPath gpath = new GraphicsPath();
+        //    int j = vxs.Count;
+        //    float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
+        //    bool isOpen = false;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        var cmd = vxs.GetVertex(i, out double x, out double y);
+        //        switch (cmd)
+        //        {
+        //            case PixelFarm.Agg.VertexCmd.MoveTo:
+        //                {
+        //                    latestMoveX = latestX = (float)x;
+        //                    latestMoveY = latestY = (float)y;
+        //                }
+        //                break;
+        //            case PixelFarm.Agg.VertexCmd.LineTo:
+        //                {
+        //                    isOpen = true;
+        //                    gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
+        //                }
+        //                break;
+        //            case PixelFarm.Agg.VertexCmd.Close:
+        //                {
+        //                    latestX = latestMoveX;
+        //                    latestY = latestMoveY;
 
+        //                    gpath.CloseFigure();
+        //                    isOpen = false;
+        //                }
+        //                break;
+        //            default:
+        //                throw new NotSupportedException();
+        //                break;
 
-            float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
-            bool isOpen = false;
-            for (int i = 0; i < j; ++i)
-            {
-                var cmd = vxs.GetVertex(i, out double x, out double y);
-                switch (cmd)
-                {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
-                        {
-                            latestMoveX = latestX = (float)x;
-                            latestMoveY = latestY = (float)y;
-                        }
-                        break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
-                        {
-                            isOpen = true;
-                            gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
-                        }
-                        break;
-                    case PixelFarm.Agg.VertexCmd.Close:
-                        {
-                            latestX = latestMoveX;
-                            latestY = latestMoveY;
+        //        }
+        //    }
 
-                            gpath.CloseFigure();
-                            isOpen = false;
-                        }
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                        break;
-
-                }
-            }
-
-            return gpath;
-        }
+        //    return gpath;
+        //}
 
         class PlotLine : UIElement
         {
@@ -184,9 +174,8 @@ namespace LayoutFarm.ColorBlenderSample
                 if (_lineRendeE == null)
                 {
 
-
-
-                    VectorToolBox.GetFreeVxs(out var vxs, out var strokeVxs);
+                    VertexStore strokeVxs = new VertexStore();
+                    VectorToolBox.GetFreeVxs(out var vxs);
                     VectorToolBox.GetFreeStroke(out var stroke, 3);
 
                     vxs.AddMoveTo(p0.Left, p0.Top);
@@ -198,7 +187,7 @@ namespace LayoutFarm.ColorBlenderSample
                     //---
 
                     _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
-                    _lineRendeE.gfxPath = ConvToGraphicPath(strokeVxs);
+                    _lineRendeE._stroke = new VxsRenderVx(strokeVxs);
 
                     _lineRendeE.X0 = p0.Left;
                     _lineRendeE.Y0 = p0.Top;
@@ -207,7 +196,7 @@ namespace LayoutFarm.ColorBlenderSample
 
 
                     VectorToolBox.ReleaseVxs(ref vxs);
-                    VectorToolBox.ReleaseVxs(ref strokeVxs);
+
                     VectorToolBox.ReleaseStroke(ref stroke);
                 }
                 return _lineRendeE;

@@ -82,12 +82,14 @@ namespace LayoutFarm
             }
             //select only
             int lastY = 0;
-            ImageBinder binder = viewport.GetImageBinder(fileNames[2]);
+
+
+            int imgNo = 0;
 
             for (int i = 0; i < fileNames.Length * 4; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 400);
-                imgbox.ImageBinder = binder;
+                imgbox.ImageBinder = viewport.GetImageBinder(fileNames[imgNo]);
                 imgbox.BackColor = Color.OrangeRed;
                 imgbox.SetLocation(0, lastY);
                 imgbox.MouseUp += (s, e) =>
@@ -100,6 +102,13 @@ namespace LayoutFarm
                 };
                 lastY += imgbox.Height + 5;
                 panel.AddChild(imgbox);
+
+                imgNo++;
+                if (imgNo == fileNames.Length - 1) //last img
+                {
+                    imgNo = 0;//reset
+                }
+
             }
             //--------------------------
             //panel may need more 

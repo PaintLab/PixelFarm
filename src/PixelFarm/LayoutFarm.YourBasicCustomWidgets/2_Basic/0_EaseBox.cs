@@ -111,12 +111,14 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------------
 
         }
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.NeedClipArea = this.NeedClipArea;
+                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
                 BuildChildrenRenderElement(renderE);
                 this.primElement = renderE;
             }
@@ -218,6 +220,9 @@ namespace LayoutFarm.CustomWidgets
 
         public void RemoveSelf()
         {
+            if (CurrentPrimaryRenderElement == null) { return; }
+            //
+
             var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
             if (parentBox != null)
             {
@@ -445,7 +450,7 @@ namespace LayoutFarm.CustomWidgets
                                 //    element.Width :
                                 //    element.DesiredWidth;
                                 //element.SetBounds(0, ypos, element.Width, elemH);
-                                element.SetBounds(0, ypos, element.Width, element.Height);
+                                element.SetLocationAndSize(0, ypos, element.Width, element.Height);
                                 ypos += element.Height;
                                 int tmp_right = element.DesiredWidth + element.Left;
                                 if (tmp_right > maxRight)
@@ -469,7 +474,7 @@ namespace LayoutFarm.CustomWidgets
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                element.SetBounds(xpos, 0, element.DesiredWidth, element.DesiredHeight);
+                                element.SetLocationAndSize(xpos, 0, element.DesiredWidth, element.DesiredHeight);
                                 xpos += element.DesiredWidth;
                                 int tmp_bottom = element.DesiredHeight + element.Top;
                                 if (tmp_bottom > maxBottom)

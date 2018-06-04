@@ -245,10 +245,13 @@ namespace LayoutFarm
 
         public bool HitTestCore(HitChain hitChain)
         {
+
+
             if ((propFlags & RenderElementConst.HIDDEN) != 0)
             {
                 return false;
             }
+
 
             int testX;
             int testY;

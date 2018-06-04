@@ -32,26 +32,27 @@ namespace LayoutFarm
             svgPart.SetVxsAsOriginal(vxs);
             svgPart.FillColor = Color.Red;
             SvgRenderVx svgRenderVx = new SvgRenderVx(new SvgPart[] { svgPart });
+            svgRenderVx.DisableBackingImage = true;
 
-            var uiSprite = new UISprite(200, 200);
+
+            var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0) 
             uiSprite.LoadSvg(svgRenderVx);
-            viewport.AddContent(uiSprite);
+            viewport.AddContent(uiSprite); 
+
+            var spriteEvListener = new GeneralEventListener();
+            uiSprite.AttachExternalEventListener(spriteEvListener);
 
 
 
-            var evListener = new GeneralEventListener();
-            uiSprite.AttachExternalEventListener(evListener);
-
-
-
-            box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
-            box1.BackColor = Color.Red;
-            box1.SetLocation(10, 10);
-            //box1.dbugTag = 1;
-            SetupActiveBoxProperties(box1);
-            viewport.AddContent(box1);
+            //box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            //box1.BackColor = Color.Red;
+            //box1.SetLocation(10, 10);
+            ////box1.dbugTag = 1;
+            //SetupActiveBoxProperties(box1);
+            //viewport.AddContent(box1);
             //-------- 
             rectBoxController.Init();
+            //polygonController.Visible = false;
             viewport.AddContent(polygonController);
             //-------------------------------------------
             viewport.AddContent(rectBoxController);
@@ -61,22 +62,22 @@ namespace LayoutFarm
             //    viewport.AddContent(ui);
             //}
 
-            evListener.MouseDown += e1 =>
+            spriteEvListener.MouseDown += e1 =>
             {
                 //mousedown on ui sprite
-                polygonController.SetPosition(uiSprite.Left, uiSprite.Top);
-                polygonController.UpdateControlPoints(vxs);
+                polygonController.SetPosition((int)uiSprite.Left, (int)uiSprite.Top);
+                polygonController.SetTargetUISprite(uiSprite);
+                polygonController.UpdateControlPoints(svgPart);
 
-                 
             };
-            evListener.MouseMove += e1 =>
+            spriteEvListener.MouseMove += e1 =>
             {
                 if (e1.IsDragging)
                 {
                     //drag event on uisprite
 
-                    int left = uiSprite.Left;
-                    int top = uiSprite.Top;
+                    int left = (int)uiSprite.Left;
+                    int top = (int)uiSprite.Top;
 
                     int new_left = left + e1.DiffCapturedX;
                     int new_top = top + e1.DiffCapturedY;
