@@ -459,9 +459,6 @@
     <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBAImageSpanGen.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\FilterRGBAImageSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBImageSpanGen.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\FilterRGBImageSpanGen.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\IImageFilter.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\IImageFilter.cs</Link>
     </Compile>
