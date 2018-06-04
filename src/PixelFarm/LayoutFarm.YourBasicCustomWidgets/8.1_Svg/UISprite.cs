@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
-
+using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.UI
 {
@@ -15,8 +15,53 @@ namespace LayoutFarm.UI
             : base(rootGfx, width, height)
         {
 
+            //this.dbug_ObjectNote = "AAA";
+            //this.NeedClipArea = false;
+            this.MayHasChild = true;
+            this.TransparentForAllEvents = true;
+
         }
         public SvgRenderVx RenderVx { get; set; }
+
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            RectD bound = RenderVx.GetBounds();
+
+            if (bound.Contains(hitChain.TestPoint.x, hitChain.TestPoint.y))
+            {
+                //check exact hit or the vxs part
+                if (HitTestOnSubPart(RenderVx, hitChain.TextPointX, hitChain.TextPointY))
+                {
+                    hitChain.AddHitObject(this);
+                }
+            }
+
+            base.ChildrenHitTestCore(hitChain);
+        }
+        static bool HitTestOnSubPart(SvgRenderVx _svgRenderVx, float x, float y)
+        {
+            int partCount = _svgRenderVx.SvgVxCount;
+
+
+            for (int i = partCount - 1; i >= 0; --i)
+            {
+                //we do hittest top to bottom => (so => iter backward)
+
+                SvgPart vx = _svgRenderVx.GetInnerVx(i);
+                if (vx.Kind != SvgRenderVxKind.Path)
+                {
+                    continue;
+                }
+                VertexStore innerVxs = vx.GetVxs();
+                //fine tune
+                //hit test ***
+                if (VertexHitTester.IsPointInVxs(innerVxs, x, y))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             if (RenderVx != null)
@@ -54,6 +99,19 @@ namespace LayoutFarm.UI
                 _svgRenderElement.RenderVx = renderVx;
                 RectD bound = renderVx.GetBounds();
                 this.SetSize((float)bound.Width, (float)bound.Height);
+            }
+        }
+        protected override void OnElementChanged()
+        {
+
+            if (_svgRenderElement != null)
+            {
+                _svgRenderVx.SetBitmapSnapshot(null);
+
+                _svgRenderElement.RenderVx = _svgRenderVx;
+                _svgRenderVx.InvalidateBounds();
+                RectD bound1 = _svgRenderVx.GetBounds();
+
             }
         }
         protected override void OnMouseDown(UIMouseEventArgs e)
@@ -191,17 +249,9 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
             }
         }
-
-
         public virtual void PerformContentLayout()
         {
         }
-
-        //----------------------------------- 
-        public object Tag { get; set; }
-        //----------------------------------- 
-
-
         protected virtual void Describe(UIVisitor visitor)
         {
             visitor.Attribute("left", this.Left);

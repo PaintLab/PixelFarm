@@ -62,7 +62,7 @@ namespace PixelFarm.Agg
             int j;
             bool yflag0, yflag1, inside_flag;
             double vtx0, vty0, vtx1, vty1;
-            vxs.GetVertex(m_num_points, out vtx0, out vty0);
+            vxs.GetVertex(m_num_points -1, out vtx0, out vty0);
             //vtx0 = GetXN(m_num_points - 1);
             //vty0 = GetYN(m_num_points - 1);
 

@@ -87,7 +87,9 @@ namespace LayoutFarm
             e.Ctrl = lastKeydownWithControl;
             //
             e.PreviousMouseDown = this.latestMouseDown;
+            //
             iTopBoxEventPortal.PortalMouseDown(e);
+            //
             this.currentMouseActiveElement = this.latestMouseDown = e.CurrentContextElement;
             this.localMouseDownX = e.X;
             this.localMouseDownY = e.Y;
