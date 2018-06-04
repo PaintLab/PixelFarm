@@ -97,6 +97,17 @@ namespace PixelFarm.Agg.Imaging
         //void BlendPixels(byte[] buffer, nt bufferOffset, Color[] sourceColors, int sourceColorsOffset, byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count);
     }
 
+    public enum TargetComponent : byte
+    {
+        All,
+        R,
+        G,
+        B,
+        A
+    }
+
+
+
     public sealed class PixelBlenderBGRA : IPixelBlender
     {
         //from https://microsoft.github.io/Win2D/html/PremultipliedAlpha.htm
@@ -123,7 +134,6 @@ namespace PixelFarm.Agg.Imaging
         bool _enableGamma;
         float _gammaValue;
 
-        int _colorCompoFilterFlags; //0 = no-blocks
 
         public PixelBlenderBGRA() { }
         public bool EnableGamma
@@ -152,14 +162,16 @@ namespace PixelFarm.Agg.Imaging
 
 
         const byte BASE_MASK = 255;
-
         public int NumPixelBits { get { return 32; } }
-        public int ColorCompoFilterFlags
+
+
+        TargetComponent _targetComponent;
+        public TargetComponent TargetComponent
         {
-            get { return _colorCompoFilterFlags; }
+            get { return _targetComponent; }
             set
             {
-                _colorCompoFilterFlags = value;
+                _targetComponent = value;
             }
         }
         /// <summary>
@@ -170,18 +182,54 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="srcColor"></param>
         internal void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
+
             unsafe
             {
+
                 fixed (int* head = &dstBuffer[arrayOffset])
                 {
-                    BlendPixelInternal(head, srcColor);
+                    switch (_targetComponent)
+                    {
+                        case TargetComponent.All:
+                            {
+                                BlendPixel(head, srcColor);
+                            }
+                            break;
+                        case TargetComponent.A:
+                            {
+
+                            }
+                            break;
+                        case TargetComponent.R:
+                            {
+
+                            }
+                            break;
+                        case TargetComponent.G:
+                            {
+
+                            }
+                            break;
+                        case TargetComponent.B:
+                            {
+
+                            }
+                            break;
+                        default:
+                            {
+
+                            }
+                            break;
+                    }
+
                 }
             }
         }
 
         //-----------------------------------------
+
         /// <summary>
-        /// blend src color to target buffer, 4 components
+        /// (1.a) blend src color to target buffer, 4 components
         /// </summary>
         /// <param name="dstBufferPtr"></param>
         /// <param name="srcColor"></param>
@@ -218,7 +266,7 @@ namespace PixelFarm.Agg.Imaging
 
 
         /// <summary>
-        /// blend src color component to target buffer,only  1 component 
+        ///(1.b) blend src color component to target buffer,only  1 component 
         /// </summary>
         /// <param name="dstBufferPtr"></param>
         /// <param name="srcCompoValue"></param>
@@ -228,7 +276,7 @@ namespace PixelFarm.Agg.Imaging
         static unsafe void BlendComponent(int* dstBufferPtr,
             byte srcCompoValue,
             byte srcAlpha,
-            byte destCompoIndex,
+            TargetComponent destCompoIndex,
             byte coverageValue)
         {
             //calculate new alpha
@@ -245,39 +293,39 @@ namespace PixelFarm.Agg.Imaging
 
                 switch (destCompoIndex)
                 {
-                    case CO.A:
+                    case TargetComponent.A:
                         {
                             *dstBufferPtr =
                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) | //only A component
-                                ((byte)(/*                          */ ((r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                 r << 16 |
+                                 g << 8 |
+                                 b;
                         }
                         break;
-                    case CO.R:
+                    case TargetComponent.R:
                         {
                             *dstBufferPtr =
                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
                                 ((byte)(((srcCompoValue - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                 g << 8 |
+                                 b;
                         }
                         break;
-                    case CO.G:
+                    case TargetComponent.G:
                         {
                             *dstBufferPtr =
                                  ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                 ((byte)((/*                         */ (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                  r << 16 |
                                  ((byte)(((srcCompoValue - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                 ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                  b;
                         }
                         break;
-                    case CO.B:
+                    case TargetComponent.B:
                         {
                             *dstBufferPtr =
                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                ((byte)((/*                         */(r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                ((byte)((/*                         */(g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                 r << 16 |
+                                 g << 8 |
                                 ((byte)(((srcCompoValue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                         }
                         break;
@@ -287,9 +335,14 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        //-----------------------------------------
 
-        internal static unsafe void BlendPixelInternal(int* dstPtr, Color srcColor)
+        //------------------------------
+        /// <summary>
+        /// (2.a)blend src color component to target buffer, 4 components
+        /// </summary>
+        /// <param name="dstPtr"></param>
+        /// <param name="srcColor"></param>
+        static unsafe void BlendPixel(int* dstPtr, Color srcColor)
         {
             unchecked
             {
@@ -317,17 +370,17 @@ namespace PixelFarm.Agg.Imaging
             }
         }
         /// <summary>
-        /// blend src color component to target buffer,only  1 component 
+        /// (2.b) blend src color component to target buffer,only  1 component 
         /// </summary>
         /// <param name="dstBufferPtr"></param>
         /// <param name="srcCompoValue"></param>
         /// <param name="srcAlpha"></param>
         /// <param name="destCompoIndex"></param>
         /// <param name="coverageValue"></param>
-        internal static unsafe void BlendComponent(int* dstBufferPtr,
-               byte srcCompoValue,
-               byte srcAlpha,
-               byte destCompoIndex)
+        static unsafe void BlendComponent(int* dstBufferPtr,
+             byte srcCompoValue,
+             byte srcAlpha,
+             TargetComponent destCompoIndex)
         {
             //calculate new alpha
             int src_a = srcAlpha;
@@ -343,39 +396,39 @@ namespace PixelFarm.Agg.Imaging
 
                 switch (destCompoIndex)
                 {
-                    case CO.A:
+                    case TargetComponent.A:
                         {
                             *dstBufferPtr =
                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) | //only A component
-                                ((byte)(/*                          */ ((r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                 r << 16 |
+                                 g << 8 |
+                                 b;
                         }
                         break;
-                    case CO.R:
+                    case TargetComponent.R:
                         {
                             *dstBufferPtr =
                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
                                 ((byte)(((srcCompoValue - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                 g << 8 |
+                                 b;
                         }
                         break;
-                    case CO.G:
+                    case TargetComponent.G:
                         {
                             *dstBufferPtr =
                                  ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                 ((byte)((/*                         */ (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                  r << 16 |
                                  ((byte)(((srcCompoValue - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                                 ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                                  b;
                         }
                         break;
-                    case CO.B:
+                    case TargetComponent.B:
                         {
                             *dstBufferPtr =
                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                ((byte)((/*                         */(r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                                ((byte)((/*                         */(g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                 r << 16 |
+                                 g << 8 |
                                 ((byte)(((srcCompoValue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                         }
                         break;
@@ -385,6 +438,18 @@ namespace PixelFarm.Agg.Imaging
             }
         }
         //---------------------------------------------------------
+
+        internal static unsafe void BlendPixelInternal(PixelBlenderBGRA blender, int* dstPtr, Color srcColor)
+        {
+            if (blender.TargetComponent == TargetComponent.All)
+            {
+                BlendPixel(dstPtr, srcColor);
+            }
+            else
+            {
+
+            }
+        }
 
         internal void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
@@ -406,7 +471,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                BlendPixelInternal(header2, srcColors[srcColorsOffset++]);
+                                BlendPixel(header2, srcColors[srcColorsOffset++]);
                                 header2++;//move next
                                 count--;
                             }
@@ -417,12 +482,12 @@ namespace PixelFarm.Agg.Imaging
                                 //now count is even number
                                 //---------
                                 //1
-                                BlendPixelInternal(header2, srcColors[srcColorsOffset++]);
+                                BlendPixel(header2, srcColors[srcColorsOffset++]);
                                 header2++;//move next
                                 count--;
                                 //---------
                                 //2
-                                BlendPixelInternal(header2, srcColors[srcColorsOffset++]);
+                                BlendPixel(header2, srcColors[srcColorsOffset++]);
                                 header2++;//move next
                                 count--;
                             }
@@ -449,7 +514,6 @@ namespace PixelFarm.Agg.Imaging
                             }
                             while (count > 0)
                             {
-                                //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
                                 //1.
                                 BlendPixel(header2, srcColors[srcColorsOffset++], cover);
                                 header2++;//move next
@@ -466,22 +530,32 @@ namespace PixelFarm.Agg.Imaging
             }
             else
             {
-                do
+
+                unsafe
                 {
-                    //cover may diff in each loop
-                    int cover = covers[coversIndex++];
-                    if (cover == 255)
+                    fixed (int* head = &dstBuffer[0])
                     {
-                        BlendPixel(dstBuffer, arrayElemOffset, srcColors[srcColorsOffset]);
+                        int* dstBufferPtr = head + arrayElemOffset;
+                        do
+                        {
+                            //cover may diff in each loop
+                            int cover = covers[coversIndex++];
+
+                            if (cover == 255)
+                            {
+                                BlendPixel(dstBufferPtr, srcColors[srcColorsOffset]);
+                            }
+                            else
+                            {
+                                BlendPixel(dstBufferPtr, srcColors[srcColorsOffset].NewFromChangeCoverage(cover));
+                            }
+                            dstBufferPtr++; //move offset
+                            ++srcColorsOffset;
+                        }
+                        while (--count != 0);
                     }
-                    else
-                    {
-                        BlendPixel(dstBuffer, arrayElemOffset, srcColors[srcColorsOffset].NewFromChangeCoverage(cover));
-                    }
-                    arrayElemOffset++;
-                    ++srcColorsOffset;
                 }
-                while (--count != 0);
+
             }
         }
 
