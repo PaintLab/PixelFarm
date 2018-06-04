@@ -168,7 +168,7 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="dstBuffer"></param>
         /// <param name="arrayOffset"></param>
         /// <param name="srcColor"></param>
-        public void BlendPixel32(int[] dstBuffer, int arrayOffset, Color srcColor)
+        public void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -472,11 +472,11 @@ namespace PixelFarm.Agg.Imaging
                     int cover = covers[coversIndex++];
                     if (cover == 255)
                     {
-                        BlendPixel32(dstBuffer, arrayElemOffset, srcColors[srcColorsOffset]);
+                        BlendPixel(dstBuffer, arrayElemOffset, srcColors[srcColorsOffset]);
                     }
                     else
                     {
-                        BlendPixel32(dstBuffer, arrayElemOffset, srcColors[srcColorsOffset].NewFromChangeCoverage(cover));
+                        BlendPixel(dstBuffer, arrayElemOffset, srcColors[srcColorsOffset].NewFromChangeCoverage(cover));
                     }
                     arrayElemOffset++;
                     ++srcColorsOffset;

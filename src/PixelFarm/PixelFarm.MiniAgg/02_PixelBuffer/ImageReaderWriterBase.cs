@@ -407,12 +407,17 @@ namespace PixelFarm.Agg
         {
 
 #if DEBUG
-            if (y >= yTableArray.Length ||
-                x >= xTableArray.Length)
+
+            if (y >= height || x >= width)
             {
                 return -1;
-                //throw new NotSupportedException();
             }
+            //if (y >= yTableArray.Length ||
+            //    x >= xTableArray.Length)
+            //{
+            //    return -1;
+            //    //throw new NotSupportedException();
+            //}
 #endif
 
             return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) * 4;
@@ -420,15 +425,19 @@ namespace PixelFarm.Agg
         }
         public int GetBufferOffsetXY32Check(int x, int y)
         {
-
-            if (y >= yTableArray.Length ||
-                x >= xTableArray.Length)
+            if (y >= height || x >= width)
             {
                 return -1;
             }
+            //if (y >= yTableArray.Length ||
+            //    x >= xTableArray.Length)
+            //{
+            //    return -1;
+            //}
 
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
+
         public int GetBufferOffsetXY32(int x, int y)
         {
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
@@ -440,7 +449,7 @@ namespace PixelFarm.Agg
 
         public void CopyHL(int x, int y, int len, Color sourceColor)
         {
-            _recvBlender32.CopyPixels(this.raw_buffer32, GetBufferOffsetXY32(x, y), sourceColor, len);
+            _recvBlender32.CopyPixels(raw_buffer32, GetBufferOffsetXY32(x, y), sourceColor, len);
         }
 
         public void CopyVL(int x, int y, int len, Color sourceColor)
@@ -555,9 +564,9 @@ namespace PixelFarm.Agg
                     }
                     else
                     {
-                        _recvBlender32.BlendPixel32(buffer, bufferOffset32, Color.FromArgb(alpha, sourceColor));
+                        _recvBlender32.BlendPixel(buffer, bufferOffset32, Color.FromArgb(alpha, sourceColor));
                     }
-                    //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+
                     bufferOffset32++;
                     coversIndex++;
                 }
@@ -611,10 +620,9 @@ namespace PixelFarm.Agg
                         else
                         {
 
-                            _recvBlender32.BlendPixel32(raw_buffer32, bufferOffset32, newcolor);
+                            _recvBlender32.BlendPixel(raw_buffer32, bufferOffset32, newcolor);
                         }
                         bufferOffset32 += actualW;
-                        //sourceColor.alpha = oldAlpha;
                     }
                     while (--len != 0);
                 }
