@@ -30,7 +30,7 @@ namespace PixelFarm.Agg
         MyImageReaderWriter destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
 
-        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        ScalineRasToDestinationBitmap sclineRasToBmp;
         PixelBlenderBGRA pixBlenderRGBA32;
         IPixelBlender currentBlender;
         double ox; //canvas origin x
@@ -52,7 +52,7 @@ namespace PixelFarm.Agg
             this.destImageReaderWriter.ReloadImage(destImage);
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
-            this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            this.sclineRasToBmp = new ScalineRasToDestinationBitmap();
             //
             this.destWidth = destImage.Width;
             this.destHeight = destImage.Height;
@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
         {
             get { return this.destImageReaderWriter; }
         }
-        public ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
+        public ScalineRasToDestinationBitmap ScanlineRasToDestBitmap
         {
             get { return this.sclineRasToBmp; }
         }

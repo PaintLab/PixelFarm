@@ -76,7 +76,7 @@
     <Compile Include="02_PixelBuffer\SubImageRW.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
-    <Compile Include="02_PixelBuffer\PixelBlenderGray.cs" />
+    <Compile Include="x_backup_notused\PixelBlenderGray.cs" />
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="07_Lines\4_OutlineAARasterizer.cs" />
     <Compile Include="08_ImageResampling\FilterImageSpanGenerator.cs" />
     <Compile Include="03_SpanGenerators\4_ImgSpanGenGray.cs" />
-    <Compile Include="03_SpanGenerators\2_ImgSpanGenRGB.cs" />
+    <Compile Include="x_backup_notused\2_ImgSpanGenRGB.cs" />
     <Compile Include="03_SpanGenerators\3_ImgSpanGenRGBA.cs" />
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
     <Compile Include="08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs" />

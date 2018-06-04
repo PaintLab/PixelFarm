@@ -185,6 +185,8 @@ namespace PixelFarm.Agg
             int bitDepth, bytesPerPixel;
             return CalculateStride(width, format, out bitDepth, out bytesPerPixel);
         }
+
+
         public static int CalculateStride(int width, PixelFormat format, out int bitDepth, out int bytesPerPixel)
         {
             //stride calcuation helper
@@ -197,12 +199,13 @@ namespace PixelFarm.Agg
                         bytesPerPixel = (bitDepth + 7) / 8;
                         return width * (32 / 8);
                     }
-                case PixelFormat.GrayScale8:
-                    {
-                        bitDepth = 8; //bit per pixel
-                        bytesPerPixel = (bitDepth + 7) / 8;
-                        return 4 * ((width * bytesPerPixel + 3) / 4);
-                    }
+
+                //case PixelFormat.GrayScale8:
+                //    {
+                //        bitDepth = 8; //bit per pixel
+                //        bytesPerPixel = (bitDepth + 7) / 8;
+                //        return 4 * ((width * bytesPerPixel + 3) / 4);
+                //    }
                 //case PixelFormat.RGB24:
                 //    {
                 //        bitDepth = 24; //bit per pixel

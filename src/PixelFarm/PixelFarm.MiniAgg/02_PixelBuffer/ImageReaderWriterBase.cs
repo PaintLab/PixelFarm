@@ -35,8 +35,9 @@ namespace PixelFarm.Agg
         int[] yTableArray;
         int[] xTableArray;
         //--------------------------------------------
-        //byte[] m_ByteBuffer;
-        int[] raw_buffer32;
+
+        int[] raw_buffer32; //raw 32 bit buffer
+
         //--------------------------------------------
         // Pointer to first pixel depending on strideInBytes and image position         
         protected int int32ArrayStartPixelAt;
@@ -51,6 +52,7 @@ namespace PixelFarm.Agg
         ///// </summary>
         //IPixelBlender recieveBlender;//blender to the target surface
         PixelBlenderBGRA _recvBlender32;
+
         //-------------------------------------------- 
         public byte[] GetBuffer()
         {
@@ -310,7 +312,14 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
-            _recvBlender32 = (PixelBlenderBGRA)value;
+            if (value is PixelBlenderBGRA)
+            {
+                _recvBlender32 = (PixelBlenderBGRA)value;
+            }
+            else
+            {
+
+            }
         }
 
         protected void SetUpLookupTables()
@@ -436,13 +445,13 @@ namespace PixelFarm.Agg
         }
         public int GetBufferOffsetXY32Check(int x, int y)
         {
- 
+
             if (y >= yTableArray.Length ||
                 x >= xTableArray.Length)
             {
                 return -1;
             }
- 
+
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public int GetBufferOffsetXY32(int x, int y)
@@ -974,7 +983,7 @@ namespace PixelFarm.Agg
     {
         ActualImage actualImage;
         IPixelBlender pixelBlenderRGBA;
-        PixelBlenderGray pixelBlenderGray;
+    
 
         public MyImageReaderWriter()
         {
@@ -1013,15 +1022,15 @@ namespace PixelFarm.Agg
                            pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA()));
                     }
                     break;
-                case PixelFormat.GrayScale8:
-                    {
-                        Attach(actualImage.Width,
-                          actualImage.Height,
-                          actualImage.BitDepth,
-                          ActualImage.GetBuffer(actualImage),
-                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderGray(1)));
-                    }
-                    break;
+                //case PixelFormat.GrayScale8:
+                //    {
+                //        Attach(actualImage.Width,
+                //          actualImage.Height,
+                //          actualImage.BitDepth,
+                //          ActualImage.GetBuffer(actualImage),
+                //          pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA()));
+                //    }
+                //    break;
                 default:
                     {
                         throw new NotSupportedException();
