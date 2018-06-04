@@ -136,7 +136,7 @@ namespace LayoutFarm.UI
             var uiContent = this.Content;
             if (uiContent != null)
             {
-                uiContent.SetBounds(x, y, w, h);
+                uiContent.SetLocationAndSize(x, y, w, h);
             }
         }
         public void ArrangeContent()
