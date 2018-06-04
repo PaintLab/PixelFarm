@@ -70,7 +70,7 @@ namespace PixelFarm.Agg.Imaging
         }
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, Color sourceColor)
         {
-            int OneOverAlpha = BASE_MASK - sourceColor.alpha;
+            //int OneOverAlpha = BASE_MASK - sourceColor.alpha;
             unchecked
             {
                 int y = (sourceColor.red * 77) + (sourceColor.green * 151) + (sourceColor.blue * 28);

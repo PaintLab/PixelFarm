@@ -28,7 +28,7 @@ namespace PixelFarm.Agg
     public enum PixelFormat
     {
         ARGB32,
-        RGB24,
+        //RGB24,
         GrayScale8,
     }
 
@@ -203,12 +203,12 @@ namespace PixelFarm.Agg
                         bytesPerPixel = (bitDepth + 7) / 8;
                         return 4 * ((width * bytesPerPixel + 3) / 4);
                     }
-                case PixelFormat.RGB24:
-                    {
-                        bitDepth = 24; //bit per pixel
-                        bytesPerPixel = (bitDepth + 7) / 8;
-                        return 4 * ((width * bytesPerPixel + 3) / 4);
-                    }
+                //case PixelFormat.RGB24:
+                //    {
+                //        bitDepth = 24; //bit per pixel
+                //        bytesPerPixel = (bitDepth + 7) / 8;
+                //        return 4 * ((width * bytesPerPixel + 3) / 4);
+                //    }
                 default:
                     throw new NotSupportedException();
             }
