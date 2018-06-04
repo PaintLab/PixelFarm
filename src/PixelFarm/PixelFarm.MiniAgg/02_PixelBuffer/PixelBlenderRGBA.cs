@@ -179,7 +179,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-
+        //-----------------------------------------
         /// <summary>
         /// blend src color to target buffer, 4 components
         /// </summary>
@@ -287,6 +287,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
+        //-----------------------------------------
 
         internal static unsafe void BlendPixelInternal(int* dstPtr, Color srcColor)
         {
@@ -323,10 +324,10 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="srcAlpha"></param>
         /// <param name="destCompoIndex"></param>
         /// <param name="coverageValue"></param>
-        static unsafe void BlendComponent(int* dstBufferPtr,
-            byte srcCompoValue,
-            byte srcAlpha,
-            byte destCompoIndex)
+        internal static unsafe void BlendComponent(int* dstBufferPtr,
+               byte srcCompoValue,
+               byte srcAlpha,
+               byte destCompoIndex)
         {
             //calculate new alpha
             int src_a = srcAlpha;
@@ -383,7 +384,7 @@ namespace PixelFarm.Agg.Imaging
                 }
             }
         }
-
+        //---------------------------------------------------------
 
         public void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
@@ -395,8 +396,6 @@ namespace PixelFarm.Agg.Imaging
                 byte cover = covers[coversIndex];
                 if (cover == 255)
                 {
-
-
                     unsafe
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])

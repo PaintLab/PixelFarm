@@ -76,6 +76,7 @@
     <Compile Include="02_PixelBuffer\SubImageRW.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
+    <Compile Include="x_backup_notused\ImageReaderWriterBase.cs" />
     <Compile Include="x_backup_notused\PixelBlenderGray.cs" />
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
