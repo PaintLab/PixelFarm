@@ -8,7 +8,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
+    <ProjectGuid>{9E747913-22C8-4971-A094-993EB14805D4}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -27,7 +27,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -499,6 +499,9 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\Menu.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\Menu.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\RectBoxController.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\RectBoxController.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ScrollBar.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\4.1_Composites\ScrollBar.cs</Link>
     </Compile>
@@ -538,11 +541,14 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\7_WindowUI\UIFloatWindow.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\7_WindowUI\UIFloatWindow.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasBox.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.1_Svg\UISprite.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.1_Svg\UISprite.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasRenderElement.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8_Canvas\MiniAggCanvasRenderElement.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasRenderElement.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\8.2_Canvas\MiniAggCanvasRenderElement.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\9_TextContentSplitter\ContentTextSplitter.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\9_TextContentSplitter\ContentTextSplitter.cs</Link>
@@ -756,9 +762,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs">
       <Link>PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\7_ContentMx\1_ImageBinder.cs">
-      <Link>PixelFarm\PaintLab.RenderTree\7_ContentMx\1_ImageBinder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs">
       <Link>PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
@@ -1077,6 +1080,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\StrokeMath.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\StrokeMath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VectorToolBox.cs">
+      <Link>PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VectorToolBox.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\CurveFlattener.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\CurveFlattener.cs</Link>
@@ -2586,14 +2592,23 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\BurmeseBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\BurmeseBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\CjBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\CjBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs">
+      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\LaoDictionaryBreakingEngine.cs">
-      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\LaoDictionaryBreakingEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\ThaiDictionaryBreakingEngine.cs">
-      <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\ThaiDictionaryBreakingEngine.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs">
       <Link>PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs</Link>

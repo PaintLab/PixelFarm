@@ -154,9 +154,10 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         var vxs = ps2.Vxs;
                         //graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
                         p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                        var v1 = GetFreeVxs();
+
+                        VectorToolBox.GetFreeVxs(out var v1);
                         p.Fill(stroke.MakeVxs(vxs, v1));
-                        ReleaseVxs(ref v1);
+                        VectorToolBox.ReleaseVxs(ref v1);
                         CreateAndRenderCombined(p, ps1.MakeVertexSnap(), new VertexStoreSnap(vxs));
                     }
                     break;
@@ -195,9 +196,10 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
                         //stroke_gb_poly.Width = 0.1;
                         p.FillColor = ColorEx.Make(0, 0, 0);
-                        var v1 = GetFreeVxs();
+
+                        VectorToolBox.GetFreeVxs(out var v1);
                         p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v1));
-                        ReleaseVxs(ref v1);
+                        VectorToolBox.ReleaseVxs(ref v1);
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
                         //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
                         p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);
@@ -217,7 +219,10 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                                 AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2));
                         //
-                        VertexStore s1 = GetFreeVxs();
+
+                        VectorToolBox.GetFreeVxs(out var s1, out var v1);
+                        VectorToolBox.GetFreeVxs(out var v2, out var v3);
+
                         mtx.TransformToVxs(gb_poly.Vxs, s1);
                         p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
                         p.Fill(s1);
@@ -226,9 +231,6 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
                         p.FillColor = Color.Black;
 
-                        var v1 = GetFreeVxs();
-                        var v2 = GetFreeVxs();
-                        var v3 = GetFreeVxs();
 
                         p.Fill(new Stroke(0.1).MakeVxs(s1, v1));
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs(v2), v3);
@@ -237,10 +239,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
                         CreateAndRenderCombined(p, new VertexStoreSnap(s1), new VertexStoreSnap(stroke_vxs));
 
-                        ReleaseVxs(ref s1);
-                        ReleaseVxs(ref v1);
-                        ReleaseVxs(ref v3);
-                        ReleaseVxs(ref v2);
+                        VectorToolBox.ReleaseVxs(ref s1, ref v1);
+                        VectorToolBox.ReleaseVxs(ref v2, ref v3);
                     }
                     break;
                 case PolygonExampleSet.SprialAndGlyph:
@@ -304,9 +304,9 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         mtx.TransformToVertexSnap(glyph.Vxs, t_glyph);
 
-                        var v1 = GetFreeVxs();
-                        var v2 = GetFreeVxs();
-                        var v3 = GetFreeVxs();
+
+                        VectorToolBox.GetFreeVxs(out var v1, out var v2, out var v3);
+
                         var sp1 = stroke.MakeVxs(sp.MakeVxs(v1), v2);
 
                         var curveVxs = new VertexStore();
@@ -320,9 +320,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         p.Fill(curveVxs);
                         //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
 
-                        ReleaseVxs(ref v1);
-                        ReleaseVxs(ref v2);
-                        ReleaseVxs(ref v3);
+
+                        VectorToolBox.ReleaseVxs(ref v1, ref v2, ref v3);
                     }
                     break;
             }

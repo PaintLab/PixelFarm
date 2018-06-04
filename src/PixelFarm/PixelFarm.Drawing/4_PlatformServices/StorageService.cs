@@ -40,8 +40,15 @@ namespace LayoutFarm
     //these will be moved later
 
 
+    public struct WordBreakInfo
+    {
+        public int breakAt;
+        public byte wordKind;
+    }
+
     public interface ITextBreaker
     {
+        void DoBreak(char[] inputBuffer, int startIndex, int len, List<WordBreakInfo> breakAtList);
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
@@ -88,6 +95,7 @@ namespace LayoutFarm
                 }
                 else
                 {
+                    //default?
                     return 16;
                 }
             }
@@ -101,7 +109,7 @@ namespace LayoutFarm
                     return this._image.Height;
                 }
                 else
-                {
+                {   //default?
                     return 16;
                 }
             }
@@ -109,6 +117,7 @@ namespace LayoutFarm
 
         public void SetImage(PixelFarm.Drawing.Image image)
         {
+            //set image to this binder
             if (image != null)
             {
                 this._image = image;
@@ -136,6 +145,8 @@ namespace LayoutFarm
                 this.lazyLoadImgFunc(this);
             }
         }
+
+        //
         public static readonly ImageBinder NoImage = new NoImageImageBinder();
         class NoImageImageBinder : ImageBinder
         {
@@ -171,6 +182,9 @@ namespace LayoutFarm
                 this.startIndex = startIndex;
                 this.length = length;
             }
+            public int RightIndex { get { return startIndex + length; } }
+            public static readonly TextSplitBound Empty = new TextSplitBound();
+
         }
         //TODO: review here
         public static class Default

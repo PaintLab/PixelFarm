@@ -1,8 +1,9 @@
 ﻿//Apache2, 2014-2018, WinterDev
 
-using PaintLab;
+ 
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
+using LayoutFarm.UI;
 
 namespace LayoutFarm
 {
@@ -13,10 +14,11 @@ namespace LayoutFarm
         int primaryScreenWorkingAreaW;
         int primaryScreenWorkingAreaH;
         int _formTitleBarHeight;
+        System.Windows.Forms.Form ownerForm;
         public SampleViewport(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
             this.vw = vw;
-            System.Windows.Forms.Form ownerForm = this.vw.FindForm();
+            ownerForm = this.vw.FindForm();
             System.Drawing.Rectangle screenRectangle = ownerForm.RectangleToScreen(ownerForm.ClientRectangle);
             _formTitleBarHeight = screenRectangle.Top - ownerForm.Top;
 
@@ -32,11 +34,19 @@ namespace LayoutFarm
                 e.SetResultImage(LoadBitmap(e.ImagSource));
             };
         }
+        public string OwnerFormTitle
+        {
+            get { return ownerForm.Text; }
+            set
+            {
+                ownerForm.Text = value;
+            }
+        }
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
 
         public static Image LoadBitmap(string filename)
         {
-            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename); 
+            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
             DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
             return bmp;
         }
@@ -75,11 +85,6 @@ namespace LayoutFarm
             imageContentMan.AddRequestImage(clientImgBinder);
             return clientImgBinder;
         }
-
-        public Image LoadImage(string imgName)
-        {
-            return LoadBitmap(imgName);
-        }
         public ImageBinder GetImageBinder2(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
@@ -88,35 +93,40 @@ namespace LayoutFarm
             return clientImgBinder;
         }
 
+        public Image LoadImage(string imgName)
+        {
+            return LoadBitmap(imgName);
+        }
+        
         //----------------------------------------
 
-        UIRootElement _uiRootElement;
+        //UIRootElement _uiRootElement;
 
-        IUIRootElement IViewport.Root
-        {
-            get
-            {
-                if (_uiRootElement == null)
-                {
-                    _uiRootElement = new UIRootElement();
-                    _uiRootElement._viewport = this;
-                }
-                return _uiRootElement;
-            }
-        }
-        MyAppHost _myAppHost;
-        IAppHost IViewport.AppHost
-        {
-            get
-            {
-                if (_myAppHost == null)
-                {
-                    _myAppHost = new MyAppHost();
-                    _myAppHost.clientViewport = this;
-                }
-                return _myAppHost;
-            }
-        }
+        //IUIRootElement IViewport.Root
+        //{
+        //    get
+        //    {
+        //        if (_uiRootElement == null)
+        //        {
+        //            _uiRootElement = new UIRootElement();
+        //            _uiRootElement._viewport = this;
+        //        }
+        //        return _uiRootElement;
+        //    }
+        //}
+        //MyAppHost _myAppHost;
+        //IAppHost IViewport.AppHost
+        //{
+        //    get
+        //    {
+        //        if (_myAppHost == null)
+        //        {
+        //            _myAppHost = new MyAppHost();
+        //            _myAppHost.clientViewport = this;
+        //        }
+        //        return _myAppHost;
+        //    }
+        //}
     }
 
 

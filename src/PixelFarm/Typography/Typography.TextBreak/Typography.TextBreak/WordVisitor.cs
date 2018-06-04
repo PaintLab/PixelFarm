@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-2017, WinterDev
 // some code from icu-project
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
@@ -14,12 +14,17 @@ namespace Typography.TextBreak
         Parsing,
         OutOfRangeChar,
         End,
-
     }
-    public class WordVisitor
+
+
+
+    class WordVisitor
     {
         CustomBreaker ownerBreak;
-        List<int> breakAtList = new List<int>();
+        //
+        List<BreakAtInfo> breakAtList = new List<BreakAtInfo>();
+
+        //
         char[] buffer;
         int bufferLen;
         int startIndex;
@@ -41,21 +46,7 @@ namespace Typography.TextBreak
             this.startIndex = currentIndex = index;
             this.currentChar = buffer[currentIndex];
             breakAtList.Clear();
-            tempCandidateBreaks.Clear();
             latestBreakAt = 0;
-        }
-        static char[] s_empty = new char[0];
-        public void ResetText()
-        {
-            
-            buffer = s_empty;
-            this.bufferLen = 0;        
-            startIndex = 0;
-            this.currentChar = '\0';
-            breakAtList.Clear();
-            tempCandidateBreaks.Clear();
-            latestBreakAt = 0;
-
         }
         public VisitorState State
         {
@@ -72,13 +63,12 @@ namespace Typography.TextBreak
         }
 
 
+
         public bool IsEnd
         {
             get { return currentIndex >= bufferLen - 1; }
         }
-
-
-        public void AddWordBreakAt(int index)
+        public void AddWordBreakAt(int index, WordKind wordKind)
         {
 
 #if DEBUG
@@ -88,8 +78,14 @@ namespace Typography.TextBreak
             }
 #endif
             this.latestBreakAt = index;
-            breakAtList.Add(index);
+
+            breakAtList.Add(new BreakAtInfo(index, wordKind));
         }
+        public void AddWordBreakAtCurrentIndex(WordKind wordKind= WordKind.Text)
+        {
+            AddWordBreakAt(this.CurrentIndex, wordKind);
+        }
+
         public int LatestBreakAt
         {
             get { return this.latestBreakAt; }
@@ -109,7 +105,7 @@ namespace Typography.TextBreak
             }
         }
 
-        public List<int> GetBreakList()
+        public List<BreakAtInfo> GetBreakList()
         {
             return breakAtList;
         }

@@ -48,14 +48,23 @@
     <Compile Include="..\Typography.TextBreak\Typography.TextBreak\CustomDict.cs">
       <Link>Typography.TextBreak\CustomDict.cs</Link>
     </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\BurmeseBreakingEngine.cs">
+      <Link>Typography.TextBreak\DictionaryBasedBreakingEngine\BurmeseBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\CjBreakingEngine.cs">
+      <Link>Typography.TextBreak\DictionaryBasedBreakingEngine\CjBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerBreakingEngine.cs">
+      <Link>Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs">
+      <Link>Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs">
+      <Link>Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs</Link>
+    </Compile>
     <Compile Include="..\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs">
       <Link>Typography.TextBreak\EngBreakingEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\LaoDictionaryBreakingEngine.cs">
-      <Link>Typography.TextBreak\LaoDictionaryBreakingEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\ThaiDictionaryBreakingEngine.cs">
-      <Link>Typography.TextBreak\ThaiDictionaryBreakingEngine.cs</Link>
     </Compile>
     <Compile Include="..\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs">
       <Link>Typography.TextBreak\WordVisitor.cs</Link>

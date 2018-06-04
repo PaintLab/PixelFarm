@@ -57,19 +57,48 @@ namespace YourImplementation
                workingArea.Height,
                innerViewportKind,
                out _latestviewport);
+            formCanvas.Text = "PixelFarm" + innerViewportKind;
 
             demo.StartDemo(new LayoutFarm.SampleViewport(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
             _latestviewport.PaintMe();
-            formCanvas.Text = "PixelFarm" + innerViewportKind;
+          
 
-            _latestviewport.PaintMe();
+            //_latestviewport.PaintMe();
 
             //formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();
             //got specfic example
             Application.Run(formCanvas);
+        }
+    }
+
+
+    public static class DemoFormCreatorHelper
+    {
+        public static void CreateReadyForm(
+         out LayoutFarm.UI.UISurfaceViewportControl viewport,
+         out Form formCanvas)
+        {
+
+            //1. select view port kind
+            InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
+
+            var workingArea = Screen.PrimaryScreen.WorkingArea;
+
+            formCanvas = FormCanvasHelper.CreateNewFormCanvas(
+              workingArea.Width,
+              workingArea.Height,
+              innerViewportKind,
+              out viewport);
+
+            formCanvas.Text = "FormCanvas 1 :" + innerViewportKind;
+
+            viewport.PaintMe();
+
+            formCanvas.WindowState = FormWindowState.Maximized;
+            formCanvas.Show();
         }
     }
 }

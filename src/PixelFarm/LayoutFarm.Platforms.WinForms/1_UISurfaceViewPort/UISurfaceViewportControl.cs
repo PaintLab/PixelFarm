@@ -368,6 +368,7 @@ namespace LayoutFarm.UI
             {
                 form.Location = new System.Drawing.Point(x, y);
             }
+            
         }
 
         void IPlatformWindowBox.SetSize(int w, int h)

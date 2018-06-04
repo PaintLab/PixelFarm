@@ -417,6 +417,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
         {
+            return null;
             throw new NotImplementedException();
         }
         public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,

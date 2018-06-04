@@ -45,6 +45,8 @@ namespace burningmime.curves
     /// </summary>
     public struct CubicBezier : IEquatable<CubicBezier>
     {
+
+
         // Control points
         public readonly VECTOR p0;
         public readonly VECTOR p1;
@@ -58,8 +60,25 @@ namespace burningmime.curves
             this.p0 = p0;
             this.p1 = p1;
             this.p2 = p2;
-            this.p3 = p3;
+            this.p3 = p3; 
         }
+
+        public bool HasSomeNanComponent 
+        {
+            get
+            {
+                return (HasSomeNanComponentXY(p0.x, p0.y) ||
+                  HasSomeNanComponentXY(p1.x, p1.y) ||
+                  HasSomeNanComponentXY(p2.x, p2.y) ||
+                  HasSomeNanComponentXY(p3.x, p3.y));
+            }
+        }
+        static bool HasSomeNanComponentXY(double x, double y)
+        {
+            //TODO: aggressive inline
+            return double.IsNaN(x) || double.IsNaN(y);
+        }
+
 
         /// <summary>
         /// Samples the bezier curve at the given t value.
@@ -108,7 +127,7 @@ namespace burningmime.curves
         {
             return VectorHelper.Normalize(Derivative(t));
         }
-
+#if DEBUG
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -131,7 +150,7 @@ namespace burningmime.curves
             sb.Append(">)");
             return sb.ToString();
         }
-
+#endif
         // Equality members -- pretty straightforward
         public static bool operator ==(CubicBezier left, CubicBezier right) { return left.Equals(right); }
         public static bool operator !=(CubicBezier left, CubicBezier right) { return !left.Equals(right); }

@@ -44,11 +44,7 @@ namespace PixelFarm.Drawing
         {
             AllocIfRequired(2);
         }
-        public VertexStore(int initsize)
-        {
-            AllocIfRequired(initsize);
-        }
-
+        
 
         /// <summary>
         /// num of vertex
@@ -98,11 +94,20 @@ namespace PixelFarm.Drawing
 
         public void Clear()
         {
+            //we clear only command part!
+            //clear only latest
+            //System.Array.Clear(m_cmds, 0, m_cmds.Length);
+            System.Array.Clear(m_cmds, 0, m_num_vertices); //only latest 
             m_num_vertices = 0;
-            System.Array.Clear(m_cmds, 0, m_cmds.Length);
         }
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
+#if DEBUG
+            if (VertexStore.dbugCheckNANs(x, y))
+            {
+
+            }
+#endif
             if (m_num_vertices >= m_allocated_vertices)
             {
                 AllocIfRequired(m_num_vertices);
@@ -123,8 +128,11 @@ namespace PixelFarm.Drawing
             }
 
         }
-        internal void ReplaceVertex(int index, double x, double y)
+        public void ReplaceVertex(int index, double x, double y)
         {
+#if DEBUG
+            _dbugIsChanged = true;
+#endif
             m_coord_xy[index << 1] = x;
             m_coord_xy[(index << 1) + 1] = y;
         }
@@ -146,6 +154,22 @@ namespace PixelFarm.Drawing
         }
 
 
+
+#if DEBUG
+        public bool _dbugIsChanged;
+        public static bool dbugCheckNANs(double x, double y)
+        {
+            if (double.IsNaN(x))
+            {
+                return true;
+            }
+            else if (double.IsNaN(y))
+            {
+                return true;
+            }
+            return false;
+        }
+#endif
         void AllocIfRequired(int indexToAdd)
         {
             if (indexToAdd < m_allocated_vertices)
@@ -316,6 +340,8 @@ namespace PixelFarm.Drawing
         /// <param name="y"></param>
         public static void AddP2c(this VertexStore vxs, double x, double y)
         {
+
+
             vxs.AddVertex(x, y, VertexCmd.P2c);
         }
         /// <summary>
@@ -374,6 +400,6 @@ namespace PixelFarm.Drawing
         }
     }
 
-    
+
 
 }

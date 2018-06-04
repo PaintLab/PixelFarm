@@ -33,9 +33,10 @@ namespace PixelFarm.Agg.Sample_Gradient
                     linearColorProvider,
                     0, 150);
                 SimpleRect srect = new SimpleRect(0, 0, 150, 50);
-                var v1 = GetFreeVxs();
+
+                PixelFarm.Drawing.VectorToolBox.GetFreeVxs(out var v1);
                 p2.Fill(srect.MakeVxs(v1), spanGenGradient);
-                ReleaseVxs(ref v1);
+                PixelFarm.Drawing.VectorToolBox.ReleaseVxs(ref v1);
             }
         }
 

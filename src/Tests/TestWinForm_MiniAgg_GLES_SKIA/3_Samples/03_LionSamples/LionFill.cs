@@ -30,6 +30,8 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
+using System.Collections.Generic;
+
 using Mini;
 namespace PixelFarm.Agg.Samples
 {
@@ -40,11 +42,11 @@ namespace PixelFarm.Agg.Samples
       + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : DemoBase
     {
-        LionFillSprite lionFill;
+        MyTestSprite lionFill;
         public override void Init()
         {
-            lionFill = new LionFillSprite();
-            //lionFill.AutoFlipY = true;           
+            lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg")));
+            //lionFill.AutoFlipY = true;
         }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -103,14 +105,44 @@ namespace PixelFarm.Agg.Samples
     [Info("HitTest and Selection")]
     public class LionFillExample_HitTest : DemoBase
     {
-        LionFillSprite lionFill;
+
+        MyTestSprite _hitLion;
         bool hitOnLion;
+        List<MyTestSprite> lionList = new List<MyTestSprite>();
+
+
         public override void Init()
         {
-            lionFill = new LionFillSprite();
+            // lion
+            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
+            lionList.Add(new MyTestSprite(s));
+            //
             //lionFill.AutoFlipY = true;           
         }
+        public override void KeyDown(int keycode)
+        {
+            //temp 
+            System.Windows.Forms.Keys k = (System.Windows.Forms.Keys)keycode;
+            switch (k)
+            {
+                case System.Windows.Forms.Keys.A:
+                    {
+                        SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
+                        lionList.Add(new MyTestSprite(s) { JustMove = true });
+                    }
+                    break;
+                case System.Windows.Forms.Keys.Q:
+                    {
+                        //test add box control ...
 
+
+                    }
+                    break;
+            }
+
+
+            base.KeyDown(keycode);
+        }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
@@ -124,14 +156,46 @@ namespace PixelFarm.Agg.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            lionFill.Draw(p);
+            foreach (var lion in lionList)
+            {
+                lion.Draw(p);
+            }
         }
+
         public override void MouseDown(int x, int y, bool isRightButton)
         {
 
             //check if we hit a lion or not 
             //this is example => if right button=>test with path
-            hitOnLion = lionFill.HitTest(x, y, isRightButton);
+
+            if (isRightButton)
+            {
+                if (LionMoveOption == LionMoveOption.Move)
+                {
+                    LionMoveOption = LionMoveOption.ZoomAndRotate;
+                }
+                else
+                {
+                    LionMoveOption = LionMoveOption.Move;
+                }
+            }
+
+            //-----------------------------------------------------
+            _hitLion = null;
+            hitOnLion = false;
+
+            for (int i = lionList.Count - 1; i >= 0; --i)
+            {
+                MyTestSprite lion = lionList[i];
+                if (lion.HitTest(x, y, isRightButton))
+                {
+                    hitOnLion = true;
+                    _hitLion = lion;
+                    break;
+                }
+            }
+
+
             base.MouseDown(x, y, isRightButton);
         }
         public override void MouseUp(int x, int y)
@@ -141,9 +205,9 @@ namespace PixelFarm.Agg.Samples
         }
         public override void MouseDrag(int x, int y)
         {
-            if (hitOnLion)
+            if (hitOnLion && _hitLion != null)
             {
-                lionFill.Move(x, y);
+                _hitLion.Move(x, y);
             }
         }
         [DemoConfig]
@@ -167,10 +231,17 @@ namespace PixelFarm.Agg.Samples
                 {
                     default: break;
                     case LionMoveOption.Move:
-                        lionFill.JustMove = true;
+                        foreach (var lion in lionList)
+                        {
+                            lion.JustMove = true;
+                        }
+
                         break;
                     case LionMoveOption.ZoomAndRotate:
-                        lionFill.JustMove = false;
+                        foreach (var lion in lionList)
+                        {
+                            lion.JustMove = false;
+                        }
                         break;
                 }
             }

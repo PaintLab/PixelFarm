@@ -1,69 +1,40 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-2017, WinterDev
 //some code from ICU project with BSD license
 
 namespace Typography.TextBreak
 {
-    public enum TextBreakKind
-    {
-        Word,
-        Sentence,
-    }
 
-    public delegate void OnBreak(BreakBounds breakBounds);
+    delegate void OnBreak(BreakBounds breakBounds);
 
-    public class BreakBounds
+    class BreakBounds
     {
         public int startIndex;
         public int length;
         public bool stopNext;
-        public WorkKind kind;
+        public WordKind kind;
     }
-    public enum WorkKind
+
+    public enum WordKind : byte
     {
+        Unknown,
+        //
         Whitespace,
         NewLine,
-        Text,
         Number,
-        Punc
+        Punc,
+        //
+        Text,
+        TextIncomplete,
     }
-
-
-    //public abstract class TextBreaker
-    //{
-    //    public abstract void DoBreak(char[] input, int start, int len, OnBreak onbreak);
-    //    public TextBreakKind BreakKind
-    //    {
-    //        get;
-    //        set;
-    //    }
-    //    public void DoBreak(char[] charBuff, OnBreak onbreak)
-    //    {
-    //        IsCanceled = false;//reset 
-    //        //to end
-    //        DoBreak(charBuff, 0, charBuff.Length, onbreak);
-    //    }
-       
-    //    protected bool IsCanceled { get; set; }
-    //    /// <summary>
-    //    /// cancel current breaking task
-    //    /// </summary>
-    //    public void Cancel() { IsCanceled = true; }
-    //}
-//    public struct SplitBound
-//    {
-//        public readonly int startIndex;
-//        public readonly int length;
-//        public SplitBound(int startIndex, int length)
-//        {
-//            this.startIndex = startIndex;
-//            this.length = length;
-//        }
-//#if DEBUG
-//        public override string ToString()
-//        {
-//            return startIndex + ":" + length;
-//        }
-//#endif
-//    }
+    public struct BreakAtInfo
+    {
+        public readonly int breakAt;
+        public readonly WordKind wordKind;
+        public BreakAtInfo(int breakAt, WordKind w)
+        {
+            this.breakAt = breakAt;
+            this.wordKind = w;
+        }
+    }
 
 }

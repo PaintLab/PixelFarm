@@ -960,12 +960,12 @@ namespace LayoutFarm.CustomWidgets
 
     class ScrollBarButton : EaseBox
     {
-        public ScrollBarButton(int w, int h, IEventListener owner)
+        public ScrollBarButton(int w, int h, IUIEventListener owner)
             : base(w, h)
         {
             this.OwnerScrollBar = owner;
         }
-        IEventListener OwnerScrollBar
+        IUIEventListener OwnerScrollBar
         {
             get;
             set;

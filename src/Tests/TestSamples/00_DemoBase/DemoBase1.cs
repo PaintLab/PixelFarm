@@ -26,7 +26,7 @@ namespace Mini
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
         GLPainter _painter;
-        
+
         public virtual void Draw(Painter p) { }
         public void CloseDemo()
         {
@@ -34,22 +34,13 @@ namespace Mini
         }
 
         public virtual void Init() { }
-
+        public virtual void KeyDown(int keycode) { }
         public virtual void MouseDrag(int x, int y) { }
         public virtual void MouseDown(int x, int y, bool isRightButton) { }
         public virtual void MouseUp(int x, int y) { }
         public virtual int Width { get; set; }
         public virtual int Height { get; set; }
-        VertexStorePool _vxsPool = new VertexStorePool();
-        public VertexStore GetFreeVxs()
-        {
-            return _vxsPool.GetFreeVxs();
-        }
-        public void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
-
+        
 
 
         protected virtual void DemoClosing()

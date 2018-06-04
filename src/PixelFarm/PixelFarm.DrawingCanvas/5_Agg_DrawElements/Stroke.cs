@@ -77,7 +77,7 @@ namespace PixelFarm.Agg
             get { return _strokeGen.Shorten; }
             set { _strokeGen.Shorten = value; }
         }
-        public VertexStore MakeVxs(VertexStore sourceVxs, VertexStore vxs)
+        public VertexStore MakeVxs(VertexStore sourceVxs, VertexStore outputVxs)
         {
             StrokeGenerator strkgen = _strokeGen;
             int j = sourceVxs.Count;
@@ -97,7 +97,7 @@ namespace PixelFarm.Agg
                         {
                             //close command
                             strkgen.Close();
-                            strkgen.WriteTo(vxs);
+                            strkgen.WriteTo(outputVxs);
                             strkgen.Reset();
                         }
                         else
@@ -110,7 +110,7 @@ namespace PixelFarm.Agg
                         {
                             //close command
                             strkgen.Close();
-                            strkgen.WriteTo(vxs);
+                            strkgen.WriteTo(outputVxs);
                             strkgen.Reset();
                         }
                         else
@@ -135,10 +135,10 @@ namespace PixelFarm.Agg
                     default: throw new System.NotSupportedException();
                 }
             }
-            strkgen.WriteTo(vxs);
+            strkgen.WriteTo(outputVxs);
             strkgen.Reset();
 
-            return vxs;
+            return outputVxs;
         }
     }
 

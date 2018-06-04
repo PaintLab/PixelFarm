@@ -26,6 +26,8 @@ namespace PixelFarm.Drawing.Pdf
             : this(0, 0, left, top, width, height)
         {
         }
+
+
         internal MyPdfDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
@@ -71,6 +73,10 @@ namespace PixelFarm.Drawing.Pdf
             this.CurrentTextColor = Color.Black;
             //--------------
 
+        }
+        public override void Dispose()
+        {
+             
         }
 #if DEBUG
         public override string ToString()

@@ -683,6 +683,7 @@ namespace PixelFarm.Agg.VertexSource
                             double x4, double y4,
                             int level)
         {
+            //recursive
             if (level > Curves.CURVE_RECURSION_LIMIT)
             {
                 return;

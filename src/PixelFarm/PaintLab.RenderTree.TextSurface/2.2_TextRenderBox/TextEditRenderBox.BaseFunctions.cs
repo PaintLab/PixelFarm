@@ -451,6 +451,17 @@ namespace LayoutFarm.Text
             {
                 switch (e.KeyCode)
                 {
+                    case UIKeys.A:
+                        {
+                            //select all
+                            //....
+                            this.CurrentLineNumber = 0;
+                            //start select to end
+                            DoEnd(true);//simulate 
+                            this.CurrentLineNumber = this.LineCount - 1;
+                            DoEnd(true);
+                        }
+                        break;
                     case UIKeys.C:
                         {
                             StringBuilder stBuilder = GetFreeStringBuilder();

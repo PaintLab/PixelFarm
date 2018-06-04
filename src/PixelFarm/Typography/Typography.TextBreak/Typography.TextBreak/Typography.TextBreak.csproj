@@ -31,20 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="BreakBounds.cs" />
     <Compile Include="CustomBreaker.cs" />
     <Compile Include="CustomBreakerBuilder.cs" />
     <Compile Include="CustomDict.cs" />
     <Compile Include="BreakingEngine.cs" />
+    <Compile Include="DictionaryBasedBreakingEngine\BurmeseBreakingEngine.cs" />
+    <Compile Include="DictionaryBasedBreakingEngine\CJBreakingEngine.cs" />
+    <Compile Include="DictionaryBasedBreakingEngine\KhmerBreakingEngine.cs" />
     <Compile Include="EngBreakingEngine.cs" />
-    <Compile Include="LaoDictionaryBreakingEngine.cs" />
-    <Compile Include="ThaiDictionaryBreakingEngine.cs" />
+    <Compile Include="DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs" />
+    <Compile Include="DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs" />
     <Compile Include="WordVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

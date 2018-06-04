@@ -34,8 +34,11 @@
   <ItemGroup>
     <Compile Include="CssLexer.cs" />
     <Compile Include="dbugLexerReport.cs" />
+    <Compile Include="MyXmlLexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextSnapshot.cs" />
+    <Compile Include="XmlLexer.cs" />
+    <Compile Include="XmlLexer_debug.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

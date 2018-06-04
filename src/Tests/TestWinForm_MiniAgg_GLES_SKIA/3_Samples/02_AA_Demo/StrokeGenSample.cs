@@ -246,14 +246,15 @@ namespace PixelFarm.Agg.Sample_Draw
             writer.LineTo(20, 200);
             writer.LineTo(20, 0);
 
-
-
             //writer.MoveTo(20, 100);
             //writer.LineTo(20, 15);
             //writer.CloseFigure();
 
             aggPainter.Draw(vxs);
             aggPainter.LineDashGen = null;
+
+
+
         }
         void DrawD(PixelFarm.Drawing.Painter painter)
         {

@@ -22,8 +22,8 @@ namespace PixelFarm.Agg.Sample_Perspective
         private SpriteShape lionShape;
         public perspective_application()
         {
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+
+            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
 
             quadPolygonControl = new PixelFarm.Agg.UI.PolygonEditWidget(4, 5.0);
             quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
@@ -102,22 +102,25 @@ namespace PixelFarm.Agg.Sample_Perspective
                     quadPolygonControl.GetInnerCoords());
                 if (txBilinear.IsValid)
                 {
-                    var v3 = GetFreeVxs();
 
+
+                    VectorToolBox.GetFreeVxs(out var v3);
                     lionShape.ApplyTransform(txBilinear);
-                    lionShape.Paint(painter); 
-                  
-
+                    lionShape.Paint(painter);
                     RectD lionBound = lionShape.Bounds;
                     Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
                                      (lionBound.Bottom + lionBound.Top) * 0.5,
                                      (lionBound.Right - lionBound.Left) * 0.5,
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
-                    ReleaseVxs(ref v3);
+                    VectorToolBox.ReleaseVxs(ref v3);
 
-                    var v1 = GetFreeVxs();
-                    var trans_ell = GetFreeVxs();
+                    //
+
+
+
+                    VectorToolBox.GetFreeVxs(out var v1, out var trans_ell);
+
                     txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
                     painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(trans_ell);
@@ -129,8 +132,8 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
 
-                    ReleaseVxs(ref v1);
-                    ReleaseVxs(ref trans_ell);
+
+                    VectorToolBox.ReleaseVxs(ref v1, ref trans_ell);
                 }
             }
             else
@@ -142,8 +145,8 @@ namespace PixelFarm.Agg.Sample_Perspective
                     quadPolygonControl.GetInnerCoords());
                 if (txPerspective.IsValid)
                 {
-                    var v1 = GetFreeVxs();
 
+ 
                     lionShape.Paint(p, txPerspective); //transform -> paint
 
                     //painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Vxs, v1),
@@ -160,8 +163,8 @@ namespace PixelFarm.Agg.Sample_Perspective
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
 
-                    VertexStore v2 = GetFreeVxs();
-                    VertexStore transformedEll = GetFreeVxs();
+                    VectorToolBox.GetFreeVxs(out var v2, out var transformedEll);
+
                     txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
                     painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(transformedEll);
@@ -171,18 +174,20 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(transformedEll);
                     painter.StrokeWidth = prevStrokeW;
-                    ReleaseVxs(ref v2);
-                    ReleaseVxs(ref v1);
-                    ReleaseVxs(ref transformedEll);
+
+
+                    VectorToolBox.ReleaseVxs(ref v2, ref transformedEll);
+                     
                 }
             }
 
             //--------------------------
             // Render the "quad" tool and controls
             painter.FillColor = ColorEx.Make(0f, 0.3f, 0.5f, 0.6f);
-            var v4 = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out var v4);
             painter.Fill(quadPolygonControl.MakeVxs(v4));
-            ReleaseVxs(ref v4);
+            VectorToolBox.ReleaseVxs(ref v4);
         }
 
         public override void MouseDown(int x, int y, bool isRightButton)

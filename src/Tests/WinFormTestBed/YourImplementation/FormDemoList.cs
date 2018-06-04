@@ -68,7 +68,7 @@ namespace LayoutFarm.Dev
         public void RunDemo(DemoBase selectedDemo)
         {
 
-            CreateReadyForm(out _latestviewport, out _latest_formCanvas);
+            YourImplementation.DemoFormCreatorHelper.CreateReadyForm(out _latestviewport, out _latest_formCanvas);
 
             selectedDemo.StartDemo(new SampleViewport(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
@@ -87,7 +87,7 @@ namespace LayoutFarm.Dev
         }
         public void RunDemo(DemoBase2 selectedDemo)
         {
-            CreateReadyForm(out _latestviewport, out _latest_formCanvas);
+            YourImplementation.DemoFormCreatorHelper.CreateReadyForm(out _latestviewport, out _latest_formCanvas);
             selectedDemo.StartDemo(new SampleViewport(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
@@ -130,30 +130,7 @@ namespace LayoutFarm.Dev
             };
             formPrint.Connect(viewport);
         }
-        void CreateReadyForm(
-            out LayoutFarm.UI.UISurfaceViewportControl viewport,
-            out Form formCanvas)
-        {
-
-            //1. select view port kind
-            InnerViewportKind innerViewportKind = (InnerViewportKind)lstPlatformSelectors.SelectedItem;
-
-            var workingArea = Screen.PrimaryScreen.WorkingArea;
-
-            formCanvas = FormCanvasHelper.CreateNewFormCanvas(
-              workingArea.Width,
-              workingArea.Height,
-              innerViewportKind,
-              out viewport);
-
-            formCanvas.Text = "FormCanvas 1 :" + innerViewportKind;
-
-            viewport.PaintMe();
-
-            formCanvas.WindowState = FormWindowState.Maximized;
-            formCanvas.Show();
-        }
-
+       
         public void ClearDemoList()
         {
             this.lstDemoList.Items.Clear();

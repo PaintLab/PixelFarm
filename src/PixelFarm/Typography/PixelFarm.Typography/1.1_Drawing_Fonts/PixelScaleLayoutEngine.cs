@@ -56,7 +56,7 @@ namespace Typography.Contours
         float _currentFontSizeInPoints;
         HintTechnique _currentHintTech;
 
-        VertexStorePool _vxsPool = new VertexStorePool(); //TODO: review pool again
+    
         GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
 
         public GlyphMeshStore()

@@ -4,7 +4,7 @@ namespace LayoutFarm.UI
 {
     public interface ITopWindowEventRoot
     {
-        IEventListener CurrentKeyboardFocusedElement { get; set; }
+        IUIEventListener CurrentKeyboardFocusedElement { get; set; }
         MouseCursorStyle MouseCursorStyle { get; }
 
 

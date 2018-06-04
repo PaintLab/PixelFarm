@@ -14,13 +14,13 @@
 // "The Art of War"
 
 
-using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
 
 
     partial class GdiPlusDrawBoard
     {
+
 
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
         {
@@ -35,8 +35,26 @@ namespace PixelFarm.Drawing.WinGdi
             //TODO: review here
             //temp here          
             var vxFormattedString = renderVx as WinGdiRenderVxFormattedString;
-            if (vxFormattedString == null) return;
-            _gdigsx.DrawText(vxFormattedString.InternalBuffer, (int)x, (int)y);
+            if (vxFormattedString != null)
+            {
+                _gdigsx.DrawText(vxFormattedString.InternalBuffer, (int)x, (int)y);
+            }
+            else
+            {
+                var svxRenderVx = renderVx as PixelFarm.Agg.VxsRenderVx;
+                if (svxRenderVx != null)
+                {
+                    //TODO: review fill color here
+                    _gdigsx.FillPath(svxRenderVx);
+                }
+                else
+                {
+                    var svgRenderVx = renderVx as Agg.SvgRenderVx;
+                    _gdigsx.FillPath(svgRenderVx);
+                }
+
+            }
+
         }
 
         public override void DrawText(char[] buffer, int x, int y)

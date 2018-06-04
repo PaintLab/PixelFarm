@@ -190,6 +190,10 @@ namespace LayoutFarm.UI
 
 
             HitChain hitPointChain = GetFreeHitChain();
+#if DEBUG
+            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseDown;
+#endif
+
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             int hitCount = hitPointChain.Count;
             RenderElement hitElement = hitPointChain.TopMostElement;
@@ -200,7 +204,7 @@ namespace LayoutFarm.UI
                 SetEventOrigin(e, hitPointChain);
                 //------------------------------ 
                 var prevMouseDownElement = e.PreviousMouseDown;
-                IEventListener currentMouseDown = null;
+                IUIEventListener currentMouseDown = null;
                 //portal                
                 ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (portal) =>
                 {
@@ -217,6 +221,8 @@ namespace LayoutFarm.UI
                     ForEachEventListenerBubbleUp(e, hitPointChain, (listener) =>
                     {
                         currentMouseDown = listener;
+                       
+
                         listener.ListenMouseDown(e);
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e.CancelBubbling;
@@ -227,6 +233,8 @@ namespace LayoutFarm.UI
                             prevMouseDownElement = null;//clear
                         }
                         //------------------------------------------------------- 
+                        //retrun true to stop this loop (no further bubble up)
+                        //return false to bubble this to upper control       
                         return e.CancelBubbling || !listener.BypassAllMouseEvents;
 
                     });
@@ -277,6 +285,9 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseMove(UIMouseEventArgs e)
         {
             HitChain hitPointChain = GetFreeHitChain();
+#if DEBUG
+            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseMove;
+#endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             this._previousChain.ClearAll();
             SetEventOrigin(e, hitPointChain);
@@ -342,6 +353,9 @@ namespace LayoutFarm.UI
 #endif
 
             HitChain hitPointChain = GetFreeHitChain();
+#if DEBUG
+            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseUp;
+#endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             int hitCount = hitPointChain.Count;
             if (hitCount > 0)
@@ -393,6 +407,9 @@ namespace LayoutFarm.UI
                         ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
                         {
                             listener.ListenMouseClick(e);
+
+                            //retrun true to stop this loop (no further bubble up)
+                            //return false to bubble this to upper control       
                             return e.CancelBubbling || !listener.BypassAllMouseEvents;
                         });
                     }
@@ -417,7 +434,7 @@ namespace LayoutFarm.UI
 
         //===================================================================
         delegate bool EventPortalAction(IEventPortal evPortal);
-        delegate bool EventListenerAction(IEventListener listener);
+        delegate bool EventListenerAction(IUIEventListener listener);
         static void ForEachOnlyEventPortalBubbleUp(UIEventArgs e, HitChain hitPointChain, EventPortalAction eventPortalAction)
         {
             for (int i = hitPointChain.Count - 1; i >= 0; --i)
@@ -428,7 +445,7 @@ namespace LayoutFarm.UI
                 if (eventPortal != null)
                 {
                     var ppp = hitPoint.point;
-                    e.CurrentContextElement = currentHitElement as IEventListener;
+                    e.CurrentContextElement = currentHitElement as IUIEventListener;
                     e.SetLocation(ppp.X, ppp.Y);
                     if (eventPortalAction(eventPortal))
                     {
@@ -443,7 +460,7 @@ namespace LayoutFarm.UI
             for (int i = hitPointChain.Count - 1; i >= 0; --i)
             {
                 hitInfo = hitPointChain.GetHitInfo(i);
-                IEventListener listener = hitInfo.hitElement.GetController() as IEventListener;
+                IUIEventListener listener = hitInfo.hitElement.GetController() as IUIEventListener;
                 if (listener != null)
                 {
                     if (e.SourceHitElement == null)

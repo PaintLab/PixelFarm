@@ -4,7 +4,7 @@
 namespace PixelFarm.Drawing
 {
 
-    public abstract class DrawBoard
+    public abstract class DrawBoard : System.IDisposable
     {
 
         //------------------------------
@@ -75,6 +75,7 @@ namespace PixelFarm.Drawing
         //buffer
         public abstract void Clear(Color c);
         public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
+        public virtual void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH) { }
         //------------------------------------------------------- 
 
         //lines         
@@ -89,7 +90,7 @@ namespace PixelFarm.Drawing
         //path,  polygons,ellipse spline,contour,   
         public abstract void FillPath(Color color, GraphicsPath gfxPath);
         public abstract void FillPath(Brush brush, GraphicsPath gfxPath);
-        public abstract void DrawPath(GraphicsPath gfxPath);
+        public abstract void DrawPath(GraphicsPath gfxPath); 
         public abstract void FillPolygon(Brush brush, PointF[] points);
         public abstract void FillPolygon(Color color, PointF[] points);
         //-------------------------------------------------------  
@@ -113,6 +114,7 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len);
         public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
+        public abstract void Dispose();
 
     }
 
@@ -174,6 +176,66 @@ namespace PixelFarm.Drawing
         {
             //TODO: review offset function
             drawBoard.OffsetCanvasOrigin(0, dy);
+        }
+
+
+        //--------------------------------------------------
+
+        public static SmoothingModeState SaveSmoothMode(this DrawBoard drawBoard)
+        {
+            //TODO: review offset function
+            return new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+        }
+        public static SmoothingModeState SetSmoothMode(this DrawBoard drawBoard, SmoothingMode value)
+        {
+            //TODO: review offset function
+            var saveState = new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+            drawBoard.SmoothingMode = value;
+            return saveState;
+        }
+
+
+
+
+
+        public struct SmoothingModeState
+        {
+            readonly DrawBoard drawBoard;
+            readonly SmoothingMode _latestSmoothMode;
+            internal SmoothingModeState(DrawBoard drawBoard, SmoothingMode state)
+            {
+                _latestSmoothMode = state;
+                this.drawBoard = drawBoard;
+            }
+            public void Restore()
+            {
+                drawBoard.SmoothingMode = _latestSmoothMode;
+            }
+        }
+
+
+    }
+
+
+    public static class DrawBoardCreator
+    {
+        public delegate DrawBoard CreateNewDrawBoardDelegate(int w, int h);
+        static System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate> _s_creators = new System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate>();
+        public static void RegisterCreator(int creatorName, CreateNewDrawBoardDelegate del)
+        {
+            _s_creators.Add(creatorName, del);
+        }
+        public static DrawBoard CreateNewDrawBoard(int name, int w, int h)
+        {
+            if (_s_creators.TryGetValue(name, out CreateNewDrawBoardDelegate foundCreator))
+            {
+                return foundCreator(w, h);
+            }
+            else
+            {
+                //not found this creator
+                return null;
+            }
         }
     }
 }

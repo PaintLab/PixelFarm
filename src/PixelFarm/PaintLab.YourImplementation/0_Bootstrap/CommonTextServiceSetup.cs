@@ -4,7 +4,7 @@ using System.IO;
 using Typography.TextServices;
 namespace YourImplementation
 {
-    class MyIcuDataProvider : Typography.TextBreak.IIcuDataProvider
+    class MyIcuDataProvider 
     {
         public string icuDir;
 
@@ -34,8 +34,8 @@ namespace YourImplementation
         internal static IFontLoader myFontLoader;
 
 
-        internal static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
-        internal static FileDBStorageProvider s_filedb = new FileDBStorageProvider("textservicedb");
+        static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
+        static FileDBStorageProvider s_filedb = new FileDBStorageProvider("textservicedb");
 
         public static void SetupDefaultValues()
         {
@@ -48,13 +48,14 @@ namespace YourImplementation
             //check if we have that data? 
 
             //string typographyDir = @"/icu/brkitr_src/dictionaries";
+            //***
             string typographyDir = @"d:/test/icu60/brkitr_src/dictionaries";
             s_icuDataProvider = new MyIcuDataProvider();
             if (System.IO.Directory.Exists(typographyDir))
             {
                 s_icuDataProvider.icuDir = typographyDir;
             }
-            Typography.TextBreak.CustomBreakerBuilder.Setup(s_icuDataProvider);
+            Typography.TextBreak.CustomBreakerBuilder.Setup(typographyDir);
             s_isInit = true;
         }
     }

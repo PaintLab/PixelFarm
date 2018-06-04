@@ -34,9 +34,9 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_WebDom.Parser\CssParser.cs" />
-    <Compile Include="0_WebDom.Parser\CssParserHelper.cs" />
-    <Compile Include="0_WebDom.Parser\CssValueParser.cs" />
+    <Compile Include="1_Css_Parser\CssParser.cs" />
+    <Compile Include="1_Css_Parser\CssParserHelper.cs" />
+    <Compile Include="1_Css_Parser\CssValueParser.cs" />
     <Compile Include="1_Css\CssActiveSheet.cs" />
     <Compile Include="1_Css\CssAttributeSelector.cs" />
     <Compile Include="1_Css\CssCodeValueExpressions.cs" />
@@ -47,16 +47,8 @@
     <Compile Include="1_Css\UserMapUtil.cs" />
     <Compile Include="1_Css\ValueMaps.cs" />
     <Compile Include="1_Css\WellknownCssPropertyName.cs" />
-    <Compile Include="2_Svg\07_Coords_Transforms\SvgMatrix.cs" />
-    <Compile Include="2_Svg\07_Coords_Transforms\SvgRotate.cs" />
-    <Compile Include="2_Svg\07_Coords_Transforms\SvgScale.cs" />
-    <Compile Include="2_Svg\07_Coords_Transforms\SvgShear.cs" />
-    <Compile Include="2_Svg\07_Coords_Transforms\SvgSkew.cs" />
-    <Compile Include="2_Svg\07_Coords_Transforms\SvgTransform.cs" />
-    <Compile Include="2_Svg\07_Coords_Transforms\SvgTranslate.cs" />
-    <Compile Include="2_Svg\08_Paths\SvgPathDataParser.cs" />
-    <Compile Include="2_Svg\08_Paths\SvgPathSegments.cs" />
-    <Compile Include="2_Svg\09_BasicShapes\SvgSpec.cs" />
+    <Compile Include="2_Svg\SvgPathDataParser.cs" />
+    <Compile Include="2_Svg\SvgSpec.cs" />
     <Compile Include="2_Svg\SvgParser.cs" />
     <Compile Include="IScriptable\JsScriptAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,10 +7,13 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
 using burningmime.curves; //for curve fit
 using PixelFarm.Drawing;
+
 namespace PixelFarm.Agg.Samples
 {
     class MyBrushPath
     {
+
+
         bool validBoundingRect;
         VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();
@@ -31,7 +34,13 @@ namespace PixelFarm.Agg.Samples
             contPoints.Insert(0, new Vector2(x, y));
             isValidSmooth = false;
         }
-        public VertexStore Vxs { get { return vxs; } }
+        public VertexStore Vxs
+        {
+            get
+            {
+                return vxs;
+            }
+        }
         public void SetVxs(VertexStore vxs)
         {
             this.vxs = vxs;
@@ -100,6 +109,145 @@ namespace PixelFarm.Agg.Samples
             get;
             set;
         }
+
+
+
+        Stroke _stroke1 = new Stroke(1);
+
+        public void MakeRegularPath(float strokeW)
+        {
+
+            if (this.isValidSmooth)
+            {
+                return;
+            }
+            this.isValidSmooth = true;
+            //--------
+
+            if (contPoints.Count == 0)
+            {
+                return;
+            }
+
+            //SimplifyPaths();
+            _stroke1.Width = strokeW*2;
+            _stroke1.LineCap = LineCap.Round;
+            _stroke1.LineJoin = LineJoin.Round;
+
+            var tmpVxs = new VertexStore();
+            int j = contPoints.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //TODO: review here
+                //
+                Vector2 v = contPoints[i];
+                if (i == 0)
+                {
+                    tmpVxs.AddMoveTo(v.x, v.y);
+                }
+                else
+                {
+                    tmpVxs.AddLineTo(v.x, v.y);
+                }
+            }
+            ////
+
+            VertexStore v2 = new VertexStore();
+            _stroke1.MakeVxs(tmpVxs, v2);
+
+
+
+            vxs = v2;
+
+            //release vxs to pool
+        }
+
+        void SimplifyPaths()
+        {
+
+            //return;
+            //--------
+            //lets smooth it 
+            //string str1 = dbugDumpPointsToString(contPoints);
+            //string str2 = dbugDumpPointsToString2(contPoints); 
+            //var data2 = CurvePreprocess.RdpReduce(contPoints, 2);
+            List<Vector2> data2 = contPoints;
+            CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
+            vxs = new VertexStore();
+            int j = cubicBzs.Length;
+            //1. 
+            if (j > 1)
+            {
+                //1st
+                CubicBezier bz0 = cubicBzs[0];
+                vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
+                vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                if (!bz0.HasSomeNanComponent)
+                {
+                    vxs.AddCurve4To(
+                        bz0.p1.x, bz0.p1.y,
+                        bz0.p2.x, bz0.p2.y,
+                        bz0.p3.x, bz0.p3.y);
+                }
+                else
+                {
+                    vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                }
+
+
+                //-------------------------------
+                for (int i = 1; i < j; ++i) //start at 1
+                {
+                    CubicBezier bz = cubicBzs[i];
+                    if (!bz.HasSomeNanComponent)
+                    {
+                        vxs.AddCurve4To(
+                            bz.p1.x, bz.p1.y,
+                            bz.p2.x, bz.p2.y,
+                            bz.p3.x, bz.p3.y);
+                    }
+                    else
+                    {
+                        vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                    }
+
+                }
+                //-------------------------------
+                //close
+                //TODO: we not need this AddLineTo()
+                vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                vxs.AddCloseFigure();
+            }
+            else if (j == 1)
+            {
+                CubicBezier bz0 = cubicBzs[0];
+                vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
+
+                if (!bz0.HasSomeNanComponent)
+                {
+                    vxs.AddCurve4To(
+                        bz0.p1.x, bz0.p1.y,
+                        bz0.p2.x, bz0.p2.y,
+                        bz0.p3.x, bz0.p3.y);
+                }
+                else
+                {
+                    vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                }
+
+
+
+            }
+            else
+            {
+                // = 0
+            }
+
+            //TODO: review here
+            VertexStore v2 = new VertexStore();
+            cflat.MakeVxs(vxs, v2);
+            vxs = v2;
+        }
         public void MakeSmoothPath()
         {
             if (this.isValidSmooth)
@@ -112,46 +260,9 @@ namespace PixelFarm.Agg.Samples
             {
                 return;
             }
-            //return;
-            //--------
-            //lets smooth it 
-            //string str1 = dbugDumpPointsToString(contPoints);
-            //string str2 = dbugDumpPointsToString2(contPoints); 
-            //var data2 = CurvePreprocess.RdpReduce(contPoints, 2);
-            var data2 = contPoints;
-            CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
-            vxs = new VertexStore();
-            int j = cubicBzs.Length;
-            //1. 
-            if (j > 0)
-            {
-                //1st
-                CubicBezier bz0 = cubicBzs[0];
-                vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
-                vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
-                vxs.AddCurve4To(
-                    bz0.p1.x, bz0.p1.y,
-                    bz0.p2.x, bz0.p2.y,
-                    bz0.p3.x, bz0.p3.y);
+            SimplifyPaths();
 
-                //-------------------------------
-                for (int i = 1; i < j; ++i) //start at 1
-                {
-                    CubicBezier bz = cubicBzs[i];
-                    vxs.AddCurve4To(
-                        bz.p1.x, bz.p1.y,
-                        bz.p2.x, bz.p2.y,
-                        bz.p3.x, bz.p3.y);
-                }
-                //-------------------------------
-                //close
-                //TODO: we not need this AddLineTo()
-                vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
-            }
-            vxs.AddCloseFigure();
-            VertexStore v2 = new VertexStore();
-            cflat.MakeVxs(vxs, v2);
-            vxs = v2;
+
         }
         public void Close()
         {
