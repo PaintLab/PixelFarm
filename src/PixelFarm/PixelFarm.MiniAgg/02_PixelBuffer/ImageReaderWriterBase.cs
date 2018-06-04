@@ -47,9 +47,10 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
 
-        ///// <summary>
-        ///// blender for destination image buffer, in this version we support 32 bits ARGB 
-        ///// </summary> 
+
+        /// <summary>
+        /// blender for destination image buffer, in this version we support 32 bits ARGB 
+        /// </summary>
         PixelBlenderBGRA _recvBlender32;
 
         //-------------------------------------------- 
@@ -765,7 +766,7 @@ namespace PixelFarm.Agg
 
                             do
                             {
-                                PixelBlenderBGRA.Blend32PixelInternal(destBuffer, colors[colorsIndex]);
+                                PixelBlenderBGRA.BlendPixelInternal(destBuffer, colors[colorsIndex]);
                                 //CopyOrBlend32_BasedOnAlpha(_recvBlender32, m_ByteBuffer, bufferOffset, colors[colorsIndex]);
                                 //bufferOffset += scanWidthBytes;
                                 ++colorsIndex;
@@ -885,7 +886,7 @@ namespace PixelFarm.Agg
         {
             if (cover == 255)
             {
-                PixelBlenderBGRA.Blend32PixelInternal(destBuffer + destArrayOffset, sourceColor);
+                PixelBlenderBGRA.BlendPixelInternal(destBuffer + destArrayOffset, sourceColor);
                 //CopyOrBlend32_BasedOnAlpha(recieveBlender, destBuffer, destArrayOffset, sourceColor);
             }
             else
@@ -902,7 +903,7 @@ namespace PixelFarm.Agg
 #endif
 
 
-                    PixelBlenderBGRA.Blend32PixelInternal(destBuffer + destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
+                    PixelBlenderBGRA.BlendPixelInternal(destBuffer + destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
                     //recieveBlender.BlendPixel(destBuffer, destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
 
 
@@ -915,7 +916,7 @@ namespace PixelFarm.Agg
             {
                 fixed (int* destAdd = &destBuffer[destArrayOffset])
                 {
-                    PixelBlenderBGRA.Blend32PixelInternal(destAdd, sourceColor);
+                    PixelBlenderBGRA.BlendPixelInternal(destAdd, sourceColor);
                     //CopyOrBlend32_BasedOnAlpha(recieveBlender, destBuffer, destArrayOffset, sourceColor);
                 }
 
@@ -935,7 +936,7 @@ namespace PixelFarm.Agg
 
                     fixed (int* destAdd = &destBuffer[destArrayOffset])
                     {
-                        PixelBlenderBGRA.Blend32PixelInternal(destAdd, sourceColor.NewFromChangeCoverage(cover));
+                        PixelBlenderBGRA.BlendPixelInternal(destAdd, sourceColor.NewFromChangeCoverage(cover));
                         //recieveBlender.BlendPixel(destBuffer, destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
 
                     }

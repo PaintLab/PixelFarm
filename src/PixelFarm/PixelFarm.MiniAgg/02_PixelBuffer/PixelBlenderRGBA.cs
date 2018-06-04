@@ -122,6 +122,9 @@ namespace PixelFarm.Agg.Imaging
 
         bool _enableGamma;
         float _gammaValue;
+
+        int _colorBlockFlags; //0 = no-blocks
+
         public PixelBlenderBGRA() { }
         public bool EnableGamma
         {
@@ -147,8 +150,18 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public int NumPixelBits { get { return 32; } }
+
         const byte BASE_MASK = 255;
+
+        public int NumPixelBits { get { return 32; } }
+        public int ColorBlockFlags
+        {
+            get { return _colorBlockFlags; }
+            set
+            {
+                _colorBlockFlags = value;
+            }
+        }
         /// <summary>
         /// blend source color to target buffer
         /// </summary>
@@ -161,19 +174,19 @@ namespace PixelFarm.Agg.Imaging
             {
                 fixed (int* head = &dstBuffer[arrayOffset])
                 {
-                    Blend32PixelInternal(head, srcColor);
+                    BlendPixelInternal(head, srcColor);
                 }
             }
         }
 
 
         /// <summary>
-        /// blend src color to target buffer
+        /// blend src color to target buffer, 4 components
         /// </summary>
         /// <param name="dstBufferPtr"></param>
         /// <param name="srcColor"></param>
         /// <param name="coverageValue"></param>
-        static unsafe void Blend32PixelInternal(int* dstBufferPtr, Color srcColor, byte coverageValue)
+        static unsafe void BlendPixel(int* dstBufferPtr, Color srcColor, byte coverageValue)
         {
             //calculate new alpha
             int src_a = (byte)((srcColor.alpha * coverageValue + 255) >> 8);
@@ -204,8 +217,78 @@ namespace PixelFarm.Agg.Imaging
         }
 
 
+        /// <summary>
+        /// blend src color component to target buffer,only  1 component 
+        /// </summary>
+        /// <param name="dstBufferPtr"></param>
+        /// <param name="srcCompoValue"></param>
+        /// <param name="srcAlpha"></param>
+        /// <param name="destCompoIndex"></param>
+        /// <param name="coverageValue"></param>
+        static unsafe void BlendComponent(int* dstBufferPtr,
+            byte srcCompoValue,
+            byte srcAlpha,
+            byte destCompoIndex,
+            byte coverageValue)
+        {
+            //calculate new alpha
+            int src_a = (byte)((srcAlpha * coverageValue + 255) >> 8);
+            //after apply the alpha
+            unchecked
+            {
+                int dest = *dstBufferPtr;
+                //separate each component
+                byte a = (byte)((dest >> 24) & 0xff);
+                byte r = (byte)((dest >> 16) & 0xff);
+                byte g = (byte)((dest >> 8) & 0xff);
+                byte b = (byte)((dest) & 0xff);
 
-        internal static unsafe void Blend32PixelInternal(int* dstPtr, Color srcColor)
+                switch (destCompoIndex)
+                {
+                    case CO.A:
+                        {
+                            *dstBufferPtr =
+                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) | //only A component
+                                ((byte)(/*                          */ ((r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    case CO.R:
+                        {
+                            *dstBufferPtr =
+                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                                ((byte)(((srcCompoValue - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    case CO.G:
+                        {
+                            *dstBufferPtr =
+                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                                 ((byte)((/*                         */ (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                 ((byte)(((srcCompoValue - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                 ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    case CO.B:
+                        {
+                            *dstBufferPtr =
+                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                                ((byte)((/*                         */(r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                ((byte)((/*                         */(g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                ((byte)(((srcCompoValue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+        }
+
+
+        internal static unsafe void BlendPixelInternal(int* dstPtr, Color srcColor)
         {
             unchecked
             {
@@ -232,7 +315,74 @@ namespace PixelFarm.Agg.Imaging
                 }
             }
         }
+        /// <summary>
+        /// blend src color component to target buffer,only  1 component 
+        /// </summary>
+        /// <param name="dstBufferPtr"></param>
+        /// <param name="srcCompoValue"></param>
+        /// <param name="srcAlpha"></param>
+        /// <param name="destCompoIndex"></param>
+        /// <param name="coverageValue"></param>
+        static unsafe void BlendComponent(int* dstBufferPtr,
+            byte srcCompoValue,
+            byte srcAlpha,
+            byte destCompoIndex)
+        {
+            //calculate new alpha
+            int src_a = srcAlpha;
+            //after apply the alpha
+            unchecked
+            {
+                int dest = *dstBufferPtr;
+                //separate each component
+                byte a = (byte)((dest >> 24) & 0xff);
+                byte r = (byte)((dest >> 16) & 0xff);
+                byte g = (byte)((dest >> 8) & 0xff);
+                byte b = (byte)((dest) & 0xff);
 
+                switch (destCompoIndex)
+                {
+                    case CO.A:
+                        {
+                            *dstBufferPtr =
+                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) | //only A component
+                                ((byte)(/*                          */ ((r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    case CO.R:
+                        {
+                            *dstBufferPtr =
+                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                                ((byte)(((srcCompoValue - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                ((byte)(/*                          */ ((g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    case CO.G:
+                        {
+                            *dstBufferPtr =
+                                 ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                                 ((byte)((/*                         */ (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                 ((byte)(((srcCompoValue - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                 ((byte)(/*                          */ ((b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    case CO.B:
+                        {
+                            *dstBufferPtr =
+                                ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                                ((byte)((/*                         */(r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                                ((byte)((/*                         */(g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                                ((byte)(((srcCompoValue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+        }
 
 
         public void BlendPixels(
@@ -245,30 +395,8 @@ namespace PixelFarm.Agg.Imaging
                 byte cover = covers[coversIndex];
                 if (cover == 255)
                 {
-                    //version 1
-                    //do
-                    //{
-                    //    BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset++]);
-                    //    bufferOffset += 4;
-                    //}
-                    //while (--count != 0);
 
-                    //version 2
-                    //unsafe
-                    //{
-                    //    fixed (byte* head = &destBuffer[bufferOffset])
-                    //    {
-                    //        int* header2 = (int*)(IntPtr)head;
-                    //        do
-                    //        {
-                    //            Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++]);
-                    //            header2++;//move next
-                    //        }
-                    //        while (--count != 0);
-                    //    }
-                    //}
-                    //------------------------------
-                    //version 3: similar to version 2, but have a plan
+
                     unsafe
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
@@ -279,7 +407,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                Blend32PixelInternal(header2, srcColors[srcColorsOffset++]);
+                                BlendPixelInternal(header2, srcColors[srcColorsOffset++]);
                                 header2++;//move next
                                 count--;
                             }
@@ -290,12 +418,12 @@ namespace PixelFarm.Agg.Imaging
                                 //now count is even number
                                 //---------
                                 //1
-                                Blend32PixelInternal(header2, srcColors[srcColorsOffset++]);
+                                BlendPixelInternal(header2, srcColors[srcColorsOffset++]);
                                 header2++;//move next
                                 count--;
                                 //---------
                                 //2
-                                Blend32PixelInternal(header2, srcColors[srcColorsOffset++]);
+                                BlendPixelInternal(header2, srcColors[srcColorsOffset++]);
                                 header2++;//move next
                                 count--;
                             }
@@ -305,33 +433,7 @@ namespace PixelFarm.Agg.Imaging
                 }
                 else
                 {
-                    ////version 1
-                    //do
-                    //{
-                    //    BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
-                    //    bufferOffset += 4;
-                    //    ++sourceColorsOffset;
-                    //}
-                    //while (--count != 0);
 
-                    ////version 2 
-                    //unsafe
-                    //{
-                    //    fixed (byte* head = &destBuffer[bufferOffset])
-                    //    {
-                    //        int* header2 = (int*)(IntPtr)head;
-                    //        do
-                    //        {
-
-                    //            //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
-                    //            Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
-                    //            header2++;//move next
-                    //        }
-                    //        while (--count != 0);
-                    //    }
-                    //}
-                    //------------------------------
-                    //version 3: similar to version 2, but have a plan
                     unsafe
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
@@ -342,7 +444,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                Blend32PixelInternal(header2, srcColors[srcColorsOffset++], cover);
+                                BlendPixel(header2, srcColors[srcColorsOffset++], cover);
                                 header2++;//move next
                                 count--;
                             }
@@ -350,11 +452,11 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
                                 //1.
-                                Blend32PixelInternal(header2, srcColors[srcColorsOffset++], cover);
+                                BlendPixel(header2, srcColors[srcColorsOffset++], cover);
                                 header2++;//move next
                                 count--;
                                 //2.
-                                Blend32PixelInternal(header2, srcColors[srcColorsOffset++], cover);
+                                BlendPixel(header2, srcColors[srcColorsOffset++], cover);
                                 header2++;//move next
                                 count--;
                             }
