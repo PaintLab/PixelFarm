@@ -49,8 +49,7 @@ namespace PixelFarm.Agg
 
         ///// <summary>
         ///// blender for destination image buffer, in this version we support 32 bits ARGB 
-        ///// </summary>
-        //IPixelBlender recieveBlender;//blender to the target surface
+        ///// </summary> 
         PixelBlenderBGRA _recvBlender32;
 
         //-------------------------------------------- 
@@ -983,7 +982,7 @@ namespace PixelFarm.Agg
     {
         ActualImage actualImage;
         IPixelBlender pixelBlenderRGBA;
-    
+
 
         public MyImageReaderWriter()
         {
