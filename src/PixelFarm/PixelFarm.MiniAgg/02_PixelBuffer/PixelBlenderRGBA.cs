@@ -95,7 +95,7 @@ namespace PixelFarm.Agg.Imaging
         ///// <param name="firstCoverForAll"></param>
         ///// <param name="count"></param>
         //void BlendPixels(byte[] buffer, nt bufferOffset, Color[] sourceColors, int sourceColorsOffset, byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count);
-    } 
+    }
 
     public sealed class PixelBlenderBGRA : IPixelBlender
     {
@@ -173,7 +173,7 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="dstBufferPtr"></param>
         /// <param name="srcColor"></param>
         /// <param name="coverageValue"></param>
-        static unsafe void Blend32PixelInternal(int* dstBufferPtr, Color srcColor, int coverageValue)
+        static unsafe void Blend32PixelInternal(int* dstBufferPtr, Color srcColor, byte coverageValue)
         {
             //calculate new alpha
             int src_a = (byte)((srcColor.alpha * coverageValue + 255) >> 8);
@@ -242,7 +242,7 @@ namespace PixelFarm.Agg.Imaging
         {
             if (firstCoverForAll)
             {
-                int cover = covers[coversIndex];
+                byte cover = covers[coversIndex];
                 if (cover == 255)
                 {
                     //version 1
@@ -384,7 +384,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public void CopyPixels(int[] dstBuffer, int arrayOffset, Color sourceColor, int count)
+        public void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
@@ -394,7 +394,7 @@ namespace PixelFarm.Agg.Imaging
                     {
                         //TODO: consider use memcpy() impl***
                         int* ptr = ptr_byte;
-                        int argb = sourceColor.ToARGB();
+                        int argb = srcColor.ToARGB();
 
                         //---------
                         if ((count % 2) != 0)
@@ -424,20 +424,23 @@ namespace PixelFarm.Agg.Imaging
         }
 
 
-        public void CopyPixel(int[] buffer, int arrayOffset, Color sourceColor)
+        public void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
                 unchecked
                 {
-                    fixed (int* ptr = &buffer[arrayOffset])
+                    fixed (int* ptr = &dstBuffer[arrayOffset])
                     {
-                        //TODO: consider use memcpy() impl*** 
-                        *ptr = sourceColor.ToARGB();
+                        //TODO: review 
+                        *ptr = srcColor.ToARGB();
                     }
                 }
             }
         }
+
+
+
 
         public Color PixelToColorRGBA(int[] buffer, int bufferOffset32)
         {
