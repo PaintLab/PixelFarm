@@ -40,8 +40,15 @@ namespace LayoutFarm
     //these will be moved later
 
 
+    public struct WordBreakInfo
+    {
+        public int breakAt;
+        public byte wordKind;
+    }
+
     public interface ITextBreaker
     {
+        void DoBreak(char[] inputBuffer, int startIndex, int len, List<WordBreakInfo> breakAtList);
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
@@ -175,6 +182,9 @@ namespace LayoutFarm
                 this.startIndex = startIndex;
                 this.length = length;
             }
+            public int RightIndex { get { return startIndex + length; } }
+            public static readonly TextSplitBound Empty = new TextSplitBound();
+
         }
         //TODO: review here
         public static class Default

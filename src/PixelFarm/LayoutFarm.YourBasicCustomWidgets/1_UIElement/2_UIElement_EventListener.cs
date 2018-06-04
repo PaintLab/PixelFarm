@@ -85,26 +85,26 @@ namespace LayoutFarm.UI
             OnLostKeyboardFocus(e);
             _externalEventListener?.ListenLostKeyboardFocus(e);
         }
-        void IEventListener.HandleContentLayout()
+        void IUIEventListener.HandleContentLayout()
         {
             OnContentLayout();
         }
-        void IEventListener.HandleContentUpdate()
+        void IUIEventListener.HandleContentUpdate()
         {
             OnContentUpdate();
         }
-        void IEventListener.HandleElementUpdate()
+        void IUIEventListener.HandleElementUpdate()
         {
             OnElementChanged();
         }
-        bool IEventListener.BypassAllMouseEvents
+        bool IUIEventListener.BypassAllMouseEvents
         {
             get
             {
                 return this.TransparentAllMouseEvents;
             }
         }
-        bool IEventListener.AutoStopMouseEventPropagation
+        bool IUIEventListener.AutoStopMouseEventPropagation
         {
             get
             {
@@ -120,7 +120,7 @@ namespace LayoutFarm.UI
         {
             this.OnGuestTalk(e);
         }
-        void IEventListener.GetGlobalLocation(out int x, out int y)
+        void IUIEventListener.GetGlobalLocation(out int x, out int y)
         {
             var globalLoca = this.CurrentPrimaryRenderElement.GetGlobalLocation();
             x = globalLoca.X;

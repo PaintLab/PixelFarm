@@ -60,7 +60,7 @@ namespace LayoutFarm.Text
                     {
                         //stop caret on prev element
                         currentTextBox.SetCaretState(false);
-                        var evlistener = currentTextBox.GetController() as IEventListener;
+                        var evlistener = currentTextBox.GetController() as IUIEventListener;
                         currentTextBox = null;
                         if (evlistener != null)
                         {

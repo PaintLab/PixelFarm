@@ -84,7 +84,7 @@ namespace PixelFarm.Agg
             {
                 return this.currentBlender;
             }
-           
+
         }
         public ImageReaderWriterBase DestImage
         {
@@ -108,15 +108,6 @@ namespace PixelFarm.Agg
             set { this.imgInterpolationQuality = value; }
         }
 
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
-        {
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
         public void Clear(Color color)
         {
             RectInt clippingRectInt = GetClippingRect();
@@ -320,9 +311,10 @@ namespace PixelFarm.Agg
             if (!transform.IsIdentity())
             {
 
-                var v1 = transform.TransformToVxs(vxsSnap, GetFreeVxs());
+                VectorToolBox.GetFreeVxs(out var v1);
+                transform.TransformToVxs(vxsSnap, v1);
                 sclineRas.AddPath(v1);
-                ReleaseVxs(ref v1);
+                VectorToolBox.ReleaseVxs(ref v1);
                 //-------------------------
                 //since sclineRas do NOT store vxs
                 //then we can reuse the vxs***
@@ -360,7 +352,7 @@ namespace PixelFarm.Agg
             }
         }
 #if DEBUG
-        VertexStore dbug_v1 = new VertexStore(8);
+        VertexStore dbug_v1 = new VertexStore();
         VertexStore dbug_v2 = new VertexStore();
         Stroke dbugStroke = new Stroke(1);
         public void dbugLine(double x1, double y1, double x2, double y2, Drawing.Color color)

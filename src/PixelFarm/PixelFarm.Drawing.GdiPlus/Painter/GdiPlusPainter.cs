@@ -462,7 +462,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override void Fill(VertexStore vxs)
         {
 
-            VxsHelper.DrawVxsSnap(_renderSurface.gx, new VertexStoreSnap(vxs), _strokeColor);
+            VxsHelper.FillVxsSnap(_renderSurface.gx, new VertexStoreSnap(vxs), _fillColor);
 
         }
 
@@ -491,7 +491,7 @@ namespace PixelFarm.Drawing.WinGdi
             WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
             VxsHelper.FillPath(_renderSurface.gx, wRenderVx.path, this.FillColor);
         }
- 
+
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
 
@@ -511,16 +511,16 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
-        {
+        //VertexStorePool _vxsPool = new VertexStorePool();
+        //VertexStore GetFreeVxs()
+        //{
 
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+        //    return _vxsPool.GetFreeVxs();
+        //}
+        //void ReleaseVxs(ref VertexStore vxs)
+        //{
+        //    _vxsPool.Release(ref vxs);
+        //}
 
     }
 

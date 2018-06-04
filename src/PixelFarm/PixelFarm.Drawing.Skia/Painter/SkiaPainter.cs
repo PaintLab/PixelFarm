@@ -463,16 +463,16 @@ namespace PixelFarm.Drawing.Skia
         //        _fill);
         //}
 
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
-        {
+        //VertexStorePool _vxsPool = new VertexStorePool();
+        //VertexStore GetFreeVxs()
+        //{
 
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+        //    return _vxsPool.GetFreeVxs();
+        //}
+        //void ReleaseVxs(ref VertexStore vxs)
+        //{
+        //    _vxsPool.Release(ref vxs);
+        //}
         //public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         //{
         //    if (roundRect == null)

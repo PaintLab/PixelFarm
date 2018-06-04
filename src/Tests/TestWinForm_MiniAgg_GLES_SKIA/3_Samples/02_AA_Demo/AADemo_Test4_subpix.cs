@@ -348,7 +348,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int y = 30;
             p.FillColor = PixelFarm.Drawing.Color.Black;
 
-            VertexStorePool pool = new VertexStorePool();
+         
             using (System.IO.FileStream fs = new System.IO.FileStream("c:\\Windows\\Fonts\\tahoma.ttf", System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 Typography.OpenFont.OpenFontReader reader = new Typography.OpenFont.OpenFontReader();

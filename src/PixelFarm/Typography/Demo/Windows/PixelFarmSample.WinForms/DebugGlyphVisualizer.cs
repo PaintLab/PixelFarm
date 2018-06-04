@@ -42,7 +42,7 @@ namespace SampleWinForms.UI
         Typeface _typeface;
         float _sizeInPoint;
         GlyphPathBuilder builder;
-        VertexStorePool _vxsPool = new VertexStorePool();
+       
         PixelFarm.Drawing.Painter painter;
         float _pxscale;
         HintTechnique _latestHint;

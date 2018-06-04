@@ -4,7 +4,7 @@ namespace LayoutFarm
 {
     class MyClientImageBinder : ImageBinder
     {
-        UI.IEventListener listener;
+        UI.IUIEventListener listener;
         public MyClientImageBinder(string src)
             : base(src)
         {
@@ -16,7 +16,7 @@ namespace LayoutFarm
                 listener.HandleContentUpdate();
             }
         }
-        public void SetOwner(UI.IEventListener listener)
+        public void SetOwner(UI.IUIEventListener listener)
         {
             this.listener = listener;
         }

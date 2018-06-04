@@ -2,13 +2,19 @@
 
 namespace LayoutFarm.UI
 {
+    
+    /// <summary>
+    /// can listen to some event
+    /// </summary>
     public interface IEventListener
     {
+
+
         //--------------------------------------------------------------------------
-        void ListenKeyPress(UIKeyEventArgs args);
+        void ListenKeyPress(UIKeyEventArgs e);
         void ListenKeyDown(UIKeyEventArgs e);
         void ListenKeyUp(UIKeyEventArgs e);
-        bool ListenProcessDialogKey(UIKeyEventArgs args);
+        bool ListenProcessDialogKey(UIKeyEventArgs e);
         //--------------------------------------------------------------------------
         void ListenMouseDown(UIMouseEventArgs e);
         void ListenMouseMove(UIMouseEventArgs e);
@@ -26,6 +32,11 @@ namespace LayoutFarm.UI
         void ListenInterComponentMsg(object sender, int msgcode, string msg);
         void ListenGuestTalk(UIGuestTalkEventArgs e);
         //-------------------------------------------------------------------------- 
+
+    }
+    public interface IUIEventListener : IEventListener
+    {
+        //-------------------------------------------------------------------------- 
         void HandleContentLayout();
         void HandleContentUpdate();
         void HandleElementUpdate();
@@ -33,9 +44,8 @@ namespace LayoutFarm.UI
         bool BypassAllMouseEvents { get; }
         bool AutoStopMouseEventPropagation { get; }
         void GetGlobalLocation(out int x, out int y);
-        //-------------------------------------------------------------------------- 
-
-
-
+        //--------------------------------------------------------------------------  
     }
+
+    public delegate void UIEventHandler<T>(T e);
 }

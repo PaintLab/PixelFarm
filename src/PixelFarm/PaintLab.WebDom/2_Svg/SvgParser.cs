@@ -355,8 +355,8 @@ namespace PaintLab.Svg
         CurveFlattener _curveFlattener = new CurveFlattener();
         MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser();
         CssParser _cssParser = new CssParser();
-        Queue<PathWriter> _resuablePathWriterQueue = new Queue<PathWriter>();
-        Queue<VertexStore> _reusableVertexStore = new Queue<VertexStore>();
+
+
         Stack<ParsingContext> openElemStack = new Stack<ParsingContext>();
 
         ParsingContext currentContex;
@@ -719,58 +719,32 @@ namespace PaintLab.Svg
         public VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
 
-            PathWriter pathWriter = GetFreePathWriter();
+
+           
+
+            //
+            VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
+            VectorToolBox.GetFreeVxs(out VertexStore flattenVxs);
+
             _svgPathDataParser.SetPathWriter(pathWriter);
             //tokenize the path definition data
             _svgPathDataParser.Parse(buffer);
 
-            //
-            VertexStore flattenVxs = GetFreeVxs();
+
             _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
             //------------------------------------------------- 
 
             //create a small copy of the vxs 
             VertexStore vxs = flattenVxs.CreateTrim();
 
-            ReleaseVertexStore(flattenVxs);
-            ReleasePathWriter(pathWriter);
+            VectorToolBox.ReleaseVxs(ref flattenVxs);
+            VectorToolBox.ReleasePathWriter(ref pathWriter);
+
 
 
             return vxs;
         }
 
-        PathWriter GetFreePathWriter()
-        {
-            if (_resuablePathWriterQueue.Count > 0)
-            {
-                return _resuablePathWriterQueue.Dequeue();
-            }
-            else
-            {
-                return new PathWriter(new VertexStore());
-            }
-        }
-        void ReleasePathWriter(PathWriter p)
-        {
-            p.Clear();
-            _resuablePathWriterQueue.Enqueue(p);
-        }
-        VertexStore GetFreeVxs()
-        {
-            if (_reusableVertexStore.Count > 0)
-            {
-                return _reusableVertexStore.Dequeue();
-            }
-            else
-            {
-                return new VertexStore();
-            }
-        }
-        void ReleaseVertexStore(VertexStore vxs)
-        {
-            vxs.Clear();
-            _reusableVertexStore.Enqueue(vxs);
-        }
 
 
         //------------------------------------

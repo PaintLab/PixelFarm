@@ -81,14 +81,16 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     //rasterizer.AddPath(ellipseForMask.MakeVxs());
                     //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
                     //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                    var v1 = GetFreeVxs();
+
+                    VectorToolBox.GetFreeVxs(out var v1);
                     VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v1), ColorEx.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                    ReleaseVxs(ref v1);
+                    VectorToolBox.ReleaseVxs(ref v1);
+
                 }
                 //the last one
                 ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                 //fill 
-                var v2 = GetFreeVxs();
+                VectorToolBox.GetFreeVxs(out var v2);
                 VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), ColorEx.Make(0, 0, 0, 255));
                 v2.Clear();// reuse later
                 //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
@@ -99,7 +101,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
                 VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), ColorEx.Make(255, 0, 0, 255));
 
-                ReleaseVxs(ref v2);
+                VectorToolBox.ReleaseVxs(ref v2);
+
                 //for (i = 0; i < num; i++)
                 //{
                 //    if (i == num - 1)
@@ -155,7 +158,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             int i;
             int num = (int)maskAlphaSliderValue;
 
-            var v1 = GetFreeVxs();
+            VectorToolBox.GetFreeVxs(out var v1);
             for (i = 0; i < num; i++)
             {
                 if (i == num - 1)
@@ -186,7 +189,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                       ColorEx.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
-            ReleaseVxs(ref v1);
+            VectorToolBox.ReleaseVxs(ref v1);
         }
 
 
@@ -365,7 +368,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
-            var v1 = GetFreeVxs();
+
+            VectorToolBox.GetFreeVxs(out var v1);
             for (int i = 0; i < 40; i++)
             {
                 for (int j = 0; j < 40; j++)
@@ -381,7 +385,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     }
                 }
             }
-            ReleaseVxs(ref v1);
+            VectorToolBox.ReleaseVxs(ref v1);
+
             ////int x, y; 
             //// Render the lion
             ////VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
@@ -389,9 +394,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             ////var vxlist = new System.Collections.Generic.List<VertexData>();
             ////trans.DoTransform(vxlist); 
 
-            var tmpVxs1 = new VertexStore();
-
-            lionShape.ApplyTransform(transform);
+            //var tmpVxs1 = new VertexStore();
+            //lionShape.ApplyTransform(transform);
 
             throw new NotImplementedException();
 

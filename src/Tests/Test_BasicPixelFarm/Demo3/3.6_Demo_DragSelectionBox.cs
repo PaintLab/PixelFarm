@@ -142,7 +142,7 @@ namespace LayoutFarm
                         y -= h;
                     }
                     //set width and height
-                    selectionBox.SetBounds(x, y, w, h);
+                    selectionBox.SetLocationAndSize(x, y, w, h);
                 }
             };
             backgroundBox.MouseUp += (s, e) =>
@@ -323,7 +323,7 @@ namespace LayoutFarm
                         y -= h;
                     }
                     //set width and height
-                    selectionBox.SetBounds(x, y, w, h);
+                    selectionBox.SetLocationAndSize(x, y, w, h);
                     e.StopPropagation();
                 }
             };
@@ -384,7 +384,7 @@ namespace LayoutFarm
                         //TODO: review here
                         //this version we select the first one
 
-                        var listener = dragOverElements[0] as IEventListener;
+                        var listener = dragOverElements[0] as IUIEventListener;
                         if (listener != null)
                         {
                             var talkMsg = new UIGuestTalkEventArgs();
@@ -411,7 +411,7 @@ namespace LayoutFarm
                     {
                         foreach (var leavingElement in prevDragOverElements.Keys)
                         {
-                            var listener = leavingElement as IEventListener;
+                            var listener = leavingElement as IUIEventListener;
                             if (listener != null)
                             {
                                 var talkMsg = new UIGuestTalkEventArgs();
@@ -450,7 +450,7 @@ namespace LayoutFarm
                         //remaining elements
                         foreach (var leavingElement in prevDragOverElements.Keys)
                         {
-                            var listener = leavingElement as IEventListener;
+                            var listener = leavingElement as IUIEventListener;
                             if (listener != null)
                             {
                                 var talkMsg = new UIGuestTalkEventArgs();
@@ -471,7 +471,7 @@ namespace LayoutFarm
                     controllerBox.LastestDragOverElements = latestDragOverElements;
                     foreach (var drgElement in latestDragOverElements.Keys)
                     {
-                        var listener = drgElement as IEventListener;
+                        var listener = drgElement as IUIEventListener;
                         if (listener != null)
                         {
                             var talkMsg = new UIGuestTalkEventArgs();
@@ -562,7 +562,7 @@ namespace LayoutFarm
                     //adjust grid size
                     gridBox.SetSize(width - 10, height - 10);
                 }
-                //---------------------------------
+                //--------------------------------- 
                 this.dockspaceController.SetSize(width, height);
             }
 
@@ -620,13 +620,13 @@ namespace LayoutFarm
                         {
                             if (xdiff != 0 || ydiff != 0)
                             {
-                                controllerBox.SetBounds(controllerBox.Left + xdiff, controllerBox.Top + ydiff,
+                                controllerBox.SetLocationAndSize(controllerBox.Left + xdiff, controllerBox.Top + ydiff,
                                     controllerBox.Width - xdiff, controllerBox.Height - ydiff);
                                 var targetBox = controllerBox.TargetBox;
                                 if (targetBox != null)
                                 {
                                     //move target box too                                     
-                                    targetBox.SetBounds(targetBox.Left + xdiff, targetBox.Top + ydiff,
+                                    targetBox.SetLocationAndSize(targetBox.Left + xdiff, targetBox.Top + ydiff,
                                         targetBox.Width - xdiff, targetBox.Height - ydiff);
                                 }
                             }
@@ -636,12 +636,12 @@ namespace LayoutFarm
                         {
                             if (xdiff != 0 || ydiff != 0)
                             {
-                                controllerBox.SetBounds(controllerBox.Left, controllerBox.Top + ydiff,
+                                controllerBox.SetLocationAndSize(controllerBox.Left, controllerBox.Top + ydiff,
                                     controllerBox.Width + xdiff, controllerBox.Height - ydiff);
                                 var targetBox = controllerBox.TargetBox;
                                 if (targetBox != null)
                                 {
-                                    targetBox.SetBounds(targetBox.Left, targetBox.Top + ydiff,
+                                    targetBox.SetLocationAndSize(targetBox.Left, targetBox.Top + ydiff,
                                         targetBox.Width + xdiff, targetBox.Height - ydiff);
                                 }
                             }
@@ -665,13 +665,13 @@ namespace LayoutFarm
                         {
                             if (xdiff != 0 || ydiff != 0)
                             {
-                                controllerBox.SetBounds(controllerBox.Left + xdiff, controllerBox.Top,
+                                controllerBox.SetLocationAndSize(controllerBox.Left + xdiff, controllerBox.Top,
                                     controllerBox.Width - xdiff, controllerBox.Height + ydiff);
                                 var targetBox = controllerBox.TargetBox;
                                 if (targetBox != null)
                                 {
                                     //move target box too 
-                                    targetBox.SetBounds(targetBox.Left + xdiff, targetBox.Top,
+                                    targetBox.SetLocationAndSize(targetBox.Left + xdiff, targetBox.Top,
                                         targetBox.Width - xdiff, targetBox.Height + ydiff);
                                 }
                             }

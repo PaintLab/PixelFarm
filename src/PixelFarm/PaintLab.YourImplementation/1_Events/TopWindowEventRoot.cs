@@ -9,10 +9,10 @@ namespace LayoutFarm
         RootGraphic rootgfx;
         RenderElementEventPortal topWinBoxEventPortal;
         IEventPortal iTopBoxEventPortal;
-        IEventListener currentKbFocusElem;
-        IEventListener currentMouseActiveElement;
-        IEventListener latestMouseDown;
-        IEventListener draggingElement;
+        IUIEventListener currentKbFocusElem;
+        IUIEventListener currentMouseActiveElement;
+        IUIEventListener latestMouseDown;
+        IUIEventListener draggingElement;
         DateTime lastTimeMouseUp;
         int dblClickSense = 200;//ms         
         UIHoverMonitorTask hoverMonitoringTask;
@@ -43,7 +43,7 @@ namespace LayoutFarm
             UIPlatform.RegisterTimerTask(hoverMonitoringTask);
 
         }
-        public IEventListener CurrentKeyboardFocusedElement
+        public IUIEventListener CurrentKeyboardFocusedElement
         {
             get
             {
@@ -87,7 +87,9 @@ namespace LayoutFarm
             e.Ctrl = lastKeydownWithControl;
             //
             e.PreviousMouseDown = this.latestMouseDown;
+            //
             iTopBoxEventPortal.PortalMouseDown(e);
+            //
             this.currentMouseActiveElement = this.latestMouseDown = e.CurrentContextElement;
             this.localMouseDownX = e.X;
             this.localMouseDownY = e.Y;

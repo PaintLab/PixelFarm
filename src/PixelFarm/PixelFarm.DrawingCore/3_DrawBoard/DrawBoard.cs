@@ -90,7 +90,7 @@ namespace PixelFarm.Drawing
         //path,  polygons,ellipse spline,contour,   
         public abstract void FillPath(Color color, GraphicsPath gfxPath);
         public abstract void FillPath(Brush brush, GraphicsPath gfxPath);
-        public abstract void DrawPath(GraphicsPath gfxPath);
+        public abstract void DrawPath(GraphicsPath gfxPath); 
         public abstract void FillPolygon(Brush brush, PointF[] points);
         public abstract void FillPolygon(Color color, PointF[] points);
         //-------------------------------------------------------  
@@ -177,9 +177,44 @@ namespace PixelFarm.Drawing
             //TODO: review offset function
             drawBoard.OffsetCanvasOrigin(0, dy);
         }
+
+
+        //--------------------------------------------------
+
+        public static SmoothingModeState SaveSmoothMode(this DrawBoard drawBoard)
+        {
+            //TODO: review offset function
+            return new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+        }
+        public static SmoothingModeState SetSmoothMode(this DrawBoard drawBoard, SmoothingMode value)
+        {
+            //TODO: review offset function
+            var saveState = new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+            drawBoard.SmoothingMode = value;
+            return saveState;
+        }
+
+
+
+
+
+        public struct SmoothingModeState
+        {
+            readonly DrawBoard drawBoard;
+            readonly SmoothingMode _latestSmoothMode;
+            internal SmoothingModeState(DrawBoard drawBoard, SmoothingMode state)
+            {
+                _latestSmoothMode = state;
+                this.drawBoard = drawBoard;
+            }
+            public void Restore()
+            {
+                drawBoard.SmoothingMode = _latestSmoothMode;
+            }
+        }
+
+
     }
-
-
 
 
     public static class DrawBoardCreator

@@ -286,9 +286,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 //Stroke stroke = new Stroke(ps);
                 //stroke.Width = 2;
                 //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
-                var v1 = GetFreeVxs();
+
+                VectorToolBox.GetFreeVxs(out var v1);
                 rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
-                ReleaseVxs(ref v1);
+                VectorToolBox.ReleaseVxs(ref v1);
                 //----------------------------------------
 
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));

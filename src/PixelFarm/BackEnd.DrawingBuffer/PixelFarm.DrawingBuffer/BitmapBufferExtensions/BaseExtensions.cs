@@ -18,7 +18,6 @@
 
 using System;
 namespace PixelFarm.DrawingBuffer
-
 {
     /// <summary>
     /// Collection of extension methods for the WriteableBitmap class.
