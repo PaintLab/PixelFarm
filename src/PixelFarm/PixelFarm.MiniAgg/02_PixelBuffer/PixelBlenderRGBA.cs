@@ -123,7 +123,7 @@ namespace PixelFarm.Agg.Imaging
         bool _enableGamma;
         float _gammaValue;
 
-        int _colorBlockFlags; //0 = no-blocks
+        int _colorCompoFilterFlags; //0 = no-blocks
 
         public PixelBlenderBGRA() { }
         public bool EnableGamma
@@ -154,12 +154,12 @@ namespace PixelFarm.Agg.Imaging
         const byte BASE_MASK = 255;
 
         public int NumPixelBits { get { return 32; } }
-        public int ColorBlockFlags
+        public int ColorCompoFilterFlags
         {
-            get { return _colorBlockFlags; }
+            get { return _colorCompoFilterFlags; }
             set
             {
-                _colorBlockFlags = value;
+                _colorCompoFilterFlags = value;
             }
         }
         /// <summary>
@@ -168,7 +168,7 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="dstBuffer"></param>
         /// <param name="arrayOffset"></param>
         /// <param name="srcColor"></param>
-        public void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
+        internal void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -386,7 +386,7 @@ namespace PixelFarm.Agg.Imaging
         }
         //---------------------------------------------------------
 
-        public void BlendPixels(
+        internal void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
             Color[] srcColors, int srcColorsOffset,
             byte[] covers, int coversIndex, bool firstCoverForAll, int count)
@@ -485,7 +485,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
+        internal void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
@@ -525,7 +525,7 @@ namespace PixelFarm.Agg.Imaging
         }
 
 
-        public void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
+        internal void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -543,7 +543,7 @@ namespace PixelFarm.Agg.Imaging
 
 
 
-        public Color PixelToColorRGBA(int[] buffer, int bufferOffset32)
+        internal Color PixelToColorRGBA(int[] buffer, int bufferOffset32)
         {
             //TODO: review here ...             
             //check if the buffer is pre-multiplied color?
