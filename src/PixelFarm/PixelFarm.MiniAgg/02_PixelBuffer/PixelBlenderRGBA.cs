@@ -108,13 +108,13 @@ namespace PixelFarm.Agg.Imaging
 
 
 
-        internal abstract void BlendPixel32(int[] buffer, int arrayOffset, Color sourceColor);
+        internal abstract void BlendPixel32(int[] dstBuffer, int arrayOffset, Color srcColor);
         internal abstract void BlendPixels(
-            int[] destBuffer, int arrayElemOffset,
+            int[] dstBuffer, int arrayElemOffset,
             Color[] sourceColors, int sourceColorsOffset,
             byte[] covers, int coversIndex, bool firstCoverForAll, int count);
-        internal abstract void CopyPixels(int[] buffer, int arrayOffset, Color sourceColor, int count);
-        internal abstract void CopyPixel(int[] buffer, int arrayOffset, Color sourceColor);
+        internal abstract void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count);
+        internal abstract void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
         internal abstract unsafe void BlendPixel32(int* ptr, Color sc);
         internal Color PixelToColorRGBA(int[] buffer, int bufferOffset32)
         {
@@ -139,7 +139,6 @@ namespace PixelFarm.Agg.Imaging
             //}
 
         }
-
     }
 
     public class PixelBlenderBGRA : PixelBlenderBGRABase, IPixelBlender
@@ -191,13 +190,13 @@ namespace PixelFarm.Agg.Imaging
         }
 
 
-        internal override void BlendPixel32(int[] buffer, int arrayOffset, Color sourceColor)
+        internal override void BlendPixel32(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
-                fixed (int* head = &buffer[arrayOffset])
+                fixed (int* head = &dstBuffer[arrayOffset])
                 {
-                    BlendPixel32Internal(head, sourceColor);
+                    BlendPixel32Internal(head, srcColor);
                 }
             }
         }
@@ -208,7 +207,7 @@ namespace PixelFarm.Agg.Imaging
 
 
         internal override void BlendPixels(
-            int[] destBuffer, int arrayElemOffset,
+            int[] dstBuffer, int arrayElemOffset,
             Color[] srcColors, int srcColorOffset,
             byte[] covers, int coversIndex, bool firstCoverForAll, int count)
         {
@@ -243,7 +242,7 @@ namespace PixelFarm.Agg.Imaging
                     //version 3: similar to version 2, but have a plan
                     unsafe
                     {
-                        fixed (int* head = &destBuffer[arrayElemOffset])
+                        fixed (int* head = &dstBuffer[arrayElemOffset])
                         {
                             int* header2 = (int*)(IntPtr)head;
 
@@ -306,7 +305,7 @@ namespace PixelFarm.Agg.Imaging
                     //version 3: similar to version 2, but have a plan
                     unsafe
                     {
-                        fixed (int* head = &destBuffer[arrayElemOffset])
+                        fixed (int* head = &dstBuffer[arrayElemOffset])
                         {
                             int* header2 = (int*)(IntPtr)head;
 
@@ -339,22 +338,22 @@ namespace PixelFarm.Agg.Imaging
             {
                 unsafe
                 {
-                    fixed (int* dstHead = &destBuffer[arrayElemOffset])
+                    fixed (int* dstHead = &dstBuffer[arrayElemOffset])
                     {
-                        int* dstBuffer = dstHead;
+                        int* dstBufferPtr = dstHead;
                         do
                         {
                             //cover may diff in each loop
                             int cover = covers[coversIndex++];
                             if (cover == 255)
                             {
-                                BlendPixel32Internal(dstBuffer, srcColors[srcColorOffset]);
+                                BlendPixel32Internal(dstBufferPtr, srcColors[srcColorOffset]);
                             }
                             else
                             {
-                                BlendPixel32Internal(dstBuffer, srcColors[srcColorOffset].NewFromChangeCoverage(cover));
+                                BlendPixel32Internal(dstBufferPtr, srcColors[srcColorOffset].NewFromChangeCoverage(cover));
                             }
-                            dstBuffer++;
+                            dstBufferPtr++;
                             ++srcColorOffset;
                         }
                         while (--count != 0);
@@ -363,27 +362,27 @@ namespace PixelFarm.Agg.Imaging
 
             }
         }
-        internal override void CopyPixel(int[] buffer, int arrayOffset, Color sourceColor)
+        internal override void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
                 unchecked
                 {
-                    fixed (int* ptr = &buffer[arrayOffset])
+                    fixed (int* ptr = &dstBuffer[arrayOffset])
                     {
                         //TODO: consider use memcpy() impl*** 
-                        *ptr = sourceColor.ToARGB();
+                        *ptr = srcColor.ToARGB();
                     }
                 }
             }
         }
-        internal override void CopyPixels(int[] buffer, int arrayOffset, Color srcColor, int count)
+        internal override void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
                 unchecked
                 {
-                    fixed (int* ptr_byte = &buffer[arrayOffset])
+                    fixed (int* ptr_byte = &dstBuffer[arrayOffset])
                     {
                         //TODO: consider use memcpy() impl***
                         int* ptr = ptr_byte;
@@ -448,30 +447,30 @@ namespace PixelFarm.Agg.Imaging
             }
 
         }
-        static unsafe void BlendPixel32Internal(int* ptr, Color sc)
+        static unsafe void BlendPixel32Internal(int* dstBuffer, Color srcColor)
         {
             unchecked
             {
-                if (sc.alpha == 255)
+                if (srcColor.alpha == 255)
                 {
-                    *ptr = sc.ToARGB(); //just copy
+                    *dstBuffer = srcColor.ToARGB(); //just copy
                 }
                 else
                 {
-                    int dest = *ptr;
+                    int dest = *dstBuffer;
                     //separate each component
                     byte a = (byte)((dest >> 24) & 0xff);
                     byte r = (byte)((dest >> 16) & 0xff);
                     byte g = (byte)((dest >> 8) & 0xff);
                     byte b = (byte)((dest) & 0xff);
 
-                    byte src_a = sc.alpha;
+                    byte src_a = srcColor.alpha;
 
-                    *ptr =
+                    *dstBuffer =
                      ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                     ((byte)(((sc.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                     ((byte)(((sc.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
-                     ((byte)(((sc.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                 }
             }
         }

@@ -598,7 +598,7 @@ namespace PixelFarm.Agg
                     {
                         _recvBlender32.BlendPixel32(buffer, bufferOffset32, Color.FromArgb(alpha, sourceColor));
                     }
-                    //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+
                     bufferOffset32++;
                     coversIndex++;
                 }
