@@ -1259,6 +1259,9 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs</Link>
     </Compile>
@@ -1270,6 +1273,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\1_ImgSpanGen.cs">
       <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\1_ImgSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\2_ImgSpanGenRGB.cs">
+      <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\2_ImgSpanGenRGB.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\3_ImgSpanGenRGBA.cs">
       <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\3_ImgSpanGenRGBA.cs</Link>
