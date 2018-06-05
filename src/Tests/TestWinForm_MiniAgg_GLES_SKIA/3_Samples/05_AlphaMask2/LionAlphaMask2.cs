@@ -138,7 +138,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         void generate_alpha_mask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
             //create 1  8-bits chanel (grayscale8) bmp
-            alphaBitmap = new ActualImage(width, height, PixelFormat.GrayScale8);
+            alphaBitmap = new ActualImage(width, height);
             var bmpReaderWrtier = new MyImageReaderWriter();
             bmpReaderWrtier.ReloadImage(alphaBitmap);
             alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderAlpha());

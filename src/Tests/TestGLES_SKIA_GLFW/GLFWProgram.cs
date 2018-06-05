@@ -115,7 +115,6 @@ namespace TestGlfw
             PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
-                PixelFarm.Agg.PixelFormat.ARGB32,
                 extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian
@@ -222,7 +221,6 @@ namespace TestGlfw
             PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
-                PixelFarm.Agg.PixelFormat.ARGB32,
                 extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian

@@ -343,13 +343,13 @@ namespace PixelFarm.Agg.Imaging
             BlendPixel32Internal(dstPtr, srcColor);
         }
 
-        internal override void BlendPixels(int[] dstBuffer, 
+        internal override void BlendPixels(int[] dstBuffer,
             int arrayElemOffset,
-            Color[] srcColors, 
-            int srcColorOffset, 
+            Color[] srcColors,
+            int srcColorOffset,
             byte[] covers,
             int coversIndex,
-            bool firstCoverForAll, 
+            bool firstCoverForAll,
             int count)
         {
             if (firstCoverForAll)
