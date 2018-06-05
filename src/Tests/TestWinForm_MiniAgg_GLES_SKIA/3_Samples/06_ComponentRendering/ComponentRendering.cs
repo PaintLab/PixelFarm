@@ -65,7 +65,7 @@ namespace PixelFarm.Agg
                     new Drawing.Color((byte)(this.AlphaValue), 0, 0, 0);
 
 
-                ScalineRasToDestinationBitmap sclineRasToBmp = asx.ScanlineRasToDestBitmap;
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = asx.ScanlineRasToDestBitmap;
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 //
                 VectorToolBox.GetFreeVxs(out var v1);

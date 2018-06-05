@@ -270,7 +270,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
                 ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //----------------------------------------
-                ScalineRasToDestinationBitmap sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
                 aggsx.UseSubPixelRendering = false;
                 sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 rasterizer.ResetGamma(new GammaNone());

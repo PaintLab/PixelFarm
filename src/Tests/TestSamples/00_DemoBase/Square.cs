@@ -15,7 +15,7 @@ namespace PixelFarm.Agg
         }
 
         public void Draw(
-            ScalineRasToDestinationBitmap sclineRasToBmp,
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp,
             ScanlineRasterizer ras,
             Scanline sl,
             IImageReaderWriter destImage, Color color,

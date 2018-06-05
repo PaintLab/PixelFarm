@@ -135,7 +135,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 //}
             }
         }
-        void generate_alpha_mask(ScalineRasToDestinationBitmap sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
+        void generate_alpha_mask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
  
             //create 1  8-bits chanel (grayscale8) bmp
@@ -369,7 +369,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(Drawing.Color.White);
-            ScalineRasToDestinationBitmap sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
 

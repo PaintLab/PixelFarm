@@ -140,7 +140,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
         void DrawAsScanline(ClipProxyImage imageClippingProxy,
             AggRenderSurface aggsx,
             ScanlineRasterizer rasterizer,
-            ScalineRasToDestinationBitmap sclineRasToBmp)
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp)
         {
             SvgRenderVx renderVx = lionShape.GetRenderVx();
             int num_paths = renderVx.SvgVxCount;
