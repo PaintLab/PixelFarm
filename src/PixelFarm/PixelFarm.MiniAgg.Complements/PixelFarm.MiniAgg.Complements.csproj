@@ -224,10 +224,10 @@
     <Compile Include="DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="DrawBoard\LineDashGenerator.cs" />
-    <Compile Include="1_Base\ScanlineRasToDestBitmapRendererExtension.cs" />
+    <Content Include="x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
     <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
     <Compile Include="4_Image\FilterMan.cs" />
-    <Compile Include="1_Base\PixelBlenderRGB.cs" />
+    <Content Include="x_backup\PixelBlenderRGB.txt" />
     <Compile Include="1_Base\Queue.cs" />
     <Compile Include="1_Base\BorderDouble.cs" />
     <Compile Include="1_Base\GammaFuntions.cs" />

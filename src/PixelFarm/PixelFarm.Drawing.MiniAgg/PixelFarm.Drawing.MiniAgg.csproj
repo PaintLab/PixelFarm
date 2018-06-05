@@ -261,17 +261,11 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\GammaFuntions.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\GammaFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\PixelBlenderRGB.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\PixelBlenderRGB.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ProxyImage.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ProxyImage.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\Queue.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\Queue.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ScanlineRasToDestBitmapRendererExtension.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ScanlineRasToDestBitmapRendererExtension.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGenGouraud.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGenGouraud.cs</Link>
