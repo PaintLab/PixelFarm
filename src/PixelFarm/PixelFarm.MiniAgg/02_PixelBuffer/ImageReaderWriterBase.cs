@@ -23,6 +23,12 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
+
+    public enum PixelBlenderKind
+    {
+
+
+    }
     /// <summary>
     /// base class for access(read/write) pixel buffer
     /// </summary>
@@ -46,11 +52,9 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
 
-        ///// <summary>
-        ///// blender for destination image buffer, in this version we support 32 bits ARGB 
-        ///// </summary>
-        //IPixelBlender recieveBlender;//blender to the target surface
         PixelBlenderBGRA _recvBlender32;
+        PixelBlenderGray _recvBlender8;
+
         //-------------------------------------------- 
         public byte[] GetBuffer()
         {
@@ -310,7 +314,12 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
-            _recvBlender32 = (PixelBlenderBGRA)value;
+
+            _recvBlender32 = value as PixelBlenderBGRA;
+            if (_recvBlender32 == null)
+            {
+
+            }
         }
 
         protected void SetUpLookupTables()
@@ -357,15 +366,7 @@ namespace PixelFarm.Agg
                 // LBB, don't fix this if you don't understand what it's trying to do.
                 throw new Exception("The yTable and xTable should be allocated correctly at this point. Figure out what happend.");
             }
-
         }
-
-
-
-
-
-
-
         public static void CopySubBufferToInt32Array(ImageReaderWriterBase buff, int mx, int my, int w, int h, int[] buffer)
         {
             //TODO: review here, 
@@ -436,13 +437,13 @@ namespace PixelFarm.Agg
         }
         public int GetBufferOffsetXY32Check(int x, int y)
         {
- 
+
             if (y >= yTableArray.Length ||
                 x >= xTableArray.Length)
             {
                 return -1;
             }
- 
+
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public int GetBufferOffsetXY32(int x, int y)
@@ -609,7 +610,7 @@ namespace PixelFarm.Agg
         {
             if (sourceColor.A != 0)
             {
-                int scanWidthBytes = Stride;
+                int scanWidthInBytes = Stride;
                 unchecked
                 {
                     //int bufferOffset = GetBufferOffsetXY(x, y);
@@ -635,7 +636,9 @@ namespace PixelFarm.Agg
                     //}
                     //while (--len != 0); 
                     //
-                    int actualW = scanWidthBytes / 4;
+
+                    int actualW = scanWidthInBytes / 4;
+
                     do
                     {
                         //byte oldAlpha = sourceColor.A;
@@ -653,10 +656,11 @@ namespace PixelFarm.Agg
 
                             _recvBlender32.BlendPixel32(raw_buffer32, bufferOffset32, newcolor);
                         }
-                        bufferOffset32 += actualW;
-                        //sourceColor.alpha = oldAlpha;
+                        bufferOffset32 += actualW;//vertically move to next line ***
                     }
                     while (--len != 0);
+
+
                 }
             }
         }
@@ -668,7 +672,6 @@ namespace PixelFarm.Agg
             {
                 _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
-                //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
                 bufferOffset32++;
             }
             while (--len != 0);
@@ -691,7 +694,7 @@ namespace PixelFarm.Agg
             {
                 _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
-                bufferOffset32 += actualW;
+                bufferOffset32 += actualW; //vertically move to next line ***
             }
             while (--len != 0);
         }
@@ -720,7 +723,7 @@ namespace PixelFarm.Agg
 
         public void BlendColorVSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            
+
             int bufferOffset32 = GetBufferOffsetXY32(x, y);
             int scanWidthBytes = System.Math.Abs(Stride);
             if (!firstCoverForAll)
@@ -898,39 +901,6 @@ namespace PixelFarm.Agg
                     //recieveBlender.BlendPixel(destBuffer, destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
 
 
-                }
-            }
-        }
-        static unsafe void CopyOrBlend32_BasedOnAlphaAndCover(PixelBlenderBGRA recieveBlender, int[] destBuffer, int destArrayOffset, Color sourceColor, int cover)
-        {
-            if (cover == 255)
-            {
-                fixed (int* destAdd = &destBuffer[destArrayOffset])
-                {
-                    PixelBlenderBGRA.Blend32PixelInternal(destAdd, sourceColor);
-                    //CopyOrBlend32_BasedOnAlpha(recieveBlender, destBuffer, destArrayOffset, sourceColor);
-                }
-
-            }
-            else
-            {
-                //if (sourceColor.m_A != 0)
-                {
-
-#if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
-                    if (sourceColor.m_A == base_mask)
-                    {
-                        Blender.CopyPixel(pDestBuffer, sourceColor);
-                    }
-                    else
-#endif
-
-                    fixed (int* destAdd = &destBuffer[destArrayOffset])
-                    {
-                        PixelBlenderBGRA.Blend32PixelInternal(destAdd, sourceColor.NewFromChangeCoverage(cover));
-                        //recieveBlender.BlendPixel(destBuffer, destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
-
-                    }
                 }
             }
         }

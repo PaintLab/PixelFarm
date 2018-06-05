@@ -37,9 +37,7 @@ namespace PixelFarm.Agg
                 return;
             }
 
-
-            throw new NotSupportedException();
-
+ 
             AggPainter p2 = (AggPainter)p;
             AggRenderSurface aggRdsf = p2.RenderSurface;
             if (aggRdsf.DestImage != null)
