@@ -53,7 +53,7 @@ namespace PixelFarm.Agg
         int bitDepth;
 
         PixelBlenderBGRA _recvBlender32;
-        PixelBlenderGray _recvBlender8;
+         
 
         //-------------------------------------------- 
         public byte[] GetBuffer()
@@ -314,11 +314,10 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
-
+            
             _recvBlender32 = value as PixelBlenderBGRA;
             if (_recvBlender32 == null)
-            {
-
+            { 
             }
         }
 
@@ -480,24 +479,25 @@ namespace PixelFarm.Agg
             //-------------------------------------------------
 
             int len = x2 - x1 + 1;
-
-
-            int[] buffer = this.GetBuffer32();
+          
             int bufferOffset = GetBufferOffsetXY32(x1, y);
+
             int alpha = (((int)(sourceColor.A) * (cover + 1)) >> 8);
             if (alpha == BASE_MASK)
             {
                 //full
+                int[] buffer = this.GetBuffer32();
                 _recvBlender32.CopyPixels(buffer, bufferOffset, sourceColor, len);
+
             }
             else
-            {
+            {   
                 Color c2 = Color.FromArgb(alpha, sourceColor);
+                int[] buffer = this.GetBuffer32();
                 do
                 {
                     //copy pixel-by-pixel
                     _recvBlender32.BlendPixel32(buffer, bufferOffset, c2);
-                    //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
                     bufferOffset++;
                 }
                 while (--len != 0);
@@ -989,7 +989,7 @@ namespace PixelFarm.Agg
                           actualImage.Height,
                           actualImage.BitDepth,
                           ActualImage.GetBuffer(actualImage),
-                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderGray(1)));
+                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderGray()));
                     }
                     break;
                 default:
