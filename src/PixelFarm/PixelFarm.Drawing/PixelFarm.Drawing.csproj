@@ -412,9 +412,6 @@
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\Queue.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\Queue.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\1_base\ScanlineRasToDestBitmapRendererExtension.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ScanlineRasToDestBitmapRendererExtension.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraud.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGenGouraud.cs</Link>
     </Compile>
