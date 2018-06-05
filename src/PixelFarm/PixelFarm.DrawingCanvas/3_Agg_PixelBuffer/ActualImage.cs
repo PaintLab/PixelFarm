@@ -76,9 +76,7 @@ namespace PixelFarm.Agg
         int[] pixelBuffer;
 
         public ActualImage(int width, int height)
-        {
-
-
+        {   
             //width and height must >0 
             this.width = width;
             this.height = height;
@@ -130,8 +128,7 @@ namespace PixelFarm.Agg
 
         public static TempMemPtr GetBufferPtr(ActualImage img)
         {
-            TempMemPtr tmp = new TempMemPtr(img.pixelBuffer);
-            return tmp;
+            return new TempMemPtr(img.pixelBuffer);
         }
 
         public static int[] GetBuffer(ActualImage img)

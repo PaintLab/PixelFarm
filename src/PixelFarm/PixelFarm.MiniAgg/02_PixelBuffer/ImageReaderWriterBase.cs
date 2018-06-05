@@ -943,8 +943,7 @@ namespace PixelFarm.Agg
     public class MyImageReaderWriter : ImageReaderWriterBase
     {
         ActualImage actualImage;
-        IPixelBlender pixelBlenderRGBA;
-        PixelBlenderAlpha pixelBlenderGray;
+
 
         public MyImageReaderWriter()
         {
@@ -963,40 +962,13 @@ namespace PixelFarm.Agg
             if (this.actualImage == actualImage)
             {
                 return;
-            }
-
-            //in this version we support actual images
-            //in 2 formats : 
-            //1. 32 bits ARGB
-            //2. 8  bits gray scale
-            //
-
+            } 
             this.actualImage = actualImage;
-            switch (actualImage.PixelFormat)
-            {
-                case PixelFormat.ARGB32:
-                    {
-                        Attach(actualImage.Width,
+            Attach(actualImage.Width,
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualImage.GetBuffer(actualImage),
-                           pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA()));
-                    }
-                    break;
-                case PixelFormat.GrayScale8:
-                    {
-                        Attach(actualImage.Width,
-                          actualImage.Height,
-                          actualImage.BitDepth,
-                          ActualImage.GetBuffer(actualImage),
-                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderAlpha()));
-                    }
-                    break;
-                default:
-                    {
-                        throw new NotSupportedException();
-                    }
-            }
+                           new PixelBlenderBGRA());
         }
     }
 }

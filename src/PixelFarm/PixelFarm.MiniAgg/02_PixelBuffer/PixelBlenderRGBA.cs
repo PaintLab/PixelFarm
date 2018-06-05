@@ -59,46 +59,7 @@ namespace PixelFarm.Agg.Imaging
         /// info 
         /// </summary>
         int NumPixelBits { get; }
-
-        //Color PixelToColorRGBA(byte[] buffer, int bufferOffset);
-
-        ///// <summary>
-        ///// copy source color and set to dest buffer
-        ///// </summary>
-        ///// <param name="buffer"></param>
-        ///// <param name="bufferOffset"></param>
-        ///// <param name="sourceColor"></param>
-        ///// <param name="count"></param>
-        //void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count);
-        ///// <summary>
-        ///// copy source color and set to dest buffer
-        ///// </summary>
-        ///// <param name="buffer"></param>
-        ///// <param name="bufferOffset"></param>
-        ///// <param name="sourceColor"></param>
-        //void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor);
-        ///// <summary>
-        ///// blend source color to dest buffer with specific blend function of this PixelBlender
-        ///// </summary>
-        ///// <param name="buffer"></param>
-        ///// <param name="bufferOffset"></param>
-        ///// <param name="sourceColor"></param>
-        //void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor);
-
-        ///// <summary>
-        ///// blend source color to dest buffer with specific blend function of this PixelBlender
-        ///// </summary>
-        ///// <param name="buffer"></param>
-        ///// <param name="bufferOffset"></param>
-        ///// <param name="sourceColors"></param>
-        ///// <param name="sourceColorsOffset"></param>
-        ///// <param name="sourceCovers"></param>
-        ///// <param name="sourceCoversOffset"></param>
-        ///// <param name="firstCoverForAll"></param>
-        ///// <param name="count"></param>
-        //void BlendPixels(byte[] buffer, int bufferOffset, Color[] sourceColors, int sourceColorsOffset, byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count);
-
-
+ 
     }
 
     public abstract class PixelBlenderBGRABase : IPixelBlender
