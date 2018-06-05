@@ -140,11 +140,7 @@ namespace PixelFarm.Agg.Imaging
             linkedImage.BlendColorVSpan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-        public byte[] GetBuffer()
-        {
-            //TODO: review here, this may not correct 
-            return linkedImage.GetBuffer();
-        }
+       
         public int[] GetInt32Buffer()
         {
             //TODO: review here, this may not correct 

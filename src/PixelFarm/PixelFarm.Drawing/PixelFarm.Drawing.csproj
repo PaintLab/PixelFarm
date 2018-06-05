@@ -523,9 +523,6 @@
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\1_ImgSpanGen.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\1_ImgSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\03_spangenerators\2_ImgSpanGenRGB.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\2_ImgSpanGenRGB.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\3_ImgSpanGenRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\3_ImgSpanGenRGBA.cs</Link>
     </Compile>
@@ -606,18 +603,6 @@
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\07_lines\4_OutlineAARasterizer.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\07_Lines\4_OutlineAARasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBAImageSpanGen.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\FilterRGBAImageSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBImageSpanGen.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\FilterRGBImageSpanGen.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\IImageFilter.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\IImageFilter.cs</Link>

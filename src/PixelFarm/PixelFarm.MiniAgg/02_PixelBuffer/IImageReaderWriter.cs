@@ -22,6 +22,9 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
+    /// <summary>
+    /// access reader /writer to an image buffer
+    /// </summary>
     public interface IImageReaderWriter
     {
         int BitDepth { get; }
@@ -36,7 +39,6 @@ namespace PixelFarm.Agg
 
         IPixelBlender GetRecieveBlender();
         void SetRecieveBlender(IPixelBlender value);
-        byte[] GetBuffer();
         int[] GetInt32Buffer();
         TempMemPtr GetBufferPtr();
         void ReplaceBuffer(int[] newBuffer);

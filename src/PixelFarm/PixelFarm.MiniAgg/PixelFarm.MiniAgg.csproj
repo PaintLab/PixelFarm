@@ -88,8 +88,8 @@
     <Compile Include="07_Lines\2.1_DistanceInterpolators.cs" />
     <Compile Include="07_Lines\2.3_EllipseBrensenhemInterpolator.cs" />
     <Compile Include="07_Lines\3.1_LineRenderer.cs" />
-    <Compile Include="08_ImageResampling\FilterRGBAImageSpanGen.cs" />
-    <Compile Include="08_ImageResampling\FilterRGBImageSpanGen.cs" />
+    <Content Include="x_backup\FilterRGBAImageSpanGen.txt" />
+    <Content Include="x_backup\FilterRGBImageSpanGen.txt" />
     <Compile Include="08_ImageResampling\ImageFreeTransform.cs" />
     <Compile Include="08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="08_ImageResampling\ImageTransform.cs" />
@@ -103,12 +103,12 @@
     <Compile Include="04_Scanline\4.2_CellAARasterizer.cs" />
     <Compile Include="08_ImageResampling\IImageFilter.cs" />
     <Compile Include="07_Lines\4_OutlineAARasterizer.cs" />
-    <Compile Include="08_ImageResampling\FilterImageSpanGenerator.cs" />
+    <Content Include="x_backup\FilterImageSpanGenerator.txt" />
     <Compile Include="03_SpanGenerators\4_ImgSpanGenGray.cs" />
-    <Compile Include="03_SpanGenerators\2_ImgSpanGenRGB.cs" />
+    <Content Include="x_backup\2_ImgSpanGenRGB.txt" />
     <Compile Include="03_SpanGenerators\3_ImgSpanGenRGBA.cs" />
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
-    <Compile Include="08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs" />
+    <Content Include="x_backup\FilterImageSpanGenerator.ImageBufferAccessor.txt" />
     <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
     <Compile Include="07_Lines\3.3_ImageLineRenderer.cs" />
     <Compile Include="02_PixelBuffer\IImageReaderWriter.cs" />

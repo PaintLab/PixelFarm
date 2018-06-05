@@ -30,7 +30,7 @@ namespace PixelFarm.Agg.Imaging
             srcRW = (ImageReaderWriterBase)src;
             if (srcRW.BitDepth != 8)
             {
-                throw new NotSupportedException("The source is expected to be 32 bit.");
+                throw new NotSupportedException("The source is expected to be 8 bit.");
             }
         }
         public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
