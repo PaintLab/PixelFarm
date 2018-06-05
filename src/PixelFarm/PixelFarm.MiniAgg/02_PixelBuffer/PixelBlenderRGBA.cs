@@ -355,7 +355,20 @@ namespace PixelFarm.Agg.Imaging
                 while (--count != 0);
             }
         }
-
+        internal override void CopyPixel(int[] buffer, int arrayOffset, Color sourceColor)
+        {
+            unsafe
+            {
+                unchecked
+                {
+                    fixed (int* ptr = &buffer[arrayOffset])
+                    {
+                        //TODO: consider use memcpy() impl*** 
+                        *ptr = sourceColor.ToARGB();
+                    }
+                }
+            }
+        }
         internal override void CopyPixels(int[] buffer, int arrayOffset, Color sourceColor, int count)
         {
             unsafe
@@ -395,20 +408,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        internal override void CopyPixel(int[] buffer, int arrayOffset, Color sourceColor)
-        {
-            unsafe
-            {
-                unchecked
-                {
-                    fixed (int* ptr = &buffer[arrayOffset])
-                    {
-                        //TODO: consider use memcpy() impl*** 
-                        *ptr = sourceColor.ToARGB();
-                    }
-                }
-            }
-        }
+       
 
         static unsafe void Blend32PixelInternal(int* ptr, Color sc, int coverageValue)
         {

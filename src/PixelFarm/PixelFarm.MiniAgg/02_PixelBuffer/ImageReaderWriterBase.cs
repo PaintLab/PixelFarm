@@ -944,7 +944,7 @@ namespace PixelFarm.Agg
     {
         ActualImage actualImage;
         IPixelBlender pixelBlenderRGBA;
-        PixelBlenderChangeDestAlpha pixelBlenderGray;
+        PixelBlenderAlpha pixelBlenderGray;
 
         public MyImageReaderWriter()
         {
@@ -989,7 +989,7 @@ namespace PixelFarm.Agg
                           actualImage.Height,
                           actualImage.BitDepth,
                           ActualImage.GetBuffer(actualImage),
-                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderChangeDestAlpha()));
+                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderAlpha()));
                     }
                     break;
                 default:

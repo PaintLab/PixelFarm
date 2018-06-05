@@ -141,7 +141,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             alphaBitmap = new ActualImage(width, height, PixelFormat.GrayScale8);
             var bmpReaderWrtier = new MyImageReaderWriter();
             bmpReaderWrtier.ReloadImage(alphaBitmap);
-            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderChangeDestAlpha());
+            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderAlpha());
             //create mask from alpahMaskImageBuffer
             alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
 #if USE_CLIPPING_ALPHA_MASK
@@ -150,7 +150,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             alphaMaskImageBuffer.attach(alphaByteArray, (int)cx, (int)cy, cx, 1);
 #endif
 
-            var image = new SubImageRW(alphaMaskImageBuffer, new PixelBlenderChangeDestAlpha());
+            var image = new SubImageRW(alphaMaskImageBuffer, new PixelBlenderAlpha());
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
             clippingProxy.Clear(Drawing.Color.Black);
             VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
