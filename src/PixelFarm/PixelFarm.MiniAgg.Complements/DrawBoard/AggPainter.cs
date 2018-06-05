@@ -712,14 +712,14 @@ namespace PixelFarm.Agg
                 return;
             }
             //check image caching system 
-            if (this._renderQuality == RenderQualtity.Fast)
-            {
-                //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
-                //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
-                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
-                this._bxt.CopyBlit(left, top, srcBmp);
-                return;
-            }
+            //if (this._renderQuality == RenderQualtity.Fast)
+            //{
+            //    //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
+            //    //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
+            //    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+            //    this._bxt.CopyBlit(left, top, srcBmp);
+            //    return;
+            //}
 
             this.sharedImageWriterReader.ReloadImage(actualImg);
 
@@ -757,20 +757,20 @@ namespace PixelFarm.Agg
                 return;
             }
 
-            //if (this._renderQuality == RenderQualtity.Fast)
-            //{
-            //    //todo, review here again
-            //    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
-            //    //this._bxt.CopyBlit(left, top, srcBmp); 
-            //    DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
-            //        DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
-            //        DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
-            //        //DrawingBuffer.AffinePlan.Translate(100,100)
-            //    });
-            //    //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
-            //    this._bxt.BlitRender(srcBmp, false, 1, mx);
-            //    return;
-            //}
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                //todo, review here again
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+                //this._bxt.CopyBlit(left, top, srcBmp); 
+                DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
+                    DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
+                    DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
+                    //DrawingBuffer.AffinePlan.Translate(100,100)
+                });
+                //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
+                this._bxt.BlitRender(srcBmp, false, 1, mx);
+                return;
+            }
 
 
             this.sharedImageWriterReader.ReloadImage((ActualImage)img);

@@ -246,6 +246,7 @@
     <Compile Include="2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SvgRenderVx\SvgRenderVx.cs" />
+    <Content Include="x_backup\AggRenderSurface_RenderImages.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
@@ -264,6 +265,7 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
