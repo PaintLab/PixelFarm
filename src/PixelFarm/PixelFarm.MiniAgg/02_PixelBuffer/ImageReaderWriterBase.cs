@@ -720,7 +720,7 @@ namespace PixelFarm.Agg
 
         public void BlendColorVSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            //int bufferOffset = GetBufferOffsetXY(x, y);
+            
             int bufferOffset32 = GetBufferOffsetXY32(x, y);
             int scanWidthBytes = System.Math.Abs(Stride);
             if (!firstCoverForAll)
