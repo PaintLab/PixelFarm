@@ -423,11 +423,15 @@ namespace PixelFarm.Agg
         {
 
 #if DEBUG
-            if (y >= yTableArray.Length ||
-                x >= xTableArray.Length)
+            //if (y >= yTableArray.Length ||
+            //    x >= xTableArray.Length)
+            //{
+            //    return -1;
+            //    //throw new NotSupportedException();
+            //}
+            if (y >= height || x >= width)
             {
                 return -1;
-                //throw new NotSupportedException();
             }
 #endif
 
@@ -437,12 +441,16 @@ namespace PixelFarm.Agg
         public int GetBufferOffsetXY32Check(int x, int y)
         {
 
-            if (y >= yTableArray.Length ||
-                x >= xTableArray.Length)
+
+            //if (y >= yTableArray.Length ||
+            //    x >= xTableArray.Length)
+            //{
+            //    return -1;
+            //}
+            if (y >= height || x >= width)
             {
                 return -1;
             }
-
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public int GetBufferOffsetXY32(int x, int y)
@@ -962,7 +970,7 @@ namespace PixelFarm.Agg
             if (this.actualImage == actualImage)
             {
                 return;
-            } 
+            }
             this.actualImage = actualImage;
             Attach(actualImage.Width,
                            actualImage.Height,
