@@ -52,8 +52,8 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
 
-        PixelBlenderBGRA _recvBlender32;
-         
+        PixelBlenderBGRABase _recvBlender32;
+
 
         //-------------------------------------------- 
         public byte[] GetBuffer()
@@ -314,10 +314,10 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
-            
-            _recvBlender32 = value as PixelBlenderBGRA;
+
+            _recvBlender32 = value as PixelBlenderBGRABase;
             if (_recvBlender32 == null)
-            { 
+            {
             }
         }
 
@@ -479,7 +479,7 @@ namespace PixelFarm.Agg
             //-------------------------------------------------
 
             int len = x2 - x1 + 1;
-          
+
             int bufferOffset = GetBufferOffsetXY32(x1, y);
 
             int alpha = (((int)(sourceColor.A) * (cover + 1)) >> 8);
@@ -491,7 +491,7 @@ namespace PixelFarm.Agg
 
             }
             else
-            {   
+            {
                 Color c2 = Color.FromArgb(alpha, sourceColor);
                 int[] buffer = this.GetBuffer32();
                 do
@@ -760,7 +760,7 @@ namespace PixelFarm.Agg
 
                             do
                             {
-                                PixelBlenderBGRA.Blend32PixelInternal(destBuffer, colors[colorsIndex]);
+                                _recvBlender32.BlendPixel32(destBuffer, colors[colorsIndex]);
                                 //CopyOrBlend32_BasedOnAlpha(_recvBlender32, m_ByteBuffer, bufferOffset, colors[colorsIndex]);
                                 //bufferOffset += scanWidthBytes;
                                 ++colorsIndex;
@@ -876,11 +876,11 @@ namespace PixelFarm.Agg
         //                }
         //            }
         //        }
-        static unsafe void CopyOrBlend32_BasedOnAlphaAndCover(PixelBlenderBGRA recieveBlender, int* destBuffer, int destArrayOffset, Color sourceColor, int cover)
+        static unsafe void CopyOrBlend32_BasedOnAlphaAndCover(PixelBlenderBGRABase recieveBlender, int* destBuffer, int destArrayOffset, Color sourceColor, int cover)
         {
             if (cover == 255)
             {
-                PixelBlenderBGRA.Blend32PixelInternal(destBuffer + destArrayOffset, sourceColor);
+                recieveBlender.BlendPixel32(destBuffer + destArrayOffset, sourceColor);
                 //CopyOrBlend32_BasedOnAlpha(recieveBlender, destBuffer, destArrayOffset, sourceColor);
             }
             else
@@ -897,7 +897,7 @@ namespace PixelFarm.Agg
 #endif
 
 
-                    PixelBlenderBGRA.Blend32PixelInternal(destBuffer + destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
+                    recieveBlender.BlendPixel32(destBuffer + destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
                     //recieveBlender.BlendPixel(destBuffer, destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
 
 
@@ -944,7 +944,7 @@ namespace PixelFarm.Agg
     {
         ActualImage actualImage;
         IPixelBlender pixelBlenderRGBA;
-        PixelBlenderGray pixelBlenderGray;
+        PixelBlenderChangeDestAlpha pixelBlenderGray;
 
         public MyImageReaderWriter()
         {
@@ -989,7 +989,7 @@ namespace PixelFarm.Agg
                           actualImage.Height,
                           actualImage.BitDepth,
                           ActualImage.GetBuffer(actualImage),
-                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderGray()));
+                          pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderChangeDestAlpha()));
                     }
                     break;
                 default:

@@ -8,7 +8,7 @@ using Mini;
 namespace PixelFarm.Agg
 {
     [Info(OrderCode = "06")]
-    [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
+    //[Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
     public class ComponentRendering : DemoBase
     {
         public ComponentRendering()
@@ -37,7 +37,7 @@ namespace PixelFarm.Agg
                 return;
             }
 
- 
+
             AggPainter p2 = (AggPainter)p;
             AggRenderSurface aggRdsf = p2.RenderSurface;
             if (aggRdsf.DestImage != null)
@@ -46,9 +46,9 @@ namespace PixelFarm.Agg
                 IPixelBlender currentPixelBlender = aggRdsf.PixelBlender;
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
                 //use different pixel blender 
-                var redImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray());
-                var greenImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray());
-                var blueImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray());
+                var redImageBuffer = new SubImageRW(backBuffer, new PixelBlenderChangeDestRed());
+                var greenImageBuffer = new SubImageRW(backBuffer, new PixelBlenderChangeDestRed());
+                var blueImageBuffer = new SubImageRW(backBuffer, new PixelBlenderChangeDestRed());
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
                 ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
@@ -67,13 +67,14 @@ namespace PixelFarm.Agg
                 sclineRas.AddPath(er.MakeVxs(v1));
                 v1.Clear();
                 sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
+                //
                 VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(eg.MakeVertexSnap(v1));
                 v1.Clear();
-
                 sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
-                VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
 
+                //
+                VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
                 sclineRas.AddPath(eb.MakeVertexSnap(v1));
                 v1.Clear();
                 sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
