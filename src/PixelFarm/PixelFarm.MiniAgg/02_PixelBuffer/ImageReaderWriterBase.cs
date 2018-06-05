@@ -24,11 +24,6 @@ using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
 
-    public enum PixelBlenderKind
-    {
-
-
-    }
     /// <summary>
     /// base class for access(read/write) pixel buffer
     /// </summary>
@@ -314,11 +309,8 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
+            _recvBlender32 = (PixelBlenderBGRABase)value;
 
-            _recvBlender32 = value as PixelBlenderBGRABase;
-            if (_recvBlender32 == null)
-            {
-            }
         }
 
         protected void SetUpLookupTables()
