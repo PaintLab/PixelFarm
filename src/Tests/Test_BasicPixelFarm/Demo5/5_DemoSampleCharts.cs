@@ -98,49 +98,7 @@ namespace LayoutFarm.ColorBlenderSample
             public float Y1;
         }
 
-
-        //static GraphicsPath ConvToGraphicPath(VertexStore vxs)
-        //{
-        //    GraphicsPath gpath = new GraphicsPath();
-        //    int j = vxs.Count;
-        //    float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
-        //    bool isOpen = false;
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        var cmd = vxs.GetVertex(i, out double x, out double y);
-        //        switch (cmd)
-        //        {
-        //            case PixelFarm.Agg.VertexCmd.MoveTo:
-        //                {
-        //                    latestMoveX = latestX = (float)x;
-        //                    latestMoveY = latestY = (float)y;
-        //                }
-        //                break;
-        //            case PixelFarm.Agg.VertexCmd.LineTo:
-        //                {
-        //                    isOpen = true;
-        //                    gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
-        //                }
-        //                break;
-        //            case PixelFarm.Agg.VertexCmd.Close:
-        //                {
-        //                    latestX = latestMoveX;
-        //                    latestY = latestMoveY;
-
-        //                    gpath.CloseFigure();
-        //                    isOpen = false;
-        //                }
-        //                break;
-        //            default:
-        //                throw new NotSupportedException();
-        //                break;
-
-        //        }
-        //    }
-
-        //    return gpath;
-        //}
-
+ 
         class PlotLine : UIElement
         {
             LineRenderElement _lineRendeE;
