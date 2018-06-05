@@ -97,8 +97,8 @@ namespace LayoutFarm.ColorBlenderSample
             public float X1;
             public float Y1;
         }
+         
 
- 
         class PlotLine : UIElement
         {
             LineRenderElement _lineRendeE;

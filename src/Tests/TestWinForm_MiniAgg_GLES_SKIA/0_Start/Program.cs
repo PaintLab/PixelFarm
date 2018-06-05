@@ -116,7 +116,6 @@ namespace Mini
             PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
                 bmp.Width,
                 bmp.Height,
-                 PixelFarm.Agg.PixelFormat.ARGB32,
                 imgBuffer
                 );
             //gdi+ load as little endian             

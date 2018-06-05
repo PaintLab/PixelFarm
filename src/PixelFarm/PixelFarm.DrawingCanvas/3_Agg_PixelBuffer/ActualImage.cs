@@ -75,23 +75,14 @@ namespace PixelFarm.Agg
 
         int[] pixelBuffer;
 
-        public ActualImage(int width, int height, PixelFormat format = PixelFormat.ARGB32)
-        {
-
-#if DEBUG
-
-            if (format != PixelFormat.ARGB32)
-            {
-                throw new NotSupportedException();
-            }
-
-#endif
+        public ActualImage(int width, int height)
+        {   
             //width and height must >0 
             this.width = width;
             this.height = height;
             int bytesPerPixel;
             this.stride = CalculateStride(width,
-                this.pixelFormat = format,
+                this.pixelFormat = PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
@@ -137,8 +128,7 @@ namespace PixelFarm.Agg
 
         public static TempMemPtr GetBufferPtr(ActualImage img)
         {
-            TempMemPtr tmp = new TempMemPtr(img.pixelBuffer);
-            return tmp;
+            return new TempMemPtr(img.pixelBuffer);
         }
 
         public static int[] GetBuffer(ActualImage img)
@@ -150,14 +140,11 @@ namespace PixelFarm.Agg
         {
             img.pixelBuffer = pixelBuffer;
         }
-        public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, int[] buffer)
+        public static ActualImage CreateFromBuffer(int width, int height, int[] buffer)
         {
-            if (format != PixelFormat.ARGB32)
-            {
-                throw new NotSupportedException();
-            }
+
             //
-            var img = new ActualImage(width, height, format);
+            var img = new ActualImage(width, height);
             unsafe
             {
                 fixed (int* header = &img.pixelBuffer[0])

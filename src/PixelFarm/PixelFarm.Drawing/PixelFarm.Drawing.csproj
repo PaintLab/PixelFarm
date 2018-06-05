@@ -508,8 +508,8 @@
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ImageReaderWriterBase.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderGray.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderGray.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs</Link>
