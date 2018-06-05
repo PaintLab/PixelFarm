@@ -49,12 +49,7 @@ namespace PixelFarm.Agg
 
         PixelBlenderBGRABase _recvBlender32;
 
-
-        //-------------------------------------------- 
-        public byte[] GetBuffer()
-        {
-            throw new NotSupportedException();
-        }
+         
         public int[] GetBuffer32()
         {
             return this.raw_buffer32;
