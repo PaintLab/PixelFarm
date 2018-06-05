@@ -137,16 +137,13 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         void generate_alpha_mask(ScalineRasToDestinationBitmap sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
-
-
-            //in this version: we use alpha mask as 32 bit-image
-            //TODO: review 8 bit-image again **
-
-
+ 
+            //create 1  8-bits chanel (grayscale8) bmp
             alphaBitmap = new ActualImage(width, height);
             var bmpReaderWrtier = new MyImageReaderWriter();
             bmpReaderWrtier.ReloadImage(alphaBitmap);
-            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderBGRA());
+            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderAlpha());
+ 
             //create mask from alpahMaskImageBuffer
             alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
 #if USE_CLIPPING_ALPHA_MASK
@@ -155,7 +152,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             alphaMaskImageBuffer.attach(alphaByteArray, (int)cx, (int)cy, cx, 1);
 #endif
 
-            var image = new SubImageRW(alphaMaskImageBuffer, new PixelBlenderBGRA());
+ 
+            var image = new SubImageRW(alphaMaskImageBuffer, new PixelBlenderAlpha());
+ 
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
             clippingProxy.Clear(Drawing.Color.Black);
             VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
