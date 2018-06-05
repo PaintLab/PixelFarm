@@ -261,9 +261,6 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\GammaFuntions.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\GammaFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\PixelBlenderRGB.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\PixelBlenderRGB.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ProxyImage.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ProxyImage.cs</Link>
     </Compile>

@@ -406,9 +406,6 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ImgFilters.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ImgFilters.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\1_base\PixelBlenderRGB.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\PixelBlenderRGB.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\ProxyImage.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ProxyImage.cs</Link>
     </Compile>

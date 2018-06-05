@@ -227,7 +227,7 @@
     <Compile Include="1_Base\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
     <Compile Include="4_Image\FilterMan.cs" />
-    <Compile Include="1_Base\PixelBlenderRGB.cs" />
+    <Content Include="x_backup\PixelBlenderRGB.txt" />
     <Compile Include="1_Base\Queue.cs" />
     <Compile Include="1_Base\BorderDouble.cs" />
     <Compile Include="1_Base\GammaFuntions.cs" />
