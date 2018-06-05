@@ -209,7 +209,7 @@ namespace PixelFarm.Agg.Imaging
 
         internal override void BlendPixels(
             int[] destBuffer, int arrayElemOffset,
-            Color[] sourceColors, int sourceColorsOffset,
+            Color[] srcColors, int srcColorOffset,
             byte[] covers, int coversIndex, bool firstCoverForAll, int count)
         {
             if (firstCoverForAll)
@@ -251,7 +251,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(header2, srcColors[srcColorOffset++]);
                                 header2++;//move next
                                 count--;
                             }
@@ -262,12 +262,12 @@ namespace PixelFarm.Agg.Imaging
                                 //now count is even number
                                 //---------
                                 //1
-                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(header2, srcColors[srcColorOffset++]);
                                 header2++;//move next
                                 count--;
                                 //---------
                                 //2
-                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(header2, srcColors[srcColorOffset++]);
                                 header2++;//move next
                                 count--;
                             }
@@ -314,7 +314,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(header2, srcColors[srcColorOffset++], cover);
                                 header2++;//move next
                                 count--;
                             }
@@ -322,11 +322,11 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
                                 //1.
-                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(header2, srcColors[srcColorOffset++], cover);
                                 header2++;//move next
                                 count--;
                                 //2.
-                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(header2, srcColors[srcColorOffset++], cover);
                                 header2++;//move next
                                 count--;
                             }
@@ -337,22 +337,30 @@ namespace PixelFarm.Agg.Imaging
             }
             else
             {
-                do
+                unsafe
                 {
-                    //cover may diff in each loop
-                    int cover = covers[coversIndex++];
-                    if (cover == 255)
+                    fixed (int* dstHead = &destBuffer[arrayElemOffset])
                     {
-                        BlendPixel32(destBuffer, arrayElemOffset, sourceColors[sourceColorsOffset]);
+                        int* dstBuffer = dstHead;
+                        do
+                        {
+                            //cover may diff in each loop
+                            int cover = covers[coversIndex++];
+                            if (cover == 255)
+                            {
+                                BlendPixel32Internal(dstBuffer, srcColors[srcColorOffset]);
+                            }
+                            else
+                            {
+                                BlendPixel32Internal(dstBuffer, srcColors[srcColorOffset].NewFromChangeCoverage(cover));
+                            }
+                            dstBuffer++;
+                            ++srcColorOffset;
+                        }
+                        while (--count != 0);
                     }
-                    else
-                    {
-                        BlendPixel32(destBuffer, arrayElemOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
-                    }
-                    arrayElemOffset++;
-                    ++sourceColorsOffset;
                 }
-                while (--count != 0);
+
             }
         }
         internal override void CopyPixel(int[] buffer, int arrayOffset, Color sourceColor)
@@ -369,7 +377,7 @@ namespace PixelFarm.Agg.Imaging
                 }
             }
         }
-        internal override void CopyPixels(int[] buffer, int arrayOffset, Color sourceColor, int count)
+        internal override void CopyPixels(int[] buffer, int arrayOffset, Color srcColor, int count)
         {
             unsafe
             {
@@ -379,7 +387,7 @@ namespace PixelFarm.Agg.Imaging
                     {
                         //TODO: consider use memcpy() impl***
                         int* ptr = ptr_byte;
-                        int argb = sourceColor.ToARGB();
+                        int argb = srcColor.ToARGB();
 
                         //---------
                         if ((count % 2) != 0)
@@ -410,16 +418,16 @@ namespace PixelFarm.Agg.Imaging
 
 
 
-        static unsafe void BlendPixel32Internal(int* ptr, Color sc, int coverageValue)
+        static unsafe void BlendPixel32Internal(int* ptr, Color srcColor, int coverageValue)
         {
             //calculate new alpha
-            int src_a = (byte)((sc.alpha * coverageValue + 255) >> 8);
+            int src_a = (byte)((srcColor.alpha * coverageValue + 255) >> 8);
             //after apply the alpha
             unchecked
             {
                 if (src_a == 255)
                 {
-                    *ptr = sc.ToARGB(); //just copy
+                    *ptr = srcColor.ToARGB(); //just copy
                 }
                 else
                 {
@@ -433,9 +441,9 @@ namespace PixelFarm.Agg.Imaging
 
                     *ptr =
                      ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                     ((byte)(((sc.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
-                     ((byte)(((sc.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT) << 8) |
-                     ((byte)(((sc.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                     ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                     ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT) << 8) |
+                     ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                 }
             }
 
