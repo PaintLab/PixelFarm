@@ -42,14 +42,14 @@ namespace PixelFarm.Agg.Imaging
             {
                 fixed (int* head = &buffer[arrayOffset])
                 {
-                    Blend32PixelInternal(head, sourceColor);
+                    BlendPixel32Internal(head, sourceColor);
                 }
             }
         }
 
         internal override unsafe void BlendPixel32(int* ptr, Color sc)
         {
-            Blend32PixelInternal(ptr, sc);
+            BlendPixel32Internal(ptr, sc);
         }
 
         internal override void BlendPixels(int[] destBuffer, int arrayElemOffset, Color[] sourceColors, int sourceColorsOffset, byte[] covers, int coversIndex, bool firstCoverForAll, int count)
@@ -70,7 +70,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++]);
                                 dstBuffer++;//move next
                                 count--;
                             }
@@ -81,12 +81,12 @@ namespace PixelFarm.Agg.Imaging
                                 //now count is even number
                                 //---------
                                 //1
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++]);
                                 dstBuffer++;//move next
                                 count--;
                                 //---------
                                 //2
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++]);
                                 dstBuffer++;//move next
                                 count--;
                             }
@@ -107,7 +107,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++], cover);
                                 header2++;//move next
                                 count--;
                             }
@@ -115,11 +115,11 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
                                 //1.
-                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++], cover);
                                 header2++;//move next
                                 count--;
                                 //2.
-                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(header2, sourceColors[sourceColorsOffset++], cover);
                                 header2++;//move next
                                 count--;
                             }
@@ -232,7 +232,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        static unsafe void Blend32PixelInternal(int* ptr, Color sc, int coverageValue)
+        static unsafe void BlendPixel32Internal(int* ptr, Color sc, int coverageValue)
         {
             //calculate new alpha
             int src_a = (byte)((sc.alpha * coverageValue + 255) >> 8);
@@ -272,7 +272,7 @@ namespace PixelFarm.Agg.Imaging
             }
 
         }
-        static unsafe void Blend32PixelInternal(int* ptr, Color sc)
+        static unsafe void BlendPixel32Internal(int* ptr, Color sc)
         {
             unchecked
             {
@@ -319,14 +319,14 @@ namespace PixelFarm.Agg.Imaging
             {
                 fixed (int* head = &buffer[arrayOffset])
                 {
-                    Blend32PixelInternal(head, sourceColor);
+                    BlendPixel32Internal(head, sourceColor);
                 }
             }
         }
 
         internal override unsafe void BlendPixel32(int* ptr, Color sc)
         {
-            Blend32PixelInternal(ptr, sc);
+            BlendPixel32Internal(ptr, sc);
         }
 
         internal override void BlendPixels(int[] destBuffer, int arrayElemOffset, Color[] sourceColors, int sourceColorsOffset, byte[] covers, int coversIndex, bool firstCoverForAll, int count)
@@ -347,7 +347,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++]);
                                 dstBuffer++;//move next
                                 count--;
                             }
@@ -358,12 +358,12 @@ namespace PixelFarm.Agg.Imaging
                                 //now count is even number
                                 //---------
                                 //1
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++]);
                                 dstBuffer++;//move next
                                 count--;
                                 //---------
                                 //2
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++]);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++]);
                                 dstBuffer++;//move next
                                 count--;
                             }
@@ -384,7 +384,7 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //odd
                                 //
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++], cover);
                                 dstBuffer++;//move next
                                 count--;
                             }
@@ -392,11 +392,11 @@ namespace PixelFarm.Agg.Imaging
                             {
                                 //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
                                 //1.
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++], cover);
                                 dstBuffer++;//move next
                                 count--;
                                 //2.
-                                Blend32PixelInternal(dstBuffer, sourceColors[sourceColorsOffset++], cover);
+                                BlendPixel32Internal(dstBuffer, sourceColors[sourceColorsOffset++], cover);
                                 dstBuffer++;//move next
                                 count--;
                             }
@@ -507,7 +507,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        static unsafe void Blend32PixelInternal(int* ptr, Color sc, int coverageValue)
+        static unsafe void BlendPixel32Internal(int* ptr, Color sc, int coverageValue)
         {
             //calculate new alpha
             int src_a = (byte)((sc.alpha * coverageValue + 255) >> 8);
@@ -547,7 +547,7 @@ namespace PixelFarm.Agg.Imaging
             }
 
         }
-        static unsafe void Blend32PixelInternal(int* ptr, Color sc)
+        static unsafe void BlendPixel32Internal(int* ptr, Color sc)
         {
             unchecked
             {
