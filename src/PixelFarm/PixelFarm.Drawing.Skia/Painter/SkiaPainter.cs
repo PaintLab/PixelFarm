@@ -367,14 +367,14 @@ namespace PixelFarm.Drawing.Skia
                             //}
                         }
                         break;
-                    //case Agg.PixelFormat.RGB24:
-                    //    {
-                    //    }
-                    //    break;
-                    //case Agg.PixelFormat.GrayScale8:
-                    //    {
-                    //    }
-                    //    break;
+                    case Agg.PixelFormat.RGB24:
+                        {
+                        }
+                        break;
+                    case Agg.PixelFormat.GrayScale8:
+                        {
+                        }
+                        break;
                     default:
                         throw new NotSupportedException();
                 }

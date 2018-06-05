@@ -216,21 +216,21 @@ namespace PixelFarm.Drawing
             return new Color(a, r, g, b);
         }
 
-        public static Color operator +(Color X, Color Y)
+        public static Color operator +(Color A, Color B)
         {
-            byte r = (byte)((X._r + Y._r) > 255 ? 255 : (X._r + Y._r));
-            byte g = (byte)((X._g + Y._g) > 255 ? 255 : (X._g + Y._g));
-            byte b = (byte)((X._b + Y._b) > 255 ? 255 : (X._b + Y._b));
-            byte a = (byte)((X._a + Y._a) > 255 ? 255 : (X._a + Y._a));
+            byte r = (byte)((A._r + B._r) > 255 ? 255 : (A._r + B._r));
+            byte g = (byte)((A._g + B._g) > 255 ? 255 : (A._g + B._g));
+            byte b = (byte)((A._b + B._b) > 255 ? 255 : (A._b + B._b));
+            byte a = (byte)((A._a + B._a) > 255 ? 255 : (A._a + B._a));
             return new Color(a, r, g, b);
         }
 
-        public static Color operator -(Color X, Color Y)
+        public static Color operator -(Color A, Color B)
         {
-            byte red = (byte)((X._r - Y._r) < 0 ? 0 : (X._r - Y._r));
-            byte green = (byte)((X._g - Y._g) < 0 ? 0 : (X._g - Y._g));
-            byte blue = (byte)((X._b - Y._b) < 0 ? 0 : (X._b - Y._b));
-            byte alpha = (byte)((X._a - Y._a) < 0 ? 0 : (X._a - Y._a));
+            byte red = (byte)((A._r - B._r) < 0 ? 0 : (A._r - B._r));
+            byte green = (byte)((A._g - B._g) < 0 ? 0 : (A._g - B._g));
+            byte blue = (byte)((A._b - B._b) < 0 ? 0 : (A._b - B._b));
+            byte alpha = (byte)((A._a - B._a) < 0 ? 0 : (A._a - B._a));
             return new Color(alpha, red, green, blue);
         }
 

@@ -76,8 +76,7 @@
     <Compile Include="02_PixelBuffer\SubImageRW.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
-    <Compile Include="x_backup_notused\ImageReaderWriterBase.cs" />
-    <Compile Include="x_backup_notused\PixelBlenderGray.cs" />
+    <Compile Include="02_PixelBuffer\PixelBlenderOthers.cs" />
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
@@ -106,7 +105,7 @@
     <Compile Include="07_Lines\4_OutlineAARasterizer.cs" />
     <Compile Include="08_ImageResampling\FilterImageSpanGenerator.cs" />
     <Compile Include="03_SpanGenerators\4_ImgSpanGenGray.cs" />
-    <Compile Include="x_backup_notused\2_ImgSpanGenRGB.cs" />
+    <Compile Include="03_SpanGenerators\2_ImgSpanGenRGB.cs" />
     <Compile Include="03_SpanGenerators\3_ImgSpanGenRGBA.cs" />
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
     <Compile Include="08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs" />
@@ -123,7 +122,7 @@
     <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
     <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="04_Scanline\4.3_VectorClipper.cs" />
-    <Compile Include="x_backup_notused\PixelBlenderRGBA_Backup.cs" />
+    <Content Include="x_backup\PixelBlenderGray.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">

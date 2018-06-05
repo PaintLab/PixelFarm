@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
         /// <summary>
         /// scanline rasterizer to bitmap
         /// </summary>
-        ScalineRasToDestinationBitmap sclineRasToBmp;
+        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
 
         //--------------------
         //pen 

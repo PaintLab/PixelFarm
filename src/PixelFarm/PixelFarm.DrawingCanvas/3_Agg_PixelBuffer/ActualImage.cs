@@ -28,7 +28,7 @@ namespace PixelFarm.Agg
     public enum PixelFormat
     {
         ARGB32,
-        //RGB24,
+        RGB24,
         GrayScale8,
     }
 
@@ -75,23 +75,14 @@ namespace PixelFarm.Agg
 
         int[] pixelBuffer;
 
-        public ActualImage(int width, int height, PixelFormat format = PixelFormat.ARGB32)
-        {
-
-#if DEBUG
-
-            if (format != PixelFormat.ARGB32)
-            {
-                throw new NotSupportedException();
-            }
-
-#endif
+        public ActualImage(int width, int height)
+        {   
             //width and height must >0 
             this.width = width;
             this.height = height;
             int bytesPerPixel;
             this.stride = CalculateStride(width,
-                this.pixelFormat = format,
+                this.pixelFormat = PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
@@ -137,8 +128,7 @@ namespace PixelFarm.Agg
 
         public static TempMemPtr GetBufferPtr(ActualImage img)
         {
-            TempMemPtr tmp = new TempMemPtr(img.pixelBuffer);
-            return tmp;
+            return new TempMemPtr(img.pixelBuffer);
         }
 
         public static int[] GetBuffer(ActualImage img)
@@ -150,14 +140,11 @@ namespace PixelFarm.Agg
         {
             img.pixelBuffer = pixelBuffer;
         }
-        public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, int[] buffer)
+        public static ActualImage CreateFromBuffer(int width, int height, int[] buffer)
         {
-            if (format != PixelFormat.ARGB32)
-            {
-                throw new NotSupportedException();
-            }
+
             //
-            var img = new ActualImage(width, height, format);
+            var img = new ActualImage(width, height);
             unsafe
             {
                 fixed (int* header = &img.pixelBuffer[0])
@@ -185,8 +172,6 @@ namespace PixelFarm.Agg
             int bitDepth, bytesPerPixel;
             return CalculateStride(width, format, out bitDepth, out bytesPerPixel);
         }
-
-
         public static int CalculateStride(int width, PixelFormat format, out int bitDepth, out int bytesPerPixel)
         {
             //stride calcuation helper
@@ -199,19 +184,18 @@ namespace PixelFarm.Agg
                         bytesPerPixel = (bitDepth + 7) / 8;
                         return width * (32 / 8);
                     }
-
-                //case PixelFormat.GrayScale8:
-                //    {
-                //        bitDepth = 8; //bit per pixel
-                //        bytesPerPixel = (bitDepth + 7) / 8;
-                //        return 4 * ((width * bytesPerPixel + 3) / 4);
-                //    }
-                //case PixelFormat.RGB24:
-                //    {
-                //        bitDepth = 24; //bit per pixel
-                //        bytesPerPixel = (bitDepth + 7) / 8;
-                //        return 4 * ((width * bytesPerPixel + 3) / 4);
-                //    }
+                case PixelFormat.GrayScale8:
+                    {
+                        bitDepth = 8; //bit per pixel
+                        bytesPerPixel = (bitDepth + 7) / 8;
+                        return 4 * ((width * bytesPerPixel + 3) / 4);
+                    }
+                case PixelFormat.RGB24:
+                    {
+                        bitDepth = 24; //bit per pixel
+                        bytesPerPixel = (bitDepth + 7) / 8;
+                        return 4 * ((width * bytesPerPixel + 3) / 4);
+                    }
                 default:
                     throw new NotSupportedException();
             }

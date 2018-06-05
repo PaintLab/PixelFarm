@@ -1406,12 +1406,12 @@ namespace PixelFarm.Agg
     /// <summary>
     /// scanline rasterizer TO DESTINATION bitmap
     /// </summary>  
-    public class ScalineRasToDestinationBitmap
+    public class ScanlineRasToDestBitmapRenderer
     {
 
         ScanlineSubPixelRasterizer scSubPixRas = new ScanlineSubPixelRasterizer();
         ArrayList<Color> tempSpanColors = new ArrayList<Color>();
-        public ScalineRasToDestinationBitmap()
+        public ScanlineRasToDestBitmapRenderer()
         {
         }
         public ScanlineRenderMode ScanlineRenderMode
@@ -1538,7 +1538,7 @@ namespace PixelFarm.Agg
 
 
     //----------------------------
-    public class CustomScanlineRasToDestBitmapRenderer : ScalineRasToDestinationBitmap
+    public class CustomScanlineRasToDestBitmapRenderer : ScanlineRasToDestBitmapRenderer
     {
     }
 

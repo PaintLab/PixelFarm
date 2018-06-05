@@ -56,15 +56,15 @@ namespace PixelFarm.Agg.Imaging
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
-        //public SubImageRW(IImageReaderWriter image,
-        //    IPixelBlender blender,
-        //    int distanceBetweenPixelsInclusive,
-        //    int arrayOffset32,
-        //    int bitsPerPixel)
-        //{
-        //    SetRecieveBlender(blender);
-        //    Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
-        //}
+        public SubImageRW(IImageReaderWriter image,
+            IPixelBlender blender,
+            int distanceBetweenPixelsInclusive,
+            int arrayOffset32,
+            int bitsPerPixel)
+        {
+            SetRecieveBlender(blender);
+            Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
+        }
         public SubImageRW(IImageReaderWriter image, IPixelBlender blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);

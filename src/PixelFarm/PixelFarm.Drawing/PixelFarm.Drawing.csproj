@@ -508,6 +508,9 @@
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ImageReaderWriterBase.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs</Link>
+    </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs</Link>
     </Compile>
@@ -519,6 +522,9 @@
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\1_ImgSpanGen.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\1_ImgSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.miniagg\03_spangenerators\2_ImgSpanGenRGB.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\2_ImgSpanGenRGB.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\3_ImgSpanGenRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\3_ImgSpanGenRGBA.cs</Link>

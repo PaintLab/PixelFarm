@@ -97,7 +97,7 @@ namespace SampleWinForms
             //----------------
             this.txtInputChar.Text = inputstr;
             _readyToRender = true;
-        } 
+        }
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
@@ -312,7 +312,7 @@ namespace SampleWinForms
             MsdfGenParams genParams = new MsdfGenParams();
             GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, genParams);
 
-            var actualImg = ActualImage.CreateFromBuffer(glyphImg.Width, glyphImg.Height, PixelFormat.ARGB32, glyphImg.GetImageBuffer());
+            var actualImg = ActualImage.CreateFromBuffer(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer());
             painter.DrawImage(actualImg, 0, 0);
 
             //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -357,7 +357,7 @@ namespace SampleWinForms
 
 
 
-         
+
         int _gridSize = 5;//default 
 
 
