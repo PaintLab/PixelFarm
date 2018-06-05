@@ -22,6 +22,9 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
+    /// <summary>
+    /// access reader /writer to an image buffer
+    /// </summary>
     public interface IImageReaderWriter
     {
         int BitDepth { get; }
