@@ -24,18 +24,18 @@
 //    {
 //        sealed class ImageBufferAccessor
 //        {
-//            IImageReaderWriter imgRW;
+//            IBitmapBlender imgRW;
 //            int m_x, m_x0, m_y, m_distanceBetweenPixelsInclusive;
 //            byte[] m_buffer;
 //            int m_currentBufferOffset = -1;
 //            int m_src_width;
 //            int m_src_height;
-//            public ImageBufferAccessor(IImageReaderWriter imgRW)
+//            public ImageBufferAccessor(IBitmapBlender imgRW)
 //            {
 //                Attach(imgRW);
 //            }
 
-//            void Attach(IImageReaderWriter imgRW)
+//            void Attach(IBitmapBlender imgRW)
 //            {
 //                this.imgRW = imgRW;
 //                m_buffer = imgRW.GetBuffer();

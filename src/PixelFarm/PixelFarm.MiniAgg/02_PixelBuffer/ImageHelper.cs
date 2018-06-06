@@ -30,7 +30,7 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="parentImage"></param>
         /// <param name="subImgBounds"></param>
         /// <returns></returns>
-        public static SubImageRW CreateSubImgRW(IImageReaderWriter parentImage, RectInt subImgBounds)
+        public static SubImageRW CreateSubImgRW(IBitmapBlender parentImage, RectInt subImgBounds)
         {
             if (subImgBounds.Left < 0 || subImgBounds.Bottom < 0 || subImgBounds.Right > parentImage.Width || subImgBounds.Top > parentImage.Height
                 || subImgBounds.Left >= subImgBounds.Right || subImgBounds.Bottom >= subImgBounds.Top)

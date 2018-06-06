@@ -21,10 +21,10 @@
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Imaging
 {
-    public abstract class ProxyImage : IImageReaderWriter
+    public abstract class ProxyImage : IBitmapBlender
     {
-        protected IImageReaderWriter linkedImage;
-        public ProxyImage(IImageReaderWriter linkedImage)
+        protected IBitmapBlender linkedImage;
+        public ProxyImage(IBitmapBlender linkedImage)
         {
             this.linkedImage = linkedImage;
         }
@@ -75,7 +75,7 @@ namespace PixelFarm.Agg.Imaging
             return linkedImage.GetPixel(x, y);
         }
 
-        public virtual void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
+        public virtual void CopyFrom(IBitmapBlender sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
             linkedImage.CopyFrom(sourceImage, sourceImageRect, destXOffset, destYOffset);
         }

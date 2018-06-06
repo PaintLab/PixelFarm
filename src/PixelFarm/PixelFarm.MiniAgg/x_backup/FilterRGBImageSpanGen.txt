@@ -36,7 +36,7 @@
 //        const int BASE_MASK = 255;
 //        const int DOWNSCALE_SHIFT = ImageFilterLookUpTable.ImgFilterConst.SHIFT;
 //        //--------------------------------------------------------------------
-//        public FilterRGBImageSpanGen(IImageReaderWriter src,
+//        public FilterRGBImageSpanGen(IBitmapBlender src,
 //                            ISpanInterpolator inter,
 //                            ImageFilterLookUpTable filter) :
 //            base(src, inter, filter)

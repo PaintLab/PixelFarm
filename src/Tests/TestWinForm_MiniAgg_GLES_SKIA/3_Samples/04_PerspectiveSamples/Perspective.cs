@@ -73,7 +73,7 @@ namespace PixelFarm.Agg.Sample_Perspective
 
             //-----------------------------------
             painter.Clear(Drawing.Color.White);
-            //IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
+            //IBitmapBlender backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
             //ChildImage image;
             //if (backBuffer.BitDepth == 32)
             //{

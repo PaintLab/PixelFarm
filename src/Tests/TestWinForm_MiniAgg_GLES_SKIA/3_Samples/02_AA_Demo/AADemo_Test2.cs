@@ -21,7 +21,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);
         }
-        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
+        protected override void CustomRenderSingleScanLine(IBitmapBlender destImage, Scanline scanline, Color color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;

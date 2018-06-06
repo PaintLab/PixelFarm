@@ -27,7 +27,7 @@ namespace PixelFarm.Agg
     /// <summary>
     /// base class for access(read/write) pixel buffer
     /// </summary>
-    public abstract class ImageReaderWriterBase : IImageReaderWriter
+    public abstract class ImageReaderWriterBase : IBitmapBlender
     {
         const int BASE_MASK = 255;
         //--------------------------------------------
@@ -139,7 +139,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        void CopyFromNoClipping(IImageReaderWriter sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
+        void CopyFromNoClipping(IBitmapBlender sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
             if (BytesBetweenPixelsInclusive != BitDepth / 8
                 || sourceImage.BytesBetweenPixelsInclusive != sourceImage.BitDepth / 8)
@@ -234,7 +234,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
+        public void CopyFrom(IBitmapBlender sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
             RectInt sourceImageBounds = sourceImage.GetBounds();
             RectInt clippedSourceImageRect = new RectInt();

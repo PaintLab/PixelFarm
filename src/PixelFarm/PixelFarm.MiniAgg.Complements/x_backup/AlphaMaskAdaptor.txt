@@ -51,7 +51,7 @@
 //            }
 //        }
 
-//        public AlphaMaskAdaptor(IImageReaderWriter image, IAlphaMask mask)
+//        public AlphaMaskAdaptor(IBitmapBlender image, IAlphaMask mask)
 //            : base(image)
 //        {
 //            linkedImage = image;
@@ -59,7 +59,7 @@
 //            m_spans = new byte[256];
 //        }
 
-//        public void AttachImage(IImageReaderWriter image)
+//        public void AttachImage(IBitmapBlender image)
 //        {
 //            linkedImage = image;
 //        }

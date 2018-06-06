@@ -84,7 +84,7 @@ namespace PixelFarm.Agg
 
 
         public void RenderScanlines(
-            IImageReaderWriter dest,
+            IBitmapBlender dest,
             ScanlineRasterizer sclineRas,
             Scanline scline,
             Color color)
@@ -982,7 +982,7 @@ namespace PixelFarm.Agg
             }
         }
 #endif
-        //void SubPixRender(IImageReaderWriter dest, Scanline scanline, Color color)
+        //void SubPixRender(IBitmapBlender dest, Scanline scanline, Color color)
         //{
         //    byte[] covers = scanline.GetCovers();
         //    int num_spans = scanline.SpanCount;
@@ -1420,7 +1420,7 @@ namespace PixelFarm.Agg
             set;
         }
 
-        public void RenderWithColor(IImageReaderWriter dest,
+        public void RenderWithColor(IBitmapBlender dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
                 Color color)
@@ -1469,7 +1469,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public void RenderWithSpan(IImageReaderWriter dest,
+        public void RenderWithSpan(IBitmapBlender dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
                 ISpanGenerator spanGenerator)
@@ -1518,7 +1518,7 @@ namespace PixelFarm.Agg
             }
         }
         protected virtual void CustomRenderSingleScanLine(
-            IImageReaderWriter dest,
+            IBitmapBlender dest,
             Scanline scline,
             Color color)
         {

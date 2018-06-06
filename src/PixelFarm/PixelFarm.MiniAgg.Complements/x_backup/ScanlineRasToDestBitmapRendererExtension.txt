@@ -20,7 +20,7 @@
 //    public static class ScanlineRasToDestBitmapRendererExtension
 //    {
 //        public static void RenderSolidAllPaths(this ScanlineRasToDestBitmapRenderer sclineRasToBmp,
-//             IImageReaderWriter destImage,
+//             IBitmapBlender destImage,
 //              ScanlineRasterizer sclineRas,
 //              Scanline scline,
 //              VertexStore vxs,

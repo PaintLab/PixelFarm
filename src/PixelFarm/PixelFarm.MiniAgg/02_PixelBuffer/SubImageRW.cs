@@ -26,7 +26,7 @@ namespace PixelFarm.Agg.Imaging
     /// </summary>
     public class SubImageRW : ImageReaderWriterBase
     {
-        public SubImageRW(IImageReaderWriter image,
+        public SubImageRW(IBitmapBlender image,
             int arrayOffset32,
             int width,
             int height)
@@ -56,7 +56,7 @@ namespace PixelFarm.Agg.Imaging
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
-        public SubImageRW(IImageReaderWriter image,
+        public SubImageRW(IBitmapBlender image,
             PixelBlender32 blender,
             int distanceBetweenPixelsInclusive,
             int arrayOffset32,
@@ -65,11 +65,11 @@ namespace PixelFarm.Agg.Imaging
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
-        public SubImageRW(IImageReaderWriter image, PixelBlender32 blender)
+        public SubImageRW(IBitmapBlender image, PixelBlender32 blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-        //public SubImageRW(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
+        //public SubImageRW(IBitmapBlender image, IPixelBlender blender, int x1, int y1, int x2, int y2)
         //{
         //    SetRecieveBlender(blender);
         //    Attach(image, x1, y1, x2, y2);
@@ -99,8 +99,8 @@ namespace PixelFarm.Agg.Imaging
 
         }
 
-        IImageReaderWriter _sourceImage;
-        void Attach(IImageReaderWriter sourceImage,
+        IBitmapBlender _sourceImage;
+        void Attach(IBitmapBlender sourceImage,
           PixelBlender32 recieveBlender,
           int distanceBetweenPixelsInclusive,
           int arrayElemOffset,
@@ -118,7 +118,7 @@ namespace PixelFarm.Agg.Imaging
             SetBuffer(buffer, srcOffset32 + arrayElemOffset);
             SetRecieveBlender(recieveBlender);
         }
-        //bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
+        //bool Attach(IBitmapBlender sourceImage, int x1, int y1, int x2, int y2)
         //{
         //    _sourceImage = sourceImage;
         //    SetBufferToNull();
