@@ -121,7 +121,7 @@ namespace PixelFarm.Agg
                 spanGen);
         }
 
-        public void Render(IImageReaderWriter source,
+        public void Render(IBitmapBlender source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)
@@ -258,7 +258,7 @@ namespace PixelFarm.Agg
         }
 
         int destImageChanged = 0;
-        public void Render(IImageReaderWriter source, AffinePlan[] affinePlans)
+        public void Render(IBitmapBlender source, AffinePlan[] affinePlans)
         {
 
 
@@ -278,7 +278,7 @@ namespace PixelFarm.Agg
             VectorToolBox.ReleaseVxs(ref v1, ref v2);
 
         }
-        public void Render(IImageReaderWriter source, double destX, double destY)
+        public void Render(IBitmapBlender source, double destX, double destY)
         {
 
 

@@ -193,7 +193,7 @@ namespace PixelFarm.Agg.Lines
     public class OutlineRenderer : LineRenderer
     {
         const int MAX_HALF_WIDTH = 64;
-        IImageReaderWriter destImageSurface;
+        IBitmapBlender destImageSurface;
         LineProfileAnitAlias lineProfile;
         RectInt clippingRectangle;
         bool doClipping;
@@ -210,7 +210,7 @@ namespace PixelFarm.Agg.Lines
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(IImageReaderWriter destImage, PixelBlender32 destPixelBlender, LineProfileAnitAlias profile)
+        public OutlineRenderer(IBitmapBlender destImage, PixelBlender32 destPixelBlender, LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;

@@ -38,7 +38,7 @@ namespace PixelFarm.Agg.Imaging
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
         ImageReaderWriterBase srcRW;
-        public ImgSpanGenRGBA_NN_StepXBy1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+        public ImgSpanGenRGBA_NN_StepXBy1(IBitmapBlender src, ISpanInterpolator spanInterpolator)
             : base(spanInterpolator)
         {
             srcRW = (ImageReaderWriterBase)src;
@@ -125,7 +125,7 @@ namespace PixelFarm.Agg.Imaging
         bool _mode0 = false;
 
 
-        public ImgSpanGenRGBA_BilinearClip(IImageReaderWriter src,
+        public ImgSpanGenRGBA_BilinearClip(IBitmapBlender src,
             Drawing.Color back_color,
             ISpanInterpolator inter)
             : base(inter)

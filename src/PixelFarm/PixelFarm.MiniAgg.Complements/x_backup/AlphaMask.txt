@@ -38,21 +38,21 @@
 
 //    public sealed class AlphaMaskByteUnclipped : IAlphaMask
 //    {
-//        IImageReaderWriter m_rbuf;
+//        IBitmapBlender m_rbuf;
 //        uint m_Step;
 //        uint m_Offset;
 //        //public static readonly int cover_shift = 8;
 //        //public static readonly int cover_none = 0;
 //        //public static readonly int cover_full = 255;
 
-//        public AlphaMaskByteUnclipped(IImageReaderWriter rbuf, uint Step, uint Offset)
+//        public AlphaMaskByteUnclipped(IBitmapBlender rbuf, uint Step, uint Offset)
 //        {
 //            m_Step = Step;
 //            m_Offset = Offset;
 //            m_rbuf = rbuf;
 //        }
 
-//        public void attach(IImageReaderWriter rbuf) { m_rbuf = rbuf; }
+//        public void attach(IBitmapBlender rbuf) { m_rbuf = rbuf; }
 
 //        //--------------------------------------------------------------------
 //        public byte pixel(int x, int y)
@@ -167,21 +167,21 @@
 //    }
 //    public sealed class AlphaMaskByteClipped : IAlphaMask
 //    {
-//        IImageReaderWriter m_rbuf;
+//        IBitmapBlender m_rbuf;
 //        uint m_Step;
 //        uint m_Offset;
 //        //public static readonly int cover_shift = 8;
 //        //public static readonly int cover_none = 0;
 //        //public static readonly int cover_full = 255;
 
-//        public AlphaMaskByteClipped(IImageReaderWriter rbuf, uint step, uint offset)
+//        public AlphaMaskByteClipped(IBitmapBlender rbuf, uint step, uint offset)
 //        {
 //            m_Step = step;
 //            m_Offset = offset;
 //            m_rbuf = rbuf;
 //        }
 
-//        public void attach(IImageReaderWriter rbuf) { m_rbuf = rbuf; }
+//        public void attach(IBitmapBlender rbuf) { m_rbuf = rbuf; }
 
 
 //        //--------------------------------------------------------------------

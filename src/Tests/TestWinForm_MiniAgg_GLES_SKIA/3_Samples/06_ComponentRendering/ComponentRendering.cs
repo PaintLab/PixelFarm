@@ -42,7 +42,7 @@ namespace PixelFarm.Agg
             AggRenderSurface asx = p2.RenderSurface;
             if (asx.DestImage != null)
             {
-                IImageReaderWriter backBuffer = asx.DestImage;
+                IBitmapBlender backBuffer = asx.DestImage;
 
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
 

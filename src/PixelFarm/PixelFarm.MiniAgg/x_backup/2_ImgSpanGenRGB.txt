@@ -38,7 +38,7 @@
 //        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
 //        const int BASE_MASK = BASE_SCALE - 1;
 //        ImageReaderWriterBase srcRW;
-//        public dbugImgSpanGenRGB_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+//        public dbugImgSpanGenRGB_NNStepXby1(IBitmapBlender src, ISpanInterpolator spanInterpolator)
 //            : base(spanInterpolator)
 //        {
 //            this.srcRW = (ImageReaderWriterBase)src;
@@ -123,7 +123,7 @@
 //        const int BASE_MASK = BASE_SCALE - 1;
 //        ImageReaderWriterBase srcRW;
 //        //--------------------------------------------------------------------
-//        public dbugImgSpanGenRGB_BilinearClip(IImageReaderWriter src,
+//        public dbugImgSpanGenRGB_BilinearClip(IBitmapBlender src,
 //                                          Drawing.Color back_color,
 //                                          ISpanInterpolator inter)
 //            : base(inter)

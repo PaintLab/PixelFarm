@@ -56,109 +56,19 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         void GenerateMaskWithWinGdiPlus(int w, int h)
         {
-            //1. create 32 bits for mask image
-            this.a_alphaBmp = new System.Drawing.Bitmap(w, h);
-            //2. create graphics based on a_alphaBmp
-            using (System.Drawing.Graphics gfxBmp = System.Drawing.Graphics.FromImage(a_alphaBmp))
-            {
-                gfxBmp.Clear(System.Drawing.Color.Black);
-                //ClipProxyImage clippingProxy = new ClipProxyImage(image);
-                //clippingProxy.Clear(ColorRGBA.Black);
-                VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
-                System.Random randGenerator = new Random(1432);
-                int num = (int)maskAlphaSliderValue;
-                int lim = num - 1;
-                for (int i = 0; i < lim; ++i)
-                {
-                    ellipseForMask.Reset(randGenerator.Next() % w,
-                                 randGenerator.Next() % h,
-                                 randGenerator.Next() % 100 + 20,
-                                 randGenerator.Next() % 100 + 20,
-                                 100);
-                    // set the color to draw into the alpha channel.
-                    // there is not very much reason to set the alpha as you will get the amount of 
-                    // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                    //rasterizer.AddPath(ellipseForMask.MakeVxs());
-                    //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
-                    //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
 
-                    VectorToolBox.GetFreeVxs(out var v1);
-                    VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v1), ColorEx.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                    VectorToolBox.ReleaseVxs(ref v1);
-
-                }
-                //the last one
-                ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                //fill 
-                VectorToolBox.GetFreeVxs(out var v2);
-                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), ColorEx.Make(0, 0, 0, 255));
-                v2.Clear();// reuse later
-                //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
-                ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
-
-                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), ColorEx.Make(255, 0, 0, 255));
-
-                VectorToolBox.ReleaseVxs(ref v2);
-
-                //for (i = 0; i < num; i++)
-                //{
-                //    if (i == num - 1)
-                //    {
-                //        ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                //        //fill 
-                //        VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(0, 0, 0, 255));
-                //        //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //        //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
-                //        ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                //        //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //        //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
-                //        VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(255, 0, 0, 255));
-                //    }
-                //    else
-                //    {
-                //        ellipseForMask.Reset(randGenerator.Next() % w,
-                //                 randGenerator.Next() % h,
-                //                 randGenerator.Next() % 100 + 20,
-                //                 randGenerator.Next() % 100 + 20,
-                //                 100);
-                //        // set the color to draw into the alpha channel.
-                //        // there is not very much reason to set the alpha as you will get the amount of 
-                //        // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                //        //rasterizer.AddPath(ellipseForMask.MakeVxs());
-                //        //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
-                //        //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                //        VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                //    }
-                //}
-            }
         }
-        void generate_alpha_mask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
+        void GenAlphaMask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
-
 
             alphaBitmap = new ActualImage(width, height);
             //
             var bmpReaderWrtier = new MyImageReaderWriter();
             bmpReaderWrtier.ReloadImage(alphaBitmap);
-            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderBGRA());
-
-            //create mask from alpahMaskImageBuffer
-            //alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
-#if USE_CLIPPING_ALPHA_MASK
-            //alphaMaskImageBuffer.AttachBuffer(alphaBitmap.GetBuffer(), 20 * width + 20, width - 40, height - 40, width, 8, 1);
-#else
-            alphaMaskImageBuffer.attach(alphaByteArray, (int)cx, (int)cy, cx, 1);
-#endif
-
+            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderGrey()); 
             //
-            var image = new SubImageRW(alphaMaskImageBuffer, new PixelBlenderGrey());
-            //
-            ClipProxyImage clippingProxy = new ClipProxyImage(image);
-            clippingProxy.Clear(Drawing.Color.Black);
-
+            ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);
+            clippingProxy.Clear(Drawing.Color.Black); 
 
             System.Random randGenerator = new Random(1432);
             int i;
@@ -167,23 +77,21 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
             int elliseFlattenStep = 64;
             VectorToolBox.GetFreeVxs(out var v1);
+            VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
+
             for (i = 0; i < num; i++)
             {
-                VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
+                
                 if (i == num - 1)
                 {
                     ////for the last one
-                    //VertexStore v1 = new VertexStore();
+                   
                     ellipseForMask.Reset(Width / 2, (Height / 2) - 90, 110, 110, elliseFlattenStep);
                     rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
                     v1.Clear();
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 255, 0));
-
-                    //
-                    //
-                    //ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
-                    //v1 = new VertexStore();
+ 
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, elliseFlattenStep);
                     rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
@@ -202,7 +110,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     // set the color to draw into the alpha channel.
                     // there is not very much reason to set the alpha as you will get the amount of 
                     // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                    //VertexStore v1 = new VertexStore();
+                  
                     rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVxs(v1));
                     v1.Clear();
@@ -366,7 +274,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                generate_alpha_mask(aggsx.ScanlineRasToDestBitmap, aggsx.ScanlinePacked8, aggsx.ScanlineRasterizer, width, height);
+                GenAlphaMask(aggsx.ScanlineRasToDestBitmap, aggsx.ScanlinePacked8, aggsx.ScanlineRasterizer, width, height);
                 this.isMaskSliderValueChanged = false;
                 maskPixelBlender.SetMaskImage(alphaBitmap);
 

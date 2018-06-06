@@ -25,7 +25,7 @@ namespace PixelFarm.Agg
     /// <summary>
     /// access reader /writer to an image buffer
     /// </summary>
-    public interface IImageReaderWriter
+    public interface IBitmapBlender
     {
         int BitDepth { get; }
         int Width { get; }
@@ -51,7 +51,7 @@ namespace PixelFarm.Agg
         //-------------------------------------------------------------------------------------------
 
 
-        void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset); //not used
+        void CopyFrom(IBitmapBlender sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset); //not used
         // line stuff
         void CopyHL(int x, int y, int len, Color sourceColor);//not used
         void CopyVL(int x, int y, int len, Color sourceColor);//not used

@@ -441,7 +441,7 @@ namespace PixelFarm.Agg.Imaging
             m_buf = new ArrayList<Color>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         }
-        public void BlurX(IImageReaderWriter img, double radius)
+        public void BlurX(IBitmapBlender img, double radius)
         {
             if (radius < 0.62) return;
             if (img.Width < 3) return;
@@ -513,13 +513,13 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public void BlurY(IImageReaderWriter img, double radius)
+        public void BlurY(IBitmapBlender img, double radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
             BlurX(img2, radius);
         }
 
-        public void Blur(IImageReaderWriter img, double radius)
+        public void Blur(IBitmapBlender img, double radius)
         {
             BlurX(img, radius);
             BlurY(img, radius);
