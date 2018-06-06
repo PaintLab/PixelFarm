@@ -54,9 +54,10 @@ namespace PixelFarm.Agg.Imaging
     public abstract class PixelBlender32
     {
         public int NumPixelBits { get { return 32; } }
-        public const byte BASE_MASK = 255;
-        
-        
+
+        internal const byte BASE_MASK = 255;
+
+
         internal abstract void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
         internal abstract void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
