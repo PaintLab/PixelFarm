@@ -56,7 +56,7 @@ namespace PixelFarm.Agg.Imaging
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
-        public SubImageRW(IBitmapBlender image,
+        public SubImageRW(IBitmapSrc image,
             PixelBlender32 blender,
             int distanceBetweenPixelsInclusive,
             int arrayOffset32,
@@ -65,15 +65,11 @@ namespace PixelFarm.Agg.Imaging
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
-        public SubImageRW(IBitmapBlender image, PixelBlender32 blender)
+        public SubImageRW(IBitmapSrc image, PixelBlender32 blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-        //public SubImageRW(IBitmapBlender image, IPixelBlender blender, int x1, int y1, int x2, int y2)
-        //{
-        //    SetRecieveBlender(blender);
-        //    Attach(image, x1, y1, x2, y2);
-        //}
+       
         public override void ReplaceBuffer(int[] newbuffer)
         {
             if (_sourceImage != null)
@@ -99,8 +95,8 @@ namespace PixelFarm.Agg.Imaging
 
         }
 
-        IBitmapBlender _sourceImage;
-        void Attach(IBitmapBlender sourceImage,
+        IBitmapSrc _sourceImage;
+        void Attach(IBitmapSrc sourceImage,
           PixelBlender32 recieveBlender,
           int distanceBetweenPixelsInclusive,
           int arrayElemOffset,

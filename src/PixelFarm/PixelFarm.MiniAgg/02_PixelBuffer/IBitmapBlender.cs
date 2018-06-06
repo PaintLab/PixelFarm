@@ -22,7 +22,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
-    public interface IBitmap
+    public interface IBitmapSrc
     {
         int BitDepth { get; }
         int Width { get; }
@@ -34,17 +34,18 @@ namespace PixelFarm.Agg
         int Stride { get; }
         int BytesBetweenPixelsInclusive { get; }
         void ReplaceBuffer(int[] newBuffer);
-        Color GetPixel(int x, int y);
-        void SetPixel(int x, int y, Color color);
+        Color GetPixel(int x, int y); 
     }
+
+
     /// <summary>
     /// access reader /writer to an image buffer
     /// </summary>
-    public interface IBitmapBlender : IBitmap
-    { 
-
+    public interface IBitmapBlender : IBitmapSrc
+    {
+        void SetPixel(int x, int y, Color color);
         PixelBlender32 GetRecieveBlender();
-        void SetRecieveBlender(PixelBlender32 value); 
+        void SetRecieveBlender(PixelBlender32 value);
         //-------------------------------------------------------------------------------------------
         void BlendHL(int x, int y, int x2, Color sourceColor, byte cover); //**
         void BlendVL(int x, int y1, int y2, Color sourceColor, byte cover);
