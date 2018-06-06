@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         double skewX = 0;
         double skewY = 0;
         bool isMaskSliderValueChanged = true;
-        SubImageRW alphaMaskImageBuffer;
+        SubBitmapBlender alphaMaskImageBuffer;
         //IAlphaMask alphaMask;
         System.Drawing.Bitmap a_alphaBmp;
         public alpha_mask2_application()
@@ -65,7 +65,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //
             var bmpReaderWrtier = new MyImageReaderWriter();
             bmpReaderWrtier.ReloadImage(alphaBitmap);
-            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderGrey()); 
+            alphaMaskImageBuffer = new SubBitmapBlender(bmpReaderWrtier, new PixelBlenderGrey()); 
             //
             ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);
             clippingProxy.Clear(Drawing.Color.Black); 

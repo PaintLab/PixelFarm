@@ -327,6 +327,9 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\RenderSurface\AggRenderSurface_RenderImages.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\ColorOrder.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ColorOrder.cs</Link>
     </Compile>
@@ -339,20 +342,14 @@
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\IBitmapBlender.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\IBitmapBlender.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\ImageHelper.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ImageHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\ImageReaderWriterBase.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ImageReaderWriterBase.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\SubImageRW.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs</Link>

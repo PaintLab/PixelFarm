@@ -61,7 +61,7 @@ namespace PixelFarm.Agg.Lines
         IPatternFilter m_filter;
         int m_dilation;
         int m_dilation_hr;
-        SubImageRW m_buf;
+        SubBitmapBlender m_buf;
         int[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
@@ -148,7 +148,7 @@ namespace PixelFarm.Agg.Lines
             }
 
 
-            m_buf = new SubImageRW(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
+            m_buf = new SubBitmapBlender(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
 
             unsafe
             {

@@ -94,12 +94,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             {
                 AggPainter p2 = (AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
-                SubImageRW subImg = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
+                SubBitmapBlender subImg = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
 
                 //TODO: review here again
                 PixelBlenderBGRA blenderWithGamma = new PixelBlenderBGRA();
 
-                SubImageRW rasterGamma = new SubImageRW(subImg, blenderWithGamma);
+                SubBitmapBlender rasterGamma = new SubBitmapBlender(subImg, blenderWithGamma);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(subImg);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);

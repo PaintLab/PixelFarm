@@ -22,11 +22,11 @@ using System;
 namespace PixelFarm.Agg.Imaging
 {
     /// <summary>
-    /// sub-image reader /writer
+    /// sub-image reader /writer/blend part of org bitmap
     /// </summary>
-    public class SubImageRW : BitmapBlenderBase
+    public class SubBitmapBlender : BitmapBlenderBase
     {
-        public SubImageRW(IBitmapBlender image,
+        public SubBitmapBlender(IBitmapBlender image,
             int arrayOffset32,
             int width,
             int height)
@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Imaging
                 image.BytesBetweenPixelsInclusive);
         }
 
-        public SubImageRW(int[] buffer,
+        public SubBitmapBlender(int[] buffer,
             int arrayOffset32,
             int width,
             int height,
@@ -56,7 +56,7 @@ namespace PixelFarm.Agg.Imaging
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
-        public SubImageRW(IBitmapSrc image,
+        public SubBitmapBlender(IBitmapSrc image,
             PixelBlender32 blender,
             int distanceBetweenPixelsInclusive,
             int arrayOffset32,
@@ -65,11 +65,11 @@ namespace PixelFarm.Agg.Imaging
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
-        public SubImageRW(IBitmapSrc image, PixelBlender32 blender)
+        public SubBitmapBlender(IBitmapSrc image, PixelBlender32 blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-       
+
         public override void ReplaceBuffer(int[] newbuffer)
         {
             if (_sourceImage != null)
@@ -156,4 +156,35 @@ namespace PixelFarm.Agg.Imaging
             SetUpLookupTables();
         }
     }
+
+
+
+
+
+    public static class BitmapBlenderExtension
+    {
+        /// <summary>
+        /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
+        /// It will modify the original main image when you draw to it.
+        /// </summary>
+        /// <param name="parentImage"></param>
+        /// <param name="subImgBounds"></param>
+        /// <returns></returns>
+        public static SubBitmapBlender CreateSubBitmapBlender(IBitmapBlender parentImage, RectInt subImgBounds)
+        {
+            if (subImgBounds.Left < 0 || subImgBounds.Bottom < 0 || subImgBounds.Right > parentImage.Width || subImgBounds.Top > parentImage.Height
+                || subImgBounds.Left >= subImgBounds.Right || subImgBounds.Bottom >= subImgBounds.Top)
+            {
+                throw new ArgumentException("The subImageBounds must be on the image and valid.");
+            }
+
+            int left = Math.Max(0, subImgBounds.Left);
+            int bottom = Math.Max(0, subImgBounds.Bottom);
+            int width = Math.Min(parentImage.Width - left, subImgBounds.Width);
+            int height = Math.Min(parentImage.Height - bottom, subImgBounds.Height);
+            int bufferOffsetToFirstPixel = parentImage.GetByteBufferOffsetXY(left, bottom);
+            return new SubBitmapBlender(parentImage, bufferOffsetToFirstPixel / 4, width, height);
+        }
+    }
+
 }

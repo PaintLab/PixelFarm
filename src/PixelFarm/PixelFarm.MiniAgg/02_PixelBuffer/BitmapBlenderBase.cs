@@ -25,7 +25,7 @@ namespace PixelFarm.Agg
 {
 
     /// <summary>
-    /// base class for access(read/write) pixel buffer
+    /// base class for access(read/write/blend) pixel buffer
     /// </summary>
     public abstract class BitmapBlenderBase : IBitmapBlender
     {
@@ -917,8 +917,8 @@ namespace PixelFarm.Agg
                            ActualImage.GetBuffer(actualImage),
                            new PixelBlenderBGRA());
         }
-
     }
 
 
+   
 }
