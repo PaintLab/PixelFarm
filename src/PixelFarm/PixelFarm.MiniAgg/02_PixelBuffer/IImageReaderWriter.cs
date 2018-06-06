@@ -37,8 +37,8 @@ namespace PixelFarm.Agg
         int Stride { get; }
         int BytesBetweenPixelsInclusive { get; }
 
-        IPixelBlender GetRecieveBlender();
-        void SetRecieveBlender(IPixelBlender value);
+        PixelBlender32 GetRecieveBlender();
+        void SetRecieveBlender(PixelBlender32 value);
         int[] GetInt32Buffer();
         TempMemPtr GetBufferPtr();
         void ReplaceBuffer(int[] newBuffer);

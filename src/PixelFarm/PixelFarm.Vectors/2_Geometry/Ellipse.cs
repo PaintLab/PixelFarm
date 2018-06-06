@@ -55,6 +55,7 @@ namespace PixelFarm.Agg.VertexSource
             radiusX = rx;
             radiusY = ry;
             m_cw = cw;
+            m_scale = 1;
             numSteps = num_steps;
             if (numSteps == 0)
             {

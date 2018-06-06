@@ -1483,20 +1483,10 @@ namespace PixelFarm.Agg
             int scline_width = sclineRas.MaxX - sclineRas.MinX;
             tempSpanColors.Clear(scline_width);
             if(scline_width > tempSpanColors.AllocatedSize)
-            {
+            { //if not enough -> alloc more
                 tempSpanColors.Clear(scline_width); 
             }
-            //if (dest.Stride / 4 >= (tempSpanColors.AllocatedSize))
-            //{
-            //    //if not enough -> alloc more
-            //    tempSpanColors.Clear((dest.Stride + 16) / 4);
-            //}
-            //if (dest.Stride  >= (tempSpanColors.AllocatedSize))
-            //{
-            //    //if not enough -> alloc more
-            //    tempSpanColors.Clear(dest.Stride);
-            //}
-
+            
 
             Color[] colorArray = tempSpanColors.Array;
             while (sclineRas.SweepScanline(scline))

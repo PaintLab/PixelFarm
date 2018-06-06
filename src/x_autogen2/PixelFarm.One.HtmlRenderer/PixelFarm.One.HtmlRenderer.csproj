@@ -1196,12 +1196,6 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\3_filter\StackBlur.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\3_filter\StackBlur.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMask.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMask.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMaskAdaptor.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMaskAdaptor.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\FilterMan.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\FilterMan.cs</Link>
     </Compile>

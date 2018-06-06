@@ -422,8 +422,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\3_filter\RecursiveBlur.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg.Complements\3_Filter\SharpenFilter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\3_filter\StackBlur.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\4_image\AlphaMask.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\4_image\AlphaMaskAdaptor.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\4_image\FilterMan.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\4_image\FloodFiller.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\4_image\Transposer.cs" />

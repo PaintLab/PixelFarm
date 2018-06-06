@@ -297,12 +297,6 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\StackBlur.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\StackBlur.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\AlphaMask.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\AlphaMask.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\AlphaMaskAdaptor.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\AlphaMaskAdaptor.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\FilterMan.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\FilterMan.cs</Link>
     </Compile>
