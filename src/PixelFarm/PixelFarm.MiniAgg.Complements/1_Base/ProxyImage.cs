@@ -60,12 +60,12 @@ namespace PixelFarm.Agg.Imaging
             return linkedImage.GetBounds();
         }
 
-        public IPixelBlender GetRecieveBlender()
+        public PixelBlender32 GetRecieveBlender()
         {
             return linkedImage.GetRecieveBlender();
         }
 
-        public void SetRecieveBlender(IPixelBlender value)
+        public void SetRecieveBlender(PixelBlender32 value)
         {
             linkedImage.SetRecieveBlender(value);
         }
@@ -84,11 +84,7 @@ namespace PixelFarm.Agg.Imaging
         {
             linkedImage.SetPixel(x, y, color);
         }
-
-        //public virtual void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover)
-        //{
-        //    linkedImage.BlendPixel(x, y, sourceColor, cover);
-        //}
+         
 
         public virtual void CopyHL(int x, int y, int len, Color sourceColor)
         {

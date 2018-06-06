@@ -57,7 +57,7 @@ namespace PixelFarm.Agg.Imaging
                 distanceInBytesBetweenPixelsInclusive);
         }
         public SubImageRW(IImageReaderWriter image,
-            IPixelBlender blender,
+            PixelBlender32 blender,
             int distanceBetweenPixelsInclusive,
             int arrayOffset32,
             int bitsPerPixel)
@@ -65,7 +65,7 @@ namespace PixelFarm.Agg.Imaging
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
-        public SubImageRW(IImageReaderWriter image, IPixelBlender blender)
+        public SubImageRW(IImageReaderWriter image, PixelBlender32 blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
@@ -101,7 +101,7 @@ namespace PixelFarm.Agg.Imaging
 
         IImageReaderWriter _sourceImage;
         void Attach(IImageReaderWriter sourceImage,
-          IPixelBlender recieveBlender,
+          PixelBlender32 recieveBlender,
           int distanceBetweenPixelsInclusive,
           int arrayElemOffset,
           int bitsPerPixel)

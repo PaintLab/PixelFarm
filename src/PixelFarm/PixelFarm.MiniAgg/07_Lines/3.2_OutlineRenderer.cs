@@ -197,7 +197,8 @@ namespace PixelFarm.Agg.Lines
         LineProfileAnitAlias lineProfile;
         RectInt clippingRectangle;
         bool doClipping;
-        IPixelBlender destPixelBlender;
+        PixelBlender32 destPixelBlender;
+
 #if false
         public int min_x() { throw new System.NotImplementedException(); }
         public int min_y() { throw new System.NotImplementedException(); }
@@ -209,7 +210,7 @@ namespace PixelFarm.Agg.Lines
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(IImageReaderWriter destImage, IPixelBlender destPixelBlender, LineProfileAnitAlias profile)
+        public OutlineRenderer(IImageReaderWriter destImage, PixelBlender32 destPixelBlender, LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;
@@ -388,7 +389,7 @@ namespace PixelFarm.Agg.Lines
 
             LineInterpolatorAA0 li = new LineInterpolatorAA0(this, lp);
             li.Loop();
-            
+
         }
 
         public override void Line0(LineParameters lp)
@@ -553,7 +554,7 @@ namespace PixelFarm.Agg.Lines
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
             LineInterpolatorAA3 li = new LineInterpolatorAA3(this, lp, sx, sy, ex, ey);
-            li.Loop(); 
+            li.Loop();
         }
 
         public override void Line3(LineParameters lp,

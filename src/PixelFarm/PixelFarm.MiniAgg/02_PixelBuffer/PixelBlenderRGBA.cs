@@ -51,25 +51,13 @@ namespace PixelFarm.Agg.Imaging
         }
     }
 
-
-
-    public interface IPixelBlender
-    {
-        /// <summary>
-        /// info 
-        /// </summary>
-        int NumPixelBits { get; }
- 
-    }
-
-    public abstract class PixelBlenderBGRABase : IPixelBlender
+    public abstract class PixelBlender32
     {
         public int NumPixelBits { get { return 32; } }
         public const byte BASE_MASK = 255;
 
-
-
-        internal abstract void BlendPixel32(int[] dstBuffer, int arrayOffset, Color srcColor);
+        
+        internal abstract void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
         internal abstract void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
             Color[] sourceColors, int sourceColorsOffset,
@@ -102,7 +90,7 @@ namespace PixelFarm.Agg.Imaging
         }
     }
 
-    public class PixelBlenderBGRA : PixelBlenderBGRABase, IPixelBlender
+    public class PixelBlenderBGRA : PixelBlender32
     {
         //from https://microsoft.github.io/Win2D/html/PremultipliedAlpha.htm
         //1. Straight alpha
@@ -151,7 +139,7 @@ namespace PixelFarm.Agg.Imaging
         }
 
 
-        internal override void BlendPixel32(int[] dstBuffer, int arrayOffset, Color srcColor)
+        internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -378,7 +366,7 @@ namespace PixelFarm.Agg.Imaging
 
 
 
-        static unsafe void BlendPixel32Internal(int* ptr, Color srcColor, int coverageValue)
+        static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, int coverageValue)
         {
             //calculate new alpha
             int src_a = (byte)((srcColor.alpha * coverageValue + 255) >> 8);
@@ -387,11 +375,11 @@ namespace PixelFarm.Agg.Imaging
             {
                 if (src_a == 255)
                 {
-                    *ptr = srcColor.ToARGB(); //just copy
+                    *dstPtr = srcColor.ToARGB(); //just copy
                 }
                 else
                 {
-                    int dest = *ptr;
+                    int dest = *dstPtr;
                     //separate each component
                     byte a = (byte)((dest >> 24) & 0xff);
                     byte r = (byte)((dest >> 16) & 0xff);
@@ -399,7 +387,7 @@ namespace PixelFarm.Agg.Imaging
                     byte b = (byte)((dest) & 0xff);
 
 
-                    *ptr =
+                    *dstPtr =
                      ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
                      ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
                      ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT) << 8) |
@@ -408,17 +396,17 @@ namespace PixelFarm.Agg.Imaging
             }
 
         }
-        static unsafe void BlendPixel32Internal(int* dstBuffer, Color srcColor)
+        static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor)
         {
             unchecked
             {
                 if (srcColor.alpha == 255)
                 {
-                    *dstBuffer = srcColor.ToARGB(); //just copy
+                    *dstPtr = srcColor.ToARGB(); //just copy
                 }
                 else
                 {
-                    int dest = *dstBuffer;
+                    int dest = *dstPtr;
                     //separate each component
                     byte a = (byte)((dest >> 24) & 0xff);
                     byte r = (byte)((dest >> 16) & 0xff);
@@ -427,7 +415,7 @@ namespace PixelFarm.Agg.Imaging
 
                     byte src_a = srcColor.alpha;
 
-                    *dstBuffer =
+                    *dstPtr =
                      ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
                      ((byte)(((srcColor.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
                      ((byte)(((srcColor.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |

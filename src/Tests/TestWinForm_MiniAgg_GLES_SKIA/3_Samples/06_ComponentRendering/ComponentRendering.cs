@@ -43,14 +43,14 @@ namespace PixelFarm.Agg
             if (asx.DestImage != null)
             {
                 IImageReaderWriter backBuffer = asx.DestImage;
-                IPixelBlender currentPixelBlender = asx.PixelBlender;
+
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
- 
+
                 //use different pixel blender 
                 var redImageBuffer = new SubImageRW(backBuffer, new PixelBlenderRed());
                 var greenImageBuffer = new SubImageRW(backBuffer, new PixelBlenderRed());
                 var blueImageBuffer = new SubImageRW(backBuffer, new PixelBlenderRed());
- 
+
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
                 ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
@@ -72,7 +72,7 @@ namespace PixelFarm.Agg
                 sclineRas.AddPath(er.MakeVxs(v1));
                 v1.Clear();
                 sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
-                
+
                 ////
                 VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(eg.MakeVertexSnap(v1));
