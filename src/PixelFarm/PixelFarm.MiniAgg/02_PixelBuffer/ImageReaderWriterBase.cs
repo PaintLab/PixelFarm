@@ -300,13 +300,15 @@ namespace PixelFarm.Agg
         /// <param name="value"></param>
         public void SetRecieveBlender(PixelBlender32 value)
         {
+
+#if DEBUG
             if (BitDepth != 0 && value != null && value.NumPixelBits != BitDepth)
             {
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
+#endif
             _recvBlender32 = value;
         }
-
         protected void SetUpLookupTables()
         {
             yTableArray = new int[height];

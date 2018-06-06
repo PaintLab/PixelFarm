@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
         ScanlinePacked8 sclinePack8;
 
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
-        PixelBlenderBGRA pixBlenderRGBA32; 
+        PixelBlenderBGRA pixBlenderRGBA32;
         double ox; //canvas origin x
         double oy; //canvas origin y
         int destWidth;
@@ -59,7 +59,7 @@ namespace PixelFarm.Agg
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this.sclineRas.SetClipBox(this.clipBox);
             this.sclinePack8 = new ScanlinePacked8();
-              this.pixBlenderRGBA32 = new PixelBlenderBGRA();
+            this.pixBlenderRGBA32 = new PixelBlenderBGRA();
         }
 
         public int Width { get { return destWidth; } }

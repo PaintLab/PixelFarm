@@ -347,6 +347,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
         }
+
+        PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
         public override void Draw(Painter p)
         {
             if (p is GdiPlusPainter)
@@ -355,7 +357,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 return;
             }
             AggPainter p2 = (AggPainter)p;
-
+            p2.Clear(Color.White);
             AggRenderSurface aggsx = p2.RenderSurface;
             MyImageReaderWriter widgetsSubImage = (MyImageReaderWriter)aggsx.DestImage;
             ScanlinePacked8 scline = aggsx.ScanlinePacked8;
@@ -366,14 +368,22 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             {
                 generate_alpha_mask(aggsx.ScanlineRasToDestBitmap, aggsx.ScanlinePacked8, aggsx.ScanlineRasterizer, width, height);
                 this.isMaskSliderValueChanged = false;
+                maskPixelBlender.SetMaskImage(alphaBitmap);
+
             }
 
             //1. alpha mask...
-            p2.DrawImage(alphaBitmap, 0, 0);
+            //p2.DrawImage(alphaBitmap, 0, 0);
+
+
+            var blender = widgetsSubImage.GetRecieveBlender();
+            widgetsSubImage.SetRecieveBlender(maskPixelBlender);
             //
             //2. 
             p2.FillColor = Color.Blue;
-            p2.FillCircle(100, 100, 50);
+            p2.FillCircle(300, 300, 100);
+            widgetsSubImage.SetRecieveBlender(blender);
+
 
             //var rasterizer = aggsx.ScanlineRasterizer;
             //rasterizer.SetClipBox(0, 0, width, height);
