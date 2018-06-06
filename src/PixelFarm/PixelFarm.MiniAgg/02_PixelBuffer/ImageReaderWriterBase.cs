@@ -746,14 +746,16 @@ namespace PixelFarm.Agg
                             do
                             {
                                 //-----------------------
-                                int cover = covers[coversIndex++];
+                                byte cover = covers[coversIndex++];
 
                                 if (cover == 255)
                                 {
+                                    //full cover => so use original color
                                     _recvBlender32.BlendPixel32(head + bufferOffset32, colors[colorsIndex]);
                                 }
                                 else
                                 {
+                                    //not full => use new color (change alpha) 
                                     _recvBlender32.BlendPixel32(head + bufferOffset32, colors[colorsIndex].NewFromChangeCoverage(cover));
                                 }
                                 //-----------------------
