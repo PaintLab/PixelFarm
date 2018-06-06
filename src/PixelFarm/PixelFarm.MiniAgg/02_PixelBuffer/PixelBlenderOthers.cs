@@ -797,11 +797,17 @@ namespace PixelFarm.Agg.Imaging
     }
 
 
+
     /// <summary>
-    /// change destination alpha change with red color from source
+    /// apply mask to srcColor before send it to dest bmp
     /// </summary>
     public class PixelBlenderWithMask : PixelBlender32
     {
+        IImageReaderWriter _maskImg;
+        public void SetMaskImage(IImageReaderWriter maskImg)
+        {
+            _maskImg = maskImg;
+        }
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe

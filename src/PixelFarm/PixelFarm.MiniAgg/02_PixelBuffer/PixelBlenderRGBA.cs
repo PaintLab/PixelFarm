@@ -55,16 +55,19 @@ namespace PixelFarm.Agg.Imaging
     {
         public int NumPixelBits { get { return 32; } }
         public const byte BASE_MASK = 255;
-
+        
         
         internal abstract void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
         internal abstract void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
             Color[] sourceColors, int sourceColorsOffset,
             byte[] covers, int coversIndex, bool firstCoverForAll, int count);
+
         internal abstract void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count);
         internal abstract void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
+
         internal abstract unsafe void BlendPixel32(int* ptr, Color sc);
+
         internal Color PixelToColorRGBA(int[] buffer, int bufferOffset32)
         {
             //TODO: review here ...             
