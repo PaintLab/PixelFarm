@@ -685,13 +685,23 @@ namespace PixelFarm.Agg
             {
                 unsafe
                 {
-                    fixed (int* head = &raw_buffer32[0])
+                    fixed (int* dstBuffer = &raw_buffer32[0])
                     {
-
                         int actualWidth = scanWidthBytes / 4;
                         do
                         {
-                            CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, head, bufferOffset32, colors[colorsIndex], covers[coversIndex++]);
+
+                            //-----------------------
+                            int cover = covers[coversIndex++];
+                            if (cover == 255)
+                            {
+                                _recvBlender32.BlendPixel32(dstBuffer + bufferOffset32, colors[colorsIndex]);
+                            }
+                            else
+                            {
+                                _recvBlender32.BlendPixel32(dstBuffer + bufferOffset32, colors[colorsIndex].NewFromChangeCoverage(cover));
+                            }
+                            //-----------------------
 
                             //bufferOffset += actualWidth;
                             bufferOffset32++;
@@ -735,7 +745,19 @@ namespace PixelFarm.Agg
                             int actualWidth = scanWidthBytes / 4;
                             do
                             {
-                                CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, head, bufferOffset32, colors[colorsIndex], covers[coversIndex]);
+                                //-----------------------
+                                int cover = covers[coversIndex++];
+
+                                if (cover == 255)
+                                {
+                                    _recvBlender32.BlendPixel32(head + bufferOffset32, colors[colorsIndex]);
+                                }
+                                else
+                                {
+                                    _recvBlender32.BlendPixel32(head + bufferOffset32, colors[colorsIndex].NewFromChangeCoverage(cover));
+                                }
+                                //-----------------------
+
                                 // bufferOffset += actualWidth;
                                 ++colorsIndex;
                             }
@@ -760,18 +782,6 @@ namespace PixelFarm.Agg
         }
 #endif
 
-
-        static unsafe void CopyOrBlend32_BasedOnAlphaAndCover(PixelBlender32 recieveBlender, int* destBuffer, int destArrayOffset, Color sourceColor, int cover)
-        {
-            if (cover == 255)
-            {
-                recieveBlender.BlendPixel32(destBuffer + destArrayOffset, sourceColor);
-            }
-            else
-            {
-                recieveBlender.BlendPixel32(destBuffer + destArrayOffset, sourceColor.NewFromChangeCoverage(cover));
-            }
-        }
 
         public int[] GetInt32Buffer()
         {
