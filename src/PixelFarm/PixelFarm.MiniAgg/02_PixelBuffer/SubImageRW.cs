@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Imaging
     /// <summary>
     /// sub-image reader /writer
     /// </summary>
-    public class SubImageRW : ImageReaderWriterBase
+    public class SubImageRW : BitmapBlenderBase
     {
         public SubImageRW(IBitmapBlender image,
             int arrayOffset32,

@@ -84,7 +84,7 @@ namespace PixelFarm.Agg
                 return this.pixBlenderRGBA32;
             }
         }
-        public ImageReaderWriterBase DestImage
+        public BitmapBlenderBase DestImage
         {
             get { return this.destImageReaderWriter; }
         }

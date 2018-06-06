@@ -27,7 +27,7 @@ namespace PixelFarm.Agg
     /// <summary>
     /// base class for access(read/write) pixel buffer
     /// </summary>
-    public abstract class ImageReaderWriterBase : IBitmapBlender
+    public abstract class BitmapBlenderBase : IBitmapBlender
     {
         const int BASE_MASK = 255;
         //--------------------------------------------
@@ -354,7 +354,7 @@ namespace PixelFarm.Agg
                 throw new Exception("The yTable and xTable should be allocated correctly at this point. Figure out what happend.");
             }
         }
-        public static void CopySubBufferToInt32Array(ImageReaderWriterBase buff, int mx, int my, int w, int h, int[] buffer)
+        public static void CopySubBufferToInt32Array(BitmapBlenderBase buff, int mx, int my, int w, int h, int[] buffer)
         {
             //TODO: review here, 
             //check pixel format for an image buffer before use
@@ -889,7 +889,7 @@ namespace PixelFarm.Agg
 
 
 
-    public class MyImageReaderWriter : ImageReaderWriterBase
+    public class MyImageReaderWriter : BitmapBlenderBase
     {
         ActualImage actualImage;
         public MyImageReaderWriter()

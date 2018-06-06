@@ -129,9 +129,9 @@ namespace PixelFarm.Agg
         }
 
 
-        ImageReaderWriterBase _destImgRW;
+        BitmapBlenderBase _destImgRW;
 
-        public void Fill(ImageReaderWriterBase bufferToFillOn, int x, int y)
+        public void Fill(BitmapBlenderBase bufferToFillOn, int x, int y)
         {
             y -= imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number

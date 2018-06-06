@@ -37,11 +37,11 @@
 //        const int BASE_SHIFT = 8;
 //        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
 //        const int BASE_MASK = BASE_SCALE - 1;
-//        ImageReaderWriterBase srcRW;
+//        BitmapBlenderBase srcRW;
 //        public dbugImgSpanGenRGB_NNStepXby1(IBitmapBlender src, ISpanInterpolator spanInterpolator)
 //            : base(spanInterpolator)
 //        {
-//            this.srcRW = (ImageReaderWriterBase)src;
+//            this.srcRW = (BitmapBlenderBase)src;
 //            if (srcRW.BitDepth != 24)
 //            {
 //                throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -121,7 +121,7 @@
 //        const int BASE_SHIFT = 8;
 //        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
 //        const int BASE_MASK = BASE_SCALE - 1;
-//        ImageReaderWriterBase srcRW;
+//        BitmapBlenderBase srcRW;
 //        //--------------------------------------------------------------------
 //        public dbugImgSpanGenRGB_BilinearClip(IBitmapBlender src,
 //                                          Drawing.Color back_color,
@@ -129,7 +129,7 @@
 //            : base(inter)
 //        {
 //            m_bgcolor = back_color;
-//            srcRW = (ImageReaderWriterBase)src;
+//            srcRW = (BitmapBlenderBase)src;
 //        }
 
 //        public Drawing.Color BackgroundColor

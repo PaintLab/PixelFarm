@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
             p[offset] = buf[y][x];
         }
 
-        public void SetPixelHighRes(ImageReaderWriterBase sourceImage,
+        public void SetPixelHighRes(BitmapBlenderBase sourceImage,
             Color[] destBuffer,
             int destBufferOffset,
             int x,

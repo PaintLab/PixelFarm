@@ -81,7 +81,7 @@ namespace PixelFarm.Agg.Lines
             m_half_height_hr = (0);
             m_offset_y_hr = (0);
         }
-        public ImageReaderWriterBase MyBuffer
+        public BitmapBlenderBase MyBuffer
         {
             get
             {
