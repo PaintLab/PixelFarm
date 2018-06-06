@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Imaging
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
         ImageReaderWriterBase srcRW;
-        public ImgSpanGenGray_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+        public ImgSpanGenGray_NNStepXby1(IBitmapBlender src, ISpanInterpolator spanInterpolator)
             : base(spanInterpolator)
         {
             srcRW = (ImageReaderWriterBase)src;
