@@ -487,8 +487,8 @@
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\GammaLookUpTable.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\GammaLookUpTable.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\IImageReaderWriter.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\IImageReaderWriter.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\IBitmapBlender.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\IBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ImageHelper.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ImageHelper.cs</Link>
