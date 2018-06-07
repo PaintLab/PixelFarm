@@ -2,11 +2,12 @@ BackEnd.DrawingBuffer
 ---  
  
 
+License: MIT
+ 
+Ported to .Net 2.0 WinForms and PixelFarm
 
-ported to .Net 2.0 WinForms and PixelFarm
 
-
-from https://github.com/teichgraf/WriteableBitmapEx
+From https://github.com/teichgraf/WriteableBitmapEx
 
 
 Sample Screenshots : 
