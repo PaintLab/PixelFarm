@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\BackEnd.NativeWindows\0_Init\GlfwOpenTKContext.cs" Link="0_Init\GlfwOpenTKContext.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\0_Init\GLFWPlatforms.cs" Link="0_Init\GLFWPlatforms.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3.cs" Link="Glfw\Glfw3.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3Delegates.cs" Link="Glfw\Glfw3Delegates.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3DelegateTypes.cs" Link="Glfw\Glfw3DelegateTypes.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3Enum.cs" Link="Glfw\Glfw3Enum.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3KeyboardState.cs" Link="Glfw\Glfw3KeyboardState.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3MouseState.cs" Link="Glfw\Glfw3MouseState.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3Structs.cs" Link="Glfw\Glfw3Structs.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3_32.cs" Link="Glfw\Glfw3_32.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Glfw\Glfw3_64.cs" Link="Glfw\Glfw3_64.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Windows\GlfwForms.cs" Link="Windows\GlfwForms.cs" />
+    <Compile Include="..\BackEnd.NativeWindows\Windows\WindowForms.cs" Link="Windows\WindowForms.cs" />
+    <Compile Include="..\BackEnd.TypeMirror\SimpleReflectionHelper.cs" Link="0_Init\SimpleReflectionHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="0_Init\" />
+    <Folder Include="Glfw\" />
+    <Folder Include="Windows\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BackEnd.MiniOpenTK.NetCore\BackEnd.MiniOpenTK.NetCore.csproj" />
+  </ItemGroup>
+
+</Project>
