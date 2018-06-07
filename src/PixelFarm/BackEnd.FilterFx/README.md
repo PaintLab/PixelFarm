@@ -15,10 +15,14 @@ Sample Screenshots:
 
 
 ![pdn01](https://user-images.githubusercontent.com/7447159/41098046-4f8147a0-6a84-11e8-9028-a2e60290d16f.png)
+
 _pic 1:  Test projects_
 
+
 ![pdn02](https://user-images.githubusercontent.com/7447159/41098044-4f0c1976-6a84-11e8-8b54-c40fbcc325f0.png)
+
 _pic 2: Pdn's **Emboss** filter_
+
 
 ![pdn03](https://user-images.githubusercontent.com/7447159/41098045-4f4a47be-6a84-11e8-8d21-fe7b223426db.png)
 
