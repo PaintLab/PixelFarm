@@ -64,8 +64,7 @@ License:
 
 ---
 
-C# Port port by: Lars Brubaker, 2007
-                 larsbrubaker@gmail.com
+C# Port port by: Lars Brubaker, 2007, https://github.com/MatterHackers/agg-sharp
 
  
 
