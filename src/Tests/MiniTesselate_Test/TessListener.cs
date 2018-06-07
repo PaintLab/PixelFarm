@@ -38,7 +38,7 @@ namespace TessTest
 
         List<Vertex> inputVertextList;
         List<Vertex> tempVertextList = new List<Vertex>();
-        public List<Vertex> resultVertexList = new List<Vertex>(); 
+        public List<Vertex> resultVertexList = new List<Vertex>();
         public TessListener()
         {
             //empty not use
@@ -100,9 +100,9 @@ namespace TessTest
             //Assert.IsTrue(GetNextOutputAsString() == "F");
             //Assert.AreEqual(GetNextOutputAsBool(), IsEdge);
         }
-
-        public void CombineCallBack(double v0, double v1, double v2, int[] data4,
-            double[] weight4, out int outData)
+        //public delegate void CallCombineDelegate(
+        // double c1, double c2, double c3, ref CombineParameters combinePars, out int outData);
+        public void CombineCallBack(double c1, double c2, double c3, ref Tesselator.CombineParameters combinePars, out int outData)
         {
             //double error = .001;
             //Assert.IsTrue(GetNextOutputAsString() == "C");
@@ -129,7 +129,7 @@ namespace TessTest
 
             outData = -this.tempVertextList.Count;
             //----------------------------------------
-            tempVertextList.Add(new Vertex(v0, v1));
+            tempVertextList.Add(new Vertex(c1, c2));
             //----------------------------------------
 
         }

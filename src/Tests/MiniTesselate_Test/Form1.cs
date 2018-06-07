@@ -26,9 +26,9 @@ namespace TessTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-           
 
-            var alist = new MiniCollection.MaxFirstList<int>();
+
+            var alist = new Tesselate.MaxFirstList<int>();
             alist.Add(16);
             alist.Add(4);
             alist.Add(14);
@@ -49,7 +49,7 @@ namespace TessTest
             alist.Add(3);
             alist.Add(2);
             alist.Add(8);
-            alist.Add(1); 
+            alist.Add(1);
 
             var a = alist.FindMin();
         }
@@ -75,7 +75,7 @@ namespace TessTest
 
             int lim = j - 2;
 
-            for (int i = 0; i < lim; )
+            for (int i = 0; i < lim;)
             {
                 var v0 = m_VertexList[i];
                 var v1 = m_VertexList[i + 1];
@@ -152,7 +152,7 @@ namespace TessTest
                 new Vertex(-1, 3),
                 new Vertex(0, 0),
                 new Vertex(1 ,3),
-                new Vertex(0 ,2),               
+                new Vertex(0 ,2),
             };
 
             t01.Connect(vertexts, tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
@@ -231,7 +231,7 @@ namespace TessTest
                 new Vertex(-1,2),
                 new Vertex(-1,1),
                 new Vertex(1,1),
-                new Vertex(1,2),  
+                new Vertex(1,2),
             };
             //------------------
 
@@ -339,8 +339,8 @@ namespace TessTest
                 new Vertex(0,3),
                 new Vertex(-1,0),
                 new Vertex(1.6,1.9),
-                new Vertex(-1.6,1.9),                                
-                new Vertex(1,0)                   
+                new Vertex(-1.6,1.9),
+                new Vertex(1,0)
             };
             //------------------
 
