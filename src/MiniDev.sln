@@ -21,11 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6_Tools", "6_Tools", "{A056
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildMergeProject", "Tools\BuildMergeProject\BuildMergeProject.csproj", "{FA071D34-6C87-425D-8110-9C3595A01106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.NativeWindows", "PixelFarm\PixelFarm.NativeWindows\BackEnd.NativeWindows.csproj", "{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.NativeWindows", "PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj", "{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGLES_GLFW_Basic", "Tests\TestGLES_GLFW_Basic\TestGLES_GLFW_Basic.csproj", "{908071D8-60E4-4BB2-8490-FB2DAA46D6B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.OpenTKWinForms", "PixelFarm\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj", "{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.OpenTKWinForms", "PixelFarm\BackEnd.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj", "{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSamples", "Tests\TestSamples\TestSamples.csproj", "{18EC3701-C6A5-429D-8C65-19ED4A2C2FED}"
 EndProject
@@ -33,17 +33,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.GLES2", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.OpenFont", "PixelFarm\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj", "{F7D71E61-9342-4DD7-9AFD-69045F2EC98B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.MiniOpenTK", "PixelFarm\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj", "{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.MiniOpenTK", "PixelFarm\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj", "{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.TypeMirror", "PixelFarm\TypeMirror\BackEnd.TypeMirror.csproj", "{68F1DAF6-2B35-476E-B2F8-5EADBC823935}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.TypeMirror", "PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj", "{68F1DAF6-2B35-476E-B2F8-5EADBC823935}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.DrawingGL", "PixelFarm\PixelFarm.DrawingGL\PixelFarm.DrawingGL.csproj", "{E1702214-6C76-46FA-A1DF-31645CA704C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.Win32Utils", "PixelFarm\Win32Utils\BackEnd.Win32Utils.csproj", "{B9C23586-913D-4EE8-B266-BD58FBD0133B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.Win32Utils", "PixelFarm\BackEnd.Win32Utils\BackEnd.Win32Utils.csproj", "{B9C23586-913D-4EE8-B266-BD58FBD0133B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.ImgCodecs", "PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj", "{BFADB269-520E-4A14-9D4A-3D65ED57EB75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.SkiaSharp", "PixelFarm\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj", "{FB828375-3017-44D8-8357-59207224906D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.SkiaSharp", "PixelFarm\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj", "{FB828375-3017-44D8-8357-59207224906D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.Skia", "PixelFarm\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj", "{9450C9FB-5A70-4E47-BEC3-B0A98A9C7D15}"
 EndProject
@@ -113,9 +113,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.Contours", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlyphTess.WinForms", "Tests\GlyphTess.WinForms\GlyphTess.WinForms.csproj", "{56DCAE82-671D-409E-A3B3-BF4834756D3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd.MiniOpenTK.NetCore", "PixelFarm\PixelFarm.MiniOpenTK.NetCore\BackEnd.MiniOpenTK.NetCore.csproj", "{118E626D-0353-48CF-8225-4C0C33336BCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd.MiniOpenTK.NetCore", "PixelFarm\BackEnd.MiniOpenTK.NetCore\BackEnd.MiniOpenTK.NetCore.csproj", "{118E626D-0353-48CF-8225-4C0C33336BCC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd.NativeWindows.NetCore", "PixelFarm\PixelFarm.NativeWindows.NetCore\BackEnd.NativeWindows.NetCore.csproj", "{395E0BEB-7E5B-4E8A-96C6-6FAAEE141B6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd.NativeWindows.NetCore", "PixelFarm\BackEnd.NativeWindows.NetCore\BackEnd.NativeWindows.NetCore.csproj", "{395E0BEB-7E5B-4E8A-96C6-6FAAEE141B6D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1_Typography_Shared", "5.1_Typography_Shared", "{B8B3271D-359F-402F-AA0C-877ECAAA7AB4}"
 EndProject
@@ -185,25 +185,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_TreeCollection", "Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.DrawingBuffer", "PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BackEnd.DrawingBuffer.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PdnSharedProject", "PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PdnSharedProject.shproj", "{536B9B08-98D7-4261-A78D-3B1CCD11D5EF}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PdnSharedProject", "PixelFarm\BackEnd.FilterFx\PdnSharedProject\PdnSharedProject.shproj", "{536B9B08-98D7-4261-A78D-3B1CCD11D5EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.FilterFx", "PixelFarm\BackEnd.DrawingFilters\PdnPixelEffectPixelFarm\BackEnd.FilterFx.csproj", "{9A7DB6EA-7F85-4420-9E42-F0F277524FB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.FilterFx", "PixelFarm\BackEnd.FilterFx\PdnPixelEffectPixelFarm\BackEnd.FilterFx.csproj", "{9A7DB6EA-7F85-4420-9E42-F0F277524FB7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.8_BackEnd", "0.8_BackEnd", "{ABA16C8F-2363-4B10-ADE5-C168383C13CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPdnEffect", "PixelFarm\BackEnd.DrawingFilters\TestPdnEffect\TestPdnEffect.csproj", "{1A8E11C5-07CE-4B98-A0BA-76F199525D7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPdnEffect", "PixelFarm\BackEnd.FilterFx\TestPdnEffect\TestPdnEffect.csproj", "{1A8E11C5-07CE-4B98-A0BA-76F199525D7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormGdiPlus", "PixelFarm\BackEnd.DrawingBuffer\Test_WinFormGdiPlus\WinFormGdiPlus.csproj", "{9422AB9D-341B-4B72-8611-86418707B2E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Svg", "PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj", "{466DD2AE-EADC-4E20-82B3-DA6D018006C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDB", "PixelFarm\BackEnd.FileDB\FileDB\FileDB.csproj", "{5F72F6FB-89BC-439F-989A-5B9581A50CC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.FileDB", "PixelFarm\BackEnd.FileDB\FileDB\BackEnd.FileDB.csproj", "{5F72F6FB-89BC-439F-989A-5B9581A50CC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "PixelFarm\BackEnd.FileDB\TestConsole\TestConsole.csproj", "{5B7F7322-3699-48E5-B631-A06CD50AFE79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extrator", "PixelFarm\BackEnd.FileDB\Extrator\Extrator.csproj", "{B71BB947-B7D5-45EF-9EF5-543A63106FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hjg.Pngcs", "PixelFarm\BackEnd.PngCs\Hjg.Pngcs\Hjg.Pngcs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.PngCs", "PixelFarm\BackEnd.PngCs\Hjg.Pngcs\BackEnd.PngCs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpZipLib", "PixelFarm\SharpZipLib\SharpZipLib.csproj", "{1EC4200D-E955-4617-9558-B859BB6B5AF2}"
 EndProject
@@ -218,8 +218,8 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PixelFarm\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{235a071b-8d06-40ae-a5c5-b1ce59715ee9}*SharedItemsImports = 13
-		PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PdnSharedProject.projitems*{536b9b08-98d7-4261-a78d-3b1ccd11d5ef}*SharedItemsImports = 13
-		PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PdnSharedProject.projitems*{9a7db6ea-7f85-4420-9e42-f0f277524fb7}*SharedItemsImports = 4
+		PixelFarm\BackEnd.FilterFx\PdnSharedProject\PdnSharedProject.projitems*{536b9b08-98d7-4261-a78d-3b1ccd11d5ef}*SharedItemsImports = 13
+		PixelFarm\BackEnd.FilterFx\PdnSharedProject\PdnSharedProject.projitems*{9a7db6ea-7f85-4420-9e42-f0f277524fb7}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Compatibility-GLFW2|Any CPU = Compatibility-GLFW2|Any CPU

@@ -56,9 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BackEnd.FileDB\FileDB\FileDB.csproj">
+    <ProjectReference Include="..\BackEnd.FileDB\FileDB\BackEnd.FileDB.csproj">
       <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
-      <Name>FileDB</Name>
+      <Name>BackEnd.FileDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
