@@ -14,7 +14,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 {
     [Info(OrderCode = "05")]
     [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
-    public class alpha_mask2_application : DemoBase
+    public class LionAlphaMask2 : DemoBase
     {
         int maskAlphaSliderValue = 100;
         ActualImage alphaBitmap;
@@ -27,8 +27,17 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         SubBitmapBlender alphaMaskImageBuffer;
         //IAlphaMask alphaMask;
         System.Drawing.Bitmap a_alphaBmp;
-        public alpha_mask2_application()
+        ActualImage lionImg;
+        public LionAlphaMask2()
         {
+
+            string imgFileName = "d:\\WImageTest\\lion1.png";
+            if (System.IO.File.Exists(imgFileName))
+            {
+                lionImg = DemoHelper.LoadImage(imgFileName);
+            } 
+
+
             lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/arrow2.svg"));
             this.Width = 800;
             this.Height = 600;
@@ -61,7 +70,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         void GenAlphaMask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
 
-            alphaBitmap = new ActualImage(width, height); 
+            alphaBitmap = new ActualImage(width, height);
             alphaMaskImageBuffer = new SubBitmapBlender(alphaBitmap, new PixelBlenderGrey());
             //
             ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);
@@ -238,7 +247,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     byte src_B = *(src); //b
                     byte src_G = *(src + 1); //g
                     byte src_R = *(src + 2); //r
-                    //convert rgb to gray scale: from  this equation...
+                                             //convert rgb to gray scale: from  this equation...
                     int y = (src_R * 77) + (src_G * 151) + (src_B * 28);
                     *(dest + 3) = (byte)(y >> 8);
                     //*(dest + 3) = (byte)((new_B + new_G + new_R) / 3);
@@ -278,9 +287,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             }
 
             //1. alpha mask...
-            //p2.DrawImage(alphaBitmap, 0, 0);
-
-
+            //p2.DrawImage(alphaBitmap, 0, 0); 
             var blender = widgetsSubImage.GetRecieveBlender();
             widgetsSubImage.SetRecieveBlender(maskPixelBlender);
             //
