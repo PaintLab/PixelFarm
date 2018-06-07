@@ -33,7 +33,7 @@ namespace PixelFarm.Agg
 
         ShapenFilterPdn pdnSharpen;
 
-        public void DoStackBlur(ImageReaderWriterBase readerWriter, int radius)
+        public void DoStackBlur(BitmapBlenderBase readerWriter, int radius)
         {
             if (stackBlur == null)
             {
@@ -41,7 +41,7 @@ namespace PixelFarm.Agg
             }
             stackBlur.Blur(readerWriter, radius, radius);
         }
-        public void DoRecursiveBlur(ImageReaderWriterBase readerWriter, int radius)
+        public void DoRecursiveBlur(BitmapBlenderBase readerWriter, int radius)
         {
             if (m_recursive_blur == null)
             {
@@ -49,7 +49,7 @@ namespace PixelFarm.Agg
             }
             m_recursive_blur.Blur(readerWriter, radius);
         }
-        public void DoSharpen(ImageReaderWriterBase readerWriter, int radius)
+        public void DoSharpen(BitmapBlenderBase readerWriter, int radius)
         {
             if (pdnSharpen == null)
             {

@@ -326,7 +326,7 @@
 //        }
 
 
-//        static unsafe int LowLevelReadTGABitsFromBuffer(ImageReaderWriterBase imageToReadTo, byte[] wholeFileBuffer, int DestBitDepth)
+//        static unsafe int LowLevelReadTGABitsFromBuffer(BitmapBlenderBase imageToReadTo, byte[] wholeFileBuffer, int DestBitDepth)
 //        {
 //            throw new NotSupportedException();
 
@@ -746,18 +746,18 @@
 //             */
 //        }
 
-//        static public bool SaveImageData(String fileNameToSaveTo, ImageReaderWriterBase image)
+//        static public bool SaveImageData(String fileNameToSaveTo, BitmapBlenderBase image)
 //        {
 //            return Save(image, fileNameToSaveTo);
 //        }
 
-//        static public bool Save(ImageReaderWriterBase image, String fileNameToSaveTo)
+//        static public bool Save(BitmapBlenderBase image, String fileNameToSaveTo)
 //        {
 //            Stream file = File.Open(fileNameToSaveTo, FileMode.Create);
 //            return Save(image, file);
 //        }
 
-//        static public bool Save(ImageReaderWriterBase image, Stream streamToSaveImageDataTo)
+//        static public bool Save(BitmapBlenderBase image, Stream streamToSaveImageDataTo)
 //        {
 //            STargaHeader TargaHeader;
 
@@ -902,17 +902,17 @@
 //        }
 //         */
 
-//        static public int ReadBitsFromBuffer(ImageReaderWriterBase image, byte[] WorkPtr, int destBitDepth)
+//        static public int ReadBitsFromBuffer(BitmapBlenderBase image, byte[] WorkPtr, int destBitDepth)
 //        {  
 //            return LowLevelReadTGABitsFromBuffer(image, WorkPtr, destBitDepth);
 //        }
 
-//        public static bool LoadImageData(string fileName, ImageReaderWriterBase image)
+//        public static bool LoadImageData(string fileName, BitmapBlenderBase image)
 //        {
 //            return LoadImageData(image, fileName);
 //        }
 
-//        static public bool LoadImageData(ImageReaderWriterBase image, string fileName)
+//        static public bool LoadImageData(BitmapBlenderBase image, string fileName)
 //        {
 //            if (System.IO.File.Exists(fileName))
 //            {
@@ -923,7 +923,7 @@
 //            return false;
 //        }
 
-//        static public bool LoadImageData(ImageReaderWriterBase image, Stream streamToLoadImageDataFrom, int destBitDepth)
+//        static public bool LoadImageData(BitmapBlenderBase image, Stream streamToLoadImageDataFrom, int destBitDepth)
 //        {
 //            byte[] ImageData = new byte[streamToLoadImageDataFrom.Length];
 //            streamToLoadImageDataFrom.Read(ImageData, 0, (int)streamToLoadImageDataFrom.Length);

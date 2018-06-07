@@ -278,11 +278,8 @@ namespace PixelFarm.Agg
             VectorToolBox.ReleaseVxs(ref v1, ref v2);
 
         }
-        public void Render(IBitmapBlender source, double destX, double destY)
-        {
-
-
-
+        public void Render(IBitmapSrc source, double destX, double destY)
+        { 
             int inScaleX = 1;
             int inScaleY = 1;
             int angleRadians = 0;

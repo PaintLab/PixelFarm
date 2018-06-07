@@ -27,7 +27,7 @@ namespace PixelFarm.Agg
 {
     public sealed partial class AggRenderSurface
     {
-        MyImageReaderWriter destImageReaderWriter;
+        MyBitmapBlender destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
 
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
@@ -47,8 +47,8 @@ namespace PixelFarm.Agg
 
             this.destImage = destImage;
             this.destActualImage = destImage;
-            this.destImageReaderWriter = new MyImageReaderWriter();
-            this.destImageReaderWriter.ReloadImage(destImage);
+            this.destImageReaderWriter = new MyBitmapBlender(destImage);
+          
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
@@ -84,7 +84,7 @@ namespace PixelFarm.Agg
                 return this.pixBlenderRGBA32;
             }
         }
-        public ImageReaderWriterBase DestImage
+        public BitmapBlenderBase DestImage
         {
             get { return this.destImageReaderWriter; }
         }

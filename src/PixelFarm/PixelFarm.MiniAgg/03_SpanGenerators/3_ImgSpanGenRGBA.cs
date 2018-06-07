@@ -37,11 +37,11 @@ namespace PixelFarm.Agg.Imaging
         const int BASE_SHITF = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
-        ImageReaderWriterBase srcRW;
-        public ImgSpanGenRGBA_NN_StepXBy1(IBitmapBlender src, ISpanInterpolator spanInterpolator)
+        IBitmapSrc srcRW;
+        public ImgSpanGenRGBA_NN_StepXBy1(IBitmapSrc src, ISpanInterpolator spanInterpolator)
             : base(spanInterpolator)
         {
-            srcRW = (ImageReaderWriterBase)src;
+            srcRW = src;
             if (srcRW.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -119,19 +119,19 @@ namespace PixelFarm.Agg.Imaging
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
-        ImageReaderWriterBase srcRW;
+        IBitmapSrc srcRW;
         Drawing.Color m_bgcolor;
         int bytesBetweenPixelInclusive;
         bool _mode0 = false;
 
 
-        public ImgSpanGenRGBA_BilinearClip(IBitmapBlender src,
+        public ImgSpanGenRGBA_BilinearClip(IBitmapSrc src,
             Drawing.Color back_color,
             ISpanInterpolator inter)
             : base(inter)
         {
             m_bgcolor = back_color;
-            srcRW = (ImageReaderWriterBase)src;
+            srcRW = (BitmapBlenderBase)src;
             bytesBetweenPixelInclusive = srcRW.BytesBetweenPixelsInclusive;
         }
 
@@ -236,7 +236,7 @@ namespace PixelFarm.Agg.Imaging
                                 {
                                     int bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
 
- 
+
                                     accColor0 =
                                     accColor1 =
                                     accColor2 =

@@ -84,7 +84,7 @@ namespace PixelFarm.Agg.Imaging
         {
             linkedImage.SetPixel(x, y, color);
         }
-         
+
 
         public virtual void CopyHL(int x, int y, int len, Color sourceColor)
         {
@@ -136,7 +136,7 @@ namespace PixelFarm.Agg.Imaging
             linkedImage.BlendColorVSpan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-       
+
         public int[] GetInt32Buffer()
         {
             //TODO: review here, this may not correct 
@@ -155,7 +155,11 @@ namespace PixelFarm.Agg.Imaging
             return linkedImage.GetByteBufferOffsetXY(x, y);
         }
 
-
+        public int GetBufferOffsetXY32(int x, int y)
+        {
+            return linkedImage.GetBufferOffsetXY32(x, y);
+        }
+         
 
         public virtual int BytesBetweenPixelsInclusive
         {

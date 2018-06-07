@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Imaging
             }
 
         }
-        public void Sharpen(IBitmapBlender img, int radius)
+        public void Sharpen(IBitmapSrc img, int radius)
         {
             unsafe
             {

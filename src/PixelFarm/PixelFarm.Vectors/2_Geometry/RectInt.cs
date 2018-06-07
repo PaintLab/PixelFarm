@@ -79,7 +79,7 @@ namespace PixelFarm.Agg
             return Left <= Right && Bottom <= Top;
         }
 
-        public bool hit_test(int x, int y)
+        public bool Contains(int x, int y)
         {
             return (x >= Left && x <= Right && y >= Bottom && y <= Top);
         }
