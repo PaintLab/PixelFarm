@@ -238,7 +238,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public void CopyFrom(IBitmapBlender sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
+        public void CopyFrom(IBitmapSrc sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
             RectInt sourceImageBounds = sourceImage.GetBounds();
             RectInt clippedSourceImageRect = new RectInt();

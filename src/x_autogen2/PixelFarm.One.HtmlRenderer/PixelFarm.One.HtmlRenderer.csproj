@@ -1229,6 +1229,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs</Link>
     </Compile>
@@ -1238,14 +1241,8 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\GammaLookUpTable.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\GammaLookUpTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\IImageReaderWriter.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\IImageReaderWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageHelper.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\IBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\IBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs</Link>
@@ -1253,8 +1250,8 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\0_ISpanGenerator.cs">
       <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\0_ISpanGenerator.cs</Link>
