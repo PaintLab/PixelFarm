@@ -35,7 +35,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             if (System.IO.File.Exists(imgFileName))
             {
                 lionImg = DemoHelper.LoadImage(imgFileName);
-            } 
+            }
 
 
             lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/arrow2.svg"));
@@ -79,7 +79,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             System.Random randGenerator = new Random(1432);
             int i;
             int num = (int)maskAlphaSliderValue;
-            num = 100;
+            num = 50;
 
             int elliseFlattenStep = 64;
             VectorToolBox.GetFreeVxs(out var v1);
@@ -294,6 +294,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //2. 
             p2.FillColor = Color.Blue;
             p2.FillCircle(300, 300, 100);
+
+            p2.DrawImage(lionImg, 20, 20);
+
             widgetsSubImage.SetRecieveBlender(blender);
 
 
