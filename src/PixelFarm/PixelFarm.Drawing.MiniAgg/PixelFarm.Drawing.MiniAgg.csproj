@@ -464,8 +464,6 @@
       <Name>PixelFarm.DrawingCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="3.1_DrawingCanvas.MiniAgg\09_ImgFilters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
