@@ -289,7 +289,7 @@ namespace PixelFarm.Agg
 
         int IBitmapSrc.BytesBetweenPixelsInclusive
         {
-            get { return 0; }
+            get { return 4; }
         }
 
 

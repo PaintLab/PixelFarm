@@ -11,7 +11,7 @@ using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
 
-    public class MyBitmapBlender : BitmapBlenderBase
+    class MyBitmapBlender : BitmapBlenderBase
     {
         ActualImage actualImage;
         public MyBitmapBlender()

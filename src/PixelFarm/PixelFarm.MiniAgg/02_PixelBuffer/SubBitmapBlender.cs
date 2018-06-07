@@ -26,10 +26,12 @@ namespace PixelFarm.Agg.Imaging
     /// </summary>
     public class SubBitmapBlender : BitmapBlenderBase
     {
+
+       
         public SubBitmapBlender(IBitmapBlender image,
-            int arrayOffset32,
-            int width,
-            int height)
+        int arrayOffset32,
+        int width,
+        int height)
         {
             SetRecieveBlender(image.GetRecieveBlender());
             AttachBuffer(image.GetInt32Buffer(),

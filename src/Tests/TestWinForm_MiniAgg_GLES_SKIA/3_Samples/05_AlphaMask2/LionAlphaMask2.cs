@@ -61,10 +61,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         void GenAlphaMask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
 
-            alphaBitmap = new ActualImage(width, height);
-            //
-            var bmpReaderWrtier = new MyBitmapBlender(alphaBitmap);
-            alphaMaskImageBuffer = new SubBitmapBlender(bmpReaderWrtier, new PixelBlenderGrey());
+            alphaBitmap = new ActualImage(width, height); 
+            alphaMaskImageBuffer = new SubBitmapBlender(alphaBitmap, new PixelBlenderGrey());
             //
             ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);
             clippingProxy.Clear(Drawing.Color.Black);
@@ -266,7 +264,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             AggPainter p2 = (AggPainter)p;
             p2.Clear(Color.White);
             AggRenderSurface aggsx = p2.RenderSurface;
-            MyBitmapBlender widgetsSubImage = (MyBitmapBlender)aggsx.DestImage;
+            BitmapBlenderBase widgetsSubImage = (BitmapBlenderBase)aggsx.DestImage;
             ScanlinePacked8 scline = aggsx.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
