@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg", "PixelF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg.Complements", "PixelFarm\PixelFarm.MiniAgg.Complements\PixelFarm.MiniAgg.Complements.csproj", "{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesselate", "PixelFarm\Tesselate\Tesselate.csproj", "{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.Tesselate", "PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj", "{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.2_DevTest_WinForms", "0.2_DevTest_WinForms", "{13F19F93-8CDB-4AC4-BF06-51C144FA54C1}"
 EndProject
@@ -81,11 +81,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWinForm_MiniAgg_GLES", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.2_Platform_BackEnd", "3.2_Platform_BackEnd", "{0BDC62C6-1F5C-4645-BE3E-AF5360347A7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.PlatformBase", "PixelFarm\LayoutFarm.PlatformBase\PaintLab.PlatformBase.csproj", "{CDEFD12B-956C-4686-AE8A-F89C3280C95F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.PlatformBase", "PixelFarm\PaintLab.PlatformBase\PaintLab.PlatformBase.csproj", "{CDEFD12B-956C-4686-AE8A-F89C3280C95F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.WinForms", "PixelFarm\LayoutFarm.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj", "{4602B28B-EEEC-4A69-854C-B00B8B616837}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.WinForms", "PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj", "{4602B28B-EEEC-4A69-854C-B00B8B616837}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.WinNeutral", "PixelFarm\LayoutFarm.Platforms.WinNeutral\PaintLab.Platforms.WinNeutral.csproj", "{2854A4F1-0110-4B47-B773-9A5FD462755E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.WinNeutral", "PixelFarm\PaintLab.Platforms.WinNeutral\PaintLab.Platforms.WinNeutral.csproj", "{2854A4F1-0110-4B47-B773-9A5FD462755E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test0_WinNeutral", "Tests\Test0_WinNeutral\Test0_WinNeutral.csproj", "{E6A6EC75-7A46-4E96-A21D-785FD2165D3D}"
 EndProject
@@ -149,7 +149,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.TestTextFlow", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormTestBed", "Tests\WinFormTestBed\WinFormTestBed.csproj", "{3E30E0D2-1CD7-42CC-9555-614105EF9C56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.MiniWinForms", "PixelFarm\LayoutFarm.Platforms.MiniWinForms\PaintLab.Platforms.MiniWinForms.csproj", "{53BDC3F9-61B4-4FEC-AF57-AD311420D424}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Platforms.MiniWinForms", "PixelFarm\PaintLab.Platforms.MiniWinForms\PaintLab.Platforms.MiniWinForms.csproj", "{53BDC3F9-61B4-4FEC-AF57-AD311420D424}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceGen", "Tools\InterfaceGen\InterfaceGen.csproj", "{0F4AD2A4-770D-4C6A-941B-B32A9AF12D18}"
 EndProject
@@ -183,7 +183,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.7_TreeTest", "0.7_TreeTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_TreeCollection", "Tests\Test_TreeCollection\Test_TreeCollection.csproj", "{2A3DABCE-F953-4A79-BFFC-7E9C52660D62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.DrawingBuffer", "PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BackEnd.DrawingBuffer.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.DrawingBuffer", "PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PdnSharedProject", "PixelFarm\BackEnd.FilterFx\PdnSharedProject\PdnSharedProject.shproj", "{536B9B08-98D7-4261-A78D-3B1CCD11D5EF}"
 EndProject
@@ -203,9 +203,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "PixelFarm\Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extrator", "PixelFarm\BackEnd.FileDB\Extrator\Extrator.csproj", "{B71BB947-B7D5-45EF-9EF5-543A63106FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.PngCs", "PixelFarm\BackEnd.PngCs\Hjg.Pngcs\BackEnd.PngCs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImgCodec.PngCs", "PixelFarm\ImgCodec.PngCs\ImgCodec.Pngcs\ImgCodec.PngCs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpZipLib", "PixelFarm\SharpZipLib\SharpZipLib.csproj", "{1EC4200D-E955-4617-9558-B859BB6B5AF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.SharpZipLib", "PixelFarm\BackEnd.SharpZipLib\BackEnd.SharpZipLib.csproj", "{1EC4200D-E955-4617-9558-B859BB6B5AF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.9_SvgTest", "0.9_SvgTest", "{B8B57320-63FF-453D-9892-671E48F8F084}"
 EndProject
@@ -10942,7 +10942,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4D5CE655-58FA-4523-8E46-738B941E9E47} = {DECD4407-4688-44B5-A1E5-126760BF637F}
 		{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7} = {DECD4407-4688-44B5-A1E5-126760BF637F}
-		{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9} = {AC10C2FA-8476-4818-ABFF-2E83739B8A57}
+		{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
 		{13F19F93-8CDB-4AC4-BF06-51C144FA54C1} = {A2D588B0-C60B-4C1E-B5EE-7B506C99C8C2}
 		{51D63482-5697-4B16-8401-506965624657} = {1FFAB66A-292D-402A-9505-35FA36942F4B}
 		{1AA171E3-523C-4DD5-A169-DE6322991FF5} = {2EF747E4-862C-4B3E-B865-765B5385D7AC}

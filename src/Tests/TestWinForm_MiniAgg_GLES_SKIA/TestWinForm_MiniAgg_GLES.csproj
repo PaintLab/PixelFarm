@@ -257,9 +257,9 @@
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
-      <Name>Tesselate</Name>
+      <Name>BackEnd.Tesselate</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>

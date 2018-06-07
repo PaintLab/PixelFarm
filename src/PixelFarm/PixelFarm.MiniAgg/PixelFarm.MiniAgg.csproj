@@ -34,43 +34,43 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBuffer.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBuffer.cs">
       <Link>100_DrawingBufferExt\BitmapBuffer.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs">
       <Link>100_DrawingBufferExt\AntialiasingExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs">
       <Link>100_DrawingBufferExt\BaseExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs">
       <Link>100_DrawingBufferExt\BlitExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs">
       <Link>100_DrawingBufferExt\ConvertExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs">
       <Link>100_DrawingBufferExt\FillExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
       <Link>100_DrawingBufferExt\FilterExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
       <Link>100_DrawingBufferExt\LineExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs">
       <Link>100_DrawingBufferExt\ShapeExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs">
       <Link>100_DrawingBufferExt\SplineExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs">
       <Link>100_DrawingBufferExt\TransformationExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferFactory.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferFactory.cs">
       <Link>100_DrawingBufferExt\BitmapBufferFactory.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapContext.cs">
       <Link>100_DrawingBufferExt\BitmapContext.cs</Link>
     </Compile>
     <Compile Include="02_PixelBuffer\BitmapBlenderBase.cs" />
