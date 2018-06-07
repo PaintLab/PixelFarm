@@ -712,9 +712,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\BackEnd.SharpZipLib\SharpZipLib.csproj">
+    <ProjectReference Include="..\BackEnd.SharpZipLib\BackEnd.SharpZipLib.csproj">
       <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>
-      <Name>SharpZipLib</Name>
+      <Name>BackEnd.SharpZipLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
