@@ -49,7 +49,7 @@ namespace PixelFarm.Agg.Imaging
             _clippingRect.Top = 0;
             return false;
         }
-         
+
         public bool InClipArea(int x, int y)
         {
             return _clippingRect.Contains(x, y);
@@ -306,7 +306,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public override void CopyFrom(IBitmapBlender sourceImage,
+        public override void CopyFrom(IBitmapSrc sourceImage,
                        RectInt sourceImageRect,
                        int destXOffset,
                        int destYOffset)

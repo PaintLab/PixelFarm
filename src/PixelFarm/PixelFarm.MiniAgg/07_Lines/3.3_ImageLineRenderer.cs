@@ -114,7 +114,7 @@ namespace PixelFarm.Agg.Lines
 
         // Create
         //--------------------------------------------------------------------
-        public void Create(IBitmapBlender src)
+        public void Create(IBitmapSrc src)
         {
             // we are going to create a dialated image for filtering
             // we add m_dilation pixels to every side of the image and then copy the image in the x

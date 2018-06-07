@@ -121,7 +121,7 @@ namespace PixelFarm.Agg
                 spanGen);
         }
 
-        public void Render(IBitmapBlender source,
+        public void Render(IBitmapSrc source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)
@@ -258,10 +258,9 @@ namespace PixelFarm.Agg
         }
 
         int destImageChanged = 0;
-        public void Render(IBitmapBlender source, AffinePlan[] affinePlans)
+        public void Render(IBitmapSrc source, AffinePlan[] affinePlans)
         {
-
-
+             
             VectorToolBox.GetFreeVxs(out var v1, out var v2);
 
             Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1);
