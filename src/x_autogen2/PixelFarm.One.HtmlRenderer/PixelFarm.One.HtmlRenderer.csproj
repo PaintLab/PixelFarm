@@ -212,47 +212,47 @@
     <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\WrapBasedEffRenderer.cs">
       <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\WrapBasedEffRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\00_Porting\NativeMethods.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\00_Porting\NativeMethods.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\00_Porting\NativeMethods.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\00_Porting\NativeMethods.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBuffer.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBuffer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBuffer.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBuffer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferFactory.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferFactory.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferFactory.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs">
-      <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapContext.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapContext.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Engine\Engine.cs">
       <Link>PixelFarm\BackEnd.FileDB\FileDB\Engine\Engine.cs</Link>
@@ -944,6 +944,30 @@
     <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\Util.cs">
       <Link>PixelFarm\BackEnd.SkiaSharp\Util.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\ActiveRegion.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\ActiveRegion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\ContourVertex.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\ContourVertex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Dictionary.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\Dictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Face.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\Face.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\HalfEdge.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\HalfEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\MaxFirstList.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\MaxFirstList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Mesh.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\Mesh.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs">
+      <Link>PixelFarm\BackEnd.Tesselate\Tesselator.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs">
       <Link>PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs</Link>
     </Compile>
@@ -1622,32 +1646,32 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\Painter\VxsHelper.cs">
       <Link>PixelFarm\PixelFarm.Drawing.Skia\Painter\VxsHelper.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveBuilder.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveFit.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveFit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveFitBase.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CurveFitBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CurvePreprocess.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CurvePreprocess.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\Spline.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\Spline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\SplineBuilder.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\SplineBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\VectorHelper.cs">
+      <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\VectorHelper.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.H.cs">
       <Link>PixelFarm\BackEnd.FilterFx\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.H.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\CubicBezier.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\CubicBezier.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\CurveBuilder.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\CurveBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\CurveFit.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\CurveFit.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\CurveFitBase.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\CurveFitBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\CurvePreprocess.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\CurvePreprocess.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\Spline.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\Spline.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\SplineBuilder.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\SplineBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\VectorHelper.cs">
-      <Link>PixelFarm\burningminecurve\curveutils\VectorHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\0_BufferMx\NativeMemMx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\0_BufferMx\NativeMemMx.cs</Link>
@@ -2137,30 +2161,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.vectors\5_clipper\cliper.cs">
       <Link>PixelFarm\pixelfarm.vectors\5_clipper\cliper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\ActiveRegion.cs">
-      <Link>PixelFarm\tesselate\ActiveRegion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\ContourVertex.cs">
-      <Link>PixelFarm\tesselate\ContourVertex.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\Dictionary.cs">
-      <Link>PixelFarm\tesselate\Dictionary.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\Face.cs">
-      <Link>PixelFarm\tesselate\Face.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\HalfEdge.cs">
-      <Link>PixelFarm\tesselate\HalfEdge.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\MaxFirstList.cs">
-      <Link>PixelFarm\tesselate\MaxFirstList.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\mesh.cs">
-      <Link>PixelFarm\tesselate\mesh.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\tesselate\Tesselator.cs">
-      <Link>PixelFarm\tesselate\Tesselator.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs">
       <Link>PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs</Link>

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg", "PixelF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg.Complements", "PixelFarm\PixelFarm.MiniAgg.Complements\PixelFarm.MiniAgg.Complements.csproj", "{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesselate", "PixelFarm\Tesselate\Tesselate.csproj", "{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.Tesselate", "PixelFarm\BackEnd.Tesselate\Tesselate.csproj", "{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.2_DevTest_WinForms", "0.2_DevTest_WinForms", "{13F19F93-8CDB-4AC4-BF06-51C144FA54C1}"
 EndProject
@@ -203,9 +203,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "PixelFarm\Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extrator", "PixelFarm\BackEnd.FileDB\Extrator\Extrator.csproj", "{B71BB947-B7D5-45EF-9EF5-543A63106FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.PngCs", "PixelFarm\BackEnd.PngCs\BackEnd.Pngcs\BackEnd.PngCs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImgCodec.PngCs", "PixelFarm\ImgCodec.PngCs\ImgCodec.Pngcs\ImgCodec.PngCs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpZipLib", "PixelFarm\SharpZipLib\SharpZipLib.csproj", "{1EC4200D-E955-4617-9558-B859BB6B5AF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.SharpZipLib", "PixelFarm\BackEnd.SharpZipLib\SharpZipLib.csproj", "{1EC4200D-E955-4617-9558-B859BB6B5AF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.9_SvgTest", "0.9_SvgTest", "{B8B57320-63FF-453D-9892-671E48F8F084}"
 EndProject
