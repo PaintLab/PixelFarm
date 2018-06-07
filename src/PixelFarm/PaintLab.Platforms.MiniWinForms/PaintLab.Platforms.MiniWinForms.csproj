@@ -40,71 +40,71 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LayoutFarm.PlatformBase\BootStrapSkia.cs">
+    <Compile Include="..\PaintLab.PlatformBase\BootStrapSkia.cs">
       <Link>0_Platform\BootStrapSkia.cs</Link>
     </Compile>
-    <Compile Include="..\layoutfarm.platformbase\CanvasViewport.cs">
+    <Compile Include="..\PaintLab.PlatformBase\CanvasViewport.cs">
       <Link>0_Shared\CanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\layoutfarm.platformbase\dbugHelper.cs">
+    <Compile Include="..\PaintLab.PlatformBase\dbugHelper.cs">
       <Link>0_Shared\dbugHelper.cs</Link>
     </Compile>
-    <Compile Include="..\layoutfarm.platformbase\InnerViewportKind.cs">
+    <Compile Include="..\PaintLab.PlatformBase\InnerViewportKind.cs">
       <Link>0_Shared\InnerViewportKind.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs">
       <Link>0_Platform\UIPlatformWinForms.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\1_UISurfaceViewPort\UISurfaceViewportControl.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\1_UISurfaceViewPort\UISurfaceViewportControl.cs">
       <Link>1_UISurfaceViewPort\UISurfaceViewportControl.cs</Link>
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\1_UISurfaceViewPort\UISurfaceViewportControl.Designer.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\1_UISurfaceViewPort\UISurfaceViewportControl.Designer.cs">
       <Link>1_UISurfaceViewPort\UISurfaceViewportControl.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\2_Bridge_WinForm\TopWindowBridgeWinForm.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\2_Bridge_WinForm\TopWindowBridgeWinForm.cs">
       <Link>2_Bridge_WinForm\TopWindowBridgeWinForm.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\2_Bridge_WinForm\TopWindowBridgeWinForm_dbug.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\2_Bridge_WinForm\TopWindowBridgeWinForm_dbug.cs">
       <Link>2_Bridge_WinForm\TopWindowBridgeWinForm_dbug.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\4_GdiPlus\1_GdiPlusCanvasViewport.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\4_GdiPlus\1_GdiPlusCanvasViewport.cs">
       <Link>4_GdiPlus\1_GdiPlusCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs">
       <Link>4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs">
       <Link>4_GdiPlus\CanvasCollection.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\4_GdiPlus\Conv.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs">
       <Link>4_GdiPlus\Conv.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.Platforms.WinForms\4_GdiPlus\QuadPages.cs">
+    <Compile Include="..\PaintLab.Platforms.WinForms\4_GdiPlus\QuadPages.cs">
       <Link>4_GdiPlus\QuadPages.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">

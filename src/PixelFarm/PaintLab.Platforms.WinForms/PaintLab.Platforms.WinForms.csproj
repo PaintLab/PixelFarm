@@ -43,22 +43,22 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\LayoutFarm.PlatformBase\BootStrapSkia.cs">
+    <Compile Include="..\PaintLab.PlatformBase\BootStrapSkia.cs">
       <Link>0_Platform\BootStrapSkia.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\CanvasViewport.cs">
+    <Compile Include="..\PaintLab.PlatformBase\CanvasViewport.cs">
       <Link>0_Shared\CanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\dbugHelper.cs">
+    <Compile Include="..\PaintLab.PlatformBase\dbugHelper.cs">
       <Link>0_Shared\dbugHelper.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\InnerViewportKind.cs">
+    <Compile Include="..\PaintLab.PlatformBase\InnerViewportKind.cs">
       <Link>0_Shared\InnerViewportKind.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\OpenGLCanvasViewport.cs">
+    <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs">
+    <Compile Include="..\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
       <Link>4_Skia\SkiaCanvasViewport.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
