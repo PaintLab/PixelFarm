@@ -38,28 +38,28 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\burningminecurve\curveutils\CubicBezier.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs">
       <Link>1_Vectors\4_BurningMineCurves\CubicBezier.cs</Link>
     </Compile>
-    <Compile Include="..\burningminecurve\curveutils\CurveBuilder.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\CurveBuilder.cs">
       <Link>1_Vectors\4_BurningMineCurves\CurveBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\burningminecurve\curveutils\CurveFit.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\CurveFit.cs">
       <Link>1_Vectors\4_BurningMineCurves\CurveFit.cs</Link>
     </Compile>
-    <Compile Include="..\burningminecurve\curveutils\CurveFitBase.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\CurveFitBase.cs">
       <Link>1_Vectors\4_BurningMineCurves\CurveFitBase.cs</Link>
     </Compile>
-    <Compile Include="..\burningminecurve\curveutils\CurvePreprocess.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\CurvePreprocess.cs">
       <Link>1_Vectors\4_BurningMineCurves\CurvePreprocess.cs</Link>
     </Compile>
-    <Compile Include="..\burningminecurve\curveutils\Spline.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\Spline.cs">
       <Link>1_Vectors\4_BurningMineCurves\Spline.cs</Link>
     </Compile>
-    <Compile Include="..\burningminecurve\curveutils\SplineBuilder.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\SplineBuilder.cs">
       <Link>1_Vectors\4_BurningMineCurves\SplineBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
+    <Compile Include="..\BackEnd.BurningMineCurve\curveutils\VectorHelper.cs">
       <Link>1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.triangulation\delaunay\AdvancingFront.cs">
@@ -212,28 +212,28 @@
     <Compile Include="..\PixelFarm.Vectors\5_Clipper\cliper.cs">
       <Link>1_Vectors\5_Clipper\cliper.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\ActiveRegion.cs">
+    <Compile Include="..\BackEnd.Tesselate\ActiveRegion.cs">
       <Link>1_Vectors\6_Tesselate\ActiveRegion.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\ContourVertex.cs">
+    <Compile Include="..\BackEnd.Tesselate\ContourVertex.cs">
       <Link>1_Vectors\6_Tesselate\ContourVertex.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\Dictionary.cs">
+    <Compile Include="..\BackEnd.Tesselate\Dictionary.cs">
       <Link>1_Vectors\6_Tesselate\Dictionary.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\Face.cs">
+    <Compile Include="..\BackEnd.Tesselate\Face.cs">
       <Link>1_Vectors\6_Tesselate\Face.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\HalfEdge.cs">
+    <Compile Include="..\BackEnd.Tesselate\HalfEdge.cs">
       <Link>1_Vectors\6_Tesselate\HalfEdge.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\MaxFirstList.cs">
+    <Compile Include="..\BackEnd.Tesselate\MaxFirstList.cs">
       <Link>1_Vectors\6_Tesselate\MaxFirstList.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\mesh.cs">
+    <Compile Include="..\BackEnd.Tesselate\mesh.cs">
       <Link>1_Vectors\6_Tesselate\mesh.cs</Link>
     </Compile>
-    <Compile Include="..\tesselate\Tesselator.cs">
+    <Compile Include="..\BackEnd.Tesselate\Tesselator.cs">
       <Link>1_Vectors\6_Tesselate\Tesselator.cs</Link>
     </Compile>
     <Compile Include="0_BufferMx\ForNet20.cs" />

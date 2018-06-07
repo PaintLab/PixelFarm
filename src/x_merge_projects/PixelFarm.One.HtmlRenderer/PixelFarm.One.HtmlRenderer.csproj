@@ -39,17 +39,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BackEnd.DrawingBuffer.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer.csproj">
       <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
       <Name>BackEnd.DrawingBuffer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\BackEnd.FileDB.csproj">
+      <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
+      <Name>BackEnd.FileDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.FilterFx\PdnPixelEffectPixelFarm\BackEnd.FilterFx.csproj">
       <Project>{9a7db6ea-7f85-4420-9e42-f0f277524fb7}</Project>
       <Name>BackEnd.FilterFx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\BackEnd.FileDB.csproj">
-      <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
-      <Name>BackEnd.FileDB</Name>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
+      <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
+      <Name>BackEnd.Tesselate</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
@@ -102,10 +106,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
       <Name>PixelFarm.Triangulation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
-      <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
-      <Name>Tesselate</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68f1daf6-2b35-476e-b2f8-5eadbc823935}</Project>

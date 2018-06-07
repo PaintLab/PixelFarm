@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormGdiPlus", "Test_WinFormGdiPlus\WinFormGdiPlus.csproj", "{9422AB9D-341B-4B72-8611-86418707B2E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.DrawingBuffer", "PixelFarm.DrawingBuffer\PixelFarm.DrawingBuffer.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.DrawingBuffer", "BackEnd.DrawingBuffer\BackEnd.DrawingBuffer.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
