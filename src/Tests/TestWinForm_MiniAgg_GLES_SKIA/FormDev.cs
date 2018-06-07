@@ -349,7 +349,7 @@ namespace Mini
                 int bmpH = 500;
                 using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
                 {
-                    ActualImage actualImage = new ActualImage(bmpW, bmpH);
+                    ActualBitmap actualImage = new ActualBitmap(bmpW, bmpH);
                     AggRenderSurface gfx = new AggRenderSurface(actualImage);
                     var vxs = new PixelFarm.Drawing.VertexStore();
                     //vxs.AddMoveTo(0, 0);

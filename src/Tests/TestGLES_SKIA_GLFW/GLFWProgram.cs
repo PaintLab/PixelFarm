@@ -81,7 +81,7 @@ namespace TestGlfw
             }
         }
 
-        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        static PixelFarm.Agg.ActualBitmap LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
@@ -112,7 +112,7 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+            PixelFarm.Agg.ActualBitmap actualImg = PixelFarm.Agg.ActualBitmap.CreateFromBuffer(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32
@@ -187,7 +187,7 @@ namespace TestGlfw
 
     class GLFWProgram
     {
-        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        static PixelFarm.Agg.ActualBitmap LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
@@ -218,7 +218,7 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+            PixelFarm.Agg.ActualBitmap actualImg = PixelFarm.Agg.ActualBitmap.CreateFromBuffer(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32

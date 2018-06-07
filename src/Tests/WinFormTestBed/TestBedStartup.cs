@@ -13,7 +13,7 @@ namespace YourImplementation
 #else
             CommonTextServiceSetup.SetupDefaultValues();
 #endif 
-            PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
+            PixelFarm.Agg.ActualBitmap.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 
                 using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))

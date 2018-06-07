@@ -67,10 +67,10 @@ namespace PixelFarm.Drawing.WinGdi
 
             unsafe
             {
-                Agg.ActualImage img = destImg as Agg.ActualImage;
+                Agg.ActualBitmap img = destImg as Agg.ActualBitmap;
                 if (img != null)
                 {
-                    var tmpPtr = Agg.ActualImage.GetBufferPtr(img);
+                    var tmpPtr = Agg.ActualBitmap.GetBufferPtr(img);
                     byte* head = (byte*)tmpPtr.Ptr;
                     _gdigsx.RenderTo(head);
                     tmpPtr.Release();

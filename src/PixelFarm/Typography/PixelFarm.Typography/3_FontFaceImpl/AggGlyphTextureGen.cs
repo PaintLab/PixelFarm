@@ -73,7 +73,7 @@ namespace Typography.Rendering
             w = (int)Math.Ceiling(dx + w + horizontal_margin); //+right margin
             h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin 
 
-            ActualImage img = new ActualImage(w, h);
+            ActualBitmap img = new ActualBitmap(w, h);
             AggRenderSurface aggsx = new AggRenderSurface(img);
             AggPainter painter = new AggPainter(aggsx);
 
@@ -119,7 +119,7 @@ namespace Typography.Rendering
             var glyphImage = new GlyphImage(w, h);
             glyphImage.TextureOffsetX = dx;
             glyphImage.TextureOffsetY = dy;
-            glyphImage.SetImageBuffer(ActualImageExtensions.CopyImgBuffer(img, w), false);
+            glyphImage.SetImageBuffer(ActualBitmapExtensions.CopyImgBuffer(img, w), false);
             //copy data from agg canvas to glyph image 
             return glyphImage;
 

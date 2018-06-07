@@ -10,7 +10,7 @@ namespace SampleWinForms.UI
     {
         Graphics g;
         VxsTextPrinter _printer;
-        ActualImage destImg;
+        ActualBitmap destImg;
         AggRenderSurface aggsx;
         AggPainter p;
         Bitmap winBmp;
@@ -24,7 +24,7 @@ namespace SampleWinForms.UI
         {
             g = hostControlGraphics;
             //
-            destImg = new ActualImage(400, 300);
+            destImg = new ActualBitmap(400, 300);
             aggsx = new AggRenderSurface(destImg); //no platform
             p = new AggPainter(aggsx);
             winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);

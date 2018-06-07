@@ -286,8 +286,8 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\2_Canvas\PainterExtensions.cs">
       <Link>2_DrawingCanvas\2_Canvas\PainterExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\ActualImage.cs">
-      <Link>2_DrawingCanvas\3_Agg_PixelBuffer\ActualImage.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\ActualBitmap.cs">
+      <Link>2_DrawingCanvas\3_Agg_PixelBuffer\ActualBitmap.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\AggMemMx.cs">
       <Link>2_DrawingCanvas\3_Agg_PixelBuffer\AggMemMx.cs</Link>

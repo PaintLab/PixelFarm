@@ -94,11 +94,11 @@ namespace PixelFarm.DrawingGL
 
 
             memdc.MeasureTextSize(textBuffer, out bmpWidth, out bmpHeight);
-            var actualImg = new Agg.ActualImage(bmpWidth, bmpHeight);
+            var actualImg = new Agg.ActualBitmap(bmpWidth, bmpHeight);
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   
-            Agg.TempMemPtr buffer = PixelFarm.Agg.ActualImage.GetBufferPtr(actualImg);
+            Agg.TempMemPtr buffer = PixelFarm.Agg.ActualBitmap.GetBufferPtr(actualImg);
             unsafe
             {
                 byte* header = (byte*)memdc.PPVBits;

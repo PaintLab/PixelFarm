@@ -13,29 +13,29 @@ namespace PixelFarm.Agg
 
     class MyBitmapBlender : BitmapBlenderBase
     {
-        ActualImage actualImage;
+        ActualBitmap actualImage;
         public MyBitmapBlender()
         {
 
         }
-        public MyBitmapBlender(ActualImage actualImage)
+        public MyBitmapBlender(ActualBitmap actualImage)
         {
             this.actualImage = actualImage;
             Attach(actualImage.Width,
                            actualImage.Height,
                            actualImage.BitDepth,
-                           ActualImage.GetBuffer(actualImage),
+                           ActualBitmap.GetBuffer(actualImage),
                            new PixelBlenderBGRA());
         }
         public override void ReplaceBuffer(int[] newbuffer)
         {
-            ActualImage.ReplaceBuffer(actualImage, newbuffer);
+            ActualBitmap.ReplaceBuffer(actualImage, newbuffer);
         }
         /// <summary>
         /// load image to the reader/writer
         /// </summary>
         /// <param name="actualImage"></param>
-        public void ReloadImage(ActualImage actualImage)
+        public void ReloadImage(ActualBitmap actualImage)
         {
 
             if (this.actualImage == actualImage)
@@ -46,7 +46,7 @@ namespace PixelFarm.Agg
             Attach(actualImage.Width,
                            actualImage.Height,
                            actualImage.BitDepth,
-                           ActualImage.GetBuffer(actualImage),
+                           ActualBitmap.GetBuffer(actualImage),
                            new PixelBlenderBGRA());
         }
     }
@@ -113,7 +113,7 @@ namespace PixelFarm.Agg
             //from membuffer
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
-                PixelFarm.Agg.ActualImage.GetBuffer(aggsx.DestActualImage));
+                PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
 
 
             _vectorTool = new VectorTool();
@@ -745,7 +745,7 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, double left, double top)
         {
-            ActualImage actualImg = img as ActualImage;
+            ActualBitmap actualImg = img as ActualBitmap;
             if (actualImg == null)
             {
                 //? TODO
@@ -790,7 +790,7 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, params Transform.AffinePlan[] affinePlans)
         {
-            ActualImage actualImg = img as ActualImage;
+            ActualBitmap actualImg = img as ActualBitmap;
             if (actualImg == null)
             {
                 //? TODO
@@ -800,7 +800,7 @@ namespace PixelFarm.Agg
             if (this._renderQuality == RenderQualtity.Fast)
             {
                 //todo, review here again
-                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualBitmap.GetBuffer(actualImg));
                 //this._bxt.CopyBlit(left, top, srcBmp); 
                 DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
                     DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
@@ -813,7 +813,7 @@ namespace PixelFarm.Agg
             }
 
 
-            this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+            this.sharedImageWriterReader.ReloadImage((ActualBitmap)img);
 
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
