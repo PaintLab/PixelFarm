@@ -79,9 +79,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hjg.Pngcs\Hjg.Pngcs.csproj">
+    <ProjectReference Include="..\BackEnd.PngCs\BackEnd.PngCs.csproj">
       <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
-      <Name>Hjg.Pngcs</Name>
+      <Name>BackEnd.PngCs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

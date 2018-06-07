@@ -203,7 +203,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "PixelFarm\Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extrator", "PixelFarm\BackEnd.FileDB\Extrator\Extrator.csproj", "{B71BB947-B7D5-45EF-9EF5-543A63106FA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.PngCs", "PixelFarm\BackEnd.PngCs\Hjg.Pngcs\BackEnd.PngCs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.PngCs", "PixelFarm\BackEnd.PngCs\BackEnd.Pngcs\BackEnd.PngCs.csproj", "{FD3B0D50-46B3-4A83-9A6D-C641569142CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpZipLib", "PixelFarm\SharpZipLib\SharpZipLib.csproj", "{1EC4200D-E955-4617-9558-B859BB6B5AF2}"
 EndProject
