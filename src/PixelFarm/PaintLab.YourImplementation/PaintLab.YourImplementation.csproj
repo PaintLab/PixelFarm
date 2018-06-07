@@ -80,11 +80,11 @@
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
       <Name>PixelFarm.ImgCodecs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
+    <ProjectReference Include="..\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
       <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
+    <ProjectReference Include="..\BackEnd.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
       <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
