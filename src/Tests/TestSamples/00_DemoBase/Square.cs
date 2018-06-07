@@ -18,7 +18,7 @@ namespace PixelFarm.Agg
             ScanlineRasToDestBitmapRenderer sclineRasToBmp,
             ScanlineRasterizer ras,
             Scanline sl,
-            IImageReaderWriter destImage, Color color,
+            IBitmapBlender destImage, Color color,
             double x, double y)
         {
             ras.Reset();

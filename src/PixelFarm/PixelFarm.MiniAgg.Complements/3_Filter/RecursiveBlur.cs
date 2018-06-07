@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Imaging
     //==============================================================stack_blur
     public class StackBlur
     {
-        public void Blur(ImageReaderWriterBase img, int rx, int ry)
+        public void Blur(BitmapBlenderBase img, int rx, int ry)
         {
             switch (img.BitDepth)
             {
@@ -51,7 +51,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        void StackBlurRGB24(ImageReaderWriterBase img, int rx, int ry)
+        void StackBlurRGB24(BitmapBlenderBase img, int rx, int ry)
         {
             throw new NotImplementedException();
 #if false
@@ -385,7 +385,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        void StackBlurRGBA32(ImageReaderWriterBase img, int radius, int ry)
+        void StackBlurRGBA32(BitmapBlenderBase img, int radius, int ry)
         {
             int width = img.Width;
             int w4 = img.Width * 4;
@@ -395,7 +395,7 @@ namespace PixelFarm.Agg.Imaging
             //need to copy ?
 
             int[] srcBuffer = new int[width * height];
-            ImageReaderWriterBase.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
+            BitmapBlenderBase.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
             StackBlurARGB.FastBlur32ARGB(srcBuffer, srcBuffer, img.Width, img.Height, radius);
             int i = 0;
             for (int y = 0; y < height; ++y)
@@ -441,7 +441,7 @@ namespace PixelFarm.Agg.Imaging
             m_buf = new ArrayList<Color>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         }
-        public void BlurX(IImageReaderWriter img, double radius)
+        public void BlurX(IBitmapBlender img, double radius)
         {
             if (radius < 0.62) return;
             if (img.Width < 3) return;
@@ -513,13 +513,13 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public void BlurY(IImageReaderWriter img, double radius)
+        public void BlurY(IBitmapBlender img, double radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
             BlurX(img2, radius);
         }
 
-        public void Blur(IImageReaderWriter img, double radius)
+        public void Blur(IBitmapBlender img, double radius)
         {
             BlurX(img, radius);
             BlurY(img, radius);

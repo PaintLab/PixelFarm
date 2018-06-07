@@ -22,14 +22,16 @@ using System;
 namespace PixelFarm.Agg.Imaging
 {
     /// <summary>
-    /// sub-image reader /writer
+    /// sub-image reader /writer/blend part of org bitmap
     /// </summary>
-    public class SubImageRW : ImageReaderWriterBase
+    public class SubBitmapBlender : BitmapBlenderBase
     {
-        public SubImageRW(IImageReaderWriter image,
-            int arrayOffset32,
-            int width,
-            int height)
+
+       
+        public SubBitmapBlender(IBitmapBlender image,
+        int arrayOffset32,
+        int width,
+        int height)
         {
             SetRecieveBlender(image.GetRecieveBlender());
             AttachBuffer(image.GetInt32Buffer(),
@@ -41,7 +43,7 @@ namespace PixelFarm.Agg.Imaging
                 image.BytesBetweenPixelsInclusive);
         }
 
-        public SubImageRW(int[] buffer,
+        public SubBitmapBlender(int[] buffer,
             int arrayOffset32,
             int width,
             int height,
@@ -56,8 +58,8 @@ namespace PixelFarm.Agg.Imaging
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
-        public SubImageRW(IImageReaderWriter image,
-            IPixelBlender blender,
+        public SubBitmapBlender(IBitmapSrc image,
+            PixelBlender32 blender,
             int distanceBetweenPixelsInclusive,
             int arrayOffset32,
             int bitsPerPixel)
@@ -65,15 +67,11 @@ namespace PixelFarm.Agg.Imaging
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
-        public SubImageRW(IImageReaderWriter image, IPixelBlender blender)
+        public SubBitmapBlender(IBitmapSrc image, PixelBlender32 blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-        //public SubImageRW(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
-        //{
-        //    SetRecieveBlender(blender);
-        //    Attach(image, x1, y1, x2, y2);
-        //}
+
         public override void ReplaceBuffer(int[] newbuffer)
         {
             if (_sourceImage != null)
@@ -99,9 +97,9 @@ namespace PixelFarm.Agg.Imaging
 
         }
 
-        IImageReaderWriter _sourceImage;
-        void Attach(IImageReaderWriter sourceImage,
-          IPixelBlender recieveBlender,
+        IBitmapSrc _sourceImage;
+        void Attach(IBitmapSrc sourceImage,
+          PixelBlender32 recieveBlender,
           int distanceBetweenPixelsInclusive,
           int arrayElemOffset,
           int bitsPerPixel)
@@ -118,7 +116,7 @@ namespace PixelFarm.Agg.Imaging
             SetBuffer(buffer, srcOffset32 + arrayElemOffset);
             SetRecieveBlender(recieveBlender);
         }
-        //bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
+        //bool Attach(IBitmapBlender sourceImage, int x1, int y1, int x2, int y2)
         //{
         //    _sourceImage = sourceImage;
         //    SetBufferToNull();
@@ -160,4 +158,35 @@ namespace PixelFarm.Agg.Imaging
             SetUpLookupTables();
         }
     }
+
+
+
+
+
+    public static class BitmapBlenderExtension
+    {
+        /// <summary>
+        /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
+        /// It will modify the original main image when you draw to it.
+        /// </summary>
+        /// <param name="parentImage"></param>
+        /// <param name="subImgBounds"></param>
+        /// <returns></returns>
+        public static SubBitmapBlender CreateSubBitmapBlender(IBitmapBlender parentImage, RectInt subImgBounds)
+        {
+            if (subImgBounds.Left < 0 || subImgBounds.Bottom < 0 || subImgBounds.Right > parentImage.Width || subImgBounds.Top > parentImage.Height
+                || subImgBounds.Left >= subImgBounds.Right || subImgBounds.Bottom >= subImgBounds.Top)
+            {
+                throw new ArgumentException("The subImageBounds must be on the image and valid.");
+            }
+
+            int left = Math.Max(0, subImgBounds.Left);
+            int bottom = Math.Max(0, subImgBounds.Bottom);
+            int width = Math.Min(parentImage.Width - left, subImgBounds.Width);
+            int height = Math.Min(parentImage.Height - bottom, subImgBounds.Height);
+            int bufferOffsetToFirstPixel = parentImage.GetByteBufferOffsetXY(left, bottom);
+            return new SubBitmapBlender(parentImage, bufferOffsetToFirstPixel / 4, width, height);
+        }
+    }
+
 }

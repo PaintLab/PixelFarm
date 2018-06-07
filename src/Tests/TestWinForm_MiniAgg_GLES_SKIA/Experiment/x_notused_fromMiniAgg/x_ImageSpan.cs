@@ -97,10 +97,10 @@
 //                                     (int)img_filter_const.SCALE / 2) >>
 //                                     (int)img_filter_const.SHIFT;
 
-//                        f_b += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-//                        f_g += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-//                        f_r += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-//                        f_a += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
+//                        f_b += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderR];
+//                        f_g += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderG];
+//                        f_r += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderB];
+//                        f_a += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderA];
 
 //                        if (--x_count == 0) break;
 //                        x_hr += (int)img_subpix_const.SCALE;
@@ -170,7 +170,7 @@
 
 //        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
 //        {
-//            ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
+//            BitmapBlenderBase SourceRenderingBuffer = (BitmapBlenderBase)ImgBuffAccessor.SourceImage;
 //            if (SourceRenderingBuffer.BitDepth != 32)
 //            {
 //                throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -214,7 +214,7 @@
 
 //        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
 //        {
-//            ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
+//            BitmapBlenderBase SourceRenderingBuffer = (BitmapBlenderBase)ImgBuffAccessor.SourceImage;
 //            if (SourceRenderingBuffer.BitDepth != 24)
 //            {
 //                throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -265,7 +265,7 @@
 //        {
 //            base.Interpolator.Begin(x + base.dx, y + base.dy, len);
 
-//            ImageReaderWriterBase srcImg = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
+//            BitmapBlenderBase srcImg = (BitmapBlenderBase)base.ImgBuffAccessor.SourceImage;
 //            ISpanInterpolator spanInterpolator = base.Interpolator;
 //            int bufferIndex = 0;
 //            byte[] fg_ptr = srcImg.GetBuffer();
@@ -300,29 +300,29 @@
 
 //                    weight = (((int)img_subpix_const.SCALE - x_hr) *
 //                             ((int)img_subpix_const.SCALE - y_hr));
-//                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+//                    tempR += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderR];
+//                    tempG += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderG];
+//                    tempB += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderB];
 //                    bufferIndex += 3;
 
 //                    weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
-//                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+//                    tempR += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderR];
+//                    tempG += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderG];
+//                    tempB += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderB];
 
 //                    y_lr++;
 //                    bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
 
 //                    weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+//                    tempR += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderR];
+//                    tempG += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderG];
+//                    tempB += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderB];
 //                    bufferIndex += 3;
 
 //                    weight = (x_hr * y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+//                    tempR += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderR];
+//                    tempG += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderG];
+//                    tempB += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderB];
 
 //                    tempR >>= (int)img_subpix_const.SHIFT * 2;
 //                    tempG >>= (int)img_subpix_const.SHIFT * 2;
@@ -341,7 +341,7 @@
 //            }
 //        }
 
-//        private void BlendInFilterPixel(int[] fg, ref int src_alpha, int back_r, int back_g, int back_b, int back_a, ImageReaderWriterBase SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
+//        private void BlendInFilterPixel(int[] fg, ref int src_alpha, int back_r, int back_g, int back_b, int back_a, BitmapBlenderBase SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
 //        {
 //            throw new NotImplementedException(); /*
 //            int[] fg_ptr;
@@ -432,9 +432,9 @@
 //                                     (int)img_filter_const.SCALE / 2) >>
 //                                     (int)img_filter_const.SHIFT;
 
-//                        f_b += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-//                        f_g += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-//                        f_r += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+//                        f_b += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderR];
+//                        f_g += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderG];
+//                        f_r += weight * fg_ptr[bufferIndex + BitmapBlenderBase.OrderB];
 
 //                        if (--x_count == 0) break;
 //                        x_hr += (int)img_subpix_const.SCALE;

@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Imaging
             }
 
         }
-        public void Sharpen(IImageReaderWriter img, int radius)
+        public void Sharpen(IBitmapSrc img, int radius)
         {
             unsafe
             {
@@ -92,7 +92,7 @@ namespace PixelFarm.Agg.Imaging
     //                                             {-2, 11, -2},
     //                                             { 0, -2,  0}
     //                                          };
-    //    public void Sharpen(IImageReaderWriter img, double radius)
+    //    public void Sharpen(IBitmapBlender img, double radius)
     //    {
 
     //        byte[] buffer = img.GetBuffer();

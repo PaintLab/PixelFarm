@@ -34,7 +34,7 @@
 //        const int m_blur_x = img_subpix_scale.SCALE;
 //        const int m_blur_y = img_subpix_scale.SCALE;
 //        ImageBufferAccessor imageBufferAccessor;
-//        public FilterImageSpanGenerator(IImageReaderWriter src,
+//        public FilterImageSpanGenerator(IBitmapBlender src,
 //                            ISpanInterpolator inter,
 //                            ImageFilterLookUpTable filterLookup)
 //            : base(inter)

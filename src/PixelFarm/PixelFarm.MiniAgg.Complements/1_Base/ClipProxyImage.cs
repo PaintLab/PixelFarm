@@ -27,11 +27,11 @@ namespace PixelFarm.Agg.Imaging
 {
     public sealed class ClipProxyImage : ProxyImage
     {
-        RectInt m_ClippingRect;
-        public ClipProxyImage(IImageReaderWriter refImage)
+        RectInt _clippingRect;
+        public ClipProxyImage(IBitmapBlender refImage)
             : base(refImage)
         {
-            m_ClippingRect = new RectInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
+            _clippingRect = new RectInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
         }
 
         public bool SetClippingBox(int x1, int y1, int x2, int y2)
@@ -40,21 +40,19 @@ namespace PixelFarm.Agg.Imaging
             cb.Normalize();
             if (cb.Clip(new RectInt(0, 0, (int)Width - 1, (int)Height - 1)))
             {
-                m_ClippingRect = cb;
+                _clippingRect = cb;
                 return true;
             }
-            m_ClippingRect.Left = 1;
-            m_ClippingRect.Bottom = 1;
-            m_ClippingRect.Right = 0;
-            m_ClippingRect.Top = 0;
+            _clippingRect.Left = 1;
+            _clippingRect.Bottom = 1;
+            _clippingRect.Right = 0;
+            _clippingRect.Top = 0;
             return false;
         }
-
-
+         
         public bool InClipArea(int x, int y)
         {
-            return x >= m_ClippingRect.Left && y >= m_ClippingRect.Bottom &&
-                   x <= m_ClippingRect.Right && y <= m_ClippingRect.Top;
+            return _clippingRect.Contains(x, y);
         }
         public RectInt GetClipArea(ref RectInt destRect, ref RectInt sourceRect, int sourceWidth, int sourceHeight)
         {
@@ -107,11 +105,11 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public RectInt ClipBox { get { return m_ClippingRect; } }
-        int XMin { get { return m_ClippingRect.Left; } }
-        int YMin { get { return m_ClippingRect.Bottom; } }
-        int XMax { get { return m_ClippingRect.Right; } }
-        int YMax { get { return m_ClippingRect.Top; } }
+        public RectInt ClipBox { get { return _clippingRect; } }
+        int XMin { get { return _clippingRect.Left; } }
+        int YMin { get { return _clippingRect.Bottom; } }
+        int XMax { get { return _clippingRect.Right; } }
+        int YMax { get { return _clippingRect.Top; } }
 
 
 
@@ -308,7 +306,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public override void CopyFrom(IImageReaderWriter sourceImage,
+        public override void CopyFrom(IBitmapBlender sourceImage,
                        RectInt sourceImageRect,
                        int destXOffset,
                        int destYOffset)
@@ -316,7 +314,7 @@ namespace PixelFarm.Agg.Imaging
             RectInt destRect = sourceImageRect;
             destRect.Offset(destXOffset, destYOffset);
             RectInt clippedSourceRect = new RectInt();
-            if (clippedSourceRect.IntersectRectangles(destRect, m_ClippingRect))
+            if (clippedSourceRect.IntersectRectangles(destRect, _clippingRect))
             {
                 // move it back relative to the source
                 clippedSourceRect.Offset(-destXOffset, -destYOffset);

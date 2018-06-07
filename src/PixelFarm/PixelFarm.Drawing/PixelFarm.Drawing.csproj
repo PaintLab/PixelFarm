@@ -406,17 +406,11 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ImgFilters.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ImgFilters.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\1_base\PixelBlenderRGB.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\PixelBlenderRGB.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\ProxyImage.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ProxyImage.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\Queue.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\Queue.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\1_base\ScanlineRasToDestBitmapRendererExtension.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ScanlineRasToDestBitmapRendererExtension.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraud.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGenGouraud.cs</Link>
@@ -451,12 +445,6 @@
     <Compile Include="..\pixelfarm.miniagg.complements\3_filter\StackBlur.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\StackBlur.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\4_image\AlphaMask.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\AlphaMask.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\4_image\AlphaMaskAdaptor.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\AlphaMaskAdaptor.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\4_image\FilterMan.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\FilterMan.cs</Link>
     </Compile>
@@ -490,6 +478,9 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\SvgRenderVx\SvgRenderVx.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs</Link>
+    </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ColorOrder.cs</Link>
     </Compile>
@@ -499,14 +490,8 @@
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\GammaLookUpTable.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\GammaLookUpTable.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\IImageReaderWriter.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\IImageReaderWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ImageHelper.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ImageHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ImageReaderWriterBase.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\IBitmapBlender.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\IBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs</Link>
@@ -514,8 +499,8 @@
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\SubImageRW.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\0_ISpanGenerator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs</Link>
