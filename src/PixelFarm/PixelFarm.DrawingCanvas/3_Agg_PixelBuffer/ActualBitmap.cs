@@ -286,25 +286,19 @@ namespace PixelFarm.Agg
             {
                 return this.stride;
             }
-        }
-
-
+        } 
         int IBitmapSrc.BytesBetweenPixelsInclusive
         {
             get { return 4; }
-        }
-
-
+        } 
         RectInt IBitmapSrc.GetBounds()
         {
             return new RectInt(0, 0, width, height);
-        }
-
+        } 
         int[] IBitmapSrc.GetInt32Buffer()
         {
             return this.pixelBuffer;
-        }
-
+        } 
         TempMemPtr IBitmapSrc.GetBufferPtr()
         {
             return new TempMemPtr(pixelBuffer);
