@@ -353,13 +353,13 @@ namespace PixelFarm.Agg.Imaging
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
                         {
-                            int* header2 = (int*)(IntPtr)head;
+                            int* header2 = head;
 
                             if (count % 2 != 0)
                             {
                                 //odd
                                 //
-                                BlendPixel(dstBuffer, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset++], arrayElemOffset));                                
+                                BlendPixel(dstBuffer, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset++], arrayElemOffset));
                                 header2++;//move next
                                 count--;
                                 arrayElemOffset++;
@@ -394,7 +394,7 @@ namespace PixelFarm.Agg.Imaging
                     {
                         fixed (int* head = &dstBuffer[arrayElemOffset])
                         {
-                            int* header2 = (int*)(IntPtr)head;
+                            int* header2 = head;
 
                             if (count % 2 != 0)
                             {
@@ -440,19 +440,17 @@ namespace PixelFarm.Agg.Imaging
                         {
                             //cover may diff in each loop
                             int cover = covers[coversIndex++];
-                            //if (cover == 255)
-                            //{
-                            //    BlendPixel32Internal(dstBufferPtr, srcColors[srcColorOffset]);
-                            //}
-                            //else
-                            //{
-                            //    BlendPixel32Internal(dstBufferPtr, srcColors[srcColorOffset].NewFromChangeCoverage(cover));
-                            //}
+                            if (cover == 255)
+                            {
+                                BlendPixel(dstBuffer, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset], arrayElemOffset));
+                            }
+                            else
+                            {
+                                BlendPixel(dstBuffer, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset].NewFromChangeCoverage(cover), arrayElemOffset));
+                            }
 
-                            BlendPixel(dstBuffer, arrayElemOffset, NewColorFromMask(srcColors[srcColorOffset].NewFromChangeCoverage(cover), arrayElemOffset));
+
                             arrayElemOffset++;
-
-
                             dstBufferPtr++;
                             ++srcColorOffset;
                         }
