@@ -64,10 +64,10 @@ License:
 
 ---
 
-C# Port port by: Lars Brubaker
+C# Port port by: Lars Brubaker, 2007
                  larsbrubaker@gmail.com
 
-Copyright (C) 2007
+ 
 
 
 
