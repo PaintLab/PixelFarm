@@ -11,7 +11,7 @@ from https://github.com/teichgraf/WriteableBitmapEx
 
 Sample Screenshots : 
 
-
+![p8](https://user-images.githubusercontent.com/7447159/41097450-252db418-6a82-11e8-9762-120b0f9b9ea5.png)
 ![p1](https://user-images.githubusercontent.com/7447159/41097058-ebe21eca-6a80-11e8-8e94-110b3b06bb2d.png)
 ![p2](https://user-images.githubusercontent.com/7447159/41097059-ec28b1b4-6a80-11e8-86f3-a1ed6977198c.png)
 ![p3](https://user-images.githubusercontent.com/7447159/41097061-ec6dbe76-6a80-11e8-88be-935de6510762.png)
