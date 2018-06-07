@@ -63,12 +63,11 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
             alphaBitmap = new ActualImage(width, height);
             //
-            var bmpReaderWrtier = new MyImageReaderWriter();
-            bmpReaderWrtier.ReloadImage(alphaBitmap);
-            alphaMaskImageBuffer = new SubBitmapBlender(bmpReaderWrtier, new PixelBlenderGrey()); 
+            var bmpReaderWrtier = new MyBitmapBlender(alphaBitmap);
+            alphaMaskImageBuffer = new SubBitmapBlender(bmpReaderWrtier, new PixelBlenderGrey());
             //
             ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);
-            clippingProxy.Clear(Drawing.Color.Black); 
+            clippingProxy.Clear(Drawing.Color.Black);
 
             System.Random randGenerator = new Random(1432);
             int i;
@@ -81,17 +80,17 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
             for (i = 0; i < num; i++)
             {
-                
+
                 if (i == num - 1)
                 {
                     ////for the last one
-                   
+
                     ellipseForMask.Reset(Width / 2, (Height / 2) - 90, 110, 110, elliseFlattenStep);
                     rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
                     v1.Clear();
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 255, 0));
- 
+
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, elliseFlattenStep);
                     rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
@@ -110,7 +109,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     // set the color to draw into the alpha channel.
                     // there is not very much reason to set the alpha as you will get the amount of 
                     // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                  
+
                     rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVxs(v1));
                     v1.Clear();
@@ -267,7 +266,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             AggPainter p2 = (AggPainter)p;
             p2.Clear(Color.White);
             AggRenderSurface aggsx = p2.RenderSurface;
-            MyImageReaderWriter widgetsSubImage = (MyImageReaderWriter)aggsx.DestImage;
+            MyBitmapBlender widgetsSubImage = (MyBitmapBlender)aggsx.DestImage;
             ScanlinePacked8 scline = aggsx.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;

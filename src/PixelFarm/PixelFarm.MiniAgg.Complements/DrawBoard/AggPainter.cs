@@ -6,10 +6,50 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.DrawingBuffer;
 using PixelFarm.Drawing.PainterExtensions;
+using PixelFarm.Agg.Imaging;
 
 namespace PixelFarm.Agg
 {
 
+    public class MyBitmapBlender : BitmapBlenderBase
+    {
+        ActualImage actualImage;
+        public MyBitmapBlender()
+        {
+
+        }
+        public MyBitmapBlender(ActualImage actualImage)
+        {
+            this.actualImage = actualImage;
+            Attach(actualImage.Width,
+                           actualImage.Height,
+                           actualImage.BitDepth,
+                           ActualImage.GetBuffer(actualImage),
+                           new PixelBlenderBGRA());
+        }
+        public override void ReplaceBuffer(int[] newbuffer)
+        {
+            ActualImage.ReplaceBuffer(actualImage, newbuffer);
+        }
+        /// <summary>
+        /// load image to the reader/writer
+        /// </summary>
+        /// <param name="actualImage"></param>
+        public void ReloadImage(ActualImage actualImage)
+        {
+
+            if (this.actualImage == actualImage)
+            {
+                return;
+            }
+            this.actualImage = actualImage;
+            Attach(actualImage.Width,
+                           actualImage.Height,
+                           actualImage.BitDepth,
+                           ActualImage.GetBuffer(actualImage),
+                           new PixelBlenderBGRA());
+        }
+    }
     public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
     {
         Stroke _stroke = new Stroke(1);
@@ -52,7 +92,7 @@ namespace PixelFarm.Agg
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
 
-        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
+        MyBitmapBlender sharedImageWriterReader = new MyBitmapBlender();
 
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;

@@ -72,6 +72,10 @@ namespace PixelFarm.Agg
 
         public abstract void ReplaceBuffer(int[] newbuffer);
 
+        protected void Attach(ActualImage img)
+        {
+            Attach(img.Width, img.Height, img.BitDepth, ActualImage.GetBuffer(img), new PixelBlenderBGRA());
+        }
         /// <summary>
         /// attach image buffer and its information to the reader
         /// </summary>
@@ -139,7 +143,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        void CopyFromNoClipping(IBitmapBlender sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
+        void CopyFromNoClipping(IBitmapSrc sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
             if (BytesBetweenPixelsInclusive != BitDepth / 8
                 || sourceImage.BytesBetweenPixelsInclusive != sourceImage.BitDepth / 8)
@@ -424,22 +428,19 @@ namespace PixelFarm.Agg
             }
 #endif
 
-            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) * 4;
+            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) << 2;// x4
 
         }
         public int GetBufferOffsetXY32Check(int x, int y)
         {
-            //if (y >= yTableArray.Length ||
-            //    x >= xTableArray.Length)
-            //{
-            //    return -1;
-            //}
+
             if (y >= height || x >= width)
             {
                 return -1;
             }
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
+      
         public int GetBufferOffsetXY32(int x, int y)
         {
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
@@ -889,36 +890,7 @@ namespace PixelFarm.Agg
 
 
 
-    public class MyImageReaderWriter : BitmapBlenderBase
-    {
-        ActualImage actualImage;
-        public MyImageReaderWriter()
-        {
-        }
-        public override void ReplaceBuffer(int[] newbuffer)
-        {
-            ActualImage.ReplaceBuffer(actualImage, newbuffer);
-        }
-        /// <summary>
-        /// load image to the reader/writer
-        /// </summary>
-        /// <param name="actualImage"></param>
-        public void ReloadImage(ActualImage actualImage)
-        {
-
-            if (this.actualImage == actualImage)
-            {
-                return;
-            }
-            this.actualImage = actualImage;
-            Attach(actualImage.Width,
-                           actualImage.Height,
-                           actualImage.BitDepth,
-                           ActualImage.GetBuffer(actualImage),
-                           new PixelBlenderBGRA());
-        }
-    }
 
 
-   
+
 }

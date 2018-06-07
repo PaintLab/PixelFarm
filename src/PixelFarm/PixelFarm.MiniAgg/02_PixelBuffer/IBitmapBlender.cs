@@ -22,21 +22,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
-    public interface IBitmapSrc
-    {
-        int BitDepth { get; }
-        int Width { get; }
-        int Height { get; }
-        RectInt GetBounds();
-        int[] GetInt32Buffer();
-        TempMemPtr GetBufferPtr();
-        int GetByteBufferOffsetXY(int x, int y);
-        int Stride { get; }
-        int BytesBetweenPixelsInclusive { get; }
-        void ReplaceBuffer(int[] newBuffer);
-        Color GetPixel(int x, int y); 
-    }
-
+    
 
     /// <summary>
     /// access reader /writer to an image buffer

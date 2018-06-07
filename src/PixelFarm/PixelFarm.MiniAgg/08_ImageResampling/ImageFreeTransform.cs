@@ -11,10 +11,22 @@ namespace PixelFarm.Agg.Imaging
 
     public class FreeTransform
     {
+        class MyBitmapBlender : BitmapBlenderBase
+        {
+            public MyBitmapBlender(ActualImage img)
+            {
+                Attach(img);
+            }
+            public override void ReplaceBuffer(int[] newbuffer)
+            {
+               
+            }
+        }
+
         PointF[] vertex = new PointF[4];
         Vector AB, BC, CD, DA;
         RectInt rect = new RectInt();
-        MyImageReaderWriter srcCB;
+        MyBitmapBlender srcCB;
         ActualImage srcImageInput;
         int srcW = 0;
         int srcH = 0;
@@ -36,8 +48,7 @@ namespace PixelFarm.Agg.Imaging
                 try
                 {
                     this.srcImageInput = value;
-                    this.srcCB = new MyImageReaderWriter();
-                    srcCB.ReloadImage(value);
+                    this.srcCB = new MyBitmapBlender(value);
                     srcH = value.Height;
                     srcW = value.Width;
                 }
@@ -166,8 +177,7 @@ namespace PixelFarm.Agg.Imaging
         ActualImage GetTransformedBitmapNoInterpolation()
         {
             var destCB = new ActualImage(rect.Width, rect.Height);
-            var destWriter = new MyImageReaderWriter();
-            destWriter.ReloadImage(destCB);
+            var destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
             double dab, dbc, dcd, dda;
@@ -209,8 +219,7 @@ namespace PixelFarm.Agg.Imaging
             //4 points sampling
             //weight between four point
             ActualImage destCB = new ActualImage(rect.Width, rect.Height);
-            MyImageReaderWriter destWriter = new MyImageReaderWriter();
-            destWriter.ReloadImage(destCB);
+            MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
             double dab, dbc, dcd, dda;
@@ -309,8 +318,7 @@ namespace PixelFarm.Agg.Imaging
             ////-----------------------------------------
 
             ActualImage destCB = new ActualImage(rect.Width, rect.Height);
-            MyImageReaderWriter destWriter = new MyImageReaderWriter();
-            destWriter.ReloadImage(destCB);
+            MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
             //PointF ptInPlane = new PointF();
 
             //int stride2 = bmpdata2.Stride;

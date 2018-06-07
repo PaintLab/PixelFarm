@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.Agg
 {
@@ -65,7 +66,7 @@ namespace PixelFarm.Agg
         }
 
     }
-    public sealed class ActualImage : PixelFarm.Drawing.Image
+    public sealed class ActualImage : PixelFarm.Drawing.Image, IBitmapSrc
     {
         int width;
         int height;
@@ -76,7 +77,7 @@ namespace PixelFarm.Agg
         int[] pixelBuffer;
 
         public ActualImage(int width, int height)
-        {   
+        {
             //width and height must >0 
             this.width = width;
             this.height = height;
@@ -245,16 +246,112 @@ namespace PixelFarm.Agg
         {
             s_saveToPngFileDel = saveToPngFileDelegate;
         }
-#if DEBUG
 
+
+#if DEBUG 
         public void dbugSaveToPngFile(string filename)
         {
             SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
         }
-
 #endif
+        int IBitmapSrc.BitDepth
+        {
+            get
+            {
+                return this.bitDepth;
+            }
+        }
+
+        int IBitmapSrc.Width
+        {
+            get
+            {
+                return this.width;
+            }
+        }
+
+        int IBitmapSrc.Height
+        {
+            get
+            {
+                return this.height;
+            }
+        }
+
+        int IBitmapSrc.Stride
+        {
+            get
+            {
+                return this.stride;
+            }
+        }
+
+
+        int IBitmapSrc.BytesBetweenPixelsInclusive
+        {
+            get { return 0; }
+        }
+
+
+        RectInt IBitmapSrc.GetBounds()
+        {
+            return new RectInt(0, 0, width, height);
+        }
+
+        int[] IBitmapSrc.GetInt32Buffer()
+        {
+            return this.pixelBuffer;
+        }
+
+        TempMemPtr IBitmapSrc.GetBufferPtr()
+        {
+            return new TempMemPtr(pixelBuffer);
+        }
+
+        int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
+        {
+            return ((y * width) + x) << 2;
+        }
+
+        int IBitmapSrc.GetBufferOffsetXY32(int x, int y)
+        {
+            return (y * width) + x;
+        }
+
+        void IBitmapSrc.ReplaceBuffer(int[] newBuffer)
+        {
+            pixelBuffer = newBuffer;
+        }
+
+        Color IBitmapSrc.GetPixel(int x, int y)
+        {
+            int pixelValue = pixelBuffer[y * width + x];
+            return new Color(
+              (byte)(pixelValue >> 24),
+              (byte)(pixelValue >> 16),
+              (byte)(pixelValue >> 8),
+              (byte)(pixelValue));
+
+        }
+
     }
 
+
+    public interface IBitmapSrc
+    {
+        int BitDepth { get; }
+        int Width { get; }
+        int Height { get; }
+        RectInt GetBounds();
+        int[] GetInt32Buffer();
+        TempMemPtr GetBufferPtr();
+        int GetByteBufferOffsetXY(int x, int y);
+        int GetBufferOffsetXY32(int x, int y);
+        int Stride { get; }
+        int BytesBetweenPixelsInclusive { get; }
+        void ReplaceBuffer(int[] newBuffer);
+        PixelFarm.Drawing.Color GetPixel(int x, int y);
+    }
 
     public static class ActualImageExtensions
     {

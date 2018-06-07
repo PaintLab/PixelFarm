@@ -122,9 +122,7 @@ namespace PixelFarm.Agg
         public void Fill(ActualImage img, int x, int y)
         {
             //reuse this? 
-            var imgReadWrite = new MyImageReaderWriter();
-            imgReadWrite.ReloadImage(img);
-
+            var imgReadWrite = new MyBitmapBlender(img); 
             Fill(imgReadWrite, x, y);
         }
 
@@ -144,7 +142,7 @@ namespace PixelFarm.Agg
             _destImgRW = bufferToFillOn;
             TempMemPtr destBufferPtr = bufferToFillOn.GetBufferPtr();
 
-           
+
 
             unsafe
             {

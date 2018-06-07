@@ -23,11 +23,11 @@ namespace PixelFarm.Agg.Imaging
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
-        BitmapBlenderBase srcRW;
-        public ImgSpanGenGray_NNStepXby1(IBitmapBlender src, ISpanInterpolator spanInterpolator)
+        IBitmapSrc srcRW;
+        public ImgSpanGenGray_NNStepXby1(IBitmapSrc src, ISpanInterpolator spanInterpolator)
             : base(spanInterpolator)
         {
-            srcRW = (BitmapBlenderBase)src;
+            srcRW = src;
             if (srcRW.BitDepth != 8)
             {
                 throw new NotSupportedException("The source is expected to be 8 bit.");
