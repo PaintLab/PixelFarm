@@ -23,7 +23,7 @@ namespace SampleWinForms
         Graphics g;
         AggPainter painter;
         AggRenderSurface _aggsx;
-        ActualImage destImg;
+        ActualBitmap destImg;
         Bitmap winBmp;
 
 
@@ -109,7 +109,7 @@ namespace SampleWinForms
             //
             if (g == null)
             {
-                destImg = new ActualImage(800, 600);
+                destImg = new ActualBitmap(800, 600);
                 _aggsx = new AggRenderSurface(destImg); //no platform
                 painter = new AggPainter(_aggsx);
                 winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -312,7 +312,7 @@ namespace SampleWinForms
             MsdfGenParams genParams = new MsdfGenParams();
             GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, genParams);
 
-            var actualImg = ActualImage.CreateFromBuffer(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer());
+            var actualImg = ActualBitmap.CreateFromBuffer(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer());
             painter.DrawImage(actualImg, 0, 0);
 
             //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))

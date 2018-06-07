@@ -23,7 +23,7 @@ namespace PixelFarm.DrawingGL
 
     public class AggTextSpanPrinter : ITextPrinter
     {
-        ActualImage _actualImage;
+        ActualBitmap _actualImage;
         AggRenderSurface _aggsx;
         AggPainter _aggPainter;
         VxsTextPrinter _vxsTextPrinter;
@@ -45,7 +45,7 @@ namespace PixelFarm.DrawingGL
             bmpWidth = w;
             bmpHeight = h;
 
-            _actualImage = new ActualImage(bmpWidth, bmpHeight);
+            _actualImage = new ActualBitmap(bmpWidth, bmpHeight);
             _aggsx = new AggRenderSurface(_actualImage);
             _aggPainter = new AggPainter(_aggsx);
             _aggPainter.FillColor = Color.Black;

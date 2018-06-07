@@ -18,7 +18,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         AggRenderSurface gfx;
         AggLcdDistributionLookupTable lcdLut;
         double primary = 1;
-        public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualImage destImage)
+        public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualBitmap destImage)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;

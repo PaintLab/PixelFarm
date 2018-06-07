@@ -72,9 +72,9 @@ namespace PixelFarm.Agg
 
         public abstract void ReplaceBuffer(int[] newbuffer);
 
-        protected void Attach(ActualImage img)
+        protected void Attach(ActualBitmap img)
         {
-            Attach(img.Width, img.Height, img.BitDepth, ActualImage.GetBuffer(img), new PixelBlenderBGRA());
+            Attach(img.Width, img.Height, img.BitDepth, ActualBitmap.GetBuffer(img), new PixelBlenderBGRA());
         }
         /// <summary>
         /// attach image buffer and its information to the reader
@@ -575,8 +575,8 @@ namespace PixelFarm.Agg
         }
 
 
-        ActualImage _filterImage;
-        public void SetFilterImage(ActualImage filterImg)
+        ActualBitmap _filterImage;
+        public void SetFilterImage(ActualBitmap filterImg)
         {
             _filterImage = filterImg;
         }

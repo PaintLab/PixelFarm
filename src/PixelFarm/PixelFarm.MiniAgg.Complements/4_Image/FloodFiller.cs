@@ -119,7 +119,7 @@ namespace PixelFarm.Agg
                 fillRule = new ExactMatch(fillColor);
             }
         }
-        public void Fill(ActualImage img, int x, int y)
+        public void Fill(ActualBitmap img, int x, int y)
         {
             //reuse this? 
             var imgReadWrite = new MyBitmapBlender(img); 

@@ -17,7 +17,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
     public class LionAlphaMask2 : DemoBase
     {
         int maskAlphaSliderValue = 100;
-        ActualImage alphaBitmap;
+        ActualBitmap alphaBitmap;
         SpriteShape lionShape;
         double angle = 0;
         double lionScale = 1.0;
@@ -27,7 +27,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         SubBitmapBlender alphaMaskImageBuffer;
         //IAlphaMask alphaMask;
         System.Drawing.Bitmap a_alphaBmp;
-        ActualImage lionImg;
+        ActualBitmap lionImg;
         public LionAlphaMask2()
         {
 
@@ -70,7 +70,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         void GenAlphaMask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
 
-            alphaBitmap = new ActualImage(width, height);
+            alphaBitmap = new ActualBitmap(width, height);
             alphaMaskImageBuffer = new SubBitmapBlender(alphaBitmap, new PixelBlenderGrey());
             //
             ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);

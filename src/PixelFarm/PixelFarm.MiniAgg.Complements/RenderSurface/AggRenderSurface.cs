@@ -39,8 +39,8 @@ namespace PixelFarm.Agg
         RectInt clipBox;
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
 
-        ActualImage destImage;
-        public AggRenderSurface(ActualImage destImage)
+        ActualBitmap destImage;
+        public AggRenderSurface(ActualBitmap destImage)
         {
             //create from actual image
 
@@ -69,7 +69,7 @@ namespace PixelFarm.Agg
         {
             get { return sclineRas; }
         }
-        public ActualImage DestActualImage
+        public ActualBitmap DestActualImage
         {
             get { return this.destActualImage; }
         }
@@ -338,7 +338,7 @@ namespace PixelFarm.Agg
         {
             Render(new VertexStoreSnap(vxs), c);
         }
-        ActualImage destActualImage;
+        ActualBitmap destActualImage;
         ScanlineRasterizer sclineRas;
         Affine currentTxMatrix = Affine.IdentityMatrix;
         public Affine CurrentTransformMatrix

@@ -85,7 +85,7 @@ namespace LayoutFarm
                     {
                         gdiDrawBoard.OffsetCanvasOrigin(rectBoxController.ControllerBoxMain.Left, rectBoxController.ControllerBoxMain.Top);
                         _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, w, h));
-                        var img2 = new ActualImage(w, h);
+                        var img2 = new ActualBitmap(w, h);
                         //copy content from drawboard to target image and save
                         gdiDrawBoard.RenderTo(img2, 0, 0, w, h);
 
