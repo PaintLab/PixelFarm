@@ -7,8 +7,8 @@
     <ProjectGuid>{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.DrawingBuffer</RootNamespace>
-    <AssemblyName>PixelFarm.DrawingBuffer</AssemblyName>
+    <RootNamespace>BackEnd.DrawingBuffer</RootNamespace>
+    <AssemblyName>BackEnd.DrawingBuffer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

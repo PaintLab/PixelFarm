@@ -34,43 +34,43 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\BitmapBuffer.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBuffer.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BitmapBuffer.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\AntialiasingExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\AntialiasingExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\AntialiasingExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\BaseExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\BaseExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BaseExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\BlitExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\BlitExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BlitExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\ConvertExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\ConvertExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\ConvertExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\FillExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\FillExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\FillExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\FilterExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\FilterExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\FilterExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\LineExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\LineExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\LineExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\ShapeExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\ShapeExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\ShapeExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\SplineExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\SplineExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\SplineExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\TransformationExtensions.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\TransformationExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\TransformationExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\BitmapBufferFactory.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferFactory.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BitmapBufferFactory.cs</Link>
     </Compile>
-    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\BitmapContext.cs">
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapContext.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BitmapContext.cs</Link>
     </Compile>
     <Compile Include="..\BackEnd.FilterFx\pdnsharedproject\01_core\color\ColorBgra.cs">
