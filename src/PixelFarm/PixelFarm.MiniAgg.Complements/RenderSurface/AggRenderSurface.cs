@@ -27,12 +27,11 @@ namespace PixelFarm.Agg
 {
     public sealed partial class AggRenderSurface
     {
-        MyImageReaderWriter destImageReaderWriter;
+        MyBitmapBlender destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
 
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
         PixelBlenderBGRA pixBlenderRGBA32;
-        IPixelBlender currentBlender;
         double ox; //canvas origin x
         double oy; //canvas origin y
         int destWidth;
@@ -40,16 +39,16 @@ namespace PixelFarm.Agg
         RectInt clipBox;
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
 
-        ActualImage destImage;
-        public AggRenderSurface(ActualImage destImage)
+        ActualBitmap destImage;
+        public AggRenderSurface(ActualBitmap destImage)
         {
             //create from actual image
 
 
             this.destImage = destImage;
             this.destActualImage = destImage;
-            this.destImageReaderWriter = new MyImageReaderWriter();
-            this.destImageReaderWriter.ReloadImage(destImage);
+            this.destImageReaderWriter = new MyBitmapBlender(destImage);
+          
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
@@ -60,7 +59,7 @@ namespace PixelFarm.Agg
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this.sclineRas.SetClipBox(this.clipBox);
             this.sclinePack8 = new ScanlinePacked8();
-            this.currentBlender = this.pixBlenderRGBA32 = new PixelBlenderBGRA();
+            this.pixBlenderRGBA32 = new PixelBlenderBGRA();
         }
 
         public int Width { get { return destWidth; } }
@@ -70,7 +69,7 @@ namespace PixelFarm.Agg
         {
             get { return sclineRas; }
         }
-        public ActualImage DestActualImage
+        public ActualBitmap DestActualImage
         {
             get { return this.destActualImage; }
         }
@@ -78,15 +77,14 @@ namespace PixelFarm.Agg
         {
             get { return this.sclinePack8; }
         }
-        public IPixelBlender PixelBlender
+        public PixelBlender32 PixelBlender
         {
             get
             {
-                return this.currentBlender;
+                return this.pixBlenderRGBA32;
             }
-
         }
-        public ImageReaderWriterBase DestImage
+        public BitmapBlenderBase DestImage
         {
             get { return this.destImageReaderWriter; }
         }
@@ -340,7 +338,7 @@ namespace PixelFarm.Agg
         {
             Render(new VertexStoreSnap(vxs), c);
         }
-        ActualImage destActualImage;
+        ActualBitmap destActualImage;
         ScanlineRasterizer sclineRas;
         Affine currentTxMatrix = Affine.IdentityMatrix;
         public Affine CurrentTransformMatrix

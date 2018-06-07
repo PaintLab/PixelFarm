@@ -33,6 +33,7 @@ namespace LayoutFarm.UI
                 if (HitTestOnSubPart(RenderVx, hitChain.TextPointX, hitChain.TextPointY))
                 {
                     hitChain.AddHitObject(this);
+                    return; //return after first hit
                 }
             }
 

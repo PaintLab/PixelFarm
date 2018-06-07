@@ -6,10 +6,50 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.DrawingBuffer;
 using PixelFarm.Drawing.PainterExtensions;
+using PixelFarm.Agg.Imaging;
 
 namespace PixelFarm.Agg
 {
 
+    class MyBitmapBlender : BitmapBlenderBase
+    {
+        ActualBitmap actualImage;
+        public MyBitmapBlender()
+        {
+
+        }
+        public MyBitmapBlender(ActualBitmap actualImage)
+        {
+            this.actualImage = actualImage;
+            Attach(actualImage.Width,
+                           actualImage.Height,
+                           actualImage.BitDepth,
+                           ActualBitmap.GetBuffer(actualImage),
+                           new PixelBlenderBGRA());
+        }
+        public override void ReplaceBuffer(int[] newbuffer)
+        {
+            ActualBitmap.ReplaceBuffer(actualImage, newbuffer);
+        }
+        /// <summary>
+        /// load image to the reader/writer
+        /// </summary>
+        /// <param name="actualImage"></param>
+        public void ReloadImage(ActualBitmap actualImage)
+        {
+
+            if (this.actualImage == actualImage)
+            {
+                return;
+            }
+            this.actualImage = actualImage;
+            Attach(actualImage.Width,
+                           actualImage.Height,
+                           actualImage.BitDepth,
+                           ActualBitmap.GetBuffer(actualImage),
+                           new PixelBlenderBGRA());
+        }
+    }
     public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
     {
         Stroke _stroke = new Stroke(1);
@@ -52,7 +92,7 @@ namespace PixelFarm.Agg
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
 
-        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
+        MyBitmapBlender sharedImageWriterReader = new MyBitmapBlender();
 
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
@@ -73,7 +113,7 @@ namespace PixelFarm.Agg
             //from membuffer
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
-                PixelFarm.Agg.ActualImage.GetBuffer(aggsx.DestActualImage));
+                PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
 
 
             _vectorTool = new VectorTool();
@@ -705,21 +745,21 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, double left, double top)
         {
-            ActualImage actualImg = img as ActualImage;
+            ActualBitmap actualImg = img as ActualBitmap;
             if (actualImg == null)
             {
                 //? TODO
                 return;
             }
             //check image caching system 
-            if (this._renderQuality == RenderQualtity.Fast)
-            {
-                //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
-                //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
-                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
-                this._bxt.CopyBlit(left, top, srcBmp);
-                return;
-            }
+            //if (this._renderQuality == RenderQualtity.Fast)
+            //{
+            //    //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
+            //    //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
+            //    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
+            //    this._bxt.CopyBlit(left, top, srcBmp);
+            //    return;
+            //}
 
             this.sharedImageWriterReader.ReloadImage(actualImg);
 
@@ -750,30 +790,30 @@ namespace PixelFarm.Agg
         }
         public override void DrawImage(Image img, params Transform.AffinePlan[] affinePlans)
         {
-            ActualImage actualImg = img as ActualImage;
+            ActualBitmap actualImg = img as ActualBitmap;
             if (actualImg == null)
             {
                 //? TODO
                 return;
             }
 
-            //if (this._renderQuality == RenderQualtity.Fast)
-            //{
-            //    //todo, review here again
-            //    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
-            //    //this._bxt.CopyBlit(left, top, srcBmp); 
-            //    DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
-            //        DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
-            //        DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
-            //        //DrawingBuffer.AffinePlan.Translate(100,100)
-            //    });
-            //    //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
-            //    this._bxt.BlitRender(srcBmp, false, 1, mx);
-            //    return;
-            //}
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                //todo, review here again
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualBitmap.GetBuffer(actualImg));
+                //this._bxt.CopyBlit(left, top, srcBmp); 
+                DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
+                    DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
+                    DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
+                    //DrawingBuffer.AffinePlan.Translate(100,100)
+                });
+                //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
+                this._bxt.BlitRender(srcBmp, false, 1, mx);
+                return;
+            }
 
 
-            this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+            this.sharedImageWriterReader.ReloadImage((ActualBitmap)img);
 
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering

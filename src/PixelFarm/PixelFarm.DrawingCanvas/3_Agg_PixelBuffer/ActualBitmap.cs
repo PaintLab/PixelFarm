@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.Agg
 {
@@ -65,7 +66,9 @@ namespace PixelFarm.Agg
         }
 
     }
-    public sealed class ActualImage : PixelFarm.Drawing.Image
+
+
+    public sealed class ActualBitmap : PixelFarm.Drawing.Image, IBitmapSrc
     {
         int width;
         int height;
@@ -75,23 +78,14 @@ namespace PixelFarm.Agg
 
         int[] pixelBuffer;
 
-        public ActualImage(int width, int height, PixelFormat format = PixelFormat.ARGB32)
+        public ActualBitmap(int width, int height)
         {
-
-#if DEBUG
-
-            if (format != PixelFormat.ARGB32)
-            {
-                throw new NotSupportedException();
-            }
-
-#endif
             //width and height must >0 
             this.width = width;
             this.height = height;
             int bytesPerPixel;
             this.stride = CalculateStride(width,
-                this.pixelFormat = format,
+                this.pixelFormat = PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
@@ -135,29 +129,25 @@ namespace PixelFarm.Agg
         public bool IsBigEndian { get; set; }
 
 
-        public static TempMemPtr GetBufferPtr(ActualImage img)
+        public static TempMemPtr GetBufferPtr(ActualBitmap img)
         {
-            TempMemPtr tmp = new TempMemPtr(img.pixelBuffer);
-            return tmp;
+            return new TempMemPtr(img.pixelBuffer);
         }
 
-        public static int[] GetBuffer(ActualImage img)
+        public static int[] GetBuffer(ActualBitmap img)
         {
             return img.pixelBuffer;
         }
 
-        public static void ReplaceBuffer(ActualImage img, int[] pixelBuffer)
+        public static void ReplaceBuffer(ActualBitmap img, int[] pixelBuffer)
         {
             img.pixelBuffer = pixelBuffer;
         }
-        public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, int[] buffer)
+        public static ActualBitmap CreateFromBuffer(int width, int height, int[] buffer)
         {
-            if (format != PixelFormat.ARGB32)
-            {
-                throw new NotSupportedException();
-            }
+
             //
-            var img = new ActualImage(width, height, format);
+            var img = new ActualBitmap(width, height);
             unsafe
             {
                 fixed (int* header = &img.pixelBuffer[0])
@@ -213,14 +203,14 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
-        public static int[] CopyImgBuffer(ActualImage img)
+        public static int[] CopyImgBuffer(ActualBitmap img)
         {
 
             int[] buff2 = new int[img.Width * img.Height];
             unsafe
             {
                 //byte[] pixelBuffer = ActualImage.GetBuffer(img);
-                TempMemPtr pixBuffer = ActualImage.GetBufferPtr(img);
+                TempMemPtr pixBuffer = ActualBitmap.GetBufferPtr(img);
                 //fixed (byte* header = &pixelBuffer[0])
                 byte* header = (byte*)pixBuffer.Ptr;
                 {
@@ -258,24 +248,120 @@ namespace PixelFarm.Agg
         {
             s_saveToPngFileDel = saveToPngFileDelegate;
         }
-#if DEBUG
 
+
+#if DEBUG 
         public void dbugSaveToPngFile(string filename)
         {
             SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
         }
-
 #endif
+        int IBitmapSrc.BitDepth
+        {
+            get
+            {
+                return this.bitDepth;
+            }
+        }
+
+        int IBitmapSrc.Width
+        {
+            get
+            {
+                return this.width;
+            }
+        }
+
+        int IBitmapSrc.Height
+        {
+            get
+            {
+                return this.height;
+            }
+        }
+
+        int IBitmapSrc.Stride
+        {
+            get
+            {
+                return this.stride;
+            }
+        }
+
+
+        int IBitmapSrc.BytesBetweenPixelsInclusive
+        {
+            get { return 4; }
+        }
+
+
+        RectInt IBitmapSrc.GetBounds()
+        {
+            return new RectInt(0, 0, width, height);
+        }
+
+        int[] IBitmapSrc.GetInt32Buffer()
+        {
+            return this.pixelBuffer;
+        }
+
+        TempMemPtr IBitmapSrc.GetBufferPtr()
+        {
+            return new TempMemPtr(pixelBuffer);
+        }
+
+        int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
+        {
+            return ((y * width) + x) << 2;
+        }
+
+        int IBitmapSrc.GetBufferOffsetXY32(int x, int y)
+        {
+            return (y * width) + x;
+        }
+
+        void IBitmapSrc.ReplaceBuffer(int[] newBuffer)
+        {
+            pixelBuffer = newBuffer;
+        }
+
+        Color IBitmapSrc.GetPixel(int x, int y)
+        {
+            int pixelValue = pixelBuffer[y * width + x];
+            return new Color(
+              (byte)(pixelValue >> 24),
+              (byte)(pixelValue >> 16),
+              (byte)(pixelValue >> 8),
+              (byte)(pixelValue));
+
+        }
+
     }
 
 
-    public static class ActualImageExtensions
+    public interface IBitmapSrc
     {
-        public static int[] CopyImgBuffer(ActualImage img, int width)
+        int BitDepth { get; }
+        int Width { get; }
+        int Height { get; }
+        RectInt GetBounds();
+        int[] GetInt32Buffer();
+        TempMemPtr GetBufferPtr();
+        int GetByteBufferOffsetXY(int x, int y);
+        int GetBufferOffsetXY32(int x, int y);
+        int Stride { get; }
+        int BytesBetweenPixelsInclusive { get; }
+        void ReplaceBuffer(int[] newBuffer);
+        PixelFarm.Drawing.Color GetPixel(int x, int y);
+    }
+
+    public static class ActualBitmapExtensions
+    {
+        public static int[] CopyImgBuffer(ActualBitmap img, int width)
         {
             //calculate stride for the width
 
-            int destStride = ActualImage.CalculateStride(width, PixelFormat.ARGB32);
+            int destStride = ActualBitmap.CalculateStride(width, PixelFormat.ARGB32);
             int h = img.Height;
             int newBmpW = destStride / 4;
 
@@ -283,7 +369,7 @@ namespace PixelFarm.Agg
             unsafe
             {
 
-                TempMemPtr srcBufferPtr = ActualImage.GetBufferPtr(img);
+                TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(img);
                 byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
                 int srcIndex = 0;
                 int srcStride = img.Stride;
@@ -303,17 +389,17 @@ namespace PixelFarm.Agg
             return buff2;
         }
 
-        public static int[] CopyImgBuffer(ActualImage src, int srcX, int srcY, int srcW, int srcH)
+        public static int[] CopyImgBuffer(ActualBitmap src, int srcX, int srcY, int srcW, int srcH)
         {
             //calculate stride for the width 
-            int destStride = ActualImage.CalculateStride(srcW, PixelFormat.ARGB32);
+            int destStride = ActualBitmap.CalculateStride(srcW, PixelFormat.ARGB32);
             int newBmpW = destStride / 4;
 
             int[] buff2 = new int[newBmpW * srcH];
             unsafe
             {
 
-                TempMemPtr srcBufferPtr = ActualImage.GetBufferPtr(src);
+                TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(src);
                 byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
                 int srcIndex = 0;
                 int srcStride = src.Stride;

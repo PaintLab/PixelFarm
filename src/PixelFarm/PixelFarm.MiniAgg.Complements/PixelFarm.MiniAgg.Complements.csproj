@@ -224,10 +224,12 @@
     <Compile Include="DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="DrawBoard\LineDashGenerator.cs" />
-    <Compile Include="1_Base\ScanlineRasToDestBitmapRendererExtension.cs" />
+    <Content Include="x_backup\AlphaMask.txt" />
+    <Content Include="x_backup\AlphaMaskAdaptor.txt" />
+    <Content Include="x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
     <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
     <Compile Include="4_Image\FilterMan.cs" />
-    <Compile Include="1_Base\PixelBlenderRGB.cs" />
+    <Content Include="x_backup\PixelBlenderRGB.txt" />
     <Compile Include="1_Base\Queue.cs" />
     <Compile Include="1_Base\BorderDouble.cs" />
     <Compile Include="1_Base\GammaFuntions.cs" />
@@ -235,9 +237,7 @@
     <Compile Include="1_Base\ProxyImage.cs" />
     <Compile Include="3_Filter\ImageFilters.cs" />
     <Compile Include="3_Filter\PatternFilterBilnearColorRGBA.cs" />
-    <Compile Include="4_Image\AlphaMask.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient.cs" />
-    <Compile Include="4_Image\AlphaMaskAdaptor.cs" />
     <Compile Include="4_Image\FloodFiller.cs" />
     <Compile Include="3_Filter\RecursiveBlur.cs" />
     <Compile Include="3_Filter\StackBlur.cs" />
@@ -246,6 +246,7 @@
     <Compile Include="2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SvgRenderVx\SvgRenderVx.cs" />
+    <Content Include="x_backup\AggRenderSurface_RenderImages.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
@@ -264,6 +265,7 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

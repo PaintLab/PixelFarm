@@ -604,7 +604,7 @@ namespace PixelFarm.Drawing.WinGdi
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
 
-            if (image is PixelFarm.Agg.ActualImage)
+            if (image is PixelFarm.Agg.ActualBitmap)
             {
                 //this is known image
                 var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
@@ -616,7 +616,7 @@ namespace PixelFarm.Drawing.WinGdi
                         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     //
                     //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.Agg.ActualImage)image, bmp);
+                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.Agg.ActualBitmap)image, bmp);
                     //
                     Image.SetCacheInnerImage(image, bmp);
                     return bmp;
@@ -786,7 +786,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         Agg.AggPainter _painter;
-        Agg.ActualImage _aggActualImg;
+        Agg.ActualBitmap _aggActualImg;
         Agg.AggRenderSurface _aggRenderSurface;
         static Typography.TextServices.OpenFontStore openFontStore;
         Painter GetAggPainter()
@@ -794,7 +794,7 @@ namespace PixelFarm.Drawing.WinGdi
             if (_painter == null)
             {
 
-                _aggActualImg = new Agg.ActualImage(this.Width, this.Height);
+                _aggActualImg = new Agg.ActualBitmap(this.Width, this.Height);
                 _aggRenderSurface = new Agg.AggRenderSurface(_aggActualImg);
                 var aggPainter = new Agg.AggPainter(_aggRenderSurface);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
@@ -836,7 +836,7 @@ namespace PixelFarm.Drawing.WinGdi
                 Agg.RectD bound = svgVx.GetBounds();
 
                 //create 
-                Agg.ActualImage backimg = new Agg.ActualImage((int)bound.Width, (int)bound.Height);
+                Agg.ActualBitmap backimg = new Agg.ActualBitmap((int)bound.Width, (int)bound.Height);
                 Agg.AggRenderSurface renderSurface = new Agg.AggRenderSurface(backimg);
                 Agg.AggPainter painter = new Agg.AggPainter(renderSurface);
                 svgVx.Render(painter);

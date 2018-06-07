@@ -119,19 +119,17 @@ namespace PixelFarm.Agg
                 fillRule = new ExactMatch(fillColor);
             }
         }
-        public void Fill(ActualImage img, int x, int y)
+        public void Fill(ActualBitmap img, int x, int y)
         {
             //reuse this? 
-            var imgReadWrite = new MyImageReaderWriter();
-            imgReadWrite.ReloadImage(img);
-
+            var imgReadWrite = new MyBitmapBlender(img); 
             Fill(imgReadWrite, x, y);
         }
 
 
-        ImageReaderWriterBase _destImgRW;
+        BitmapBlenderBase _destImgRW;
 
-        public void Fill(ImageReaderWriterBase bufferToFillOn, int x, int y)
+        public void Fill(BitmapBlenderBase bufferToFillOn, int x, int y)
         {
             y -= imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number
@@ -144,7 +142,7 @@ namespace PixelFarm.Agg
             _destImgRW = bufferToFillOn;
             TempMemPtr destBufferPtr = bufferToFillOn.GetBufferPtr();
 
-           
+
 
             unsafe
             {

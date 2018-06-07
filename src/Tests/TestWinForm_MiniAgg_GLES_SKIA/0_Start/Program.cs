@@ -60,7 +60,7 @@ namespace Mini
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());
         }
-        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        static PixelFarm.Agg.ActualBitmap LoadImage(string filename)
         {
 
 
@@ -113,10 +113,9 @@ namespace Mini
             //        throw new NotSupportedException();
             //}
 
-            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+            PixelFarm.Agg.ActualBitmap actualImg = PixelFarm.Agg.ActualBitmap.CreateFromBuffer(
                 bmp.Width,
                 bmp.Height,
-                 PixelFarm.Agg.PixelFormat.ARGB32,
                 imgBuffer
                 );
             //gdi+ load as little endian             

@@ -14,14 +14,14 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         AggRenderSurface gfx;
-        public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
+        public CustomScanlineRasToBmp_EnlargedV2(double size, ActualBitmap destImage)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);
         }
-        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
+        protected override void CustomRenderSingleScanLine(IBitmapBlender destImage, Scanline scanline, Color color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -94,12 +94,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             {
                 AggPainter p2 = (AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
-                SubImageRW subImg = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
+                SubBitmapBlender subImg = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
 
                 //TODO: review here again
                 PixelBlenderBGRA blenderWithGamma = new PixelBlenderBGRA();
 
-                SubImageRW rasterGamma = new SubImageRW(subImg, blenderWithGamma);
+                SubBitmapBlender rasterGamma = new SubBitmapBlender(subImg, blenderWithGamma);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(subImg);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);

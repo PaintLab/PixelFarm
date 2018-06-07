@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Imaging
 
     public class GdiBitmapBackBuffer : IDisposable
     {
-        ActualImage actualImage;
+        ActualBitmap actualImage;
         int width;
         int height;
         //------------------------------------
@@ -72,7 +72,7 @@ namespace PixelFarm.Agg.Imaging
                  height,
                  nativeWin32Dc.DC, 0, 0, SRCCOPY);
         }
-        public void Initialize(int width, int height, int bitDepth, ActualImage actualImage)
+        public void Initialize(int width, int height, int bitDepth, ActualBitmap actualImage)
         {
             if (width > 0 && height > 0)
             {

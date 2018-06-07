@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{9E747913-22C8-4971-A094-993EB14805D4}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -359,7 +358,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -381,14 +379,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
@@ -398,7 +394,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
@@ -1162,17 +1157,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\1_Base\ImgFilters.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg.Complements\1_Base\ImgFilters.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\1_base\PixelBlenderRGB.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\1_base\PixelBlenderRGB.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\1_base\ProxyImage.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\1_base\ProxyImage.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\1_base\Queue.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\1_base\Queue.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\1_base\ScanlineRasToDestBitmapRendererExtension.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\1_base\ScanlineRasToDestBitmapRendererExtension.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraud.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraud.cs</Link>
@@ -1207,12 +1196,6 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\3_filter\StackBlur.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\3_filter\StackBlur.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMask.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMask.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMaskAdaptor.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\AlphaMaskAdaptor.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\FilterMan.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\FilterMan.cs</Link>
     </Compile>
@@ -1246,6 +1229,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs</Link>
     </Compile>
@@ -1255,32 +1241,23 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\GammaLookUpTable.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\GammaLookUpTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\IImageReaderWriter.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\IImageReaderWriter.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\IBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\IBitmapBlender.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageHelper.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ImageReaderWriterBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderGray.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderGray.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\PixelBlenderOthers.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\0_ISpanGenerator.cs">
       <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\0_ISpanGenerator.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\1_ImgSpanGen.cs">
       <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\1_ImgSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\2_ImgSpanGenRGB.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\2_ImgSpanGenRGB.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\03_spangenerators\3_ImgSpanGenRGBA.cs">
       <Link>PixelFarm\pixelfarm.miniagg\03_spangenerators\3_ImgSpanGenRGBA.cs</Link>
@@ -1362,18 +1339,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\07_lines\4_OutlineAARasterizer.cs">
       <Link>PixelFarm\pixelfarm.miniagg\07_lines\4_OutlineAARasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBAImageSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBAImageSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBImageSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\FilterRGBImageSpanGen.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\IImageFilter.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\IImageFilter.cs</Link>
@@ -2073,7 +2038,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
@@ -2086,7 +2050,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
       <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
@@ -2678,21 +2641,18 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs</Link>
@@ -2702,14 +2662,12 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs</Link>

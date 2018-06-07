@@ -15,7 +15,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
     {
-        ActualImage imageToFillOn;
+        ActualBitmap imageToFillOn;
 
         int imgOffsetX = 20;
         int imgOffsetY = 60;
@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             //
             BackgroundColor = Color.White;
-            imageToFillOn = new ActualImage(400, 300);
+            imageToFillOn = new ActualBitmap(400, 300);
             AggRenderSurface aggsx = new AggRenderSurface(imageToFillOn);
             AggPainter p = new AggPainter(aggsx);
 

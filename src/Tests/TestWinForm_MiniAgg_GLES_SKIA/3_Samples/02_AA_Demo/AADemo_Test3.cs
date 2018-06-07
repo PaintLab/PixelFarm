@@ -18,7 +18,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         AggRenderSurface gfx;
         AggLcdDistributionLookupTable lcdLut;
         double primary = 1;
-        public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualImage destImage)
+        public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualBitmap destImage)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
@@ -35,12 +35,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
         const float cover_1_3 = 255f / 3f;
         const float cover_2_3 = cover_1_3 * 2f;
-        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
+        protected override void CustomRenderSingleScanLine(IBitmapBlender destImage, Scanline scanline, Color color)
         {
             SubPixRender(destImage, scanline, color);
         }
 
-        void SubPixRender(IImageReaderWriter destImage, Scanline scanline, Color color)
+        void SubPixRender(IBitmapBlender destImage, Scanline scanline, Color color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -250,13 +250,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
 
 
-                var widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
+                var widgetsSubImage = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
                 aggsx.UseSubPixelRendering = false;
                 PixelBlenderBGRA normalBlender = new PixelBlenderBGRA();
                 PixelBlenderBGRA gammaBlender = new PixelBlenderBGRA(); //TODO: revisit, and fix this again
                 gammaBlender.GammaValue = this.GammaValue;
                 gammaBlender.EnableGamma = true;
-                var rasterGamma = new SubImageRW(widgetsSubImage, gammaBlender);
+                var rasterGamma = new SubBitmapBlender(widgetsSubImage, gammaBlender);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);

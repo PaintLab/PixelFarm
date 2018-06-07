@@ -10,14 +10,14 @@ namespace LayoutFarm.CustomWidgets
         AggRenderSurface _aggsx;
         Painter painter;
         bool needUpdate;
-        ActualImage actualImage;
+        ActualBitmap actualImage;
         Image bmp;
 
         public MiniAggCanvasRenderElement(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
 
-            this.actualImage = new ActualImage(width, height);
+            this.actualImage = new ActualBitmap(width, height);
             this._aggsx = new AggRenderSurface(actualImage);
             this.painter = new AggPainter((AggRenderSurface)_aggsx);
             needUpdate = true;

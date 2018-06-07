@@ -319,9 +319,9 @@ namespace PixelFarm.Drawing.Skia
         }
         public override void DrawImage(Image img, double left, double top)
         {
-            if (img is ActualImage)
+            if (img is ActualBitmap)
             {
-                ActualImage actualImage = (ActualImage)img;
+                ActualBitmap actualImage = (ActualBitmap)img;
                 //create Gdi bitmap from actual image
                 int w = actualImage.Width;
                 int h = actualImage.Height;
@@ -334,7 +334,7 @@ namespace PixelFarm.Drawing.Skia
                             {
                                 newBmp.LockPixels();
                                 //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-                                TempMemPtr bufferPtr = ActualImage.GetBufferPtr(actualImage);
+                                TempMemPtr bufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                                 unsafe
                                 {
                                     byte* actualImgH = (byte*)bufferPtr.Ptr;

@@ -210,7 +210,7 @@ namespace PixelFarm.Drawing.Skia
         static SKBitmap ResolveInnerBmp(Image image)
         {
 
-            if (image is PixelFarm.Agg.ActualImage)
+            if (image is PixelFarm.Agg.ActualBitmap)
             {
                 //this is known image
                 var cacheBmp = Image.GetCacheInnerImage(image) as SKBitmap;
@@ -220,7 +220,7 @@ namespace PixelFarm.Drawing.Skia
                     //MySkBmp bmp = new MySkBmp(image.Width,
                     //   image.Height);
                     //
-                    BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, internalBmp);
+                    BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualBitmap)image, internalBmp);
                     //
                     Image.SetCacheInnerImage(image, internalBmp);
                     return internalBmp;

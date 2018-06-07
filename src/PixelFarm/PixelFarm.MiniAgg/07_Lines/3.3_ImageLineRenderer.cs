@@ -61,7 +61,7 @@ namespace PixelFarm.Agg.Lines
         IPatternFilter m_filter;
         int m_dilation;
         int m_dilation_hr;
-        SubImageRW m_buf;
+        SubBitmapBlender m_buf;
         int[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
@@ -81,7 +81,7 @@ namespace PixelFarm.Agg.Lines
             m_half_height_hr = (0);
             m_offset_y_hr = (0);
         }
-        public ImageReaderWriterBase MyBuffer
+        public BitmapBlenderBase MyBuffer
         {
             get
             {
@@ -114,7 +114,7 @@ namespace PixelFarm.Agg.Lines
 
         // Create
         //--------------------------------------------------------------------
-        public void Create(IImageReaderWriter src)
+        public void Create(IBitmapSrc src)
         {
             // we are going to create a dialated image for filtering
             // we add m_dilation pixels to every side of the image and then copy the image in the x
@@ -148,7 +148,7 @@ namespace PixelFarm.Agg.Lines
             }
 
 
-            m_buf = new SubImageRW(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
+            m_buf = new SubBitmapBlender(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
 
             unsafe
             {
@@ -591,7 +591,7 @@ namespace PixelFarm.Agg.Lines
     //template<class BaseRenderer, class ImagePattern> 
     public class ImageLineRenderer : LineRenderer
     {
-        IImageReaderWriter m_ren;
+        IBitmapBlender m_ren;
         LineImagePattern m_pattern;
         int m_start;
         double m_scale_x;
@@ -601,7 +601,7 @@ namespace PixelFarm.Agg.Lines
         //typedef renderer_outline_image<BaseRenderer, ImagePattern> self_type;
 
         //---------------------------------------------------------------------
-        public ImageLineRenderer(IImageReaderWriter ren, LineImagePattern patt)
+        public ImageLineRenderer(IBitmapBlender ren, LineImagePattern patt)
         {
             m_ren = ren;
             m_pattern = patt;
@@ -611,7 +611,7 @@ namespace PixelFarm.Agg.Lines
             m_clipping = (false);
         }
 
-        public void Attach(IImageReaderWriter ren) { m_ren = ren; }
+        public void Attach(IBitmapBlender ren) { m_ren = ren; }
 
         //---------------------------------------------------------------------
         public LineImagePattern Pattern

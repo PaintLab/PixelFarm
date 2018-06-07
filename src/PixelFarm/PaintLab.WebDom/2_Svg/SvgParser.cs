@@ -829,7 +829,7 @@ namespace PaintLab.Svg
             {
                 default:
 #if DEBUG
-                    Console.WriteLine("unimplemented element: " + elemName);
+                    Console.WriteLine("svg unimplemented element: " + elemName);
 #endif
                     break;
                 case "svg":

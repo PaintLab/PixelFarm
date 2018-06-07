@@ -73,11 +73,11 @@
     <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs">
       <Link>100_DrawingBufferExt\BitmapContext.cs</Link>
     </Compile>
-    <Compile Include="02_PixelBuffer\SubImageRW.cs" />
+    <Compile Include="02_PixelBuffer\BitmapBlenderBase.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
-    <Compile Include="02_PixelBuffer\PixelBlenderGray.cs" />
-    <Compile Include="02_PixelBuffer\ImageHelper.cs" />
+    <Compile Include="02_PixelBuffer\PixelBlenderOthers.cs" />
+    <Compile Include="02_PixelBuffer\SubBitmapBlender.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
     <Compile Include="04_Scanline\SubPixConst.cs" />
@@ -88,8 +88,8 @@
     <Compile Include="07_Lines\2.1_DistanceInterpolators.cs" />
     <Compile Include="07_Lines\2.3_EllipseBrensenhemInterpolator.cs" />
     <Compile Include="07_Lines\3.1_LineRenderer.cs" />
-    <Compile Include="08_ImageResampling\FilterRGBAImageSpanGen.cs" />
-    <Compile Include="08_ImageResampling\FilterRGBImageSpanGen.cs" />
+    <Content Include="x_backup\FilterRGBAImageSpanGen.txt" />
+    <Content Include="x_backup\FilterRGBImageSpanGen.txt" />
     <Compile Include="08_ImageResampling\ImageFreeTransform.cs" />
     <Compile Include="08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="08_ImageResampling\ImageTransform.cs" />
@@ -103,16 +103,15 @@
     <Compile Include="04_Scanline\4.2_CellAARasterizer.cs" />
     <Compile Include="08_ImageResampling\IImageFilter.cs" />
     <Compile Include="07_Lines\4_OutlineAARasterizer.cs" />
-    <Compile Include="08_ImageResampling\FilterImageSpanGenerator.cs" />
+    <Content Include="x_backup\FilterImageSpanGenerator.txt" />
     <Compile Include="03_SpanGenerators\4_ImgSpanGenGray.cs" />
-    <Compile Include="03_SpanGenerators\2_ImgSpanGenRGB.cs" />
+    <Content Include="x_backup\2_ImgSpanGenRGB.txt" />
     <Compile Include="03_SpanGenerators\3_ImgSpanGenRGBA.cs" />
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
-    <Compile Include="08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs" />
+    <Content Include="x_backup\FilterImageSpanGenerator.ImageBufferAccessor.txt" />
     <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
     <Compile Include="07_Lines\3.3_ImageLineRenderer.cs" />
-    <Compile Include="02_PixelBuffer\IImageReaderWriter.cs" />
-    <Compile Include="02_PixelBuffer\ImageReaderWriterBase.cs" />
+    <Compile Include="02_PixelBuffer\IBitmapBlender.cs" />
     <Compile Include="02_PixelBuffer\PixelBlenderRGBA.cs" />
     <Compile Include="04_Scanline\1_Scanline.cs" />
     <Compile Include="07_Lines\3.2_OutlineRenderer.cs" />
@@ -122,6 +121,7 @@
     <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
     <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="04_Scanline\4.3_VectorClipper.cs" />
+    <Content Include="x_backup\PixelBlenderGray.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">

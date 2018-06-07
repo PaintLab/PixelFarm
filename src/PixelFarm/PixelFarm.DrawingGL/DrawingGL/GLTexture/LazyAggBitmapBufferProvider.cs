@@ -6,9 +6,9 @@ namespace PixelFarm.DrawingGL
 {
     public class LazyAggBitmapBufferProvider : LazyBitmapBufferProvider
     {
-        PixelFarm.Agg.ActualImage image;
+        PixelFarm.Agg.ActualBitmap image;
         GCHandle handle;
-        public LazyAggBitmapBufferProvider(PixelFarm.Agg.ActualImage image)
+        public LazyAggBitmapBufferProvider(PixelFarm.Agg.ActualBitmap image)
         {
             this.image = image;
         }
@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
         }
         public override IntPtr GetRawBufferHead()
         {
-            int[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(image);
+            int[] buffer = PixelFarm.Agg.ActualBitmap.GetBuffer(image);
             this.handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             return this.handle.AddrOfPinnedObject();
         }

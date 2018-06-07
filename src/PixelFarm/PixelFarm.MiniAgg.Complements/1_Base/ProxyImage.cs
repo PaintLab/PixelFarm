@@ -21,10 +21,10 @@
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Imaging
 {
-    public abstract class ProxyImage : IImageReaderWriter
+    public abstract class ProxyImage : IBitmapBlender
     {
-        protected IImageReaderWriter linkedImage;
-        public ProxyImage(IImageReaderWriter linkedImage)
+        protected IBitmapBlender linkedImage;
+        public ProxyImage(IBitmapBlender linkedImage)
         {
             this.linkedImage = linkedImage;
         }
@@ -60,12 +60,12 @@ namespace PixelFarm.Agg.Imaging
             return linkedImage.GetBounds();
         }
 
-        public IPixelBlender GetRecieveBlender()
+        public PixelBlender32 GetRecieveBlender()
         {
             return linkedImage.GetRecieveBlender();
         }
 
-        public void SetRecieveBlender(IPixelBlender value)
+        public void SetRecieveBlender(PixelBlender32 value)
         {
             linkedImage.SetRecieveBlender(value);
         }
@@ -75,7 +75,7 @@ namespace PixelFarm.Agg.Imaging
             return linkedImage.GetPixel(x, y);
         }
 
-        public virtual void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
+        public virtual void CopyFrom(IBitmapSrc sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
             linkedImage.CopyFrom(sourceImage, sourceImageRect, destXOffset, destYOffset);
         }
@@ -85,10 +85,6 @@ namespace PixelFarm.Agg.Imaging
             linkedImage.SetPixel(x, y, color);
         }
 
-        //public virtual void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover)
-        //{
-        //    linkedImage.BlendPixel(x, y, sourceColor, cover);
-        //}
 
         public virtual void CopyHL(int x, int y, int len, Color sourceColor)
         {
@@ -140,11 +136,7 @@ namespace PixelFarm.Agg.Imaging
             linkedImage.BlendColorVSpan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-        public byte[] GetBuffer()
-        {
-            //TODO: review here, this may not correct 
-            return linkedImage.GetBuffer();
-        }
+
         public int[] GetInt32Buffer()
         {
             //TODO: review here, this may not correct 
@@ -163,7 +155,11 @@ namespace PixelFarm.Agg.Imaging
             return linkedImage.GetByteBufferOffsetXY(x, y);
         }
 
-
+        public int GetBufferOffsetXY32(int x, int y)
+        {
+            return linkedImage.GetBufferOffsetXY32(x, y);
+        }
+         
 
         public virtual int BytesBetweenPixelsInclusive
         {

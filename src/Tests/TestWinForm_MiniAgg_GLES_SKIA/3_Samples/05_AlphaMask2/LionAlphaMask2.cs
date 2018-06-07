@@ -14,22 +14,31 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 {
     [Info(OrderCode = "05")]
     [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
-    public class alpha_mask2_application : DemoBase
+    public class LionAlphaMask2 : DemoBase
     {
         int maskAlphaSliderValue = 100;
-        ActualImage alphaBitmap;
+        ActualBitmap alphaBitmap;
         SpriteShape lionShape;
         double angle = 0;
         double lionScale = 1.0;
         double skewX = 0;
         double skewY = 0;
         bool isMaskSliderValueChanged = true;
-        SubImageRW alphaMaskImageBuffer;
-        IAlphaMask alphaMask;
+        SubBitmapBlender alphaMaskImageBuffer;
+        //IAlphaMask alphaMask;
         System.Drawing.Bitmap a_alphaBmp;
-        public alpha_mask2_application()
+        ActualBitmap lionImg;
+        public LionAlphaMask2()
         {
-            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples\arrow2.svg"));
+
+            string imgFileName = "d:\\WImageTest\\lion1.png";
+            if (System.IO.File.Exists(imgFileName))
+            {
+                lionImg = DemoHelper.LoadImage(imgFileName);
+            }
+
+
+            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/arrow2.svg"));
             this.Width = 800;
             this.Height = 600;
             //AnchorAll();
@@ -56,119 +65,41 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         void GenerateMaskWithWinGdiPlus(int w, int h)
         {
-            //1. create 32 bits for mask image
-            this.a_alphaBmp = new System.Drawing.Bitmap(w, h);
-            //2. create graphics based on a_alphaBmp
-            using (System.Drawing.Graphics gfxBmp = System.Drawing.Graphics.FromImage(a_alphaBmp))
-            {
-                gfxBmp.Clear(System.Drawing.Color.Black);
-                //ClipProxyImage clippingProxy = new ClipProxyImage(image);
-                //clippingProxy.Clear(ColorRGBA.Black);
-                VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
-                System.Random randGenerator = new Random(1432);
-                int num = (int)maskAlphaSliderValue;
-                int lim = num - 1;
-                for (int i = 0; i < lim; ++i)
-                {
-                    ellipseForMask.Reset(randGenerator.Next() % w,
-                                 randGenerator.Next() % h,
-                                 randGenerator.Next() % 100 + 20,
-                                 randGenerator.Next() % 100 + 20,
-                                 100);
-                    // set the color to draw into the alpha channel.
-                    // there is not very much reason to set the alpha as you will get the amount of 
-                    // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                    //rasterizer.AddPath(ellipseForMask.MakeVxs());
-                    //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
-                    //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
 
-                    VectorToolBox.GetFreeVxs(out var v1);
-                    VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v1), ColorEx.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                    VectorToolBox.ReleaseVxs(ref v1);
-
-                }
-                //the last one
-                ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                //fill 
-                VectorToolBox.GetFreeVxs(out var v2);
-                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), ColorEx.Make(0, 0, 0, 255));
-                v2.Clear();// reuse later
-                //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
-                ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
-
-                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), ColorEx.Make(255, 0, 0, 255));
-
-                VectorToolBox.ReleaseVxs(ref v2);
-
-                //for (i = 0; i < num; i++)
-                //{
-                //    if (i == num - 1)
-                //    {
-                //        ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                //        //fill 
-                //        VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(0, 0, 0, 255));
-                //        //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //        //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
-                //        ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                //        //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                //        //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
-                //        VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(255, 0, 0, 255));
-                //    }
-                //    else
-                //    {
-                //        ellipseForMask.Reset(randGenerator.Next() % w,
-                //                 randGenerator.Next() % h,
-                //                 randGenerator.Next() % 100 + 20,
-                //                 randGenerator.Next() % 100 + 20,
-                //                 100);
-                //        // set the color to draw into the alpha channel.
-                //        // there is not very much reason to set the alpha as you will get the amount of 
-                //        // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                //        //rasterizer.AddPath(ellipseForMask.MakeVxs());
-                //        //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
-                //        //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                //        VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                //    }
-                //}
-            }
         }
-        void generate_alpha_mask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
+        void GenAlphaMask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
-            //create 1  8-bits chanel (grayscale8) bmp
-            alphaBitmap = new ActualImage(width, height, PixelFormat.GrayScale8);
-            var bmpReaderWrtier = new MyImageReaderWriter();
-            bmpReaderWrtier.ReloadImage(alphaBitmap);
-            alphaMaskImageBuffer = new SubImageRW(bmpReaderWrtier, new PixelBlenderGray(1));
-            //create mask from alpahMaskImageBuffer
-            alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
-#if USE_CLIPPING_ALPHA_MASK
-            //alphaMaskImageBuffer.AttachBuffer(alphaBitmap.GetBuffer(), 20 * width + 20, width - 40, height - 40, width, 8, 1);
-#else
-            alphaMaskImageBuffer.attach(alphaByteArray, (int)cx, (int)cy, cx, 1);
-#endif
 
-            var image = new SubImageRW(alphaMaskImageBuffer, new PixelBlenderGray(1), 1, 0, 8);
-            ClipProxyImage clippingProxy = new ClipProxyImage(image);
+            alphaBitmap = new ActualBitmap(width, height);
+            alphaMaskImageBuffer = new SubBitmapBlender(alphaBitmap, new PixelBlenderGrey());
+            //
+            ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);
             clippingProxy.Clear(Drawing.Color.Black);
-            VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
+
             System.Random randGenerator = new Random(1432);
             int i;
             int num = (int)maskAlphaSliderValue;
+            num = 50;
 
+            int elliseFlattenStep = 64;
             VectorToolBox.GetFreeVxs(out var v1);
+            VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
+
             for (i = 0; i < num; i++)
             {
+
                 if (i == num - 1)
                 {
-                    //for the last one
-                    ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
+                    ////for the last one
+
+                    ellipseForMask.Reset(Width / 2, (Height / 2) - 90, 110, 110, elliseFlattenStep);
+                    rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
                     v1.Clear();
-                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 0, 0, 0));
-                    ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
+                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 255, 0));
+
+                    ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, elliseFlattenStep);
+                    rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
                     v1.Clear();
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 0, 0));
@@ -179,14 +110,18 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                              randGenerator.Next() % height,
                              randGenerator.Next() % 100 + 20,
                              randGenerator.Next() % 100 + 20,
-                             100);
+                             elliseFlattenStep);
+                    // ellipseForMask.Reset(Width / 2, Height / 2, 150, 150, 100);
+
                     // set the color to draw into the alpha channel.
                     // there is not very much reason to set the alpha as you will get the amount of 
                     // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
+
+                    rasterizer.Reset();
                     rasterizer.AddPath(ellipseForMask.MakeVxs(v1));
                     v1.Clear();
-                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
-                      ColorEx.Make((int)((float)i / (float)num * 255), 0, 0, 255));
+                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 0, 0));
+                    //ColorEx.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
             VectorToolBox.ReleaseVxs(ref v1);
@@ -312,7 +247,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     byte src_B = *(src); //b
                     byte src_G = *(src + 1); //g
                     byte src_R = *(src + 2); //r
-                    //convert rgb to gray scale: from  this equation...
+                                             //convert rgb to gray scale: from  this equation...
                     int y = (src_R * 77) + (src_G * 151) + (src_B * 28);
                     *(dest + 3) = (byte)(y >> 8);
                     //*(dest + 3) = (byte)((new_B + new_G + new_R) / 3);
@@ -326,66 +261,85 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
         }
+
+        PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
         public override void Draw(Painter p)
         {
             if (p is GdiPlusPainter)
             {
-                DrawWithWinGdi((GdiPlusPainter)p);
+                //DrawWithWinGdi((GdiPlusPainter)p);
                 return;
             }
             AggPainter p2 = (AggPainter)p;
-            AggRenderSurface aggRdsf = p2.RenderSurface;
-            var widgetsSubImage = aggRdsf.DestImage;
-            var scline = aggRdsf.ScanlinePacked8;
+            p2.Clear(Color.White);
+            AggRenderSurface aggsx = p2.RenderSurface;
+            BitmapBlenderBase widgetsSubImage = (BitmapBlenderBase)aggsx.DestImage;
+            ScanlinePacked8 scline = aggsx.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                generate_alpha_mask(aggRdsf.ScanlineRasToDestBitmap, aggRdsf.ScanlinePacked8, aggRdsf.ScanlineRasterizer, width, height);
+                GenAlphaMask(aggsx.ScanlineRasToDestBitmap, aggsx.ScanlinePacked8, aggsx.ScanlineRasterizer, width, height);
                 this.isMaskSliderValueChanged = false;
-            }
-            var rasterizer = aggRdsf.ScanlineRasterizer;
-            rasterizer.SetClipBox(0, 0, width, height);
-            //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
+                maskPixelBlender.SetMaskImage(alphaBitmap);
 
-            PixelFarm.Agg.Imaging.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Imaging.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
-            ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
-            ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
-            ////Affine transform = Affine.NewIdentity();
-            ////transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-            ////transform *= Affine.NewScaling(lionScale, lionScale);
-            ////transform *= Affine.NewRotation(angle + Math.PI);
-            ////transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-            ////transform *= Affine.NewTranslation(Width / 2, Height / 2);
-            Affine transform = Affine.NewMatix(
-                    AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-                    AffinePlan.Scale(lionScale, lionScale),
-                    AffinePlan.Rotate(angle + Math.PI),
-                    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                    AffinePlan.Translate(width / 2, height / 2));
-            clippingProxy.Clear(Drawing.Color.White);
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
-            // draw a background to show how the mask is working better
-            int rect_w = 30;
-
-            VectorToolBox.GetFreeVxs(out var v1);
-            for (int i = 0; i < 40; i++)
-            {
-                for (int j = 0; j < 40; j++)
-                {
-                    if ((i + j) % 2 != 0)
-                    {
-                        VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
-                        rect.NormalizeRadius();
-                        // Drawing as an outline
-                        rasterizer.AddPath(rect.MakeVxs(v1));
-                        v1.Clear();
-                        sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, ColorEx.Make(.9f, .9f, .9f));
-                    }
-                }
             }
-            VectorToolBox.ReleaseVxs(ref v1);
+
+            //1. alpha mask...
+            //p2.DrawImage(alphaBitmap, 0, 0); 
+            var blender = widgetsSubImage.GetRecieveBlender();
+            widgetsSubImage.SetRecieveBlender(maskPixelBlender);
+            //
+            //2. 
+            p2.FillColor = Color.Blue;
+            p2.FillCircle(300, 300, 100);
+
+            p2.DrawImage(lionImg, 20, 20);
+
+            widgetsSubImage.SetRecieveBlender(blender);
+
+
+            //var rasterizer = aggsx.ScanlineRasterizer;
+            //rasterizer.SetClipBox(0, 0, width, height);
+            ////alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
+
+            //PixelFarm.Agg.Imaging.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Imaging.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
+            //ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
+            //ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
+            //////Affine transform = Affine.NewIdentity();
+            //////transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
+            //////transform *= Affine.NewScaling(lionScale, lionScale);
+            //////transform *= Affine.NewRotation(angle + Math.PI);
+            //////transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
+            //////transform *= Affine.NewTranslation(Width / 2, Height / 2);
+            //Affine transform = Affine.NewMatix(
+            //        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+            //        AffinePlan.Scale(lionScale, lionScale),
+            //        AffinePlan.Rotate(angle + Math.PI),
+            //        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+            //        AffinePlan.Translate(width / 2, height / 2));
+            //clippingProxy.Clear(Drawing.Color.White);
+            //ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
+            //// draw a background to show how the mask is working better
+            //int rect_w = 30;
+
+            //VectorToolBox.GetFreeVxs(out var v1);
+            //for (int i = 0; i < 40; i++)
+            //{
+            //    for (int j = 0; j < 40; j++)
+            //    {
+            //        if ((i + j) % 2 != 0)
+            //        {
+            //            VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
+            //            rect.NormalizeRadius(); 
+            //            rasterizer.AddPath(rect.MakeVxs(v1));
+            //            v1.Clear();
+            //            sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, ColorEx.Make(.9f, .9f, .9f));
+            //        }
+            //    }
+            //}
+            //VectorToolBox.ReleaseVxs(ref v1);
 
             ////int x, y; 
             //// Render the lion
@@ -397,7 +351,13 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //var tmpVxs1 = new VertexStore();
             //lionShape.ApplyTransform(transform);
 
-            throw new NotImplementedException();
+
+            //for (int i = 0; i < num_paths; ++i)
+            //{
+            //    rasterizer.Reset();
+            //    rasterizer.AddPath(new VertexStoreSnap(vxs, path_id[i]));
+            //    sclineRasToBmp.RenderWithColor(destImage, sclineRas, scline, colors[i]);
+            //}
 
             //sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
             //       rasterizer,

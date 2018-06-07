@@ -402,8 +402,8 @@ namespace PixelFarm.Agg.Sample_LionOutline
             //int width = widgetsSubImage.Width;
             //int height = widgetsSubImage.Height; 
 
-            SubImageRW widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
-            SubImageRW clippedSubImage = new SubImageRW(widgetsSubImage, new PixelBlenderBGRA());
+            SubBitmapBlender widgetsSubImage = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
+            SubBitmapBlender clippedSubImage = new SubBitmapBlender(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
 

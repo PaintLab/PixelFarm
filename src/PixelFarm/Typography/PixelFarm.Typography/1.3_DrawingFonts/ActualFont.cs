@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// 32 bpp image for render
         /// </summary>
-        public ActualImage glyphImage32;
+        public ActualBitmap glyphImage32;
         //----------------------------
         /// <summary>
         /// original glyph outline
