@@ -1,5 +1,27 @@
 BackEnd.DrawingBuffer
 ---  
+ 
+
+
+ported to .Net 2.0 WinForms and PixelFarm
+
+
+from https://github.com/teichgraf/WriteableBitmapEx
+
+
+Sample Screenshots : 
+
+
+![p1](https://user-images.githubusercontent.com/7447159/41097058-ebe21eca-6a80-11e8-8e94-110b3b06bb2d.png)
+![p2](https://user-images.githubusercontent.com/7447159/41097059-ec28b1b4-6a80-11e8-86f3-a1ed6977198c.png)
+![p3](https://user-images.githubusercontent.com/7447159/41097061-ec6dbe76-6a80-11e8-88be-935de6510762.png)
+![p4](https://user-images.githubusercontent.com/7447159/41097062-eca1b99c-6a80-11e8-9316-7e4a5f9b555a.png)
+![p5](https://user-images.githubusercontent.com/7447159/41097063-ecd93ad4-6a80-11e8-832a-34c84da1b833.png)
+![p6](https://user-images.githubusercontent.com/7447159/41097064-ed10eec0-6a80-11e8-8ff3-233e2a1c243b.png)
+![p7](https://user-images.githubusercontent.com/7447159/41097066-ed48c804-6a80-11e8-9a56-867e24fa928d.png)
+
+
+---
 
 The MIT License (MIT)
 
@@ -22,24 +44,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
----
-
-
-ported to .Net 2.0 WinForms and PixelFarm
-
-
-from https://github.com/teichgraf/WriteableBitmapEx
-
-
-Sample Screenshots : 
-
-
-![p1](https://user-images.githubusercontent.com/7447159/41097058-ebe21eca-6a80-11e8-8e94-110b3b06bb2d.png)
-![p2](https://user-images.githubusercontent.com/7447159/41097059-ec28b1b4-6a80-11e8-86f3-a1ed6977198c.png)
-![p3](https://user-images.githubusercontent.com/7447159/41097061-ec6dbe76-6a80-11e8-88be-935de6510762.png)
-![p4](https://user-images.githubusercontent.com/7447159/41097062-eca1b99c-6a80-11e8-9316-7e4a5f9b555a.png)
-![p5](https://user-images.githubusercontent.com/7447159/41097063-ecd93ad4-6a80-11e8-832a-34c84da1b833.png)
-![p6](https://user-images.githubusercontent.com/7447159/41097064-ed10eec0-6a80-11e8-8ff3-233e2a1c243b.png)
-![p7](https://user-images.githubusercontent.com/7447159/41097066-ed48c804-6a80-11e8-9a56-867e24fa928d.png)
