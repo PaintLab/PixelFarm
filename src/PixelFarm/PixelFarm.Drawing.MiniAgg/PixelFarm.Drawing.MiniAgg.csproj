@@ -240,7 +240,7 @@
     <Compile Include="..\BackEnd.FilterFx\pdnsharedproject\pixelops\PosterizeRenderer.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\PixelOps\PosterizeRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.DrawingFilters\PdnSharedProject\PlatformMemory.cs">
+    <Compile Include="..\BackEnd.FilterFx\PdnSharedProject\PlatformMemory.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\PlatformMemory.cs</Link>
     </Compile>
     <Compile Include="..\BackEnd.FilterFx\pdnsharedproject\wrap\PolarInversionEffect.cs">
