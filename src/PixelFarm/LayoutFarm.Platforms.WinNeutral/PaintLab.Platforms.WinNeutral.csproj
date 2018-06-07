@@ -63,10 +63,10 @@
     <Compile Include="..\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
       <Link>0_Platform\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
-    <Compile Include="..\Win32Utils\MyWin32.cs">
+    <Compile Include="..\BackEnd.Win32Utils\MyWin32.cs">
       <Link>MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\Win32Utils\NativeWin32MemoryDc.cs">
+    <Compile Include="..\BackEnd.Win32Utils\NativeWin32MemoryDc.cs">
       <Link>NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="1_LayoutFarm.UI\AbstractCompletionWindow.cs" />
@@ -99,15 +99,15 @@
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
       <Name>PixelFarm.ImgCodecs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
+    <ProjectReference Include="..\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
       <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.NativeWindows\BackEnd.NativeWindows.csproj">
+    <ProjectReference Include="..\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
       <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
       <Name>BackEnd.NativeWindows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj">
+    <ProjectReference Include="..\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>

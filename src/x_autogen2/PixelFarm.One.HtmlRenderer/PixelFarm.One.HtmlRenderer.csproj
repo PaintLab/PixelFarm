@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -36,182 +35,182 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Color\ColorBgra.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Color\ColorBgra.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Color\ColorBgra.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Color\ColorBgra.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Color\HsvColor.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Color\HsvColor.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Color\HsvColor.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Color\HsvColor.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Color\RgbColor.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Color\RgbColor.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Color\RgbColor.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Color\RgbColor.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PdnResources.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PdnResources.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PdnResources.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PdnResources.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\BinaryPixelOp.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\BinaryPixelOp.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOp.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOp.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\BinaryPixelOps.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\BinaryPixelOps.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOps.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOps.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\IPixelOp.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\IPixelOp.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\IPixelOp.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\IPixelOp.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\PixelOp.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\PixelOp.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\PixelOp.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\PixelOp.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\UnaryPixelOp.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\UnaryPixelOp.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOp.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOp.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\UnaryPixelOps.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\PixelOps\UnaryPixelOps.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOps.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOps.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\RenderArgs.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\RenderArgs.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\RenderArgs.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\RenderArgs.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\GradientRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\GradientRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\GradientRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\GradientRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\GradientRenderers.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\GradientRenderers.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\GradientRenderers.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\GradientRenderers.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\Histogram.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\Histogram.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\Histogram.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\Histogram.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\HistogramLuminosity.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\HistogramLuminosity.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\HistogramLuminosity.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\HistogramLuminosity.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\HistogramRGB.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Renderer\HistogramRGB.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\HistogramRGB.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Renderer\HistogramRGB.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\ResamplingAlgorithm.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\ResamplingAlgorithm.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\ResamplingAlgorithm.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\ResamplingAlgorithm.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Scanline.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Scanline.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Scanline.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Scanline.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Surface.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Surface.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Surface.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Surface.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\UserBlendOps\UserBlendOp.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\UserBlendOps\UserBlendOp.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOp.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOp.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Utility.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\01_Core\Utility.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Utility.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\01_Core\Utility.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Blur\BrightnessAndContrastRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Blur\BrightnessAndContrastRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Blur\BrightnessAndContrastRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Blur\BrightnessAndContrastRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Blur\MotionBlurRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Blur\MotionBlurRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Blur\MotionBlurRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Blur\MotionBlurRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Blur\ZoomBlurEffRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Blur\ZoomBlurEffRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Blur\ZoomBlurEffRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Blur\ZoomBlurEffRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\ColorDiffEffect.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\ColorDiffEffect.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\ColorDiffEffect.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\ColorDiffEffect.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\ConvolutionRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\ConvolutionRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\ConvolutionRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\ConvolutionRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\EdgeDetectRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\EdgeDetectRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\EdgeDetectRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\EdgeDetectRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\EmbossRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\EmbossRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\EmbossRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\EmbossRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\GaussainBlurRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\GaussainBlurRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\GaussainBlurRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\GaussainBlurRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\ReliefEffectRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Convolution\ReliefEffectRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\ReliefEffectRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Convolution\ReliefEffectRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\EffectRendererBase.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\EffectRendererBase.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\EffectRendererBase.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\EffectRendererBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\HistogramRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\HistogramRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\HistogramRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\HistogramRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\MedianRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\MedianRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\MedianRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\MedianRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\OutlineRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\OutlineRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\OutlineRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\OutlineRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\ReduceNoiseRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\ReduceNoiseRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\ReduceNoiseRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\ReduceNoiseRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\SharpenRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\SharpenRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\SharpenRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\SharpenRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\UnfocusRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Histogram\UnfocusRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\UnfocusRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Histogram\UnfocusRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Levels\AutoLevelRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Levels\AutoLevelRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Levels\AutoLevelRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Levels\AutoLevelRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Levels\SepiaRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Levels\SepiaRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Levels\SepiaRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Levels\SepiaRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\BlugeEffectRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\BlugeEffectRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\BlugeEffectRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\BlugeEffectRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\CloudEffect.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\CloudEffect.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\CloudEffect.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\CloudEffect.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\GlowRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\GlowRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\GlowRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\GlowRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\OilPaintRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\OilPaintRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\OilPaintRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\OilPaintRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\PencilSketchRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\PencilSketchRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\PencilSketchRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\PencilSketchRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\TileRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\TileRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\TileRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\TileRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\TwistRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Material\TwistRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\TwistRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Material\TwistRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\InkSketchRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\InkSketchRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\InkSketchRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\InkSketchRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\JulianFractalRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\JulianFractalRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\JulianFractalRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\JulianFractalRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\PerlinNoise2D.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\PerlinNoise2D.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\PerlinNoise2D.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\PerlinNoise2D.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\RotateAndZoomRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Others\RotateAndZoomRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\RotateAndZoomRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Others\RotateAndZoomRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PixelOps\HueAndSatRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PixelOps\HueAndSatRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\PixelOps\HueAndSatRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\PixelOps\HueAndSatRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PixelOps\InvertColorRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PixelOps\InvertColorRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\PixelOps\InvertColorRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\PixelOps\InvertColorRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PixelOps\PosterizeRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PixelOps\PosterizeRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\PixelOps\PosterizeRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\PixelOps\PosterizeRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PlatformMemory.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\PlatformMemory.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\PlatformMemory.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\PlatformMemory.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Wrap\PolarInversionEffect.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Wrap\PolarInversionEffect.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\PolarInversionEffect.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\PolarInversionEffect.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Wrap\WarpEdgeBehavior.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Wrap\WarpEdgeBehavior.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\WarpEdgeBehavior.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\WarpEdgeBehavior.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Wrap\WrapBasedEffRenderer.cs">
-      <Link>PixelFarm\BackEnd.DrawingFilters\PdnSharedProject\Wrap\WrapBasedEffRenderer.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\WrapBasedEffRenderer.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\PdnSharedProject\Wrap\WrapBasedEffRenderer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\00_Porting\NativeMethods.cs">
       <Link>PixelFarm\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\00_Porting\NativeMethods.cs</Link>
@@ -330,6 +329,624 @@
     <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexPage.cs">
       <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexPage.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\BindingsBase.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\BindingsBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\BlittableValueType.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\BlittableValueType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\ContextHandle.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\ContextHandle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\DisplayDevice.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\DisplayDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\DisplayResolution.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\DisplayResolution.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\GameWindowFlags.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\GameWindowFlags.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\Color4.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\Color4.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ColorFormat.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ColorFormat.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Core.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Core.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Delegates.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Delegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Enums.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Enums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\ErrorHelper.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\ErrorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\ES.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\ES.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Helper.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\ES20\Helper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsBindingsBase.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsBindingsBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContext.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextBase.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextException.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextFlags.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextFlags.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextMissingException.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextMissingException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextVersion.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsContextVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsErrorException.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsErrorException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsExceptions.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsExceptions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsMode.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsModeException.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\GraphicsModeException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\IGraphicsContext.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\IGraphicsContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\IGraphicsMode.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\IGraphicsMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\ErrorHelper.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\ErrorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GL.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GL.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLCore.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLCore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLDelegates.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLDelegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLEnums.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLHelper.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\Rectangle_Point_Size.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\Rectangle_Point_Size.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\IWindowInfo.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\IWindowInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\BezierCurve.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\BezierCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\BezierCurveCubic.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\BezierCurveCubic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\BezierCurveQuadric.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\BezierCurveQuadric.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Box2.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Box2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Functions.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Functions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Half.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Half.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\MathHelper.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\MathHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Matrix3d.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Matrix3d.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Matrix4.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Matrix4.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Matrix4d.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Matrix4d.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Point.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Point.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Quaternion.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Quaternion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Quaterniond.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Quaterniond.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Rectangle.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Rectangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Size.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Size.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector2.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector2d.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector2d.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector2h.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector2h.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector3.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector3.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector3d.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector3d.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector3h.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector3h.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector4.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector4.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector4d.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector4d.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector4h.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Math\Vector4h.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\DesktopBackend.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\DesktopBackend.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\DesktopGraphicsContext.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\DesktopGraphicsContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\Dummy\DummyGLContext.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\Dummy\DummyGLContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\Dummy\DummyWindowInfo.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\Dummy\DummyWindowInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\External\ExternalGraphicsContext.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\External\ExternalGraphicsContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\Factory.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\Factory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\IDisplayDeviceDriver.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\IDisplayDeviceDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\INativeWindow.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\INativeWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\IPlatformFactory.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Platform\IPlatformFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Serialization\XmlIgnoreAttribute.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Serialization\XmlIgnoreAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\Platform_Egl\Egl.cs">
+      <Link>PixelFarm\BackEnd.MiniOpenTK\Platform_Egl\Egl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.TypeMirror\SimpleReflectionHelper.cs">
+      <Link>PixelFarm\BackEnd.TypeMirror\SimpleReflectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Configuration.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Configuration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Exceptions.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Exceptions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\FrameEventArgs.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\FrameEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\GameWindow.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\GameWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\IGameWindow.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\IGameWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\INativeWindow.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\INativeWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\GamePad.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\GamePad.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\GamePadState.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\GamePadState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\IInputDevice.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\IInputDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\IInputDriver.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\IInputDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\IJoystickDriver.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\IJoystickDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\IKeyboardDriver.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\IKeyboardDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\IMouseDriver.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\IMouseDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\InputDriver.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\InputDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\JoystickDevice.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\JoystickDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\Key.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\Key.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\Keyboard.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\Keyboard.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\KeyboardDevice.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\KeyboardDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\KeyboardKeyEventArgs.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\KeyboardKeyEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\KeyboardState.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\KeyboardState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\Mouse.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\Mouse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\MouseButton.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\MouseButton.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\MouseDevice.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\MouseDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Input\MouseState.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Input\MouseState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\KeyPressEventArgs.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\KeyPressEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Minimal.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Minimal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\NativeWindow.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\NativeWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\AngleProjectEglConfig.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\AngleProjectEglConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglContext.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglGraphicsMode.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglGraphicsMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglMacPlatformFactory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglMacPlatformFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglWindowInfo.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglWindowInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglWinPlatformFactory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglWinPlatformFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglX11PlatformFactory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Egl\EglX11PlatformFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\EmbeddedGraphicsContext.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\EmbeddedGraphicsContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Factory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Factory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\INativeWindow2.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\INativeWindow2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\AglContext.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\AglContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\Application.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\Application.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\Agl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\Agl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\CarbonAPI.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\CarbonAPI.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\CoreFoundation.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\CoreFoundation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\MacOSKeys.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\MacOSKeys.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\QuartzDisplayServicesAPI.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\QuartzDisplayServicesAPI.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\SpeechChannel.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonBindings\SpeechChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonGLNative.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonGLNative.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonInput.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonInput.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonWindowInfo.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\CarbonWindowInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\EventInfo.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\EventInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSException.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSFactory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSGraphicsMode.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSGraphicsMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSKeyMap.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\MacOSKeyMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\QuartzDisplayDeviceDriver.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\MacOS\QuartzDisplayDeviceDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\PlatformException.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\PlatformException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Utilities.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Utilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\API.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\API.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\Wgl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\Wgl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\WglCore.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\WglCore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\WglDelegates.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\WglDelegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\WglEnums.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\Bindings\WglEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WglHelper.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WglHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinDisplayDevice.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinDisplayDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinFactory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinGLContext.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinGLContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinGLNative.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinGLNative.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinGraphicsMode.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinGraphicsMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinKeyMap.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinKeyMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinMMJoystick.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinMMJoystick.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinRawInput.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinRawInput.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinRawKeyboard.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinRawKeyboard.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinRawMouse.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinRawMouse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinWindowInfo.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WinWindowInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WMInput.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\Windows\WMInput.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\API.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\API.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\Bindings\Glx.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\Bindings\Glx.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\Functions.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\Functions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\GlxHelper.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\GlxHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\Structs.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\Structs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11DisplayDevice.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11DisplayDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11Factory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11Factory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11GLContext.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11GLContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11GLNative.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11GLNative.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11GraphicsMode.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11GraphicsMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11Input.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11Input.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11Joystick.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11Joystick.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11KeyMap.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11KeyMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11WindowInfo.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Platform\X11\X11WindowInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\Toolkit.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\Toolkit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\CarbonGLControl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\CarbonGLControl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\DummyGLControl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\DummyGLControl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.Designer.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControlFactory.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControlFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\IGLControl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\IGLControl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\WinGLControl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\WinGLControl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\X11GLControl.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\X11GLControl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\WindowBorder.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\WindowBorder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\WindowState.cs">
+      <Link>PixelFarm\BackEnd.OpenTKWinForms\WindowState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\Definitions.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\Definitions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\GRContext.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\GRContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\GRGlInterface.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\GRGlInterface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\NET20\ForNET20.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\NET20\ForNET20.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\PreserveAttribute.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\PreserveAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKBitmap.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKCanvas.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKCanvas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKCodec.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKCodec.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKColorFilter.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKColorFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKColors.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKColors.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKColorTable.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKColorTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKData.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKDocument.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SkiaApi.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SkiaApi.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKImage.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKImageFilter.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKImageFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKManagedStream.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKManagedStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKMaskFilter.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKMaskFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKObject.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKPaint.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKPaint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKPath.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKPath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKPathEffect.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKPathEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKPathMeasure.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKPathMeasure.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKPicture.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKPicture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKPictureRecorder.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKPictureRecorder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKRegion.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKRegion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKShader.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKShader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKStream.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKString.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKString.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKSurface.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKSurface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\SKTypeface.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\SKTypeface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.SkiaSharp\Util.cs">
+      <Link>PixelFarm\BackEnd.SkiaSharp\Util.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs">
+      <Link>PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.PlatformBase\BootStrapSkia.cs">
       <Link>PixelFarm\LayoutFarm.PlatformBase\BootStrapSkia.cs</Link>
     </Compile>
@@ -359,7 +976,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -381,14 +997,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
@@ -398,7 +1012,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
@@ -820,11 +1433,11 @@
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\win32utils\MyWin32.cs">
-      <Link>PixelFarm\win32utils\MyWin32.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\MyWin32.cs">
+      <Link>PixelFarm\BackEnd.Win32Utils\MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\win32utils\NativeWin32MemoryDc.cs">
-      <Link>PixelFarm\win32utils\NativeWin32MemoryDc.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\NativeWin32MemoryDc.cs">
+      <Link>PixelFarm\BackEnd.Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\0_Start\WinGdiPlusPlatform.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\0_Start\WinGdiPlusPlatform.cs</Link>
@@ -1009,8 +1622,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\Painter\VxsHelper.cs">
       <Link>PixelFarm\PixelFarm.Drawing.Skia\Painter\VxsHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\backend.drawingfilters\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.H.cs">
-      <Link>PixelFarm\backend.drawingfilters\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.H.cs</Link>
+    <Compile Include="..\..\PixelFarm\BackEnd.FilterFx\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.H.cs">
+      <Link>PixelFarm\BackEnd.FilterFx\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.H.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\CubicBezier.cs">
       <Link>PixelFarm\burningminecurve\curveutils\CubicBezier.cs</Link>
@@ -1552,623 +2165,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs">
       <Link>PixelFarm\PixelFarm.Drawing\4_PlatformServices\StorageService.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\BindingsBase.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\BindingsBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\BlittableValueType.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\BlittableValueType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\ContextHandle.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\ContextHandle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\DisplayDevice.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\DisplayDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\DisplayResolution.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\DisplayResolution.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\GameWindowFlags.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\GameWindowFlags.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\Color4.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\Color4.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ColorFormat.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ColorFormat.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Core.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Core.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Delegates.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Delegates.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Enums.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Enums.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\ErrorHelper.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\ErrorHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\ES.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\ES.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Helper.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\ES20\Helper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsBindingsBase.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsBindingsBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContext.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextBase.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextException.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextFlags.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextFlags.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextMissingException.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextMissingException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextVersion.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsContextVersion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsErrorException.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsErrorException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsExceptions.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsExceptions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsMode.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsModeException.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\GraphicsModeException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\IGraphicsContext.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\IGraphicsContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\IGraphicsMode.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\IGraphicsMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\ErrorHelper.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\ErrorHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GL.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GL.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLCore.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLCore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLDelegates.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLDelegates.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLEnums.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLEnums.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLHelper.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\OpenGL\GLHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\Rectangle_Point_Size.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Graphics\Rectangle_Point_Size.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\IWindowInfo.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\IWindowInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\BezierCurve.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\BezierCurve.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\BezierCurveCubic.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\BezierCurveCubic.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\BezierCurveQuadric.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\BezierCurveQuadric.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Box2.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Box2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Functions.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Functions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Half.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Half.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\MathHelper.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\MathHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Matrix3d.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Matrix3d.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Matrix4.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Matrix4.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Matrix4d.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Matrix4d.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Point.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Point.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Quaternion.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Quaternion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Quaterniond.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Quaterniond.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Rectangle.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Rectangle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Size.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Size.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector2.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector2d.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector2d.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector2h.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector2h.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector3.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector3.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector3d.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector3d.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector3h.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector3h.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector4.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector4.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector4d.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector4d.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector4h.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Math\Vector4h.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\DesktopBackend.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\DesktopBackend.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\DesktopGraphicsContext.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\DesktopGraphicsContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\Dummy\DummyGLContext.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\Dummy\DummyGLContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\Dummy\DummyWindowInfo.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\Dummy\DummyWindowInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\External\ExternalGraphicsContext.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\External\ExternalGraphicsContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\Factory.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\Factory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\IDisplayDeviceDriver.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\IDisplayDeviceDriver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\INativeWindow.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\INativeWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\IPlatformFactory.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Platform\IPlatformFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Serialization\XmlIgnoreAttribute.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\OpenTK\Serialization\XmlIgnoreAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\Platform_Egl\Egl.cs">
-      <Link>PixelFarm\PixelFarm.MiniOpenTK\Platform_Egl\Egl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\TypeMirror\SimpleReflectionHelper.cs">
-      <Link>PixelFarm\TypeMirror\SimpleReflectionHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Configuration.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Configuration.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Exceptions.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Exceptions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\FrameEventArgs.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\FrameEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\GameWindow.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\GameWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\IGameWindow.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\IGameWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\INativeWindow.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\INativeWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\GamePad.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\GamePad.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\GamePadState.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\GamePadState.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\IInputDevice.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\IInputDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\IInputDriver.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\IInputDriver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\IJoystickDriver.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\IJoystickDriver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\IKeyboardDriver.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\IKeyboardDriver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\IMouseDriver.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\IMouseDriver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\InputDriver.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\InputDriver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\JoystickDevice.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\JoystickDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\Key.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\Key.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\Keyboard.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\Keyboard.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\KeyboardDevice.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\KeyboardDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\KeyboardKeyEventArgs.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\KeyboardKeyEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\KeyboardState.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\KeyboardState.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\Mouse.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\Mouse.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\MouseButton.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\MouseButton.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\MouseDevice.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\MouseDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Input\MouseState.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Input\MouseState.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\KeyPressEventArgs.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\KeyPressEventArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Minimal.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Minimal.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\NativeWindow.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\NativeWindow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\AngleProjectEglConfig.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\AngleProjectEglConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglContext.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglGraphicsMode.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglGraphicsMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglMacPlatformFactory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglMacPlatformFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglWindowInfo.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglWindowInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglWinPlatformFactory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglWinPlatformFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglX11PlatformFactory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Egl\EglX11PlatformFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\EmbeddedGraphicsContext.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\EmbeddedGraphicsContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Factory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Factory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\INativeWindow2.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\INativeWindow2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\AglContext.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\AglContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\Application.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\Application.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\Agl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\Agl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\CarbonAPI.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\CarbonAPI.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\CoreFoundation.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\CoreFoundation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\MacOSKeys.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\MacOSKeys.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\QuartzDisplayServicesAPI.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\QuartzDisplayServicesAPI.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\SpeechChannel.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonBindings\SpeechChannel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonGLNative.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonGLNative.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonInput.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonInput.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonWindowInfo.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\CarbonWindowInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\EventInfo.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\EventInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSException.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSFactory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSGraphicsMode.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSGraphicsMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSKeyMap.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\MacOSKeyMap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\QuartzDisplayDeviceDriver.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\MacOS\QuartzDisplayDeviceDriver.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\PlatformException.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\PlatformException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Utilities.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Utilities.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\API.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\API.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\Wgl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\Wgl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\WglCore.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\WglCore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\WglDelegates.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\WglDelegates.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\WglEnums.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\Bindings\WglEnums.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WglHelper.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WglHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinDisplayDevice.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinDisplayDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinFactory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinGLContext.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinGLContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinGLNative.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinGLNative.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinGraphicsMode.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinGraphicsMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinKeyMap.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinKeyMap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinMMJoystick.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinMMJoystick.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinRawInput.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinRawInput.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinRawKeyboard.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinRawKeyboard.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinRawMouse.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinRawMouse.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinWindowInfo.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WinWindowInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WMInput.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\Windows\WMInput.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\API.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\API.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\Bindings\Glx.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\Bindings\Glx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\Functions.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\Functions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\GlxHelper.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\GlxHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\Structs.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\Structs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11DisplayDevice.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11DisplayDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11Factory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11Factory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11GLContext.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11GLContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11GLNative.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11GLNative.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11GraphicsMode.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11GraphicsMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11Input.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11Input.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11Joystick.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11Joystick.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11KeyMap.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11KeyMap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11WindowInfo.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Platform\X11\X11WindowInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\Toolkit.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\Toolkit.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\CarbonGLControl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\CarbonGLControl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\DummyGLControl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\DummyGLControl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControlFactory.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\GLControlFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\IGLControl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\IGLControl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\WinGLControl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\WinGLControl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\X11GLControl.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\UserGLControl\X11GLControl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\WindowBorder.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\WindowBorder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\WindowState.cs">
-      <Link>PixelFarm\PixelFarm.OpenTKWinForms\WindowState.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\Definitions.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\Definitions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\GRContext.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\GRContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\GRGlInterface.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\GRGlInterface.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\NET20\ForNET20.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\NET20\ForNET20.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PreserveAttribute.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\PreserveAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKBitmap.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKBitmap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKCanvas.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKCanvas.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKCodec.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKCodec.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKColorFilter.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKColorFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKColors.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKColors.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKColorTable.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKColorTable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKData.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKData.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKDocument.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SkiaApi.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SkiaApi.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKImage.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKImageFilter.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKImageFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKManagedStream.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKManagedStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKMaskFilter.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKMaskFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKObject.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKObject.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKPaint.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKPaint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKPath.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKPath.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKPathEffect.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKPathEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKPathMeasure.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKPathMeasure.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKPicture.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKPicture.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKPictureRecorder.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKPictureRecorder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKRegion.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKRegion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKShader.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKShader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKStream.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKString.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKString.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKSurface.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKSurface.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\SKTypeface.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\SKTypeface.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.SkiaSharp\Util.cs">
-      <Link>PixelFarm\PixelFarm.SkiaSharp\Util.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepBasin.cs">
       <Link>PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepBasin.cs</Link>
     </Compile>
@@ -2622,9 +2618,6 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.TextServices\Utils\CRC32.cs">
       <Link>PixelFarm\Typography\Typography.TextServices\Utils\CRC32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Win32Utils\Win32_NotUsed.cs">
-      <Link>PixelFarm\Win32Utils\Win32_NotUsed.cs</Link>
-    </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\Interfaces\Interfaces.cs">
       <Link>Tests\WinFormTestBed\Interfaces\Interfaces.cs</Link>
     </Compile>
@@ -2648,21 +2641,18 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs</Link>
@@ -2672,14 +2662,12 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs</Link>

@@ -40,7 +40,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\TypeMirror\SimpleReflectionHelper.cs">
+    <Compile Include="..\BackEnd.TypeMirror\SimpleReflectionHelper.cs">
       <Link>0_Init\SimpleReflectionHelper.cs</Link>
     </Compile>
     <Compile Include="0_Init\GlfwOpenTKContext.cs" />
@@ -78,7 +78,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
+    <ProjectReference Include="..\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
       <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>

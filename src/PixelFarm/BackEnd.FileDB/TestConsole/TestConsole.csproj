@@ -39,9 +39,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FileDB\FileDB.csproj">
+    <ProjectReference Include="..\FileDB\BackEnd.FileDB.csproj">
       <Project>{5F72F6FB-89BC-439F-989A-5B9581A50CC5}</Project>
-      <Name>FileDB</Name>
+      <Name>BackEnd.FileDB</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
