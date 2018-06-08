@@ -122,11 +122,8 @@ namespace PixelFarm.DrawingBuffer
             RectD sourceRect = new RectD(0, 0, source.PixelWidth, source.PixelHeight);
             RectD destRect = new RectD(destX, destY, source.PixelWidth, source.PixelHeight);
             Blit(bmp, destRect, source, sourceRect, WhiteColor, BlendMode.None);
-        }
-
-
-        ///
-
+        } 
+        /// 
         /// <summary>
         /// Copies (blits) the pixels from the WriteableBitmap source to the destination WriteableBitmap (this).
         /// </summary>
@@ -576,6 +573,7 @@ namespace PixelFarm.DrawingBuffer
                     RectD sourceRect = new RectD(0, 0, sourceWidth, sourceHeight);
                     RectD destRect = new RectD(0, 0, destWidth, destHeight);
                     RectD bounds = transform.TransformBounds(sourceRect);
+
                     bounds.Intersect(destRect);
 
                     int startX = (int)bounds.Left;

@@ -17,13 +17,16 @@
 //
 
 
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using PixelFarm.DrawingBuffer;
+
+ 
 
 namespace WinFormGdiPlus
 {
@@ -33,6 +36,60 @@ namespace WinFormGdiPlus
         public FormBlit()
         {
             InitializeComponent();
+
+         
+
+        }
+
+        private void RollControl1_ValueChanged(object sender, EventArgs e)
+        {
+
+            //StringBuilder stbuilder = new StringBuilder();
+            //stbuilder.AppendLine("roll-angle: " + rollControl1.Angle);
+            //stbuilder.AppendLine("roll-direction: " + rollControl1.RollDirection);
+            //stbuilder.AppendLine("roll-amount: " + rollControl1.RollAmount);
+            //this.textBox1.Text = stbuilder.ToString();
+
+            //var token = new RotateZoomEffectConfigToken(true, 0, 0, 0, 1.0f, PointF.Empty, false, false);
+
+            //double angle = rollControl1.RollDirection * Math.PI / 180;
+            //double dist = rollControl1.RollAmount;
+
+            //if (double.IsNaN(angle))
+            //{
+            //    angle = 0;
+            //    dist = 0;
+            //}
+
+            //int trackBackZoomValue = 512;//trackBarZoom.Value
+            //token.Offset = new PointF(0, 0);// panControl.Position;
+            //token.PreRotateZ = (float)(angle);
+            //token.PostRotateZ = (float)(-angle - rollControl1.Angle * Math.PI / 180);
+            //token.Tilt = (float)Math.Asin(dist / 90);
+            //token.SourceAsBackground = false;//*** keepBackgroundCheckBox.Checked;
+            //token.Tile = false;// tileSourceCheckBox.Checked;
+            //token.Zoom = (float)Math.Pow(2.0, (trackBackZoomValue - 512) / 128.0);
+
+
+            ////if (this.angleUpDown.Value != (decimal)this.rollControl.Angle)
+            ////{
+            ////    this.angleUpDown.Value = (decimal)this.rollControl.Angle;
+            ////}
+
+            ////if (this.twistAngleUpDown.Value != -(decimal)this.rollControl.RollDirection)
+            ////{
+            ////    this.twistAngleUpDown.Value = -(decimal)this.rollControl.RollDirection;
+            ////}
+
+            ////if (this.twistRadiusUpDown.Value != (decimal)this.rollControl.RollAmount)
+            ////{
+            ////    this.twistRadiusUpDown.Value = (decimal)this.rollControl.RollAmount;
+            ////}
+
+            ////UpdateUpDowns();
+            ////FinishTokenUpdate();
+
+
         }
 
         private void FormBlit_Load(object sender, EventArgs e)
@@ -247,6 +304,14 @@ namespace WinFormGdiPlus
                 g.Clear(System.Drawing.Color.White);
                 g.DrawImage(destBmp, 0, 0);
             }
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //....
+
+
 
         }
     }

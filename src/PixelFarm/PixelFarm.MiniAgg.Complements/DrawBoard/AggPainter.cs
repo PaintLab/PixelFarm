@@ -802,13 +802,52 @@ namespace PixelFarm.Agg
                 //todo, review here again
                 BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualBitmap.GetBuffer(actualImg));
                 //this._bxt.CopyBlit(left, top, srcBmp); 
-                DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
-                    DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
-                    DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
-                    //DrawingBuffer.AffinePlan.Translate(100,100)
-                });
+                //DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
+                //    DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
+                //    DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
+                //    //DrawingBuffer.AffinePlan.Translate(100,100)
+                //});
                 //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
-                this._bxt.BlitRender(srcBmp, false, 1, mx);
+
+                if (affinePlans != null)
+                {
+                    int affCount = affinePlans.Length;
+                    DrawingBuffer.AffinePlan[] affs = new AffinePlan[affCount];
+                    for (int i = 0; i < affCount; ++i)
+                    {
+                        Transform.AffinePlan plan = affinePlans[i];
+                        switch (plan.cmd)
+                        {
+                            default:
+                                throw new NotSupportedException();
+                                break;
+                            case Transform.AffineMatrixCommand.Rotate:
+                                affs[i] = new AffinePlan(AffineMatrixCommand.Rotate, plan.x, plan.y);
+                                break;
+                            case Transform.AffineMatrixCommand.Scale:
+                                affs[i] = new AffinePlan(AffineMatrixCommand.Scale, plan.x, plan.y);
+                                break;
+                            case Transform.AffineMatrixCommand.Skew:
+                                affs[i] = new AffinePlan(AffineMatrixCommand.Skew, plan.x, plan.y);
+                                break;
+                            case Transform.AffineMatrixCommand.Translate:
+                                affs[i] = new AffinePlan(AffineMatrixCommand.Translate, plan.x, plan.y);
+                                break;
+                            case Transform.AffineMatrixCommand.None:
+                                affs[i] = new AffinePlan(AffineMatrixCommand.None, plan.x, plan.y);
+                                break;
+                            case Transform.AffineMatrixCommand.Invert:
+                                affs[i] = new AffinePlan(AffineMatrixCommand.Invert, plan.x, plan.y);
+                                break;
+                        }
+                    }
+                    DrawingBuffer.MatrixTransform mx = new DrawingBuffer.MatrixTransform(affs);
+                    this._bxt.BlitRender(srcBmp, false, 1, mx);
+                }
+                else
+                {
+                    this._bxt.BlitRender(srcBmp, false, 1, null);
+                }
                 return;
             }
 

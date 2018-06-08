@@ -13,12 +13,26 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
+using PixelFarm.Drawing.Effects;
+
 namespace PaintDotNet.Effects
 {
     public partial class RollControl
         : System.Windows.Forms.UserControl
     {
-        
+
+        static class Utility
+        {
+            public static RectangleF RectangleFromCenter(PointF center, float halfSize)
+            {
+                RectangleF ret = new RectangleF(center.X, center.Y, 0, 0);
+                ret.Inflate(halfSize, halfSize);
+                return ret;
+            }
+        }
+
+
+
         private bool tracking = false;
         private Point lastMouseXY;
         private Bitmap renderSurface = null; // used for double-buffering
@@ -502,8 +516,8 @@ namespace PaintDotNet.Effects
             this.ResizeRedraw = true;
         }
 
-         
 
-        
+
+
     }
 }
