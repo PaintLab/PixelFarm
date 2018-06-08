@@ -145,10 +145,10 @@ namespace PixelFarm.DrawingBuffer
 
                                     int col = pixels[py * w + px];
                                     int k = kernel[ky + kwh, kx + khh];
-                                    a += ((col >> 24) & 0x000000FF) * k;
-                                    r += ((col >> 16) & 0x000000FF) * k;
-                                    g += ((col >> 8) & 0x000000FF) * k;
-                                    b += ((col) & 0x000000FF) * k;
+                                    a += ((col >> 24) & 0xff) * k;
+                                    r += ((col >> 16) & 0xff) * k;
+                                    g += ((col >> 8) & 0xff) * k;
+                                    b += ((col) & 0xff) * k;
                                 }
                             }
 
