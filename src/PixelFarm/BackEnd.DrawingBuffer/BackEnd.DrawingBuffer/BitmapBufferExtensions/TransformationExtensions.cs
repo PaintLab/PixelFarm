@@ -72,7 +72,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A new WriteableBitmap that is a cropped version of the input.</returns>
         public static BitmapBuffer Crop(this BitmapBuffer bmp, int x, int y, int width, int height)
         {
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int srcWidth = srcContext.Width;
                 int srcHeight = srcContext.Height;
@@ -91,7 +91,7 @@ namespace PixelFarm.DrawingBuffer
 
                 // Copy the pixels line by line using fast BlockCopy
                 BitmapBuffer result = BitmapBufferFactory.New(width, height);
-                using (var destContext = result.GetBitmapContext())
+                using (BitmapContext destContext = result.GetBitmapContext())
                 {
                     for (int line = 0; line < height; line++)
                     {
@@ -127,12 +127,12 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A new WriteableBitmap that is a resized version of the input.</returns>
         public static BitmapBuffer Resize(this BitmapBuffer bmp, int width, int height, Interpolation interpolation)
         {
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int[] pd = Resize(srcContext, srcContext.Width, srcContext.Height, width, height, interpolation);
 
                 BitmapBuffer result = BitmapBufferFactory.New(width, height);
-                using (var dstContext = result.GetBitmapContext())
+                using (BitmapContext dstContext = result.GetBitmapContext())
                 {
                     BitmapContext.BlockCopy(pd, 0, dstContext, 0, ARGB_SIZE * pd.Length);
                 }
@@ -298,7 +298,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A new WriteableBitmap that is a rotated version of the input.</returns>
         public static BitmapBuffer Rotate(this BitmapBuffer bmp, int angle)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -311,7 +311,7 @@ namespace PixelFarm.DrawingBuffer
                 if (angle > 0 && angle <= 90)
                 {
                     result = BitmapBufferFactory.New(h, w);
-                    using (var destContext = result.GetBitmapContext())
+                    using (BitmapContext destContext = result.GetBitmapContext())
                     {
                         var rp = destContext.Pixels;
                         for (int x = 0; x < w; x++)
@@ -328,7 +328,7 @@ namespace PixelFarm.DrawingBuffer
                 else if (angle > 90 && angle <= 180)
                 {
                     result = BitmapBufferFactory.New(w, h);
-                    using (var destContext = result.GetBitmapContext())
+                    using (BitmapContext destContext = result.GetBitmapContext())
                     {
                         var rp = destContext.Pixels;
                         for (int y = h - 1; y >= 0; y--)
@@ -345,7 +345,7 @@ namespace PixelFarm.DrawingBuffer
                 else if (angle > 180 && angle <= 270)
                 {
                     result = BitmapBufferFactory.New(h, w);
-                    using (var destContext = result.GetBitmapContext())
+                    using (BitmapContext destContext = result.GetBitmapContext())
                     {
                         int[] rp = destContext.Pixels;
                         for (int x = w - 1; x >= 0; x--)
@@ -430,7 +430,7 @@ namespace PixelFarm.DrawingBuffer
 
                 BitmapBuffer bmBilinearInterpolation = BitmapBufferFactory.New(newWidth, newHeight);
 
-                using (var bilinearContext = bmBilinearInterpolation.GetBitmapContext())
+                using (BitmapContext bilinearContext = bmBilinearInterpolation.GetBitmapContext())
                 {
                     int[] newp = bilinearContext.Pixels;
                     int[] oldp = bmpContext.Pixels;
@@ -548,7 +548,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A new WriteableBitmap that is a flipped version of the input.</returns>
         public static BitmapBuffer Flip(this BitmapBuffer bmp, FlipMode flipMode)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;

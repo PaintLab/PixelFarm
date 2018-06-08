@@ -82,7 +82,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The WriteableBitmap that was passed as parameter.</returns>
         public static BitmapBuffer FromByteArray(this BitmapBuffer bmp, byte[] buffer, int offset, int count)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 BitmapContext.BlockCopy(buffer, offset, context, 0, count);
                 return bmp;

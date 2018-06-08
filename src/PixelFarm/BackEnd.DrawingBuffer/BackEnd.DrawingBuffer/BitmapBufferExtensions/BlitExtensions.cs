@@ -163,8 +163,8 @@ namespace PixelFarm.DrawingBuffer
             int dw = (int)destRect.Width;
             int dh = (int)destRect.Height;
 
-            using (var srcContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))
-            using (var destContext = bmp.GetBitmapContext())
+            using (BitmapContext srcContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext destContext = bmp.GetBitmapContext())
             {
 
                 int sourceWidth = srcContext.Width;

@@ -57,7 +57,7 @@ namespace PixelFarm.DrawingBuffer
         {
             
 
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -232,7 +232,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, int color, bool doAlphaBlend = false)
         {
             // Use refs for faster access (really important!) speeds up a lot!
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 int[] pixels = context.Pixels;
                 int w = context.Width;
@@ -440,7 +440,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
         public static void FillPolygon(this BitmapBuffer bmp, int[] points, int color, bool doAlphaBlend = false)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -675,7 +675,7 @@ namespace PixelFarm.DrawingBuffer
             // could use single polygon fill if count is 1, but it the algorithm used there is slower (at least for larger polygons)
 
 
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
