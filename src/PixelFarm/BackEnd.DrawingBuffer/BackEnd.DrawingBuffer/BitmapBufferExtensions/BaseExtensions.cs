@@ -47,7 +47,7 @@ namespace PixelFarm.DrawingBuffer
         public static void Clear(this BitmapBuffer bmp, ColorInt color)
         {
             int colr = color.ToPreMultAlphaColor();
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 int[] pixels = context.Pixels;
                 int w = context.Width;
@@ -78,7 +78,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         public static void Clear(this BitmapBuffer bmp)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Clear();
             }

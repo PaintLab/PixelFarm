@@ -269,6 +269,10 @@ namespace PixelFarm.DrawingBuffer
                                             sa = 0;
                                         }
                                     }
+
+                                    //---------------
+
+
                                     if (blendMode == BlendMode.None)
                                     {
                                         destPixels[idx] = sourcePixel;

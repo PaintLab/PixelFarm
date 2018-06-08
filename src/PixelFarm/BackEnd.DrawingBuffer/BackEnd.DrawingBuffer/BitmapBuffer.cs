@@ -535,10 +535,6 @@ namespace PixelFarm.DrawingBuffer
 
 
 
-
-
-
-
     public struct RectD
     {
         public RectD(double left, double top, double width, double height)
@@ -765,7 +761,7 @@ namespace PixelFarm.DrawingBuffer
                 (uint)((c2_r << 16) | (c2_g << 8) | (c2_b));
         }
     }
-   
+
     public struct BitmapBuffer
     {
         public static readonly BitmapBuffer Empty = new BitmapBuffer();
