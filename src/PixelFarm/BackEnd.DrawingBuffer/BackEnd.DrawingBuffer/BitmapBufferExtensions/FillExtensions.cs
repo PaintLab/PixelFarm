@@ -55,7 +55,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
         public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, bool doAlphaBlend = false)
         {
-            
+
 
             using (BitmapContext context = bmp.GetBitmapContext())
             {
@@ -103,7 +103,7 @@ namespace PixelFarm.DrawingBuffer
                 int startY = y1 * w;
                 int startYPlusX1 = startY + x1;
                 int endOffset = startY + x2;
-                
+
 
 
                 for (int idx = startYPlusX1; idx < endOffset; idx++)
@@ -147,18 +147,17 @@ namespace PixelFarm.DrawingBuffer
         private static int AlphaBlendColors(int pixel, int sa, int sr, int sg, int sb)
         {
             // Alpha blend
-            int destPixel = pixel;
-            int da = ((destPixel >> 24) & 0xff);
-            int dr = ((destPixel >> 16) & 0xff);
-            int dg = ((destPixel >> 8) & 0xff);
-            int db = ((destPixel) & 0xff);
 
-            destPixel = ((sa + (((da * (255 - sa)) * 0x8081) >> 23)) << 24) |
-                                     ((sr + (((dr * (255 - sa)) * 0x8081) >> 23)) << 16) |
-                                     ((sg + (((dg * (255 - sa)) * 0x8081) >> 23)) << 8) |
-                                     ((sb + (((db * (255 - sa)) * 0x8081) >> 23)));
+            int da = ((pixel >> 24) & 0xff);
+            int dr = ((pixel >> 16) & 0xff);
+            int dg = ((pixel >> 8) & 0xff);
+            int db = ((pixel) & 0xff);
 
-            return destPixel;
+            return ((sa + (((da * (255 - sa)) * 0x8081) >> 23)) << 24) |
+                                      ((sr + (((dr * (255 - sa)) * 0x8081) >> 23)) << 16) |
+                                      ((sg + (((dg * (255 - sa)) * 0x8081) >> 23)) << 8) |
+                                      ((sb + (((db * (255 - sa)) * 0x8081) >> 23)));
+
         }
 
 
