@@ -226,5 +226,28 @@ namespace WinFormGdiPlus
                 g.DrawImage(destBmp, 0, 0);
             }
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer flipImg = unmodifiedBmp.RotateFree(20, false);
+
+
+            using (LockBmp bmplock = destBmp.Lock())
+            {
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
+                wb.Clear(Colors.White);
+
+                wb.Blit(new RectD(0, 0, flipImg.PixelWidth, flipImg.PixelHeight),
+                        flipImg,
+                        new RectD(0, 0, flipImg.PixelWidth, flipImg.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
+
+        }
     }
 }
