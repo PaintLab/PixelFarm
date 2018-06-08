@@ -47,7 +47,7 @@ namespace PixelFarm.DrawingBuffer
         public static void Clear(this BitmapBuffer bmp, ColorInt color)
         {
             int colr = color.ToPreMultAlphaColor();
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 int[] pixels = context.Pixels;
                 int w = context.Width;
@@ -78,7 +78,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         public static void Clear(this BitmapBuffer bmp)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Clear();
             }
@@ -91,7 +91,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A copy of the WriteableBitmap.</returns>
         public static BitmapBuffer Clone(this BitmapBuffer bmp)
         {
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 BitmapBuffer result = BitmapBufferFactory.New(srcContext.Width, srcContext.Height);
                 using (var destContext = result.GetBitmapContext())
@@ -183,7 +183,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The color of the pixel at x, y.</returns>
         public static int dbugGetPixeli(this BitmapBuffer bmp, int x, int y)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 return context.Pixels[y * context.Width + x];
             }
@@ -199,7 +199,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The color of the pixel at x, y as a Color struct.</returns>
         public static ColorInt dbugGetPixel(this BitmapBuffer bmp, int x, int y)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int c = context.Pixels[y * context.Width + x];
                 byte a = (byte)(c >> 24);
@@ -229,7 +229,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The brightness of the pixel at x, y.</returns>
         public static byte GetBrightness(this BitmapBuffer bmp, int x, int y)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Extract color components
                 int c = context.Pixels[y * context.Width + x];
@@ -253,7 +253,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="b">The blue value of the color.</param>
         public static void SetPixeli(this BitmapBuffer bmp, int index, byte r, byte g, byte b)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[index] = (255 << 24) | (r << 16) | (g << 8) | b;
             }
@@ -271,7 +271,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="b">The blue value of the color.</param>
         public static void SetPixel(this BitmapBuffer bmp, int x, int y, byte r, byte g, byte b)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[y * context.Width + x] = (255 << 24) | (r << 16) | (g << 8) | b;
             }
@@ -291,7 +291,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="b">The blue value of the color.</param>
         public static void SetPixeli(this BitmapBuffer bmp, int index, byte a, byte r, byte g, byte b)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[index] = (a << 24) | (r << 16) | (g << 8) | b;
             }
@@ -310,7 +310,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="b">The blue value of the color.</param>
         public static void SetPixel(this BitmapBuffer bmp, int x, int y, byte a, byte r, byte g, byte b)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[y * context.Width + x] = (a << 24) | (r << 16) | (g << 8) | b;
             }
@@ -327,7 +327,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void SetPixeli(this BitmapBuffer bmp, int index, ColorInt color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[index] = color.ToPreMultAlphaColor();
             }
@@ -343,7 +343,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void SetPixel(this BitmapBuffer bmp, int x, int y, ColorInt color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[y * context.Width + x] = color.ToPreMultAlphaColor();
             }
@@ -359,7 +359,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void SetPixeli(this BitmapBuffer bmp, int index, byte a, ColorInt color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[index] = color.ToPreMultAlphaColor();
             }
@@ -376,7 +376,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void SetPixel(this BitmapBuffer bmp, int x, int y, byte a, ColorInt color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Add one to use mul and cheap bit shift for multiplicaltion
                 context.Pixels[y * context.Width + x] = color.ToPreMultAlphaColor();
@@ -392,7 +392,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void SetPixeli(this BitmapBuffer bmp, int index, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[index] = color;
             }
@@ -408,7 +408,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void SetPixel(this BitmapBuffer bmp, int x, int y, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 context.Pixels[y * context.Width + x] = color;
             }

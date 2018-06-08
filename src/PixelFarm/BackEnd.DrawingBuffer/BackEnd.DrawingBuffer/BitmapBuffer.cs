@@ -535,10 +535,6 @@ namespace PixelFarm.DrawingBuffer
 
 
 
-
-
-
-
     public struct RectD
     {
         public RectD(double left, double top, double width, double height)
@@ -765,25 +761,13 @@ namespace PixelFarm.DrawingBuffer
                 (uint)((c2_r << 16) | (c2_g << 8) | (c2_b));
         }
     }
-    public struct Colors
-    {
-        public static ColorInt White = ColorInt.FromArgb(255, 255, 255, 255);
-        public static ColorInt Black = ColorInt.FromArgb(255, 0, 0, 0);
-        public static ColorInt Red = ColorInt.FromArgb(255, 255, 0, 0);
-        public static ColorInt Blue = ColorInt.FromArgb(255, 0, 0, 255);
-    }
 
     public struct BitmapBuffer
     {
         public static readonly BitmapBuffer Empty = new BitmapBuffer();
 
         //in this version , only 32 bits 
-        public BitmapBuffer(int w, int h)
-        {
-            this.PixelWidth = w;
-            this.PixelHeight = h;
-            this.Pixels = new int[w * h];
-        }
+
         public BitmapBuffer(int w, int h, int[] orgBuffer)
         {
             this.PixelWidth = w;

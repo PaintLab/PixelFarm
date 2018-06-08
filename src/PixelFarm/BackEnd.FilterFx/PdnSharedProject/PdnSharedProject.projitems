@@ -66,6 +66,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)PixelOps\PosterizeRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)00_Porting\PORTING_NOTMERGE.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformMemory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TransformEffect\RotateZoomEffect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TransformEffect\RotateZoomEffectConfigToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Wrap\PolarInversionEffect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Wrap\WarpEdgeBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Wrap\WrapBasedEffRenderer.cs" />

@@ -65,9 +65,9 @@ namespace WinFormGdiPlus
             //render!
             using (Graphics g = this.panel1.CreateGraphics())
             using (Bitmap bmp1 = new Bitmap(400, 500))
-            using (var bmplock = bmp1.Lock())
+            using (LockBmp bmplock = bmp1.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
                 switch (sampleName)
                 {
                     case SampleName.DrawEllipses:

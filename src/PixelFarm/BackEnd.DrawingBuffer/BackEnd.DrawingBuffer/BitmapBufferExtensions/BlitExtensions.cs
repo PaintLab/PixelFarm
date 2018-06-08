@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingBuffer
     /// </summary>
     public static partial class BitmapBufferExtensions
     {
-
+        static readonly ColorInt WhiteColor = ColorInt.FromArgb(255, 255, 255, 255);
 
         /// <summary>
         /// The blending mode.
@@ -80,7 +80,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
         public static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect, BlendMode blendMode)
         {
-            Blit(bmp, destRect, source, sourceRect, Colors.White, blendMode);
+            Blit(bmp, destRect, source, sourceRect, WhiteColor, blendMode);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         public static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect)
         {
-            Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.Alpha);
+            Blit(bmp, destRect, source, sourceRect, WhiteColor, BlendMode.Alpha);
         }
 
         //
@@ -106,7 +106,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         public static void CopyBlit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect)
         {
-            Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.None);
+            Blit(bmp, destRect, source, sourceRect, WhiteColor, BlendMode.None);
         }
         //
         //my extension
@@ -121,12 +121,9 @@ namespace PixelFarm.DrawingBuffer
         {
             RectD sourceRect = new RectD(0, 0, source.PixelWidth, source.PixelHeight);
             RectD destRect = new RectD(destX, destY, source.PixelWidth, source.PixelHeight);
-            Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.None);
-        }
-
-
-        ///
-
+            Blit(bmp, destRect, source, sourceRect, WhiteColor, BlendMode.None);
+        } 
+        /// 
         /// <summary>
         /// Copies (blits) the pixels from the WriteableBitmap source to the destination WriteableBitmap (this).
         /// </summary>
@@ -163,8 +160,8 @@ namespace PixelFarm.DrawingBuffer
             int dw = (int)destRect.Width;
             int dh = (int)destRect.Height;
 
-            using (var srcContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))
-            using (var destContext = bmp.GetBitmapContext())
+            using (BitmapContext srcContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext destContext = bmp.GetBitmapContext())
             {
 
                 int sourceWidth = srcContext.Width;
@@ -204,7 +201,7 @@ namespace PixelFarm.DrawingBuffer
                 int cr = color.R;
                 int cg = color.G;
                 int cb = color.B;
-                bool tinted = color != Colors.White;
+                bool tinted = color != WhiteColor;
                 int sw = (int)sourceRect.Width;
                 double sdx = sourceRect.Width / destRect.Width;
                 double sdy = sourceRect.Height / destRect.Height;
@@ -269,6 +266,10 @@ namespace PixelFarm.DrawingBuffer
                                             sa = 0;
                                         }
                                     }
+
+                                    //---------------
+
+
                                     if (blendMode == BlendMode.None)
                                     {
                                         destPixels[idx] = sourcePixel;
@@ -572,6 +573,7 @@ namespace PixelFarm.DrawingBuffer
                     RectD sourceRect = new RectD(0, 0, sourceWidth, sourceHeight);
                     RectD destRect = new RectD(0, 0, destWidth, destHeight);
                     RectD bounds = transform.TransformBounds(sourceRect);
+
                     bounds.Intersect(destRect);
 
                     int startX = (int)bounds.Left;
