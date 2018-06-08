@@ -46,6 +46,9 @@ namespace WinFormGdiPlus
             //
             //create
             bufferLenInBytes = _bmpdata.Stride * _bmpdata.Height;
+
+
+            //copy*** original buffer ti iyr BitmapBuffer
             int[] buffer = new int[bufferLenInBytes / 4];
             System.Runtime.InteropServices.Marshal.Copy(_bmpdata.Scan0, buffer, 0, bufferLenInBytes / 4);
 
