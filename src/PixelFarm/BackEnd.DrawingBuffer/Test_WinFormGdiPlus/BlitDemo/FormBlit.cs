@@ -128,7 +128,7 @@ namespace WinFormGdiPlus
         }
         public static BitmapBuffer Overlay(BitmapBuffer bmp, BitmapBuffer overlay, PixelFarm.DrawingBuffer.PointD location)
         {
-            var result = bmp.Clone();
+            BitmapBuffer result = bmp.Clone();
             var size = new PixelFarm.DrawingBuffer.SizeD(overlay.PixelWidth, overlay.PixelHeight);
             result.Blit(new PixelFarm.DrawingBuffer.RectD(location, size), overlay,
                 new RectD(new PixelFarm.DrawingBuffer.PointD(0, 0), size),
@@ -159,6 +159,28 @@ namespace WinFormGdiPlus
             }
 
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer cropBmp = unmodifiedBmp.Crop(new RectD(10, 10, 40, 40));
+
+
+            using (LockBmp bmplock = destBmp.Lock())
+            {
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
+                wb.Clear(Colors.White);
+
+                wb.Blit(new RectD(0, 0, cropBmp.PixelWidth, cropBmp.PixelHeight),
+                        cropBmp,
+                        new RectD(0, 0, cropBmp.PixelWidth, cropBmp.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
         }
     }
 }
