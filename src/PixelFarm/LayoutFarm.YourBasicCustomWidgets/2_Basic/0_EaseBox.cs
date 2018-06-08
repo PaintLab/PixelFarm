@@ -51,7 +51,10 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        public override void Walk(UIVisitor visitor)
+        {
 
+        }
         protected override bool HasReadyRenderElement
         {
             get { return this.primElement != null; }

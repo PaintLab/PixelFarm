@@ -125,7 +125,7 @@ namespace LayoutFarm.Text
                         debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
                     }
 
-                    canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
+                  //  canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
 
 #endif
 
