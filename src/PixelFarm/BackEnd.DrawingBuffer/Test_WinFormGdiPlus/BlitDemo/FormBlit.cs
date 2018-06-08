@@ -164,7 +164,7 @@ namespace WinFormGdiPlus
         private void button3_Click(object sender, EventArgs e)
         {
             BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
-            BitmapBuffer cropBmp = unmodifiedBmp.Crop(new RectD(10, 10, 40, 40));
+            BitmapBuffer cropBmp = unmodifiedBmp.Crop(10, 10, 40, 40);
 
 
             using (LockBmp bmplock = destBmp.Lock())
@@ -175,6 +175,28 @@ namespace WinFormGdiPlus
                 wb.Blit(new RectD(0, 0, cropBmp.PixelWidth, cropBmp.PixelHeight),
                         cropBmp,
                         new RectD(0, 0, cropBmp.PixelWidth, cropBmp.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer rotateBmp = unmodifiedBmp.Rotate(BitmapBufferExtensions.FastRotateAngle.Rotate270);
+
+
+            using (LockBmp bmplock = destBmp.Lock())
+            {
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
+                wb.Clear(Colors.White);
+
+                wb.Blit(new RectD(0, 0, rotateBmp.PixelWidth, rotateBmp.PixelHeight),
+                        rotateBmp,
+                        new RectD(0, 0, rotateBmp.PixelWidth, rotateBmp.PixelHeight));
 
                 bmplock.WriteAndUnlock();
 
