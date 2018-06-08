@@ -28,11 +28,11 @@ namespace LayoutFarm
             for (int i = 0; i < 10; ++i)
             {
                 Label label = new Label(17, 50);
-                label.SetLocation(0, i * 20);
+                label.SetLocation(i * 20, i * 20);
                 label.Color = PixelFarm.Drawing.Color.Black;
                 label.Text = "ABCDEFGHIJKLMNOPQRSTUVWXZYZ0123456789";
                 viewport.AddContent(label);
-            } 
+            }
         }
     }
 }
