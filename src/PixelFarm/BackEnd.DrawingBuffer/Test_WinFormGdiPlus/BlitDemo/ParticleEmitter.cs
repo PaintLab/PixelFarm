@@ -1,10 +1,18 @@
 ﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 using System;
 using System.Collections.Generic;
-using  PixelFarm.DrawingBuffer;
+using PixelFarm.DrawingBuffer;
 
 namespace WinFormGdiPlus
 {
+
+    static class Colors
+    {
+        public static ColorInt White = ColorInt.FromArgb(255, 255, 255, 255);
+        public static ColorInt Black = ColorInt.FromArgb(255, 0, 0, 0);
+        public static ColorInt Red = ColorInt.FromArgb(255, 255, 0, 0);
+        public static ColorInt Blue = ColorInt.FromArgb(255, 0, 0, 255);
+    }
     public class ParticleEmitter
     {
 

@@ -27,6 +27,9 @@ namespace WinFormGdiPlus
 {
     public partial class FormPlantDemo : Form
     {
+       
+
+
         public FormPlantDemo()
         {
             InitializeComponent();
