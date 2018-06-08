@@ -91,7 +91,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A copy of the WriteableBitmap.</returns>
         public static BitmapBuffer Clone(this BitmapBuffer bmp)
         {
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 BitmapBuffer result = BitmapBufferFactory.New(srcContext.Width, srcContext.Height);
                 using (var destContext = result.GetBitmapContext())
@@ -183,7 +183,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The color of the pixel at x, y.</returns>
         public static int dbugGetPixeli(this BitmapBuffer bmp, int x, int y)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 return context.Pixels[y * context.Width + x];
             }
@@ -199,7 +199,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The color of the pixel at x, y as a Color struct.</returns>
         public static ColorInt dbugGetPixel(this BitmapBuffer bmp, int x, int y)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int c = context.Pixels[y * context.Width + x];
                 byte a = (byte)(c >> 24);
@@ -229,7 +229,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The brightness of the pixel at x, y.</returns>
         public static byte GetBrightness(this BitmapBuffer bmp, int x, int y)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Extract color components
                 int c = context.Pixels[y * context.Width + x];

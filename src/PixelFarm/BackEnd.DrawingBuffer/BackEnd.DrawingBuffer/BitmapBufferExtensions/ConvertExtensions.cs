@@ -36,7 +36,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The color buffer as byte ARGB values.</returns>
         public static byte[] ToByteArray(this BitmapBuffer bmp, int offset, int count)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 if (count == -1)
                 {
@@ -122,7 +122,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="destination">The destination stream.</param>
         public static void WriteTga(this BitmapBuffer bmp, Stream destination)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int width = context.Width;
                 int height = context.Height;
