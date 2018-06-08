@@ -42,9 +42,9 @@ namespace WinFormGdiPlus
             //render!
             using (System.Drawing.Graphics g = this.panel1.CreateGraphics())
             using (System.Drawing.Bitmap bmp1 = new System.Drawing.Bitmap(panel1.Width, panel1.Height))
-            using (var bmplock = bmp1.Lock())
+            using (LockBmp bmplock = bmp1.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
 
                 Draw(wb);
                 bmplock.WriteAndUnlock();

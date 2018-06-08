@@ -68,9 +68,9 @@ namespace WinFormGdiPlus
             SampleName sampleName = (SampleName)listBox1.SelectedItem;
             using (Graphics g = this.panel1.CreateGraphics())
             using (Bitmap bmp1 = new Bitmap(400, 500))
-            using (var bmplock = bmp1.Lock())
+            using (LockBmp bmplock = bmp1.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
                 switch (sampleName)
                 {
                     case SampleName.StaticShapes:
@@ -249,7 +249,7 @@ namespace WinFormGdiPlus
 
         private void DrawFillDemo(BitmapBuffer writeableBmp)
         {
-            
+
 
             // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
             using (writeableBmp.GetBitmapContext())

@@ -40,7 +40,7 @@ namespace WinFormGdiPlus
             _writeableBitmap = PixelFarm.DrawingBuffer.BitmapBuffer.Empty;
             bufferLenInBytes = 0;
         }
-        public PixelFarm.DrawingBuffer.BitmapBuffer GetWritableBitmap()
+        public PixelFarm.DrawingBuffer.BitmapBuffer CreateNewBitmapBuffer()
         {
             if (!_writeableBitmap.IsEmpty) return _writeableBitmap;
             //

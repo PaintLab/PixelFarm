@@ -65,9 +65,9 @@ namespace WinFormGdiPlus
             // NOTE: This is not strictly necessary for the SL version as this is a WPF feature, however we include it here for completeness and to show
             // a similar API to WPF 
             //render! 
-            using (var bmplock = destBmp.Lock())
+            using (LockBmp bmplock = destBmp.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
                 emitter.TargetBitmap = wb;
                 emitter.ParticleBitmap = particleBmp;
 
@@ -112,7 +112,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp = new Bitmap(path))
             using (var lockBmp = new LockBmp(bmp))
             {
-                return lockBmp.GetWritableBitmap();
+                return lockBmp.CreateNewBitmapBuffer();
             }
         }
         void MainPage_MouseMove(object sender, MouseEventArgs e)
@@ -143,9 +143,9 @@ namespace WinFormGdiPlus
 
             BitmapBuffer overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.DrawingBuffer.PointD(10, 10));
 
-            using (var bmplock = destBmp.Lock())
+            using (LockBmp bmplock = destBmp.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
                 wb.Clear(Colors.Black);
 
                 wb.Blit(new RectD(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight),
