@@ -23,7 +23,7 @@ namespace TestPdnEffect
             rollControl1.ValueChanged += (s, e) => UpdateRotateZoomParameters();
             chkTile.CheckedChanged += (s, e) => UpdateRotateZoomParameters();
             chkKeepBackground.CheckedChanged += (s, e) => UpdateRotateZoomParameters();
-
+            trkZoom.ValueChanged += (s, e) => UpdateRotateZoomParameters();
         }
 
         RotateZoomEffectConfigToken _rotateZoomConfigToken;
@@ -48,7 +48,7 @@ namespace TestPdnEffect
                 dist = 0;
             }
 
-            int trackBackZoomValue = 512;//trackBarZoom.Value
+            int trackBackZoomValue = trkZoom.Value;//trackBarZoom.Value
             token.Offset = new PixelFarm.Drawing.PointF(0, 0);// panControl.Position;
             token.PreRotateZ = (float)(angle);
             token.PostRotateZ = (float)(-angle - rollControl1.Angle * Math.PI / 180);
@@ -138,14 +138,19 @@ namespace TestPdnEffect
 
         }
 
+        
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            UpdateRotateZoomParameters(); //
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             //create surface from memory 
             //on 32 argb format
 
 
-            Bitmap bmp = new Bitmap("lion1.png");
-
+            Bitmap bmp = new Bitmap("lion1.png"); 
             var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
             System.Drawing.Imaging.ImageLockMode.ReadOnly,
             System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -196,11 +201,6 @@ namespace TestPdnEffect
             //then copy to bitmap 
             //
 
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            UpdateRotateZoomParameters(); //
         }
     }
 }
