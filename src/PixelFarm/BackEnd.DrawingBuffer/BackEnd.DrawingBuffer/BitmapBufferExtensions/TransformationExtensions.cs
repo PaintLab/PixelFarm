@@ -569,41 +569,41 @@ namespace PixelFarm.DrawingBuffer
                 int i = 0;
                 BitmapBuffer result = BitmapBufferFactory.New(w, h);
 
-                if (flipMode == FlipMode.Horizontal)
+                switch (flipMode)
                 {
-
-                    using (BitmapContext destContext = result.GetBitmapContext())
-                    {
-                        int[] rp = destContext.Pixels;
-                        for (int y = h - 1; y >= 0; y--)
+                    default:
+                        throw new NotSupportedException();
+                    case FlipMode.Vertical:
+                        using (BitmapContext destContext = result.GetBitmapContext())
                         {
-                            for (int x = 0; x < w; x++)
+                            int[] rp = destContext.Pixels;
+                            for (int y = h - 1; y >= 0; y--)
                             {
-                                int srcInd = y * w + x;
-                                rp[i] = p[srcInd];
-                                i++;
+                                for (int x = 0; x < w; x++)
+                                {
+                                    int srcInd = y * w + x;
+                                    rp[i] = p[srcInd];
+                                    i++;
+                                }
                             }
                         }
-                    }
-                }
-                else if (flipMode == FlipMode.Vertical)
-                {
-
-                    using (BitmapContext destContext = result.GetBitmapContext())
-                    {
-                        int[] rp = destContext.Pixels;
-                        for (int y = 0; y < h; y++)
+                        break;
+                    case FlipMode.Horizontal:
+                        using (BitmapContext destContext = result.GetBitmapContext())
                         {
-                            for (int x = w - 1; x >= 0; x--)
+                            int[] rp = destContext.Pixels;
+                            for (int y = 0; y < h; y++)
                             {
-                                int srcInd = y * w + x;
-                                rp[i] = p[srcInd];
-                                i++;
+                                for (int x = w - 1; x >= 0; x--)
+                                {
+                                    int srcInd = y * w + x;
+                                    rp[i] = p[srcInd];
+                                    i++;
+                                }
                             }
                         }
-                    }
+                        break;
                 }
-
                 return result;
             }
         }
