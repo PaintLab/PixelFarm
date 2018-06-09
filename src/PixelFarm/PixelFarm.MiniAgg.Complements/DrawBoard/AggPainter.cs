@@ -749,7 +749,7 @@ namespace PixelFarm.Agg
             if (this._renderQuality == RenderQualtity.Fast)
             {
                 BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
-                this._bxt.CopyBlit(left, top, srcBmp);
+                this._bxt.CopyBlit((int)left, (int)top, srcBmp);
                 return;
             }
 

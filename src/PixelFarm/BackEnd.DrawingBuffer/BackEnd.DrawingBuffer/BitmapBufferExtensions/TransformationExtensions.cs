@@ -98,8 +98,7 @@ namespace PixelFarm.DrawingBuffer
                         int srcOff = ((y + line) * srcWidth + x) * ARGB_SIZE;
                         int dstOff = line * width * ARGB_SIZE;
                         BitmapContext.BlockCopy(srcContext, srcOff, destContext, dstOff, width * ARGB_SIZE);
-                    }
-
+                    } 
                     return result;
                 }
             }
