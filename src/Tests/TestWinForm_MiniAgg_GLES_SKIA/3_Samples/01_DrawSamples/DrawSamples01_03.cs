@@ -85,6 +85,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //---red reference line--
 
 
+            p.RenderQuality = RenderQualtity.Fast;
             //p.DrawImage(lionImg, 0, 0); //reference at 0,0 
             p.DrawImage(lionImg, 300, 0);
 
@@ -95,18 +96,13 @@ namespace PixelFarm.Agg.Sample_Draw
             p.DrawImage(lionImg,
              //move to center of the image (hotspot x,y)
              AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
-             AffinePlan.Scale(0.50, 0.50),
+             //AffinePlan.Scale(0.50, 0.50),//
              AffinePlan.Rotate(AggMath.deg2rad(30)),
              AffinePlan.Translate(_imgW / 2, _imgH / 2)
              );
 
             //AffinePlan.Scale(0.75, 0.75),
-            //move to target
-
-
-            
-
-
+            //move to target 
 
             //p.DrawImage(lionImg,
             //   //move to center of the image (hotspot x,y)
@@ -116,8 +112,6 @@ namespace PixelFarm.Agg.Sample_Draw
             //   //move to target
             //   AffinePlan.Translate(400, 200));
         }
-
-
     }
 
     [Info(OrderCode = "01")]

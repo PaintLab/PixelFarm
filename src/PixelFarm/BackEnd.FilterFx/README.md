@@ -32,3 +32,12 @@ _pic 2: Pdn's **Emboss** filter_
 
 _pic 3: Pdn's **Sharpen** filter_
 
+
+---
+
+
+![pdn_rotate_zoom](https://user-images.githubusercontent.com/7447159/41177836-abbacdc8-6b8f-11e8-956b-61107f4dfffc.png)
+
+_pic 4: Pdn's classic **RotateAndZoom**_
+
+---

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//MIT, 2018, WinterDev
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -10,7 +12,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Effects;
 using PixelFarm.Drawing.DrawingBuffer;
 
-using PaintDotNet.Effects;
+
 
 namespace TestPdnEffect
 {
@@ -138,7 +140,7 @@ namespace TestPdnEffect
 
         }
 
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
             UpdateRotateZoomParameters(); //
@@ -150,7 +152,7 @@ namespace TestPdnEffect
             //on 32 argb format
 
 
-            Bitmap bmp = new Bitmap("lion1.png"); 
+            Bitmap bmp = new Bitmap("lion1.png");
             var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
             System.Drawing.Imaging.ImageLockMode.ReadOnly,
             System.Drawing.Imaging.PixelFormat.Format32bppArgb);

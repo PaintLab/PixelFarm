@@ -92,7 +92,7 @@ namespace PixelFarm.Agg
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
 
-        MyBitmapBlender sharedImageWriterReader = new MyBitmapBlender();
+        //MyBitmapBlender _sharedImageWriterReader = new MyBitmapBlender();
 
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
@@ -743,13 +743,50 @@ namespace PixelFarm.Agg
             this.sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
         }
+        void DrawBitmap(ActualBitmap actualBmp, double left, double top)
+        {
+            //check image caching system 
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
+                this._bxt.CopyBlit((int)left, (int)top, srcBmp);
+                return;
+            }
+
+            //save, restore later... 
+            bool useSubPix = UseSubPixelLcdEffect;
+            //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+            _aggsx.UseSubPixelRendering = false;
+
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //place left upper corner at specific x y                    
+                this._aggsx.Render(actualBmp, left, this.Height - (top + actualBmp.Height));
+            }
+            else
+            {
+                //left-bottom as original
+                //place left-lower of the img at specific (x,y)
+                this._aggsx.Render(actualBmp, left, top);
+            }
+
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+            _aggsx.UseSubPixelRendering = useSubPix;
+        }
         public override void DrawImage(Image img, double left, double top)
         {
-            ActualBitmap actualImg = img as ActualBitmap;
-            if (actualImg == null)
+            ActualBitmap actualBmp = img as ActualBitmap;
+            if (actualBmp == null)
             {
-                //? TODO
+
+                //test with other bitmap 
                 return;
+            }
+            else
+            {
+                DrawBitmap(actualBmp, left, top);
             }
             //check image caching system 
             //if (this._renderQuality == RenderQualtity.Fast)
@@ -761,29 +798,30 @@ namespace PixelFarm.Agg
             //    return;
             //}
 
-            this.sharedImageWriterReader.ReloadImage(actualImg);
 
-            //save, restore later... 
-            bool useSubPix = UseSubPixelLcdEffect;
-            //before render an image we turn off vxs subpixel rendering
-            this.UseSubPixelLcdEffect = false;
-            _aggsx.UseSubPixelRendering = false;
+            //this._sharedImageWriterReader.ReloadImage(actualBmp);
 
-            if (this._orientation == DrawBoardOrientation.LeftTop)
-            {
-                //place left upper corner at specific x y                    
-                this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
-            }
-            else
-            {
-                //left-bottom as original
-                //place left-lower of the img at specific (x,y)
-                this._aggsx.Render(this.sharedImageWriterReader, left, top);
-            }
+            ////save, restore later... 
+            //bool useSubPix = UseSubPixelLcdEffect;
+            ////before render an image we turn off vxs subpixel rendering
+            //this.UseSubPixelLcdEffect = false;
+            //_aggsx.UseSubPixelRendering = false;
 
-            //restore...
-            this.UseSubPixelLcdEffect = useSubPix;
-            _aggsx.UseSubPixelRendering = useSubPix;
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    //place left upper corner at specific x y                    
+            //    this._aggsx.Render(this._sharedImageWriterReader, left, this.Height - (top + img.Height));
+            //}
+            //else
+            //{
+            //    //left-bottom as original
+            //    //place left-lower of the img at specific (x,y)
+            //    this._aggsx.Render(this._sharedImageWriterReader, left, top);
+            //}
+
+            ////restore...
+            //this.UseSubPixelLcdEffect = useSubPix;
+            //_aggsx.UseSubPixelRendering = useSubPix;
 
 
 
@@ -852,7 +890,7 @@ namespace PixelFarm.Agg
             }
 
 
-            this.sharedImageWriterReader.ReloadImage((ActualBitmap)img);
+            //this._sharedImageWriterReader.ReloadImage((ActualBitmap)img);
 
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
@@ -860,9 +898,9 @@ namespace PixelFarm.Agg
             _aggsx.UseSubPixelRendering = false;
 
 
-            this._aggsx.Render(sharedImageWriterReader, affinePlans);
+            //this._aggsx.Render(_sharedImageWriterReader, affinePlans);
 
-
+            this._aggsx.Render(actualImg, affinePlans);
 
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
