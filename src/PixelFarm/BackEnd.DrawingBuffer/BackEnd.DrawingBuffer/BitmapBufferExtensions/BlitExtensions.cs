@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingBuffer
                 int py = dstY;
 
                 int x;
-                int y;
+
                 int idx;
 
                 int sw = source.PixelWidth;
@@ -187,7 +187,7 @@ namespace PixelFarm.DrawingBuffer
 
                 int cur_srcY = sourceStartY;
 
-                y = py;
+                int y = py;
 
                 for (int j = 0; j < dh; j++)
                 {
@@ -196,8 +196,7 @@ namespace PixelFarm.DrawingBuffer
 
                         idx = px + y * dpw;
                         x = px;
-                        // Scanline BlockCopy is much faster (3.5x) if no tinting and blending is needed,
-                        // even for smaller sprites like the 32x32 particles. 
+
 
                         sourceIdx = sourceStartX + (cur_srcY * sourceWidth);
                         int offset = x < 0 ? -x : 0;
@@ -206,6 +205,12 @@ namespace PixelFarm.DrawingBuffer
                         int len = xx + wx < dpw ? wx : dpw - xx;
                         if (len > sw) len = sw;
                         if (len > dw) len = dw;
+
+
+                        // Scanline BlockCopy is much faster (3.5x) if no tinting and blending is needed,
+                        // even for smaller sprites like the 32x32 particles. 
+
+
                         BitmapContext.BlockCopy(srcContext, (sourceIdx + offset) * 4, destContext, (idx + offset) * 4, len * 4);
                     }
                     cur_srcY += 1;
