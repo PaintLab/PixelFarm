@@ -141,10 +141,11 @@ namespace PixelFarm.Agg.Sample_Draw
     {
 
         Stroke stroke = new Stroke(1);
+        VertexStoreSnap vxsSnap;
 
         public override void Init()
         {
-
+            
         }
         [DemoConfig]
         public bool UseBitmapExt
@@ -236,5 +237,8 @@ namespace PixelFarm.Agg.Sample_Draw
             ////g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
         }
     }
+
+
+
 
 }

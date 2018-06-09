@@ -21,7 +21,7 @@ namespace PixelFarm.DrawingGL
         int height;
 
         int[] rawIntBuffer;
-        //PixelFarm.Drawing.Imaging.NativeImage bmp;
+       
         IntPtr nativeImgMem;
         LazyBitmapBufferProvider lazyProvider;
         bool isInvertImage = false;
