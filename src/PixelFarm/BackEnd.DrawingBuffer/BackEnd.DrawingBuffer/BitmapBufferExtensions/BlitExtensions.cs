@@ -419,7 +419,8 @@ namespace PixelFarm.DrawingBuffer
             int dstY,
             int dstW,
             int dstH,
-            BitmapBuffer source, int srcX, int srcY, int srcW, int srcH,
+            BitmapBuffer source, 
+            int srcX, int srcY, int srcW, int srcH,
             ColorInt color, BlendMode blendMode)
         {
             if (color.A == 0)

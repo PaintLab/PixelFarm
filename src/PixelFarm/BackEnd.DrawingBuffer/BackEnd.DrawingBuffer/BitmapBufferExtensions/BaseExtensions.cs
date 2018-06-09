@@ -25,19 +25,7 @@ namespace PixelFarm.DrawingBuffer
     public static partial class BitmapBufferExtensions
     {
 
-        internal const int ARGB_SIZE = 4;
-
-        //public static int ConvertColor(double opacity, ColorInt color)
-        //{
-        //    if (opacity < 0.0 || opacity > 1.0)
-        //    {
-        //        throw new ArgumentOutOfRangeException("opacity", "Opacity must be between 0.0 and 1.0");
-        //    } 
-        //    color.A = (byte)(color.A * opacity); 
-        //    return ConvertColor(color);
-        //}
-
-
+        internal const int ARGB_SIZE = 4; 
 
         /// <summary>
         /// Fills the whole WriteableBitmap with a color.
