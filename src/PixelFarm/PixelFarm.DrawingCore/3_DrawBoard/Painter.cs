@@ -111,6 +111,7 @@ namespace PixelFarm.Drawing
         internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
 
 
+         
         public abstract PainterExtensions.VectorTool VectorTool { get; }
     }
 
