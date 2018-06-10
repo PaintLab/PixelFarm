@@ -128,6 +128,13 @@ namespace PixelFarm.Agg
         {
             get { return this._aggsx; }
         }
+
+        public BitmapBlenderBase DestBitmapBlender
+        {
+            get { return this._aggsx.DestImage; }
+        }
+
+
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {

@@ -71,6 +71,11 @@ namespace PixelFarm.Agg
         {
             get { return this.destActualImage; }
         }
+        public BitmapBlenderBase DestImage
+        {
+            get { return this.destImageReaderWriter; }
+        }
+
         public ScanlinePacked8 ScanlinePacked8
         {
             get { return this.sclinePack8; }
@@ -86,10 +91,7 @@ namespace PixelFarm.Agg
                 this.destImageReaderWriter.OutputPixelBlender = value;
             }
         }
-        public BitmapBlenderBase DestImage
-        {
-            get { return this.destImageReaderWriter; }
-        }
+       
         public ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
         {
             get { return this.sclineRasToBmp; }

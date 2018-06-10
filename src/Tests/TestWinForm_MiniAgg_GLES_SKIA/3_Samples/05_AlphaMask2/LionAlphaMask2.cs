@@ -608,31 +608,25 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
             }
 
             //
-            AggPainter p2 = (AggPainter)p;
-            p2.Clear(Color.White);
+            AggPainter painter = (AggPainter)p;
+            painter.Clear(Color.White);
 
-            AggRenderSurface aggsx = p2.RenderSurface;
-            BitmapBlenderBase destBmpBlender = aggsx.DestImage;
-            ScanlinePacked8 scline = aggsx.ScanlinePacked8;
-            int width = (int)destBmpBlender.Width;
-            int height = (int)destBmpBlender.Height;
+            int width = painter.Width;
+            int height = painter.Height;
             //change value ***
             if (isMaskSliderValueChanged)
             {
                 SetupMaskPixelBlender(width, height);
                 this.isMaskSliderValueChanged = false;
+                //
+                painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlender; //change to new blender
             }
             //1. alpha mask...
-            //p2.DrawImage(alphaBitmap, 0, 0); 
-
-            PixelBlender32 blender = destBmpBlender.OutputPixelBlender;
-            destBmpBlender.OutputPixelBlender = (maskPixelBlender); //change to new blender
-            ////
-            ////2. 
-            p2.FillColor = Color.Blue;
-            p2.FillCircle(300, 300, 100);
-            p2.DrawImage(lionImg, 20, 20);
-
+            //p2.DrawImage(alphaBitmap, 0, 0);   
+            // 
+            painter.FillColor = Color.Blue;
+            painter.FillCircle(300, 300, 100);
+            painter.DrawImage(lionImg, 20, 20);
 
         }
         public override void MouseDown(int x, int y, bool isRightButton)
