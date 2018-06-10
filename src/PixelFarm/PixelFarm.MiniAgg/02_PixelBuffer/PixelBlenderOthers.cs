@@ -303,20 +303,21 @@ namespace PixelFarm.Agg.Imaging
     /// </summary>
     public class PixelBlenderWithMask : PixelBlender32
     {
-        ActualBitmap _maskImg;
-
+        
+        int[] _maskInnerBuffer;
         public PixelBlenderWithMask()
         {
             //please note that size of mask must be the same size of the dest buffer
         }
-        public void SetMaskImage(ActualBitmap maskImg)
+        public void SetMaskImage(ActualBitmap maskBmp)
         {
-            _maskImg = maskImg;
+           
+            _maskInnerBuffer = ActualBitmap.GetBuffer(maskBmp);
         }
         Color NewColorFromMask(Color srcColor, int arrayOffset)
         {
             //then apply alpha value to the srcColor
-            return srcColor.NewFromChangeCoverage((byte)((ActualBitmap.GetBuffer(_maskImg)[arrayOffset]) >> 16));
+            return srcColor.NewFromChangeCoverage((byte)((_maskInnerBuffer[arrayOffset]) >> 16));
         }
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
@@ -587,5 +588,8 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     }
+
+
+
 
 }
