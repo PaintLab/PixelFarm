@@ -121,15 +121,13 @@ namespace PixelFarm.Agg
         }
         public void Fill(ActualBitmap img, int x, int y)
         {
-            //reuse this? 
-            var imgReadWrite = new MyBitmapBlender(img); 
-            Fill(imgReadWrite, x, y);
+            Fill((IBitmapSrc)img, x, y);
         }
 
 
-        BitmapBlenderBase _destImgRW;
+        IBitmapSrc _destImgRW;
 
-        public void Fill(BitmapBlenderBase bufferToFillOn, int x, int y)
+        public void Fill(IBitmapSrc bufferToFillOn, int x, int y)
         {
             y -= imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number
@@ -141,9 +139,6 @@ namespace PixelFarm.Agg
             }
             _destImgRW = bufferToFillOn;
             TempMemPtr destBufferPtr = bufferToFillOn.GetBufferPtr();
-
-
-
             unsafe
             {
                 imageWidth = bufferToFillOn.Width;
