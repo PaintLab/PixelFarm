@@ -72,9 +72,7 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
-
-        //MyBitmapBlender _sharedImageWriterReader = new MyBitmapBlender();
-
+ 
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
