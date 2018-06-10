@@ -526,10 +526,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
         public override void Init()
         {
         }
-        void GenerateMaskWithWinGdiPlus(int w, int h)
-        {
-
-        }
+        
         void GenAlphaMask(int width, int height)
         {
             //----------
@@ -598,127 +595,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
                 isMaskSliderValueChanged = true;
             }
         }
-        static System.Drawing.Bitmap CreateBackgroundBmp(int w, int h)
-        {
-            //----------------------------------------------------
-            //1. create background bitmap
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);
-            //2. create graphics from bmp
-            System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp);
-            // draw a background to show how the mask is working better
-            g.Clear(System.Drawing.Color.White);
-            int rect_w = 30;
-
-            var v1 = new VertexStore();//todo; use pool
-            for (int i = 0; i < 40; i++)
-            {
-                for (int j = 0; j < 40; j++)
-                {
-                    if ((i + j) % 2 != 0)
-                    {
-                        VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
-                        rect.NormalizeRadius();
-                        // Drawing as an outline
-                        VxsHelper.FillVxsSnap(g, new VertexStoreSnap(rect.MakeVxs(v1)), ColorEx.Make(.9f, .9f, .9f));
-                        v1.Clear();
-                    }
-                }
-            }
-
-            //----------------------------------------------------
-            return bmp;
-        }
-        void DrawWithWinGdi(GdiPlusPainter p)
-        {
-            int w = 800, h = 600;
-            p.Clear(Drawing.Color.White);
-            p.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-            if (isMaskSliderValueChanged)
-            {
-                GenerateMaskWithWinGdiPlus(w, h);
-            }
-
-            using (System.Drawing.Bitmap background = CreateBackgroundBmp(w, h))
-            {
-                p.DrawImage(background, 0, 0);
-            }
-
-            //draw lion on background
-            Affine transform = Affine.NewMatix(
-              AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-              AffinePlan.Scale(lionScale, lionScale),
-              AffinePlan.Rotate(angle + Math.PI),
-              AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-              AffinePlan.Translate(w / 2, h / 2));
-            using (System.Drawing.Bitmap lionBmp = new System.Drawing.Bitmap(w, h))
-            using (System.Drawing.Graphics lionGfx = System.Drawing.Graphics.FromImage(lionBmp))
-            {
-                //lionGfx.Clear(System.Drawing.Color.White);
-                //int n = lionShape.NumPaths;
-                //int[] indexList = lionShape.PathIndexList;
-
-
-                //TODO: review here again
-                throw new NotSupportedException();
-
-                //Color[] colors = lionShape.Colors;
-                ////var lionVxs = lionShape.Path.Vxs;// transform.TransformToVxs(lionShape.Path.Vxs);
-
-                //var lionVxs = new VertexStore();
-                //transform.TransformToVxs(lionShape.Vxs, lionVxs);
-                //for (int i = 0; i < n; ++i)
-                //{
-                //    VxsHelper.FillVxsSnap(lionGfx,
-                //        new VertexStoreSnap(lionVxs, indexList[i]),
-                //        colors[i]);
-                //}
-                //using (var mergeBmp = MergeAlphaChannel(lionBmp, a_alphaBmp))
-                //{
-                //    //gx.InternalGraphics.DrawImage(this.a_alphaBmp, new System.Drawing.PointF(0, 0));
-                //    //gx.InternalGraphics.DrawImage(bmp, new System.Drawing.PointF(0, 0));                      
-                //    p.DrawImage(mergeBmp, 0, 0);
-                //}
-            }
-        }
-        static System.Drawing.Bitmap MergeAlphaChannel(System.Drawing.Bitmap original, System.Drawing.Bitmap alphaChannelBmp)
-        {
-            int w = original.Width;
-            int h = original.Height;
-            System.Drawing.Bitmap resultBmp = new System.Drawing.Bitmap(original);
-            System.Drawing.Imaging.BitmapData resultBmpData = resultBmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, original.PixelFormat);
-            System.Drawing.Imaging.BitmapData alphaBmpData = alphaChannelBmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, alphaChannelBmp.PixelFormat);
-            IntPtr resultScan0 = resultBmpData.Scan0;
-            IntPtr alphaScan0 = alphaBmpData.Scan0;
-            int resultStride = resultBmpData.Stride;
-            int lineByteCount = resultStride;
-            int totalByteCount = lineByteCount * h;
-            unsafe
-            {
-                byte* dest = (byte*)resultScan0;
-                byte* src = (byte*)alphaScan0;
-                for (int i = 0; i < totalByteCount;)
-                {
-                    // *(dest + 3) = 150;
-                    //replace  alpha channel with data from alphaBmpData
-                    byte oldAlpha = *(dest + 3);
-                    byte src_B = *(src); //b
-                    byte src_G = *(src + 1); //g
-                    byte src_R = *(src + 2); //r
-                                             //convert rgb to gray scale: from  this equation...
-                    int y = (src_R * 77) + (src_G * 151) + (src_B * 28);
-                    *(dest + 3) = (byte)(y >> 8);
-                    //*(dest + 3) = (byte)((new_B + new_G + new_R) / 3);
-
-                    dest += 4;
-                    src += 4;
-                    i += 4;
-                }
-            }
-            alphaChannelBmp.UnlockBits(alphaBmpData);
-            resultBmp.UnlockBits(resultBmpData);
-            return resultBmp;
-        }
-
+        
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
         public override void Draw(Painter p)
         {
