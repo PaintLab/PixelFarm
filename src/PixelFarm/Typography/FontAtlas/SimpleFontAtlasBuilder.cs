@@ -87,7 +87,8 @@ namespace Typography.Rendering
                 }
             }
             else
-            {    //3. layout 
+            {
+                //3. layout 
                 int glyphCount = glyphList.Count;
                 for (int i = 0; i < glyphCount; ++i)
                 {
@@ -101,6 +102,7 @@ namespace Typography.Rendering
                         //start new row
                         currentY += maxRowHeight;
                         currentX = 0;
+                        maxRowHeight = 0;//reset, after start new row
                     }
                     //-------------------
                     g.area = new Rectangle(currentX, currentY, g.img.Width, g.img.Height);
