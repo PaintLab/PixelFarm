@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.Sample_Draw
             });
 
             //3.  
-            _font = new RequestFont("tahoma", 14);
+            _font = new RequestFont("tahoma", 10);
             _fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
 
         }

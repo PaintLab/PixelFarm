@@ -11,8 +11,8 @@ namespace Typography.Rendering
 
     public class SimpleFontAtlasBuilder
     {
-        GlyphImage latestGenGlyphImage;
-        Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
+        GlyphImage _latestGenGlyphImage;
+        Dictionary<int, CacheGlyph> _glyphs = new Dictionary<int, CacheGlyph>();
 
         public SimpleFontAtlasBuilder()
         {
@@ -20,7 +20,7 @@ namespace Typography.Rendering
             MaxAtlasWidth = 800;
         }
         public int MaxAtlasWidth { get; set; }
-        
+
         public TextureKind TextureKind { get; private set; }
         public float FontSizeInPoints { get; private set; }
 
@@ -44,7 +44,7 @@ namespace Typography.Rendering
             glyphCache.glyphIndex = glyphIndex;
             glyphCache.img = img;
 
-            glyphs[glyphIndex] = glyphCache;
+            _glyphs[glyphIndex] = glyphCache;
         }
 
         public void SetAtlasInfo(TextureKind textureKind, float fontSizeInPts)
@@ -53,14 +53,13 @@ namespace Typography.Rendering
             this.FontSizeInPoints = fontSizeInPts;
         }
 
-
         public CompactOption SpaceCompactOption { get; set; }
 
         public GlyphImage BuildSingleImage()
         {
             //1. add to list 
-            var glyphList = new List<CacheGlyph>(glyphs.Count);
-            foreach (CacheGlyph glyphImg in glyphs.Values)
+            var glyphList = new List<CacheGlyph>(_glyphs.Count);
+            foreach (CacheGlyph glyphImg in _glyphs.Values)
             {
                 //sort data
                 glyphList.Add(glyphImg);
@@ -185,7 +184,7 @@ namespace Typography.Rendering
                         totalImgWidth = newRect.Right;
                     }
                 }
-            } 
+            }
             // ------------------------------- 
             //4. create array that can hold data  
             int[] totalBuffer = new int[totalImgWidth * imgH];
@@ -214,7 +213,7 @@ namespace Typography.Rendering
 
             GlyphImage glyphImage = new GlyphImage(totalImgWidth, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
-            latestGenGlyphImage = glyphImage;
+            _latestGenGlyphImage = glyphImage;
             return glyphImage;
 
         }
@@ -231,7 +230,7 @@ namespace Typography.Rendering
             XmlElement root = xmldoc.CreateElement("font");
             xmldoc.AppendChild(root);
 
-            if (latestGenGlyphImage == null)
+            if (_latestGenGlyphImage == null)
             {
                 BuildSingleImage();
             }
@@ -239,13 +238,13 @@ namespace Typography.Rendering
             {
                 //total img element
                 XmlElement totalImgElem = xmldoc.CreateElement("total_img");
-                totalImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
-                totalImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
+                totalImgElem.SetAttribute("w", _latestGenGlyphImage.Width.ToString());
+                totalImgElem.SetAttribute("h", _latestGenGlyphImage.Height.ToString());
                 totalImgElem.SetAttribute("compo", "4");
                 root.AppendChild(totalImgElem);
             }
 
-            foreach (CacheGlyph g in glyphs.Values)
+            foreach (CacheGlyph g in _glyphs.Values)
             {
                 XmlElement gElem = xmldoc.CreateElement("glyph");
                 //convert char to hex
@@ -277,7 +276,7 @@ namespace Typography.Rendering
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
             simpleFontAtlas.TextureKind = this.TextureKind;
             simpleFontAtlas.OriginalFontSizePts = this.FontSizeInPoints;
-            foreach (CacheGlyph cacheGlyph in glyphs.Values)
+            foreach (CacheGlyph cacheGlyph in _glyphs.Values)
             {
                 //convert char to hex
                 string unicode = ("0x" + ((int)cacheGlyph.character).ToString("X"));//code point
@@ -362,8 +361,6 @@ namespace Typography.Rendering
                 int.Parse(ltwh[2]),
                 int.Parse(ltwh[3]));
         }
-
-
         static void CopyToDest(int[] srcPixels, int srcW, int srcH, int[] targetPixels, int targetX, int targetY, int totalTargetWidth)
         {
             int srcIndex = 0;
