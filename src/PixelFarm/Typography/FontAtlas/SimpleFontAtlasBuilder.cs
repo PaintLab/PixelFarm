@@ -213,7 +213,10 @@ namespace Typography.Rendering
 
             GlyphImage glyphImage = new GlyphImage(totalImgWidth, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
+            
+
             _latestGenGlyphImage = glyphImage;
+
             return glyphImage;
 
         }

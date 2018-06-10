@@ -121,6 +121,7 @@ namespace PixelFarm.Agg.Sample_Draw
             float acc_y = 0;
 
 
+
             UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
@@ -152,8 +153,24 @@ namespace PixelFarm.Agg.Sample_Draw
 
                 p.RenderQuality = RenderQualtity.Fast;
 
-                //*** the atlas is in inverted form
-                p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - srcY, srcW, srcH);
+                //*** the atlas is inverted so...
+                p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+                //p.DrawImage(_fontBmp, g_x, g_y);
+
+                switch (textureKind)
+                {
+                    default:
+                        break;
+                    case TextureKind.StencilLcdEffect:
+                        {
+                            //how to draw lcd glyph texture
+
+
+
+                        }
+                        break;
+                }
+
 
 
                 //copy some part from the bitmap 
