@@ -530,7 +530,11 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
         void SetupMaskPixelBlender(int width, int height)
         {
             //----------
-            alphaBitmap = new ActualBitmap(width, height);//same size
+            //same size
+            alphaBitmap = new ActualBitmap(width, height);
+            alphaPainter = AggPainter.Create(alphaBitmap);
+
+
             AggRenderSurface alphaRenderSx = new AggRenderSurface(alphaBitmap);
             alphaRenderSx.PixelBlender = new PixelBlenderGrey();
             alphaPainter = new AggPainter(alphaRenderSx);

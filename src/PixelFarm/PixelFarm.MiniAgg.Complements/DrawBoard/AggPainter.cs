@@ -16,39 +16,20 @@ namespace PixelFarm.Agg
         ActualBitmap actualImage;
 
 
-        public MyBitmapBlender(ActualBitmap actualImage)
+        public MyBitmapBlender(ActualBitmap actualImage, PixelBlender32 pxBlender)
         {
             this.actualImage = actualImage;
             Attach(actualImage.Width,
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualBitmap.GetBuffer(actualImage),
-                           new PixelBlenderBGRA()); //set default px blender
+                           pxBlender); //set default px blender
         }
-
-
         public override void ReplaceBuffer(int[] newbuffer)
         {
             ActualBitmap.ReplaceBuffer(actualImage, newbuffer);
         }
-        /// <summary>
-        /// load image to the reader/writer
-        /// </summary>
-        /// <param name="actualImage"></param>
-        public void ReloadImage(ActualBitmap actualImage)
-        {
 
-            if (this.actualImage == actualImage)
-            {
-                return;
-            }
-            this.actualImage = actualImage;
-            Attach(actualImage.Width,
-                           actualImage.Height,
-                           actualImage.BitDepth,
-                           ActualBitmap.GetBuffer(actualImage),
-                           new PixelBlenderBGRA());
-        }
     }
     public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
     {
@@ -115,10 +96,24 @@ namespace PixelFarm.Agg
                 aggsx.Height,
                 PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
             _vectorTool = new VectorTool();
-
-
-
         }
+
+
+        public static AggPainter Create(ActualBitmap bmp, PixelBlender32 blender = null)
+        {
+            //helper func
+
+            AggRenderSurface renderSx = new AggRenderSurface(bmp);
+            if (blender == null)
+            {
+                blender = new PixelBlenderBGRA();
+            }
+            renderSx.PixelBlender = blender;
+
+            return new AggPainter(renderSx);
+        }
+
+
         public override Drawing.PainterExtensions.VectorTool VectorTool
         {
             get { return _vectorTool; }

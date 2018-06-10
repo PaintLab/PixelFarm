@@ -45,7 +45,8 @@ namespace PixelFarm.Agg
             //create from actual image 
             this.destImage = destImage;
             this.destActualImage = destImage;
-            this.destImageReaderWriter = new MyBitmapBlender(destImage);
+
+            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
@@ -56,7 +57,6 @@ namespace PixelFarm.Agg
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this.sclineRas.SetClipBox(this.clipBox);
             this.sclinePack8 = new ScanlinePacked8();
-
         }
 
 
@@ -91,7 +91,7 @@ namespace PixelFarm.Agg
                 this.destImageReaderWriter.OutputPixelBlender = value;
             }
         }
-       
+
         public ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
         {
             get { return this.sclineRasToBmp; }
