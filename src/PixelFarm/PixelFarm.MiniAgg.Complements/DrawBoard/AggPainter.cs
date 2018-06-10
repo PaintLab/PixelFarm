@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
             set
             {
                 _pxBlender = value;
-                SetRecieveBlender(value);
+                SetOutputPixelBlender(value);
             }
         }
 

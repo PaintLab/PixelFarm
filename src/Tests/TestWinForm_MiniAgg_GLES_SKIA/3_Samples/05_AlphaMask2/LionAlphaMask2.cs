@@ -288,8 +288,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
 
             //1. alpha mask...
             //p2.DrawImage(alphaBitmap, 0, 0); 
-            var blender = widgetsSubImage.GetRecieveBlender();
-            widgetsSubImage.SetRecieveBlender(maskPixelBlender);
+            PixelBlender32 blender = widgetsSubImage.GetOutputPixelBlender();
+            widgetsSubImage.SetOutputPixelBlender(maskPixelBlender);
             //
             //2. 
             p2.FillColor = Color.Blue;
@@ -297,7 +297,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
 
             p2.DrawImage(lionImg, 20, 20);
 
-            widgetsSubImage.SetRecieveBlender(blender);
+            widgetsSubImage.SetOutputPixelBlender(blender);
 
 
             //var rasterizer = aggsx.ScanlineRasterizer;
@@ -526,8 +526,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
         public override void Init()
         {
         }
-        
-        void GenAlphaMask(int width, int height)
+
+        void SetupMaskPixelBlender(int width, int height)
         {
             //----------
             alphaBitmap = new ActualBitmap(width, height);//same size
@@ -579,6 +579,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
                 }
             }
             VectorToolBox.ReleaseVxs(ref v1);
+
+
+            maskPixelBlender.SetMaskImage(alphaBitmap);
         }
 
 
@@ -595,33 +598,33 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
                 isMaskSliderValueChanged = true;
             }
         }
-        
+
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
         public override void Draw(Painter p)
         {
             if (p is GdiPlusPainter)
             {
-                //DrawWithWinGdi((GdiPlusPainter)p);
                 return;
             }
+
+            //
             AggPainter p2 = (AggPainter)p;
             p2.Clear(Color.White);
             AggRenderSurface aggsx = p2.RenderSurface;
-            BitmapBlenderBase widgetsSubImage = (BitmapBlenderBase)aggsx.DestImage;
+            BitmapBlenderBase destimg = aggsx.DestImage;
             ScanlinePacked8 scline = aggsx.ScanlinePacked8;
-            int width = (int)widgetsSubImage.Width;
-            int height = (int)widgetsSubImage.Height;
+            int width = (int)destimg.Width;
+            int height = (int)destimg.Height;
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                GenAlphaMask(width, height);
-                this.isMaskSliderValueChanged = false;
-                maskPixelBlender.SetMaskImage(alphaBitmap); 
-            } 
+                SetupMaskPixelBlender(width, height);
+                this.isMaskSliderValueChanged = false;              
+            }
             //1. alpha mask...
             //p2.DrawImage(alphaBitmap, 0, 0); 
-            PixelBlender32 blender = widgetsSubImage.GetRecieveBlender();
-            widgetsSubImage.SetRecieveBlender(maskPixelBlender);
+            PixelBlender32 blender = destimg.GetOutputPixelBlender();
+            destimg.SetOutputPixelBlender(maskPixelBlender); //change to new blender
             ////
             ////2. 
             p2.FillColor = Color.Blue;

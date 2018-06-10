@@ -47,7 +47,7 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
 
-        PixelBlender32 _recvBlender32;
+        PixelBlender32 _outputPxBlender;
 
 
         public int[] GetBuffer32()
@@ -111,7 +111,7 @@ namespace PixelFarm.Agg
             SetDimmensionAndFormat(width, height, stride, bitsPerPixel, bitsPerPixel / 8);
             SetUpLookupTables();
             //
-            SetRecieveBlender(recieveBlender);
+            SetOutputPixelBlender(recieveBlender);
             //
             //this.m_ByteBuffer = imgbuffer;
             this.raw_buffer32 = imgbuffer;
@@ -294,15 +294,15 @@ namespace PixelFarm.Agg
         /// get blender of destination image buffer
         /// </summary>
         /// <returns></returns>
-        public PixelBlender32 GetRecieveBlender()
+        public PixelBlender32 GetOutputPixelBlender()
         {
-            return _recvBlender32;
+            return _outputPxBlender;
         }
         /// <summary>
         /// set pixel blender for destination image buffer
         /// </summary>
         /// <param name="value"></param>
-        public void SetRecieveBlender(PixelBlender32 value)
+        public void SetOutputPixelBlender(PixelBlender32 value)
         {
 
 #if DEBUG
@@ -311,7 +311,7 @@ namespace PixelFarm.Agg
                 throw new NotSupportedException("The blender has to support the bit depth of this image.");
             }
 #endif
-            _recvBlender32 = value;
+            _outputPxBlender = value;
         }
         protected void SetUpLookupTables()
         {
@@ -410,7 +410,7 @@ namespace PixelFarm.Agg
         }
         public Color GetPixel(int x, int y)
         {
-            return _recvBlender32.PixelToColorRGBA(raw_buffer32, GetBufferOffsetXY32(x, y));
+            return _outputPxBlender.PixelToColorRGBA(raw_buffer32, GetBufferOffsetXY32(x, y));
         }
         public int GetByteBufferOffsetXY(int x, int y)
         {
@@ -447,13 +447,13 @@ namespace PixelFarm.Agg
         }
         public void SetPixel(int x, int y, Color color)
         {
-            _recvBlender32.CopyPixel(raw_buffer32, GetBufferOffsetXY32(x, y), color);
+            _outputPxBlender.CopyPixel(raw_buffer32, GetBufferOffsetXY32(x, y), color);
         }
 
         public void CopyHL(int x, int y, int len, Color sourceColor)
         {
 
-            _recvBlender32.CopyPixels(this.raw_buffer32, GetBufferOffsetXY32(x, y), sourceColor, len);
+            _outputPxBlender.CopyPixels(this.raw_buffer32, GetBufferOffsetXY32(x, y), sourceColor, len);
         }
 
         public void CopyVL(int x, int y, int len, Color sourceColor)
@@ -484,7 +484,7 @@ namespace PixelFarm.Agg
             {
                 //full
                 int[] buffer = this.GetBuffer32();
-                _recvBlender32.CopyPixels(buffer, bufferOffset, sourceColor, len);
+                _outputPxBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
 
             }
             else
@@ -494,7 +494,7 @@ namespace PixelFarm.Agg
                 do
                 {
                     //copy pixel-by-pixel
-                    _recvBlender32.BlendPixel(buffer, bufferOffset, c2);
+                    _outputPxBlender.BlendPixel(buffer, bufferOffset, c2);
                     bufferOffset++;
                 }
                 while (--len != 0);
@@ -593,11 +593,11 @@ namespace PixelFarm.Agg
                     int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
                     if (alpha == BASE_MASK)
                     {
-                        _recvBlender32.CopyPixel(buffer, bufferOffset32, sourceColor);
+                        _outputPxBlender.CopyPixel(buffer, bufferOffset32, sourceColor);
                     }
                     else
                     {
-                        _recvBlender32.BlendPixel(buffer, bufferOffset32, Color.FromArgb(alpha, sourceColor));
+                        _outputPxBlender.BlendPixel(buffer, bufferOffset32, Color.FromArgb(alpha, sourceColor));
                     }
 
                     bufferOffset32++;
@@ -624,11 +624,11 @@ namespace PixelFarm.Agg
                         Color newcolor = sourceColor.NewFromChangeCoverage(covers[coversIndex++]);
                         if (newcolor.alpha == BASE_MASK)
                         {
-                            _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, newcolor);
+                            _outputPxBlender.CopyPixel(raw_buffer32, bufferOffset32, newcolor);
                         }
                         else
                         {
-                            _recvBlender32.BlendPixel(raw_buffer32, bufferOffset32, newcolor);
+                            _outputPxBlender.BlendPixel(raw_buffer32, bufferOffset32, newcolor);
                         }
                         bufferOffset32 += actualW;//vertically move to next line ***
                     }
@@ -644,7 +644,7 @@ namespace PixelFarm.Agg
             int bufferOffset32 = GetBufferOffsetXY32(x, y);
             do
             {
-                _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
+                _outputPxBlender.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
                 bufferOffset32++;
             }
@@ -657,7 +657,7 @@ namespace PixelFarm.Agg
             int actualW = strideInBytes / 4;
             do
             {
-                _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
+                _outputPxBlender.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
                 bufferOffset32 += actualW; //vertically move to next line ***
             }
@@ -669,7 +669,7 @@ namespace PixelFarm.Agg
             int bufferOffset32 = GetBufferOffsetXY32Check(x, y);
             if (bufferOffset32 > -1)
             {
-                _recvBlender32.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
+                _outputPxBlender.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
             }
             else
             {
@@ -696,11 +696,11 @@ namespace PixelFarm.Agg
                             int cover = covers[coversIndex++];
                             if (cover == 255)
                             {
-                                _recvBlender32.BlendPixel32(dstBuffer + bufferOffset32, colors[colorsIndex]);
+                                _outputPxBlender.BlendPixel32(dstBuffer + bufferOffset32, colors[colorsIndex]);
                             }
                             else
                             {
-                                _recvBlender32.BlendPixel32(dstBuffer + bufferOffset32, colors[colorsIndex].NewFromChangeCoverage(cover));
+                                _outputPxBlender.BlendPixel32(dstBuffer + bufferOffset32, colors[colorsIndex].NewFromChangeCoverage(cover));
                             }
                             //-----------------------
 
@@ -726,7 +726,7 @@ namespace PixelFarm.Agg
 
                             do
                             {
-                                _recvBlender32.BlendPixel32(destBuffer, colors[colorsIndex]);
+                                _outputPxBlender.BlendPixel32(destBuffer, colors[colorsIndex]);
                                 //CopyOrBlend32_BasedOnAlpha(_recvBlender32, m_ByteBuffer, bufferOffset, colors[colorsIndex]);
                                 //bufferOffset += scanWidthBytes;
                                 ++colorsIndex;
@@ -752,12 +752,12 @@ namespace PixelFarm.Agg
                                 if (cover == 255)
                                 {
                                     //full cover => so use original color
-                                    _recvBlender32.BlendPixel32(head + bufferOffset32, colors[colorsIndex]);
+                                    _outputPxBlender.BlendPixel32(head + bufferOffset32, colors[colorsIndex]);
                                 }
                                 else
                                 {
                                     //not full => use new color (change alpha) 
-                                    _recvBlender32.BlendPixel32(head + bufferOffset32, colors[colorsIndex].NewFromChangeCoverage(cover));
+                                    _outputPxBlender.BlendPixel32(head + bufferOffset32, colors[colorsIndex].NewFromChangeCoverage(cover));
                                 }
                                 //-----------------------
 

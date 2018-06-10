@@ -60,14 +60,14 @@ namespace PixelFarm.Agg.Imaging
             return linkedImage.GetBounds();
         }
 
-        public PixelBlender32 GetRecieveBlender()
+        public PixelBlender32 GetOutputPixelBlender()
         {
-            return linkedImage.GetRecieveBlender();
+            return linkedImage.GetOutputPixelBlender();
         }
 
-        public void SetRecieveBlender(PixelBlender32 value)
+        public void SetOutputPixelBlender(PixelBlender32 value)
         {
-            linkedImage.SetRecieveBlender(value);
+            linkedImage.SetOutputPixelBlender(value);
         }
 
         public virtual Color GetPixel(int x, int y)

@@ -33,7 +33,7 @@ namespace PixelFarm.Agg.Imaging
         int width,
         int height)
         {
-            SetRecieveBlender(image.GetRecieveBlender());
+            SetOutputPixelBlender(image.GetOutputPixelBlender());
             AttachBuffer(image.GetInt32Buffer(),
                 arrayOffset32,
                 width,
@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.Imaging
             int arrayOffset32,
             int bitsPerPixel)
         {
-            SetRecieveBlender(blender);
+            SetOutputPixelBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
         public SubBitmapBlender(IBitmapSrc image, PixelBlender32 blender)
@@ -114,7 +114,7 @@ namespace PixelFarm.Agg.Imaging
             int srcOffset32 = sourceImage.GetByteBufferOffsetXY(0, 0) / 4;
             int[] buffer = sourceImage.GetInt32Buffer();
             SetBuffer(buffer, srcOffset32 + arrayElemOffset);
-            SetRecieveBlender(recieveBlender);
+            SetOutputPixelBlender(recieveBlender);
         }
         //bool Attach(IBitmapBlender sourceImage, int x1, int y1, int x2, int y2)
         //{
