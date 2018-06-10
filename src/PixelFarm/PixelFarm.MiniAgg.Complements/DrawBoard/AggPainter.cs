@@ -14,7 +14,7 @@ namespace PixelFarm.Agg
     class MyBitmapBlender : BitmapBlenderBase
     {
         ActualBitmap actualImage;
-        PixelBlender32 _pxBlender;
+
 
         public MyBitmapBlender(ActualBitmap actualImage)
         {
@@ -23,17 +23,9 @@ namespace PixelFarm.Agg
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualBitmap.GetBuffer(actualImage),
-                          _pxBlender = new PixelBlenderBGRA()); //set default px blender
+                           new PixelBlenderBGRA()); //set default px blender
         }
-        public PixelBlender32 PixelBlender
-        {
-            get { return _pxBlender; }
-            set
-            {
-                _pxBlender = value;
-                SetOutputPixelBlender(value);
-            }
-        }
+
 
         public override void ReplaceBuffer(int[] newbuffer)
         {

@@ -288,8 +288,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
 
             //1. alpha mask...
             //p2.DrawImage(alphaBitmap, 0, 0); 
-            PixelBlender32 blender = widgetsSubImage.GetOutputPixelBlender();
-            widgetsSubImage.SetOutputPixelBlender(maskPixelBlender);
+            PixelBlender32 blender = widgetsSubImage.OutputPixelBlender; //save
+            widgetsSubImage.OutputPixelBlender = maskPixelBlender;
             //
             //2. 
             p2.FillColor = Color.Blue;
@@ -297,7 +297,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
 
             p2.DrawImage(lionImg, 20, 20);
 
-            widgetsSubImage.SetOutputPixelBlender(blender);
+            widgetsSubImage.OutputPixelBlender = blender; //restore
 
 
             //var rasterizer = aggsx.ScanlineRasterizer;
@@ -610,26 +610,30 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
             //
             AggPainter p2 = (AggPainter)p;
             p2.Clear(Color.White);
+
             AggRenderSurface aggsx = p2.RenderSurface;
-            BitmapBlenderBase destimg = aggsx.DestImage;
+            BitmapBlenderBase destBmpBlender = aggsx.DestImage;
             ScanlinePacked8 scline = aggsx.ScanlinePacked8;
-            int width = (int)destimg.Width;
-            int height = (int)destimg.Height;
+            int width = (int)destBmpBlender.Width;
+            int height = (int)destBmpBlender.Height;
             //change value ***
             if (isMaskSliderValueChanged)
             {
                 SetupMaskPixelBlender(width, height);
-                this.isMaskSliderValueChanged = false;              
+                this.isMaskSliderValueChanged = false;
             }
             //1. alpha mask...
             //p2.DrawImage(alphaBitmap, 0, 0); 
-            PixelBlender32 blender = destimg.GetOutputPixelBlender();
-            destimg.SetOutputPixelBlender(maskPixelBlender); //change to new blender
+
+            PixelBlender32 blender = destBmpBlender.OutputPixelBlender;
+            destBmpBlender.OutputPixelBlender = (maskPixelBlender); //change to new blender
             ////
             ////2. 
             p2.FillColor = Color.Blue;
             p2.FillCircle(300, 300, 100);
             p2.DrawImage(lionImg, 20, 20);
+
+
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {

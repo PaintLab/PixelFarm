@@ -30,8 +30,8 @@ namespace PixelFarm.Agg
     public interface IBitmapBlender : IBitmapSrc
     {
         void SetPixel(int x, int y, Color color);
-        PixelBlender32 GetOutputPixelBlender();
-        void SetOutputPixelBlender(PixelBlender32 value);
+        PixelBlender32 OutputPixelBlender { get; set; }
+ 
         //-------------------------------------------------------------------------------------------
         void BlendHL(int x, int y, int x2, Color sourceColor, byte cover); //**
         void BlendVL(int x, int y1, int y2, Color sourceColor, byte cover);

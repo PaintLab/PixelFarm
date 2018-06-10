@@ -59,17 +59,15 @@ namespace PixelFarm.Agg.Imaging
         {
             return linkedImage.GetBounds();
         }
-
-        public PixelBlender32 GetOutputPixelBlender()
+        public PixelBlender32 OutputPixelBlender
         {
-            return linkedImage.GetOutputPixelBlender();
+            get { return linkedImage.OutputPixelBlender; }
+            set
+            {
+                linkedImage.OutputPixelBlender = value;
+            }
         }
-
-        public void SetOutputPixelBlender(PixelBlender32 value)
-        {
-            linkedImage.SetOutputPixelBlender(value);
-        }
-
+         
         public virtual Color GetPixel(int x, int y)
         {
             return linkedImage.GetPixel(x, y);
@@ -159,7 +157,7 @@ namespace PixelFarm.Agg.Imaging
         {
             return linkedImage.GetBufferOffsetXY32(x, y);
         }
-         
+
 
         public virtual int BytesBetweenPixelsInclusive
         {

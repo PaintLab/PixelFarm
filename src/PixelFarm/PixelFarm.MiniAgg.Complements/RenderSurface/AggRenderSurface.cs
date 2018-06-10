@@ -79,11 +79,11 @@ namespace PixelFarm.Agg
         {
             get
             {
-                return this.destImageReaderWriter.PixelBlender;
+                return this.destImageReaderWriter.OutputPixelBlender;
             }
             set
             {
-                this.destImageReaderWriter.PixelBlender = value;
+                this.destImageReaderWriter.OutputPixelBlender = value;
             }
         }
         public BitmapBlenderBase DestImage

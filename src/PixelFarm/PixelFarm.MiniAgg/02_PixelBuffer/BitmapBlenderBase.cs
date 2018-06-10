@@ -83,8 +83,8 @@ namespace PixelFarm.Agg
         /// <param name="height"></param>
         /// <param name="bitsPerPixel"></param>
         /// <param name="imgbuffer"></param>
-        /// <param name="recieveBlender"></param>
-        protected void Attach(int width, int height, int bitsPerPixel, int[] imgbuffer, PixelBlender32 recieveBlender)
+        /// <param name="outputPxBlender"></param>
+        protected void Attach(int width, int height, int bitsPerPixel, int[] imgbuffer, PixelBlender32 outputPxBlender)
         {
 
 
@@ -111,7 +111,8 @@ namespace PixelFarm.Agg
             SetDimmensionAndFormat(width, height, stride, bitsPerPixel, bitsPerPixel / 8);
             SetUpLookupTables();
             //
-            SetOutputPixelBlender(recieveBlender);
+             
+            this.OutputPixelBlender = outputPxBlender;
             //
             //this.m_ByteBuffer = imgbuffer;
             this.raw_buffer32 = imgbuffer;
@@ -291,28 +292,24 @@ namespace PixelFarm.Agg
         }
 
         /// <summary>
-        /// get blender of destination image buffer
+        /// get, set blender of destination image buffer
         /// </summary>
         /// <returns></returns>
-        public PixelBlender32 GetOutputPixelBlender()
+        public PixelBlender32 OutputPixelBlender
         {
-            return _outputPxBlender;
-        }
-        /// <summary>
-        /// set pixel blender for destination image buffer
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetOutputPixelBlender(PixelBlender32 value)
-        {
-
-#if DEBUG
-            if (BitDepth != 0 && value != null && value.NumPixelBits != BitDepth)
+            get { return _outputPxBlender; }
+            set
             {
-                throw new NotSupportedException("The blender has to support the bit depth of this image.");
-            }
+#if DEBUG
+                if (BitDepth != 0 && value != null && value.NumPixelBits != BitDepth)
+                {
+                    throw new NotSupportedException("The blender has to support the bit depth of this image.");
+                }
 #endif
-            _outputPxBlender = value;
+                _outputPxBlender = value;
+            }
         }
+
         protected void SetUpLookupTables()
         {
             yTableArray = new int[height];
@@ -440,7 +437,7 @@ namespace PixelFarm.Agg
             }
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
-      
+
         public int GetBufferOffsetXY32(int x, int y)
         {
             return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
