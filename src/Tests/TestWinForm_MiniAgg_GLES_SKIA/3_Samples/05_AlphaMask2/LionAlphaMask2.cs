@@ -10,7 +10,7 @@ using Mini;
 using PixelFarm.Drawing.WinGdi;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg.Sample_LionAlphaMask2
+namespace PixelFarm.Agg.Sample_LionAlphaMask
 {
     [Info(OrderCode = "05")]
     [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
@@ -487,10 +487,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         double skewX = 0;
         double skewY = 0;
         bool isMaskSliderValueChanged = true;
-        SubBitmapBlender alphaMaskImageBuffer;
-        //IAlphaMask alphaMask;
-        System.Drawing.Bitmap a_alphaBmp;
+
         ActualBitmap lionImg;
+        AggPainter alphaPainter;
 
         public LionAlphaMask3()
         {
@@ -531,14 +530,15 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         {
 
         }
-        void GenAlphaMask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
+        void GenAlphaMask(int width, int height)
         {
-
-            alphaBitmap = new ActualBitmap(width, height);
-            alphaMaskImageBuffer = new SubBitmapBlender(alphaBitmap, new PixelBlenderGrey());
-            //
-            ClipProxyImage clippingProxy = new ClipProxyImage(alphaMaskImageBuffer);
-            clippingProxy.Clear(Drawing.Color.Black);
+            //----------
+            alphaBitmap = new ActualBitmap(width, height);//same size
+            AggRenderSurface alphaRenderSx = new AggRenderSurface(alphaBitmap);
+            alphaRenderSx.PixelBlender = new PixelBlenderGrey();
+            alphaPainter = new AggPainter(alphaRenderSx);
+            alphaPainter.Clear(Color.Black);
+            //------------ 
 
             System.Random randGenerator = new Random(1432);
             int i;
@@ -554,19 +554,19 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
                 if (i == num - 1)
                 {
-                    ////for the last one
-
+                    ////for the last one 
                     ellipseForMask.Reset(Width / 2, (Height / 2) - 90, 110, 110, elliseFlattenStep);
-                    rasterizer.Reset();
-                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
+                    ellipseForMask.MakeVertexSnap(v1);
+                    alphaPainter.FillColor = new Color(255, 255, 255, 0);
+                    alphaPainter.Fill(v1);
                     v1.Clear();
-                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 255, 0));
-
+                    //
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, elliseFlattenStep);
-                    rasterizer.Reset();
-                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
+                    ellipseForMask.MakeVertexSnap(v1);
+                    alphaPainter.FillColor = new Color(255, 255, 0, 0);
+                    alphaPainter.Fill(v1);
                     v1.Clear();
-                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 0, 0));
+                    //
                 }
                 else
                 {
@@ -575,17 +575,10 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                              randGenerator.Next() % 100 + 20,
                              randGenerator.Next() % 100 + 20,
                              elliseFlattenStep);
-                    // ellipseForMask.Reset(Width / 2, Height / 2, 150, 150, 100);
-
-                    // set the color to draw into the alpha channel.
-                    // there is not very much reason to set the alpha as you will get the amount of 
-                    // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-
-                    rasterizer.Reset();
-                    rasterizer.AddPath(ellipseForMask.MakeVxs(v1));
+                    ellipseForMask.MakeVertexSnap(v1);
+                    alphaPainter.FillColor = new Color(255, 255, 0, 0);
+                    alphaPainter.Fill(v1);
                     v1.Clear();
-                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 0, 0));
-                    //ColorEx.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
             VectorToolBox.ReleaseVxs(ref v1);
@@ -744,180 +737,19 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                GenAlphaMask(aggsx.ScanlineRasToDestBitmap, aggsx.ScanlinePacked8, aggsx.ScanlineRasterizer, width, height);
+                GenAlphaMask(width, height);
                 this.isMaskSliderValueChanged = false;
-                maskPixelBlender.SetMaskImage(alphaBitmap);
-
-            }
-
+                maskPixelBlender.SetMaskImage(alphaBitmap); 
+            } 
             //1. alpha mask...
             //p2.DrawImage(alphaBitmap, 0, 0); 
-            var blender = widgetsSubImage.GetRecieveBlender();
+            PixelBlender32 blender = widgetsSubImage.GetRecieveBlender();
             widgetsSubImage.SetRecieveBlender(maskPixelBlender);
-            //
-            //2. 
+            ////
+            ////2. 
             p2.FillColor = Color.Blue;
             p2.FillCircle(300, 300, 100);
-
             p2.DrawImage(lionImg, 20, 20);
-
-            widgetsSubImage.SetRecieveBlender(blender);
-
-
-            //var rasterizer = aggsx.ScanlineRasterizer;
-            //rasterizer.SetClipBox(0, 0, width, height);
-            ////alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
-
-            //PixelFarm.Agg.Imaging.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Imaging.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
-            //ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
-            //ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
-            //////Affine transform = Affine.NewIdentity();
-            //////transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-            //////transform *= Affine.NewScaling(lionScale, lionScale);
-            //////transform *= Affine.NewRotation(angle + Math.PI);
-            //////transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-            //////transform *= Affine.NewTranslation(Width / 2, Height / 2);
-            //Affine transform = Affine.NewMatix(
-            //        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-            //        AffinePlan.Scale(lionScale, lionScale),
-            //        AffinePlan.Rotate(angle + Math.PI),
-            //        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-            //        AffinePlan.Translate(width / 2, height / 2));
-            //clippingProxy.Clear(Drawing.Color.White);
-            //ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
-            //// draw a background to show how the mask is working better
-            //int rect_w = 30;
-
-            //VectorToolBox.GetFreeVxs(out var v1);
-            //for (int i = 0; i < 40; i++)
-            //{
-            //    for (int j = 0; j < 40; j++)
-            //    {
-            //        if ((i + j) % 2 != 0)
-            //        {
-            //            VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
-            //            rect.NormalizeRadius(); 
-            //            rasterizer.AddPath(rect.MakeVxs(v1));
-            //            v1.Clear();
-            //            sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, ColorEx.Make(.9f, .9f, .9f));
-            //        }
-            //    }
-            //}
-            //VectorToolBox.ReleaseVxs(ref v1);
-
-            ////int x, y; 
-            //// Render the lion
-            ////VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-
-            ////var vxlist = new System.Collections.Generic.List<VertexData>();
-            ////trans.DoTransform(vxlist); 
-
-            //var tmpVxs1 = new VertexStore();
-            //lionShape.ApplyTransform(transform);
-
-
-            //for (int i = 0; i < num_paths; ++i)
-            //{
-            //    rasterizer.Reset();
-            //    rasterizer.AddPath(new VertexStoreSnap(vxs, path_id[i]));
-            //    sclineRasToBmp.RenderWithColor(destImage, sclineRas, scline, colors[i]);
-            //}
-
-            //sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
-            //       rasterizer,
-            //       scline,
-            //       tmpVxs1,
-            //       lionShape.Colors,
-            //       lionShape.PathIndexList,
-            //       lionShape.NumPaths);
-
-            ///*
-            //// Render random Bresenham lines and markers
-            //agg::renderer_markers<amask_ren_type> m(r);
-            //for(i = 0; i < 50; i++)
-            //{
-            //    m.line_color(agg::rgba8(randGenerator.Next() & 0x7F, 
-            //                            randGenerator.Next() & 0x7F, 
-            //                            randGenerator.Next() & 0x7F, 
-            //                            (randGenerator.Next() & 0x7F) + 0x7F)); 
-            //    m.fill_color(agg::rgba8(randGenerator.Next() & 0x7F, 
-            //                            randGenerator.Next() & 0x7F, 
-            //                            randGenerator.Next() & 0x7F, 
-            //                            (randGenerator.Next() & 0x7F) + 0x7F));
-
-            //    m.line(m.coord(randGenerator.Next() % width), m.coord(randGenerator.Next() % height), 
-            //           m.coord(randGenerator.Next() % width), m.coord(randGenerator.Next() % height));
-
-            //    m.marker(randGenerator.Next() % width, randGenerator.Next() % height, randGenerator.Next() % 10 + 5,
-            //             agg::marker_e(randGenerator.Next() % agg::end_of_markers));
-            //}
-
-
-            //// Render random anti-aliased lines
-            //double w = 5.0;
-            //agg::line_profile_aa profile;
-            //profile.width(w);
-
-            //typedef agg::renderer_outline_aa<amask_ren_type> renderer_type;
-            //renderer_type ren(r, profile);
-
-            //typedef agg::rasterizer_outline_aa<renderer_type> rasterizer_type;
-            //rasterizer_type ras(ren);
-            //ras.round_cap(true);
-
-            //for(i = 0; i < 50; i++)
-            //{
-            //    ren.Color = agg::rgba8(randGenerator.Next() & 0x7F, 
-            //                         randGenerator.Next() & 0x7F, 
-            //                         randGenerator.Next() & 0x7F, 
-            //                         //255));
-            //                         (randGenerator.Next() & 0x7F) + 0x7F); 
-            //    ras.move_to_d(randGenerator.Next() % width, randGenerator.Next() % height);
-            //    ras.line_to_d(randGenerator.Next() % width, randGenerator.Next() % height);
-            //    ras.render(false);
-            //}
-
-
-            //// Render random circles with gradient
-            //typedef agg::gradient_linear_color<color_type> grad_color;
-            //typedef agg::gradient_circle grad_func;
-            //typedef agg::span_interpolator_linear<> interpolator_type;
-            //typedef agg::span_gradient<color_type, 
-            //                          interpolator_type, 
-            //                          grad_func, 
-            //                          grad_color> span_grad_type;
-
-            //agg::trans_affine grm;
-            //grad_func grf;
-            //grad_color grc(agg::rgba8(0,0,0), agg::rgba8(0,0,0));
-            //agg::ellipse ell;
-            //agg::span_allocator<color_type> sa;
-            //interpolator_type inter(grm);
-            //span_grad_type sg(inter, grf, grc, 0, 10);
-            //agg::renderer_scanline_aa<amask_ren_type, 
-            //                          agg::span_allocator<color_type>,
-            //                          span_grad_type> rg(r, sa, sg);
-            //for(i = 0; i < 50; i++)
-            //{
-            //    x = randGenerator.Next() % width;
-            //    y = randGenerator.Next() % height;
-            //    double r = randGenerator.Next() % 10 + 5;
-            //    grm.reset();
-            //    grm *= agg::trans_affine_scaling(r / 10.0);
-            //    grm *= agg::trans_affine_translation(x, y);
-            //    grm.invert();
-            //    grc.colors(agg::rgba8(255, 255, 255, 0),
-            //               agg::rgba8(randGenerator.Next() & 0x7F, 
-            //                          randGenerator.Next() & 0x7F, 
-            //                          randGenerator.Next() & 0x7F, 
-            //                          255));
-            //    sg.color_function(grc);
-            //    ell.init(x, y, r, r, 32);
-            //    g_rasterizer.add_path(ell);
-            //    agg::render_scanlines(g_rasterizer, g_scanline, rg);
-            //}
-            // */
-            ////m_num_cb.Render(g_rasterizer, g_scanline, clippingProxy); 
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {
