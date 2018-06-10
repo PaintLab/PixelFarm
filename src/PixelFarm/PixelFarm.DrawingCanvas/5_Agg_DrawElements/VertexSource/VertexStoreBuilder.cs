@@ -24,14 +24,14 @@ namespace PixelFarm.Agg
 {
     public static class VertexStoreBuilder
     {
-        public static VertexStore CreateVxs(IEnumerable<VertexData> iter, VertexStore vxs)
+        public static VertexStore CreateVxs(IEnumerable<VertexData> iter, VertexStore output)
         {
 
             foreach (VertexData v in iter)
             {
-                vxs.AddVertex(v.x, v.y, v.command);
+                output.AddVertex(v.x, v.y, v.command);
             }
-            return vxs;
+            return output;
         }
     }
 }
