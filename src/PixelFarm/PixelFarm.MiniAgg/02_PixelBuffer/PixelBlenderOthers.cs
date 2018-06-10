@@ -266,7 +266,7 @@ namespace PixelFarm.Agg.Imaging
             unchecked
             {
 
-                //calculate new grey-scale color
+                //convert srcColor to grey-scale image
                 byte y = (byte)(((srcColor.red * 77) + (srcColor.green * 151) + (srcColor.blue * 28)) >> 8);
                 srcColor = new Color(srcColor.alpha, y, y, y);
 
@@ -304,10 +304,18 @@ namespace PixelFarm.Agg.Imaging
     public class PixelBlenderWithMask : PixelBlender32
     {
 
+        public enum ColorComponent
+        {
+            A, //24
+            R, //16
+            G, //8
+            B  //0
+        }
+
         int[] _maskInnerBuffer;
+        int _mask_shift = 16;//default
         public PixelBlenderWithMask()
         {
-
         }
         /// <summary>
         /// set mask image, please note that size of mask must be the same size of the dest buffer
@@ -315,13 +323,32 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="maskBmp"></param>
         public void SetMaskImage(ActualBitmap maskBmp)
         {
+            //please note that size of mask must be the same size of the dest buffer
 
             _maskInnerBuffer = ActualBitmap.GetBuffer(maskBmp);
         }
+        public void UseMaskDataFromColorComponent(ColorComponent colorComponent)
+        {
+            switch (colorComponent)
+            {
+                default: throw new NotSupportedException();
+                case ColorComponent.A:
+                    _mask_shift = 24;
+                    break;
+                case ColorComponent.R:
+                    _mask_shift = 16;
+                    break;
+                case ColorComponent.G:
+                    _mask_shift = 8;
+                    break;
+                case ColorComponent.B:
+                    _mask_shift = 0;
+                    break;
+            }
+        }
         Color NewColorFromMask(Color srcColor, int arrayOffset)
         {
-            //then apply alpha value to the srcColor
-            return srcColor.NewFromChangeCoverage((byte)((_maskInnerBuffer[arrayOffset]) >> 16));
+            return srcColor.NewFromChangeCoverage((byte)((_maskInnerBuffer[arrayOffset]) >> _mask_shift));
         }
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
