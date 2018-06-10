@@ -783,6 +783,62 @@ namespace PixelFarm.Agg
             this.UseSubPixelLcdEffect = useSubPix;
             _aggsx.UseSubPixelRendering = useSubPix;
         }
+        void DrawBitmap(ActualBitmap actualBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            //check image caching system 
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
+                try
+                {
+                    DrawingBuffer.RectD src = new DrawingBuffer.RectD(srcX, srcY, srcW, srcH);
+                    DrawingBuffer.RectD dest = new DrawingBuffer.RectD(left, top, srcW, srcH);
+                    DrawingBuffer.BitmapBuffer bmpBuffer = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
+                    this._bxt.CopyBlit(dest, bmpBuffer, src);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                return;
+            }
+
+            //save, restore later... 
+            bool useSubPix = UseSubPixelLcdEffect;
+            //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+            _aggsx.UseSubPixelRendering = false;
+
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //place left upper corner at specific x y                    
+                this._aggsx.Render(actualBmp, left, this.Height - (top + actualBmp.Height));
+            }
+            else
+            {
+                //left-bottom as original
+                //place left-lower of the img at specific (x,y)
+                this._aggsx.Render(actualBmp, left, top);
+            }
+
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+            _aggsx.UseSubPixelRendering = useSubPix;
+        }
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            ActualBitmap actualBmp = actualImage as ActualBitmap;
+            if (actualBmp == null)
+            {
+                //test with other bitmap 
+                return;
+            }
+            else
+            {
+                DrawBitmap(actualBmp, left, top, srcX, srcY, srcW, srcH);
+            }
+        }
         public override void DrawImage(Image img, double left, double top)
         {
             ActualBitmap actualBmp = img as ActualBitmap;

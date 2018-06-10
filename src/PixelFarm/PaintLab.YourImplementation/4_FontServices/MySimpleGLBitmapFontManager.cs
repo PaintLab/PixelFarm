@@ -15,16 +15,14 @@ using PixelFarm.Platforms;
 
 namespace PixelFarm.DrawingGL
 {
+
     class MySimpleGLBitmapFontManager
     {
         static GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
         static Dictionary<int, SimpleFontAtlas> _createdAtlases = new Dictionary<int, SimpleFontAtlas>();
 
         LayoutFarm.OpenFontTextService textServices;
-
         ScriptLang[] _currentScriptLangs;
-
-
         TextureKind _textureKind;
         public MySimpleGLBitmapFontManager(TextureKind textureKind, LayoutFarm.OpenFontTextService textServices)
         {
@@ -48,10 +46,8 @@ namespace PixelFarm.DrawingGL
             this._currentScriptLangs = currentScriptLangs;
 
             //TODO: review here again,
-            //this is a fixed version for tahoma font
-
-            //temp fix here
-
+            //this is a fixed version for tahoma font 
+            //temp fix here 
             _textureBuildDetails = new GlyphTextureBuildDetail[]
             {
                 new GlyphTextureBuildDetail{ ScriptLang= ScriptLangs.Latin, DoFilter= false, HintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly },

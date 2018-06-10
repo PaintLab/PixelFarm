@@ -73,6 +73,7 @@ namespace PixelFarm.Drawing
         /// <param name="left"></param>
         /// <param name="top"></param>
         public abstract void DrawImage(Image actualImage, double left, double top);
+        public abstract void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH);
         public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
@@ -83,7 +84,7 @@ namespace PixelFarm.Drawing
         public abstract void Fill(VertexStoreSnap snap);
         public abstract void Fill(VertexStore vxs);
 
-     
+
         public abstract void Draw(VertexStore vxs);
         public abstract void Draw(VertexStoreSnap vxs);
         public abstract RenderVx CreateRenderVx(VertexStoreSnap snap);

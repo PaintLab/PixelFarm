@@ -10,10 +10,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
-using Typography.TextServices;
 using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
-
 
 
 namespace PixelFarm.DrawingGL
@@ -551,6 +548,8 @@ namespace PixelFarm.DrawingGL
             _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
 
         }
+
+
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
             _glsx.LoadTexture1(_glBmp);

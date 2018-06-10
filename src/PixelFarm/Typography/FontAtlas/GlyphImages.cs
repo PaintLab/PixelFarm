@@ -63,6 +63,9 @@ namespace Typography.Rendering
         }
     }
 
+
+
+
     public class CacheGlyph
     {
         public int borderX;
@@ -102,6 +105,13 @@ namespace Typography.Rendering
         {
             get;
             set;
+        }
+        public void GetGlyphRect(out int x, out int y, out int w, out int h)
+        {
+            x = Rect.X;
+            y = Rect.Y;
+            w = Rect.Width;
+            h = Rect.Height;
         }
 
     }
