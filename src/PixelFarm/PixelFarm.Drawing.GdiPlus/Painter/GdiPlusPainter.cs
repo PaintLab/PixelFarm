@@ -509,7 +509,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
         }
-
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            throw new NotImplementedException();
+        }
 
         //VertexStorePool _vxsPool = new VertexStorePool();
         //VertexStore GetFreeVxs()

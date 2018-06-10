@@ -15,7 +15,6 @@ namespace OpenTkEssTest
         bool resInit;
         GLBitmap msdf_bmp;
         GLPainter painter;
-        PixelFarm.Agg.ActualBitmap totalImg;
         SimpleFontAtlas fontAtlas;
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)

@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\GLDemoContextWinForm.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />
     <Compile Include="3_Samples\02_AA_Demo\Lines.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
@@ -264,6 +265,10 @@
     <ProjectReference Include="..\..\PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
       <Name>BackEnd.TypeMirror</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
