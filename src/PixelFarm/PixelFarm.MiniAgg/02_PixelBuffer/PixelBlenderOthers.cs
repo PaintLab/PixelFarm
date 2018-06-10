@@ -303,15 +303,19 @@ namespace PixelFarm.Agg.Imaging
     /// </summary>
     public class PixelBlenderWithMask : PixelBlender32
     {
-        
+
         int[] _maskInnerBuffer;
         public PixelBlenderWithMask()
         {
-            //please note that size of mask must be the same size of the dest buffer
+
         }
+        /// <summary>
+        /// set mask image, please note that size of mask must be the same size of the dest buffer
+        /// </summary>
+        /// <param name="maskBmp"></param>
         public void SetMaskImage(ActualBitmap maskBmp)
         {
-           
+
             _maskInnerBuffer = ActualBitmap.GetBuffer(maskBmp);
         }
         Color NewColorFromMask(Color srcColor, int arrayOffset)
