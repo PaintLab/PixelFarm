@@ -111,7 +111,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="reqFont"></param>
         /// <returns></returns>
-        public SimpleFontAtlas GetFontAtlas(RequestFont reqFont, out B glBmp)
+        public SimpleFontAtlas GetFontAtlas(RequestFont reqFont, out B outputBitmap)
         {
 
 #if DEBUG
@@ -240,7 +240,7 @@ namespace Typography.Rendering
                 }
             }
 
-            glBmp = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
+            outputBitmap = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
             return fontAtlas;
         }
 
