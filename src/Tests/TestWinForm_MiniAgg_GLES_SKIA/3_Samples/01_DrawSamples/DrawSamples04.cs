@@ -80,7 +80,7 @@ namespace PixelFarm.Agg.Sample_Draw
         ActualBitmap _stencilBmp;
         SubBitmapBlender _stencilBlender;
         AggPainter _backPainter;
-        AggRenderSurface _aggRenderSx;
+
 
         public void DrawString(Painter p, string text, double x, double y)
         {
@@ -97,9 +97,8 @@ namespace PixelFarm.Agg.Sample_Draw
             {
                 //create a stencil bmp
                 _stencilBmp = new ActualBitmap(p.Width, p.Height);
-                _stencilBlender = new SubBitmapBlender(_stencilBmp, new PixelBlenderBGRA());
-                _aggRenderSx = new AggRenderSurface(_stencilBmp);
-                _backPainter = new AggPainter(_aggRenderSx);
+                _stencilBlender = new SubBitmapBlender(_stencilBmp, new PixelBlenderBGRA());                 
+                _backPainter = AggPainter.Create(_stencilBmp);
                 //------
             }
 

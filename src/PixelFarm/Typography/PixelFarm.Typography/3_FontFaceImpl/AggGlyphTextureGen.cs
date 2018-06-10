@@ -74,8 +74,7 @@ namespace Typography.Rendering
             h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin 
 
             ActualBitmap img = new ActualBitmap(w, h);
-            AggRenderSurface aggsx = new AggRenderSurface(img);
-            AggPainter painter = new AggPainter(aggsx);
+            AggPainter painter = AggPainter.Create(img);
 
             if (TextureKind == TextureKind.StencilLcdEffect)
             {
