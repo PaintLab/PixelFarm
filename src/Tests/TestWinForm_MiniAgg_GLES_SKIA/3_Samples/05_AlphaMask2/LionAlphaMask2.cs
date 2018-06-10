@@ -16,7 +16,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
 
     [Info(OrderCode = "05")]
     [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
-    public class LionAlphaMask3 : DemoBase
+    public class LionAlphaMask2 : DemoBase
     {
         int maskAlphaSliderValue = 100;
 
@@ -30,7 +30,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
         ActualBitmap lionImg;
         ActualBitmap alphaBitmap;
 
-        public LionAlphaMask3()
+        public LionAlphaMask2()
         {
 
             string imgFileName = "Data/lion1.png";

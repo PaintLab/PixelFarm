@@ -64,7 +64,7 @@
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2_and_3.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\21_HandPaint\MyBrushPath.cs" />
     <Compile Include="3_Samples\21_HandPaint\SmoothBrush2.cs" />
