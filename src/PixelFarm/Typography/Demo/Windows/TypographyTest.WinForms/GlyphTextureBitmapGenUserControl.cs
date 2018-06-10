@@ -25,6 +25,15 @@ namespace TypographyTest.WinForms
             _glyphTextureBitmapController = new GlyphTextureBitmapGenerator();
             SelectedScriptLangs = new List<Typography.OpenFont.ScriptLang>();
             FontSizeInPoints = 18;//default
+
+            //-
+            this.cmbSpaceCompactOption.Items.AddRange(
+                new object[] {
+                    SimpleFontAtlasBuilder.CompactOption.None,
+                    SimpleFontAtlasBuilder.CompactOption.ArrangeByHeight,
+                    SimpleFontAtlasBuilder.CompactOption.BinPack,
+                });
+            this.cmbSpaceCompactOption.SelectedIndex = 0;//default
         }
         public float FontSizeInPoints { get; set; }
         public Typography.OpenFont.Typeface SelectedTypeface
@@ -218,7 +227,7 @@ namespace TypographyTest.WinForms
                {
                    if (atlasBuilder != null)
                    {
-                       atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
+                       atlasBuilder.SpaceCompactOption = (SimpleFontAtlasBuilder.CompactOption)cmbSpaceCompactOption.SelectedValue;
                        GlyphImage totalGlyphs = atlasBuilder.BuildSingleImage();
                        SaveImgBufferToFile(totalGlyphs, bitmapImgSaveFileName + ".png");
 
@@ -270,7 +279,7 @@ namespace TypographyTest.WinForms
               {
                   if (atlasBuilder != null)
                   {
-                      atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
+                      atlasBuilder.SpaceCompactOption = (SimpleFontAtlasBuilder.CompactOption)cmbSpaceCompactOption.SelectedValue;
                       GlyphImage totalGlyphs = atlasBuilder.BuildSingleImage();
                       //
                       SaveImgBufferToFile(totalGlyphs, bitmapImgSaveFileName + ".png");
