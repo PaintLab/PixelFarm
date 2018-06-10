@@ -12,7 +12,6 @@ using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;
 using Typography.OpenFont;
 
-
 namespace PixelFarm.DrawingGL
 {
 
@@ -156,53 +155,7 @@ namespace PixelFarm.DrawingGL
             throw new NotImplementedException();
         }
     }
-
-
-    delegate GLBitmap LoadNewGLBitmapDel<T>(T src);
-
-    class GLBitmapCache<T> : IDisposable
-    {
-        Dictionary<T, GLBitmap> _loadedGLBmps = new Dictionary<T, GLBitmap>();
-        LoadNewGLBitmapDel<T> _loadNewGLBmpDel;
-        public GLBitmapCache(LoadNewGLBitmapDel<T> loadNewGLBmpDel)
-        {
-            _loadNewGLBmpDel = loadNewGLBmpDel;
-        }
-        public GLBitmap GetOrCreateNewOne(T key)
-        {
-            GLBitmap found;
-            if (!_loadedGLBmps.TryGetValue(key, out found))
-            {
-
-                return _loadedGLBmps[key] = _loadNewGLBmpDel(key);
-            }
-            return found;
-        }
-        public void Dispose()
-        {
-            Clear();
-        }
-        public void Clear()
-        {
-            foreach (GLBitmap glbmp in _loadedGLBmps.Values)
-            {
-                glbmp.Dispose();
-            }
-            _loadedGLBmps.Clear();
-        }
-        public void Delete(T key)
-        {
-            GLBitmap found;
-            if (_loadedGLBmps.TryGetValue(key, out found))
-            {
-                found.Dispose();
-                _loadedGLBmps.Remove(key);
-            }
-        }
-    }
-
-
-
+     
 
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
