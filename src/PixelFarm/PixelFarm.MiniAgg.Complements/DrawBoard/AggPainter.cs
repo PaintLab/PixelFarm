@@ -14,10 +14,8 @@ namespace PixelFarm.Agg
     class MyBitmapBlender : BitmapBlenderBase
     {
         ActualBitmap actualImage;
-        public MyBitmapBlender()
-        {
+        PixelBlender32 _pxBlender;
 
-        }
         public MyBitmapBlender(ActualBitmap actualImage)
         {
             this.actualImage = actualImage;
@@ -25,8 +23,18 @@ namespace PixelFarm.Agg
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualBitmap.GetBuffer(actualImage),
-                           new PixelBlenderBGRA());
+                          _pxBlender = new PixelBlenderBGRA()); //set default px blender
         }
+        public PixelBlender32 PixelBlender
+        {
+            get { return _pxBlender; }
+            set
+            {
+                _pxBlender = value;
+                SetRecieveBlender(value);
+            }
+        }
+
         public override void ReplaceBuffer(int[] newbuffer)
         {
             ActualBitmap.ReplaceBuffer(actualImage, newbuffer);
@@ -114,9 +122,10 @@ namespace PixelFarm.Agg
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
                 PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
-
-
             _vectorTool = new VectorTool();
+
+
+
         }
         public override Drawing.PainterExtensions.VectorTool VectorTool
         {
