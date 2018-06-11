@@ -207,8 +207,11 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
             //painter.DrawImage(lionImg, 20, 20);
 
 
+
             //4.
             painter.FillColor = Color.Black;
+            //this test lcd-effect => we need to draw it 3 times with different color component, on the same position
+            //(same as we do with OpenGLES rendering surface)
             maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
             maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
             painter.FillRect(0, 0, 200, 100);
