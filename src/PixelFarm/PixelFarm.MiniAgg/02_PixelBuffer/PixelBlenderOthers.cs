@@ -314,8 +314,10 @@ namespace PixelFarm.Agg.Imaging
 
         int[] _maskInnerBuffer;
         int _mask_shift = 16;//default
+        ColorComponent _selectedMaskComponent;
         public PixelBlenderWithMask()
         {
+            SelectedMaskComponent = ColorComponent.R; //default
         }
         /// <summary>
         /// set mask image, please note that size of mask must be the same size of the dest buffer
@@ -327,25 +329,34 @@ namespace PixelFarm.Agg.Imaging
 
             _maskInnerBuffer = ActualBitmap.GetBuffer(maskBmp);
         }
-        public void UseMaskDataFromColorComponent(ColorComponent colorComponent)
+        public ColorComponent SelectedMaskComponent
         {
-            switch (colorComponent)
+            get
             {
-                default: throw new NotSupportedException();
-                case ColorComponent.A:
-                    _mask_shift = 24;
-                    break;
-                case ColorComponent.R:
-                    _mask_shift = 16;
-                    break;
-                case ColorComponent.G:
-                    _mask_shift = 8;
-                    break;
-                case ColorComponent.B:
-                    _mask_shift = 0;
-                    break;
+                return _selectedMaskComponent;
+            }
+            set
+            {
+                _selectedMaskComponent = value;
+                switch (value)
+                {
+                    default: throw new NotSupportedException();
+                    case ColorComponent.A:
+                        _mask_shift = 24;
+                        break;
+                    case ColorComponent.R:
+                        _mask_shift = 16;
+                        break;
+                    case ColorComponent.G:
+                        _mask_shift = 8;
+                        break;
+                    case ColorComponent.B:
+                        _mask_shift = 0;
+                        break;
+                }
             }
         }
+
         Color NewColorFromMask(Color srcColor, int arrayOffset)
         {
             return srcColor.NewFromChangeCoverage((byte)((_maskInnerBuffer[arrayOffset]) >> _mask_shift));

@@ -97,7 +97,7 @@ namespace PixelFarm.Agg.Sample_Draw
             {
                 //create a stencil bmp
                 _stencilBmp = new ActualBitmap(p.Width, p.Height);
-                _stencilBlender = new SubBitmapBlender(_stencilBmp, new PixelBlenderBGRA());                 
+                _stencilBlender = new SubBitmapBlender(_stencilBmp, new PixelBlenderBGRA());
                 _backPainter = AggPainter.Create(_stencilBmp);
                 //------
             }
@@ -189,10 +189,7 @@ namespace PixelFarm.Agg.Sample_Draw
                     default:
                         break;
                     case TextureKind.StencilLcdEffect:
-                        {
-
-
-
+                        { 
                         }
                         break;
                 }
@@ -262,8 +259,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
             p.Orientation = DrawBoardOrientation.LeftBottom;
 
-            int width = 800;
-            int height = 600;
+
             //clear the image to white         
             // draw a circle
             p.Clear(Drawing.Color.White);
