@@ -558,12 +558,10 @@ namespace LayoutFarm.CustomWidgets
     public class GridView : EaseBox
     {
         GridViewRenderElement _gridViewRenderE;
-
         CellSizeStyle cellSizeStyle;
-
         GridTable gridTable;
-
         GridSelectionSession _gridSelectionSession;
+
 
         public GridView(int width, int height)
             : base(width, height)
@@ -574,9 +572,26 @@ namespace LayoutFarm.CustomWidgets
             ClearSelectionWhenLostFocus = true;
             AcceptKeyboardFocus = true;
         }
+        public void BuildGridByRowsAndColumns(int ncols, int eachColumnWidth, int nrows, int eachRowWidth)
+        {
+            this.cellSizeStyle = CellSizeStyle.ColumnAndRow;
 
+            //1. create cols
+            var cols = gridTable.Columns;
+            for (int n = 0; n < ncols; ++n)
+            {
+                //create with defatul width 
+                cols.Add(new GridColumn(eachColumnWidth));
+            }
+            //2. create rows
+            var rows = gridTable.Rows;
+            for (int n = 0; n < nrows; ++n)
+            {   
+                rows.Add(new GridRow(eachRowWidth));
+            }
 
-        public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
+        }
+        public void BuildGridByRowsAndColumns(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
             this.cellSizeStyle = cellSizeStyle;
             //1. create cols
