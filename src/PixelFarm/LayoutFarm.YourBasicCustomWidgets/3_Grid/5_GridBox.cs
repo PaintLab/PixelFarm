@@ -562,6 +562,28 @@ namespace LayoutFarm.CustomWidgets
         GridTable gridTable;
         GridSelectionSession _gridSelectionSession;
 
+        public struct GridCellInfo
+        {
+            public readonly int Row;
+            public readonly int Column;
+            public GridCellInfo(int column, int row)
+            {
+                Column = column;
+                Row = row;
+            }
+
+            public bool IsEmpty
+            {
+                get { return Row < 0; }
+            }
+
+#if DEBUG
+            public override string ToString()
+            {
+                return Column + "," + Row;
+            }
+#endif
+        }
 
         public GridView(int width, int height)
             : base(width, height)
@@ -572,7 +594,7 @@ namespace LayoutFarm.CustomWidgets
             ClearSelectionWhenLostFocus = true;
             AcceptKeyboardFocus = true;
         }
-        public void BuildGridByRowsAndColumns(int ncols, int eachColumnWidth, int nrows, int eachRowWidth)
+        public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
         {
             this.cellSizeStyle = CellSizeStyle.ColumnAndRow;
 
@@ -586,12 +608,12 @@ namespace LayoutFarm.CustomWidgets
             //2. create rows
             var rows = gridTable.Rows;
             for (int n = 0; n < nrows; ++n)
-            {   
-                rows.Add(new GridRow(eachRowWidth));
+            {
+                rows.Add(new GridRow(eachRowHeight));
             }
 
         }
-        public void BuildGridByRowsAndColumns(int ncols, int nrows, CellSizeStyle cellSizeStyle)
+        public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
             this.cellSizeStyle = cellSizeStyle;
             //1. create cols
@@ -623,9 +645,19 @@ namespace LayoutFarm.CustomWidgets
         {
             return gridTable.GetCell(row, col);
         }
-
-
-
+        public GridCellInfo GetCellInfoByMousePosition(int x, int y)
+        {
+            GridLayer layer = _gridViewRenderE.GridLayer;
+            GridCell hitCell = layer.GetGridItemByPosition(x, y);
+            if (hitCell != null)
+            {
+                return new GridCellInfo(hitCell.ColumnIndex, hitCell.RowIndex);
+            }
+            else
+            {
+                return new GridCellInfo(-1, -1);
+            }
+        }
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
             if (e.IsDragging)
@@ -636,10 +668,15 @@ namespace LayoutFarm.CustomWidgets
                 {
                     _gridSelectionSession.SetLatestHit(hitCell);
                 }
+            }
+            else
+            {
+                //not draging 
 
             }
             base.OnMouseMove(e);
         }
+
         protected override void OnMouseDown(UIMouseEventArgs e)
         {
             //check if cell content
