@@ -129,6 +129,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
             alphaPainter.DrawImage(glyphAtlasBmp, 0, 0);
 
             maskPixelBlender.SetMaskImage(alphaBitmap);
+            maskPixelBlenderPerCompo.SetMaskImage(alphaBitmap);
         }
 
 
@@ -147,7 +148,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
         }
 
         [DemoConfig]
-        public PixelBlenderWithMask.ColorComponent SelectedComponent
+        public PixelBlenderColorComponent SelectedComponent
         {
             get
             {
@@ -157,18 +158,20 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
                 }
                 else
                 {
-                    return PixelBlenderWithMask.ColorComponent.R;//default
+                    return PixelBlenderColorComponent.R;//default
                 }
             }
             set
             {
                 isMaskSliderValueChanged = true;
                 maskPixelBlender.SelectedMaskComponent = value;
-
+                maskPixelBlenderPerCompo.SelectedMaskComponent = value;
             }
         }
 
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
+        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
+
         public override void Draw(Painter p)
         {
             if (p is GdiPlusPainter)
@@ -188,18 +191,33 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask
                 SetupMaskPixelBlender(width, height);
                 this.isMaskSliderValueChanged = false;
                 //
-                painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlender; //change to new blender
+                //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlender; //change to new blender
+                painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender
             }
             //1. alpha mask...
             //p2.DrawImage(alphaBitmap, 0, 0);               
 
-            painter.FillColor = Color.Black;
-            painter.FillRect(0, 0, 200, 100);
+            //2.
+            //painter.FillColor = Color.Black;
+            //painter.FillRect(0, 0, 200, 100);
 
-
+            //3.
             //painter.FillColor = Color.Blue;
             //painter.FillCircle(300, 300, 100);
             //painter.DrawImage(lionImg, 20, 20);
+
+
+            //4.
+            painter.FillColor = Color.Black;
+            maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
+            maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
+            painter.FillRect(0, 0, 200, 100);
+            maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
+            maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
+            painter.FillRect(0, 0, 200, 100);
+            maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
+            maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
+            painter.FillRect(0, 0, 200, 100);
 
         }
         public override void MouseDown(int x, int y, bool isRightButton)
