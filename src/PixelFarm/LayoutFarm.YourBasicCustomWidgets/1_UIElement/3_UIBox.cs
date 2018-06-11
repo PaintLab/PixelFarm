@@ -9,6 +9,8 @@ namespace LayoutFarm.UI
 
         bool specificWidth, specificHeight;
         public event EventHandler LayoutFinished;
+        public event EventHandler ViewportChanged;
+
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -20,6 +22,13 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
         }
 
+        protected void RaiseViewportChanged()
+        {
+            if (ViewportChanged != null)
+            {
+                ViewportChanged(this, EventArgs.Empty);
+            }
+        }
         protected void RaiseLayoutFinished()
         {
             if (this.LayoutFinished != null)
@@ -50,7 +59,7 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.SetSize(width, height);
             }
         }
-        
+
         public void SetLocationAndSize(int left, int top, int width, int height)
         {
             SetLocation(left, top);
@@ -168,7 +177,7 @@ namespace LayoutFarm.UI
         {
             get { return this.Height; }
         }
-        public virtual void SetViewport(int x, int y)
+        public virtual void SetViewport(int x, int y, object reqBy)
         {
         }
         //------------------------------

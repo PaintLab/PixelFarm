@@ -103,13 +103,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
-        public override void SetViewport(int x, int y)
+        public override void SetViewport(int x, int y, object reqBy)
         {
             this.viewportX = x;
             this.viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this.panel.SetViewport(x, y);
+                this.panel.SetViewport(x, y, this);
             }
         }
         //----------------------------------------------------

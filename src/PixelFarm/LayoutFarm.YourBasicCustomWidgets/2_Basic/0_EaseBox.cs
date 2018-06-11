@@ -242,13 +242,20 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
-        public override void SetViewport(int x, int y)
+        public override void SetViewport(int x, int y, object reqBy)
         {
+            //check if viewport is changed or not
+            bool isChanged = (viewportX != x) || (viewportY != y);
             this.viewportX = x;
             this.viewportY = y;
             if (this.HasReadyRenderElement)
             {
                 primElement.SetViewport(viewportX, viewportY);
+                if (isChanged)
+                {
+                    RaiseViewportChanged();
+                }
+
             }
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
