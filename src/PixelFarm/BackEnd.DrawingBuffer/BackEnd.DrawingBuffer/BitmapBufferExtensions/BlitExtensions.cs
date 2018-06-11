@@ -123,16 +123,106 @@ namespace PixelFarm.DrawingBuffer
             RectD destRect = new RectD(destX, destY, source.PixelWidth, source.PixelHeight);
             Blit(bmp, destRect, source, sourceRect, WhiteColor, BlendMode.None);
         }
-        public static void CopyBlit(this BitmapBuffer bmp, int destX, int destY, BitmapBuffer source)
+
+        /// <summary>
+        /// copyblit, no-scaling, no blending
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="dstX"></param>
+        /// <param name="dstY"></param>
+        /// <param name="source"></param>
+        public static void CopyBlit(this BitmapBuffer bmp, int dstX, int dstY, BitmapBuffer source)
         {
-            RectD sourceRect = new RectD(0, 0, source.PixelWidth, source.PixelHeight);
-            RectD destRect = new RectD(destX, destY, source.PixelWidth, source.PixelHeight);
-            Blit(bmp,
-                destX, destY, source.PixelWidth, source.PixelHeight,
-                source,
-                0, 0, source.PixelWidth, source.PixelHeight,
-                WhiteColor, BlendMode.None);//  destRect, source, sourceRect, WhiteColor, BlendMode.None);
+            //just copy blit
+            //no scaling,
+            //blendMode=NONE
+
+            //Blit(bmp,
+            //    destX, destY, source.PixelWidth, source.PixelHeight,
+            //    source,
+            //    0, 0, source.PixelWidth, source.PixelHeight,
+            //    WhiteColor, BlendMode.None);  
+            //blend mode= NONE
+            //no scale **
+
+#if WPF
+            bool isPrgba = source.Format == PixelFormats.Pbgra32 || source.Format == PixelFormats.Prgba64 || source.Format == PixelFormats.Prgba128Float;
+#endif
+            int dw = source.PixelWidth;
+            int dh = source.PixelHeight;
+            int dstW = source.PixelWidth;
+            int dstH = source.PixelHeight;
+
+
+            using (BitmapContext srcContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext destContext = bmp.GetBitmapContext())
+            {
+
+                int sourceWidth = srcContext.Width;
+                int dpw = destContext.Width;
+                int dph = destContext.Height;
+
+                Rectnt32 intersect = new Rectnt32(0, 0, dpw, dph);
+                intersect.Intersect(new Rectnt32(dstX, dstY, dstW, dstH));
+                if (intersect.IsEmpty)
+                {
+                    return;
+                }
+
+                int[] sourcePixels = srcContext.Pixels;
+                int[] destPixels = destContext.Pixels;
+                int sourceLength = srcContext.Length;
+
+                int sourceIdx = -1;
+                int px = dstX;
+                int py = dstY;
+
+                int x;
+
+                int idx;
+
+                int sw = source.PixelWidth;
+                int sourceStartX = 0;
+                int sourceStartY = 0;
+
+                int cur_srcY = sourceStartY;
+
+                int y = py;
+
+                for (int j = 0; j < dh; j++)
+                {
+                    if (y >= 0 && y < dph)
+                    {
+
+                        idx = px + y * dpw;
+                        x = px;
+
+
+                        sourceIdx = sourceStartX + (cur_srcY * sourceWidth);
+                        int offset = x < 0 ? -x : 0;
+                        int xx = x + offset;
+                        int wx = sourceWidth - offset;
+                        int len = xx + wx < dpw ? wx : dpw - xx;
+                        if (len > sw) len = sw;
+                        if (len > dw) len = dw;
+
+
+                        // Scanline BlockCopy is much faster (3.5x) if no tinting and blending is needed,
+                        // even for smaller sprites like the 32x32 particles. 
+
+
+                        BitmapContext.BlockCopy(srcContext, (sourceIdx + offset) * 4, destContext, (idx + offset) * 4, len * 4);
+                    }
+                    cur_srcY += 1;
+                    y++;
+                }
+            }
+
         }
+
+
+
+
         /// 
         /// <summary>
         /// Copies (blits) the pixels from the WriteableBitmap source to the destination WriteableBitmap (this).
@@ -419,7 +509,8 @@ namespace PixelFarm.DrawingBuffer
             int dstY,
             int dstW,
             int dstH,
-            BitmapBuffer source, int srcX, int srcY, int srcW, int srcH,
+            BitmapBuffer source,
+            int srcX, int srcY, int srcW, int srcH,
             ColorInt color, BlendMode blendMode)
         {
             if (color.A == 0)
@@ -673,7 +764,6 @@ namespace PixelFarm.DrawingBuffer
                     jj += sdy;
                     y++;
                 }
-
             }
         }
 

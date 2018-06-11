@@ -574,6 +574,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\Typography\PixelFarm.Typography\2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\Typography\PixelFarm.Typography\2_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\NOpenFontFace.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.HtmlRender.Windows.One\..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\OpenFontLoader.cs" />

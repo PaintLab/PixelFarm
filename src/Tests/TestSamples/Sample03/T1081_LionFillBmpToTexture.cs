@@ -22,9 +22,8 @@ namespace OpenTkEssTest
         //---------------------------
 
         ActualBitmap aggImage;
-        AggRenderSurface _aggsx;
-        AggPainter aggPainter;
 
+        AggPainter aggPainter;
         //---------------------------
         GLRenderSurface _glsx;
         SpriteShape lionShape;
@@ -46,8 +45,7 @@ namespace OpenTkEssTest
             RectD lionBounds = lionShape.Bounds;
             //-------------
             aggImage = new ActualBitmap((int)lionBounds.Width, (int)lionBounds.Height);
-            _aggsx = new AggRenderSurface(aggImage);
-            aggPainter = new AggPainter(_aggsx);
+            aggPainter = AggPainter.Create(aggImage);
 
 
             DrawLion(aggPainter, lionShape);

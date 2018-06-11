@@ -14,41 +14,22 @@ namespace PixelFarm.Agg
     class MyBitmapBlender : BitmapBlenderBase
     {
         ActualBitmap actualImage;
-        public MyBitmapBlender()
-        {
 
-        }
-        public MyBitmapBlender(ActualBitmap actualImage)
+
+        public MyBitmapBlender(ActualBitmap actualImage, PixelBlender32 pxBlender)
         {
             this.actualImage = actualImage;
             Attach(actualImage.Width,
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualBitmap.GetBuffer(actualImage),
-                           new PixelBlenderBGRA());
+                           pxBlender); //set default px blender
         }
         public override void ReplaceBuffer(int[] newbuffer)
         {
             ActualBitmap.ReplaceBuffer(actualImage, newbuffer);
         }
-        /// <summary>
-        /// load image to the reader/writer
-        /// </summary>
-        /// <param name="actualImage"></param>
-        public void ReloadImage(ActualBitmap actualImage)
-        {
 
-            if (this.actualImage == actualImage)
-            {
-                return;
-            }
-            this.actualImage = actualImage;
-            Attach(actualImage.Width,
-                           actualImage.Height,
-                           actualImage.BitDepth,
-                           ActualBitmap.GetBuffer(actualImage),
-                           new PixelBlenderBGRA());
-        }
     }
     public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
     {
@@ -91,9 +72,7 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
-
-        //MyBitmapBlender _sharedImageWriterReader = new MyBitmapBlender();
-
+ 
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
@@ -114,10 +93,25 @@ namespace PixelFarm.Agg
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
                 PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
-
-
             _vectorTool = new VectorTool();
         }
+
+
+        public static AggPainter Create(ActualBitmap bmp, PixelBlender32 blender = null)
+        {
+            //helper func
+
+            AggRenderSurface renderSx = new AggRenderSurface(bmp);
+            if (blender == null)
+            {
+                blender = new PixelBlenderBGRA();
+            }
+            renderSx.PixelBlender = blender;
+
+            return new AggPainter(renderSx);
+        }
+
+
         public override Drawing.PainterExtensions.VectorTool VectorTool
         {
             get { return _vectorTool; }
@@ -127,6 +121,13 @@ namespace PixelFarm.Agg
         {
             get { return this._aggsx; }
         }
+
+        public BitmapBlenderBase DestBitmapBlender
+        {
+            get { return this._aggsx.DestImage; }
+        }
+
+
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {
@@ -749,7 +750,15 @@ namespace PixelFarm.Agg
             if (this._renderQuality == RenderQualtity.Fast)
             {
                 BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
-                this._bxt.CopyBlit((int)left, (int)top, srcBmp);
+                try
+                {
+                    this._bxt.CopyBlit((int)left, (int)top, srcBmp);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
                 return;
             }
 
@@ -774,6 +783,62 @@ namespace PixelFarm.Agg
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
             _aggsx.UseSubPixelRendering = useSubPix;
+        }
+        void DrawBitmap(ActualBitmap actualBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            //check image caching system 
+            if (this._renderQuality == RenderQualtity.Fast)
+            {
+                BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
+                try
+                {
+                    DrawingBuffer.RectD src = new DrawingBuffer.RectD(srcX, srcY, srcW, srcH);
+                    DrawingBuffer.RectD dest = new DrawingBuffer.RectD(left, top, srcW, srcH);
+                    DrawingBuffer.BitmapBuffer bmpBuffer = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
+                    this._bxt.CopyBlit(dest, bmpBuffer, src);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                return;
+            }
+
+            //save, restore later... 
+            bool useSubPix = UseSubPixelLcdEffect;
+            //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+            _aggsx.UseSubPixelRendering = false;
+
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //place left upper corner at specific x y                    
+                this._aggsx.Render(actualBmp, left, this.Height - (top + actualBmp.Height));
+            }
+            else
+            {
+                //left-bottom as original
+                //place left-lower of the img at specific (x,y)
+                this._aggsx.Render(actualBmp, left, top);
+            }
+
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+            _aggsx.UseSubPixelRendering = useSubPix;
+        }
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            ActualBitmap actualBmp = actualImage as ActualBitmap;
+            if (actualBmp == null)
+            {
+                //test with other bitmap 
+                return;
+            }
+            else
+            {
+                DrawBitmap(actualBmp, left, top, srcX, srcY, srcW, srcH);
+            }
         }
         public override void DrawImage(Image img, double left, double top)
         {

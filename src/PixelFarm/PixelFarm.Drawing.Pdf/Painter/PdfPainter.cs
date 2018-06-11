@@ -284,7 +284,10 @@ namespace PixelFarm.Drawing.Pdf
         //    //     controlX2, controlY2,
         //    //     endX, endY);
         //}
-
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 

@@ -244,6 +244,15 @@ namespace TestGlfw
             {
                 System.IO.File.WriteAllBytes(dataName, content);
             }
+
+            public override PixelFarm.Agg.ActualBitmap ReadPngBitmap(string filename)
+            {
+                throw new System.NotImplementedException();
+            }
+            public override void SavePngBitmap(PixelFarm.Agg.ActualBitmap bmp, string filename)
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
 
