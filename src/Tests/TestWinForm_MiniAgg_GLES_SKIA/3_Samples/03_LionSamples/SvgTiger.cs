@@ -97,8 +97,7 @@ namespace PixelFarm.Agg.Samples
 
                     //create 
                     ActualBitmap backimg = new ActualBitmap((int)bound.Width, (int)bound.Height);
-                    AggRenderSurface renderSurface = new AggRenderSurface(backimg);
-                    AggPainter painter = new AggPainter(renderSurface);
+                    AggPainter painter = AggPainter.Create(backimg);
                     svgVx.Render(painter);
 
 #if DEBUG

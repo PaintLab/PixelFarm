@@ -16,6 +16,7 @@ namespace OpenTkEssTest
         GLBitmap msdf_bmp;
         GLPainter painter;
         SimpleFontAtlas fontAtlas;
+        PixelFarm.Agg.ActualBitmap totalImg;
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
@@ -28,7 +29,6 @@ namespace OpenTkEssTest
 
             //---------------------  
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-
             using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.xml", System.IO.FileMode.Open))
             {
                 fontAtlas = atlasBuilder.LoadAtlasInfo(fs);
@@ -36,7 +36,7 @@ namespace OpenTkEssTest
 
 
             var actualImg = DemoHelper.LoadImage(RootDemoPath.Path + @"\a_total.png");
-
+            totalImg = actualImg;
             //var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
             //var buffer = new int[totalImg.Width * totalImg.Height];
             //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);

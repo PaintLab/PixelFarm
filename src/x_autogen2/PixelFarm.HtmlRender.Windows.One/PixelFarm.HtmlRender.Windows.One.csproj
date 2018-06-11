@@ -1652,6 +1652,9 @@
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs">
+      <Link>PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs</Link>
     </Compile>

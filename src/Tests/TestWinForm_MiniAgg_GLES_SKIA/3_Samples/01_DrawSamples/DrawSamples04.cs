@@ -24,7 +24,7 @@ using Typography.TextServices;
 
 
 using PixelFarm.Platforms;
-
+using PixelFarm.Agg.Imaging;
 
 namespace PixelFarm.Agg.Sample_Draw
 {
@@ -64,13 +64,24 @@ namespace PixelFarm.Agg.Sample_Draw
             });
 
             //3.  
-            _font = new RequestFont("tahoma", 14);
+            _font = new RequestFont("tahoma", 10);
             _fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
 
+
+            //----------
         }
+
+
+
         float _finalTextureScale = 1;
         List<float> _vboBufferList = new List<float>();
         List<ushort> _indexList = new List<ushort>();
+
+        ActualBitmap _stencilBmp;
+        SubBitmapBlender _stencilBlender;
+        AggPainter _backPainter;
+
+
         public void DrawString(Painter p, string text, double x, double y)
         {
             if (text != null)
@@ -81,6 +92,15 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
         {
+
+            if (_stencilBmp == null)
+            {
+                //create a stencil bmp
+                _stencilBmp = new ActualBitmap(p.Width, p.Height);
+                _stencilBlender = new SubBitmapBlender(_stencilBmp, new PixelBlenderBGRA());
+                _backPainter = AggPainter.Create(_stencilBmp);
+                //------
+            }
 
             int j = buffer.Length;
             //create temp buffer span that describe the part of a whole char buffer
@@ -121,6 +141,7 @@ namespace PixelFarm.Agg.Sample_Draw
             float acc_y = 0;
 
 
+
             UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
@@ -152,8 +173,27 @@ namespace PixelFarm.Agg.Sample_Draw
 
                 p.RenderQuality = RenderQualtity.Fast;
 
-                //*** the atlas is in inverted form
-                p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - srcY, srcW, srcH);
+                //*** the atlas is inverted so...
+                //p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+                //p.DrawImage(_fontBmp, g_x, g_y);
+
+                //1. draw to back buffer 
+                _backPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+
+                //2. then copy content to this
+
+                p.DrawImage(_stencilBmp, 100, 100);
+
+                switch (textureKind)
+                {
+                    default:
+                        break;
+                    case TextureKind.StencilLcdEffect:
+                        { 
+                        }
+                        break;
+                }
+
 
 
                 //copy some part from the bitmap 
@@ -219,8 +259,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
             p.Orientation = DrawBoardOrientation.LeftBottom;
 
-            int width = 800;
-            int height = 600;
+
             //clear the image to white         
             // draw a circle
             p.Clear(Drawing.Color.White);

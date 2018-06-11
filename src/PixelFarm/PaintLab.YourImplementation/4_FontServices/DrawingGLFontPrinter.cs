@@ -20,7 +20,7 @@ namespace PixelFarm.DrawingGL
     public class AggTextSpanPrinter : ITextPrinter
     {
         ActualBitmap _actualImage;
-        AggRenderSurface _aggsx;
+
         AggPainter _aggPainter;
         VxsTextPrinter _vxsTextPrinter;
         int bmpWidth;
@@ -42,8 +42,7 @@ namespace PixelFarm.DrawingGL
             bmpHeight = h;
 
             _actualImage = new ActualBitmap(bmpWidth, bmpHeight);
-            _aggsx = new AggRenderSurface(_actualImage);
-            _aggPainter = new AggPainter(_aggsx);
+            _aggPainter = AggPainter.Create(_actualImage);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;
 
@@ -155,7 +154,7 @@ namespace PixelFarm.DrawingGL
             throw new NotImplementedException();
         }
     }
-     
+
 
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {

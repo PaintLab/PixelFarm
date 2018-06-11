@@ -14,41 +14,22 @@ namespace PixelFarm.Agg
     class MyBitmapBlender : BitmapBlenderBase
     {
         ActualBitmap actualImage;
-        public MyBitmapBlender()
-        {
 
-        }
-        public MyBitmapBlender(ActualBitmap actualImage)
+
+        public MyBitmapBlender(ActualBitmap actualImage, PixelBlender32 pxBlender)
         {
             this.actualImage = actualImage;
             Attach(actualImage.Width,
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualBitmap.GetBuffer(actualImage),
-                           new PixelBlenderBGRA());
+                           pxBlender); //set default px blender
         }
         public override void ReplaceBuffer(int[] newbuffer)
         {
             ActualBitmap.ReplaceBuffer(actualImage, newbuffer);
         }
-        /// <summary>
-        /// load image to the reader/writer
-        /// </summary>
-        /// <param name="actualImage"></param>
-        public void ReloadImage(ActualBitmap actualImage)
-        {
 
-            if (this.actualImage == actualImage)
-            {
-                return;
-            }
-            this.actualImage = actualImage;
-            Attach(actualImage.Width,
-                           actualImage.Height,
-                           actualImage.BitDepth,
-                           ActualBitmap.GetBuffer(actualImage),
-                           new PixelBlenderBGRA());
-        }
     }
     public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
     {
@@ -91,9 +72,7 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
-
-        //MyBitmapBlender _sharedImageWriterReader = new MyBitmapBlender();
-
+ 
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
@@ -114,10 +93,25 @@ namespace PixelFarm.Agg
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
                 PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
-
-
             _vectorTool = new VectorTool();
         }
+
+
+        public static AggPainter Create(ActualBitmap bmp, PixelBlender32 blender = null)
+        {
+            //helper func
+
+            AggRenderSurface renderSx = new AggRenderSurface(bmp);
+            if (blender == null)
+            {
+                blender = new PixelBlenderBGRA();
+            }
+            renderSx.PixelBlender = blender;
+
+            return new AggPainter(renderSx);
+        }
+
+
         public override Drawing.PainterExtensions.VectorTool VectorTool
         {
             get { return _vectorTool; }
@@ -127,6 +121,13 @@ namespace PixelFarm.Agg
         {
             get { return this._aggsx; }
         }
+
+        public BitmapBlenderBase DestBitmapBlender
+        {
+            get { return this._aggsx.DestImage; }
+        }
+
+
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {

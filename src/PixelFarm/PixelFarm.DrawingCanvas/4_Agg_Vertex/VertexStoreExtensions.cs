@@ -32,14 +32,14 @@ namespace PixelFarm.Agg
 
     public static class VertexSourceExtensions
     {
-        public static VertexStoreSnap MakeVertexSnap(this Ellipse ellipse, VertexStore vxs)
+        public static VertexStoreSnap MakeVertexSnap(this Ellipse ellipse, VertexStore output)
         {
-            return new VertexStoreSnap(MakeVxs(ellipse, vxs));
+            return new VertexStoreSnap(MakeVxs(ellipse, output));
         }
-        public static VertexStore MakeVxs(this Ellipse ellipse, VertexStore vxs)
+        public static VertexStore MakeVxs(this Ellipse ellipse, VertexStore output)
         {
             //TODO: review here
-            return VertexStoreBuilder.CreateVxs(GetVertexIter(ellipse), vxs);
+            return VertexStoreBuilder.CreateVxs(GetVertexIter(ellipse), output);
         }
         public static IEnumerable<VertexData> GetVertexIter(this Ellipse ellipse)
         {
@@ -98,7 +98,7 @@ namespace PixelFarm.Agg
             //1. subdiv technique
             s_curve3Div.Init(x0, y0, x1, y1, x2, y2);
 
-           
+
             ArrayList<Vector2> points = s_curve3Div.GetInternalPoints();
             int n = 0;
             for (int i = points.Length - 1; i >= 0; --i)
