@@ -549,10 +549,6 @@ namespace LayoutFarm.CustomWidgets
             _scrollableViewPanel.AddChild(gridView);
         }
 
-        public override void Walk(UIVisitor visitor)
-        {
-
-        }
     }
 
     public class GridView : EaseBox
@@ -908,6 +904,8 @@ namespace LayoutFarm.CustomWidgets
             {
                 var myGridBox = new GridViewRenderElement(rootgfx, this.Width, this.Height);
                 myGridBox.HasSpecificSize = true;//***
+                myGridBox.NeedClipArea = this.NeedClipArea;
+
                 myGridBox.SetLocation(this.Left, this.Top);
                 myGridBox.SetController(this);
                 myGridBox.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
@@ -939,13 +937,6 @@ namespace LayoutFarm.CustomWidgets
 
             }
             return _gridViewRenderE;
-        }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            visitor.BeginElement(this, "gridbox");
-            this.Describe(visitor);
-            visitor.EndElement();
         }
 
 
