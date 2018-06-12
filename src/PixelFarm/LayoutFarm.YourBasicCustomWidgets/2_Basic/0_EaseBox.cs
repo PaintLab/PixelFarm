@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public abstract class EaseBox : UIBox
+    public abstract class EaseBox : AbstractRect
     {
         BoxContentLayoutKind panelLayoutKind;
         bool needContentLayout;
@@ -448,7 +448,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxRight = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as UIBox;
+                            var element = this.GetChild(i) as AbstractRect;
                             if (element != null)
                             {
 
@@ -480,7 +480,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as UIBox;
+                            var element = this.GetChild(i) as AbstractRect;
                             if (element != null)
                             {
                                 element.PerformContentLayout();
@@ -504,7 +504,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as UIBox;
+                            var element = this.GetChild(i) as AbstractRect;
                             if (element != null)
                             {
                                 element.PerformContentLayout();

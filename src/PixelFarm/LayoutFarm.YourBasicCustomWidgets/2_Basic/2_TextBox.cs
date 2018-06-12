@@ -9,7 +9,7 @@ using LayoutFarm.Text;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TextBox : UIBox
+    public class TextBox : AbstractRect
     {
         TextSurfaceEventListener textSurfaceListener;
         TextEditRenderBox textEditRenderElement;

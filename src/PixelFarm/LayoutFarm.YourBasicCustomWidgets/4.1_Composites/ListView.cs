@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
 {
 
 
-    public class ListView : UIBox
+    public class ListView : AbstractRect
     {
 
 
@@ -308,7 +308,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class ListItem : UIBox
+    public class ListItem : AbstractRect
     {
         CustomContainerRenderBox primElement;
         CustomTextRun listItemText;

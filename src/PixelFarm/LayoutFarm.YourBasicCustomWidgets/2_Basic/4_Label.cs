@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class Label : UIBox
+    public class Label : AbstractRect
     {
         string text;
         Color textColor;

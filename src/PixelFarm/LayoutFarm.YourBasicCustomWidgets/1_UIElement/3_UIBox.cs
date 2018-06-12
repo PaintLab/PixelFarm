@@ -4,7 +4,8 @@ using System;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
-    public abstract class UIBox : UIElement, IScrollable, IBoxElement
+
+    public abstract class AbstractRect : UIElement, IScrollable, IBoxElement
     {
 
         bool specificWidth, specificHeight;
@@ -15,7 +16,7 @@ namespace LayoutFarm.UI
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public UIBox(int width, int height)
+        public AbstractRect(int width, int height)
         {
             SetElementBoundsWH(width, height);
             //default for box

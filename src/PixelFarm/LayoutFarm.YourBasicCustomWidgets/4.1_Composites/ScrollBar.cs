@@ -106,7 +106,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class SliderBox : UIBox
+    public class SliderBox : AbstractRect
     {
 
         ScrollRangeLogic scrollRangeLogic;
@@ -671,7 +671,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
-    public class ScrollBar : UIBox
+    public class ScrollBar : AbstractRect
     {
         ScrollBarButton minButton;
         ScrollBarButton maxButton;

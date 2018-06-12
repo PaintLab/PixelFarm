@@ -83,7 +83,7 @@ namespace LayoutFarm
                 : base(w, h)
             {
             }
-            public LayoutFarm.UI.UIBox TargetBox
+            public LayoutFarm.UI.AbstractRect TargetBox
             {
                 get;
                 set;

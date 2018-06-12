@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TreeView : UIBox
+    public class TreeView : AbstractRect
     {
         //composite          
         CustomRenderBox primElement;//background
@@ -132,7 +132,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public class TreeNode : UIBox
+    public class TreeNode : AbstractRect
     {
         const int NODE_DEFAULT_HEIGHT = 17;
         CustomRenderBox primElement;//bg primary render element
