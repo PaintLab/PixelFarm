@@ -607,7 +607,34 @@ namespace LayoutFarm.CustomWidgets
             {
                 rows.Add(new GridRow(eachRowHeight));
             }
+        }
+        public override void PerformContentLayout()
+        {
+            //calculate grid width
+            var cols = gridTable.Columns;
+            int ncols = cols.Count;
+            int widthSum = 0;
+            for (int n = 0; n < ncols; ++n)
+            {
+                widthSum += cols[n].Width;
+            }
+            //2. create rows
+            var rows = gridTable.Rows;
+            int heightSum = 0;
+            int nrows = rows.Count;
+            for (int n = 0; n < nrows; ++n)
+            {
+                heightSum += rows[n].Height;
+            }
 
+            base.PerformContentLayout();
+
+            int finW = System.Math.Max(DesiredWidth, widthSum);
+            int finH = System.Math.Max(DesiredHeight, heightSum);
+
+            SetDesiredSize(finW, finH);
+
+            RaiseLayoutFinished();
         }
         public void BuildGrid(int ncols, int nrows, CellSizeStyle cellSizeStyle)
         {
@@ -677,6 +704,12 @@ namespace LayoutFarm.CustomWidgets
         {
             //check if cell content
             //find grid item 
+
+            if (this.ViewportX > 0)
+            {
+
+            }
+
             GridLayer layer = _gridViewRenderE.GridLayer;
             GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
             if (hitCell != null)
