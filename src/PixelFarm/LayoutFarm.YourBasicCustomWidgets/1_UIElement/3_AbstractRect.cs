@@ -4,7 +4,9 @@ using System;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
-
+    /// <summary>
+    /// abstract Rect UI Element
+    /// </summary>
     public abstract class AbstractRect : UIElement, IScrollable, IBoxElement
     {
 
