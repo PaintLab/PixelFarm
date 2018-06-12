@@ -62,8 +62,12 @@ namespace LayoutFarm.UI
 
         public void SetLocationAndSize(int left, int top, int width, int height)
         {
-            SetLocation(left, top);
-            SetSize(width, height);
+            SetElementBoundsLT(left, top);
+            SetElementBoundsWH(width, height);
+            if (this.HasReadyRenderElement)
+            {
+                this.CurrentPrimaryRenderElement.SetBounds(left, top, width, height);
+            }
         }
         public int Left
         {

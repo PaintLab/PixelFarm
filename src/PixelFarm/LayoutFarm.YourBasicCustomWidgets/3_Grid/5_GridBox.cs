@@ -106,7 +106,6 @@ namespace LayoutFarm.CustomWidgets
             box.Visible = false;
             box.TransparentAllMouseEvents = true;
             return box;
-
         }
         public GridSelectionStyle GridSelectionStyle
         {
@@ -114,19 +113,16 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _gridSelectionStyle = value;
-
             }
         }
-
-
         public void StartAt(GridCell hitCell)
         {
 
             _moreThan1Cell = false;
             _beginSelectedCell = _latestHitCell = hitCell;
 
-            _bodyBox.SetSize(hitCell.Width, hitCell.Height);
-            _bodyBox.SetLocation(hitCell.X, hitCell.Y);
+
+            _bodyBox.SetLocationAndSize(hitCell.X, hitCell.Y, hitCell.Width, hitCell.Height);
             _bodyBox.Visible = true;
             Started = true;
         }

@@ -92,8 +92,8 @@ namespace LayoutFarm
 
                 //grid 6
                 var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
-                gridView.HasSpecificHeight = true; //if not set ,scroll bar will not show scroll button
-                gridView.HasSpecificWidth = true;//if not set ,scroll bar will not show scroll button
+                //gridView.HasSpecificHeight = true; //if not set ,scroll bar will not show scroll button
+                //gridView.HasSpecificWidth = true;//if not set ,scroll bar will not show scroll button
 
                 gridView.SetLocation(300, 500);
                 gridView.NeedClipArea = true;
