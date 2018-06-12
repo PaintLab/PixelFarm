@@ -29,7 +29,7 @@ namespace LayoutFarm
                 //combine before and after rect 
                 //add to invalidate root invalidate queue  
                 this.InvalidateGraphicBounds(Rectangle.Union(prevBounds, this.RectBounds));
-                this.InvalidateGraphics();
+
             }
         }
 
@@ -53,7 +53,7 @@ namespace LayoutFarm
                 //combine before and after rect  
                 //add to invalidate root invalidate queue
                 this.InvalidateGraphicBounds(Rectangle.Union(prevBounds, this.RectBounds));
-                this.InvalidateGraphics();
+                
             }
         }
 
@@ -75,7 +75,7 @@ namespace LayoutFarm
                 this.b_width = width;
                 this.b_height = height;
                 this.InvalidateGraphicBounds(Rectangle.Union(prevBounds, this.RectBounds));
-                this.InvalidateGraphics();
+               
             }
         }
     }

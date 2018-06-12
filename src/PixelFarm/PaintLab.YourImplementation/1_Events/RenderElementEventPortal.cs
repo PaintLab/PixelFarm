@@ -221,7 +221,7 @@ namespace LayoutFarm.UI
                     ForEachEventListenerBubbleUp(e, hitPointChain, (listener) =>
                     {
                         currentMouseDown = listener;
-                       
+
 
                         listener.ListenMouseDown(e);
                         //------------------------------------------------------- 
@@ -444,9 +444,9 @@ namespace LayoutFarm.UI
                 IEventPortal eventPortal = currentHitElement as IEventPortal;
                 if (eventPortal != null)
                 {
-                    var ppp = hitPoint.point;
+                    Point p = hitPoint.point;
                     e.CurrentContextElement = currentHitElement as IUIEventListener;
-                    e.SetLocation(ppp.X, ppp.Y);
+                    e.SetLocation(p.X, p.Y);
                     if (eventPortalAction(eventPortal))
                     {
                         return;
@@ -468,8 +468,8 @@ namespace LayoutFarm.UI
                         e.SourceHitElement = listener;
                     }
 
-                    var hitPoint = hitInfo.point;
-                    e.SetLocation(hitPoint.X, hitPoint.Y);
+                    Point p = hitInfo.point;
+                    e.SetLocation(p.X, p.Y);
                     e.CurrentContextElement = listener;
                     if (listenerAction(listener))
                     {

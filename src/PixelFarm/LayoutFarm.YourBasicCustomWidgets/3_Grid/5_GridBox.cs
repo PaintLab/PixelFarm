@@ -679,8 +679,10 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
+            //System.Console.WriteLine(e.X + "," + e.Y);
             if (e.IsDragging)
             {
+              
                 GridLayer layer = _gridViewRenderE.GridLayer;
                 GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
                 if (_gridSelectionSession != null)
@@ -701,10 +703,7 @@ namespace LayoutFarm.CustomWidgets
             //check if cell content
             //find grid item 
 
-            if (this.ViewportX > 0)
-            {
-
-            }
+            //System.Console.WriteLine(e.X + "," + e.Y);
 
             GridLayer layer = _gridViewRenderE.GridLayer;
             GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
