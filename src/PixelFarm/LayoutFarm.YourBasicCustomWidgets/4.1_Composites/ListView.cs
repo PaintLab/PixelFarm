@@ -287,9 +287,9 @@ namespace LayoutFarm.CustomWidgets
                 //check if selected item is visible
                 //if not bring them into view
                 int topPos = selectedItem.Top;
-                if (this.viewportY + ViewportHeight < topPos)
+                if (this.viewportY + Height < topPos)
                 {
-                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2));
+                    SetViewport(this.viewportX, topPos - (Height / 2));
                 }
             }
 

@@ -176,11 +176,11 @@ namespace LayoutFarm.UI
         {
             get { return 0; }
         }
-        public virtual int ViewportWidth
+        int IScrollable.ViewportWidth
         {
             get { return this.Width; }
         }
-        public virtual int ViewportHeight
+        int IScrollable.ViewportHeight
         {
             get { return this.Height; }
         }
