@@ -958,7 +958,7 @@ namespace LayoutFarm.CustomWidgets
 
 
 
-    class ScrollBarButton : AbstractBox
+    class ScrollBarButton : Box
     {
         public ScrollBarButton(int w, int h, IUIEventListener owner)
             : base(w, h)

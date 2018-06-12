@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
     /// <summary>
     /// textbox with decoration(eg. placeholder)
     /// </summary>
-    public class TextBoxContainer : AbstractBox
+    public class TextBoxContainer : Box
     {
         TextBox myTextBox;
         CustomTextRun placeHolder;

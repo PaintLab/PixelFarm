@@ -26,7 +26,7 @@ namespace LayoutFarm
                 viewport.AddContent(box2);
             }
         }
-        static void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.AbstractBox box)
+        static void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
 

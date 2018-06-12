@@ -3,7 +3,7 @@
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class UIFloatWindow : AbstractBox, ITopWindowBox
+    public class UIFloatWindow : Box, ITopWindowBox
     {
         IPlatformWindowBox platformWindowBox;
         public UIFloatWindow(int w, int h)

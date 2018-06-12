@@ -106,7 +106,7 @@ namespace LayoutFarm
             }
             this.workingControllerBoxes.Clear();
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.AbstractBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
             //if click on background
             backgroundBox.MouseDown += (s, e) =>
@@ -199,7 +199,7 @@ namespace LayoutFarm
                 }
             }
         }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.AbstractBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>
@@ -485,14 +485,14 @@ namespace LayoutFarm
         }
 
         //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
+        class UIControllerBox : LayoutFarm.CustomWidgets.Box
         {
             LayoutFarm.CustomWidgets.GridView gridBox;
             //small controller box
-            LayoutFarm.CustomWidgets.AbstractBox boxLeftTop;
-            LayoutFarm.CustomWidgets.AbstractBox boxRightTop;
-            LayoutFarm.CustomWidgets.AbstractBox boxLeftBottom;
-            LayoutFarm.CustomWidgets.AbstractBox boxRightBottom;
+            LayoutFarm.CustomWidgets.Box boxLeftTop;
+            LayoutFarm.CustomWidgets.Box boxRightTop;
+            LayoutFarm.CustomWidgets.Box boxLeftBottom;
+            LayoutFarm.CustomWidgets.Box boxRightBottom;
             DockSpacesController dockspaceController;
             Dictionary<UIElement, int> latestDragOverElements;
             LayoutFarm.UI.AbstractRect targetBox;
@@ -577,7 +577,7 @@ namespace LayoutFarm
                 this.dockspaceController.RightBottomSpace.Content = boxRightBottom = CreateTinyControlBox(SpaceName.RightBottom);
             }
 
-            CustomWidgets.AbstractBox CreateTinyControlBox(SpaceName name)
+            CustomWidgets.Box CreateTinyControlBox(SpaceName name)
             {
                 int controllerBoxWH = 10;
                 var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
@@ -688,7 +688,7 @@ namespace LayoutFarm
             }
         }
 
-        class UISelectionBox : LayoutFarm.CustomWidgets.AbstractBox
+        class UISelectionBox : LayoutFarm.CustomWidgets.Box
         {
             public UISelectionBox(int w, int h)
                 : base(w, h)

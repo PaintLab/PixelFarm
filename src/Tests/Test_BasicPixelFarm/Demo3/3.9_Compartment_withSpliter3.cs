@@ -36,7 +36,7 @@ namespace LayoutFarm
             //ninespaceBox.LeftSpace.AddChildBox(sampleListView);
 
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.AbstractBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
         }
 

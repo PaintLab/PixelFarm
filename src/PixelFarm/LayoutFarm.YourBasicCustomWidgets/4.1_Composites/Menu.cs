@@ -263,7 +263,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class MenuBox : AbstractBox
+    public class MenuBox : Box
     {
         bool showing;
         RenderBoxBase topWindow;

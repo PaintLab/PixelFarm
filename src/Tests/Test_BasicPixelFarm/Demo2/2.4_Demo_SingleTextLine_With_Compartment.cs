@@ -53,7 +53,7 @@ namespace LayoutFarm
             ninespaceBox.LeftSpace.AddChild(textbox);
             ninespaceBox.RightSpace.AddChild(listView);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.AbstractBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
         }
 
@@ -397,7 +397,7 @@ Zimbabwe");
         }
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
+        class UINinespaceBox : LayoutFarm.CustomWidgets.Box
         {
             SimpleBox boxLeftTop;
             SimpleBox boxRightTop;
@@ -410,10 +410,10 @@ Zimbabwe");
             SimpleBox boxBottom;
             //-------------------------------------
             SimpleBox centerBox;
-            AbstractBox gripperLeft;
-            AbstractBox gripperRight;
-            AbstractBox gripperTop;
-            AbstractBox gripperBottom;
+            Box gripperLeft;
+            Box gripperRight;
+            Box gripperTop;
+            Box gripperBottom;
             DockSpacesController dockspaceController;
             NinespaceGrippers ninespaceGrippers;
             public UINinespaceBox(int w, int h)
@@ -456,7 +456,7 @@ Zimbabwe");
                 this.Describe(visitor);
                 visitor.EndElement();
             }
-            CustomWidgets.AbstractBox CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
+            CustomWidgets.Box CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
             {
                 int controllerBoxWH = 10;
                 var gripperBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);

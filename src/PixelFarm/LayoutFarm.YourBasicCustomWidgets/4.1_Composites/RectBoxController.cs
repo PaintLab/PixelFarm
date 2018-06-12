@@ -8,7 +8,7 @@ using LayoutFarm.UI;
 
 namespace LayoutFarm.CustomWidgets
 {
-    class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
+    class UIControllerBox : LayoutFarm.CustomWidgets.Box
     {
         public UIControllerBox(int w, int h)
             : base(w, h)
@@ -200,7 +200,7 @@ namespace LayoutFarm.CustomWidgets
             _simpleBox.AddChild(_boxRightBottom);
         }
 
-        public AbstractBox ControllerBoxMain
+        public Box ControllerBoxMain
         {
             get { return controllerBox1; }
         }

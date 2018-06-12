@@ -31,7 +31,7 @@ namespace LayoutFarm
             viewport.AddContent(controllerBox1);
         }
 
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.AbstractBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>
@@ -77,7 +77,7 @@ namespace LayoutFarm
             };
         }
 
-        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
+        class UIControllerBox : LayoutFarm.CustomWidgets.Box
         {
             public UIControllerBox(int w, int h)
                 : base(w, h)
@@ -128,7 +128,7 @@ namespace LayoutFarm
 
         }
 
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.AbstractBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>

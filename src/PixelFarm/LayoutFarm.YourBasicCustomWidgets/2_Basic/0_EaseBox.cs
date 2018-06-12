@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public abstract class AbstractBox : AbstractRect
+    public abstract class Box : AbstractRect
     {
         BoxContentLayoutKind panelLayoutKind;
         bool needContentLayout;
@@ -32,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
-        public AbstractBox(int width, int height)
+        public Box(int width, int height)
             : base(width, height)
         {
             this.desiredHeight = height;

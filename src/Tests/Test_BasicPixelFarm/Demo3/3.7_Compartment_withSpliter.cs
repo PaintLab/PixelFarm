@@ -26,7 +26,7 @@ namespace LayoutFarm
             viewport.AddContent(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.AbstractBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
         }
     }
