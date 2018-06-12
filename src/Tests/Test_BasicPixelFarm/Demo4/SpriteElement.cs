@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
 
         }
     }
-    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.EaseBox
+    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.Box
     {
         BackBoardRenderElement _backboardRenderE;
         public BackDrawBoardUI(int w, int h)

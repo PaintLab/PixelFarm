@@ -8,13 +8,13 @@ using LayoutFarm.UI;
 
 namespace LayoutFarm.CustomWidgets
 {
-    class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+    class UIControllerBox : LayoutFarm.CustomWidgets.Box
     {
         public UIControllerBox(int w, int h)
             : base(w, h)
         {
         }
-        public LayoutFarm.UI.UIBox TargetBox
+        public LayoutFarm.UI.AbstractRect TargetBox
         {
             get;
             set;
@@ -78,7 +78,7 @@ namespace LayoutFarm.CustomWidgets
             controllerBox1.AcceptKeyboardFocus = true;
             controllerBox1.Focus();
         }
-        public void UpdateControllerBoxes(LayoutFarm.UI.UIBox box)
+        public void UpdateControllerBoxes(LayoutFarm.UI.AbstractRect box)
         {
 
             //move controller here 
@@ -140,7 +140,7 @@ namespace LayoutFarm.CustomWidgets
             _boxLeftTop.MouseDrag += (s1, e1) =>
             {
                 //move other boxes ...
-                UIBox target1 = _boxLeftTop.TargetBox;
+                AbstractRect target1 = _boxLeftTop.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
@@ -156,7 +156,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxLeftBottom);
             _boxLeftBottom.MouseDrag += (s1, e1) =>
             {
-                UIBox target1 = _boxLeftBottom.TargetBox;
+                AbstractRect target1 = _boxLeftBottom.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftBottom.Right,
                                       _boxLeftTop.Bottom,
@@ -172,7 +172,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxRightTop);
             _boxRightTop.MouseDrag += (s1, e1) =>
             {
-                UIBox target1 = _boxRightTop.TargetBox;
+                AbstractRect target1 = _boxRightTop.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxRightTop.Bottom,
@@ -188,7 +188,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxRightBottom);
             _boxRightBottom.MouseDrag += (s1, e1) =>
             {
-                UIBox target1 = _boxRightBottom.TargetBox;
+                AbstractRect target1 = _boxRightBottom.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
@@ -200,7 +200,7 @@ namespace LayoutFarm.CustomWidgets
             _simpleBox.AddChild(_boxRightBottom);
         }
 
-        public EaseBox ControllerBoxMain
+        public Box ControllerBoxMain
         {
             get { return controllerBox1; }
         }

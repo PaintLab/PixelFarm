@@ -4,7 +4,7 @@ namespace LayoutFarm.UI
 {
     public class FreeSpacesController : NinespaceController
     {
-        public FreeSpacesController(UIBox owner)
+        public FreeSpacesController(AbstractRect owner)
             : base(owner, SpaceConcept.NineSpaceFree)
         {
             spaces[L] = InitSpace(SpaceName.Left);
