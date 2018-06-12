@@ -492,7 +492,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public class GridBox : EaseBox
+    public class GridBox : AbstractBox
     {
         //grid view + scollable view+ header
         GridView _gridView;
@@ -547,7 +547,7 @@ namespace LayoutFarm.CustomWidgets
 
     }
 
-    public class GridView : EaseBox
+    public class GridView : AbstractBox
     {
         GridViewRenderElement _gridViewRenderE;
         CellSizeStyle cellSizeStyle;

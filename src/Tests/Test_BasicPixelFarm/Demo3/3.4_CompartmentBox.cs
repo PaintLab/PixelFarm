@@ -38,7 +38,7 @@ namespace LayoutFarm
             SetupControllerBoxProperties(controllerBox1);
             viewport.AddContent(controllerBox1);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.AbstractBox backgroundBox)
         {
             //if click on background
             backgroundBox.MouseDown += (s, e) =>
@@ -47,7 +47,7 @@ namespace LayoutFarm
                 controllerBox1.Visible = false;
             };
         }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.AbstractBox box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>
@@ -109,14 +109,14 @@ namespace LayoutFarm
         }
 
         //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             LayoutFarm.CustomWidgets.GridView gridBox;
             //-------------------------------------------
-            LayoutFarm.CustomWidgets.EaseBox boxLeftTop;
-            LayoutFarm.CustomWidgets.EaseBox boxRightTop;
-            LayoutFarm.CustomWidgets.EaseBox boxLeftBottom;
-            LayoutFarm.CustomWidgets.EaseBox boxRightBottom;
+            LayoutFarm.CustomWidgets.AbstractBox boxLeftTop;
+            LayoutFarm.CustomWidgets.AbstractBox boxRightTop;
+            LayoutFarm.CustomWidgets.AbstractBox boxLeftBottom;
+            LayoutFarm.CustomWidgets.AbstractBox boxRightBottom;
             //-------------------------------------------
 
             DockSpacesController dockspaceController;
@@ -175,7 +175,7 @@ namespace LayoutFarm
                 this.dockspaceController.RightBottomSpace.Content = boxRightBottom = CreateTinyControlBox(SpaceName.RightBottom);
             }
 
-            CustomWidgets.EaseBox CreateTinyControlBox(SpaceName name)
+            CustomWidgets.AbstractBox CreateTinyControlBox(SpaceName name)
             {
                 int controllerBoxWH = 10;
                 var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);

@@ -41,7 +41,7 @@ namespace LayoutFarm
             SetupControllerBoxProperties(controllerBox1);
             viewport.AddContent(controllerBox1);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.AbstractBox backgroundBox)
         {
             //if click on background
             backgroundBox.MouseDown += (s, e) =>
@@ -50,7 +50,7 @@ namespace LayoutFarm
                 controllerBox1.Visible = false;
             };
         }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.AbstractBox box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>
@@ -109,7 +109,7 @@ namespace LayoutFarm
         }
 
         //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             LayoutFarm.CustomWidgets.GridView gridBox;
             public UIControllerBox(int w, int h)

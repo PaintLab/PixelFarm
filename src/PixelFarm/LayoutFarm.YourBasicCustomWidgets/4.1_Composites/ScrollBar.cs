@@ -958,7 +958,7 @@ namespace LayoutFarm.CustomWidgets
 
 
 
-    class ScrollBarButton : EaseBox
+    class ScrollBarButton : AbstractBox
     {
         public ScrollBarButton(int w, int h, IUIEventListener owner)
             : base(w, h)

@@ -4,7 +4,7 @@ using System;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ImageBox : EaseBox
+    public class ImageBox : AbstractBox
     {
         CustomImageRenderBox imgRenderBox;
         ImageBinder imageBinder;

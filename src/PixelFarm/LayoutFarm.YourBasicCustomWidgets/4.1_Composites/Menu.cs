@@ -263,7 +263,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class MenuBox : EaseBox
+    public class MenuBox : AbstractBox
     {
         bool showing;
         RenderBoxBase topWindow;

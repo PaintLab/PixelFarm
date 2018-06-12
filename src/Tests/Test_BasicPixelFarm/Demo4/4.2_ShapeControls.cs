@@ -89,7 +89,7 @@ namespace LayoutFarm
             };
 
         }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.AbstractBox box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>

@@ -34,7 +34,7 @@ namespace LayoutFarm
             ninespaceBox.LeftSpace.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             ninespaceBox.LeftSpace.AddChild(sampleListView);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.AbstractBox backgroundBox)
         {
         }
 
