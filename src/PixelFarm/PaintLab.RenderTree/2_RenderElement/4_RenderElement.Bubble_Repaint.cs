@@ -16,6 +16,7 @@ namespace LayoutFarm
                 return false;
             }
 
+            var parent = this.ParentRenderElement;
             Rectangle rect = new Rectangle(0, 0, b_width, b_height);
             RootInvalidateGraphicArea(this, ref rect);
             return true;//TODO: review this 
@@ -33,7 +34,14 @@ namespace LayoutFarm
             {
                 return;
             }
-            this.rootGfx.InvalidateGraphicArea(parent, ref totalBounds);
+
+            //System.Console.WriteLine(totalBounds.ToString()); 
+            //if (parent.MayHasViewport)
+            //{
+            //    totalBounds.Offset(-parent.ViewportX, -parent.ViewportY);
+            //}
+
+            this.rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);
         }
 
         static void RootInvalidateGraphicArea(RenderElement re, ref Rectangle rect)

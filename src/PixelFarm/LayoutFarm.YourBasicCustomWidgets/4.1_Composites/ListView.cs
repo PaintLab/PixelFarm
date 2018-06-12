@@ -261,13 +261,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
-        public override void SetViewport(int x, int y)
+        public override void SetViewport(int x, int y, object reqBy)
         {
             this.viewportX = x;
             this.viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this.panel.SetViewport(x, y);
+                this.panel.SetViewport(x, y, reqBy);
             }
         }
         public void ScrollToSelectedItem()
@@ -277,7 +277,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //find the item height
                 int topPos = selectedItem.Top;
-                SetViewport(this.viewportX, topPos);
+                SetViewport(this.viewportX, topPos, this);
             }
         }
         public void EnsureSelectedItemVisible()
@@ -289,7 +289,7 @@ namespace LayoutFarm.CustomWidgets
                 int topPos = selectedItem.Top;
                 if (this.viewportY + ViewportHeight < topPos)
                 {
-                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2));
+                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2), this);
                 }
             }
 
@@ -321,7 +321,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             this.TransparentAllMouseEvents = true;
-            
+
         }
         public override RenderElement CurrentPrimaryRenderElement
         {

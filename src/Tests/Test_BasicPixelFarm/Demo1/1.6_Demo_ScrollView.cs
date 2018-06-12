@@ -60,7 +60,7 @@ namespace LayoutFarm
             }
             //--------------------------   
             panel.PerformContentLayout();
-            panel.SetViewport(0, 0);
+            panel.SetViewport(0, 0, this);
         }
         void AddScrollView2(SampleViewport viewport, int x, int y)
         {
@@ -112,7 +112,7 @@ namespace LayoutFarm
             }
             //--------------------------
             //panel may need more 
-            panel.SetViewport(0, 0);
+            panel.SetViewport(0, 0, this);
             //-------------------------  
             {
                 //vertical scrollbar
