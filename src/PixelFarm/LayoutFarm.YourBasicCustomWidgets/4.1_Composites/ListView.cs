@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
 {
 
 
-    public class ListView : UIBox
+    public class ListView : AbstractRect
     {
 
 
@@ -277,7 +277,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //find the item height
                 int topPos = selectedItem.Top;
-                SetViewport(this.viewportX, topPos, this);
+                SetViewport(this.viewportX, topPos);
             }
         }
         public void EnsureSelectedItemVisible()
@@ -287,9 +287,9 @@ namespace LayoutFarm.CustomWidgets
                 //check if selected item is visible
                 //if not bring them into view
                 int topPos = selectedItem.Top;
-                if (this.viewportY + ViewportHeight < topPos)
+                if (this.viewportY + Height < topPos)
                 {
-                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2), this);
+                    SetViewport(this.viewportX, topPos - (Height / 2));
                 }
             }
 
@@ -308,7 +308,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class ListItem : UIBox
+    public class ListItem : AbstractRect
     {
         CustomContainerRenderBox primElement;
         CustomTextRun listItemText;

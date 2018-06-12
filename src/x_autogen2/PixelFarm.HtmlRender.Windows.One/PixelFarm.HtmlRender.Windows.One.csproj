@@ -56,8 +56,8 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\2_UIElement_EventListener.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\2_UIElement_EventListener.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\3_UIBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\3_UIBox.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\3_AbstractRect.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\3_AbstractRect.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\4_UICollection.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\4_UICollection.cs</Link>
@@ -71,8 +71,8 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIVisitor.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIVisitor.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_EaseBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_EaseBox.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_Box.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_Box.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\1_ImageBox.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\1_ImageBox.cs</Link>

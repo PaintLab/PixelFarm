@@ -23,10 +23,7 @@ namespace LayoutFarm
         public bool UseAsFloatWindow { get; set; }
         public override void SetViewport(int viewportX, int viewportY)
         {
-            if (viewportX > 0)
-            {
 
-            }
             this.myviewportX = viewportX;
             this.myviewportY = viewportY;
             this.InvalidateGraphics();

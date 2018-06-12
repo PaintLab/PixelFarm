@@ -26,7 +26,7 @@ namespace LayoutFarm
             viewport.AddContent(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
             ////if click on background
             //backgroundBox.MouseDown += (s, e) =>
@@ -41,22 +41,22 @@ namespace LayoutFarm
 
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.EaseBox
+        class UINinespaceBox : LayoutFarm.CustomWidgets.Box
         {
             //-------------------------------------
-            EaseBox boxLeftTop;
-            EaseBox boxRightTop;
-            EaseBox boxLeftBottom;
-            EaseBox boxRightBottom;
+            Box boxLeftTop;
+            Box boxRightTop;
+            Box boxLeftBottom;
+            Box boxRightBottom;
             //-------------------------------------
-            EaseBox boxLeft;
-            EaseBox boxTop;
-            EaseBox boxRight;
-            EaseBox boxBottom;
+            Box boxLeft;
+            Box boxTop;
+            Box boxRight;
+            Box boxBottom;
             //-------------------------------------
 
             //-------------------------------------
-            EaseBox centerBox;
+            Box centerBox;
             DockSpacesController dockspaceController;
             public UINinespaceBox(int w, int h)
                 : base(w, h)
@@ -86,7 +86,7 @@ namespace LayoutFarm
             }
 
 
-            static CustomWidgets.EaseBox CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
+            static CustomWidgets.Box CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
             {
                 int controllerBoxWH = 10;
                 var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
