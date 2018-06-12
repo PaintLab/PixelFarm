@@ -162,7 +162,7 @@ namespace LayoutFarm.UI
             {
                 this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
             }
-        } 
+        }
         public override void GetViewport(out int x, out int y)
         {
             x = ViewportX;
@@ -186,6 +186,10 @@ namespace LayoutFarm.UI
         }
         public virtual void SetViewport(int x, int y, object reqBy)
         {
+        }
+        public void SetViewport(int x, int y)
+        {
+            SetViewport(x, y, this);
         }
         //------------------------------
         public virtual void PerformContentLayout()

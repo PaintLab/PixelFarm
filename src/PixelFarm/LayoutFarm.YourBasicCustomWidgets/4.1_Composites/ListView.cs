@@ -277,7 +277,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //find the item height
                 int topPos = selectedItem.Top;
-                SetViewport(this.viewportX, topPos, this);
+                SetViewport(this.viewportX, topPos);
             }
         }
         public void EnsureSelectedItemVisible()
@@ -289,7 +289,7 @@ namespace LayoutFarm.CustomWidgets
                 int topPos = selectedItem.Top;
                 if (this.viewportY + ViewportHeight < topPos)
                 {
-                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2), this);
+                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2));
                 }
             }
 
