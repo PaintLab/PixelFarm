@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 //MatterHackers: BSD
 // Much of the ui to the drawing functions still needs to be C#'ed and cleaned up.  A lot of

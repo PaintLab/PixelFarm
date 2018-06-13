@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 //we use concept from https://www.mapbox.com/blog/drawing-antialiased-lines/
 using System;
 using OpenTK.Graphics.ES20;

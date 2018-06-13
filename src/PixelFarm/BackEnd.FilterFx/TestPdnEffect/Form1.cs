@@ -1,4 +1,4 @@
-﻿//MIT, 2018, WinterDev
+﻿//MIT, 2018-present, WinterDev
 
 using System;
 using System.Collections.Generic;

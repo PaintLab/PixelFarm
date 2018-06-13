@@ -1,5 +1,5 @@
 ﻿//MIT, 2015, Michael Popoloski's SharpFont,
-//MIT, 2016-2018, WinterDev
+//MIT, 2016-present, WinterDev
 
 
 using System.Numerics;

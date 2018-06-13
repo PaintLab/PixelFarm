@@ -1,5 +1,5 @@
-﻿//BSD, 2014-2018, WinterDev
-//MIT, 2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
+//MIT, 2018-present, WinterDev
 using System.Collections.Generic;
 using System.IO;
 namespace PixelFarm.Platforms

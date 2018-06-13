@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //BSD (Oct,November) 2008, (Jan 2009), 2014 WinterDev
 
 using System;

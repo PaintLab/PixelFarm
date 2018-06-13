@@ -1,4 +1,4 @@
-﻿//2017, MIT, WinterDev
+﻿//MIT, 2017-present, WinterDev
 //and ICU data is modified from ICU project (http://site.icu-project.org/)
 
 //----------------------------

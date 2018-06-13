@@ -1,5 +1,5 @@
 ﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
-//MIT, 2017-2018, WinterDev
+//MIT, 2017-present, WinterDev
 
 using System;
 namespace PixelFarm.DrawingBuffer

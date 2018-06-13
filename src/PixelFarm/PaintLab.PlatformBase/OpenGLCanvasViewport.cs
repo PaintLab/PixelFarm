@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 #if GL_ENABLE
 using System.Collections.Generic;
 using PixelFarm.Drawing;

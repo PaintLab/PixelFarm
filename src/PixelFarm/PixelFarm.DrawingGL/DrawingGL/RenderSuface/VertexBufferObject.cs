@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 //https://www.khronos.org/opengl/wiki/Vertex_Specification#Vertex_Buffer_Object
 //https://www.khronos.org/opengl/wiki/Generic_Vertex_Attribute_-_examples
 //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html

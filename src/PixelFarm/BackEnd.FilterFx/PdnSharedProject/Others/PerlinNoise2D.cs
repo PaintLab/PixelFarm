@@ -33,7 +33,7 @@
 // Parts adapted to 2D from perlin's reference 3D implementation
 // http://mrl.nyu.edu/~perlin/noise/
 
-//Apache2, 2017-2018, WinterDev
+//Apache2, 2017-present, WinterDev
 using System;
 
 using PixelFarm.Drawing.DrawingBuffer;

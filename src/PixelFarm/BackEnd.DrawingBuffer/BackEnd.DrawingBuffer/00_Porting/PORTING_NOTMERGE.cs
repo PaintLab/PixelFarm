@@ -1,4 +1,4 @@
-﻿//MIT, 2017-2018, WinterDev
+﻿//MIT, 2017-present, WinterDev
 //example and test for WritableBitmap (https://github.com/teichgraf/WriteableBitmapEx) on Gdi+
 
 using System;
