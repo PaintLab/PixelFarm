@@ -16,7 +16,7 @@ namespace LayoutFarm
             //set default style
             textbox.DefaultSpanStyle = textSpanStyle;
 
-            viewport.AddContent(textbox);
+            viewport.AddChild(textbox);
             textbox.InvalidateGraphics();
         }
     }

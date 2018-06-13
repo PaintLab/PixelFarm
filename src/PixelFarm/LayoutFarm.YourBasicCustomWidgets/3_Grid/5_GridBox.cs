@@ -64,9 +64,9 @@ namespace LayoutFarm.CustomWidgets
     {
         public GridCell _latestHitCell;
         public GridCell _beginSelectedCell;
-        public SimpleBox _bodyBox; //used in RectBox mode and FlowBox mode
-        public SimpleBox _headBox;
-        public SimpleBox _tailBox;
+        public Box _bodyBox; //used in RectBox mode and FlowBox mode
+        public Box _headBox;
+        public Box _tailBox;
         GridSelectionStyle _gridSelectionStyle;
         bool _moreThan1Cell;
 
@@ -99,9 +99,9 @@ namespace LayoutFarm.CustomWidgets
 
         }
 
-        static SimpleBox SetupHighlightBox()
+        static Box SetupHighlightBox()
         {
-            var box = new SimpleBox(10, 10);
+            var box = new Box(10, 10);
             box.BackColor = new Color(100, 255, 0, 0);
             box.Visible = false;
             box.TransparentAllMouseEvents = true;
@@ -492,11 +492,11 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public class GridBox : Box
+    public class GridBox : AbstractBox
     {
         //grid view + scollable view+ header
         GridView _gridView;
-        SimpleBox _scrollableViewPanel;
+        Box _scrollableViewPanel;
 
         public GridBox(int width, int height)
             : base(width, height)
@@ -507,7 +507,7 @@ namespace LayoutFarm.CustomWidgets
             this.NeedClipArea = true;
 
             //scrollable content box is inside this grid box
-            _scrollableViewPanel = new SimpleBox(this.Width, this.Height);
+            _scrollableViewPanel = new Box(this.Width, this.Height);
 
 
 
@@ -547,7 +547,7 @@ namespace LayoutFarm.CustomWidgets
 
     }
 
-    public class GridView : Box
+    public class GridView : AbstractBox
     {
         GridViewRenderElement _gridViewRenderE;
         CellSizeStyle cellSizeStyle;

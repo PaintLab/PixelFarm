@@ -1016,8 +1016,8 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIVisitor.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\1_UIElement\UIVisitor.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_Box.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_Box.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_AbstractBox.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\0_AbstractBox.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\1_ImageBox.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\1_ImageBox.cs</Link>
@@ -1025,8 +1025,8 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\2_TextBox.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\2_TextBox.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\3_SimpleBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\3_SimpleBox.cs</Link>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\3_Box.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\3_Box.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\4_Label.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets\2_Basic\4_Label.cs</Link>

@@ -10,17 +10,17 @@ namespace LayoutFarm
         UIControllerBox controllerBox1;
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
-            viewport.AddContent(box1);
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
+            viewport.AddChild(box1);
+            var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
-            viewport.AddContent(box2);
+            viewport.AddChild(box2);
             controllerBox1 = new UIControllerBox(40, 40);
             Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
             controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
@@ -28,7 +28,7 @@ namespace LayoutFarm
             //controllerBox1.dbugTag = 3;
             controllerBox1.Visible = false;
             SetupControllerBoxProperties(controllerBox1);
-            viewport.AddContent(controllerBox1);
+            viewport.AddChild(controllerBox1);
         }
 
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
@@ -77,7 +77,7 @@ namespace LayoutFarm
             };
         }
 
-        class UIControllerBox : LayoutFarm.CustomWidgets.Box
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             public UIControllerBox(int w, int h)
                 : base(w, h)
@@ -105,21 +105,21 @@ namespace LayoutFarm
 
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
-            viewport.AddContent(box1);
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
+            viewport.AddChild(box1);
+            var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
-            viewport.AddContent(box2);
+            viewport.AddChild(box2);
             rectBoxController.Init();
             //------------
 
-            viewport.AddContent(rectBoxController);
+            viewport.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{

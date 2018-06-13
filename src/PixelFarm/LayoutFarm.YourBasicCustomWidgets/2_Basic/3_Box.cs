@@ -18,15 +18,15 @@ namespace LayoutFarm.CustomWidgets
         Both,
     }
 
-    public sealed class SimpleBox : Box
+    public sealed class Box : AbstractBox
     {
-        public SimpleBox(int w, int h)
+        public Box(int w, int h)
             : base(w, h)
         {
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "simplebox");
+            visitor.BeginElement(this, "box");
             this.Describe(visitor);
             //descrube child 
             visitor.EndElement();

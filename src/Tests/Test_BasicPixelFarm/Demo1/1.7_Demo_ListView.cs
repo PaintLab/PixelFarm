@@ -12,7 +12,7 @@ namespace LayoutFarm
             listview.SetLocation(10, 10);
             listview.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
             //add list view to viewport
-            viewport.AddContent(listview);
+            viewport.AddChild(listview);
             //add 
             RequestFont listItemFont = new RequestFont("tahoma", 18);
             for (int i = 0; i < 10; ++i)

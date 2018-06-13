@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
 
         }
     }
-    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.Box
+    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.AbstractBox
     {
         BackBoardRenderElement _backboardRenderE;
         public BackDrawBoardUI(int w, int h)

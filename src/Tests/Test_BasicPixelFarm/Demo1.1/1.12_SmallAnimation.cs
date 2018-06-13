@@ -32,7 +32,7 @@ namespace LayoutFarm
                         }
                     });
                 };
-                viewport.AddContent(imgBox);
+                viewport.AddChild(imgBox);
             }
 
         }

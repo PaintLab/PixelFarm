@@ -14,12 +14,12 @@ namespace LayoutFarm.CustomWidgets
         int viewportX, viewportY;
         UICollection uiList;
         int latestItemY;
-        SimpleBox panel; //panel 
+        Box panel; //panel 
         public TreeView(int width, int height)
             : base(width, height)
         {
             //panel for listview items
-            this.panel = new SimpleBox(width, height);
+            this.panel = new Box(width, height);
             panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             panel.BackColor = Color.LightGray;
             panel.NeedClipArea = true;

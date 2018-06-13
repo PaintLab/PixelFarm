@@ -14,7 +14,7 @@ namespace LayoutFarm
             //test with various font style
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox1.DefaultSpanStyle = style1;
-            viewport.AddContent(textbox1);
+            viewport.AddChild(textbox1);
             //-------------------
             //this version we need to set a style font each textbox
             var textbox2 = new LayoutFarm.CustomWidgets.TextBox(400, 500, true);
@@ -25,7 +25,7 @@ namespace LayoutFarm
             textbox2.SetLocation(20, 120);
             
 
-            viewport.AddContent(textbox2);
+            viewport.AddChild(textbox2);
             var textSplitter = new ContentTextSplitter();
             textbox2.TextSplitter = textSplitter;
             textbox2.Text = "Hello World!";

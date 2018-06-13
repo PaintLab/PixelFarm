@@ -12,7 +12,7 @@ namespace LayoutFarm
     class Demo_SvgTiger : DemoBase
     {
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
-        LayoutFarm.CustomWidgets.SimpleBox box1;
+        LayoutFarm.CustomWidgets.Box box1;
         BackDrawBoardUI _backBoard;
 
         protected override void OnStartDemo(SampleViewport viewport)
@@ -22,11 +22,11 @@ namespace LayoutFarm
             PaintLab.Svg.SvgParser parser = new SvgParser();
             _backBoard = new BackDrawBoardUI(400, 400);
             _backBoard.BackColor = Color.White;
-            viewport.AddContent(_backBoard);
+            viewport.AddChild(_backBoard);
 
 
 
-            box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
@@ -48,7 +48,7 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //------------
-            viewport.AddContent(rectBoxController);
+            viewport.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{

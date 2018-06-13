@@ -14,16 +14,16 @@ namespace LayoutFarm
             //--------------------------------
             {
                 //background element
-                var bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+                var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddContent(bgbox);
+                viewport.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new UINinespaceBox(800, 600);
-            viewport.AddContent(ninespaceBox);
+            viewport.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
         }
         void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
@@ -41,7 +41,7 @@ namespace LayoutFarm
 
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.Box
+        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             //-------------------------------------
             Box boxLeftTop;
@@ -89,7 +89,7 @@ namespace LayoutFarm
             static CustomWidgets.Box CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
             {
                 int controllerBoxWH = 10;
-                var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                var tinyBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 tinyBox.BackColor = bgcolor;
                 tinyBox.Tag = name;
                 return tinyBox;
