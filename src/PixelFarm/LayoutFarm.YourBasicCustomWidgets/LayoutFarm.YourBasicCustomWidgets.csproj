@@ -49,7 +49,7 @@
     <Compile Include="2_Basic\0_AbstractBox.cs" />
     <Compile Include="2_Basic\1_ImageBox.cs" />
     <Compile Include="2_Basic\2_TextBox.cs" />
-    <Compile Include="2_Basic\3_SimpleBox.cs" />
+    <Compile Include="2_Basic\3_Box.cs" />
     <Compile Include="2_Basic\4_Label.cs" />
     <Compile Include="3_Grid\2_GridLayer.cs" />
     <Compile Include="3_Grid\3_GridTable.cs" />

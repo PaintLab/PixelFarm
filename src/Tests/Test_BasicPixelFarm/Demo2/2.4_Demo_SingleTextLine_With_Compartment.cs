@@ -129,7 +129,7 @@ namespace LayoutFarm
                     }
                 }
             }
-         
+
             //-------------------------------------------------------------------------
         }
 
@@ -397,7 +397,7 @@ Zimbabwe");
         }
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.Box
+        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             Box boxLeftTop;
             Box boxRightTop;

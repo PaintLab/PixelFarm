@@ -109,7 +109,7 @@ namespace LayoutFarm
         }
 
         //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.Box
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             LayoutFarm.CustomWidgets.GridView gridBox;
             //-------------------------------------------

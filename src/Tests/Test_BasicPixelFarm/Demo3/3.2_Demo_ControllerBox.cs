@@ -77,7 +77,7 @@ namespace LayoutFarm
             };
         }
 
-        class UIControllerBox : LayoutFarm.CustomWidgets.Box
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             public UIControllerBox(int w, int h)
                 : base(w, h)

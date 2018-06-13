@@ -485,7 +485,7 @@ namespace LayoutFarm
         }
 
         //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.Box
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             LayoutFarm.CustomWidgets.GridView gridBox;
             //small controller box
@@ -688,7 +688,7 @@ namespace LayoutFarm
             }
         }
 
-        class UISelectionBox : LayoutFarm.CustomWidgets.Box
+        class UISelectionBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             public UISelectionBox(int w, int h)
                 : base(w, h)
