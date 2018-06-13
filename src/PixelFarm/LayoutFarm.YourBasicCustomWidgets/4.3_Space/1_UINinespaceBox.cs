@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class NinespaceBox : Box
+    public class NinespaceBox : AbstractBox
     {
         SimpleBox boxLeftTop;
         SimpleBox boxRightTop;
@@ -17,10 +17,10 @@ namespace LayoutFarm.CustomWidgets
         SimpleBox boxBottom;
         //-------------------------------------
         SimpleBox boxCentral;
-        Box gripperLeft;
-        Box gripperRight;
-        Box gripperTop;
-        Box gripperBottom;
+        AbstractBox gripperLeft;
+        AbstractBox gripperRight;
+        AbstractBox gripperTop;
+        AbstractBox gripperBottom;
         DockSpacesController dockspaceController;
         NinespaceGrippers ninespaceGrippers;
         public NinespaceBox(int w, int h)
@@ -89,7 +89,7 @@ namespace LayoutFarm.CustomWidgets
         public void SetDockSpaceConcept(LayoutFarm.UI.SpaceConcept concept)
         {
         }
-        Box CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
+        AbstractBox CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
         {
             int controllerBoxWH = 10;
             var gripperBox = new SimpleBox(controllerBoxWH, controllerBoxWH);

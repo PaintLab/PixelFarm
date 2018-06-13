@@ -9,7 +9,7 @@ namespace LayoutFarm.CustomWidgets
     /// <summary>
     /// abstract box ui element
     /// </summary>
-    public abstract class Box : AbstractRect
+    public abstract class AbstractBox : AbstractRect
     {
         BoxContentLayoutKind panelLayoutKind;
         bool needContentLayout;
@@ -35,7 +35,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
-        public Box(int width, int height)
+        public AbstractBox(int width, int height)
             : base(width, height)
         {
             this.desiredHeight = height;
