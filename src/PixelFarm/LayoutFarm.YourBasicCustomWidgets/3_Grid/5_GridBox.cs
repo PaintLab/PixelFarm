@@ -4,11 +4,11 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    class GridViewRenderElement : CustomRenderBox
+    class GridViewRenderBox : CustomRenderBox
     {
         GridLayer gridLayer;
 
-        public GridViewRenderElement(RootGraphic rootgfx, int w, int h)
+        public GridViewRenderBox(RootGraphic rootgfx, int w, int h)
             : base(rootgfx, w, h)
         {
         }
@@ -36,9 +36,19 @@ namespace LayoutFarm.CustomWidgets
             //{
             //}
 #endif
-            //sample bg   
-            //canvas.FillRectangle(BackColor, updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height);
-            canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
+            //sample bg  
+            //TODO: review here again
+            if (this.MayHasViewport)
+            {
+                canvas.FillRectangle(BackColor, ViewportX, ViewportY, this.Width, this.Height);
+            }
+            else
+            {
+                canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
+            }
+
+
+
             gridLayer.DrawChildContent(canvas, updateArea);
             if (this.HasDefaultLayer)
             {
@@ -549,7 +559,7 @@ namespace LayoutFarm.CustomWidgets
 
     public class GridView : AbstractBox
     {
-        GridViewRenderElement _gridViewRenderE;
+        GridViewRenderBox _gridViewRenderE;
         CellSizeStyle cellSizeStyle;
         GridTable gridTable;
         GridSelectionSession _gridSelectionSession;
@@ -682,7 +692,7 @@ namespace LayoutFarm.CustomWidgets
             //System.Console.WriteLine(e.X + "," + e.Y);
             if (e.IsDragging)
             {
-              
+
                 GridLayer layer = _gridViewRenderE.GridLayer;
                 GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
                 if (_gridSelectionSession != null)
@@ -930,7 +940,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_gridViewRenderE == null)
             {
-                var myGridBox = new GridViewRenderElement(rootgfx, this.Width, this.Height);
+                var myGridBox = new GridViewRenderBox(rootgfx, this.Width, this.Height);
                 myGridBox.HasSpecificSize = true;//***
                 myGridBox.NeedClipArea = this.NeedClipArea;
 
