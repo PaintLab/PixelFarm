@@ -43,7 +43,7 @@ namespace LayoutFarm
             //if click on background
             backgroundBox.MouseDown += (s, e) =>
             {
-                controllerBox1.TargetBox = null;//release target box
+                controllerBox1.Target = null;//release target box
                 controllerBox1.Visible = false;
             };
         }
@@ -56,7 +56,7 @@ namespace LayoutFarm
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 //--------------------------------------------
                 //move controller here
-                controllerBox1.TargetBox = box;
+                controllerBox1.Target = box;
                 controllerBox1.SetLocation(box.Left - 5, box.Top - 5);
                 controllerBox1.SetSize(box.Width + 10, box.Height + 10);
                 controllerBox1.Visible = true;
@@ -71,7 +71,7 @@ namespace LayoutFarm
                 box.BackColor = Color.LightGray;
                 //hide controller
                 controllerBox1.Visible = false;
-                controllerBox1.TargetBox = null;
+                controllerBox1.Target = null;
             };
         }
 
@@ -88,7 +88,7 @@ namespace LayoutFarm
             int nearestX = (int)((newX + halfGrid) / gridSize) * gridSize;
             int nearestY = (int)((newY + halfGrid) / gridSize) * gridSize;
             controllerBox.SetLocation(nearestX, nearestY);
-            var targetBox = controllerBox.TargetBox;
+            var targetBox = controllerBox.Target;
             if (targetBox != null)
             {
                 //move target box too
@@ -125,7 +125,7 @@ namespace LayoutFarm
             {
                 SetupDockSpaces();
             }
-            public LayoutFarm.UI.AbstractRect TargetBox
+            public LayoutFarm.UI.AbstractRect Target
             {
                 get;
                 set;
@@ -232,7 +232,7 @@ namespace LayoutFarm
                             {
                                 controllerBox.SetLocation(controllerBox.Left + xdiff, controllerBox.Top + ydiff);
                                 controllerBox.SetSize(controllerBox.Width - xdiff, controllerBox.Height - ydiff);
-                                var targetBox = controllerBox.TargetBox;
+                                var targetBox = controllerBox.Target;
                                 if (targetBox != null)
                                 {
                                     //move target box too 
@@ -250,7 +250,7 @@ namespace LayoutFarm
                             {
                                 controllerBox.SetLocation(controllerBox.Left, controllerBox.Top + ydiff);
                                 controllerBox.SetSize(controllerBox.Width + xdiff, controllerBox.Height - ydiff);
-                                var targetBox = controllerBox.TargetBox;
+                                var targetBox = controllerBox.Target;
                                 if (targetBox != null)
                                 {
                                     //move target box too 
@@ -267,7 +267,7 @@ namespace LayoutFarm
                             if (xdiff != 0 || ydiff != 0)
                             {
                                 controllerBox.SetSize(controllerBox.Width + xdiff, controllerBox.Height + ydiff);
-                                var targetBox = controllerBox.TargetBox;
+                                var targetBox = controllerBox.Target;
                                 if (targetBox != null)
                                 {
                                     //move target box too 
@@ -285,7 +285,7 @@ namespace LayoutFarm
                             {
                                 controllerBox.SetLocation(controllerBox.Left + xdiff, controllerBox.Top);
                                 controllerBox.SetSize(controllerBox.Width - xdiff, controllerBox.Height + ydiff);
-                                var targetBox = controllerBox.TargetBox;
+                                var targetBox = controllerBox.Target;
                                 if (targetBox != null)
                                 {
                                     //move target box too 
@@ -317,7 +317,7 @@ namespace LayoutFarm
                     controllerBox.SetSize(controllerBox.Width + xdiff, controllerBox.Height);
                 }
 
-                var targetBox = controllerBox.TargetBox;
+                var targetBox = controllerBox.Target;
                 if (targetBox != null)
                 {
                     //move target box too 
