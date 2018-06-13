@@ -248,6 +248,20 @@ namespace LayoutFarm.UI
                 }
             }
         }
+        public bool HasSpecificSize
+        {
+            get { return this.specificHeight && specificWidth; }
+            set
+            {
+                this.specificHeight = this.specificWidth = value;
+
+                if (this.CurrentPrimaryRenderElement != null)
+                {
+                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
+                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
+                }
+            }
+        }
         public Rectangle Bounds
         {
             get { return new Rectangle(this.Left, this.Top, this.Width, this.Height); }
