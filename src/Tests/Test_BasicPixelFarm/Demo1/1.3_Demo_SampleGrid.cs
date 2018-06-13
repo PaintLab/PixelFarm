@@ -25,7 +25,7 @@ namespace LayoutFarm
                 gridView.SetLocation(200, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
                 viewport.AddChild(gridView);
-                var simpleButton = new LayoutFarm.CustomWidgets.SimpleBox(20, 20);
+                var simpleButton = new LayoutFarm.CustomWidgets.Box(20, 20);
                 simpleButton.BackColor = KnownColors.FromKnownColor(KnownColor.OliveDrab);
                 gridView.SetCellContent(simpleButton, 1, 1);
                 gridView.MouseDown += (s1, e1) =>
@@ -36,7 +36,7 @@ namespace LayoutFarm
 
                 simpleButton.MouseDown += (s1, e1) =>
                 {
-                    var box = (LayoutFarm.CustomWidgets.SimpleBox)s1;
+                    var box = (LayoutFarm.CustomWidgets.Box)s1;
                     box.BackColor = KnownColors.FromKnownColor(KnownColor.OrangeRed);
 
                 };

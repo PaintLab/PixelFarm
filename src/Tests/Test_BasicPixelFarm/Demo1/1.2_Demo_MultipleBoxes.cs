@@ -14,7 +14,7 @@ namespace LayoutFarm
             SetupImageList(viewport);
             for (int i = 1; i < 5; ++i)
             {
-                var textbox = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
+                var textbox = new LayoutFarm.CustomWidgets.Box(30, 30);
                 textbox.SetLocation(i * 40, i * 40);
                 viewport.AddChild(textbox);
             }

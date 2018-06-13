@@ -8,13 +8,13 @@ namespace LayoutFarm
     [DemoNote("1.14 EasingFuncs")]
     class Demo_EasingFuncs : DemoBase
     {
-        SimpleBox animationBoard;
+        Box animationBoard;
         SampleViewport viewport;
         protected override void OnStartDemo(SampleViewport viewport)
         {
             this.viewport = viewport;
             {
-                animationBoard = new SimpleBox(800, 800);
+                animationBoard = new Box(800, 800);
                 animationBoard.BackColor = PixelFarm.Drawing.Color.White;
                 viewport.AddChild(animationBoard);
             }
@@ -69,7 +69,7 @@ namespace LayoutFarm
             int j = calculatedValues.Count;
             for (int i = 0; i < j; ++i)
             {
-                SimpleBox box = new SimpleBox(5, 5);
+                Box box = new Box(5, 5);
                 box.SetLocation(5 * i, (int)calculatedValues[i]);
                 animationBoard.AddChild(box);
             }
@@ -77,7 +77,7 @@ namespace LayoutFarm
             //-----
             //show animation
 
-            SimpleBox sampleBox1 = new SimpleBox(600, 20);
+            Box sampleBox1 = new Box(600, 20);
             animationBoard.AddChild(sampleBox1);
             sampleBox1.BackColor = PixelFarm.Drawing.Color.Red;
             int step = 0;

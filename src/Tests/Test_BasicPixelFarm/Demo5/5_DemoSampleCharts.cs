@@ -227,7 +227,7 @@ namespace LayoutFarm.ColorBlenderSample
 
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            var sampleButton = new LayoutFarm.CustomWidgets.SimpleBox(100, _chartHeight);
+            var sampleButton = new LayoutFarm.CustomWidgets.Box(100, _chartHeight);
             viewport.AddChild(sampleButton);
             int count = 0;
             sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>

@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
         List<ListItem> items = new List<ListItem>();
         int selectedIndex = -1;//default = no selection
         ListItem selectedItem = null;
-        SimpleBox panel;
+        Box panel;
 
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
@@ -33,7 +33,7 @@ namespace LayoutFarm.CustomWidgets
         {
             uiList = new UICollection(this);
 
-            var simpleBox = new SimpleBox(width, height);
+            var simpleBox = new Box(width, height);
             simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             simpleBox.BackColor = Color.LightGray;
             simpleBox.MouseDown += panel_MouseDown;

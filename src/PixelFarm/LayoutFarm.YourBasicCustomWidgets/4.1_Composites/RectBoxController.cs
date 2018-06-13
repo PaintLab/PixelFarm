@@ -39,11 +39,11 @@ namespace LayoutFarm.CustomWidgets
         UIControllerBox controllerBox1 = new UIControllerBox(40, 40);
         List<UIControllerBox> _controls = new List<UIControllerBox>();
 
-        SimpleBox _simpleBox;
+        Box _simpleBox;
         bool _hasPrimRenderE;
         public RectBoxController()
         {
-            _simpleBox = new SimpleBox(10, 10);
+            _simpleBox = new Box(10, 10);
             _simpleBox.BackColor = Color.Transparent;//*** 
         }
         //-------------
@@ -273,14 +273,14 @@ namespace LayoutFarm.CustomWidgets
 
     public class PolygonController : UIElement
     {
-        SimpleBox _simpleBox;
+        Box _simpleBox;
         bool _hasPrimRenderE;
         List<PointF> _points = new List<PointF>();
         List<UIControllerBox> _controls = new List<UIControllerBox>();
         public PolygonController()
         {
 
-            _simpleBox = new SimpleBox(10, 10);
+            _simpleBox = new Box(10, 10);
             _simpleBox.TransparentAllMouseEvents = true;
             _simpleBox.NeedClipArea = false;
             //_simpleBox.BackColor = Color.Transparent;//*** 

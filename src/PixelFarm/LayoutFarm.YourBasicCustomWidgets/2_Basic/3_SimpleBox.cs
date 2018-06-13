@@ -18,9 +18,9 @@ namespace LayoutFarm.CustomWidgets
         Both,
     }
 
-    public sealed class SimpleBox : AbstractBox
+    public sealed class Box : AbstractBox
     {
-        public SimpleBox(int w, int h)
+        public Box(int w, int h)
             : base(w, h)
         {
         }

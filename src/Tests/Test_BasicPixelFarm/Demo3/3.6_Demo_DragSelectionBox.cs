@@ -22,30 +22,30 @@ namespace LayoutFarm
         ControllerBoxMode controllerBoxMode;
         UIControllerBox singleControllerBox;
         SampleViewport viewport;
-        LayoutFarm.CustomWidgets.SimpleBox bgbox;
+        LayoutFarm.CustomWidgets.Box bgbox;
         protected override void OnStartDemo(SampleViewport viewport)
         {
             this.viewport = viewport;
             this.rootgfx = viewport.RootGfx;
             //--------------------------------
 
-            bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+            bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
             bgbox.BackColor = Color.White;
             bgbox.SetLocation(0, 0);
             SetupBackgroundProperties(bgbox);
             viewport.AddChild(bgbox);
             //user box1
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(150, 150);
+            var box1 = new LayoutFarm.CustomWidgets.Box(150, 150);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             SetupActiveBoxProperties(box1);
             bgbox.AddChild(box1);
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(60, 60);
+            var box2 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box2.BackColor = Color.Yellow;
             box2.SetLocation(50, 50);
             SetupActiveBoxProperties(box2);
             bgbox.AddChild(box2);
-            var box3 = new LayoutFarm.CustomWidgets.SimpleBox(60, 60);
+            var box3 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box3.BackColor = Color.OrangeRed;
             box3.SetLocation(200, 80);
             SetupActiveBoxProperties(box3);
@@ -265,7 +265,7 @@ namespace LayoutFarm
                             if (droppingBox != null)
                             {
                                 //move from original 
-                                var parentBox = droppingBox.ParentUI as LayoutFarm.CustomWidgets.SimpleBox;
+                                var parentBox = droppingBox.ParentUI as LayoutFarm.CustomWidgets.Box;
                                 if (parentBox != null)
                                 {
                                     var newParentGlobalLoca = box.GetGlobalLocation();
@@ -580,7 +580,7 @@ namespace LayoutFarm
             CustomWidgets.Box CreateTinyControlBox(SpaceName name)
             {
                 int controllerBoxWH = 10;
-                var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                var tinyBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 tinyBox.BackColor = PixelFarm.Drawing.Color.Red;
                 tinyBox.Tag = name;
                 //add handler for each tiny box

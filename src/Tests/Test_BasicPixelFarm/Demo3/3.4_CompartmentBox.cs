@@ -10,21 +10,21 @@ namespace LayoutFarm
         UIControllerBox controllerBox1;
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            var bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+            var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
             bgbox.BackColor = Color.White;
             bgbox.SetLocation(0, 0);
             SetupBackgroundProperties(bgbox);
             viewport.AddChild(bgbox);
             //--------------------------------
 
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(150, 150);
+            var box1 = new LayoutFarm.CustomWidgets.Box(150, 150);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
             viewport.AddChild(box1);
             //--------------------------------
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(60, 60);
+            var box2 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
@@ -178,7 +178,7 @@ namespace LayoutFarm
             CustomWidgets.Box CreateTinyControlBox(SpaceName name)
             {
                 int controllerBoxWH = 10;
-                var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                var tinyBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 tinyBox.BackColor = PixelFarm.Drawing.Color.Red;
                 tinyBox.Tag = name;
                 //add handler for each tiny box

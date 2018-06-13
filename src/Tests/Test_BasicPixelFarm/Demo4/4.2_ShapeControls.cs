@@ -15,7 +15,7 @@ namespace LayoutFarm
     {
         LayoutFarm.CustomWidgets.PolygonController polygonController = new CustomWidgets.PolygonController();
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
-        LayoutFarm.CustomWidgets.SimpleBox box1;
+        LayoutFarm.CustomWidgets.Box box1;
 
 
         protected override void OnStartDemo(SampleViewport viewport)
