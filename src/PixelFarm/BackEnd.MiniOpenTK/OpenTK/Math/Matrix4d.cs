@@ -289,6 +289,38 @@ namespace OpenTK
         }
 
 
+        /// <summary>
+        /// Creates a rotation matrix from a quaternion.
+        /// </summary>
+        /// <param name="rotation">The quaternion to use to build the matrix.</param>
+        /// <returns>The created rotation matrix.</returns>
+        public static Matrix4d RotationQuaternion(Quaternion rotation)
+        {
+            Matrix4d result;
+            RotationQuaternion(ref rotation, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a rotation matrix with a specified yaw, pitch, and roll.
+        /// </summary>
+        /// <param name="yaw">Yaw around the y-axis, in radians.</param>
+        /// <param name="pitch">Pitch around the x-axis, in radians.</param>
+        /// <param name="roll">Roll around the z-axis, in radians.</param>
+        /// <param name="result">When the method completes, contains the created rotation matrix.</param>
+        public static void RotationYawPitchRoll(double yaw, double pitch, double roll, out Matrix4d result)
+        {
+            Quaternion quaternion = new Quaternion();
+            Quaternion.RotationYawPitchRoll(yaw, pitch, roll, out quaternion);
+            RotationQuaternion(ref quaternion, out result);
+        }
+        public static Matrix4d RotationYawPitchRoll(double yaw, double pitch, double roll)
+        {
+            Matrix4d result;
+            RotationYawPitchRoll(yaw, pitch, roll, out result);
+            return result;
+        }
+
 
         /// <summary>
         /// Builds a rotation matrix for a rotation around the x-axis.
@@ -424,7 +456,34 @@ namespace OpenTK
         }
 
 
+        /// <summary>
+        /// Creates a rotation matrix from a quaternion.
+        /// </summary>
+        /// <param name="rotation">The quaternion to use to build the matrix.</param>
+        /// <param name="result">The created rotation matrix.</param>
+        public static void RotationQuaternion(ref Quaternion rotation, out Matrix4d result)
+        {
+            double xx = rotation.X * rotation.X;
+            double yy = rotation.Y * rotation.Y;
+            double zz = rotation.Z * rotation.Z;
+            double xy = rotation.X * rotation.Y;
+            double zw = rotation.Z * rotation.W;
+            double zx = rotation.Z * rotation.X;
+            double yw = rotation.Y * rotation.W;
+            double yz = rotation.Y * rotation.Z;
+            double xw = rotation.X * rotation.W;
 
+            result = Matrix4d.Identity;
+            result.M11 = 1.0f - (2.0f * (yy + zz));
+            result.M12 = 2.0f * (xy + zw);
+            result.M13 = 2.0f * (zx - yw);
+            result.M21 = 2.0f * (xy - zw);
+            result.M22 = 1.0f - (2.0f * (zz + xx));
+            result.M23 = 2.0f * (yz + xw);
+            result.M31 = 2.0f * (zx + yw);
+            result.M32 = 2.0f * (yz - xw);
+            result.M33 = 1.0f - (2.0f * (yy + xx));
+        }
         /// <summary>
         /// Creates an orthographic projection matrix.
         /// </summary>
