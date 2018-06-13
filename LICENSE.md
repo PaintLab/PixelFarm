@@ -25,7 +25,7 @@ MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelse
 
 Apache2, 2012,  Hernán J. González, pngcs, https://github.com/leonbloy/pngcs
 
-Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. 
+Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. , https://imagetools.codeplex.com/
  
 
 **Font**

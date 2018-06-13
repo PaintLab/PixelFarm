@@ -14,19 +14,19 @@ namespace LayoutFarm
             //--------------------------------
             {
                 //background element
-                var bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+                var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddContent(bgbox);
+                viewport.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new UINinespaceBox(800, 600);
-            viewport.AddContent(ninespaceBox);
+            viewport.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
             ////if click on background
             //backgroundBox.MouseDown += (s, e) =>
@@ -41,22 +41,22 @@ namespace LayoutFarm
 
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.EaseBox
+        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             //-------------------------------------
-            EaseBox boxLeftTop;
-            EaseBox boxRightTop;
-            EaseBox boxLeftBottom;
-            EaseBox boxRightBottom;
+            Box boxLeftTop;
+            Box boxRightTop;
+            Box boxLeftBottom;
+            Box boxRightBottom;
             //-------------------------------------
-            EaseBox boxLeft;
-            EaseBox boxTop;
-            EaseBox boxRight;
-            EaseBox boxBottom;
+            Box boxLeft;
+            Box boxTop;
+            Box boxRight;
+            Box boxBottom;
             //-------------------------------------
 
             //-------------------------------------
-            EaseBox centerBox;
+            Box centerBox;
             DockSpacesController dockspaceController;
             public UINinespaceBox(int w, int h)
                 : base(w, h)
@@ -86,10 +86,10 @@ namespace LayoutFarm
             }
 
 
-            static CustomWidgets.EaseBox CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
+            static CustomWidgets.Box CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
             {
                 int controllerBoxWH = 10;
-                var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                var tinyBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 tinyBox.BackColor = bgcolor;
                 tinyBox.Tag = name;
                 return tinyBox;

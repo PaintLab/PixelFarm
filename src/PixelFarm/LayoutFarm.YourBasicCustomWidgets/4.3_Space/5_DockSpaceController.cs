@@ -12,7 +12,7 @@ namespace LayoutFarm.UI
         int leftSplitterWidth;
         int rightSplitterWidth;
         public event EventHandler FinishNineSpaceArrangement;
-        public DockSpacesController(UIBox owner, SpaceConcept initConcept)
+        public DockSpacesController(AbstractRect owner, SpaceConcept initConcept)
             : base(owner, initConcept)
         {
             this.myOwner = owner;

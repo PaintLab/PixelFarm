@@ -65,7 +65,7 @@ namespace PixelFarm.DrawingBuffer
         public static BitmapBuffer Convolute(this BitmapBuffer bmp, int[,] kernel)
         {
             int kernelFactorSum = 0;
-            foreach (var b in kernel)
+            foreach (int b in kernel)
             {
                 kernelFactorSum += b;
             }
@@ -94,13 +94,13 @@ namespace PixelFarm.DrawingBuffer
                 throw new System.InvalidOperationException("Kernel height must be odd!");
             }
 
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int w = srcContext.Width;
                 int h = srcContext.Height;
                 BitmapBuffer result = BitmapBufferFactory.New(w, h);
 
-                using (var resultContext = result.GetBitmapContext())
+                using (BitmapContext resultContext = result.GetBitmapContext())
                 {
                     int[] pixels = srcContext.Pixels;
                     int[] resultPixels = resultContext.Pixels;
@@ -145,10 +145,10 @@ namespace PixelFarm.DrawingBuffer
 
                                     int col = pixels[py * w + px];
                                     int k = kernel[ky + kwh, kx + khh];
-                                    a += ((col >> 24) & 0x000000FF) * k;
-                                    r += ((col >> 16) & 0x000000FF) * k;
-                                    g += ((col >> 8) & 0x000000FF) * k;
-                                    b += ((col) & 0x000000FF) * k;
+                                    a += ((col >> 24) & 0xff) * k;
+                                    r += ((col >> 16) & 0xff) * k;
+                                    g += ((col >> 8) & 0xff) * k;
+                                    b += ((col) & 0xff) * k;
                                 }
                             }
 
@@ -180,10 +180,10 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The new inverted WriteableBitmap.</returns>
         public static BitmapBuffer Invert(this BitmapBuffer bmp)
         {
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 var result = BitmapBufferFactory.New(srcContext.Width, srcContext.Height);
-                using (var resultContext = result.GetBitmapContext())
+                using (BitmapContext resultContext = result.GetBitmapContext())
                 {
                     int[] rp = resultContext.Pixels;
                     int[] p = srcContext.Pixels;
@@ -221,14 +221,14 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The new gray WriteableBitmap.</returns>
         public static BitmapBuffer Gray(this BitmapBuffer bmp)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] px = context.Pixels;
                 BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
-                using (var dest = result.GetBitmapContext())
+                using (BitmapContext dest = result.GetBitmapContext())
                 {
                     int[] rp = dest.Pixels;
                     int len = context.Length;
@@ -263,14 +263,14 @@ namespace PixelFarm.DrawingBuffer
         {
             int factor = (int)((259.0 * (level + 255.0)) / (255.0 * (259.0 - level)) * 255.0);
 
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] px = context.Pixels;
                 BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
-                using (var dest = result.GetBitmapContext())
+                using (BitmapContext dest = result.GetBitmapContext())
                 {
                     int[] rp = dest.Pixels;
                     int len = context.Length;
@@ -311,14 +311,14 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The new WriteableBitmap.</returns>
         public static BitmapBuffer AdjustBrightness(this BitmapBuffer bmp, int nLevel)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] px = context.Pixels;
                 BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
-                using (var dest = result.GetBitmapContext())
+                using (BitmapContext dest = result.GetBitmapContext())
                 {
                     int[] rp = dest.Pixels;
                     int len = context.Length;
@@ -359,14 +359,14 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>The new WriteableBitmap.</returns>
         public static BitmapBuffer AdjustGamma(this BitmapBuffer bmp, double value)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] srcPixels = context.Pixels;
                 BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
-                using (var dest = result.GetBitmapContext())
+                using (BitmapContext dest = result.GetBitmapContext())
                 {
                     int[] rp = dest.Pixels;
                     var gammaCorrection = 1.0 / value;

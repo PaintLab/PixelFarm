@@ -25,8 +25,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
             //
             BackgroundColor = Color.White;
             imageToFillOn = new ActualBitmap(400, 300);
-            AggRenderSurface aggsx = new AggRenderSurface(imageToFillOn);
-            AggPainter p = new AggPainter(aggsx);
+            AggPainter p = AggPainter.Create(imageToFillOn);
 
             p.Clear(Color.White);
 

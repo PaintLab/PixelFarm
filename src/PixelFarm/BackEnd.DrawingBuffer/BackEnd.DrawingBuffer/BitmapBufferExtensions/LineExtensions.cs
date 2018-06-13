@@ -49,7 +49,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
         public static void DrawLineBresenham(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -184,7 +184,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
         public static void DrawLineDDA(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -268,7 +268,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
         public static void DrawLine(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 DrawLine(context, context.Width, context.Height, x1, y1, x2, y2, color, clipRect);
             }
@@ -573,8 +573,8 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawLinePenned(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, BitmapBuffer penBmp, RectD? clipRect = null)
         {
 
-            using (var context = bmp.GetBitmapContext())
-            using (var penContext = penBmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext())
+            using (BitmapContext penContext = penBmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 DrawLinePenned(context, bmp.PixelWidth, bmp.PixelHeight, x1, y1, x2, y2, penContext, clipRect);
             }
@@ -745,7 +745,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
         public static void DrawLineWu(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int sa, int sr, int sg, int sb, RectD? clipRect = null)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 DrawLineWu(context, bmp.PixelWidth, bmp.PixelHeight, x1, y1, x2, y2, sa, sr, sg, sb, clipRect);
             }
@@ -947,7 +947,7 @@ namespace PixelFarm.DrawingBuffer
         /// </summary>
         public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 AAWidthLine(bmp.PixelWidth, bmp.PixelHeight, context, x1, y1, x2, y2, strokeThickness, color, clipRect);
             }
@@ -982,7 +982,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 AAWidthLine(bmp.PixelWidth, bmp.PixelHeight, context, x1, y1, x2, y2, strokeThickness, color.ToPreMultAlphaColor(), clipRect);
             }
@@ -1016,7 +1016,7 @@ namespace PixelFarm.DrawingBuffer
         /// </summary> 
         public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 DrawLineAa(context, context.Width, context.Height, x1, y1, x2, y2, color, clipRect);
             }

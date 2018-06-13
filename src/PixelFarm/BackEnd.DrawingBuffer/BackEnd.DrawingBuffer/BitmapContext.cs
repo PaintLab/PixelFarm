@@ -124,7 +124,7 @@ namespace PixelFarm.DrawingBuffer
         /// </summary>
         public void Clear()
         {
-            var pixels = _writeableBitmap.Pixels;
+            int[] pixels = _writeableBitmap.Pixels;
             Array.Clear(pixels, 0, pixels.Length);
         }
     }

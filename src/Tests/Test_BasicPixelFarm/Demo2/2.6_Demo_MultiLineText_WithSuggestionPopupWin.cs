@@ -39,8 +39,8 @@ namespace LayoutFarm
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
-            viewport.AddContent(textbox);
-            viewport.AddContent(sgBox.GetPrimaryUI());
+            viewport.AddChild(textbox);
+            viewport.AddChild(sgBox.GetPrimaryUI());
             //------------------------------------ 
             BuildSampleCountryList();
         }

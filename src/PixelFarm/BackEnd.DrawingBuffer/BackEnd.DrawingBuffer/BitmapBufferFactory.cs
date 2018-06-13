@@ -33,7 +33,8 @@ namespace PixelFarm.DrawingBuffer
         {
             if (pixelHeight < 1) pixelHeight = 1;
             if (pixelWidth < 1) pixelWidth = 1;
-            return new BitmapBuffer(pixelWidth, pixelHeight);
+
+            return new BitmapBuffer(pixelWidth, pixelHeight, new int[pixelWidth * pixelHeight]);
         }
     }
 }

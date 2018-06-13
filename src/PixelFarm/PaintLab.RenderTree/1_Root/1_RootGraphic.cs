@@ -128,7 +128,7 @@ namespace LayoutFarm
 #endif
 
 
-        public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect)
+        public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
 
@@ -139,7 +139,6 @@ namespace LayoutFarm
             //int globalX = 0;
             //int globalY = 0;
             Point globalPoint = new Point();
-            bool isBubbleUp = false;
 #if DEBUG
             //if (fromElement.dbug_ObjectNote == "panel")
             //{
@@ -171,7 +170,7 @@ namespace LayoutFarm
 
                 globalPoint.Offset(fromElement.X, fromElement.Y);
 
-                if (fromElement.MayHasViewport && isBubbleUp)
+                if (fromElement.MayHasViewport && passSourceElem)
                 {
 
                     elemClientRect.Offset(globalPoint);
@@ -223,7 +222,7 @@ namespace LayoutFarm
                     }
                 }
 
-                isBubbleUp = true;
+                passSourceElem = true;
             } while (true);
 #if DEBUG
             var dbugMyroot = this;

@@ -10,11 +10,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
-using Typography.TextServices;
 using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
-
-
 
 namespace PixelFarm.DrawingGL
 {
@@ -24,7 +20,7 @@ namespace PixelFarm.DrawingGL
     public class AggTextSpanPrinter : ITextPrinter
     {
         ActualBitmap _actualImage;
-        AggRenderSurface _aggsx;
+
         AggPainter _aggPainter;
         VxsTextPrinter _vxsTextPrinter;
         int bmpWidth;
@@ -46,8 +42,7 @@ namespace PixelFarm.DrawingGL
             bmpHeight = h;
 
             _actualImage = new ActualBitmap(bmpWidth, bmpHeight);
-            _aggsx = new AggRenderSurface(_actualImage);
-            _aggPainter = new AggPainter(_aggsx);
+            _aggPainter = AggPainter.Create(_actualImage);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;
 
@@ -159,52 +154,6 @@ namespace PixelFarm.DrawingGL
             throw new NotImplementedException();
         }
     }
-
-
-    delegate GLBitmap LoadNewGLBitmapDel<T>(T src);
-
-    class GLBitmapCache<T> : IDisposable
-    {
-        Dictionary<T, GLBitmap> _loadedGLBmps = new Dictionary<T, GLBitmap>();
-        LoadNewGLBitmapDel<T> _loadNewGLBmpDel;
-        public GLBitmapCache(LoadNewGLBitmapDel<T> loadNewGLBmpDel)
-        {
-            _loadNewGLBmpDel = loadNewGLBmpDel;
-        }
-        public GLBitmap GetOrCreateNewOne(T key)
-        {
-            GLBitmap found;
-            if (!_loadedGLBmps.TryGetValue(key, out found))
-            {
-
-                return _loadedGLBmps[key] = _loadNewGLBmpDel(key);
-            }
-            return found;
-        }
-        public void Dispose()
-        {
-            Clear();
-        }
-        public void Clear()
-        {
-            foreach (GLBitmap glbmp in _loadedGLBmps.Values)
-            {
-                glbmp.Dispose();
-            }
-            _loadedGLBmps.Clear();
-        }
-        public void Delete(T key)
-        {
-            GLBitmap found;
-            if (_loadedGLBmps.TryGetValue(key, out found))
-            {
-                found.Dispose();
-                _loadedGLBmps.Remove(key);
-            }
-        }
-    }
-
-
 
 
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
@@ -551,6 +500,8 @@ namespace PixelFarm.DrawingGL
             _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
 
         }
+
+
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
             _glsx.LoadTexture1(_glBmp);

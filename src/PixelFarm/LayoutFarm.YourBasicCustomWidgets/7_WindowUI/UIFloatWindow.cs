@@ -3,7 +3,7 @@
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class UIFloatWindow : EaseBox, ITopWindowBox
+    public class UIFloatWindow : AbstractBox, ITopWindowBox
     {
         IPlatformWindowBox platformWindowBox;
         public UIFloatWindow(int w, int h)
@@ -28,10 +28,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public override void Walk(UIVisitor visitor)
-        {
-            //TODO: implement this 
-        }
+     
         public override void SetLocation(int left, int top)
         {
             if (platformWindowBox != null)

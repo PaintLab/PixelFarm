@@ -106,7 +106,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class SliderBox : UIBox
+    public class SliderBox : AbstractRect
     {
 
         ScrollRangeLogic scrollRangeLogic;
@@ -671,7 +671,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
-    public class ScrollBar : UIBox
+    public class ScrollBar : AbstractRect
     {
         ScrollBarButton minButton;
         ScrollBarButton maxButton;
@@ -958,7 +958,7 @@ namespace LayoutFarm.CustomWidgets
 
 
 
-    class ScrollBarButton : EaseBox
+    class ScrollBarButton : AbstractBox
     {
         public ScrollBarButton(int w, int h, IUIEventListener owner)
             : base(w, h)
@@ -1048,9 +1048,17 @@ namespace LayoutFarm.CustomWidgets
                 scBar.MaxValue = scrollableSurface.DesiredHeight;
                 scBar.ReEvaluateScrollBar();
             };
+            scrollableSurface.ViewportChanged += (s, e) =>
+            {
+                if (s != scBar)
+                {
+                    //change scrollbar
+                    scBar.ScrollValue = scrollableSurface.ViewportY;
+                }
+            };
             scBar.UserScroll += (s, e) =>
             {
-                scrollableSurface.SetViewport(scrollableSurface.ViewportX, (int)scBar.ScrollValue);
+                scrollableSurface.SetViewport(scrollableSurface.ViewportX, (int)scBar.ScrollValue, scBar);
             };
         }
         void SetupHorizontalScrollRelation()
@@ -1083,15 +1091,27 @@ namespace LayoutFarm.CustomWidgets
             //1st evaluate  
             scBar.MaxValue = scrollableSurface.DesiredWidth;
             scBar.ReEvaluateScrollBar();
+
             scrollableSurface.LayoutFinished += (s, e) =>
             {
                 scBar.MaxValue = scrollableSurface.DesiredWidth;
                 scBar.ReEvaluateScrollBar();
             };
+
+            scrollableSurface.ViewportChanged += (s, e) =>
+            {
+                if (s != scBar)
+                {
+                    //change scbar
+                    scBar.ScrollValue = scrollableSurface.ViewportX;
+                }
+            };
+
             scBar.UserScroll += (s, e) =>
             {
-                scrollableSurface.SetViewport((int)scBar.ScrollValue, scrollableSurface.ViewportY);
+                scrollableSurface.SetViewport((int)scBar.ScrollValue, scrollableSurface.ViewportY, scBar);
             };
+
         }
     }
 }

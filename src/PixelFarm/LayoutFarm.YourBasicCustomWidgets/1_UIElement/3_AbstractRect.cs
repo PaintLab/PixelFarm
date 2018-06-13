@@ -4,22 +4,34 @@ using System;
 using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
-    public abstract class UIBox : UIElement, IScrollable, IBoxElement
+    /// <summary>
+    /// abstract Rect UI Element
+    /// </summary>
+    public abstract class AbstractRect : UIElement, IScrollable, IBoxElement
     {
 
         bool specificWidth, specificHeight;
         public event EventHandler LayoutFinished;
+        public event EventHandler ViewportChanged;
+
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public UIBox(int width, int height)
+        public AbstractRect(int width, int height)
         {
             SetElementBoundsWH(width, height);
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
 
+        protected void RaiseViewportChanged()
+        {
+            if (ViewportChanged != null)
+            {
+                ViewportChanged(this, EventArgs.Empty);
+            }
+        }
         protected void RaiseLayoutFinished()
         {
             if (this.LayoutFinished != null)
@@ -50,11 +62,15 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.SetSize(width, height);
             }
         }
-        
+
         public void SetLocationAndSize(int left, int top, int width, int height)
         {
-            SetLocation(left, top);
-            SetSize(width, height);
+            SetElementBoundsLT(left, top);
+            SetElementBoundsWH(width, height);
+            if (this.HasReadyRenderElement)
+            {
+                this.CurrentPrimaryRenderElement.SetBounds(left, top, width, height);
+            }
         }
         public int Left
         {
@@ -150,8 +166,11 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
             }
         }
-
-        //------------------------------
+        public override void GetViewport(out int x, out int y)
+        {
+            x = ViewportX;
+            y = ViewportY;
+        }
         public virtual int ViewportX
         {
             get { return 0; }
@@ -160,16 +179,20 @@ namespace LayoutFarm.UI
         {
             get { return 0; }
         }
-        public virtual int ViewportWidth
+        int IScrollable.ViewportWidth
         {
             get { return this.Width; }
         }
-        public virtual int ViewportHeight
+        int IScrollable.ViewportHeight
         {
             get { return this.Height; }
         }
-        public virtual void SetViewport(int x, int y)
+        public virtual void SetViewport(int x, int y, object reqBy)
         {
+        }
+        public void SetViewport(int x, int y)
+        {
+            SetViewport(x, y, this);
         }
         //------------------------------
         public virtual void PerformContentLayout()
@@ -222,6 +245,20 @@ namespace LayoutFarm.UI
                 if (this.CurrentPrimaryRenderElement != null)
                 {
                     CurrentPrimaryRenderElement.HasSpecificHeight = value;
+                }
+            }
+        }
+        public bool HasSpecificSize
+        {
+            get { return this.specificHeight && specificWidth; }
+            set
+            {
+                this.specificHeight = this.specificWidth = value;
+
+                if (this.CurrentPrimaryRenderElement != null)
+                {
+                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
+                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
                 }
             }
         }

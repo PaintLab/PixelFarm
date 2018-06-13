@@ -17,11 +17,11 @@ namespace LayoutFarm
 
         void AddScrollView1(SampleViewport viewport, int x, int y)
         {
-            var panel = new LayoutFarm.CustomWidgets.SimpleBox(200, 175);
+            var panel = new LayoutFarm.CustomWidgets.Box(200, 175);
             panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
             panel.BackColor = Color.LightGray;
-            viewport.AddContent(panel);
+            viewport.AddChild(panel);
             //-------------------------  
             {
                 //vertical scrollbar
@@ -30,7 +30,7 @@ namespace LayoutFarm
                 vscbar.MinValue = 0;
                 vscbar.MaxValue = 170;
                 vscbar.SmallChange = 20;
-                viewport.AddContent(vscbar);
+                viewport.AddChild(vscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
@@ -43,7 +43,7 @@ namespace LayoutFarm
                 hscbar.MinValue = 0;
                 hscbar.MaxValue = 170;
                 hscbar.SmallChange = 20;
-                viewport.AddContent(hscbar);
+                viewport.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
@@ -51,7 +51,7 @@ namespace LayoutFarm
             //add content to panel
             for (int i = 0; i < 10; ++i)
             {
-                var box1 = new LayoutFarm.CustomWidgets.SimpleBox(400, 30);
+                var box1 = new LayoutFarm.CustomWidgets.Box(400, 30);
                 box1.HasSpecificWidth = true;
                 box1.HasSpecificHeight = true;
                 box1.BackColor = Color.OrangeRed;
@@ -64,12 +64,12 @@ namespace LayoutFarm
         }
         void AddScrollView2(SampleViewport viewport, int x, int y)
         {
-            var panel = new LayoutFarm.CustomWidgets.SimpleBox(800, 1000);
+            var panel = new LayoutFarm.CustomWidgets.Box(800, 1000);
             panel.NeedClipArea = true;
             panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
             panel.ContentLayoutKind = CustomWidgets.BoxContentLayoutKind.VerticalStack;
-            viewport.AddContent(panel);
+            viewport.AddChild(panel);
             //-------------------------  
             //load images...
 
@@ -121,7 +121,7 @@ namespace LayoutFarm
                 vscbar.MinValue = 0;
                 vscbar.MaxValue = lastY;
                 vscbar.SmallChange = 20;
-                viewport.AddContent(vscbar);
+                viewport.AddChild(vscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
@@ -134,7 +134,7 @@ namespace LayoutFarm
                 hscbar.MinValue = 0;
                 hscbar.MaxValue = 170;
                 hscbar.SmallChange = 20;
-                viewport.AddContent(hscbar);
+                viewport.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }

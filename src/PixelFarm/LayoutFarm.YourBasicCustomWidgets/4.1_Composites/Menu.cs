@@ -7,13 +7,13 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MenuItem : UIBox
+    public class MenuItem : AbstractRect
     {
         CustomRenderBox primElement;//background 
         Color backColor = Color.LightGray;
         bool thisMenuOpened;
         //1. land part
-        UIBox landPart;
+        AbstractRect landPart;
         //2. float part   
         MenuBox floatPart;
         CustomRenderBox floatPartRenderElement;
@@ -91,7 +91,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
         //----------------------------------------------------  
-        public UIBox LandPart
+        public AbstractRect LandPart
         {
             get { return this.landPart; }
             set
@@ -263,7 +263,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class MenuBox : EaseBox
+    public class MenuBox : AbstractBox
     {
         bool showing;
         RenderBoxBase topWindow;

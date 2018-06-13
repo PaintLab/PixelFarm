@@ -14,7 +14,10 @@ namespace BitMiracle.LibJpeg
         short[] lineBuffer;
         int columnCount;
         int componentsPerSample;
-
+        public SampleRow(short[] row, byte bitsPerComponent, byte componentsPerSample)
+        {
+            //temp
+        }
         /// <summary>
         /// Creates a row from raw samples data.
         /// </summary>

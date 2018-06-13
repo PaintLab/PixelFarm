@@ -123,6 +123,10 @@ namespace LayoutFarm.UI
             }
             return new PixelFarm.Drawing.Point((int)_left, (int)_top);
         }
+        public virtual void GetViewport(out int x, out int y)
+        {
+            x = y = 0;
+        }
         public void GetElementBounds(
            out float left,
            out float top,

@@ -4,7 +4,7 @@ using System;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class CheckBox : EaseBox
+    public class CheckBox : AbstractBox
     {
         //check icon
         ImageBox imageBox;

@@ -14,6 +14,9 @@ namespace PixelFarm.Platforms
             byte[] data = ReadData(dataName);
             return new MemoryStream(data);
         }
+        public abstract PixelFarm.Agg.ActualBitmap ReadPngBitmap(string filename);
+        public abstract void SavePngBitmap(PixelFarm.Agg.ActualBitmap bmp, string filename);
+
     }
 
     public static class StorageService

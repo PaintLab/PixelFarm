@@ -530,14 +530,75 @@ namespace PixelFarm.DrawingBuffer
 
     }
 
+    struct Rectnt32
+    {
+        public Rectnt32(int left, int top, int width, int height)
+        {
+            this.Left = left;
+            this.Top = top;
+            this.Width = width;
+            this.Height = height;
+        }
+        public int Left { get; private set; }
+        public int Top { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public int X { get { return this.Left; } }
+        public int Y { get { return this.Top; } }
+        public int Bottom { get { return Y + Height; } }
+        public int Right { get { return Left + Width; } }
+        public bool IsEmpty
+        {
+            get
+            {
+                //TODO: eval once
+                return this.Left == 0 && this.Top == 0
+                    && this.Width == 0 && this.Height == 0;
+            }
+        }
+        private bool IntersectsWithInclusive(Rectnt32 r)
+        {
+            return !((Left > r.Right) || (Right < r.Left) ||
+                (Top > r.Bottom) || (Bottom < r.Top));
+        }
+        public static Rectnt32 Intersect(Rectnt32 a, Rectnt32 b)
+        {
+            // MS.NET returns a non-empty rectangle if the two rectangles
+            // touch each other
+            if (!a.IntersectsWithInclusive(b))
+            {
+                return new Rectnt32(0, 0, 0, 0);
+            }
+            //
+            return Rectnt32.FromLTRB(
+                Math.Max(a.Left, b.Left),
+                Math.Max(a.Top, b.Top),
+                Math.Min(a.Right, b.Right),
+                Math.Min(a.Bottom, b.Bottom));
+        }
 
+        public static Rectnt32 FromLTRB(int left, int top, int right, int bottom)
+        {
+            // MS.NET returns a non-empty rectangle if the two rectangles
+            // touch each other
+            return new Rectnt32(left, top, right - left, bottom - top);
+        }
 
+        /// <summary>
+        ///	Intersect Method
+        /// </summary>
+        ///
+        /// <remarks>
+        ///	Replaces the Rectangle with the intersection of itself
+        ///	and another Rectangle.
+        /// </remarks>
 
+        public void Intersect(Rectnt32 rect)
+        {
+            this = Rectnt32.Intersect(this, rect);
+        }
 
-
-
-
-
+    }
 
     public struct RectD
     {
@@ -610,6 +671,7 @@ namespace PixelFarm.DrawingBuffer
         {
             this = RectD.Intersect(this, rect);
         }
+
     }
     public struct PointD
     {
@@ -765,25 +827,16 @@ namespace PixelFarm.DrawingBuffer
                 (uint)((c2_r << 16) | (c2_g << 8) | (c2_b));
         }
     }
-    public struct Colors
-    {
-        public static ColorInt White = ColorInt.FromArgb(255, 255, 255, 255);
-        public static ColorInt Black = ColorInt.FromArgb(255, 0, 0, 0);
-        public static ColorInt Red = ColorInt.FromArgb(255, 255, 0, 0);
-        public static ColorInt Blue = ColorInt.FromArgb(255, 0, 0, 255);
-    }
 
     public struct BitmapBuffer
     {
+        //from WriteableBitmap***
+
+
         public static readonly BitmapBuffer Empty = new BitmapBuffer();
 
         //in this version , only 32 bits 
-        public BitmapBuffer(int w, int h)
-        {
-            this.PixelWidth = w;
-            this.PixelHeight = h;
-            this.Pixels = new int[w * h];
-        }
+
         public BitmapBuffer(int w, int h, int[] orgBuffer)
         {
             this.PixelWidth = w;

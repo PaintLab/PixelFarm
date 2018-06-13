@@ -6,7 +6,7 @@ namespace LayoutFarm.UI
     {
         NamedSpaceContainerOverlapMode overlapMode;
         SpaceName spaceName;
-        UIBox spaceContent;
+        AbstractRect spaceContent;
         NinespaceController ownerDockspaceController;
         int spaceWidth;
         int spaceHeight;
@@ -28,7 +28,7 @@ namespace LayoutFarm.UI
                 return this.ownerDockspaceController;
             }
         }
-        public UIBox Content
+        public AbstractRect Content
         {
             get
             {

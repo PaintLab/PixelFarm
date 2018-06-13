@@ -15,6 +15,9 @@ namespace LayoutFarm
         int uiLayoutFlags;
         //------------------------ 
 
+        /// <summary>
+        /// rectangle bounds relative to its parent element
+        /// </summary>
         public Rectangle RectBounds
         {
             get
