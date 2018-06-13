@@ -10,7 +10,7 @@ namespace LayoutFarm
         protected override void OnStartDemo(SampleViewport viewport)
         {
             var sampleButton = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
-            viewport.AddContent(sampleButton);
+            viewport.AddChild(sampleButton);
             int count = 0;
             sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
             {

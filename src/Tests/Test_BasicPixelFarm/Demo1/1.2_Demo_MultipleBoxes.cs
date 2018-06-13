@@ -16,7 +16,7 @@ namespace LayoutFarm
             {
                 var textbox = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
                 textbox.SetLocation(i * 40, i * 40);
-                viewport.AddContent(textbox);
+                viewport.AddChild(textbox);
             }
             //--------------------
             //image box
@@ -25,7 +25,7 @@ namespace LayoutFarm
 
             var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
             imgBox.ImageBinder = imgBinder;
-            viewport.AddContent(imgBox);
+            viewport.AddChild(imgBox);
             //--------------------
             //checked box
             int boxHeight = 20;
@@ -36,7 +36,7 @@ namespace LayoutFarm
                 var statedBox = new LayoutFarm.CustomWidgets.CheckBox(20, boxHeight);
                 statedBox.SetLocation(10, boxY);
                 boxY += boxHeight + 5;
-                viewport.AddContent(statedBox);
+                viewport.AddChild(statedBox);
             }
             //-------------------------------------------------------------------------
             //single select 
@@ -46,7 +46,7 @@ namespace LayoutFarm
                 var statedBox = new LayoutFarm.CustomWidgets.CheckBox(20, boxHeight);
                 statedBox.SetLocation(10, boxY);
                 boxY += boxHeight + 5;
-                viewport.AddContent(statedBox);
+                viewport.AddChild(statedBox);
                 statedBox.WhenChecked += (s, e) =>
                 {
                     var selectedBox = (LayoutFarm.CustomWidgets.CheckBox)s;
@@ -64,7 +64,7 @@ namespace LayoutFarm
             //test canvas
             var canvasBox = new MyDrawingCanvas(300, 300);
             canvasBox.SetLocation(400, 150);
-            viewport.AddContent(canvasBox);
+            viewport.AddChild(canvasBox);
             //-------------------------------------------------------------------
 
         }

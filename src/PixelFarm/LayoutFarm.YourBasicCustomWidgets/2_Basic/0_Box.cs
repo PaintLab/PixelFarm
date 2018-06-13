@@ -6,6 +6,9 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
+    /// <summary>
+    /// abstract box ui element
+    /// </summary>
     public abstract class Box : AbstractRect
     {
         BoxContentLayoutKind panelLayoutKind;

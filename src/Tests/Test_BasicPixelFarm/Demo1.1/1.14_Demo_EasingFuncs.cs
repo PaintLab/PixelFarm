@@ -16,7 +16,7 @@ namespace LayoutFarm
             {
                 animationBoard = new SimpleBox(800, 800);
                 animationBoard.BackColor = PixelFarm.Drawing.Color.White;
-                viewport.AddContent(animationBoard);
+                viewport.AddChild(animationBoard);
             }
             //
             {
@@ -24,7 +24,7 @@ namespace LayoutFarm
                 List<PennerAnimationInfo> pennerAnimationList = LoadAllPennerAnimationList();
                 ListView easingFuncs_List = new ListView(200, 850);
                 easingFuncs_List.SetLocation(600, 20);
-                viewport.AddContent(easingFuncs_List);
+                viewport.AddChild(easingFuncs_List);
                 easingFuncs_List.ListItemMouseEvent += (s, e) =>
                 {
 

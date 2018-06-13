@@ -33,7 +33,7 @@ namespace LayoutFarm
             bgbox.BackColor = Color.White;
             bgbox.SetLocation(0, 0);
             SetupBackgroundProperties(bgbox);
-            viewport.AddContent(bgbox);
+            viewport.AddChild(bgbox);
             //user box1
             var box1 = new LayoutFarm.CustomWidgets.SimpleBox(150, 150);
             box1.BackColor = Color.Red;
@@ -53,7 +53,7 @@ namespace LayoutFarm
             selectionBox = new UISelectionBox(1, 1);
             selectionBox.Visible = false;
             selectionBox.BackColor = Color.FromArgb(80, Color.Green);
-            viewport.AddContent(selectionBox);
+            viewport.AddChild(selectionBox);
             SetupSelectionBoxProperties(selectionBox);
         }
 
@@ -195,7 +195,7 @@ namespace LayoutFarm
                     userControllerBox.SetLocation(globalTargetPos.X - 5, globalTargetPos.Y - 5);
                     userControllerBox.SetSize(box.Width + 10, box.Height + 10);
                     userControllerBox.Visible = true;
-                    viewport.AddContent(userControllerBox);
+                    viewport.AddChild(userControllerBox);
                 }
             }
         }
@@ -224,7 +224,7 @@ namespace LayoutFarm
                 }
                 //request user controller for this box
                 userControllerBox.TargetBox = box;
-                viewport.AddContent(userControllerBox);
+                viewport.AddChild(userControllerBox);
                 //location relative to global position of target box
                 var globalTargetPos = box.GetGlobalLocation();
                 userControllerBox.SetLocation(globalTargetPos.X - 5, globalTargetPos.Y - 5);

@@ -17,7 +17,7 @@ namespace LayoutFarm
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddContent(bgbox);
+                viewport.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
@@ -27,7 +27,7 @@ namespace LayoutFarm
             ninespace2.SetLeftSpaceWidth(150);
             ninespace2.ShowGrippers = true;
             ninespaceBox.RightSpace.AddChild(ninespace2);
-            viewport.AddContent(ninespaceBox);
+            viewport.AddChild(ninespaceBox);
             // ninespaceBox.SetSize(800, 600);
 
             ////test add some content to the ninespace box

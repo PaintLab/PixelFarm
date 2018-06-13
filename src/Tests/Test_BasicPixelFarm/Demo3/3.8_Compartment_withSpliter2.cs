@@ -17,13 +17,13 @@ namespace LayoutFarm
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddContent(bgbox);
+                viewport.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new NinespaceBox(800, 600);
             ninespaceBox.ShowGrippers = true;
-            viewport.AddContent(ninespaceBox);
+            viewport.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
             //--------------------------------
 

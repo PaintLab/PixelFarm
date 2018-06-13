@@ -129,7 +129,7 @@ namespace LayoutFarm.CustomWidgets
                 //controllerBox1.dbugTag = 3;
                 controllerBox1.Visible = false;
                 SetupControllerBoxProperties(controllerBox1);
-                //viewport.AddContent(controllerBox1);
+                //viewport.AddChild(controllerBox1);
                 _controls.Add(controllerBox1);
             }
             _simpleBox.AddChild(controllerBox1);
@@ -264,7 +264,7 @@ namespace LayoutFarm.CustomWidgets
             //controllerBox1.dbugTag = 3;
             box.Visible = false;
             SetupControllerBoxProperties2(box);
-            //viewport.AddContent(box);
+            //viewport.AddChild(box);
             //
             _controls.Add(box);
         }
@@ -390,7 +390,7 @@ namespace LayoutFarm.CustomWidgets
             //controllerBox1.dbugTag = 3;
             box.Visible = true;
             SetupCornerProperties(box);
-            //viewport.AddContent(box);
+            //viewport.AddChild(box);
             //
             _controls.Add(box);
         }

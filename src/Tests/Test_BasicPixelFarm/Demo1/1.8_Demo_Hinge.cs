@@ -13,14 +13,14 @@ namespace LayoutFarm
         {
             this.viewport = viewport;
             var comboBox1 = CreateComboBox(20, 20);
-            viewport.AddContent(comboBox1);
+            viewport.AddChild(comboBox1);
             var comboBox2 = CreateComboBox(50, 50);
-            viewport.AddContent(comboBox2);
+            viewport.AddChild(comboBox2);
             //------------
             var menuItem = CreateMenuItem(50, 100);
             var menuItem2 = CreateMenuItem(5, 5);
             menuItem.AddSubMenuItem(menuItem2);
-            viewport.AddContent(menuItem);
+            viewport.AddChild(menuItem);
         }
 
         LayoutFarm.CustomWidgets.ComboBox CreateComboBox(int x, int y)

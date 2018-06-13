@@ -16,7 +16,7 @@ namespace LayoutFarm
                 slideBox.MinValue = 0;
                 slideBox.MaxValue = 100;
                 slideBox.SmallChange = 50; 
-                viewport.AddContent(slideBox);
+                viewport.AddChild(slideBox);
                 slideBox.ScrollValue = 150;
             }
             //----------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace LayoutFarm
                 scbar.MaxValue = 100;
                 scbar.SmallChange = 50;
                 scbar.ScrollValue = 150;
-                viewport.AddContent(scbar);
+                viewport.AddChild(scbar);
 
             }
             //----------------------------------------------------------------
@@ -40,7 +40,7 @@ namespace LayoutFarm
                 scbar.MinValue = 0;
                 scbar.MaxValue = 100;
                 scbar.SmallChange = 25;
-                viewport.AddContent(scbar);
+                viewport.AddChild(scbar);
             }
             //----------------------------------------------------------------
             {
@@ -49,7 +49,7 @@ namespace LayoutFarm
                 scbar.MinValue = 0;
                 scbar.MaxValue = 1000;
                 scbar.SmallChange = 100;
-                viewport.AddContent(scbar);
+                viewport.AddChild(scbar);
             }
             //-------------------------------------
             {
@@ -60,7 +60,7 @@ namespace LayoutFarm
                 scbar.MinValue = 0;
                 scbar.MaxValue = 100;
                 scbar.SmallChange = 50;
-                viewport.AddContent(scbar);
+                viewport.AddChild(scbar);
             }
             {
                 //horizontal scrollbar
@@ -70,7 +70,7 @@ namespace LayoutFarm
                 scbar.MinValue = 0;
                 scbar.MaxValue = 100;
                 scbar.SmallChange = 25;
-                viewport.AddContent(scbar);
+                viewport.AddChild(scbar);
             }
 
             {
@@ -81,7 +81,7 @@ namespace LayoutFarm
                 scbar.MinValue = 0;
                 scbar.MaxValue = 1000;
                 scbar.SmallChange = 100;
-                viewport.AddContent(scbar);
+                viewport.AddChild(scbar);
             }
         }
     }

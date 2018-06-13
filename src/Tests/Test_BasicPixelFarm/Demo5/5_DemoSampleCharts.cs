@@ -228,7 +228,7 @@ namespace LayoutFarm.ColorBlenderSample
         protected override void OnStartDemo(SampleViewport viewport)
         {
             var sampleButton = new LayoutFarm.CustomWidgets.SimpleBox(100, _chartHeight);
-            viewport.AddContent(sampleButton);
+            viewport.AddChild(sampleButton);
             int count = 0;
             sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
             {
@@ -267,7 +267,7 @@ namespace LayoutFarm.ColorBlenderSample
                 pt.BackColor = Color.Red;
 
                 plotBoxes.Add(pt);
-                viewport.AddContent(pt);
+                viewport.AddChild(pt);
             }
 
 
@@ -279,7 +279,7 @@ namespace LayoutFarm.ColorBlenderSample
                 PlotBox p0 = plotBoxes[i];
                 PlotBox p1 = plotBoxes[i + 1];
                 PlotLine line = new PlotLine(p0, p1);
-                viewport.AddContent(line);
+                viewport.AddChild(line);
             }
         }
 

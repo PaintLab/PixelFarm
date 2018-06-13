@@ -38,7 +38,7 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 lstvw_blendAlgo = new ListView(200, 400);
                 lstvw_blendAlgo.SetLocation(500, 20);
-                viewport.AddContent(lstvw_blendAlgo);
+                viewport.AddChild(lstvw_blendAlgo);
                 lstvw_blendAlgo.ListItemMouseEvent += (s, e) =>
                 {
                     if (lstvw_blendAlgo.SelectedIndex > -1)
@@ -75,7 +75,7 @@ namespace LayoutFarm.ColorBlenderSample
                     (byte)b_value,
                     (byte)g_value);
                 pure_rgbBox.SetLocation(0, 0);
-                viewport.AddContent(pure_rgbBox);
+                viewport.AddChild(pure_rgbBox);
             }
 
             //R
@@ -90,8 +90,8 @@ namespace LayoutFarm.ColorBlenderSample
                     }
 
                 });
-                viewport.AddContent(r_sc);
-                viewport.AddContent(r_sampleBox);
+                viewport.AddChild(r_sc);
+                viewport.AddChild(r_sampleBox);
             }
             //G 
             {
@@ -104,8 +104,8 @@ namespace LayoutFarm.ColorBlenderSample
                         UpdateAllComponents();
                     }
                 });
-                viewport.AddContent(g_sc);
-                viewport.AddContent(g_sampleBox);
+                viewport.AddChild(g_sc);
+                viewport.AddChild(g_sampleBox);
             }
             //B
             {
@@ -117,8 +117,8 @@ namespace LayoutFarm.ColorBlenderSample
                         UpdateAllComponents();
                     }
                 });
-                viewport.AddContent(b_sc);
-                viewport.AddContent(b_sampleBox);
+                viewport.AddChild(b_sc);
+                viewport.AddChild(b_sampleBox);
             }
             _component_ready = true;
         }
@@ -131,7 +131,7 @@ namespace LayoutFarm.ColorBlenderSample
                 SimpleBox rgb_varBox = new SimpleBox(40, 40);
                 rgb_varBox.SetLocation(x + (i * 40), y);
                 rgb_varBoxes[i] = rgb_varBox;
-                viewport.AddContent(rgb_varBox);
+                viewport.AddChild(rgb_varBox);
             }
         }
         void CreateSwatchBoxes(SampleViewport viewport, int x, int y)
@@ -142,7 +142,7 @@ namespace LayoutFarm.ColorBlenderSample
                 SimpleBox swatchBox = new SimpleBox(40, 40);
                 swatchBox.SetLocation(x + (i * 40), y);
                 swatch_Boxes[i] = swatchBox;
-                viewport.AddContent(swatchBox);
+                viewport.AddChild(swatchBox);
             }
         }
         void CreateHsvVarBoxes(SampleViewport viewport, int x, int y)
@@ -153,7 +153,7 @@ namespace LayoutFarm.ColorBlenderSample
                 SimpleBox hsv_varBox = new SimpleBox(40, 40);
                 hsv_varBox.SetLocation(x + (i * 40), y);
                 hsv_varBoxes[i] = hsv_varBox;
-                viewport.AddContent(hsv_varBox);
+                viewport.AddChild(hsv_varBox);
             }
         }
         void CreateRBGScrollBarAndSampleColorBox(

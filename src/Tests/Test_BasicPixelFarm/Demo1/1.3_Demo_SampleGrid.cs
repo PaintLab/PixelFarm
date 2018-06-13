@@ -14,7 +14,7 @@ namespace LayoutFarm
                 var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
                 gridView.SetLocation(50, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
-                viewport.AddContent(gridView);
+                viewport.AddChild(gridView);
                 gridView.MouseDown += (s1, e1) =>
                 {
                 };
@@ -24,7 +24,7 @@ namespace LayoutFarm
                 var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
                 gridView.SetLocation(200, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
-                viewport.AddContent(gridView);
+                viewport.AddChild(gridView);
                 var simpleButton = new LayoutFarm.CustomWidgets.SimpleBox(20, 20);
                 simpleButton.BackColor = KnownColors.FromKnownColor(KnownColor.OliveDrab);
                 gridView.SetCellContent(simpleButton, 1, 1);
@@ -47,7 +47,7 @@ namespace LayoutFarm
                 var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
                 gridView.SetLocation(350, 50);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
-                viewport.AddContent(gridView);
+                viewport.AddChild(gridView);
             }
 
             ////-----
@@ -56,7 +56,7 @@ namespace LayoutFarm
                 var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
                 gridView.SetLocation(50, 250);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
-                viewport.AddContent(gridView);
+                viewport.AddChild(gridView);
             }
 
 
@@ -85,7 +85,7 @@ namespace LayoutFarm
                 var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
                 gridView.SetLocation(50, 500);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
-                viewport.AddContent(gridView);
+                viewport.AddChild(gridView);
             }
 
             {
@@ -98,7 +98,7 @@ namespace LayoutFarm
                 gridView.SetLocation(300, 500);
                 gridView.NeedClipArea = true;
                 gridView.BuildGrid(100, 4, 5, 20);
-                viewport.AddContent(gridView);
+                viewport.AddChild(gridView);
 
                 //manual sc-bar
                 var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, 100);
@@ -108,7 +108,7 @@ namespace LayoutFarm
                     vscbar.MinValue = 0;
                     vscbar.MaxValue = gridView.Height;
                     vscbar.SmallChange = 20;
-                    viewport.AddContent(vscbar);
+                    viewport.AddChild(vscbar);
 
                     //add relation between viewpanel and scroll bar 
                     var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, gridView);
@@ -122,7 +122,7 @@ namespace LayoutFarm
                     hscbar.MinValue = 0;
                     hscbar.MaxValue = gridView.Width;
                     hscbar.SmallChange = 2;
-                    viewport.AddContent(hscbar);
+                    viewport.AddChild(hscbar);
                     //add relation between viewpanel and scroll bar 
                     var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, gridView);
                 }

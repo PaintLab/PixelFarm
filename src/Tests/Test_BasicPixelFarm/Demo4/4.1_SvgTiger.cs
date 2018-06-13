@@ -22,7 +22,7 @@ namespace LayoutFarm
             PaintLab.Svg.SvgParser parser = new SvgParser();
             _backBoard = new BackDrawBoardUI(400, 400);
             _backBoard.BackColor = Color.White;
-            viewport.AddContent(_backBoard);
+            viewport.AddChild(_backBoard);
 
 
 
@@ -48,7 +48,7 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //------------
-            viewport.AddContent(rectBoxController);
+            viewport.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{

@@ -21,7 +21,7 @@ namespace LayoutFarm
             panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
             panel.BackColor = Color.LightGray;
-            viewport.AddContent(panel);
+            viewport.AddChild(panel);
             //-------------------------  
             {
                 //vertical scrollbar
@@ -30,7 +30,7 @@ namespace LayoutFarm
                 vscbar.MinValue = 0;
                 vscbar.MaxValue = 170;
                 vscbar.SmallChange = 20;
-                viewport.AddContent(vscbar);
+                viewport.AddChild(vscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
@@ -43,7 +43,7 @@ namespace LayoutFarm
                 hscbar.MinValue = 0;
                 hscbar.MaxValue = 170;
                 hscbar.SmallChange = 20;
-                viewport.AddContent(hscbar);
+                viewport.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
@@ -69,7 +69,7 @@ namespace LayoutFarm
             panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
             panel.ContentLayoutKind = CustomWidgets.BoxContentLayoutKind.VerticalStack;
-            viewport.AddContent(panel);
+            viewport.AddChild(panel);
             //-------------------------  
             //load images...
 
@@ -121,7 +121,7 @@ namespace LayoutFarm
                 vscbar.MinValue = 0;
                 vscbar.MaxValue = lastY;
                 vscbar.SmallChange = 20;
-                viewport.AddContent(vscbar);
+                viewport.AddChild(vscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
@@ -134,7 +134,7 @@ namespace LayoutFarm
                 hscbar.MinValue = 0;
                 hscbar.MaxValue = 170;
                 hscbar.SmallChange = 20;
-                viewport.AddContent(hscbar);
+                viewport.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
