@@ -23,6 +23,11 @@ namespace LayoutFarm.CustomWidgets
         public Box(int w, int h)
             : base(w, h)
         {
+
+        }
+        public void SetInnerContentSize(int w, int h)
+        {   
+            SetDesiredSize(w, h);
         }
         public override void Walk(UIVisitor visitor)
         {

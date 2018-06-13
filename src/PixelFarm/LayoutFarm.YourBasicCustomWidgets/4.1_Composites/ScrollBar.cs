@@ -1082,7 +1082,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     onePixelFor = (double)contentLength / (double)physicalScrollLength;
                 }
-                //sc.MaxValue = contentLength - scrollableSurface.ViewportWidth;
+
                 sc.MaxValue = (contentLength > scrollableSurface.ViewportWidth) ?
                     contentLength - scrollableSurface.ViewportWidth :
                     0;
@@ -1102,7 +1102,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (s != scBar)
                 {
-                    //change scbar
+                    //change value
                     scBar.ScrollValue = scrollableSurface.ViewportX;
                 }
             };
