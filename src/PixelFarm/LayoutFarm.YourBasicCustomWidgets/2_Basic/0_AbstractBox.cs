@@ -29,6 +29,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDoubleClick;
         public event EventHandler<UIMouseEventArgs> MouseLeave;
         public event EventHandler<UIMouseEventArgs> MouseDrag;
+        public event EventHandler<UIMouseEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
         //--------------------------------------------------------
@@ -264,6 +265,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             //vertical scroll
+
             if (this.desiredHeight > this.Height)
             {
                 if (e.Delta < 0)
@@ -286,6 +288,10 @@ namespace LayoutFarm.CustomWidgets
                 }
                 this.primElement.SetViewport(viewportX, viewportY);
                 this.InvalidateGraphics();
+            }
+            if (MouseWheel != null)
+            {
+                MouseWheel(this, e);
             }
         }
         //-------------------
