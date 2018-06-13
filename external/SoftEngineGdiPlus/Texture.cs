@@ -1,4 +1,5 @@
-﻿using System;
+﻿//2013, David Rousset, https://www.davrous.com
+using System;
 using SharpDX;
 using System.Drawing;
 

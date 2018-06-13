@@ -1,4 +1,4 @@
-﻿
+﻿///2013, David Rousset, https://www.davrous.com
 
 
 namespace SoftEngine
