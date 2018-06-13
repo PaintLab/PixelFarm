@@ -174,22 +174,7 @@ namespace PaintDotNet.SystemLayer
         private static PropertyItem GetPropertyItem()
         {
             throw new StillNotPortedException();
-            //if (propertyItemImage == null)
-            //{
-            //    //TODO: review here
-            //    propertyItemImage = new Bitmap(@"D:\projects\paint102_dev\src\PixelCore\Natives\PropertyItem.png");
-            //    //Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("PaintDotNet.SystemLayer.PropertyItem.png");
-            //    // propertyItemImage = Image.FromStream(stream);
-            //    // = new Bitmap(10, 10, PixelFormat.Format32bppArgb);
-            //}
-
-            //PropertyItem pi = propertyItemImage.PropertyItems[0];
-            //pi.Id = 0;
-            //pi.Len = 0;
-            //pi.Type = 0;
-            //pi.Value = new byte[0];
-
-            //return pi;
+            
         }
     }
 }
