@@ -74,14 +74,14 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public override int DesiredHeight
+        public override int InnerHeight
         {
             get
             {
                 return this.Height;
             }
         }
-        public override int DesiredWidth
+        public override int InnerWidth
         {
             get
             {

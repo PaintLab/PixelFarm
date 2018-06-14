@@ -1105,7 +1105,7 @@ namespace LayoutFarm.CustomWidgets
                 onePixelFor = 1;
                 scrollBoxLength = 1;
                 //1. 
-                int contentLength = scrollableSurface.DesiredHeight;
+                int contentLength = scrollableSurface.InnerHeight;
                 if (contentLength == 0)
                 {
                     return;
@@ -1129,11 +1129,11 @@ namespace LayoutFarm.CustomWidgets
             });
             //--------------------------------------------------------------------------------------
             //1st evaluate  
-            _slideBox.MaxValue = scrollableSurface.DesiredHeight;
+            _slideBox.MaxValue = scrollableSurface.InnerHeight;
             _slideBox.ReEvaluateScrollBar();
             scrollableSurface.LayoutFinished += (s, e) =>
             {
-                _slideBox.MaxValue = scrollableSurface.DesiredHeight;
+                _slideBox.MaxValue = scrollableSurface.InnerHeight;
                 _slideBox.ReEvaluateScrollBar();
             };
             scrollableSurface.ViewportChanged += (s, e) =>
@@ -1158,7 +1158,7 @@ namespace LayoutFarm.CustomWidgets
                 onePixelFor = 1;
                 scrollBoxLength = 1;
                 //1. 
-                int contentLength = scrollableSurface.DesiredWidth;
+                int contentLength = scrollableSurface.InnerWidth;
                 if (contentLength == 0) return;
                 scrollBoxLength = (int)((physicalScrollLength * scrollableSurface.ViewportWidth) / contentLength);
                 if (scrollBoxLength < sc.ScrollBoxSizeLimit)
@@ -1179,12 +1179,12 @@ namespace LayoutFarm.CustomWidgets
             });
             //--------------------------------------------------------------------------------------
             //1st evaluate  
-            _slideBox.MaxValue = scrollableSurface.DesiredWidth;
+            _slideBox.MaxValue = scrollableSurface.InnerWidth;
             _slideBox.ReEvaluateScrollBar();
 
             scrollableSurface.LayoutFinished += (s, e) =>
             {
-                _slideBox.MaxValue = scrollableSurface.DesiredWidth;
+                _slideBox.MaxValue = scrollableSurface.InnerWidth;
                 _slideBox.ReEvaluateScrollBar();
             };
 
