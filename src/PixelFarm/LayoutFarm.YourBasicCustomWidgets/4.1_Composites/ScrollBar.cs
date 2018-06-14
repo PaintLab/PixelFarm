@@ -207,6 +207,30 @@ namespace LayoutFarm.CustomWidgets
                 this.UserScroll(this, EventArgs.Empty);
             }
         }
+        public void StepLargeToMax()
+        {
+
+            scrollRangeLogic.LargeStepToMax();
+            //---------------------------
+            //update visual presentation             
+            UpdateScrollButtonPosition();
+            if (this.UserScroll != null)
+            {
+                this.UserScroll(this, EventArgs.Empty);
+            }
+        }
+        public void StepLargeToMin()
+        {
+
+            scrollRangeLogic.LargeStepToMin();
+            //---------------------------
+            //update visual presentation   
+            UpdateScrollButtonPosition();
+            if (this.UserScroll != null)
+            {
+                this.UserScroll(this, EventArgs.Empty);
+            }
+        }
 
         void UpdateScrollButtonPosition()
         {
@@ -348,6 +372,21 @@ namespace LayoutFarm.CustomWidgets
             //---------------------------------
             EvalNeedScrollBox();
 
+        }
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            if (e.X < scrollButton.Left)
+            {
+                //to min
+                StepSmallToMin();
+            }
+            else if (e.X > scrollButton.Right)
+            {
+                //to max
+                StepSmallToMax();
+            }
+
+            base.OnMouseDown(e);
         }
         void SetupVerticalScrollButtonProperties(RenderElement container)
         {
