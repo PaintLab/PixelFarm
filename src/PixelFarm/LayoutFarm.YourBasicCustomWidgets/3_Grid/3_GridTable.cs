@@ -176,7 +176,11 @@ namespace LayoutFarm.UI
         }
         public GridCell GetCell(int rowIndex)
         {
-            return cells[rowIndex];
+            if (rowIndex < cells.Count)
+            {
+                return cells[rowIndex];
+            }
+            return null;
         }
         public int CellCount
         {

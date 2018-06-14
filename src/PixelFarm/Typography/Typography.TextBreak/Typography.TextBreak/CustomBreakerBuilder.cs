@@ -14,7 +14,7 @@ namespace Typography.TextBreak
         static LaoDictionaryBreakingEngine laoDicBreakingEngine;
 
         static bool isInit;
-        static DictionaryProvider s_dicProvider; 
+        static DictionaryProvider s_dicProvider;
 
         static void InitAllDics()
         {
@@ -55,6 +55,11 @@ namespace Typography.TextBreak
         {
             if (!isInit)
             {
+                if (s_dicProvider == null)
+                {
+                    //no dictionary provider
+                    return null;
+                }
                 InitAllDics();
                 isInit = true;
             }

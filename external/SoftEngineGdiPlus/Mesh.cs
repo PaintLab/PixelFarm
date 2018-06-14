@@ -1,4 +1,5 @@
-﻿// Mesh.cs
+﻿//2013, David Rousset, https://www.davrous.com
+// Mesh.cs
 using OpenTK;
 
 namespace SoftEngine

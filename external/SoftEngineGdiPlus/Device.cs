@@ -1,4 +1,4 @@
-﻿
+﻿//2013, David Rousset, https://www.davrous.com
 using OpenTK;
 using SharpDX;
 using System;
