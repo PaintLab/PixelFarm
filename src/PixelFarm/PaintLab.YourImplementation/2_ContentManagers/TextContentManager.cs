@@ -1,5 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev 
-//ArthurHub  , Jose Manuel Menendez Poo
+//ArthurHub, Jose Manuel Menendez Poo
 
 using System;
 namespace LayoutFarm.ContentManagers
