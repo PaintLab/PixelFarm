@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
 using System;
 using PixelFarm.Agg;
@@ -509,7 +509,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
         }
-
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            throw new NotImplementedException();
+        }
 
         //VertexStorePool _vxsPool = new VertexStorePool();
         //VertexStore GetFreeVxs()

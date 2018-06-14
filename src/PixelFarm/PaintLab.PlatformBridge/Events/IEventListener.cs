@@ -1,8 +1,8 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 namespace LayoutFarm.UI
 {
-    
+
     /// <summary>
     /// can listen to some event
     /// </summary>
@@ -44,6 +44,7 @@ namespace LayoutFarm.UI
         bool BypassAllMouseEvents { get; }
         bool AutoStopMouseEventPropagation { get; }
         void GetGlobalLocation(out int x, out int y);
+        void GetViewport(out int x, out int y);
         //--------------------------------------------------------------------------  
     }
 

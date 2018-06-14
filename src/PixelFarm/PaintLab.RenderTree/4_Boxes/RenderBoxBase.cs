@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
@@ -23,6 +23,7 @@ namespace LayoutFarm
         public bool UseAsFloatWindow { get; set; }
         public override void SetViewport(int viewportX, int viewportY)
         {
+
             this.myviewportX = viewportX;
             this.myviewportY = viewportY;
             this.InvalidateGraphics();

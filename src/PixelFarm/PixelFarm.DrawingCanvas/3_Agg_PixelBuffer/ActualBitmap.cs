@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -91,6 +91,20 @@ namespace PixelFarm.Agg
             //alloc mem
 
             this.pixelBuffer = new int[width * height];
+        }
+        public ActualBitmap(int width, int height, int[] orgBuffer)
+        {
+            //width and height must >0 
+            this.width = width;
+            this.height = height;
+            int bytesPerPixel;
+            this.stride = CalculateStride(width,
+                this.pixelFormat = PixelFormat.ARGB32, //***
+                out bitDepth,
+                out bytesPerPixel);
+            //alloc mem
+
+            this.pixelBuffer = orgBuffer;
         }
         public override void Dispose()
         {
@@ -286,19 +300,19 @@ namespace PixelFarm.Agg
             {
                 return this.stride;
             }
-        } 
+        }
         int IBitmapSrc.BytesBetweenPixelsInclusive
         {
             get { return 4; }
-        } 
+        }
         RectInt IBitmapSrc.GetBounds()
         {
             return new RectInt(0, 0, width, height);
-        } 
+        }
         int[] IBitmapSrc.GetInt32Buffer()
         {
             return this.pixelBuffer;
-        } 
+        }
         TempMemPtr IBitmapSrc.GetBufferPtr()
         {
             return new TempMemPtr(pixelBuffer);

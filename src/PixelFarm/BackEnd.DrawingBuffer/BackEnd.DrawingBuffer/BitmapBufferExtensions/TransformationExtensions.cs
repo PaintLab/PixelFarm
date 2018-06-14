@@ -72,7 +72,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A new WriteableBitmap that is a cropped version of the input.</returns>
         public static BitmapBuffer Crop(this BitmapBuffer bmp, int x, int y, int width, int height)
         {
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int srcWidth = srcContext.Width;
                 int srcHeight = srcContext.Height;
@@ -91,19 +91,20 @@ namespace PixelFarm.DrawingBuffer
 
                 // Copy the pixels line by line using fast BlockCopy
                 BitmapBuffer result = BitmapBufferFactory.New(width, height);
-                using (var destContext = result.GetBitmapContext())
+                using (BitmapContext destContext = result.GetBitmapContext())
                 {
                     for (int line = 0; line < height; line++)
                     {
                         int srcOff = ((y + line) * srcWidth + x) * ARGB_SIZE;
                         int dstOff = line * width * ARGB_SIZE;
                         BitmapContext.BlockCopy(srcContext, srcOff, destContext, dstOff, width * ARGB_SIZE);
-                    }
-
+                    } 
                     return result;
                 }
             }
         }
+
+#if DEBUG
         /// <summary>
         /// Creates a new cropped WriteableBitmap.
         /// </summary>
@@ -114,8 +115,7 @@ namespace PixelFarm.DrawingBuffer
         {
             return bmp.Crop((int)region.X, (int)region.Y, (int)region.Width, (int)region.Height);
         }
-
-
+#endif
 
         /// <summary>
         /// Creates a new resized WriteableBitmap.
@@ -127,12 +127,12 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A new WriteableBitmap that is a resized version of the input.</returns>
         public static BitmapBuffer Resize(this BitmapBuffer bmp, int width, int height, Interpolation interpolation)
         {
-            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int[] pd = Resize(srcContext, srcContext.Width, srcContext.Height, width, height, interpolation);
 
                 BitmapBuffer result = BitmapBufferFactory.New(width, height);
-                using (var dstContext = result.GetBitmapContext())
+                using (BitmapContext dstContext = result.GetBitmapContext())
                 {
                     BitmapContext.BlockCopy(pd, 0, dstContext, 0, ARGB_SIZE * pd.Length);
                 }
@@ -288,7 +288,13 @@ namespace PixelFarm.DrawingBuffer
             return pd;
         }
 
-
+        public enum FastRotateAngle
+        {
+            Rotate0,
+            Rotate90,
+            Rotate180,
+            Rotate270,
+        }
 
         /// <summary>
         /// Rotates the bitmap in 90° steps clockwise and returns a new rotated WriteableBitmap.
@@ -296,74 +302,79 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="angle">The angle in degrees the bitmap should be rotated in 90° steps clockwise.</param>
         /// <returns>A new WriteableBitmap that is a rotated version of the input.</returns>
-        public static BitmapBuffer Rotate(this BitmapBuffer bmp, int angle)
+        public static BitmapBuffer Rotate(this BitmapBuffer bmp, FastRotateAngle angle)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
                 int h = context.Height;
                 int[] p = context.Pixels;
                 int i = 0;
-                BitmapBuffer result;
-                angle %= 360;
 
-                if (angle > 0 && angle <= 90)
+
+                switch (angle)
                 {
-                    result = BitmapBufferFactory.New(h, w);
-                    using (var destContext = result.GetBitmapContext())
-                    {
-                        var rp = destContext.Pixels;
-                        for (int x = 0; x < w; x++)
+                    default:
                         {
-                            for (int y = h - 1; y >= 0; y--)
-                            {
-                                int srcInd = y * w + x;
-                                rp[i] = p[srcInd];
-                                i++;
-                            }
+                            return bmp.Clone();
                         }
-                    }
-                }
-                else if (angle > 90 && angle <= 180)
-                {
-                    result = BitmapBufferFactory.New(w, h);
-                    using (var destContext = result.GetBitmapContext())
-                    {
-                        var rp = destContext.Pixels;
-                        for (int y = h - 1; y >= 0; y--)
+                    case FastRotateAngle.Rotate90:
                         {
-                            for (int x = w - 1; x >= 0; x--)
+                            var result = BitmapBufferFactory.New(h, w);
+                            using (BitmapContext destContext = result.GetBitmapContext())
                             {
-                                int srcInd = y * w + x;
-                                rp[i] = p[srcInd];
-                                i++;
+                                var rp = destContext.Pixels;
+                                for (int x = 0; x < w; x++)
+                                {
+                                    for (int y = h - 1; y >= 0; y--)
+                                    {
+                                        int srcInd = y * w + x;
+                                        rp[i] = p[srcInd];
+                                        i++;
+                                    }
+                                }
                             }
+                            return result;
                         }
-                    }
-                }
-                else if (angle > 180 && angle <= 270)
-                {
-                    result = BitmapBufferFactory.New(h, w);
-                    using (var destContext = result.GetBitmapContext())
-                    {
-                        int[] rp = destContext.Pixels;
-                        for (int x = w - 1; x >= 0; x--)
+
+                    case FastRotateAngle.Rotate180:
                         {
-                            for (int y = 0; y < h; y++)
+                            var result = BitmapBufferFactory.New(w, h);
+                            using (BitmapContext destContext = result.GetBitmapContext())
                             {
-                                int srcInd = y * w + x;
-                                rp[i] = p[srcInd];
-                                i++;
+                                var rp = destContext.Pixels;
+                                for (int y = h - 1; y >= 0; y--)
+                                {
+                                    for (int x = w - 1; x >= 0; x--)
+                                    {
+                                        int srcInd = y * w + x;
+                                        rp[i] = p[srcInd];
+                                        i++;
+                                    }
+                                }
                             }
+                            return result;
                         }
-                    }
+                    case FastRotateAngle.Rotate270:
+                        {
+                            var result = BitmapBufferFactory.New(h, w);
+                            using (BitmapContext destContext = result.GetBitmapContext())
+                            {
+                                int[] rp = destContext.Pixels;
+                                for (int x = w - 1; x >= 0; x--)
+                                {
+                                    for (int y = 0; y < h; y++)
+                                    {
+                                        int srcInd = y * w + x;
+                                        rp[i] = p[srcInd];
+                                        i++;
+                                    }
+                                }
+                            }
+                            return result;
+                        }
                 }
-                else
-                {
-                    result = bmp.Clone();
-                }
-                return result;
             }
         }
 
@@ -430,7 +441,7 @@ namespace PixelFarm.DrawingBuffer
 
                 BitmapBuffer bmBilinearInterpolation = BitmapBufferFactory.New(newWidth, newHeight);
 
-                using (var bilinearContext = bmBilinearInterpolation.GetBitmapContext())
+                using (BitmapContext bilinearContext = bmBilinearInterpolation.GetBitmapContext())
                 {
                     int[] newp = bilinearContext.Pixels;
                     int[] oldp = bmpContext.Pixels;
@@ -548,7 +559,7 @@ namespace PixelFarm.DrawingBuffer
         /// <returns>A new WriteableBitmap that is a flipped version of the input.</returns>
         public static BitmapBuffer Flip(this BitmapBuffer bmp, FlipMode flipMode)
         {
-            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
+            using (BitmapContext context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -557,41 +568,41 @@ namespace PixelFarm.DrawingBuffer
                 int i = 0;
                 BitmapBuffer result = BitmapBufferFactory.New(w, h);
 
-                if (flipMode == FlipMode.Horizontal)
+                switch (flipMode)
                 {
-
-                    using (BitmapContext destContext = result.GetBitmapContext())
-                    {
-                        int[] rp = destContext.Pixels;
-                        for (int y = h - 1; y >= 0; y--)
+                    default:
+                        throw new NotSupportedException();
+                    case FlipMode.Vertical:
+                        using (BitmapContext destContext = result.GetBitmapContext())
                         {
-                            for (int x = 0; x < w; x++)
+                            int[] rp = destContext.Pixels;
+                            for (int y = h - 1; y >= 0; y--)
                             {
-                                int srcInd = y * w + x;
-                                rp[i] = p[srcInd];
-                                i++;
+                                for (int x = 0; x < w; x++)
+                                {
+                                    int srcInd = y * w + x;
+                                    rp[i] = p[srcInd];
+                                    i++;
+                                }
                             }
                         }
-                    }
-                }
-                else if (flipMode == FlipMode.Vertical)
-                {
-
-                    using (BitmapContext destContext = result.GetBitmapContext())
-                    {
-                        int[] rp = destContext.Pixels;
-                        for (int y = 0; y < h; y++)
+                        break;
+                    case FlipMode.Horizontal:
+                        using (BitmapContext destContext = result.GetBitmapContext())
                         {
-                            for (int x = w - 1; x >= 0; x--)
+                            int[] rp = destContext.Pixels;
+                            for (int y = 0; y < h; y++)
                             {
-                                int srcInd = y * w + x;
-                                rp[i] = p[srcInd];
-                                i++;
+                                for (int x = w - 1; x >= 0; x--)
+                                {
+                                    int srcInd = y * w + x;
+                                    rp[i] = p[srcInd];
+                                    i++;
+                                }
                             }
                         }
-                    }
+                        break;
                 }
-
                 return result;
             }
         }

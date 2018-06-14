@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -27,13 +27,13 @@ namespace PixelFarm.Agg.Imaging
     public class SubBitmapBlender : BitmapBlenderBase
     {
 
-       
+
         public SubBitmapBlender(IBitmapBlender image,
         int arrayOffset32,
         int width,
         int height)
         {
-            SetRecieveBlender(image.GetRecieveBlender());
+            this.OutputPixelBlender = image.OutputPixelBlender;
             AttachBuffer(image.GetInt32Buffer(),
                 arrayOffset32,
                 width,
@@ -64,7 +64,8 @@ namespace PixelFarm.Agg.Imaging
             int arrayOffset32,
             int bitsPerPixel)
         {
-            SetRecieveBlender(blender);
+
+            this.OutputPixelBlender = blender;
             Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
         public SubBitmapBlender(IBitmapSrc image, PixelBlender32 blender)
@@ -99,7 +100,7 @@ namespace PixelFarm.Agg.Imaging
 
         IBitmapSrc _sourceImage;
         void Attach(IBitmapSrc sourceImage,
-          PixelBlender32 recieveBlender,
+          PixelBlender32 outputPxBlender,
           int distanceBetweenPixelsInclusive,
           int arrayElemOffset,
           int bitsPerPixel)
@@ -114,7 +115,8 @@ namespace PixelFarm.Agg.Imaging
             int srcOffset32 = sourceImage.GetByteBufferOffsetXY(0, 0) / 4;
             int[] buffer = sourceImage.GetInt32Buffer();
             SetBuffer(buffer, srcOffset32 + arrayElemOffset);
-            SetRecieveBlender(recieveBlender);
+
+            this.OutputPixelBlender = outputPxBlender;
         }
         //bool Attach(IBitmapBlender sourceImage, int x1, int y1, int x2, int y2)
         //{

@@ -1,4 +1,4 @@
-﻿//MIT, 2017-2018, WinterDev
+﻿//MIT, 2017-present, WinterDev
 using System;
 using System.Drawing;
 using System.Text;

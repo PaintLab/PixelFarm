@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System.Drawing;
 using PixelFarm.Agg;
@@ -11,11 +11,11 @@ namespace SampleWinForms.UI
         Graphics g;
         VxsTextPrinter _printer;
         ActualBitmap destImg;
-        AggRenderSurface aggsx;
+
         AggPainter p;
         Bitmap winBmp;
         VisualLine _visualLine;
-         
+
         public SampleTextBoxControllerForPixelFarm()
         {
         }
@@ -25,8 +25,7 @@ namespace SampleWinForms.UI
             g = hostControlGraphics;
             //
             destImg = new ActualBitmap(400, 300);
-            aggsx = new AggRenderSurface(destImg); //no platform
-            p = new AggPainter(aggsx);
+            p = AggPainter.Create(destImg);
             winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             _printer = new VxsTextPrinter(p, null);

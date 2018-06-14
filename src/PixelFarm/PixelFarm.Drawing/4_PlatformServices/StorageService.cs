@@ -1,5 +1,5 @@
-﻿//BSD, 2014-2018, WinterDev
-//MIT, 2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
+//MIT, 2018-present, WinterDev
 using System.Collections.Generic;
 using System.IO;
 namespace PixelFarm.Platforms
@@ -14,6 +14,9 @@ namespace PixelFarm.Platforms
             byte[] data = ReadData(dataName);
             return new MemoryStream(data);
         }
+        public abstract PixelFarm.Agg.ActualBitmap ReadPngBitmap(string filename);
+        public abstract void SavePngBitmap(PixelFarm.Agg.ActualBitmap bmp, string filename);
+
     }
 
     public static class StorageService

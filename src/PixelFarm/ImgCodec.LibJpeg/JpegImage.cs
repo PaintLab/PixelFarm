@@ -447,8 +447,8 @@ namespace BitMiracle.LibJpeg
 
         private bool needCompressWith(CompressionParameters parameters)
         {
-            return m_compressedData == null || 
-                   m_compressionParameters == null || 
+            return m_compressedData == null ||
+                   m_compressionParameters == null ||
                    !m_compressionParameters.Equals(parameters);
         }
 
@@ -496,7 +496,7 @@ namespace BitMiracle.LibJpeg
             m_bitsPerComponent = 8;
             m_componentsPerSample = 3;
             m_colorspace = Colorspace.RGB;
-            
+
             if (pixelSizeByte == 16)
                 m_bitsPerComponent = 6;
             else if (pixelSizeByte == 24 || pixelSizeByte == 32)

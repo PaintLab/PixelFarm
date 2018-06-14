@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -39,8 +39,8 @@ namespace LayoutFarm
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
-            viewport.AddContent(textbox);
-            viewport.AddContent(sgBox.GetPrimaryUI());
+            viewport.AddChild(textbox);
+            viewport.AddChild(sgBox.GetPrimaryUI());
             //------------------------------------ 
             BuildSampleCountryList();
         }

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 namespace LayoutFarm
@@ -13,14 +13,14 @@ namespace LayoutFarm
         {
             this.viewport = viewport;
             var comboBox1 = CreateComboBox(20, 20);
-            viewport.AddContent(comboBox1);
+            viewport.AddChild(comboBox1);
             var comboBox2 = CreateComboBox(50, 50);
-            viewport.AddContent(comboBox2);
+            viewport.AddChild(comboBox2);
             //------------
             var menuItem = CreateMenuItem(50, 100);
             var menuItem2 = CreateMenuItem(5, 5);
             menuItem.AddSubMenuItem(menuItem2);
-            viewport.AddContent(menuItem);
+            viewport.AddChild(menuItem);
         }
 
         LayoutFarm.CustomWidgets.ComboBox CreateComboBox(int x, int y)
@@ -29,7 +29,7 @@ namespace LayoutFarm
             comboBox.SetLocation(x, y);
             //--------------------
             //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.SimpleBox(400, 20);
+            var landPart = new LayoutFarm.CustomWidgets.Box(400, 20);
             landPart.BackColor = Color.Green;
             comboBox.LandPart = landPart;
             //--------------------------------------
@@ -44,7 +44,7 @@ namespace LayoutFarm
             imgBox.ImageBinder = arrowBmp;
             //--------------------------------------
             //2. float part
-            var floatPart = new LayoutFarm.CustomWidgets.SimpleBox(400, 100);
+            var floatPart = new LayoutFarm.CustomWidgets.Box(400, 100);
             floatPart.BackColor = Color.Blue;
             comboBox.FloatPart = floatPart;
             //--------------------------------------
@@ -78,7 +78,7 @@ namespace LayoutFarm
             mnuItem.SetLocation(x, y);
             //--------------------
             //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.SimpleBox(150, 20);
+            var landPart = new LayoutFarm.CustomWidgets.Box(150, 20);
             landPart.BackColor = Color.OrangeRed;
             mnuItem.LandPart = landPart;
             //--------------------------------------

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
 {
 
 
-    public class ListView : UIBox
+    public class ListView : AbstractRect
     {
 
 
@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
         List<ListItem> items = new List<ListItem>();
         int selectedIndex = -1;//default = no selection
         ListItem selectedItem = null;
-        SimpleBox panel;
+        Box panel;
 
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
@@ -33,7 +33,7 @@ namespace LayoutFarm.CustomWidgets
         {
             uiList = new UICollection(this);
 
-            var simpleBox = new SimpleBox(width, height);
+            var simpleBox = new Box(width, height);
             simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             simpleBox.BackColor = Color.LightGray;
             simpleBox.MouseDown += panel_MouseDown;
@@ -261,13 +261,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
-        public override void SetViewport(int x, int y)
+        public override void SetViewport(int x, int y, object reqBy)
         {
             this.viewportX = x;
             this.viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this.panel.SetViewport(x, y);
+                this.panel.SetViewport(x, y, reqBy);
             }
         }
         public void ScrollToSelectedItem()
@@ -287,9 +287,9 @@ namespace LayoutFarm.CustomWidgets
                 //check if selected item is visible
                 //if not bring them into view
                 int topPos = selectedItem.Top;
-                if (this.viewportY + ViewportHeight < topPos)
+                if (this.viewportY + Height < topPos)
                 {
-                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2));
+                    SetViewport(this.viewportX, topPos - (Height / 2));
                 }
             }
 
@@ -308,7 +308,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class ListItem : UIBox
+    public class ListItem : AbstractRect
     {
         CustomContainerRenderBox primElement;
         CustomTextRun listItemText;
@@ -321,7 +321,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             this.TransparentAllMouseEvents = true;
-            
+
         }
         public override RenderElement CurrentPrimaryRenderElement
         {

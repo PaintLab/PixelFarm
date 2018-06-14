@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
@@ -18,15 +18,20 @@ namespace LayoutFarm.CustomWidgets
         Both,
     }
 
-    public sealed class SimpleBox : EaseBox
+    public sealed class Box : AbstractBox
     {
-        public SimpleBox(int w, int h)
+        public Box(int w, int h)
             : base(w, h)
         {
+
+        }
+        public void SetInnerContentSize(int w, int h)
+        {   
+            SetDesiredSize(w, h);
         }
         public override void Walk(UIVisitor visitor)
         {
-            visitor.BeginElement(this, "simplebox");
+            visitor.BeginElement(this, "box");
             this.Describe(visitor);
             //descrube child 
             visitor.EndElement();

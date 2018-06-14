@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 namespace LayoutFarm
 {
@@ -16,7 +16,7 @@ namespace LayoutFarm
             //set default style
             textbox.DefaultSpanStyle = textSpanStyle;
 
-            viewport.AddContent(textbox);
+            viewport.AddChild(textbox);
             textbox.InvalidateGraphics();
         }
     }

@@ -1,10 +1,10 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ImageBox : EaseBox
+    public class ImageBox : AbstractBox
     {
         CustomImageRenderBox imgRenderBox;
         ImageBinder imageBinder;

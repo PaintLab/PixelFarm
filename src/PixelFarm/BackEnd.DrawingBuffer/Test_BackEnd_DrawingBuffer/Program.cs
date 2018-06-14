@@ -1,4 +1,4 @@
-﻿//MIT, 2017-2018, WinterDev
+﻿//MIT, 2017-present, WinterDev
 //example and test for WritableBitmap (https://github.com/teichgraf/WriteableBitmapEx) on Gdi+
 
 using System;
@@ -40,12 +40,15 @@ namespace WinFormGdiPlus
             _writeableBitmap = PixelFarm.DrawingBuffer.BitmapBuffer.Empty;
             bufferLenInBytes = 0;
         }
-        public PixelFarm.DrawingBuffer.BitmapBuffer GetWritableBitmap()
+        public PixelFarm.DrawingBuffer.BitmapBuffer CreateNewBitmapBuffer()
         {
             if (!_writeableBitmap.IsEmpty) return _writeableBitmap;
             //
             //create
             bufferLenInBytes = _bmpdata.Stride * _bmpdata.Height;
+
+
+            //copy*** original buffer ti iyr BitmapBuffer
             int[] buffer = new int[bufferLenInBytes / 4];
             System.Runtime.InteropServices.Marshal.Copy(_bmpdata.Scan0, buffer, 0, bufferLenInBytes / 4);
 
@@ -91,5 +94,4 @@ namespace WinFormGdiPlus
         }
     }
 }
-
 

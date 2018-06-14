@@ -1,4 +1,4 @@
-//BSD, 2014-2018, WinterDev
+//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -59,17 +59,15 @@ namespace PixelFarm.Agg.Imaging
         {
             return linkedImage.GetBounds();
         }
-
-        public PixelBlender32 GetRecieveBlender()
+        public PixelBlender32 OutputPixelBlender
         {
-            return linkedImage.GetRecieveBlender();
+            get { return linkedImage.OutputPixelBlender; }
+            set
+            {
+                linkedImage.OutputPixelBlender = value;
+            }
         }
-
-        public void SetRecieveBlender(PixelBlender32 value)
-        {
-            linkedImage.SetRecieveBlender(value);
-        }
-
+         
         public virtual Color GetPixel(int x, int y)
         {
             return linkedImage.GetPixel(x, y);
@@ -159,7 +157,7 @@ namespace PixelFarm.Agg.Imaging
         {
             return linkedImage.GetBufferOffsetXY32(x, y);
         }
-         
+
 
         public virtual int BytesBetweenPixelsInclusive
         {

@@ -1,4 +1,4 @@
-﻿//MIT, 2017-2018, WinterDev 
+﻿//MIT, 2017-present, WinterDev 
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
@@ -205,8 +205,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualBitmap glyphImg = new ActualBitmap(100, 100);
-            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
-            AggPainter painter = new AggPainter(glyph2d);
+            AggPainter painter = AggPainter.Create(glyphImg);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f * 3;
@@ -247,8 +246,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualBitmap glyphImg = new ActualBitmap(100, 100);
-            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
-            AggPainter painter = new AggPainter(glyph2d);
+            AggPainter painter = AggPainter.Create(glyphImg);
             //
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f;
@@ -348,7 +346,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int y = 30;
             p.FillColor = PixelFarm.Drawing.Color.Black;
 
-         
+
             using (System.IO.FileStream fs = new System.IO.FileStream("c:\\Windows\\Fonts\\tahoma.ttf", System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 Typography.OpenFont.OpenFontReader reader = new Typography.OpenFont.OpenFontReader();

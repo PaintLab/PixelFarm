@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,10 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public abstract class EaseBox : UIBox
+    /// <summary>
+    /// abstract box ui element
+    /// </summary>
+    public abstract class AbstractBox : AbstractRect
     {
         BoxContentLayoutKind panelLayoutKind;
         bool needContentLayout;
@@ -26,13 +29,14 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDoubleClick;
         public event EventHandler<UIMouseEventArgs> MouseLeave;
         public event EventHandler<UIMouseEventArgs> MouseDrag;
+        public event EventHandler<UIMouseEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
         public event EventHandler<UIGuestTalkEventArgs> DragOver;
         //--------------------------------------------------------
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
-        public EaseBox(int width, int height)
+        public AbstractBox(int width, int height)
             : base(width, height)
         {
             this.desiredHeight = height;
@@ -51,7 +55,10 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        public override void Walk(UIVisitor visitor)
+        {
 
+        }
         protected override bool HasReadyRenderElement
         {
             get { return this.primElement != null; }
@@ -239,18 +246,26 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
-        public override void SetViewport(int x, int y)
+        public override void SetViewport(int x, int y, object reqBy)
         {
+            //check if viewport is changed or not
+            bool isChanged = (viewportX != x) || (viewportY != y);
             this.viewportX = x;
             this.viewportY = y;
             if (this.HasReadyRenderElement)
             {
                 primElement.SetViewport(viewportX, viewportY);
+                if (isChanged)
+                {
+                    RaiseViewportChanged();
+                }
+
             }
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             //vertical scroll
+
             if (this.desiredHeight > this.Height)
             {
                 if (e.Delta < 0)
@@ -273,6 +288,10 @@ namespace LayoutFarm.CustomWidgets
                 }
                 this.primElement.SetViewport(viewportX, viewportY);
                 this.InvalidateGraphics();
+            }
+            if (MouseWheel != null)
+            {
+                MouseWheel(this, e);
             }
         }
         //-------------------
@@ -438,7 +457,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxRight = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as UIBox;
+                            var element = this.GetChild(i) as AbstractRect;
                             if (element != null)
                             {
 
@@ -470,7 +489,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as UIBox;
+                            var element = this.GetChild(i) as AbstractRect;
                             if (element != null)
                             {
                                 element.PerformContentLayout();
@@ -494,7 +513,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as UIBox;
+                            var element = this.GetChild(i) as AbstractRect;
                             if (element != null)
                             {
                                 element.PerformContentLayout();

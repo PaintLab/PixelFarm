@@ -1,19 +1,19 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ComboBox : UIBox
+    public class ComboBox : AbstractRect
     {
         CustomRenderBox primElement;//background 
         Color backColor = Color.LightGray;
         bool isOpen;
         //1. land part
-        UIBox landPart;
+        AbstractRect landPart;
         //2. float part   
-        UIBox floatPart;
+        AbstractRect floatPart;
         RenderElement floatPartRenderElement;
         HingeFloatPartStyle floatPartStyle;
         public ComboBox(int width, int height)
@@ -86,7 +86,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
         //----------------------------------------------------  
-        public UIBox LandPart
+        public AbstractRect LandPart
         {
             get { return this.landPart; }
             set
@@ -118,7 +118,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public UIBox FloatPart
+        public AbstractRect FloatPart
         {
             get { return this.floatPart; }
             set

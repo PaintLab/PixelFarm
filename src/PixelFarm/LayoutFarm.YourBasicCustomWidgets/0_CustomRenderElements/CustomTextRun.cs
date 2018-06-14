@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
@@ -61,7 +61,7 @@ namespace LayoutFarm.CustomWidgets
                 var prevColor = canvas.CurrentTextColor;
                 canvas.CurrentTextColor = textColor;
                 canvas.CurrentFont = _font;
-                
+
                 //for faster text drawing
                 //we create a formatted-text 
                 //canvas.DrawText(this.textBuffer, this.X, this.Y);
@@ -69,7 +69,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     renderVxFormattedString = canvas.CreateFormattedString(textBuffer, 0, textBuffer.Length);
                 }
-                canvas.DrawRenderVx(renderVxFormattedString, this.X, this.Y);
+                canvas.DrawRenderVx(renderVxFormattedString, 0, 0); //X=0,Y=0 because  we offset the canvas to this Y before drawing this
                 canvas.CurrentTextColor = prevColor;
             }
         }

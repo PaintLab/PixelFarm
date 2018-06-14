@@ -1,9 +1,9 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MiniAggCanvasBox : UIBox
+    public class MiniAggCanvasBox : AbstractRect
     {
         MiniAggCanvasRenderElement canvasRenderElement;
         public MiniAggCanvasBox(int w, int h)

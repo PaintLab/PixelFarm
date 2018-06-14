@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -215,14 +215,14 @@ namespace LayoutFarm.UI
         {
             this.rootgfx.TopWindowRenderBox.TopDownReCalculateContentSize();
         }
-        public void AddContent(RenderElement vi)
+        public void AddChild(RenderElement vi)
         {
             this.rootgfx.TopWindowRenderBox.AddChild(vi);
         }
 
 
         static IntPtr s_tmpHandle;
-        public void AddContent(RenderElement vi, object owner)
+        public void AddChild(RenderElement vi, object owner)
         {
             if (vi is RenderBoxBase)
             {
@@ -248,7 +248,7 @@ namespace LayoutFarm.UI
                         newForm.Controls.Add(newSurfaceViewport);
                         vi.ResetRootGraphics(newSurfaceViewport.RootGfx);
                         vi.SetLocation(0, 0);
-                        newSurfaceViewport.AddContent(vi);
+                        newSurfaceViewport.AddChild(vi);
                         //-----------------------------------------------------                        
                         s_tmpHandle = newForm.Handle;//force newform to create window handle
                         //----------
@@ -368,7 +368,7 @@ namespace LayoutFarm.UI
             {
                 form.Location = new System.Drawing.Point(x, y);
             }
-            
+
         }
 
         void IPlatformWindowBox.SetSize(int w, int h)

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------
-//Apache2, 2014-2018, WinterDev
+//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -8,13 +8,13 @@ using LayoutFarm.UI;
 
 namespace LayoutFarm.CustomWidgets
 {
-    class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+    class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
     {
         public UIControllerBox(int w, int h)
             : base(w, h)
         {
         }
-        public LayoutFarm.UI.UIBox TargetBox
+        public LayoutFarm.UI.AbstractRect TargetBox
         {
             get;
             set;
@@ -39,11 +39,11 @@ namespace LayoutFarm.CustomWidgets
         UIControllerBox controllerBox1 = new UIControllerBox(40, 40);
         List<UIControllerBox> _controls = new List<UIControllerBox>();
 
-        SimpleBox _simpleBox;
+        Box _simpleBox;
         bool _hasPrimRenderE;
         public RectBoxController()
         {
-            _simpleBox = new SimpleBox(10, 10);
+            _simpleBox = new Box(10, 10);
             _simpleBox.BackColor = Color.Transparent;//*** 
         }
         //-------------
@@ -78,7 +78,7 @@ namespace LayoutFarm.CustomWidgets
             controllerBox1.AcceptKeyboardFocus = true;
             controllerBox1.Focus();
         }
-        public void UpdateControllerBoxes(LayoutFarm.UI.UIBox box)
+        public void UpdateControllerBoxes(LayoutFarm.UI.AbstractRect box)
         {
 
             //move controller here 
@@ -129,7 +129,7 @@ namespace LayoutFarm.CustomWidgets
                 //controllerBox1.dbugTag = 3;
                 controllerBox1.Visible = false;
                 SetupControllerBoxProperties(controllerBox1);
-                //viewport.AddContent(controllerBox1);
+                //viewport.AddChild(controllerBox1);
                 _controls.Add(controllerBox1);
             }
             _simpleBox.AddChild(controllerBox1);
@@ -140,7 +140,7 @@ namespace LayoutFarm.CustomWidgets
             _boxLeftTop.MouseDrag += (s1, e1) =>
             {
                 //move other boxes ...
-                UIBox target1 = _boxLeftTop.TargetBox;
+                AbstractRect target1 = _boxLeftTop.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
@@ -156,7 +156,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxLeftBottom);
             _boxLeftBottom.MouseDrag += (s1, e1) =>
             {
-                UIBox target1 = _boxLeftBottom.TargetBox;
+                AbstractRect target1 = _boxLeftBottom.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftBottom.Right,
                                       _boxLeftTop.Bottom,
@@ -172,7 +172,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxRightTop);
             _boxRightTop.MouseDrag += (s1, e1) =>
             {
-                UIBox target1 = _boxRightTop.TargetBox;
+                AbstractRect target1 = _boxRightTop.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxRightTop.Bottom,
@@ -188,7 +188,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxRightBottom);
             _boxRightBottom.MouseDrag += (s1, e1) =>
             {
-                UIBox target1 = _boxRightBottom.TargetBox;
+                AbstractRect target1 = _boxRightBottom.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
@@ -200,7 +200,7 @@ namespace LayoutFarm.CustomWidgets
             _simpleBox.AddChild(_boxRightBottom);
         }
 
-        public EaseBox ControllerBoxMain
+        public AbstractBox ControllerBoxMain
         {
             get { return controllerBox1; }
         }
@@ -264,7 +264,7 @@ namespace LayoutFarm.CustomWidgets
             //controllerBox1.dbugTag = 3;
             box.Visible = false;
             SetupControllerBoxProperties2(box);
-            //viewport.AddContent(box);
+            //viewport.AddChild(box);
             //
             _controls.Add(box);
         }
@@ -273,14 +273,14 @@ namespace LayoutFarm.CustomWidgets
 
     public class PolygonController : UIElement
     {
-        SimpleBox _simpleBox;
+        Box _simpleBox;
         bool _hasPrimRenderE;
         List<PointF> _points = new List<PointF>();
         List<UIControllerBox> _controls = new List<UIControllerBox>();
         public PolygonController()
         {
 
-            _simpleBox = new SimpleBox(10, 10);
+            _simpleBox = new Box(10, 10);
             _simpleBox.TransparentAllMouseEvents = true;
             _simpleBox.NeedClipArea = false;
             //_simpleBox.BackColor = Color.Transparent;//*** 
@@ -390,7 +390,7 @@ namespace LayoutFarm.CustomWidgets
             //controllerBox1.dbugTag = 3;
             box.Visible = true;
             SetupCornerProperties(box);
-            //viewport.AddContent(box);
+            //viewport.AddChild(box);
             //
             _controls.Add(box);
         }

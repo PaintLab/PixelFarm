@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using PixelFarm.Drawing;
@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
 
         }
     }
-    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.EaseBox
+    public class BackDrawBoardUI : LayoutFarm.CustomWidgets.AbstractBox
     {
         BackBoardRenderElement _backboardRenderE;
         public BackDrawBoardUI(int w, int h)

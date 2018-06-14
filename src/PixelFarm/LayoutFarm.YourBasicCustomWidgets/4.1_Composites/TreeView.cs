@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TreeView : UIBox
+    public class TreeView : AbstractRect
     {
         //composite          
         CustomRenderBox primElement;//background
@@ -14,12 +14,12 @@ namespace LayoutFarm.CustomWidgets
         int viewportX, viewportY;
         UICollection uiList;
         int latestItemY;
-        SimpleBox panel; //panel 
+        Box panel; //panel 
         public TreeView(int width, int height)
             : base(width, height)
         {
             //panel for listview items
-            this.panel = new SimpleBox(width, height);
+            this.panel = new Box(width, height);
             panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             panel.BackColor = Color.LightGray;
             panel.NeedClipArea = true;
@@ -103,13 +103,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
-        public override void SetViewport(int x, int y)
+        public override void SetViewport(int x, int y, object reqBy)
         {
             this.viewportX = x;
             this.viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this.panel.SetViewport(x, y);
+                this.panel.SetViewport(x, y, this);
             }
         }
         //----------------------------------------------------
@@ -132,7 +132,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public class TreeNode : UIBox
+    public class TreeNode : AbstractRect
     {
         const int NODE_DEFAULT_HEIGHT = 17;
         CustomRenderBox primElement;//bg primary render element

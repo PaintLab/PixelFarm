@@ -1,4 +1,4 @@
-﻿//MIT, 2017-2018, WinterDev
+﻿//MIT, 2017-present, WinterDev
 //example and test for WritableBitmap (https://github.com/teichgraf/WriteableBitmapEx) on Gdi+
 using System;
 using System.Collections.Generic;
@@ -21,9 +21,9 @@ namespace WinFormGdiPlus
         private void button1_Click(object sender, EventArgs e)
         {
             using (Bitmap bmp1 = new Bitmap(400, 500))
-            using (var bmplock = bmp1.Lock())
+            using (LockBmp bmplock = bmp1.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
                 //lines
 
                 int y = 0;
@@ -54,9 +54,9 @@ namespace WinFormGdiPlus
         private void button2_Click(object sender, EventArgs e)
         {
             using (Bitmap bmp1 = new Bitmap(400, 500))
-            using (var bmplock = bmp1.Lock())
+            using (LockBmp bmplock = bmp1.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
 
                 int y = 0;
                 wb.FillRectangle(5, 5, 20, 20, PixelFarm.DrawingBuffer.ColorInt.FromArgb(255, 255, 0, 0));
@@ -69,12 +69,12 @@ namespace WinFormGdiPlus
         private void button3_Click(object sender, EventArgs e)
         {
             using (Bitmap src = new Bitmap("d:\\WImageTest\\L01.png"))
-            using (var srcLock = src.Lock())
+            using (LockBmp srcLock = src.Lock())
             using (Bitmap dest = new Bitmap(400, 500))
-            using (var dstLock = dest.Lock())
+            using (LockBmp dstLock = dest.Lock())
             {
-                BitmapBuffer dstWb = dstLock.GetWritableBitmap();
-                BitmapBuffer srcWb = srcLock.GetWritableBitmap();
+                BitmapBuffer dstWb = dstLock.CreateNewBitmapBuffer();
+                BitmapBuffer srcWb = srcLock.CreateNewBitmapBuffer();
                 int y = 0;
                 dstWb.Clear(PixelFarm.DrawingBuffer.ColorInt.FromArgb(255, 255, 255, 255));
 

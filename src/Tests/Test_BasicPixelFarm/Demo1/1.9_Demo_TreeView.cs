@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 namespace LayoutFarm
@@ -11,7 +11,7 @@ namespace LayoutFarm
             var treeView = new LayoutFarm.CustomWidgets.TreeView(300, 400);
             treeView.SetLocation(10, 10);
             treeView.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
-            viewport.AddContent(treeView);
+            viewport.AddChild(treeView);
             //prepare node icon
 
             ImageBinder nodeOpen = viewport.GetImageBinder2("../../Data/imgs/arrow_open.png");             

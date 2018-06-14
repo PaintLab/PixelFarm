@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-//Apache2, 2017-2018, WinterDev
+//Apache2, 2017-present, WinterDev
 using PixelFarm.Drawing.DrawingBuffer;
 namespace System
 {

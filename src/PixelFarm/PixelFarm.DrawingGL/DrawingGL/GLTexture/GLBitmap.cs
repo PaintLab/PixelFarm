@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using OpenTK.Graphics.ES20;
@@ -21,7 +21,7 @@ namespace PixelFarm.DrawingGL
         int height;
 
         int[] rawIntBuffer;
-        //PixelFarm.Drawing.Imaging.NativeImage bmp;
+       
         IntPtr nativeImgMem;
         LazyBitmapBufferProvider lazyProvider;
         bool isInvertImage = false;

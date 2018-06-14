@@ -42,7 +42,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         public static void DrawPolyline(this BitmapBuffer bmp, int[] points, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -81,7 +81,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         public static void DrawPolylineAa(this BitmapBuffer bmp, int[] points, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -131,7 +131,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void DrawTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -177,7 +177,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void DrawQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -220,7 +220,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color.</param>
         public static void DrawRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -340,7 +340,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, int color)
         {
             // Use refs for faster access (really important!) speeds up a lot!
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
 
                 int[] pixels = context.Pixels;

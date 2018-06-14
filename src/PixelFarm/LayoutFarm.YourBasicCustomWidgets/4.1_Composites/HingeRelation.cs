@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 
 using LayoutFarm.UI;
@@ -8,13 +8,13 @@ namespace LayoutFarm.CustomWidgets
     {
         bool isOpen;
         //1. land part
-        UIBox landPart;
+        AbstractRect landPart;
         //2. float part   
-        UIBox floatPart;
+        AbstractRect floatPart;
         RenderElement floatPartRenderElement;
         HingeFloatPartStyle floatPartStyle;
         //----------------------------------------------------  
-        public UIBox LandPart
+        public AbstractRect LandPart
         {
             get { return this.landPart; }
             set
@@ -48,7 +48,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public UIBox FloatPart
+        public AbstractRect FloatPart
         {
             get { return this.floatPart; }
             set

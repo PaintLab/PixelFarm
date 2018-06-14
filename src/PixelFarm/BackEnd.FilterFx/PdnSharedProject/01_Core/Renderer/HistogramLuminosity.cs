@@ -6,7 +6,7 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
-//Apache2, 2017-2018, WinterDev
+//Apache2, 2017-present, WinterDev
 namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>

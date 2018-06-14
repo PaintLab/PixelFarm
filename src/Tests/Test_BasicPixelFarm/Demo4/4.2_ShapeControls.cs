@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System.Collections.Generic;
 
@@ -15,7 +15,7 @@ namespace LayoutFarm
     {
         LayoutFarm.CustomWidgets.PolygonController polygonController = new CustomWidgets.PolygonController();
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
-        LayoutFarm.CustomWidgets.SimpleBox box1;
+        LayoutFarm.CustomWidgets.Box box1;
 
 
         protected override void OnStartDemo(SampleViewport viewport)
@@ -37,7 +37,7 @@ namespace LayoutFarm
 
             var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0) 
             uiSprite.LoadSvg(svgRenderVx);
-            viewport.AddContent(uiSprite); 
+            viewport.AddChild(uiSprite); 
 
             var spriteEvListener = new GeneralEventListener();
             uiSprite.AttachExternalEventListener(spriteEvListener);
@@ -53,9 +53,9 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //polygonController.Visible = false;
-            viewport.AddContent(polygonController);
+            viewport.AddChild(polygonController);
             //-------------------------------------------
-            viewport.AddContent(rectBoxController);
+            viewport.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{
@@ -89,7 +89,7 @@ namespace LayoutFarm
             };
 
         }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>

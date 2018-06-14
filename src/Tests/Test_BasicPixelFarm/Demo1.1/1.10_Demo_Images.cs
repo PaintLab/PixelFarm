@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
@@ -15,7 +15,7 @@ namespace LayoutFarm
                 var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
                 imgBox.ImageBinder = imgBinder;
                 imgBox.SetLocation(i * 10, i * 10);
-                viewport.AddContent(imgBox);
+                viewport.AddChild(imgBox);
             }
         }
     }
@@ -28,11 +28,11 @@ namespace LayoutFarm
             for (int i = 0; i < 10; ++i)
             {
                 Label label = new Label(17, 50);
-                label.SetLocation(0, i * 20);
+                label.SetLocation(i * 20, i * 20);
                 label.Color = PixelFarm.Drawing.Color.Black;
                 label.Text = "ABCDEFGHIJKLMNOPQRSTUVWXZYZ0123456789";
-                viewport.AddContent(label);
-            } 
+                viewport.AddChild(label);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //ArthurHub  , Jose Manuel Menendez Poo
 
 // "Therefore those skilled at the unorthodox
@@ -787,7 +787,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         Agg.AggPainter _painter;
         Agg.ActualBitmap _aggActualImg;
-        Agg.AggRenderSurface _aggRenderSurface;
+
         static Typography.TextServices.OpenFontStore openFontStore;
         Painter GetAggPainter()
         {
@@ -795,8 +795,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
 
                 _aggActualImg = new Agg.ActualBitmap(this.Width, this.Height);
-                _aggRenderSurface = new Agg.AggRenderSurface(_aggActualImg);
-                var aggPainter = new Agg.AggPainter(_aggRenderSurface);
+                var aggPainter = Agg.AggPainter.Create(_aggActualImg);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
                 //ifont loader
@@ -837,8 +836,7 @@ namespace PixelFarm.Drawing.WinGdi
 
                 //create 
                 Agg.ActualBitmap backimg = new Agg.ActualBitmap((int)bound.Width, (int)bound.Height);
-                Agg.AggRenderSurface renderSurface = new Agg.AggRenderSurface(backimg);
-                Agg.AggPainter painter = new Agg.AggPainter(renderSurface);
+                Agg.AggPainter painter = Agg.AggPainter.Create(backimg);
                 svgVx.Render(painter);
 
 #if DEBUG

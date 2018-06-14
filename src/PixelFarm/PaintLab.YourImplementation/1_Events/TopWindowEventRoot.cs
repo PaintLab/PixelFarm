@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 using System;
 using System.Collections.Generic;
 using LayoutFarm.UI;
@@ -165,7 +165,7 @@ namespace LayoutFarm
                 }
                 iTopBoxEventPortal.PortalMouseUp(e);
             }
-           
+
 
             this.localMouseDownX = this.localMouseDownY = 0;
             this.mouseCursorStyle = e.MouseCursorStyle;
@@ -197,15 +197,22 @@ namespace LayoutFarm
             {
                 if (draggingElement != null)
                 {
-                    //send this to dragging element first
+                    //send this to dragging element first 
                     int d_GlobalX, d_globalY;
                     draggingElement.GetGlobalLocation(out d_GlobalX, out d_globalY);
-                    e.SetLocation(e.GlobalX - d_GlobalX, e.GlobalY - d_globalY);
+
+
+                    int vwp_x, vwp_y;
+                    draggingElement.GetViewport(out vwp_x, out vwp_y);
+                    e.SetLocation(e.GlobalX - d_GlobalX + vwp_x, e.GlobalY - d_globalY + vwp_y);
+
                     e.CapturedMouseX = this.localMouseDownX;
                     e.CapturedMouseY = this.localMouseDownY;
+
                     var iportal = draggingElement as IEventPortal;
                     if (iportal != null)
                     {
+
                         iportal.PortalMouseMove(e);
                         if (!e.IsCanceled)
                         {

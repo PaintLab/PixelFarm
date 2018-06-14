@@ -61,7 +61,28 @@ namespace Typography.Rendering
                 _textureOffsetY = value;
             }
         }
+        //public void FlipY()
+        //{
+        //    //flip this img vertically
+        //    int[] newBuffer = new int[pixelBuffer.Length];
+
+        //    int w = this.Width;///pixel width
+        //    int stride = w * 4; //bytes
+        //    int readAt = stride * (Height - 1); //bytes
+        //    int writeAt = 0;
+
+        //    for (int row = Height - 1; row >= 0; --row)
+        //    {
+        //        //each row
+        //        Buffer.BlockCopy(pixelBuffer, readAt, newBuffer, writeAt, stride);
+        //        readAt -= stride;
+        //        writeAt += stride;
+        //    }
+
+        //}
     }
+
+
 
     public class CacheGlyph
     {
@@ -103,7 +124,13 @@ namespace Typography.Rendering
             get;
             set;
         }
+        public void GetGlyphRect(out int x, out int y, out int w, out int h)
+        {
+            x = Rect.X;
+            y = Rect.Y;
+            w = Rect.Width;
+            h = Rect.Height;
+        }
 
-    }
-
+    } 
 }

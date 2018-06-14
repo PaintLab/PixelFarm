@@ -78,7 +78,7 @@ namespace PixelFarm.DrawingBuffer
             // Prevent division by zero
             if (len != 0)
             {
-                using (var context = bmp.GetBitmapContext())
+                using (BitmapContext context = bmp.GetBitmapContext())
                 {
                     // Use refs for faster access (really important!) speeds up a lot!
                     int w = context.Width;
@@ -245,7 +245,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the spline.</param>
         public static void DrawCurve(this BitmapBuffer bmp, int[] points, float tension, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -290,7 +290,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the spline.</param>
         public static void DrawCurveClosed(this BitmapBuffer bmp, int[] points, float tension, int color)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;

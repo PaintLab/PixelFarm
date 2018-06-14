@@ -1,14 +1,15 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class Label : UIBox
+    public class Label : AbstractRect
     {
         string text;
         Color textColor;
         CustomTextRun myTextRun;
+        RequestFont _font;
         public Label(int w, int h)
             : base(w, h)
         {
@@ -21,10 +22,25 @@ namespace LayoutFarm.CustomWidgets
                 trun.SetLocation(this.Left, this.Top);
                 trun.TextColor = this.textColor;
                 trun.Text = this.Text;
+                if(_font != null)
+                {
+                    trun.RequestFont = _font;
+                }
                 this.myTextRun = trun;
             }
             //-----------
             return myTextRun;
+        }
+        public override void SetFont(RequestFont font)
+        {
+            if (myTextRun != null)
+            {
+                myTextRun.RequestFont = font;
+            }
+            else
+            {
+                _font = font;
+            }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System.Collections.Generic;
 namespace LayoutFarm.UI
@@ -122,6 +122,10 @@ namespace LayoutFarm.UI
                 return this.CurrentPrimaryRenderElement.GetGlobalLocation();
             }
             return new PixelFarm.Drawing.Point((int)_left, (int)_top);
+        }
+        public virtual void GetViewport(out int x, out int y)
+        {
+            x = y = 0;
         }
         public void GetElementBounds(
            out float left,

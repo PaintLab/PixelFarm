@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using PixelFarm.Drawing;
@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
     /// <summary>
     /// textbox with decoration(eg. placeholder)
     /// </summary>
-    public class TextBoxContainer : EaseBox
+    public class TextBoxContainer : AbstractBox
     {
         TextBox myTextBox;
         CustomTextRun placeHolder;

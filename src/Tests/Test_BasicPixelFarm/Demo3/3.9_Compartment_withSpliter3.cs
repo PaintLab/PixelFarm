@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.CustomWidgets;
@@ -13,11 +13,11 @@ namespace LayoutFarm
             //--------------------------------
             {
                 //background element
-                var bgbox = new LayoutFarm.CustomWidgets.SimpleBox(viewport.PrimaryScreenWidth, viewport.PrimaryScreenHeight);
+                var bgbox = new LayoutFarm.CustomWidgets.Box(viewport.PrimaryScreenWidth, viewport.PrimaryScreenHeight);
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddContent(bgbox);
+                viewport.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
@@ -27,7 +27,7 @@ namespace LayoutFarm
             ninespace2.SetLeftSpaceWidth(150);
             ninespace2.ShowGrippers = true;
             ninespaceBox.RightSpace.AddChild(ninespace2);
-            viewport.AddContent(ninespaceBox);
+            viewport.AddChild(ninespaceBox);
             // ninespaceBox.SetSize(800, 600);
 
             ////test add some content to the ninespace box
@@ -36,7 +36,7 @@ namespace LayoutFarm
             //ninespaceBox.LeftSpace.AddChildBox(sampleListView);
 
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
         }
 

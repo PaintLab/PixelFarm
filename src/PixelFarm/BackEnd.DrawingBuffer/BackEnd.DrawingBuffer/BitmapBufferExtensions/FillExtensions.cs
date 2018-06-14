@@ -55,9 +55,9 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
         public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, bool doAlphaBlend = false)
         {
-            
 
-            using (var context = bmp.GetBitmapContext())
+
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -103,7 +103,7 @@ namespace PixelFarm.DrawingBuffer
                 int startY = y1 * w;
                 int startYPlusX1 = startY + x1;
                 int endOffset = startY + x2;
-                
+
 
 
                 for (int idx = startYPlusX1; idx < endOffset; idx++)
@@ -147,18 +147,17 @@ namespace PixelFarm.DrawingBuffer
         private static int AlphaBlendColors(int pixel, int sa, int sr, int sg, int sb)
         {
             // Alpha blend
-            int destPixel = pixel;
-            int da = ((destPixel >> 24) & 0xff);
-            int dr = ((destPixel >> 16) & 0xff);
-            int dg = ((destPixel >> 8) & 0xff);
-            int db = ((destPixel) & 0xff);
 
-            destPixel = ((sa + (((da * (255 - sa)) * 0x8081) >> 23)) << 24) |
-                                     ((sr + (((dr * (255 - sa)) * 0x8081) >> 23)) << 16) |
-                                     ((sg + (((dg * (255 - sa)) * 0x8081) >> 23)) << 8) |
-                                     ((sb + (((db * (255 - sa)) * 0x8081) >> 23)));
+            int da = ((pixel >> 24) & 0xff);
+            int dr = ((pixel >> 16) & 0xff);
+            int dg = ((pixel >> 8) & 0xff);
+            int db = ((pixel) & 0xff);
 
-            return destPixel;
+            return ((sa + (((da * (255 - sa)) * 0x8081) >> 23)) << 24) |
+                                      ((sr + (((dr * (255 - sa)) * 0x8081) >> 23)) << 16) |
+                                      ((sg + (((dg * (255 - sa)) * 0x8081) >> 23)) << 8) |
+                                      ((sb + (((db * (255 - sa)) * 0x8081) >> 23)));
+
         }
 
 
@@ -232,7 +231,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, int color, bool doAlphaBlend = false)
         {
             // Use refs for faster access (really important!) speeds up a lot!
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 int[] pixels = context.Pixels;
                 int w = context.Width;
@@ -440,7 +439,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
         public static void FillPolygon(this BitmapBuffer bmp, int[] points, int color, bool doAlphaBlend = false)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
@@ -675,7 +674,7 @@ namespace PixelFarm.DrawingBuffer
             // could use single polygon fill if count is 1, but it the algorithm used there is slower (at least for larger polygons)
 
 
-            using (var context = bmp.GetBitmapContext())
+            using (BitmapContext context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;

@@ -17,13 +17,16 @@
 //
 
 
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using PixelFarm.DrawingBuffer;
+
+ 
 
 namespace WinFormGdiPlus
 {
@@ -33,6 +36,60 @@ namespace WinFormGdiPlus
         public FormBlit()
         {
             InitializeComponent();
+
+         
+
+        }
+
+        private void RollControl1_ValueChanged(object sender, EventArgs e)
+        {
+
+            //StringBuilder stbuilder = new StringBuilder();
+            //stbuilder.AppendLine("roll-angle: " + rollControl1.Angle);
+            //stbuilder.AppendLine("roll-direction: " + rollControl1.RollDirection);
+            //stbuilder.AppendLine("roll-amount: " + rollControl1.RollAmount);
+            //this.textBox1.Text = stbuilder.ToString();
+
+            //var token = new RotateZoomEffectConfigToken(true, 0, 0, 0, 1.0f, PointF.Empty, false, false);
+
+            //double angle = rollControl1.RollDirection * Math.PI / 180;
+            //double dist = rollControl1.RollAmount;
+
+            //if (double.IsNaN(angle))
+            //{
+            //    angle = 0;
+            //    dist = 0;
+            //}
+
+            //int trackBackZoomValue = 512;//trackBarZoom.Value
+            //token.Offset = new PointF(0, 0);// panControl.Position;
+            //token.PreRotateZ = (float)(angle);
+            //token.PostRotateZ = (float)(-angle - rollControl1.Angle * Math.PI / 180);
+            //token.Tilt = (float)Math.Asin(dist / 90);
+            //token.SourceAsBackground = false;//*** keepBackgroundCheckBox.Checked;
+            //token.Tile = false;// tileSourceCheckBox.Checked;
+            //token.Zoom = (float)Math.Pow(2.0, (trackBackZoomValue - 512) / 128.0);
+
+
+            ////if (this.angleUpDown.Value != (decimal)this.rollControl.Angle)
+            ////{
+            ////    this.angleUpDown.Value = (decimal)this.rollControl.Angle;
+            ////}
+
+            ////if (this.twistAngleUpDown.Value != -(decimal)this.rollControl.RollDirection)
+            ////{
+            ////    this.twistAngleUpDown.Value = -(decimal)this.rollControl.RollDirection;
+            ////}
+
+            ////if (this.twistRadiusUpDown.Value != (decimal)this.rollControl.RollAmount)
+            ////{
+            ////    this.twistRadiusUpDown.Value = (decimal)this.rollControl.RollAmount;
+            ////}
+
+            ////UpdateUpDowns();
+            ////FinishTokenUpdate();
+
+
         }
 
         private void FormBlit_Load(object sender, EventArgs e)
@@ -65,9 +122,9 @@ namespace WinFormGdiPlus
             // NOTE: This is not strictly necessary for the SL version as this is a WPF feature, however we include it here for completeness and to show
             // a similar API to WPF 
             //render! 
-            using (var bmplock = destBmp.Lock())
+            using (LockBmp bmplock = destBmp.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
                 emitter.TargetBitmap = wb;
                 emitter.ParticleBitmap = particleBmp;
 
@@ -112,7 +169,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp = new Bitmap(path))
             using (var lockBmp = new LockBmp(bmp))
             {
-                return lockBmp.GetWritableBitmap();
+                return lockBmp.CreateNewBitmapBuffer();
             }
         }
         void MainPage_MouseMove(object sender, MouseEventArgs e)
@@ -128,7 +185,7 @@ namespace WinFormGdiPlus
         }
         public static BitmapBuffer Overlay(BitmapBuffer bmp, BitmapBuffer overlay, PixelFarm.DrawingBuffer.PointD location)
         {
-            var result = bmp.Clone();
+            BitmapBuffer result = bmp.Clone();
             var size = new PixelFarm.DrawingBuffer.SizeD(overlay.PixelWidth, overlay.PixelHeight);
             result.Blit(new PixelFarm.DrawingBuffer.RectD(location, size), overlay,
                 new RectD(new PixelFarm.DrawingBuffer.PointD(0, 0), size),
@@ -143,9 +200,9 @@ namespace WinFormGdiPlus
 
             BitmapBuffer overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.DrawingBuffer.PointD(10, 10));
 
-            using (var bmplock = destBmp.Lock())
+            using (LockBmp bmplock = destBmp.Lock())
             {
-                BitmapBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
                 wb.Clear(Colors.Black);
 
                 wb.Blit(new RectD(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight),
@@ -157,6 +214,103 @@ namespace WinFormGdiPlus
                 g.Clear(System.Drawing.Color.White);
                 g.DrawImage(destBmp, 0, 0);
             }
+
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer cropBmp = unmodifiedBmp.Crop(10, 10, 40, 40);
+
+
+            using (LockBmp bmplock = destBmp.Lock())
+            {
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
+                wb.Clear(Colors.White);
+
+                wb.Blit(new RectD(0, 0, cropBmp.PixelWidth, cropBmp.PixelHeight),
+                        cropBmp,
+                        new RectD(0, 0, cropBmp.PixelWidth, cropBmp.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer rotateBmp = unmodifiedBmp.Rotate(BitmapBufferExtensions.FastRotateAngle.Rotate270);
+
+
+            using (LockBmp bmplock = destBmp.Lock())
+            {
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
+                wb.Clear(Colors.White);
+
+                wb.Blit(new RectD(0, 0, rotateBmp.PixelWidth, rotateBmp.PixelHeight),
+                        rotateBmp,
+                        new RectD(0, 0, rotateBmp.PixelWidth, rotateBmp.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer flipImg = unmodifiedBmp.Flip(BitmapBufferExtensions.FlipMode.Horizontal);
+
+
+            using (LockBmp bmplock = destBmp.Lock())
+            {
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
+                wb.Clear(Colors.White);
+
+                wb.Blit(new RectD(0, 0, flipImg.PixelWidth, flipImg.PixelHeight),
+                        flipImg,
+                        new RectD(0, 0, flipImg.PixelWidth, flipImg.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer flipImg = unmodifiedBmp.RotateFree(20, false);
+
+
+            using (LockBmp bmplock = destBmp.Lock())
+            {
+                BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
+                wb.Clear(Colors.White);
+
+                wb.Blit(new RectD(0, 0, flipImg.PixelWidth, flipImg.PixelHeight),
+                        flipImg,
+                        new RectD(0, 0, flipImg.PixelWidth, flipImg.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //....
+
 
 
         }

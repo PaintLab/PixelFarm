@@ -1,10 +1,10 @@
-﻿//MIT, 2017-2018, WinterDev
+﻿//MIT, 2017-present, WinterDev
 
 using System.IO;
 using Typography.TextServices;
 namespace YourImplementation
 {
-    class MyIcuDataProvider 
+    class MyIcuDataProvider
     {
         public string icuDir;
 
@@ -30,25 +30,40 @@ namespace YourImplementation
     public static class CommonTextServiceSetup
     {
         static bool s_isInit;
-        internal static MyIcuDataProvider s_icuDataProvider;
+        static MyIcuDataProvider s_icuDataProvider;
         internal static IFontLoader myFontLoader;
 
 
         static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
-        static FileDBStorageProvider s_filedb = new FileDBStorageProvider("textservicedb");
+        static FileDBStorageProvider s_filedb;
 
         public static void SetupDefaultValues()
         {
             //--------
-            if (s_isInit) return;
+            //This is optional if you don't use Typography Text Service.            
             //--------
-            PixelFarm.Platforms.StorageService.RegisterProvider(s_filedb);
-            myFontLoader = new OpenFontStore();
-            //test Typography's custom text break, 
-            //check if we have that data? 
+            return;
+            if (s_isInit)
+                return;
+            //--------
 
-            //string typographyDir = @"/icu/brkitr_src/dictionaries";
-            //***
+            //--------
+            //1. Storage provider
+            // choose local file or filedb 
+            // if we choose filedb => then this will create/open a 'disk' file for read/write data
+            s_filedb = new FileDBStorageProvider("textservicedb");
+            // then register to the storage service
+            PixelFarm.Platforms.StorageService.RegisterProvider(s_filedb);
+
+            //--------
+            //2. Typography's Text Service settings...
+            //this set some essentail values for Typography Text Serice
+            //
+            //2.1 Font Loader: how to load a font
+            myFontLoader = new OpenFontStore();
+            //2.2 Icu Text Break info
+            //test Typography's custom text break,
+            //check if we have that data?             
             string typographyDir = @"d:/test/icu60/brkitr_src/dictionaries";
             s_icuDataProvider = new MyIcuDataProvider();
             if (System.IO.Directory.Exists(typographyDir))

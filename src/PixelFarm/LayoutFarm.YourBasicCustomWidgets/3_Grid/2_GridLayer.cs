@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -22,44 +22,78 @@ namespace LayoutFarm.UI
 
             gridRows = gridTable.Rows;
             gridCols = gridTable.Columns;
-            int columnWidth = owner.Width;
+
 
             int nColumns = gridTable.ColumnCount;
-            if (nColumns > 0)
+            if (cellSizeStyle == CellSizeStyle.ColumnAndRow)
             {
-                columnWidth = columnWidth / nColumns;
-                uniformCellWidth = columnWidth;
-                if (columnWidth < 1)
+
+                int cx = 0;
+                for (int c = 0; c < nColumns; c++)
                 {
-                    columnWidth = 1;
+                    GridColumn col = gridCols.GetColumn(c);
+                    int col_w = col.Width;
+                    col.Left = cx;
+                    cx += col_w;
+                }
+                //------------------------------------------------------------
+                int nRows = gridTable.RowCount;
+                if (nRows > 0)
+                {
+
+                    int cy = 0;
+                    int row_h = 1;
+                    for (int r = 0; r < nRows; r++)
+                    {
+                        GridRow row = gridRows.GetRow(r);
+                        row_h = row.Height;
+                        row.Height = row_h;
+                        row.Top = cy;
+                        cy += row_h;
+                    }
+                    uniformCellHeight = row_h;
+                }
+
+            }
+            else
+            {
+                int columnWidth = owner.Width;
+                if (nColumns > 0)
+                {
+                    columnWidth = columnWidth / nColumns;
+                    uniformCellWidth = columnWidth;
+                    if (columnWidth < 1)
+                    {
+                        columnWidth = 1;
+                    }
+                }
+                //------------------------------------------------------------             
+                int cx = 0;
+                for (int c = 0; c < nColumns; c++)
+                {
+                    GridColumn col = gridCols.GetColumn(c);
+                    col.Width = columnWidth;
+                    col.Left = cx;
+                    cx += columnWidth;
+                }
+                //------------------------------------------------------------
+                int nRows = gridTable.RowCount;
+                if (nRows > 0)
+                {
+                    int rowHeight = owner.Height / nRows;
+                    int cy = 0;
+                    for (int r = 0; r < nRows; r++)
+                    {
+                        GridRow row = gridRows.GetRow(r);
+                        row.Height = rowHeight;
+                        row.Top = cy;
+                        cy += rowHeight;
+                    }
+                    uniformCellHeight = rowHeight;
                 }
             }
 
-            //------------------------------------------------------------             
-            int cx = 0;
-            for (int c = 0; c < nColumns; c++)
-            {
-                GridColumn col = gridCols.GetColumn(c);
-                col.Width = columnWidth;
-                col.Left = cx;
-                cx += columnWidth;
 
-            }
-            //------------------------------------------------------------
-            int nRows = gridTable.RowCount;
-            if (nRows > 0)
-            {
-                int rowHeight = owner.Height / nRows;
-                int cy = 0;
-                for (int r = 0; r < nRows; r++)
-                {
-                    GridRow row = gridRows.GetRow(r);
-                    row.Height = rowHeight;
-                    row.Top = cy;
-                    cy += rowHeight;
-                }
-                uniformCellHeight = rowHeight;
-            }
             //------------------------------------------------------------
         }
         public override bool HitTestCore(HitChain hitChain)
@@ -594,7 +628,7 @@ namespace LayoutFarm.UI
         }
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
-             
+
             //TODO: temp fixed, review here again,
             GridCell leftTopGridItem = this.GetCell(0, 0);
             if (leftTopGridItem == null)

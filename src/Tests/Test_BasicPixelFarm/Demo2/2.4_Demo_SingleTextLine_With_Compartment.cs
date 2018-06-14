@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -19,16 +19,16 @@ namespace LayoutFarm
             //--------------------------------
             {
                 //background element
-                var bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+                var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddContent(bgbox);
+                viewport.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new UINinespaceBox(800, 600);
-            viewport.AddContent(ninespaceBox);
+            viewport.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
             //--------------------------------
             //test add some content to the ninespace box
@@ -53,7 +53,7 @@ namespace LayoutFarm
             ninespaceBox.LeftSpace.AddChild(textbox);
             ninespaceBox.RightSpace.AddChild(listView);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
         }
 
@@ -129,7 +129,7 @@ namespace LayoutFarm
                     }
                 }
             }
-         
+
             //-------------------------------------------------------------------------
         }
 
@@ -397,23 +397,23 @@ Zimbabwe");
         }
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.EaseBox
+        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
         {
-            SimpleBox boxLeftTop;
-            SimpleBox boxRightTop;
-            SimpleBox boxLeftBottom;
-            SimpleBox boxRightBottom;
+            Box boxLeftTop;
+            Box boxRightTop;
+            Box boxLeftBottom;
+            Box boxRightBottom;
             //-------------------------------------
-            SimpleBox boxLeft;
-            SimpleBox boxTop;
-            SimpleBox boxRight;
-            SimpleBox boxBottom;
+            Box boxLeft;
+            Box boxTop;
+            Box boxRight;
+            Box boxBottom;
             //-------------------------------------
-            SimpleBox centerBox;
-            EaseBox gripperLeft;
-            EaseBox gripperRight;
-            EaseBox gripperTop;
-            EaseBox gripperBottom;
+            Box centerBox;
+            Box gripperLeft;
+            Box gripperRight;
+            Box gripperTop;
+            Box gripperBottom;
             DockSpacesController dockspaceController;
             NinespaceGrippers ninespaceGrippers;
             public UINinespaceBox(int w, int h)
@@ -456,10 +456,10 @@ Zimbabwe");
                 this.Describe(visitor);
                 visitor.EndElement();
             }
-            CustomWidgets.EaseBox CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
+            CustomWidgets.Box CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
             {
                 int controllerBoxWH = 10;
-                var gripperBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                var gripperBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 gripperBox.BackColor = bgcolor;
                 //---------------------------------------------------------------------
 
@@ -486,10 +486,10 @@ Zimbabwe");
                 };
                 return gripperBox;
             }
-            static CustomWidgets.SimpleBox CreateSpaceBox(SpaceName name, Color bgcolor)
+            static CustomWidgets.Box CreateSpaceBox(SpaceName name, Color bgcolor)
             {
                 int controllerBoxWH = 10;
-                CustomWidgets.SimpleBox spaceBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                CustomWidgets.Box spaceBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 spaceBox.BackColor = bgcolor;
                 spaceBox.Tag = name;
                 return spaceBox;
@@ -526,10 +526,10 @@ Zimbabwe");
                 dockspaceController.SetSize(width, height);
             }
 
-            public SimpleBox LeftSpace { get { return this.boxLeft; } }
-            public SimpleBox RightSpace { get { return this.boxRight; } }
-            public SimpleBox TopSpace { get { return this.boxTop; } }
-            public SimpleBox BottomSpace { get { return this.boxBottom; } }
+            public Box LeftSpace { get { return this.boxLeft; } }
+            public Box RightSpace { get { return this.boxRight; } }
+            public Box TopSpace { get { return this.boxTop; } }
+            public Box BottomSpace { get { return this.boxBottom; } }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 namespace LayoutFarm.UI
@@ -10,23 +10,23 @@ namespace LayoutFarm.UI
         {
             this.ninespaceController = ninespaceController;
         }
-        public UIBox LeftGripper
+        public AbstractRect LeftGripper
         {
             get;
             set;
         }
-        public UIBox TopGripper
+        public AbstractRect TopGripper
         {
             get;
             set;
         }
 
-        public UIBox RightGripper
+        public AbstractRect RightGripper
         {
             get;
             set;
         }
-        public UIBox BottomGripper
+        public AbstractRect BottomGripper
         {
             get;
             set;

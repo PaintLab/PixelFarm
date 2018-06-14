@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 using System;
 using SkiaSharp;
 
@@ -243,6 +243,15 @@ namespace TestGlfw
             public override void SaveData(string dataName, byte[] content)
             {
                 System.IO.File.WriteAllBytes(dataName, content);
+            }
+
+            public override PixelFarm.Agg.ActualBitmap ReadPngBitmap(string filename)
+            {
+                throw new System.NotImplementedException();
+            }
+            public override void SavePngBitmap(PixelFarm.Agg.ActualBitmap bmp, string filename)
+            {
+                throw new System.NotImplementedException();
             }
         }
 

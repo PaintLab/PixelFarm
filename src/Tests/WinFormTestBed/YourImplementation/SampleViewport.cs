@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
  
 using PixelFarm.Drawing;
@@ -64,9 +64,9 @@ namespace LayoutFarm
         {
             get { return this.primaryScreenWorkingAreaH; }
         }
-        public void AddContent(RenderElement renderElement)
+        public void AddChild(RenderElement renderElement)
         {
-            this.vw.AddContent(renderElement);
+            this.vw.AddChild(renderElement);
         }
 
         internal LayoutFarm.UI.UISurfaceViewportControl ViewportControl

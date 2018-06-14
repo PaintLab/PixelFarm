@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 using System;
 using System.Collections.Generic;
 
@@ -22,7 +22,7 @@ namespace SampleWinForms
     {
         Graphics g;
         AggPainter painter;
-        AggRenderSurface _aggsx;
+
         ActualBitmap destImg;
         Bitmap winBmp;
 
@@ -110,8 +110,7 @@ namespace SampleWinForms
             if (g == null)
             {
                 destImg = new ActualBitmap(800, 600);
-                _aggsx = new AggRenderSurface(destImg); //no platform
-                painter = new AggPainter(_aggsx);
+                painter = AggPainter.Create(destImg);
                 winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();
 

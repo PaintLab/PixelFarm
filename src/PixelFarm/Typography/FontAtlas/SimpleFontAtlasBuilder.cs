@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 //----------------------------------- 
 
 using System.Collections.Generic;
@@ -8,20 +8,30 @@ using Typography.Contours;
 
 namespace Typography.Rendering
 {
+
     public class SimpleFontAtlasBuilder
     {
-        GlyphImage latestGenGlyphImage;
-        Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
+        GlyphImage _latestGenGlyphImage;
+        Dictionary<int, CacheGlyph> _glyphs = new Dictionary<int, CacheGlyph>();
 
         public SimpleFontAtlasBuilder()
         {
-            CompactGlyphSpace = true;
+            SpaceCompactOption = CompactOption.BinPack; //default
             MaxAtlasWidth = 800;
         }
         public int MaxAtlasWidth { get; set; }
-        public bool CompactGlyphSpace { get; set; }
+
         public TextureKind TextureKind { get; private set; }
         public float FontSizeInPoints { get; private set; }
+
+
+        public enum CompactOption
+        {
+            None,
+            BinPack,
+            ArrangeByHeight
+        }
+
 
         /// <summary>
         /// add or replace
@@ -34,7 +44,7 @@ namespace Typography.Rendering
             glyphCache.glyphIndex = glyphIndex;
             glyphCache.img = img;
 
-            glyphs[glyphIndex] = glyphCache;
+            _glyphs[glyphIndex] = glyphCache;
         }
 
         public void SetAtlasInfo(TextureKind textureKind, float fontSizeInPts)
@@ -43,69 +53,109 @@ namespace Typography.Rendering
             this.FontSizeInPoints = fontSizeInPts;
         }
 
+        public CompactOption SpaceCompactOption { get; set; }
+
         public GlyphImage BuildSingleImage()
         {
             //1. add to list 
-            var glyphList = new List<CacheGlyph>(glyphs.Count);
-            foreach (CacheGlyph glyphImg in glyphs.Values)
+            var glyphList = new List<CacheGlyph>(_glyphs.Count);
+            foreach (CacheGlyph glyphImg in _glyphs.Values)
             {
                 //sort data
                 glyphList.Add(glyphImg);
             }
-
 
             int totalMaxLim = MaxAtlasWidth;
             int maxRowHeight = 0;
             int currentY = 0;
             int currentX = 0;
 
-
-            if (CompactGlyphSpace)
+            switch (this.SpaceCompactOption)
             {
-                //2. sort by glyph width
-                glyphList.Sort((a, b) =>
-                {
-                    return a.img.Width.CompareTo(b.img.Width);
-                });
-                //3. layout 
-                for (int i = glyphList.Count - 1; i >= 0; --i)
-                {
-                    CacheGlyph g = glyphList[i];
-                    if (g.img.Height > maxRowHeight)
+                default:
+                    throw new System.NotSupportedException();
+                case CompactOption.BinPack:
                     {
-                        maxRowHeight = g.img.Height;
+                        //2. sort by glyph width
+                        glyphList.Sort((a, b) =>
+                        {
+                            return a.img.Width.CompareTo(b.img.Width);
+                        });
+                        //3. layout 
+                        for (int i = glyphList.Count - 1; i >= 0; --i)
+                        {
+                            CacheGlyph g = glyphList[i];
+                            if (g.img.Height > maxRowHeight)
+                            {
+                                maxRowHeight = g.img.Height;
+                            }
+                            if (currentX + g.img.Width > totalMaxLim)
+                            {
+                                //start new row
+                                currentY += maxRowHeight;
+                                currentX = 0;
+                            }
+                            //-------------------
+                            g.area = new Rectangle(currentX, currentY, g.img.Width, g.img.Height);
+                            currentX += g.img.Width;
+                        }
+
                     }
-                    if (currentX + g.img.Width > totalMaxLim)
+                    break;
+                case CompactOption.ArrangeByHeight:
                     {
-                        //start new row
-                        currentY += maxRowHeight;
-                        currentX = 0;
+                        //2. sort by height
+                        glyphList.Sort((a, b) =>
+                        {
+                            return a.img.Height.CompareTo(b.img.Height);
+                        });
+                        //3. layout 
+                        int glyphCount = glyphList.Count;
+                        for (int i = 0; i < glyphCount; ++i)
+                        {
+                            CacheGlyph g = glyphList[i];
+                            if (g.img.Height > maxRowHeight)
+                            {
+                                maxRowHeight = g.img.Height;
+                            }
+                            if (currentX + g.img.Width > totalMaxLim)
+                            {
+                                //start new row
+                                currentY += maxRowHeight;
+                                currentX = 0;
+                                maxRowHeight = 0;//reset, after start new row
+                            }
+                            //-------------------
+                            g.area = new Rectangle(currentX, currentY, g.img.Width, g.img.Height);
+                            currentX += g.img.Width;
+                        }
+
                     }
-                    //-------------------
-                    g.area = new Rectangle(currentX, currentY, g.img.Width, g.img.Height);
-                    currentX += g.img.Width;
-                }
-            }
-            else
-            {    //3. layout 
-                int glyphCount = glyphList.Count;
-                for (int i = 0; i < glyphCount; ++i)
-                {
-                    CacheGlyph g = glyphList[i];
-                    if (g.img.Height > maxRowHeight)
+                    break;
+                case CompactOption.None:
                     {
-                        maxRowHeight = g.img.Height;
+                        //3. layout 
+                        int glyphCount = glyphList.Count;
+                        for (int i = 0; i < glyphCount; ++i)
+                        {
+                            CacheGlyph g = glyphList[i];
+                            if (g.img.Height > maxRowHeight)
+                            {
+                                maxRowHeight = g.img.Height;
+                            }
+                            if (currentX + g.img.Width > totalMaxLim)
+                            {
+                                //start new row
+                                currentY += maxRowHeight;
+                                currentX = 0;
+                                maxRowHeight = 0;//reset, after start new row
+                            }
+                            //-------------------
+                            g.area = new Rectangle(currentX, currentY, g.img.Width, g.img.Height);
+                            currentX += g.img.Width;
+                        }
                     }
-                    if (currentX + g.img.Width > totalMaxLim)
-                    {
-                        //start new row
-                        currentY += maxRowHeight;
-                        currentX = 0;
-                    }
-                    //-------------------
-                    g.area = new Rectangle(currentX, currentY, g.img.Width, g.img.Height);
-                    currentX += g.img.Width;
-                }
+                    break;
             }
 
             currentY += maxRowHeight;
@@ -115,9 +165,10 @@ namespace Typography.Rendering
             // TODO: review performance here again***
 
             int totalImgWidth = totalMaxLim;
-            if (CompactGlyphSpace)
+            if (SpaceCompactOption == CompactOption.BinPack) //again here?
             {
                 totalImgWidth = 0;//reset
+                //use bin packer
                 BinPacker binPacker = new BinPacker(totalMaxLim, currentY);
                 for (int i = glyphList.Count - 1; i >= 0; --i)
                 {
@@ -134,12 +185,10 @@ namespace Typography.Rendering
                     }
                 }
             }
-
-
             // ------------------------------- 
             //4. create array that can hold data  
             int[] totalBuffer = new int[totalImgWidth * imgH];
-            if (CompactGlyphSpace)
+            if (SpaceCompactOption == CompactOption.BinPack) //again here?
             {
                 for (int i = glyphList.Count - 1; i >= 0; --i)
                 {
@@ -164,7 +213,10 @@ namespace Typography.Rendering
 
             GlyphImage glyphImage = new GlyphImage(totalImgWidth, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
-            latestGenGlyphImage = glyphImage;
+            
+
+            _latestGenGlyphImage = glyphImage;
+
             return glyphImage;
 
         }
@@ -181,7 +233,7 @@ namespace Typography.Rendering
             XmlElement root = xmldoc.CreateElement("font");
             xmldoc.AppendChild(root);
 
-            if (latestGenGlyphImage == null)
+            if (_latestGenGlyphImage == null)
             {
                 BuildSingleImage();
             }
@@ -189,13 +241,13 @@ namespace Typography.Rendering
             {
                 //total img element
                 XmlElement totalImgElem = xmldoc.CreateElement("total_img");
-                totalImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
-                totalImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
+                totalImgElem.SetAttribute("w", _latestGenGlyphImage.Width.ToString());
+                totalImgElem.SetAttribute("h", _latestGenGlyphImage.Height.ToString());
                 totalImgElem.SetAttribute("compo", "4");
                 root.AppendChild(totalImgElem);
             }
 
-            foreach (CacheGlyph g in glyphs.Values)
+            foreach (CacheGlyph g in _glyphs.Values)
             {
                 XmlElement gElem = xmldoc.CreateElement("glyph");
                 //convert char to hex
@@ -227,7 +279,7 @@ namespace Typography.Rendering
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
             simpleFontAtlas.TextureKind = this.TextureKind;
             simpleFontAtlas.OriginalFontSizePts = this.FontSizeInPoints;
-            foreach (CacheGlyph cacheGlyph in glyphs.Values)
+            foreach (CacheGlyph cacheGlyph in _glyphs.Values)
             {
                 //convert char to hex
                 string unicode = ("0x" + ((int)cacheGlyph.character).ToString("X"));//code point
@@ -312,8 +364,6 @@ namespace Typography.Rendering
                 int.Parse(ltwh[2]),
                 int.Parse(ltwh[3]));
         }
-
-
         static void CopyToDest(int[] srcPixels, int srcW, int srcH, int[] targetPixels, int targetX, int targetY, int totalTargetWidth)
         {
             int srcIndex = 0;

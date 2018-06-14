@@ -1,4 +1,4 @@
-//MIT, 2014-2018, WinterDev
+//MIT, 2014-present, WinterDev
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
         ScanlinePacked8 sclinePack8;
 
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
-        PixelBlenderBGRA pixBlenderRGBA32;
+
         double ox; //canvas origin x
         double oy; //canvas origin y
         int destWidth;
@@ -42,13 +42,11 @@ namespace PixelFarm.Agg
         ActualBitmap destImage;
         public AggRenderSurface(ActualBitmap destImage)
         {
-            //create from actual image
-
-
+            //create from actual image 
             this.destImage = destImage;
             this.destActualImage = destImage;
-            this.destImageReaderWriter = new MyBitmapBlender(destImage);
-          
+
+            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
@@ -59,8 +57,8 @@ namespace PixelFarm.Agg
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this.sclineRas.SetClipBox(this.clipBox);
             this.sclinePack8 = new ScanlinePacked8();
-            this.pixBlenderRGBA32 = new PixelBlenderBGRA();
         }
+
 
         public int Width { get { return destWidth; } }
         public int Height { get { return destHeight; } }
@@ -73,6 +71,11 @@ namespace PixelFarm.Agg
         {
             get { return this.destActualImage; }
         }
+        public BitmapBlenderBase DestImage
+        {
+            get { return this.destImageReaderWriter; }
+        }
+
         public ScanlinePacked8 ScanlinePacked8
         {
             get { return this.sclinePack8; }
@@ -81,13 +84,14 @@ namespace PixelFarm.Agg
         {
             get
             {
-                return this.pixBlenderRGBA32;
+                return this.destImageReaderWriter.OutputPixelBlender;
+            }
+            set
+            {
+                this.destImageReaderWriter.OutputPixelBlender = value;
             }
         }
-        public BitmapBlenderBase DestImage
-        {
-            get { return this.destImageReaderWriter; }
-        }
+
         public ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
         {
             get { return this.sclineRasToBmp; }

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using LayoutFarm.Text;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TextBox : UIBox
+    public class TextBox : AbstractRect
     {
         TextSurfaceEventListener textSurfaceListener;
         TextEditRenderBox textEditRenderElement;

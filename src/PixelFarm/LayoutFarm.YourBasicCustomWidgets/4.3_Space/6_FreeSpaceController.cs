@@ -1,10 +1,10 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 namespace LayoutFarm.UI
 {
     public class FreeSpacesController : NinespaceController
     {
-        public FreeSpacesController(UIBox owner)
+        public FreeSpacesController(AbstractRect owner)
             : base(owner, SpaceConcept.NineSpaceFree)
         {
             spaces[L] = InitSpace(SpaceName.Left);

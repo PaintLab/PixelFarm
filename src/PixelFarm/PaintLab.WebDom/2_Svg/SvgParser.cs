@@ -1,4 +1,4 @@
-﻿//MIT, 2018, WinterDev
+﻿//MIT, 2018-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)

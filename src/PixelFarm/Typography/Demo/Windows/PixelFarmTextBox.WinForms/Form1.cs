@@ -24,7 +24,7 @@ namespace PixelFarmTextBox.WinForms
     {
         Graphics g;
         AggPainter painter;
-        AggRenderSurface aggsx;
+
         ActualBitmap destImg;
         Bitmap winBmp;
 
@@ -67,8 +67,8 @@ namespace PixelFarmTextBox.WinForms
             //but you can create another text printer that specific to text textbox control
 
             destImg = new ActualBitmap(800, 600);
-            aggsx = new AggRenderSurface(destImg); //no platform
-            painter = new AggPainter(aggsx);
+            painter = AggPainter.Create(destImg);
+
             winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             g = this.sampleTextBox1.CreateGraphics();
 

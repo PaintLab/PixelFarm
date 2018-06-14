@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -291,6 +291,10 @@ namespace PixelFarm.DrawingGL
                 //place left-lower of the img at specific (x,y)
                 _glsx.DrawImage(glBmp, (float)left, (float)top);
             }
+        }
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            throw new NotImplementedException();
         }
         float[] rect_coords = new float[8];
         public override void FillRect(double left, double top, double width, double height)

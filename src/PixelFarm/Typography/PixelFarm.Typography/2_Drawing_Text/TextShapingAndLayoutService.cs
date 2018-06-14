@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 using System.Collections.Generic;
 using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;
