@@ -158,7 +158,21 @@ namespace LayoutFarm.CustomWidgets
         }
         //--------------------------------------------------------------------------
 
+        public void HideScrollButton()
+        {
+            if (scrollButton != null)
+            {
+                scrollButton.Visible = false;
+            }
 
+        }
+        public void ShowScrollButton()
+        {
+            if (scrollButton != null)
+            {
+                scrollButton.Visible = true;
+            }
+        }
         public int ScrollBoxSizeLimit { get { return SCROLL_BOX_SIZE_LIMIT; } }
 
         public int PhysicalScrollLength
@@ -508,7 +522,7 @@ namespace LayoutFarm.CustomWidgets
             //TODO: use 'theme-concept' eg. css
 
             var scroll_button = new ScrollBarButton(SCROLL_BOX_SIZE_LIMIT, this.Height, this); //create with default value
-            scroll_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkBlue);
+            scroll_button.BackColor = KnownColors.FromKnownColor(KnownColor.Gray);
             int thumbPosX = CalculateThumbPosition();
             scroll_button.SetLocation(thumbPosX, 0);
             container.AddChild(scroll_button);
@@ -1038,6 +1052,14 @@ namespace LayoutFarm.CustomWidgets
                 sc.MaxValue = (contentLength > scrollableSurface.ViewportHeight) ?
                     contentLength - scrollableSurface.ViewportHeight :
                     0;
+                if (sc.MaxValue == 0)
+                {
+                    sc.HideScrollButton();
+                }
+                else
+                {
+                    sc.ShowScrollButton();
+                }
             });
             //--------------------------------------------------------------------------------------
             //1st evaluate  
@@ -1086,6 +1108,16 @@ namespace LayoutFarm.CustomWidgets
                 sc.MaxValue = (contentLength > scrollableSurface.ViewportWidth) ?
                     contentLength - scrollableSurface.ViewportWidth :
                     0;
+
+
+                if (sc.MaxValue == 0)
+                {
+                    sc.HideScrollButton();
+                }
+                else
+                {
+                    sc.ShowScrollButton();
+                }
             });
             //--------------------------------------------------------------------------------------
             //1st evaluate  
