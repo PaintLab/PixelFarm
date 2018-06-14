@@ -53,16 +53,27 @@ namespace LayoutFarm.UI
             }
         }
 
+
+        /// <summary>
+        /// set visual size (or viewport size) of this rect
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public virtual void SetSize(int width, int height)
         {
-
             SetElementBoundsWH(width, height);
             if (this.HasReadyRenderElement)
             {
                 this.CurrentPrimaryRenderElement.SetSize(width, height);
             }
         }
-
+        /// <summary>
+        /// set location and visual size of this rect
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public void SetLocationAndSize(int left, int top, int width, int height)
         {
             SetElementBoundsLT(left, top);
@@ -123,6 +134,9 @@ namespace LayoutFarm.UI
                 }
             }
         }
+        /// <summary>
+        /// visual width or viewport width
+        /// </summary>
         public int Width
         {
             get
@@ -137,6 +151,9 @@ namespace LayoutFarm.UI
                 }
             }
         }
+        /// <summary>
+        /// visual height or viewport height
+        /// </summary>
         public int Height
         {
             get
@@ -156,49 +173,64 @@ namespace LayoutFarm.UI
         {
             if (this.HasReadyRenderElement)
             {
+                //invalidate 'bubble' rect 
+                //is (0,0,w,h) start invalidate from current primary render element
                 this.CurrentPrimaryRenderElement.InvalidateGraphics();
             }
         }
         public void InvalidateOuterGraphics()
         {
-            if (this.CurrentPrimaryRenderElement != null)
-            {
-                this.CurrentPrimaryRenderElement.InvalidateGraphicBounds();
-            }
+            //if we have primary render element
+            //invalidate 'bubble' rect start
+            CurrentPrimaryRenderElement?.InvalidateGraphicBounds();
         }
         public override void GetViewport(out int x, out int y)
         {
+            //AbstractRect dose not have actual viewport
             x = ViewportX;
             y = ViewportY;
         }
         public virtual int ViewportX
         {
+            //AbstractRect dose not have actual viewport
+            //if you want viewport you must overide this
             get { return 0; }
         }
         public virtual int ViewportY
         {
+            //AbstractRect dose not have actual viewport
+            //if you want viewport you must overide this
             get { return 0; }
         }
         int IScrollable.ViewportWidth
         {
+            //AbstractRect dose not have actual viewport
+            //if you want viewport you must overide this
             get { return this.Width; }
         }
         int IScrollable.ViewportHeight
         {
+            //AbstractRect dose not have actual viewport
+            //if you want viewport you must overide this
+
             get { return this.Height; }
         }
         public virtual void SetViewport(int x, int y, object reqBy)
         {
+            //AbstractRect dose not have actual viewport
+            //if you want viewport you must overide this
         }
         public void SetViewport(int x, int y)
         {
+            //AbstractRect dose not have actual viewport
+            //if you want viewport you must overide this
             SetViewport(x, y, this);
         }
         //------------------------------
         public virtual void PerformContentLayout()
         {
+            //AbstractRect dose not have content
         }
-
         public virtual int DesiredHeight
         {
             get
@@ -213,8 +245,6 @@ namespace LayoutFarm.UI
                 return this.Width;
             }
         }
-
-
         protected virtual void Describe(UIVisitor visitor)
         {
             visitor.Attribute("left", this.Left);
