@@ -49,7 +49,10 @@ namespace YourImplementation
             //--------
             //This is optional if you don't use Typography Text Service.            
             //--------
-           
+#if !DEBUG
+            return;
+#endif
+
             if (s_isInit)
                 return;
             //--------
