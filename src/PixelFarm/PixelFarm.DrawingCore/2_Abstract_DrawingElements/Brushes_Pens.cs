@@ -90,7 +90,9 @@ namespace PixelFarm.Drawing
 
     public abstract class GeometryGraidentBrush : Brush
     {
+
     }
+
     public sealed class LinearGradientBrush : GeometryGraidentBrush
     {
         object innerBrush;
@@ -178,6 +180,7 @@ namespace PixelFarm.Drawing
             }
             else if (degreeAngle < 180)
             {
+
                 startPoint = new PointF(rect.Right, rect.Bottom);
                 var angleRad = DegreesToRadians(degreeAngle);
                 var pos = (float)(Math.Cos(angleRad) * radius);
@@ -219,6 +222,8 @@ namespace PixelFarm.Drawing
 
             return new LinearGradientBrush(startPoint, startColor, stopPoint, stopColor);
         }
+
+
         const float DEG_TO_RAD = (float)System.Math.PI / 180.0f;
         /// <summary>
         /// Convert degrees to radians
