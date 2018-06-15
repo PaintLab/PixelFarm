@@ -40,12 +40,14 @@ namespace PixelFarm.Agg
         public readonly short cover_index;
         public ScanlineSpan(int x, int cover_index)
         {
+            //TODO: x should be ushort?
             this.x = (short)x;
             this.len = 1;
             this.cover_index = (short)cover_index;
         }
         public ScanlineSpan(int x, int len, int cover_index)
         {
+            //TODO: x should be ushort?
             this.x = (short)x;
             this.len = (short)len;
             this.cover_index = (short)cover_index;
