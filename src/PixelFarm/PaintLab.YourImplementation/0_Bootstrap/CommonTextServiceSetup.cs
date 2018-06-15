@@ -31,18 +31,28 @@ namespace YourImplementation
     {
         static bool s_isInit;
         static MyIcuDataProvider s_icuDataProvider;
-        internal static IFontLoader myFontLoader;
+        static IFontLoader myFontLoader;
 
 
         static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
         static FileDBStorageProvider s_filedb;
 
+        public static IFontLoader FontLoader
+        {
+            get
+            {
+                return myFontLoader;
+            }
+        }
         public static void SetupDefaultValues()
         {
             //--------
             //This is optional if you don't use Typography Text Service.            
             //--------
+#if !DEBUG
             return;
+#endif
+
             if (s_isInit)
                 return;
             //--------

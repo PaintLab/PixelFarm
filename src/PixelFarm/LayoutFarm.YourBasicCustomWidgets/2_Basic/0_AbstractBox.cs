@@ -19,8 +19,8 @@ namespace LayoutFarm.CustomWidgets
         Color backColor = Color.LightGray;
         int viewportX;
         int viewportY;
-        int desiredHeight;
-        int desiredWidth;
+        int _innerHeight;
+        int _innerWidth;
         UICollection uiList;
 
         public event EventHandler<UIMouseEventArgs> MouseDown;
@@ -39,8 +39,8 @@ namespace LayoutFarm.CustomWidgets
         public AbstractBox(int width, int height)
             : base(width, height)
         {
-            this.desiredHeight = height;
-            this.desiredWidth = width;
+            this._innerHeight = height;
+            this._innerWidth = width;
         }
         bool _needClipArea;
         public bool NeedClipArea
@@ -266,15 +266,15 @@ namespace LayoutFarm.CustomWidgets
         {
             //vertical scroll
 
-            if (this.desiredHeight > this.Height)
+            if (this._innerHeight > this.Height)
             {
                 if (e.Delta < 0)
                 {
                     //down
                     this.viewportY += 20;
-                    if (viewportY > desiredHeight - this.Height)
+                    if (viewportY > _innerHeight - this.Height)
                     {
-                        this.viewportY = desiredHeight - this.Height;
+                        this.viewportY = _innerHeight - this.Height;
                     }
                 }
                 else
@@ -324,25 +324,25 @@ namespace LayoutFarm.CustomWidgets
             base.OnKeyUp(e);
         }
         //-------------------
-        public override int DesiredWidth
+        public override int InnerWidth
         {
             get
             {
-                return this.desiredWidth;
+                return this._innerWidth;
             }
         }
-        public override int DesiredHeight
+        public override int InnerHeight
         {
             get
             {
 
-                return this.desiredHeight;
+                return this._innerHeight;
             }
         }
         protected void SetDesiredSize(int w, int h)
         {
-            this.desiredWidth = w;
-            this.desiredHeight = h;
+            this._innerWidth = w;
+            this._innerHeight = h;
         }
 
         //----------------------------------------------------
@@ -471,7 +471,7 @@ namespace LayoutFarm.CustomWidgets
                                 //element.SetBounds(0, ypos, element.Width, elemH);
                                 element.SetLocationAndSize(0, ypos, element.Width, element.Height);
                                 ypos += element.Height;
-                                int tmp_right = element.DesiredWidth + element.Left;
+                                int tmp_right = element.InnerWidth + element.Left;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
@@ -493,9 +493,9 @@ namespace LayoutFarm.CustomWidgets
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                element.SetLocationAndSize(xpos, 0, element.DesiredWidth, element.DesiredHeight);
-                                xpos += element.DesiredWidth;
-                                int tmp_bottom = element.DesiredHeight + element.Top;
+                                element.SetLocationAndSize(xpos, 0, element.InnerWidth, element.InnerHeight);
+                                xpos += element.InnerWidth;
+                                int tmp_bottom = element.InnerHeight + element.Top;
                                 if (tmp_bottom > maxBottom)
                                 {
                                     maxBottom = tmp_bottom;
@@ -517,12 +517,12 @@ namespace LayoutFarm.CustomWidgets
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                int tmp_right = element.DesiredWidth + element.Left;
+                                int tmp_right = element.InnerWidth + element.Left;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
                                 }
-                                int tmp_bottom = element.DesiredHeight + element.Top;
+                                int tmp_bottom = element.InnerHeight + element.Top;
                                 if (tmp_bottom > maxBottom)
                                 {
                                     maxBottom = tmp_bottom;
@@ -532,11 +532,11 @@ namespace LayoutFarm.CustomWidgets
 
                         if (!this.HasSpecificWidth)
                         {
-                            this.SetDesiredSize(maxRight, this.DesiredHeight);
+                            this.SetDesiredSize(maxRight, this.InnerHeight);
                         }
                         if (!this.HasSpecificHeight)
                         {
-                            this.SetDesiredSize(this.DesiredWidth, maxBottom);
+                            this.SetDesiredSize(this.InnerWidth, maxBottom);
                         }
                     }
                     break;

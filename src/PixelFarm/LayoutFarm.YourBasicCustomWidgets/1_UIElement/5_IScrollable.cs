@@ -10,8 +10,8 @@ namespace LayoutFarm.UI
         int ViewportY { get; }
         int ViewportWidth { get; }
         int ViewportHeight { get; }
-        int DesiredHeight { get; }
-        int DesiredWidth { get; }
+        int InnerHeight { get; }
+        int InnerWidth { get; }
         event EventHandler ViewportChanged;
         event EventHandler LayoutFinished;
     }

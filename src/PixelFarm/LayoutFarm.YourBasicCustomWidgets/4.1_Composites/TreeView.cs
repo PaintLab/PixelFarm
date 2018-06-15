@@ -320,14 +320,14 @@ namespace LayoutFarm.CustomWidgets
                         childNode.SetLocationAndSize(indentWidth,
                             newChildNodeY,
                             childNode.Width,
-                            childNode.DesiredHeight);
-                        newChildNodeY += childNode.DesiredHeight;
+                            childNode.InnerHeight);
+                        newChildNodeY += childNode.InnerHeight;
                     }
                 }
             }
             this.desiredHeight = newChildNodeY;
         }
-        public override int DesiredHeight
+        public override int InnerHeight
         {
             get
             {
