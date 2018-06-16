@@ -26,17 +26,17 @@ using System;
 namespace PixelFarm.Agg.Transform
 {
     //===================================================dda_line_interpolator
-    public sealed class LineInterpolatorDDA
+    public struct LineInterpolatorDDA
     {
         int m_y;
         int m_inc;
         int m_dy;
         int m_fractionShift;
         //--------------------------------------------------------------------
-        public LineInterpolatorDDA(int fractionShift)
-        {
-            m_fractionShift = fractionShift;
-        }
+        //public LineInterpolatorDDA(int fractionShift)
+        //{   
+        //    m_fractionShift = fractionShift;
+        //}
 
         //--------------------------------------------------------------------
         public LineInterpolatorDDA(int y1, int y2, int count, int fractionShift)
@@ -82,7 +82,7 @@ namespace PixelFarm.Agg.Transform
     }
 
     //=================================================dda2_line_interpolator
-    sealed class LineInterpolatorDDA2
+    struct LineInterpolatorDDA2
     {
         int m_cnt;
         int m_lft;
@@ -90,7 +90,7 @@ namespace PixelFarm.Agg.Transform
         int m_mod;
         int m_y;
         //--------------------------------------------------------------------
-        public LineInterpolatorDDA2() { }
+        //public LineInterpolatorDDA2() { }
 
         //-------------------------------------------- Forward-adjusted line
         public LineInterpolatorDDA2(int y1, int y2, int count)
