@@ -48,13 +48,16 @@ namespace PixelFarm.Agg.Sample_Gradient
 
                 var prevBrush = p.CurrentBrush;
                 p.CurrentBrush = gradientBrush;
-               
+
                 p2.FillRect(0, 100, 150, 50);
                 p2.FillRect(0, 200, 150, 50);
 
                 //------------- 
-
+                //fill path with gradient
                 p2.Fill(vxs);
+                //------------- 
+
+
 
                 p.CurrentBrush = prevBrush;
 

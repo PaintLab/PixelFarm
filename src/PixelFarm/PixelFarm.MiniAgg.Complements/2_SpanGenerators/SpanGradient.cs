@@ -26,13 +26,13 @@ namespace PixelFarm.Agg
         const int GR_SUBPIX_MASK = GR_SUBPIX_SCALE - 1;    //-----gradient_subpixel_mask
         const int SUBPIX_SHIFT = 8;
         const int DOWN_SCALE_SHIFT = SUBPIX_SHIFT - GR_SUBPIX_SHIFT;
-        ISpanInterpolator m_interpolator;
-        IGradientValueCalculator m_grValueCalculator;
-        IGradientColorsProvider m_colorsProvider;
-        int m_d1;
-        int m_d2;
-        int dd;
-        float stepRatio;
+        ISpanInterpolator _interpolator;
+        IGradientValueCalculator _grValueCalculator;
+        IGradientColorsProvider _colorsProvider;
+        int _d1;
+        int _d2;
+
+        float _stepRatio;
 
         int _xoffset;
         int _yoffset;
@@ -57,14 +57,17 @@ namespace PixelFarm.Agg
         {
             _xoffset = _yoffset = 0;//reset
 
-            this.m_interpolator = inter;
-            this.m_grValueCalculator = gvc;
-            this.m_colorsProvider = m_colorsProvider;
-            m_d1 = AggMath.iround(d1 * GR_SUBPIX_SCALE);
-            m_d2 = AggMath.iround(d2 * GR_SUBPIX_SCALE);
-            dd = m_d2 - m_d1;
-            if (dd < 1) dd = 1;
-            stepRatio = (float)m_colorsProvider.GradientSteps / (float)dd;
+            this._interpolator = inter;
+            this._grValueCalculator = gvc;
+            this._colorsProvider = m_colorsProvider;
+            _d1 = AggMath.iround(d1 * GR_SUBPIX_SCALE);
+            _d2 = AggMath.iround(d2 * GR_SUBPIX_SCALE);
+            int dd = _d2 - _d1;
+            if (dd < 1)
+            {
+                dd = 1;
+            }
+            _stepRatio = (float)m_colorsProvider.GradientSteps / (float)dd;
 
 
             _xoffset = _yoffset = 0;//reset
@@ -75,22 +78,25 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
         {
-            m_interpolator.Begin(_xoffset + x + 0.5, _yoffset + y + 0.5, len);
+            _interpolator.Begin(_xoffset + x + 0.5, _yoffset + y + 0.5, len);
             do
             {
-                m_interpolator.GetCoord(out x, out y);
-                float d = m_grValueCalculator.Calculate(x >> DOWN_SCALE_SHIFT,
+                _interpolator.GetCoord(out x, out y);
+                float d = _grValueCalculator.Calculate(x >> DOWN_SCALE_SHIFT,
                                                       y >> DOWN_SCALE_SHIFT,
-                                                      m_d2);
-                d = ((d - m_d1) * stepRatio);
-                if (d < 0) d = 0;
-                if (d >= m_colorsProvider.GradientSteps)
+                                                      _d2);
+                d = ((d - _d1) * _stepRatio);
+                if (d < 0)
                 {
-                    d = m_colorsProvider.GradientSteps - 1;
+                    d = 0;
+                }
+                else if (d >= _colorsProvider.GradientSteps)
+                {
+                    d = _colorsProvider.GradientSteps - 1;
                 }
 
-                outputColors[startIndex++] = m_colorsProvider.GetColor((int)d);
-                m_interpolator.Next();
+                outputColors[startIndex++] = _colorsProvider.GetColor((int)d);
+                _interpolator.Next();
             }
             while (--len != 0);
         }
