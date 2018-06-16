@@ -23,11 +23,13 @@ namespace PixelFarm.Agg.Lines
     public struct LineParameters
     {
         //---------------------------------------------------------------------
-        public readonly int x1, y1, x2, y2, dx, dy, sx, sy;
+
+        public readonly int x1, y1, x2, y2, len;
+        readonly byte octant;
         public readonly bool vertical;
-        public readonly int inc;
-        public readonly int len;
-        public readonly int octant;
+        public readonly short inc;
+
+
         // The number of the octant is determined as a 3-bit value as follows:
         // bit 0 = vertical flag
         // bit 1 = sx < 0
@@ -51,29 +53,49 @@ namespace PixelFarm.Agg.Lines
         //   [2]          |          [3]
         //               <3> 
         //                                                        0,1,2,3,4,5,6,7 
-        public static readonly byte[] s_orthogonal_quadrant = { 0, 0, 1, 1, 3, 3, 2, 2 };
-        public static readonly byte[] s_diagonal_quadrant = { 0, 1, 2, 1, 0, 3, 2, 3 };
+        static readonly byte[] s_orthogonal_quadrant = { 0, 0, 1, 1, 3, 3, 2, 2 };
+        static readonly byte[] s_diagonal_quadrant = { 0, 1, 2, 1, 0, 3, 2, 3 };
         //---------------------------------------------------------------------
-        public LineParameters(int x1_, int y1_, int x2_, int y2_, int len_)
+        public LineParameters(int x1, int y1, int x2, int y2, int len)
         {
-            x1 = (x1_);
-            y1 = (y1_);
-            x2 = (x2_);
-            y2 = (y2_);
-            dx = (Math.Abs(x2_ - x1_));
-            dy = (Math.Abs(y2_ - y1_));
-            sx = ((x2_ > x1_) ? 1 : -1);
-            sy = ((y2_ > y1_) ? 1 : -1);
-            vertical = (dy >= dx);
-            inc = (vertical ? sy : sx);
-            len = (len_);
-            octant = ((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
+            this.x1 = (x1);
+            this.y1 = (y1);
+            this.x2 = (x2);
+            this.y2 = (y2);
+
+            int sx = ((x2 > x1) ? 1 : -1); //sx =1 or -1
+            int sy = ((y2 > y1) ? 1 : -1); //sy = 1 or -1
+
+
+            //assign vertical value and evaluate inc value ***
+            this.inc = (short)((vertical = ((Math.Abs(x2 - x1)) >= (Math.Abs(y2 - y1)))) ?
+                        sy :
+                        sx); //inc is 1 or -1
+
+            this.len = (len);
+
+            //1 byte is enough
+            this.octant = (byte)((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
         }
 
         //---------------------------------------------------------------------
         public uint OrthogonalQuadrant { get { return s_orthogonal_quadrant[octant]; } }
         public uint DiagonalQuadrant { get { return s_diagonal_quadrant[octant]; } }
 
+        public int dx
+        {
+            get
+            {
+                return Math.Abs(x2 - x1);
+            }
+        }
+        public int dy
+        {
+            get
+            {
+                return Math.Abs(y2 - y1);
+            }
+        }
         //---------------------------------------------------------------------
         public bool IsSameOrthogonalQuadrant(LineParameters lp)
         {
