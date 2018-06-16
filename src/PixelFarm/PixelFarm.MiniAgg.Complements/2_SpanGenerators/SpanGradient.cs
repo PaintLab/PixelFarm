@@ -82,26 +82,18 @@ namespace PixelFarm.Agg
         Color m_c1;
         Color m_c2;
         int gradientSteps;
-        public LinearGradientColorsProvider(Color c1, Color c2)
-            : this(c1, c2, 256)
+
+        public LinearGradientColorsProvider(Color c1, Color c2, int gradientSteps = 256)
         {
-        }
-        public LinearGradientColorsProvider(Color c1, Color c2, int gradientSteps)
-        {
-            m_c1 = c1;
-            m_c2 = c2;
-            this.gradientSteps = gradientSteps;
+            SetColors(c1, c2, gradientSteps);
         }
         public int GradientSteps { get { return gradientSteps; } }
         public Color GetColor(int v)
         {
             return m_c1.CreateGradient(m_c2, (float)(v) / (float)(gradientSteps - 1));
         }
-        public void SetColors(Color c1, Color c2)
-        {
-            SetColors(c1, c2, 256);
-        }
-        public void SetColors(Color c1, Color c2, int gradientSteps)
+
+        public void SetColors(Color c1, Color c2, int gradientSteps = 256)
         {
             m_c1 = c1;
             m_c2 = c2;
