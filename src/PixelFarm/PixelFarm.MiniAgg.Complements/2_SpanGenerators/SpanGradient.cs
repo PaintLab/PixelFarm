@@ -83,6 +83,7 @@ namespace PixelFarm.Agg
         Color m_c2;
         int gradientSteps;
 
+        public LinearGradientColorsProvider() { }
         public LinearGradientColorsProvider(Color c1, Color c2, int gradientSteps = 256)
         {
             SetColors(c1, c2, gradientSteps);

@@ -39,7 +39,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
 
-            bmp.FillRectangle(x1, y1, x2, y2, color.ToPreMultAlphaColor(),true);
+            bmp.FillRectangle(x1, y1, x2, y2, color.ToPreMultAlphaColor(), true);
         }
 
         /// <summary>
@@ -147,25 +147,6 @@ namespace PixelFarm.DrawingBuffer
                         }
                     }
                 }
-                //-------------------------
-
-
-
-                //for (int y = startYPlusX1 + w; y < offset2; y += w)
-                //{
-                //    if (noBlending)
-                //    {
-                //        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * ARGB_SIZE, len * ARGB_SIZE);
-                //        continue;
-                //    }
-
-                //    // Alpha blend line
-                //    for (int i = 0; i < len; i++)
-                //    {
-                //        int idx = y + i;
-                //        pixels[idx] = AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
-                //    }
-                //}
             }
         }
 

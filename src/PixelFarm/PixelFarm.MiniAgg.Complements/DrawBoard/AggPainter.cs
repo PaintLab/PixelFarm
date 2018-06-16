@@ -43,6 +43,15 @@ namespace PixelFarm.Agg
     }
 
 
+
+    static class GradientColorTool
+    {
+
+
+
+    }
+
+
     public class AggPainter : Painter
     {
         AggRenderSurface _aggsx; //target rendering surface
@@ -81,6 +90,7 @@ namespace PixelFarm.Agg
 
         Brush _curBrush;
         Pen _curPen;
+        LinearGradientColorsProvider _linearGradientColorProvider;
 
         bool _useDefaultBrush;
 
@@ -547,20 +557,25 @@ namespace PixelFarm.Agg
                             //------------------------------------------- 
                             //original agg's gradient fill
                             LinearGradientBrush linearGrBrush = (LinearGradientBrush)br;
-
-                            //resolve linear gradient to agg object
-                            var innerGradient = new Gradients.GvcXY();
-                            var linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix); 
                             List<PointF> stopPoints = linearGrBrush.GetStopPoints();
                             List<Color> stopColors = linearGrBrush.GetColors();
 
-                            var linearColorProvider = new LinearGradientColorsProvider(stopColors[0], stopColors[1]);
+                            //resolve linear gradient to agg object
 
+                            var innerGradient = new Gradients.GvcX();
+                            var linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
+                            if (_linearGradientColorProvider == null)
+                            {
+                                _linearGradientColorProvider = new LinearGradientColorsProvider();
+                            }
+                            _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1]); 
                             SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
                                 innerGradient,
-                                linearColorProvider,
+                                _linearGradientColorProvider,
                                 0,
-                                100); 
+                                100);
+
+
                             Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGradient);
 
                         }
@@ -580,7 +595,6 @@ namespace PixelFarm.Agg
         }
         VertexStore GetFreeVxs()
         {
-
             VectorToolBox.GetFreeVxs(out VertexStore v);
             return v;
         }
@@ -752,10 +766,9 @@ namespace PixelFarm.Agg
                 _reusablePolygonList.Add(latestMoveToX);
                 _reusablePolygonList.Add(latestMoveToY);
 
-                _bxt.FillPolygon(_reusablePolygonList.ToArray(),
-                    this.fillColor.ToARGB());
-
-
+                _bxt.FillPolygon(
+                    _reusablePolygonList.ToArray(),
+                    this.fillColor.ToARGB()); 
             }
         }
         /// <summary>
@@ -1243,7 +1256,7 @@ namespace PixelFarm.Agg
             return new LinearGradientBrush(startPoint, startColor, stopPoint, stopColor);
         }
 
-         
+
 
     }
 }
