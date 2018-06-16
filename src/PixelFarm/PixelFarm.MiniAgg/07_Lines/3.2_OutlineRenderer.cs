@@ -381,7 +381,7 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 Line0NoClip(lp1);
                 Line0NoClip(lp2);
                 return;
@@ -426,7 +426,7 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 Line1NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
                 Line1NoClip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                 return;
@@ -484,7 +484,7 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 Line2NoClip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                 Line2NoClip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
                 return;
@@ -543,7 +543,7 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 int mx = lp1.x2 + (lp1.y2 - lp1.y1);
                 int my = lp1.y2 - (lp1.x2 - lp1.x1);
                 Line3NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);
