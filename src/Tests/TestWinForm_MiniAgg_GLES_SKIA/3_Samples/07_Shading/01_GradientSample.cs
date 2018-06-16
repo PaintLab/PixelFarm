@@ -19,8 +19,8 @@ namespace PixelFarm.Agg.Sample_Gradient
             gradientBrush = new LinearGradientBrush(
                      new PointF(0, 0),
                      Drawing.Color.Red,
-                     new PointF(150, 0),
-                     Drawing.Color.Yellow);
+                     new PointF(20, 0),
+                     Drawing.Color.Black);
         }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -30,24 +30,23 @@ namespace PixelFarm.Agg.Sample_Gradient
                 //solid color
                 var p2 = (AggPainter)p;
                 p.RenderQuality = RenderQualtity.Fast;
-                p.Clear(Color.Blue);
 
-                //p.FillColor = Drawing.Color.Red;
-                //p.FillRect(0, 70, 150, 120);
+
+                p.FillColor = Drawing.Color.Red;
+                p.FillRect(0, 70, 150, 120);
 
                 ////solid color + alpa
-                //p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
-                //p.FillRect(180, 70, 150, 120);
+                p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
+                p.FillRect(180, 70, 150, 120);
                 ////-------------
 
 
-                //var prevBrush = p.CurrentBrush;
-                //p.CurrentBrush = gradientBrush;
-                //p2.FillRect(0, 0, 150, 50);
-                //p2.FillRect(0, 100, 150, 50);
-                //p2.FillRect(0, 200, 150, 50);
-
-                //p.CurrentBrush = prevBrush;
+                var prevBrush = p.CurrentBrush;
+                p.CurrentBrush = gradientBrush;
+                p2.FillRect(0, 0, 150, 50);
+                p2.FillRect(0, 100, 150, 50);
+                p2.FillRect(0, 200, 150, 50);
+                p.CurrentBrush = prevBrush;
 
             }
         }

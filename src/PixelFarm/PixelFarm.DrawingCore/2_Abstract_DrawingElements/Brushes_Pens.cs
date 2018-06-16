@@ -108,6 +108,7 @@ namespace PixelFarm.Drawing
             this.stopPoints.Add(stop1);
             this.stopPoints.Add(stop2);
         }
+
         public Color Color
         {
             //first stop color

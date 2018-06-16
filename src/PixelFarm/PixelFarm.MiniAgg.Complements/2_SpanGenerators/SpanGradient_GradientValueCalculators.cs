@@ -37,6 +37,7 @@ namespace PixelFarm.Agg.Gradients
     {
         public int Calculate(int x, int y, int d)
         {
+            //TODO: check Taxicab => https://en.wikipedia.org/wiki/Taxicab_geometry
             //return (int)(AggMath.fast_sqrt((int)(x * x + y * y)));
             return (int)(System.Math.Sqrt(x * x + y * y));
         }
