@@ -26,19 +26,37 @@ namespace PixelFarm.Agg
         const int GR_SUBPIX_MASK = GR_SUBPIX_SCALE - 1;    //-----gradient_subpixel_mask
         const int SUBPIX_SHIFT = 8;
         const int DOWN_SCALE_SHIFT = SUBPIX_SHIFT - GR_SUBPIX_SHIFT;
-        readonly ISpanInterpolator m_interpolator;
-        readonly IGradientValueCalculator m_grValueCalculator;
-        readonly IGradientColorsProvider m_colorsProvider;
-        readonly int m_d1;
-        readonly int m_d2;
-        readonly int dd;
-        readonly float stepRatio;
+        ISpanInterpolator m_interpolator;
+        IGradientValueCalculator m_grValueCalculator;
+        IGradientColorsProvider m_colorsProvider;
+        int m_d1;
+        int m_d2;
+        int dd;
+        float stepRatio;
+
+        int _xoffset;
+        int _yoffset;
         //--------------------------------------------------------------------
+        public SpanGenGradient() { }
         public SpanGenGradient(ISpanInterpolator inter,
                       IGradientValueCalculator gvc,
                       IGradientColorsProvider m_colorsProvider,
                       double d1, double d2)
         {
+            Reset(inter, gvc, m_colorsProvider, d1, d2);
+        }
+        public void SetOffset(int x, int y)
+        {
+            _xoffset = x;
+            _yoffset = y;
+        }
+        public void Reset(ISpanInterpolator inter,
+                  IGradientValueCalculator gvc,
+                  IGradientColorsProvider m_colorsProvider,
+                  double d1, double d2)
+        {
+            _xoffset = _yoffset = 0;//reset
+
             this.m_interpolator = inter;
             this.m_grValueCalculator = gvc;
             this.m_colorsProvider = m_colorsProvider;
@@ -47,15 +65,17 @@ namespace PixelFarm.Agg
             dd = m_d2 - m_d1;
             if (dd < 1) dd = 1;
             stepRatio = (float)m_colorsProvider.GradientSteps / (float)dd;
-        }
 
+
+            _xoffset = _yoffset = 0;//reset
+        }
 
         //--------------------------------------------------------------------
         public void Prepare() { }
         //--------------------------------------------------------------------
         public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
         {
-            m_interpolator.Begin(x + 0.5, y + 0.5, len);
+            m_interpolator.Begin(_xoffset + x + 0.5, _yoffset + y + 0.5, len);
             do
             {
                 m_interpolator.GetCoord(out x, out y);
