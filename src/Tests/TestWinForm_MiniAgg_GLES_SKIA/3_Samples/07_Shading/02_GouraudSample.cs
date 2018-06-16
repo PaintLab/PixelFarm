@@ -74,7 +74,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
 
             //
             AggRenderSurface aggRdsf = painter.RenderSurface;
-            SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
+            RGBAGouraudSpanGen gouraudSpanGen = new RGBAGouraudSpanGen();
             aggRdsf.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
             double d = this.DilationValue;
             // Six triangles

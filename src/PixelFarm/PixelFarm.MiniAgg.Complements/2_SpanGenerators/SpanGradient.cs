@@ -19,7 +19,7 @@ using PixelFarm.Agg.Gradients;
 namespace PixelFarm.Agg
 {
     //==========================================================span_gradient
-    public class SpanGenGradient : ISpanGenerator
+    public class GradientSpanGen : ISpanGenerator
     {
         const int GR_SUBPIX_SHIFT = 4;                              //-----gradient_subpixel_shift
         internal const int GR_SUBPIX_SCALE = 1 << GR_SUBPIX_SHIFT;   //-----gradient_subpixel_scale
@@ -37,7 +37,7 @@ namespace PixelFarm.Agg
         int _xoffset;
         int _yoffset;
         //--------------------------------------------------------------------
-        public SpanGenGradient() { }
+        public GradientSpanGen() { }
         //public SpanGenGradient(ISpanInterpolator inter,
         //              IGradientValueCalculator gvc,
         //              IGradientColorsProvider m_colorsProvider,

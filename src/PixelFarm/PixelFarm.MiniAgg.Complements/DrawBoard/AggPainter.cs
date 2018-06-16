@@ -554,7 +554,7 @@ namespace PixelFarm.Agg
                             //------------------------------------------- 
                             //original agg's gradient fill 
 
-                            SpanGenGradient spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
+                            GradientSpanGen spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
                             spanGenGrad.SetOffset((int)-left, -(int)top);
                             Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGrad);
 
@@ -577,10 +577,10 @@ namespace PixelFarm.Agg
 
 
         Gradients.GvcY _gvcY;
-        SpanGenGradient _spanGenGr;
+        GradientSpanGen _spanGenGr;
         LinearGradientColorsProvider _linearGradientColorProvider;
         PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
-        SpanGenGradient ResolveSpanGradientGen(LinearGradientBrush linearGrBrush)
+        GradientSpanGen ResolveSpanGradientGen(LinearGradientBrush linearGrBrush)
         {
             List<PointF> stopPoints = linearGrBrush.GetStopPoints();
             List<Color> stopColors = linearGrBrush.GetColors();
@@ -592,7 +592,7 @@ namespace PixelFarm.Agg
                 _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
                 _gvcY = new Gradients.GvcY();
                 _linearGradientColorProvider = new LinearGradientColorsProvider();
-                _spanGenGr = new SpanGenGradient();
+                _spanGenGr = new GradientSpanGen();
             }
 
             _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1]);
@@ -827,7 +827,7 @@ namespace PixelFarm.Agg
                             //------------------------------------------- 
                             //original agg's gradient fill 
 
-                            SpanGenGradient spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
+                            GradientSpanGen spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
                             spanGenGrad.SetOffset(0, 0);
                             Fill(vxs, spanGenGrad);
                         }
