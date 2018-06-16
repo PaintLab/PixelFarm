@@ -272,6 +272,7 @@ namespace PixelFarm.Agg
 
             var spanInterpolator = new SpanInterpolatorLinear();
             spanInterpolator.Transformer = sourceRectTransform;
+
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
                 Drawing.Color.Transparent,
