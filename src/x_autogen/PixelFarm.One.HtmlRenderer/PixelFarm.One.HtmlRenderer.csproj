@@ -104,6 +104,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs" />

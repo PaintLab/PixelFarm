@@ -550,9 +550,7 @@ namespace PixelFarm.Agg
 
                             //resolve linear gradient to agg object
                             var innerGradient = new Gradients.GvcXY();
-                            var linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
-
-
+                            var linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix); 
                             List<PointF> stopPoints = linearGrBrush.GetStopPoints();
                             List<Color> stopColors = linearGrBrush.GetColors();
 
@@ -561,10 +559,8 @@ namespace PixelFarm.Agg
                             SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
                                 innerGradient,
                                 linearColorProvider,
-                                stopPoints[0].X,
-                                stopPoints[1].X);
-
-
+                                0,
+                                100); 
                             Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGradient);
 
                         }

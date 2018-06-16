@@ -12,8 +12,15 @@ namespace PixelFarm.Agg.Sample_Gradient
     public class GradientDemo : DemoBase
     {
         Stopwatch stopwatch = new Stopwatch();
+
+        LinearGradientBrush gradientBrush;
         public GradientDemo()
         {
+            gradientBrush = new LinearGradientBrush(
+                     new PointF(0, 0),
+                     Drawing.Color.Red,
+                     new PointF(150, 0),
+                     Drawing.Color.Yellow);
         }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -31,14 +38,6 @@ namespace PixelFarm.Agg.Sample_Gradient
                 p.FillRect(180, 70, 150, 120);
                 //-------------
 
-
-                //-------------
-
-                var gradientBrush = new LinearGradientBrush(
-                    new PointF(0, 0),
-                    Drawing.Color.Red,
-                    new PointF(150, 0),
-                    Drawing.Color.Yellow);
 
                 var prevBrush = p.CurrentBrush;
                 p.CurrentBrush = gradientBrush;

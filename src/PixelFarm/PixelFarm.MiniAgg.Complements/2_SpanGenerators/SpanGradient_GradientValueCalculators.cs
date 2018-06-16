@@ -30,6 +30,9 @@ namespace PixelFarm.Agg.Gradients
 
 
     //==========================================================gradient_radial
+    /// <summary>
+    /// gradient value calculator 
+    /// </summary>
     public class GvcRadial : IGradientValueCalculator
     {
         public int Calculate(int x, int y, int d)

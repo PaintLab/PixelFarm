@@ -95,6 +95,7 @@ namespace PixelFarm.Drawing
 
     }
 
+
     public sealed class LinearGradientBrush : GeometryGraidentBrush
     {
         object innerBrush;

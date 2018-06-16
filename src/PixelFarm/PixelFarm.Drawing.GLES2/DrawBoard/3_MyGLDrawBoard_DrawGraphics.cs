@@ -81,7 +81,6 @@ namespace PixelFarm.Drawing.GLES2
                             left, top,
                             width, height,
                             solidBrush.Color);
-
                     }
                     break;
                 case BrushKind.LinearGradient:
