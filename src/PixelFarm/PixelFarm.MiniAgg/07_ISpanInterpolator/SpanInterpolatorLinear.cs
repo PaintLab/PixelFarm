@@ -29,7 +29,7 @@ namespace PixelFarm.Agg.Transform
         LineInterpolatorDDA2 m_li_y;
         const int SUB_PIXEL_SHIFT = 8;
         const int SUB_PIXEL_SCALE = 1 << SUB_PIXEL_SHIFT;
-       
+
         public Transform.ICoordTransformer Transformer
         {
             get { return this.m_trans; }
@@ -43,18 +43,19 @@ namespace PixelFarm.Agg.Transform
         //----------------------------------------------------------------
         public void Begin(double x, double y, int len)
         {
-            double tx;
-            double ty;
-            tx = x;
-            ty = y;
+            double tx = x;
+            double ty = y;
+
             m_trans.Transform(ref tx, ref ty);
             int x1 = AggMath.iround(tx * (double)SUB_PIXEL_SCALE);
             int y1 = AggMath.iround(ty * (double)SUB_PIXEL_SCALE);
-            tx = x + len;
-            ty = y;
+            //
+            tx = x + len; //*** 
+            ty = y;//**
             m_trans.Transform(ref tx, ref ty);
             int x2 = AggMath.iround(tx * (double)SUB_PIXEL_SCALE);
             int y2 = AggMath.iround(ty * (double)SUB_PIXEL_SCALE);
+            //
             m_li_x = new LineInterpolatorDDA2(x1, x2, (int)len);
             m_li_y = new LineInterpolatorDDA2(y1, y2, (int)len);
         }

@@ -38,7 +38,7 @@ namespace PixelFarm.Agg
         int _yoffset;
         //--------------------------------------------------------------------
         public GradientSpanGen() { }
-        
+
         public void SetOffset(int x, int y)
         {
             _xoffset = x;
@@ -62,8 +62,6 @@ namespace PixelFarm.Agg
                 dd = 1;
             }
             _stepRatio = (float)m_colorsProvider.GradientSteps / (float)dd;
-
-
             _xoffset = _yoffset = 0;//reset
         }
 
@@ -73,6 +71,9 @@ namespace PixelFarm.Agg
         public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
         {
             _interpolator.Begin(_xoffset + x + 0.5, _yoffset + y + 0.5, len);
+
+            int gradientSteps = _colorsProvider.GradientSteps;
+
             do
             {
                 _interpolator.GetCoord(out x, out y);
@@ -84,13 +85,13 @@ namespace PixelFarm.Agg
                 {
                     d = 0;
                 }
-                else if (d >= _colorsProvider.GradientSteps)
+                else if (d >= gradientSteps)
                 {
-                    d = _colorsProvider.GradientSteps - 1;
+                    d = gradientSteps - 1;
                 }
 
                 outputColors[startIndex++] = _colorsProvider.GetColor((int)d);
-                _interpolator.Next();
+                _interpolator.Next();//**
             }
             while (--len != 0);
         }

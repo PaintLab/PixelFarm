@@ -576,10 +576,11 @@ namespace PixelFarm.Agg
 
 
 
-        Gradients.GvcY _gvcY;
+        Gradients.IGradientValueCalculator _gvc;
         GradientSpanGen _spanGenGr;
         LinearGradientColorsProvider _linearGradientColorProvider;
         PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
+
         GradientSpanGen ResolveSpanGradientGen(LinearGradientBrush linearGrBrush)
         {
             List<PointF> stopPoints = linearGrBrush.GetStopPoints();
@@ -590,15 +591,15 @@ namespace PixelFarm.Agg
             {
                 //temp fix
                 _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
-                _linerInterpolator.Transformer = PixelFarm.Agg.Transform.Affine.IdentityMatrix;
-                _gvcY = new Gradients.GvcY();
+                _linerInterpolator.Transformer = PixelFarm.Agg.Transform.Affine.NewRotation(Agg.AggMath.deg2rad(45));// PixelFarm.Agg.Transform.Affine.IdentityMatrix;
+                _gvc = new Gradients.GvcX();
                 _linearGradientColorProvider = new LinearGradientColorsProvider();
                 _spanGenGr = new GradientSpanGen();
             }
 
             _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1]);
             _spanGenGr.Reset(_linerInterpolator,
-                _gvcY,
+                _gvc,
                 _linearGradientColorProvider, 0, 100);
 
             return _spanGenGr;

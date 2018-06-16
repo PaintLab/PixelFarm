@@ -121,7 +121,10 @@ namespace PixelFarm.Agg.Gradients
     //==============================================================gradient_x
     public class GvcX : IGradientValueCalculator
     {
-        public int Calculate(int x, int y, int d) { return x; }
+        public int Calculate(int x, int y, int d)
+        {
+            return x;
+        }
     }
     //==============================================================gradient_y
     public class GvcY : IGradientValueCalculator

@@ -32,13 +32,7 @@ namespace PixelFarm.Agg.Transform
         int m_inc;
         int m_dy;
         int m_fractionShift;
-        //--------------------------------------------------------------------
-        //public LineInterpolatorDDA(int fractionShift)
-        //{   
-        //    m_fractionShift = fractionShift;
-        //}
 
-        //--------------------------------------------------------------------
         public LineInterpolatorDDA(int y1, int y2, int count, int fractionShift)
         {
             m_fractionShift = fractionShift;
