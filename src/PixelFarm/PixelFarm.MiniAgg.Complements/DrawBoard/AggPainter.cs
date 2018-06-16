@@ -807,18 +807,48 @@ namespace PixelFarm.Agg
         public override void Fill(VertexStore vxs)
         {
             //
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
                 FillWithBxt(new VertexStoreSnap(vxs));
                 return;
             }
+            if (!_useDefaultBrush)
+            {
+                Brush br = _curBrush;
+                switch (br.BrushKind)
+                {
+                    case BrushKind.LinearGradient:
+                        {
+                            //fill linear gradient brush
+                            //....
 
-            //
-            sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                            //check resolved object for br 
+                            //if not then create a new one
+                            //------------------------------------------- 
+                            //original agg's gradient fill 
+
+                            SpanGenGradient spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
+                            spanGenGrad.SetOffset(0, 0);
+                            Fill(vxs, spanGenGrad);
+                        }
+                        break;
+                    default:
+                        {
+                            sclineRas.AddPath(vxs);
+                            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                sclineRas.AddPath(vxs);
+                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            }
+
+
         }
-
-
         public override bool UseSubPixelLcdEffect
         {
             get
