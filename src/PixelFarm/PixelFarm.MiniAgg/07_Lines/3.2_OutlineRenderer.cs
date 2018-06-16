@@ -387,9 +387,7 @@ namespace PixelFarm.Agg.Lines
                 return;
             }
 
-            LineInterpolatorAA0 li = new LineInterpolatorAA0(this, lp);
-            li.Loop();
-
+            (new LineInterpolatorAA0(this, lp)).Loop();
         }
 
         public override void Line0(LineParameters lp)
@@ -433,8 +431,7 @@ namespace PixelFarm.Agg.Lines
             }
 
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
-            LineInterpolatorAA1 li = new LineInterpolatorAA1(this, lp, sx, sy);
-            li.Loop();
+            (new LineInterpolatorAA1(this, lp, sx, sy)).Loop();
         }
 
         public override void Line1(LineParameters lp, int sx, int sy)
@@ -491,8 +488,8 @@ namespace PixelFarm.Agg.Lines
             }
 
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
-            LineInterpolatorAA2 li = new LineInterpolatorAA2(this, lp, ex, ey);
-            li.Loop();
+            (new LineInterpolatorAA2(this, lp, ex, ey)).Loop();
+
         }
 
         public override void Line2(LineParameters lp, int ex, int ey)
@@ -553,8 +550,8 @@ namespace PixelFarm.Agg.Lines
 
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
-            LineInterpolatorAA3 li = new LineInterpolatorAA3(this, lp, sx, sy, ex, ey);
-            li.Loop();
+            (new LineInterpolatorAA3(this, lp, sx, sy, ex, ey)).Loop();
+
         }
 
         public override void Line3(LineParameters lp,
