@@ -454,7 +454,7 @@ namespace PixelFarm.Agg.Imaging
 }
 
 
-//#endif
+ 
 
 
 
