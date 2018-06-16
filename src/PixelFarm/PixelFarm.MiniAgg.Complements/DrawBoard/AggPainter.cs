@@ -589,7 +589,8 @@ namespace PixelFarm.Agg
             if (_linearGradientColorProvider == null)
             {
                 //temp fix
-                _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
+                _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
+                _linerInterpolator.Transformer = PixelFarm.Agg.Transform.Affine.IdentityMatrix;
                 _gvcY = new Gradients.GvcY();
                 _linearGradientColorProvider = new LinearGradientColorsProvider();
                 _spanGenGr = new GradientSpanGen();

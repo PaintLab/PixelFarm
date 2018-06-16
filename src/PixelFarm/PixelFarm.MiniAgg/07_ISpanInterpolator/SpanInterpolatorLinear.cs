@@ -22,18 +22,14 @@
 namespace PixelFarm.Agg.Transform
 {
     //================================================span_interpolator_linear
-    public sealed class SpanInterpolatorLinear : ISpanInterpolator
+    public struct SpanInterpolatorLinear : ISpanInterpolator
     {
         Transform.ICoordTransformer m_trans;
         LineInterpolatorDDA2 m_li_x;
         LineInterpolatorDDA2 m_li_y;
         const int SUB_PIXEL_SHIFT = 8;
         const int SUB_PIXEL_SCALE = 1 << SUB_PIXEL_SHIFT;
-        public SpanInterpolatorLinear(Transform.ICoordTransformer trans)
-        {
-            m_trans = trans;
-        }
-
+       
         public Transform.ICoordTransformer Transformer
         {
             get { return this.m_trans; }
