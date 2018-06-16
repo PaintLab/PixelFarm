@@ -39,7 +39,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
 
-            bmp.FillRectangle(x1, y1, x2, y2, color.ToPreMultAlphaColor());
+            bmp.FillRectangle(x1, y1, x2, y2, color.ToPreMultAlphaColor(),true);
         }
 
         /// <summary>
@@ -106,41 +106,66 @@ namespace PixelFarm.DrawingBuffer
 
 
 
-                for (int idx = startYPlusX1; idx < endOffset; idx++)
-                {
-                    pixels[idx] = noBlending ? color : AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
-                }
-
                 // Copy first line
                 int len = (x2 - x1);
                 int srcOffsetBytes = startYPlusX1 * ARGB_SIZE;
                 int offset2 = y2 * w + x1;
 
-                //plan...
+                //-------------------------
+                //NO BLENDING VS BLENDING
                 if (noBlending)
                 {
 
+                    //first rows
+                    for (int idx = startYPlusX1; idx < endOffset; idx++)
+                    {
+                        pixels[idx] = color;
+                    }
+                    //next rows
+                    int strideInBytes = len * ARGB_SIZE;
+                    for (int y = startYPlusX1 + w; y < offset2; y += w)
+                    {
+                        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * ARGB_SIZE, strideInBytes);
+                    }
                 }
                 else
                 {
-
-                }
-
-                for (int y = startYPlusX1 + w; y < offset2; y += w)
-                {
-                    if (noBlending)
+                    //first rows
+                    for (int idx = startYPlusX1; idx < endOffset; idx++)
                     {
-                        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * ARGB_SIZE, len * ARGB_SIZE);
-                        continue;
-                    }
-
-                    // Alpha blend line
-                    for (int i = 0; i < len; i++)
-                    {
-                        int idx = y + i;
                         pixels[idx] = AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
                     }
+
+                    //next rows
+                    for (int y = startYPlusX1 + w; y < offset2; y += w)
+                    {
+                        // Alpha blend line
+                        for (int i = 0; i < len; i++)
+                        {
+                            int idx = y + i;
+                            pixels[idx] = AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
+                        }
+                    }
                 }
+                //-------------------------
+
+
+
+                //for (int y = startYPlusX1 + w; y < offset2; y += w)
+                //{
+                //    if (noBlending)
+                //    {
+                //        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * ARGB_SIZE, len * ARGB_SIZE);
+                //        continue;
+                //    }
+
+                //    // Alpha blend line
+                //    for (int i = 0; i < len; i++)
+                //    {
+                //        int idx = y + i;
+                //        pixels[idx] = AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
+                //    }
+                //}
             }
         }
 
