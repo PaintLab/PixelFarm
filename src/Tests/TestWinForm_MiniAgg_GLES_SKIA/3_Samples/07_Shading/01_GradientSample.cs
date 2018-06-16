@@ -28,11 +28,11 @@ namespace PixelFarm.Agg.Sample_Gradient
                 p.FillColor = Drawing.Color.Red;
                 p.FillRect(0, 70, 150, 120);
 
+
                 p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
                 p.FillRect(180, 70, 150, 120);
                 //-------------
-                //p.FillColor = Color.FromArgb(70, Color.Red);
-                //p.FillRect(0, 70, 150, 120);
+
 
                 //-------------
 

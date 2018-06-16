@@ -95,7 +95,7 @@ namespace PixelFarm.DrawingBuffer
                     int x2 = points[i];
                     int y2 = points[i + 1];
 
-                    dbugDrawLineAa(context, w, h, x1, y1, x2, y2, color);
+                    DrawLineAa(context, w, h, x1, y1, x2, y2, color);
                     x1 = x2;
                     y1 = y2;
                 }
