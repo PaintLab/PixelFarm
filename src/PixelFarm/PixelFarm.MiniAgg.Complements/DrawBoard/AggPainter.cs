@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
 
         Brush _curBrush;
         Pen _curPen;
-        LinearGradientColorsProvider _linearGradientColorProvider;
+
 
         bool _useDefaultBrush;
 
@@ -491,7 +491,7 @@ namespace PixelFarm.Agg
 
             //---------------------------------------------------------- 
             //BitmapExt
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
                 this._bxt.FillRectangle(
                       (int)Math.Round(left),
@@ -538,9 +538,6 @@ namespace PixelFarm.Agg
             }
 
             var v1 = GetFreeVxs();
-
-
-
             //---------------------------------------------------------- 
             if (!_useDefaultBrush)
             {
@@ -555,28 +552,11 @@ namespace PixelFarm.Agg
                             //check resolved object for br 
                             //if not then create a new one
                             //------------------------------------------- 
-                            //original agg's gradient fill
-                            LinearGradientBrush linearGrBrush = (LinearGradientBrush)br;
-                            List<PointF> stopPoints = linearGrBrush.GetStopPoints();
-                            List<Color> stopColors = linearGrBrush.GetColors();
+                            //original agg's gradient fill 
 
-                            //resolve linear gradient to agg object
-
-                            var innerGradient = new Gradients.GvcX();
-                            var linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
-                            if (_linearGradientColorProvider == null)
-                            {
-                                _linearGradientColorProvider = new LinearGradientColorsProvider();
-                            }
-                            _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1]); 
-                            SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
-                                innerGradient,
-                                _linearGradientColorProvider,
-                                0,
-                                100);
-
-
-                            Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGradient);
+                            SpanGenGradient spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
+                            spanGenGrad.SetOffset((int)-left, -(int)top);
+                            Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGrad);
 
                         }
                         break;
@@ -593,6 +573,36 @@ namespace PixelFarm.Agg
             }
             ReleaseVxs(ref v1);
         }
+
+
+
+        Gradients.GvcY _gvcY;
+        SpanGenGradient _spanGenGr;
+        LinearGradientColorsProvider _linearGradientColorProvider;
+        PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
+        SpanGenGradient ResolveSpanGradientGen(LinearGradientBrush linearGrBrush)
+        {
+            List<PointF> stopPoints = linearGrBrush.GetStopPoints();
+            List<Color> stopColors = linearGrBrush.GetColors();
+
+            //resolve linear gradient to agg object  
+            if (_linearGradientColorProvider == null)
+            {
+                //temp fix
+                _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
+                _gvcY = new Gradients.GvcY();
+                _linearGradientColorProvider = new LinearGradientColorsProvider();
+                _spanGenGr = new SpanGenGradient();
+            }
+
+            _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1]);
+            _spanGenGr.Reset(_linerInterpolator,
+                _gvcY,
+                _linearGradientColorProvider, 0, 100);
+
+            return _spanGenGr;
+        }
+
         VertexStore GetFreeVxs()
         {
             VectorToolBox.GetFreeVxs(out VertexStore v);
@@ -768,7 +778,7 @@ namespace PixelFarm.Agg
 
                 _bxt.FillPolygon(
                     _reusablePolygonList.ToArray(),
-                    this.fillColor.ToARGB()); 
+                    this.fillColor.ToARGB());
             }
         }
         /// <summary>
