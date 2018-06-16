@@ -82,6 +82,8 @@ namespace PixelFarm.Agg
         Brush _curBrush;
         Pen _curPen;
 
+        bool _useDefaultBrush;
+
         public AggPainter(AggRenderSurface aggsx)
         {
             //painter paint to target surface
@@ -96,6 +98,8 @@ namespace PixelFarm.Agg
                 aggsx.Height,
                 PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
             _vectorTool = new VectorTool();
+            _useDefaultBrush = true;
+
         }
 
         public override Brush CurrentBrush
@@ -108,10 +112,14 @@ namespace PixelFarm.Agg
             {
                 _curBrush = value;
                 //check brush kind
-                if (value == null) return;
+                if (value == null)
+                {
+                    _useDefaultBrush = true;
+                    return;
+                }
 
-                //
-                //
+                _useDefaultBrush = false;
+
                 switch (value.BrushKind)
                 {
                     default: throw new NotSupportedException();
@@ -470,6 +478,12 @@ namespace PixelFarm.Agg
         public override void FillRect(double left, double top, double width, double height)
         {
 
+
+            if (_useDefaultBrush)
+            {
+                Brush br = _curBrush;
+
+            }
 
             //---------------------------------------------------------- 
             //BitmapExt

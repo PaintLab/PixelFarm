@@ -22,13 +22,13 @@ namespace PixelFarm.Agg.Sample_Gradient
         {
             if (p is AggPainter)
             {
-                //solid fill
+                //solid color
                 var p2 = (AggPainter)p;
                 p.RenderQuality = RenderQualtity.Fast;
                 p.FillColor = Drawing.Color.Red;
                 p.FillRect(0, 70, 150, 120);
 
-
+                //solid color + alpa
                 p.FillColor = Color.FromArgb(80, Drawing.Color.Red);
                 p.FillRect(180, 70, 150, 120);
                 //-------------
@@ -36,16 +36,16 @@ namespace PixelFarm.Agg.Sample_Gradient
 
                 //-------------
 
-                //var gradientBrush = new LinearGradientBrush(
-                //    new PointF(0, 0),
-                //    Drawing.Color.Red,
-                //    new PointF(150, 0),
-                //    Drawing.Color.Yellow);
+                var gradientBrush = new LinearGradientBrush(
+                    new PointF(0, 0),
+                    Drawing.Color.Red,
+                    new PointF(150, 0),
+                    Drawing.Color.Yellow);
 
-                //var prevBrush = p.CurrentBrush;
-                //p.CurrentBrush = gradientBrush;
-                //p2.FillRect(0, 0, 150, 50);
-                //p.CurrentBrush = prevBrush;
+                var prevBrush = p.CurrentBrush;
+                p.CurrentBrush = gradientBrush;
+                p2.FillRect(0, 0, 150, 50);
+                p.CurrentBrush = prevBrush;
 
 
 

@@ -55,6 +55,9 @@
     <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\FilterExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\FilterExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\LineAaExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\LineExtensions.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\LineExtensions.cs</Link>
     </Compile>

@@ -20,7 +20,6 @@ namespace PixelFarm.DrawingBuffer
     public static partial class BitmapBufferExtensions
     {
 
-
 #if DEBUG
         /// <summary> 
         /// Draws an anti-aliased line with a desired stroke thickness
