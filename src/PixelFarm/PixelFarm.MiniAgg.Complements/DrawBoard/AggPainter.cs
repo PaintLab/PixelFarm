@@ -72,13 +72,15 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
- 
+
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
         BitmapBuffer _bxt;
         VectorTool _vectorTool;
 
+        Brush _curBrush;
+        Pen _curPen;
 
         public AggPainter(AggRenderSurface aggsx)
         {
@@ -96,7 +98,45 @@ namespace PixelFarm.Agg
             _vectorTool = new VectorTool();
         }
 
+        public override Brush CurrentBrush
+        {
+            get
+            {
+                return _curBrush;
+            }
+            set
+            {
+                _curBrush = value;
+                //check brush kind
+                if (value == null) return;
 
+                //
+                //
+                switch (value.BrushKind)
+                {
+                    default: throw new NotSupportedException();
+                    //
+                    case BrushKind.Solid:
+                        break;
+                    case BrushKind.LinearGradient:
+                        break;
+                    case BrushKind.CircularGraident:
+                        break;
+                    case BrushKind.GeometryGradient:
+                        break;
+                    case BrushKind.Texture:
+                        break;
+                }
+            }
+        }
+        public override Pen CurrentPen
+        {
+            get { return _curPen; }
+            set
+            {
+                _curPen = value;
+            }
+        }
         public static AggPainter Create(ActualBitmap bmp, PixelBlender32 blender = null)
         {
             //helper func
@@ -440,7 +480,6 @@ namespace PixelFarm.Agg
                       (int)Math.Round(top),
                       (int)Math.Round(left + width),
                       (int)Math.Round(top + height),
-
                       ColorInt.FromArgb(this.fillColor.ToARGB()));
                 return;
             }
@@ -726,7 +765,10 @@ namespace PixelFarm.Agg
         public override Color FillColor
         {
             get { return fillColor; }
-            set { this.fillColor = value; }
+            set
+            {
+                this.fillColor = value;
+            }
         }
         public override Color StrokeColor
         {

@@ -22,7 +22,7 @@ namespace PixelFarm.Agg
     public class SpanGenGradient : ISpanGenerator
     {
         const int GR_SUBPIX_SHIFT = 4;                              //-----gradient_subpixel_shift
-        public const int GR_SUBPIX_SCALE = 1 << GR_SUBPIX_SHIFT;   //-----gradient_subpixel_scale
+        internal const int GR_SUBPIX_SCALE = 1 << GR_SUBPIX_SHIFT;   //-----gradient_subpixel_scale
         const int GR_SUBPIX_MASK = GR_SUBPIX_SCALE - 1;    //-----gradient_subpixel_mask
         const int SUBPIX_SHIFT = 8;
         const int DOWN_SCALE_SHIFT = SUBPIX_SHIFT - GR_SUBPIX_SHIFT;

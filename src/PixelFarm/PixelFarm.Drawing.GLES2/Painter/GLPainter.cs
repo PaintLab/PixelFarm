@@ -160,6 +160,27 @@ namespace PixelFarm.DrawingGL
                 _fillColor = value;
             }
         }
+
+
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
+
+        Pen _currentPen;
+        public override Pen CurrentPen
+        {
+            get { return _currentPen; }
+            set
+            {
+                _currentPen = value;
+            }
+        }
         public override int Height
         {
             get
