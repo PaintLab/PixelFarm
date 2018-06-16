@@ -38,13 +38,7 @@ namespace PixelFarm.Agg
         int _yoffset;
         //--------------------------------------------------------------------
         public GradientSpanGen() { }
-        //public SpanGenGradient(ISpanInterpolator inter,
-        //              IGradientValueCalculator gvc,
-        //              IGradientColorsProvider m_colorsProvider,
-        //              double d1, double d2)
-        //{
-        //    Reset(inter, gvc, m_colorsProvider, d1, d2);
-        //}
+        
         public void SetOffset(int x, int y)
         {
             _xoffset = x;
