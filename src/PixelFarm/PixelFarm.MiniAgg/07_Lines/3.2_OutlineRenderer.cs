@@ -451,7 +451,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                                                 AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if (((int)flags & 1) != 0)
                         {
                             sx = x1 + (y2 - y1);
@@ -509,7 +509,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                                                 AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if ((flags & 2) != 0)
                         {
                             ex = x2 + (y2 - y1);

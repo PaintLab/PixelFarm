@@ -295,8 +295,8 @@ namespace PixelFarm.Agg.Lines
             int x2;
             int y2;
             int lprev;
-            LineParameters curr = null;
-            LineParameters next = null;
+            LineParameters curr;
+            LineParameters next;
             if (close_polygon)
             {
                 if (m_src_vertices.Count >= 3)
