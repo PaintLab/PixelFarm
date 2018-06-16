@@ -25,7 +25,32 @@ namespace PixelFarm.DrawingBuffer
     public static partial class BitmapBufferExtensions
     {
 
-        internal const int ARGB_SIZE = 4; 
+        internal const int ARGB_SIZE = 4;
+
+        public static void Clear(this BitmapContext context, ColorInt color)
+        {
+            int colr = color.ToPreMultAlphaColor();
+            int[] pixels = context.Pixels;
+            int w = context.Width;
+            int h = context.Height;
+            int len = w * ARGB_SIZE;
+
+            // Fill first line
+            for (int x = 0; x < w; x++)
+            {
+                pixels[x] = colr;
+            }
+
+            // Copy first line
+            int blockHeight = 1;
+            int y = 1;
+            while (y < h)
+            {
+                BitmapContext.BlockCopy(context, 0, context, y * len, blockHeight * len);
+                y += blockHeight;
+                blockHeight = Math.Min(2 * blockHeight, h - y);
+            }
+        }
 
         /// <summary>
         /// Fills the whole WriteableBitmap with a color.
@@ -33,30 +58,10 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="color">The color used for filling.</param>
         public static void Clear(this BitmapBuffer bmp, ColorInt color)
-        {
-            int colr = color.ToPreMultAlphaColor();
+        {            
             using (BitmapContext context = bmp.GetBitmapContext())
             {
-                int[] pixels = context.Pixels;
-                int w = context.Width;
-                int h = context.Height;
-                int len = w * ARGB_SIZE;
-
-                // Fill first line
-                for (int x = 0; x < w; x++)
-                {
-                    pixels[x] = colr;
-                }
-
-                // Copy first line
-                int blockHeight = 1;
-                int y = 1;
-                while (y < h)
-                {
-                    BitmapContext.BlockCopy(context, 0, context, y * len, blockHeight * len);
-                    y += blockHeight;
-                    blockHeight = Math.Min(2 * blockHeight, h - y);
-                }
+                Clear(context, color);
             }
         }
 

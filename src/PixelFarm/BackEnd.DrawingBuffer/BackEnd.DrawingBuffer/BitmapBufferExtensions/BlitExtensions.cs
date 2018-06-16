@@ -248,7 +248,12 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         /// <param name="color">If not Colors.White, will tint the source image. A partially transparent color and the image will be drawn partially transparent. If the BlendMode is ColorKeying, this color will be used as color key to mask all pixels with this value out.</param>
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
-        internal static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect, ColorInt color, BlendMode blendMode)
+        internal static void Blit(this BitmapBuffer bmp,
+            RectD destRect, 
+            BitmapBuffer source,
+            RectD sourceRect,
+            ColorInt color,
+            BlendMode blendMode)
         {
             if (color.A == 0)
             {
@@ -333,8 +338,7 @@ namespace PixelFarm.DrawingBuffer
                             if (len > sw) len = sw;
                             if (len > dw) len = dw;
                             BitmapContext.BlockCopy(srcContext, (sourceIdx + offset) * 4, destContext, (idx + offset) * 4, len * 4);
-                        }
-
+                        } 
                         // Pixel by pixel copying
                         else
                         {
@@ -365,11 +369,8 @@ namespace PixelFarm.DrawingBuffer
                                         {
                                             sa = 0;
                                         }
-                                    }
-
-                                    //---------------
-
-
+                                    } 
+                                    //--------------- 
                                     if (blendMode == BlendMode.None)
                                     {
                                         destPixels[idx] = sourcePixel;
@@ -501,8 +502,7 @@ namespace PixelFarm.DrawingBuffer
                 }
 
             }
-        }
-
+        } 
 
         internal static void Blit(this BitmapBuffer bmp,
             int dstX,
@@ -765,11 +765,7 @@ namespace PixelFarm.DrawingBuffer
                     y++;
                 }
             }
-        }
-
-
-
-
+        } 
         public static void Blit(BitmapContext destContext, int dpw, int dph, RectD destRect, BitmapContext srcContext, RectD sourceRect, int sourceWidth)
         {
 
