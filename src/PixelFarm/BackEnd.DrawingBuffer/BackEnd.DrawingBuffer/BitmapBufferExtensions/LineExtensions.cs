@@ -920,6 +920,8 @@ namespace PixelFarm.DrawingBuffer
             //bitmap.SetPixel(X1, Y1, BaseColor);
         }
 
+
+#if DEBUG
         /// <summary> 
         /// Draws an anti-aliased line with a desired stroke thickness
         /// <param name="context">The context containing the pixels as int RGBA value.</param>
@@ -930,7 +932,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
+        public static void dbugDrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
         {
             AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, color, clipRect);
         }
@@ -945,7 +947,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
+        public static void dbugDrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
         {
             using (BitmapContext context = bmp.GetBitmapContext())
             {
@@ -963,7 +965,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
+        public static void dbugDrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
             AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, color.ToPreMultAlphaColor(), clipRect);
@@ -979,7 +981,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
+        public static void dbugDrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
             using (BitmapContext context = bmp.GetBitmapContext())
@@ -998,10 +1000,9 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
+        public static void dbugDrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
-
-            bmp.DrawLineAa(x1, y1, x2, y2, color.ToPreMultAlphaColor(), clipRect);
+            bmp.dbugDrawLineAa(x1, y1, x2, y2, color.ToPreMultAlphaColor(), clipRect);
         }
 
         /// <summary> 
@@ -1014,11 +1015,11 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
+        public static void dbugDrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (BitmapContext context = bmp.GetBitmapContext())
             {
-                DrawLineAa(context, context.Width, context.Height, x1, y1, x2, y2, color, clipRect);
+                dbugDrawLineAa(context, context.Width, context.Height, x1, y1, x2, y2, color, clipRect);
             }
         }
 
@@ -1034,7 +1035,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
+        public static void dbugDrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             if ((x1 == x2) && (y1 == y2)) return; // edge case causing invDFloat to overflow, found by Shai Rubinshtein
 
@@ -1143,6 +1144,8 @@ namespace PixelFarm.DrawingBuffer
                 addr += uincr;
             } while (u <= uend);
         }
+#endif
+
 
         /// <summary> 
         /// Blends a specific source color on top of a destination premultiplied color 

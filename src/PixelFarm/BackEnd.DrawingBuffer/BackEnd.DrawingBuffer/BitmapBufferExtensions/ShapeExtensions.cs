@@ -62,15 +62,16 @@ namespace PixelFarm.DrawingBuffer
             }
         }
 
+#if DEBUG
         /// <summary>
         /// Draws a polyline. Add the first point also at the end of the array if the line should be closed.
         /// </summary>
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points of the polyline in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawPolylineAa(this BitmapBuffer bmp, int[] points, ColorInt color)
+        public static void dbugDrawPolylineAa(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
-            bmp.DrawPolylineAa(points, color.ToPreMultAlphaColor());
+            bmp.dbugDrawPolylineAa(points, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points of the polyline in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawPolylineAa(this BitmapBuffer bmp, int[] points, int color)
+        public static void dbugDrawPolylineAa(this BitmapBuffer bmp, int[] points, int color)
         {
             using (BitmapContext context = bmp.GetBitmapContext())
             {
@@ -94,13 +95,13 @@ namespace PixelFarm.DrawingBuffer
                     int x2 = points[i];
                     int y2 = points[i + 1];
 
-                    DrawLineAa(context, w, h, x1, y1, x2, y2, color);
+                    dbugDrawLineAa(context, w, h, x1, y1, x2, y2, color);
                     x1 = x2;
                     y1 = y2;
                 }
             }
         }
-
+#endif
         /// <summary>
         /// Draws a triangle.
         /// </summary>
