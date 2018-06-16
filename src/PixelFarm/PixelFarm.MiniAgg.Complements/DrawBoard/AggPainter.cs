@@ -479,12 +479,6 @@ namespace PixelFarm.Agg
         {
 
 
-            if (_useDefaultBrush)
-            {
-                Brush br = _curBrush;
-
-            }
-
             //---------------------------------------------------------- 
             //BitmapExt
             if (this._renderQuality == RenderQualtity.Fast)
@@ -498,7 +492,7 @@ namespace PixelFarm.Agg
                 return;
             }
 
-            //Agg
+            //Agg 
             //---------------------------------------------------------- 
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
@@ -534,7 +528,54 @@ namespace PixelFarm.Agg
             }
 
             var v1 = GetFreeVxs();
-            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+
+
+
+            //---------------------------------------------------------- 
+            if (!_useDefaultBrush)
+            {
+                Brush br = _curBrush;
+                switch (br.BrushKind)
+                {
+                    case BrushKind.LinearGradient:
+                        {
+                            //fill linear gradient brush
+                            //....
+
+                            //check resolved object for br 
+                            //if not then create a new one
+                            //------------------------------------------- 
+                            //original agg's gradient fill
+                            LinearGradientBrush linearGrBrush = (LinearGradientBrush)br;
+
+                            //resolve linear gradient to agg object
+                            var innerGradient = new Gradients.GvcXY();
+                            var linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
+                            var linearColorProvider = new LinearGradientColorsProvider(Drawing.Color.Red, Drawing.Color.Yellow);
+
+                            List<PointF> stopPoints = linearGrBrush.GetStopPoints();
+                            List<Color> stopColors = linearGrBrush.GetColors();
+
+                            SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
+                                innerGradient,
+                                linearColorProvider,
+                                stopPoints[0].X, stopPoints[1].X);
+
+                            Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGradient);
+
+                        }
+                        break;
+                    default:
+                        {
+                            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+            }
             ReleaseVxs(ref v1);
         }
         VertexStore GetFreeVxs()

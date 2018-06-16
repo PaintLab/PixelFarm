@@ -4,8 +4,6 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Transform;
 using Mini;
 namespace PixelFarm.Agg.Sample_Gradient
 {
@@ -24,7 +22,7 @@ namespace PixelFarm.Agg.Sample_Gradient
             {
                 //solid color
                 var p2 = (AggPainter)p;
-                p.RenderQuality = RenderQualtity.Fast;
+                //p.RenderQuality = RenderQualtity.Fast;
                 p.FillColor = Drawing.Color.Red;
                 p.FillRect(0, 70, 150, 120);
 
@@ -45,24 +43,11 @@ namespace PixelFarm.Agg.Sample_Gradient
                 var prevBrush = p.CurrentBrush;
                 p.CurrentBrush = gradientBrush;
                 p2.FillRect(0, 0, 150, 50);
+                p2.FillRect(0, 100, 150, 50);
+                p2.FillRect(0, 200, 150, 50);
+
                 p.CurrentBrush = prevBrush;
 
-
-
-                ////------------------------------------------- 
-                ////original agg's gradient fill
-                //var innerGradient = new Gradients.GvcRadial();
-                //SpanInterpolatorLinear linerInterpolator = new SpanInterpolatorLinear(Affine.IdentityMatrix);
-                //LinearGradientColorsProvider linearColorProvider = new LinearGradientColorsProvider(Drawing.Color.Red, Drawing.Color.Yellow);
-                //SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
-                //    innerGradient,
-                //    linearColorProvider,
-                //    0, 150);
-                //SimpleRect srect = new SimpleRect(0, 0, 150, 50);
-
-                //PixelFarm.Drawing.VectorToolBox.GetFreeVxs(out var v1);
-                //p2.Fill(srect.MakeVxs(v1), spanGenGradient);
-                //PixelFarm.Drawing.VectorToolBox.ReleaseVxs(ref v1);
             }
         }
 

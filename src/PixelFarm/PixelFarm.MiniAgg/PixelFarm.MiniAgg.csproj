@@ -55,6 +55,9 @@
     <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
       <Link>100_DrawingBufferExt\FilterExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs">
+      <Link>100_DrawingBufferExt\LineAaExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
       <Link>100_DrawingBufferExt\LineExtensions.cs</Link>
     </Compile>
