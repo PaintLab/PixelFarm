@@ -68,15 +68,20 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         public void Prepare() { }
         //--------------------------------------------------------------------
-        public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int len)
+        public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
         {
-            _interpolator.Begin(_xoffset + x + 0.5, _yoffset + y + 0.5, len);
+            //set interpolation start point
+            //spanLen => horizontal span len
+
+            _interpolator.Begin(_xoffset + x + 0.5, _yoffset + y + 0.5, spanLen);
 
             int gradientSteps = _colorsProvider.GradientSteps;
 
             do
             {
+                //find actual x and y 
                 _interpolator.GetCoord(out x, out y);
+
                 float d = _grValueCalculator.Calculate(x >> DOWN_SCALE_SHIFT,
                                                       y >> DOWN_SCALE_SHIFT,
                                                       _d2);
@@ -93,33 +98,37 @@ namespace PixelFarm.Agg
                 outputColors[startIndex++] = _colorsProvider.GetColor((int)d);
                 _interpolator.Next();//**
             }
-            while (--len != 0);
+            while (--spanLen != 0);
         }
     }
 
     //=====================================================gradient_linear_color
     public class LinearGradientColorsProvider : Gradients.IGradientColorsProvider
     {
-        Color m_c1;
-        Color m_c2;
-        int gradientSteps;
+        Color _c1;
+        Color _c2;
+        int _gradientSteps;
 
         public LinearGradientColorsProvider() { }
-        public LinearGradientColorsProvider(Color c1, Color c2, int gradientSteps = 256)
-        {
-            SetColors(c1, c2, gradientSteps);
-        }
-        public int GradientSteps { get { return gradientSteps; } }
+
+        public int GradientSteps { get { return _gradientSteps; } }
         public Color GetColor(int v)
         {
-            return m_c1.CreateGradient(m_c2, (float)(v) / (float)(gradientSteps - 1));
+            //get gradient color between c1 and c2 and specific step
+            return _c1.CreateGradient(_c2, (float)(v) / (float)(_gradientSteps - 1));
         }
 
         public void SetColors(Color c1, Color c2, int gradientSteps = 256)
         {
-            m_c1 = c1;
-            m_c2 = c2;
-            this.gradientSteps = gradientSteps;
+            _c1 = c1;
+            _c2 = c2;
+            //-------
+            if (gradientSteps < 2)
+            {
+                gradientSteps = 2;
+            }
+            //-------
+            _gradientSteps = gradientSteps;
         }
     }
 }

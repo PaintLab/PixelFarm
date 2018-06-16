@@ -27,6 +27,6 @@ namespace PixelFarm.Agg
         void Prepare();
         void GenerateColors(PixelFarm.Drawing.Color[] outputColors,
             int startIndex,
-            int x, int y, int len);
+            int x, int y, int spanLen);
     }
 }
