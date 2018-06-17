@@ -45,8 +45,8 @@ namespace PixelFarm.Agg
 
         internal void SetStartPoint(float grad0X, float grad0Y)
         {
-             _grad0X = -grad0X;
-             _grad0Y = -grad0Y;
+            _grad0X = -grad0X;
+            _grad0Y = -grad0Y;
         }
         internal void SetOffset(float x, float y)
         {
@@ -101,7 +101,10 @@ namespace PixelFarm.Agg
                 {
                     d = gradientSteps - 1;
                 }
-
+                else
+                {
+                    //
+                }
                 outputColors[startIndex++] = _colorsProvider.GetColor((int)d);
                 _interpolator.Next();//**
             }
