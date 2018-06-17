@@ -919,14 +919,15 @@ namespace PixelFarm.DrawingGL
                                     case Drawing.BrushKind.LinearGradient:
                                         {
                                             var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
-                                            var colors = linearGradientBrush.GetColors();
-                                            var points = linearGradientBrush.GetStopPoints();
+                                            Drawing.LinearGradientPair firstPair = linearGradientBrush.GetFirstPair();
+
                                             float[] v2f, color4f;
                                             GLGradientColorProvider.CalculateLinearGradientVxs2(
-                                                 points[0].X, points[0].Y,
-                                                 points[1].X, points[1].Y,
-                                                 colors[0],
-                                                 colors[1], out v2f, out color4f);
+                                                firstPair.x1, firstPair.y1,
+                                                firstPair.x2, firstPair.y2,
+                                                firstPair.c1,
+                                                firstPair.c2,
+                                                out v2f, out color4f);
                                             rectFillShader.Render(v2f, color4f);
                                         }
                                         break;

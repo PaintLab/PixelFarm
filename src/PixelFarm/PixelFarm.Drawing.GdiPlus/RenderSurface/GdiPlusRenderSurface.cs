@@ -507,13 +507,12 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                         //draw with gradient
                         LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
-                        var colors = linearBrush.GetColors();
-                        var points = linearBrush.GetStopPoints();
+                        Drawing.LinearGradientPair firstPair = linearBrush.GetFirstPair();
                         using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                             points[0].ToPointF(),
-                             points[1].ToPointF(),
-                             ConvColor(colors[0]),
-                             ConvColor(colors[1])))
+                            new System.Drawing.PointF(firstPair.x1, firstPair.y1),
+                            new System.Drawing.PointF(firstPair.x2, firstPair.y2),
+                            ConvColor(firstPair.c1),
+                            ConvColor(firstPair.c2)))
                         {
                             gx.FillRectangle(linearGradBrush, left, top, width, height);
                         }
