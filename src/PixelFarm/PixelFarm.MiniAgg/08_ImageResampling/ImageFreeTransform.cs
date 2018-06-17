@@ -13,6 +13,13 @@ namespace PixelFarm.Agg.Imaging
 
     public class FreeTransform
     {
+        public enum InterpolationMode
+        {
+            None,
+            Bilinear,
+            Bicubic
+        }
+
         class MyBitmapBlender : BitmapBlenderBase
         {
             public MyBitmapBlender(ActualBitmap img)
@@ -29,51 +36,52 @@ namespace PixelFarm.Agg.Imaging
         PointF _p0, _p1, _p2, _p3;
         Vector AB, BC, CD, DA;
         PixelFarm.Drawing.Rectangle rect;
-        MyBitmapBlender srcCB;
-        ActualBitmap srcImageInput;
         int srcW = 0;
         int srcH = 0;
+
+        IBitmapSrc _srcBmp;
+
         public FreeTransform()
         {
+            Interpolation = InterpolationMode.Bilinear;
         }
 
-        public ActualBitmap Bitmap
-        {
-            get
-            {
-                return GetTransformedBitmap();
-            }
-            set
-            {
-                if (value == null)
-                {
-                    return;
-                }
-                try
-                {
-                    this.srcImageInput = value;
-                    this.srcCB = new MyBitmapBlender(value);
-                    srcH = value.Height;
-                    srcW = value.Width;
-                }
-                catch
-                {
-                    srcW = 0; srcH = 0;
-                }
-            }
-        }
+        //public IBitmapSrc Bitmap
+        //{
+        //    get
+        //    {
+        //        return _srcBmp;
+        //    }
+        //    set
+        //    {
+        //        _srcBmp = value;
+
+        //        if (value == null)
+        //        {
+        //            return;
+        //        }
+        //        try
+        //        {
+        //            _srcBmp = value;
+        //            srcH = value.Height;
+        //            srcW = value.Width;
+        //        }
+        //        catch
+        //        {
+        //            srcW = 0; srcH = 0;
+        //        }
+        //    }
+        //}
 
         public Point ImageLocation
         {
             //left bottom?
             get { return new Point(rect.Left, rect.Bottom); }
         }
-
-        bool isBilinear = false;
-        public bool IsBilinearInterpolation
+        public InterpolationMode Interpolation
         {
-            get { return isBilinear; }
-            set { isBilinear = value; }
+            get;
+            set;
         }
 
         public int ImageWidth
@@ -177,19 +185,34 @@ namespace PixelFarm.Agg.Imaging
                    !MyVectorHelper.IsCCW(pt, _p3, _p0);
         }
 
-        public ActualBitmap GetTransformedBitmap()
+        public ActualBitmap GetTransformedBitmap(IBitmapSrc bitmap)
         {
-            if (srcH == 0 || srcW == 0) return null;
-            if (isBilinear)
-            {
+            _srcBmp = bitmap;
 
-                //return GetTransformedBicubicInterpolation();
-                return GetTransformedBilinearInterpolation();
-            }
-            else
+            if (bitmap == null)
             {
-                return GetTransformedBitmapNoInterpolation();
+                return null;
             }
+
+            _srcBmp = bitmap;
+            srcH = bitmap.Height;
+            srcW = bitmap.Width;
+            
+
+            //-------------------
+            if (srcH == 0 || srcW == 0) return null;
+            switch (this.Interpolation)
+            {
+                default: throw new NotSupportedException();
+                case InterpolationMode.None:
+                    return GetTransformedBitmapNoInterpolation();
+                case InterpolationMode.Bilinear:
+                    return GetTransformedBilinearInterpolation();
+                case InterpolationMode.Bicubic:
+                    return GetTransformedBicubicInterpolation();
+            }
+
+
         }
 
         ActualBitmap GetTransformedBitmapNoInterpolation()
@@ -197,7 +220,8 @@ namespace PixelFarm.Agg.Imaging
             var destCB = new ActualBitmap(rect.Width, rect.Height);
             var destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
-            int x1, x2, y1, y2;
+
+            int x1, y1;
             double dab, dbc, dcd, dda;
 
             int rectWidth = rect.Width;
@@ -208,31 +232,44 @@ namespace PixelFarm.Agg.Imaging
             Vector da_vec = this.DA;
             int rectLeft = this.rect.Left;
             int rectTop = this.rect.Top;
-            for (int y = 0; y < rectHeight; ++y)
+
+            TempMemPtr bufferPtr = _srcBmp.GetBufferPtr();
+
+            unsafe
             {
-                for (int x = 0; x < rectWidth; ++x)
+
+
+                BufferReader4 reader = new BufferReader4((int*)bufferPtr.Ptr, _srcBmp.Width, _srcBmp.Height);
+
+                for (int y = 0; y < rectHeight; ++y)
                 {
-                    PointF srcPt = new PointF(x, y);
-                    srcPt.Offset(rectLeft, rectTop);
-                    if (!IsOnPlaneABCD(srcPt))
+                    for (int x = 0; x < rectWidth; ++x)
                     {
-                        continue;
+                        PointF srcPt = new PointF(x, y);
+                        srcPt.Offset(rectLeft, rectTop);
+                        if (!IsOnPlaneABCD(srcPt))
+                        {
+                            continue;
+                        }
+                        x1 = (int)ptInPlane.X;
+                        y1 = (int)ptInPlane.Y;
+
+                        reader.SetStartPixel(x1, y1);
+                        destWriter.SetPixel(x, y, reader.Read1());
+                        //-------------------------------------
+                        dab = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p0, srcPt)).CrossProduct(ab_vec));
+                        dbc = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p1, srcPt)).CrossProduct(bc_vec));
+                        dcd = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p2, srcPt)).CrossProduct(cd_vec));
+                        dda = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p3, srcPt)).CrossProduct(da_vec));
+                        ptInPlane.X = (float)(srcW * (dda / (dda + dbc)));
+                        ptInPlane.Y = (float)(srcH * (dab / (dab + dcd)));
                     }
-                    x1 = (int)ptInPlane.X;
-                    y1 = (int)ptInPlane.Y;
-                    destWriter.SetPixel(x, y, srcCB.GetPixel(x1, y1));
-                    //-------------------------------------
-                    dab = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p0, srcPt)).CrossProduct(ab_vec));
-                    dbc = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p1, srcPt)).CrossProduct(bc_vec));
-                    dcd = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p2, srcPt)).CrossProduct(cd_vec));
-                    dda = Math.Abs((MyVectorHelper.NewFromTwoPoints(_p3, srcPt)).CrossProduct(da_vec));
-                    ptInPlane.X = (float)(srcW * (dda / (dda + dbc)));
-                    ptInPlane.Y = (float)(srcH * (dab / (dab + dcd)));
                 }
+                return destCB;
             }
-            return destCB;
         }
-        ActualBitmap GetTransformedBilinearInterpolation()
+
+        unsafe ActualBitmap GetTransformedBilinearInterpolation()
         {
             //4 points sampling
             //weight between four point
@@ -253,6 +290,10 @@ namespace PixelFarm.Agg.Imaging
 
             int srcW_lim = srcW - 1;
             int srcH_lim = srcH - 1;
+
+
+            TempMemPtr bufferPtr = _srcBmp.GetBufferPtr();
+            BufferReader4 reader = new BufferReader4((int*)bufferPtr.Ptr, _srcBmp.Width, _srcBmp.Height);
 
 
             for (int y = 0; y < rectHeight; ++y)
@@ -276,7 +317,8 @@ namespace PixelFarm.Agg.Imaging
                     x1 = (int)ptInPlane.X;
                     y1 = (int)ptInPlane.Y;
 
-                    if (x1 >= 0 && x1 < srcW_lim && y1 >= 0 && y1 < srcH_lim)
+                    if (x1 >= 0 && x1 < srcW_lim &&
+                        y1 >= 0 && y1 < srcH_lim)
                     {
 
                         //x2 = (x1 == srcW - 1) ? x1 : x1 + 1;
@@ -289,21 +331,34 @@ namespace PixelFarm.Agg.Imaging
                         if (dx1 < 0) dx1 = 0;
                         dx1 = 1f - dx1;
                         dx2 = 1f - dx1;
+                        //
+                        //
                         dy1 = ptInPlane.Y - y1;
                         if (dy1 < 0) dy1 = 0;
                         dy1 = 1f - dy1;
                         dy2 = 1f - dy1;
+                        //
+                        //
                         dx1y1 = dx1 * dy1;
                         dx1y2 = dx1 * dy2;
                         dx2y1 = dx2 * dy1;
                         dx2y2 = dx2 * dy2;
                         //use 4 points
 
+                        reader.SetStartPixel(x1, y1);
 
-                        Drawing.Color x1y1Color = srcCB.GetPixel(x1, y1);
-                        Drawing.Color x2y1Color = srcCB.GetPixel(x2, y1);
-                        Drawing.Color x1y2Color = srcCB.GetPixel(x1, y2);
-                        Drawing.Color x2y2Color = srcCB.GetPixel(x2, y2);
+
+                        Drawing.Color x1y1Color;
+                        Drawing.Color x2y1Color;
+                        Drawing.Color x1y2Color;
+                        Drawing.Color x2y2Color;
+
+                        reader.Read4(out x1y1Color, out x2y1Color, out x1y2Color, out x2y2Color);
+
+                        //Drawing.Color x1y1Color = srcCB.GetPixel(x1, y1);
+                        //Drawing.Color x2y1Color = srcCB.GetPixel(x2, y1);
+                        //Drawing.Color x1y2Color = srcCB.GetPixel(x1, y2);
+                        //Drawing.Color x2y2Color = srcCB.GetPixel(x2, y2);
                         float a = (x1y1Color.alpha * dx1y1) + (x2y1Color.alpha * dx2y1) + (x1y2Color.alpha * dx1y2) + (x2y2Color.alpha * dx2y2);
                         float b = (x1y1Color.blue * dx1y1) + (x2y1Color.blue * dx2y1) + (x1y2Color.blue * dx1y2) + (x2y2Color.blue * dx2y2);
                         float g = (x1y1Color.green * dx1y1) + (x2y1Color.green * dx2y1) + (x1y2Color.green * dx1y2) + (x2y2Color.green * dx2y2);
@@ -408,8 +463,8 @@ namespace PixelFarm.Agg.Imaging
             Vector da_vec = this.DA;
 
 
-            TempMemPtr bufferPtr = srcCB.GetBufferPtr();
-            BufferReader4 reader = new BufferReader4((int*)bufferPtr.Ptr, srcCB.Width, srcCB.Height);
+            TempMemPtr bufferPtr = _srcBmp.GetBufferPtr();
+            BufferReader4 reader = new BufferReader4((int*)bufferPtr.Ptr, _srcBmp.Width, _srcBmp.Height);
 
             ActualBitmap destCB = new ActualBitmap(rect.Width, rect.Height);
             MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
@@ -418,6 +473,9 @@ namespace PixelFarm.Agg.Imaging
 
             //***
             PixelFarm.Drawing.Color[] colors = new PixelFarm.Drawing.Color[16];
+
+            int srcW_lim = srcW - 2;
+            int srcH_lim = srcH - 2;
 
             for (int y = 0; y < rectHeight; ++y)
             {
@@ -438,7 +496,8 @@ namespace PixelFarm.Agg.Imaging
                     ptInPlane.Y = (float)(srcH * (dab / (dab + dcd)));
                     x1 = (int)ptInPlane.X;
                     y1 = (int)ptInPlane.Y;
-                    if (x1 >= 2 && x1 < srcW - 2 && y1 >= 2 && y1 < srcH - 2)
+                    if (x1 >= 2 && x1 < srcW_lim &&
+                        y1 >= 2 && y1 < srcH_lim)
                     {
                         reader.SetStartPixel(x1, y1);
                         //reader.Read16(pixelBuffer);

@@ -10,7 +10,7 @@ namespace PixelFarm.Agg.Imaging
         }
     }
 
-   
+
 
     public class BicubicInterpolator : CubicInterpolator
     {
@@ -190,28 +190,34 @@ namespace PixelFarm.Agg.Imaging
 
             }
         }
-        public void Read4(Color[] outputBuffer)
+
+        public Color Read1()
         {
-            //byte b, g, r, a;
-            int m = 0;
-            int tmpY = this.cY;
-            int index = (tmpY * width) + cX;
             unsafe
             {
-                outputBuffer[m] = FromInt(buffer[index]);
+                return FromInt(buffer[(this.cY * width) + cX]);
+            }
+        }
+        public void Read4(out Color x0y0, out Color x1y0, out Color x0y1, out Color x1y1)
+        {
+            //byte b, g, r, a; 
+
+            int index = (this.cY * width) + cX;
+            unsafe
+            {
+                x0y0 = FromInt(buffer[index]);
                 index++;
                 //----------------------------------- 
-                outputBuffer[m + 1] = FromInt(buffer[index]);
+                x1y0 = FromInt(buffer[index]);
                 index++;
                 //------------------------------------
                 //newline
-                tmpY++;
-                index = (tmpY * width) + cX;
+                index = ((this.cY + 1) * width) + cX;
                 //------------------------------------ 
-                outputBuffer[m + 2] = FromInt(buffer[index]);
+                x0y1 = FromInt(buffer[index]);
                 index++;
                 //------------------------------------ 
-                outputBuffer[m + 3] = FromInt(buffer[index]);
+                x1y1 = FromInt(buffer[index]);
                 index++;
             }
 

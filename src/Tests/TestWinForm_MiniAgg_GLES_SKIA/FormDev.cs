@@ -547,8 +547,9 @@ namespace Mini
 
             PixelFarm.Agg.Imaging.FreeTransform freeTx = new PixelFarm.Agg.Imaging.FreeTransform();
             ActualBitmap img = LoadImage("Samples\\lion1.png");
-            freeTx.Bitmap = img;
-            freeTx.IsBilinearInterpolation = true;
+             
+
+            freeTx.Interpolation = PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.None;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
             freeTx.SetFourCorners(
                 new PixelFarm.VectorMath.PointF(0, 0),
                 new PixelFarm.VectorMath.PointF(img.Width / 2, 0),
@@ -556,9 +557,9 @@ namespace Mini
                 new PixelFarm.VectorMath.PointF(0, img.Height)
             );
 
-            ActualBitmap actualBmp = freeTx.GetTransformedBitmap();
+            ActualBitmap transformImg = freeTx.GetTransformedBitmap(img);
 
-            SaveImage(actualBmp, "d:\\WImageTest\\test01_tx.png");
+            SaveImage(transformImg, "d:\\WImageTest\\test01_tx.png");
         }
         static void SaveImage(ActualBitmap img, string filename)
         {
