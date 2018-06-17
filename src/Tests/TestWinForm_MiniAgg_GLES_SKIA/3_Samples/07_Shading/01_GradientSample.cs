@@ -13,22 +13,22 @@ namespace PixelFarm.Agg.Sample_Gradient
     {
         Stopwatch stopwatch = new Stopwatch();
         VertexStore triangleVxs;
-        LinearGradientBrush gradientBrush;
+        LinearGradientBrush _linearGrBrush;
 
-        CircularGradiantBrush _circularGrBrush;
+        CircularGradientBrush _circularGrBrush;
 
         public GradientDemo()
         {
-            gradientBrush = new LinearGradientBrush(
+            _linearGrBrush = new LinearGradientBrush(
                      new PointF(0, 0),
                      Drawing.Color.Black,
                      new PointF(50, 0),
                      Drawing.Color.Red);
-            gradientBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
-            gradientBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
+            _linearGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
+            _linearGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
 
 
-            _circularGrBrush = new CircularGradiantBrush(new PointF(0, 0),
+            _circularGrBrush = new CircularGradientBrush(new PointF(0, 0),
                      Drawing.Color.Black,
                      new PointF(120, 0),
                      Drawing.Color.Blue);
@@ -63,6 +63,8 @@ namespace PixelFarm.Agg.Sample_Gradient
                 p.CurrentBrush = _circularGrBrush;// gradientBrush;
 
                 p2.FillRect(0, 100, 150, 50);
+
+                p.CurrentBrush = _linearGrBrush;
                 p2.FillRect(0, 200, 150, 50);
 
                 //------------- 

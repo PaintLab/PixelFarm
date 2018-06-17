@@ -72,7 +72,6 @@ namespace PixelFarm.Drawing
             get { return this.textureImage; }
         }
 
-
         public override object InnerBrush
         {
             get
@@ -153,7 +152,7 @@ namespace PixelFarm.Drawing
     }
 
 
-    public sealed class CircularGradiantBrush : GeometryGraidentBrush
+    public sealed class CircularGradientBrush : GeometryGraidentBrush
     {
         object innerBrush;
         LinearGradientPair _firstGradientPair;
@@ -162,7 +161,7 @@ namespace PixelFarm.Drawing
         PointF _latesStop;
         Color _latestColor;
 
-        public CircularGradiantBrush(PointF stop1, Color c1, PointF stop2, Color c2)
+        public CircularGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
         {
             _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
             _latesStop = stop2;
@@ -314,6 +313,18 @@ namespace PixelFarm.Drawing
         }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public abstract class PenBase : System.IDisposable

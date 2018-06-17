@@ -556,7 +556,7 @@ namespace PixelFarm.Agg
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            _circularGradBrush.ResolveBrush((CircularGradiantBrush)br);
+                            _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
                             _circularGradBrush.SetOffset((float)-left, (float)-top);
                             Fill(_simpleRectVxsGen.MakeVxs(v1), _circularGradBrush);
                         }
@@ -815,7 +815,7 @@ namespace PixelFarm.Agg
                         break;
                     case BrushKind.CircularGraident:
                         {
-                            _circularGradBrush.ResolveBrush((CircularGradiantBrush)br);
+                            _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
                             _circularGradBrush.SetOffset(0, 0);
                             Fill(vxs, _circularGradBrush);
                         }
@@ -1482,7 +1482,7 @@ namespace PixelFarm.Agg
         }
 
 
-        public void ResolveBrush(CircularGradiantBrush linearGrBrush)
+        public void ResolveBrush(CircularGradientBrush linearGrBrush)
         {
             //for gradient :
             int pairCount = linearGrBrush.PairCount;
