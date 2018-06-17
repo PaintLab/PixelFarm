@@ -44,7 +44,7 @@ namespace PixelFarm.Drawing
         {
             AllocIfRequired(2);
         }
-        
+
 
         /// <summary>
         /// num of vertex
@@ -265,8 +265,8 @@ namespace PixelFarm.Drawing
 
             if (trim)
             {
-                int coord_len = m_num_vertices;
-                int cmds_len = m_num_vertices;
+                int coord_len = m_num_vertices + 1; //+1 for no more cmd
+                int cmds_len = m_num_vertices + 1; //+1 for no more cmd
 
                 this.m_coord_xy = new double[coord_len << 1];//*2
                 this.m_cmds = new byte[cmds_len];

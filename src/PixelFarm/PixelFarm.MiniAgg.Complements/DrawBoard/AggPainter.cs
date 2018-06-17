@@ -555,6 +555,7 @@ namespace PixelFarm.Agg
                             //original agg's gradient fill 
 
                             GradientSpanGen spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
+
                             spanGenGrad.SetOffset((int)-left, -(int)top);
                             Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGrad);
 
@@ -580,6 +581,7 @@ namespace PixelFarm.Agg
         GradientSpanGen _spanGenGr;
         LinearGradientColorsProvider _linearGradientColorProvider;
         PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
+        ReusableRotationTransformer _reusableRotationTransformer;
 
         GradientSpanGen ResolveSpanGradientGen(LinearGradientBrush linearGrBrush)
         {
@@ -591,19 +593,53 @@ namespace PixelFarm.Agg
             {
                 //temp fix
                 _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
-                _linerInterpolator.Transformer = PixelFarm.Agg.Transform.Affine.NewRotation(Agg.AggMath.deg2rad(45));// PixelFarm.Agg.Transform.Affine.IdentityMatrix;
-                _gvc = new Gradients.GvcX();
+                _gvc = new Gradients.GvcY(); //default gvc
                 _linearGradientColorProvider = new LinearGradientColorsProvider();
                 _spanGenGr = new GradientSpanGen();
+                _reusableRotationTransformer = new ReusableRotationTransformer();
+                _linerInterpolator.Transformer = _reusableRotationTransformer;
             }
 
-            _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1]);
+            _reusableRotationTransformer.Angle = linearGrBrush.Angle;
+            _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1], linearGrBrush.ColorSteps);
+
             _spanGenGr.Reset(_linerInterpolator,
                 _gvc,
-                _linearGradientColorProvider, 0, 100);
+                _linearGradientColorProvider, linearGrBrush.DistanceBetweenStopPoints);
 
             return _spanGenGr;
         }
+
+        class ReusableRotationTransformer : Transform.ICoordTransformer
+        {
+
+            double _angle;
+            Affine affine;
+            public ReusableRotationTransformer()
+            {
+                affine = Affine.IdentityMatrix;
+            }
+            public double Angle
+            {
+                get
+                {
+                    return _angle;
+                }
+                set
+                {
+                    if (value != _angle)
+                    {
+                        affine = Affine.NewRotation(value);
+                    }
+                    _angle = value;
+                }
+            }
+            public void Transform(ref double x, ref double y)
+            {
+                affine.Transform(ref x, ref y);
+            }
+        }
+
 
         VertexStore GetFreeVxs()
         {

@@ -12,14 +12,14 @@ namespace PixelFarm.Agg.Sample_Gradient
     public class GradientDemo : DemoBase
     {
         Stopwatch stopwatch = new Stopwatch();
-        VertexStore vxs;
+        VertexStore triangleVxs;
         LinearGradientBrush gradientBrush;
         public GradientDemo()
         {
             gradientBrush = new LinearGradientBrush(
                      new PointF(0, 0),
                      Drawing.Color.Red,
-                     new PointF(20, 0),
+                     new PointF(100, 100),
                      Drawing.Color.Black);
 
             PixelFarm.Agg.VertexSource.PathWriter p = new VertexSource.PathWriter();
@@ -28,7 +28,7 @@ namespace PixelFarm.Agg.Sample_Gradient
             p.LineToRel(100, 100);
             p.LineToRel(100, -100);
             p.CloseFigure();
-            vxs = p.Vxs;
+            triangleVxs = p.Vxs.CreateTrim();
 
         }
 
@@ -54,7 +54,7 @@ namespace PixelFarm.Agg.Sample_Gradient
 
                 //------------- 
                 //fill path with gradient
-                p2.Fill(vxs);
+                p2.Fill(triangleVxs);
                 //------------- 
 
 
