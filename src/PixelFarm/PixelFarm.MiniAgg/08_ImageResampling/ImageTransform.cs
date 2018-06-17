@@ -1,5 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Imaging
 {
     public class CubicInterpolator
@@ -57,24 +57,7 @@ namespace PixelFarm.Agg.Imaging
             return getValue2(a1, a2, a3, a4, y);
         }
     }
-    public struct MyColor
-    {
-        public byte r;
-        public byte g;
-        public byte b;
-        public byte a;
-        public MyColor(byte r, byte g, byte b, byte a)
-        {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = a;
-        }
-        public override string ToString()
-        {
-            return "b:" + b + ",g:" + g + ",r:" + r + ",a:" + a;
-        }
-    }
+
     struct BufferReader4
     {
         //matrix four ,four reader
@@ -90,7 +73,7 @@ namespace PixelFarm.Agg.Imaging
             this.stride = stride;
             this.width = width;
             this.height = height;
-            cX = cY = 0;             
+            cX = cY = 0;
         }
         public void SetStartPixel(int x, int y)
         {
@@ -98,7 +81,7 @@ namespace PixelFarm.Agg.Imaging
             cY = y;
         }
 
-        public MyColor ReadOnePixel()
+        public Color ReadOnePixel()
         {
             int byteIndex = ((cY * stride) + cX * 4);
             unsafe
@@ -107,10 +90,11 @@ namespace PixelFarm.Agg.Imaging
                 byte g = buffer[byteIndex + 1];
                 byte r = buffer[byteIndex + 2];
                 byte a = buffer[byteIndex + 3];
-                return new MyColor(r, g, b, a);
+                return new Color(a, r, g, b);
+
             }
         }
-        public void Read4(MyColor[] outputBuffer)
+        public void Read4(Color[] outputBuffer)
         {
             byte b, g, r, a;
             int m = 0;
@@ -122,14 +106,14 @@ namespace PixelFarm.Agg.Imaging
                 g = buffer[byteIndex + 1];
                 r = buffer[byteIndex + 2];
                 a = buffer[byteIndex + 3];
-                outputBuffer[m] = new MyColor(r, g, b, a);
+                outputBuffer[m] = new Color(a, r, g, b);
                 byteIndex += 4;
                 //-----------------------------------
                 b = buffer[byteIndex];
                 g = buffer[byteIndex + 1];
                 r = buffer[byteIndex + 2];
                 a = buffer[byteIndex + 3];
-                outputBuffer[m + 1] = new MyColor(r, g, b, a);
+                outputBuffer[m + 1] = new Color(a, r, g, b);
                 byteIndex += 4;
                 //------------------------------------
                 //newline
@@ -140,19 +124,19 @@ namespace PixelFarm.Agg.Imaging
                 g = buffer[byteIndex + 1];
                 r = buffer[byteIndex + 2];
                 a = buffer[byteIndex + 3];
-                outputBuffer[m + 2] = new MyColor(r, g, b, a);
+                outputBuffer[m + 2] = new Color(a, r, g, b);
                 byteIndex += 4;
                 //------------------------------------
                 b = buffer[byteIndex];
                 g = buffer[byteIndex + 1];
                 r = buffer[byteIndex + 2];
                 a = buffer[byteIndex + 3];
-                outputBuffer[m + 3] = new MyColor(r, g, b, a);
+                outputBuffer[m + 3] = new Color(a, r, g, b);
                 byteIndex += 4;
             }
 
         }
-        public void Read16(MyColor[] outputBuffer)
+        public void Read16(Color[] outputBuffer)
         {
             //bgra to argb
             //16 px 
@@ -170,7 +154,7 @@ namespace PixelFarm.Agg.Imaging
                     g = buffer[byteIndex + 1];
                     r = buffer[byteIndex + 2];
                     a = buffer[byteIndex + 3];
-                    outputBuffer[m] = new MyColor(r, g, b, a);
+                    outputBuffer[m] = new Color(a, r, g, b);
                     byteIndex += 4;
                     //------------------------------------------------
                     //1
@@ -178,7 +162,7 @@ namespace PixelFarm.Agg.Imaging
                     g = buffer[byteIndex + 1];
                     r = buffer[byteIndex + 2];
                     a = buffer[byteIndex + 3];
-                    outputBuffer[m + 1] = new MyColor(r, g, b, a);
+                    outputBuffer[m + 1] = new Color(a, r, g, b);
                     byteIndex += 4;
                     //------------------------------------------------
                     //2
@@ -186,7 +170,7 @@ namespace PixelFarm.Agg.Imaging
                     g = buffer[byteIndex + 1];
                     r = buffer[byteIndex + 2];
                     a = buffer[byteIndex + 3];
-                    outputBuffer[m + 2] = new MyColor(r, g, b, a);
+                    outputBuffer[m + 2] = new Color(a, r, g, b);
                     byteIndex += 4;
                     //------------------------------------------------
                     //3
@@ -194,7 +178,7 @@ namespace PixelFarm.Agg.Imaging
                     g = buffer[byteIndex + 1];
                     r = buffer[byteIndex + 2];
                     a = buffer[byteIndex + 3];
-                    outputBuffer[m + 3] = new MyColor(r, g, b, a);
+                    outputBuffer[m + 3] = new Color(a, r, g, b);
                     byteIndex += 4;
                     //------------------------------------------------
                     m += 4;

@@ -6,6 +6,8 @@
 
 using System;
 using PixelFarm.VectorMath;
+
+
 namespace PixelFarm.Agg.Imaging
 {
 
@@ -313,7 +315,7 @@ namespace PixelFarm.Agg.Imaging
             int bmpWidth = srcCB.Width;
             int bmpHeight = srcCB.Height;
             BufferReader4 reader = new BufferReader4(buffer, stride, bmpWidth, bmpHeight);
-            MyColor[] pixelBuffer = new MyColor[16];
+            PixelFarm.Drawing.Color[] pixelBuffer = new PixelFarm.Drawing.Color[16];
             byte[] sqPixs = new byte[16];
             //Bitmap outputbmp = new Bitmap(rectWidth, rectHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             ////-----------------------------------------------
@@ -359,7 +361,7 @@ namespace PixelFarm.Agg.Imaging
                         //do interpolate
 
                         //find src pixel and approximate  
-                        MyColor color = GetApproximateColor_Bicubic(reader,
+                        PixelFarm.Drawing.Color color = GetApproximateColor_Bicubic(reader,
                            ptInPlane.X,
                            ptInPlane.Y);
                         //outputBuffer[targetPixelIndex] = (byte)color.b;
@@ -368,7 +370,7 @@ namespace PixelFarm.Agg.Imaging
                         //outputBuffer[targetPixelIndex + 3] = (byte)color.a;
                         //targetPixelIndex += 4;
 
-                        destWriter.SetPixel(x, y, new Drawing.Color(255, color.b, color.g, color.r)); //TODO:review here blue switch to red channel
+                        destWriter.SetPixel(x, y, color); //TODO:review here blue switch to red channel
                     }
                 }
                 //newline
@@ -386,18 +388,18 @@ namespace PixelFarm.Agg.Imaging
             //return outputbmp;
             return destCB;
         }
-        static void SeparateByChannel(MyColor[] myColors, byte[] rBuffer, byte[] gBuffer, byte[] bBuffer, byte[] aBuffer)
+        static void SeparateByChannel(PixelFarm.Drawing.Color[] myColors, byte[] rBuffer, byte[] gBuffer, byte[] bBuffer, byte[] aBuffer)
         {
             for (int i = 0; i < 16; ++i)
             {
-                MyColor m = myColors[i];
-                rBuffer[i] = m.r;
-                gBuffer[i] = m.g;
-                bBuffer[i] = m.b;
-                aBuffer[i] = m.a;
+                PixelFarm.Drawing.Color m = myColors[i];
+                rBuffer[i] = m.R;
+                gBuffer[i] = m.G;
+                bBuffer[i] = m.B;
+                aBuffer[i] = m.A;
             }
         }
-        static MyColor GetApproximateColor_Bicubic(BufferReader4 reader, double cx, double cy)
+        static PixelFarm.Drawing.Color GetApproximateColor_Bicubic(BufferReader4 reader, double cx, double cy)
         {
             //TODO: review here,
             //passing pointer to array or use stackalloc
@@ -411,7 +413,7 @@ namespace PixelFarm.Agg.Imaging
                 reader.CurrentY < reader.Height - 2)
             {
                 //read 4 point sample
-                MyColor[] colors = new MyColor[16];
+                PixelFarm.Drawing.Color[] colors = new PixelFarm.Drawing.Color[16];
                 reader.SetStartPixel((int)cx, (int)cy);
                 reader.Read16(colors);
                 double x0 = (int)cx;
@@ -462,7 +464,7 @@ namespace PixelFarm.Agg.Imaging
                     result_A = 0;
                 }
 
-                return new MyColor((byte)result_R, (byte)result_G, (byte)result_B, (byte)result_A);
+                return new PixelFarm.Drawing.Color((byte)result_A, (byte)result_R, (byte)result_G, (byte)result_B);
             }
             else
             {
