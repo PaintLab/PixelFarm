@@ -29,62 +29,43 @@ namespace PixelFarm.Agg
         ISpanInterpolator _interpolator;
         IGradientValueCalculator _grValueCalculator;
         IGradientColorsProvider _colorsProvider;
-        //int _d1;
-        //int _d2;
+
         int _dist;
 
         float _stepRatio;
 
-        int _xoffset;
-        int _yoffset;
+        float _xoffset;
+        float _yoffset;
+
+        float _grad0X;
+        float _grad0Y;
+
         //--------------------------------------------------------------------
         public GradientSpanGen() { }
 
-        public void SetOffset(int x, int y)
+        internal void SetStartPoint(float grad0X, float grad0Y)
+        {
+             _grad0X = -grad0X;
+             _grad0Y = -grad0Y;
+        }
+        internal void SetOffset(float x, float y)
         {
             _xoffset = x;
             _yoffset = y;
         }
-
-        //public void Reset(ISpanInterpolator inter,
-        //          IGradientValueCalculator gvc,
-        //          IGradientColorsProvider m_colorsProvider,
-        //          double d1, double d2)
-        //{
-        //    _xoffset = _yoffset = 0;//reset
-
-        //    this._interpolator = inter;
-        //    this._grValueCalculator = gvc;
-        //    this._colorsProvider = m_colorsProvider;
-        //    _d1 = AggMath.iround(d1 * GR_SUBPIX_SCALE);
-        //    _d2 = AggMath.iround(d2 * GR_SUBPIX_SCALE);
-        //    int dd = _d2 - _d1;
-        //    if (dd < 1)
-        //    {
-        //        dd = 1;
-        //    }
-        //    _stepRatio = (float)m_colorsProvider.GradientSteps / (float)dd;
-        //    _xoffset = _yoffset = 0;//reset
-        //}
 
         public void Reset(ISpanInterpolator inter,
                 IGradientValueCalculator gvc,
                 IGradientColorsProvider m_colorsProvider,
                 double distance)
         {
-            _xoffset = _yoffset = 0;//reset
+            _grad0X = _grad0Y = _xoffset = _yoffset = 0;//reset
 
             this._interpolator = inter;
             this._grValueCalculator = gvc;
             this._colorsProvider = m_colorsProvider;
             _dist = AggMath.iround(distance * GR_SUBPIX_SCALE);
-            //_d1 = AggMath.iround(d1 * GR_SUBPIX_SCALE);
-            //_d2 = AggMath.iround(d2 * GR_SUBPIX_SCALE);
-            //int dd = _d2 - _d1;
-            //if (dd < 1)
-            //{
-            //    dd = 1;
-            //}
+
             if (_dist < 1)
             {
                 _dist = 1;
@@ -100,7 +81,7 @@ namespace PixelFarm.Agg
             //set interpolation start point
             //spanLen => horizontal span len
 
-            _interpolator.Begin(_xoffset + x + 0.5, _yoffset + y + 0.5, spanLen);
+            _interpolator.Begin(_grad0X + _xoffset + x + 0.5, _grad0Y + _yoffset + y + 0.5, spanLen);
 
             int gradientSteps = _colorsProvider.GradientSteps;
 
@@ -112,7 +93,6 @@ namespace PixelFarm.Agg
                 float d = _grValueCalculator.Calculate(x >> DOWN_SCALE_SHIFT,
                                                        y >> DOWN_SCALE_SHIFT,
                                                       _dist) * _stepRatio;
-                //d = ((d - _d1) * _stepRatio);
                 if (d < 0)
                 {
                     d = 0;

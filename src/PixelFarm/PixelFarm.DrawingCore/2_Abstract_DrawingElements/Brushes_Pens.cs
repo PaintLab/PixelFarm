@@ -101,7 +101,7 @@ namespace PixelFarm.Drawing
         object innerBrush;
         double _distance;
         double _angle;
-
+        GradientDirection _dir;
 
         List<Color> stopColors = new List<Color>(2);
         List<PointF> stopPoints = new List<PointF>(2);
@@ -119,20 +119,26 @@ namespace PixelFarm.Drawing
             if (dx == 0)
             {
                 //vertical
+                _dir = GradientDirection.Vertical;
                 _distance = Math.Abs(dy);
             }
             else if (dy == 0)
             {
                 //horizontal
+                _dir = GradientDirection.Horizontal;
                 _distance = Math.Abs(dx);
             }
             else
             {
+                _dir = GradientDirection.Angle;
                 _distance = Math.Sqrt(dx * dx + dy * dy);
             }
             _angle = (double)Math.Atan2(dy, dx);
         }
-
+        public GradientDirection Direction
+        {
+            get { return _dir; }
+        }
         public int ColorSteps { get; set; }
         public Color Color
         {
@@ -184,7 +190,12 @@ namespace PixelFarm.Drawing
             }
         }
 
-
+        public enum GradientDirection : byte
+        {
+            Vertical,
+            Horizontal,
+            Angle
+        }
     }
 
 

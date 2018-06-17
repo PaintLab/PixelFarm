@@ -556,7 +556,7 @@ namespace PixelFarm.Agg
 
                             GradientSpanGen spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
 
-                            spanGenGrad.SetOffset((int)-left, -(int)top);
+                            spanGenGrad.SetOffset((float)-left, (float)-top);
                             Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGrad);
 
                         }
@@ -577,7 +577,10 @@ namespace PixelFarm.Agg
 
 
 
-        Gradients.IGradientValueCalculator _gvc;
+
+        Gradients.IGradientValueCalculator _gvcX;
+        Gradients.IGradientValueCalculator _gvcY;
+
         GradientSpanGen _spanGenGr;
         LinearGradientColorsProvider _linearGradientColorProvider;
         PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
@@ -593,19 +596,44 @@ namespace PixelFarm.Agg
             {
                 //temp fix
                 _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
-                _gvc = new Gradients.GvcY(); //default gvc
+                _gvcX = new Gradients.GvcX();
+                _gvcY = new Gradients.GvcY();
                 _linearGradientColorProvider = new LinearGradientColorsProvider();
                 _spanGenGr = new GradientSpanGen();
+
+                //TODO:
+                //user can use other coord transformer
                 _reusableRotationTransformer = new ReusableRotationTransformer();
                 _linerInterpolator.Transformer = _reusableRotationTransformer;
+            }
+
+            Gradients.IGradientValueCalculator gvc = null;
+
+
+
+            switch (linearGrBrush.Direction)
+            {
+                case LinearGradientBrush.GradientDirection.Vertical:
+                    gvc = _gvcY;
+                    break;
+                case LinearGradientBrush.GradientDirection.Horizontal:
+                    gvc = _gvcX;
+                    break;
+                default:
+                    //temp, 
+                    //TODO: review here
+                    gvc = _gvcX;
+                    break;
             }
 
             _reusableRotationTransformer.Angle = linearGrBrush.Angle;
             _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1], linearGrBrush.ColorSteps);
 
             _spanGenGr.Reset(_linerInterpolator,
-                _gvc,
-                _linearGradientColorProvider, linearGrBrush.DistanceBetweenStopPoints);
+                gvc,
+                _linearGradientColorProvider,
+                linearGrBrush.DistanceBetweenStopPoints);
+            _spanGenGr.SetStartPoint(stopPoints[0].X, stopPoints[0].Y);
 
             return _spanGenGr;
         }

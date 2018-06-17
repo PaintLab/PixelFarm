@@ -17,9 +17,9 @@ namespace PixelFarm.Agg.Sample_Gradient
         public GradientDemo()
         {
             gradientBrush = new LinearGradientBrush(
-                     new PointF(0, 0),
+                     new PointF(120, 0),
                      Drawing.Color.Red,
-                     new PointF(100, 100),
+                     new PointF(140, 0),
                      Drawing.Color.Black);
 
             PixelFarm.Agg.VertexSource.PathWriter p = new VertexSource.PathWriter();
