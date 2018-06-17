@@ -551,7 +551,7 @@ namespace Mini
             freeTx.IsBilinearInterpolation = true;
             freeTx.SetFourCorners(
                 new PixelFarm.VectorMath.PointF(0, 0),
-                new PixelFarm.VectorMath.PointF(img.Width, 0),
+                new PixelFarm.VectorMath.PointF(img.Width / 2, 0),
                 new PixelFarm.VectorMath.PointF(img.Width, img.Height),
                 new PixelFarm.VectorMath.PointF(0, img.Height)
             );
