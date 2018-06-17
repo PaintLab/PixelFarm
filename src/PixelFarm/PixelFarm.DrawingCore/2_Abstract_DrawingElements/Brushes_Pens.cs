@@ -152,6 +152,88 @@ namespace PixelFarm.Drawing
         }
     }
 
+
+    public sealed class CircularGradiantBrush : GeometryGraidentBrush
+    {
+        object innerBrush;
+        LinearGradientPair _firstGradientPair;
+        List<LinearGradientPair> _colorPairs;
+
+        PointF _latesStop;
+        Color _latestColor;
+
+        public CircularGradiantBrush(PointF stop1, Color c1, PointF stop2, Color c2)
+        {
+            _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
+            _latesStop = stop2;
+            _latestColor = c2;
+        }
+        public void AddMoreColorStop(PointF stop2, Color c2)
+        {
+            if (_colorPairs == null)
+            {
+                _colorPairs = new List<LinearGradientPair>();
+                _colorPairs.Add(_firstGradientPair);
+            }
+            var newpair = new LinearGradientPair(_latesStop, _latestColor, stop2, c2);
+            _colorPairs.Add(newpair);
+            _latesStop = stop2;
+            _latestColor = c2;
+        }
+        public Color Color
+        {
+            //first stop color
+            get { return _firstGradientPair.c1; }
+        }
+        public int PairCount
+        {
+            get
+            {
+                return (_colorPairs == null) ? 1 : _colorPairs.Count;
+            }
+        }
+
+        public LinearGradientPair GetFirstPair()
+        {
+            return _firstGradientPair;
+        }
+        public IEnumerable<LinearGradientPair> GetColorPairIter()
+        {
+            if (_colorPairs == null)
+            {
+                yield return _firstGradientPair;
+            }
+            else
+            {
+                int j = _colorPairs.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    yield return _colorPairs[i];
+                }
+            }
+        }
+
+        public override object InnerBrush
+        {
+            get
+            {
+                return this.innerBrush;
+            }
+            set
+            {
+                this.innerBrush = value;
+            }
+        }
+        public override BrushKind BrushKind
+        {
+            get { return BrushKind.CircularGraident; }
+        }
+        public override void Dispose()
+        {
+        }
+
+    }
+
     public sealed class LinearGradientBrush : GeometryGraidentBrush
     {
         object innerBrush;
@@ -230,33 +312,6 @@ namespace PixelFarm.Drawing
         public override void Dispose()
         {
         }
-        //public List<Color> GetColors()
-        //{
-        //    return this.stopColors;
-        //}
-        //public List<PointF> GetStopPoints()
-        //{
-        //    return this.stopPoints;
-        //}
-
-        ///// <summary>
-        ///// angle in radian between stop1 and stop2
-        ///// </summary>
-        //public double Angle
-        //{
-        //    get
-        //    {
-        //        return _angle;
-        //    }
-        //}
-        //public double DistanceBetweenStopPoints
-        //{
-        //    get
-        //    {
-        //        return _distance;
-        //    }
-        //}
-
 
     }
 

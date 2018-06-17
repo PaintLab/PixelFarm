@@ -14,6 +14,9 @@ namespace PixelFarm.Agg.Sample_Gradient
         Stopwatch stopwatch = new Stopwatch();
         VertexStore triangleVxs;
         LinearGradientBrush gradientBrush;
+
+        CircularGradiantBrush _circularGrBrush;
+
         public GradientDemo()
         {
             gradientBrush = new LinearGradientBrush(
@@ -24,8 +27,16 @@ namespace PixelFarm.Agg.Sample_Gradient
             gradientBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
             gradientBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
 
-            PixelFarm.Agg.VertexSource.PathWriter p = new VertexSource.PathWriter();
 
+            _circularGrBrush = new CircularGradiantBrush(new PointF(0, 0),
+                     Drawing.Color.Black,
+                     new PointF(120, 0),
+                     Drawing.Color.Blue);
+           // _circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
+           //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
+
+
+            PixelFarm.Agg.VertexSource.PathWriter p = new VertexSource.PathWriter();
             p.MoveTo(0, 0);
             p.LineToRel(100, 100);
             p.LineToRel(100, -100);
@@ -49,7 +60,7 @@ namespace PixelFarm.Agg.Sample_Gradient
 
 
                 var prevBrush = p.CurrentBrush;
-                p.CurrentBrush = gradientBrush;
+                p.CurrentBrush = _circularGrBrush;// gradientBrush;
 
                 p2.FillRect(0, 100, 150, 50);
                 p2.FillRect(0, 200, 150, 50);
