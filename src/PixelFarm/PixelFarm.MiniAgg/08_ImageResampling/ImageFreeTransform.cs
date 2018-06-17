@@ -154,7 +154,7 @@ namespace PixelFarm.Agg.Imaging
                 {
                     if (!MyVectorHelper.IsCCW(pt, vertex[2], vertex[3]))
                     {
-                        if (MyVectorHelper.IsCCW(pt, vertex[3], vertex[0]))
+                        if (!MyVectorHelper.IsCCW(pt, vertex[3], vertex[0]))
                             return true;
                     }
                 }

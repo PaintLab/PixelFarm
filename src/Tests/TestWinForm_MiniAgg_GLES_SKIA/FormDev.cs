@@ -553,7 +553,7 @@ namespace Mini
                 new PixelFarm.VectorMath.PointF(0, 0),
                 new PixelFarm.VectorMath.PointF(img.Width, 0),
                 new PixelFarm.VectorMath.PointF(img.Width, img.Height),
-                new PixelFarm.VectorMath.PointF(0, 0)
+                new PixelFarm.VectorMath.PointF(0, img.Height)
             );
 
             ActualBitmap actualBmp = freeTx.GetTransformedBitmap();
