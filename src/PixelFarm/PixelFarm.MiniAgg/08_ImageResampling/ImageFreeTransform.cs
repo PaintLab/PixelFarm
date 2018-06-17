@@ -175,23 +175,6 @@ namespace PixelFarm.Agg.Imaging
                    !MyVectorHelper.IsCCW(pt, _vec1, _vec2) &&
                    !MyVectorHelper.IsCCW(pt, _vec2, _vec3) &&
                    !MyVectorHelper.IsCCW(pt, _vec3, _vec0);
-
-
-            //if (!MyVectorHelper.IsCCW(pt, vertex[0], vertex[1]))
-            //{
-            //    if (!MyVectorHelper.IsCCW(pt, vertex[1], vertex[2]))
-            //    {
-            //        if (!MyVectorHelper.IsCCW(pt, vertex[2], vertex[3]))
-            //        {
-            //            if (!MyVectorHelper.IsCCW(pt, vertex[3], vertex[0]))
-            //            {
-            //                return true;
-            //            }
-            //        }
-            //    }
-            //}
-
-            //return false;
         }
 
         public ActualBitmap GetTransformedBitmap()
@@ -216,13 +199,13 @@ namespace PixelFarm.Agg.Imaging
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
             double dab, dbc, dcd, dda;
-            float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
+
             int rectWidth = rect.Width;
             int rectHeight = rect.Height;
-            var ab_vec = this.AB;
-            var bc_vec = this.BC;
-            var cd_vec = this.CD;
-            var da_vec = this.DA;
+            Vector ab_vec = this.AB;
+            Vector bc_vec = this.BC;
+            Vector cd_vec = this.CD;
+            Vector da_vec = this.DA;
             int rectLeft = this.rect.Left;
             int rectTop = this.rect.Top;
             for (int y = 0; y < rectHeight; ++y)
@@ -261,10 +244,10 @@ namespace PixelFarm.Agg.Imaging
             float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
             int rectWidth = rect.Width;
             int rectHeight = rect.Height;
-            var ab_vec = this.AB;
-            var bc_vec = this.BC;
-            var cd_vec = this.CD;
-            var da_vec = this.DA;
+            Vector ab_vec = this.AB;
+            Vector bc_vec = this.BC;
+            Vector cd_vec = this.CD;
+            Vector da_vec = this.DA;
             int rectLeft = this.rect.Left;
             int rectTop = this.rect.Top;
             for (int y = 0; y < rectHeight; ++y)
@@ -326,21 +309,21 @@ namespace PixelFarm.Agg.Imaging
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
             double dab, dbc, dcd, dda;
-            float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
+            //float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
             int rectWidth = rect.Width;
             int rectHeight = rect.Height;
-            var ab_vec = this.AB;
-            var bc_vec = this.BC;
-            var cd_vec = this.CD;
-            var da_vec = this.DA;
+            Vector ab_vec = this.AB;
+            Vector bc_vec = this.BC;
+            Vector cd_vec = this.CD;
+            Vector da_vec = this.DA;
 
 
             TempMemPtr bufferPtr = srcCB.GetBufferPtr();
-            byte* buffer = (byte*)bufferPtr.Ptr;
-            int stride = srcCB.Stride;
+            int* buffer = (int*)bufferPtr.Ptr;
+
             int bmpWidth = srcCB.Width;
             int bmpHeight = srcCB.Height;
-            BufferReader4 reader = new BufferReader4(buffer, stride, bmpWidth, bmpHeight);
+            BufferReader4 reader = new BufferReader4(buffer, bmpWidth, bmpHeight);
 
             ActualBitmap destCB = new ActualBitmap(rect.Width, rect.Height);
             MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
@@ -400,19 +383,12 @@ namespace PixelFarm.Agg.Imaging
 
         static PixelFarm.Drawing.Color GetApproximateColor_Bicubic(BufferReader4 reader, PixelFarm.Drawing.Color[] colors, double cx, double cy)
         {
-            //TODO: review here,
-            //passing pointer to array or use stackalloc 
-            //nearest neighbor 
-
-            if (reader.CurrentX > 2 && reader.CurrentY > 2 &&
-                reader.CurrentX < reader.Width - 2 &&
-                reader.CurrentY < reader.Height - 2)
+            if (reader.CanReadAsBlock())
             {
-                //read 4 point sample 
-
+                //read 4 point sample  
                 reader.Read16(colors);
                 //
-                BicubicInterpolator2.GetValueBytes(colors, cx - ((int)cx) /*xdiff*/, cy - ((int)cy)/*ydiff*/, out PixelFarm.Drawing.Color result);
+                BicubicInterpolator2.GetInterpolatedColor(colors, cx - ((int)cx) /*xdiff*/, cy - ((int)cy)/*ydiff*/, out PixelFarm.Drawing.Color result);
                 return result;
             }
             else

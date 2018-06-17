@@ -42,7 +42,7 @@ namespace PixelFarm.Agg.Imaging
     public class BicubicInterpolator2 : CubicInterpolator2
     {
 
-        public static void GetValueBytes(Color[] colors, double x, double y,
+        public static void GetInterpolatedColor(Color[] colors, double x, double y,
             out PixelFarm.Drawing.Color outputColor)
         {
             //interpolate by channel        
@@ -152,16 +152,17 @@ namespace PixelFarm.Agg.Imaging
     struct BufferReader4
     {
         //matrix four ,four reader
-        unsafe byte* buffer;
-        int stride;
+        unsafe int* buffer;
+
+
         int width;
         int height;
         int cX;
         int cY;
-        unsafe public BufferReader4(byte* buffer, int stride, int width, int height)
+        unsafe public BufferReader4(int* buffer, int width, int height)
         {
             this.buffer = buffer;
-            this.stride = stride;
+
             this.width = width;
             this.height = height;
             cX = cY = 0;
@@ -171,59 +172,46 @@ namespace PixelFarm.Agg.Imaging
             cX = x;
             cY = y;
         }
-
+        static Color FromInt(int value)
+        {
+            return new Color(
+                (byte)((value >> 24) & 0xff),
+                (byte)((value >> 16) & 0xff),
+                (byte)((value >> 8) & 0xff),
+                (byte)((value >> 0) & 0xff));
+        }
         public Color ReadOnePixel()
         {
-            int byteIndex = ((cY * stride) + cX * 4);
+
             unsafe
             {
-                byte b = buffer[byteIndex];
-                byte g = buffer[byteIndex + 1];
-                byte r = buffer[byteIndex + 2];
-                byte a = buffer[byteIndex + 3];
-                return new Color(a, r, g, b);
+                return FromInt(buffer[((cY * width) + cX)]);
 
             }
         }
         public void Read4(Color[] outputBuffer)
         {
-            byte b, g, r, a;
+            //byte b, g, r, a;
             int m = 0;
             int tmpY = this.cY;
-            int byteIndex = ((tmpY * stride) + cX * 4);
+            int index = (tmpY * width) + cX;
             unsafe
             {
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m] = new Color(a, r, g, b);
-                byteIndex += 4;
-                //-----------------------------------
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m + 1] = new Color(a, r, g, b);
-                byteIndex += 4;
+                outputBuffer[m] = FromInt(buffer[index]);
+                index++;
+                //----------------------------------- 
+                outputBuffer[m + 1] = FromInt(buffer[index]);
+                index++;
                 //------------------------------------
                 //newline
                 tmpY++;
-                byteIndex = (tmpY * stride) + (cX * 4);
-                //------------------------------------
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m + 2] = new Color(a, r, g, b);
-                byteIndex += 4;
-                //------------------------------------
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m + 3] = new Color(a, r, g, b);
-                byteIndex += 4;
+                index = (tmpY * width) + cX;
+                //------------------------------------ 
+                outputBuffer[m + 2] = FromInt(buffer[index]);
+                index++;
+                //------------------------------------ 
+                outputBuffer[m + 3] = FromInt(buffer[index]);
+                index++;
             }
 
         }
@@ -231,66 +219,42 @@ namespace PixelFarm.Agg.Imaging
         {
             //bgra to argb
             //16 px 
-            byte b, g, r, a;
+            //byte b, g, r, a;
             int m = 0;
             int tmpY = this.cY - 1;
-            int byteIndex = ((tmpY * stride) + cX * 4);
-            byteIndex -= 4;//step back
+            int index = (tmpY * width) + cX;
+            index--;
+
             unsafe
             {  //-------------------------------------------------             
                 for (int n = 0; n < 4; ++n)
                 {
-                    //0
-                    b = buffer[byteIndex];
-                    g = buffer[byteIndex + 1];
-                    r = buffer[byteIndex + 2];
-                    a = buffer[byteIndex + 3];
-                    outputBuffer[m] = new Color(a, r, g, b);
-                    byteIndex += 4;
-                    //------------------------------------------------
-                    //1
-                    b = buffer[byteIndex];
-                    g = buffer[byteIndex + 1];
-                    r = buffer[byteIndex + 2];
-                    a = buffer[byteIndex + 3];
-                    outputBuffer[m + 1] = new Color(a, r, g, b);
-                    byteIndex += 4;
-                    //------------------------------------------------
-                    //2
-                    b = buffer[byteIndex];
-                    g = buffer[byteIndex + 1];
-                    r = buffer[byteIndex + 2];
-                    a = buffer[byteIndex + 3];
-                    outputBuffer[m + 2] = new Color(a, r, g, b);
-                    byteIndex += 4;
-                    //------------------------------------------------
-                    //3
-                    b = buffer[byteIndex];
-                    g = buffer[byteIndex + 1];
-                    r = buffer[byteIndex + 2];
-                    a = buffer[byteIndex + 3];
-                    outputBuffer[m + 3] = new Color(a, r, g, b);
-                    byteIndex += 4;
+                    outputBuffer[m] = FromInt(buffer[index]);
+                    index++;
+                    //------------------------------------------------ 
+                    outputBuffer[m + 1] = FromInt(buffer[index]);
+                    index++;
+                    //------------------------------------------------ 
+                    outputBuffer[m + 2] = FromInt(buffer[index]);
+                    index++;
+                    //------------------------------------------------ 
+                    outputBuffer[m + 3] = FromInt(buffer[index]);
+                    index++;
                     //------------------------------------------------
                     m += 4;
                     //go next row
                     tmpY++;
-                    byteIndex = (tmpY * stride) + (cX * 4);
-                    byteIndex -= 4;
+                    index = (tmpY * width) + cX;
+                    index--;
                 }
             }
-
         }
-        public void MoveNext()
+        public bool CanReadAsBlock()
         {
-            //move next and automatic gonext line
-            cX++;
-        }
+            return cX > 2 && cY > 2 &&
+                   cX < width - 2 && cY < height - 2;
 
-        public int CurrentX { get { return this.cX; } }
-        public int CurrentY { get { return this.cY; } }
-        public int Height { get { return this.height; } }
-        public int Width { get { return this.width; } }
+        }
     }
     //------------------------------------------------------------------------
 }
