@@ -381,15 +381,13 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 Line0NoClip(lp1);
                 Line0NoClip(lp2);
                 return;
             }
 
-            LineInterpolatorAA0 li = new LineInterpolatorAA0(this, lp);
-            li.Loop();
-
+            (new LineInterpolatorAA0(this, lp)).Loop();
         }
 
         public override void Line0(LineParameters lp)
@@ -426,15 +424,14 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 Line1NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
                 Line1NoClip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                 return;
             }
 
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
-            LineInterpolatorAA1 li = new LineInterpolatorAA1(this, lp, sx, sy);
-            li.Loop();
+            (new LineInterpolatorAA1(this, lp, sx, sy)).Loop();
         }
 
         public override void Line1(LineParameters lp, int sx, int sy)
@@ -451,7 +448,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                                                 AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if (((int)flags & 1) != 0)
                         {
                             sx = x1 + (y2 - y1);
@@ -484,15 +481,15 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 Line2NoClip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                 Line2NoClip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
                 return;
             }
 
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
-            LineInterpolatorAA2 li = new LineInterpolatorAA2(this, lp, ex, ey);
-            li.Loop();
+            (new LineInterpolatorAA2(this, lp, ex, ey)).Loop();
+
         }
 
         public override void Line2(LineParameters lp, int ex, int ey)
@@ -509,7 +506,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                                                 AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if ((flags & 2) != 0)
                         {
                             ex = x2 + (y2 - y1);
@@ -543,7 +540,7 @@ namespace PixelFarm.Agg.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
+                lp.HalfDivide(out lp1, out lp2);
                 int mx = lp1.x2 + (lp1.y2 - lp1.y1);
                 int my = lp1.y2 - (lp1.x2 - lp1.x1);
                 Line3NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);
@@ -553,8 +550,8 @@ namespace PixelFarm.Agg.Lines
 
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
-            LineInterpolatorAA3 li = new LineInterpolatorAA3(this, lp, sx, sy, ex, ey);
-            li.Loop();
+            (new LineInterpolatorAA3(this, lp, sx, sy, ex, ey)).Loop();
+
         }
 
         public override void Line3(LineParameters lp,

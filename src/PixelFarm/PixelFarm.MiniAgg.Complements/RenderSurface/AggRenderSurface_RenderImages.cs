@@ -210,7 +210,9 @@ namespace PixelFarm.Agg
 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
+
+                var interpolator = new SpanInterpolatorLinear();
+                interpolator.Transformer = sourceRectTransform;
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
 
                 VectorToolBox.GetFreeVxs(out var v1);
@@ -229,7 +231,8 @@ namespace PixelFarm.Agg
                 Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, destX, destY, imgBoundsPath);
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
+                var interpolator = new SpanInterpolatorLinear();
+                interpolator.Transformer = sourceRectTransform;
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)
                 {
@@ -260,16 +263,21 @@ namespace PixelFarm.Agg
         int destImageChanged = 0;
         public void Render(IBitmapSrc source, AffinePlan[] affinePlans)
         {
-             
+
             VectorToolBox.GetFreeVxs(out var v1, out var v2);
 
             Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1);
             // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
             Affine sourceRectTransform = destRectTransform.CreateInvert();
+
+            var spanInterpolator = new SpanInterpolatorLinear();
+            spanInterpolator.Transformer = sourceRectTransform;
+
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
                 Drawing.Color.Transparent,
-                new SpanInterpolatorLinear(sourceRectTransform));
+                spanInterpolator);
+
             destRectTransform.TransformToVxs(v1, v2);
             Render(v2, imgSpanGen);
             //
@@ -278,7 +286,7 @@ namespace PixelFarm.Agg
 
         }
         public void Render(IBitmapSrc source, double destX, double destY)
-        { 
+        {
             int inScaleX = 1;
             int inScaleY = 1;
             int angleRadians = 0;
@@ -374,10 +382,13 @@ namespace PixelFarm.Agg
                     destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
+
+                var spanInterpolator = new SpanInterpolatorLinear();
+                spanInterpolator.Transformer = sourceRectTransform;
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                     source,
                     Drawing.Color.Black,
-                    new SpanInterpolatorLinear(sourceRectTransform));
+                    spanInterpolator);
 
                 VectorToolBox.GetFreeVxs(out VertexStore v1);
                 destRectTransform.TransformToVxs(imgBoundsPath, v1);
@@ -396,7 +407,8 @@ namespace PixelFarm.Agg
                     destX, destY, imgBoundsPath);
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
+                var interpolator = new SpanInterpolatorLinear();
+                interpolator.Transformer = sourceRectTransform;
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)
                 {

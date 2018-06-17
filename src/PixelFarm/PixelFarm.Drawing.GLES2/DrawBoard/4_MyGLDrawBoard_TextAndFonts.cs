@@ -66,8 +66,7 @@ namespace PixelFarm.Drawing.GLES2
                 DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
                
                 var prevColor = painter1.FillColor;
-                painter1.FillColor = PixelFarm.Drawing.Color.Black;
-              
+                painter1.FillColor = PixelFarm.Drawing.Color.Black; 
                 painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
                 painter1.FillColor = prevColor;
             }

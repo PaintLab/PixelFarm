@@ -41,7 +41,30 @@ namespace PixelFarm.Drawing.Skia
         {
             get { return _vectorTool; }
         }
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
 
+        Pen _curPen;
+        public override Pen CurrentPen
+        {
+            get
+            {
+                throw new NotSupportedException();
+                return _curPen;
+            }
+            set
+            {
+                throw new NotSupportedException();
+                _curPen = value;
+            }
+        }
         public SKCanvas Canvas
         {
             get { return _skCanvas; }
@@ -517,7 +540,7 @@ namespace PixelFarm.Drawing.Skia
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
 
-        
+
 
         public override void DrawRect(double left, double bottom, double right, double top)
         {

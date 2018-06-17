@@ -148,6 +148,26 @@ namespace PixelFarm.Drawing.WinGdi
                 _currentPen.Color = GdiPlusRenderSurface.ConvColor(value);
             }
         }
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
+
+        //-----------------
+        Pen _curPen;
+        public override Pen CurrentPen
+        {
+            get { return _curPen; }
+            set
+            {
+                _curPen = value;
+            }
+        }
         public override DrawBoardOrientation Orientation
         {
             get { return DrawBoardOrientation.LeftTop; }
@@ -164,7 +184,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _renderSurface.CurrentFont = value;
             }
         }
-
+        //-----------------
         public override void Clear(Color color)
         {
             _renderSurface.Clear(color);

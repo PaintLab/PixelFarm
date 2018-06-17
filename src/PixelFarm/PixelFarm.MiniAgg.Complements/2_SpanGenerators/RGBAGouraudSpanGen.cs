@@ -27,7 +27,7 @@ using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     //=======================================================span_gouraud_rgba
-    public sealed class SpanGenGouraudRGBA : SpanGenGouraud, ISpanGenerator
+    public sealed class RGBAGouraudSpanGen : GouraudSpanGen, ISpanGenerator
     {
         bool m_swap;
         int m_y2;
@@ -39,7 +39,7 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         struct RGBA_Calculator
         {
-            public void Init(SpanGenGouraud.CoordAndColor c1, SpanGenGouraud.CoordAndColor c2)
+            public void Init(GouraudSpanGen.CoordAndColor c1, GouraudSpanGen.CoordAndColor c2)
             {
                 m_x1 = c1.x - 0.5;
                 m_y1 = c1.y - 0.5;
@@ -88,8 +88,8 @@ namespace PixelFarm.Agg
         }
 
         //--------------------------------------------------------------------
-        public SpanGenGouraudRGBA() { }
-        public SpanGenGouraudRGBA(Color c1,
+        public RGBAGouraudSpanGen() { }
+        public RGBAGouraudSpanGen(Color c1,
                           Color c2,
                           Color c3,
                           double x1, double y1,
@@ -98,7 +98,7 @@ namespace PixelFarm.Agg
             : this(c1, c2, c3, x1, y1, x2, y2, x3, y3, 0)
         { }
 
-        public SpanGenGouraudRGBA(Color c1,
+        public RGBAGouraudSpanGen(Color c1,
                           Color c2,
                           Color c3,
                           double x1, double y1,

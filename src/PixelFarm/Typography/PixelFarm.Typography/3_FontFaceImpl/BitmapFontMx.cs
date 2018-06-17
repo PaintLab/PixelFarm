@@ -257,7 +257,7 @@ namespace Typography.Rendering
               
             var bmp = new PixelFarm.Agg.ActualBitmap(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer());
             StorageService.Provider.SavePngBitmap(bmp, filename);
-
+            
         }
 #if DEBUG
         /// <summary>

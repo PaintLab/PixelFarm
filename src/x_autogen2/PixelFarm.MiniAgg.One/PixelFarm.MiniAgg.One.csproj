@@ -77,6 +77,9 @@
     <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\FilterExtensions.cs">
       <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\FilterExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs">
+      <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\LineExtensions.cs">
       <Link>PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\LineExtensions.cs</Link>
     </Compile>
@@ -434,17 +437,17 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\1_base\Queue.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\1_base\Queue.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraud.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraud.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GouraudSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GouraudSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraudRGBA.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraudRGBA.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GradientSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GradientSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGradient.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGradient.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGradient_GradientValueCalculators.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\2_spangenerators\SpanGradient_GradientValueCalculators.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\RGBAGouraudSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\RGBAGouraudSpanGen.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\3_filter\BrightnessAndContrastAdjustment.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\3_filter\BrightnessAndContrastAdjustment.cs</Link>

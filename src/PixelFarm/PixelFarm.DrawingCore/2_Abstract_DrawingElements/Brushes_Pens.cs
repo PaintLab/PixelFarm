@@ -2,12 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+
 namespace PixelFarm.Drawing
 {
     public abstract class Brush : System.IDisposable
     {
         public abstract BrushKind BrushKind { get; }
         public abstract void Dispose();
+
         public abstract object InnerBrush { get; set; }
     }
 
@@ -70,7 +72,6 @@ namespace PixelFarm.Drawing
             get { return this.textureImage; }
         }
 
-
         public override object InnerBrush
         {
             get
@@ -93,23 +94,205 @@ namespace PixelFarm.Drawing
 
     }
 
-    public sealed class LinearGradientBrush : GeometryGraidentBrush
+
+    public class LinearGradientPair
+    {
+        public readonly Color c1;
+        public readonly float x1;
+        public readonly float y1;
+
+
+        public readonly Color c2;
+        public readonly float x2;
+        public readonly float y2;
+        public readonly double _distance;
+        public readonly double Angle;
+
+        public readonly GradientDirection Direction;
+        public int steps;
+
+        public LinearGradientPair(PointF stop1, Color c1, PointF stop2, Color c2)
+        {
+            this.c1 = c1;
+            this.c2 = c2;
+            this.x1 = stop1.X;
+            this.y1 = stop1.Y;
+            this.x2 = stop2.X;
+            this.y2 = stop2.Y;
+
+            float dx = stop2.X - stop1.X;
+            float dy = stop2.Y - stop1.Y;
+            if (dx == 0)
+            {
+                //vertical
+                Direction = GradientDirection.Vertical;
+                _distance = Math.Abs(dy);
+            }
+            else if (dy == 0)
+            {
+                //horizontal
+                Direction = GradientDirection.Horizontal;
+                _distance = Math.Abs(dx);
+            }
+            else
+            {
+                Direction = GradientDirection.Angle;
+                _distance = Math.Sqrt(dx * dx + dy * dy);
+            }
+            Angle = (double)Math.Atan2(dy, dx);
+            steps = 256;
+
+        }
+        public enum GradientDirection : byte
+        {
+            Vertical,
+            Horizontal,
+            Angle
+        }
+    }
+
+
+    public sealed class CircularGradientBrush : GeometryGraidentBrush
     {
         object innerBrush;
-        List<Color> stopColors = new List<Color>(2);
-        List<PointF> stopPoints = new List<PointF>(2);
-        public LinearGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
+        LinearGradientPair _firstGradientPair;
+        List<LinearGradientPair> _colorPairs;
+
+        PointF _latesStop;
+        Color _latestColor;
+
+        public CircularGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
         {
-            this.stopColors.Add(c1);
-            this.stopColors.Add(c2);
-            this.stopPoints.Add(stop1);
-            this.stopPoints.Add(stop2);
+            _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
+            _latesStop = stop2;
+            _latestColor = c2;
+        }
+        public void AddMoreColorStop(PointF stop2, Color c2)
+        {
+            if (_colorPairs == null)
+            {
+                _colorPairs = new List<LinearGradientPair>();
+                _colorPairs.Add(_firstGradientPair);
+            }
+            var newpair = new LinearGradientPair(_latesStop, _latestColor, stop2, c2);
+            _colorPairs.Add(newpair);
+            _latesStop = stop2;
+            _latestColor = c2;
         }
         public Color Color
         {
             //first stop color
-            get { return this.stopColors[0]; }
+            get { return _firstGradientPair.c1; }
         }
+        public int PairCount
+        {
+            get
+            {
+                return (_colorPairs == null) ? 1 : _colorPairs.Count;
+            }
+        }
+
+        public LinearGradientPair GetFirstPair()
+        {
+            return _firstGradientPair;
+        }
+        public IEnumerable<LinearGradientPair> GetColorPairIter()
+        {
+            if (_colorPairs == null)
+            {
+                yield return _firstGradientPair;
+            }
+            else
+            {
+                int j = _colorPairs.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    yield return _colorPairs[i];
+                }
+            }
+        }
+
+        public override object InnerBrush
+        {
+            get
+            {
+                return this.innerBrush;
+            }
+            set
+            {
+                this.innerBrush = value;
+            }
+        }
+        public override BrushKind BrushKind
+        {
+            get { return BrushKind.CircularGraident; }
+        }
+        public override void Dispose()
+        {
+        }
+
+    }
+
+    public sealed class LinearGradientBrush : GeometryGraidentBrush
+    {
+        object innerBrush;
+        LinearGradientPair _firstGradientPair;
+        List<LinearGradientPair> _colorPairs;
+
+        PointF _latesStop;
+        Color _latestColor;
+
+        public LinearGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
+        {
+            _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
+            _latesStop = stop2;
+            _latestColor = c2;
+        }
+        public void AddMoreColorStop(PointF stop2, Color c2)
+        {
+            if (_colorPairs == null)
+            {
+                _colorPairs = new List<LinearGradientPair>();
+                _colorPairs.Add(_firstGradientPair);
+            }
+            var newpair = new LinearGradientPair(_latesStop, _latestColor, stop2, c2);
+            _colorPairs.Add(newpair);
+            _latesStop = stop2;
+            _latestColor = c2;
+        }
+        public Color Color
+        {
+            //first stop color
+            get { return _firstGradientPair.c1; }
+        }
+        public int PairCount
+        {
+            get
+            {
+                return (_colorPairs == null) ? 1 : _colorPairs.Count;
+            }
+        }
+
+        public LinearGradientPair GetFirstPair()
+        {
+            return _firstGradientPair;
+        }
+        public IEnumerable<LinearGradientPair> GetColorPairIter()
+        {
+            if (_colorPairs == null)
+            {
+                yield return _firstGradientPair;
+            }
+            else
+            {
+                int j = _colorPairs.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    yield return _colorPairs[i];
+                }
+            }
+        }
+
         public override object InnerBrush
         {
             get
@@ -128,124 +311,20 @@ namespace PixelFarm.Drawing
         public override void Dispose()
         {
         }
-        public List<Color> GetColors()
-        {
-            return this.stopColors;
-        }
-        public List<PointF> GetStopPoints()
-        {
-            return this.stopPoints;
-        }
 
-        public static LinearGradientBrush CreateLinearGradientBrush(RectangleF rect,
-            Color startColor, Color stopColor, float degreeAngle)
-        {
-            //find radius
-            int w = Math.Abs((int)(rect.Right - rect.Left));
-            int h = Math.Abs((int)(rect.Bottom - rect.Top));
-            int max = Math.Max(w, h);
-            float radius = (float)Math.Pow(2 * (max * max), 0.5f);
-            //find point1 and point2
-            //not implement! 
-            bool fromNegativeAngle = false;
-            if (degreeAngle < 0)
-            {
-                fromNegativeAngle = true;
-                degreeAngle = -degreeAngle;
-            }
-
-            PointF startPoint = new PointF(rect.Left, rect.Top);
-            PointF stopPoint = new PointF(rect.Right, rect.Top);
-            if (degreeAngle > 360)
-            {
-            }
-            //-------------------------
-            if (degreeAngle == 0)
-            {
-                startPoint = new PointF(rect.Left, rect.Bottom);
-                stopPoint = new PointF(rect.Right, rect.Bottom);
-            }
-            else if (degreeAngle < 90)
-            {
-                startPoint = new PointF(rect.Left, rect.Bottom);
-                var angleRad = DegreesToRadians(degreeAngle);
-                stopPoint = new PointF(
-                   rect.Left + (float)(Math.Cos(angleRad) * radius),
-                   rect.Bottom - (float)(Math.Sin(angleRad) * radius));
-            }
-            else if (degreeAngle == 90)
-            {
-                startPoint = new PointF(rect.Left, rect.Bottom);
-                stopPoint = new PointF(rect.Left, rect.Top);
-            }
-            else if (degreeAngle < 180)
-            {
-
-                startPoint = new PointF(rect.Right, rect.Bottom);
-                var angleRad = DegreesToRadians(degreeAngle);
-                var pos = (float)(Math.Cos(angleRad) * radius);
-                stopPoint = new PointF(
-                   rect.Right + (float)(Math.Cos(angleRad) * radius),
-                   rect.Bottom - (float)(Math.Sin(angleRad) * radius));
-            }
-            else if (degreeAngle == 180)
-            {
-                startPoint = new PointF(rect.Right, rect.Bottom);
-                stopPoint = new PointF(rect.Left, rect.Bottom);
-            }
-            else if (degreeAngle < 270)
-            {
-                startPoint = new PointF(rect.Right, rect.Top);
-                var angleRad = DegreesToRadians(degreeAngle);
-                stopPoint = new PointF(
-                   rect.Right - (float)(Math.Cos(angleRad) * radius),
-                   rect.Top + (float)(Math.Sin(angleRad) * radius));
-            }
-            else if (degreeAngle == 270)
-            {
-                startPoint = new PointF(rect.Left, rect.Top);
-                stopPoint = new PointF(rect.Left, rect.Bottom);
-            }
-            else if (degreeAngle < 360)
-            {
-                startPoint = new PointF(rect.Left, rect.Top);
-                var angleRad = DegreesToRadians(degreeAngle);
-                stopPoint = new PointF(
-                   rect.Left + (float)(Math.Cos(angleRad) * radius),
-                   rect.Top + (float)(Math.Sin(angleRad) * radius));
-            }
-            else if (degreeAngle == 360)
-            {
-                startPoint = new PointF(rect.Left, rect.Bottom);
-                stopPoint = new PointF(rect.Right, rect.Bottom);
-            }
-
-            return new LinearGradientBrush(startPoint, startColor, stopPoint, stopColor);
-        }
-
-
-        const float DEG_TO_RAD = (float)System.Math.PI / 180.0f;
-        /// <summary>
-        /// Convert degrees to radians
-        /// </summary>
-        /// <param name="degrees">An angle in degrees</param>
-        /// <returns>The angle expressed in radians</returns>
-        public static float DegreesToRadians(float degrees)
-        {
-            return degrees * DEG_TO_RAD;
-        }
-
-        /// <summary>
-        /// Convert radians to degrees
-        /// </summary>
-        /// <param name="radians">An angle in radians</param>
-        /// <returns>The angle expressed in degrees</returns>
-        public static float RadiansToDegrees(float radians)
-        {
-            const float radToDeg = 180.0f / (float)System.Math.PI;
-            return radians * radToDeg;
-        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public abstract class PenBase : System.IDisposable

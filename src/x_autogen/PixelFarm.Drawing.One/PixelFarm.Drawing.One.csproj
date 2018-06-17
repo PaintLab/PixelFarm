@@ -120,6 +120,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\ConvertExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\FillExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\FilterExtensions.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\LineExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\ShapeExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\bitmapbufferextensions\SplineExtensions.cs" />
@@ -238,10 +239,10 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg.Complements\1_Base\ImgFilters.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\1_base\ProxyImage.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\1_base\Queue.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraud.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\2_spangenerators\SpanGenGouraudRGBA.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\2_spangenerators\SpanGradient.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\2_spangenerators\SpanGradient_GradientValueCalculators.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GouraudSpanGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GradientSpanGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\RGBAGouraudSpanGen.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\3_filter\BrightnessAndContrastAdjustment.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg.complements\3_filter\ImageFilters.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg.Complements\3_Filter\InternalBrightnessAndContrastAdjustment.cs" />

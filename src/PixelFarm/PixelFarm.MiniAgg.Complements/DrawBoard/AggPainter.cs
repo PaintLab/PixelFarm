@@ -43,6 +43,10 @@ namespace PixelFarm.Agg
     }
 
 
+
+
+
+
     public class AggPainter : Painter
     {
         AggRenderSurface _aggsx; //target rendering surface
@@ -72,13 +76,18 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
- 
+
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
         BitmapBuffer _bxt;
         VectorTool _vectorTool;
 
+        Brush _curBrush;
+        Pen _curPen;
+
+
+        bool _useDefaultBrush;
 
         public AggPainter(AggRenderSurface aggsx)
         {
@@ -94,9 +103,53 @@ namespace PixelFarm.Agg
                 aggsx.Height,
                 PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
             _vectorTool = new VectorTool();
+            _useDefaultBrush = true;
+
         }
 
+        public override Brush CurrentBrush
+        {
+            get
+            {
+                return _curBrush;
+            }
+            set
+            {
+                _curBrush = value;
+                //check brush kind
+                if (value == null)
+                {
+                    _useDefaultBrush = true;
+                    return;
+                }
 
+                _useDefaultBrush = false;
+
+                switch (value.BrushKind)
+                {
+                    default: throw new NotSupportedException();
+                    //
+                    case BrushKind.Solid:
+                        break;
+                    case BrushKind.LinearGradient:
+                        break;
+                    case BrushKind.CircularGraident:
+                        break;
+                    case BrushKind.GeometryGradient:
+                        break;
+                    case BrushKind.Texture:
+                        break;
+                }
+            }
+        }
+        public override Pen CurrentPen
+        {
+            get { return _curPen; }
+            set
+            {
+                _curPen = value;
+            }
+        }
         public static AggPainter Create(ActualBitmap bmp, PixelBlender32 blender = null)
         {
             //helper func
@@ -433,19 +486,18 @@ namespace PixelFarm.Agg
 
             //---------------------------------------------------------- 
             //BitmapExt
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
                 this._bxt.FillRectangle(
                       (int)Math.Round(left),
                       (int)Math.Round(top),
                       (int)Math.Round(left + width),
                       (int)Math.Round(top + height),
-
                       ColorInt.FromArgb(this.fillColor.ToARGB()));
                 return;
             }
 
-            //Agg
+            //Agg 
             //---------------------------------------------------------- 
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
@@ -481,12 +533,59 @@ namespace PixelFarm.Agg
             }
 
             var v1 = GetFreeVxs();
-            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+            //---------------------------------------------------------- 
+            if (!_useDefaultBrush)
+            {
+                Brush br = _curBrush;
+                switch (br.BrushKind)
+                {
+                    case BrushKind.LinearGradient:
+                        {
+                            //fill linear gradient brush
+                            //....
+
+                            //check resolved object for br 
+                            //if not then create a new one
+                            //------------------------------------------- 
+                            //original agg's gradient fill 
+
+                            _aggGradientBrush.ResolveBrush((LinearGradientBrush)br);
+                            _aggGradientBrush.SetOffset((float)-left, (float)-top);
+                            Fill(_simpleRectVxsGen.MakeVxs(v1), _aggGradientBrush);
+                        }
+                        break;
+                    case BrushKind.CircularGraident:
+                        {
+                            _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
+                            _circularGradBrush.SetOffset((float)-left, (float)-top);
+                            Fill(_simpleRectVxsGen.MakeVxs(v1), _circularGradBrush);
+                        }
+                        break;
+                    default:
+                        {
+                            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+            }
             ReleaseVxs(ref v1);
         }
+
+
+
+
+
+        AggLinearGradientBrush _aggGradientBrush = new AggLinearGradientBrush();
+        AggCircularGradientBrush _circularGradBrush = new AggCircularGradientBrush();
+
+
+
         VertexStore GetFreeVxs()
         {
-
             VectorToolBox.GetFreeVxs(out VertexStore v);
             return v;
         }
@@ -658,10 +757,9 @@ namespace PixelFarm.Agg
                 _reusablePolygonList.Add(latestMoveToX);
                 _reusablePolygonList.Add(latestMoveToY);
 
-                _bxt.FillPolygon(_reusablePolygonList.ToArray(),
+                _bxt.FillPolygon(
+                    _reusablePolygonList.ToArray(),
                     this.fillColor.ToARGB());
-
-
             }
         }
         /// <summary>
@@ -690,18 +788,55 @@ namespace PixelFarm.Agg
         public override void Fill(VertexStore vxs)
         {
             //
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
                 FillWithBxt(new VertexStoreSnap(vxs));
                 return;
             }
+            if (!_useDefaultBrush)
+            {
+                Brush br = _curBrush;
+                switch (br.BrushKind)
+                {
+                    case BrushKind.LinearGradient:
+                        {
+                            //fill linear gradient brush
+                            //....
 
-            //
-            sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                            //check resolved object for br 
+                            //if not then create a new one
+                            //------------------------------------------- 
+                            //original agg's gradient fill 
+
+                            _aggGradientBrush.ResolveBrush((LinearGradientBrush)br);
+                            _aggGradientBrush.SetOffset(0, 0);
+                            Fill(vxs, _aggGradientBrush);
+                        }
+                        break;
+                    case BrushKind.CircularGraident:
+                        {
+                            _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
+                            _circularGradBrush.SetOffset(0, 0);
+                            Fill(vxs, _circularGradBrush);
+                        }
+                        break;
+                    default:
+                        {
+                            sclineRas.AddPath(vxs);
+                            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                sclineRas.AddPath(vxs);
+                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            }
+
+
         }
-
-
         public override bool UseSubPixelLcdEffect
         {
             get
@@ -726,7 +861,10 @@ namespace PixelFarm.Agg
         public override Color FillColor
         {
             get { return fillColor; }
-            set { this.fillColor = value; }
+            set
+            {
+                this.fillColor = value;
+            }
         }
         public override Color StrokeColor
         {
@@ -1058,7 +1196,362 @@ namespace PixelFarm.Agg
             get { return this._lineDashGen; }
             set { this._lineDashGen = value; }
         }
+    }
 
+
+    delegate GradientSpanGen GetNextGradientSpanGenDel(int fromPartNo);
+
+    class ReusableRotationTransformer : Transform.ICoordTransformer
+    {
+
+        double _angle;
+        Affine affine;
+        public ReusableRotationTransformer()
+        {
+            affine = Affine.IdentityMatrix;
+        }
+        public double Angle
+        {
+            get
+            {
+                return _angle;
+            }
+            set
+            {
+                if (value != _angle)
+                {
+                    affine = Affine.NewRotation(value);
+                }
+                _angle = value;
+            }
+        }
+        public void Transform(ref double x, ref double y)
+        {
+            affine.Transform(ref x, ref y);
+        }
+    }
+
+
+    struct GradientSpanPart
+    {
+
+
+
+        public GradientSpanGen _spanGenGr;
+        public LinearGradientColorsProvider _linearGradientColorProvider;
+        public PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
+        public ReusableRotationTransformer _reusableRotationTransformer;
+
+        public void SetData(Gradients.IGradientValueCalculator gvc, LinearGradientPair pair)
+        {
+
+            _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
+            _linearGradientColorProvider = new LinearGradientColorsProvider();
+            _spanGenGr = new GradientSpanGen();
+            //TODO:
+            //user can use other coord transformer 
+            _linerInterpolator.Transformer =
+                _reusableRotationTransformer = new ReusableRotationTransformer();
+            _reusableRotationTransformer.Angle = pair.Angle;
+            _linearGradientColorProvider.SetColors(pair.c1, pair.c2, pair.steps);
+            _spanGenGr.Reset(_linerInterpolator,
+                gvc,
+                _linearGradientColorProvider,
+               pair._distance);
+
+            _spanGenGr.SetStartPoint(pair.x1, pair.y1);
+
+        }
+
+        public void SetOffset(float x, float y)
+        {
+            _spanGenGr.SetOffset(x, y);
+        }
+    }
+
+    class AggLinearGradientBrush : ISpanGenerator
+    {
+        static Gradients.IGradientValueCalculator _gvcX = new Gradients.GvcX();
+        static Gradients.IGradientValueCalculator _gvcY = new Gradients.GvcY();
+
+
+
+        GradientSpanPart _grSpanGenPart;
+        List<GradientSpanPart> _moreSpanGenertors;
+
+
+        bool isInit;
+        public void Prepare()
+        {
+
+        }
+
+
+        public void ResolveBrush(LinearGradientBrush linearGrBrush)
+        {
+            //for gradient :
+            int pairCount = linearGrBrush.PairCount;
+
+            //resolve linear gradient to agg object  
+            if (!isInit)
+            {
+                //temp fix  
+                isInit = true;
+            }
+            if (_moreSpanGenertors == null)
+            {
+                _moreSpanGenertors = new List<GradientSpanPart>();
+            }
+            else
+            {
+                _moreSpanGenertors.Clear();
+            }
+            //
+            //more than 1 pair   
+            int partNo = 0;
+            int partCount = linearGrBrush.PairCount;
+
+
+
+
+            foreach (LinearGradientPair pair in linearGrBrush.GetColorPairIter())
+            {
+                Gradients.IGradientValueCalculator gvc = null;
+                switch (pair.Direction)
+                {
+                    case LinearGradientPair.GradientDirection.Vertical:
+                        gvc = _gvcY;
+                        break;
+                    case LinearGradientPair.GradientDirection.Horizontal:
+                        gvc = _gvcX;
+                        break;
+                    default:
+                        //temp, 
+                        //TODO: review here
+                        gvc = _gvcX;
+                        break;
+                }
+
+                _grSpanGenPart = new GradientSpanPart();
+                _grSpanGenPart.SetData(gvc, pair);
+                _grSpanGenPart._spanGenGr.PartNo = partNo;
+                _grSpanGenPart._spanGenGr.IsLastPart = (partNo == partCount - 1);
+                _moreSpanGenertors.Add(_grSpanGenPart);
+                partNo++;
+            }
+
+            _grSpanGenPart = _moreSpanGenertors[0];
+
+
+            for (int i = 0; i < partCount - 1; ++i)
+            {
+                GradientSpanPart part = _moreSpanGenertors[i];
+                part._spanGenGr.RequestGradientPart += (fromPartNo) =>
+                {
+                    if (fromPartNo < partCount)
+                    {
+                        return _moreSpanGenertors[fromPartNo]._spanGenGr;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                };
+            }
+        }
+
+
+        public void SetOffset(float x, float y)
+        {
+            //apply offset to all span generator
+            int j = _moreSpanGenertors.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                _moreSpanGenertors[i].SetOffset(x, y);
+            }
+        }
+        public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
+        {
+
+            //start at current span generator 
+            _grSpanGenPart._spanGenGr.GenerateColors(outputColors, startIndex, x, y, spanLen);
+        }
+
+
+        static LinearGradientBrush CreateLinearGradientBrush(RectangleF rect,
+        Color startColor, Color stopColor, float degreeAngle)
+        {
+            //find radius
+            int w = Math.Abs((int)(rect.Right - rect.Left));
+            int h = Math.Abs((int)(rect.Bottom - rect.Top));
+            int max = Math.Max(w, h);
+            float radius = (float)Math.Pow(2 * (max * max), 0.5f);
+            //find point1 and point2
+            //not implement! 
+            bool fromNegativeAngle = false;
+            if (degreeAngle < 0)
+            {
+                fromNegativeAngle = true;
+                degreeAngle = -degreeAngle;
+            }
+
+            PointF startPoint = new PointF(rect.Left, rect.Top);
+            PointF stopPoint = new PointF(rect.Right, rect.Top);
+            if (degreeAngle > 360)
+            {
+            }
+            //-------------------------
+            if (degreeAngle == 0)
+            {
+                startPoint = new PointF(rect.Left, rect.Bottom);
+                stopPoint = new PointF(rect.Right, rect.Bottom);
+            }
+            else if (degreeAngle < 90)
+            {
+                startPoint = new PointF(rect.Left, rect.Bottom);
+                var angleRad = AggMath.deg2rad(degreeAngle);
+
+                stopPoint = new PointF(
+                   rect.Left + (float)(Math.Cos(angleRad) * radius),
+                   rect.Bottom - (float)(Math.Sin(angleRad) * radius));
+            }
+            else if (degreeAngle == 90)
+            {
+                startPoint = new PointF(rect.Left, rect.Bottom);
+                stopPoint = new PointF(rect.Left, rect.Top);
+            }
+            else if (degreeAngle < 180)
+            {
+
+                startPoint = new PointF(rect.Right, rect.Bottom);
+                var angleRad = AggMath.deg2rad(degreeAngle);
+                var pos = (float)(Math.Cos(angleRad) * radius);
+                stopPoint = new PointF(
+                   rect.Right + (float)(Math.Cos(angleRad) * radius),
+                   rect.Bottom - (float)(Math.Sin(angleRad) * radius));
+            }
+            else if (degreeAngle == 180)
+            {
+                startPoint = new PointF(rect.Right, rect.Bottom);
+                stopPoint = new PointF(rect.Left, rect.Bottom);
+            }
+            else if (degreeAngle < 270)
+            {
+                startPoint = new PointF(rect.Right, rect.Top);
+                var angleRad = AggMath.deg2rad(degreeAngle);
+                stopPoint = new PointF(
+                   rect.Right - (float)(Math.Cos(angleRad) * radius),
+                   rect.Top + (float)(Math.Sin(angleRad) * radius));
+            }
+            else if (degreeAngle == 270)
+            {
+                startPoint = new PointF(rect.Left, rect.Top);
+                stopPoint = new PointF(rect.Left, rect.Bottom);
+            }
+            else if (degreeAngle < 360)
+            {
+                startPoint = new PointF(rect.Left, rect.Top);
+                var angleRad = AggMath.deg2rad(degreeAngle);
+                stopPoint = new PointF(
+                   rect.Left + (float)(Math.Cos(angleRad) * radius),
+                   rect.Top + (float)(Math.Sin(angleRad) * radius));
+            }
+            else if (degreeAngle == 360)
+            {
+                startPoint = new PointF(rect.Left, rect.Bottom);
+                stopPoint = new PointF(rect.Right, rect.Bottom);
+            }
+
+            return new LinearGradientBrush(startPoint, startColor, stopPoint, stopColor);
+        }
+    }
+
+    class AggCircularGradientBrush : ISpanGenerator
+    {
+
+        static Gradients.IGradientValueCalculator _gvcCircular = new Gradients.GvcRadial();
+
+        GradientSpanPart _grSpanGenPart;
+        List<GradientSpanPart> _moreSpanGenertors;
+
+
+        bool isInit;
+        public void Prepare()
+        {
+
+        }
+
+
+        public void ResolveBrush(CircularGradientBrush linearGrBrush)
+        {
+            //for gradient :
+            int pairCount = linearGrBrush.PairCount;
+
+            //resolve linear gradient to agg object  
+            if (!isInit)
+            {
+                //temp fix   
+                isInit = true;
+            }
+            if (_moreSpanGenertors == null)
+            {
+                _moreSpanGenertors = new List<GradientSpanPart>();
+            }
+            else
+            {
+                _moreSpanGenertors.Clear();
+            }
+            //
+            //more than 1 pair   
+            int partNo = 0;
+            int partCount = linearGrBrush.PairCount;
+            foreach (LinearGradientPair pair in linearGrBrush.GetColorPairIter())
+            {
+                _grSpanGenPart = new GradientSpanPart();
+                _grSpanGenPart.SetData(_gvcCircular, pair);
+                _grSpanGenPart._spanGenGr.PartNo = partNo;
+                _grSpanGenPart._spanGenGr.IsLastPart = (partNo == partCount - 1);
+                _moreSpanGenertors.Add(_grSpanGenPart);
+                partNo++;
+            }
+
+            _grSpanGenPart = _moreSpanGenertors[0];
+
+
+            for (int i = 0; i < partCount - 1; ++i)
+            {
+                GradientSpanPart part = _moreSpanGenertors[i];
+                part._spanGenGr.RequestGradientPart += (fromPartNo) =>
+                {
+                    if (fromPartNo != partCount - 1)
+                    {
+                        return _moreSpanGenertors[fromPartNo + 1]._spanGenGr;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                };
+            }
+        }
+
+
+        public void SetOffset(float x, float y)
+        {
+            //apply offset to all span generator
+            int j = _moreSpanGenertors.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                _moreSpanGenertors[i].SetOffset(x, y);
+            }
+        }
+        public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
+        {
+
+            //start at current span generator 
+            _grSpanGenPart._spanGenGr.GenerateColors(outputColors, startIndex, x, y, spanLen);
+        }
 
     }
+
 }
