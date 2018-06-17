@@ -17,10 +17,12 @@ namespace PixelFarm.Agg.Sample_Gradient
         public GradientDemo()
         {
             gradientBrush = new LinearGradientBrush(
-                     new PointF(120, 0),
-                     Drawing.Color.Red,
-                     new PointF(140, 0),
-                     Drawing.Color.Black);
+                     new PointF(0, 0),
+                     Drawing.Color.Black,
+                     new PointF(50, 0),
+                     Drawing.Color.Red);
+            gradientBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
+            gradientBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
 
             PixelFarm.Agg.VertexSource.PathWriter p = new VertexSource.PathWriter();
 

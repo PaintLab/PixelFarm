@@ -96,55 +96,122 @@ namespace PixelFarm.Drawing
     }
 
 
-    public sealed class LinearGradientBrush : GeometryGraidentBrush
+    public class LinearGradientPair
     {
-        object innerBrush;
-        double _distance;
-        double _angle;
-        GradientDirection _dir;
+        public readonly Color c1;
+        public readonly float x1;
+        public readonly float y1;
 
-        List<Color> stopColors = new List<Color>(2);
-        List<PointF> stopPoints = new List<PointF>(2);
 
-        public LinearGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
+        public readonly Color c2;
+        public readonly float x2;
+        public readonly float y2;
+        public readonly double _distance;
+        public readonly double Angle;
+
+        public readonly GradientDirection Direction;
+        public int steps;
+
+        public LinearGradientPair(PointF stop1, Color c1, PointF stop2, Color c2)
         {
-            this.stopColors.Add(c1);
-            this.stopColors.Add(c2);
-            this.stopPoints.Add(stop1);
-            this.stopPoints.Add(stop2);
-            this.ColorSteps = 256;//default 
+            this.c1 = c1;
+            this.c2 = c2;
+            this.x1 = stop1.X;
+            this.y1 = stop1.Y;
+            this.x2 = stop2.X;
+            this.y2 = stop2.Y;
 
             float dx = stop2.X - stop1.X;
             float dy = stop2.Y - stop1.Y;
             if (dx == 0)
             {
                 //vertical
-                _dir = GradientDirection.Vertical;
+                Direction = GradientDirection.Vertical;
                 _distance = Math.Abs(dy);
             }
             else if (dy == 0)
             {
                 //horizontal
-                _dir = GradientDirection.Horizontal;
+                Direction = GradientDirection.Horizontal;
                 _distance = Math.Abs(dx);
             }
             else
             {
-                _dir = GradientDirection.Angle;
+                Direction = GradientDirection.Angle;
                 _distance = Math.Sqrt(dx * dx + dy * dy);
             }
-            _angle = (double)Math.Atan2(dy, dx);
+            Angle = (double)Math.Atan2(dy, dx);
+            steps = 256;
+
         }
-        public GradientDirection Direction
+        public enum GradientDirection : byte
         {
-            get { return _dir; }
+            Vertical,
+            Horizontal,
+            Angle
         }
-        public int ColorSteps { get; set; }
+    }
+
+    public sealed class LinearGradientBrush : GeometryGraidentBrush
+    {
+        object innerBrush;
+        LinearGradientPair _firstGradientPair;
+        List<LinearGradientPair> _colorPairs;
+
+        PointF _latesStop;
+        Color _latestColor;
+
+        public LinearGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
+        {
+            _firstGradientPair = new LinearGradientPair(stop1, c1, stop2, c2);
+            _latesStop = stop2;
+            _latestColor = c2;
+        }
+        public void AddMoreColorStop(PointF stop2, Color c2)
+        {
+            if (_colorPairs == null)
+            {
+                _colorPairs = new List<LinearGradientPair>();
+                _colorPairs.Add(_firstGradientPair);
+            }
+            var newpair = new LinearGradientPair(_latesStop, _latestColor, stop2, c2);
+            _colorPairs.Add(newpair);
+            _latesStop = stop2;
+            _latestColor = c2;
+        }
         public Color Color
         {
             //first stop color
-            get { return this.stopColors[0]; }
+            get { return _firstGradientPair.c1; }
         }
+        public int PairCount
+        {
+            get
+            {
+                return (_colorPairs == null) ? 1 : _colorPairs.Count;
+            }
+        }
+
+        public LinearGradientPair GetFirstPair()
+        {
+            return _firstGradientPair;
+        }
+        public IEnumerable<LinearGradientPair> GetColorPairIter()
+        {
+            if (_colorPairs == null)
+            {
+                yield return _firstGradientPair;
+            }
+            else
+            {
+                int j = _colorPairs.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    yield return _colorPairs[i];
+                }
+            }
+        }
+
         public override object InnerBrush
         {
             get
@@ -163,39 +230,34 @@ namespace PixelFarm.Drawing
         public override void Dispose()
         {
         }
-        public List<Color> GetColors()
-        {
-            return this.stopColors;
-        }
-        public List<PointF> GetStopPoints()
-        {
-            return this.stopPoints;
-        }
+        //public List<Color> GetColors()
+        //{
+        //    return this.stopColors;
+        //}
+        //public List<PointF> GetStopPoints()
+        //{
+        //    return this.stopPoints;
+        //}
 
-        /// <summary>
-        /// angle in radian between stop1 and stop2
-        /// </summary>
-        public double Angle
-        {
-            get
-            {
-                return _angle;
-            }
-        }
-        public double DistanceBetweenStopPoints
-        {
-            get
-            {
-                return _distance;
-            }
-        }
+        ///// <summary>
+        ///// angle in radian between stop1 and stop2
+        ///// </summary>
+        //public double Angle
+        //{
+        //    get
+        //    {
+        //        return _angle;
+        //    }
+        //}
+        //public double DistanceBetweenStopPoints
+        //{
+        //    get
+        //    {
+        //        return _distance;
+        //    }
+        //}
 
-        public enum GradientDirection : byte
-        {
-            Vertical,
-            Horizontal,
-            Angle
-        }
+
     }
 
 

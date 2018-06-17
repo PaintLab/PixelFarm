@@ -30,10 +30,9 @@ namespace PixelFarm.Agg
         IGradientValueCalculator _grValueCalculator;
         IGradientColorsProvider _colorsProvider;
 
+
         int _dist;
-
         float _stepRatio;
-
         float _xoffset;
         float _yoffset;
 
@@ -53,6 +52,10 @@ namespace PixelFarm.Agg
             _xoffset = x;
             _yoffset = y;
         }
+
+        internal bool IsLastPart { get; set; }
+        internal int PartNo { get; set; }
+        internal event GetNextGradientSpanGenDel RequestNextGradientSpanGen;
 
         public void Reset(ISpanInterpolator inter,
                 IGradientValueCalculator gvc,
@@ -82,8 +85,9 @@ namespace PixelFarm.Agg
             //spanLen => horizontal span len
 
             _interpolator.Begin(_grad0X + _xoffset + x + 0.5, _grad0Y + _yoffset + y + 0.5, spanLen);
-
             int gradientSteps = _colorsProvider.GradientSteps;
+
+            int scanline_x = x;
 
             do
             {
@@ -95,11 +99,41 @@ namespace PixelFarm.Agg
                                                       _dist) * _stepRatio;
                 if (d < 0)
                 {
-                    d = 0;
+
+                    if (PartNo == 0)
+                    {
+                        d = 0;
+                    }
+                    else
+                    {
+                        //move to prev part
+                        d = 0;
+                    }
                 }
                 else if (d >= gradientSteps)
                 {
-                    d = gradientSteps - 1;
+                    if (IsLastPart)
+                    {
+                        d = gradientSteps - 1;
+                    }
+                    else
+                    {
+                        //move to next part
+                        if (RequestNextGradientSpanGen != null)
+                        {
+                            GradientSpanGen nextPart = RequestNextGradientSpanGen(this.PartNo);
+                            if (nextPart != null)
+                            {
+                                //generate next part
+                                nextPart.GenerateColors(outputColors, startIndex, scanline_x, y, spanLen);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            d = gradientSteps - 1;
+                        }
+                    }
                 }
                 else
                 {
@@ -107,6 +141,7 @@ namespace PixelFarm.Agg
                 }
                 outputColors[startIndex++] = _colorsProvider.GetColor((int)d);
                 _interpolator.Next();//**
+                scanline_x++;
             }
             while (--spanLen != 0);
         }
