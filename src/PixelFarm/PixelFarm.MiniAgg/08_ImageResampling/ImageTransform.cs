@@ -10,6 +10,7 @@ namespace PixelFarm.Agg.Imaging
         }
     }
 
+   
 
     public class BicubicInterpolator : CubicInterpolator
     {
