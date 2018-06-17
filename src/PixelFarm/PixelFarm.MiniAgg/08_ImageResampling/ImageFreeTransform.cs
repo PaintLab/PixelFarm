@@ -19,13 +19,13 @@ namespace PixelFarm.Agg.Imaging
             }
             public override void ReplaceBuffer(int[] newbuffer)
             {
-               
+
             }
         }
 
         PointF[] vertex = new PointF[4];
         Vector AB, BC, CD, DA;
-        RectInt rect = new RectInt();
+        PixelFarm.Drawing.Rectangle rect;
         MyBitmapBlender srcCB;
         ActualBitmap srcImageInput;
         int srcW = 0;
@@ -33,6 +33,7 @@ namespace PixelFarm.Agg.Imaging
         public FreeTransform()
         {
         }
+
         public ActualBitmap Bitmap
         {
             get
@@ -84,14 +85,15 @@ namespace PixelFarm.Agg.Imaging
 
         public PointF VertexLeftTop
         {
-            set { vertex[0] = value; setVertex(); }
             get { return vertex[0]; }
+            set { vertex[0] = value; UpdateVertices(); }
+
         }
 
-        public PointF VertexTopRight
+        public PointF VertexRightTop
         {
             get { return vertex[1]; }
-            set { vertex[1] = value; setVertex(); }
+            set { vertex[1] = value; UpdateVertices(); }
         }
 
         public PointF VertexRightBottom
@@ -100,23 +102,24 @@ namespace PixelFarm.Agg.Imaging
             set
             {
                 vertex[2] = value;
-                setVertex();
+                UpdateVertices();
             }
         }
-
         public PointF VertexBottomLeft
         {
             get { return vertex[3]; }
-            set { vertex[3] = value; setVertex(); }
+            set { vertex[3] = value; UpdateVertices(); }
         }
-
-        public PointF[] FourCorners
+        public void SetFourCorners(PointF leftTop, PointF rightTop, PointF rightBottom, PointF leftBottom)
         {
-            get { return vertex; }
-            set { vertex = value; setVertex(); }
+            vertex[0] = leftTop;
+            vertex[1] = rightTop;
+            vertex[2] = rightBottom;
+            vertex[3] = leftBottom;
+            UpdateVertices();
         }
 
-        private void setVertex()
+        void UpdateVertices()
         {
             float xmin = float.MaxValue;
             float ymin = float.MaxValue;
@@ -130,7 +133,8 @@ namespace PixelFarm.Agg.Imaging
                 ymin = Math.Min(ymin, vertex[i].Y);
             }
 
-            rect = new RectInt((int)xmin, (int)ymin, (int)(xmax - xmin), (int)(ymax - ymin));
+            //rect = new RectInt((int)xmin, (int)ymin, (int)(xmax - xmin), (int)(ymax - ymin));
+            rect = new Drawing.Rectangle((int)xmin, (int)ymin, (int)(xmax - xmin), (int)(ymax - ymin));
             AB = MyVectorHelper.NewFromTwoPoints(vertex[0], vertex[1]);
             BC = MyVectorHelper.NewFromTwoPoints(vertex[1], vertex[2]);
             CD = MyVectorHelper.NewFromTwoPoints(vertex[2], vertex[3]);
@@ -159,7 +163,7 @@ namespace PixelFarm.Agg.Imaging
             return false;
         }
 
-        ActualBitmap GetTransformedBitmap()
+        public ActualBitmap GetTransformedBitmap()
         {
             if (srcH == 0 || srcW == 0) return null;
             if (isBilinear)
@@ -334,7 +338,7 @@ namespace PixelFarm.Agg.Imaging
                 for (int x = 0; x < rectWidth; ++x)
                 {
                     PointF srcPt = new PointF(x, y);
-                    srcPt.Offset(rectLeft, rectTop);
+                    srcPt.Offset(rectLeft, 0);
                     if (!IsOnPlaneABCD(srcPt))
                     {
                         continue;
@@ -364,7 +368,7 @@ namespace PixelFarm.Agg.Imaging
                         //outputBuffer[targetPixelIndex + 3] = (byte)color.a;
                         //targetPixelIndex += 4;
 
-                        destWriter.SetPixel(x, y, new Drawing.Color(color.a, color.b, color.g, color.r)); //TODO:review here blue switch to red channel
+                        destWriter.SetPixel(x, y, new Drawing.Color(255, color.b, color.g, color.r)); //TODO:review here blue switch to red channel
                     }
                 }
                 //newline

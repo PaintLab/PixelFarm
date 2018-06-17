@@ -541,6 +541,44 @@ namespace Mini
 
             //System.IO.File.WriteAllText("d:\\WImageTest\\lion.svg", stbuilder.ToString());
         }
+
+        private void cmdFreeTransform_Click(object sender, EventArgs e)
+        {
+
+            PixelFarm.Agg.Imaging.FreeTransform freeTx = new PixelFarm.Agg.Imaging.FreeTransform();
+            ActualBitmap img = LoadImage("Samples\\lion1.png");
+            freeTx.Bitmap = img;
+            freeTx.IsBilinearInterpolation = true;
+            freeTx.SetFourCorners(
+                new PixelFarm.VectorMath.PointF(0, 0),
+                new PixelFarm.VectorMath.PointF(img.Width, 0),
+                new PixelFarm.VectorMath.PointF(img.Width, img.Height),
+                new PixelFarm.VectorMath.PointF(0, 0)
+            );
+
+            ActualBitmap actualBmp = freeTx.GetTransformedBitmap();
+
+            SaveImage(actualBmp, "d:\\WImageTest\\test01_tx.png");
+        }
+        static void SaveImage(ActualBitmap img, string filename)
+        {
+            Bitmap newBmp = new Bitmap(img.Width, img.Height);
+            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(img, newBmp);
+            newBmp.Save("d:\\WImageTest\\test01_tx.png");
+        }
+        static ActualBitmap LoadImage(string filename)
+        {
+            //read sample image
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
+            {
+                //read to image buffer 
+                int bmpW = bmp.Width;
+                int bmpH = bmp.Height;
+                ActualBitmap img = new ActualBitmap(bmpW, bmpH);
+                PixelFarm.Agg.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
+                return img;
+            }
+        }
     }
 }
 
