@@ -270,17 +270,17 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\Queue.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\Queue.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGenGouraud.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGenGouraud.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GouraudSpanGen.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\GouraudSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGenGouraudRGBA.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGenGouraudRGBA.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GradientSpanGen.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\GradientSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGradient.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGradient.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\RGBAGouraudSpanGen.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\RGBAGouraudSpanGen.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\BrightnessAndContrastAdjustment.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\BrightnessAndContrastAdjustment.cs</Link>

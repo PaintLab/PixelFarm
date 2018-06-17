@@ -59,7 +59,7 @@ namespace OpenTkEssTest
             //------------------------------------------------------------------------- 
             var linearGrBrush2 = new LinearGradientBrush(
               new PointF(0, 50), Color.Red,
-              new PointF(400, 100), Color.White);
+              new PointF(0, 100), Color.White);
             //fill polygon with gradient brush  
             painter.FillColor = Color.Yellow;
             painter.FillRect(200, 0, 150, 150);

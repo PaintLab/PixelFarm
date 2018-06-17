@@ -99,15 +99,47 @@ namespace PixelFarm.Drawing
     public sealed class LinearGradientBrush : GeometryGraidentBrush
     {
         object innerBrush;
+        double _distance;
+        double _angle;
+        GradientDirection _dir;
+
         List<Color> stopColors = new List<Color>(2);
         List<PointF> stopPoints = new List<PointF>(2);
+
         public LinearGradientBrush(PointF stop1, Color c1, PointF stop2, Color c2)
         {
             this.stopColors.Add(c1);
             this.stopColors.Add(c2);
             this.stopPoints.Add(stop1);
             this.stopPoints.Add(stop2);
+            this.ColorSteps = 256;//default 
+
+            float dx = stop2.X - stop1.X;
+            float dy = stop2.Y - stop1.Y;
+            if (dx == 0)
+            {
+                //vertical
+                _dir = GradientDirection.Vertical;
+                _distance = Math.Abs(dy);
+            }
+            else if (dy == 0)
+            {
+                //horizontal
+                _dir = GradientDirection.Horizontal;
+                _distance = Math.Abs(dx);
+            }
+            else
+            {
+                _dir = GradientDirection.Angle;
+                _distance = Math.Sqrt(dx * dx + dy * dy);
+            }
+            _angle = (double)Math.Atan2(dy, dx);
         }
+        public GradientDirection Direction
+        {
+            get { return _dir; }
+        }
+        public int ColorSteps { get; set; }
         public Color Color
         {
             //first stop color
@@ -140,6 +172,30 @@ namespace PixelFarm.Drawing
             return this.stopPoints;
         }
 
+        /// <summary>
+        /// angle in radian between stop1 and stop2
+        /// </summary>
+        public double Angle
+        {
+            get
+            {
+                return _angle;
+            }
+        }
+        public double DistanceBetweenStopPoints
+        {
+            get
+            {
+                return _distance;
+            }
+        }
+
+        public enum GradientDirection : byte
+        {
+            Vertical,
+            Horizontal,
+            Angle
+        }
     }
 
 

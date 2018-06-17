@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             UseBitmapExt = false;
 
-            string imgFileName = "d:\\WImageTest\\lion1.png";
+            string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
                 lionImg = DemoHelper.LoadImage(imgFileName);

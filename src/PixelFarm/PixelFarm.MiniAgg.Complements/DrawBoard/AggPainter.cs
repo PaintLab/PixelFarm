@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
 
         Brush _curBrush;
         Pen _curPen;
-        LinearGradientColorsProvider _linearGradientColorProvider;
+
 
         bool _useDefaultBrush;
 
@@ -491,7 +491,7 @@ namespace PixelFarm.Agg
 
             //---------------------------------------------------------- 
             //BitmapExt
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
                 this._bxt.FillRectangle(
                       (int)Math.Round(left),
@@ -538,9 +538,6 @@ namespace PixelFarm.Agg
             }
 
             var v1 = GetFreeVxs();
-
-
-
             //---------------------------------------------------------- 
             if (!_useDefaultBrush)
             {
@@ -555,28 +552,12 @@ namespace PixelFarm.Agg
                             //check resolved object for br 
                             //if not then create a new one
                             //------------------------------------------- 
-                            //original agg's gradient fill
-                            LinearGradientBrush linearGrBrush = (LinearGradientBrush)br;
-                            List<PointF> stopPoints = linearGrBrush.GetStopPoints();
-                            List<Color> stopColors = linearGrBrush.GetColors();
+                            //original agg's gradient fill 
 
-                            //resolve linear gradient to agg object
+                            GradientSpanGen spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
 
-                            var innerGradient = new Gradients.GvcX();
-                            var linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear(PixelFarm.Agg.Transform.Affine.IdentityMatrix);
-                            if (_linearGradientColorProvider == null)
-                            {
-                                _linearGradientColorProvider = new LinearGradientColorsProvider();
-                            }
-                            _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1]); 
-                            SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
-                                innerGradient,
-                                _linearGradientColorProvider,
-                                0,
-                                100);
-
-
-                            Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGradient);
+                            spanGenGrad.SetOffset((float)-left, (float)-top);
+                            Fill(_simpleRectVxsGen.MakeVxs(v1), spanGenGrad);
 
                         }
                         break;
@@ -593,6 +574,101 @@ namespace PixelFarm.Agg
             }
             ReleaseVxs(ref v1);
         }
+
+
+
+
+        Gradients.IGradientValueCalculator _gvcX;
+        Gradients.IGradientValueCalculator _gvcY;
+
+        GradientSpanGen _spanGenGr;
+        LinearGradientColorsProvider _linearGradientColorProvider;
+        PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
+        ReusableRotationTransformer _reusableRotationTransformer;
+
+        GradientSpanGen ResolveSpanGradientGen(LinearGradientBrush linearGrBrush)
+        {
+            List<PointF> stopPoints = linearGrBrush.GetStopPoints();
+            List<Color> stopColors = linearGrBrush.GetColors();
+
+            //resolve linear gradient to agg object  
+            if (_linearGradientColorProvider == null)
+            {
+                //temp fix
+                _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
+                _gvcX = new Gradients.GvcX();
+                _gvcY = new Gradients.GvcY();
+                _linearGradientColorProvider = new LinearGradientColorsProvider();
+                _spanGenGr = new GradientSpanGen();
+
+                //TODO:
+                //user can use other coord transformer
+                _reusableRotationTransformer = new ReusableRotationTransformer();
+                _linerInterpolator.Transformer = _reusableRotationTransformer;
+            }
+
+            Gradients.IGradientValueCalculator gvc = null;
+
+
+
+            switch (linearGrBrush.Direction)
+            {
+                case LinearGradientBrush.GradientDirection.Vertical:
+                    gvc = _gvcY;
+                    break;
+                case LinearGradientBrush.GradientDirection.Horizontal:
+                    gvc = _gvcX;
+                    break;
+                default:
+                    //temp, 
+                    //TODO: review here
+                    gvc = _gvcX;
+                    break;
+            }
+
+            _reusableRotationTransformer.Angle = linearGrBrush.Angle;
+            _linearGradientColorProvider.SetColors(stopColors[0], stopColors[1], linearGrBrush.ColorSteps);
+
+            _spanGenGr.Reset(_linerInterpolator,
+                gvc,
+                _linearGradientColorProvider,
+                linearGrBrush.DistanceBetweenStopPoints);
+            _spanGenGr.SetStartPoint(stopPoints[0].X, stopPoints[0].Y);
+
+            return _spanGenGr;
+        }
+
+        class ReusableRotationTransformer : Transform.ICoordTransformer
+        {
+
+            double _angle;
+            Affine affine;
+            public ReusableRotationTransformer()
+            {
+                affine = Affine.IdentityMatrix;
+            }
+            public double Angle
+            {
+                get
+                {
+                    return _angle;
+                }
+                set
+                {
+                    if (value != _angle)
+                    {
+                        affine = Affine.NewRotation(value);
+                    }
+                    _angle = value;
+                }
+            }
+            public void Transform(ref double x, ref double y)
+            {
+                affine.Transform(ref x, ref y);
+            }
+        }
+
+
         VertexStore GetFreeVxs()
         {
             VectorToolBox.GetFreeVxs(out VertexStore v);
@@ -768,7 +844,7 @@ namespace PixelFarm.Agg
 
                 _bxt.FillPolygon(
                     _reusablePolygonList.ToArray(),
-                    this.fillColor.ToARGB()); 
+                    this.fillColor.ToARGB());
             }
         }
         /// <summary>
@@ -797,18 +873,48 @@ namespace PixelFarm.Agg
         public override void Fill(VertexStore vxs)
         {
             //
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
                 FillWithBxt(new VertexStoreSnap(vxs));
                 return;
             }
+            if (!_useDefaultBrush)
+            {
+                Brush br = _curBrush;
+                switch (br.BrushKind)
+                {
+                    case BrushKind.LinearGradient:
+                        {
+                            //fill linear gradient brush
+                            //....
 
-            //
-            sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                            //check resolved object for br 
+                            //if not then create a new one
+                            //------------------------------------------- 
+                            //original agg's gradient fill 
+
+                            GradientSpanGen spanGenGrad = ResolveSpanGradientGen((LinearGradientBrush)br);
+                            spanGenGrad.SetOffset(0, 0);
+                            Fill(vxs, spanGenGrad);
+                        }
+                        break;
+                    default:
+                        {
+                            sclineRas.AddPath(vxs);
+                            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                sclineRas.AddPath(vxs);
+                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            }
+
+
         }
-
-
         public override bool UseSubPixelLcdEffect
         {
             get

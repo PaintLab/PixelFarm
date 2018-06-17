@@ -37,6 +37,7 @@ namespace PixelFarm.Agg.Gradients
     {
         public int Calculate(int x, int y, int d)
         {
+            //TODO: check Taxicab => https://en.wikipedia.org/wiki/Taxicab_geometry
             //return (int)(AggMath.fast_sqrt((int)(x * x + y * y)));
             return (int)(System.Math.Sqrt(x * x + y * y));
         }
@@ -55,7 +56,7 @@ namespace PixelFarm.Agg.Gradients
         //---------------------------------------------------------------------
         public GvcRadialFocus()
         {
-            m_r = (100 * SpanGenGradient.GR_SUBPIX_SCALE);
+            m_r = (100 * GradientSpanGen.GR_SUBPIX_SCALE);
             m_fx = 0;
             m_fy = 0;
             UpdateValues();
@@ -64,16 +65,16 @@ namespace PixelFarm.Agg.Gradients
         //---------------------------------------------------------------------
         public void Setup(double r, double fx, double fy)
         {
-            m_r = AggMath.iround(r * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fx = AggMath.iround(fx * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fy = AggMath.iround(fy * SpanGenGradient.GR_SUBPIX_SCALE);
+            m_r = AggMath.iround(r * GradientSpanGen.GR_SUBPIX_SCALE);
+            m_fx = AggMath.iround(fx * GradientSpanGen.GR_SUBPIX_SCALE);
+            m_fy = AggMath.iround(fy * GradientSpanGen.GR_SUBPIX_SCALE);
             UpdateValues();
         }
 
         //---------------------------------------------------------------------
-        public double Radius { get { return (double)(m_r) / SpanGenGradient.GR_SUBPIX_SCALE; } }
-        public double FocusX { get { return (double)(m_fx) / SpanGenGradient.GR_SUBPIX_SCALE; } }
-        public double FocusY { get { return (double)(m_fy) / SpanGenGradient.GR_SUBPIX_SCALE; } }
+        public double Radius { get { return (double)(m_r) / GradientSpanGen.GR_SUBPIX_SCALE; } }
+        public double FocusX { get { return (double)(m_fx) / GradientSpanGen.GR_SUBPIX_SCALE; } }
+        public double FocusY { get { return (double)(m_fy) / GradientSpanGen.GR_SUBPIX_SCALE; } }
 
         //---------------------------------------------------------------------
         public int Calculate(int x, int y, int d)
@@ -120,7 +121,10 @@ namespace PixelFarm.Agg.Gradients
     //==============================================================gradient_x
     public class GvcX : IGradientValueCalculator
     {
-        public int Calculate(int x, int y, int d) { return x; }
+        public int Calculate(int x, int y, int d)
+        {
+            return x;
+        }
     }
     //==============================================================gradient_y
     public class GvcY : IGradientValueCalculator

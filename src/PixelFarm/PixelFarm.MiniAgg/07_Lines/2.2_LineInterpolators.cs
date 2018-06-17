@@ -256,8 +256,10 @@ namespace PixelFarm.Agg.Lines
                     _aa_data.m_li.Prev();
                     _aa_data.m_y -= lp.inc;
                     _aa_data.m_x = (_aa_data.m_lp.x1 + _aa_data.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+                    //
                     if (lp.inc > 0) _m_di.DecY(_aa_data.m_x - _aa_data.m_old_x);
                     else _m_di.IncY(_aa_data.m_x - _aa_data.m_old_x);
+                    //
                     _aa_data.m_old_x = _aa_data.m_x;
                     dist1_start = dist2_start = _m_di.DistanceStart;
                     int dx = 0;
@@ -284,8 +286,10 @@ namespace PixelFarm.Agg.Lines
                     _aa_data.m_li.Prev();
                     _aa_data.m_x -= lp.inc;
                     _aa_data.m_y = (_aa_data.m_lp.y1 + _aa_data.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+                    //
                     if (lp.inc > 0) _m_di.DecX(_aa_data.m_y - _aa_data.m_old_y);
                     else _m_di.IncX(_aa_data.m_y - _aa_data.m_old_y);
+                    //
                     _aa_data.m_old_y = _aa_data.m_y;
                     dist1_start = dist2_start = _m_di.DistanceStart;
                     int dy = 0;
