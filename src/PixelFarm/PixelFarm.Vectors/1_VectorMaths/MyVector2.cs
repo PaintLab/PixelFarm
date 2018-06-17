@@ -39,13 +39,19 @@ namespace PixelFarm.VectorMath
 #endif
     }
 
-
     public static class MyVectorHelper
     {
         public static Vector NewFromPoint(PointF p)
         {
             return new Vector(p.X, p.Y);
         }
+
+        /// <summary>
+        /// create vector from start to end
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         public static Vector NewFromTwoPoints(PointF start, PointF end)
         {
             return new Vector(end.X - start.X, end.Y - start.Y);
@@ -66,6 +72,7 @@ namespace PixelFarm.VectorMath
         }
 
     }
+
 
     public struct Vector
     {

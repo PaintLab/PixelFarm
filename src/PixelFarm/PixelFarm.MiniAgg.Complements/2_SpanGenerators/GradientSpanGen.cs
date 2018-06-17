@@ -55,7 +55,7 @@ namespace PixelFarm.Agg
 
         internal bool IsLastPart { get; set; }
         internal int PartNo { get; set; }
-        internal event GetNextGradientSpanGenDel RequestNextGradientSpanGen;
+        internal event GetNextGradientSpanGenDel RequestGradientPart;
 
         public void Reset(ISpanInterpolator inter,
                 IGradientValueCalculator gvc,
@@ -108,6 +108,22 @@ namespace PixelFarm.Agg
                     {
                         //move to prev part
                         d = 0;
+
+                        //move to next part
+                        if (RequestGradientPart != null)
+                        {
+                            GradientSpanGen nextPart = RequestGradientPart(this.PartNo - 1);
+                            if (nextPart != null)
+                            {
+                                //generate next part
+                                nextPart.GenerateColors(outputColors, startIndex, scanline_x, y, spanLen);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            d = 0;
+                        }
                     }
                 }
                 else if (d >= gradientSteps)
@@ -119,9 +135,9 @@ namespace PixelFarm.Agg
                     else
                     {
                         //move to next part
-                        if (RequestNextGradientSpanGen != null)
+                        if (RequestGradientPart != null)
                         {
-                            GradientSpanGen nextPart = RequestNextGradientSpanGen(this.PartNo);
+                            GradientSpanGen nextPart = RequestGradientPart(this.PartNo + 1);
                             if (nextPart != null)
                             {
                                 //generate next part

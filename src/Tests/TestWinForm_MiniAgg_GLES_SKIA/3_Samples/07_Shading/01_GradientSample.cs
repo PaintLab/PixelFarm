@@ -7,25 +7,36 @@ using PixelFarm.Drawing;
 using Mini;
 namespace PixelFarm.Agg.Sample_Gradient
 {
+
     [Info(OrderCode = "01_1")]
-    [Info("This �sphere� is rendered with color gradients only. Initially there was an idea to compensate so called Mach Bands effect. To do so I added a gradient profile functor. Then the concept was extended to set a color profile. As a result you can render simple geometrical objects in 2D looking like 3D ones. In this example you can construct your own color profile and select the gradient function. There're not so many gradient functions in AGG, but you can easily add your own. Also, drag the �gradient� with the left mouse button, scale and rotate it with the right one.")]
     public class GradientDemo : DemoBase
     {
         Stopwatch stopwatch = new Stopwatch();
         VertexStore triangleVxs;
-        LinearGradientBrush gradientBrush;
+        LinearGradientBrush _linearGrBrush;
+
+        CircularGradientBrush _circularGrBrush;
+
         public GradientDemo()
         {
-            gradientBrush = new LinearGradientBrush(
+            _linearGrBrush = new LinearGradientBrush(
                      new PointF(0, 0),
                      Drawing.Color.Black,
                      new PointF(50, 0),
                      Drawing.Color.Red);
-            gradientBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
-            gradientBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
+            _linearGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Yellow);
+            _linearGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.OrangeRed);
+
+
+            _circularGrBrush = new CircularGradientBrush(new PointF(0, 0),
+                     Drawing.Color.Black,
+                     new PointF(120, 0),
+                     Drawing.Color.Blue);
+            // _circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
+            //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
+
 
             PixelFarm.Agg.VertexSource.PathWriter p = new VertexSource.PathWriter();
-
             p.MoveTo(0, 0);
             p.LineToRel(100, 100);
             p.LineToRel(100, -100);
@@ -49,9 +60,11 @@ namespace PixelFarm.Agg.Sample_Gradient
 
 
                 var prevBrush = p.CurrentBrush;
-                p.CurrentBrush = gradientBrush;
+                p.CurrentBrush = _circularGrBrush;// gradientBrush;
 
                 p2.FillRect(0, 100, 150, 50);
+
+                p.CurrentBrush = _linearGrBrush;
                 p2.FillRect(0, 200, 150, 50);
 
                 //------------- 
