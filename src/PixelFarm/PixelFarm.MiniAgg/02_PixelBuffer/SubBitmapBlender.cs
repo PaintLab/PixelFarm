@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.CpuBlit.Imaging
+namespace PixelFarm.CpuBlit.PixelBlenders
 {
     /// <summary>
     /// sub-image reader /writer/blend part of org bitmap

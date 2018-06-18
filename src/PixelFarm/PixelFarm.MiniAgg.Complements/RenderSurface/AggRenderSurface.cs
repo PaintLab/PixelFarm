@@ -46,7 +46,7 @@ namespace PixelFarm.CpuBlit
             this.destImage = destImage;
             this.destActualImage = destImage;
 
-            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
+            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenders.PixelBlenderBGRA());
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this._bmpRasterizer = new DestBitmapRasterizer();

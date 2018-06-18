@@ -78,7 +78,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         List<ushort> _indexList = new List<ushort>();
 
         ActualBitmap _stencilBmp;
-        SubBitmapBlender _stencilBlender;
+        PixelBlenders.SubBitmapBlender _stencilBlender;
         AggPainter _backPainter;
 
 
@@ -97,7 +97,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 //create a stencil bmp
                 _stencilBmp = new ActualBitmap(p.Width, p.Height);
-                _stencilBlender = new SubBitmapBlender(_stencilBmp, new PixelBlenderBGRA());
+                _stencilBlender = new PixelBlenders.SubBitmapBlender(_stencilBmp, new PixelBlenders.PixelBlenderBGRA());
                 _backPainter = AggPainter.Create(_stencilBmp);
                 //------
             }
@@ -189,7 +189,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                     default:
                         break;
                     case TextureKind.StencilLcdEffect:
-                        { 
+                        {
                         }
                         break;
                 }

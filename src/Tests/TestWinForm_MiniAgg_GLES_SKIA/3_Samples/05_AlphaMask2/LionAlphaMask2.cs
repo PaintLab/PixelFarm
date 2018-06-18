@@ -9,6 +9,8 @@ using PixelFarm.CpuBlit.Imaging;
 using Mini;
 using PixelFarm.Drawing.WinGdi;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.PixelBlenders;
+
 
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
@@ -148,7 +150,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         }
 
         [DemoConfig]
-        public PixelBlenderColorComponent SelectedComponent
+        public PixelBlenders.PixelBlenderColorComponent SelectedComponent
         {
             get
             {
@@ -158,7 +160,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 }
                 else
                 {
-                    return PixelBlenderColorComponent.R;//default
+                    return PixelBlenders.PixelBlenderColorComponent.R;//default
                 }
             }
             set

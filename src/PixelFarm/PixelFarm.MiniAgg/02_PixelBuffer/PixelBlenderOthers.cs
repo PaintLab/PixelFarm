@@ -28,10 +28,8 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.Imaging
+namespace PixelFarm.CpuBlit.PixelBlenders
 {
-
-
 
     /// <summary>
     /// change destination alpha change with red color from source
@@ -295,8 +293,6 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
     }
-
-
 
     /// <summary>
     /// apply mask to srcColor before send it to dest bmp
@@ -595,7 +591,7 @@ namespace PixelFarm.CpuBlit.Imaging
         }
     }
 
-    public enum PixelBlenderColorComponent 
+    public enum PixelBlenderColorComponent
     {
         A, //24
         R, //16
@@ -603,7 +599,7 @@ namespace PixelFarm.CpuBlit.Imaging
         B  //0
     }
 
-    public enum EnableOutputColorComponent  
+    public enum EnableOutputColorComponent
     {
         EnableAll, //=0
 
@@ -952,7 +948,7 @@ namespace PixelFarm.CpuBlit.Imaging
                                  ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                             }
                             break;
-                    } 
+                    }
                 }
             }
         }

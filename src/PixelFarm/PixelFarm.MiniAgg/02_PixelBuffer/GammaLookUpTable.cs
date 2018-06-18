@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.Infrastructure
 {
     public class GammaLookUpTable
     {

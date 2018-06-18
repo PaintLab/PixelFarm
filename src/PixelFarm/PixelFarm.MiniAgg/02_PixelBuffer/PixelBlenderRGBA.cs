@@ -28,29 +28,10 @@
 #define USE_BLENDER
 
 using PixelFarm.Drawing;
-using System.Collections.Generic;
 using System;
 
-namespace PixelFarm.CpuBlit.Imaging
+namespace PixelFarm.CpuBlit
 {
-    /// <summary>
-    /// look up table helper for clamp value from 9 bits to 8 bits
-    /// </summary>
-    static class ClampFrom9To8Bits
-    {
-        internal static readonly byte[] _ = new byte[1 << 9];
-        static ClampFrom9To8Bits()
-        {
-            //this is a clamp table
-            //9 bits to 8 bits
-            //if we don't use this clamp table
-            for (int i = _.Length - 1; i >= 0; --i)
-            {
-                _[i] = (byte)Math.Min(i, 255);
-            }
-        }
-    }
-
     public abstract class PixelBlender32
     {
         public int NumPixelBits { get { return 32; } }
@@ -94,6 +75,30 @@ namespace PixelFarm.CpuBlit.Imaging
         }
     }
 
+}
+
+
+namespace PixelFarm.CpuBlit.PixelBlenders
+{
+    /// <summary>
+    /// look up table helper for clamp value from 9 bits to 8 bits
+    /// </summary>
+    static class ClampFrom9To8Bits
+    {
+        internal static readonly byte[] _ = new byte[1 << 9];
+        static ClampFrom9To8Bits()
+        {
+            //this is a clamp table
+            //9 bits to 8 bits
+            //if we don't use this clamp table
+            for (int i = _.Length - 1; i >= 0; --i)
+            {
+                _[i] = (byte)Math.Min(i, 255);
+            }
+        }
+    }
+
+    
     public class PixelBlenderBGRA : PixelBlender32
     {
         //from https://microsoft.github.io/Win2D/html/PremultipliedAlpha.htm

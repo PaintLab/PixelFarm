@@ -20,7 +20,8 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.PixelBlenders;
+
 namespace PixelFarm.CpuBlit
 {
 
@@ -111,7 +112,7 @@ namespace PixelFarm.CpuBlit
             SetDimmensionAndFormat(width, height, stride, bitsPerPixel, bitsPerPixel / 8);
             SetUpLookupTables();
             //
-             
+
             this.OutputPixelBlender = outputPxBlender;
             //
             //this.m_ByteBuffer = imgbuffer;

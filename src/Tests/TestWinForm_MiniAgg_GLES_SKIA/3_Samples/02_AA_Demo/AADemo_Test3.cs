@@ -250,13 +250,13 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
 
 
-                var widgetsSubImage = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
+                var widgetsSubImage = PixelBlenders.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
                 aggsx.UseSubPixelRendering = false;
-                PixelBlenderBGRA normalBlender = new PixelBlenderBGRA();
-                PixelBlenderBGRA gammaBlender = new PixelBlenderBGRA(); //TODO: revisit, and fix this again
+                PixelBlenders.PixelBlenderBGRA normalBlender = new PixelBlenders.PixelBlenderBGRA();
+                PixelBlenders.PixelBlenderBGRA gammaBlender = new PixelBlenders.PixelBlenderBGRA(); //TODO: revisit, and fix this again
                 gammaBlender.GammaValue = this.GammaValue;
                 gammaBlender.EnableGamma = true;
-                var rasterGamma = new SubBitmapBlender(widgetsSubImage, gammaBlender);
+                var rasterGamma = new PixelBlenders.SubBitmapBlender(widgetsSubImage, gammaBlender);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);

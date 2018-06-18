@@ -20,6 +20,7 @@
 
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Lines;
+
 namespace PixelFarm.CpuBlit
 {
     public struct PatternFilterBilnearColorRGBA : IPatternFilter
