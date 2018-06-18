@@ -565,11 +565,11 @@ namespace PixelFarm.CpuBlit.Imaging
     }
 
     //=================================================recursive_blur_calc_rgba
-    public sealed class RecursiveBlueCalcRGBA : RecursizeBlurCalculator
+    public sealed class RecursiveBlurCalcRGBA : RecursizeBlurCalculator
     {
         public override RecursizeBlurCalculator CreateNew()
         {
-            return new RecursiveBlueCalcRGBA();
+            return new RecursiveBlurCalcRGBA();
         }
 
         public override void FromPix(Color c)

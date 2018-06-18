@@ -66,7 +66,7 @@ namespace PixelFarm.Drawing.Skia
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, bufferH + startRowAt, stride);
+                            PixelFarm.CpuBlit.Infrastructure.AggMemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }

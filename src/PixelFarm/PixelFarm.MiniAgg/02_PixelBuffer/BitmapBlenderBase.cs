@@ -169,7 +169,7 @@ namespace PixelFarm.CpuBlit
                     int destOffset = GetByteBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
                     for (int i = 0; i < clippedSourceImageRect.Height; i++)
                     {
-                        AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
+                        Infrastructure.AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
                         sourceOffset += sourceImage.Stride;
                         destOffset += Stride;
                     }

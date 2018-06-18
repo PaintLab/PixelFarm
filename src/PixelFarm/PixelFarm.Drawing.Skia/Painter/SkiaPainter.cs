@@ -365,7 +365,7 @@ namespace PixelFarm.Drawing.Skia
                                 unsafe
                                 {
                                     byte* actualImgH = (byte*)bufferPtr.Ptr;
-                                    AggMemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
+                                    PixelFarm.CpuBlit.Infrastructure.AggMemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
                                     //System.Runtime.InteropServices.Marshal.Copy(
                                     //    actualImgBuffer,
                                     //    0,
