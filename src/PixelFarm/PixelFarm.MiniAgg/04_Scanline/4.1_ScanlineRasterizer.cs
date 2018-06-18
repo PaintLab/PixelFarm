@@ -32,7 +32,7 @@
 // 
 //----------------------------------------------------------------------------
 
-using poly_subpix = PixelFarm.CpuBlit.PolySubPix;
+using poly_subpix = PixelFarm.CpuBlit.Infrastructure.PolySubPix;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.Infrastructure

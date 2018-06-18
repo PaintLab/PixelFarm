@@ -33,7 +33,7 @@
 //----------------------------------------------------------------------------
 
 
-using poly_subpix = PixelFarm.CpuBlit.PolySubPix;
+using poly_subpix = PixelFarm.CpuBlit.Infrastructure.PolySubPix;
 namespace PixelFarm.CpuBlit.Infrastructure
 {
     partial class ScanlineRasterizer
