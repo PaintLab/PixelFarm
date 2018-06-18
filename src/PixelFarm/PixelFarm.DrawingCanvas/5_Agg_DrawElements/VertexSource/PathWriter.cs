@@ -20,7 +20,8 @@
 
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.VertexSource
+using PixelFarm.CpuBlit.VertexSource;
+namespace PixelFarm.CpuBlit
 {
 
 

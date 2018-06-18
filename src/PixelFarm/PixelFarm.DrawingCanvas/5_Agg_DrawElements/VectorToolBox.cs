@@ -77,8 +77,8 @@ namespace PixelFarm.Drawing
 
 
         [System.ThreadStatic]
-        static Stack<PixelFarm.CpuBlit.VertexSource.PathWriter> s_pathWriters = new Stack<PixelFarm.CpuBlit.VertexSource.PathWriter>();
-        public static void GetFreePathWriter(out PixelFarm.CpuBlit.VertexSource.PathWriter p)
+        static Stack<PixelFarm.CpuBlit.PathWriter> s_pathWriters = new Stack<PixelFarm.CpuBlit.PathWriter>();
+        public static void GetFreePathWriter(out PixelFarm.CpuBlit.PathWriter p)
         {
             if (s_pathWriters.Count > 0)
             {
@@ -86,10 +86,10 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                p = new CpuBlit.VertexSource.PathWriter();
+                p = new CpuBlit.PathWriter();
             }
         }
-        public static void ReleasePathWriter(ref PixelFarm.CpuBlit.VertexSource.PathWriter p)
+        public static void ReleasePathWriter(ref PixelFarm.CpuBlit.PathWriter p)
         {
             p.Clear();
             s_pathWriters.Push(p);
