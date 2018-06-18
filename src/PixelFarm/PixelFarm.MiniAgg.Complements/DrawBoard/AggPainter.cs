@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.DrawingBuffer;
-using PixelFarm.Drawing.PainterExtensions;
 using PixelFarm.Agg.Imaging;
 
 namespace PixelFarm.Agg
@@ -1309,8 +1308,8 @@ namespace PixelFarm.Agg
             //
             //more than 1 pair   
             int partNo = 0;
-            int partCount = linearGrBrush.PairCount; 
-             
+            int partCount = linearGrBrush.PairCount;
+
             foreach (LinearGradientPair pair in linearGrBrush.GetColorPairIter())
             {
                 Gradients.IGradientValueCalculator gvc = null;
@@ -1375,7 +1374,7 @@ namespace PixelFarm.Agg
         }
 
 
-      
+
     }
 
     class AggCircularGradientBrush : ISpanGenerator
