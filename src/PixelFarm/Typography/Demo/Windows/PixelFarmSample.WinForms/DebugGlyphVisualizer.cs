@@ -1,5 +1,5 @@
 ﻿//MIT, 2014-present, WinterDev
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using System;

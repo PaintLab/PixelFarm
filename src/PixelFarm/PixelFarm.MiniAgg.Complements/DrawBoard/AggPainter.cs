@@ -3,11 +3,11 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.DrawingBuffer;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Imaging;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
     class MyBitmapBlender : BitmapBlenderBase
@@ -100,7 +100,7 @@ namespace PixelFarm.Agg
             //from membuffer
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
-                PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
+                PixelFarm.CpuBlit.ActualBitmap.GetBuffer(aggsx.DestActualImage));
             _vectorTool = new VectorTool();
             _useDefaultBrush = true;
 
@@ -1238,13 +1238,13 @@ namespace PixelFarm.Agg
 
         public GradientSpanGen _spanGenGr;
         public LinearGradientColorsProvider _linearGradientColorProvider;
-        public PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
+        public PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear _linerInterpolator;
         public ReusableRotationTransformer _reusableRotationTransformer;
 
         public void SetData(Gradients.IGradientValueCalculator gvc, LinearGradientPair pair)
         {
 
-            _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
+            _linerInterpolator = new PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear();
             _linearGradientColorProvider = new LinearGradientColorsProvider();
             _spanGenGr = new GradientSpanGen();
             //TODO:

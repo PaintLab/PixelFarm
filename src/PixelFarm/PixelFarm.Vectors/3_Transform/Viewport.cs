@@ -24,7 +24,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.Transform
 {
     //----------------------------------------------------------trans_viewport
 

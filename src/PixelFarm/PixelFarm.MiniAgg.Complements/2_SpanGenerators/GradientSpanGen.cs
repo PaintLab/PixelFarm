@@ -15,8 +15,8 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Gradients;
-namespace PixelFarm.Agg
+using PixelFarm.CpuBlit.Gradients;
+namespace PixelFarm.CpuBlit
 {
     //==========================================================span_gradient
     public class GradientSpanGen : ISpanGenerator

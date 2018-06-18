@@ -27,7 +27,7 @@
 //----------------------------------------------------------------------------
 #define USE_UNSAFE_CODE
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     //-----------------------------------------------------ImageFilterLookUpTable
     public class ImageFilterLookUpTable

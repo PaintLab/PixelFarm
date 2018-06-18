@@ -28,8 +28,8 @@
 #define USE_UNSAFE_CODE
 
 using System;
-using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
-namespace PixelFarm.Agg.Imaging
+using img_subpix_const = PixelFarm.CpuBlit.ImageFilterLookUpTable.ImgSubPixConst;
+namespace PixelFarm.CpuBlit.Imaging
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     public class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
@@ -140,9 +140,9 @@ namespace PixelFarm.Agg.Imaging
             base.Prepare();
 
             ISpanInterpolator spanInterpolator = base.Interpolator;
-            _mode0 = (spanInterpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
-                && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
-                && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
+            _mode0 = (spanInterpolator.GetType() == typeof(PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear)
+                && ((PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.Transform.Affine)
+                && ((PixelFarm.CpuBlit.Transform.Affine)((PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
         }
         public Drawing.Color BackgroundColor
         {

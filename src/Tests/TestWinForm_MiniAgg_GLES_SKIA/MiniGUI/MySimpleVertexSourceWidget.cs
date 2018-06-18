@@ -20,7 +20,7 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.UI
+namespace PixelFarm.CpuBlit.UI
 {
     abstract public class SimpleVertexSourceWidget : IncompleteWidget
     {

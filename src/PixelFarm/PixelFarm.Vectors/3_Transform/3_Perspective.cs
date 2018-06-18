@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.Transform
 {
     //=======================================================trans_perspective
     public sealed class Perspective : ICoordTransformer

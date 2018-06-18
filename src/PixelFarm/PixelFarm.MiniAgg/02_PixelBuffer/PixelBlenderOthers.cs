@@ -28,7 +28,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
 
 

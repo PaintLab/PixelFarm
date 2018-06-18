@@ -14,7 +14,7 @@
 // "The Art of War"
 
 using System;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.GLES2
 {
 

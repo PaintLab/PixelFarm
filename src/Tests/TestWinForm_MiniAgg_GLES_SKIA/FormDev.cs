@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 namespace Mini
 {
@@ -265,7 +265,7 @@ namespace Mini
                 var source = new int[width * height];
                 var dest = new int[width * height];
                 Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
-                PixelFarm.Agg.Imaging.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+                PixelFarm.CpuBlit.Imaging.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
                 Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
                 bmp.UnlockBits(bitmapData);
                 bmp.Save("d:\\WImageTest\\test002_2.png");
@@ -374,7 +374,7 @@ namespace Mini
                     vxs = vxs.TranslateToNewVxs(15, 0, new PixelFarm.Drawing.VertexStore());
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(
+                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(
                       actualImage, //src from actual img buffer
                       bufferBmp //dest to buffer bmp
                      );
@@ -545,11 +545,11 @@ namespace Mini
         private void cmdFreeTransform_Click(object sender, EventArgs e)
         {
 
-            PixelFarm.Agg.Imaging.FreeTransform freeTx = new PixelFarm.Agg.Imaging.FreeTransform();
+            PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
             ActualBitmap img = LoadImage("Samples\\lion1.png");
              
 
-            freeTx.Interpolation = PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.None;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
+            freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
             freeTx.SetFourCorners(
                 new PixelFarm.VectorMath.PointF(0, 0),
                 new PixelFarm.VectorMath.PointF(img.Width / 2, 0),
@@ -564,7 +564,7 @@ namespace Mini
         static void SaveImage(ActualBitmap img, string filename)
         {
             Bitmap newBmp = new Bitmap(img.Width, img.Height);
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(img, newBmp);
+            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(img, newBmp);
             newBmp.Save("d:\\WImageTest\\test01_tx.png");
         }
         static ActualBitmap LoadImage(string filename)
@@ -576,7 +576,7 @@ namespace Mini
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
                 ActualBitmap img = new ActualBitmap(bmpW, bmpH);
-                PixelFarm.Agg.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
+                PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
                 return img;
             }
         }

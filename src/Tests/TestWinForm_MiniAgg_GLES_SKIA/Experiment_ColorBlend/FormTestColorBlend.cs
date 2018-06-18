@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 
 using System.Windows.Forms;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Imaging;
 
 namespace Mini
 {

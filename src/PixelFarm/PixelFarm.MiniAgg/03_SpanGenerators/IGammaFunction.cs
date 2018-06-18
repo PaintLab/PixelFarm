@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public interface IGammaFunction
     {

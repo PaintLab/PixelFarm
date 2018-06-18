@@ -1,7 +1,7 @@
 ﻿//BSD, 2014-present, WinterDev
 
 using System.Collections.Generic;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
     //----------------------------------------

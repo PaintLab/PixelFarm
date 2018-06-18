@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 using Typography.Contours;
 using Typography.OpenFont;
@@ -324,8 +324,8 @@ namespace PixelFarm.Drawing.Fonts
                 painter.RenderQuality = RenderQualtity.HighQuality;
                 painter.UseSubPixelLcdEffect = true;
 
-                Agg.Transform.Affine flipY = Agg.Transform.Affine.NewMatix(
-                    Agg.Transform.AffinePlan.Scale(1, -1)); //flip Y
+                CpuBlit.Transform.Affine flipY = CpuBlit.Transform.Affine.NewMatix(
+                    CpuBlit.Transform.AffinePlan.Scale(1, -1)); //flip Y
 
                 VertexStore reusableVxs = new VertexStore();
 
@@ -477,8 +477,8 @@ namespace PixelFarm.Drawing.Fonts
                 painter.RenderQuality = RenderQualtity.HighQuality;
                 painter.UseSubPixelLcdEffect = true;
 
-                Agg.Transform.Affine flipY = Agg.Transform.Affine.NewMatix(
-                    Agg.Transform.AffinePlan.Scale(1, -1)); //flip Y
+                CpuBlit.Transform.Affine flipY = CpuBlit.Transform.Affine.NewMatix(
+                    CpuBlit.Transform.AffinePlan.Scale(1, -1)); //flip Y
                 VertexStore reusableVxs = new VertexStore();
 
                 float acc_x = 0; //acummulate x

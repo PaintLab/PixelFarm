@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.DrawingGL
@@ -36,7 +36,7 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         RenderQualtity _renderQuality;
 
-        PixelFarm.Agg.VectorTool _vectorTool;
+        PixelFarm.CpuBlit.VectorTool _vectorTool;
 
 
         public GLPainter(GLRenderSurface glsx)
@@ -52,7 +52,7 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
 
-            _vectorTool = new Agg.VectorTool();
+            _vectorTool = new CpuBlit.VectorTool();
         }
 
         public override Drawing.PainterExtensions.VectorTool VectorTool
@@ -734,11 +734,11 @@ namespace PixelFarm.DrawingGL
                 //also  rotate 
                 if (centerFormArc.scaleUp)
                 {
-                    var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     VectorToolBox.GetFreeVxs(out VertexStore v2);
                     mat.TransformToVxs(v1, v2);
                     VectorToolBox.ReleaseVxs(ref v1);
@@ -747,10 +747,10 @@ namespace PixelFarm.DrawingGL
                 else
                 {
                     //not scalue
-                    var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     VectorToolBox.GetFreeVxs(out VertexStore v2);
                     mat.TransformToVxs(v1, v2);
                     VectorToolBox.ReleaseVxs(ref v1);
@@ -762,10 +762,10 @@ namespace PixelFarm.DrawingGL
                 //no rotate
                 if (centerFormArc.scaleUp)
                 {
-                    var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
 
                     VectorToolBox.GetFreeVxs(out VertexStore v2);
                     mat.TransformToVxs(v1, v2);
@@ -1039,7 +1039,7 @@ namespace PixelFarm.DrawingGL
                     double x, y;
                     switch (vxsIter.GetNextVertex(out x, out y))
                     {
-                        case PixelFarm.Agg.VertexCmd.MoveTo:
+                        case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                             if (!isAddToList)
                             {
                                 isAddToList = true;
@@ -1049,13 +1049,13 @@ namespace PixelFarm.DrawingGL
                             xylist.Add((float)x);
                             xylist.Add((float)y);
                             break;
-                        case PixelFarm.Agg.VertexCmd.LineTo:
+                        case PixelFarm.CpuBlit.VertexCmd.LineTo:
                             xylist.Add((float)x);
                             xylist.Add((float)y);
                             prevX = x;
                             prevY = y;
                             break;
-                        case PixelFarm.Agg.VertexCmd.Close:
+                        case PixelFarm.CpuBlit.VertexCmd.Close:
                             //from current point 
                             {
                                 xylist.Add((float)prevMoveToX);
@@ -1087,7 +1087,7 @@ namespace PixelFarm.DrawingGL
                                 isAddToList = false;
                             }
                             break;
-                        case PixelFarm.Agg.VertexCmd.NoMore:
+                        case PixelFarm.CpuBlit.VertexCmd.NoMore:
                             goto EXIT_LOOP;
                         default:
                             throw new System.NotSupportedException();

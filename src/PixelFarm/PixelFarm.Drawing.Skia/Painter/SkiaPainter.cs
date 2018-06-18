@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.Transform;
 using PixelFarm.Drawing.PainterExtensions;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
@@ -18,14 +18,14 @@ namespace PixelFarm.Drawing.Skia
 
         int _height;
         int _width;
-        Agg.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexSource.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
         //-----------------------
         SKCanvas _skCanvas;
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
-        PixelFarm.Agg.VectorTool _vectorTool;
+        PixelFarm.CpuBlit.VectorTool _vectorTool;
         public SkiaPainter(int w, int h)
         {
 
@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
 
-            _vectorTool = new PixelFarm.Agg.VectorTool();
+            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
         }
         public override PainterExtensions.VectorTool VectorTool
         {
@@ -354,7 +354,7 @@ namespace PixelFarm.Drawing.Skia
                 int h = actualImage.Height;
                 switch (actualImage.PixelFormat)
                 {
-                    case Agg.PixelFormat.ARGB32:
+                    case CpuBlit.PixelFormat.ARGB32:
                         {
 
                             using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
@@ -394,11 +394,11 @@ namespace PixelFarm.Drawing.Skia
                             //}
                         }
                         break;
-                    case Agg.PixelFormat.RGB24:
+                    case CpuBlit.PixelFormat.RGB24:
                         {
                         }
                         break;
-                    case Agg.PixelFormat.GrayScale8:
+                    case CpuBlit.PixelFormat.GrayScale8:
                         {
                         }
                         break;

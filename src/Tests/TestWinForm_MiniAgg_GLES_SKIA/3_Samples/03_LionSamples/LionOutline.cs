@@ -31,12 +31,12 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using PixelFarm;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Lines;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Lines;
 using Mini;
-namespace PixelFarm.Agg.Sample_LionOutline
+namespace PixelFarm.CpuBlit.Sample_LionOutline
 {
     [Info(OrderCode = "03")]
     [Info("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
@@ -167,7 +167,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             public float strokeWidth;
             public PixelFarm.Drawing.Color strokeColor;
             public PixelFarm.Drawing.Color fillColor;
-            public PixelFarm.Agg.Transform.Affine affineTx;
+            public PixelFarm.CpuBlit.Transform.Affine affineTx;
         }
 
 

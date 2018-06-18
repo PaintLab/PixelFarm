@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.Fonts;
 
 using Typography.OpenFont;
@@ -131,7 +131,7 @@ namespace PixelFarmTextBox.WinForms
 
                         //----------------
                         //copy from Agg's memory buffer to gdi 
-                        PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
+                        PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
                         g.Clear(Color.White);
                         g.DrawImage(winBmp, new Point(10, 0));
 
@@ -207,7 +207,7 @@ namespace PixelFarmTextBox.WinForms
             //----------
 
             //use this util to copy image from Agg actual image to System.Drawing.Bitmap 
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(painter.RenderSurface.DestActualImage, winBmp);
+            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(painter.RenderSurface.DestActualImage, winBmp);
             //----------------
             //copy from Agg's memory buffer to gdi 
             //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);

@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else
             {
-                var svxRenderVx = renderVx as PixelFarm.Agg.VxsRenderVx;
+                var svxRenderVx = renderVx as PixelFarm.CpuBlit.VxsRenderVx;
                 if (svxRenderVx != null)
                 {
                     //TODO: review fill color here
@@ -49,7 +49,7 @@ namespace PixelFarm.Drawing.WinGdi
                 }
                 else
                 {
-                    var svgRenderVx = renderVx as Agg.SvgRenderVx;
+                    var svgRenderVx = renderVx as CpuBlit.SvgRenderVx;
                     _gdigsx.FillPath(svgRenderVx);
                 }
 

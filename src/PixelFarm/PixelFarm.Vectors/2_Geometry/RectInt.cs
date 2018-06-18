@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public struct RectInt
     {

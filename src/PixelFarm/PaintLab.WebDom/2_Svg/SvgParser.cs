@@ -31,9 +31,9 @@ using LayoutFarm.Svg.Pathing;
 
 using PixelFarm;
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.Transform;
 
 
 namespace PaintLab.Svg

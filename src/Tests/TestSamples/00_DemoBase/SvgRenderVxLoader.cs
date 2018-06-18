@@ -6,7 +6,7 @@
 using System;
 using PaintLab.Svg;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public class SvgRenderVxLoader
     {

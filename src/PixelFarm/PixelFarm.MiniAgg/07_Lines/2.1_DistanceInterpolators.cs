@@ -14,7 +14,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.CpuBlit.Lines
 {
     //===================================================distance_interpolator0
     struct DistanceInterpolator0

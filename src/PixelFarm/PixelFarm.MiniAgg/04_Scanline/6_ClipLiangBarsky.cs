@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public static class ClipLiangBarsky
     {

@@ -4,7 +4,7 @@
 using System;
 using Mini;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Sample_ScanlineBoolean
+namespace PixelFarm.CpuBlit.Sample_ScanlineBoolean
 {
     [Info(OrderCode = "31")]
     public class ScanlineBoolean : DemoBase

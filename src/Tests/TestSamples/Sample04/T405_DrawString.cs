@@ -4,7 +4,7 @@ using System;
 using Mini;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Text;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 namespace OpenTkEssTest
 {

@@ -23,8 +23,8 @@
 //----------------------------------------------------------------------------
 
 using System;
-using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
-namespace PixelFarm.Agg
+using img_subpix_const = PixelFarm.CpuBlit.ImageFilterLookUpTable.ImgSubPixConst;
+namespace PixelFarm.CpuBlit
 {
     public abstract class ImgSpanGen : ISpanGenerator
     {

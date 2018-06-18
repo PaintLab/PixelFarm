@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Numeria.IO;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 namespace YourImplementation
 {

@@ -24,7 +24,7 @@
 
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public static class BoundingRect
     {

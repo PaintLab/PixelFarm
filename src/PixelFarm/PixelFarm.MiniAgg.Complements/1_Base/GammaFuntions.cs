@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public struct GammaNone : IGammaFunction
     {

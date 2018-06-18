@@ -12,7 +12,7 @@
 using System;
 using PixelFarm.Drawing.Effects;
 using PixelFarm.Drawing.DrawingBuffer;
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
     /// <summary>
     /// pdn sharpen

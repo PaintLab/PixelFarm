@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.CpuBlit.Lines
 {
     //==========================================================line_parameters
     public struct LineParameters

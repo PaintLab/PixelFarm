@@ -20,7 +20,7 @@
 //----------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
 
@@ -79,7 +79,7 @@ namespace PixelFarm.Drawing
         /// <param name="top"></param>
         public abstract void DrawImage(Image actualImage, double left, double top);
         public abstract void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH);
-        public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
+        public abstract void DrawImage(Image actualImage, params CpuBlit.Transform.AffinePlan[] affinePlans);
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
 

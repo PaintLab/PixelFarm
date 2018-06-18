@@ -20,7 +20,7 @@
 
 #define UNSAFE_VER 
 
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
 

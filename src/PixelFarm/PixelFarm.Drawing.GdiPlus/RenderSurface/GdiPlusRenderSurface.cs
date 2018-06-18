@@ -603,7 +603,7 @@ namespace PixelFarm.Drawing.WinGdi
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
 
-            if (image is PixelFarm.Agg.ActualBitmap)
+            if (image is PixelFarm.CpuBlit.ActualBitmap)
             {
                 //this is known image
                 var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
@@ -615,7 +615,7 @@ namespace PixelFarm.Drawing.WinGdi
                         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     //
                     //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.Agg.ActualBitmap)image, bmp);
+                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.ActualBitmap)image, bmp);
                     //
                     Image.SetCacheInnerImage(image, bmp);
                     return bmp;
@@ -703,23 +703,23 @@ namespace PixelFarm.Drawing.WinGdi
             gx.FillPath(internalSolidBrush, innerPath);
             internalSolidBrush.Color = prevColor;
         }
-        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.Agg.SvgPart vxsRenderVx)
+        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.SvgPart vxsRenderVx)
         {
-            var gpath = PixelFarm.Agg.SvgPart.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
+            var gpath = PixelFarm.CpuBlit.SvgPart.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
             if (gpath != null) return gpath;
 
             gpath = CreateGraphicsPath(vxsRenderVx.GetVxs());
-            PixelFarm.Agg.SvgPart.SetResolvedObject(vxsRenderVx, gpath);
+            PixelFarm.CpuBlit.SvgPart.SetResolvedObject(vxsRenderVx, gpath);
             return gpath;
         }
-        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 
-            var gpath = PixelFarm.Agg.VxsRenderVx.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
+            var gpath = PixelFarm.CpuBlit.VxsRenderVx.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
             if (gpath != null) return gpath;
 
             gpath = CreateGraphicsPath(vxsRenderVx._vxs);
-            PixelFarm.Agg.VxsRenderVx.SetResolvedObject(vxsRenderVx, gpath);
+            PixelFarm.CpuBlit.VxsRenderVx.SetResolvedObject(vxsRenderVx, gpath);
             return gpath;
         }
         static System.Drawing.Drawing2D.GraphicsPath CreateGraphicsPath(VertexStore vxs)
@@ -736,19 +736,19 @@ namespace PixelFarm.Drawing.WinGdi
                 var cmd = vxs.GetVertex(i, out double x, out double y);
                 switch (cmd)
                 {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                         {
                             latestMoveX = latestX = (float)x;
                             latestMoveY = latestY = (float)y;
                         }
                         break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
+                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
                         {
                             isOpen = true;
                             gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
                         }
                         break;
-                    case PixelFarm.Agg.VertexCmd.Close:
+                    case PixelFarm.CpuBlit.VertexCmd.Close:
                         {
                             latestX = latestMoveX;
                             latestY = latestMoveY;
@@ -757,7 +757,7 @@ namespace PixelFarm.Drawing.WinGdi
                             isOpen = false;
                         }
                         break;
-                    case Agg.VertexCmd.NoMore: break;
+                    case CpuBlit.VertexCmd.NoMore: break;
                     default:
                         throw new System.NotSupportedException();
                 }
@@ -765,7 +765,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             return gpath;
         }
-        public void FillPath(Color color, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        public void FillPath(Color color, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 
             //solid color
@@ -775,7 +775,7 @@ namespace PixelFarm.Drawing.WinGdi
             gx.FillPath(internalSolidBrush, innerPath);
             internalSolidBrush.Color = prevColor;
         }
-        public void FillPath(PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        public void FillPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 
             //solid color 
@@ -784,8 +784,8 @@ namespace PixelFarm.Drawing.WinGdi
 
         }
 
-        Agg.AggPainter _painter;
-        Agg.ActualBitmap _aggActualImg;
+        CpuBlit.AggPainter _painter;
+        CpuBlit.ActualBitmap _aggActualImg;
 
         static Typography.TextServices.OpenFontStore openFontStore;
         Painter GetAggPainter()
@@ -793,8 +793,8 @@ namespace PixelFarm.Drawing.WinGdi
             if (_painter == null)
             {
 
-                _aggActualImg = new Agg.ActualBitmap(this.Width, this.Height);
-                var aggPainter = Agg.AggPainter.Create(_aggActualImg);
+                _aggActualImg = new CpuBlit.ActualBitmap(this.Width, this.Height);
+                var aggPainter = CpuBlit.AggPainter.Create(_aggActualImg);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
                 //ifont loader
@@ -812,7 +812,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
         GdiPlusPainter _gdiPlusPainter;
-        public void FillPath(PixelFarm.Agg.SvgRenderVx svgVx)
+        public void FillPath(PixelFarm.CpuBlit.SvgRenderVx svgVx)
         {
             if (svgVx == null) return;
             //-------------------------
@@ -831,11 +831,11 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else if (!svgVx.HasBitmapSnapshot)
             {
-                Agg.RectD bound = svgVx.GetBounds();
+                CpuBlit.RectD bound = svgVx.GetBounds();
 
                 //create 
-                Agg.ActualBitmap backimg = new Agg.ActualBitmap((int)bound.Width, (int)bound.Height);
-                Agg.AggPainter painter = Agg.AggPainter.Create(backimg);
+                CpuBlit.ActualBitmap backimg = new CpuBlit.ActualBitmap((int)bound.Width, (int)bound.Height);
+                CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg);
                 svgVx.Render(painter);
 
 #if DEBUG
@@ -876,7 +876,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
         }
-        public void FillPath(Brush brush, PixelFarm.Agg.VxsRenderVx vxsRenderVx)
+        public void FillPath(Brush brush, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 
             switch (brush.BrushKind)

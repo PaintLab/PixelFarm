@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.Transform
 {
     //================================================span_interpolator_linear
     public struct SpanInterpolatorLinear : ISpanInterpolator

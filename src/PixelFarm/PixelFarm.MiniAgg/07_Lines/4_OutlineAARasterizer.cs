@@ -17,7 +17,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.CpuBlit.Lines
 {
     //-----------------------------------------------------------line_aa_vertex
     // Vertex (x, y) with the distance to the next one. The last vertex has 

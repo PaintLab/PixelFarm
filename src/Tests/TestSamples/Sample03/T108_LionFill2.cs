@@ -4,7 +4,7 @@ using System;
 using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 namespace OpenTkEssTest
 {
@@ -29,9 +29,9 @@ namespace OpenTkEssTest
             
 
             //flip this lion vertically before use with openGL
-            PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
-                 PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
-                 PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
+            PixelFarm.CpuBlit.Transform.Affine aff = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
+                 PixelFarm.CpuBlit.Transform.AffinePlan.Scale(1, -1),
+                 PixelFarm.CpuBlit.Transform.AffinePlan.Translate(0, 600));
             lionShape.ApplyTransform(aff);
 
 

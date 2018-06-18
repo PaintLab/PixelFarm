@@ -20,11 +20,11 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Transform;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     partial class AggRenderSurface
     {

@@ -55,8 +55,8 @@ namespace PixelFarm.Drawing
 
         //-----------------------------------
         [System.ThreadStatic]
-        static Stack<Agg.Stroke> s_strokePool = new Stack<Agg.Stroke>();
-        public static void GetFreeStroke(out Agg.Stroke stroke, int w)
+        static Stack<CpuBlit.Stroke> s_strokePool = new Stack<CpuBlit.Stroke>();
+        public static void GetFreeStroke(out CpuBlit.Stroke stroke, int w)
         {
             if (s_strokePool.Count > 0)
             {
@@ -65,10 +65,10 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                stroke = new Agg.Stroke(w);
+                stroke = new CpuBlit.Stroke(w);
             }
         }
-        public static void ReleaseStroke(ref Agg.Stroke stroke)
+        public static void ReleaseStroke(ref CpuBlit.Stroke stroke)
         {
             s_strokePool.Push(stroke);
             stroke = null;
@@ -77,8 +77,8 @@ namespace PixelFarm.Drawing
 
 
         [System.ThreadStatic]
-        static Stack<PixelFarm.Agg.VertexSource.PathWriter> s_pathWriters = new Stack<PixelFarm.Agg.VertexSource.PathWriter>();
-        public static void GetFreePathWriter(out PixelFarm.Agg.VertexSource.PathWriter p)
+        static Stack<PixelFarm.CpuBlit.VertexSource.PathWriter> s_pathWriters = new Stack<PixelFarm.CpuBlit.VertexSource.PathWriter>();
+        public static void GetFreePathWriter(out PixelFarm.CpuBlit.VertexSource.PathWriter p)
         {
             if (s_pathWriters.Count > 0)
             {
@@ -86,10 +86,10 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                p = new Agg.VertexSource.PathWriter();
+                p = new CpuBlit.VertexSource.PathWriter();
             }
         }
-        public static void ReleasePathWriter(ref PixelFarm.Agg.VertexSource.PathWriter p)
+        public static void ReleasePathWriter(ref PixelFarm.CpuBlit.VertexSource.PathWriter p)
         {
             p.Clear();
             s_pathWriters.Push(p);

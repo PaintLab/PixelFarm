@@ -3,7 +3,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.WinGdi
 {
     public static class VxsHelper
@@ -72,17 +72,17 @@ namespace PixelFarm.Drawing.WinGdi
                 VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
                 switch (cmd)
                 {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                         prevMoveToX = prevX = x;
                         prevMoveToY = prevY = y;
                         brush_path.StartFigure();
                         break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
+                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
                         brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.Close:
+                    case PixelFarm.CpuBlit.VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
                         //from current point                         
                         brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
@@ -91,7 +91,7 @@ namespace PixelFarm.Drawing.WinGdi
                         brush_path.CloseFigure();
                         break;
 
-                    case PixelFarm.Agg.VertexCmd.NoMore:
+                    case PixelFarm.CpuBlit.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
                         throw new NotSupportedException();

@@ -31,7 +31,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public abstract class Scanline
     {

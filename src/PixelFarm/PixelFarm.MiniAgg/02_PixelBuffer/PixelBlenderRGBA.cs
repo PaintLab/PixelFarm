@@ -31,7 +31,7 @@ using PixelFarm.Drawing;
 using System.Collections.Generic;
 using System;
 
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
     /// <summary>
     /// look up table helper for clamp value from 9 bits to 8 bits

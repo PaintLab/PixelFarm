@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.Transform
 {
     //===================================================dda_line_interpolator
     public struct LineInterpolatorDDA

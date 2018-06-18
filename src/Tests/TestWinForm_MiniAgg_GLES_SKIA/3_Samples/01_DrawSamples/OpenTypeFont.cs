@@ -10,13 +10,13 @@
 using System.IO;
 //
 using Mini;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Contours;
 using Typography.TextServices;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Sample_Draw
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
     [Info(OrderCode = "01")]
     [Info("OpenTypeReaderFromPureCs")]
@@ -84,13 +84,13 @@ namespace PixelFarm.Agg.Sample_Draw
 
             VectorToolBox.GetFreeVxs(out VertexStore v0, out VertexStore v1);
             txToVxs.WriteOutput(v0);
-            var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+            var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
                  //translate
-                 new PixelFarm.Agg.Transform.AffinePlan(
-                     PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 10, 10),
+                 new PixelFarm.CpuBlit.Transform.AffinePlan(
+                     PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, 10, 10),
                  //scale
-                 new PixelFarm.Agg.Transform.AffinePlan(
-                     PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
+                 new PixelFarm.CpuBlit.Transform.AffinePlan(
+                     PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Scale, 1, 1)
                      );
 
 

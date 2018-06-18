@@ -19,8 +19,8 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-namespace PixelFarm.Agg
+using PixelFarm.CpuBlit.Imaging;
+namespace PixelFarm.CpuBlit
 {
     
 

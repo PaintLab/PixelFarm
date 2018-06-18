@@ -3,10 +3,10 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexSource;
 using Mini;
-namespace PixelFarm.Agg.Sample_AADemoTest3
+namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 {
     class CustomScanlineRasToBmp_EnlargedSubPixelRendering : CustomDestBitmapRasterizer
     {
@@ -20,7 +20,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         double primary = 1;
         public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualBitmap destImage)
         {
-            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
+            this.ScanlineRenderMode = CpuBlit.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);
@@ -241,11 +241,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         {
             //specific for agg
 
-            if (p is PixelFarm.Agg.AggPainter)
+            if (p is PixelFarm.CpuBlit.AggPainter)
             {
 
 
-                var p2 = (PixelFarm.Agg.AggPainter)p;
+                var p2 = (PixelFarm.CpuBlit.AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
 

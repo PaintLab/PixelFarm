@@ -15,8 +15,8 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Agg.Transform;
-namespace PixelFarm.Agg.Lines
+using PixelFarm.CpuBlit.Transform;
+namespace PixelFarm.CpuBlit.Lines
 {
     //================================================line_interpolator_aa_base
     struct LineInterpolatorAAData

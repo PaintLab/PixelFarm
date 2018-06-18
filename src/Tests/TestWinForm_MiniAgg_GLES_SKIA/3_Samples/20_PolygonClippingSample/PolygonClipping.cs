@@ -4,11 +4,11 @@
 using System;
 using PixelFarm.Drawing;
 using System.Collections.Generic;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.Transform;
 using Mini;
 using ClipperLib;
-namespace PixelFarm.Agg.Sample_PolygonClipping
+namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
     public enum OperationOption
     {
@@ -168,7 +168,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //
                         PathWriter gb_poly = new PathWriter();
                         PathWriter arrows = new PathWriter();
-                        PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                        PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
                         make_arrows(arrows);
                         //Affine mtx1 = Affine.NewIdentity();                        
                         //mtx1 *= Affine.NewTranslation(-1150, -1150);
@@ -214,7 +214,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
                         PathWriter gb_poly = new PathWriter();
-                        PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                        PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
                         Affine mtx = Affine.NewMatix(
                                 AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2));

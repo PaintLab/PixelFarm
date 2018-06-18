@@ -1,9 +1,9 @@
 ﻿//MIT, 2017-present, WinterDev 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using Mini;
-namespace PixelFarm.Agg.Sample_AADemoTest4
+namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 {
 
     public enum Sample
@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyImgStride);
 
             //blend lcd 
-            var aggPainer = (PixelFarm.Agg.AggPainter)p;
+            var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
             Blend(aggPainer.RenderSurface.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
@@ -255,7 +255,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
-            var aggPainer = (PixelFarm.Agg.AggPainter)p;
+            var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
             BlendWithLcdTechnique(aggPainer.RenderSurface.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
@@ -369,7 +369,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //specific for agg
 
-            if (!(p is PixelFarm.Agg.AggPainter))
+            if (!(p is PixelFarm.CpuBlit.AggPainter))
             {
                 return;
             }

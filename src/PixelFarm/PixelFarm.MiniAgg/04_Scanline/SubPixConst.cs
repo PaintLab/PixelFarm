@@ -5,7 +5,7 @@
 // sizeof(int) * 8 - poly_subpixel_shift, i.e, for 32-bit integers and
 // 8-bits fractional part the capacity is 24 bits.
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     static class PolySubPix
     {

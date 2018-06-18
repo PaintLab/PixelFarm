@@ -246,16 +246,16 @@ namespace Typography.Rendering
 
         static GlyphImage ReadGlyphImages(string filename)
         {
-            PixelFarm.Agg.ActualBitmap bmp = StorageService.Provider.ReadPngBitmap(filename);
+            PixelFarm.CpuBlit.ActualBitmap bmp = StorageService.Provider.ReadPngBitmap(filename);
             GlyphImage img = new GlyphImage(bmp.Width, bmp.Height);
-            img.SetImageBuffer(PixelFarm.Agg.ActualBitmap.GetBuffer(bmp), true);
+            img.SetImageBuffer(PixelFarm.CpuBlit.ActualBitmap.GetBuffer(bmp), true);
             return img;
 
         }
         static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
         {
               
-            var bmp = new PixelFarm.Agg.ActualBitmap(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer());
+            var bmp = new PixelFarm.CpuBlit.ActualBitmap(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer());
             StorageService.Provider.SavePngBitmap(bmp, filename);
             
         }
@@ -271,7 +271,7 @@ namespace Typography.Rendering
 
             GlyphImage newImg = new GlyphImage(org.Width, org.Height);
 
-            PixelFarm.Agg.Imaging.ShapenFilterPdn sharpen1 = new PixelFarm.Agg.Imaging.ShapenFilterPdn();
+            PixelFarm.CpuBlit.Imaging.ShapenFilterPdn sharpen1 = new PixelFarm.CpuBlit.Imaging.ShapenFilterPdn();
             int[] orgBuffer = org.GetImageBuffer();
             unsafe
             {

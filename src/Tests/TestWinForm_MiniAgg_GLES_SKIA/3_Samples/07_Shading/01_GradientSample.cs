@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
 using Mini;
-namespace PixelFarm.Agg.Sample_Gradient
+namespace PixelFarm.CpuBlit.Sample_Gradient
 {
 
     [Info(OrderCode = "01_1")]
@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Sample_Gradient
             //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
 
 
-            PixelFarm.Agg.VertexSource.PathWriter p = new VertexSource.PathWriter();
+            PixelFarm.CpuBlit.VertexSource.PathWriter p = new VertexSource.PathWriter();
             p.MoveTo(0, 0);
             p.LineToRel(100, 100);
             p.LineToRel(100, -100);

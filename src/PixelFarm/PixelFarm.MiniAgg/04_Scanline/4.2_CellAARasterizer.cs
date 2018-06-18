@@ -33,8 +33,8 @@
 //----------------------------------------------------------------------------
 
 
-using poly_subpix = PixelFarm.Agg.PolySubPix;
-namespace PixelFarm.Agg
+using poly_subpix = PixelFarm.CpuBlit.PolySubPix;
+namespace PixelFarm.CpuBlit
 {
     partial class ScanlineRasterizer
     {

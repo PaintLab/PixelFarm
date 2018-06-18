@@ -2,12 +2,12 @@
 //MatterHackers
 
 using System;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexSource;
 using Mini;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Sample_Perspective
+namespace PixelFarm.CpuBlit.Sample_Perspective
 {
     [Info(OrderCode = "04")]
     [Info("Perspective and bilinear transformations. In general, these classes can transform an arbitrary quadrangle "
@@ -25,7 +25,7 @@ namespace PixelFarm.Agg.Sample_Perspective
 
             lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
 
-            quadPolygonControl = new PixelFarm.Agg.UI.PolygonEditWidget(4, 5.0);
+            quadPolygonControl = new PixelFarm.CpuBlit.UI.PolygonEditWidget(4, 5.0);
             quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
             quadPolygonControl.SetYN(0, lionShape.Bounds.Top);
             quadPolygonControl.SetXN(1, lionShape.Bounds.Right);

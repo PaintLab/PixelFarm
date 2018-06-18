@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.Skia
 {
     static class BitmapHelper

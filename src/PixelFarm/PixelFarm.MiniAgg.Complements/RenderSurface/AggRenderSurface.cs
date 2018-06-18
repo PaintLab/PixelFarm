@@ -21,9 +21,9 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Transform;
-namespace PixelFarm.Agg
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Transform;
+namespace PixelFarm.CpuBlit
 {
     public sealed partial class AggRenderSurface
     {

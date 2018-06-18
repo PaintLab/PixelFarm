@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using PixelFarm;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.PainterExtensions;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.Transform;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     //very simple svg parser 
 
@@ -126,7 +126,7 @@ namespace PixelFarm.Agg
                 return;
             }
 
-            PixelFarm.Agg.Transform.Affine currentTx = null;
+            PixelFarm.CpuBlit.Transform.Affine currentTx = null;
 
             var renderState = new TempRenderState();
             renderState.strokeColor = p.StrokeColor;
@@ -419,7 +419,7 @@ namespace PixelFarm.Agg
         }
 
 
-        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.Agg.Transform.Affine tx)
+        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.Transform.Affine tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (originalSvgVx._vxs != null)
@@ -443,7 +443,7 @@ namespace PixelFarm.Agg
             }
             return newSx;
         }
-        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.Agg.Transform.Bilinear tx)
+        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.Transform.Bilinear tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (newSx._vxs != null)

@@ -151,7 +151,7 @@ namespace Typography.Contours
             return InternalGetGlyphMesh(glyphIndex).GetControlPars();
         }
 
-        PixelFarm.Agg.Transform.Affine _invertY = PixelFarm.Agg.Transform.Affine.NewScaling(1, -1);
+        PixelFarm.CpuBlit.Transform.Affine _invertY = PixelFarm.CpuBlit.Transform.Affine.NewScaling(1, -1);
         VertexStore _vxs1 = new VertexStore();
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Typography.Contours
                         _tovxs.WriteOutput(_vxs1);
 
                         VertexStore vxs = new VertexStore();
-                        PixelFarm.Agg.VertexStoreTransformExtensions.TransformToVxs(_invertY, _vxs1, vxs);
+                        PixelFarm.CpuBlit.VertexStoreTransformExtensions.TransformToVxs(_invertY, _vxs1, vxs);
                         //then
                         glyphMeshData.vxsStore = vxs;
                     }
@@ -200,7 +200,7 @@ namespace Typography.Contours
                         _tovxs.WriteOutput(_vxs1);
 
                         VertexStore vxs = new VertexStore();
-                        PixelFarm.Agg.VertexStoreTransformExtensions.TransformToVxs(_invertY, _vxs1, vxs);
+                        PixelFarm.CpuBlit.VertexStoreTransformExtensions.TransformToVxs(_invertY, _vxs1, vxs);
                         //then
                         glyphMeshData.vxsStore = vxs;
                     }

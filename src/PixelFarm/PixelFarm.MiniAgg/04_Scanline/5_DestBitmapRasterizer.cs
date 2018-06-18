@@ -16,7 +16,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public enum ScanlineRenderMode : byte
     {
@@ -1452,10 +1452,10 @@ namespace PixelFarm.Agg
                         }
                     }
                     break;
-                case Agg.ScanlineRenderMode.SubPixelLcdEffect:
+                case CpuBlit.ScanlineRenderMode.SubPixelLcdEffect:
                     scSubPixRas.RenderScanlines(dest, sclineRas, scline, color);
                     break;
-                case Agg.ScanlineRenderMode.Custom:
+                case CpuBlit.ScanlineRenderMode.Custom:
                     while (sclineRas.SweepScanline(scline))
                     {
                         CustomRenderSingleScanLine(dest, scline, color);

@@ -3,15 +3,15 @@
 
 
 using System.Diagnostics;
-using PixelFarm.Agg.UI;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.UI;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexSource;
 
 using Mini;
 using System;
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Sample_Blur2
+namespace PixelFarm.CpuBlit.Sample_Blur2
 {
 
 

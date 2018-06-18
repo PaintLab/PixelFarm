@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using PixelFarm.VectorMath;
 using Mini;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     public enum SmoothBrushMode
     {
@@ -133,7 +133,7 @@ namespace PixelFarm.Agg.Samples
                                         //cut each path
                                         var lastPath = myBrushPathList[i];
                                         //do path clip***
-                                        List<VertexStore> paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(
+                                        List<VertexStore> paths = PixelFarm.CpuBlit.VertexSource.VxsClipper.CombinePaths(
                                                 new VertexStoreSnap(lastPath.Vxs),
                                                 new VertexStoreSnap(currentBrushPath.Vxs), VertexSource.VxsClipperType.Difference,
                                                 true);

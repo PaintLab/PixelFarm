@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.Fonts;
 namespace SampleWinForms.UI
 {
@@ -65,7 +65,7 @@ namespace SampleWinForms.UI
 
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
 
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(p.RenderSurface.DestActualImage, winBmp);
+            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(p.RenderSurface.DestActualImage, winBmp);
             //--------------- 
             //7. just render our bitmap
             g.Clear(Color.White);

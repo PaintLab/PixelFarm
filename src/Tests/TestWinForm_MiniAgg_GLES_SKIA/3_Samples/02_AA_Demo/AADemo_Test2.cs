@@ -3,10 +3,10 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexSource;
 using Mini;
-namespace PixelFarm.Agg.Sample_AADemoTest2
+namespace PixelFarm.CpuBlit.Sample_AADemoTest2
 {
     class CustomRas_EnlargeV2 : CustomDestBitmapRasterizer
     {
@@ -16,7 +16,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         AggRenderSurface gfx;
         public CustomRas_EnlargeV2(double size, ActualBitmap destImage)
         {
-            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
+            this.ScanlineRenderMode = CpuBlit.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);

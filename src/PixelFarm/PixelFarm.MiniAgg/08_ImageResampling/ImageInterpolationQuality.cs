@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
     public enum ImageInterpolationQuality
     {

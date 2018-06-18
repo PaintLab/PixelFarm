@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev 
 using System.Runtime.InteropServices;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
 

@@ -4,13 +4,13 @@
 #define USE_CLIPPING_ALPHA_MASK
 
 using System;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Imaging;
 using Mini;
 using PixelFarm.Drawing.WinGdi;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg.Sample_LionAlphaMask
+namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
 
 

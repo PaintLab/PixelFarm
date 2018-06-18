@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
 using Mini;
-namespace PixelFarm.Agg.Sample_Gouraud
+namespace PixelFarm.CpuBlit.Sample_Gouraud
 {
     [Info(OrderCode = "07_2")]
     [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"

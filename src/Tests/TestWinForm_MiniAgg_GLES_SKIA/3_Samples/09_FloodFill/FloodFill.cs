@@ -3,13 +3,13 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing.Fonts;
 using Mini;
 
-namespace PixelFarm.Agg.Sample_FloodFill
+namespace PixelFarm.CpuBlit.Sample_FloodFill
 {
     [Info(OrderCode = "09")]
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]

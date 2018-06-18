@@ -20,8 +20,8 @@
 #if true
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-namespace PixelFarm.Agg.Lines
+using PixelFarm.CpuBlit.Imaging;
+namespace PixelFarm.CpuBlit.Lines
 {
     /*
     //========================================================line_image_scale

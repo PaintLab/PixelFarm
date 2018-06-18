@@ -24,9 +24,9 @@ using Typography.TextServices;
 
 
 using PixelFarm.Platforms;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Imaging;
 
-namespace PixelFarm.Agg.Sample_Draw
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
 
     [Info(OrderCode = "01")]
