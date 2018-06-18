@@ -16,7 +16,8 @@
 
 using System;
 using PixelFarm.CpuBlit.Imaging;
-namespace PixelFarm.CpuBlit.Lines
+using PixelFarm.CpuBlit.Lines;
+namespace PixelFarm.CpuBlit.Infrastructure
 {
     //==========================================================line_profile_aa
     //

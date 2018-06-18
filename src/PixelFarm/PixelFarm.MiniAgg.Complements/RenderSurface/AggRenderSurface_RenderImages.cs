@@ -22,8 +22,10 @@
 using System;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Infrastructure;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit
 {
     partial class AggRenderSurface

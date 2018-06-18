@@ -4,8 +4,10 @@
 
 
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.Infrastructure;
 namespace PixelFarm.CpuBlit
 {
+
     public class Square
     {
         double m_size;
@@ -15,18 +17,19 @@ namespace PixelFarm.CpuBlit
         }
 
         public void Draw(
-            DestBitmapRasterizer sclineRasToBmp,
+            DestBitmapRasterizer bmpRast,
             ScanlineRasterizer ras,
             Scanline sl,
             IBitmapBlender destImage, Color color,
             double x, double y)
         {
+
             ras.Reset();
             ras.MoveTo(x * m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
-            sclineRasToBmp.RenderWithColor(destImage, ras, sl, color);
+            bmpRast.RenderWithColor(destImage, ras, sl, color);
         }
     }
 }

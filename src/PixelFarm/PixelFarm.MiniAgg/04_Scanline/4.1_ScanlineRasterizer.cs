@@ -35,7 +35,7 @@
 using poly_subpix = PixelFarm.CpuBlit.PolySubPix;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.Infrastructure
 {
 
     //==================================================rasterizer_scanline_aa

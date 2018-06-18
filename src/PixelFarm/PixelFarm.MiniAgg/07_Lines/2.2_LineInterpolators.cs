@@ -16,6 +16,8 @@
 
 using System;
 using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Infrastructure;
+
 namespace PixelFarm.CpuBlit.Lines
 {
     //================================================line_interpolator_aa_base

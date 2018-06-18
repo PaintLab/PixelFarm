@@ -22,8 +22,8 @@
 
 //#include "agg_clip_liang_barsky.h"
 
-
-namespace PixelFarm.CpuBlit
+ 
+namespace PixelFarm.CpuBlit.Infrastructure
 {
     partial class ScanlineRasterizer
     {

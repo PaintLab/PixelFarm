@@ -6,6 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.CpuBlit.PixelBlenders;
+using PixelFarm.CpuBlit.Infrastructure;
 
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_AADemoTest2
@@ -18,7 +19,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
         AggRenderSurface gfx;
         public CustomRas_EnlargeV2(double size, ActualBitmap destImage)
         {
-            this.ScanlineRenderMode = CpuBlit.ScanlineRenderMode.Custom;
+            this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);

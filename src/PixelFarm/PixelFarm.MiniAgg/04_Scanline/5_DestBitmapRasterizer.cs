@@ -16,7 +16,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.Infrastructure
 {
     public enum ScanlineRenderMode : byte
     {
@@ -24,9 +24,6 @@ namespace PixelFarm.CpuBlit
         Custom,
         SubPixelLcdEffect
     }
-
-
-
     public partial class ScanlineSubPixelRasterizer
     {
         //this class design for render 32 bits RGBA  
@@ -1452,10 +1449,10 @@ namespace PixelFarm.CpuBlit
                         }
                     }
                     break;
-                case CpuBlit.ScanlineRenderMode.SubPixelLcdEffect:
+                case ScanlineRenderMode.SubPixelLcdEffect:
                     scSubPixRas.RenderScanlines(dest, sclineRas, scline, color);
                     break;
-                case CpuBlit.ScanlineRenderMode.Custom:
+                case ScanlineRenderMode.Custom:
                     while (sclineRas.SweepScanline(scline))
                     {
                         CustomRenderSingleScanLine(dest, scline, color);

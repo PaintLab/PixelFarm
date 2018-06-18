@@ -36,7 +36,7 @@ using PixelFarm.CpuBlit.Transform;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Lines;
 using PixelFarm.CpuBlit.PixelBlenders;
-
+using PixelFarm.CpuBlit.Infrastructure;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_LionOutline
 {

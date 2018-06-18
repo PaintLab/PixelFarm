@@ -399,7 +399,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 
         }
 
-        static LcdDistributionLut g8_4_2_1 = new LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
+        static PixelFarm.CpuBlit.Infrastructure.LcdDistributionLut g8_4_2_1 = new PixelFarm.CpuBlit.Infrastructure.LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
         void BlendWithLcdTechnique(ActualBitmap destImg, ActualBitmap glyphImg, PixelFarm.Drawing.Color color)
         {
             //var g8Lut = g8_4_2_1;
@@ -546,7 +546,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //agg lcd test
             //lcd_distribution_lut<ggo_gray8> lut(1.0/3.0, 2.0/9.0, 1.0/9.0);
             //lcd_distribution_lut<ggo_gray8> lut(0.5, 0.25, 0.125);
-            LcdDistributionLut lut = g8_4_2_1;
+            PixelFarm.CpuBlit.Infrastructure.LcdDistributionLut lut = g8_4_2_1;
             int destImgStride = srcW + 4; //expand the original gray scale 
             newImageStride = destImgStride;
 

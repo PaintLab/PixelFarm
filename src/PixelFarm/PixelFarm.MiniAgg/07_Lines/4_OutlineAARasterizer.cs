@@ -16,7 +16,7 @@
 
 using System;
 using PixelFarm.Drawing;
-
+using PixelFarm.CpuBlit.Infrastructure;
 namespace PixelFarm.CpuBlit.Lines
 {
     //-----------------------------------------------------------line_aa_vertex

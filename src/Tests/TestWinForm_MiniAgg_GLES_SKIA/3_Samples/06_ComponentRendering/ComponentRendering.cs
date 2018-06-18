@@ -5,6 +5,8 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.PixelBlenders;
 using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Infrastructure;
+
 using Mini;
 namespace PixelFarm.CpuBlit
 {

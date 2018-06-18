@@ -31,7 +31,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.Infrastructure
 {
     public struct ScanlineSpan
     {

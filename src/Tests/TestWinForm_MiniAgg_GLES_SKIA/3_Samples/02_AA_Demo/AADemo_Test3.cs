@@ -5,6 +5,8 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.Infrastructure;
+
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 {
@@ -20,7 +22,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
         double primary = 1;
         public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualBitmap destImage)
         {
-            this.ScanlineRenderMode = CpuBlit.ScanlineRenderMode.Custom;
+            this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);

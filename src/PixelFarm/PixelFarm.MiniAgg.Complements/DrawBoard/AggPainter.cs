@@ -6,6 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.DrawingBuffer;
 using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Infrastructure;
 
 namespace PixelFarm.CpuBlit
 {
@@ -1372,8 +1373,6 @@ namespace PixelFarm.CpuBlit
             //start at current span generator 
             _grSpanGenPart._spanGenGr.GenerateColors(outputColors, startIndex, x, y, spanLen);
         }
-
-
 
     }
 
