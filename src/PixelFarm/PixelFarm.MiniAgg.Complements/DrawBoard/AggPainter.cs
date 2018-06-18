@@ -55,7 +55,7 @@ namespace PixelFarm.Agg
         /// <summary>
         /// scanline rasterizer to bitmap
         /// </summary>
-        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        DestBitmapRasterizer _bmpRasterizer;
 
         //--------------------
         //pen 
@@ -95,7 +95,7 @@ namespace PixelFarm.Agg
             this.sclineRas = _aggsx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = aggsx.ScanlinePacked8;
-            this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
+            this._bmpRasterizer = aggsx.BitmapRasterizer;
             _orientation = DrawBoardOrientation.LeftBottom;
             //from membuffer
             _bxt = new BitmapBuffer(aggsx.Width,
@@ -778,7 +778,7 @@ namespace PixelFarm.Agg
 
             //Agg
             sclineRas.AddPath(snap);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
         }
         /// <summary>
         /// fill vxs, we do NOT store vxs
@@ -822,7 +822,7 @@ namespace PixelFarm.Agg
                     default:
                         {
                             sclineRas.AddPath(vxs);
-                            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
 
                         }
                         break;
@@ -831,7 +831,7 @@ namespace PixelFarm.Agg
             else
             {
                 sclineRas.AddPath(vxs);
-                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
             }
 
 
@@ -848,12 +848,12 @@ namespace PixelFarm.Agg
                 {
                     //TODO: review here again             
                     this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = true;
-                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
+                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
                 }
                 else
                 {
                     this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = false;
-                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
+                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.Default;
                 }
             }
         }
@@ -879,7 +879,7 @@ namespace PixelFarm.Agg
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
             this.sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
+            _bmpRasterizer.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
         }
         void DrawBitmap(ActualBitmap actualBmp, double left, double top)
         {

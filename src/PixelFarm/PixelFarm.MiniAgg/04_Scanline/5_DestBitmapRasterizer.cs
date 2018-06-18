@@ -1398,20 +1398,15 @@ namespace PixelFarm.Agg
     }
 
 
-
-
-
-
-
     /// <summary>
-    /// scanline rasterizer TO DESTINATION bitmap
+    /// rasterizer TO DESTINATION bitmap
     /// </summary>  
-    public class ScanlineRasToDestBitmapRenderer
+    public class DestBitmapRasterizer
     {
 
         ScanlineSubPixelRasterizer scSubPixRas = new ScanlineSubPixelRasterizer();
         ArrayList<Color> tempSpanColors = new ArrayList<Color>();
-        public ScanlineRasToDestBitmapRenderer()
+        public DestBitmapRasterizer()
         {
         }
         public ScanlineRenderMode ScanlineRenderMode
@@ -1482,11 +1477,11 @@ namespace PixelFarm.Agg
 
             int scline_width = sclineRas.MaxX - sclineRas.MinX;
             tempSpanColors.Clear(scline_width);
-            if(scline_width > tempSpanColors.AllocatedSize)
+            if (scline_width > tempSpanColors.AllocatedSize)
             { //if not enough -> alloc more
-                tempSpanColors.Clear(scline_width); 
+                tempSpanColors.Clear(scline_width);
             }
-            
+
 
             Color[] colorArray = tempSpanColors.Array;
             while (sclineRas.SweepScanline(scline))
@@ -1528,8 +1523,9 @@ namespace PixelFarm.Agg
 
 
     //----------------------------
-    public class CustomScanlineRasToDestBitmapRenderer : ScanlineRasToDestBitmapRenderer
+    public class CustomDestBitmapRasterizer : DestBitmapRasterizer
     {
+
     }
 
 

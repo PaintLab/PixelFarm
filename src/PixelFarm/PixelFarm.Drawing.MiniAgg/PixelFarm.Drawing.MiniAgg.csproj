@@ -393,8 +393,8 @@
     <Compile Include="..\PixelFarm.MiniAgg\04_Scanline\4.3_VectorClipper.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\4.3_VectorClipper.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Scanline\5_DestBitmapRasterizer.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\5_DestBitmapRasterizer.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\04_Scanline\6_ClipLiangBarsky.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\6_ClipLiangBarsky.cs</Link>

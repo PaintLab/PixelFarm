@@ -140,7 +140,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
         void DrawAsScanline(ClipProxyImage imageClippingProxy,
             AggRenderSurface aggsx,
             ScanlineRasterizer rasterizer,
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp)
+            DestBitmapRasterizer bmpRas)
         {
             SvgRenderVx renderVx = lionShape.GetRenderVx();
             int num_paths = renderVx.SvgVxCount;
@@ -155,7 +155,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                     case SvgRenderVxKind.Path:
                         {
                             rasterizer.AddPath(new PixelFarm.Drawing.VertexStoreSnap(svgPart.GetVxs(), 0));
-                            sclineRasToBmp.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
+                            bmpRas.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
                         }
                         break;
                 }
@@ -417,7 +417,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 lionShape.ApplyTransform(affTx);
 
 
-                DrawAsScanline(imageClippingProxy, aggsx, rasterizer, aggsx.ScanlineRasToDestBitmap);
+                DrawAsScanline(imageClippingProxy, aggsx, rasterizer, aggsx.BitmapRasterizer);
 
 
 

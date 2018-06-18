@@ -30,7 +30,7 @@ namespace PixelFarm.Agg
         MyBitmapBlender destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
 
-        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        DestBitmapRasterizer _bmpRasterizer;
 
         double ox; //canvas origin x
         double oy; //canvas origin y
@@ -49,7 +49,7 @@ namespace PixelFarm.Agg
             this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
-            this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            this._bmpRasterizer = new DestBitmapRasterizer();
             //
             this.destWidth = destImage.Width;
             this.destHeight = destImage.Height;
@@ -92,9 +92,9 @@ namespace PixelFarm.Agg
             }
         }
 
-        public ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
+        public DestBitmapRasterizer BitmapRasterizer
         {
-            get { return this.sclineRasToBmp; }
+            get { return this._bmpRasterizer; }
         }
         public void SetClippingRect(RectInt rect)
         {
@@ -326,7 +326,7 @@ namespace PixelFarm.Agg
             {
                 sclineRas.AddPath(vxsSnap);
             }
-            sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+            _bmpRasterizer.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
             unchecked { destImageChanged++; };
             //-----------------------------
         }

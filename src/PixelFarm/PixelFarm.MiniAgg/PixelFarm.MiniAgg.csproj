@@ -122,7 +122,7 @@
     <Compile Include="04_Scanline\2_ScanlinePacked8.cs" />
     <Compile Include="04_Scanline\3_ScanlineUnpacked8.cs" />
     <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
-    <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
+    <Compile Include="04_Scanline\5_DestBitmapRasterizer.cs" />
     <Compile Include="04_Scanline\4.3_VectorClipper.cs" />
     <Content Include="x_backup\PixelBlenderGray.txt" />
   </ItemGroup>

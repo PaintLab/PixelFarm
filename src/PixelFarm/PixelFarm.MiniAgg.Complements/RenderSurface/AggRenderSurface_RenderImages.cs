@@ -30,8 +30,8 @@ namespace PixelFarm.Agg
     {
         public bool UseSubPixelRendering
         {
-            get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
-            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
+            get { return this._bmpRasterizer.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
+            set { this._bmpRasterizer.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
         }
         static Affine BuildImageBoundsPath(
             int srcW, int srcH,
@@ -114,7 +114,7 @@ namespace PixelFarm.Agg
         void Render(VertexStore vxs, ISpanGenerator spanGen)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithSpan(
+            _bmpRasterizer.RenderWithSpan(
                 destImageReaderWriter,
                 sclineRas,
                 sclinePack8,

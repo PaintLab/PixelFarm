@@ -8,7 +8,7 @@ using PixelFarm.Agg.VertexSource;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest3
 {
-    class CustomScanlineRasToBmp_EnlargedSubPixelRendering : CustomScanlineRasToDestBitmapRenderer
+    class CustomScanlineRasToBmp_EnlargedSubPixelRendering : CustomDestBitmapRasterizer
     {
         //old idea not corrrect
 
@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             int num_spans = scanline.SpanCount;
             byte[] covers = scanline.GetCovers();
             ScanlineRasterizer ras = gfx.ScanlineRasterizer;
-            var rasToBmp = gfx.ScanlineRasToDestBitmap;
+            var rasToBmp = gfx.BitmapRasterizer;
             //------------------------------------------
             Color bgColor = Color.White;
             float cb_R = bgColor.R / 255f;
@@ -270,7 +270,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
                 ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //----------------------------------------
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
+                DestBitmapRasterizer sclineRasToBmp = aggsx.BitmapRasterizer;
                 aggsx.UseSubPixelRendering = false;
                 sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 rasterizer.ResetGamma(new GammaNone());
