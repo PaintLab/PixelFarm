@@ -523,35 +523,35 @@
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\ISpanInterpolator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\ISpanInterpolator.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\0_ScanlineSpan.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\0_ScanlineSpan.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\0_ScanlineSpan.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\0_ScanlineSpan.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\1_Scanline.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\1_Scanline.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\1_Scanline.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\1_Scanline.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\2_ScanlinePacked8.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\2_ScanlinePacked8.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\2_ScanlinePacked8.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\2_ScanlinePacked8.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\3_ScanlineUnpacked8.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\3_ScanlineUnpacked8.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\3_ScanlineUnpacked8.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\3_ScanlineUnpacked8.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\4.1_ScanlineRasterizer.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\4.1_ScanlineRasterizer.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\4.1_ScanlineRasterizer.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\4.1_ScanlineRasterizer.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\4.2_CellAARasterizer.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\4.2_CellAARasterizer.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\4.2_CellAARasterizer.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\4.2_CellAARasterizer.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\4.3_VectorClipper.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\4.3_VectorClipper.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\4.3_VectorClipper.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\4.3_VectorClipper.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\04_Scanline\5_DestBitmapRasterizer.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\5_DestBitmapRasterizer.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\5_DestBitmapRasterizer.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\5_DestBitmapRasterizer.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\6_ClipLiangBarsky.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\6_ClipLiangBarsky.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\6_ClipLiangBarsky.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\6_ClipLiangBarsky.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_scanline\SubPixConst.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_Scanline\SubPixConst.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\SubPixConst.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\SubPixConst.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\07_ispaninterpolator\LineInterpolators.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\07_ISpanInterpolator\LineInterpolators.cs</Link>
