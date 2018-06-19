@@ -354,6 +354,9 @@
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\SubBitmapBlender.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\03_PrimitiveProcessing\ClipLiangBarsky.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\03_PrimitiveProcessing\ClipLiangBarsky.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs</Link>
     </Compile>
@@ -395,9 +398,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\5_DestBitmapRasterizer.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\5_DestBitmapRasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\6_ClipLiangBarsky.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\6_ClipLiangBarsky.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\04_Rasterization\SubPixConst.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\05_Rasterization\SubPixConst.cs</Link>

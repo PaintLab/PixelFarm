@@ -14,7 +14,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.CpuBlit.Lines
+namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     public class EllipseBresenhamInterpolator
     {

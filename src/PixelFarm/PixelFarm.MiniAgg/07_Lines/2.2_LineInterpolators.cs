@@ -15,10 +15,9 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.CpuBlit.Transform;
-using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.Transform; 
 
-namespace PixelFarm.CpuBlit.Lines
+namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //================================================line_interpolator_aa_base
     struct LineInterpolatorAAData

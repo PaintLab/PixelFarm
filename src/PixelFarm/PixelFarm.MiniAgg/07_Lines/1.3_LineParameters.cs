@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.CpuBlit.Lines
+namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //==========================================================line_parameters
     public struct LineParameters

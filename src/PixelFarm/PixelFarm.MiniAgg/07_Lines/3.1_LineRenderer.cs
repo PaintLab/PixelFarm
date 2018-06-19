@@ -16,7 +16,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.Lines
+namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     public abstract class LineRenderer
     {

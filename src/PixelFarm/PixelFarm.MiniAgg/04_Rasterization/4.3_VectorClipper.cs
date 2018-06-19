@@ -22,9 +22,11 @@
 
 //#include "agg_clip_liang_barsky.h"
 
- 
+
+using PixelFarm.CpuBlit.PrimitiveProcessing;
 namespace PixelFarm.CpuBlit.Rasterization
 {
+
     partial class ScanlineRasterizer
     {
         class VectorClipper

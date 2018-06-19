@@ -16,8 +16,8 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Rasterization;
-namespace PixelFarm.CpuBlit.Lines
+
+namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //-----------------------------------------------------------line_aa_vertex
     // Vertex (x, y) with the distance to the next one. The last vertex has 
@@ -554,12 +554,12 @@ namespace PixelFarm.CpuBlit.Lines
                     Render(false);
                     MoveTo(x, y);
                     break;
-                
+
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
                     Render(true);
                     MoveTo(m_start_x, m_start_y);
-                    break; 
+                    break;
                 default:
                     LineTo(x, y);
                     break;

@@ -100,7 +100,7 @@
     <Compile Include="04_Rasterization\0_ScanlineSpan.cs" />
     <Compile Include="07_Lines\1.2_PatternFilter.cs" />
     <Compile Include="07_Lines\1.3_LineParameters.cs" />
-    <Compile Include="04_Rasterization\6_ClipLiangBarsky.cs" />
+    <Compile Include="03_PrimitiveProcessing\ClipLiangBarsky.cs" />
     <Compile Include="03_SpanGenerators\IGammaFunction.cs" />
     <Compile Include="07_Lines\1.1_LinesAA.cs" />
     <Compile Include="04_Rasterization\4.2_CellAARasterizer.cs" />

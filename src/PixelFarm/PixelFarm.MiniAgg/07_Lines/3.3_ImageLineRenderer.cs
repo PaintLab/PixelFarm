@@ -20,7 +20,9 @@
 #if true
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.Rasterization.Lines;
+
 namespace PixelFarm.CpuBlit.Lines
 {
     /*
