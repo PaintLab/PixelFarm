@@ -157,7 +157,7 @@ namespace PixelFarm.CpuBlit
             AggRenderSurface renderSx = new AggRenderSurface(bmp);
             if (blender == null)
             {
-                blender = new PixelBlenders.PixelBlenderBGRA();
+                blender = new PixelProcessing.PixelBlenderBGRA();
             }
             renderSx.PixelBlender = blender;
 

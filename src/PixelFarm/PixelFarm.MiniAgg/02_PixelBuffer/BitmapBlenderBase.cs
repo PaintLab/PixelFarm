@@ -20,7 +20,7 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.PixelBlenders;
+using PixelFarm.CpuBlit.PixelProcessing;
 
 namespace PixelFarm.CpuBlit
 {

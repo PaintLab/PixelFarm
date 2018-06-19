@@ -28,7 +28,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.PixelBlenders
+namespace PixelFarm.CpuBlit.PixelProcessing
 {
 
     /// <summary>

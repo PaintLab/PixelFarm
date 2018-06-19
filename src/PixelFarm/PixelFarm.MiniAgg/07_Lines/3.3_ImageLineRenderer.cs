@@ -63,7 +63,7 @@ namespace PixelFarm.CpuBlit.Lines
         IPatternFilter m_filter;
         int m_dilation;
         int m_dilation_hr;
-        PixelBlenders.SubBitmapBlender m_buf;
+        PixelProcessing.SubBitmapBlender m_buf;
         int[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
@@ -150,7 +150,7 @@ namespace PixelFarm.CpuBlit.Lines
             }
 
 
-            m_buf = new PixelBlenders.SubBitmapBlender(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
+            m_buf = new PixelProcessing.SubBitmapBlender(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
 
             unsafe
             {

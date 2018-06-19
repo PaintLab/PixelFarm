@@ -78,7 +78,7 @@ namespace PixelFarm.CpuBlit
 }
 
 
-namespace PixelFarm.CpuBlit.PixelBlenders
+namespace PixelFarm.CpuBlit.PixelProcessing
 {
     /// <summary>
     /// look up table helper for clamp value from 9 bits to 8 bits
