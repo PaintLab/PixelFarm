@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.CpuBlit.Rasterization;
-
+using PixelFarm.CpuBlit.FragmentProcessing;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 {
