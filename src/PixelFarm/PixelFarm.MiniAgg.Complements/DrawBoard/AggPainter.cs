@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.DrawingBuffer;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.Infrastructure;
+using PixelFarm.CpuBlit.Rasterization;
 
 namespace PixelFarm.CpuBlit
 {

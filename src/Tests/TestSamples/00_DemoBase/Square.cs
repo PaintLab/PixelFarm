@@ -4,7 +4,7 @@
 
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Infrastructure;
+using PixelFarm.CpuBlit.Rasterization;
 namespace PixelFarm.CpuBlit
 {
 

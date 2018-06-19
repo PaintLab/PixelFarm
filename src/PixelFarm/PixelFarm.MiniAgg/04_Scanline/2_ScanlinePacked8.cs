@@ -32,7 +32,7 @@
 
 
 using System;
-namespace PixelFarm.CpuBlit.Infrastructure
+namespace PixelFarm.CpuBlit.Rasterization
 {
     //=============================================================scanline_p8
     // 

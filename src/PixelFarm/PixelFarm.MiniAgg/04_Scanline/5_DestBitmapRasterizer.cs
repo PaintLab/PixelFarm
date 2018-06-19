@@ -16,7 +16,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.Infrastructure
+namespace PixelFarm.CpuBlit.Rasterization
 {
     public enum ScanlineRenderMode : byte
     {

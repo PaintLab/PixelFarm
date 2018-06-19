@@ -17,7 +17,7 @@
 using System;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Lines;
-namespace PixelFarm.CpuBlit.Infrastructure
+namespace PixelFarm.CpuBlit.Rasterization
 {
     //==========================================================line_profile_aa
     //

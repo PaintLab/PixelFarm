@@ -32,10 +32,10 @@
 // 
 //----------------------------------------------------------------------------
 
-using poly_subpix = PixelFarm.CpuBlit.Infrastructure.PolySubPix;
+using poly_subpix = PixelFarm.CpuBlit.Rasterization.PolySubPix;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.CpuBlit.Infrastructure
+namespace PixelFarm.CpuBlit.Rasterization
 {
 
     //==================================================rasterizer_scanline_aa
