@@ -34,6 +34,48 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\BitmapBuffer.cs">
+      <Link>100_DrawingBufferExt\BitmapBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\AntialiasingExtensions.cs">
+      <Link>100_DrawingBufferExt\AntialiasingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\BaseExtensions.cs">
+      <Link>100_DrawingBufferExt\BaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\BlitExtensions.cs">
+      <Link>100_DrawingBufferExt\BlitExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\ConvertExtensions.cs">
+      <Link>100_DrawingBufferExt\ConvertExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\FillExtensions.cs">
+      <Link>100_DrawingBufferExt\FillExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\FilterExtensions.cs">
+      <Link>100_DrawingBufferExt\FilterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\LineAaExtensions.cs">
+      <Link>100_DrawingBufferExt\LineAaExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\LineExtensions.cs">
+      <Link>100_DrawingBufferExt\LineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\ShapeExtensions.cs">
+      <Link>100_DrawingBufferExt\ShapeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\SplineExtensions.cs">
+      <Link>100_DrawingBufferExt\SplineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\bitmapbufferextensions\TransformationExtensions.cs">
+      <Link>100_DrawingBufferExt\TransformationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\BitmapBufferFactory.cs">
+      <Link>100_DrawingBufferExt\BitmapBufferFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\backend.drawingbuffer\BitmapContext.cs">
+      <Link>100_DrawingBufferExt\BitmapContext.cs</Link>
+    </Compile>
     <Compile Include="..\BackEnd.FilterFx\pdnsharedproject\01_core\color\ColorBgra.cs">
       <Link>101_FilterFx\01_Core\Color\ColorBgra.cs</Link>
     </Compile>

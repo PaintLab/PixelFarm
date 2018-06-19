@@ -28,7 +28,6 @@
 #define USE_BLENDER
 
 using PixelFarm.Drawing;
-using System;
 
 namespace PixelFarm.CpuBlit
 {

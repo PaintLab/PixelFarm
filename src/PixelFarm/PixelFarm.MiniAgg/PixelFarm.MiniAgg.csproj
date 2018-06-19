@@ -34,53 +34,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBuffer.cs">
-      <Link>100_DrawingBufferExt\BitmapBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs">
-      <Link>100_DrawingBufferExt\AntialiasingExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs">
-      <Link>100_DrawingBufferExt\BaseExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs">
-      <Link>100_DrawingBufferExt\BlitExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs">
-      <Link>100_DrawingBufferExt\ConvertExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs">
-      <Link>100_DrawingBufferExt\FillExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
-      <Link>100_DrawingBufferExt\FilterExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs">
-      <Link>100_DrawingBufferExt\LineAaExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
-      <Link>100_DrawingBufferExt\LineExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs">
-      <Link>100_DrawingBufferExt\ShapeExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs">
-      <Link>100_DrawingBufferExt\SplineExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs">
-      <Link>100_DrawingBufferExt\TransformationExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapBufferFactory.cs">
-      <Link>100_DrawingBufferExt\BitmapBufferFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BitmapContext.cs">
-      <Link>100_DrawingBufferExt\BitmapContext.cs</Link>
-    </Compile>
     <Compile Include="02_PixelBuffer\BitmapBlenderBase.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
-    <Compile Include="02_PixelBuffer\PixelBlenderOthers.cs" />
-    <Compile Include="02_PixelBuffer\SubBitmapBlender.cs" />
+    <Compile Include="04_PixelProcessing\PixelBlenderOthers.cs" />
+    <Compile Include="04_PixelProcessing\SubBitmapBlender.cs" />
     <Compile Include="03_Rasterization\SubPixConst.cs" />
     <Compile Include="01_VertexProcessing\LineInterpolators.cs" />
     <Compile Include="01_VertexProcessing\SpanInterpolatorLinear.cs" />
@@ -115,7 +73,7 @@
     <Content Include="x_backup\2_ImgSpanGenRGB.txt" />
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
     <Content Include="x_backup\FilterImageSpanGenerator.ImageBufferAccessor.txt" />
-    <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
+    <Compile Include="04_FragmentProcessing\GammaLookUpTable.cs" />
     <Compile Include="02_PixelBuffer\IBitmapBlender.cs" />
     <Compile Include="02_PixelBuffer\PixelBlenderRGBA.cs" />
     <Compile Include="03_Rasterization\1_Scanline.cs" />

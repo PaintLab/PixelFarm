@@ -24,7 +24,7 @@
 
 using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     public abstract class ImgSpanGen : ISpanGenerator
     {

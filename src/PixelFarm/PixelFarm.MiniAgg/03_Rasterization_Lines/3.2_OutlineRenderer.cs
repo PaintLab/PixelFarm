@@ -16,6 +16,8 @@
 
 using System;
 using PixelFarm.CpuBlit.PrimitiveProcessing;
+using PixelFarm.CpuBlit.FragmentProcessing;
+
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //==========================================================line_profile_aa
