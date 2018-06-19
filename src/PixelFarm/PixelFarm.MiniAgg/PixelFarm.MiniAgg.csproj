@@ -84,9 +84,9 @@
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
     <Compile Include="04_Rasterization\SubPixConst.cs" />
-    <Compile Include="07_ISpanInterpolator\LineInterpolators.cs" />
-    <Compile Include="07_ISpanInterpolator\SpanInterpolatorLinear.cs" />
-    <Compile Include="07_ISpanInterpolator\SpanInterpolatorPerspectiveLerp.cs" />
+    <Compile Include="02_VertexProcessing\LineInterpolators.cs" />
+    <Compile Include="02_VertexProcessing\SpanInterpolatorLinear.cs" />
+    <Compile Include="02_VertexProcessing\SpanInterpolatorPerspectiveLerp.cs" />
     <Compile Include="07_Lines\2.2_LineInterpolators.cs" />
     <Compile Include="07_Lines\2.1_DistanceInterpolators.cs" />
     <Compile Include="07_Lines\2.3_EllipseBrensenhemInterpolator.cs" />
@@ -136,7 +136,9 @@
       <Name>PixelFarm.DrawingCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="073\" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
