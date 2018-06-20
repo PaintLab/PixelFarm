@@ -20,10 +20,8 @@
 #if true
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Rasterization;
-using PixelFarm.CpuBlit.Rasterization.Lines;
 
-namespace PixelFarm.CpuBlit.Lines
+namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     /*
     //========================================================line_image_scale
@@ -216,13 +214,13 @@ namespace PixelFarm.CpuBlit.Lines
     }
 
     /*
-    
+
     //=================================================line_image_pattern_pow2
     public class line_image_pattern_pow2 : 
         line_image_pattern<IPatternFilter>
     {
         uint m_mask;
-	
+
         //--------------------------------------------------------------------
         public line_image_pattern_pow2(IPatternFilter filter) :
             line_image_pattern<IPatternFilter>(filter), m_mask(line_subpixel_mask) {}
@@ -233,7 +231,7 @@ namespace PixelFarm.CpuBlit.Lines
         {
             create(src);
         }
-            
+
         //--------------------------------------------------------------------
         public void create(ImageBuffer src)
         {
@@ -715,7 +713,7 @@ namespace PixelFarm.CpuBlit.Lines
                             line3_no_clip(lp2, mx, my, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
                             return;
                         }
-            
+
                         LineAABasics.fix_degenerate_bisectrix_start(lp, ref sx, ref sy);
                         LineAABasics.fix_degenerate_bisectrix_end(lp, ref ex, ref ey);
                         line_interpolator_image li = new line_interpolator_image(this, lp, 
