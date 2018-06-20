@@ -23,11 +23,10 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
 
     public static class VertexSourceExtensions

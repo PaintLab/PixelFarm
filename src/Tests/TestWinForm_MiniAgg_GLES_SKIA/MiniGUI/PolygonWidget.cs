@@ -20,6 +20,8 @@
 using PixelFarm.Drawing;
 using System;
 using PixelFarm.VectorMath;
+using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.CpuBlit.UI
 {
     class SimplePolygonVertexSource
