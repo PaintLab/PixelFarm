@@ -821,18 +821,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\1_Base\Queue.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg.Complements\1_Base\Queue.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GouraudSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GouraudSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GradientSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\GradientSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\RGBAGouraudSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\2_SpanGenerators\RGBAGouraudSpanGen.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\3_Filter\BrightnessAndContrastAdjustment.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg.Complements\3_Filter\BrightnessAndContrastAdjustment.cs</Link>
     </Compile>
@@ -989,14 +977,26 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\ISpanInterpolator.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\ISpanInterpolator.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_PixelProcessing\PixelBlenderOthers.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_PixelProcessing\PixelBlenderOthers.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\GouraudSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\GouraudSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_PixelProcessing\PixelBlenders.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_PixelProcessing\PixelBlenders.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\GradientSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\GradientSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_PixelProcessing\SubBitmapBlender.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_PixelProcessing\SubBitmapBlender.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\IGradientValueCalculator_and_Impl.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\IGradientValueCalculator_and_Impl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\RGBAGouraudSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\RGBAGouraudSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderOthers.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderOthers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenders.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenders.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\SubBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\SubBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\IImageFilter.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\08_ImageResampling\IImageFilter.cs</Link>
