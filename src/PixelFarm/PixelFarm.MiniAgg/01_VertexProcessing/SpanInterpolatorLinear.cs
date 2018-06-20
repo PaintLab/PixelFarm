@@ -22,7 +22,7 @@
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //================================================span_interpolator_linear
-    public struct SpanInterpolatorLinear : ISpanInterpolator
+    public struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator
     {
         VertexProcessing.ICoordTransformer m_trans;
         LineInterpolatorDDA2 m_li_x;

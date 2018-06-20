@@ -23,7 +23,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //============================================span_interpolator_persp_lerp
 
-    public sealed class SpanInterpolatorPerspectiveLerp : ISpanInterpolator
+    public sealed class SpanInterpolatorPerspectiveLerp : FragmentProcessing.ISpanInterpolator
     {
         Perspective m_trans_dir;
         Perspective m_trans_inv;

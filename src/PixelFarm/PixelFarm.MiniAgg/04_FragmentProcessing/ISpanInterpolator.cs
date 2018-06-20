@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     public interface ISpanInterpolator
     {
