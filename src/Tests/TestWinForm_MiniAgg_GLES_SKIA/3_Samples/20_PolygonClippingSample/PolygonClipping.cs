@@ -4,7 +4,7 @@
 using System;
 using PixelFarm.Drawing;
 using System.Collections.Generic;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Transform;
 using Mini;
 using ClipperLib;

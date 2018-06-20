@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 

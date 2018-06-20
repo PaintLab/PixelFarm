@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.Skia
 
         int _height;
         int _width;
-        CpuBlit.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
         //-----------------------
         SKCanvas _skCanvas;

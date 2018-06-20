@@ -3,7 +3,7 @@
 //AGG 2.4
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using PaintLab.Svg;
 

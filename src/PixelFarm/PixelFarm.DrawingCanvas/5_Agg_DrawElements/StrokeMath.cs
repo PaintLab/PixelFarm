@@ -28,10 +28,8 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit
 {
-    public struct Vertex2d
+    struct Vertex2d
     {
-
-
         public readonly double x;
         public readonly double y;
         public Vertex2d(double x, double y)

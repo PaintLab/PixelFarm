@@ -26,7 +26,7 @@ namespace PixelFarm.Drawing.Pdf
         RequestFont _currentFont;
 
         PixelFarm.CpuBlit.VectorTool _vectorTool;
-        CpuBlit.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
 
 
         SmoothingMode _smoothingMode;

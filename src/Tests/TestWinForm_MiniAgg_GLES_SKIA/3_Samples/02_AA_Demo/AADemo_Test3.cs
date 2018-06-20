@@ -4,7 +4,7 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
 using Mini;

@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //---------------------------------------------------------------conv_curve
     // Curve converter class. Any path storage can have Bezier curves defined 

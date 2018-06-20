@@ -5,7 +5,7 @@
 using System.Diagnostics;
 using PixelFarm.CpuBlit.UI;
 using PixelFarm.CpuBlit.Transform;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 using Mini;
 using System;

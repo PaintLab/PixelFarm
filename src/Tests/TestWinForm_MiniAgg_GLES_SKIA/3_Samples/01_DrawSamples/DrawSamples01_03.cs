@@ -6,7 +6,7 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using PixelFarm.CpuBlit.Transform;
 

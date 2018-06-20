@@ -10,7 +10,7 @@
 using System.IO;
 //
 using Mini;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Contours;

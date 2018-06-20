@@ -107,7 +107,7 @@ namespace PixelFarm.CpuBlit.UI
         int m_edge;
         SimplePolygonVertexSource m_vs;
         Stroke m_stroke;
-        VertexSource.Ellipse m_ellipse;
+        VertexProcessing.Ellipse m_ellipse;
         double m_point_radius;
         int m_status;
         double m_dx;
@@ -119,7 +119,7 @@ namespace PixelFarm.CpuBlit.UI
         public PolygonControl(int np, double point_radius)
             : base(new Vector2())
         {
-            m_ellipse = new PixelFarm.CpuBlit.VertexSource.Ellipse();
+            m_ellipse = new PixelFarm.CpuBlit.VertexProcessing.Ellipse();
             m_polygon = new double[np * 2];
             m_num_points = (np);
             m_node = (-1);
