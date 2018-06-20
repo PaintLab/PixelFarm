@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using burningmime.curves; //for curve fit
 using PixelFarm.Drawing;

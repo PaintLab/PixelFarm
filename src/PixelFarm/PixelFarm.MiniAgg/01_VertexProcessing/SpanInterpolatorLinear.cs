@@ -19,18 +19,18 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.CpuBlit.Transform
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //================================================span_interpolator_linear
     public struct SpanInterpolatorLinear : ISpanInterpolator
     {
-        Transform.ICoordTransformer m_trans;
+        VertexProcessing.ICoordTransformer m_trans;
         LineInterpolatorDDA2 m_li_x;
         LineInterpolatorDDA2 m_li_y;
         const int SUB_PIXEL_SHIFT = 8;
         const int SUB_PIXEL_SCALE = 1 << SUB_PIXEL_SHIFT;
 
-        public Transform.ICoordTransformer Transformer
+        public VertexProcessing.ICoordTransformer Transformer
         {
             get { return this.m_trans; }
             set { this.m_trans = value; }

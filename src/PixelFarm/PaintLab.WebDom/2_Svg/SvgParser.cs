@@ -33,7 +33,7 @@ using PixelFarm;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 
 namespace PaintLab.Svg

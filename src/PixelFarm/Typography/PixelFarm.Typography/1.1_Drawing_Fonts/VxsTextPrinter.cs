@@ -324,8 +324,8 @@ namespace PixelFarm.Drawing.Fonts
                 painter.RenderQuality = RenderQualtity.HighQuality;
                 painter.UseSubPixelLcdEffect = true;
 
-                CpuBlit.Transform.Affine flipY = CpuBlit.Transform.Affine.NewMatix(
-                    CpuBlit.Transform.AffinePlan.Scale(1, -1)); //flip Y
+                CpuBlit.VertexProcessing.Affine flipY = CpuBlit.VertexProcessing.Affine.NewMatix(
+                    CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1)); //flip Y
 
                 VertexStore reusableVxs = new VertexStore();
 
@@ -477,8 +477,8 @@ namespace PixelFarm.Drawing.Fonts
                 painter.RenderQuality = RenderQualtity.HighQuality;
                 painter.UseSubPixelLcdEffect = true;
 
-                CpuBlit.Transform.Affine flipY = CpuBlit.Transform.Affine.NewMatix(
-                    CpuBlit.Transform.AffinePlan.Scale(1, -1)); //flip Y
+                CpuBlit.VertexProcessing.Affine flipY = CpuBlit.VertexProcessing.Affine.NewMatix(
+                    CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1)); //flip Y
                 VertexStore reusableVxs = new VertexStore();
 
                 float acc_x = 0; //acummulate x

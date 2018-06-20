@@ -20,7 +20,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
 

@@ -27,7 +27,7 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit
 {

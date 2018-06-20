@@ -45,7 +45,7 @@ namespace PixelFarm.CpuBlit
                 _svgRenderVx.ResetTransform();
             }
         }
-        public void ApplyTransform(CpuBlit.Transform.Affine tx)
+        public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {
             int elemCount = _svgRenderVx.SvgVxCount;
             for (int i = 0; i < elemCount; ++i)
@@ -54,7 +54,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public void ApplyTransform(CpuBlit.Transform.Bilinear tx)
+        public void ApplyTransform(CpuBlit.VertexProcessing.Bilinear tx)
         {
             int elemCount = _svgRenderVx.SvgVxCount;
             for (int i = 0; i < elemCount; ++i)
@@ -97,11 +97,11 @@ namespace PixelFarm.CpuBlit
             _svgRenderVx.Render(p);
         }
 
-        public void Paint(Painter p, PixelFarm.CpuBlit.Transform.Perspective tx)
+        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
         {
             _svgRenderVx.Render(p);
         }
-        public void Paint(Painter p, PixelFarm.CpuBlit.Transform.Affine tx)
+        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
         {
 
         }

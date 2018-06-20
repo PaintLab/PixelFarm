@@ -28,7 +28,7 @@ namespace PixelFarm.CpuBlit
         void GetCoord(out int x, out int y);
         void Next();
         //------------------------------------------------
-        Transform.ICoordTransformer Transformer { get; set; }
+        VertexProcessing.ICoordTransformer Transformer { get; set; }
 
         //------------------------------------------------
         void ReSync(double xe, double ye, int len);

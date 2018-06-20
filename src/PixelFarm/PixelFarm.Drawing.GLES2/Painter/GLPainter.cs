@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.Transform;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.PainterExtensions;
 
@@ -734,11 +733,11 @@ namespace PixelFarm.DrawingGL
                 //also  rotate 
                 if (centerFormArc.scaleUp)
                 {
-                    var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     VectorToolBox.GetFreeVxs(out VertexStore v2);
                     mat.TransformToVxs(v1, v2);
                     VectorToolBox.ReleaseVxs(ref v1);
@@ -747,10 +746,10 @@ namespace PixelFarm.DrawingGL
                 else
                 {
                     //not scalue
-                    var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     VectorToolBox.GetFreeVxs(out VertexStore v2);
                     mat.TransformToVxs(v1, v2);
                     VectorToolBox.ReleaseVxs(ref v1);
@@ -762,10 +761,10 @@ namespace PixelFarm.DrawingGL
                 //no rotate
                 if (centerFormArc.scaleUp)
                 {
-                    var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                            new PixelFarm.CpuBlit.Transform.AffinePlan(PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
 
                     VectorToolBox.GetFreeVxs(out VertexStore v2);
                     mat.TransformToVxs(v1, v2);

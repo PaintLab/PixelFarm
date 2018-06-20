@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.CpuBlit.Transform
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //============================================span_interpolator_persp_lerp
 
@@ -198,7 +198,7 @@ namespace PixelFarm.CpuBlit.Transform
             m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
             m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
         }
-        public Transform.ICoordTransformer Transformer
+        public VertexProcessing.ICoordTransformer Transformer
         {
             get { throw new System.NotImplementedException(); }
             set { throw new System.NotImplementedException(); }

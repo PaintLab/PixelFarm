@@ -1030,7 +1030,7 @@ namespace PixelFarm.CpuBlit
 
 
         }
-        public override void DrawImage(Image img, params Transform.AffinePlan[] affinePlans)
+        public override void DrawImage(Image img, params PixelFarm.CpuBlit.VertexProcessing.AffinePlan[] affinePlans)
         {
             ActualBitmap actualImg = img as ActualBitmap;
             if (actualImg == null)
@@ -1054,32 +1054,32 @@ namespace PixelFarm.CpuBlit
                 if (affinePlans != null)
                 {
                     int affCount = affinePlans.Length;
-                    DrawingBuffer.AffinePlan[] affs = new AffinePlan[affCount];
+                    DrawingBuffer.AffinePlan[] affs = new DrawingBuffer.AffinePlan[affCount];
                     for (int i = 0; i < affCount; ++i)
                     {
-                        Transform.AffinePlan plan = affinePlans[i];
+                        VertexProcessing.AffinePlan plan = affinePlans[i];
                         switch (plan.cmd)
                         {
                             default:
                                 throw new NotSupportedException();
                                 break;
-                            case Transform.AffineMatrixCommand.Rotate:
-                                affs[i] = new AffinePlan(AffineMatrixCommand.Rotate, plan.x, plan.y);
+                            case VertexProcessing.AffineMatrixCommand.Rotate:
+                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Rotate, plan.x, plan.y);
                                 break;
-                            case Transform.AffineMatrixCommand.Scale:
-                                affs[i] = new AffinePlan(AffineMatrixCommand.Scale, plan.x, plan.y);
+                            case VertexProcessing.AffineMatrixCommand.Scale:
+                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Scale, plan.x, plan.y);
                                 break;
-                            case Transform.AffineMatrixCommand.Skew:
-                                affs[i] = new AffinePlan(AffineMatrixCommand.Skew, plan.x, plan.y);
+                            case VertexProcessing.AffineMatrixCommand.Skew:
+                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Skew, plan.x, plan.y);
                                 break;
-                            case Transform.AffineMatrixCommand.Translate:
-                                affs[i] = new AffinePlan(AffineMatrixCommand.Translate, plan.x, plan.y);
+                            case VertexProcessing.AffineMatrixCommand.Translate:
+                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Translate, plan.x, plan.y);
                                 break;
-                            case Transform.AffineMatrixCommand.None:
-                                affs[i] = new AffinePlan(AffineMatrixCommand.None, plan.x, plan.y);
+                            case VertexProcessing.AffineMatrixCommand.None:
+                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.None, plan.x, plan.y);
                                 break;
-                            case Transform.AffineMatrixCommand.Invert:
-                                affs[i] = new AffinePlan(AffineMatrixCommand.Invert, plan.x, plan.y);
+                            case VertexProcessing.AffineMatrixCommand.Invert:
+                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Invert, plan.x, plan.y);
                                 break;
                         }
                     }
@@ -1202,14 +1202,14 @@ namespace PixelFarm.CpuBlit
 
 
 
-    class ReusableRotationTransformer : Transform.ICoordTransformer
+    class ReusableRotationTransformer : VertexProcessing.ICoordTransformer
     {
 
         double _angle;
-        Affine affine;
+        PixelFarm.CpuBlit.VertexProcessing.Affine affine;
         public ReusableRotationTransformer()
-        {
-            affine = Affine.IdentityMatrix;
+        { 
+            affine = PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix;
         }
         public double Angle
         {
@@ -1221,7 +1221,7 @@ namespace PixelFarm.CpuBlit
             {
                 if (value != _angle)
                 {
-                    affine = Affine.NewRotation(value);
+                    affine = PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(value);
                 }
                 _angle = value;
             }
@@ -1240,13 +1240,13 @@ namespace PixelFarm.CpuBlit
 
         public GradientSpanGen _spanGenGr;
         public LinearGradientColorsProvider _linearGradientColorProvider;
-        public PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear _linerInterpolator;
+        public PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear _linerInterpolator;
         public ReusableRotationTransformer _reusableRotationTransformer;
 
         public void SetData(IGradientValueCalculator gvc, LinearGradientPair pair)
         {
 
-            _linerInterpolator = new PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear();
+            _linerInterpolator = new PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear();
             _linearGradientColorProvider = new LinearGradientColorsProvider();
             _spanGenGr = new GradientSpanGen();
             //TODO:

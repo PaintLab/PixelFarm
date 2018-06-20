@@ -22,7 +22,7 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 
 namespace PixelFarm.CpuBlit

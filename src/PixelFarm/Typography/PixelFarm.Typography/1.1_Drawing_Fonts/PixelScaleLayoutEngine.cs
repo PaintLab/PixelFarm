@@ -151,7 +151,7 @@ namespace Typography.Contours
             return InternalGetGlyphMesh(glyphIndex).GetControlPars();
         }
 
-        PixelFarm.CpuBlit.Transform.Affine _invertY = PixelFarm.CpuBlit.Transform.Affine.NewScaling(1, -1);
+        PixelFarm.CpuBlit.VertexProcessing.Affine _invertY = PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(1, -1);
         VertexStore _vxs1 = new VertexStore();
 
         /// <summary>

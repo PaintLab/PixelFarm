@@ -16,7 +16,7 @@ namespace LayoutFarm.Svg
         public bool HasStrokeColor { get; set; }
         public bool HasStrokeWidth { get; set; }
 
-        public PixelFarm.CpuBlit.Transform.Affine Transform { get; set; }
+        public PixelFarm.CpuBlit.VertexProcessing.Affine Transform { get; set; }
         public Color FillColor
         {
             get { return this.fillColor; }

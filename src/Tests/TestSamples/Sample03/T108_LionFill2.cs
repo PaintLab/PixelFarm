@@ -29,9 +29,9 @@ namespace OpenTkEssTest
             
 
             //flip this lion vertically before use with openGL
-            PixelFarm.CpuBlit.Transform.Affine aff = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
-                 PixelFarm.CpuBlit.Transform.AffinePlan.Scale(1, -1),
-                 PixelFarm.CpuBlit.Transform.AffinePlan.Translate(0, 600));
+            PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1),
+                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(0, 600));
             lionShape.ApplyTransform(aff);
 
 

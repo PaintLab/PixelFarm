@@ -4,7 +4,7 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.PainterExtensions;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.CpuBlit
 {
@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-            PixelFarm.CpuBlit.Transform.Affine currentTx = null;
+            PixelFarm.CpuBlit.VertexProcessing.Affine currentTx = null;
 
             var renderState = new TempRenderState();
             renderState.strokeColor = p.StrokeColor;
@@ -415,7 +415,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.Transform.Affine tx)
+        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (originalSvgVx._vxs != null)
@@ -439,7 +439,7 @@ namespace PixelFarm.CpuBlit
             }
             return newSx;
         }
-        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.Transform.Bilinear tx)
+        public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.VertexProcessing.Bilinear tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (newSx._vxs != null)
