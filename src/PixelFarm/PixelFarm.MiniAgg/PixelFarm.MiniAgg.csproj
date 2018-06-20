@@ -37,8 +37,12 @@
     <Compile Include="02_PixelBuffer\BitmapBlenderBase.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
-    <Compile Include="04_PixelProcessing\PixelBlenderOthers.cs" />
-    <Compile Include="04_PixelProcessing\SubBitmapBlender.cs" />
+    <Compile Include="04_FragmentProcessing_Gouraud\GouraudSpanGen.cs" />
+    <Compile Include="04_FragmentProcessing_Gouraud\GradientSpanGen.cs" />
+    <Compile Include="04_FragmentProcessing_Gouraud\IGradientValueCalculator_and_Impl.cs" />
+    <Compile Include="04_FragmentProcessing_Gouraud\RGBAGouraudSpanGen.cs" />
+    <Compile Include="05_PixelProcessing\PixelBlenderOthers.cs" />
+    <Compile Include="05_PixelProcessing\SubBitmapBlender.cs" />
     <Compile Include="03_Rasterization\SubPixConst.cs" />
     <Compile Include="01_VertexProcessing\LineInterpolators.cs" />
     <Compile Include="01_VertexProcessing\SpanInterpolatorLinear.cs" />
@@ -61,7 +65,7 @@
     <Compile Include="04_FragmentProcessing\4_ImgSpanGenGray.cs" />
     <Compile Include="04_FragmentProcessing\IGammaFunction.cs" />
     <Compile Include="04_FragmentProcessing\ISpanInterpolator.cs" />
-    <Compile Include="04_PixelProcessing\PixelBlenders.cs" />
+    <Compile Include="05_PixelProcessing\PixelBlenders.cs" />
     <Compile Include="08_ImageResampling\ImageFreeTransform.cs" />
     <Compile Include="08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="08_ImageResampling\ImageTransform.cs" />

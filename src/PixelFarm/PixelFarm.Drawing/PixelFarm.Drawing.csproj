@@ -406,7 +406,7 @@
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\GammaFuntions.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\GammaFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ImgFilters.cs">
+    <Compile Include="..\pixelfarm.miniagg.complements\1_base\ImgFilters.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ImgFilters.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\ProxyImage.cs">
@@ -414,18 +414,6 @@
     </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\Queue.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\Queue.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\2_spangenerators\GouraudSpanGen.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\GouraudSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\2_spangenerators\GradientSpanGen.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\GradientSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\2_spangenerators\IGradientValueCalculator_and_Impl.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\IGradientValueCalculator_and_Impl.cs</Link>
-    </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\2_spangenerators\RGBAGouraudSpanGen.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\RGBAGouraudSpanGen.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\3_filter\BrightnessAndContrastAdjustment.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\BrightnessAndContrastAdjustment.cs</Link>
@@ -583,14 +571,26 @@
     <Compile Include="..\pixelfarm.miniagg\04_fragmentprocessing\ISpanInterpolator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing\ISpanInterpolator.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_pixelprocessing\PixelBlenderOthers.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_PixelProcessing\PixelBlenderOthers.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\GouraudSpanGen.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing_Gouraund\GouraudSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_pixelprocessing\PixelBlenders.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_PixelProcessing\PixelBlenders.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\GradientSpanGen.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing_Gouraund\GradientSpanGen.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\04_pixelprocessing\SubBitmapBlender.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\04_PixelProcessing\SubBitmapBlender.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing_Gouraund\IGradientValueCalculator_and_Impl.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing_Gouraund\RGBAGouraudSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.miniagg\05_pixelprocessing\PixelBlenderOthers.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_PixelProcessing\PixelBlenderOthers.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.miniagg\05_pixelprocessing\PixelBlenders.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_PixelProcessing\PixelBlenders.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.miniagg\05_pixelprocessing\SubBitmapBlender.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_PixelProcessing\SubBitmapBlender.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\08_imageresampling\IImageFilter.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\IImageFilter.cs</Link>

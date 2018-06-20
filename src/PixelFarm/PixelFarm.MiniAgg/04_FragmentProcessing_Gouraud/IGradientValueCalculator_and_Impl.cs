@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.CpuBlit.Gradients
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     public interface IGradientValueCalculator
     {

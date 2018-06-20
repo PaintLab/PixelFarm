@@ -16,8 +16,8 @@
 
 
 
-using PixelFarm.CpuBlit.Imaging;
-namespace PixelFarm.CpuBlit
+ 
+namespace PixelFarm.CpuBlit.Imaging
 {
     public enum BlurMethod
     {

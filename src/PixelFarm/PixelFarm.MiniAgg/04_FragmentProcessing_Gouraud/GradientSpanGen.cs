@@ -15,9 +15,10 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Gradients;
-namespace PixelFarm.CpuBlit
+
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
+    public delegate GradientSpanGen GetNextGradientSpanGenDel(int fromPartNo);
     //==========================================================span_gradient
     public class GradientSpanGen : ISpanGenerator
     {
@@ -42,20 +43,20 @@ namespace PixelFarm.CpuBlit
         //--------------------------------------------------------------------
         public GradientSpanGen() { }
 
-        internal void SetStartPoint(float grad0X, float grad0Y)
+        public void SetStartPoint(float grad0X, float grad0Y)
         {
             _grad0X = -grad0X;
             _grad0Y = -grad0Y;
         }
-        internal void SetOffset(float x, float y)
+        public void SetOffset(float x, float y)
         {
             _xoffset = x;
             _yoffset = y;
         }
 
-        internal bool IsLastPart { get; set; }
-        internal int PartNo { get; set; }
-        internal event GetNextGradientSpanGenDel RequestGradientPart;
+        public bool IsLastPart { get; set; }
+        public int PartNo { get; set; }
+        public event GetNextGradientSpanGenDel RequestGradientPart;
 
         public void Reset(ISpanInterpolator inter,
                 IGradientValueCalculator gvc,
@@ -164,7 +165,7 @@ namespace PixelFarm.CpuBlit
     }
 
     //=====================================================gradient_linear_color
-    public class LinearGradientColorsProvider : Gradients.IGradientColorsProvider
+    public class LinearGradientColorsProvider : IGradientColorsProvider
     {
         Color _c1;
         Color _c2;

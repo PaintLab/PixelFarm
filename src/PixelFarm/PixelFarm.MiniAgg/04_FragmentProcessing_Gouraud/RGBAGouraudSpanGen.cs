@@ -24,7 +24,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //=======================================================span_gouraud_rgba
     public sealed class RGBAGouraudSpanGen : GouraudSpanGen, ISpanGenerator

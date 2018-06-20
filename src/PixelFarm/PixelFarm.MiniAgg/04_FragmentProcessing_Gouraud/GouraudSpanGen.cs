@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //Gouraud shading
     //============================================================span_gouraud
