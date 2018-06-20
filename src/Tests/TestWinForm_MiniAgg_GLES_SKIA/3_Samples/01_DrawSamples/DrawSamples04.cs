@@ -78,7 +78,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         List<ushort> _indexList = new List<ushort>();
 
         ActualBitmap _stencilBmp;
-        PixelBlenders.SubBitmapBlender _stencilBlender;
+        PixelProcessing.SubBitmapBlender _stencilBlender;
         AggPainter _backPainter;
 
 
@@ -97,7 +97,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 //create a stencil bmp
                 _stencilBmp = new ActualBitmap(p.Width, p.Height);
-                _stencilBlender = new PixelBlenders.SubBitmapBlender(_stencilBmp, new PixelBlenders.PixelBlenderBGRA());
+                _stencilBlender = new PixelProcessing.SubBitmapBlender(_stencilBmp, new PixelProcessing.PixelBlenderBGRA());
                 _backPainter = AggPainter.Create(_stencilBmp);
                 //------
             }

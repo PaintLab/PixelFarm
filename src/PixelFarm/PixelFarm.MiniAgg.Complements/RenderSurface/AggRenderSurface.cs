@@ -23,7 +23,7 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Transform;
-using PixelFarm.CpuBlit.Infrastructure;
+using PixelFarm.CpuBlit.Rasterization;
 
 namespace PixelFarm.CpuBlit
 {
@@ -48,7 +48,7 @@ namespace PixelFarm.CpuBlit
             this.destImage = destImage;
             this.destActualImage = destImage;
 
-            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenders.PixelBlenderBGRA());
+            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelProcessing.PixelBlenderBGRA());
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this._bmpRasterizer = new DestBitmapRasterizer();

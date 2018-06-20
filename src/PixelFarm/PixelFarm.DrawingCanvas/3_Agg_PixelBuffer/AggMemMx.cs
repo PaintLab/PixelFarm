@@ -22,7 +22,7 @@
 //#define USE_UNSAFE // no real code for this yet
 
 using System;
-namespace PixelFarm.CpuBlit.Infrastructure
+namespace PixelFarm.CpuBlit.Rasterization
 {
     public static class AggMemMx
     {

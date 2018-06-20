@@ -6,7 +6,8 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.DrawingBuffer;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.Infrastructure;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.FragmentProcessing;
 
 namespace PixelFarm.CpuBlit
 {
@@ -157,7 +158,7 @@ namespace PixelFarm.CpuBlit
             AggRenderSurface renderSx = new AggRenderSurface(bmp);
             if (blender == null)
             {
-                blender = new PixelBlenders.PixelBlenderBGRA();
+                blender = new PixelProcessing.PixelBlenderBGRA();
             }
             renderSx.PixelBlender = blender;
 
@@ -1199,7 +1200,7 @@ namespace PixelFarm.CpuBlit
     }
 
 
-    delegate GradientSpanGen GetNextGradientSpanGenDel(int fromPartNo);
+
 
     class ReusableRotationTransformer : Transform.ICoordTransformer
     {
@@ -1242,7 +1243,7 @@ namespace PixelFarm.CpuBlit
         public PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear _linerInterpolator;
         public ReusableRotationTransformer _reusableRotationTransformer;
 
-        public void SetData(Gradients.IGradientValueCalculator gvc, LinearGradientPair pair)
+        public void SetData(IGradientValueCalculator gvc, LinearGradientPair pair)
         {
 
             _linerInterpolator = new PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear();
@@ -1271,8 +1272,8 @@ namespace PixelFarm.CpuBlit
 
     class AggLinearGradientBrush : ISpanGenerator
     {
-        static Gradients.IGradientValueCalculator _gvcX = new Gradients.GvcX();
-        static Gradients.IGradientValueCalculator _gvcY = new Gradients.GvcY();
+        static IGradientValueCalculator _gvcX = new GvcX();
+        static IGradientValueCalculator _gvcY = new GvcY();
 
 
 
@@ -1313,7 +1314,7 @@ namespace PixelFarm.CpuBlit
 
             foreach (LinearGradientPair pair in linearGrBrush.GetColorPairIter())
             {
-                Gradients.IGradientValueCalculator gvc = null;
+                IGradientValueCalculator gvc = null;
                 switch (pair.Direction)
                 {
                     case LinearGradientPair.GradientDirection.Vertical:
@@ -1379,7 +1380,7 @@ namespace PixelFarm.CpuBlit
     class AggCircularGradientBrush : ISpanGenerator
     {
 
-        static Gradients.IGradientValueCalculator _gvcCircular = new Gradients.GvcRadial();
+        static IGradientValueCalculator _gvcCircular = new GvcRadial();
 
         GradientSpanPart _grSpanGenPart;
         List<GradientSpanPart> _moreSpanGenertors;

@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.FragmentProcessing;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gouraud
 {
@@ -91,7 +92,7 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
                               ColorEx.Make(0, 1, 0, alpha),
                              ColorEx.Make(brc, brc, brc, alpha));
             gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
-            VectorToolBox.GetFreeVxs(out VertexStore tmpVxs); 
+            VectorToolBox.GetFreeVxs(out VertexStore tmpVxs);
             painter.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
             tmpVxs.Clear();
 

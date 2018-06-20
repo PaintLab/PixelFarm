@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Lines;
+using PixelFarm.CpuBlit.Rasterization.Lines;
 
 namespace PixelFarm.CpuBlit
 {

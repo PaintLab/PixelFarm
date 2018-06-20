@@ -5,8 +5,9 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.VertexSource;
-using PixelFarm.CpuBlit.PixelBlenders;
-using PixelFarm.CpuBlit.Infrastructure;
+using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.FragmentProcessing;
 
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_AADemoTest2
@@ -97,10 +98,10 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
             {
                 AggPainter p2 = (AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
-                PixelBlenders.SubBitmapBlender subImg = PixelBlenders.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
+                PixelProcessing.SubBitmapBlender subImg = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
 
                 //TODO: review here again
-                PixelBlenderBGRA blenderWithGamma = new PixelBlenders.PixelBlenderBGRA();
+                PixelBlenderBGRA blenderWithGamma = new PixelProcessing.PixelBlenderBGRA();
 
                 SubBitmapBlender rasterGamma = new SubBitmapBlender(subImg, blenderWithGamma);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(subImg);

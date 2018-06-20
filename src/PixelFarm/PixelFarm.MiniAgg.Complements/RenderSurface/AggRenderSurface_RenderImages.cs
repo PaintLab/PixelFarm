@@ -22,7 +22,9 @@
 using System;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Transform;
-using PixelFarm.CpuBlit.Infrastructure;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.FragmentProcessing;
+
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
 
