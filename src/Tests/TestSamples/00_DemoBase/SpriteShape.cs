@@ -156,7 +156,7 @@ namespace PixelFarm.CpuBlit
                     continue;
                 }
                 VertexStore innerVxs = vx.GetVxs();
-                PixelFarm.CpuBlit.BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
+                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
             }
             this.boundingRect = rectTotal;
         }
