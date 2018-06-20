@@ -82,7 +82,7 @@ namespace PixelFarm.CpuBlit
         {
             get { return this.sclinePack8; }
         }
-        public PixelBlender32 PixelBlender
+        public PixelProcessing.PixelBlender32 PixelBlender
         {
             get
             {

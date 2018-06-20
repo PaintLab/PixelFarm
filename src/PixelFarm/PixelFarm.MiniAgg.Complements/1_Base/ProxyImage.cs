@@ -59,7 +59,7 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             return linkedImage.GetBounds();
         }
-        public PixelBlender32 OutputPixelBlender
+        public PixelProcessing.PixelBlender32 OutputPixelBlender
         {
             get { return linkedImage.OutputPixelBlender; }
             set

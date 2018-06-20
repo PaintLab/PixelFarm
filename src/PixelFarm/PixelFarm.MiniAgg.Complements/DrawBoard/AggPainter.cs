@@ -17,7 +17,7 @@ namespace PixelFarm.CpuBlit
         ActualBitmap actualImage;
 
 
-        public MyBitmapBlender(ActualBitmap actualImage, PixelBlender32 pxBlender)
+        public MyBitmapBlender(ActualBitmap actualImage, PixelProcessing.PixelBlender32 pxBlender)
         {
             this.actualImage = actualImage;
             Attach(actualImage.Width,
@@ -151,7 +151,7 @@ namespace PixelFarm.CpuBlit
                 _curPen = value;
             }
         }
-        public static AggPainter Create(ActualBitmap bmp, PixelBlender32 blender = null)
+        public static AggPainter Create(ActualBitmap bmp, PixelProcessing.PixelBlender32 blender = null)
         {
             //helper func
 
