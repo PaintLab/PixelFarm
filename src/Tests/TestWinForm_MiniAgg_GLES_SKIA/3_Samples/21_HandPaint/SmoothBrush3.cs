@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using PixelFarm.VectorMath;
 using Mini;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "22")]

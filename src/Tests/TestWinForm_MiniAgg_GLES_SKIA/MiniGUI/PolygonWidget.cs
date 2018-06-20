@@ -106,7 +106,7 @@ namespace PixelFarm.CpuBlit.UI
         int m_node;
         int m_edge;
         SimplePolygonVertexSource m_vs;
-        Stroke m_stroke;
+        CpuBlit.VertexProcessing.Stroke m_stroke;
         VertexProcessing.Ellipse m_ellipse;
         double m_point_radius;
         int m_status;
@@ -125,7 +125,7 @@ namespace PixelFarm.CpuBlit.UI
             m_node = (-1);
             m_edge = (-1);
             m_vs = new SimplePolygonVertexSource(m_polygon, m_num_points, false);
-            m_stroke = new Stroke(1);
+            m_stroke = new CpuBlit.VertexProcessing.Stroke(1);
             m_point_radius = (point_radius);
             m_status = (0);
             m_dx = (0.0);

@@ -1,6 +1,7 @@
 ﻿//BSD, 2014-present, WinterDev
 
 using System.Collections.Generic;
+using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.Drawing
 {
     public static class VectorToolBox
@@ -55,8 +56,8 @@ namespace PixelFarm.Drawing
 
         //-----------------------------------
         [System.ThreadStatic]
-        static Stack<CpuBlit.Stroke> s_strokePool = new Stack<CpuBlit.Stroke>();
-        public static void GetFreeStroke(out CpuBlit.Stroke stroke, int w)
+        static Stack<Stroke> s_strokePool = new Stack<Stroke>();
+        public static void GetFreeStroke(out Stroke stroke, int w)
         {
             if (s_strokePool.Count > 0)
             {
@@ -65,10 +66,10 @@ namespace PixelFarm.Drawing
             }
             else
             {
-                stroke = new CpuBlit.Stroke(w);
+                stroke = new Stroke(w);
             }
         }
-        public static void ReleaseStroke(ref CpuBlit.Stroke stroke)
+        public static void ReleaseStroke(ref Stroke stroke)
         {
             s_strokePool.Push(stroke);
             stroke = null;

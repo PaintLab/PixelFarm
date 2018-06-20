@@ -23,10 +23,9 @@
 //
 //----------------------------------------------------------------------------
 using System;
-using PixelFarm.Drawing;
+using PixelFarm.Drawing; 
 
-
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     struct Vertex2d
     {
