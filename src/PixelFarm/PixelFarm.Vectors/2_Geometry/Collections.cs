@@ -45,7 +45,7 @@ namespace PixelFarm.CpuBlit
             {
                 currentSize--;
             }
-        } 
+        }
         public int Count
         {
             get { return currentSize; }
@@ -81,7 +81,7 @@ namespace PixelFarm.CpuBlit
                     internalArray = new T[sizeToAllocate];
                 }
             }
-        } 
+        }
         // Allocate n elements. All data is lost, 
         // but elements can be accessed in range 0...size-1. 
         public void Allocate(int size)
