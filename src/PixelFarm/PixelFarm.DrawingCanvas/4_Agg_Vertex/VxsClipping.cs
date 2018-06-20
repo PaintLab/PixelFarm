@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using ClipperLib;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.CpuBlit.VertexSource
 {
     public enum VxsClipperType : byte
     {

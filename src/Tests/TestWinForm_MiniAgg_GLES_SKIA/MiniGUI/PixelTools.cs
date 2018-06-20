@@ -39,7 +39,7 @@ namespace Mini.WinForms
     class MyDrawingBrushController : PixelToolController
     {
         PixelFarm.VectorMath.Point _latestMousePoint;
-        PixelFarm.Agg.Samples.MyBrushPath _myBrushPath;
+        PixelFarm.CpuBlit.Samples.MyBrushPath _myBrushPath;
         System.Drawing.Drawing2D.GraphicsPath _latestBrushPathCache = null;
         List<System.Drawing.Point> _points = new List<System.Drawing.Point>();
         public MyDrawingBrushController()
@@ -101,7 +101,7 @@ namespace Mini.WinForms
             _latestBrushPathCache = null;
             _latestMousePoint = new PixelFarm.VectorMath.Point(x, y);
             _points.Clear();
-            _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
+            _myBrushPath = new PixelFarm.CpuBlit.Samples.MyBrushPath();
             _myBrushPath.FillColor = PixelFarm.Drawing.Color.Red;
             _points.Add(new System.Drawing.Point(x, y));
             _myBrushPath.AddPointAtFirst(x, y);
@@ -154,7 +154,7 @@ namespace Mini.WinForms
             }
             else
             {
-                _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
+                _myBrushPath = new PixelFarm.CpuBlit.Samples.MyBrushPath();
                 _myBrushPath.SetVxs(vxs);
             }
             _latestBrushPathCache = null;
@@ -212,10 +212,10 @@ namespace Mini.WinForms
                 {
                     PixelToolController prevPixTool = prevPixTools[n];
                     //do path clip*** 
-                    List<VertexStore> resultList = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(
+                    List<VertexStore> resultList = PixelFarm.CpuBlit.VertexSource.VxsClipper.CombinePaths(
                          new VertexStoreSnap(prevPixTool.GetVxs()),
                          new VertexStoreSnap(this.GetVxs()),
-                         PixelFarm.Agg.VertexSource.VxsClipperType.Difference,
+                         PixelFarm.CpuBlit.VertexSource.VxsClipperType.Difference,
                          true);
                     int count;
                     switch (count = resultList.Count)

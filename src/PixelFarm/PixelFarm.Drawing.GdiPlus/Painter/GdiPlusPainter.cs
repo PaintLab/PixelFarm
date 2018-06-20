@@ -1,8 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.Transform;
 using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.WinGdi
@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _currentFillBrush;
 
         GdiPlusRenderSurface _renderSurface;
-        PixelFarm.Agg.VectorTool _vectorTool;
+        PixelFarm.CpuBlit.VectorTool _vectorTool;
 
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-            _vectorTool = new PixelFarm.Agg.VectorTool();
+            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
         }
         public override PainterExtensions.VectorTool VectorTool
         {

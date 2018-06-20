@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "109")]

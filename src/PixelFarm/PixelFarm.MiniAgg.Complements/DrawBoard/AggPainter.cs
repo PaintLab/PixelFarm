@@ -3,12 +3,13 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.DrawingBuffer;
-using PixelFarm.Drawing.PainterExtensions;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.FragmentProcessing;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
     class MyBitmapBlender : BitmapBlenderBase
@@ -56,7 +57,7 @@ namespace PixelFarm.Agg
         /// <summary>
         /// scanline rasterizer to bitmap
         /// </summary>
-        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        DestBitmapRasterizer _bmpRasterizer;
 
         //--------------------
         //pen 
@@ -96,12 +97,12 @@ namespace PixelFarm.Agg
             this.sclineRas = _aggsx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = aggsx.ScanlinePacked8;
-            this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
+            this._bmpRasterizer = aggsx.BitmapRasterizer;
             _orientation = DrawBoardOrientation.LeftBottom;
             //from membuffer
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
-                PixelFarm.Agg.ActualBitmap.GetBuffer(aggsx.DestActualImage));
+                PixelFarm.CpuBlit.ActualBitmap.GetBuffer(aggsx.DestActualImage));
             _vectorTool = new VectorTool();
             _useDefaultBrush = true;
 
@@ -157,7 +158,7 @@ namespace PixelFarm.Agg
             AggRenderSurface renderSx = new AggRenderSurface(bmp);
             if (blender == null)
             {
-                blender = new PixelBlenderBGRA();
+                blender = new PixelProcessing.PixelBlenderBGRA();
             }
             renderSx.PixelBlender = blender;
 
@@ -779,7 +780,7 @@ namespace PixelFarm.Agg
 
             //Agg
             sclineRas.AddPath(snap);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
         }
         /// <summary>
         /// fill vxs, we do NOT store vxs
@@ -823,7 +824,7 @@ namespace PixelFarm.Agg
                     default:
                         {
                             sclineRas.AddPath(vxs);
-                            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
 
                         }
                         break;
@@ -832,7 +833,7 @@ namespace PixelFarm.Agg
             else
             {
                 sclineRas.AddPath(vxs);
-                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
             }
 
 
@@ -849,12 +850,12 @@ namespace PixelFarm.Agg
                 {
                     //TODO: review here again             
                     this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = true;
-                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
+                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
                 }
                 else
                 {
                     this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = false;
-                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
+                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.Default;
                 }
             }
         }
@@ -880,7 +881,7 @@ namespace PixelFarm.Agg
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
             this.sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
+            _bmpRasterizer.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
         }
         void DrawBitmap(ActualBitmap actualBmp, double left, double top)
         {
@@ -1199,7 +1200,7 @@ namespace PixelFarm.Agg
     }
 
 
-    delegate GradientSpanGen GetNextGradientSpanGenDel(int fromPartNo);
+
 
     class ReusableRotationTransformer : Transform.ICoordTransformer
     {
@@ -1239,13 +1240,13 @@ namespace PixelFarm.Agg
 
         public GradientSpanGen _spanGenGr;
         public LinearGradientColorsProvider _linearGradientColorProvider;
-        public PixelFarm.Agg.Transform.SpanInterpolatorLinear _linerInterpolator;
+        public PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear _linerInterpolator;
         public ReusableRotationTransformer _reusableRotationTransformer;
 
-        public void SetData(Gradients.IGradientValueCalculator gvc, LinearGradientPair pair)
+        public void SetData(IGradientValueCalculator gvc, LinearGradientPair pair)
         {
 
-            _linerInterpolator = new PixelFarm.Agg.Transform.SpanInterpolatorLinear();
+            _linerInterpolator = new PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear();
             _linearGradientColorProvider = new LinearGradientColorsProvider();
             _spanGenGr = new GradientSpanGen();
             //TODO:
@@ -1271,8 +1272,8 @@ namespace PixelFarm.Agg
 
     class AggLinearGradientBrush : ISpanGenerator
     {
-        static Gradients.IGradientValueCalculator _gvcX = new Gradients.GvcX();
-        static Gradients.IGradientValueCalculator _gvcY = new Gradients.GvcY();
+        static IGradientValueCalculator _gvcX = new GvcX();
+        static IGradientValueCalculator _gvcY = new GvcY();
 
 
 
@@ -1311,12 +1312,9 @@ namespace PixelFarm.Agg
             int partNo = 0;
             int partCount = linearGrBrush.PairCount;
 
-
-
-
             foreach (LinearGradientPair pair in linearGrBrush.GetColorPairIter())
             {
-                Gradients.IGradientValueCalculator gvc = null;
+                IGradientValueCalculator gvc = null;
                 switch (pair.Direction)
                 {
                     case LinearGradientPair.GradientDirection.Vertical:
@@ -1377,14 +1375,12 @@ namespace PixelFarm.Agg
             _grSpanGenPart._spanGenGr.GenerateColors(outputColors, startIndex, x, y, spanLen);
         }
 
-
-      
     }
 
     class AggCircularGradientBrush : ISpanGenerator
     {
 
-        static Gradients.IGradientValueCalculator _gvcCircular = new Gradients.GvcRadial();
+        static IGradientValueCalculator _gvcCircular = new GvcRadial();
 
         GradientSpanPart _grSpanGenPart;
         List<GradientSpanPart> _moreSpanGenertors;

@@ -31,12 +31,15 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using PixelFarm;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Lines;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.Rasterization.Lines;
+
 using Mini;
-namespace PixelFarm.Agg.Sample_LionOutline
+namespace PixelFarm.CpuBlit.Sample_LionOutline
 {
     [Info(OrderCode = "03")]
     [Info("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
@@ -140,7 +143,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
         void DrawAsScanline(ClipProxyImage imageClippingProxy,
             AggRenderSurface aggsx,
             ScanlineRasterizer rasterizer,
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp)
+            DestBitmapRasterizer bmpRas)
         {
             SvgRenderVx renderVx = lionShape.GetRenderVx();
             int num_paths = renderVx.SvgVxCount;
@@ -155,7 +158,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                     case SvgRenderVxKind.Path:
                         {
                             rasterizer.AddPath(new PixelFarm.Drawing.VertexStoreSnap(svgPart.GetVxs(), 0));
-                            sclineRasToBmp.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
+                            bmpRas.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
                         }
                         break;
                 }
@@ -167,7 +170,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             public float strokeWidth;
             public PixelFarm.Drawing.Color strokeColor;
             public PixelFarm.Drawing.Color fillColor;
-            public PixelFarm.Agg.Transform.Affine affineTx;
+            public PixelFarm.CpuBlit.Transform.Affine affineTx;
         }
 
 
@@ -417,7 +420,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 lionShape.ApplyTransform(affTx);
 
 
-                DrawAsScanline(imageClippingProxy, aggsx, rasterizer, aggsx.ScanlineRasToDestBitmap);
+                DrawAsScanline(imageClippingProxy, aggsx, rasterizer, aggsx.BitmapRasterizer);
 
 
 

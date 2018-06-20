@@ -3,7 +3,9 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-namespace PixelFarm.Agg.Imaging
+using PixelFarm.CpuBlit.Rasterization;
+
+namespace PixelFarm.CpuBlit.Imaging
 {
     public static class BitmapHelper
     {
@@ -310,7 +312,7 @@ namespace PixelFarm.Agg.Imaging
                     for (int y = h; y > 0; --y)
                     {
                         byte* src = bufferH + ((y - 1) * stride);
-                        AggMemMx.memcpy(target, src, stride);
+                        Rasterization.AggMemMx.memcpy(target, src, stride);
                         startRowAt -= stride;
                         target += stride;
                     }

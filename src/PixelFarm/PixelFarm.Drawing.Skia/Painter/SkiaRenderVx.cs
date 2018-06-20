@@ -1,6 +1,6 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.Skia
 {
     class WinGdiRenderVx : RenderVx

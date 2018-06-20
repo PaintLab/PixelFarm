@@ -60,7 +60,7 @@ namespace Mini
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());
         }
-        static PixelFarm.Agg.ActualBitmap LoadImage(string filename)
+        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
         {
 
 
@@ -113,7 +113,7 @@ namespace Mini
             //        throw new NotSupportedException();
             //}
 
-            PixelFarm.Agg.ActualBitmap actualImg = PixelFarm.Agg.ActualBitmap.CreateFromBuffer(
+            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromBuffer(
                 bmp.Width,
                 bmp.Height,
                 imgBuffer

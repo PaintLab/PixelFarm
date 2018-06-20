@@ -2,9 +2,9 @@
 //MatterHackers
 
 using System;
-using PixelFarm.Agg.UI;
+using PixelFarm.CpuBlit.UI;
 using Mini;
-namespace PixelFarm.Agg.Sample_TransCurve
+namespace PixelFarm.CpuBlit.Sample_TransCurve
 {
     [Info(OrderCode = "11")]
     [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]

@@ -27,9 +27,9 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.Transform;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
     public static class VertexStoreTransformExtensions

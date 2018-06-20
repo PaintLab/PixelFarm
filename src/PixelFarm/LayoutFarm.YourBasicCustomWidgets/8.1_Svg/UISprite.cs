@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.UI

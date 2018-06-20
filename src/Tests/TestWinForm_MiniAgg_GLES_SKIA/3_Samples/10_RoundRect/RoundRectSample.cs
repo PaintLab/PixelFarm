@@ -2,9 +2,9 @@
 //MatterHackers 
 
 using System;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Imaging;
 using Mini;
-namespace PixelFarm.Agg.Sample_RoundRect
+namespace PixelFarm.CpuBlit.Sample_RoundRect
 {
     //[Info(OrderCode = "10")]
     //[Info("Yet another example dedicated to Gamma Correction. If you have a CRT monitor: The rectangle looks bad - "

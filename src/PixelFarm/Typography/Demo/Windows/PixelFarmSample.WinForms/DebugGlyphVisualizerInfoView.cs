@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Typography.Contours;
 using PixelFarm;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace SampleWinForms.UI
 {
 

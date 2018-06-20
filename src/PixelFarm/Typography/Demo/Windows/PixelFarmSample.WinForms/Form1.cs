@@ -6,7 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 
@@ -184,7 +184,7 @@ namespace SampleWinForms
 
 
                         //copy from Agg's memory buffer to gdi 
-                        PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
+                        PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
                         g.Clear(System.Drawing.Color.White);
                         g.DrawImage(winBmp, new System.Drawing.Point(10, 0));
 
@@ -232,7 +232,7 @@ namespace SampleWinForms
                 {
                     painter.SetOrigin(0, 0);
                     //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
+                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
                     //--------------- 
                     //7. just render our bitmap
                     g.Clear(System.Drawing.Color.White);
@@ -283,7 +283,7 @@ namespace SampleWinForms
             }
             painter.SetOrigin(0, 0);
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
+            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
             //--------------- 
             //7. just render our bitmap
             g.Clear(System.Drawing.Color.White);
@@ -329,7 +329,7 @@ namespace SampleWinForms
             }
 
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
+            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
             //--------------- 
             //7. just render our bitmap
             g.Clear(System.Drawing.Color.White);

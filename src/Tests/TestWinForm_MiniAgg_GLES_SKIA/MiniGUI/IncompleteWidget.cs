@@ -22,10 +22,10 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Transform;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.UI
+namespace PixelFarm.CpuBlit.UI
 {
     /// <summary>
     /// incomplete widget, for test Agg Core Only

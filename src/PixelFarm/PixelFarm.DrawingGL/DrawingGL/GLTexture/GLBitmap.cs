@@ -59,11 +59,11 @@ namespace PixelFarm.DrawingGL
             this.height = h;
         }
 
-        public GLBitmap(PixelFarm.Agg.ActualBitmap actualImg)
+        public GLBitmap(PixelFarm.CpuBlit.ActualBitmap actualImg)
         {
             this.width = actualImg.Width;
             this.height = actualImg.Height;
-            this.rawIntBuffer = PixelFarm.Agg.ActualBitmap.GetBuffer(actualImg);
+            this.rawIntBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualImg);
         }
 
         public bool IsBigEndianPixel { get; set; }

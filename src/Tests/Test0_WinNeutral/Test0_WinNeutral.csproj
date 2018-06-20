@@ -36,7 +36,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinNeutral\PaintLab.Platforms.WinNeutral.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinNeutral\PaintLab.Platforms.WinNeutral.csproj">
       <Project>{2854a4f1-0110-4b47-b773-9a5fd462755e}</Project>
       <Name>PaintLab.Platforms.WinNeutral</Name>
     </ProjectReference>

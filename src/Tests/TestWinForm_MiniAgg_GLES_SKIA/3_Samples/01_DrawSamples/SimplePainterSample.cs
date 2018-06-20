@@ -7,7 +7,7 @@
 
 using System;
 using Mini;
-namespace PixelFarm.Agg.SimplePainter
+namespace PixelFarm.CpuBlit.SimplePainter
 {
     [Info(OrderCode = "01")]
     [Info("SimplePainter")]

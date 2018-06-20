@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     class AggRenderVx : PixelFarm.Drawing.RenderVx
     {

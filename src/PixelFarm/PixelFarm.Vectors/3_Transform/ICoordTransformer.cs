@@ -28,7 +28,7 @@
 //#include "agg_basics.h"
 
 
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.Transform
 {
     public interface ICoordTransformer
     {

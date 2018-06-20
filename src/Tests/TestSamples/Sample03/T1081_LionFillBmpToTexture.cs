@@ -4,7 +4,7 @@ using System;
 using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "108.1")]
@@ -39,7 +39,7 @@ namespace OpenTkEssTest
         {
 
 
-            var _svgRenderVx = PixelFarm.Agg.SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/lion.svg");
+            var _svgRenderVx = PixelFarm.CpuBlit.SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/lion.svg");
             lionShape = new SpriteShape(_svgRenderVx);
 
             RectD lionBounds = lionShape.Bounds;

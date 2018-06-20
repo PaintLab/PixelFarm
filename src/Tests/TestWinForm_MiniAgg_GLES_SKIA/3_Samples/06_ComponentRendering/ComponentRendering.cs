@@ -3,9 +3,12 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Rasterization;
+
 using Mini;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     [Info(OrderCode = "06")]
     //[Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
@@ -65,25 +68,25 @@ namespace PixelFarm.Agg
                     new Drawing.Color((byte)(this.AlphaValue), 0, 0, 0);
 
 
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = asx.ScanlineRasToDestBitmap;
-                VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+                DestBitmapRasterizer bmpRas = asx.BitmapRasterizer;
+                VertexSource.Ellipse er = new PixelFarm.CpuBlit.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 //
                 VectorToolBox.GetFreeVxs(out var v1);
                 sclineRas.AddPath(er.MakeVxs(v1));
                 v1.Clear();
-                sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
+                bmpRas.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
 
                 ////
-                VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+                VertexSource.Ellipse eg = new PixelFarm.CpuBlit.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(eg.MakeVertexSnap(v1));
                 v1.Clear();
-                sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
+                bmpRas.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
 
                 //
-                VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
+                VertexSource.Ellipse eb = new PixelFarm.CpuBlit.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
                 sclineRas.AddPath(eb.MakeVertexSnap(v1));
                 v1.Clear();
-                sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
+                bmpRas.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
 
                 VectorToolBox.ReleaseVxs(ref v1);
             }

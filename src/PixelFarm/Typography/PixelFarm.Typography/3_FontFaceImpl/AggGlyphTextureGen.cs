@@ -4,7 +4,7 @@ using System;
 using Typography.Contours;
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.Fonts;
 
 namespace Typography.Rendering

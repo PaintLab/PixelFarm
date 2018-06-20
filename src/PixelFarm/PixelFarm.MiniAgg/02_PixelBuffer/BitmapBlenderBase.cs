@@ -20,8 +20,9 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-namespace PixelFarm.Agg
+using PixelFarm.CpuBlit.PixelProcessing;
+
+namespace PixelFarm.CpuBlit
 {
 
     /// <summary>
@@ -111,7 +112,7 @@ namespace PixelFarm.Agg
             SetDimmensionAndFormat(width, height, stride, bitsPerPixel, bitsPerPixel / 8);
             SetUpLookupTables();
             //
-             
+
             this.OutputPixelBlender = outputPxBlender;
             //
             //this.m_ByteBuffer = imgbuffer;
@@ -168,7 +169,7 @@ namespace PixelFarm.Agg
                     int destOffset = GetByteBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
                     for (int i = 0; i < clippedSourceImageRect.Height; i++)
                     {
-                        AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
+                        Rasterization.AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
                         sourceOffset += sourceImage.Stride;
                         destOffset += Stride;
                     }

@@ -20,10 +20,10 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.VectorMath;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public static class Canvas2dExtension
     {

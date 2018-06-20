@@ -5,12 +5,12 @@
 // it still follows the originall agg function names.  I have been cleaning these up over time
 // and intend to do much more refactoring of these things over the long term.
 
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.Drawing;
 using Mini;
 
-namespace PixelFarm.Agg.Sample_Draw
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
     [Info(OrderCode = "02")]
     [Info("Lines")]
@@ -73,14 +73,14 @@ namespace PixelFarm.Agg.Sample_Draw
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            var aggPainter = p as PixelFarm.Agg.AggPainter;
+            var aggPainter = p as PixelFarm.CpuBlit.AggPainter;
             if (aggPainter == null)
             {
                 return;
             }
             Draw(aggPainter);
         }
-        void Draw(PixelFarm.Agg.AggPainter aggPainter)
+        void Draw(PixelFarm.CpuBlit.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
@@ -156,14 +156,14 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            var aggPainter = p as PixelFarm.Agg.AggPainter;
+            var aggPainter = p as PixelFarm.CpuBlit.AggPainter;
             if (aggPainter == null)
             {
                 return;
             }
             Draw(aggPainter);
         }
-        void Draw(PixelFarm.Agg.AggPainter aggPainter)
+        void Draw(PixelFarm.CpuBlit.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);

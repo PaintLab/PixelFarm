@@ -29,10 +29,10 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Imaging;
 using Mini;
-namespace PixelFarm.Agg.Sample_Images
+namespace PixelFarm.CpuBlit.Sample_Images
 {
     [Info(OrderCode = "41")]
     [Info("Basic Bitmap Rendering")]

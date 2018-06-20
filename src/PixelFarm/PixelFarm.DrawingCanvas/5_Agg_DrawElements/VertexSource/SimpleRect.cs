@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.CpuBlit.VertexSource
 {
  
     public class SimpleRect

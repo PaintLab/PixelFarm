@@ -20,18 +20,22 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.FragmentProcessing;
+
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+
+namespace PixelFarm.CpuBlit
 {
     partial class AggRenderSurface
     {
         public bool UseSubPixelRendering
         {
-            get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
-            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
+            get { return this._bmpRasterizer.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
+            set { this._bmpRasterizer.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
         }
         static Affine BuildImageBoundsPath(
             int srcW, int srcH,
@@ -114,7 +118,7 @@ namespace PixelFarm.Agg
         void Render(VertexStore vxs, ISpanGenerator spanGen)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithSpan(
+            _bmpRasterizer.RenderWithSpan(
                 destImageReaderWriter,
                 sclineRas,
                 sclinePack8,

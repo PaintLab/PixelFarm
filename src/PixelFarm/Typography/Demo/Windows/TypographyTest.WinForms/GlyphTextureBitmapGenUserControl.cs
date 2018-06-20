@@ -96,7 +96,7 @@ namespace TypographyTest.WinForms
                         //   stride);
                         //startRowAt -= stride;
                         //target += stride;  
-                        PixelFarm.Agg.AggMemMx.memcpy(target, src, stride);
+                        PixelFarm.CpuBlit.Rasterization.AggMemMx.memcpy(target, src, stride);
                         startRowAt -= stride;
                         target += stride;
                     }

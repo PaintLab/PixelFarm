@@ -8,7 +8,7 @@ using System;
 using PixelFarm.VectorMath;
 
 
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
 
     public class FreeTransform

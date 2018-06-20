@@ -3,9 +3,9 @@
 //AGG 2.4
 
 using System;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.Transform;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
 

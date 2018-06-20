@@ -3,7 +3,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
     static class BitmapHelper
     {
@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Imaging
             unsafe
             {
                 TempMemPtr memPtr = ActualBitmap.GetBufferPtr(actualImage);
-                AggMemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
+                PixelFarm.CpuBlit.Rasterization.AggMemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
                 memPtr.Release();
             }
             //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
@@ -75,7 +75,7 @@ namespace PixelFarm.Agg.Imaging
                             //   (IntPtr)target,
                             //   stride);
 
-                            AggMemMx.memcpy(target, bufferH + startRowAt, stride);
+                            PixelFarm.CpuBlit.Rasterization.AggMemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }
@@ -189,7 +189,7 @@ namespace PixelFarm.Agg.Imaging
                     //System.Runtime.InteropServices.Marshal.Copy(
                     //      (IntPtr)src,//src
                     //      targetBuffer, startRowAt, stride);
-                    AggMemMx.memcpy(target + startRowAt, src, stride);
+                    PixelFarm.CpuBlit.Rasterization.AggMemMx.memcpy(target + startRowAt, src, stride);
                     startRowAt -= stride;
                     src += stride;
                 }

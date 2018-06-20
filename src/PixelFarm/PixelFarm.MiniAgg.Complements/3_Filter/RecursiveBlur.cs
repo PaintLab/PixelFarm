@@ -31,7 +31,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
     //==============================================================stack_blur
     public class StackBlur
@@ -565,11 +565,11 @@ namespace PixelFarm.Agg.Imaging
     }
 
     //=================================================recursive_blur_calc_rgba
-    public sealed class RecursiveBlueCalcRGBA : RecursizeBlurCalculator
+    public sealed class RecursiveBlurCalcRGBA : RecursizeBlurCalculator
     {
         public override RecursizeBlurCalculator CreateNew()
         {
-            return new RecursiveBlueCalcRGBA();
+            return new RecursiveBlurCalcRGBA();
         }
 
         public override void FromPix(Color c)

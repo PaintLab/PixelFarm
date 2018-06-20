@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
 
@@ -448,7 +448,7 @@ namespace PixelFarm.Agg
 
             //start new range with x and y
             _ranges.Add(_latestRange = new Range(_vertextDistanceList.Count));
-            AddVertex(new Agg.Vertex2d(x, y));
+            AddVertex(new CpuBlit.Vertex2d(x, y));
             _latestMoveToX = x;
             _latestMoveToY = y;
         }
@@ -476,7 +476,7 @@ namespace PixelFarm.Agg
         {
             _ranges.Clear();
             _vertextDistanceList.Clear();
-            _latestVertex = new Agg.Vertex2d();
+            _latestVertex = new CpuBlit.Vertex2d();
             _rangeIndex = 0;
             _latestRange = null;
         }

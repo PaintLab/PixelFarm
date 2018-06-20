@@ -27,7 +27,7 @@
 //----------------------------------------------------------------------------
 #if DEBUG
 using System;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     // Supported byte orders for RGB and RGBA pixel formats
     //=======================================================================

@@ -20,7 +20,7 @@
 using PixelFarm.Drawing;
 using System;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.UI
+namespace PixelFarm.CpuBlit.UI
 {
     class SimplePolygonVertexSource
     {
@@ -119,7 +119,7 @@ namespace PixelFarm.Agg.UI
         public PolygonControl(int np, double point_radius)
             : base(new Vector2())
         {
-            m_ellipse = new PixelFarm.Agg.VertexSource.Ellipse();
+            m_ellipse = new PixelFarm.CpuBlit.VertexSource.Ellipse();
             m_polygon = new double[np * 2];
             m_num_points = (np);
             m_node = (-1);

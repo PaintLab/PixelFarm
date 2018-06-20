@@ -29,7 +29,7 @@
 
 using System;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.Transform
 {
     //============================================================trans_affine
     //

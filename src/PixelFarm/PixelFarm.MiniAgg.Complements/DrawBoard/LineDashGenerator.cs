@@ -1,8 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev 
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
-namespace PixelFarm.Agg
+using PixelFarm.CpuBlit.VertexSource;
+namespace PixelFarm.CpuBlit
 {
     public class LineDashGenerator
     {

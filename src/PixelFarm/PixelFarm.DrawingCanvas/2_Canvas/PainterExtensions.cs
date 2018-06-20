@@ -20,7 +20,7 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
 

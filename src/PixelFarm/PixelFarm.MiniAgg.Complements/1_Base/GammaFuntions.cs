@@ -18,12 +18,12 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
-namespace PixelFarm.Agg
+using System; 
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     public struct GammaNone : IGammaFunction
     {
-        public float GetGamma(float x) { return x; } 
+        public float GetGamma(float x) { return x; }
     }
     //==============================================================gamma_power
     public class GammaPower : IGammaFunction

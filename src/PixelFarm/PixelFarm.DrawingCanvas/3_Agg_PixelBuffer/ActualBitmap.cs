@@ -21,7 +21,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     /// <summary>
     /// agg buffer's pixel format

@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.Skia
 {
     static class BitmapHelper
@@ -66,7 +66,7 @@ namespace PixelFarm.Drawing.Skia
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, bufferH + startRowAt, stride);
+                            PixelFarm.CpuBlit.Rasterization.AggMemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }

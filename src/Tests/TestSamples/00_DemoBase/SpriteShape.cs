@@ -3,13 +3,13 @@
 //AGG 2.4
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexSource;
 using PixelFarm.VectorMath;
 using PaintLab.Svg;
 
 using System.Text;
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
 
 
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
                 _svgRenderVx.ResetTransform();
             }
         }
-        public void ApplyTransform(Agg.Transform.Affine tx)
+        public void ApplyTransform(CpuBlit.Transform.Affine tx)
         {
             int elemCount = _svgRenderVx.SvgVxCount;
             for (int i = 0; i < elemCount; ++i)
@@ -54,7 +54,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public void ApplyTransform(Agg.Transform.Bilinear tx)
+        public void ApplyTransform(CpuBlit.Transform.Bilinear tx)
         {
             int elemCount = _svgRenderVx.SvgVxCount;
             for (int i = 0; i < elemCount; ++i)
@@ -97,11 +97,11 @@ namespace PixelFarm.Agg
             _svgRenderVx.Render(p);
         }
 
-        public void Paint(Painter p, PixelFarm.Agg.Transform.Perspective tx)
+        public void Paint(Painter p, PixelFarm.CpuBlit.Transform.Perspective tx)
         {
             _svgRenderVx.Render(p);
         }
-        public void Paint(Painter p, PixelFarm.Agg.Transform.Affine tx)
+        public void Paint(Painter p, PixelFarm.CpuBlit.Transform.Affine tx)
         {
 
         }
@@ -156,7 +156,7 @@ namespace PixelFarm.Agg
                     continue;
                 }
                 VertexStore innerVxs = vx.GetVxs();
-                PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
+                PixelFarm.CpuBlit.BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
             }
             this.boundingRect = rectTotal;
         }

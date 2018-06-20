@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.CustomWidgets;
 using LayoutFarm.UI;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 namespace LayoutFarm.ColorBlenderSample
 {

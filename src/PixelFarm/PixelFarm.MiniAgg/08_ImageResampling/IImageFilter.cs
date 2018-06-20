@@ -27,7 +27,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
     public interface IImageFilter
     {

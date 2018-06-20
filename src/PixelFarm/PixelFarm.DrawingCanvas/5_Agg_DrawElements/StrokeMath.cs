@@ -26,7 +26,7 @@ using System;
 using PixelFarm.Drawing;
 
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public struct Vertex2d
     {
