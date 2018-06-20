@@ -2,17 +2,13 @@
 //MIT, 2014-present, WinterDev
 
 using System;
-using System.Collections.Generic;
-using PixelFarm;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.PainterExtensions;
 using PixelFarm.CpuBlit.Transform;
 
 namespace PixelFarm.CpuBlit
 {
-    //very simple svg parser 
-
-
+    //very simple svg parser  
     public enum SvgRenderVxKind
     {
         BeginGroup,

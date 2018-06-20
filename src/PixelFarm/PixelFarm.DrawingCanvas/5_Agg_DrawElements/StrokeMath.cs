@@ -67,7 +67,7 @@ namespace PixelFarm.CpuBlit
     }
 
 
-    public class StrokeMath
+    class StrokeMath
     {
 
         double m_width;
@@ -160,7 +160,7 @@ namespace PixelFarm.CpuBlit
         public void CreateCap(VertexStore output, Vertex2d v0, Vertex2d v1, double len)
         {
             output.Clear();
-            double dx1 = (v1.y - v0.y) / len;  
+            double dx1 = (v1.y - v0.y) / len;
             double dy1 = (v1.x - v0.x) / len;
             double dx2 = 0;
             double dy2 = 0;

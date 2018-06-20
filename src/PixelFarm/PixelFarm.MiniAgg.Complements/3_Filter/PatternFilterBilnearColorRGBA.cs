@@ -19,9 +19,8 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Rasterization.Lines;
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.Rasterization.Lines 
 {
     public struct PatternFilterBilnearColorRGBA : IPatternFilter
     {
