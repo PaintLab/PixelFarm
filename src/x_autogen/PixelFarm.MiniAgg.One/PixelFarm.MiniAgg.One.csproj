@@ -188,7 +188,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\01_vertexprocessing\SpanInterpolatorLinear.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\01_vertexprocessing\SpanInterpolatorPerspectiveLerp.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\02_pixelbuffer\BitmapBlenderBase.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\02_pixelbuffer\ColorRGBAf.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\02_pixelbuffer\IBitmapBlender.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs" />
@@ -223,6 +222,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\GradientSpanGen.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\05_pixelprocessing\PixelBlenderOthers.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\05_pixelprocessing\PixelBlenders.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\pixelfarm.miniagg\05_pixelprocessing\SubBitmapBlender.cs" />

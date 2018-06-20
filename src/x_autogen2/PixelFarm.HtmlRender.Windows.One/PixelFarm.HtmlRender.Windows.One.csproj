@@ -884,9 +884,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\ColorOrder.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\ColorOrder.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\02_PixelBuffer\ColorRGBAf.cs</Link>
     </Compile>
@@ -988,6 +985,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\RGBAGouraudSpanGen.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing_Gouraud\RGBAGouraudSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderOthers.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderOthers.cs</Link>

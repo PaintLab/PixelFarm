@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="02_PixelBuffer\BitmapBlenderBase.cs" />
-    <Compile Include="02_PixelBuffer\ColorOrder.cs" />
+    <Compile Include="05_PixelProcessing\CO.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\GouraudSpanGen.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\GradientSpanGen.cs" />

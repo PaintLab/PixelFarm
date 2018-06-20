@@ -29,6 +29,8 @@
 
 using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
+using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
+
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14

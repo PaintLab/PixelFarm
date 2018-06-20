@@ -478,9 +478,6 @@
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\BitmapBlenderBase.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\BitmapBlenderBase.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ColorOrder.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ColorRGBAf.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ColorRGBAf.cs</Link>
     </Compile>
@@ -582,6 +579,9 @@
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing_Gouraund\RGBAGouraudSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\05_PixelProcessing\CO.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\05_pixelprocessing\PixelBlenderOthers.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\05_PixelProcessing\PixelBlenderOthers.cs</Link>
