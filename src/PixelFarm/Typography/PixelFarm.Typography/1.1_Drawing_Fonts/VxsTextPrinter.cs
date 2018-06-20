@@ -357,7 +357,7 @@ namespace PixelFarm.Drawing.Fonts
 
                     reusableVxs.Clear();
                     VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
-                    flipY.TransformToVxs(vxs, reusableVxs);
+                    PixelFarm.CpuBlit.VertexProcessing.VertexStoreTransformExtensions.TransformToVxs(flipY, vxs, reusableVxs);
                     painter.Fill(reusableVxs);
 
 
@@ -509,7 +509,7 @@ namespace PixelFarm.Drawing.Fonts
 
                     reusableVxs.Clear();
                     VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
-                    flipY.TransformToVxs(vxs, reusableVxs);
+                    PixelFarm.CpuBlit.VertexProcessing.VertexStoreTransformExtensions.TransformToVxs(flipY, vxs, reusableVxs);
                     painter.Fill(reusableVxs);
 
 
