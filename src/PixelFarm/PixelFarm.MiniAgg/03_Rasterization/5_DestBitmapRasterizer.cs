@@ -1464,7 +1464,7 @@ namespace PixelFarm.CpuBlit.Rasterization
         public void RenderWithSpan(IBitmapBlender dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
-                ISpanGenerator spanGenerator)
+                FragmentProcessing.ISpanGenerator spanGenerator)
         {
             if (!sclineRas.RewindScanlines()) { return; } //early exit
             //-----------------------------------------------
