@@ -152,8 +152,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
             unsafe
             {
-                TempMemPtr destMemPtr = m_buf.GetBufferPtr();
-                TempMemPtr srcMemPtr = src.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr destMemPtr = m_buf.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr srcMemPtr = src.GetBufferPtr();
 
                 byte* destBuffer = (byte*)destMemPtr.Ptr;
                 byte* srcBuffer = (byte*)srcMemPtr.Ptr;

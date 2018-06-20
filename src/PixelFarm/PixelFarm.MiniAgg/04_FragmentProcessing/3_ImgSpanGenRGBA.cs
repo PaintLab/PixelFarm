@@ -63,7 +63,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
             unsafe
             {
-                TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                 int* pSource = (int*)srcBufferPtr.Ptr + bufferIndex;
                 {
                     //int* src_ptr = (int*)pSource;
@@ -164,7 +164,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 if (_mode0)
                 {
 
-                    TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                     byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
                     int bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
                     //unsafe
@@ -209,7 +209,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                     try
                     {
                         ISpanInterpolator spanInterpolator = base.Interpolator;
-                        TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                        CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                         byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
 
                         spanInterpolator.Begin(x + base.dx, y + base.dy, len);

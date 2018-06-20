@@ -98,7 +98,7 @@ namespace PixelFarm.DrawingGL
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   
-            CpuBlit.TempMemPtr buffer = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(actualImg);
+            CpuBlit.Imaging.TempMemPtr buffer = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(actualImg);
             unsafe
             {
                 byte* header = (byte*)memdc.PPVBits;

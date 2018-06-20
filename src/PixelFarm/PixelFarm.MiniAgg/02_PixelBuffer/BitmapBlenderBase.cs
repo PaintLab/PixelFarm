@@ -20,6 +20,7 @@
 
 using System;
 using PixelFarm.Drawing;
+
 using PixelFarm.CpuBlit.PixelProcessing;
 
 namespace PixelFarm.CpuBlit
@@ -56,9 +57,9 @@ namespace PixelFarm.CpuBlit
             return this.raw_buffer32;
         }
 
-        public TempMemPtr GetBufferPtr()
+        public CpuBlit.Imaging.TempMemPtr GetBufferPtr()
         {
-            return new TempMemPtr(raw_buffer32);
+            return new CpuBlit.Imaging.TempMemPtr(raw_buffer32);
         }
 
         protected void SetBufferToNull()
@@ -161,8 +162,8 @@ namespace PixelFarm.CpuBlit
                 unsafe
                 {
 
-                    TempMemPtr memPtr = sourceImage.GetBufferPtr();
-                    TempMemPtr destPtr = this.GetBufferPtr();
+                    CpuBlit.Imaging.TempMemPtr memPtr = sourceImage.GetBufferPtr();
+                    CpuBlit.Imaging.TempMemPtr destPtr = this.GetBufferPtr();
 
                     byte* sourceBuffer = (byte*)memPtr.Ptr;
                     byte* destBuffer = (byte*)destPtr.Ptr;
@@ -198,8 +199,8 @@ namespace PixelFarm.CpuBlit
                                         //byte[] sourceBuffer = sourceImage.GetBuffer();
                                         //byte[] destBuffer = GetBuffer();
 
-                                        TempMemPtr srcMemPtr = sourceImage.GetBufferPtr();
-                                        TempMemPtr destBufferPtr = this.GetBufferPtr();
+                                        CpuBlit.Imaging.TempMemPtr srcMemPtr = sourceImage.GetBufferPtr();
+                                        CpuBlit.Imaging.TempMemPtr destBufferPtr = this.GetBufferPtr();
 
                                         int destOffset = GetByteBufferOffsetXY(
                                             clippedSourceImageRect.Left + destXOffset,
