@@ -1,6 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev
-using System;
-using PixelFarm.Drawing;
+ 
 namespace PixelFarm.Drawing.Effects
 {
     public class ImgFilterStackBlur : ImageFilter

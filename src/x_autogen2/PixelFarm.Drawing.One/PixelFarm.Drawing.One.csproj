@@ -650,9 +650,6 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\1_base\ProxyImage.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\1_base\ProxyImage.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\1_base\Queue.cs">
-      <Link>PixelFarm\pixelfarm.miniagg.complements\1_base\Queue.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\3_filter\BrightnessAndContrastAdjustment.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\3_filter\BrightnessAndContrastAdjustment.cs</Link>
     </Compile>
@@ -676,6 +673,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\FloodFiller.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\FloodFiller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg.Complements\4_Image\Queue.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg.Complements\4_Image\Queue.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\4_image\Transposer.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\4_image\Transposer.cs</Link>
@@ -704,6 +704,12 @@
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg.complements\svgrendervx\SvgRenderVx.cs">
       <Link>PixelFarm\pixelfarm.miniagg.complements\svgrendervx\SvgRenderVx.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\00\BitmapBlenderBase.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\00\BitmapBlenderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\00\ColorRGBAf.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\00\ColorRGBAf.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\01_vertexprocessing\LineInterpolators.cs">
       <Link>PixelFarm\pixelfarm.miniagg\01_vertexprocessing\LineInterpolators.cs</Link>
     </Compile>
@@ -712,18 +718,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\01_vertexprocessing\SpanInterpolatorPerspectiveLerp.cs">
       <Link>PixelFarm\pixelfarm.miniagg\01_vertexprocessing\SpanInterpolatorPerspectiveLerp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\BitmapBlenderBase.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\BitmapBlenderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorRGBAf.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\ColorRGBAf.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\IBitmapBlender.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\IBitmapBlender.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
-      <Link>PixelFarm\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\02_primitiveprocessing\ClipLiangBarsky.cs">
       <Link>PixelFarm\pixelfarm.miniagg\02_primitiveprocessing\ClipLiangBarsky.cs</Link>
@@ -821,8 +815,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs">
       <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\IBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\IBitmapBlender.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\05_pixelprocessing\PixelBlenderOthers.cs">
       <Link>PixelFarm\pixelfarm.miniagg\05_pixelprocessing\PixelBlenderOthers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderRGBA.cs">
+      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderRGBA.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\pixelfarm.miniagg\05_pixelprocessing\PixelBlenders.cs">
       <Link>PixelFarm\pixelfarm.miniagg\05_pixelprocessing\PixelBlenders.cs</Link>
