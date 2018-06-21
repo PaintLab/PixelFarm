@@ -44,9 +44,9 @@
     <Compile Include="05_PixelProcessing\PixelBlenderOthers.cs" />
     <Compile Include="05_PixelProcessing\SubBitmapBlender.cs" />
     <Compile Include="03_Rasterization\SubPixConst.cs" />
-    <Compile Include="01_VertexProcessing\LineInterpolators.cs" />
-    <Compile Include="01_VertexProcessing\SpanInterpolatorLinear.cs" />
-    <Compile Include="01_VertexProcessing\SpanInterpolatorPerspectiveLerp.cs" />
+    <Compile Include="04_FragmentProcessing\LineInterpolators.cs" />
+    <Compile Include="04_FragmentProcessing\SpanInterpolatorLinear.cs" />
+    <Compile Include="04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" />
     <Content Include="x_backup\FilterRGBAImageSpanGen.txt" />
     <Content Include="x_backup\FilterRGBImageSpanGen.txt" />
     <Compile Include="03_Rasterization_Lines\1.1_LinesAA.cs" />

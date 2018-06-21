@@ -1234,19 +1234,16 @@ namespace PixelFarm.CpuBlit
 
 
     struct GradientSpanPart
-    {
-
-
-
+    {   
         public GradientSpanGen _spanGenGr;
         public LinearGradientColorsProvider _linearGradientColorProvider;
-        public PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear _linerInterpolator;
+        public SpanInterpolatorLinear _linerInterpolator;
         public ReusableRotationTransformer _reusableRotationTransformer;
 
         public void SetData(IGradientValueCalculator gvc, LinearGradientPair pair)
         {
 
-            _linerInterpolator = new PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear();
+            _linerInterpolator = new SpanInterpolatorLinear();
             _linearGradientColorProvider = new LinearGradientColorsProvider();
             _spanGenGr = new GradientSpanGen();
             //TODO:

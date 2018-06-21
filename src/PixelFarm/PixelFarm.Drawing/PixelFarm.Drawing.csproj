@@ -472,15 +472,6 @@
     <Compile Include="..\PixelFarm.MiniAgg\00\ColorRGBAf.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\00\ColorRGBAf.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\01_vertexprocessing\LineInterpolators.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\01_VertexProcessing\LineInterpolators.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\01_vertexprocessing\SpanInterpolatorLinear.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\01_VertexProcessing\SpanInterpolatorLinear.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\01_vertexprocessing\SpanInterpolatorPerspectiveLerp.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\01_VertexProcessing\SpanInterpolatorPerspectiveLerp.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_primitiveprocessing\ClipLiangBarsky.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PrimitiveProcessing\ClipLiangBarsky.cs</Link>
     </Compile>
@@ -561,6 +552,9 @@
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\04_fragmentprocessing\ISpanInterpolator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing\ISpanInterpolator.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\04_FragmentProcessing\SpanInterpolatorLinear.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing\SpanInterpolatorLinear.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\GouraudSpanGen.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing_Gouraund\GouraudSpanGen.cs</Link>

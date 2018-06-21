@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.CpuBlit.VertexProcessing
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //===================================================dda_line_interpolator
     public struct LineInterpolatorDDA

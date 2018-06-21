@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 
-namespace PixelFarm.CpuBlit.VertexProcessing
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //================================================span_interpolator_linear
     public struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator

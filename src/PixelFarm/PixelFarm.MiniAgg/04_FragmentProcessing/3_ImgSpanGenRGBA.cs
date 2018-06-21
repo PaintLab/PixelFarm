@@ -142,9 +142,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             base.Prepare();
 
             ISpanInterpolator spanInterpolator = base.Interpolator;
-            _mode0 = (spanInterpolator.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)
-                && ((PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.Affine)
-                && ((PixelFarm.CpuBlit.VertexProcessing.Affine)((PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
+            _mode0 = (spanInterpolator.GetType() == typeof(SpanInterpolatorLinear)
+                && ((SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.Affine)
+                && ((PixelFarm.CpuBlit.VertexProcessing.Affine)((SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
         }
         public Drawing.Color BackgroundColor
         {

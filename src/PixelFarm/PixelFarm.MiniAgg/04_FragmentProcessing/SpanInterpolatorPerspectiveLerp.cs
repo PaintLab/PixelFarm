@@ -19,7 +19,8 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.CpuBlit.VertexProcessing
+using PixelFarm.CpuBlit.VertexProcessing;
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //============================================span_interpolator_persp_lerp
 
