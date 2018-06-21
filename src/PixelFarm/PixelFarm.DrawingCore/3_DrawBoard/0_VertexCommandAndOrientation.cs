@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 
-using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit
 {
     /// <summary>
@@ -39,5 +39,5 @@ namespace PixelFarm.CpuBlit
         CW//2
     }
 
-    
+
 }
