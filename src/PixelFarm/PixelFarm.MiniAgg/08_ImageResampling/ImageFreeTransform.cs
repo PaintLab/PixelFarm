@@ -6,8 +6,7 @@
 
 using System;
 using PixelFarm.VectorMath;
-
-
+using PixelFarm.CpuBlit.PixelProcessing; 
 namespace PixelFarm.CpuBlit.Imaging
 {
 

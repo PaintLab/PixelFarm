@@ -8,7 +8,7 @@ using PixelFarm.BitmapBufferEx;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
-
+using PixelFarm.CpuBlit.PixelProcessing;
 namespace PixelFarm.CpuBlit
 {
 

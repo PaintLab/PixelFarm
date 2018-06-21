@@ -34,9 +34,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="00\BitmapBlenderBase.cs" />
+    <Compile Include="05_PixelProcessing\BitmapBlenderBase.cs" />
     <Compile Include="05_PixelProcessing\CO.cs" />
-    <Compile Include="00\ColorRGBAf.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\GouraudSpanGen.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\GradientSpanGen.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\IGradientValueCalculator_and_Impl.cs" />
@@ -70,7 +69,6 @@
     <Compile Include="08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="08_ImageResampling\ImageTransform.cs" />
     <Compile Include="03_Rasterization\0_ScanlineSpan.cs" />
-    <Compile Include="02_PrimitiveProcessing\ClipLiangBarsky.cs" />
     <Compile Include="03_Rasterization\4.2_CellAARasterizer.cs" />
     <Compile Include="08_ImageResampling\IImageFilter.cs" />
     <Content Include="x_backup\FilterImageSpanGenerator.txt" />
