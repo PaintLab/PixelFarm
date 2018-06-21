@@ -20,7 +20,7 @@
 
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public static class VertexStoreBuilder
     {
