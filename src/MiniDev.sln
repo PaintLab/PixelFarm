@@ -183,7 +183,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.DrawingBuffer", "Pi
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PdnSharedProject", "PixelFarm\BackEnd.FilterFx\PdnSharedProject\PdnSharedProject.shproj", "{536B9B08-98D7-4261-A78D-3B1CCD11D5EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.FilterFx", "PixelFarm\BackEnd.FilterFx\PdnPixelEffectPixelFarm\BackEnd.FilterFx.csproj", "{9A7DB6EA-7F85-4420-9E42-F0F277524FB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.PaintFx", "PixelFarm\BackEnd.FilterFx\PdnPixelEffectPixelFarm\BackEnd.PaintFx.csproj", "{9A7DB6EA-7F85-4420-9E42-F0F277524FB7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.8_BackEnd", "0.8_BackEnd", "{ABA16C8F-2363-4B10-ADE5-C168383C13CC}"
 EndProject

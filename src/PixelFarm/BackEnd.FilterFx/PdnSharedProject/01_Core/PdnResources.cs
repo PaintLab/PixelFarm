@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 //Apache2, 2017-present, WinterDev
-namespace PixelFarm.Drawing.DrawingBuffer
+namespace PixelFarm.PaintFx
 {
     static class BlendResources
     { 

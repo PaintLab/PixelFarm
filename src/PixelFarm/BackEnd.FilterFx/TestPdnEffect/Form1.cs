@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Effects;
-using PixelFarm.Drawing.DrawingBuffer;
+using PixelFarm.PaintFx;
 
 
 

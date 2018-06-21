@@ -32,7 +32,7 @@
 
 //Apache2, 2017-present, WinterDev
 
-using PixelFarm.Drawing.DrawingBuffer; 
+using PixelFarm.PaintFx; 
 
 namespace PixelFarm.Drawing.Effects
 {

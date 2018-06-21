@@ -8,7 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 //Apache2, 2017-present, WinterDev
-namespace PixelFarm.Drawing.DrawingBuffer
+using PixelFarm.Drawing;
+namespace PixelFarm.PaintFx
 {
     /// <summary>
     /// Provides an interface for the methods that UnaryPixelOp and BinaryPixelOp share.

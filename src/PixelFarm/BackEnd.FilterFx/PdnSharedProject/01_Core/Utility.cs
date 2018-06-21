@@ -14,8 +14,9 @@ using System.Collections.Generic;
 
 using System.IO;
 using System.Text;
+using PixelFarm.Drawing;
 
-namespace PixelFarm.Drawing.DrawingBuffer
+namespace PixelFarm.PaintFx
 {
     /// <summary>
     /// Defines miscellaneous constants and static functions.

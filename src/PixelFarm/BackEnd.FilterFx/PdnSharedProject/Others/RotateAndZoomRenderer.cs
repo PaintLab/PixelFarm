@@ -9,7 +9,7 @@
 //Apache2, 2017-present, WinterDev
 using System;
 
-using PixelFarm.Drawing.DrawingBuffer;
+using PixelFarm.PaintFx;
 
 namespace PixelFarm.Drawing.Effects
 {
@@ -191,7 +191,7 @@ namespace PixelFarm.Drawing.Effects
                                     }
                                     else
                                     {
-                                        *dstPtr = PixelFarm.Drawing.DrawingBuffer.UserBlendOps.NormalBlendOp.ApplyStatic(*srcPtr, c);
+                                        *dstPtr = PixelFarm.PaintFx.UserBlendOps.NormalBlendOp.ApplyStatic(*srcPtr, c);
                                     }
                                 }
                             }

@@ -11,7 +11,7 @@
 
 using System;
 using PixelFarm.Drawing.Effects;
-using PixelFarm.Drawing.DrawingBuffer;
+using PixelFarm.PaintFx;
 namespace PixelFarm.CpuBlit.Imaging
 {
     /// <summary>

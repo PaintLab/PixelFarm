@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 //Apache2, 2017-present, WinterDev
-
-namespace PixelFarm.Drawing.DrawingBuffer
+using PixelFarm.Drawing;
+namespace PixelFarm.PaintFx
 {
     public abstract class GradientRenderer
     {

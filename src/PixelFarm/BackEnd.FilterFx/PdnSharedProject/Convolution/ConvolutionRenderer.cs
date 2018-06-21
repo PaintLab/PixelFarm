@@ -10,7 +10,7 @@
 using System;
 using System.Collections;
 
-using PixelFarm.Drawing.DrawingBuffer;
+using PixelFarm.PaintFx;
 
 namespace PixelFarm.Drawing.Effects
 {

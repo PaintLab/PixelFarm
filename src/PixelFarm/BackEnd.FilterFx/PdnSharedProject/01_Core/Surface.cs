@@ -9,8 +9,9 @@
 
 //Apache2, 2017-present, WinterDev
 using System;
+using PixelFarm.Drawing;
 
-namespace PixelFarm.Drawing.DrawingBuffer
+namespace PixelFarm.PaintFx
 {
 
     public class MemHolder

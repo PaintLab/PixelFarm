@@ -10,8 +10,8 @@
 //Apache2, 2017-present, WinterDev
 using System;
 using System.Runtime.InteropServices;
-
-namespace PixelFarm.Drawing.DrawingBuffer
+using PixelFarm.Drawing;
+namespace PixelFarm.PaintFx
 {
     /// <summary>
     /// This is our pixel format that we will work with. It is always 32-bits / 4-bytes and is

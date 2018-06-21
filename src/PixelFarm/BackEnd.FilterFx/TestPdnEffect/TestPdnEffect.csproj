@@ -74,9 +74,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdnPixelEffectPixelFarm\BackEnd.FilterFx.csproj">
+    <ProjectReference Include="..\PdnPixelEffectPixelFarm\BackEnd.PaintFx.csproj">
       <Project>{9a7db6ea-7f85-4420-9e42-f0f277524fb7}</Project>
-      <Name>BackEnd.FilterFx</Name>
+      <Name>BackEnd.PaintFx</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

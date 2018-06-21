@@ -9,7 +9,9 @@
 
 //Apache2, 2017-present, WinterDev
 using System;
-namespace PixelFarm.Drawing.DrawingBuffer
+using PixelFarm.Drawing;
+
+namespace PixelFarm.PaintFx
 {
     /// <summary>
     /// Provides a set of standard UnaryPixelOps.
@@ -24,7 +26,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// Passes through the given color value.
         /// result(color) = color
         /// </summary>
-        
+
         public class Identity
             : UnaryPixelOp
         {
@@ -47,7 +49,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// <summary>
         /// Always returns a constant color.
         /// </summary>
-        
+
         public class Constant
             : UnaryPixelOp
         {
@@ -87,7 +89,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// <summary>
         /// Blends pixels with the specified constant color.
         /// </summary>
-        
+
         public class BlendConstant
             : UnaryPixelOp
         {
@@ -116,7 +118,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// Used to set a given channel of a pixel to a given, predefined color.
         /// Useful if you want to set only the alpha value of a given region.
         /// </summary>
-        
+
         public class SetChannel
             : UnaryPixelOp
         {
@@ -166,7 +168,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// occupying the 8 most-significant-bits of a ColorBgra instance.
         /// By the way, we use addition instead of bitwise-OR because an addition can be
         /// perform very fast (0.5 cycles) on a Pentium 4.</remarks>
-        
+
         public class SetAlphaChannel
             : UnaryPixelOp
         {
@@ -207,7 +209,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// <summary>
         /// Specialization of SetAlphaChannel that always sets alpha to 255.
         /// </summary>
-        
+
         public class SetAlphaChannelTo255
             : UnaryPixelOp
         {
@@ -241,7 +243,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// <summary>
         /// Inverts a pixel's color, and passes through the alpha component.
         /// </summary>
-        
+
         public class Invert
             : UnaryPixelOp
         {
@@ -254,7 +256,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// <summary>
         /// If the color is within the red tolerance, remove it
         /// </summary>
-        
+
         public class RedEyeRemove
             : UnaryPixelOp
         {
@@ -324,7 +326,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// <summary>
         /// Inverts a pixel's color and its alpha component.
         /// </summary>
-        
+
         public class InvertWithAlpha
             : UnaryPixelOp
         {
@@ -338,7 +340,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
         /// Averages the input color's red, green, and blue channels. The alpha component
         /// is unaffected.
         /// </summary>
-        
+
         public class AverageChannels
             : UnaryPixelOp
         {
@@ -349,7 +351,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
             }
         }
 
-        
+
         public class Desaturate
             : UnaryPixelOp
         {
@@ -392,7 +394,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
             }
         }
 
-        
+
         public class LuminosityCurve
             : UnaryPixelOp
         {
@@ -419,7 +421,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
             }
         }
 
-        
+
         public class ChannelCurve
             : UnaryPixelOp
         {
@@ -474,7 +476,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
             }
         }
 
-        
+
         public class Level
             : ChannelCurve,
               ICloneable
@@ -817,7 +819,7 @@ namespace PixelFarm.Drawing.DrawingBuffer
             }
         }
 
-        
+
         public class HueSaturationLightness
             : UnaryPixelOp
         {
