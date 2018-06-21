@@ -11,7 +11,8 @@
 //Apache2, 2018, WinterDev
 
 using System;
-namespace PixelFarm.Drawing.Effects
+using PixelFarm.Drawing;
+namespace PixelFarm.PaintFx.Effects
 {
 
 

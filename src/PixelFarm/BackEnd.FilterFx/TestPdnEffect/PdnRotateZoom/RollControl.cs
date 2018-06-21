@@ -13,7 +13,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-using PixelFarm.Drawing.Effects;
+using PixelFarm.PaintFx.Effects;
 
 namespace PaintDotNet.Effects
 {

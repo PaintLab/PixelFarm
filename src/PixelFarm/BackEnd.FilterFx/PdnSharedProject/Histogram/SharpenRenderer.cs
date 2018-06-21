@@ -8,9 +8,9 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017-present, WinterDev
 
-using PixelFarm.PaintFx;
+using PixelFarm.Drawing;
 
-namespace PixelFarm.Drawing.Effects
+namespace PixelFarm.PaintFx.Effects
 {
     public class SharpenRenderer : HistogramRenderer
     {

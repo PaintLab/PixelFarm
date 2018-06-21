@@ -10,9 +10,8 @@
 using System;
 using System.Collections;
 
-using PixelFarm.PaintFx;
-
-namespace PixelFarm.Drawing.Effects
+using PixelFarm.Drawing;
+namespace PixelFarm.PaintFx.Effects
 {
     class ConvolutionRenderer
     {

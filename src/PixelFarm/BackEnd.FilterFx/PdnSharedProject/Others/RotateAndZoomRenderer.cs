@@ -8,10 +8,9 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017-present, WinterDev
 using System;
+using PixelFarm.Drawing;
 
-using PixelFarm.PaintFx;
-
-namespace PixelFarm.Drawing.Effects
+namespace PixelFarm.PaintFx.Effects
 {
     public class RotateAndZoomRenderer
     {

@@ -8,10 +8,10 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017-present, WinterDev
 
-using PixelFarm.PaintFx;
 
-namespace PixelFarm.Drawing.Effects
-{
+using PixelFarm.Drawing;
+namespace PixelFarm.PaintFx.Effects
+{   
     public class HueAndSatRenderer : EffectRendererBase
     {
         private int hue;

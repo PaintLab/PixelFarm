@@ -30,7 +30,7 @@
 // THE SOFTWARE. 
 //
 //Apache2, 2017-present, WinterDev
-namespace PixelFarm.Drawing.Effects
+namespace PixelFarm.PaintFx.Effects
 {
     public enum WarpEdgeBehavior
     {
