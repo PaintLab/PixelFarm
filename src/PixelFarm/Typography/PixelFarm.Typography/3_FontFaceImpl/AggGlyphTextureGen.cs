@@ -39,7 +39,7 @@ namespace Typography.Rendering
             //-------------------------------------------- 
             //GlyphImage glyphImg = new GlyphImage()
             RectD bounds = new RectD();
-            BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref bounds);
+            PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref bounds);
 
             ////-------------------------------------------- 
             int w = (int)System.Math.Ceiling(bounds.Width);

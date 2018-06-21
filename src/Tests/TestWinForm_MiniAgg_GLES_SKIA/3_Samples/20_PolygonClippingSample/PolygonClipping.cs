@@ -4,8 +4,8 @@
 using System;
 using PixelFarm.Drawing;
 using System.Collections.Generic;
-using PixelFarm.CpuBlit.VertexSource;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.VertexProcessing;
 using Mini;
 using ClipperLib;
 namespace PixelFarm.CpuBlit.Sample_PolygonClipping

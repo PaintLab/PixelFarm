@@ -1,6 +1,6 @@
 //BSD, 2014-present, WinterDev
 
-using PixelFarm.Drawing;
+using PixelFarm.Drawing; 
 namespace PixelFarm.CpuBlit.Imaging
 {
     public class FloodFill
@@ -38,9 +38,9 @@ namespace PixelFarm.CpuBlit.Imaging
             public override bool CheckPixel(int pixelValue32)
             {
                 //ARGB
-                int r = ((pixelValue32 >> (CO.R * 8)) & 0xff);//16
-                int g = ((pixelValue32 >> (CO.G * 8)) & 0xff);//8
-                int b = ((pixelValue32 >> (CO.B * 8)) & 0xff);//0
+                int r = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.R * 8)) & 0xff);//16
+                int g = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.G * 8)) & 0xff);//8
+                int b = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.B * 8)) & 0xff);//0
 
                 return r == startColor.red &&
                        g == startColor.green &&
@@ -64,9 +64,9 @@ namespace PixelFarm.CpuBlit.Imaging
             public override bool CheckPixel(int pixelValue32)
             {
                 //ARGB
-                int r = ((pixelValue32 >> (CO.R * 8)) & 0xff);
-                int g = ((pixelValue32 >> (CO.G * 8)) & 0xff);
-                int b = ((pixelValue32 >> (CO.B * 8)) & 0xff);
+                int r = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.R * 8)) & 0xff);
+                int g = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.G * 8)) & 0xff);
+                int b = ((pixelValue32 >> (PixelFarm.CpuBlit.PixelProcessing.CO.B * 8)) & 0xff);
 
 
                 return (r >= (startColor.red - tolerance0To255)) && (r <= (startColor.red + tolerance0To255)) &&

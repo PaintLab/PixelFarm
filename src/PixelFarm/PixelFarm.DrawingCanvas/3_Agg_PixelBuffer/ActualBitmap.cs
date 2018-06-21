@@ -21,7 +21,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.Imaging
 {
     /// <summary>
     /// agg buffer's pixel format
@@ -68,13 +68,17 @@ namespace PixelFarm.CpuBlit
     }
 
 
+}
+namespace PixelFarm.CpuBlit
+{
+
     public sealed class ActualBitmap : PixelFarm.Drawing.Image, IBitmapSrc
     {
         int width;
         int height;
         int stride;
         int bitDepth;
-        PixelFormat pixelFormat;
+        CpuBlit.Imaging.PixelFormat pixelFormat;
 
         int[] pixelBuffer;
 
@@ -85,7 +89,7 @@ namespace PixelFarm.CpuBlit
             this.height = height;
             int bytesPerPixel;
             this.stride = CalculateStride(width,
-                this.pixelFormat = PixelFormat.ARGB32, //***
+                this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
@@ -99,7 +103,7 @@ namespace PixelFarm.CpuBlit
             this.height = height;
             int bytesPerPixel;
             this.stride = CalculateStride(width,
-                this.pixelFormat = PixelFormat.ARGB32, //***
+                this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
@@ -137,15 +141,15 @@ namespace PixelFarm.CpuBlit
             get { return false; }
         }
 
-        public PixelFormat PixelFormat { get { return this.pixelFormat; } }
+        public CpuBlit.Imaging.PixelFormat PixelFormat { get { return this.pixelFormat; } }
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
         public bool IsBigEndian { get; set; }
 
 
-        public static TempMemPtr GetBufferPtr(ActualBitmap img)
+        public static CpuBlit.Imaging.TempMemPtr GetBufferPtr(ActualBitmap img)
         {
-            return new TempMemPtr(img.pixelBuffer);
+            return new CpuBlit.Imaging.TempMemPtr(img.pixelBuffer);
         }
 
         public static int[] GetBuffer(ActualBitmap img)
@@ -174,7 +178,7 @@ namespace PixelFarm.CpuBlit
 
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
-            if (pixelFormat != PixelFormat.ARGB32)
+            if (pixelFormat != CpuBlit.Imaging.PixelFormat.ARGB32)
             {
                 throw new NotSupportedException();
             }
@@ -184,30 +188,30 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        public static int CalculateStride(int width, PixelFormat format)
+        public static int CalculateStride(int width, CpuBlit.Imaging.PixelFormat format)
         {
             int bitDepth, bytesPerPixel;
             return CalculateStride(width, format, out bitDepth, out bytesPerPixel);
         }
-        public static int CalculateStride(int width, PixelFormat format, out int bitDepth, out int bytesPerPixel)
+        public static int CalculateStride(int width, CpuBlit.Imaging.PixelFormat format, out int bitDepth, out int bytesPerPixel)
         {
             //stride calcuation helper
 
             switch (format)
             {
-                case PixelFormat.ARGB32:
+                case CpuBlit.Imaging.PixelFormat.ARGB32:
                     {
                         bitDepth = 32;
                         bytesPerPixel = (bitDepth + 7) / 8;
                         return width * (32 / 8);
                     }
-                case PixelFormat.GrayScale8:
+                case CpuBlit.Imaging.PixelFormat.GrayScale8:
                     {
                         bitDepth = 8; //bit per pixel
                         bytesPerPixel = (bitDepth + 7) / 8;
                         return 4 * ((width * bytesPerPixel + 3) / 4);
                     }
-                case PixelFormat.RGB24:
+                case CpuBlit.Imaging.PixelFormat.RGB24:
                     {
                         bitDepth = 24; //bit per pixel
                         bytesPerPixel = (bitDepth + 7) / 8;
@@ -224,7 +228,7 @@ namespace PixelFarm.CpuBlit
             unsafe
             {
                 //byte[] pixelBuffer = ActualImage.GetBuffer(img);
-                TempMemPtr pixBuffer = ActualBitmap.GetBufferPtr(img);
+                CpuBlit.Imaging.TempMemPtr pixBuffer = ActualBitmap.GetBufferPtr(img);
                 //fixed (byte* header = &pixelBuffer[0])
                 byte* header = (byte*)pixBuffer.Ptr;
                 {
@@ -313,9 +317,9 @@ namespace PixelFarm.CpuBlit
         {
             return this.pixelBuffer;
         }
-        TempMemPtr IBitmapSrc.GetBufferPtr()
+        CpuBlit.Imaging.TempMemPtr IBitmapSrc.GetBufferPtr()
         {
-            return new TempMemPtr(pixelBuffer);
+            return new CpuBlit.Imaging.TempMemPtr(pixelBuffer);
         }
 
         int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
@@ -354,7 +358,7 @@ namespace PixelFarm.CpuBlit
         int Height { get; }
         RectInt GetBounds();
         int[] GetInt32Buffer();
-        TempMemPtr GetBufferPtr();
+        CpuBlit.Imaging.TempMemPtr GetBufferPtr();
         int GetByteBufferOffsetXY(int x, int y);
         int GetBufferOffsetXY32(int x, int y);
         int Stride { get; }
@@ -369,7 +373,7 @@ namespace PixelFarm.CpuBlit
         {
             //calculate stride for the width
 
-            int destStride = ActualBitmap.CalculateStride(width, PixelFormat.ARGB32);
+            int destStride = ActualBitmap.CalculateStride(width, CpuBlit.Imaging.PixelFormat.ARGB32);
             int h = img.Height;
             int newBmpW = destStride / 4;
 
@@ -377,7 +381,7 @@ namespace PixelFarm.CpuBlit
             unsafe
             {
 
-                TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(img);
+                CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(img);
                 byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
                 int srcIndex = 0;
                 int srcStride = img.Stride;
@@ -400,14 +404,14 @@ namespace PixelFarm.CpuBlit
         public static int[] CopyImgBuffer(ActualBitmap src, int srcX, int srcY, int srcW, int srcH)
         {
             //calculate stride for the width 
-            int destStride = ActualBitmap.CalculateStride(srcW, PixelFormat.ARGB32);
+            int destStride = ActualBitmap.CalculateStride(srcW, CpuBlit.Imaging.PixelFormat.ARGB32);
             int newBmpW = destStride / 4;
 
             int[] buff2 = new int[newBmpW * srcH];
             unsafe
             {
 
-                TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(src);
+                CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(src);
                 byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
                 int srcIndex = 0;
                 int srcStride = src.Stride;

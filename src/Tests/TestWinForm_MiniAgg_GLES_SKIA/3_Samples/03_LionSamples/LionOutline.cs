@@ -32,7 +32,7 @@ either expressed or implied, of the FreeBSD Project.
 using System;
 using PixelFarm;
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.PixelProcessing;
 using PixelFarm.CpuBlit.Rasterization;
@@ -170,7 +170,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             public float strokeWidth;
             public PixelFarm.Drawing.Color strokeColor;
             public PixelFarm.Drawing.Color fillColor;
-            public PixelFarm.CpuBlit.Transform.Affine affineTx;
+            public PixelFarm.CpuBlit.VertexProcessing.Affine affineTx;
         }
 
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using PixelFarm.VectorMath;
 using Mini;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "22")]
@@ -131,9 +132,9 @@ namespace PixelFarm.CpuBlit.Samples
                                         //cut each path
                                         var lastPath = myBrushPathList[i];
                                         //do path clip***
-                                        List<VertexStore> paths = PixelFarm.CpuBlit.VertexSource.VxsClipper.CombinePaths(
+                                        List<VertexStore> paths = PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
                                                 new VertexStoreSnap(lastPath.Vxs),
-                                                new VertexStoreSnap(currentBrushPath.Vxs), VertexSource.VxsClipperType.Difference,
+                                                new VertexStoreSnap(currentBrushPath.Vxs), VertexProcessing.VxsClipperType.Difference,
                                                 true);
 
                                         myBrushPathList.RemoveAt(i);

@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.CpuBlit.Transform
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //==========================================================trans_bilinear
     public sealed partial class Bilinear : ICoordTransformer

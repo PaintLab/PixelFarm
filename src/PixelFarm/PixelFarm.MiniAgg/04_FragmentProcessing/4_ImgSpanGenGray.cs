@@ -48,7 +48,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
             unsafe
             {
-                TempMemPtr srcBuffPtr = srcRW.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr srcBuffPtr = srcRW.GetBufferPtr();
                 byte* pSource = (byte*)srcBuffPtr.Ptr;
                 {
                     do

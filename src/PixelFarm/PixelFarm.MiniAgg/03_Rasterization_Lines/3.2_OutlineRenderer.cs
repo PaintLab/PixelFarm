@@ -195,11 +195,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     public class OutlineRenderer : LineRenderer
     {
         const int MAX_HALF_WIDTH = 64;
-        IBitmapBlender destImageSurface;
+        PixelProcessing.IBitmapBlender destImageSurface;
         LineProfileAnitAlias lineProfile;
         RectInt clippingRectangle;
         bool doClipping;
-        PixelBlender32 destPixelBlender;
+        PixelProcessing.PixelBlender32 destPixelBlender;
 
 #if false
         public int min_x() { throw new System.NotImplementedException(); }
@@ -212,7 +212,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(IBitmapBlender destImage, PixelBlender32 destPixelBlender, LineProfileAnitAlias profile)
+        public OutlineRenderer(PixelProcessing.IBitmapBlender destImage, PixelProcessing.PixelBlender32 destPixelBlender, LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;

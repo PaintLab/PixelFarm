@@ -4,7 +4,7 @@
 #define USE_CLIPPING_ALPHA_MASK
 
 using System;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Imaging;
 using Mini;
 using PixelFarm.Drawing.WinGdi;

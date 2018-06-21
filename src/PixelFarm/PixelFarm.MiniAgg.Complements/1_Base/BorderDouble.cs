@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     /// <summary>
     /// BorderDouble is used to represent the border around (Margin) on inside (Padding) of a rectangular area.

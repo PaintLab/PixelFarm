@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 using System; 
-namespace PixelFarm.CpuBlit.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public class Ellipse
     {

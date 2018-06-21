@@ -4,7 +4,7 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing.Fonts;
 using Mini;

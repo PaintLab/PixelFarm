@@ -22,7 +22,7 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 
 namespace PixelFarm.CpuBlit
@@ -82,7 +82,7 @@ namespace PixelFarm.CpuBlit
         {
             get { return this.sclinePack8; }
         }
-        public PixelBlender32 PixelBlender
+        public PixelProcessing.PixelBlender32 PixelBlender
         {
             get
             {

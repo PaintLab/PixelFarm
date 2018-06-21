@@ -10,7 +10,7 @@
 using System.IO;
 //
 using Mini;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Contours;
@@ -84,13 +84,13 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             VectorToolBox.GetFreeVxs(out VertexStore v0, out VertexStore v1);
             txToVxs.WriteOutput(v0);
-            var mat = PixelFarm.CpuBlit.Transform.Affine.NewMatix(
+            var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
                  //translate
-                 new PixelFarm.CpuBlit.Transform.AffinePlan(
-                     PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Translate, 10, 10),
+                 new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
+                     PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, 10, 10),
                  //scale
-                 new PixelFarm.CpuBlit.Transform.AffinePlan(
-                     PixelFarm.CpuBlit.Transform.AffineMatrixCommand.Scale, 1, 1)
+                 new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
+                     PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, 1, 1)
                      );
 
 

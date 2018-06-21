@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public enum LineCap
     {

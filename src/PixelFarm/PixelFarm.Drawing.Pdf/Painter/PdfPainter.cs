@@ -2,7 +2,7 @@
 
 using System;
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.Pdf
@@ -26,7 +26,7 @@ namespace PixelFarm.Drawing.Pdf
         RequestFont _currentFont;
 
         PixelFarm.CpuBlit.VectorTool _vectorTool;
-        CpuBlit.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
 
 
         SmoothingMode _smoothingMode;

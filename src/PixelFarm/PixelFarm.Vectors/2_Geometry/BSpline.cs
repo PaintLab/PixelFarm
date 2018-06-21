@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.CpuBlit.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //----------------------------------------------------------------bspline
     // A very simple class of Bi-cubic Spline interpolation.

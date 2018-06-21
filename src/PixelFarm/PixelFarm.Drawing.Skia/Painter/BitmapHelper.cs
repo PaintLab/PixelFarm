@@ -52,7 +52,7 @@ namespace PixelFarm.Drawing.Skia
                 //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
                 unsafe
                 {
-                    TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
+                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                     //fixed (byte* bufferH = &srcBuffer[0])
                     byte* bufferH = (byte*)srcBufferPtr.Ptr;
                     {

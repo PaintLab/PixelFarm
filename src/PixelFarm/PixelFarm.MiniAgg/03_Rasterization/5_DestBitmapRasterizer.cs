@@ -81,7 +81,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
 
         public void RenderScanlines(
-            IBitmapBlender dest,
+            PixelProcessing.IBitmapBlender dest,
             ScanlineRasterizer sclineRas,
             Scanline scline,
             Color color)
@@ -104,7 +104,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             unsafe
             {
 
-                TempMemPtr dest_bufferPtr = dest.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr dest_bufferPtr = dest.GetBufferPtr();
                 byte* dest_buffer = (byte*)dest_bufferPtr.Ptr;
                 int dest_stride = this._destImgStride = dest.Stride;
                 //*** set color before call Blend()
@@ -1412,7 +1412,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             set;
         }
 
-        public void RenderWithColor(IBitmapBlender dest,
+        public void RenderWithColor(PixelProcessing.IBitmapBlender dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
                 Color color)
@@ -1461,10 +1461,10 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
         }
 
-        public void RenderWithSpan(IBitmapBlender dest,
+        public void RenderWithSpan(PixelProcessing.IBitmapBlender dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
-                ISpanGenerator spanGenerator)
+                FragmentProcessing.ISpanGenerator spanGenerator)
         {
             if (!sclineRas.RewindScanlines()) { return; } //early exit
             //-----------------------------------------------
@@ -1510,7 +1510,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
         }
         protected virtual void CustomRenderSingleScanLine(
-            IBitmapBlender dest,
+            PixelProcessing.IBitmapBlender dest,
             Scanline scline,
             Color color)
         {

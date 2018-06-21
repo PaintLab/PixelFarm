@@ -20,6 +20,8 @@
 using PixelFarm.Drawing;
 using System;
 using PixelFarm.VectorMath;
+using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.CpuBlit.UI
 {
     class SimplePolygonVertexSource
@@ -106,8 +108,8 @@ namespace PixelFarm.CpuBlit.UI
         int m_node;
         int m_edge;
         SimplePolygonVertexSource m_vs;
-        Stroke m_stroke;
-        VertexSource.Ellipse m_ellipse;
+        CpuBlit.VertexProcessing.Stroke m_stroke;
+        VertexProcessing.Ellipse m_ellipse;
         double m_point_radius;
         int m_status;
         double m_dx;
@@ -119,13 +121,13 @@ namespace PixelFarm.CpuBlit.UI
         public PolygonControl(int np, double point_radius)
             : base(new Vector2())
         {
-            m_ellipse = new PixelFarm.CpuBlit.VertexSource.Ellipse();
+            m_ellipse = new PixelFarm.CpuBlit.VertexProcessing.Ellipse();
             m_polygon = new double[np * 2];
             m_num_points = (np);
             m_node = (-1);
             m_edge = (-1);
             m_vs = new SimplePolygonVertexSource(m_polygon, m_num_points, false);
-            m_stroke = new Stroke(1);
+            m_stroke = new CpuBlit.VertexProcessing.Stroke(1);
             m_point_radius = (point_radius);
             m_status = (0);
             m_dx = (0.0);

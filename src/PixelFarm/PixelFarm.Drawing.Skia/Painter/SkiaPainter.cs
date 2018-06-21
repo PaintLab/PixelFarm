@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev 
 using System;
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.PainterExtensions;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.Skia
 
         int _height;
         int _width;
-        CpuBlit.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
         //-----------------------
         SKCanvas _skCanvas;
@@ -354,14 +354,14 @@ namespace PixelFarm.Drawing.Skia
                 int h = actualImage.Height;
                 switch (actualImage.PixelFormat)
                 {
-                    case CpuBlit.PixelFormat.ARGB32:
+                    case CpuBlit.Imaging.PixelFormat.ARGB32:
                         {
 
                             using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
                             {
                                 newBmp.LockPixels();
                                 //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-                                TempMemPtr bufferPtr = ActualBitmap.GetBufferPtr(actualImage);
+                                CpuBlit.Imaging.TempMemPtr bufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                                 unsafe
                                 {
                                     byte* actualImgH = (byte*)bufferPtr.Ptr;
@@ -394,11 +394,11 @@ namespace PixelFarm.Drawing.Skia
                             //}
                         }
                         break;
-                    case CpuBlit.PixelFormat.RGB24:
+                    case CpuBlit.Imaging.PixelFormat.RGB24:
                         {
                         }
                         break;
-                    case CpuBlit.PixelFormat.GrayScale8:
+                    case CpuBlit.Imaging.PixelFormat.GrayScale8:
                         {
                         }
                         break;

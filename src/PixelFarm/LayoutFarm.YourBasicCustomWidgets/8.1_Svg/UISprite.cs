@@ -56,7 +56,7 @@ namespace LayoutFarm.UI
                 VertexStore innerVxs = vx.GetVxs();
                 //fine tune
                 //hit test ***
-                if (VertexHitTester.IsPointInVxs(innerVxs, x, y))
+                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(innerVxs, x, y))
                 {
                     return true;
                 }

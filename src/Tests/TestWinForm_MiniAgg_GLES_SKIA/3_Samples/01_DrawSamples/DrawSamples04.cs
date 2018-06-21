@@ -16,16 +16,10 @@ using PixelFarm.Drawing.Fonts;
 using Mini;
 
 
-using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
+using Typography.OpenFont; 
 using Typography.Rendering;
-using Typography.TextLayout;
-using Typography.TextServices;
-
-
-using PixelFarm.Platforms;
-using PixelFarm.CpuBlit.Imaging;
-
+using Typography.TextLayout; 
+using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.CpuBlit.Sample_Draw
 {
 

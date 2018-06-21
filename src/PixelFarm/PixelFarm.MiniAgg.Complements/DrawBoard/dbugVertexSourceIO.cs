@@ -2,7 +2,7 @@
 
 using System.IO;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
 #if DEBUG
     public class dbugVertexSourceIO

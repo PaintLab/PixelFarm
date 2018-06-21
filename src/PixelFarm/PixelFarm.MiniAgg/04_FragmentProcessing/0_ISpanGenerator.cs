@@ -20,7 +20,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     public interface ISpanGenerator
     {

@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-namespace PixelFarm.CpuBlit.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
 
     public delegate void LineSegmentDelegate(VertexStore vxs, VertexCmd cmd, double x, double y);

@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.CpuBlit.Transform; 
+using PixelFarm.CpuBlit.VertexProcessing; 
 
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {

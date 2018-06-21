@@ -33,7 +33,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //56 level grey scale buffer
 
 
-            TempMemPtr srcMemPtr = ActualBitmap.GetBufferPtr(img);
+            CpuBlit.Imaging.TempMemPtr srcMemPtr = ActualBitmap.GetBufferPtr(img);
 
             int greyScaleBufferLen = imgW * height;
             byte[] greyScaleBuffer = new byte[greyScaleBufferLen];
@@ -99,7 +99,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //-------------------------
             //destination
 
-            TempMemPtr memPtr = ActualBitmap.GetBufferPtr(destImg);
+            CpuBlit.Imaging.TempMemPtr memPtr = ActualBitmap.GetBufferPtr(destImg);
             //start pixel
             int destImgIndex = (x * 4) + (destImg.Stride * y);
             //start img src

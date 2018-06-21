@@ -29,6 +29,8 @@
 
 using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
+using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
+
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
@@ -61,7 +63,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
             unsafe
             {
-                TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                 int* pSource = (int*)srcBufferPtr.Ptr + bufferIndex;
                 {
                     //int* src_ptr = (int*)pSource;
@@ -140,9 +142,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             base.Prepare();
 
             ISpanInterpolator spanInterpolator = base.Interpolator;
-            _mode0 = (spanInterpolator.GetType() == typeof(PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear)
-                && ((PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.Transform.Affine)
-                && ((PixelFarm.CpuBlit.Transform.Affine)((PixelFarm.CpuBlit.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
+            _mode0 = (spanInterpolator.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)
+                && ((PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.Affine)
+                && ((PixelFarm.CpuBlit.VertexProcessing.Affine)((PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
         }
         public Drawing.Color BackgroundColor
         {
@@ -162,7 +164,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 if (_mode0)
                 {
 
-                    TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                     byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
                     int bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
                     //unsafe
@@ -207,7 +209,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                     try
                     {
                         ISpanInterpolator spanInterpolator = base.Interpolator;
-                        TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                        CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
                         byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
 
                         spanInterpolator.Begin(x + base.dx, y + base.dy, len);

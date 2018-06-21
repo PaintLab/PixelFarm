@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.PixelProcessing
 {
     /// <summary>
     /// color order

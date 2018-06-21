@@ -152,8 +152,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
             unsafe
             {
-                TempMemPtr destMemPtr = m_buf.GetBufferPtr();
-                TempMemPtr srcMemPtr = src.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr destMemPtr = m_buf.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr srcMemPtr = src.GetBufferPtr();
 
                 byte* destBuffer = (byte*)destMemPtr.Ptr;
                 byte* srcBuffer = (byte*)srcMemPtr.Ptr;
@@ -591,7 +591,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     //template<class BaseRenderer, class ImagePattern> 
     public class ImageLineRenderer : LineRenderer
     {
-        IBitmapBlender m_ren;
+        PixelProcessing.IBitmapBlender m_ren;
         LineImagePattern m_pattern;
         int m_start;
         double m_scale_x;
@@ -601,7 +601,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         //typedef renderer_outline_image<BaseRenderer, ImagePattern> self_type;
 
         //---------------------------------------------------------------------
-        public ImageLineRenderer(IBitmapBlender ren, LineImagePattern patt)
+        public ImageLineRenderer(PixelProcessing.IBitmapBlender ren, LineImagePattern patt)
         {
             m_ren = ren;
             m_pattern = patt;
@@ -611,7 +611,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             m_clipping = (false);
         }
 
-        public void Attach(IBitmapBlender ren) { m_ren = ren; }
+        public void Attach(PixelProcessing.IBitmapBlender ren) { m_ren = ren; }
 
         //---------------------------------------------------------------------
         public LineImagePattern Pattern

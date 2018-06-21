@@ -6,7 +6,7 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 using Mini;
 
