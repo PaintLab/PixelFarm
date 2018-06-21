@@ -15,7 +15,7 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 using System;
-namespace PixelFarm.DrawingBuffer
+namespace PixelFarm.BitmapBufferEx
 {
     public static partial class BitmapBufferExtensions
     {

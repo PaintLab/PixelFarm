@@ -29,7 +29,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     public interface IBitmapBlender : IBitmapSrc
     {
         void SetPixel(int x, int y, Color color);
-        PixelProcessing.PixelBlender32 OutputPixelBlender { get; set; }
+        PixelBlender32 OutputPixelBlender { get; set; }
 
         //-------------------------------------------------------------------------------------------
         void BlendHL(int x, int y, int x2, Color sourceColor, byte cover); //**

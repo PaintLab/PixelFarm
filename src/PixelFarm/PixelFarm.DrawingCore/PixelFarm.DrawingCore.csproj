@@ -35,13 +35,13 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\BasicGeometries.cs">
+    <Compile Include="..\PixelFarm.Vectors\2_geometry\BasicGeometries.cs">
       <Link>1_Geometry\BasicGeometries.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\Rectangle.cs">
+    <Compile Include="..\PixelFarm.Vectors\2_geometry\Rectangle.cs">
       <Link>1_Geometry\Rectangle.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\RectangleF.cs">
+    <Compile Include="..\PixelFarm.Vectors\2_geometry\RectangleF.cs">
       <Link>1_Geometry\RectangleF.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Vectors\2_Geometry\RectInt.cs">

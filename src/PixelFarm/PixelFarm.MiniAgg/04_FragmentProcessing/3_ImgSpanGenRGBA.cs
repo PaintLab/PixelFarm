@@ -30,7 +30,7 @@
 using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
 using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
-
+using PixelFarm.CpuBlit.PixelProcessing;
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
@@ -142,9 +142,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             base.Prepare();
 
             ISpanInterpolator spanInterpolator = base.Interpolator;
-            _mode0 = (spanInterpolator.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)
-                && ((PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.Affine)
-                && ((PixelFarm.CpuBlit.VertexProcessing.Affine)((PixelFarm.CpuBlit.VertexProcessing.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
+            _mode0 = (spanInterpolator.GetType() == typeof(SpanInterpolatorLinear)
+                && ((SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.Affine)
+                && ((PixelFarm.CpuBlit.VertexProcessing.Affine)((SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
         }
         public Drawing.Color BackgroundColor
         {

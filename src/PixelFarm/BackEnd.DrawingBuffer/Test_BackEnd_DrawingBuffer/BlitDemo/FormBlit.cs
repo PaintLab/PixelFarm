@@ -24,7 +24,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using PixelFarm.DrawingBuffer;
+using PixelFarm.BitmapBufferEx;
 
  
 
@@ -183,12 +183,12 @@ namespace WinFormGdiPlus
             //start ...
             UpdateRenderFrame();
         }
-        public static BitmapBuffer Overlay(BitmapBuffer bmp, BitmapBuffer overlay, PixelFarm.DrawingBuffer.PointD location)
+        public static BitmapBuffer Overlay(BitmapBuffer bmp, BitmapBuffer overlay, PixelFarm.BitmapBufferEx.PointD location)
         {
             BitmapBuffer result = bmp.Clone();
-            var size = new PixelFarm.DrawingBuffer.SizeD(overlay.PixelWidth, overlay.PixelHeight);
-            result.Blit(new PixelFarm.DrawingBuffer.RectD(location, size), overlay,
-                new RectD(new PixelFarm.DrawingBuffer.PointD(0, 0), size),
+            var size = new PixelFarm.BitmapBufferEx.SizeD(overlay.PixelWidth, overlay.PixelHeight);
+            result.Blit(new PixelFarm.BitmapBufferEx.RectD(location, size), overlay,
+                new RectD(new PixelFarm.BitmapBufferEx.PointD(0, 0), size),
                 BitmapBufferExtensions.BlendMode.Multiply);
             return result;
         }
@@ -198,7 +198,7 @@ namespace WinFormGdiPlus
             BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
             BitmapBuffer sticker = LoadBitmapAsReadonly("../../01.jpg");
 
-            BitmapBuffer overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.DrawingBuffer.PointD(10, 10));
+            BitmapBuffer overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.BitmapBufferEx.PointD(10, 10));
 
             using (LockBmp bmplock = destBmp.Lock())
             {

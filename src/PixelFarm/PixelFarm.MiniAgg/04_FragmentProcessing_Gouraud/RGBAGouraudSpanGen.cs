@@ -156,10 +156,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             //-------------------------
             int nlen = Math.Abs(pc2.m_x - pc1.m_x);
             if (nlen <= 0) nlen = 1;
-            var line_r = new PixelFarm.CpuBlit.VertexProcessing.LineInterpolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
-            var line_g = new PixelFarm.CpuBlit.VertexProcessing.LineInterpolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
-            var line_b = new PixelFarm.CpuBlit.VertexProcessing.LineInterpolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
-            var line_a = new PixelFarm.CpuBlit.VertexProcessing.LineInterpolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
+            var line_r = new LineInterpolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
+            var line_g = new LineInterpolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
+            var line_b = new LineInterpolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
+            var line_a = new LineInterpolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
             // Calculate the starting point of the gradient with subpixel 
             // accuracy and correct (roll back) the interpolators.
             // This operation will also clip the beginning of the span

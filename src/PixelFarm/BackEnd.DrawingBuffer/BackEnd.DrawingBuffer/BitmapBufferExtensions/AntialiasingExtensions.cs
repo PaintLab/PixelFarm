@@ -17,7 +17,7 @@
 //
 
 using System;
-namespace PixelFarm.DrawingBuffer
+namespace PixelFarm.BitmapBufferEx
 {
 
 #if DEBUG

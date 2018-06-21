@@ -34,9 +34,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="00\BitmapBlenderBase.cs" />
+    <Compile Include="05_PixelProcessing\BitmapBlenderBase.cs" />
     <Compile Include="05_PixelProcessing\CO.cs" />
-    <Compile Include="00\ColorRGBAf.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\GouraudSpanGen.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\GradientSpanGen.cs" />
     <Compile Include="04_FragmentProcessing_Gouraud\IGradientValueCalculator_and_Impl.cs" />
@@ -44,9 +43,12 @@
     <Compile Include="05_PixelProcessing\PixelBlenderOthers.cs" />
     <Compile Include="05_PixelProcessing\SubBitmapBlender.cs" />
     <Compile Include="03_Rasterization\SubPixConst.cs" />
-    <Compile Include="01_VertexProcessing\LineInterpolators.cs" />
-    <Compile Include="01_VertexProcessing\SpanInterpolatorLinear.cs" />
-    <Compile Include="01_VertexProcessing\SpanInterpolatorPerspectiveLerp.cs" />
+    <Compile Include="04_FragmentProcessing\LineInterpolators.cs" />
+    <Compile Include="04_FragmentProcessing\SpanInterpolatorLinear.cs" />
+    <Compile Include="04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" />
+    <Content Include="x_backup\AggRenderSurface_RenderImages.txt" />
+    <Content Include="x_backup\AlphaMask.txt" />
+    <Content Include="x_backup\AlphaMaskAdaptor.txt" />
     <Content Include="x_backup\FilterRGBAImageSpanGen.txt" />
     <Content Include="x_backup\FilterRGBImageSpanGen.txt" />
     <Compile Include="03_Rasterization_Lines\1.1_LinesAA.cs" />
@@ -70,7 +72,6 @@
     <Compile Include="08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="08_ImageResampling\ImageTransform.cs" />
     <Compile Include="03_Rasterization\0_ScanlineSpan.cs" />
-    <Compile Include="02_PrimitiveProcessing\ClipLiangBarsky.cs" />
     <Compile Include="03_Rasterization\4.2_CellAARasterizer.cs" />
     <Compile Include="08_ImageResampling\IImageFilter.cs" />
     <Content Include="x_backup\FilterImageSpanGenerator.txt" />
@@ -88,6 +89,8 @@
     <Compile Include="03_Rasterization\5_DestBitmapRasterizer.cs" />
     <Compile Include="03_Rasterization\4.3_VectorClipper.cs" />
     <Content Include="x_backup\PixelBlenderGray.txt" />
+    <Content Include="x_backup\PixelBlenderRGB.txt" />
+    <Content Include="x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">

@@ -18,7 +18,7 @@
 
 using System.IO;
 
-namespace PixelFarm.DrawingBuffer
+namespace PixelFarm.BitmapBufferEx
 {
     /// <summary>
     /// Collection of interchange extension methods for the WriteableBitmap class.

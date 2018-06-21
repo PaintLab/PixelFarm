@@ -16,7 +16,7 @@
 //
 
 using System;
-namespace PixelFarm.DrawingBuffer
+namespace PixelFarm.BitmapBufferEx
 {
     /// <summary>
     /// Collection of draw spline extension methods for the WriteableBitmap class.

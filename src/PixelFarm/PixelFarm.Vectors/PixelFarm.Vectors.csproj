@@ -179,6 +179,7 @@
     <Compile Include="2_Geometry\RectD.cs" />
     <Compile Include="2_Geometry\RectInt.cs" />
     <Compile Include="5_Clipper\cliper.cs" />
+    <Compile Include="5_Clipper\ClipLiangBarsky.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
