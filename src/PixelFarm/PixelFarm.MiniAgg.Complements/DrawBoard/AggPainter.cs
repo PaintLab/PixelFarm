@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.DrawingBuffer;
+using PixelFarm.BitmapBufferEx;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
@@ -931,9 +931,9 @@ namespace PixelFarm.CpuBlit
                 BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
                 try
                 {
-                    DrawingBuffer.RectD src = new DrawingBuffer.RectD(srcX, srcY, srcW, srcH);
-                    DrawingBuffer.RectD dest = new DrawingBuffer.RectD(left, top, srcW, srcH);
-                    DrawingBuffer.BitmapBuffer bmpBuffer = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
+                    var src = new PixelFarm.BitmapBufferEx.RectD(srcX, srcY, srcW, srcH);
+                    var dest = new PixelFarm.BitmapBufferEx.RectD(left, top, srcW, srcH);
+                    BitmapBuffer bmpBuffer = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
                     this._bxt.CopyBlit(dest, bmpBuffer, src);
                 }
                 catch (Exception ex)
@@ -1054,7 +1054,7 @@ namespace PixelFarm.CpuBlit
                 if (affinePlans != null)
                 {
                     int affCount = affinePlans.Length;
-                    DrawingBuffer.AffinePlan[] affs = new DrawingBuffer.AffinePlan[affCount];
+                    PixelFarm.BitmapBufferEx.AffinePlan[] affs = new PixelFarm.BitmapBufferEx.AffinePlan[affCount];
                     for (int i = 0; i < affCount; ++i)
                     {
                         VertexProcessing.AffinePlan plan = affinePlans[i];
@@ -1064,26 +1064,26 @@ namespace PixelFarm.CpuBlit
                                 throw new NotSupportedException();
                                 break;
                             case VertexProcessing.AffineMatrixCommand.Rotate:
-                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Rotate, plan.x, plan.y);
+                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Rotate, plan.x, plan.y);
                                 break;
                             case VertexProcessing.AffineMatrixCommand.Scale:
-                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Scale, plan.x, plan.y);
+                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Scale, plan.x, plan.y);
                                 break;
                             case VertexProcessing.AffineMatrixCommand.Skew:
-                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Skew, plan.x, plan.y);
+                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Skew, plan.x, plan.y);
                                 break;
                             case VertexProcessing.AffineMatrixCommand.Translate:
-                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Translate, plan.x, plan.y);
+                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Translate, plan.x, plan.y);
                                 break;
                             case VertexProcessing.AffineMatrixCommand.None:
-                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.None, plan.x, plan.y);
+                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.None, plan.x, plan.y);
                                 break;
                             case VertexProcessing.AffineMatrixCommand.Invert:
-                                affs[i] = new DrawingBuffer.AffinePlan(DrawingBuffer.AffineMatrixCommand.Invert, plan.x, plan.y);
+                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Invert, plan.x, plan.y);
                                 break;
                         }
                     }
-                    DrawingBuffer.MatrixTransform mx = new DrawingBuffer.MatrixTransform(affs);
+                    PixelFarm.BitmapBufferEx.MatrixTransform mx = new PixelFarm.BitmapBufferEx.MatrixTransform(affs);
                     this._bxt.BlitRender(srcBmp, false, 1, mx);
                 }
                 else
@@ -1208,7 +1208,7 @@ namespace PixelFarm.CpuBlit
         double _angle;
         PixelFarm.CpuBlit.VertexProcessing.Affine affine;
         public ReusableRotationTransformer()
-        { 
+        {
             affine = PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix;
         }
         public double Angle

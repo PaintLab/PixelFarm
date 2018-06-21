@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using PixelFarm.DrawingBuffer;
+using PixelFarm.BitmapBufferEx;
 namespace WinFormGdiPlus
 {
     public partial class FormFill : Form
@@ -180,7 +180,7 @@ namespace WinFormGdiPlus
                 writeableBmp.FillRectangle(rand.Next(2 * w3, 2 * w3 + w6), rand.Next(2 * h3, 2 * h3 + h6),
                        rand.Next(2 * w3 + w6, w), rand.Next(2 * h3 + h6, h), GetRandomColor(), true);
 
-                PixelFarm.DrawingBuffer.ColorInt black = PixelFarm.DrawingBuffer.ColorInt.FromArgb(255, 0, 0, 0);
+               PixelFarm.BitmapBufferEx.ColorInt black =PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 0);
                 // Draw Grid
                 writeableBmp.DrawLine(0, h3, w, h3, Colors.Black);
                 writeableBmp.DrawLine(0, 2 * h3, w, 2 * h3, Colors.Black);
