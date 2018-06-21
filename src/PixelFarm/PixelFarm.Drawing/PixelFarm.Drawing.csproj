@@ -412,9 +412,6 @@
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\ProxyImage.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ProxyImage.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg.complements\1_base\Queue.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\Queue.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\3_filter\BrightnessAndContrastAdjustment.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\BrightnessAndContrastAdjustment.cs</Link>
     </Compile>
@@ -438,6 +435,9 @@
     </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\4_image\FloodFiller.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\FloodFiller.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\Queue.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\Queue.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\4_image\Transposer.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\Transposer.cs</Link>

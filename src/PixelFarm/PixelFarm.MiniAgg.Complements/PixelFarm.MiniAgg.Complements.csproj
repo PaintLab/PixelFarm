@@ -271,7 +271,7 @@
     <Content Include="x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
     <Compile Include="4_Image\FilterMan.cs" />
     <Content Include="x_backup\PixelBlenderRGB.txt" />
-    <Compile Include="1_Base\Queue.cs" />
+    <Compile Include="4_Image\Queue.cs" />
     <Compile Include="1_Base\BorderDouble.cs" />
     <Compile Include="1_Base\GammaFuntions.cs" />
     <Compile Include="1_Base\ClipProxyImage.cs" />

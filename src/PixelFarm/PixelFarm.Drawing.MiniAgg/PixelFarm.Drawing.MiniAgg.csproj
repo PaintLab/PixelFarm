@@ -270,9 +270,6 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ProxyImage.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ProxyImage.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\Queue.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\Queue.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\BrightnessAndContrastAdjustment.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\BrightnessAndContrastAdjustment.cs</Link>
     </Compile>
@@ -296,6 +293,9 @@
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\FloodFiller.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\FloodFiller.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\Queue.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\Queue.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\Transposer.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\Transposer.cs</Link>
@@ -476,8 +476,6 @@
       <Name>PixelFarm.DrawingCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="100_DrawingBufferExt\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,7 +1,7 @@
 ﻿//BSD, 2014-present, WinterDev
 
 using System;
-namespace PixelFarm.CpuBlit
+namespace PixelFarm.CpuBlit.Imaging
 {
     class Queue<T>
     {
