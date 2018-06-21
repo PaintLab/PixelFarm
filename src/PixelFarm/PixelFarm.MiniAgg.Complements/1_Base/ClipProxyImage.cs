@@ -28,7 +28,7 @@ namespace PixelFarm.CpuBlit.Imaging
     public sealed class ClipProxyImage : ProxyImage
     {
         RectInt _clippingRect;
-        public ClipProxyImage(IBitmapBlender refImage)
+        public ClipProxyImage(PixelProcessing.IBitmapBlender refImage)
             : base(refImage)
         {
             _clippingRect = new RectInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);

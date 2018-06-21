@@ -81,7 +81,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
 
         public void RenderScanlines(
-            IBitmapBlender dest,
+            PixelProcessing.IBitmapBlender dest,
             ScanlineRasterizer sclineRas,
             Scanline scline,
             Color color)
@@ -1412,7 +1412,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             set;
         }
 
-        public void RenderWithColor(IBitmapBlender dest,
+        public void RenderWithColor(PixelProcessing.IBitmapBlender dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
                 Color color)
@@ -1461,7 +1461,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
         }
 
-        public void RenderWithSpan(IBitmapBlender dest,
+        public void RenderWithSpan(PixelProcessing.IBitmapBlender dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
                 FragmentProcessing.ISpanGenerator spanGenerator)
@@ -1510,7 +1510,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
         }
         protected virtual void CustomRenderSingleScanLine(
-            IBitmapBlender dest,
+            PixelProcessing.IBitmapBlender dest,
             Scanline scline,
             Color color)
         {

@@ -20,7 +20,7 @@ namespace PixelFarm.CpuBlit
             DestBitmapRasterizer bmpRast,
             ScanlineRasterizer ras,
             Scanline sl,
-            IBitmapBlender destImage, Color color,
+            PixelProcessing.IBitmapBlender destImage, Color color,
             double x, double y)
         {
 

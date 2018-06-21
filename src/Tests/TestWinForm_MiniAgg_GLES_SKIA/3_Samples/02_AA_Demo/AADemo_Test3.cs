@@ -37,12 +37,12 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 
         const float cover_1_3 = 255f / 3f;
         const float cover_2_3 = cover_1_3 * 2f;
-        protected override void CustomRenderSingleScanLine(IBitmapBlender destImage, Scanline scanline, Color color)
+        protected override void CustomRenderSingleScanLine(PixelProcessing.IBitmapBlender destImage, Scanline scanline, Color color)
         {
             SubPixRender(destImage, scanline, color);
         }
 
-        void SubPixRender(IBitmapBlender destImage, Scanline scanline, Color color)
+        void SubPixRender(PixelProcessing.IBitmapBlender destImage, Scanline scanline, Color color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;

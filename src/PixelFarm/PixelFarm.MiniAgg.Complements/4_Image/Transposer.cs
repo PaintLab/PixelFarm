@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Imaging
     //=======================================================pixfmt_transposer
     public sealed class FormatTransposer : ProxyImage
     {
-        public FormatTransposer(IBitmapBlender pixelFormat)
+        public FormatTransposer(PixelProcessing.IBitmapBlender pixelFormat)
             : base(pixelFormat)
         {
         }
