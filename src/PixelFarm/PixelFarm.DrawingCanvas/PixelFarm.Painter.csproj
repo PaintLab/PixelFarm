@@ -243,7 +243,20 @@
     <Compile Include="2_Canvas\ColorRGBAf.cs" />
     <Compile Include="2_Canvas\PainterExtensions.cs" />
     <Compile Include="2_Canvas\ColorEx.cs" />
+    <Compile Include="5_Agg_DrawElements\BoundingRect.cs" />
+    <Compile Include="5_Agg_DrawElements\CurveFlattener.cs" />
+    <Compile Include="5_Agg_DrawElements\LineCapAndJoin.cs" />
+    <Compile Include="5_Agg_DrawElements\LineWalker.cs" />
+    <Compile Include="5_Agg_DrawElements\PathWriter.cs" />
+    <Compile Include="5_Agg_DrawElements\RoundedRect.cs" />
+    <Compile Include="5_Agg_DrawElements\SimpleRect.cs" />
+    <Compile Include="5_Agg_DrawElements\Stroke.cs" />
+    <Compile Include="5_Agg_DrawElements\StrokeGenerator.cs" />
+    <Compile Include="5_Agg_DrawElements\StrokeGen_Old.cs" />
+    <Compile Include="5_Agg_DrawElements\StrokeMath.cs" />
     <Compile Include="5_Agg_DrawElements\VectorToolBox.cs" />
+    <Compile Include="5_Agg_DrawElements\VertexData.cs" />
+    <Compile Include="5_Agg_DrawElements\VertexStoreBuilder.cs" />
     <Compile Include="6_Typography\ITextPrinter.cs" />
     <Compile Include="3_Agg_PixelBuffer\ActualBitmap.cs" />
     <Compile Include="3_Agg_PixelBuffer\AggMemMx.cs" />
@@ -252,19 +265,6 @@
     <Compile Include="4_Agg_Vertex\VertexStoreExtensions.cs" />
     <Compile Include="4_Agg_Vertex\VertexStoreTransformExtensions.cs" />
     <Compile Include="4_Agg_Vertex\VxsClipping.cs" />
-    <Compile Include="5_Agg_DrawElements\BoundingRect.cs" />
-    <Compile Include="5_Agg_DrawElements\LineCapAndJoin.cs" />
-    <Compile Include="5_Agg_DrawElements\Stroke.cs" />
-    <Compile Include="5_Agg_DrawElements\StrokeGenerator.cs" />
-    <Compile Include="5_Agg_DrawElements\StrokeGen_Old.cs" />
-    <Compile Include="5_Agg_DrawElements\StrokeMath.cs" />
-    <Compile Include="5_Agg_DrawElements\VertexSource\CurveFlattener.cs" />
-    <Compile Include="5_Agg_DrawElements\VertexSource\LineWalker.cs" />
-    <Compile Include="5_Agg_DrawElements\VertexSource\PathWriter.cs" />
-    <Compile Include="5_Agg_DrawElements\VertexSource\RoundedRect.cs" />
-    <Compile Include="5_Agg_DrawElements\VertexSource\SimpleRect.cs" />
-    <Compile Include="5_Agg_DrawElements\VertexSource\VertexData.cs" />
-    <Compile Include="5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">

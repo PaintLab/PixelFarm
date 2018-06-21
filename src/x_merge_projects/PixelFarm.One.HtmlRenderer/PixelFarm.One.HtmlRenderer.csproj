@@ -47,7 +47,7 @@
       <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
       <Name>BackEnd.FileDB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.FilterFx\PdnPixelEffectPixelFarm\BackEnd.PaintFx.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.PaintFx\PdnPixelEffectPixelFarm\BackEnd.PaintFx.csproj">
       <Project>{9a7db6ea-7f85-4420-9e42-f0f277524fb7}</Project>
       <Name>BackEnd.PaintFx</Name>
     </ProjectReference>
