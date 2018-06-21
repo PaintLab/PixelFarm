@@ -463,8 +463,8 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\rendersurface\AggRenderSurface_RenderImages.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\svgrendervx\SvgRenderVx.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\SvgRenderVx\SvgRenderVx.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\RenderSurface\SvgRenderVx.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\SvgRenderVx.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\00\BitmapBlenderBase.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\00\BitmapBlenderBase.cs</Link>
@@ -553,8 +553,14 @@
     <Compile Include="..\PixelFarm.MiniAgg\04_fragmentprocessing\ISpanInterpolator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing\ISpanInterpolator.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\04_FragmentProcessing\LineInterpolators.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing\LineInterpolators.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\04_FragmentProcessing\SpanInterpolatorLinear.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing\SpanInterpolatorLinear.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\GouraudSpanGen.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\04_FragmentProcessing_Gouraund\GouraudSpanGen.cs</Link>
@@ -796,7 +802,9 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\SvgRenderVx\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
