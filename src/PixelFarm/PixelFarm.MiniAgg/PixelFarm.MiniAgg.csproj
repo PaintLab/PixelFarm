@@ -46,6 +46,9 @@
     <Compile Include="04_FragmentProcessing\LineInterpolators.cs" />
     <Compile Include="04_FragmentProcessing\SpanInterpolatorLinear.cs" />
     <Compile Include="04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs" />
+    <Content Include="x_backup\AggRenderSurface_RenderImages.txt" />
+    <Content Include="x_backup\AlphaMask.txt" />
+    <Content Include="x_backup\AlphaMaskAdaptor.txt" />
     <Content Include="x_backup\FilterRGBAImageSpanGen.txt" />
     <Content Include="x_backup\FilterRGBImageSpanGen.txt" />
     <Compile Include="03_Rasterization_Lines\1.1_LinesAA.cs" />
@@ -86,6 +89,8 @@
     <Compile Include="03_Rasterization\5_DestBitmapRasterizer.cs" />
     <Compile Include="03_Rasterization\4.3_VectorClipper.cs" />
     <Content Include="x_backup\PixelBlenderGray.txt" />
+    <Content Include="x_backup\PixelBlenderRGB.txt" />
+    <Content Include="x_backup\ScanlineRasToDestBitmapRendererExtension.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
