@@ -278,28 +278,37 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.Clear(Drawing.Color.White);
             p.UseSubPixelLcdEffect = false;
 
-            p.RenderQuality = RenderQualtity.Fast;
+
             //
             //---red reference line--
-            p.DrawLine(0, 400, 800, 400);
+            p.StrokeColor = Color.Black;
+            p.DrawLine(0, 400, 800, 400); //draw reference line
             p.DrawImage(lionImg, 300, 0);
 
             int _imgW = lionImg.Width;
             int _imgH = lionImg.Height;
 
-            p.RenderQuality = RenderQualtity.Fast;
-            p.DrawImage(lionImg,
-             //move to center of the image (hotspot x,y)
-             AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f),
-             AffinePlan.Scale(0.50, 0.50), 
-             AffinePlan.Rotate(AggMath.deg2rad(30)),
-             AffinePlan.Translate(_imgW / 2f, _imgH / 2f)
-             );
+
+
+            int x_pos = 0;
+            for (int i = 0; i < 360; i += 30)
+            {
+                p.DrawImage(lionImg,
+                   //move to center of the image (hotspot x,y)
+                   AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f),
+                   AffinePlan.Scale(0.50, 0.50),
+                   AffinePlan.Rotate(AggMath.deg2rad(i)),
+                   AffinePlan.Translate((_imgW / 2f) + x_pos, _imgH / 2f) //translate back
+                   );
+
+                x_pos += _imgW / 3;
+            }
 
             //----
             //
             VectorToolBox.GetFreeVxs(out VertexStore vxs1);
             VectorToolBox.GetFreeVxs(out VertexStore vxs2);
+
             SimpleRect sRect = new SimpleRect();
             int x = 0, y = 0, w = 100, h = 100;
             sRect.SetRect(x, y, x + w, y + h);
