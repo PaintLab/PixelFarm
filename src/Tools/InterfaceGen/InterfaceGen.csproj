@@ -75,7 +75,7 @@
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.Painter.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Painter\PixelFarm.Painter.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.Painter</Name>
     </ProjectReference>
