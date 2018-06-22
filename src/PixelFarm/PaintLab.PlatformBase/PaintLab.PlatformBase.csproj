@@ -7,8 +7,8 @@
     <ProjectGuid>{CDEFD12B-956C-4686-AE8A-F89C3280C95F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayoutFarm.PlatformBase</RootNamespace>
-    <AssemblyName>LayoutFarm.PlatformBase</AssemblyName>
+    <RootNamespace>PaintLab.PlatformBase</RootNamespace>
+    <AssemblyName>PaintLab.PlatformBase</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
