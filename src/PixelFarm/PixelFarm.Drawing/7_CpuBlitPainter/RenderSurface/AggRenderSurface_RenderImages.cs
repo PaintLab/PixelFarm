@@ -36,13 +36,19 @@ namespace PixelFarm.CpuBlit
             get { return this._bmpRasterizer.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
             set { this._bmpRasterizer.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
         }
-        static Affine BuildImageBoundsPath(
-            int srcW, int srcH,
-            double destX, double destY,
-            double hotspotOffsetX, double hotSpotOffsetY,
-            double scaleX, double scaleY,
-            double angleRad,
-            VertexStore outputDestImgRect)
+
+        static void BuildOrgImgRectVxs(int srcW, int srcH, VertexStore output)
+        {
+            output.Clear();
+            output.AddMoveTo(0, 0);
+            output.AddLineTo(srcW, 0);
+            output.AddLineTo(srcW, srcH);
+            output.AddLineTo(0, srcH);
+            output.AddCloseFigure();
+        }
+        static Affine CreateAffine(double destX, double destY,
+            double hotspotOffsetX, double hotSpotOffsetY, double scaleX, double scaleY,
+            double angleRad)
         {
 
             AffinePlan[] plans = new AffinePlan[4];
@@ -70,45 +76,91 @@ namespace PixelFarm.CpuBlit
                 plans[i] = AffinePlan.Translate(destX, destY);
                 i++;
             }
-
-            outputDestImgRect.Clear();
-            outputDestImgRect.AddMoveTo(0, 0);
-            outputDestImgRect.AddLineTo(srcW, 0);
-            outputDestImgRect.AddLineTo(srcW, srcH);
-            outputDestImgRect.AddLineTo(0, srcH);
-            outputDestImgRect.AddCloseFigure();
             return Affine.NewMatix(plans);
         }
-        static Affine BuildImageBoundsPath(
-            int srcW, int srcH,
-            double destX, double destY, VertexStore outputDestImgRect)
+        static Affine CreateAffine(double destX, double destY)
         {
             AffinePlan plan = new AffinePlan();
             if (destX != 0 || destY != 0)
             {
                 plan = AffinePlan.Translate(destX, destY);
             }
-
-            outputDestImgRect.Clear();
-            outputDestImgRect.AddMoveTo(0, 0);
-            outputDestImgRect.AddLineTo(srcW, 0);
-            outputDestImgRect.AddLineTo(srcW, srcH);
-            outputDestImgRect.AddLineTo(0, srcH);
-            outputDestImgRect.AddCloseFigure();
             return Affine.NewMatix(plan);
         }
-        static Affine BuildImageBoundsPath(int srcW, int srcH,
-           AffinePlan[] affPlans,
-           VertexStore outputDestImgRect)
-        {
-            outputDestImgRect.Clear();
-            outputDestImgRect.AddMoveTo(0, 0);
-            outputDestImgRect.AddLineTo(srcW, 0);
-            outputDestImgRect.AddLineTo(srcW, srcH);
-            outputDestImgRect.AddLineTo(0, srcH);
-            outputDestImgRect.AddCloseFigure();
-            return Affine.NewMatix(affPlans);
-        }
+        //static Affine BuildImageBoundsPath(
+        //    int srcW, int srcH,
+        //    double destX, double destY,
+        //    double hotspotOffsetX, double hotSpotOffsetY,
+        //    double scaleX, double scaleY,
+        //    double angleRad,
+        //    VertexStore outputDestImgRect)
+        //{
+
+        //    AffinePlan[] plans = new AffinePlan[4];
+        //    int i = 0;
+        //    if (hotspotOffsetX != 0.0f || hotSpotOffsetY != 0.0f)
+        //    {
+        //        plans[i] = AffinePlan.Translate(-hotspotOffsetX, -hotSpotOffsetY);
+        //        i++;
+        //    }
+
+        //    if (scaleX != 1 || scaleY != 1)
+        //    {
+        //        plans[i] = AffinePlan.Scale(scaleX, scaleY);
+        //        i++;
+        //    }
+
+        //    if (angleRad != 0)
+        //    {
+        //        plans[i] = AffinePlan.Rotate(angleRad);
+        //        i++;
+        //    }
+
+        //    if (destX != 0 || destY != 0)
+        //    {
+        //        plans[i] = AffinePlan.Translate(destX, destY);
+        //        i++;
+        //    }
+
+        //    outputDestImgRect.Clear();
+        //    outputDestImgRect.AddMoveTo(0, 0);
+        //    outputDestImgRect.AddLineTo(srcW, 0);
+        //    outputDestImgRect.AddLineTo(srcW, srcH);
+        //    outputDestImgRect.AddLineTo(0, srcH);
+        //    outputDestImgRect.AddCloseFigure();
+        //    return Affine.NewMatix(plans);
+        //}
+        //static Affine BuildImageBoundsPath(
+        //    int srcW, int srcH,
+        //    double destX, double destY,
+        //    VertexStore outputDestImgRect)
+        //{
+        //    AffinePlan plan = new AffinePlan();
+        //    if (destX != 0 || destY != 0)
+        //    {
+        //        plan = AffinePlan.Translate(destX, destY);
+        //    }
+
+        //    outputDestImgRect.Clear();
+        //    outputDestImgRect.AddMoveTo(0, 0);
+        //    outputDestImgRect.AddLineTo(srcW, 0);
+        //    outputDestImgRect.AddLineTo(srcW, srcH);
+        //    outputDestImgRect.AddLineTo(0, srcH);
+        //    outputDestImgRect.AddCloseFigure();
+        //    return Affine.NewMatix(plan);
+        //}
+        //static Affine BuildImageBoundsPath(int srcW, int srcH,
+        //   AffinePlan[] affPlans,
+        //   VertexStore outputDestImgRect)
+        //{
+        //    outputDestImgRect.Clear();
+        //    outputDestImgRect.AddMoveTo(0, 0);
+        //    outputDestImgRect.AddLineTo(srcW, 0);
+        //    outputDestImgRect.AddLineTo(srcW, srcH);
+        //    outputDestImgRect.AddLineTo(0, srcH);
+        //    outputDestImgRect.AddCloseFigure();
+        //    return Affine.NewMatix(affPlans);
+        //}
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
@@ -208,14 +260,21 @@ namespace PixelFarm.CpuBlit
                 //    HotspotOffsetY *= (inScaleY / scaleY);
                 //}
 
-                Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
-                    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
+
+
+                //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
+                //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
+
+
+                //1. 
+                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+                //2. 
+                Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                 
+                var interpolator = new SpanInterpolatorLinear();
 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
-
-                var interpolator = new SpanInterpolatorLinear();
-                interpolator.Transformer = sourceRectTransform;
+                interpolator.Transformer = destRectTransform.CreateInvert();
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
 
                 VectorToolBox.GetFreeVxs(out var v1);
@@ -231,11 +290,16 @@ namespace PixelFarm.CpuBlit
             }
             else // TODO: this can be even faster if we do not use an intermediat buffer
             {
-                Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, destX, destY, imgBoundsPath);
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
+                //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, destX, destY, imgBoundsPath);
+
+                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+
+                Affine destRectTransform = CreateAffine(destX, destY);
+         
                 var interpolator = new SpanInterpolatorLinear();
-                interpolator.Transformer = sourceRectTransform;
+
+                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                interpolator.Transformer = destRectTransform.CreateInvert();
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)
                 {
@@ -269,12 +333,18 @@ namespace PixelFarm.CpuBlit
 
             VectorToolBox.GetFreeVxs(out var v1, out var v2);
 
-            Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1);
-            // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-            Affine sourceRectTransform = destRectTransform.CreateInvert();
+
+            //BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1);
+
+
+            BuildOrgImgRectVxs(source.Width, source.Height, v1);
+
+            Affine destRectTransform = Affine.NewMatix(affinePlans);
 
             var spanInterpolator = new SpanInterpolatorLinear();
-            spanInterpolator.Transformer = sourceRectTransform;
+            
+            // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+            spanInterpolator.Transformer = destRectTransform.CreateInvert();
 
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
@@ -282,6 +352,7 @@ namespace PixelFarm.CpuBlit
                 spanInterpolator);
 
             destRectTransform.TransformToVxs(v1, v2);
+
             Render(v2, imgSpanGen);
             //
 
@@ -337,10 +408,8 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                angleRadians = 0;//reset very small angle to 0
-
+                angleRadians = 0;//reset very small angle to 0 
             }
-
 
             //bool IsMipped = false;
             //double ox, oy;
@@ -355,12 +424,16 @@ namespace PixelFarm.CpuBlit
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
 
-
             VectorToolBox.GetFreeVxs(out VertexStore imgBoundsPath);
             // this is the fast drawing path
             if (needSourceResampling)
             {
+
+
+
+
 #if false // if the scalling is small enough the results can be improved by using mip maps
+                
 	        if(CanUseMipMaps)
 	        {
 		        CMipMapFrameProperty* pMipMapFrameProperty = CMipMapFrameProperty::GetMipMapFrameProperty(source);
@@ -381,13 +454,17 @@ namespace PixelFarm.CpuBlit
 #endif
 
 
-                Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
-                    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
+                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath); 
+                 
+                //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
+                //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
+
+                Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians); 
 
                 var spanInterpolator = new SpanInterpolatorLinear();
-                spanInterpolator.Transformer = sourceRectTransform;
+                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                spanInterpolator.Transformer = destRectTransform.CreateInvert();
+
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                     source,
                     Drawing.Color.Black,
@@ -397,6 +474,8 @@ namespace PixelFarm.CpuBlit
                 destRectTransform.TransformToVxs(imgBoundsPath, v1);
                 Render(v1, imgSpanGen);
                 VectorToolBox.ReleaseVxs(ref v1);
+
+
 #if false // this is some debug you can enable to visualize the dest bounding box
 		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
 		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -404,23 +483,32 @@ namespace PixelFarm.CpuBlit
 		        LineFloat(BoundingRect.left, BoundingRect.bottom, BoundingRect.left, BoundingRect.top, WHITE);
 #endif
             }
-            else // TODO: this can be even faster if we do not use an intermediat buffer
+            else // TODO: this can be even faster if we do not use an intermediate buffer
             {
-                Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
-                    destX, destY, imgBoundsPath);
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
+
+                //Affine destRectTransform = BuildImageBoundsPath(
+                //    source.Width, source.Height,
+                //    destX, destY, imgBoundsPath);
+
+
+                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+                //...
+                Affine destRectTransform = CreateAffine(destX, destY);
+          
+         
                 var interpolator = new SpanInterpolatorLinear();
-                interpolator.Transformer = sourceRectTransform;
+
+                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                interpolator.Transformer = destRectTransform.CreateInvert();
+
+                //we generate image by this imagespan generator
+
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)
                 {
                     case 32:
                         imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
-                    //case 24:
-                    //    imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
-                    //    break;
                     case 8:
                         imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
                         break;
@@ -428,13 +516,14 @@ namespace PixelFarm.CpuBlit
                         throw new NotImplementedException();
                 }
 
-
                 VectorToolBox.GetFreeVxs(out VertexStore v1);
 
                 destRectTransform.TransformToVxs(imgBoundsPath, v1);
+                //...
                 Render(v1, imgSpanGen);
 
                 VectorToolBox.ReleaseVxs(ref v1);
+                //
                 unchecked { destImageChanged++; };
             }
             VectorToolBox.ReleaseVxs(ref imgBoundsPath);

@@ -8,8 +8,6 @@
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-using PixelFarm.CpuBlit.VertexProcessing;
-
 using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_Draw

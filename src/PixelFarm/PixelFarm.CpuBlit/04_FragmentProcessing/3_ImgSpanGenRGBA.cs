@@ -29,12 +29,15 @@
 
 using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO; 
+using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     public class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
     {
+
+        //a span generator generates output color spans => 
+
         const int BASE_SHITF = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
@@ -141,9 +144,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             base.Prepare();
 
             ISpanInterpolator spanInterpolator = base.Interpolator;
+
             _mode0 = (spanInterpolator.GetType() == typeof(SpanInterpolatorLinear)
-                && ((SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.CpuBlit.VertexProcessing.Affine)
-                && ((PixelFarm.CpuBlit.VertexProcessing.Affine)((SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
+                && ((SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(VertexProcessing.Affine)
+                && ((VertexProcessing.Affine)((SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity());
         }
         public Drawing.Color BackgroundColor
         {
@@ -164,7 +168,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 {
 
                     CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
-                    byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
+                    byte* srcBuffer = srcBufferPtr.BytePtr;
                     int bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
                     //unsafe
                     {
@@ -239,14 +243,16 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
 
                                     accColor0 =
-                                    accColor1 =
-                                    accColor2 =
-                                    accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
-                                    x_hr &= (int)img_subpix_const.MASK;
-                                    y_hr &= (int)img_subpix_const.MASK;
+                                        accColor1 =
+                                            accColor2 =
+                                                accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
+
+                                    x_hr &= img_subpix_const.MASK;
+                                    y_hr &= img_subpix_const.MASK;
+
                                     bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
-                                    weight = (((int)img_subpix_const.SCALE - x_hr) *
-                                             ((int)img_subpix_const.SCALE - y_hr));
+                                    weight = ((img_subpix_const.SCALE - x_hr) *
+                                             (img_subpix_const.SCALE - y_hr));
                                     if (weight > BASE_MASK)
                                     {
                                         accColor0 += weight * srcBuffer[bufferIndex + CO.R];
@@ -425,11 +431,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                     }
                     catch (Exception ex1)
                     {
-
-
                     }
-
-
                 }
 
             }
@@ -455,7 +457,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 }
 
 
- 
+
 
 
 
