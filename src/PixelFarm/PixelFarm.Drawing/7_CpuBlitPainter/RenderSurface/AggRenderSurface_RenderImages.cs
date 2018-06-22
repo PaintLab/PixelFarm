@@ -271,7 +271,7 @@ namespace PixelFarm.CpuBlit
 
             Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1);
             // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-            Affine sourceRectTransform = destRectTransform.CreateInvert();
+            Affine sourceRectTransform = destRectTransform.CreateInvert(); 
 
             var spanInterpolator = new SpanInterpolatorLinear();
             spanInterpolator.Transformer = sourceRectTransform;
@@ -282,6 +282,7 @@ namespace PixelFarm.CpuBlit
                 spanInterpolator);
 
             destRectTransform.TransformToVxs(v1, v2);
+
             Render(v2, imgSpanGen);
             //
 

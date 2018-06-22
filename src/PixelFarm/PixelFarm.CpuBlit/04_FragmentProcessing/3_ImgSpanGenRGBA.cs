@@ -29,7 +29,7 @@
 
 using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
-using CO = PixelFarm.CpuBlit.PixelProcessing.CO; 
+using CO = PixelFarm.CpuBlit.PixelProcessing.CO;
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
@@ -239,14 +239,16 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
 
                                     accColor0 =
-                                    accColor1 =
-                                    accColor2 =
-                                    accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
-                                    x_hr &= (int)img_subpix_const.MASK;
-                                    y_hr &= (int)img_subpix_const.MASK;
+                                        accColor1 =
+                                            accColor2 =
+                                                accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
+
+                                    x_hr &= img_subpix_const.MASK;
+                                    y_hr &= img_subpix_const.MASK;
+
                                     bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
-                                    weight = (((int)img_subpix_const.SCALE - x_hr) *
-                                             ((int)img_subpix_const.SCALE - y_hr));
+                                    weight = ((img_subpix_const.SCALE - x_hr) *
+                                             (img_subpix_const.SCALE - y_hr));
                                     if (weight > BASE_MASK)
                                     {
                                         accColor0 += weight * srcBuffer[bufferIndex + CO.R];
@@ -455,7 +457,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 }
 
 
- 
+
 
 
 
