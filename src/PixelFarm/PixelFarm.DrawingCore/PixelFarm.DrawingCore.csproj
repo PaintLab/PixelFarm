@@ -35,20 +35,20 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\BasicGeometries.cs">
-      <Link>1_Geometry\BasicGeometries.cs</Link>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\AffinePlan.cs">
+      <Link>1_PrimitiveGeo\AffinePlan.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\Rectangle.cs">
-      <Link>1_Geometry\Rectangle.cs</Link>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
+      <Link>1_PrimitiveGeo\BasicGeometries.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\RectangleF.cs">
-      <Link>1_Geometry\RectangleF.cs</Link>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
+      <Link>1_PrimitiveGeo\Rectangle.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Vectors\2_Geometry\RectInt.cs">
-      <Link>1_Geometry\RectInt.cs</Link>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\RectangleF.cs">
+      <Link>1_PrimitiveGeo\RectangleF.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Vectors\3_Transform\AffinePlan.cs">
-      <Link>1_Geometry\AffinePlan.cs</Link>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\RectInt.cs">
+      <Link>1_PrimitiveGeo\RectInt.cs</Link>
     </Compile>
     <Compile Include="2_Abstract_DrawingElements\Brushes_Pens.cs" />
     <Compile Include="2_Abstract_DrawingElements\Color.cs" />

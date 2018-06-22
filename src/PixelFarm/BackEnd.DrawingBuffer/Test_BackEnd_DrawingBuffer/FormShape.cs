@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using PixelFarm.DrawingBuffer;
+using PixelFarm.BitmapBufferEx;
 namespace WinFormGdiPlus
 {
     public partial class FormShape : Form
@@ -136,7 +136,7 @@ namespace WinFormGdiPlus
                 // Animate base size with sine
                 int r0 = (int)((w + h) * 0.07 * s) + 10;
 
-                PixelFarm.DrawingBuffer.ColorInt color_brown = PixelFarm.DrawingBuffer.ColorInt.FromArgb(
+               PixelFarm.BitmapBufferEx.ColorInt color_brown =PixelFarm.BitmapBufferEx.ColorInt.FromArgb(
                     255, System.Drawing.Color.Brown.R, System.Drawing.Color.Brown.G, System.Drawing.Color.Brown.B);
 
                 writeableBmp.DrawEllipseCentered(xc, yc, r0, r0, color_brown);

@@ -25,7 +25,7 @@ namespace PixelFarm.CpuBlit.Imaging
             //   hBmpScan0, rawBuffer.Length);
             unsafe
             {
-                PixelFarm.CpuBlit.Rasterization.AggMemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
+                MemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
             }
             memPtr.Release();
         }
@@ -75,7 +75,7 @@ namespace PixelFarm.CpuBlit.Imaging
                             //   (IntPtr)target,
                             //   stride);
 
-                            PixelFarm.CpuBlit.Rasterization.AggMemMx.memcpy(target, bufferH + startRowAt, stride);
+                            PixelFarm.CpuBlit.MemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }
@@ -192,7 +192,7 @@ namespace PixelFarm.CpuBlit.Imaging
                     //System.Runtime.InteropServices.Marshal.Copy(
                     //      (IntPtr)src,//src
                     //      targetBuffer, startRowAt, stride);
-                    Rasterization.AggMemMx.memcpy(targetBuffer + startRowAt, src, stride);
+                    MemMx.memcpy(targetBuffer + startRowAt, src, stride);
                     startRowAt -= stride;
                     src += stride;
                 }

@@ -2,7 +2,7 @@
 //MIT, 2017-present, WinterDev
 
 using System;
-namespace PixelFarm.DrawingBuffer
+namespace PixelFarm.BitmapBufferEx
 {
 
     public enum AffineMatrixCommand : byte

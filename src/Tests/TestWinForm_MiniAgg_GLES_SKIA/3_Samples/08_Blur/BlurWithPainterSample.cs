@@ -140,8 +140,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                    1));
         }
 
-        Drawing.Effects.ImgFilterStackBlur imgFilterBlurStack = new Drawing.Effects.ImgFilterStackBlur();
-        Drawing.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new Drawing.Effects.ImgFilterRecursiveBlur();
+        PaintFx.Effects.ImgFilterStackBlur imgFilterBlurStack = new PaintFx.Effects.ImgFilterStackBlur();
+        PaintFx.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new PaintFx.Effects.ImgFilterRecursiveBlur();
 
         public override void Draw(Painter p)
         {

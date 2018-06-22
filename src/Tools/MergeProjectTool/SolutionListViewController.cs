@@ -174,6 +174,7 @@ namespace BuildMergeProject
                 ProjectAsmReference asmRef = asmRefs[i];
                 switch (asmRef.Kind)
                 {
+                      
                     case ProjectAsmReferenceKind.ProjectReference:
                         string result = System.IO.Path.Combine(fullProjectDir, asmRef.Name);
                         if (!System.IO.File.Exists(result))
@@ -226,7 +227,7 @@ namespace BuildMergeProject
             string targetProjectFile = targetProjectName + ".csproj";
             string saveProjectName = beginAt + "x_autogen\\" + targetProjectName + "\\" + targetProjectFile;
             string[] asmReferences = mergePro._asmReferences.ToArray();
-             
+
             //-----------
             mergePro.MergeAndSave(saveProjectName,
                targetProjectName,
