@@ -390,7 +390,7 @@ namespace PixelFarm.CpuBlit
                     for (int line = 0; line < h; ++line)
                     {
                         //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
-                        NaitveMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
+                        NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
                         srcIndex += srcStride;
                         destHead2 += destStride;
                     }
@@ -425,7 +425,7 @@ namespace PixelFarm.CpuBlit
                     for (int line = srcY; line < lineEnd; ++line)
                     {
                         //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
-                        NaitveMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
+                        NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
                         srcIndex += srcStride;
                         destHead2 += destStride;
                     }

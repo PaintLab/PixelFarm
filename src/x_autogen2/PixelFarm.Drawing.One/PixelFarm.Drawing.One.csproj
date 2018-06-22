@@ -524,6 +524,141 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs">
       <Link>PixelFarm\BackEnd.Tesselate\Tesselator.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\0_ScanlineSpan.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\0_ScanlineSpan.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\1_Scanline.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\1_Scanline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\2_ScanlinePacked8.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\2_ScanlinePacked8.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\3_ScanlineUnpacked8.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\3_ScanlineUnpacked8.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\4.1_ScanlineRasterizer.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\4.1_ScanlineRasterizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\4.2_CellAARasterizer.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\4.2_CellAARasterizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\4.3_VectorClipper.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\4.3_VectorClipper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\5_DestBitmapRasterizer.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\5_DestBitmapRasterizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\SubPixConst.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\SubPixConst.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\1.1_LinesAA.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\1.1_LinesAA.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\1.2_PatternFilter.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\1.2_PatternFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\1.3_LineParameters.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\1.3_LineParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\2.1_DistanceInterpolators.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\2.1_DistanceInterpolators.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\2.2_LineInterpolators.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\2.2_LineInterpolators.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\2.3_EllipseBrensenhemInterpolator.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\2.3_EllipseBrensenhemInterpolator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\3.1_LineRenderer.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\3.1_LineRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\3.2_OutlineRenderer.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\3.2_OutlineRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\3.3_ImageLineRenderer.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\3.3_ImageLineRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\4_OutlineAARasterizer.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization_lines\4_OutlineAARasterizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\0_ISpanGenerator.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\0_ISpanGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\1_ImgSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\1_ImgSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\3_ImgSpanGenRGBA.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\3_ImgSpanGenRGBA.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\4_ImgSpanGenGray.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\4_ImgSpanGenGray.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\GammaLookUpTable.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\GammaLookUpTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\IGammaFunction.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\IGammaFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\ISpanInterpolator.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\ISpanInterpolator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\LineInterpolators.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\LineInterpolators.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorLinear.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorLinear.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GouraudSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\GradientSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\CO.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderRGBA.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderRGBA.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenders.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenders.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\SubBitmapBlender.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\SubBitmapBlender.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\08_imageresampling\IImageFilter.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\08_imageresampling\IImageFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageFilterLookupTable.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageFilterLookupTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageFreeTransform.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageFreeTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageInterpolationQuality.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageInterpolationQuality.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageTransform.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageTransform.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>
     </Compile>
@@ -566,141 +701,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\0_ScanlineSpan.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\0_ScanlineSpan.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\1_Scanline.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\1_Scanline.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\2_ScanlinePacked8.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\2_ScanlinePacked8.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\3_ScanlineUnpacked8.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\3_ScanlineUnpacked8.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\4.1_ScanlineRasterizer.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\4.1_ScanlineRasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\4.2_CellAARasterizer.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\4.2_CellAARasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\4.3_VectorClipper.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\4.3_VectorClipper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\5_DestBitmapRasterizer.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\5_DestBitmapRasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization\SubPixConst.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization\SubPixConst.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\1.1_LinesAA.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\1.1_LinesAA.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\1.2_PatternFilter.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\1.2_PatternFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\1.3_LineParameters.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\1.3_LineParameters.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\2.1_DistanceInterpolators.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\2.1_DistanceInterpolators.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\2.2_LineInterpolators.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\2.2_LineInterpolators.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\2.3_EllipseBrensenhemInterpolator.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\2.3_EllipseBrensenhemInterpolator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\3.1_LineRenderer.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\3.1_LineRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\3.2_OutlineRenderer.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\3.2_OutlineRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\3.3_ImageLineRenderer.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\3.3_ImageLineRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\4_OutlineAARasterizer.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\03_rasterization_lines\4_OutlineAARasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\0_ISpanGenerator.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\0_ISpanGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\1_ImgSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\1_ImgSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\3_ImgSpanGenRGBA.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\3_ImgSpanGenRGBA.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\4_ImgSpanGenGray.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\4_ImgSpanGenGray.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\GammaLookUpTable.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\GammaLookUpTable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\IGammaFunction.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\IGammaFunction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\ISpanInterpolator.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing\ISpanInterpolator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\LineInterpolators.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\LineInterpolators.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\SpanInterpolatorLinear.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\SpanInterpolatorLinear.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_FragmentProcessing\SpanInterpolatorPerspectiveLerp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\GouraudSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\GouraudSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\GradientSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\GradientSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\IGradientValueCalculator_and_Impl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\04_fragmentprocessing_gouraud\RGBAGouraudSpanGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\BitmapBlenderBase.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\BitmapBlenderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\CO.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\IBitmapBlender.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\IBitmapBlender.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_pixelprocessing\PixelBlenderOthers.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\05_pixelprocessing\PixelBlenderOthers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderRGBA.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\05_PixelProcessing\PixelBlenderRGBA.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_pixelprocessing\PixelBlenders.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\05_pixelprocessing\PixelBlenders.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\05_pixelprocessing\SubBitmapBlender.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\05_pixelprocessing\SubBitmapBlender.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_imageresampling\IImageFilter.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_imageresampling\IImageFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageFilterLookupTable.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageFilterLookupTable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageFreeTransform.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageFreeTransform.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageInterpolationQuality.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageInterpolationQuality.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageTransform.cs">
-      <Link>PixelFarm\PixelFarm.MiniAgg\08_imageresampling\ImageTransform.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs">
       <Link>PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs</Link>
     </Compile>
@@ -713,11 +713,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\AggMemMx.cs">
-      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\AggMemMx.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs">
+      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs</Link>

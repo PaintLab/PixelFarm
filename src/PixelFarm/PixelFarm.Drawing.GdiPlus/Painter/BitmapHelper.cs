@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Imaging
             TempMemPtr memPtr = ActualBitmap.GetBufferPtr(actualImage);
             unsafe
             {
-                AggMemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
+                MemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
             }
             //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
             //   hBmpScan0, rawBuffer.Length);
@@ -76,7 +76,7 @@ namespace PixelFarm.CpuBlit.Imaging
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, src, stride);
+                            MemMx.memcpy(target, src, stride);
 
                             startRowAt += stride;
                             target += stride;
@@ -198,7 +198,7 @@ namespace PixelFarm.CpuBlit.Imaging
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, src, stride);
+                            MemMx.memcpy(target, src, stride);
 
                             startRowAt -= stride;
                             target += stride;
@@ -312,7 +312,7 @@ namespace PixelFarm.CpuBlit.Imaging
                     for (int y = h; y > 0; --y)
                     {
                         byte* src = bufferH + ((y - 1) * stride);
-                        Rasterization.AggMemMx.memcpy(target, src, stride);
+                        MemMx.memcpy(target, src, stride);
                         startRowAt -= stride;
                         target += stride;
                     }
@@ -427,7 +427,7 @@ namespace PixelFarm.CpuBlit.Imaging
                     //System.Runtime.InteropServices.Marshal.Copy(
                     //      (IntPtr)src,//src
                     //      targetBuffer, startRowAt, stride);
-                    AggMemMx.memcpy(targetH + startRowAt, src, stride);
+                    MemMx.memcpy(targetH + startRowAt, src, stride);
                     startRowAt -= stride;
                     src += stride;
                 }
