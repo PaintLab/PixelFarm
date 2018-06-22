@@ -32,6 +32,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="00_Porting\PORTING_NOTMERGE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />

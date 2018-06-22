@@ -100,192 +100,6 @@
     <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapContext.cs">
       <Link>5_BitmapBufferEx\BitmapContext.cs</Link>
     </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs">
-      <Link>6_PaintFx\01_Core\Color\ColorBgra.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs">
-      <Link>6_PaintFx\01_Core\Color\HsvColor.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs">
-      <Link>6_PaintFx\01_Core\Color\RgbColor.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\PdnResources.cs">
-      <Link>6_PaintFx\01_Core\PdnResources.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOp.cs">
-      <Link>6_PaintFx\01_Core\PixelOps\BinaryPixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOps.cs">
-      <Link>6_PaintFx\01_Core\PixelOps\BinaryPixelOps.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\IPixelOp.cs">
-      <Link>6_PaintFx\01_Core\PixelOps\IPixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\PixelOp.cs">
-      <Link>6_PaintFx\01_Core\PixelOps\PixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOp.cs">
-      <Link>6_PaintFx\01_Core\PixelOps\UnaryPixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOps.cs">
-      <Link>6_PaintFx\01_Core\PixelOps\UnaryPixelOps.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\RenderArgs.cs">
-      <Link>6_PaintFx\01_Core\RenderArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\GradientRenderer.cs">
-      <Link>6_PaintFx\01_Core\Renderer\GradientRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\GradientRenderers.cs">
-      <Link>6_PaintFx\01_Core\Renderer\GradientRenderers.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\Histogram.cs">
-      <Link>6_PaintFx\01_Core\Renderer\Histogram.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\HistogramLuminosity.cs">
-      <Link>6_PaintFx\01_Core\Renderer\HistogramLuminosity.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\HistogramRGB.cs">
-      <Link>6_PaintFx\01_Core\Renderer\HistogramRGB.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\ResamplingAlgorithm.cs">
-      <Link>6_PaintFx\01_Core\ResamplingAlgorithm.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Scanline.cs">
-      <Link>6_PaintFx\01_Core\Scanline.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Surface.cs">
-      <Link>6_PaintFx\01_Core\Surface.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOp.cs">
-      <Link>6_PaintFx\01_Core\UserBlendOps\UserBlendOp.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.cs">
-      <Link>6_PaintFx\01_Core\UserBlendOps\UserBlendOps.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.cs">
-      <Link>6_PaintFx\01_Core\UserBlendOps\UserBlendOps.Generated.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.H.cs">
-      <Link>6_PaintFx\01_Core\UserBlendOps\UserBlendOps.Generated.H.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\01_Core\Utility.cs">
-      <Link>6_PaintFx\01_Core\Utility.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Blur\BrightnessAndContrastRenderer.cs">
-      <Link>6_PaintFx\Blur\BrightnessAndContrastRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Blur\MotionBlurRenderer.cs">
-      <Link>6_PaintFx\Blur\MotionBlurRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Blur\ZoomBlurEffRenderer.cs">
-      <Link>6_PaintFx\Blur\ZoomBlurEffRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Convolution\ColorDiffEffect.cs">
-      <Link>6_PaintFx\Convolution\ColorDiffEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Convolution\ConvolutionRenderer.cs">
-      <Link>6_PaintFx\Convolution\ConvolutionRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Convolution\EdgeDetectRenderer.cs">
-      <Link>6_PaintFx\Convolution\EdgeDetectRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Convolution\EmbossRenderer.cs">
-      <Link>6_PaintFx\Convolution\EmbossRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Convolution\GaussainBlurRenderer.cs">
-      <Link>6_PaintFx\Convolution\GaussainBlurRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Convolution\ReliefEffectRenderer.cs">
-      <Link>6_PaintFx\Convolution\ReliefEffectRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\EffectRendererBase.cs">
-      <Link>6_PaintFx\EffectRendererBase.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Histogram\HistogramRenderer.cs">
-      <Link>6_PaintFx\Histogram\HistogramRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Histogram\MedianRenderer.cs">
-      <Link>6_PaintFx\Histogram\MedianRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Histogram\OutlineRenderer.cs">
-      <Link>6_PaintFx\Histogram\OutlineRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Histogram\ReduceNoiseRenderer.cs">
-      <Link>6_PaintFx\Histogram\ReduceNoiseRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Histogram\SharpenRenderer.cs">
-      <Link>6_PaintFx\Histogram\SharpenRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Histogram\UnfocusRenderer.cs">
-      <Link>6_PaintFx\Histogram\UnfocusRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Levels\AutoLevelRenderer.cs">
-      <Link>6_PaintFx\Levels\AutoLevelRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Levels\SepiaRenderer.cs">
-      <Link>6_PaintFx\Levels\SepiaRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Material\BlugeEffectRenderer.cs">
-      <Link>6_PaintFx\Material\BlugeEffectRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Material\CloudEffect.cs">
-      <Link>6_PaintFx\Material\CloudEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Material\GlowRenderer.cs">
-      <Link>6_PaintFx\Material\GlowRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Material\OilPaintRenderer.cs">
-      <Link>6_PaintFx\Material\OilPaintRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Material\PencilSketchRenderer.cs">
-      <Link>6_PaintFx\Material\PencilSketchRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Material\TileRenderer.cs">
-      <Link>6_PaintFx\Material\TileRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Material\TwistRenderer.cs">
-      <Link>6_PaintFx\Material\TwistRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Others\InkSketchRenderer.cs">
-      <Link>6_PaintFx\Others\InkSketchRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Others\JulianFractalRenderer.cs">
-      <Link>6_PaintFx\Others\JulianFractalRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Others\PerlinNoise2D.cs">
-      <Link>6_PaintFx\Others\PerlinNoise2D.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Others\RotateAndZoomRenderer.cs">
-      <Link>6_PaintFx\Others\RotateAndZoomRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\PixelOps\HueAndSatRenderer.cs">
-      <Link>6_PaintFx\PixelOps\HueAndSatRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\PixelOps\InvertColorRenderer.cs">
-      <Link>6_PaintFx\PixelOps\InvertColorRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\PixelOps\PosterizeRenderer.cs">
-      <Link>6_PaintFx\PixelOps\PosterizeRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs">
-      <Link>6_PaintFx\PlatformMemory.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\TransformEffect\RotateZoomEffect.cs">
-      <Link>6_PaintFx\TransformEffect\RotateZoomEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\TransformEffect\RotateZoomEffectConfigToken.cs">
-      <Link>6_PaintFx\TransformEffect\RotateZoomEffectConfigToken.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Wrap\PolarInversionEffect.cs">
-      <Link>6_PaintFx\Wrap\PolarInversionEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Wrap\WarpEdgeBehavior.cs">
-      <Link>6_PaintFx\Wrap\WarpEdgeBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\BackEnd.PaintFx\PdnSharedProject\Wrap\WrapBasedEffRenderer.cs">
-      <Link>6_PaintFx\Wrap\WrapBasedEffRenderer.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\0_BufferMx\NativeMemMx.cs">
       <Link>2_DrawingCanvas\0_BufferMx\NativeMemMx.cs</Link>
     </Compile>
@@ -316,8 +130,23 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\BoundingRect.cs">
       <Link>2_DrawingCanvas\5_AggDrawingElements\BoundingRect.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\CurveFlattener.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\CurveFlattener.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\LineCapAndJoin.cs">
       <Link>2_DrawingCanvas\5_AggDrawingElements\LineCapAndJoin.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\LineWalker.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\LineWalker.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\PathWriter.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\PathWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\RoundedRect.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\RoundedRect.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\SimpleRect.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\SimpleRect.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\Stroke.cs">
       <Link>2_DrawingCanvas\5_AggDrawingElements\Stroke.cs</Link>
@@ -334,26 +163,11 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VectorToolBox.cs">
       <Link>2_DrawingCanvas\5_AggDrawingElements\VectorToolBox.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\CurveFlattener.cs">
-      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\CurveFlattener.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexData.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexData.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\LineWalker.cs">
-      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\LineWalker.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\PathWriter.cs">
-      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\PathWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\RoundedRect.cs">
-      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\RoundedRect.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\SimpleRect.cs">
-      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\SimpleRect.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\VertexData.cs">
-      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\VertexData.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs">
-      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\VertexStoreBuilder.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexStoreBuilder.cs">
+      <Link>2_DrawingCanvas\5_AggDrawingElements\VertexStoreBuilder.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\6_Typography\ITextPrinter.cs">
       <Link>2_DrawingCanvas\6_Typography\ITextPrinter.cs</Link>
@@ -760,7 +574,10 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="6_PaintFx\" />
+  </ItemGroup>
+  <Import Project="..\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
