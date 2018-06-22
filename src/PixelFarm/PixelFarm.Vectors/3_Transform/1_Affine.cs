@@ -121,15 +121,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             tx = v4_tx; ty = v5_ty;
             isIdenHint = false;
         }
-        private Affine(double v0_sx, double v1_shy,
-                     double v2_shx, double v3_sy,
-                     double v4_tx, double v5_ty, bool isIdenHint)
-        {
-            sx = v0_sx; shy = v1_shy;
-            shx = v2_shx; sy = v3_sy;
-            tx = v4_tx; ty = v5_ty;
-            this.isIdenHint = isIdenHint;
-        }
+        
       
         
         //public double m11 { get { return sx; } }

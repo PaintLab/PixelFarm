@@ -1175,10 +1175,10 @@ namespace PixelFarm.CpuBlit
     {
 
         double _angle;
-        PixelFarm.CpuBlit.VertexProcessing.Affine affine;
+        Affine affine;
         public ReusableRotationTransformer()
         {
-            affine = PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix;
+            affine = Affine.IdentityMatrix;
         }
         public double Angle
         {
@@ -1190,7 +1190,7 @@ namespace PixelFarm.CpuBlit
             {
                 if (value != _angle)
                 {
-                    affine = PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(value);
+                    affine = Affine.NewRotation(value);
                 }
                 _angle = value;
             }
