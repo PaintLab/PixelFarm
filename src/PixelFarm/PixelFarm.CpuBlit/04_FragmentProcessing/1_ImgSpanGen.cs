@@ -26,6 +26,9 @@ using System;
 using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSubPixConst;
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
+    /// <summary>
+    ///a image-span generator  generate 'color'-span from input image, send this spans to output     
+    /// </summary>
     public abstract class ImgSpanGen : ISpanGenerator
     {
         ISpanInterpolator m_interpolator;
