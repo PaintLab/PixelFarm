@@ -96,6 +96,8 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WrapBasedEffRenderer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\EffectRendererBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\..\..\PixelFarm.Vectors\3_Transform\1_Affine.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\..\..\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\00_Porting\NativeMethods.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBuffer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs" />
@@ -716,11 +718,9 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\2_geometry\Curves.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\2_geometry\Ellipse.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\2_geometry\RectD.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\1_Affine.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\2_Bilinear.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\ICoordTransformer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\Viewport.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_clipper\cliper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" />
