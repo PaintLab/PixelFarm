@@ -53,6 +53,7 @@ namespace BuildMergeProject
             if (!s_loadedProjects.TryGetValue(projectFilename, out found))
             {
                 found = new Project(projectFilename);
+
                 return s_loadedProjects[projectFilename] = found;
             }
             return found;
@@ -231,14 +232,6 @@ namespace BuildMergeProject
                     case "Compile":
                         //skip
                         break;
-                    //    {
-                    //        string onlyFileName = Path.GetFileName(item.EvaluatedInclude);
-                    //        if (onlyFileName != "AssemblyInfo.cs") //special case ***no include this file
-                    //        {
-                    //            allItems.Add(item);
-                    //        }
-                    //    }
-                    //    break;
                     case "ProjectReference":
                         asmReferenceList.Add(new ProjectAsmReference(item, ProjectAsmReferenceKind.ProjectReference));
                         break;
@@ -465,7 +458,7 @@ namespace BuildMergeProject
                     {
                         //our convention
                         continue;//skip
-                    } 
+                    }
                     else if (onlyFileName == "ExtensionAttribute.cs")
                     {    //this is our convention
                          //... if we have ExtensionAttribute.cs
@@ -563,6 +556,38 @@ namespace BuildMergeProject
                         break;
                 }
             }
+
+            foreach (ResolvedImport imp1 in pro.Imports)
+            {
+                if (imp1.ImportedProject.FullPath != null &&
+                    imp1.ImportedProject.FullPath.EndsWith(".projitems"))
+                {
+                    //this is shared project 
+                    //...the we 
+                    //read this shared project too..
+                    Project sharedProj = GlobalLoadedProject.LoadProject(imp1.ImportedProject.FullPath);
+
+                    foreach (ProjectItem item in sharedProj.AllEvaluatedItems)
+                    {
+                        switch (item.ItemType)
+                        {
+                            case "Compile":
+                                {
+                                    string onlyFileName = Path.GetFileName(item.EvaluatedInclude);
+                                    if (onlyFileName != "AssemblyInfo.cs") //special case ***no include this file
+                                    {
+                                        allItems.Add(item);
+                                    }
+                                }
+                                break;
+                            case "Reference":
+                                break;
+                        }
+                    }
+                }
+
+            }
+
         }
         public List<string> GetAllAbsoluteFilenames()
         {

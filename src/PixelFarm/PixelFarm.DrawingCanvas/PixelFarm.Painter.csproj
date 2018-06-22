@@ -191,7 +191,7 @@
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
       <Link>1_Vectors\2_Geometry\RectD.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\3_transform\1_Affine.cs">
+    <Compile Include="..\PixelFarm.Vectors\3_Transform\1_Affine.cs">
       <Link>1_Vectors\3_Transform\1_Affine.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\2_Bilinear.cs">
@@ -203,7 +203,7 @@
     <Compile Include="..\pixelfarm.vectors\3_transform\4_SimulEqGeneral.cs">
       <Link>1_Vectors\3_Transform\4_SimulEqGeneral.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\3_transform\ICoordTransformer.cs">
+    <Compile Include="..\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs">
       <Link>1_Vectors\3_Transform\ICoordTransformer.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\Viewport.cs">
