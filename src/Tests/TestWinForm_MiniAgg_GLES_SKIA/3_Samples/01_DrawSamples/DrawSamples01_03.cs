@@ -278,17 +278,16 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.Clear(Drawing.Color.White);
             p.UseSubPixelLcdEffect = false;
 
-            p.RenderQuality = RenderQualtity.Fast;
+            p.RenderQuality = RenderQualtity.HighQuality;
             //
             //---red reference line--
             p.DrawLine(0, 400, 800, 400);
-
             p.DrawImage(lionImg, 300, 0);
 
             int _imgW = lionImg.Width;
             int _imgH = lionImg.Height;
 
-            //p.RenderQuality = RenderQualtity.Fast;
+            p.RenderQuality = RenderQualtity.Fast;
             p.DrawImage(lionImg,
              //move to center of the image (hotspot x,y)
              AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f),
