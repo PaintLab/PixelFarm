@@ -270,7 +270,7 @@ namespace PixelFarm.CpuBlit
                 BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
                 //2. 
                 Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
-                 
+                //TODO: review reusable span generator an interpolator ***
                 var interpolator = new SpanInterpolatorLinear();
 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
@@ -295,7 +295,8 @@ namespace PixelFarm.CpuBlit
                 BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
 
                 Affine destRectTransform = CreateAffine(destX, destY);
-         
+
+                //TODO: review reusable span generator an interpolator ***
                 var interpolator = new SpanInterpolatorLinear();
 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
@@ -340,9 +341,9 @@ namespace PixelFarm.CpuBlit
             BuildOrgImgRectVxs(source.Width, source.Height, v1);
 
             Affine destRectTransform = Affine.NewMatix(affinePlans);
-
+            //TODO: review reusable span generator an interpolator ***
             var spanInterpolator = new SpanInterpolatorLinear();
-            
+
             // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
             spanInterpolator.Transformer = destRectTransform.CreateInvert();
 
@@ -454,13 +455,13 @@ namespace PixelFarm.CpuBlit
 #endif
 
 
-                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath); 
-                 
+                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+
                 //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
                 //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
 
-                Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians); 
-
+                Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                //TODO: review reusable span generator an interpolator ***
                 var spanInterpolator = new SpanInterpolatorLinear();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 spanInterpolator.Transformer = destRectTransform.CreateInvert();
@@ -494,8 +495,8 @@ namespace PixelFarm.CpuBlit
                 BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
                 //...
                 Affine destRectTransform = CreateAffine(destX, destY);
-          
-         
+
+                //TODO: review reusable span generator an interpolator ***
                 var interpolator = new SpanInterpolatorLinear();
 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
