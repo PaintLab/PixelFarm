@@ -295,8 +295,8 @@ namespace PixelFarm.CpuBlit
                 //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, destX, destY, imgBoundsPath);
 
                 BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
-                Affine destRectTransform = CreateAffine(destX, destY);
 
+                Affine destRectTransform = CreateAffine(destX, destY);
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 var interpolator = new SpanInterpolatorLinear();
@@ -460,7 +460,7 @@ namespace PixelFarm.CpuBlit
                 //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
 
                 Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
-                
+
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
 
@@ -482,14 +482,17 @@ namespace PixelFarm.CpuBlit
 		        LineFloat(BoundingRect.left, BoundingRect.bottom, BoundingRect.left, BoundingRect.top, WHITE);
 #endif
             }
-            else // TODO: this can be even faster if we do not use an intermediat buffer
+            else // TODO: this can be even faster if we do not use an intermediate buffer
             {
-                Affine destRectTransform = CreateAffine(destX, destY);
-                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
-
+                 
                 //Affine destRectTransform = BuildImageBoundsPath(
                 //    source.Width, source.Height,
                 //    destX, destY, imgBoundsPath);
+
+
+                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+                //...
+                Affine destRectTransform = CreateAffine(destX, destY);
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 var interpolator = new SpanInterpolatorLinear();
@@ -509,14 +512,15 @@ namespace PixelFarm.CpuBlit
                     default:
                         throw new NotImplementedException();
                 }
-
-
+                
                 VectorToolBox.GetFreeVxs(out VertexStore v1);
 
                 destRectTransform.TransformToVxs(imgBoundsPath, v1);
+                //...
                 Render(v1, imgSpanGen);
 
                 VectorToolBox.ReleaseVxs(ref v1);
+                //
                 unchecked { destImageChanged++; };
             }
             VectorToolBox.ReleaseVxs(ref imgBoundsPath);
