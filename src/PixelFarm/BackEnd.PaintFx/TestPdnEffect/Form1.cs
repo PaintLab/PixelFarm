@@ -94,12 +94,15 @@ namespace TestPdnEffect
                     //apply some filter
                     //
 
+
+                    //1. test embose renderer
                     EmbossRenderer emboss = new EmbossRenderer();
                     emboss.SetParameters(30);
                     emboss.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
                             new PixelFarm.Drawing.Rectangle(0,0,w,h)
                         }, 0, 1);
 
+                    //2. test sharpen renderer
                     //SharpenRenderer sharpen = new SharpenRenderer();
                     //sharpen.Amount = 2;
                     //sharpen.Render(srcSurface, destSurface, new PixelFarm.Drawing.Rectangle[]{
