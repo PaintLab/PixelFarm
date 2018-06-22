@@ -7,8 +7,8 @@
     <ProjectGuid>{0CC424D5-20AC-4849-993D-3A720DBAE94F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.DrawingCanvas</RootNamespace>
-    <AssemblyName>PixelFarm.DrawingCanvas</AssemblyName>
+    <RootNamespace>PixelFarm.Painter</RootNamespace>
+    <AssemblyName>PixelFarm.Painter</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

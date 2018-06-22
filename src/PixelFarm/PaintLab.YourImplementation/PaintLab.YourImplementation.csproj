@@ -7,8 +7,8 @@
     <ProjectGuid>{D88D86CD-6732-45E7-8FC9-49449EA9C737}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PaintLab.RenderTreeComposer</RootNamespace>
-    <AssemblyName>PaintLab.RenderTreeComposer</AssemblyName>
+    <RootNamespace>PaintLab.YourImplementation</RootNamespace>
+    <AssemblyName>PaintLab.YourImplementation</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

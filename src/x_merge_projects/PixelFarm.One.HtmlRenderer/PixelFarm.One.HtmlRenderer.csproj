@@ -39,9 +39,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx.csproj">
       <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
-      <Name>BackEnd.DrawingBuffer</Name>
+      <Name>BackEnd.BitmapBufferEx</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\BackEnd.FileDB.csproj">
       <Project>{5f72f6fb-89bc-439f-989a-5b9581a50cc5}</Project>
