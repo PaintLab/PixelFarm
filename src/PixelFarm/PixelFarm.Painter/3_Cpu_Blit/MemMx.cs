@@ -22,20 +22,20 @@
 //#define USE_UNSAFE // no real code for this yet
 
 using System;
-namespace PixelFarm.CpuBlit.Rasterization
+namespace PixelFarm.CpuBlit
 {
-    public static class AggMemMx
+    public static class MemMx
     {
         //----------------------------------------------------------filling_rule_e
         public static void memcpy(byte[] dest,
             int destIndex, byte[] source,
             int sourceIndex, int count)
         {
-            NaitveMemMx.MemCopy(dest, destIndex, source, sourceIndex, count);
+            NativeMemMx.MemCopy(dest, destIndex, source, sourceIndex, count);
         }
         public static unsafe void memcpy(byte* dest, byte* src, int len)
         {
-            NaitveMemMx.MemCopy(dest, src, len);
+            NativeMemMx.MemCopy(dest, src, len);
         }
         public static void memmove(byte[] dest, int destIndex, byte[] source, int sourceIndex, int count)
         {
@@ -54,7 +54,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             if (source != dest
                 || destIndex < sourceIndex)
             {
-                NaitveMemMx.memcpy(dest + destIndex, source + sourceIndex, count);
+                NativeMemMx.memcpy(dest + destIndex, source + sourceIndex, count);
                 // memcpy(dest, destIndex, source, sourceIndex, Count);
             }
             else
@@ -64,11 +64,11 @@ namespace PixelFarm.CpuBlit.Rasterization
         }
         public static void memset(byte[] dest, int destIndex, byte byteValue, int count)
         {
-            NaitveMemMx.MemSet(dest, destIndex, byteValue, count);
+            NativeMemMx.MemSet(dest, destIndex, byteValue, count);
         }
         public static void MemClear(Byte[] dest, int destIndex, int count)
         {
-            NaitveMemMx.MemSet(dest, destIndex, 0, count);
+            NativeMemMx.MemSet(dest, destIndex, 0, count);
         }
     }
 }

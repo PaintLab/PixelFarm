@@ -292,11 +292,11 @@
     <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs">
       <Link>2_Painter\3_CpuBlit\ActualBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\AggMemMx.cs">
-      <Link>2_Painter\3_CpuBlit\AggMemMx.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>2_Painter\3_CpuBlit\ColorRGBAf.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs">
+      <Link>2_Painter\3_CpuBlit\MemMx.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs">
       <Link>2_Painter\3_CpuBlit\NativeMemMx.cs</Link>

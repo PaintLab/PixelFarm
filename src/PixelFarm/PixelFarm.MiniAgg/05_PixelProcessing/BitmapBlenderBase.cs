@@ -19,8 +19,8 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Drawing; 
- 
+using PixelFarm.Drawing;
+
 
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
@@ -169,7 +169,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     int destOffset = GetByteBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
                     for (int i = 0; i < clippedSourceImageRect.Height; i++)
                     {
-                        Rasterization.AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
+                        MemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
                         sourceOffset += sourceImage.Stride;
                         destOffset += Stride;
                     }
