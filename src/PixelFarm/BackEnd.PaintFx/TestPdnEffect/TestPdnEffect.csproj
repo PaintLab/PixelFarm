@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs">
+      <Link>PORT_NOTMERGE\NativeMemMx.cs</Link>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

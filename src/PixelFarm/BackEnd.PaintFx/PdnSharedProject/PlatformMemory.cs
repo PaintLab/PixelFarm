@@ -1,52 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
-//Apache2, 2017-present, WinterDev
-using PixelFarm.PaintFx;
+﻿//Apache2, 2017-present, WinterDev 
+
 namespace System
 {
-    [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
-    static class NaitveMemMx
-    {
-        //check this ....
-        //for cross platform code
-
-        //TODO: review here again***
-        //this is platform specific ***
-
-        [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
-        public static unsafe extern void memset(byte* dest, byte c, int byteCount);
-        [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
-        public static unsafe extern void memcpy(byte* dest, byte* src, int byteCount);
-        [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
-        public static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
-        //----------
-
-        public static void MemSet(byte[] dest, int startAt, byte value, int count)
-        {
-            unsafe
-            {
-                fixed (byte* head = &dest[startAt])
-                {
-                    memset(head, value, count);
-                }
-            }
-        }
-        public static void MemCopy(byte[] dest_buffer, int dest_startAt, byte[] src_buffer, int src_StartAt, int len)
-        {
-            unsafe
-            {
-                fixed (byte* head_dest = &dest_buffer[dest_startAt])
-                fixed (byte* head_src = &src_buffer[src_StartAt])
-                {
-                    memcpy(head_dest, head_src, len);
-                }
-            }
-        }
-        public static unsafe void MemCopy(byte* head_dest, byte* head_src, int len)
-        {
-            memcpy(head_dest, head_src, len);
-        }
-    }
     public abstract class PlatformMemory
     {
         static PlatformMemory platformMem;
@@ -73,7 +28,7 @@ namespace System
         //}
         public static unsafe void Copy(void* dstPtr, void* srcPtr, ulong len)
         {
-            NaitveMemMx.memcpy((byte*)dstPtr, (byte*)srcPtr, (int)len);
+            PixelFarm.CpuBlit.NativeMemMx.memcpy((byte*)dstPtr, (byte*)srcPtr, (int)len);
         }
         public static void Free(IntPtr hmem)
         {
@@ -105,12 +60,12 @@ namespace System
         //}
         public static unsafe void SetToZero(void* ptr, int len)
         {
-            NaitveMemMx.memset((byte*)ptr, 0, (int)len);
+            PixelFarm.CpuBlit.NativeMemMx.memset((byte*)ptr, 0, (int)len);
             //platformMem.SetToZeroImpl(ptr, len);
         }
         public static unsafe void SetToZero(void* ptr, ulong len)
         {
-            NaitveMemMx.memset((byte*)ptr, 0, (int)len);
+            PixelFarm.CpuBlit.NativeMemMx.memset((byte*)ptr, 0, (int)len);
             //platformMem.SetToZeroImpl(ptr, len);
         }
     }
