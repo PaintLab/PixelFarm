@@ -126,13 +126,9 @@ namespace PixelFarm.CpuBlit
             latestSVGPathCmd = SvgPathCommand.MoveTo;
             figureCount = 0;
         }
-        public void NewVxs()
-        {
-            myvxs = new VertexStore();
-        }
-        public void ClearAndStartNewVxs(VertexStore newVxsOutput)
-        {
-
+         
+        public void ResetWithExternalVxs(VertexStore newVxsOutput)
+        {   
             myvxs = newVxsOutput;
             Clear();
         }

@@ -24,10 +24,11 @@
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
- 
+
     public class SimpleRect
     {
         RectD bounds;
+        //TODO: review here again
         PathWriter _reusablePathWriter = new PathWriter();
 
         public SimpleRect()
@@ -68,15 +69,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public VertexStore MakeVxs(VertexStore output)
         {
-            
-            _reusablePathWriter.Clear();
-            _reusablePathWriter.NewVxs();
+
+            _reusablePathWriter.ResetWithExternalVxs(output);
             _reusablePathWriter.MoveTo(bounds.Left, bounds.Bottom);
             _reusablePathWriter.LineTo(bounds.Right, bounds.Bottom);
             _reusablePathWriter.LineTo(bounds.Right, bounds.Top);
             _reusablePathWriter.LineTo(bounds.Left, bounds.Top);
             _reusablePathWriter.CloseFigure();
-            return _reusablePathWriter.Vxs;
+            return output;
         }
         public VertexStoreSnap MakeVertexSnap(VertexStore output)
         {
