@@ -59,7 +59,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.GlyphLayout", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontAtlas", "PixelFarm\Typography\FontAtlas\FontAtlas.csproj", "{64C28AAB-E2EF-45C1-A674-5660D462882F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Painter", "PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.Painter.csproj", "{0CC424D5-20AC-4849-993D-3A720DBAE94F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Painter", "PixelFarm\PixelFarm.Painter\PixelFarm.Painter.csproj", "{0CC424D5-20AC-4849-993D-3A720DBAE94F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Typography", "PixelFarm\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj", "{540A2EA6-DAE3-4625-8951-B2C3118603A4}"
 EndProject
