@@ -218,7 +218,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             AffineMat clone = this; //*** COPY by value
             clone.Invert();
-            return clone; 
+            return clone;
         }
 
 
@@ -280,6 +280,55 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
+        public void BuildFromAffinePlans(AffinePlan[] creationPlans)
+        {
+            //-----------------------
+            //start with identity matrix
+            this = AffineMat.Iden;//copy from iden
+            bool isIdenHint = true;
+
+            if (creationPlans == null) return;
+            //-----------------------
+            int j = creationPlans.Length;
+            for (int i = 0; i < j; ++i)
+            {
+                AffinePlan plan = creationPlans[i];
+                switch (plan.cmd)
+                {
+                    case AffineMatrixCommand.None:
+                        break;
+                    case AffineMatrixCommand.Rotate:
+
+                        isIdenHint = false;
+                        this.Rotate(plan.x);
+
+                        break;
+                    case AffineMatrixCommand.Scale:
+
+                        isIdenHint = false;
+                        this.Scale(plan.x, plan.y);
+
+                        break;
+                    case AffineMatrixCommand.Translate:
+
+                        isIdenHint = false;
+                        this.Translate(plan.x, plan.y);
+
+                        break;
+                    case AffineMatrixCommand.Skew:
+                        isIdenHint = false;
+                        this.Skew(plan.x, plan.y);
+                        break;
+                    case AffineMatrixCommand.Invert:
+                        isIdenHint = false;
+                        this.Invert();
+                        break;
+                    default:
+                        throw new NotSupportedException();
+
+                }
+            }
+        }
     }
 
     public class Affine : ICoordTransformer

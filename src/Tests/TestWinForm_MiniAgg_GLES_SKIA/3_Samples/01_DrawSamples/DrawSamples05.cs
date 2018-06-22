@@ -148,18 +148,24 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             int _imgW = lionImg.Width;
             int _imgH = lionImg.Height;
-             
+
 
             int x_pos = 0;
+
+
+
+            var affPlans = new AffinePlan[4];
+
             for (int i = 0; i < 360; i += 30)
             {
-                p.DrawImage(lionImg,
-                   //move to center of the image (hotspot x,y)
-                   AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f),
-                   AffinePlan.Scale(0.50, 0.50),
-                   AffinePlan.Rotate(AggMath.deg2rad(i)),
-                   AffinePlan.Translate((_imgW / 2f) + x_pos, _imgH / 2f) //translate back
-                   );
+                
+                affPlans[0] = AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f);
+                affPlans[1] = AffinePlan.Scale(0.50, 0.50);
+                affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
+                affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, _imgH / 2f);
+
+
+                p.DrawImage(lionImg, affPlans);
 
                 x_pos += _imgW / 3;
             }
