@@ -6,8 +6,8 @@ using Mini;
 using PaintLab.Svg;
 using PixelFarm.Drawing;
 
-using PixelFarm.Agg;
-namespace PixelFarm.Agg.Samples
+using PixelFarm.CpuBlit;
+namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "03")]
     [Info("Test Svg")]

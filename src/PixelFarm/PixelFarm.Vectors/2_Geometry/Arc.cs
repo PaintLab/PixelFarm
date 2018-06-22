@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //=====================================================================arc
     //

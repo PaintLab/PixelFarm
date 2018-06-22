@@ -17,8 +17,10 @@
 //
 
 using System;
-namespace PixelFarm.DrawingBuffer
+namespace PixelFarm.BitmapBufferEx
 {
+
+#if DEBUG
     /// <summary>
     /// Collection of draw extension methods for the Silverlight WriteableBitmap class.
     /// </summary>
@@ -429,4 +431,6 @@ namespace PixelFarm.DrawingBuffer
             }
         }
     }
+#endif
+
 }

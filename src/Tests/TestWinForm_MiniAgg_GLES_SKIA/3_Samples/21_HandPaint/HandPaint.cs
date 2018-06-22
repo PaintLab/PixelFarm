@@ -33,7 +33,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
 using Mini;
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "21")]
     [Info("hand paint!")]

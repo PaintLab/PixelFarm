@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public static partial class AggMath
     {

@@ -6,11 +6,11 @@
 // and intend to do much more refactoring of these things over the long term.
 
 
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 using Mini;
 
-namespace PixelFarm.Agg.Sample_Draw
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
     public enum DrawStrokeSample
     {
@@ -50,7 +50,7 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            var aggPainter = p as PixelFarm.Agg.AggPainter;
+            var aggPainter = p as PixelFarm.CpuBlit.AggPainter;
             if (aggPainter == null)
             {
                 return;
@@ -76,7 +76,7 @@ namespace PixelFarm.Agg.Sample_Draw
                     break;
             }
         }
-        void DrawB(PixelFarm.Agg.AggPainter aggPainter)
+        void DrawB(PixelFarm.CpuBlit.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
@@ -151,7 +151,7 @@ namespace PixelFarm.Agg.Sample_Draw
             }
             //aggPainter.Draw(newvxs);
         }
-        void DrawA(PixelFarm.Agg.AggPainter aggPainter)
+        void DrawA(PixelFarm.CpuBlit.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
@@ -221,7 +221,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
         LineDashGenerator lineDashGen;
-        void DrawC(PixelFarm.Agg.AggPainter aggPainter)
+        void DrawC(PixelFarm.CpuBlit.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);

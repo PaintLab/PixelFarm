@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.WinGdi;
 namespace Mini.WinForms
 {
     class MyLionSpriteTool : PixelToolController
     {
-        PixelFarm.Agg.MyTestSprite lionFill;
+        PixelFarm.CpuBlit.MyTestSprite lionFill;
         List<PixelToolController> prevPixTools;
         int _latest_mouseX, _latest_mouseY;
         bool validBoundingRect;

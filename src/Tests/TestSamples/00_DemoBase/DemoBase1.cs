@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.DrawingGL;
 

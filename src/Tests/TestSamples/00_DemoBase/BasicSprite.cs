@@ -31,7 +31,7 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public abstract class BasicSprite
     {

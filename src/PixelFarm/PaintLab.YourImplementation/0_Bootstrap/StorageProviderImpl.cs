@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Numeria.IO;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 namespace YourImplementation
 {
@@ -133,7 +133,7 @@ namespace YourImplementation
 
         public static ActualBitmap Read(Stream strm)
         {
-
+            
             Hjg.Pngcs.PngReader reader = new Hjg.Pngcs.PngReader(strm);
             Hjg.Pngcs.ImageInfo imgInfo = reader.ImgInfo;
             Hjg.Pngcs.ImageLine iline2 = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);

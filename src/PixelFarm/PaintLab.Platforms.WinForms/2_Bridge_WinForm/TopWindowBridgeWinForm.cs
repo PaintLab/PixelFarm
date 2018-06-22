@@ -22,9 +22,9 @@ namespace LayoutFarm.UI
         {
 
 #if DEBUG
-            if (!PixelFarm.Agg.ExternalImageService.HasExternalImgCodec)
+            if (!PixelFarm.CpuBlit.ExternalImageService.HasExternalImgCodec)
             {
-                PixelFarm.Agg.ExternalImageService.RegisterExternalImageEncodeDelegate(SaveImage);
+                PixelFarm.CpuBlit.ExternalImageService.RegisterExternalImageEncodeDelegate(SaveImage);
             }
 
 #endif

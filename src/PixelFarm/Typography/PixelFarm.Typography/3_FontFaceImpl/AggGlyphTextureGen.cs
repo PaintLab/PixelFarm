@@ -4,7 +4,7 @@ using System;
 using Typography.Contours;
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.Fonts;
 
 namespace Typography.Rendering
@@ -39,7 +39,7 @@ namespace Typography.Rendering
             //-------------------------------------------- 
             //GlyphImage glyphImg = new GlyphImage()
             RectD bounds = new RectD();
-            BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref bounds);
+            PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref bounds);
 
             ////-------------------------------------------- 
             int w = (int)System.Math.Ceiling(bounds.Width);

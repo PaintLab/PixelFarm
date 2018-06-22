@@ -1,6 +1,6 @@
 ﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 using System;
-using  PixelFarm.DrawingBuffer;
+using PixelFarm.BitmapBufferEx;
 
 namespace WinFormGdiPlus
 {

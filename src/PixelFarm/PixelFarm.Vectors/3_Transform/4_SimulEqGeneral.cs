@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //============================================================matrix_pivot
     //template<uint Rows, uint Cols> 

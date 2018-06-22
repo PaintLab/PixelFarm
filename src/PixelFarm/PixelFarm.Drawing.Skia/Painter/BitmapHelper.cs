@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.Skia
 {
     static class BitmapHelper
@@ -52,7 +52,7 @@ namespace PixelFarm.Drawing.Skia
                 //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
                 unsafe
                 {
-                    TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
+                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                     //fixed (byte* bufferH = &srcBuffer[0])
                     byte* bufferH = (byte*)srcBufferPtr.Ptr;
                     {
@@ -66,7 +66,7 @@ namespace PixelFarm.Drawing.Skia
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, bufferH + startRowAt, stride);
+                            PixelFarm.CpuBlit.MemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }

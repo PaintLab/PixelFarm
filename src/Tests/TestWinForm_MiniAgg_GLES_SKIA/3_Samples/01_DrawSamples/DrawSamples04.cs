@@ -16,17 +16,11 @@ using PixelFarm.Drawing.Fonts;
 using Mini;
 
 
-using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
+using Typography.OpenFont; 
 using Typography.Rendering;
-using Typography.TextLayout;
-using Typography.TextServices;
-
-
-using PixelFarm.Platforms;
-using PixelFarm.Agg.Imaging;
-
-namespace PixelFarm.Agg.Sample_Draw
+using Typography.TextLayout; 
+using PixelFarm.CpuBlit.VertexProcessing;
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
 
     [Info(OrderCode = "01")]
@@ -78,7 +72,7 @@ namespace PixelFarm.Agg.Sample_Draw
         List<ushort> _indexList = new List<ushort>();
 
         ActualBitmap _stencilBmp;
-        SubBitmapBlender _stencilBlender;
+        PixelProcessing.SubBitmapBlender _stencilBlender;
         AggPainter _backPainter;
 
 
@@ -97,7 +91,7 @@ namespace PixelFarm.Agg.Sample_Draw
             {
                 //create a stencil bmp
                 _stencilBmp = new ActualBitmap(p.Width, p.Height);
-                _stencilBlender = new SubBitmapBlender(_stencilBmp, new PixelBlenderBGRA());
+                _stencilBlender = new PixelProcessing.SubBitmapBlender(_stencilBmp, new PixelProcessing.PixelBlenderBGRA());
                 _backPainter = AggPainter.Create(_stencilBmp);
                 //------
             }
@@ -189,7 +183,7 @@ namespace PixelFarm.Agg.Sample_Draw
                     default:
                         break;
                     case TextureKind.StencilLcdEffect:
-                        { 
+                        {
                         }
                         break;
                 }

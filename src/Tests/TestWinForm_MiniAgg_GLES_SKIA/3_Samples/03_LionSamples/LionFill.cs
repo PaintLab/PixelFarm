@@ -33,7 +33,7 @@ using System;
 using System.Collections.Generic;
 
 using Mini;
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"

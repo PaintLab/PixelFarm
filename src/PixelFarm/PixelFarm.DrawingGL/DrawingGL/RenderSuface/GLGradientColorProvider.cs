@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-present, WinterDev
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.DrawingGL
 {
     static class GLGradientColorProvider
@@ -54,12 +54,12 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------------
             //translate vertex around x1,y1
 
-            PixelFarm.Agg.Transform.AffinePlan[] affPlans =
-                new PixelFarm.Agg.Transform.AffinePlan[]{
-                   PixelFarm.Agg.Transform.AffinePlan.Translate(-x1,-y1),
-                   PixelFarm.Agg.Transform.AffinePlan.Rotate(angleRad),
-                   PixelFarm.Agg.Transform.AffinePlan.Translate(x1,y1)};
-            var txMatrix = PixelFarm.Agg.Transform.Affine.NewMatix(affPlans);
+            PixelFarm.CpuBlit.VertexProcessing.AffinePlan[] affPlans =
+                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan[]{
+                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1,-y1),
+                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
+                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1,y1)};
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(affPlans);
             int j = vrx.Count;
             for (int i = j - 1; i >= 0; --i)
             {
@@ -136,12 +136,12 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------------
             //translate vertex around x1,y1
 
-            PixelFarm.Agg.Transform.AffinePlan[] affPlans =
-                new PixelFarm.Agg.Transform.AffinePlan[]{
-                   PixelFarm.Agg.Transform.AffinePlan.Translate(-x1,-y1),
-                   PixelFarm.Agg.Transform.AffinePlan.Rotate(angleRad),
-                   PixelFarm.Agg.Transform.AffinePlan.Translate(x1,y1)};
-            var txMatrix = PixelFarm.Agg.Transform.Affine.NewMatix(affPlans);
+            PixelFarm.CpuBlit.VertexProcessing.AffinePlan[] affPlans =
+                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan[]{
+                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1,-y1),
+                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
+                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1,y1)};
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(affPlans);
             int j = vrx.Count;
             List<float> v2fList = new List<float>();
             List<float> colorList = new List<float>();

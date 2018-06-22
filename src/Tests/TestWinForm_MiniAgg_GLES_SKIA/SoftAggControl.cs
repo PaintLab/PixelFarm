@@ -4,8 +4,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using PixelFarm.Agg;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.Drawing.Fonts;
 
 

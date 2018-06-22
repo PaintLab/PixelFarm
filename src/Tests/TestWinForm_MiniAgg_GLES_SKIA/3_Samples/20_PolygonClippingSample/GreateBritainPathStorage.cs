@@ -4,8 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using PixelFarm.Agg.VertexSource;
-namespace PixelFarm.Agg.Sample_PolygonClipping
+using PixelFarm.CpuBlit.VertexProcessing;
+namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
     public static class GreatBritanPathStorage
     {

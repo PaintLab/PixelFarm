@@ -3,7 +3,9 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-namespace PixelFarm.Agg.Imaging
+using PixelFarm.CpuBlit.Rasterization;
+
+namespace PixelFarm.CpuBlit.Imaging
 {
     public static class BitmapHelper
     {
@@ -22,7 +24,7 @@ namespace PixelFarm.Agg.Imaging
             TempMemPtr memPtr = ActualBitmap.GetBufferPtr(actualImage);
             unsafe
             {
-                AggMemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
+                MemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
             }
             //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
             //   hBmpScan0, rawBuffer.Length);
@@ -74,7 +76,7 @@ namespace PixelFarm.Agg.Imaging
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, src, stride);
+                            MemMx.memcpy(target, src, stride);
 
                             startRowAt += stride;
                             target += stride;
@@ -196,7 +198,7 @@ namespace PixelFarm.Agg.Imaging
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, src, stride);
+                            MemMx.memcpy(target, src, stride);
 
                             startRowAt -= stride;
                             target += stride;
@@ -310,7 +312,7 @@ namespace PixelFarm.Agg.Imaging
                     for (int y = h; y > 0; --y)
                     {
                         byte* src = bufferH + ((y - 1) * stride);
-                        AggMemMx.memcpy(target, src, stride);
+                        MemMx.memcpy(target, src, stride);
                         startRowAt -= stride;
                         target += stride;
                     }
@@ -425,7 +427,7 @@ namespace PixelFarm.Agg.Imaging
                     //System.Runtime.InteropServices.Marshal.Copy(
                     //      (IntPtr)src,//src
                     //      targetBuffer, startRowAt, stride);
-                    AggMemMx.memcpy(targetH + startRowAt, src, stride);
+                    MemMx.memcpy(targetH + startRowAt, src, stride);
                     startRowAt -= stride;
                     src += stride;
                 }

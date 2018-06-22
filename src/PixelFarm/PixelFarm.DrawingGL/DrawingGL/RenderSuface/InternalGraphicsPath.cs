@@ -202,14 +202,14 @@ namespace PixelFarm.DrawingGL
 
             var iter = vxsSnap.GetVertexSnapIter();
             double x, y;
-            PixelFarm.Agg.VertexCmd cmd;
+            PixelFarm.CpuBlit.VertexCmd cmd;
             int totalXYCount = 0;
             int index = 0;
             float latestMoveToX = 0, latestMoveToY = 0;
             float latestX = 0, latestY = 0;
-            while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
+            while ((cmd = iter.GetNextVertex(out x, out y)) != CpuBlit.VertexCmd.NoMore)
             {
-                if (cmd == Agg.VertexCmd.Close || cmd == Agg.VertexCmd.CloseAndEndFigure)
+                if (cmd == CpuBlit.VertexCmd.Close || cmd == CpuBlit.VertexCmd.CloseAndEndFigure)
                 {
                     index = 0; //reset
                     //temp fix1

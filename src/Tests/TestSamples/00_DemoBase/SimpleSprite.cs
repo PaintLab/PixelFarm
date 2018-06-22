@@ -30,7 +30,7 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using PixelFarm.Agg; 
+using PixelFarm.CpuBlit; 
 namespace Mini
 {
     public abstract class SimpleSprite

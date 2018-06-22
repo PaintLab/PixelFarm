@@ -3,20 +3,24 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.FragmentProcessing;
+
 using Mini;
-namespace PixelFarm.Agg.Sample_AADemoTest2
+namespace PixelFarm.CpuBlit.Sample_AADemoTest2
 {
-    class CustomScanlineRasToBmp_EnlargedV2 : CustomScanlineRasToDestBitmapRenderer
+    class CustomRas_EnlargeV2 : CustomDestBitmapRasterizer
     {
         double m_size;
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         AggRenderSurface gfx;
-        public CustomScanlineRasToBmp_EnlargedV2(double size, ActualBitmap destImage)
+        public CustomRas_EnlargeV2(double size, ActualBitmap destImage)
         {
-            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
+            this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);
@@ -28,7 +32,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             byte[] covers = scanline.GetCovers();
             int spanCount = scanline.SpanCount;
             var ras = gfx.ScanlineRasterizer;
-            var rasToBmp = gfx.ScanlineRasToDestBitmap;
+            var rasToBmp = gfx.BitmapRasterizer;
             for (int i = 1; i <= num_spans; ++i)
             {
                 var span2 = scanline.GetSpan(i);
@@ -94,10 +98,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             {
                 AggPainter p2 = (AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
-                SubBitmapBlender subImg = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
+                PixelProcessing.SubBitmapBlender subImg = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
 
                 //TODO: review here again
-                PixelBlenderBGRA blenderWithGamma = new PixelBlenderBGRA();
+                PixelBlenderBGRA blenderWithGamma = new PixelProcessing.PixelBlenderBGRA();
 
                 SubBitmapBlender rasterGamma = new SubBitmapBlender(subImg, blenderWithGamma);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(subImg);
@@ -106,14 +110,14 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
                 var sl = new ScanlineUnpacked8();
                 int size_mul = this.PixelSize;
-                var sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, aggsx.DestActualImage);
+                var sclineToBmpEn2 = new CustomRas_EnlargeV2(size_mul, aggsx.DestActualImage);
                 rasterizer.Reset();
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
                 sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
-                sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
+                DestBitmapRasterizer bmpRas = aggsx.BitmapRasterizer;
+                bmpRas.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //-----------------------------------------------------------------------------------------------------------
                 rasterizer.ResetGamma(new GammaNone());
                 PathWriter ps = new PathWriter();
@@ -125,7 +129,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
 
                 VectorToolBox.GetFreeVxs(out var v1);
                 rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs, v1));
-                sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
+                bmpRas.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
                 VectorToolBox.ReleaseVxs(ref v1);
             }
         }

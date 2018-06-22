@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using PaintLab.Svg;
 using LayoutFarm.UI;
 using PaintLab;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 namespace LayoutFarm
 {

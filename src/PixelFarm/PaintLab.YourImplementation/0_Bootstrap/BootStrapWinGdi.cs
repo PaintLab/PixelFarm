@@ -11,12 +11,12 @@ namespace YourImplementation
     {
         public static IFontLoader GetFontLoader()
         {
-            return CommonTextServiceSetup.myFontLoader;
+            return CommonTextServiceSetup.FontLoader;
         }
         public static void SetupDefaultValues()
         {
             CommonTextServiceSetup.SetupDefaultValues();
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(CommonTextServiceSetup.myFontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(CommonTextServiceSetup.FontLoader);
         }
     }
 }

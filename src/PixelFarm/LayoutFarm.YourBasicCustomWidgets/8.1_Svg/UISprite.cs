@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.UI
@@ -56,7 +56,7 @@ namespace LayoutFarm.UI
                 VertexStore innerVxs = vx.GetVxs();
                 //fine tune
                 //hit test ***
-                if (VertexHitTester.IsPointInVxs(innerVxs, x, y))
+                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(innerVxs, x, y))
                 {
                     return true;
                 }

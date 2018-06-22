@@ -1,5 +1,5 @@
 ﻿//MIT, 2014-present, WinterDev
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using System;
@@ -117,7 +117,7 @@ namespace SampleWinForms.UI
             painter.Clear(PixelFarm.Drawing.Color.White);
 
             RectD bounds = new RectD();
-            BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(vxs), ref bounds);
+            PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(vxs), ref bounds);
             //----------------------------------------------------
             float scale = _typeface.CalculateScaleToPixelFromPointSize(_sizeInPoint);
             _pxscale = scale;

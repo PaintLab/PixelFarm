@@ -1,5 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
+//ArthurHub, Jose Manuel Menendez Poo
 
 // "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
@@ -66,8 +66,7 @@ namespace PixelFarm.Drawing.GLES2
                 DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
                
                 var prevColor = painter1.FillColor;
-                painter1.FillColor = PixelFarm.Drawing.Color.Black;
-              
+                painter1.FillColor = PixelFarm.Drawing.Color.Black; 
                 painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
                 painter1.FillColor = prevColor;
             }

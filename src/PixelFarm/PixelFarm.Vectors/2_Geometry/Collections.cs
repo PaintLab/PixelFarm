@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //---------------------------------------------------------------------------- 
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public class ArrayList<T>
     {
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
             {
                 currentSize--;
             }
-        } 
+        }
         public int Count
         {
             get { return currentSize; }
@@ -81,7 +81,7 @@ namespace PixelFarm.Agg
                     internalArray = new T[sizeToAllocate];
                 }
             }
-        } 
+        }
         // Allocate n elements. All data is lost, 
         // but elements can be accessed in range 0...size-1. 
         public void Allocate(int size)

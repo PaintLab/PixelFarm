@@ -6,13 +6,13 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 using Mini;
 
-namespace PixelFarm.Agg.Sample_Draw
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
     [Info(OrderCode = "01")]
     [Info("from MatterHackers' Agg DrawAndSave")]
@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             UseBitmapExt = false;
 
-            string imgFileName = "d:\\WImageTest\\lion1.png";
+            string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
                 lionImg = DemoHelper.LoadImage(imgFileName);

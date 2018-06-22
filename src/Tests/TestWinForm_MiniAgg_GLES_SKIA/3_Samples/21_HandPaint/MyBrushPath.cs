@@ -3,12 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using burningmime.curves; //for curve fit
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     class MyBrushPath
     {
@@ -18,7 +18,7 @@ namespace PixelFarm.Agg.Samples
         VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();
         RectD boundingRect = new RectD();
-        VertexSource.CurveFlattener cflat = new VertexSource.CurveFlattener();
+        VertexProcessing.CurveFlattener cflat = new VertexProcessing.CurveFlattener();
         bool isValidSmooth = false;
         public MyBrushPath()
         {
@@ -325,7 +325,7 @@ namespace PixelFarm.Agg.Samples
             //check if point in polygon
             if (!validBoundingRect)
             {
-                PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref boundingRect);
+                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref boundingRect);
                 validBoundingRect = true;
             }
             if (this.boundingRect.Contains(x, y))

@@ -1,9 +1,9 @@
 ﻿//MIT, 2017-present, WinterDev 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using Mini;
-namespace PixelFarm.Agg.Sample_AADemoTest4
+namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 {
 
     public enum Sample
@@ -33,7 +33,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //56 level grey scale buffer
 
 
-            TempMemPtr srcMemPtr = ActualBitmap.GetBufferPtr(img);
+            CpuBlit.Imaging.TempMemPtr srcMemPtr = ActualBitmap.GetBufferPtr(img);
 
             int greyScaleBufferLen = imgW * height;
             byte[] greyScaleBuffer = new byte[greyScaleBufferLen];
@@ -99,7 +99,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //-------------------------
             //destination
 
-            TempMemPtr memPtr = ActualBitmap.GetBufferPtr(destImg);
+            CpuBlit.Imaging.TempMemPtr memPtr = ActualBitmap.GetBufferPtr(destImg);
             //start pixel
             int destImgIndex = (x * 4) + (destImg.Stride * y);
             //start img src
@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyImgStride);
 
             //blend lcd 
-            var aggPainer = (PixelFarm.Agg.AggPainter)p;
+            var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
             Blend(aggPainer.RenderSurface.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
@@ -255,7 +255,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
-            var aggPainer = (PixelFarm.Agg.AggPainter)p;
+            var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
             BlendWithLcdTechnique(aggPainer.RenderSurface.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
@@ -369,7 +369,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //specific for agg
 
-            if (!(p is PixelFarm.Agg.AggPainter))
+            if (!(p is PixelFarm.CpuBlit.AggPainter))
             {
                 return;
             }
@@ -399,7 +399,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
         }
 
-        static LcdDistributionLut g8_4_2_1 = new LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
+        static PixelFarm.CpuBlit.Rasterization.LcdDistributionLut g8_4_2_1 = new PixelFarm.CpuBlit.Rasterization.LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
         void BlendWithLcdTechnique(ActualBitmap destImg, ActualBitmap glyphImg, PixelFarm.Drawing.Color color)
         {
             //var g8Lut = g8_4_2_1;
@@ -546,7 +546,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //agg lcd test
             //lcd_distribution_lut<ggo_gray8> lut(1.0/3.0, 2.0/9.0, 1.0/9.0);
             //lcd_distribution_lut<ggo_gray8> lut(0.5, 0.25, 0.125);
-            LcdDistributionLut lut = g8_4_2_1;
+            PixelFarm.CpuBlit.Rasterization.LcdDistributionLut lut = g8_4_2_1;
             int destImgStride = srcW + 4; //expand the original gray scale 
             newImageStride = destImgStride;
 

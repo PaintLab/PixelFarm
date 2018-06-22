@@ -231,14 +231,14 @@ namespace LayoutFarm.UI
         {
             //AbstractRect dose not have content
         }
-        public virtual int DesiredHeight
+        public virtual int InnerHeight
         {
             get
             {
                 return this.Height;
             }
         }
-        public virtual int DesiredWidth
+        public virtual int InnerWidth
         {
             get
             {

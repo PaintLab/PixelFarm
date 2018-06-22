@@ -331,8 +331,8 @@ namespace LayoutFarm.CustomWidgets
         {
             _ui = ui;
         }
-        PixelFarm.Agg.SvgPart _svgPath;
-        public void UpdateControlPoints(PixelFarm.Agg.SvgPart svgPath)
+        PixelFarm.CpuBlit.SvgPart _svgPath;
+        public void UpdateControlPoints(PixelFarm.CpuBlit.SvgPart svgPath)
         {
             //1. we remove existing point from root
 
@@ -355,7 +355,7 @@ namespace LayoutFarm.CustomWidgets
                 var cmd = vxs.GetVertex(i, out double x, out double y);
                 switch (cmd)
                 {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                         {
 
                             var ctrlPoint = new UIControllerBox(8, 8);
@@ -366,7 +366,7 @@ namespace LayoutFarm.CustomWidgets
                             _simpleBox.AddChild(ctrlPoint);
                         }
                         break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
+                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
                         {
                             var ctrlPoint = new UIControllerBox(8, 8);
                             ctrlPoint.Index = i;
@@ -376,7 +376,7 @@ namespace LayoutFarm.CustomWidgets
                             _simpleBox.AddChild(ctrlPoint);
                         }
                         break;
-                    case PixelFarm.Agg.VertexCmd.Close:
+                    case PixelFarm.CpuBlit.VertexCmd.Close:
                         break;
                 }
             }
@@ -424,7 +424,7 @@ namespace LayoutFarm.CustomWidgets
                 //then update the vxs shape
                 VertexStore vxs = _svgPath.GetVxs();
                 vxs.ReplaceVertex(cornerBox.Index, newX, newY);
-                PixelFarm.Agg.SvgPart.SetResolvedObject(_svgPath, null);//clear
+                PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
 
                 _ui.HandleElementUpdate();
 

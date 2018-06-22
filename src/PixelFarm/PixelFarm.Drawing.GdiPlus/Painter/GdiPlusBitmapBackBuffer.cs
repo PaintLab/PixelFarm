@@ -30,7 +30,7 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
 
 

@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.PainterExtensions;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
@@ -18,14 +18,14 @@ namespace PixelFarm.Drawing.Skia
 
         int _height;
         int _width;
-        Agg.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
         //-----------------------
         SKCanvas _skCanvas;
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
-        PixelFarm.Agg.VectorTool _vectorTool;
+        PixelFarm.CpuBlit.VectorTool _vectorTool;
         public SkiaPainter(int w, int h)
         {
 
@@ -35,13 +35,36 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
 
-            _vectorTool = new PixelFarm.Agg.VectorTool();
+            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
         }
         public override PainterExtensions.VectorTool VectorTool
         {
             get { return _vectorTool; }
         }
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
 
+        Pen _curPen;
+        public override Pen CurrentPen
+        {
+            get
+            {
+                throw new NotSupportedException();
+                return _curPen;
+            }
+            set
+            {
+                throw new NotSupportedException();
+                _curPen = value;
+            }
+        }
         public SKCanvas Canvas
         {
             get { return _skCanvas; }
@@ -331,18 +354,18 @@ namespace PixelFarm.Drawing.Skia
                 int h = actualImage.Height;
                 switch (actualImage.PixelFormat)
                 {
-                    case Agg.PixelFormat.ARGB32:
+                    case CpuBlit.Imaging.PixelFormat.ARGB32:
                         {
 
                             using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
                             {
                                 newBmp.LockPixels();
                                 //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-                                TempMemPtr bufferPtr = ActualBitmap.GetBufferPtr(actualImage);
+                                CpuBlit.Imaging.TempMemPtr bufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                                 unsafe
                                 {
                                     byte* actualImgH = (byte*)bufferPtr.Ptr;
-                                    AggMemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
+                                    MemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
                                     //System.Runtime.InteropServices.Marshal.Copy(
                                     //    actualImgBuffer,
                                     //    0,
@@ -371,11 +394,11 @@ namespace PixelFarm.Drawing.Skia
                             //}
                         }
                         break;
-                    case Agg.PixelFormat.RGB24:
+                    case CpuBlit.Imaging.PixelFormat.RGB24:
                         {
                         }
                         break;
-                    case Agg.PixelFormat.GrayScale8:
+                    case CpuBlit.Imaging.PixelFormat.GrayScale8:
                         {
                         }
                         break;
@@ -517,7 +540,7 @@ namespace PixelFarm.Drawing.Skia
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
 
-        
+
 
         public override void DrawRect(double left, double bottom, double right, double top)
         {

@@ -2,13 +2,13 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Imaging;
  
 using PixelFarm.VectorMath;
 using Mini;
 
 using burningmime.curves; //for curve fit
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "21")]
     [Info("hand paint with line simplification")]

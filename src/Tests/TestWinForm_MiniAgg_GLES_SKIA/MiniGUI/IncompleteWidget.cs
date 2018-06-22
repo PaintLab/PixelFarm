@@ -22,10 +22,10 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.UI
+namespace PixelFarm.CpuBlit.UI
 {
     /// <summary>
     /// incomplete widget, for test Agg Core Only
@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.UI
     {
         // this should probably some type of dirty rects with the current invalid set stored.
 
-        Transform.Affine parentToChildTransform = Affine.IdentityMatrix; //start with identiy matrix
+        Affine parentToChildTransform = Affine.IdentityMatrix; //start with identiy matrix
         RectD localBounds;
         public virtual Vector2 OriginRelativeParent
         {

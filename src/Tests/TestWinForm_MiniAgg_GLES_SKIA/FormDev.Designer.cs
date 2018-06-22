@@ -42,6 +42,7 @@
             this.cmdTestColorBlend = new System.Windows.Forms.Button();
             this.lstBackEndRenderer = new System.Windows.Forms.ListBox();
             this.button8 = new System.Windows.Forms.Button();
+            this.cmdFreeTransform = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -189,11 +190,22 @@
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // cmdFreeTransform
+            // 
+            this.cmdFreeTransform.Location = new System.Drawing.Point(417, 451);
+            this.cmdFreeTransform.Name = "cmdFreeTransform";
+            this.cmdFreeTransform.Size = new System.Drawing.Size(150, 32);
+            this.cmdFreeTransform.TabIndex = 18;
+            this.cmdFreeTransform.Text = "ImgTransform";
+            this.cmdFreeTransform.UseVisualStyleBackColor = true;
+            this.cmdFreeTransform.Click += new System.EventHandler(this.cmdFreeTransform_Click);
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(738, 588);
+            this.Controls.Add(this.cmdFreeTransform);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.lstBackEndRenderer);
             this.Controls.Add(this.cmdTestColorBlend);
@@ -233,5 +245,6 @@
         private System.Windows.Forms.Button cmdTestColorBlend;
         private System.Windows.Forms.ListBox lstBackEndRenderer;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button cmdFreeTransform;
     }
 }

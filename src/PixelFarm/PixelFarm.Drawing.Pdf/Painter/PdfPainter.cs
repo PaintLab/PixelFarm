@@ -1,8 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.Pdf
@@ -25,15 +25,15 @@ namespace PixelFarm.Drawing.Pdf
         //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
 
-        PixelFarm.Agg.VectorTool _vectorTool;
-        Agg.VertexSource.RoundedRect roundRect;
+        PixelFarm.CpuBlit.VectorTool _vectorTool;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
 
 
         SmoothingMode _smoothingMode;
 
         public PdfPainter()
         {
-            _vectorTool = new PixelFarm.Agg.VectorTool();
+            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
         }
         public override PainterExtensions.VectorTool VectorTool
         {
@@ -45,6 +45,25 @@ namespace PixelFarm.Drawing.Pdf
             get { return _orientation; }
             set
             { _orientation = value; }
+        }
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
+
+        Pen _currentPen;
+        public override Pen CurrentPen
+        {
+            get { return _currentPen; }
+            set
+            {
+                _currentPen = value;
+            }
         }
         public override float OriginX
         {

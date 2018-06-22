@@ -28,7 +28,7 @@
 //#include "agg_basics.h"
 
 
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public interface ICoordTransformer
     {

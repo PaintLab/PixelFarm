@@ -2,7 +2,7 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 
 namespace LayoutFarm.UI
 {

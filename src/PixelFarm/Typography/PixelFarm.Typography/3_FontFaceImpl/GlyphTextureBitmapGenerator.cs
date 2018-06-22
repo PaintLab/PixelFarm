@@ -189,7 +189,7 @@ namespace PixelFarm.Drawing.Fonts
         static GlyphImage Sharpen(GlyphImage org, int radius)
         {
             GlyphImage newImg = new GlyphImage(org.Width, org.Height);
-            Agg.Imaging.ShapenFilterPdn sharpen1 = new Agg.Imaging.ShapenFilterPdn();
+            CpuBlit.Imaging.ShapenFilterPdn sharpen1 = new CpuBlit.Imaging.ShapenFilterPdn();
             int[] orgBuffer = org.GetImageBuffer();
             unsafe
             {

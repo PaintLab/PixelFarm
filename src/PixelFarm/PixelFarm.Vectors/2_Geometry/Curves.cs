@@ -16,9 +16,8 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public static class Curves
     {

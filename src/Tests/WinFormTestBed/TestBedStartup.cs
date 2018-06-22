@@ -13,12 +13,12 @@ namespace YourImplementation
 #else
             CommonTextServiceSetup.SetupDefaultValues();
 #endif 
-            PixelFarm.Agg.ActualBitmap.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
+            PixelFarm.CpuBlit.ActualBitmap.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 
                 using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
+                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
                     //save
                     newBmp.Save(filename);
                 }

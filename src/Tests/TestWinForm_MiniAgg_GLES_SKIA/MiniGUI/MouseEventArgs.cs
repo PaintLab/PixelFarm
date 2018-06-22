@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.UI
+namespace PixelFarm.CpuBlit.UI
 {
     public enum MouseButtons
     {

@@ -1,8 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.WinGdi
@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _currentFillBrush;
 
         GdiPlusRenderSurface _renderSurface;
-        PixelFarm.Agg.VectorTool _vectorTool;
+        PixelFarm.CpuBlit.VectorTool _vectorTool;
 
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-            _vectorTool = new PixelFarm.Agg.VectorTool();
+            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
         }
         public override PainterExtensions.VectorTool VectorTool
         {
@@ -148,6 +148,26 @@ namespace PixelFarm.Drawing.WinGdi
                 _currentPen.Color = GdiPlusRenderSurface.ConvColor(value);
             }
         }
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
+
+        //-----------------
+        Pen _curPen;
+        public override Pen CurrentPen
+        {
+            get { return _curPen; }
+            set
+            {
+                _curPen = value;
+            }
+        }
         public override DrawBoardOrientation Orientation
         {
             get { return DrawBoardOrientation.LeftTop; }
@@ -164,7 +184,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _renderSurface.CurrentFont = value;
             }
         }
-
+        //-----------------
         public override void Clear(Color color)
         {
             _renderSurface.Clear(color);

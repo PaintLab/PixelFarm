@@ -21,7 +21,7 @@ namespace YourImplementation
             //use common font loader
             //user can create and use other font-loader
             CommonTextServiceSetup.SetupDefaultValues();
-            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(CommonTextServiceSetup.myFontLoader);
+            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(CommonTextServiceSetup.FontLoader);
         }
     }
 #endif

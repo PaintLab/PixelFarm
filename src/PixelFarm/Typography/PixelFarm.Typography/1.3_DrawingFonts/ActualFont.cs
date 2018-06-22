@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {

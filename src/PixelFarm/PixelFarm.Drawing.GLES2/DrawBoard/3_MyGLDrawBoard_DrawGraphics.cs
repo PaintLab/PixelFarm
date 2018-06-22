@@ -1,5 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
+//ArthurHub, Jose Manuel Menendez Poo
 
 // "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
@@ -14,7 +14,7 @@
 // "The Art of War"
 
 using System;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.GLES2
 {
 
@@ -81,7 +81,6 @@ namespace PixelFarm.Drawing.GLES2
                             left, top,
                             width, height,
                             solidBrush.Color);
-
                     }
                     break;
                 case BrushKind.LinearGradient:

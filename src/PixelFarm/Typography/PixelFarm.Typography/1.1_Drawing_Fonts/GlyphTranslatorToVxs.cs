@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 using Typography.OpenFont;
 
 
@@ -74,9 +74,9 @@ namespace PixelFarm.Drawing.Fonts
             }
             else
             {
-                var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                    new PixelFarm.Agg.Transform.AffinePlan(
-                        PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scale, scale));
+                var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                    new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
+                        PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scale, scale));
                 //transform -> flatten ->output
                 //TODO: review here again***
                 VertexStore tmpVxs = new VertexStore();

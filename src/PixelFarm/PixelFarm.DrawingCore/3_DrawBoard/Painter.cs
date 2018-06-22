@@ -20,7 +20,7 @@
 //----------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
 
@@ -54,6 +54,11 @@ namespace PixelFarm.Drawing
         public abstract bool UseSubPixelLcdEffect { get; set; }
         public abstract Color FillColor { get; set; }
         public abstract Color StrokeColor { get; set; }
+
+        //
+        public abstract Brush CurrentBrush { get; set; }
+        public abstract Pen CurrentPen { get; set; }
+
         //
         public abstract void Clear(Color color);
         public abstract DrawBoardOrientation Orientation { get; set; }
@@ -74,7 +79,7 @@ namespace PixelFarm.Drawing
         /// <param name="top"></param>
         public abstract void DrawImage(Image actualImage, double left, double top);
         public abstract void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH);
-        public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
+        public abstract void DrawImage(Image actualImage, params CpuBlit.VertexProcessing.AffinePlan[] affinePlans);
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
 
@@ -102,16 +107,10 @@ namespace PixelFarm.Drawing
            double x,
            double y);
         public abstract void DrawString(RenderVxFormattedString renderVx, double x, double y);
-
-
-
         //////////////////////////////////////////////////////////////////////////////
         //user's object 
         internal Stack<object> _userObjectStack = new Stack<object>();
         internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
-
-
-         
         public abstract PainterExtensions.VectorTool VectorTool { get; }
     }
 
