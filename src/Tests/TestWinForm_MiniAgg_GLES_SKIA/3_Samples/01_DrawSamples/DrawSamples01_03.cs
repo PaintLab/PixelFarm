@@ -315,7 +315,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             af.TransformToVxs(vxs1, vxs2);
             p.Fill(vxs2, Color.Red);
-
+            //-------------------
             VectorToolBox.ReleaseVxs(ref vxs1);
             VectorToolBox.ReleaseVxs(ref vxs2);
         }

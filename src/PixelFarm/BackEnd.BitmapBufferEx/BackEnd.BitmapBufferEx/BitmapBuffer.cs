@@ -493,7 +493,7 @@ namespace PixelFarm.BitmapBufferEx
             }
         }
 
-        class InternalPointD
+        struct InternalPointD
         {
             public double X;
             public double Y;
@@ -504,28 +504,27 @@ namespace PixelFarm.BitmapBufferEx
             }
         }
 
+        static RectD FindMaxBounds(InternalPointD p0, InternalPointD p1, InternalPointD p2, InternalPointD p3)
+        {
+            double left = Math.Min(Math.Min(Math.Min(p0.X, p1.X), p2.X), p3.X);
+            double top = Math.Min(Math.Min(Math.Min(p0.Y, p1.Y), p2.Y), p3.Y);
+            //
+            double right = Math.Max(Math.Max(Math.Max(p0.X, p1.X), p2.X), p3.X);
+            double bottom = Math.Max(Math.Max(Math.Max(p0.Y, p1.Y), p2.Y), p3.Y);
+            return new RectD(left, top, right - left, bottom - top);
+        }
         public override RectD TransformBounds(RectD r1)
         {
-            InternalPointD tmp0 = new InternalPointD(r1.Left, r1.Top);
-            InternalPointD tmp1 = new InternalPointD(r1.Right, r1.Top);
-            InternalPointD tmp2 = new InternalPointD(r1.Right, r1.Bottom);
-            InternalPointD tmp3 = new InternalPointD(r1.Left, r1.Bottom);
+            var tmp0 = new InternalPointD(r1.Left, r1.Top);
+            var tmp1 = new InternalPointD(r1.Right, r1.Top);
+            var tmp2 = new InternalPointD(r1.Right, r1.Bottom);
+            var tmp3 = new InternalPointD(r1.Left, r1.Bottom);
 
             affine.Transform(ref tmp0.X, ref tmp0.Y);
             affine.Transform(ref tmp1.X, ref tmp1.Y);
             affine.Transform(ref tmp2.X, ref tmp2.Y);
             affine.Transform(ref tmp3.X, ref tmp3.Y);
-
-
-            //_tmp2[0] = new System.Drawing.PointF((float)r1.Left, (float)r1.Top);
-            //_tmp2[1] = new System.Drawing.PointF((float)r1.Right, (float)r1.Top);
-            //_tmp2[2] = new System.Drawing.PointF((float)r1.Right, (float)r1.Bottom);
-            //_tmp2[3] = new System.Drawing.PointF((float)r1.Left, (float)r1.Bottom);
-            ////find a new bound
-
-            //return new RectD(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);
-
-            return new RectD(tmp0.X, tmp0.Y, tmp2.X - tmp0.X, tmp2.Y - tmp1.Y);
+            return FindMaxBounds(tmp0, tmp1, tmp2, tmp3);
         }
 
     }

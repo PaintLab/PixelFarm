@@ -28,6 +28,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public class SimpleRect
     {
         RectD bounds;
+        //TODO: review here again
         PathWriter _reusablePathWriter = new PathWriter();
 
         public SimpleRect()
