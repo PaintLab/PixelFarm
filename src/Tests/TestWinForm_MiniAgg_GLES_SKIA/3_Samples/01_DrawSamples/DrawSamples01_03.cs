@@ -278,7 +278,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.Clear(Drawing.Color.White);
             p.UseSubPixelLcdEffect = false;
 
-            p.RenderQuality = RenderQualtity.HighQuality;
+            p.RenderQuality = RenderQualtity.Fast;
             //
             //---red reference line--
             p.DrawLine(0, 400, 800, 400);
@@ -291,7 +291,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.DrawImage(lionImg,
              //move to center of the image (hotspot x,y)
              AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f),
-             //AffinePlan.Scale(0.50, 0.50),//
+             AffinePlan.Scale(0.50, 0.50), 
              AffinePlan.Rotate(AggMath.deg2rad(30)),
              AffinePlan.Translate(_imgW / 2f, _imgH / 2f)
              );
