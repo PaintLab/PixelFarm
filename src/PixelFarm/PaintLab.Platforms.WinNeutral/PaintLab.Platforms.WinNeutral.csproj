@@ -7,8 +7,8 @@
     <ProjectGuid>{2854A4F1-0110-4B47-B773-9A5FD462755E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayoutFarm.Platforms.WinNeutral</RootNamespace>
-    <AssemblyName>LayoutFarm.Platforms.WinNeutral</AssemblyName>
+    <RootNamespace>PaintLab.Platforms.WinNeutral</RootNamespace>
+    <AssemblyName>PaintLab.Platforms.WinNeutral</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

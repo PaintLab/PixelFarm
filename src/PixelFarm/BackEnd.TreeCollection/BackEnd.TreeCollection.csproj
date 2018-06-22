@@ -7,8 +7,8 @@
     <ProjectGuid>{39475DD4-6793-454F-8C48-06452F42C300}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PaintLab.TreeCollection</RootNamespace>
-    <AssemblyName>PaintLab.TreeCollection</AssemblyName>
+    <RootNamespace>BackEnd.TreeCollection</RootNamespace>
+    <AssemblyName>BackEnd.TreeCollection</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -7,8 +7,8 @@
     <ProjectGuid>{53BDC3F9-61B4-4FEC-AF57-AD311420D424}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayoutFarm.Platforms.MinWinForms</RootNamespace>
-    <AssemblyName>LayoutFarm.Platforms.MinWinForms</AssemblyName>
+    <RootNamespace>PaintLab.Platforms.MinWinForms</RootNamespace>
+    <AssemblyName>PaintLab.Platforms.MinWinForms</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

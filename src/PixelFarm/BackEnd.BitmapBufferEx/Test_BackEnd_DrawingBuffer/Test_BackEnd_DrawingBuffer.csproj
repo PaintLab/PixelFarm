@@ -112,9 +112,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer.csproj">
+    <ProjectReference Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx.csproj">
       <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
-      <Name>BackEnd.DrawingBuffer</Name>
+      <Name>BackEnd.BitmapBufferEx</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

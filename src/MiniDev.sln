@@ -175,7 +175,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.7_TreeTest", "0.7_TreeTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_TreeCollection", "Tests\Test_TreeCollection\Test_TreeCollection.csproj", "{2A3DABCE-F953-4A79-BFFC-7E9C52660D62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.DrawingBuffer", "PixelFarm\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer\BackEnd.DrawingBuffer.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.BitmapBufferEx", "PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PaintFx.Shared", "PixelFarm\BackEnd.PaintFx\PdnSharedProject\PaintFx.Shared.shproj", "{536B9B08-98D7-4261-A78D-3B1CCD11D5EF}"
 EndProject
@@ -201,7 +201,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.WebDom", "PixelFar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.WebLexer", "PixelFarm\PaintLab.WebLexer\PaintLab.WebLexer.csproj", "{8FBA6297-44A9-4C3F-B22D-D33E00669942}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_BackEnd_DrawingBuffer", "PixelFarm\BackEnd.DrawingBuffer\Test_BackEnd_DrawingBuffer\Test_BackEnd_DrawingBuffer.csproj", "{9422AB9D-341B-4B72-8611-86418707B2E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_BackEnd_DrawingBuffer", "PixelFarm\BackEnd.BitmapBufferEx\Test_BackEnd_DrawingBuffer\Test_BackEnd_DrawingBuffer.csproj", "{9422AB9D-341B-4B72-8611-86418707B2E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.PrimitiveGeo", "PixelFarm\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj", "{B951FF5B-D7A0-4259-880D-CB7A0C001956}"
 EndProject

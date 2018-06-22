@@ -34,6 +34,48 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBuffer.cs">
+      <Link>5_BitmapBufferEx\BitmapBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs">
+      <Link>5_BitmapBufferEx\AntialiasingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs">
+      <Link>5_BitmapBufferEx\BaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs">
+      <Link>5_BitmapBufferEx\BlitExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs">
+      <Link>5_BitmapBufferEx\ConvertExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs">
+      <Link>5_BitmapBufferEx\FillExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
+      <Link>5_BitmapBufferEx\FilterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs">
+      <Link>5_BitmapBufferEx\LineAaExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs">
+      <Link>5_BitmapBufferEx\LineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs">
+      <Link>5_BitmapBufferEx\ShapeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs">
+      <Link>5_BitmapBufferEx\SplineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs">
+      <Link>5_BitmapBufferEx\TransformationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferFactory.cs">
+      <Link>5_BitmapBufferEx\BitmapBufferFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs">
+      <Link>5_BitmapBufferEx\BitmapContext.cs</Link>
+    </Compile>
     <Compile Include="..\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs">
       <Link>2_Painter\1_Vectors\4_BurningMineCurves\CubicBezier.cs</Link>
     </Compile>
@@ -57,48 +99,6 @@
     </Compile>
     <Compile Include="..\BackEnd.BurningMineCurve\curveutils\VectorHelper.cs">
       <Link>2_Painter\1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBuffer.cs">
-      <Link>5_BitmapBufferEx\BitmapBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs">
-      <Link>5_BitmapBufferEx\AntialiasingExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs">
-      <Link>5_BitmapBufferEx\BaseExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs">
-      <Link>5_BitmapBufferEx\BlitExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs">
-      <Link>5_BitmapBufferEx\ConvertExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs">
-      <Link>5_BitmapBufferEx\FillExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
-      <Link>5_BitmapBufferEx\FilterExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\LineAaExtensions.cs">
-      <Link>5_BitmapBufferEx\LineAaExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
-      <Link>5_BitmapBufferEx\LineExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs">
-      <Link>5_BitmapBufferEx\ShapeExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs">
-      <Link>5_BitmapBufferEx\SplineExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs">
-      <Link>5_BitmapBufferEx\TransformationExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapBufferFactory.cs">
-      <Link>5_BitmapBufferEx\BitmapBufferFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Backend.DrawingBuffer\Backend.DrawingBuffer\BitmapContext.cs">
-      <Link>5_BitmapBufferEx\BitmapContext.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>

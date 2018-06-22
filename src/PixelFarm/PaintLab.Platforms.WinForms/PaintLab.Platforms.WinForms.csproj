@@ -8,8 +8,8 @@
     <ProjectGuid>{4602B28B-EEEC-4A69-854C-B00B8B616837}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayoutFarm.Platforms.WinForms</RootNamespace>
-    <AssemblyName>LayoutFarm.Platforms.WinForms</AssemblyName>
+    <RootNamespace>PaintLab.Platforms.WinForms</RootNamespace>
+    <AssemblyName>PaintLab.Platforms.WinForms</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
