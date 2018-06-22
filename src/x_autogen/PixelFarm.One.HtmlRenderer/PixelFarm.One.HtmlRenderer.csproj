@@ -646,8 +646,8 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\2_Canvas\ColorEx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\AggMemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" />

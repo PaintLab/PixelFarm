@@ -1043,11 +1043,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\AggMemMx.cs">
-      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\AggMemMx.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs">
+      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs</Link>
