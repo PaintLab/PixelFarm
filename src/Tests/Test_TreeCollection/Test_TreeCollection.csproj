@@ -70,9 +70,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.TreeCollection\PixelFarm.TreeCollection.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj">
       <Project>{39475dd4-6793-454f-8c48-06452f42c300}</Project>
-      <Name>PixelFarm.TreeCollection</Name>
+      <Name>BackEnd.TreeCollection</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

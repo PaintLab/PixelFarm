@@ -169,7 +169,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypographyTest.WinForms", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarmTextBox.WinForms", "PixelFarm\Typography\Demo\Windows\PixelFarmTextBox.WinForms\PixelFarmTextBox.WinForms.csproj", "{6C9262B6-F6DD-4C42-A3EF-D8574B324E7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.TreeCollection", "PixelFarm\PixelFarm.TreeCollection\PixelFarm.TreeCollection.csproj", "{39475DD4-6793-454F-8C48-06452F42C300}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.TreeCollection", "PixelFarm\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj", "{39475DD4-6793-454F-8C48-06452F42C300}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.7_TreeTest", "0.7_TreeTest", "{2AB24EA5-039E-4BAB-A7DF-6F64C9F363E9}"
 EndProject
