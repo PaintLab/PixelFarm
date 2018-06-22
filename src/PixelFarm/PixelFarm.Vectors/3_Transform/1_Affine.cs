@@ -93,7 +93,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
 
-    public sealed class Affine : ICoordTransformer
+    public class Affine : ICoordTransformer
     {
         const double EPSILON = 1e-14;
         public readonly double sx, shy, shx, sy, tx, ty;
@@ -108,6 +108,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             sy = copyFrom.sy;
             tx = copyFrom.tx;
             ty = copyFrom.ty;
+            isIdenHint = copyFrom.isIdenHint;
         }
 
         // Custom matrix. Usually used in derived classes
@@ -118,37 +119,53 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             sx = v0_sx; shy = v1_shy;
             shx = v2_shx; sy = v3_sy;
             tx = v4_tx; ty = v5_ty;
+            isIdenHint = false;
         }
-        public double m11 { get { return sx; } }
-        public double m12 { get { return shy; } }
-        public double m21 { get { return shx; } }
-        public double m22 { get { return sy; } }
-        public double dx { get { return tx; } }
-        public double dy { get { return ty; } }
-        // Custom matrix from m[6]
-        private Affine(double[] m)
+        private Affine(double v0_sx, double v1_shy,
+                     double v2_shx, double v3_sy,
+                     double v4_tx, double v5_ty, bool isIdenHint)
         {
-            sx = m[0];
-            shy = m[1];
-            shx = m[2];
-            sy = m[3];
-            tx = m[4];
-            ty = m[5];
+            sx = v0_sx; shy = v1_shy;
+            shx = v2_shx; sy = v3_sy;
+            tx = v4_tx; ty = v5_ty;
+            this.isIdenHint = isIdenHint;
         }
+      
+        
+        //public double m11 { get { return sx; } }
+        //public double m12 { get { return shy; } }
+        //public double m21 { get { return shx; } }
+        //public double m22 { get { return sy; } }
+        //public double dx { get { return tx; } }
+        //public double dy { get { return ty; } }
+        // Custom matrix from m[6]
+        //private Affine(double[] m)
+        //{
+        //    sx = m[0];
+        //    shy = m[1];
+        //    shx = m[2];
+        //    sy = m[3];
+        //    tx = m[4];
+        //    ty = m[5];
+        //}
         private Affine(Affine a, Affine b)
         {
             //copy from a
             //multiply with b
+
+            isIdenHint = false;
             sx = a.sx;
             shy = a.shy;
             shx = a.shx;
             sy = a.sy;
             tx = a.tx;
             ty = a.ty;
+
             MultiplyMatrix(ref sx, ref sy, ref shx, ref shy, ref tx, ref ty, b);
         }
         private Affine(Affine copyFrom, AffinePlan creationPlan)
         {
+            isIdenHint = false;
             //-----------------------
             sx = copyFrom.sx;
             shy = copyFrom.shy;
@@ -236,15 +253,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         private Affine(AffinePlan[] creationPlans)
         {
+
             //-----------------------
             //start with identity matrix
-
             sx = 1;
             shy = 0;
             shx = 0;
             sy = 1;
             tx = 0;
             ty = 0;
+            isIdenHint = true;
             //-----------------------
             int j = creationPlans.Length;
             for (int i = 0; i < j; ++i)
@@ -256,6 +274,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         break;
                     case AffineMatrixCommand.Rotate:
                         {
+                            isIdenHint = false;
                             double angleRad = plan.x;
                             double ca = Math.Cos(angleRad);
                             double sa = Math.Sin(angleRad);
@@ -272,6 +291,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         break;
                     case AffineMatrixCommand.Scale:
                         {
+                            isIdenHint = false;
                             double mm0 = plan.x;
                             double mm3 = plan.y;
                             sx *= mm0;
@@ -284,12 +304,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         break;
                     case AffineMatrixCommand.Translate:
                         {
+                            isIdenHint = false;
                             tx += plan.x;
                             ty += plan.y;
                         }
                         break;
                     case AffineMatrixCommand.Skew:
                         {
+                            isIdenHint = false;
                             double m_sx = 1;
                             double m_sy = 1;
                             double m_shx = Math.Tan(plan.x);
@@ -307,6 +329,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         break;
                     case AffineMatrixCommand.Invert:
                         {
+                            isIdenHint = false;
                             double d = CalculateDeterminantReciprocal();
                             double t0 = sy * d;
                             sy = sx * d;
