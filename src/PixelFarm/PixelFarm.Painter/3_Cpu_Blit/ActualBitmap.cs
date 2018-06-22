@@ -66,8 +66,7 @@ namespace PixelFarm.CpuBlit.Imaging
         }
 
     }
-
-
+     
 }
 namespace PixelFarm.CpuBlit
 {
