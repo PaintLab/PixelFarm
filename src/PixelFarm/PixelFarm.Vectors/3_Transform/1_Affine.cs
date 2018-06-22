@@ -28,7 +28,7 @@
 //#include "agg_basics.h"
 
 using System;
-using PixelFarm.VectorMath;
+
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
@@ -111,7 +111,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
         // Custom matrix. Usually used in derived classes
-        private Affine(double v0_sx, double v1_shy,
+        public Affine(double v0_sx, double v1_shy,
                        double v2_shx, double v3_sy,
                        double v4_tx, double v5_ty)
         {
@@ -398,14 +398,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 1.0, 0.0,
                 0.0, 1.0,
                 x, y);
-        }
-
-        public static Affine NewTranslation(Vector2 offset)
-        {
-            return new Affine(
-                1.0, 0.0,
-                0.0, 1.0,
-                offset.x, offset.y);
         }
 
         public static Affine NewSkewing(double x, double y)

@@ -1053,38 +1053,7 @@ namespace PixelFarm.CpuBlit
 
                 if (affinePlans != null)
                 {
-                    int affCount = affinePlans.Length;
-                    PixelFarm.BitmapBufferEx.AffinePlan[] affs = new PixelFarm.BitmapBufferEx.AffinePlan[affCount];
-                    for (int i = 0; i < affCount; ++i)
-                    {
-                        VertexProcessing.AffinePlan plan = affinePlans[i];
-                        switch (plan.cmd)
-                        {
-                            default:
-                                throw new NotSupportedException();
-                                break;
-                            case VertexProcessing.AffineMatrixCommand.Rotate:
-                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Rotate, plan.x, plan.y);
-                                break;
-                            case VertexProcessing.AffineMatrixCommand.Scale:
-                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Scale, plan.x, plan.y);
-                                break;
-                            case VertexProcessing.AffineMatrixCommand.Skew:
-                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Skew, plan.x, plan.y);
-                                break;
-                            case VertexProcessing.AffineMatrixCommand.Translate:
-                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Translate, plan.x, plan.y);
-                                break;
-                            case VertexProcessing.AffineMatrixCommand.None:
-                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.None, plan.x, plan.y);
-                                break;
-                            case VertexProcessing.AffineMatrixCommand.Invert:
-                                affs[i] = new PixelFarm.BitmapBufferEx.AffinePlan(PixelFarm.BitmapBufferEx.AffineMatrixCommand.Invert, plan.x, plan.y);
-                                break;
-                        }
-                    }
-                    PixelFarm.BitmapBufferEx.MatrixTransform mx = new PixelFarm.BitmapBufferEx.MatrixTransform(affs);
-                    this._bxt.BlitRender(srcBmp, false, 1, mx);
+                    this._bxt.BlitRender(srcBmp, false, 1, new PixelFarm.BitmapBufferEx.MatrixTransform(affinePlans));
                 }
                 else
                 {
@@ -1234,7 +1203,7 @@ namespace PixelFarm.CpuBlit
 
 
     struct GradientSpanPart
-    {   
+    {
         public GradientSpanGen _spanGenGr;
         public LinearGradientColorsProvider _linearGradientColorProvider;
         public SpanInterpolatorLinear _linerInterpolator;

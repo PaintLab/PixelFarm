@@ -35,6 +35,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm.Vectors\3_Transform\1_Affine.cs">
+      <Link>00_Porting\1_Affine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs">
+      <Link>00_Porting\ICoordTransformer.cs</Link>
+    </Compile>
     <Compile Include="BitmapBuffer.cs" />
     <Compile Include="BitmapBufferExtensions\AntialiasingExtensions.cs" />
     <Compile Include="BitmapBufferExtensions\BaseExtensions.cs" />
@@ -52,6 +58,12 @@
     <Compile Include="00_Porting\NativeMethods.cs" />
     <Compile Include="00_Porting\PORTING_NOTMERGE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
+      <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
+      <Name>PixelFarm.PrimitiveGeo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
