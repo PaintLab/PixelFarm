@@ -80,10 +80,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdnPixelEffectPixelFarm\BackEnd.PaintFx.csproj">
-      <Project>{9a7db6ea-7f85-4420-9e42-f0f277524fb7}</Project>
-      <Name>BackEnd.PaintFx</Name>
+    <ProjectReference Include="..\..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">
+      <Project>{fde310c7-9c58-47f9-a6af-3f518613bc4b}</Project>
+      <Name>PixelFarm.DrawingCore</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

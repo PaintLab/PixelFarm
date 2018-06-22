@@ -352,6 +352,21 @@
     <Compile Include="..\PixelFarm.MiniAgg\08_imageresampling\ImageTransform.cs">
       <Link>3_CpuBlit\08_ImageResampling\ImageTransform.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\AffinePlan.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\AffinePlan.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\BasicGeometries.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\Rectangle.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\RectangleF.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\RectangleF.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\RectInt.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\RectInt.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Triangulation\delaunay\AdvancingFront.cs">
       <Link>2_DrawingCanvas\1_Vectors\7_Triangulation\Delaunay\AdvancingFront.cs</Link>
     </Compile>
@@ -463,9 +478,6 @@
     <Compile Include="..\PixelFarm.Vectors\2_geometry\Arc.cs">
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\Arc.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Vectors\2_geometry\BasicGeometries.cs">
-      <Link>1_DrawingCore\2_Geometry\BasicGeometries.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.Vectors\2_geometry\BezireCurve.cs">
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\BezireCurve.cs</Link>
     </Compile>
@@ -481,17 +493,8 @@
     <Compile Include="..\PixelFarm.Vectors\2_geometry\Ellipse.cs">
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\Ellipse.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Vectors\2_geometry\Rectangle.cs">
-      <Link>1_DrawingCore\2_Geometry\Rectangle.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.Vectors\2_geometry\RectangleF.cs">
-      <Link>1_DrawingCore\2_Geometry\RectangleF.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.Vectors\2_geometry\RectD.cs">
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\RectD.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.Vectors\2_Geometry\RectInt.cs">
-      <Link>1_DrawingCore\2_Geometry\RectInt.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Vectors\3_transform\1_Affine.cs">
       <Link>2_DrawingCanvas\1_Vectors\3_Transform\1_Affine.cs</Link>
@@ -504,9 +507,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs">
       <Link>2_DrawingCanvas\1_Vectors\3_Transform\4_SimulEqGeneral.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.Vectors\3_Transform\AffinePlan.cs">
-      <Link>1_DrawingCore\2_Geometry\AffinePlan.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Vectors\3_transform\ICoordTransformer.cs">
       <Link>2_DrawingCanvas\1_Vectors\3_Transform\ICoordTransformer.cs</Link>
