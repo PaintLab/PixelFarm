@@ -41,12 +41,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         const int BASE_SHITF = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
-        IBitmapSrc srcRW;
+        IBitmapSrc _bmpSrc;
         public ImgSpanGenRGBA_NN_StepXBy1(IBitmapSrc src, ISpanInterpolator spanInterpolator)
             : base(spanInterpolator)
         {
-            srcRW = src;
-            if (srcRW.BitDepth != 32)
+            _bmpSrc = src;
+            if (_bmpSrc.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
@@ -61,11 +61,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             spanInterpolator.GetCoord(out x_hr, out y_hr);
             int x_lr = x_hr >> img_subpix_const.SHIFT;
             int y_lr = y_hr >> img_subpix_const.SHIFT;
-            int bufferIndex = srcRW.GetBufferOffsetXY32(x_lr, y_lr);
+
+            int bufferIndex = _bmpSrc.GetBufferOffsetXY32(x_lr, y_lr);
 
             unsafe
             {
-                CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                CpuBlit.Imaging.TempMemPtr srcBufferPtr = _bmpSrc.GetBufferPtr();
                 int* pSource = (int*)srcBufferPtr.Ptr + bufferIndex;
                 {
                     //int* src_ptr = (int*)pSource;
@@ -123,7 +124,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
-        IBitmapSrc srcRW;
+        IBitmapSrc _imgsrc;
         Drawing.Color m_bgcolor;
         int bytesBetweenPixelInclusive;
         bool _mode0 = false;
@@ -135,8 +136,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             : base(inter)
         {
             m_bgcolor = back_color;
-            srcRW = src;
-            bytesBetweenPixelInclusive = srcRW.BytesBetweenPixelsInclusive;
+            _imgsrc = src;
+            bytesBetweenPixelInclusive = _imgsrc.BytesBetweenPixelsInclusive;
         }
 
         public override void Prepare()
@@ -167,9 +168,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 if (_mode0)
                 {
 
-                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = _imgsrc.GetBufferPtr();
                     byte* srcBuffer = srcBufferPtr.BytePtr;
-                    int bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
+                    int bufferIndex = _imgsrc.GetByteBufferOffsetXY(x, y);
                     //unsafe
                     {
 #if true
@@ -212,7 +213,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                     try
                     {
                         ISpanInterpolator spanInterpolator = base.Interpolator;
-                        CpuBlit.Imaging.TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                        CpuBlit.Imaging.TempMemPtr srcBufferPtr = _imgsrc.GetBufferPtr();
                         byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
 
                         spanInterpolator.Begin(x + base.dx, y + base.dy, len);
@@ -221,8 +222,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int back_g = m_bgcolor.green;
                         int back_b = m_bgcolor.blue;
                         int back_a = m_bgcolor.alpha;
-                        int maxx = srcRW.Width - 1;
-                        int maxy = srcRW.Height - 1;
+                        int maxx = _imgsrc.Width - 1;
+                        int maxy = _imgsrc.Height - 1;
 
                         unchecked
                         {
@@ -239,7 +240,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                 if (x_lr >= 0 && y_lr >= 0 &&
                                    x_lr < maxx && y_lr < maxy)
                                 {
-                                    int bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
+                                    int bufferIndex = _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr);
 
 
                                     accColor0 =
@@ -250,7 +251,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     x_hr &= img_subpix_const.MASK;
                                     y_hr &= img_subpix_const.MASK;
 
-                                    bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
+                                    bufferIndex = _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr);
                                     weight = ((img_subpix_const.SCALE - x_hr) *
                                              (img_subpix_const.SCALE - y_hr));
                                     if (weight > BASE_MASK)
@@ -275,7 +276,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     if (weight > BASE_MASK)
                                     {
                                         ++y_lr;
-                                        bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
+                                        bufferIndex = _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr);
                                         accColor0 += weight * srcBuffer[bufferIndex + CO.R];
                                         accColor1 += weight * srcBuffer[bufferIndex + CO.G];
                                         accColor2 += weight * srcBuffer[bufferIndex + CO.B];
@@ -323,7 +324,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                                 BlendInFilterPixel(
                                                     ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -344,7 +345,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -365,7 +366,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -385,7 +386,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                    srcBuffer,
-                                                   srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                   _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
                                                    weight);
                                             }
                                             else

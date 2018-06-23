@@ -34,7 +34,7 @@ namespace PixelFarm.CpuBlit.Imaging
 
         PointF _p0, _p1, _p2, _p3;
         Vector AB, BC, CD, DA;
-        PixelFarm.Drawing.Rectangle rect;
+        PixelFarm.Drawing.Rectangle _destBounds;
         int srcW = 0;
         int srcH = 0;
 
@@ -75,7 +75,7 @@ namespace PixelFarm.CpuBlit.Imaging
         public Point ImageLocation
         {
             //left bottom?
-            get { return new Point(rect.Left, rect.Bottom); }
+            get { return new Point(_destBounds.Left, _destBounds.Bottom); }
         }
         public InterpolationMode Interpolation
         {
@@ -85,12 +85,12 @@ namespace PixelFarm.CpuBlit.Imaging
 
         public int ImageWidth
         {
-            get { return rect.Width; }
+            get { return _destBounds.Width; }
         }
 
         public int ImageHeight
         {
-            get { return rect.Height; }
+            get { return _destBounds.Height; }
         }
 
         public PointF VertexLeftTop
@@ -161,7 +161,7 @@ namespace PixelFarm.CpuBlit.Imaging
             }
 
 
-            rect = new Drawing.Rectangle((int)xmin, (int)ymin, (int)(xmax - xmin), (int)(ymax - ymin));
+            _destBounds = new Drawing.Rectangle((int)xmin, (int)ymin, (int)(xmax - xmin), (int)(ymax - ymin));
             AB = MyVectorHelper.NewFromTwoPoints(_p0, _p1);
             BC = MyVectorHelper.NewFromTwoPoints(_p1, _p2);
             CD = MyVectorHelper.NewFromTwoPoints(_p2, _p3);
@@ -216,21 +216,21 @@ namespace PixelFarm.CpuBlit.Imaging
 
         ActualBitmap GetTransformedBitmapNoInterpolation()
         {
-            var destCB = new ActualBitmap(rect.Width, rect.Height);
+            var destCB = new ActualBitmap(_destBounds.Width, _destBounds.Height);
             var destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
 
             int x1, y1;
             double dab, dbc, dcd, dda;
 
-            int rectWidth = rect.Width;
-            int rectHeight = rect.Height;
+            int rectWidth = _destBounds.Width;
+            int rectHeight = _destBounds.Height;
             Vector ab_vec = this.AB;
             Vector bc_vec = this.BC;
             Vector cd_vec = this.CD;
             Vector da_vec = this.DA;
-            int rectLeft = this.rect.Left;
-            int rectTop = this.rect.Top;
+            int rectLeft = this._destBounds.Left;
+            int rectTop = this._destBounds.Top;
 
             TempMemPtr bufferPtr = _srcBmp.GetBufferPtr();
 
@@ -272,20 +272,20 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             //4 points sampling
             //weight between four point
-            ActualBitmap destCB = new ActualBitmap(rect.Width, rect.Height);
+            ActualBitmap destCB = new ActualBitmap(_destBounds.Width, _destBounds.Height);
             MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
             double dab, dbc, dcd, dda;
             float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
-            int rectWidth = rect.Width;
-            int rectHeight = rect.Height;
+            int rectWidth = _destBounds.Width;
+            int rectHeight = _destBounds.Height;
             Vector ab_vec = this.AB;
             Vector bc_vec = this.BC;
             Vector cd_vec = this.CD;
             Vector da_vec = this.DA;
-            int rectLeft = this.rect.Left;
-            int rectTop = this.rect.Top;
+            int rectLeft = this._destBounds.Left;
+            int rectTop = this._destBounds.Top;
 
             int srcW_lim = srcW - 1;
             int srcH_lim = srcH - 1;
@@ -454,8 +454,8 @@ namespace PixelFarm.CpuBlit.Imaging
             int x1, x2, y1, y2;
             double dab, dbc, dcd, dda;
             //float dx1, dx2, dy1, dy2, dx1y1, dx1y2, dx2y1, dx2y2;
-            int rectWidth = rect.Width;
-            int rectHeight = rect.Height;
+            int destRectWidth = _destBounds.Width;
+            int dectRectHeight = _destBounds.Height;
             Vector ab_vec = this.AB;
             Vector bc_vec = this.BC;
             Vector cd_vec = this.CD;
@@ -465,10 +465,10 @@ namespace PixelFarm.CpuBlit.Imaging
             TempMemPtr bufferPtr = _srcBmp.GetBufferPtr();
             BufferReader4 reader = new BufferReader4((int*)bufferPtr.Ptr, _srcBmp.Width, _srcBmp.Height);
 
-            ActualBitmap destCB = new ActualBitmap(rect.Width, rect.Height);
+            ActualBitmap destCB = new ActualBitmap(_destBounds.Width, _destBounds.Height);
             MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
-            int rectLeft = this.rect.Left;
-            int rectTop = this.rect.Top;
+            int rectLeft = this._destBounds.Left;
+            int rectTop = this._destBounds.Top;
 
             //***
             PixelFarm.Drawing.Color[] colors = new PixelFarm.Drawing.Color[16];
@@ -476,9 +476,9 @@ namespace PixelFarm.CpuBlit.Imaging
             int srcW_lim = srcW - 2;
             int srcH_lim = srcH - 2;
 
-            for (int y = 0; y < rectHeight; ++y)
+            for (int y = 0; y < dectRectHeight; ++y)
             {
-                for (int x = 0; x < rectWidth; ++x)
+                for (int x = 0; x < destRectWidth; ++x)
                 {
                     PointF srcPt = new PointF(x, y);
                     srcPt.Offset(rectLeft, 0);

@@ -105,6 +105,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     public class DrawSample06 : DemoBase
     {
         ActualBitmap lionImg;
+        ActualBitmap halfLion;
         public override void Init()
         {
             UseBitmapExt = false;
@@ -113,15 +114,33 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             if (System.IO.File.Exists(imgFileName))
             {
                 lionImg = DemoHelper.LoadImage(imgFileName);
+                halfLion = CreateHalfSize(lionImg);
             }
 
-        }
 
+        }
         [DemoConfig]
         public bool UseBitmapExt
         {
             get;
             set;
+        }
+
+        ActualBitmap CreateHalfSize(ActualBitmap orgBmp)
+        {
+            //TODO: ...
+            //
+            //1. create a new one
+            ActualBitmap smallBmp = new ActualBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
+
+            //
+            var rendersx = new AggRenderSurface(smallBmp);
+            var painter = new AggPainter(rendersx);
+            //
+            painter.DrawImage(orgBmp, AffinePlan.Scale(0.5, 0.5));
+
+
+            return smallBmp;
         }
         public override void Draw(Painter p)
         {
@@ -134,41 +153,52 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.RenderQuality = RenderQualtity.HighQuality;
             }
 
-
-
             p.Clear(Drawing.Color.White);
             p.UseSubPixelLcdEffect = false;
 
-
-            //
             //---red reference line--
             p.StrokeColor = Color.Black;
             p.DrawLine(0, 400, 800, 400); //draw reference line
-            p.DrawImage(lionImg, 300, 0);
+            //p.DrawImage(lionImg, 300, 0);
+            p.DrawImage(lionImg, 0, 0, 10, 10, 20, 20);
+
+            //
+            //p.DrawImage(halfLion, 50, 0);
 
             int _imgW = lionImg.Width;
             int _imgH = lionImg.Height;
-
-
             int x_pos = 0;
-
-
+            int y_pos = 0;
 
             var affPlans = new AffinePlan[4];
+            //1. create new half-size lion image 
 
-            for (int i = 0; i < 360; i += 30)
-            {
-                
-                affPlans[0] = AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f);
-                affPlans[1] = AffinePlan.Scale(0.50, 0.50);
-                affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
-                affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, _imgH / 2f);
+            //for (int i = 0; i < 360; i += 30)
+            //{
+            //    affPlans[0] = AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f);
+            //    affPlans[1] = AffinePlan.Scale(1, 1);
+            //    affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
+            //    affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, (_imgH / 2f) + y_pos);
+            //    p.DrawImage(halfLion, affPlans);
+
+            //    x_pos += _imgW / 3;
+            //}
 
 
-                p.DrawImage(lionImg, affPlans);
+            //x_pos = 0;
+            //y_pos = 100;
+            //for (int i = 0; i < 360; i += 30)
+            //{ 
+            //    affPlans[0] = AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f);
+            //    affPlans[1] = AffinePlan.Scale(0.50, 0.50);
+            //    affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
+            //    affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, (_imgH / 2f) + y_pos);
+            //    p.DrawImage(lionImg, affPlans); 
+            //    x_pos += _imgW / 3;
+            //}
 
-                x_pos += _imgW / 3;
-            }
+
+
 
             //----
             //

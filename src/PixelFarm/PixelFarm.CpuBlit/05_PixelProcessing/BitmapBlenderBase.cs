@@ -56,9 +56,9 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             return this.raw_buffer32;
         }
 
-        public CpuBlit.Imaging.TempMemPtr GetBufferPtr()
+        public Imaging.TempMemPtr GetBufferPtr()
         {
-            return new CpuBlit.Imaging.TempMemPtr(raw_buffer32);
+            return new Imaging.TempMemPtr(raw_buffer32);
         }
 
         protected void SetBufferToNull()
@@ -584,7 +584,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             if (colorAlpha != 0)
             {
 
-                int[] buffer = this.GetInt32Buffer();
+
+                int[] buffer = this.GetOrgInt32Buffer();
                 int bufferOffset32 = GetBufferOffsetXY32(x, y);
                 do
                 {
@@ -784,7 +785,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 #endif
 
 
-        public int[] GetInt32Buffer()
+        public int[] GetOrgInt32Buffer()
         {
             return this.raw_buffer32;
         }

@@ -211,9 +211,6 @@
     <Compile Include="..\PixelFarm.CpuBlit\04_fragmentprocessing\3_ImgSpanGenRGBA.cs">
       <Link>3_CpuBlit\04_FragmentProcessing\3_ImgSpanGenRGBA.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.CpuBlit\04_fragmentprocessing\4_ImgSpanGenGray.cs">
-      <Link>3_CpuBlit\04_FragmentProcessing\4_ImgSpanGenGray.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.CpuBlit\04_fragmentprocessing\GammaLookUpTable.cs">
       <Link>3_CpuBlit\04_FragmentProcessing\GammaLookUpTable.cs</Link>
     </Compile>
