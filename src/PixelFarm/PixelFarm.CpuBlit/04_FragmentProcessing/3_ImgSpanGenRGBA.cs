@@ -169,8 +169,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 {
 
                     CpuBlit.Imaging.TempMemPtr srcBufferPtr = _imgsrc.GetBufferPtr();
-                    byte* srcBuffer = srcBufferPtr.BytePtr;
-                    int bufferIndex = _imgsrc.GetByteBufferOffsetXY(x, y);
+                    int* srcBuffer = (int*)srcBufferPtr.Ptr;
+                    int bufferIndex = _imgsrc.GetBufferOffsetXY32(x, y);
                     //unsafe
                     {
 #if true
@@ -179,12 +179,19 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                             //TODO: review here, match component?
                             //ORDER IS IMPORTANT!
                             //TODO : use CO (color order instead)
-                            byte b = (byte)srcBuffer[bufferIndex++];
-                            byte g = (byte)srcBuffer[bufferIndex++];
-                            byte r = (byte)srcBuffer[bufferIndex++];
-                            byte a = (byte)srcBuffer[bufferIndex++];
+                            int color = srcBuffer[bufferIndex++];
 
-                            outputColors[startIndex] = Drawing.Color.FromArgb(a, r, g, b);
+                            //byte b = (byte)srcBuffer[bufferIndex++];
+                            //byte g = (byte)srcBuffer[bufferIndex++];
+                            //byte r = (byte)srcBuffer[bufferIndex++];
+                            //byte a = (byte)srcBuffer[bufferIndex++];
+
+                            //outputColors[startIndex] = Drawing.Color.FromArgb(a, r, g, b);
+                            outputColors[startIndex] = Drawing.Color.FromArgb(
+                                (color >> 24) & 0xff,
+                                (color) & 0xff,
+                                (color >> 8) & 0xff,
+                                (color >> 16) & 0xff);
 
                             ++startIndex;
                         } while (--len != 0);
@@ -214,7 +221,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                     {
                         ISpanInterpolator spanInterpolator = base.Interpolator;
                         CpuBlit.Imaging.TempMemPtr srcBufferPtr = _imgsrc.GetBufferPtr();
-                        byte* srcBuffer = (byte*)srcBufferPtr.BytePtr;
+                        int* srcBuffer = (int*)srcBufferPtr.Ptr;
 
                         spanInterpolator.Begin(x + base.dx, y + base.dy, len);
                         int accColor0, accColor1, accColor2, accColor3;
@@ -224,6 +231,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                         int back_a = m_bgcolor.alpha;
                         int maxx = _imgsrc.Width - 1;
                         int maxy = _imgsrc.Height - 1;
+                        int color = 0;
 
                         unchecked
                         {
@@ -240,7 +248,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                 if (x_lr >= 0 && y_lr >= 0 &&
                                    x_lr < maxx && y_lr < maxy)
                                 {
-                                    int bufferIndex = _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr);
+                                    int bufferIndex = _imgsrc.GetBufferOffsetXY32(x_lr, y_lr);
 
 
                                     accColor0 =
@@ -251,45 +259,55 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                     x_hr &= img_subpix_const.MASK;
                                     y_hr &= img_subpix_const.MASK;
 
-                                    bufferIndex = _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr);
+                                    //bufferIndex = _imgsrc.GetBufferOffsetXY32(x_lr, y_lr);
+
                                     weight = ((img_subpix_const.SCALE - x_hr) *
                                              (img_subpix_const.SCALE - y_hr));
                                     if (weight > BASE_MASK)
                                     {
-                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
+                                        color = srcBuffer[bufferIndex];
+
+                                        accColor0 += weight * (color & 0xff);
+                                        accColor1 += weight * ((color >> 8) & 0xff);
+                                        accColor2 += weight * ((color >> 16) & 0xff);
+                                        accColor3 += weight * ((color >> 24) & 0xff);
                                     }
 
                                     weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                                     if (weight > BASE_MASK)
                                     {
-                                        bufferIndex += bytesBetweenPixelInclusive;
-                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
+                                        bufferIndex++;
+                                        color = srcBuffer[bufferIndex];
+                                        //
+                                        accColor0 += weight * (color & 0xff);
+                                        accColor1 += weight * ((color >> 8) & 0xff);
+                                        accColor2 += weight * ((color >> 16) & 0xff);
+                                        accColor3 += weight * ((color >> 24) & 0xff);
                                     }
 
                                     weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                                     if (weight > BASE_MASK)
                                     {
                                         ++y_lr;
-                                        bufferIndex = _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr);
-                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
+                                        //
+                                        bufferIndex = _imgsrc.GetBufferOffsetXY32(x_lr, y_lr);
+                                        color = srcBuffer[bufferIndex];
+                                        //
+                                        accColor0 += weight * (color & 0xff);
+                                        accColor1 += weight * ((color >> 8) & 0xff);
+                                        accColor2 += weight * ((color >> 16) & 0xff);
+                                        accColor3 += weight * ((color >> 24) & 0xff);
                                     }
                                     weight = (x_hr * y_hr);
                                     if (weight > BASE_MASK)
                                     {
-                                        bufferIndex += bytesBetweenPixelInclusive;
-                                        accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                                        accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                                        accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                                        accColor3 += weight * srcBuffer[bufferIndex + CO.A];
+                                        bufferIndex++;
+                                        color = srcBuffer[bufferIndex];
+                                        //
+                                        accColor0 += weight * (color & 0xff);
+                                        accColor1 += weight * ((color >> 8) & 0xff);
+                                        accColor2 += weight * ((color >> 16) & 0xff);
+                                        accColor3 += weight * ((color >> 24) & 0xff);
                                     }
                                     accColor0 >>= img_subpix_const.SHIFT * 2;
                                     accColor1 >>= img_subpix_const.SHIFT * 2;
@@ -324,7 +342,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                                 BlendInFilterPixel(
                                                     ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -345,7 +363,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -366,7 +384,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                     srcBuffer,
-                                                    _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                    _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                     weight);
                                             }
                                             else
@@ -386,7 +404,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                                             {
                                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                                    srcBuffer,
-                                                   _imgsrc.GetByteBufferOffsetXY(x_lr, y_lr),
+                                                   _imgsrc.GetBufferOffsetXY32(x_lr, y_lr),
                                                    weight);
                                             }
                                             else
@@ -438,8 +456,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             }
         }
 
-        static unsafe void BlendInFilterPixel(ref int accColor0, ref int accColor1, ref int accColor2, ref int accColor3,
-            byte* srcBuffer, int bufferIndex, int weight)
+        static unsafe void BlendInFilterPixel(
+            ref int accColor0, ref int accColor1,
+            ref int accColor2, ref int accColor3,
+            int* srcBuffer, int bufferIndex, int weight)
         {
             //accColor0 = back_r;
             //accColor1 = back_g;
@@ -447,10 +467,12 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             //accColor3 = back_a;
             unchecked
             {
-                accColor0 += weight * srcBuffer[bufferIndex + CO.R];
-                accColor1 += weight * srcBuffer[bufferIndex + CO.G];
-                accColor2 += weight * srcBuffer[bufferIndex + CO.B];
-                accColor3 += weight * srcBuffer[bufferIndex + CO.A];
+                int color = srcBuffer[bufferIndex];
+                //
+                accColor0 += weight * (color & 0xff);
+                accColor1 += weight * ((color >> 8) & 0xff);
+                accColor2 += weight * ((color >> 16) & 0xff);
+                accColor3 += weight * ((color >> 24) & 0xff);
             }
         }
 

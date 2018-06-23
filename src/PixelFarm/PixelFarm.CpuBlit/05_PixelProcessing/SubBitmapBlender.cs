@@ -25,7 +25,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// sub-image reader /writer/blend part of org bitmap
     /// </summary>
     public class SubBitmapBlender : BitmapBlenderBase
-    { 
+    {
         public SubBitmapBlender(IBitmapBlender image,
             int arrayOffset32,
             int width,
@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 bitsPerPixel,
                 distanceBetweenPixelsInclusive);
 
-            int srcOffset32 = sourceImage.GetByteBufferOffsetXY(0, 0) / 4;
+            int srcOffset32 = sourceImage.GetBufferOffsetXY32(0, 0);
             int[] buffer = sourceImage.GetOrgInt32Buffer();
             SetBuffer(buffer, srcOffset32 + arrayElemOffset);
 
@@ -184,8 +184,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             int bottom = Math.Max(0, subImgBounds.Bottom);
             int width = Math.Min(parentImage.Width - left, subImgBounds.Width);
             int height = Math.Min(parentImage.Height - bottom, subImgBounds.Height);
-            int bufferOffsetToFirstPixel = parentImage.GetByteBufferOffsetXY(left, bottom);
-            return new SubBitmapBlender(parentImage, bufferOffsetToFirstPixel / 4, width, height);
+            return new SubBitmapBlender(parentImage, parentImage.GetBufferOffsetXY32(left, bottom), width, height);
         }
     }
 

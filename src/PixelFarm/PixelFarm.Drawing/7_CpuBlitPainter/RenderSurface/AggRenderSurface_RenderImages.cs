@@ -540,10 +540,10 @@ namespace PixelFarm.CpuBlit
             //goto row
             return ((_y + y) * _orgSrcW) + _x + x;
         }
-        public int GetByteBufferOffsetXY(int x, int y)
-        {
-            throw new NotImplementedException();
-        }
+        //public int GetByteBufferOffsetXY(int x, int y)
+        //{
+        //    throw new NotImplementedException();
+        //}
         public TempMemPtr GetBufferPtr()
         {
             return _src.GetBufferPtr();

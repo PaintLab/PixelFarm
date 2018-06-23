@@ -60,10 +60,10 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             this.handle1.Free();
         }
-        public unsafe byte* BytePtr
-        {
-            get { return (byte*)handle1.AddrOfPinnedObject(); }
-        }
+        //public unsafe byte* BytePtr
+        //{
+        //    get { return (byte*)handle1.AddrOfPinnedObject(); }
+        //}
 
     }
 
@@ -321,10 +321,10 @@ namespace PixelFarm.CpuBlit
             return new CpuBlit.Imaging.TempMemPtr(pixelBuffer);
         }
 
-        int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
-        {
-            return ((y * width) + x) << 2;
-        }
+        //int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
+        //{
+        //    return ((y * width) + x) << 2;
+        //}
 
         int IBitmapSrc.GetBufferOffsetXY32(int x, int y)
         {
@@ -361,9 +361,7 @@ namespace PixelFarm.CpuBlit
         int[] GetOrgInt32Buffer();
         int GetBufferOffsetXY32(int x, int y);
 
-        Imaging.TempMemPtr GetBufferPtr();
-        int GetByteBufferOffsetXY(int x, int y);
-        
+        Imaging.TempMemPtr GetBufferPtr(); 
 
        
         int BytesBetweenPixelsInclusive { get; }

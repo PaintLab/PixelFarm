@@ -149,10 +149,10 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             throw new System.NotSupportedException();
         }
-        public int GetByteBufferOffsetXY(int x, int y)
-        {
-            return linkedImage.GetByteBufferOffsetXY(x, y);
-        }
+        //public int GetByteBufferOffsetXY(int x, int y)
+        //{
+        //    return linkedImage.GetByteBufferOffsetXY(x, y);
+        //}
 
         public int GetBufferOffsetXY32(int x, int y)
         {
