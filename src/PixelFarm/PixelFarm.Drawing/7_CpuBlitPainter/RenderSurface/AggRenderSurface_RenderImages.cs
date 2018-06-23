@@ -309,10 +309,13 @@ namespace PixelFarm.CpuBlit
             // 
             VectorToolBox.ReleaseVxs(ref v1, ref v2);
         }
+
+
+        SubBitmap subBitmap = new SubBitmap();
         public void Render(IBitmapSrc source, double destX, double destY, double srcX, double srcY, double srcW, double srcH)
         {
             //copy some part of src img to destination
-            SubBitmap subBitmap = new SubBitmap();
+
             subBitmap.SetSrcBitmap(source, (int)srcX, (int)srcY, (int)srcW, (int)srcH);
             Render(subBitmap, destX, destY);
         }
@@ -487,15 +490,17 @@ namespace PixelFarm.CpuBlit
     class SubBitmap : IBitmapSrc
     {
         IBitmapSrc _src;
-        int _sx, _sy, _w, _h;
+        int _orgSrcW;
+        int _x, _y, _w, _h;
         public SubBitmap()
         {
         }
         public void SetSrcBitmap(IBitmapSrc src, int x, int y, int w, int h)
         {
+            _orgSrcW = src.Width;//
             _src = src;
-            _sx = x;
-            _sy = y;
+            _x = x;
+            _y = y;
             _w = w;
             _h = h;
         }
@@ -527,13 +532,13 @@ namespace PixelFarm.CpuBlit
         }
         public RectInt GetBounds()
         {
-            return new RectInt(_sx, _sy, _sx + _w, _sy + _h);
+            return new RectInt(_x, _y, _x + _w, _y + _h);
         }
 
         public int GetBufferOffsetXY32(int x, int y)
         {
             //goto row
-            return ((_sy + y) * _w) + _sx + x;
+            return ((_y + y) * _orgSrcW) + _x + x;
         }
         public int GetByteBufferOffsetXY(int x, int y)
         {

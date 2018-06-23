@@ -953,13 +953,13 @@ namespace PixelFarm.CpuBlit
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
                 //place left upper corner at specific x y                    
-                this._aggsx.Render(actualBmp, left, this.Height - (top + actualBmp.Height));
+                this._aggsx.Render(actualBmp, left, this.Height - (top + actualBmp.Height), srcX, srcY, srcW, srcH);
             }
             else
             {
                 //left-bottom as original
                 //place left-lower of the img at specific (x,y)
-                this._aggsx.Render(actualBmp, left, top);
+                this._aggsx.Render(actualBmp, left, top, srcX, srcY, srcW, srcH);
             }
 
             //restore...

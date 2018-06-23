@@ -160,7 +160,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.StrokeColor = Color.Black;
             p.DrawLine(0, 400, 800, 400); //draw reference line
             //p.DrawImage(lionImg, 300, 0);
-            p.DrawImage(lionImg, 0, 0, 10, 10, 20, 20);
+            p.DrawImage(lionImg, 0, 0, 10, 10, 100, 100);
 
             //
             //p.DrawImage(halfLion, 50, 0);
@@ -200,28 +200,28 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
 
-            //----
-            //
-            VectorToolBox.GetFreeVxs(out VertexStore vxs1);
-            VectorToolBox.GetFreeVxs(out VertexStore vxs2);
+            ////----
+            ////
+            //VectorToolBox.GetFreeVxs(out VertexStore vxs1);
+            //VectorToolBox.GetFreeVxs(out VertexStore vxs2);
 
-            SimpleRect sRect = new SimpleRect();
-            int x = 0, y = 0, w = 100, h = 100;
-            sRect.SetRect(x, y, x + w, y + h);
-            sRect.MakeVxs(vxs1);
-            p.Fill(vxs1, Color.Blue);
-            //-------------------
-            Affine af = Affine.NewMatix(
-                AffinePlan.Translate(-w / 2f, -h / 2f),
-                AffinePlan.Rotate(AggMath.deg2rad(30)),
-                AffinePlan.Translate(w / 2f, h / 2f)
-                );
+            //SimpleRect sRect = new SimpleRect();
+            //int x = 0, y = 0, w = 100, h = 100;
+            //sRect.SetRect(x, y, x + w, y + h);
+            //sRect.MakeVxs(vxs1);
+            //p.Fill(vxs1, Color.Blue);
+            ////-------------------
+            //Affine af = Affine.NewMatix(
+            //    AffinePlan.Translate(-w / 2f, -h / 2f),
+            //    AffinePlan.Rotate(AggMath.deg2rad(30)),
+            //    AffinePlan.Translate(w / 2f, h / 2f)
+            //    );
 
-            af.TransformToVxs(vxs1, vxs2);
-            p.Fill(vxs2, Color.Red);
-            //-------------------
-            VectorToolBox.ReleaseVxs(ref vxs1);
-            VectorToolBox.ReleaseVxs(ref vxs2);
+            //af.TransformToVxs(vxs1, vxs2);
+            //p.Fill(vxs2, Color.Red);
+            ////-------------------
+            //VectorToolBox.ReleaseVxs(ref vxs1);
+            //VectorToolBox.ReleaseVxs(ref vxs2);
         }
     }
 
