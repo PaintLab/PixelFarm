@@ -56,9 +56,9 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             return this.raw_buffer32;
         }
 
-        public CpuBlit.Imaging.TempMemPtr GetBufferPtr()
+        public Imaging.TempMemPtr GetBufferPtr()
         {
-            return new CpuBlit.Imaging.TempMemPtr(raw_buffer32);
+            return new Imaging.TempMemPtr(raw_buffer32);
         }
 
         protected void SetBufferToNull()
@@ -156,7 +156,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             if (BitDepth == sourceImage.BitDepth)
             {
                 int lengthInBytes = clippedSourceImageRect.Width * BytesBetweenPixelsInclusive;
-                int sourceOffset = sourceImage.GetByteBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom);
+                int sourceOffset = sourceImage.GetBufferOffsetXY32(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom);
 
                 unsafe
                 {
@@ -166,10 +166,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
                     byte* sourceBuffer = (byte*)memPtr.Ptr;
                     byte* destBuffer = (byte*)destPtr.Ptr;
-                    int destOffset = GetByteBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
+                    int destOffset = GetBufferOffsetXY32(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
+
                     for (int i = 0; i < clippedSourceImageRect.Height; i++)
                     {
-                        MemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
+                        MemMx.memmove(destBuffer, destOffset * 4, sourceBuffer, sourceOffset, lengthInBytes);
                         sourceOffset += sourceImage.Stride;
                         destOffset += Stride;
                     }
@@ -193,7 +194,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                     int numPixelsToCopy = clippedSourceImageRect.Width;
                                     for (int i = clippedSourceImageRect.Bottom; i < clippedSourceImageRect.Top; i++)
                                     {
-                                        int sourceOffset = sourceImage.GetByteBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom + i);
+                                        int sourceOffset = sourceImage.GetBufferOffsetXY32(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom + i);
 
                                         //byte[] sourceBuffer = sourceImage.GetBuffer();
                                         //byte[] destBuffer = GetBuffer();
@@ -201,19 +202,26 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                                         CpuBlit.Imaging.TempMemPtr srcMemPtr = sourceImage.GetBufferPtr();
                                         CpuBlit.Imaging.TempMemPtr destBufferPtr = this.GetBufferPtr();
 
-                                        int destOffset = GetByteBufferOffsetXY(
+                                        int destOffset = GetBufferOffsetXY32(
                                             clippedSourceImageRect.Left + destXOffset,
                                             clippedSourceImageRect.Bottom + i + destYOffset);
                                         unsafe
                                         {
-                                            byte* destBuffer = (byte*)destBufferPtr.Ptr;
-                                            byte* sourceBuffer = (byte*)srcMemPtr.Ptr;
+                                            int* destBuffer = (int*)destBufferPtr.Ptr;
+                                            int* sourceBuffer = (int*)srcMemPtr.Ptr;
                                             for (int x = 0; x < numPixelsToCopy; x++)
                                             {
-                                                destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
-                                                destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
-                                                destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
-                                                destBuffer[destOffset++] = 255;
+                                                int color = sourceBuffer[sourceOffset++];
+
+                                                destBuffer[destOffset++] =
+                                                     (255 << 24) | //a
+                                                     (color & 0xff0000) | //b
+                                                     (color & 0x00ff00) | //g
+                                                     (color & 0xff);
+
+                                                //destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
+                                                //destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
+                                                //destBuffer[destOffset++] = 255;
                                             }
                                         }
 
@@ -410,25 +418,25 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             return _outputPxBlender.PixelToColorRGBA(raw_buffer32, GetBufferOffsetXY32(x, y));
         }
-        public int GetByteBufferOffsetXY(int x, int y)
-        {
+//        public int GetByteBufferOffsetXY(int x, int y)
+//        {
 
-#if DEBUG
-            //if (y >= yTableArray.Length ||
-            //    x >= xTableArray.Length)
-            //{
-            //    return -1;
-            //    //throw new NotSupportedException();
-            //}
-            if (y >= height || x >= width)
-            {
-                return -1;
-            }
-#endif
+//#if DEBUG
+//            //if (y >= yTableArray.Length ||
+//            //    x >= xTableArray.Length)
+//            //{
+//            //    return -1;
+//            //    //throw new NotSupportedException();
+//            //}
+//            if (y >= height || x >= width)
+//            {
+//                return -1;
+//            }
+//#endif
 
-            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) << 2;// x4
+//            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) << 2;// x4
 
-        }
+//        }
         public int GetBufferOffsetXY32Check(int x, int y)
         {
 
@@ -584,7 +592,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             if (colorAlpha != 0)
             {
 
-                int[] buffer = this.GetInt32Buffer();
+
+                int[] buffer = this.GetOrgInt32Buffer();
                 int bufferOffset32 = GetBufferOffsetXY32(x, y);
                 do
                 {
@@ -784,7 +793,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 #endif
 
 
-        public int[] GetInt32Buffer()
+        public int[] GetOrgInt32Buffer()
         {
             return this.raw_buffer32;
         }

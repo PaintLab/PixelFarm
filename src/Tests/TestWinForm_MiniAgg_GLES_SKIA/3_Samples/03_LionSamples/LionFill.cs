@@ -66,7 +66,7 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public override void MouseDrag(int x, int y)
         {
-            lionFill.Move(x, y);
+            lionFill.Move(x, y); 
         }
         [DemoConfig]
         public bool UseBitmapExt

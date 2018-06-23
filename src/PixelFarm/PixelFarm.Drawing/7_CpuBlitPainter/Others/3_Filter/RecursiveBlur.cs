@@ -486,6 +486,8 @@ namespace PixelFarm.CpuBlit.Imaging
 
             for (y = 0; y < h; y++)
             {
+
+                //TODO: review get pixel here...
                 RecursizeBlurCalculator c = m_RecursizeBlurCalculatorFactory;
                 c.FromPix(img.GetPixel(0, y));
                 Sum1Array[0].Calc(b, b1, b2, b3, c, c, c, c);
