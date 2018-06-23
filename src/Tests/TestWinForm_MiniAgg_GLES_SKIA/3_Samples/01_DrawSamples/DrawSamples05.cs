@@ -159,8 +159,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //---red reference line--
             p.StrokeColor = Color.Black;
             p.DrawLine(0, 400, 800, 400); //draw reference line
-            //p.DrawImage(lionImg, 300, 0);
-            p.DrawImage(lionImg, 0, 0, 10, 10, 100, 100);
+            p.DrawImage(lionImg, 300, 0);
+            //p.DrawImage(lionImg, 0, 0, 10, 10, 100, 100);
 
             //
             //p.DrawImage(halfLion, 50, 0);
@@ -185,43 +185,43 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //}
 
 
-            //x_pos = 0;
-            //y_pos = 100;
-            //for (int i = 0; i < 360; i += 30)
-            //{ 
-            //    affPlans[0] = AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f);
-            //    affPlans[1] = AffinePlan.Scale(0.50, 0.50);
-            //    affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
-            //    affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, (_imgH / 2f) + y_pos);
-            //    p.DrawImage(lionImg, affPlans); 
-            //    x_pos += _imgW / 3;
-            //}
+            x_pos = 0;
+            y_pos = 100;
+            for (int i = 0; i < 360; i += 30)
+            {
+                affPlans[0] = AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f);
+                affPlans[1] = AffinePlan.Scale(0.50, 0.50);
+                affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
+                affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, (_imgH / 2f) + y_pos);
+                p.DrawImage(lionImg, affPlans);
+                x_pos += _imgW / 3;
+            }
 
 
 
 
-            ////----
-            ////
-            //VectorToolBox.GetFreeVxs(out VertexStore vxs1);
-            //VectorToolBox.GetFreeVxs(out VertexStore vxs2);
+            //----
+            //
+            VectorToolBox.GetFreeVxs(out VertexStore vxs1);
+            VectorToolBox.GetFreeVxs(out VertexStore vxs2);
 
-            //SimpleRect sRect = new SimpleRect();
-            //int x = 0, y = 0, w = 100, h = 100;
-            //sRect.SetRect(x, y, x + w, y + h);
-            //sRect.MakeVxs(vxs1);
-            //p.Fill(vxs1, Color.Blue);
-            ////-------------------
-            //Affine af = Affine.NewMatix(
-            //    AffinePlan.Translate(-w / 2f, -h / 2f),
-            //    AffinePlan.Rotate(AggMath.deg2rad(30)),
-            //    AffinePlan.Translate(w / 2f, h / 2f)
-            //    );
+            SimpleRect sRect = new SimpleRect();
+            int x = 0, y = 0, w = 100, h = 100;
+            sRect.SetRect(x, y, x + w, y + h);
+            sRect.MakeVxs(vxs1);
+            p.Fill(vxs1, Color.Blue);
+            //-------------------
+            Affine af = Affine.NewMatix(
+                AffinePlan.Translate(-w / 2f, -h / 2f),
+                AffinePlan.Rotate(AggMath.deg2rad(30)),
+                AffinePlan.Translate(w / 2f, h / 2f)
+                );
 
-            //af.TransformToVxs(vxs1, vxs2);
-            //p.Fill(vxs2, Color.Red);
-            ////-------------------
-            //VectorToolBox.ReleaseVxs(ref vxs1);
-            //VectorToolBox.ReleaseVxs(ref vxs2);
+            af.TransformToVxs(vxs1, vxs2);
+            p.Fill(vxs2, Color.Red);
+            //-------------------
+            VectorToolBox.ReleaseVxs(ref vxs1);
+            VectorToolBox.ReleaseVxs(ref vxs2);
         }
     }
 
