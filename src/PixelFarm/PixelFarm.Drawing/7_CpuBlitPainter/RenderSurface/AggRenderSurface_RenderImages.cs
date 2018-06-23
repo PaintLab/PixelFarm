@@ -26,6 +26,7 @@ using PixelFarm.CpuBlit.FragmentProcessing;
 
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.Imaging;
 
 namespace PixelFarm.CpuBlit
 {
@@ -90,81 +91,6 @@ namespace PixelFarm.CpuBlit
             return Affine.NewMatix(plan);
         }
 
-
-        //static Affine BuildImageBoundsPath(
-        //    int srcW, int srcH,
-        //    double destX, double destY,
-        //    double hotspotOffsetX, double hotSpotOffsetY,
-        //    double scaleX, double scaleY,
-        //    double angleRad,
-        //    VertexStore outputDestImgRect)
-        //{
-
-        //    AffinePlan[] plans = new AffinePlan[4];
-        //    int i = 0;
-        //    if (hotspotOffsetX != 0.0f || hotSpotOffsetY != 0.0f)
-        //    {
-        //        plans[i] = AffinePlan.Translate(-hotspotOffsetX, -hotSpotOffsetY);
-        //        i++;
-        //    }
-
-        //    if (scaleX != 1 || scaleY != 1)
-        //    {
-        //        plans[i] = AffinePlan.Scale(scaleX, scaleY);
-        //        i++;
-        //    }
-
-        //    if (angleRad != 0)
-        //    {
-        //        plans[i] = AffinePlan.Rotate(angleRad);
-        //        i++;
-        //    }
-
-        //    if (destX != 0 || destY != 0)
-        //    {
-        //        plans[i] = AffinePlan.Translate(destX, destY);
-        //        i++;
-        //    }
-
-        //    outputDestImgRect.Clear();
-        //    outputDestImgRect.AddMoveTo(0, 0);
-        //    outputDestImgRect.AddLineTo(srcW, 0);
-        //    outputDestImgRect.AddLineTo(srcW, srcH);
-        //    outputDestImgRect.AddLineTo(0, srcH);
-        //    outputDestImgRect.AddCloseFigure();
-        //    return Affine.NewMatix(plans);
-        //}
-        //static Affine BuildImageBoundsPath(
-        //    int srcW, int srcH,
-        //    double destX, double destY,
-        //    VertexStore outputDestImgRect)
-        //{
-        //    AffinePlan plan = new AffinePlan();
-        //    if (destX != 0 || destY != 0)
-        //    {
-        //        plan = AffinePlan.Translate(destX, destY);
-        //    }
-
-        //    outputDestImgRect.Clear();
-        //    outputDestImgRect.AddMoveTo(0, 0);
-        //    outputDestImgRect.AddLineTo(srcW, 0);
-        //    outputDestImgRect.AddLineTo(srcW, srcH);
-        //    outputDestImgRect.AddLineTo(0, srcH);
-        //    outputDestImgRect.AddCloseFigure();
-        //    return Affine.NewMatix(plan);
-        //}
-        //static Affine BuildImageBoundsPath(int srcW, int srcH,
-        //   AffinePlan[] affPlans,
-        //   VertexStore outputDestImgRect)
-        //{
-        //    outputDestImgRect.Clear();
-        //    outputDestImgRect.AddMoveTo(0, 0);
-        //    outputDestImgRect.AddLineTo(srcW, 0);
-        //    outputDestImgRect.AddLineTo(srcW, srcH);
-        //    outputDestImgRect.AddLineTo(0, srcH);
-        //    outputDestImgRect.AddCloseFigure();
-        //    return Affine.NewMatix(affPlans);
-        //}
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
@@ -311,9 +237,9 @@ namespace PixelFarm.CpuBlit
                     //case 24:
                     //    imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
                     //    break;
-                    case 8:
-                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
-                        break;
+                    //case 8:
+                    //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
+                    //    break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -380,12 +306,19 @@ namespace PixelFarm.CpuBlit
             TransformToVxs(ref destRectTransform, v1, v2);
 
             Render(v2, imgSpanGen);
-            //
-
+            // 
             VectorToolBox.ReleaseVxs(ref v1, ref v2);
-
         }
-        
+
+
+        SubBitmap subBitmap = new SubBitmap();
+        public void Render(IBitmapSrc source, double destX, double destY, double srcX, double srcY, double srcW, double srcH)
+        {
+            //copy some part of src img to destination
+
+            subBitmap.SetSrcBitmap(source, (int)srcX, (int)srcY, (int)srcW, (int)srcH);
+            Render(subBitmap, destX, destY);
+        }
         public void Render(IBitmapSrc source, double destX, double destY)
         {
             int inScaleX = 1;
@@ -448,16 +381,13 @@ namespace PixelFarm.CpuBlit
                 canUseMipMaps = false;
             }
 
-            bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
+            bool needSourceResampling = isScale || isRotated;// || destX != (int)destX || destY != (int)destY;
 
 
             VectorToolBox.GetFreeVxs(out VertexStore imgBoundsPath);
             // this is the fast drawing path
             if (needSourceResampling)
             {
-
-
-
 
 #if false // if the scalling is small enough the results can be improved by using mip maps
                 
@@ -536,9 +466,9 @@ namespace PixelFarm.CpuBlit
                     case 32:
                         imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
-                    case 8:
-                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
-                        break;
+                    //case 8:
+                    //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
+                    //    break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -556,4 +486,82 @@ namespace PixelFarm.CpuBlit
             VectorToolBox.ReleaseVxs(ref imgBoundsPath);
         }
     }
+
+    class SubBitmap : IBitmapSrc
+    {
+        IBitmapSrc _src;
+        int _orgSrcW;
+        int _x, _y, _w, _h;
+        public SubBitmap()
+        {
+        }
+        public void SetSrcBitmap(IBitmapSrc src, int x, int y, int w, int h)
+        {
+            _orgSrcW = src.Width;//
+            _src = src;
+            _x = x;
+            _y = y;
+            _w = w;
+            _h = h;
+        }
+
+        public int BitDepth
+        {
+            get
+            {
+                return 32; //
+            }
+        }
+        public int Width
+        {
+            get { return _w; }
+        }
+
+        public int Height
+        {
+            get { return _h; }
+        }
+
+        public int Stride
+        {
+            get { return _w << 2; }
+        }
+        public int BytesBetweenPixelsInclusive
+        {
+            get { throw new NotSupportedException(); }
+        }
+        public RectInt GetBounds()
+        {
+            return new RectInt(_x, _y, _x + _w, _y + _h);
+        }
+
+        public int GetBufferOffsetXY32(int x, int y)
+        {
+            //goto row
+            return ((_y + y) * _orgSrcW) + _x + x;
+        }
+        //public int GetByteBufferOffsetXY(int x, int y)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        public TempMemPtr GetBufferPtr()
+        {
+            return _src.GetBufferPtr();
+        }
+        public int[] GetOrgInt32Buffer()
+        {
+            return _src.GetOrgInt32Buffer();
+        }
+        public Color GetPixel(int x, int y)
+        {
+            //TODO: not support here
+            throw new NotImplementedException();
+        }
+        public void ReplaceBuffer(int[] newBuffer)
+        {
+            //not support replace buffer?
+
+        }
+    }
+
 }

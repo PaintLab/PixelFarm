@@ -60,18 +60,18 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             this.handle1.Free();
         }
-        public unsafe byte* BytePtr
-        {
-            get { return (byte*)handle1.AddrOfPinnedObject(); }
-        }
+        //public unsafe byte* BytePtr
+        //{
+        //    get { return (byte*)handle1.AddrOfPinnedObject(); }
+        //}
 
     }
-     
+
 }
 namespace PixelFarm.CpuBlit
 {
 
-    public sealed class ActualBitmap : PixelFarm.Drawing.Image, IBitmapSrc
+    public sealed class ActualBitmap : Image, IBitmapSrc
     {
         int width;
         int height;
@@ -312,7 +312,7 @@ namespace PixelFarm.CpuBlit
         {
             return new RectInt(0, 0, width, height);
         }
-        int[] IBitmapSrc.GetInt32Buffer()
+        int[] IBitmapSrc.GetOrgInt32Buffer()
         {
             return this.pixelBuffer;
         }
@@ -321,10 +321,10 @@ namespace PixelFarm.CpuBlit
             return new CpuBlit.Imaging.TempMemPtr(pixelBuffer);
         }
 
-        int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
-        {
-            return ((y * width) + x) << 2;
-        }
+        //int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
+        //{
+        //    return ((y * width) + x) << 2;
+        //}
 
         int IBitmapSrc.GetBufferOffsetXY32(int x, int y)
         {
@@ -344,26 +344,29 @@ namespace PixelFarm.CpuBlit
               (byte)(pixelValue >> 16),
               (byte)(pixelValue >> 8),
               (byte)(pixelValue));
-
         }
-
     }
+
 
 
     public interface IBitmapSrc
     {
         int BitDepth { get; }
         int Width { get; }
-        int Height { get; }
-        RectInt GetBounds();
-        int[] GetInt32Buffer();
-        CpuBlit.Imaging.TempMemPtr GetBufferPtr();
-        int GetByteBufferOffsetXY(int x, int y);
-        int GetBufferOffsetXY32(int x, int y);
         int Stride { get; }
+        int Height { get; }
+
+        RectInt GetBounds();
+
+        int[] GetOrgInt32Buffer();
+        int GetBufferOffsetXY32(int x, int y);
+
+        Imaging.TempMemPtr GetBufferPtr(); 
+
+       
         int BytesBetweenPixelsInclusive { get; }
         void ReplaceBuffer(int[] newBuffer);
-        PixelFarm.Drawing.Color GetPixel(int x, int y);
+        Color GetPixel(int x, int y);
     }
 
     public static class ActualBitmapExtensions
