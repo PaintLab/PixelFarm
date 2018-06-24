@@ -56,6 +56,7 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\21_HandPaint\MyBrushPath.cs" />
     <Compile Include="3_Samples\21_HandPaint\SmoothBrush2.cs" />
@@ -211,6 +212,14 @@
       <DependentUpon>SoftAggControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="..\Data\Textures\tahoma -358105584.info">
+      <Link>Data\tahoma -358105584.info</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Data\Textures\tahoma -488129008.info">
+      <Link>Data\tahoma -488129008.info</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -299,6 +308,14 @@
   <ItemGroup>
     <Content Include="..\Data\lion1.png">
       <Link>Data\lion1.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\Textures\tahoma -358105584.info.png">
+      <Link>Data\tahoma -358105584.info.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\Textures\tahoma -488129008.info.png">
+      <Link>Data\tahoma -488129008.info.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Samples\arrow2.svg">
