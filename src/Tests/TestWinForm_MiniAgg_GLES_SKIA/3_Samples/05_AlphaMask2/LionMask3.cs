@@ -22,7 +22,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     {
         int maskAlphaSliderValue = 100;
 
-        
+
         double angle = 0;
         double lionScale = 1.0;
         double skewX = 0;
@@ -30,7 +30,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         bool isMaskSliderValueChanged = true;
 
         ActualBitmap lionImg;
-        ActualBitmap alphaBitmap;
+        ActualBitmap _alphaBitmap;
 
         public LionAlphaMask3()
         {
@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 lionImg = DemoHelper.LoadImage(imgFileName);
             }
 
-            
+
             this.Width = 800;
             this.Height = 600;
 
@@ -60,8 +60,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //----------
             //same size
-            alphaBitmap = new ActualBitmap(width, height);
-            var alphaPainter = AggPainter.Create(alphaBitmap, new PixelBlenderBGRA());
+            _alphaBitmap = new ActualBitmap(width, height);
+            var alphaPainter = AggPainter.Create(_alphaBitmap, new PixelBlenderBGRA());
             alphaPainter.Clear(Color.Black);
             //------------ 
 
@@ -106,8 +106,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 }
             }
             VectorToolBox.ReleaseVxs(ref v1);
-            maskPixelBlender.SetMaskImage(alphaBitmap);
-            maskPixelBlenderPerCompo.SetMaskImage(alphaBitmap);
+            maskPixelBlender.SetMaskBitmap(_alphaBitmap);
+            maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap);
         }
 
 

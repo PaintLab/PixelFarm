@@ -56,6 +56,7 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />

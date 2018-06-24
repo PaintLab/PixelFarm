@@ -10,16 +10,13 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using PixelFarm;
-using PixelFarm.Drawing.Fonts;
-
-
+using PixelFarm.Drawing.Fonts; 
 using Mini;
 
 
 using Typography.OpenFont; 
 using Typography.Rendering;
-using Typography.TextLayout; 
-using PixelFarm.CpuBlit.VertexProcessing;
+using Typography.TextLayout;  
 namespace PixelFarm.CpuBlit.Sample_Draw
 {
 
@@ -27,13 +24,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     public class DrawSample04 : DemoBase
     {
 
-        Stroke stroke = new Stroke(1);
+        
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<ActualBitmap> _bmpFontMx;
         SimpleFontAtlas _fontAtlas;
-        RequestFont _font;
-
+        RequestFont _font; 
         ActualBitmap _fontBmp;
+
+
 
         public override void Init()
         {
@@ -68,13 +66,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
         float _finalTextureScale = 1;
-        List<float> _vboBufferList = new List<float>();
-        List<ushort> _indexList = new List<ushort>();
-
-        ActualBitmap _stencilBmp;
-        PixelProcessing.SubBitmapBlender _stencilBlender;
-        AggPainter _backPainter;
-
+        
 
         public void DrawString(Painter p, string text, double x, double y)
         {
@@ -87,14 +79,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
         {
 
-            if (_stencilBmp == null)
-            {
-                //create a stencil bmp
-                _stencilBmp = new ActualBitmap(p.Width, p.Height);
-                _stencilBlender = new PixelProcessing.SubBitmapBlender(_stencilBmp, new PixelProcessing.PixelBlenderBGRA());
-                _backPainter = AggPainter.Create(_stencilBmp);
-                //------
-            }
+            //if (_stencilBmp == null)
+            //{
+            //    //create a stencil bmp
+            //    _stencilBmp = new ActualBitmap(p.Width, p.Height);
+            //    _stencilBlender = new PixelProcessing.SubBitmapBlender(_stencilBmp, new PixelProcessing.PixelBlenderBGRA());
+            //    _backPainter = AggPainter.Create(_stencilBmp);
+            //    //------
+            //}
 
             int j = buffer.Length;
             //create temp buffer span that describe the part of a whole char buffer
@@ -126,10 +118,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //load texture 
             //_glsx.LoadTexture1(_glBmp);
             //-------------------------------------
-
-            _vboBufferList.Clear(); //clear before use
-            _indexList.Clear(); //clear before use
-
+ 
 
             float acc_x = 0;
             float acc_y = 0;
@@ -261,32 +250,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //-------- 
 
             DrawString(p, "1234567890", 10, 20);
-
-            //----
-            //test draw img 
-            //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
-            // draw some text
-            // draw some text  
-
-            //var textPrinter = new TextPrinter();
-            //textPrinter.CurrentActualFont = svgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
-            //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
-
-            //VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
-            //var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
-            //VertexStore s1 = affTx.TransformToVxs(vxs);
-            //p.FillColor = Drawing.Color.Black;
-            //p.Fill(s1);
-            ////g.Render(s1, ColorRGBA.Black);
-            //p.FillColor = Drawing.Color.Red;
-            //p.Fill(StrokeHelp.MakeVxs(s1, 1));
-            ////g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
-            //var aff2 = Affine.NewMatix(
-            //    AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
-            //    AffinePlan.Translate(40, height / 2));
-            //p.FillColor = Drawing.Color.Black;
-            //p.Fill(aff2.TransformToVertexSnap(vxs));
-            ////g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
+             
         }
     }
 

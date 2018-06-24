@@ -18,15 +18,18 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     public class FontTextureDemo : DemoBase
     {
 
-        ActualBitmap alphaBitmap;
-        ActualBitmap glyphAtlasBmp;
 
+        ActualBitmap _alphaBitmap;
+        ActualBitmap _glyphAtlasBmp;
+        PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
+        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
+        bool _maskReady;
         public FontTextureDemo()
         {
             string glyphBmp = @"Data\tahoma -488129008.info.png";
             if (System.IO.File.Exists(glyphBmp))
             {
-                glyphAtlasBmp = DemoHelper.LoadImage(glyphBmp);
+                _glyphAtlasBmp = DemoHelper.LoadImage(glyphBmp);
             }
             this.Width = 800;
             this.Height = 600;
@@ -41,19 +44,15 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //----------
             //same size
-            alphaBitmap = new ActualBitmap(width, height);
-            var alphaPainter = AggPainter.Create(alphaBitmap, new PixelBlenderBGRA());
-            alphaPainter.Clear(Color.Black);
-            //------------ 
+            _alphaBitmap = new ActualBitmap(width, height);
+            var maskBufferPainter = AggPainter.Create(_alphaBitmap, new PixelBlenderBGRA());
+            maskBufferPainter.Clear(Color.Black);
+            //------------  
+            maskBufferPainter.DrawImage(_glyphAtlasBmp, 0, 0);
 
-            alphaPainter.DrawImage(glyphAtlasBmp, 0, 0);
-
-            maskPixelBlender.SetMaskImage(alphaBitmap);
-            maskPixelBlenderPerCompo.SetMaskImage(alphaBitmap);
+            maskPixelBlender.SetMaskBitmap(_alphaBitmap);
+            maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap);
         }
-
-
-
         [DemoConfig]
         public PixelProcessing.PixelBlenderColorComponent SelectedComponent
         {
@@ -70,15 +69,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             }
             set
             {
-
                 maskPixelBlender.SelectedMaskComponent = value;
                 maskPixelBlenderPerCompo.SelectedMaskComponent = value;
                 NeedRedraw = true;
             }
         }
 
-        PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
-        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
 
         public override void Draw(Painter p)
         {
@@ -95,12 +91,15 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             int height = painter.Height;
             //change value ***
 
-            SetupMaskPixelBlender(width, height);
+            if (!_maskReady)
+            {
+                SetupMaskPixelBlender(width, height);
+                _maskReady = true;
+            }
 
             //
             //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlender; //change to new blender
-            painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender
-             
+            painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
 
             //4.
             painter.FillColor = Color.Black;
@@ -116,6 +115,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
             painter.FillRect(0, 0, 200, 100);
         }
+
     }
 
 

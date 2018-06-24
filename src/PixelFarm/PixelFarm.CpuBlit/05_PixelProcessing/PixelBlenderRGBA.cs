@@ -34,9 +34,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     {
         public int NumPixelBits { get { return 32; } }
 
-        internal const byte BASE_MASK = 255;
-
-
+        internal const byte BASE_MASK = 255; 
         internal abstract void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
         internal abstract void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
