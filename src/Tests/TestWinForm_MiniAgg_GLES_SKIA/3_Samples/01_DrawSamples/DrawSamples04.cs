@@ -140,7 +140,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanList[i];
-                Typography.Rendering.TextureFontGlyphData glyphData;
+                TextureFontGlyphData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
@@ -165,19 +165,19 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
 
-                p.RenderQuality = RenderQualtity.Fast;
+                //p.RenderQuality = RenderQualtity.Fast;
 
                 //*** the atlas is inverted so...
                 //p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
                 //p.DrawImage(_fontBmp, g_x, g_y);
 
                 //1. draw to back buffer 
-                _backPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+                //_backPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
 
                 //2. then copy content to this
 
-                p.DrawImage(_stencilBmp, 100, 100);
-
+                //p.DrawImage(_stencilBmp, 100, 100);
+                p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
                 switch (textureKind)
                 {
                     default:
@@ -187,7 +187,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                         }
                         break;
                 }
-
+                
 
 
                 //copy some part from the bitmap 
