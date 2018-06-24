@@ -240,7 +240,7 @@ namespace LayoutFarm
 
             float pxscale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
 
-            float recommedLineSpacing = typeface.CalculateRecommendLineSpacing() * pxscale;
+            float recommedLineSpacingInPx = typeface.CalculateRecommendLineSpacing() * pxscale;
             float descentInPx = typeface.Descender * pxscale;
             float ascentInPx = typeface.Ascender * pxscale;
             float lineGapInPx = typeface.LineGap * pxscale;
@@ -251,7 +251,7 @@ namespace LayoutFarm
                 ascentInPx,
                 descentInPx,
                 lineGapInPx,
-                recommedLineSpacing);
+                recommedLineSpacingInPx);
 
             return typeface;
         }
