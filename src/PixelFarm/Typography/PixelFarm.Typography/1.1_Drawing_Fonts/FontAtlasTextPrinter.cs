@@ -281,7 +281,8 @@ namespace PixelFarm.Drawing.Fonts
             UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
 
             int lineHeight = (int)_font.LineSpacingInPx;//temp
-            //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
+
+            PixelBlender32 prevPxBlender = _painter.DestBitmapBlender.OutputPixelBlender; //save
             _painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender  
 
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
@@ -313,6 +314,7 @@ namespace PixelFarm.Drawing.Fonts
 
                 //clear with solid black color 
                 //_maskBufferPainter.Clear(Color.Black);
+                //clear mask buffer at specific pos
                 _maskBufferPainter.FillRect(gx - 1, gy - 1, srcW + 2, srcH + 2, Color.Black);
                 //draw 'stencil' glyph on mask-buffer                
                 _maskBufferPainter.DrawImage(_fontBmp, gx, gy, srcX, _fontBmp.Height - (srcY), srcW, srcH);
@@ -331,6 +333,9 @@ namespace PixelFarm.Drawing.Fonts
                 maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
                 _painter.FillRect(gx + 1, gy, srcW, srcH);
             }
+
+            //
+            _painter.DestBitmapBlender.OutputPixelBlender = prevPxBlender;//restore back
         }
     }
 }
