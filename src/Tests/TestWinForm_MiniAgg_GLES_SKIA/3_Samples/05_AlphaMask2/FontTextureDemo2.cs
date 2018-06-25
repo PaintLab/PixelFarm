@@ -1,6 +1,6 @@
 ﻿//BSD, 2018-present, WinterDev 
 
- 
+
 
 using System;
 using System.Collections.Generic;
@@ -108,8 +108,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             float scaleFromTexture = _finalTextureScale;
             TextureKind textureKind = _fontAtlas.TextureKind;
 
-            float g_x = 0;
-            float g_y = 0;
+            float gx = 0;
+            float gy = 0;
             int baseY = (int)Math.Round(y);
             int n = glyphPlanSeq.len;
             int endBefore = glyphPlanSeq.startAt + n;
@@ -144,31 +144,31 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 // -glyphData.TextureXOffset => restore to original pos
                 // -glyphData.TextureYOffset => restore to original pos 
                 //--------------------------
-                g_x = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                g_y = (float)(y + (ngy - glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
+                gx = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
+                gy = (float)(y + (ngy - glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
-                g_y = (float)Math.Floor(g_y);
+                gy = (float)Math.Floor(gy) + lineHeight;
 
                 //clear with solid black color 
                 //_maskBufferPainter.Clear(Color.Black);
-                _maskBufferPainter.FillRect(g_x - 1, g_y - 1, srcW + 2, srcH + 2, Color.Black);
+                _maskBufferPainter.FillRect(gx - 1, gy - 1, srcW + 2, srcH + 2, Color.Black);
                 //draw 'stencil' glyph on mask-buffer                
-                _maskBufferPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+                _maskBufferPainter.DrawImage(_fontBmp, gx, gy, srcX, _fontBmp.Height - (srcY), srcW, srcH);
 
                 //select component to render this need to render 3 times for lcd technique
                 //1. B
                 maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
                 maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
-                painter.FillRect(g_x + 1, g_y, srcW, srcH);
+                painter.FillRect(gx + 1, gy, srcW, srcH);
                 //2. G
                 maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
                 maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
-                painter.FillRect(g_x + 1, g_y, srcW, srcH);
+                painter.FillRect(gx + 1, gy, srcW, srcH);
                 //3. R
                 maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
                 maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
-                painter.FillRect(g_x + 1, g_y, srcW, srcH);
+                painter.FillRect(gx + 1, gy, srcW, srcH);
             }
         }
 
@@ -222,6 +222,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             // draw a circle
             p.Clear(Drawing.Color.White);
             p.FillColor = Color.Black;
+            DrawString(p, "Hello World", 10, 0);
             //--------  
 
             p.FillColor = Color.Green;
