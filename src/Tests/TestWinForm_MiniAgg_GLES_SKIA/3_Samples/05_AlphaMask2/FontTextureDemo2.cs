@@ -60,7 +60,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             });
 
             //3.  
-            _font = new RequestFont("tahoma", 10);
+            _font = new RequestFont("tahoma", 16);
             _fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
         }
 
@@ -78,6 +78,9 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
 
             AggPainter painter = p as AggPainter;
+
+
+
             if (painter == null) return;
             //
 
@@ -222,27 +225,36 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             // draw a circle
             p.Clear(Drawing.Color.White);
             p.FillColor = Color.Black;
-            DrawString(p, "Hello World", 10, 0);
+
+            int lineSpaceInPx = (int)_font.LineSpacingInPx;
+            int ypos = 0;
+            DrawString(p, "Hello World", 10, ypos);
+            ypos += lineSpaceInPx;
             //--------  
 
             p.FillColor = Color.Green;
-            DrawString(p, "Hello World", 10, 20);
+            DrawString(p, "Hello World", 10, ypos);
+            ypos += lineSpaceInPx;
 
             p.FillColor = Color.Blue;
-            DrawString(p, "Hello World", 10, 40);
+            DrawString(p, "Hello World", 10, ypos);
+            ypos += lineSpaceInPx;
 
             p.FillColor = Color.Red;
-            DrawString(p, "Hello World", 10, 60);
+            DrawString(p, "Hello World", 10, ypos);
+            ypos += lineSpaceInPx;
 
             p.FillColor = Color.Yellow;
-            DrawString(p, "Hello World", 10, 80);
+            DrawString(p, "Hello World", 10, ypos);
+            ypos += lineSpaceInPx;
 
             p.FillColor = Color.Gray;
-            DrawString(p, "Hello World", 10, 100);
-
+            DrawString(p, "Hello World", 10, ypos);
+            ypos += lineSpaceInPx;
 
             p.FillColor = Color.Black;
-            DrawString(p, "Hello World", 10, 120);
+            DrawString(p, "Hello World", 10, ypos);
+            ypos += lineSpaceInPx;
         }
 
 
