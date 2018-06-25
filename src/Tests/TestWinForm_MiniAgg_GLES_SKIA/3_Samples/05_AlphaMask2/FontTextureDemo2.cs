@@ -128,9 +128,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 SetupMaskPixelBlender(width, height);
                 _pixelBlenderSetup = true;
             }
-            //
-
-
 
             int j = buffer.Length;
             //create temp buffer span that describe the part of a whole char buffer
@@ -156,26 +153,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             int baseY = (int)Math.Round(y);
             int n = glyphPlanSeq.len;
             int endBefore = glyphPlanSeq.startAt + n;
-
-            //-------------------------------------
-            //load texture 
-            //_glsx.LoadTexture1(_glBmp);
             //------------------------------------- 
 
             float acc_x = 0;
             float acc_y = 0;
-
-            //this test lcd-effect => we need to draw it 3 times with different color component, on the same position
-            //(same as we do with OpenGLES rendering surface)
-            //maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
-            //maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
-            //painter.FillRect(0, 0, 200, 100);
-            //maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
-            //maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
-            //painter.FillRect(0, 0, 200, 100);
-            //maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
-            //maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
-            //painter.FillRect(0, 0, 200, 100); 
             UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
 
             int lineHeight = (int)_font.LineSpacingInPx;//temp
@@ -208,18 +189,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
                 g_y = (float)Math.Floor(g_y);
-
-                //p.StrokeColor = Color.Red;
-                //p.DrawRect(g_x, g_y, srcW, srcH);
-
-                //p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
-
-
-                //clear 
-                _maskBufferPainter.Clear(Color.Black);
+ 
+                //clear with solid black color 
+                //_maskBufferPainter.Clear(Color.Black);
+                _maskBufferPainter.FillRect(g_x - 1, g_y - 1, srcW + 2, srcH + 2, Color.Black);
                 //draw 'stencil' glyph on mask-buffer                
-                _maskBufferPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
-
+                _maskBufferPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH); 
 
                 //select component to render this need to render 3 times for lcd technique
                 //1. B
@@ -233,8 +208,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 //3. R
                 maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
                 maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
-                painter.FillRect(g_x + 1, g_y, srcW, srcH);
-
+                painter.FillRect(g_x + 1, g_y, srcW, srcH); 
             }
         }
 
