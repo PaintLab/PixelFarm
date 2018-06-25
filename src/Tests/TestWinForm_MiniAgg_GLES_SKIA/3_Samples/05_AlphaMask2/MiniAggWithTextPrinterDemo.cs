@@ -30,10 +30,32 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 DrawString(p, text.ToCharArray(), 0, text.Length, x, y);
             }
         }
+
+        [DemoConfig]
+        public AntialiasTechnique AntialiasTechnique
+        {
+            get
+            {
+                if (_printer == null)
+                {
+                    return AntialiasTechnique.LcdStencil;
+                }
+                else
+                {
+                    return _printer.AntialiasTech;
+                }
+            }
+            set
+            {
+                _printer.AntialiasTech = value;
+                this.NeedRedraw = true;
+            }
+        }
+
         void SetupFontAtlasPrinter(AggPainter p)
         {
             //use custom printer here
-            _printer = new FontAtlasTextPrinter(p);
+            _printer = new FontAtlasTextPrinter(p); 
             _fontAtlasPrinterReady = true;
         }
         public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
