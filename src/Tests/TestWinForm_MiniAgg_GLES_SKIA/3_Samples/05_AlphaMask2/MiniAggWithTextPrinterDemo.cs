@@ -27,7 +27,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             if (text != null)
             {
-                DrawString(p, text.ToCharArray(), 0, text.Length, x, y);
+                AggPainter painter = p as AggPainter;
+                if (painter == null) return;
+                //
+                DrawString(painter, text.ToCharArray(), 0, text.Length, x, y);
             }
         }
 
@@ -55,13 +58,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         void SetupFontAtlasPrinter(AggPainter p)
         {
             //use custom printer here
-            _printer = new FontAtlasTextPrinter(p); 
+            _printer = new FontAtlasTextPrinter(p);
             _fontAtlasPrinterReady = true;
         }
-        public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
+        public void DrawString(AggPainter painter, char[] buffer, int startAt, int len, double x, double y)
         {
-            AggPainter painter = p as AggPainter;
-            if (painter == null) return;
+
+
             if (!_fontAtlasPrinterReady)
             {
                 SetupFontAtlasPrinter(painter);
