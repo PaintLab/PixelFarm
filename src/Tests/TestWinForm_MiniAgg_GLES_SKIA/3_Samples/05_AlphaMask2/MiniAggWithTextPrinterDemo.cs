@@ -1,19 +1,8 @@
 ﻿//BSD, 2018-present, WinterDev 
 
-
-
-using System;
-using System.Collections.Generic;
 using Mini;
-
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-using PixelFarm.CpuBlit.PixelProcessing;
-
-using Typography.OpenFont;
-using Typography.Rendering;
-using Typography.TextLayout;
-
 
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
@@ -25,7 +14,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
         bool _fontAtlasPrinterReady;
         FontAtlasTextPrinter _printer;
-
 
         public MiniAggWithTextPrinterDemo()
         {
