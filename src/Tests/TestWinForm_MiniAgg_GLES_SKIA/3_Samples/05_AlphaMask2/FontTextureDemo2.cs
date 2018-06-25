@@ -1,19 +1,19 @@
-﻿//BSD, 2014-present, WinterDev
-//MatterHackers
+﻿//BSD, 2018-present, WinterDev 
 
-#define USE_CLIPPING_ALPHA_MASK
+ 
 
 using System;
 using System.Collections.Generic;
 using Mini;
-using PixelFarm.Drawing.WinGdi;
+
 using PixelFarm.Drawing;
+using PixelFarm.Drawing.Fonts;
 using PixelFarm.CpuBlit.PixelProcessing;
 
 using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.TextLayout;
-using PixelFarm.Drawing.Fonts;
+
 
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
@@ -30,22 +30,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         RequestFont _font;
         ActualBitmap _fontBmp;
         ActualBitmap _alphaBmp;
-        ActualBitmap _glyphBmp;
         float _finalTextureScale = 1;
 
         public FontTextureDemo2()
         {
-            string glyphBmp = @"Data\tahoma -488129008.info.png";
-            if (System.IO.File.Exists(glyphBmp))
-            {
-                _glyphBmp = DemoHelper.LoadImage(glyphBmp);
-            }
             this.Width = 800;
             this.Height = 600;
-
         }
-
-
         public override void Init()
         {
             //steps : detail ... 
@@ -72,37 +63,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             _font = new RequestFont("tahoma", 10);
             _fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
         }
-        //void DrawBack(Painter p)
-        //{
-        //    if (p is GdiPlusPainter)
-        //    {
-        //        return;
-        //    }
 
-        //    //
-        //    AggPainter painter = (AggPainter)p;
-        //    painter.Clear(Color.White);
-
-        //    int width = painter.Width;
-        //    int height = painter.Height;
-        //    //change value *** 
-        //    SetupMaskPixelBlender(width, height);
-        //    //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlender; //change to new blender
-        //    painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
-        //    //4.
-        //    painter.FillColor = Color.Black;
-        //    //this test lcd-effect => we need to draw it 3 times with different color component, on the same position
-        //    //(same as we do with OpenGLES rendering surface)
-        //    maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
-        //    maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
-        //    painter.FillRect(0, 0, 200, 100);
-        //    maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
-        //    maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
-        //    painter.FillRect(0, 0, 200, 100);
-        //    maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
-        //    maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
-        //    painter.FillRect(0, 0, 200, 100);
-        //}
         bool _pixelBlenderSetup = false;
 
         public void DrawString(Painter p, string text, double x, double y)
@@ -115,12 +76,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         }
         public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
         {
-            if (p is GdiPlusPainter)
-            {
-                return;
-            }
 
-            AggPainter painter = (AggPainter)p;
+            AggPainter painter = p as AggPainter;
+            if (painter == null) return;
+            //
+
             int width = painter.Width;
             int height = painter.Height;
             if (!_pixelBlenderSetup)
@@ -189,12 +149,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
                 g_y = (float)Math.Floor(g_y);
- 
+
                 //clear with solid black color 
                 //_maskBufferPainter.Clear(Color.Black);
                 _maskBufferPainter.FillRect(g_x - 1, g_y - 1, srcW + 2, srcH + 2, Color.Black);
                 //draw 'stencil' glyph on mask-buffer                
-                _maskBufferPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH); 
+                _maskBufferPainter.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
 
                 //select component to render this need to render 3 times for lcd technique
                 //1. B
@@ -208,7 +168,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 //3. R
                 maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
                 maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
-                painter.FillRect(g_x + 1, g_y, srcW, srcH); 
+                painter.FillRect(g_x + 1, g_y, srcW, srcH);
             }
         }
 
@@ -262,9 +222,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             // draw a circle
             p.Clear(Drawing.Color.White);
             p.FillColor = Color.Black;
-            //-------- 
-
-
+            //--------  
 
             p.FillColor = Color.Green;
             DrawString(p, "Hello World", 10, 20);

@@ -1,7 +1,6 @@
-﻿//BSD, 2014-present, WinterDev
-//MatterHackers
+﻿//BSD, 2018-present, WinterDev 
 
-#define USE_CLIPPING_ALPHA_MASK
+
 
 using System;
 using Mini;
