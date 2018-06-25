@@ -239,7 +239,7 @@ namespace Typography.Rendering
                     }
                 }
             }
-
+           
             outputBitmap = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
             return fontAtlas;
         }
@@ -254,10 +254,10 @@ namespace Typography.Rendering
         }
         static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
         {
-              
+
             var bmp = new PixelFarm.CpuBlit.ActualBitmap(glyphImg.Width, glyphImg.Height, glyphImg.GetImageBuffer());
             StorageService.Provider.SavePngBitmap(bmp, filename);
-            
+
         }
 #if DEBUG
         /// <summary>

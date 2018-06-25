@@ -23,6 +23,9 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     public class FontTextureDemo2 : DemoBase
     {
         AggPainter _maskBufferPainter;
+        PixelBlenderWithMask _maskPixelBlender = new PixelBlenderWithMask();
+        PixelBlenderPerColorComponentWithMask _maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
+
 
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<ActualBitmap> _bmpFontMx;
@@ -124,7 +127,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             int lineHeight = (int)_font.LineSpacingInPx;//temp
             //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
-            painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender  
+            painter.DestBitmapBlender.OutputPixelBlender = _maskPixelBlenderPerCompo; //change to new blender  
 
             for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
@@ -161,16 +164,16 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
                 //select component to render this need to render 3 times for lcd technique
                 //1. B
-                maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
-                maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
+                _maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
+                _maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
                 painter.FillRect(gx + 1, gy, srcW, srcH);
                 //2. G
-                maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
-                maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
+                _maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
+                _maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
                 painter.FillRect(gx + 1, gy, srcW, srcH);
                 //3. R
-                maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
-                maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
+                _maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
+                _maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
                 painter.FillRect(gx + 1, gy, srcW, srcH);
             }
         }
@@ -185,17 +188,17 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //------------ 
             //draw glyph bmp to _alpha bmp
             //_maskBufferPainter.DrawImage(_glyphBmp, 0, 0);
-            maskPixelBlender.SetMaskBitmap(_alphaBmp);
-            maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBmp);
+            _maskPixelBlender.SetMaskBitmap(_alphaBmp);
+            _maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBmp);
         }
         [DemoConfig]
         public PixelProcessing.PixelBlenderColorComponent SelectedComponent
         {
             get
             {
-                if (maskPixelBlender != null)
+                if (_maskPixelBlender != null)
                 {
-                    return maskPixelBlender.SelectedMaskComponent;
+                    return _maskPixelBlender.SelectedMaskComponent;
                 }
                 else
                 {
@@ -205,15 +208,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             set
             {
 
-                maskPixelBlender.SelectedMaskComponent = value;
-                maskPixelBlenderPerCompo.SelectedMaskComponent = value;
+                _maskPixelBlender.SelectedMaskComponent = value;
+                _maskPixelBlenderPerCompo.SelectedMaskComponent = value;
                 NeedRedraw = true;
             }
         }
 
-        PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
-        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
-
+       
         public override void Draw(Painter p)
         {
 
