@@ -10,6 +10,13 @@ using Typography.TextLayout;
 namespace PixelFarm.Drawing.Fonts
 {
 
+    public enum AntialiasTechnique
+    {
+        LcdStencil,
+        GreyscaleStencil,
+        None,
+
+    }
     public class FontAtlasTextPrinter : DevTextPrinterBase, ITextPrinter
     {
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
@@ -69,29 +76,14 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         public bool StartDrawOnLeftTop { get; set; }
 
-        public Painter TargetCanvasPainter
+
+        public AntialiasTechnique AntialiasTech
         {
-            get
-            {
-                return _painter;
-            }
-            set
-            {
-                _painter = (AggPainter)value;
-            }
+            get;
+            set;
         }
 
-        /// <summary>
-        /// for layout that use with our  lcd subpixel rendering technique 
-        /// </summary>
-        public bool UseWithLcdSubPixelRenderingTechnique
-        {
-            get { return _useLcdTech; }
-            set
-            {
-                _useLcdTech = value;
-            }
-        }
+
         public void ChangeFont(RequestFont font)
         {
             //call to service
@@ -291,6 +283,8 @@ namespace PixelFarm.Drawing.Fonts
             {
                 //test...
                 //fill glyph-by-glyh
+
+                var aaTech = this.AntialiasTech;
                 for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
                 {
                     UnscaledGlyphPlan glyph = glyphPlanList[i];
@@ -325,19 +319,35 @@ namespace PixelFarm.Drawing.Fonts
                     //draw 'stencil' glyph on mask-buffer                
                     _maskBufferPainter.DrawImage(_fontBmp, gx, gy, srcX, _fontBmp.Height - (srcY), srcW, srcH);
 
-                    //select component to render this need to render 3 times for lcd technique
-                    //1. B
-                    maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
-                    maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
-                    _painter.FillRect(gx + 1, gy, srcW, srcH);
-                    //2. G
-                    maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
-                    maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
-                    _painter.FillRect(gx + 1, gy, srcW, srcH);
-                    //3. R
-                    maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
-                    maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
-                    _painter.FillRect(gx + 1, gy, srcW, srcH);
+                    switch (aaTech)
+                    {
+                        default:
+                            {
+                                //select component to render this need to render 3 times for lcd technique
+                                //1. B
+                                maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
+                                maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
+                                _painter.FillRect(gx + 1, gy, srcW, srcH);
+                                //2. G
+                                maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
+                                maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
+                                _painter.FillRect(gx + 1, gy, srcW, srcH);
+                                //3. R
+                                maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
+                                maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
+                                _painter.FillRect(gx + 1, gy, srcW, srcH);
+                            }
+                            break;
+                        case AntialiasTechnique.GreyscaleStencil:
+                            {
+                                //fill once
+                                //we choose greeh channel (middle)
+                                maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
+                                maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.EnableAll;
+                                _painter.FillRect(gx + 1, gy, srcW, srcH);
+                            }
+                            break;
+                    }
                 }
             }
             else
