@@ -36,8 +36,6 @@ namespace PixelFarm.Drawing.Fonts
         Typeface _currentTypeface;
         Color _fontColor;
 
-        float _currentFontSizePxScale;
-        bool _useLcdTech;
 
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<ActualBitmap> _bmpFontMx;
