@@ -196,7 +196,7 @@ namespace LayoutFarm
                 for (int s = seq_startAt; s < endAt; ++s)
                 {
                     UnscaledGlyphPlan glyphPlan = planList[s];
- 
+
                     double actualAdvX = glyphPlan.AdvanceX;
 
                     outputTotalW +=
@@ -328,14 +328,6 @@ namespace LayoutFarm
             {
                 get { return startAt; }
             }
-            //public string GetText()
-            //{
-            //    return owner.GetSegmentText(this.startAt, len);
-            //}
-            //public int GetHashKey()
-            //{
-            //    return owner.GetHashKey(this.startAt, len);
-            //}
         }
         class MyLineSegmentList : ILineSegmentList
         {

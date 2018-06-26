@@ -107,9 +107,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.B;
             maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.B;
             painter.FillRect(0, 0, 200, 100);
+            //
             maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.G;
             maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.G;
             painter.FillRect(0, 0, 200, 100);
+            //
             maskPixelBlenderPerCompo.SelectedMaskComponent = PixelBlenderColorComponent.R;
             maskPixelBlenderPerCompo.EnableOutputColorComponent = EnableOutputColorComponent.R;
             painter.FillRect(0, 0, 200, 100);
