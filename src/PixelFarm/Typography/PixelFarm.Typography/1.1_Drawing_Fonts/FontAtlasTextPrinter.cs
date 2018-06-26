@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.Fonts
         GreyscaleStencil,
         None,
     }
-    public class FontAtlasTextPrinter : DevTextPrinterBase, ITextPrinter
+    public class FontAtlasTextPrinter : TextPrinterBase, ITextPrinter
     {
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
         PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();

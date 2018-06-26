@@ -7,10 +7,10 @@ namespace Typography.Rendering
     /// <summary>
     /// base TextPrinter class for developer only, 
     /// </summary>
-    public abstract class DevTextPrinterBase
+    public abstract class TextPrinterBase
     {
         Typography.Contours.HintTechnique _hintTech;
-        public DevTextPrinterBase()
+        public TextPrinterBase()
         {
             FontSizeInPoints = 14;//
             ScriptLang = Typography.OpenFont.ScriptLangs.Latin;//default?

@@ -16,7 +16,7 @@ using Typography.TextServices;
 namespace PixelFarm.Drawing.Fonts
 {
 
-    public class VxsTextPrinter : DevTextPrinterBase, ITextPrinter
+    public class VxsTextPrinter : TextPrinterBase, ITextPrinter
     {
         LayoutFarm.OpenFontTextService _textServices;
 

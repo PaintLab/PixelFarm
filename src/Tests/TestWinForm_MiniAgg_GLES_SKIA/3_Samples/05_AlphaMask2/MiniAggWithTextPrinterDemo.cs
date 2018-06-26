@@ -16,7 +16,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         FontAtlasTextPrinter _fontAtlasTextPrinter;
         VxsTextPrinter _vxsTextPrinter;
 
-        DevTextPrinterBase _printer;
+        TextPrinterBase _printer;
 
         public MiniAggWithTextPrinterDemo()
         {
@@ -44,7 +44,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             {
                 _useFontAtlas = value;
                 _printer = (_useFontAtlas) ?
-                    (DevTextPrinterBase)_fontAtlasTextPrinter :
+                    (TextPrinterBase)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
                 this.NeedRedraw = true;
 
@@ -88,7 +88,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             }
 
             _printer = (_useFontAtlas) ?
-                    (DevTextPrinterBase)_fontAtlasTextPrinter :
+                    (TextPrinterBase)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
 
             _fontAtlasPrinterReady = true;
