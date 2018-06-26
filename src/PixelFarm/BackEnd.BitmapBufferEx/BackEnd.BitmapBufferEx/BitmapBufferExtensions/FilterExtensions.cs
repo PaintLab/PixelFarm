@@ -381,7 +381,7 @@ namespace PixelFarm.BitmapBufferEx
                         int b = (c) & 0xff;
 
                         //Gamma adjustment
-                        //TODO: create gamma-lookup table for this
+                        //TODO: create gamma-lookup table for this ***
                         r = (int)(255.0 * Math.Pow((r / 255.0), gammaCorrection));
                         g = (int)(255.0 * Math.Pow((g / 255.0), gammaCorrection));
                         b = (int)(255.0 * Math.Pow((b / 255.0), gammaCorrection));

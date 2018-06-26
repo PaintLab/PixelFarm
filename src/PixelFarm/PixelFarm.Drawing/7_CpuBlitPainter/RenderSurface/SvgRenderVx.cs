@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-            PixelFarm.CpuBlit.VertexProcessing.Affine currentTx = null;
+            Affine currentTx = null;
 
             var renderState = new TempRenderState();
             renderState.strokeColor = p.StrokeColor;

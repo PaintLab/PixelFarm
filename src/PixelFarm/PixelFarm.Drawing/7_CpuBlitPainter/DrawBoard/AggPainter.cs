@@ -43,11 +43,6 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-
-
-
-
-
     public class AggPainter : Painter
     {
         AggRenderSurface _aggsx; //target rendering surface
@@ -953,13 +948,13 @@ namespace PixelFarm.CpuBlit
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
                 //place left upper corner at specific x y                    
-                this._aggsx.Render(actualBmp, left, this.Height - (top + actualBmp.Height));
+                this._aggsx.Render(actualBmp, left, this.Height - (top + actualBmp.Height), srcX, srcY, srcW, srcH);
             }
             else
             {
                 //left-bottom as original
                 //place left-lower of the img at specific (x,y)
-                this._aggsx.Render(actualBmp, left, top);
+                this._aggsx.Render(actualBmp, left, top, srcX, srcY, srcW, srcH);
             }
 
             //restore...
@@ -984,7 +979,6 @@ namespace PixelFarm.CpuBlit
             ActualBitmap actualBmp = img as ActualBitmap;
             if (actualBmp == null)
             {
-
                 //test with other bitmap 
                 return;
             }
@@ -992,45 +986,8 @@ namespace PixelFarm.CpuBlit
             {
                 DrawBitmap(actualBmp, left, top);
             }
-            //check image caching system 
-            //if (this._renderQuality == RenderQualtity.Fast)
-            //{
-            //    //DrawingBuffer.RectD destRect = new DrawingBuffer.RectD(left, top, img.Width, img.Height);
-            //    //DrawingBuffer.RectD srcRect = new DrawingBuffer.RectD(0, 0, img.Width, img.Height);
-            //    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualImage.GetBuffer(actualImg));
-            //    this._bxt.CopyBlit(left, top, srcBmp);
-            //    return;
-            //}
-
-
-            //this._sharedImageWriterReader.ReloadImage(actualBmp);
-
-            ////save, restore later... 
-            //bool useSubPix = UseSubPixelLcdEffect;
-            ////before render an image we turn off vxs subpixel rendering
-            //this.UseSubPixelLcdEffect = false;
-            //_aggsx.UseSubPixelRendering = false;
-
-            //if (this._orientation == DrawBoardOrientation.LeftTop)
-            //{
-            //    //place left upper corner at specific x y                    
-            //    this._aggsx.Render(this._sharedImageWriterReader, left, this.Height - (top + img.Height));
-            //}
-            //else
-            //{
-            //    //left-bottom as original
-            //    //place left-lower of the img at specific (x,y)
-            //    this._aggsx.Render(this._sharedImageWriterReader, left, top);
-            //}
-
-            ////restore...
-            //this.UseSubPixelLcdEffect = useSubPix;
-            //_aggsx.UseSubPixelRendering = useSubPix;
-
-
-
         }
-        public override void DrawImage(Image img, params PixelFarm.CpuBlit.VertexProcessing.AffinePlan[] affinePlans)
+        public override void DrawImage(Image img, params AffinePlan[] affinePlans)
         {
             ActualBitmap actualImg = img as ActualBitmap;
             if (actualImg == null)
@@ -1043,14 +1000,6 @@ namespace PixelFarm.CpuBlit
             {
                 //todo, review here again
                 BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualBitmap.GetBuffer(actualImg));
-                //this._bxt.CopyBlit(left, top, srcBmp); 
-                //DrawingBuffer.MatrixTransform mx = new MatrixTransform(new DrawingBuffer.AffinePlan[]{
-                //    DrawingBuffer.AffinePlan.Translate(-img.Width/2,-img.Height/2),
-                //    DrawingBuffer.AffinePlan.Rotate(AggMath.deg2rad(-70))
-                //    //DrawingBuffer.AffinePlan.Translate(100,100)
-                //});
-                //DrawingBuffer.MatrixTransform mx = new MatrixTransform(DrawingBuffer.Affine.IdentityMatrix);
-
                 if (affinePlans != null)
                 {
                     this._bxt.BlitRender(srcBmp, false, 1, new PixelFarm.BitmapBufferEx.MatrixTransform(affinePlans));
@@ -1062,25 +1011,15 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-
-            //this._sharedImageWriterReader.ReloadImage((ActualBitmap)img);
-
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
             this.UseSubPixelLcdEffect = false;
             _aggsx.UseSubPixelRendering = false;
-
-
-            //this._aggsx.Render(_sharedImageWriterReader, affinePlans);
-
             this._aggsx.Render(actualImg, affinePlans);
-
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
             _aggsx.UseSubPixelRendering = useSubPix;
-
         }
-
         public override void ApplyFilter(ImageFilter imgFilter)
         {
             ////----------------------
@@ -1110,8 +1049,7 @@ namespace PixelFarm.CpuBlit
             //TODO: implement this
             //resolve internal img filter
             //switch (imgFilter.Name)
-            //{
-
+            //{ 
             //} 
         }
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
@@ -1175,10 +1113,10 @@ namespace PixelFarm.CpuBlit
     {
 
         double _angle;
-        PixelFarm.CpuBlit.VertexProcessing.Affine affine;
+        Affine affine;
         public ReusableRotationTransformer()
         {
-            affine = PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix;
+            affine = Affine.IdentityMatrix;
         }
         public double Angle
         {
@@ -1190,7 +1128,7 @@ namespace PixelFarm.CpuBlit
             {
                 if (value != _angle)
                 {
-                    affine = PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(value);
+                    affine = Affine.NewRotation(value);
                 }
                 _angle = value;
             }

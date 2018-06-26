@@ -19,6 +19,7 @@ namespace Mini
         {
             this.Width = 900;
             this.Height = 700;
+            NeedRedraw = true;
         }
 
         //when we use with opengl
@@ -32,6 +33,7 @@ namespace Mini
         {
             DemoClosing();
         }
+        public bool NeedRedraw { get; set; }
 
         public virtual void Init() { }
         public virtual void KeyDown(int keycode) { }

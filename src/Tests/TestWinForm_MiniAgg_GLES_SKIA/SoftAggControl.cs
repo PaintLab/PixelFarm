@@ -46,10 +46,6 @@ namespace Mini
             get { return _gdiAntiAlias; }
             set { _gdiAntiAlias = value; }
         }
-
-
-
-
         void SoftAggControl_Load(object sender, EventArgs e)
         {
             if (_useGdiPlusOutput)
@@ -82,7 +78,9 @@ namespace Mini
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
                 //TODO: review text printer here again***
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
+                //
+                FontAtlasTextPrinter textPrinter = new FontAtlasTextPrinter(aggPainter);
+                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
                 aggPainter.TextPrinter = textPrinter;
                 painter = aggPainter;
             }
@@ -125,6 +123,7 @@ namespace Mini
             this.isMouseDown = true;
             //exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
             exampleBase.MouseDown(e.X, e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
+            exampleBase.NeedRedraw = true;
             base.OnMouseDown(e);
             if (!_useGdiPlusOutput)
             {
@@ -140,6 +139,8 @@ namespace Mini
             this.isMouseDown = false;
             //exampleBase.MouseUp(e.X, myHeight - e.Y);
             exampleBase.MouseUp(e.X, e.Y);
+            //force redraw when mouse up
+            exampleBase.NeedRedraw = true;
             base.OnMouseUp(e);
             if (!_useGdiPlusOutput)
             {
@@ -154,8 +155,11 @@ namespace Mini
         {
             if (this.isMouseDown)
             {
-                //exampleBase.MouseDrag(e.X, myHeight - e.Y);
                 exampleBase.MouseDrag(e.X, e.Y);
+
+                //force redraw when drag 
+                exampleBase.NeedRedraw = true;
+
                 if (!_useGdiPlusOutput)
                 {
                     Invalidate();
@@ -176,8 +180,13 @@ namespace Mini
             }
             if (!_useGdiPlusOutput)
             {
-                exampleBase.Draw(painter);
-
+                //check if the example output need to be redraw 
+                //or not, if not then use img cache
+                if (exampleBase.NeedRedraw)
+                {
+                    exampleBase.Draw(painter);
+                    exampleBase.NeedRedraw = false;
+                }
                 Graphics g = e.Graphics;
                 IntPtr displayDC = g.GetHdc();
                 bitmapBackBuffer.UpdateToHardwareSurface(displayDC);

@@ -41,14 +41,14 @@ namespace PixelFarm.CpuBlit
         RectInt clipBox;
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
 
-        ActualBitmap destImage;
+
         public AggRenderSurface(ActualBitmap destImage)
         {
             //create from actual image 
-            this.destImage = destImage;
+
             this.destActualImage = destImage;
 
-            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelProcessing.PixelBlenderBGRA());
+            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
             this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this._bmpRasterizer = new DestBitmapRasterizer();

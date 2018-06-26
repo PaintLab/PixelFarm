@@ -48,7 +48,7 @@ namespace PixelFarm.CpuBlit
             {
                 IBitmapBlender backBuffer = asx.DestImage;
 
-                int distBetween = backBuffer.BytesBetweenPixelsInclusive;
+                
 
                 //use different pixel blender 
                 var redImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());

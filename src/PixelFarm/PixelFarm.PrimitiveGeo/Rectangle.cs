@@ -36,7 +36,7 @@ namespace PixelFarm.Drawing
 {
     public struct Rectangle
     {
-        private int x, y, width, height;
+        int x, y, width, height;
         /// <summary>
         ///	Empty Shared Field
         /// </summary>
