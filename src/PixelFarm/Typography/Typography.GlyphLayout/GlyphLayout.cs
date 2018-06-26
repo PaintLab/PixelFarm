@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 namespace Typography.TextLayout
 {
-    public interface IPixelScaleLayout
-    {
-        void SetFont(Typeface typeface, float fontSizeInPoints);
-        void Layout(IGlyphPositions posStream, PxScaledGlyphPlanList outputGlyphPlanList);
-    }
+     
 
     /// <summary>
     /// scaled glyph plan to specfic font size.
