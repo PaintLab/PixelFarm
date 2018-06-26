@@ -3,7 +3,7 @@
 using Mini;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-
+using Typography.Rendering;
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
 
@@ -13,7 +13,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     {
 
         bool _fontAtlasPrinterReady;
-        FontAtlasTextPrinter _printer;
+        //FontAtlasTextPrinter _printer;
+        DevTextPrinterBase _printer;
 
         public MiniAggWithTextPrinterDemo()
         {
@@ -27,7 +28,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             if (text != null)
             {
-                DrawString(p, text.ToCharArray(), 0, text.Length, x, y);
+                AggPainter painter = p as AggPainter;
+                if (painter == null) return;
+                //
+                DrawString(painter, text.ToCharArray(), 0, text.Length, x, y);
             }
         }
 
@@ -42,12 +46,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 }
                 else
                 {
-                    return _printer.AntialiasTech;
+                    return AntialiasTechnique.LcdStencil;
+                    //return _printer.AntialiasTech;
                 }
             }
             set
             {
-                _printer.AntialiasTech = value;
+                //_printer.AntialiasTech = value;
                 this.NeedRedraw = true;
             }
         }
@@ -55,19 +60,20 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         void SetupFontAtlasPrinter(AggPainter p)
         {
             //use custom printer here
-            _printer = new FontAtlasTextPrinter(p); 
+            //_printer = new FontAtlasTextPrinter(p);
+            _printer = new VxsTextPrinter(p);
             _fontAtlasPrinterReady = true;
         }
-        public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
+        public void DrawString(AggPainter painter, char[] buffer, int startAt, int len, double x, double y)
         {
-            AggPainter painter = p as AggPainter;
-            if (painter == null) return;
+
+
             if (!_fontAtlasPrinterReady)
             {
                 SetupFontAtlasPrinter(painter);
             }
 
-            _printer.DrawString(buffer, startAt, len, x, y);
+            _printer.DrawString(buffer, startAt, len, (float)x, (float)y);
         }
         public override void Draw(Painter p)
         {
@@ -87,10 +93,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             p.FillColor = Color.Black;
 
 
-            int lineSpaceInPx = (int)_printer.CurrentFont.LineSpacingInPx;
+            int lineSpaceInPx = (int)painter.CurrentFont.LineSpacingInPx;
             int ypos = 0;
 
-            DrawString(p, "Hello World", 10, ypos);
+
+            DrawString(p, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii", 10, ypos);
             ypos += lineSpaceInPx;
             //--------  
 

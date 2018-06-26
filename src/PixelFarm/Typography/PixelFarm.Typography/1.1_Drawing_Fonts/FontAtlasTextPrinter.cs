@@ -15,7 +15,6 @@ namespace PixelFarm.Drawing.Fonts
         LcdStencil,
         GreyscaleStencil,
         None,
-
     }
     public class FontAtlasTextPrinter : DevTextPrinterBase, ITextPrinter
     {
@@ -36,17 +35,15 @@ namespace PixelFarm.Drawing.Fonts
         Typeface _currentTypeface;
         Color _fontColor;
 
-        float _currentFontSizePxScale;
-        bool _useLcdTech;
 
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<ActualBitmap> _bmpFontMx;
         SimpleFontAtlas _fontAtlas;
 
-        public FontAtlasTextPrinter(Painter painter)
+        public FontAtlasTextPrinter(AggPainter painter)
         {
             StartDrawOnLeftTop = true;
-            this._painter = (AggPainter)painter;
+            this._painter = painter;
 
             this.PositionTechnique = PositionTechnique.OpenFont;
 
@@ -90,6 +87,8 @@ namespace PixelFarm.Drawing.Fonts
             _font = font;
             _textServices.ResolveTypeface(font); //resolve for 'actual' font
             _fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
+            FontSizeInPoints = font.SizeInPoints;
+
         }
         public RequestFont CurrentFont
         {
@@ -179,31 +178,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
                 ChangeFont(_painter.CurrentFont);
-            }
-
-            ////2.1              
-            //_glyphMeshStore.SetHintTechnique(this.HintTechnique);
-            ////2.2
-            //_glyphLayout.Typeface = this.Typeface;
-            //_glyphLayout.ScriptLang = this.ScriptLang;
-            //_glyphLayout.PositionTechnique = this.PositionTechnique;
-            //_glyphLayout.EnableLigature = this.EnableLigature;
-
-            //_currentFontSizePxScale = Typeface.CalculateScaleToPixelFromPointSize(FontSizeInPoints);
-
-            ////2.3
-            //if (_pxScaleEngine != null)
-            //{
-            //    _pxScaleEngine.SetFont(this.Typeface, this.FontSizeInPoints);
-            //}
-            ////3. layout glyphs with selected layout technique
-            ////TODO: review this again, we should use pixel?
-
-
-
-
-            ////3.
-            ////color...
+            } 
         }
 
         /// <summary>
@@ -287,9 +262,9 @@ namespace PixelFarm.Drawing.Fonts
                 var aaTech = this.AntialiasTech;
                 for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
                 {
-                    UnscaledGlyphPlan glyph = glyphPlanList[i];
+                    UnscaledGlyphPlan unscaledGlyphPlan = glyphPlanList[i];
                     TextureFontGlyphData glyphData;
-                    if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
+                    if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(unscaledGlyphPlan.glyphIndex, out glyphData))
                     {
                         //if no glyph data, we should render a missing glyph ***
                         continue;
@@ -300,8 +275,8 @@ namespace PixelFarm.Drawing.Fonts
                     int srcX, srcY, srcW, srcH;
                     glyphData.GetGlyphRect(out srcX, out srcY, out srcW, out srcH);
 
-                    float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
-                    float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);
+                    float ngx = acc_x + (float)Math.Round(unscaledGlyphPlan.OffsetX * scale);
+                    float ngy = acc_y + (float)Math.Round(unscaledGlyphPlan.OffsetY * scale);
                     //NOTE:
                     // -glyphData.TextureXOffset => restore to original pos
                     // -glyphData.TextureYOffset => restore to original pos 
@@ -309,7 +284,7 @@ namespace PixelFarm.Drawing.Fonts
                     gx = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
                     gy = (float)(y + (ngy - glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
 
-                    acc_x += (float)Math.Round(glyph.AdvanceX * scale);
+                    acc_x += (float)Math.Round(unscaledGlyphPlan.AdvanceX * scale);
                     gy = (float)Math.Floor(gy) + lineHeight;
 
                     //clear with solid black color 
