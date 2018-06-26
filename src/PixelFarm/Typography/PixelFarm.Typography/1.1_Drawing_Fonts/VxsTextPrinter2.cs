@@ -124,32 +124,13 @@ namespace PixelFarm.Drawing.Fonts
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
         {
             UpdateGlyphLayoutSettings();
-            Typeface typeface = _currentTypeface;
-            //3. scale from design unit to specific font size
-            _outputPxScaledGlyphPlans.Clear();
-            //_pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputPxScaledGlyphPlans);
-            //TextPrinterHelper.CopyGlyphPlans(renderVx, _outputUnscaledGlyphPlans, this._currentFontSizePxScale);
-
-            ////1. update some props.. 
-            ////2. update current type face
-            //UpdateGlyphLayoutSettings();
-            //Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;            
-            //_glyphLayout.Typeface = typeface;
-            //_glyphLayout.Layout(text, startAt, len);
-            ////
-            ////3. scale from design unit to specific font size
-            //_outputPxScaledGlyphPlans.Clear();
-            //_pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputPxScaledGlyphPlans);
-            //TextPrinterHelper.CopyGlyphPlans(renderVx, _outputUnscaledGlyphPlans, this._currentFontSizePxScale);
         }
 
         public override void DrawCaret(float x, float y)
         {
-
             //TODO: remove draw caret here, this is for debug only 
 
         }
-
         public void UpdateGlyphLayoutSettings()
         {
             if (this._reqFont == null)
@@ -232,16 +213,12 @@ namespace PixelFarm.Drawing.Fonts
                 //offset y down 
                 y += this.FontLineSpacingPx;
             }
-
-
             //Typeface typeface = _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
-            //TODO: review this again, we should use pixel?
-
+            //TODO: review this again, we should use pixel? 
             float fontSizePoint = this.FontSizeInPoints;
             //float scale = _currentTypeface.CalculateScaleToPixelFromPointSize(fontSizePoint);
             float scale = 1;
-
             //4. render each glyph 
             float ox = _painter.OriginX;
             float oy = _painter.OriginY;
@@ -384,14 +361,8 @@ namespace PixelFarm.Drawing.Fonts
                 y += this.FontLineSpacingPx;
             }
 
-
-            //Typeface typeface = _glyphPathBuilder.Typeface;
-            //3. layout glyphs with selected layout technique
-            //TODO: review this again, we should use pixel?
-
             float fontSizePoint = this.FontSizeInPoints;
             float scale = _currentTypeface.CalculateScaleToPixelFromPointSize(fontSizePoint);
-
 
             //4. render each glyph 
             float ox = _painter.OriginX;
@@ -407,8 +378,8 @@ namespace PixelFarm.Drawing.Fonts
             _glyphMeshStore.SetFont(_currentTypeface, fontSizePoint);
             //---------------------------------------------------
 
-            float g_x = 0;
-            float g_y = 0;
+            float gx = 0;
+            float gy = 0;
             float baseY = (int)y;
             if (!hasColorGlyphs)
             {
@@ -418,9 +389,6 @@ namespace PixelFarm.Drawing.Fonts
                 _painter.RenderQuality = RenderQualtity.HighQuality;
                 _painter.UseSubPixelLcdEffect = true;
 
-                //CpuBlit.VertexProcessing.Affine flipY = CpuBlit.VertexProcessing.Affine.NewMatix(
-                //    CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1)); //flip Y
-                //VertexStore reusableVxs = new VertexStore();
 
                 float acc_x = 0; //acummulate x
                 float acc_y = 0; //acummulate y
@@ -436,32 +404,14 @@ namespace PixelFarm.Drawing.Fonts
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
 
+                    //glyph width 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
 
-
-                    g_x = ngx;
-                    g_y = y + ngy;
-                    _painter.SetOrigin((int)Math.Round(g_x), (int)Math.Round(g_y));
-
-                    //-----------------------------------  
-
-                    //invert each glyph 
-                    //version 3:
-
-                    //reusableVxs.Clear();
-                    VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
-                    //PixelFarm.CpuBlit.VertexProcessing.VertexStoreTransformExtensions.TransformToVxs(flipY, vxs, reusableVxs);
-                    _painter.Fill(vxs);
-
-
-                    //version2; 
-                    //VertexStore vsx = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
-                    //_vxs1 = _invertY.TransformToVxs(vsx, _vxs1);
-                    //painter.Fill(_vxs1);
-                    //_vxs1.Clear();
-
-                    //version1
-                    //painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+                    gx = ngx;
+                    gy = y + ngy;
+                    //move start draw point to gx and gy
+                    _painter.SetOrigin((float)Math.Round(gx) + 0.33f, (float)Math.Round(gy));
+                    _painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
                 //restore
                 _painter.RenderQuality = savedRederQuality;
@@ -484,11 +434,11 @@ namespace PixelFarm.Drawing.Fonts
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
 
-                    g_x = ngx;
-                    g_y = ngy;
+                    gx = ngx;
+                    gy = ngy;
 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
-                    _painter.SetOrigin(g_x, g_y);
+                    _painter.SetOrigin(gx, gy);
 
 
                     //-----------------------------------  
