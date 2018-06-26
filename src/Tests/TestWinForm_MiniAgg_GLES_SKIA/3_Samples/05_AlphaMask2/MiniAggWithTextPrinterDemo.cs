@@ -29,7 +29,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         void DrawString(AggPainter p, string text, double x, double y)
         {
             if (text != null)
-            { 
+            {
                 DrawString(p, text.ToCharArray(), 0, text.Length, x, y);
             }
         }
@@ -95,8 +95,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         }
         public void DrawString(AggPainter painter, char[] buffer, int startAt, int len, double x, double y)
         {
-
-
             if (!_fontAtlasPrinterReady)
             {
                 SetupFontAtlasPrinter(painter);

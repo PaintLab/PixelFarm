@@ -95,17 +95,12 @@ namespace Typography.TextServices
         public Typeface GetTypeface(string name, InstalledFontStyle installedFontStyle)
         {
             return typefaceStore.GetTypeface(name, installedFontStyle);
-        }
-
-
+        } 
         public GlyphPlanSequence GetUnscaledGlyphPlanSequence(TextBuffer buffer, int start, int len)
         {
             //under current typeface + scriptlang setting 
-            return _currentGlyphPlanSeqCache.GetUnscaledGlyphPlanSequence(_glyphLayout, buffer, start, len);
-
-        }
-
-
+            return _currentGlyphPlanSeqCache.GetUnscaledGlyphPlanSequence(_glyphLayout, buffer, start, len); 
+        } 
         internal void ClearAllRegisteredShapingContext()
         {
             _registerShapingContexts.Clear();
@@ -257,7 +252,7 @@ namespace Typography.TextServices
                 //measure string at specific px scale 
                 _glyphLayout.Layout(str, breakSpan.startAt, breakSpan.len);
                 //
-                 
+
                 _reusableScaledGlyphPlanList.Clear();
                 GlyphLayoutExtensions.GenerateGlyphPlans(
                     _glyphLayout.ResultUnscaledGlyphPositions,
@@ -430,9 +425,11 @@ namespace Typography.TextServices
 
 
 
-        public GlyphPlanSequence GetUnscaledGlyphPlanSequence(GlyphLayout glyphLayout,
+        public GlyphPlanSequence GetUnscaledGlyphPlanSequence(
+            GlyphLayout glyphLayout,
             TextBuffer buffer, int start, int seqLen)
         {
+
             //UNSCALED VERSION
             //use current typeface + scriptlang
             int seqHashValue = CalculateHash(buffer, start, seqLen);
@@ -466,10 +463,10 @@ namespace Typography.TextServices
                 planSeq = new GlyphPlanSequence(_planList, pre_count, post_count - pre_count);
                 //
                 seqCol.Register(seqHashValue, planSeq);
-
-
             }
             return planSeq;
+
+
         }
     }
 
