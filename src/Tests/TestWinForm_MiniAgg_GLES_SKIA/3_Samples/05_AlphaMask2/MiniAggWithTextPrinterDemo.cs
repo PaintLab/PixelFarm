@@ -26,14 +26,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         public override void Init()
         {
         }
-        public void DrawString(Painter p, string text, double x, double y)
+        void DrawString(AggPainter p, string text, double x, double y)
         {
             if (text != null)
-            {
-                AggPainter painter = p as AggPainter;
-                if (painter == null) return;
-                //
-                DrawString(painter, text.ToCharArray(), 0, text.Length, x, y);
+            { 
+                DrawString(p, text.ToCharArray(), 0, text.Length, x, y);
             }
         }
 
@@ -107,13 +104,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             _printer.DrawString(buffer, startAt, len, (float)x, (float)y);
         }
-        public override void Draw(Painter p)
+        public override void Draw(Painter painter)
         {
-            AggPainter painter = p as AggPainter;
-            if (painter == null) return;
+            AggPainter p = painter as AggPainter;
+            if (p == null) return;
             if (!_fontAtlasPrinterReady)
             {
-                SetupFontAtlasPrinter(painter);
+                SetupFontAtlasPrinter(p);
             }
 
             p.RenderQuality = RenderQualtity.HighQuality;
@@ -125,7 +122,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             p.FillColor = Color.Black;
 
 
-            int lineSpaceInPx = (int)painter.CurrentFont.LineSpacingInPx;
+            int lineSpaceInPx = (int)p.CurrentFont.LineSpacingInPx;
             int ypos = 0;
 
 
