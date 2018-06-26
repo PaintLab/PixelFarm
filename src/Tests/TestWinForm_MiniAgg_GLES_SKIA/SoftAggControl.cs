@@ -78,7 +78,9 @@ namespace Mini
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
                 //TODO: review text printer here again***
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
+                //
+                FontAtlasTextPrinter textPrinter = new FontAtlasTextPrinter(aggPainter);
+                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
                 aggPainter.TextPrinter = textPrinter;
                 painter = aggPainter;
             }

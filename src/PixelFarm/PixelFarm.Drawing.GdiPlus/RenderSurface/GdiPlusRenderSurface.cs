@@ -787,7 +787,7 @@ namespace PixelFarm.Drawing.WinGdi
         CpuBlit.AggPainter _painter;
         CpuBlit.ActualBitmap _aggActualImg;
 
-        static Typography.TextServices.OpenFontStore openFontStore;
+       
         Painter GetAggPainter()
         {
             if (_painter == null)
@@ -797,13 +797,9 @@ namespace PixelFarm.Drawing.WinGdi
                 var aggPainter = CpuBlit.AggPainter.Create(_aggActualImg);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
-                //ifont loader
-                if (openFontStore == null)
-                {
-                    openFontStore = new Typography.TextServices.OpenFontStore();
-                }
+                
 
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, openFontStore);
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
                 aggPainter.TextPrinter = textPrinter;
                 _painter = aggPainter;
             }

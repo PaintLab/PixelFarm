@@ -418,25 +418,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             return _outputPxBlender.PixelToColorRGBA(raw_buffer32, GetBufferOffsetXY32(x, y));
         }
-//        public int GetByteBufferOffsetXY(int x, int y)
-//        {
-
-//#if DEBUG
-//            //if (y >= yTableArray.Length ||
-//            //    x >= xTableArray.Length)
-//            //{
-//            //    return -1;
-//            //    //throw new NotSupportedException();
-//            //}
-//            if (y >= height || x >= width)
-//            {
-//                return -1;
-//            }
-//#endif
-
-//            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) << 2;// x4
-
-//        }
+     
         public int GetBufferOffsetXY32Check(int x, int y)
         {
 
@@ -591,8 +573,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             int colorAlpha = sourceColor.alpha;
             if (colorAlpha != 0)
             {
-
-
                 int[] buffer = this.GetOrgInt32Buffer();
                 int bufferOffset32 = GetBufferOffsetXY32(x, y);
                 do
@@ -626,7 +606,6 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     int actualW = scanWidthInBytes / 4;
                     do
                     {
-
                         //TODO: review here again
                         Color newcolor = sourceColor.NewFromChangeCoverage(covers[coversIndex++]);
                         if (newcolor.alpha == BASE_MASK)

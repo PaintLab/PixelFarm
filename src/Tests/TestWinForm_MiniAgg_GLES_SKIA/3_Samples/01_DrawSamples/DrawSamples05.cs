@@ -116,14 +116,18 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 lionImg = DemoHelper.LoadImage(imgFileName);
                 halfLion = CreateHalfSize(lionImg);
             }
-
-
         }
+
+        bool _useBmpExt;
         [DemoConfig]
         public bool UseBitmapExt
         {
-            get;
-            set;
+            get { return _useBmpExt; }
+            set
+            {
+                _useBmpExt = value;
+                this.NeedRedraw = true;
+            }
         }
 
         ActualBitmap CreateHalfSize(ActualBitmap orgBmp)

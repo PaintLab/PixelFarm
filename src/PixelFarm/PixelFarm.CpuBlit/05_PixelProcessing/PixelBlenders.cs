@@ -76,6 +76,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         bool _enableGamma;
         float _gammaValue;
         public PixelBlenderBGRA() { }
+      
         public bool EnableGamma
         {
             get { return _enableGamma; }

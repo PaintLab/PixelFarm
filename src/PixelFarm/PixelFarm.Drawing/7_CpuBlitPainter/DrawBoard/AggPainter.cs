@@ -43,11 +43,6 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-
-
-
-
-
     public class AggPainter : Painter
     {
         AggRenderSurface _aggsx; //target rendering surface
