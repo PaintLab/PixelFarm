@@ -260,8 +260,6 @@ namespace LayoutFarm
             throw new NotImplementedException();
         }
 
-
-
         public GlyphPlanSequence CreateGlyphPlanSeq(ref TextBufferSpan textBufferSpan, RequestFont font)
         {
 
