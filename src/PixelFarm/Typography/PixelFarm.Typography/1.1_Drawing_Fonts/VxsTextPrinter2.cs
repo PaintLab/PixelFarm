@@ -410,6 +410,9 @@ namespace PixelFarm.Drawing.Fonts
                     gx = ngx;
                     gy = y + ngy;
                     //move start draw point to gx and gy
+                    //I found that ... if we render this with Lcd Effect =>  +0.33px, (1/3 px) make this look sharp.
+                    //BUT, ... if we render this with grey-scaled stencil effect => not need to +0.33px
+
                     _painter.SetOrigin((float)Math.Round(gx) + 0.33f, (float)Math.Round(gy));
                     _painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
