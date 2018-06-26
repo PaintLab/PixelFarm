@@ -7,6 +7,8 @@ using PixelFarm.CpuBlit;
 
 using Typography.Contours;
 using Typography.OpenFont;
+using Typography.OpenFont.Extensions;
+
 using Typography.Rendering;
 using Typography.TextLayout;
 using Typography.TextServices;
@@ -14,104 +16,59 @@ using Typography.TextServices;
 namespace PixelFarm.Drawing.Fonts
 {
 
-    public class VxsTextPrinter : DevTextPrinterBase, ITextPrinter
+    public class VxsTextPrinter2 : DevTextPrinterBase, ITextPrinter
     {
+        LayoutFarm.OpenFontTextService _textServices;
+
         /// <summary>
         /// target canvas
         /// </summary>
         Painter _painter;
-        IFontLoader _fontLoader;
         RequestFont _reqFont;
         //----------------------------------------------------------- 
-        GlyphLayout _glyphLayout = new GlyphLayout();
+
         UnscaledGlyphPlanList _outputUnscaledGlyphPlans = new UnscaledGlyphPlanList();
         PxScaledGlyphPlanList _outputPxScaledGlyphPlans = new PxScaledGlyphPlanList();
 
         Typeface _currentTypeface;
-        PixelScaleLayoutEngine _pxScaleEngine;
+
         GlyphMeshStore _glyphMeshStore;
-        //-----------------------------------------------------------
-        Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
-        //-----------------------------------------------------------
 
         float _currentFontSizePxScale;
 
-        public VxsTextPrinter(Painter painter, IFontLoader fontLoader)
+        public VxsTextPrinter2(Painter painter)
         {
             StartDrawOnLeftTop = true;
             //
             this._painter = painter;
-            this._fontLoader = fontLoader;
+
 
             _glyphMeshStore = new GlyphMeshStore();
             _glyphMeshStore.FlipGlyphUpward = true;
 
-            //
-            _pxScaleEngine = new PixelScaleLayoutEngine();
-            _pxScaleEngine.HintedFontStore = _glyphMeshStore;//share _glyphMeshStore with pixel-scale-layout-engine
-
+            ////
+            //_pxScaleEngine = new PixelScaleLayoutEngine();
+            //_pxScaleEngine.HintedFontStore = _glyphMeshStore;//share _glyphMeshStore with pixel-scale-layout-engine
+            ////
             this.PositionTechnique = PositionTechnique.OpenFont;
-
+            //
+            _textServices = new LayoutFarm.OpenFontTextService();
+            ChangeFont(new RequestFont("tahoma", 10));
         }
         /// <summary>
         /// start draw on 'left-top' of a given area box
         /// </summary>
         public bool StartDrawOnLeftTop { get; set; }
 
-        public Painter TargetCanvasPainter
-        {
-            get
-            {
-                return _painter;
-            }
-            set
-            {
-                _painter = value;
-            }
-        }
-        bool TryGetTypeface(InstalledFont instFont, out Typeface found)
-        {
-            return _cachedTypefaces.TryGetValue(instFont, out found);
-        }
-        void RegisterTypeface(InstalledFont instFont, Typeface typeface)
-        {
-            _cachedTypefaces[instFont] = typeface;
-        }
-        /// <summary>
-        /// for layout that use with our  lcd subpixel rendering technique 
-        /// </summary>
-        public bool UseWithLcdSubPixelRenderingTechnique
-        {
-            get { return _pxScaleEngine.UseWithLcdSubPixelRenderingTechnique; }
-            set
-            {
-                _pxScaleEngine.UseWithLcdSubPixelRenderingTechnique = value;
-            }
-        }
+
+        public AntialiasTechnique AntialiasTechnique { get; set; }
+
         public void ChangeFont(RequestFont font)
         {
             //1.  resolve actual font file
             this._reqFont = font;
-            InstalledFont installedFont = _fontLoader.GetFont(font.Name, font.Style.ConvToInstalledFontStyle());
-            Typeface foundTypeface;
-
-            if (!TryGetTypeface(installedFont, out foundTypeface))
-            {
-                //if not found then create a new one
-                //if not found
-                //create the new one
-                using (FileStream fs = new FileStream(installedFont.FontPath, FileMode.Open, FileAccess.Read))
-                {
-                    var reader = new OpenFontReader();
-                    foundTypeface = reader.Read(fs);
-                    foundTypeface.Filename = installedFont.FontPath;
-                }
-                RegisterTypeface(installedFont, foundTypeface);
-            }
-
-            this.Typeface = foundTypeface;
+            this.Typeface = _textServices.ResolveTypeface(font); //resolve for 'actual' font 
             this.FontSizeInPoints = font.SizeInPoints;
-
         }
         public void ChangeFillColor(Color fontColor)
         {
@@ -144,7 +101,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                return _glyphLayout;
+                throw new NotSupportedException();
             }
         }
 
@@ -164,34 +121,16 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
         {
-
-            //1. update some props.. 
-            //2. update current type face
             UpdateGlyphLayoutSettings();
-            Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;            
-            _glyphLayout.Typeface = typeface;
-            _glyphLayout.Layout(text, startAt, len);
-            //
-            //3. scale from design unit to specific font size
-            _outputPxScaledGlyphPlans.Clear();
-            _pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputPxScaledGlyphPlans);
-            TextPrinterHelper.CopyGlyphPlans(renderVx, _outputUnscaledGlyphPlans, this._currentFontSizePxScale);
         }
 
         public override void DrawCaret(float x, float y)
         {
-
-            Painter p = this.TargetCanvasPainter;
-            PixelFarm.Drawing.Color prevColor = p.StrokeColor;
-            p.StrokeColor = PixelFarm.Drawing.Color.Red;
-            p.DrawLine(x, y, x, y + this.FontAscendingPx);
-            p.StrokeColor = prevColor;
+            //TODO: remove draw caret here, this is for debug only 
 
         }
-
         public void UpdateGlyphLayoutSettings()
         {
             if (this._reqFont == null)
@@ -199,28 +138,15 @@ namespace PixelFarm.Drawing.Fonts
                 //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
                 ChangeFont(_painter.CurrentFont);
             }
-
             //2.1              
             _glyphMeshStore.SetHintTechnique(this.HintTechnique);
-            //2.2
-            _glyphLayout.Typeface = this.Typeface;
-            _glyphLayout.ScriptLang = this.ScriptLang;
-            _glyphLayout.PositionTechnique = this.PositionTechnique;
-            _glyphLayout.EnableLigature = this.EnableLigature;
-
             _currentFontSizePxScale = Typeface.CalculateScaleToPixelFromPointSize(FontSizeInPoints);
 
-            //2.3
-            if (_pxScaleEngine != null)
-            {
-                _pxScaleEngine.SetFont(this.Typeface, this.FontSizeInPoints);
-            }
-            //3. layout glyphs with selected layout technique
-            //TODO: review this again, we should use pixel? 
-
-
-            //3.
-            //color...
+            ////2.3
+            //if (_pxScaleEngine != null)
+            //{
+            //    _pxScaleEngine.SetFont(this.Typeface, this.FontSizeInPoints);
+            //}
         }
 
         /// <summary>
@@ -280,26 +206,22 @@ namespace PixelFarm.Drawing.Fonts
 
         public override void DrawFromGlyphPlans(PxScaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
-            Painter painter = this.TargetCanvasPainter;
+
             if (StartDrawOnLeftTop)
             {
                 //version 2
                 //offset y down 
                 y += this.FontLineSpacingPx;
             }
-
-
             //Typeface typeface = _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
-            //TODO: review this again, we should use pixel?
-
+            //TODO: review this again, we should use pixel? 
             float fontSizePoint = this.FontSizeInPoints;
             //float scale = _currentTypeface.CalculateScaleToPixelFromPointSize(fontSizePoint);
             float scale = 1;
-
             //4. render each glyph 
-            float ox = painter.OriginX;
-            float oy = painter.OriginY;
+            float ox = _painter.OriginX;
+            float oy = _painter.OriginY;
             int endBefore = startAt + len;
 
             Typography.OpenFont.Tables.COLR colrTable = _currentTypeface.COLRTable;
@@ -316,10 +238,10 @@ namespace PixelFarm.Drawing.Fonts
             if (!hasColorGlyphs)
             {
 
-                bool savedUseLcdMode = painter.UseSubPixelLcdEffect; //save,restore later
-                RenderQualtity savedRederQuality = painter.RenderQuality;
-                painter.RenderQuality = RenderQualtity.HighQuality;
-                painter.UseSubPixelLcdEffect = true;
+                bool savedUseLcdMode = _painter.UseSubPixelLcdEffect; //save,restore later
+                RenderQualtity savedRederQuality = _painter.RenderQuality;
+                _painter.RenderQuality = RenderQualtity.HighQuality;
+                _painter.UseSubPixelLcdEffect = true;
 
                 CpuBlit.VertexProcessing.Affine flipY = CpuBlit.VertexProcessing.Affine.NewMatix(
                     CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1)); //flip Y
@@ -341,11 +263,9 @@ namespace PixelFarm.Drawing.Fonts
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
-
-
                     g_x = ngx;
                     g_y = ngy;
-                    painter.SetOrigin(g_x, g_y);
+                    _painter.SetOrigin((int)Math.Round(g_x) + 0.33f, (int)Math.Round(g_y) + 0.33f);
 
                     //-----------------------------------  
 
@@ -355,7 +275,7 @@ namespace PixelFarm.Drawing.Fonts
                     reusableVxs.Clear();
                     VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
                     PixelFarm.CpuBlit.VertexProcessing.VertexStoreTransformExtensions.TransformToVxs(flipY, vxs, reusableVxs);
-                    painter.Fill(reusableVxs);
+                    _painter.Fill(reusableVxs);
 
 
                     //version2; 
@@ -368,8 +288,8 @@ namespace PixelFarm.Drawing.Fonts
                     //painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
                 //restore
-                painter.RenderQuality = savedRederQuality;
-                painter.UseSubPixelLcdEffect = savedUseLcdMode;
+                _painter.RenderQuality = savedRederQuality;
+                _painter.UseSubPixelLcdEffect = savedUseLcdMode;
 
             }
             else
@@ -377,7 +297,7 @@ namespace PixelFarm.Drawing.Fonts
                 //-------------    
                 //this glyph has color information
                 //-------------
-                Color originalFillColor = painter.FillColor;
+                Color originalFillColor = _painter.FillColor;
 
                 float acc_x = 0;
                 float acc_y = 0;
@@ -392,7 +312,7 @@ namespace PixelFarm.Drawing.Fonts
                     g_y = ngy;
 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
-                    painter.SetOrigin(g_x, g_y);
+                    _painter.SetOrigin(g_x, g_y);
 
 
                     //-----------------------------------  
@@ -412,8 +332,8 @@ namespace PixelFarm.Drawing.Fonts
                                 cpalTable.Palettes[palette] + colrTable.GlyphPalettes[c], //index
                                 out r, out g, out b, out a);
                             //-----------  
-                            painter.FillColor = new Color(r, g, b);//? a component
-                            painter.Fill(_glyphMeshStore.GetGlyphMesh(gIndex));
+                            _painter.FillColor = new Color(r, g, b);//? a component
+                            _painter.Fill(_glyphMeshStore.GetGlyphMesh(gIndex));
                         }
                     }
                     else
@@ -423,36 +343,30 @@ namespace PixelFarm.Drawing.Fonts
                         //PERFORMANCE revisit here 
                         //if we have create a vxs we can cache it for later use?
                         //----------------------------------- 
-                        painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+                        _painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                     }
                 }
-                painter.FillColor = originalFillColor; //restore color
+                _painter.FillColor = originalFillColor; //restore color
             }
             //restore prev origin
-            painter.SetOrigin(ox, oy);
+            _painter.SetOrigin(ox, oy);
         }
         public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
-            Painter painter = this.TargetCanvasPainter;
+
             if (StartDrawOnLeftTop)
             {
                 //version 2
                 //offset y down 
                 y += this.FontLineSpacingPx;
             }
-
-
-            //Typeface typeface = _glyphPathBuilder.Typeface;
-            //3. layout glyphs with selected layout technique
-            //TODO: review this again, we should use pixel?
 
             float fontSizePoint = this.FontSizeInPoints;
             float scale = _currentTypeface.CalculateScaleToPixelFromPointSize(fontSizePoint);
 
-
             //4. render each glyph 
-            float ox = painter.OriginX;
-            float oy = painter.OriginY;
+            float ox = _painter.OriginX;
+            float oy = _painter.OriginY;
             int endBefore = startAt + len;
 
             Typography.OpenFont.Tables.COLR colrTable = _currentTypeface.COLRTable;
@@ -460,23 +374,21 @@ namespace PixelFarm.Drawing.Fonts
             bool hasColorGlyphs = (colrTable != null) && (cpalTable != null);
 
             //--------------------------------------------------- 
+            _glyphMeshStore.SetHintTechnique(HintTechnique.TrueTypeInstruction_VerticalOnly);
             _glyphMeshStore.SetFont(_currentTypeface, fontSizePoint);
             //---------------------------------------------------
 
-            float g_x = 0;
-            float g_y = 0;
+            float gx = 0;
+            float gy = 0;
             float baseY = (int)y;
             if (!hasColorGlyphs)
             {
 
-                bool savedUseLcdMode = painter.UseSubPixelLcdEffect; //save,restore later
-                RenderQualtity savedRederQuality = painter.RenderQuality;
-                painter.RenderQuality = RenderQualtity.HighQuality;
-                painter.UseSubPixelLcdEffect = true;
+                bool savedUseLcdMode = _painter.UseSubPixelLcdEffect; //save,restore later
+                RenderQualtity savedRederQuality = _painter.RenderQuality;
+                _painter.RenderQuality = RenderQualtity.HighQuality;
+                _painter.UseSubPixelLcdEffect = true;
 
-                CpuBlit.VertexProcessing.Affine flipY = CpuBlit.VertexProcessing.Affine.NewMatix(
-                    CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1)); //flip Y
-                VertexStore reusableVxs = new VertexStore();
 
                 float acc_x = 0; //acummulate x
                 float acc_y = 0; //acummulate y
@@ -492,36 +404,21 @@ namespace PixelFarm.Drawing.Fonts
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
 
+                    //glyph width 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
 
+                    gx = ngx;
+                    gy = y + ngy;
+                    //move start draw point to gx and gy
+                    //I found that ... if we render this with Lcd Effect =>  +0.33px, (1/3 px) make this look sharp.
+                    //BUT, ... if we render this with grey-scaled stencil effect => not need to +0.33px
 
-                    g_x = ngx;
-                    g_y = ngy;
-                    painter.SetOrigin(g_x, g_y);
-
-                    //-----------------------------------  
-
-                    //invert each glyph 
-                    //version 3:
-
-                    reusableVxs.Clear();
-                    VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
-                    PixelFarm.CpuBlit.VertexProcessing.VertexStoreTransformExtensions.TransformToVxs(flipY, vxs, reusableVxs);
-                    painter.Fill(reusableVxs);
-
-
-                    //version2; 
-                    //VertexStore vsx = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
-                    //_vxs1 = _invertY.TransformToVxs(vsx, _vxs1);
-                    //painter.Fill(_vxs1);
-                    //_vxs1.Clear();
-
-                    //version1
-                    //painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+                    _painter.SetOrigin((float)Math.Round(gx) + 0.33f, (float)Math.Round(gy));
+                    _painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
                 //restore
-                painter.RenderQuality = savedRederQuality;
-                painter.UseSubPixelLcdEffect = savedUseLcdMode;
+                _painter.RenderQuality = savedRederQuality;
+                _painter.UseSubPixelLcdEffect = savedUseLcdMode;
 
             }
             else
@@ -529,7 +426,7 @@ namespace PixelFarm.Drawing.Fonts
                 //-------------    
                 //this glyph has color information
                 //-------------
-                Color originalFillColor = painter.FillColor;
+                Color originalFillColor = _painter.FillColor;
 
                 float acc_x = 0;
                 float acc_y = 0;
@@ -540,11 +437,11 @@ namespace PixelFarm.Drawing.Fonts
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
 
-                    g_x = ngx;
-                    g_y = ngy;
+                    gx = ngx;
+                    gy = ngy;
 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
-                    painter.SetOrigin(g_x, g_y);
+                    _painter.SetOrigin(gx, gy);
 
 
                     //-----------------------------------  
@@ -564,8 +461,8 @@ namespace PixelFarm.Drawing.Fonts
                                 cpalTable.Palettes[palette] + colrTable.GlyphPalettes[c], //index
                                 out r, out g, out b, out a);
                             //-----------  
-                            painter.FillColor = new Color(r, g, b);//? a component
-                            painter.Fill(_glyphMeshStore.GetGlyphMesh(gIndex));
+                            _painter.FillColor = new Color(r, g, b);//? a component
+                            _painter.Fill(_glyphMeshStore.GetGlyphMesh(gIndex));
                         }
                     }
                     else
@@ -575,13 +472,13 @@ namespace PixelFarm.Drawing.Fonts
                         //PERFORMANCE revisit here 
                         //if we have create a vxs we can cache it for later use?
                         //----------------------------------- 
-                        painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+                        _painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                     }
                 }
-                painter.FillColor = originalFillColor; //restore color
+                _painter.FillColor = originalFillColor; //restore color
             }
             //restore prev origin
-            painter.SetOrigin(ox, oy);
+            _painter.SetOrigin(ox, oy);
         }
 
         public void DrawString(char[] text, int startAt, int len, double x, double y)
@@ -594,130 +491,14 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        void InternalDrawString(char[] textBuffer, int startAt, int len, float x, float y)
+        void InternalDrawString(char[] buffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
             //unscale layout, with design unit scale
-            _glyphLayout.Layout(textBuffer, startAt, len);
-            //
-            //
-
-            //
-            if (this._pxScaleEngine != null)
-            {
-                _outputPxScaledGlyphPlans.Clear();
-                //scale to specific font size 
-                _pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputPxScaledGlyphPlans);
-                DrawFromGlyphPlans(_outputPxScaledGlyphPlans, x, y);
-            }
-            else
-            {
-                _outputUnscaledGlyphPlans.Clear();
-                //no custom engine
-                //then use default scale  
-                GlyphLayoutExtensions.GenerateGlyphPlans(
-                    _glyphLayout.ResultUnscaledGlyphPositions,
-                    _currentFontSizePxScale,
-                    false,
-                    _outputPxScaledGlyphPlans);
-                DrawFromGlyphPlans(_outputUnscaledGlyphPlans, x, y);
-
-            }
-
-
-        }
-
-    }
-
-    public static class TextPrinterHelper
-    {
-        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, PxScaledGlyphPlanList glyphPlans)
-        {
-            int n = glyphPlans.Count;
-            //copy 
-            var renderVxGlyphPlans = new RenderVxGlyphPlan[n];
-            float acc_x = 0;
-            float acc_y = 0;
-            float x = 0;
-            float y = 0;
-            float g_x = 0;
-            float g_y = 0;
-
-            for (int i = 0; i < n; ++i)
-            {
-                PxScaledGlyphPlan glyphPlan = glyphPlans[i];
-
-
-                float ngx = acc_x + glyphPlan.OffsetX;
-                float ngy = acc_y + glyphPlan.OffsetY;
-                //NOTE:
-                // -glyphData.TextureXOffset => restore to original pos
-                // -glyphData.TextureYOffset => restore to original pos 
-                //--------------------------
-                g_x = (float)(x + ngx); //ideal x
-                g_y = (float)(y + ngy);
-
-
-                float g_w = glyphPlan.AdvanceX;
-                acc_x += g_w;
-
-                //g_x = (float)Math.Round(g_x);
-                g_y = (float)Math.Floor(g_y);
-
-
-                renderVxGlyphPlans[i] = new RenderVxGlyphPlan(
-                    glyphPlan.glyphIndex,
-                    g_x,
-                    g_y,
-                    g_w
-                    );
-            }
-            renderVx.glyphList = renderVxGlyphPlans;
-        }
-        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, UnscaledGlyphPlanList glyphPlans, float scale)
-        {
-            int n = glyphPlans.Count;
-            //copy 
-            var renderVxGlyphPlans = new RenderVxGlyphPlan[n];
-            float acc_x = 0;
-            float acc_y = 0;
-            float x = 0;
-            float y = 0;
-            float g_x = 0;
-            float g_y = 0;
-
-            for (int i = 0; i < n; ++i)
-            {
-                UnscaledGlyphPlan glyphPlan = glyphPlans[i];
-
-
-                float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
-                float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
-                //NOTE:
-                // -glyphData.TextureXOffset => restore to original pos
-                // -glyphData.TextureYOffset => restore to original pos 
-                //--------------------------
-                g_x = (float)(x + ngx); //ideal x
-                g_y = (float)(y + ngy);
-
-
-                float g_w = (float)Math.Round(glyphPlan.AdvanceX * scale);
-                acc_x += g_w;
-
-                //g_x = (float)Math.Round(g_x);
-                g_y = (float)Math.Floor(g_y);
-
-
-                renderVxGlyphPlans[i] = new RenderVxGlyphPlan(
-                    glyphPlan.glyphIndex,
-                    g_x,
-                    g_y,
-                    g_w
-                    );
-            }
-            renderVx.glyphList = renderVxGlyphPlans;
+            TextBufferSpan buffSpan = new TextBufferSpan(buffer, startAt, len);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref buffSpan, _reqFont);
+            DrawFromGlyphPlans(GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq), x, y);
         }
     }
-
 
 }

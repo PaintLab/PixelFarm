@@ -56,7 +56,7 @@ namespace Typography.Contours
         float _currentFontSizeInPoints;
         HintTechnique _currentHintTech;
 
-    
+
         GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
 
         public GlyphMeshStore()
@@ -255,256 +255,256 @@ namespace Typography.Contours
         }
 
 
-        struct FineABC
-        {
-            //this struct is used for local calculation (in a method) only
-            //not suite for storing data / pass data between methods
+        //        struct FineABC
+        //        {
+        //            //this struct is used for local calculation (in a method) only
+        //            //not suite for storing data / pass data between methods
 
-            /// <summary>
-            /// avg x to fit value, this is calculated value from dynamic layout
-            /// </summary>
-            public float s_avg_x_ToFit;
+        //            /// <summary>
+        //            /// avg x to fit value, this is calculated value from dynamic layout
+        //            /// </summary>
+        //            public float s_avg_x_ToFit;
 
-            /// <summary>
-            /// scaled offsetX
-            /// </summary>
-            public float s_offsetX;
-            /// <summary>
-            /// scaled offsetY
-            /// </summary>
-            public float s_offsetY;
-            /// <summary>
-            ///  scaled advance width
-            /// </summary>
-            public float s_advW;
-            /// <summary>
-            /// scaled x min
-            /// </summary>
-            public float s_xmin;
-            /// <summary>
-            /// scaled x max
-            /// </summary>
-            public float s_xmax;
-            /// <summary>
-            /// distance, scaled a part
-            /// </summary>
-            public float s_a;
-            /// <summary>
-            /// distance, scaled c part
-            /// </summary>
-            public float s_c;
+        //            /// <summary>
+        //            /// scaled offsetX
+        //            /// </summary>
+        //            public float s_offsetX;
+        //            /// <summary>
+        //            /// scaled offsetY
+        //            /// </summary>
+        //            public float s_offsetY;
+        //            /// <summary>
+        //            ///  scaled advance width
+        //            /// </summary>
+        //            public float s_advW;
+        //            /// <summary>
+        //            /// scaled x min
+        //            /// </summary>
+        //            public float s_xmin;
+        //            /// <summary>
+        //            /// scaled x max
+        //            /// </summary>
+        //            public float s_xmax;
+        //            /// <summary>
+        //            /// distance, scaled a part
+        //            /// </summary>
+        //            public float s_a;
+        //            /// <summary>
+        //            /// distance, scaled c part
+        //            /// </summary>
+        //            public float s_c;
 
-            /// <summary>
-            /// approximate final advance width for this glyph
-            /// </summary>
-            public int final_advW;
-
-
-            public float m_c;
-            public float m_a;
-            public short m_a_adjust; //-1,0,1
-            public short m_c_adjust; //-1,0,1
+        //            /// <summary>
+        //            /// approximate final advance width for this glyph
+        //            /// </summary>
+        //            public int final_advW;
 
 
-            public float m_max;
-            public void SetData(float pxscale, GlyphControlParameters controlPars, short offsetX, short offsetY, ushort orgAdvW)
-            {
-
-#if DEBUG
-                dbugIsPrev = false;
-#endif
-                s_avg_x_ToFit = controlPars.avgXOffsetToFit;
+        //            public float m_c;
+        //            public float m_a;
+        //            public short m_a_adjust; //-1,0,1
+        //            public short m_c_adjust; //-1,0,1
 
 
-                float o_a = controlPars.minX;
-                float o_c = (short)(orgAdvW - controlPars.maxX);
-                if (o_c < 0)
-                {
-                    //TODO: review here ...
-                    //? 
-                    //o_c = 0;
-                }
-                //-----------------
-                //calculate...  
-                s_offsetX = pxscale * offsetX;
-                s_offsetY = pxscale * offsetY;
-                s_advW = pxscale * orgAdvW;
-                s_xmin = pxscale * controlPars.minX;
-                s_xmax = pxscale * controlPars.maxX;
-                s_a = pxscale * o_a;
-                s_c = pxscale * o_c;
+        //            public float m_max;
+        //            public void SetData(float pxscale, GlyphControlParameters controlPars, short offsetX, short offsetY, ushort orgAdvW)
+        //            {
 
-                final_advW = ((s_advW - (int)s_advW) > 0.5) ?
-                                (int)(s_advW + 1) : //round
-                                (int)(s_advW);
-
-                //
-                m_c = final_advW - (s_xmax + s_avg_x_ToFit);
-                m_a = s_avg_x_ToFit + s_xmin;
-
-                if (m_a < 0.5f)
-                {
-                    m_a_adjust = 1;
-                }
-                else
-                {
-                    m_a_adjust = 0;
-                }
-
-                if (final_advW - m_c > 1f)
-                {
-                    m_c_adjust = -1;
-                }
-                else
-                {
-                    m_c = 0;
-                }
+        //#if DEBUG
+        //                dbugIsPrev = false;
+        //#endif
+        //                s_avg_x_ToFit = controlPars.avgXOffsetToFit;
 
 
-                m_max = s_xmax + s_avg_x_ToFit;
+        //                float o_a = controlPars.minX;
+        //                float o_c = (short)(orgAdvW - controlPars.maxX);
+        //                if (o_c < 0)
+        //                {
+        //                    //TODO: review here ...
+        //                    //? 
+        //                    //o_c = 0;
+        //                }
+        //                //-----------------
+        //                //calculate...  
+        //                s_offsetX = pxscale * offsetX;
+        //                s_offsetY = pxscale * offsetY;
+        //                s_advW = pxscale * orgAdvW;
+        //                s_xmin = pxscale * controlPars.minX;
+        //                s_xmax = pxscale * controlPars.maxX;
+        //                s_a = pxscale * o_a;
+        //                s_c = pxscale * o_c;
 
-            }
-#if DEBUG
-            public bool dbugIsPrev;
-            float dbug_M_C_Diff { get { return m_c - s_c; } }
-            float dbug_M_A_Diff { get { return m_a - s_a; } }
-            public override string ToString()
-            {
-                if (dbugIsPrev)
-                {
-                    return "m_c:" + m_c + ",diff:" + dbug_M_C_Diff;
-                }
-                else
-                {
-                    return "m_a" + m_a + ",diff:" + dbug_M_A_Diff;
-                }
-            }
-#endif
-        }
+        //                final_advW = ((s_advW - (int)s_advW) > 0.5) ?
+        //                                (int)(s_advW + 1) : //round
+        //                                (int)(s_advW);
+
+        //                //
+        //                m_c = final_advW - (s_xmax + s_avg_x_ToFit);
+        //                m_a = s_avg_x_ToFit + s_xmin;
+
+        //                if (m_a < 0.5f)
+        //                {
+        //                    m_a_adjust = 1;
+        //                }
+        //                else
+        //                {
+        //                    m_a_adjust = 0;
+        //                }
+
+        //                if (final_advW - m_c > 1f)
+        //                {
+        //                    m_c_adjust = -1;
+        //                }
+        //                else
+        //                {
+        //                    m_c = 0;
+        //                }
+
+
+        //                m_max = s_xmax + s_avg_x_ToFit;
+
+        //            }
+        //#if DEBUG
+        //            public bool dbugIsPrev;
+        //            float dbug_M_C_Diff { get { return m_c - s_c; } }
+        //            float dbug_M_A_Diff { get { return m_a - s_a; } }
+        //            public override string ToString()
+        //            {
+        //                if (dbugIsPrev)
+        //                {
+        //                    return "m_c:" + m_c + ",diff:" + dbug_M_C_Diff;
+        //                }
+        //                else
+        //                {
+        //                    return "m_a" + m_a + ",diff:" + dbug_M_A_Diff;
+        //                }
+        //            }
+        //#endif
+        //        }
 
 
         public void Layout(IGlyphPositions posStream, PxScaledGlyphPlanList outputGlyphPlanList)
         {
 
-            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
-            if (!UseWithLcdSubPixelRenderingTechnique)
-            {
-                //layout without fit to alignment direction
-                GlyphLayoutExtensions.GenerateGlyphPlans(posStream, pxscale, false, outputGlyphPlanList);
-                return; //early exit
-            }
-            //------------------------------
-            int finalGlyphCount = posStream.Count;
-#if DEBUG
-            float dbug_onepx = 1 / pxscale;
-#endif
-            //
-            int cx = 0;
-            short cy = 0;
-            //
-            //at this state, we need exact info at this specific pxscale
-            //
-            _glyphMeshStore.SetFont(_typeface, this._fontSizeInPoints);
-            FineABC current_ABC = new FineABC();
-            FineABC prev_ABC = new FineABC();
+            //            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
+            //            if (!UseWithLcdSubPixelRenderingTechnique)
+            //            {
+            //                //layout without fit to alignment direction
+            //                GlyphLayoutExtensions.GenerateGlyphPlans(posStream, pxscale, false, outputGlyphPlanList);
+            //                return; //early exit
+            //            }
+            //            //------------------------------
+            //            int finalGlyphCount = posStream.Count;
+            //#if DEBUG
+            //            float dbug_onepx = 1 / pxscale;
+            //#endif
+            //            //
+            //            int cx = 0;
+            //            short cy = 0;
+            //            //
+            //            //at this state, we need exact info at this specific pxscale
+            //            //
+            //            _glyphMeshStore.SetFont(_typeface, this._fontSizeInPoints);
+            //            FineABC current_ABC = new FineABC();
+            //            FineABC prev_ABC = new FineABC();
 
-            for (int i = 0; i < finalGlyphCount; ++i)
-            {
-                short input_offset, offsetX, offsetY, advW; //all from pen-pos
-                ushort glyphIndex = posStream.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
-                GlyphControlParameters controlPars = _glyphMeshStore.GetControlPars(glyphIndex);
-                current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
-                //-------------------------------------------------------------
+            //            for (int i = 0; i < finalGlyphCount; ++i)
+            //            {
+            //                short input_offset, offsetX, offsetY, advW; //all from pen-pos
+            //                ushort glyphIndex = posStream.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
+            //                GlyphControlParameters controlPars = _glyphMeshStore.GetControlPars(glyphIndex);
+            //                current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
+            //                //-------------------------------------------------------------
 
-                if (i > 0)
-                {
-                    //inter-glyph space
-                    //ideal space
-                    float ideal_space = prev_ABC.s_c + current_ABC.s_a;
-                    //actual space
-                    float actual_space = prev_ABC.m_c + current_ABC.m_a;
+            //                if (i > 0)
+            //                {
+            //                    //inter-glyph space
+            //                    //ideal space
+            //                    float ideal_space = prev_ABC.s_c + current_ABC.s_a;
+            //                    //actual space
+            //                    float actual_space = prev_ABC.m_c + current_ABC.m_a;
 
-                    if (ideal_space < 0)
-                    {
-                        //f-f
-                        //f-o 
-                        if (prev_ABC.s_c < 0)
-                        {
-                            ideal_space = 0 + current_ABC.s_a;
-                        }
-                        if (ideal_space < 0)
-                        {
-                            ideal_space = 0;
-                        }
-                    }
-                    if (ideal_space >= 0)
-                    {
-                        //m-a
-                        //i-i
-                        //o-p 
-                        if (actual_space > 1.5 && actual_space - 0.5 > ideal_space)
-                        {
-                            cx--;
-                        }
-                        else
-                        {
-                            if (actual_space < ideal_space)
-                            {
-                                if (prev_ABC.final_advW + prev_ABC.m_c_adjust < prev_ABC.m_max)
-                                {
-                                    cx += current_ABC.m_a_adjust;
-                                }
-                            }
-                            else
-                            {
-                                if (prev_ABC.final_advW - prev_ABC.m_c + prev_ABC.m_c_adjust > prev_ABC.m_max)
-                                {
-                                    cx += prev_ABC.m_c_adjust;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //this should not occur?
+            //                    if (ideal_space < 0)
+            //                    {
+            //                        //f-f
+            //                        //f-o 
+            //                        if (prev_ABC.s_c < 0)
+            //                        {
+            //                            ideal_space = 0 + current_ABC.s_a;
+            //                        }
+            //                        if (ideal_space < 0)
+            //                        {
+            //                            ideal_space = 0;
+            //                        }
+            //                    }
+            //                    if (ideal_space >= 0)
+            //                    {
+            //                        //m-a
+            //                        //i-i
+            //                        //o-p 
+            //                        if (actual_space > 1.5 && actual_space - 0.5 > ideal_space)
+            //                        {
+            //                            cx--;
+            //                        }
+            //                        else
+            //                        {
+            //                            if (actual_space < ideal_space)
+            //                            {
+            //                                if (prev_ABC.final_advW + prev_ABC.m_c_adjust < prev_ABC.m_max)
+            //                                {
+            //                                    cx += current_ABC.m_a_adjust;
+            //                                }
+            //                            }
+            //                            else
+            //                            {
+            //                                if (prev_ABC.final_advW - prev_ABC.m_c + prev_ABC.m_c_adjust > prev_ABC.m_max)
+            //                                {
+            //                                    cx += prev_ABC.m_c_adjust;
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                    else
+            //                    {
+            //                        //this should not occur?
 
-                    }
-                }
-                //------------------------------------------------------------- 
+            //                    }
+            //                }
+            //                //------------------------------------------------------------- 
 
-                //TODO: review here again***
+            //                //TODO: review here again***
 
 
-                float exact_x = (float)(cx + current_ABC.s_offsetX);
-                float exact_y = (float)(cy + current_ABC.s_offsetY);
+            //                float exact_x = (float)(cx + current_ABC.s_offsetX);
+            //                float exact_y = (float)(cy + current_ABC.s_offsetY);
 
-                //check if the current position can create a sharp glyph
-                int exact_x_floor = (int)exact_x;
-                float x_offset_to_fit = current_ABC.s_avg_x_ToFit;
+            //                //check if the current position can create a sharp glyph
+            //                int exact_x_floor = (int)exact_x;
+            //                float x_offset_to_fit = current_ABC.s_avg_x_ToFit;
 
-                float final_x = exact_x_floor + x_offset_to_fit;
-                if (UseWithLcdSubPixelRenderingTechnique)
-                {
-                    final_x += 0.33f;
-                }
+            //                float final_x = exact_x_floor + x_offset_to_fit;
+            //                if (UseWithLcdSubPixelRenderingTechnique)
+            //                {
+            //                    final_x += 0.33f;
+            //                }
 
-                outputGlyphPlanList.Append(new PxScaledGlyphPlan(
-                    input_offset,
-                    glyphIndex,
-                    (short)current_ABC.final_advW,
-                    (short)Math.Round(current_ABC.s_offsetX),
-                    (short)Math.Round(current_ABC.s_offsetY)
-                    ));
-                // 
-                //
-                cx += current_ABC.final_advW;
-                //-----------------------------------------------
-                prev_ABC = current_ABC;//copy current to prev
-#if DEBUG
-                prev_ABC.dbugIsPrev = true;
-#endif
-                // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
-            }
+            //                outputGlyphPlanList.Append(new PxScaledGlyphPlan(
+            //                    input_offset,
+            //                    glyphIndex,
+            //                    (short)current_ABC.final_advW,
+            //                    (short)Math.Round(current_ABC.s_offsetX),
+            //                    (short)Math.Round(current_ABC.s_offsetY)
+            //                    ));
+            //                // 
+            //                //
+            //                cx += current_ABC.final_advW;
+            //                //-----------------------------------------------
+            //                prev_ABC = current_ABC;//copy current to prev
+            //#if DEBUG
+            //                prev_ABC.dbugIsPrev = true;
+            //#endif
+            //                // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
+            //            }
         }
 
 
