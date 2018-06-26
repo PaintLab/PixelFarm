@@ -28,7 +28,7 @@ namespace SampleWinForms.UI
             p = AggPainter.Create(destImg);
             winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            _printer = new VxsTextPrinter(p, null);
+            _printer = new VxsTextPrinter(p);
             _visualLine = new VisualLine();
             _visualLine.BindLine(_line);
             _visualLine.Y = 100;
@@ -54,7 +54,7 @@ namespace SampleWinForms.UI
             p.FillColor = PixelFarm.Drawing.Color.Black;
             p.Clear(PixelFarm.Drawing.Color.White);
 
-            _printer.TargetCanvasPainter = p;
+           // _printer.TargetCanvasPainter = p;
             _visualLine.Draw();
 
 

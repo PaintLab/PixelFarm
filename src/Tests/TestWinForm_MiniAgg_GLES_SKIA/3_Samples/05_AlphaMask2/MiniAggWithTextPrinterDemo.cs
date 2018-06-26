@@ -61,7 +61,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //use custom printer here
             //_printer = new FontAtlasTextPrinter(p);
-            _printer = new VxsTextPrinter2(p);
+            _printer = new VxsTextPrinter(p);
             _fontAtlasPrinterReady = true;
         }
         public void DrawString(AggPainter painter, char[] buffer, int startAt, int len, double x, double y)

@@ -47,9 +47,8 @@ namespace PixelFarm.DrawingGL
             _aggPainter.StrokeColor = Color.Black;
 
             //set default1
-            _aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            var openFontStore = new Typography.TextServices.OpenFontStore();
-            _vxsTextPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
+            _aggPainter.CurrentFont = canvasPainter.CurrentFont; 
+            _vxsTextPrinter = new VxsTextPrinter(_aggPainter);
             _aggPainter.TextPrinter = _vxsTextPrinter;
         }
         public bool StartDrawOnLeftTop { get; set; }

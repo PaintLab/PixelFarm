@@ -104,15 +104,14 @@
     <Compile Include="1.1_Drawing_Fonts\GlyphMeshCollection.cs" />
     <Compile Include="1.1_Drawing_Fonts\HintTechnique.cs" />
     <Compile Include="1.1_Drawing_Fonts\OpenFontTextService.cs" />
-    <Compile Include="1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs" />
-    <Compile Include="1.1_Drawing_Fonts\VxsTextPrinter2.cs" />
+    <Compile Include="1.1_Drawing_Fonts\GlyphMeshStore.cs" />
+    <Compile Include="1.1_Drawing_Fonts\VxsTextPrinter.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="3_FontFaceImpl\BitmapFontMx.cs" />
     <Compile Include="3_FontFaceImpl\GlyphTextureBitmapGenerator.cs" />
     <Compile Include="3_FontFaceImpl\NOpenFontFace.cs" />
     <Compile Include="3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />
-    <Compile Include="1.1_Drawing_Fonts\VxsTextPrinter.cs" />
     <Compile Include="3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="3_FontFaceImpl\AggGlyphTextureGen.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphPathBuilderBase.cs" />
@@ -120,6 +119,9 @@
     <Compile Include="1.3_DrawingFonts\ActualFont.cs" />
     <Compile Include="1.3_DrawingFonts\FontFace.cs" />
     <Compile Include="1.3_DrawingFonts\FontGlyph.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x_notused\VxsTextPrinter.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
