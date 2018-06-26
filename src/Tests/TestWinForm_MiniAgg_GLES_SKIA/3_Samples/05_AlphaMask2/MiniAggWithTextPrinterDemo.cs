@@ -96,7 +96,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             int lineSpaceInPx = (int)painter.CurrentFont.LineSpacingInPx;
             int ypos = 0;
 
-            DrawString(p, "Hello World", 10, ypos);
+
+            DrawString(p, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii", 10, ypos);
             ypos += lineSpaceInPx;
             //--------  
 
