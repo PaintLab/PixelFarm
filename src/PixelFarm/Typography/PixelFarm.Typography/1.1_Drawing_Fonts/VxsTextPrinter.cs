@@ -490,7 +490,7 @@ namespace PixelFarm.Drawing.Fonts
             //unscale layout, with design unit scale
             TextBufferSpan buffSpan = new TextBufferSpan(buffer, startAt, len);
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref buffSpan, _reqFont);
-            DrawFromGlyphPlans(GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq), x, y);
+            DrawFromGlyphPlans(GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq), glyphPlanSeq.startAt, glyphPlanSeq.len, x, y);
         }
     }
     public static class TextPrinterHelper

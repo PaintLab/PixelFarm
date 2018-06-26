@@ -13,7 +13,9 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     {
 
         bool _fontAtlasPrinterReady;
-        //FontAtlasTextPrinter _printer;
+        FontAtlasTextPrinter _fontAtlasTextPrinter;
+        VxsTextPrinter _vxsTextPrinter;
+
         DevTextPrinterBase _printer;
 
         public MiniAggWithTextPrinterDemo()
@@ -32,6 +34,23 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 if (painter == null) return;
                 //
                 DrawString(painter, text.ToCharArray(), 0, text.Length, x, y);
+            }
+        }
+
+        bool _useFontAtlas;
+
+        [DemoConfig]
+        public bool UseFontAtlasOrVxs
+        {
+            get { return _useFontAtlas; }
+            set
+            {
+                _useFontAtlas = value;
+                _printer = (_useFontAtlas) ?
+                    (DevTextPrinterBase)_fontAtlasTextPrinter :
+                    _vxsTextPrinter;
+                this.NeedRedraw = true;
+
             }
         }
 
@@ -61,7 +80,20 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //use custom printer here
             //_printer = new FontAtlasTextPrinter(p);
-            _printer = new VxsTextPrinter(p);
+            if (_fontAtlasTextPrinter == null)
+            {
+                _fontAtlasTextPrinter = new FontAtlasTextPrinter(p);
+            }
+
+            if (_vxsTextPrinter == null)
+            {
+                _vxsTextPrinter = new VxsTextPrinter(p);
+            }
+
+            _printer = (_useFontAtlas) ?
+                    (DevTextPrinterBase)_fontAtlasTextPrinter :
+                    _vxsTextPrinter;
+
             _fontAtlasPrinterReady = true;
         }
         public void DrawString(AggPainter painter, char[] buffer, int startAt, int len, double x, double y)
@@ -102,7 +134,15 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //--------  
 
             p.FillColor = Color.Green;
-            DrawString(p, "Hello World", 10, ypos);
+            if (_useFontAtlas)
+            {
+                DrawString(p, "Hello World from FontAtlasTextPrinter", 10, ypos);
+            }
+            else
+            {
+                DrawString(p, "Hello World from VxsTextPrinter", 10, ypos);
+            }
+
             ypos += lineSpaceInPx;
 
             p.FillColor = Color.Blue;
