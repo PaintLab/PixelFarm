@@ -31,7 +31,7 @@ namespace OpenTkEssTest
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.xml", System.IO.FileMode.Open))
             {
-                fontAtlas = atlasBuilder.LoadAtlasInfo(fs);
+                fontAtlas = atlasBuilder.LoadFontInfo(fs);
             }
 
 

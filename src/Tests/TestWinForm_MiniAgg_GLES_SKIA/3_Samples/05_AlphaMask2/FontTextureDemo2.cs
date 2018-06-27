@@ -103,12 +103,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
             float scale = 1;// _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
+            int recommendLineSpacing = (int)_font.LineSpacingInPx;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((_fontAtlas.OriginalRecommendLineSpacing) * scale);
+            y -= ((_font.LineSpacingInPx) * scale);
 
             // 
             float scaleFromTexture = _finalTextureScale;

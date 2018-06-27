@@ -141,7 +141,7 @@ namespace Typography.Rendering
                     {
                         try
                         {
-                            fontAtlas = atlasBuilder2.LoadAtlasInfo(dataStream);
+                            fontAtlas = atlasBuilder2.LoadFontInfo(dataStream);
                             fontAtlas.TotalGlyph = ReadGlyphImages(fontTextureImg);
                             fontAtlas.OriginalFontSizePts = reqFont.SizeInPoints;
                             _createdAtlases.Add(fontKey, fontAtlas);
@@ -232,14 +232,14 @@ namespace Typography.Rendering
                     //save font info to cache
                     using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
                     {
-                        atlasBuilder.SaveAtlasInfo(ms);
+                        atlasBuilder.SaveFontInfo(ms);
                         System.IO.File.WriteAllBytes(fontTextureInfoFile, ms.ToArray());
 
                         StorageService.Provider.SaveData(fontTextureInfoFile, ms.ToArray());
                     }
                 }
             }
-           
+
             outputBitmap = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
             return fontAtlas;
         }
