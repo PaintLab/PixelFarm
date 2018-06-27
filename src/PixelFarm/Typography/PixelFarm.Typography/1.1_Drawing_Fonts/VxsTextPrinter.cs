@@ -393,7 +393,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     len = seqLen;
                 }
-                 
+
                 for (int i = startAt; i < len; ++i)
                 {   //-----------------------------------
                     //TODO: review here ***
@@ -408,7 +408,7 @@ namespace PixelFarm.Drawing.Fonts
                     //glyph width 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
 
-                    gx = ngx;
+                    gx = x + ngx;
                     gy = y + ngy;
                     //move start draw point to gx and gy
                     //I found that ... if we render this with Lcd Effect =>  +0.33px, (1/3 px) make this look sharp.
@@ -445,8 +445,8 @@ namespace PixelFarm.Drawing.Fonts
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
 
-                    gx = ngx;
-                    gy = ngy;
+                    gx = x + ngx;
+                    gy = y + ngy;
 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
                     _painter.SetOrigin(gx, gy);
@@ -488,7 +488,7 @@ namespace PixelFarm.Drawing.Fonts
             //restore prev origin
             _painter.SetOrigin(ox, oy);
         }
-       
+
 
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
