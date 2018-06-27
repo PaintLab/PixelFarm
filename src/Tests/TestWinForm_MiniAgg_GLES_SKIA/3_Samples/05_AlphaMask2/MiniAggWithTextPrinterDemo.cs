@@ -116,7 +116,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             //clear the image to white         
             // draw a circle
-            p.Clear(Drawing.Color.White);
+            p.Clear(Drawing.Color.Yellow);
             p.FillColor = Color.Black;
 
 
@@ -128,7 +128,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             ypos += lineSpaceInPx;
             //--------  
 
-            p.FillColor = Color.Green;
+            p.FillColor = Color.Black;
             if (_useFontAtlas)
             {
                 DrawString(p, "Hello World from FontAtlasTextPrinter", 10, ypos);
