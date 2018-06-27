@@ -213,7 +213,7 @@ namespace Typography.Rendering
 
             GlyphImage glyphImage = new GlyphImage(totalImgWidth, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
-            
+
 
             _latestGenGlyphImage = glyphImage;
 
@@ -339,7 +339,7 @@ namespace Typography.Rendering
                 glyphData.TextureYOffset = borderAndTransform[4];
 
                 //--------------- 
-                simpleFontAtlas.AddGlyph(glyphIndex, glyphData);
+                simpleFontAtlas.AddGlyph((ushort)glyphIndex, glyphData);
             }
             return simpleFontAtlas;
         }

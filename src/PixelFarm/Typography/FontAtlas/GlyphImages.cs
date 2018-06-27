@@ -71,8 +71,14 @@ namespace Typography.Rendering
 
     public class TextureGlyphMapData
     {
+        public int Left { get; set; }
+        public int Top { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
         public float BorderX { get; set; }
         public float BorderY { get; set; }
+
         public float AdvanceX { get; set; }
         public float AdvanceY { get; set; }
         public float BBoxXMin { get; set; }
@@ -95,15 +101,22 @@ namespace Typography.Rendering
 
         public Rectangle Rect
         {
-            get;
-            set;
+            get { return new Rectangle(Left, Top, Width, Height); }
+            set
+            {
+                Left = value.Left;
+                Top = value.Top;
+                Width = value.Width;
+                Height = value.Height;
+            }
         }
+
         public void GetGlyphRect(out int x, out int y, out int w, out int h)
         {
-            x = Rect.X;
-            y = Rect.Y;
-            w = Rect.Width;
-            h = Rect.Height;
+            x = Left;
+            y = Top;
+            w = Width;
+            h = Height;
         }
 
     }
