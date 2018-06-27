@@ -12,7 +12,7 @@ namespace Typography.Rendering
     public class SimpleFontAtlasBuilder
     {
         GlyphImage _latestGenGlyphImage;
-        Dictionary<int, CacheGlyph> _glyphs = new Dictionary<int, CacheGlyph>();
+        Dictionary<ushort, CacheGlyph> _glyphs = new Dictionary<ushort, CacheGlyph>();
 
         public SimpleFontAtlasBuilder()
         {
@@ -20,18 +20,17 @@ namespace Typography.Rendering
             MaxAtlasWidth = 800;
         }
         public int MaxAtlasWidth { get; set; }
-
         public TextureKind TextureKind { get; private set; }
         public float FontSizeInPoints { get; private set; }
-
-
+        public string FontFilename { get; set; }
+        public CompactOption SpaceCompactOption { get; set; }
+        //
         public enum CompactOption
         {
             None,
             BinPack,
             ArrangeByHeight
         }
-
 
         /// <summary>
         /// add or replace
@@ -52,8 +51,6 @@ namespace Typography.Rendering
             this.TextureKind = textureKind;
             this.FontSizeInPoints = fontSizeInPts;
         }
-
-        public CompactOption SpaceCompactOption { get; set; }
 
         public GlyphImage BuildSingleImage()
         {
