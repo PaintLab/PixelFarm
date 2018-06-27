@@ -435,7 +435,12 @@ namespace PixelFarm.DrawingGL
                 //--------------------------------------
                 //TODO: review precise height in float
                 //-------------------------------------- 
-                PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
+
+                PixelFarm.Drawing.Rectangle srcRect =
+                    new Rectangle(glyphData.Left,
+                    glyphData.Top,
+                    glyphData.Width,
+                    glyphData.Height);
 
 
                 float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
@@ -587,7 +592,11 @@ namespace PixelFarm.DrawingGL
                 //--------------------------------------
                 //TODO: review precise height in float
                 //-------------------------------------- 
-                PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
+                PixelFarm.Drawing.Rectangle srcRect =
+                          new Rectangle(glyphData.Left,
+                          glyphData.Top,
+                          glyphData.Width,
+                          glyphData.Height);
 
                 float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
                 float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);

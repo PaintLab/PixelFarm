@@ -79,37 +79,10 @@ namespace Typography.Rendering
         public float BorderX { get; set; }
         public float BorderY { get; set; }
 
-        public float AdvanceX { get; set; }
-        public float AdvanceY { get; set; }
-        public float BBoxXMin { get; set; }
-        public float BBoxXMax { get; set; }
-        public float BBoxYMin { get; set; }
-        public float BBoxYMax { get; set; }
-        public float ImgWidth { get; set; }
-        public float ImgHeight { get; set; }
-        //-----
-        public float HAdvance { get; set; }
-        public float HBearingX { get; set; }
-        public float HBearingY { get; set; }
-        //-----
-        public float VAdvance { get; set; }
-        public float VBearingX { get; set; }
-        public float VBearingY { get; set; }
-        //---
-        public double TextureXOffset { get; set; }
-        public double TextureYOffset { get; set; }
 
-        public Rectangle Rect
-        {
-            get { return new Rectangle(Left, Top, Width, Height); }
-            set
-            {
-                Left = value.Left;
-                Top = value.Top;
-                Width = value.Width;
-                Height = value.Height;
-            }
-        }
+        public float TextureXOffset { get; set; }
+        public float TextureYOffset { get; set; }
+
 
         public void GetGlyphRect(out int x, out int y, out int w, out int h)
         {
