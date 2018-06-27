@@ -427,7 +427,7 @@ namespace PixelFarm.DrawingGL
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
                 Typography.Rendering.TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -583,7 +583,7 @@ namespace PixelFarm.DrawingGL
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
                 Typography.Rendering.TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;

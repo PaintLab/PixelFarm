@@ -263,7 +263,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     UnscaledGlyphPlan unscaledGlyphPlan = glyphPlanSeq[i];
                     TextureGlyphMapData glyphData;
-                    if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(unscaledGlyphPlan.glyphIndex, out glyphData))
+                    if (!_fontAtlas.TryGetGlyphMapData(unscaledGlyphPlan.glyphIndex, out glyphData))
                     {
                         //if no glyph data, we should render a missing glyph ***
                         continue;
@@ -272,7 +272,7 @@ namespace PixelFarm.Drawing.Fonts
                     //TODO: review precise height in float
                     //-------------------------------------- 
                     int srcX, srcY, srcW, srcH;
-                    glyphData.GetGlyphRect(out srcX, out srcY, out srcW, out srcH);
+                    glyphData.GetRect(out srcX, out srcY, out srcW, out srcH);
 
                     float ngx = acc_x + (float)Math.Round(unscaledGlyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(unscaledGlyphPlan.OffsetY * scale);
@@ -345,7 +345,7 @@ namespace PixelFarm.Drawing.Fonts
                     UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
                     TextureGlyphMapData glyphData;
-                    if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
+                    if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
                     {
                         //if no glyph data, we should render a missing glyph ***
                         continue;
@@ -354,7 +354,7 @@ namespace PixelFarm.Drawing.Fonts
                     //TODO: review precise height in float
                     //-------------------------------------- 
                     int srcX, srcY, srcW, srcH;
-                    glyphData.GetGlyphRect(out srcX, out srcY, out srcW, out srcH);
+                    glyphData.GetRect(out srcX, out srcY, out srcW, out srcH);
 
                     float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);

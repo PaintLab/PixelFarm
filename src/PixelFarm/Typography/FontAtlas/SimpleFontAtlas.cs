@@ -8,9 +8,9 @@ using Typography.Rendering;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    public enum TextureKind
+    public enum TextureKind : byte
     {
-        StencilLcdEffect,
+        StencilLcdEffect,//default
         StencilGreyScale,
         Msdf,
         Bitmap,
@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.Fonts
     public class SimpleFontAtlas
     {
         GlyphImage totalGlyphImage;
-        Dictionary<int, TextureGlyphMapData> _glyphLocations = new Dictionary<int, TextureGlyphMapData>();
+        Dictionary<ushort, TextureGlyphMapData> _glyphLocations = new Dictionary<ushort, TextureGlyphMapData>();
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -37,7 +37,7 @@ namespace PixelFarm.Drawing.Fonts
             get { return totalGlyphImage; }
             set { totalGlyphImage = value; }
         }
-        public bool TryGetGlyphDataByGlyphIndex(int glyphIndex, out TextureGlyphMapData glyphdata)
+        public bool TryGetGlyphMapData(ushort glyphIndex, out TextureGlyphMapData glyphdata)
         {
             if (!_glyphLocations.TryGetValue(glyphIndex, out glyphdata))
             {
@@ -46,7 +46,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             return true;
         }
-        public string FontFilename { get; set; } 
+        public string FontFilename { get; set; }
     }
 
 }

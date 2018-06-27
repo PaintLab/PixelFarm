@@ -130,7 +130,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
                 TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -139,7 +139,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 int srcX, srcY, srcW, srcH;
-                glyphData.GetGlyphRect(out srcX, out srcY, out srcW, out srcH);
+                glyphData.GetRect(out srcX, out srcY, out srcW, out srcH);
 
                 float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
                 float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);

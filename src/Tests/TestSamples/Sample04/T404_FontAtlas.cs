@@ -74,7 +74,7 @@ namespace OpenTkEssTest
             Typography.Rendering.TextureGlyphMapData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
-            fontAtlas.TryGetGlyphDataByGlyphIndex(codepoint[0], out glyphData);
+            fontAtlas.TryGetGlyphMapData(codepoint[0], out glyphData);
             PixelFarm.Drawing.Rectangle r =
                    new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
@@ -83,7 +83,7 @@ namespace OpenTkEssTest
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             _glsx.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
 
-            fontAtlas.TryGetGlyphDataByGlyphIndex(codepoint[1], out glyphData);
+            fontAtlas.TryGetGlyphMapData(codepoint[1], out glyphData);
             PixelFarm.Drawing.Rectangle r2 = new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,
