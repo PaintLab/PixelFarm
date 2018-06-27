@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-present, WinterDev
 using System.Collections.Generic;
-using System.IO;
+
 
 using Typography.OpenFont;
 using Typography.WordBreaks;
@@ -122,7 +122,7 @@ namespace Typography.TextLayout
             //we known more about font of each style 
         }
 
-       
+
         UnscaledGlyphPlanList _outputGlyphPlan = new UnscaledGlyphPlanList();
 
         public void DoLayout()
@@ -169,15 +169,21 @@ namespace Typography.TextLayout
                     TextBuffer buffer = tt.TextBuffer;
                     char[] rawBuffer = buffer.UnsafeGetInternalBuffer();
 
+
+                    //TODO: review here again
+
                     int preCount = _outputGlyphPlan.Count;
+
                     _glyphLayout.Typeface = selectedTypeface;
                     _glyphLayout.Layout(rawBuffer, tt.StartAt, tt.Len);
 
+                    GlyphPlanSequence.GenerateUnscaledGlyphPlans(
+                        _glyphLayout.ResultUnscaledGlyphPositions,
+                        _outputGlyphPlan);
+
                     //use pixel-scale-layout-engine to scale to specific font size
-                    //or scale it manually
-
+                    //or scale it manually 
                     int postCount = _outputGlyphPlan.Count;
-
                     //
                     tt.SetGlyphPlanSeq(new GlyphPlanSequence(_outputGlyphPlan, preCount, postCount - preCount));
                     tt.IsMeasured = true;
