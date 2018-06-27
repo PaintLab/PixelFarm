@@ -389,7 +389,7 @@ namespace PixelFarm.DrawingGL
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
 
-            float scale = _fontAtlas.TargetTextureScale;
+            float scale = 1;// _fontAtlas.TargetTextureScale;
             int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
             //--------------------------
             //TODO:
@@ -530,7 +530,7 @@ namespace PixelFarm.DrawingGL
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
 
-            float scale = _fontAtlas.TargetTextureScale;
+            float scale = 1;// _fontAtlas.TargetTextureScale;
             int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
 
             //--------------------------

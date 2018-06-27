@@ -96,7 +96,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
-            float scale = _fontAtlas.TargetTextureScale;
+            float scale = 1;// _fontAtlas.TargetTextureScale;
             int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
             //--------------------------
             //TODO:
@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             float acc_y = 0;
 
 
-            int seqLen = glyphPlanSeq.Count; 
+            int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];

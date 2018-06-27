@@ -211,16 +211,16 @@ namespace Typography.Rendering
                     //cache the atlas
                     _createdAtlases.Add(fontKey, fontAtlas);
                     //
-                    //calculate some commonly used values
-                    fontAtlas.SetTextureScaleInfo(
-                        resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
-                        resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
-                    //TODO: review here, use scaled or unscaled values
-                    fontAtlas.SetCommonFontMetricValues(
-                        resolvedTypeface.Ascender,
-                        resolvedTypeface.Descender,
-                        resolvedTypeface.LineGap,
-                        resolvedTypeface.CalculateRecommendLineSpacing());
+                    ////calculate some commonly used values
+                    //fontAtlas.SetTextureScaleInfo(
+                    //    resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
+                    //    resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
+                    ////TODO: review here, use scaled or unscaled values
+                    //fontAtlas.SetCommonFontMetricValues(
+                    //    resolvedTypeface.Ascender,
+                    //    resolvedTypeface.Descender,
+                    //    resolvedTypeface.LineGap,
+                    //    resolvedTypeface.CalculateRecommendLineSpacing());
 
                     ///
 #if DEBUG
