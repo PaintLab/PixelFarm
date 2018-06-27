@@ -69,7 +69,7 @@ namespace Typography.Rendering
         public ushort glyphIndex;
     }
 
-    public class TextureFontGlyphData
+    public class TextureGlyphMapData
     {
         public float BorderX { get; set; }
         public float BorderY { get; set; }

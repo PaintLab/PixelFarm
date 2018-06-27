@@ -284,7 +284,7 @@ namespace Typography.Rendering
                 //convert char to hex
                 string unicode = ("0x" + ((int)cacheGlyph.character).ToString("X"));//code point
                 Rectangle area = cacheGlyph.area;
-                TextureFontGlyphData glyphData = new TextureFontGlyphData();
+                TextureGlyphMapData glyphData = new TextureGlyphMapData();
                 area.Y += area.Height;//*** 
 
                 //set font matrix to glyph font data
@@ -329,7 +329,7 @@ namespace Typography.Rendering
                 char c = (char)int.Parse(unicodeHex.Substring(2), System.Globalization.NumberStyles.HexNumber);
                 Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
                 area.Y += area.Height;//*** 
-                var glyphData = new TextureFontGlyphData();
+                var glyphData = new TextureGlyphMapData();
                 glyphData.Rect = Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
                 float[] borderAndTransform = ParseFloatArray(glyphElem.GetAttribute("tx"));
                 glyphData.ImgWidth = borderAndTransform[0];

@@ -262,7 +262,7 @@ namespace PixelFarm.Drawing.Fonts
                 for (int i = 0; i < seqLen; ++i)
                 {
                     UnscaledGlyphPlan unscaledGlyphPlan = glyphPlanSeq[i];
-                    TextureFontGlyphData glyphData;
+                    TextureGlyphMapData glyphData;
                     if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(unscaledGlyphPlan.glyphIndex, out glyphData))
                     {
                         //if no glyph data, we should render a missing glyph ***
@@ -344,7 +344,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
-                    TextureFontGlyphData glyphData;
+                    TextureGlyphMapData glyphData;
                     if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                     {
                         //if no glyph data, we should render a missing glyph ***

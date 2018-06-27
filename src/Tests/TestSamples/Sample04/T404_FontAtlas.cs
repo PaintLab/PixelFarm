@@ -71,7 +71,7 @@ namespace OpenTkEssTest
             //painter.DrawString("hello!", 0, 20);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
-            Typography.Rendering.TextureFontGlyphData glyphData;
+            Typography.Rendering.TextureGlyphMapData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             fontAtlas.TryGetGlyphDataByGlyphIndex(codepoint[0], out glyphData);
