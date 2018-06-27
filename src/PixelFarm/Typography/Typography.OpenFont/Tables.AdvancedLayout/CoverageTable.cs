@@ -8,7 +8,7 @@ namespace Typography.OpenFont.Tables
     // https://www.microsoft.com/typography/otspec/chapter2.htm
     abstract class CoverageTable
     {
-        public abstract int FindPosition(ushort glyphIndex); 
+        public abstract int FindPosition(ushort glyphIndex);
         public abstract IEnumerable<ushort> GetExpandedValueIter();
 
 #if DEBUG
@@ -37,7 +37,7 @@ namespace Typography.OpenFont.Tables
                 return n < 0 ? -1 : n;
             }
             public override IEnumerable<ushort> GetExpandedValueIter() { return _orderedGlyphIdList; }
-            
+
 #if DEBUG
 
             public override string ToString()
@@ -70,7 +70,7 @@ namespace Typography.OpenFont.Tables
                 }
                 return _coverageIndices[n] + glyphIndex - _startIndices[n];
             }
-             
+
             public override IEnumerable<ushort> GetExpandedValueIter()
             {
                 for (int i = 0; i < RangeCount; ++i)
@@ -115,7 +115,7 @@ namespace Typography.OpenFont.Tables
             }
 
 #if DEBUG
-           
+
             public override string ToString()
             {
                 List<string> stringList = new List<string>();
