@@ -13,8 +13,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     {
 
         bool _fontAtlasPrinterReady;
-        //FontAtlasTextPrinter _printer;
-        DevTextPrinterBase _printer;
+        FontAtlasTextPrinter _fontAtlasTextPrinter;
+        VxsTextPrinter _vxsTextPrinter;
+
+        TextPrinterBase _printer;
 
         public MiniAggWithTextPrinterDemo()
         {
@@ -24,14 +26,28 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         public override void Init()
         {
         }
-        public void DrawString(Painter p, string text, double x, double y)
+        void DrawString(AggPainter p, string text, double x, double y)
         {
             if (text != null)
             {
-                AggPainter painter = p as AggPainter;
-                if (painter == null) return;
-                //
-                DrawString(painter, text.ToCharArray(), 0, text.Length, x, y);
+                DrawString(p, text.ToCharArray(), 0, text.Length, x, y);
+            }
+        }
+
+        bool _useFontAtlas;
+
+        [DemoConfig]
+        public bool UseFontAtlasOrVxs
+        {
+            get { return _useFontAtlas; }
+            set
+            {
+                _useFontAtlas = value;
+                _printer = (_useFontAtlas) ?
+                    (TextPrinterBase)_fontAtlasTextPrinter :
+                    _vxsTextPrinter;
+                this.NeedRedraw = true;
+
             }
         }
 
@@ -61,13 +77,24 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //use custom printer here
             //_printer = new FontAtlasTextPrinter(p);
-            _printer = new VxsTextPrinter(p);
+            if (_fontAtlasTextPrinter == null)
+            {
+                _fontAtlasTextPrinter = new FontAtlasTextPrinter(p);
+            }
+
+            if (_vxsTextPrinter == null)
+            {
+                _vxsTextPrinter = new VxsTextPrinter(p);
+            }
+
+            _printer = (_useFontAtlas) ?
+                    (TextPrinterBase)_fontAtlasTextPrinter :
+                    _vxsTextPrinter;
+
             _fontAtlasPrinterReady = true;
         }
         public void DrawString(AggPainter painter, char[] buffer, int startAt, int len, double x, double y)
         {
-
-
             if (!_fontAtlasPrinterReady)
             {
                 SetupFontAtlasPrinter(painter);
@@ -75,13 +102,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             _printer.DrawString(buffer, startAt, len, (float)x, (float)y);
         }
-        public override void Draw(Painter p)
+        public override void Draw(Painter painter)
         {
-            AggPainter painter = p as AggPainter;
-            if (painter == null) return;
+            AggPainter p = painter as AggPainter;
+            if (p == null) return;
             if (!_fontAtlasPrinterReady)
             {
-                SetupFontAtlasPrinter(painter);
+                SetupFontAtlasPrinter(p);
             }
 
             p.RenderQuality = RenderQualtity.HighQuality;
@@ -89,11 +116,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             //clear the image to white         
             // draw a circle
-            p.Clear(Drawing.Color.White);
+            p.Clear(Drawing.Color.Yellow);
             p.FillColor = Color.Black;
 
 
-            int lineSpaceInPx = (int)painter.CurrentFont.LineSpacingInPx;
+            int lineSpaceInPx = (int)p.CurrentFont.LineSpacingInPx;
             int ypos = 0;
 
 
@@ -101,8 +128,16 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             ypos += lineSpaceInPx;
             //--------  
 
-            p.FillColor = Color.Green;
-            DrawString(p, "Hello World", 10, ypos);
+            p.FillColor = Color.Black;
+            if (_useFontAtlas)
+            {
+                DrawString(p, "Hello World from FontAtlasTextPrinter", 10, ypos);
+            }
+            else
+            {
+                DrawString(p, "Hello World from VxsTextPrinter", 10, ypos);
+            }
+
             ypos += lineSpaceInPx;
 
             p.FillColor = Color.Blue;

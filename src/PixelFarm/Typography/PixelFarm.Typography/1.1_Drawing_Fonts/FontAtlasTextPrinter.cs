@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.Fonts
         GreyscaleStencil,
         None,
     }
-    public class FontAtlasTextPrinter : DevTextPrinterBase, ITextPrinter
+    public class FontAtlasTextPrinter : TextPrinterBase, ITextPrinter
     {
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
         PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
@@ -178,7 +178,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
                 ChangeFont(_painter.CurrentFont);
-            } 
+            }
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             //TODO...
         }
-        public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(GlyphPlanSequence glyphPlanList, int startAt, int len, float x, float y)
         {
             //TODO...
 
@@ -239,13 +239,10 @@ namespace PixelFarm.Drawing.Fonts
             float gx = 0;
             float gy = 0;
             int baseY = (int)Math.Round(y);
-            int n = glyphPlanSeq.len;
-            int endBefore = glyphPlanSeq.startAt + n;
-            //------------------------------------- 
+
 
             float acc_x = 0;
             float acc_y = 0;
-            UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
 
             int lineHeight = (int)_font.LineSpacingInPx;//temp
 
@@ -260,9 +257,11 @@ namespace PixelFarm.Drawing.Fonts
                 //fill glyph-by-glyh
 
                 var aaTech = this.AntialiasTech;
-                for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
+
+                int seqLen = glyphPlanSeq.Count;
+                for (int i = 0; i < seqLen; ++i)
                 {
-                    UnscaledGlyphPlan unscaledGlyphPlan = glyphPlanList[i];
+                    UnscaledGlyphPlan unscaledGlyphPlan = glyphPlanSeq[i];
                     TextureFontGlyphData glyphData;
                     if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(unscaledGlyphPlan.glyphIndex, out glyphData))
                     {
@@ -281,8 +280,13 @@ namespace PixelFarm.Drawing.Fonts
                     // -glyphData.TextureXOffset => restore to original pos
                     // -glyphData.TextureYOffset => restore to original pos 
                     //--------------------------
+
+                    //if (glyphData.TextureXOffset != 0)
+                    //{
+                    //}
+
                     gx = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                    gy = (float)(y + (ngy - glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
+                    gy = (float)(y + (ngy + glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
 
                     acc_x += (float)Math.Round(unscaledGlyphPlan.AdvanceX * scale);
                     gy = (float)Math.Floor(gy) + lineHeight;
@@ -334,9 +338,12 @@ namespace PixelFarm.Drawing.Fonts
                 int startX = 0, startY = 0;
                 float lenW = 0;
                 float lenH = 0;
-                for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
+
+                int seqLen = glyphPlanSeq.Count;
+                for (int i = 0; i < seqLen; ++i)
                 {
-                    UnscaledGlyphPlan glyph = glyphPlanList[i];
+                    UnscaledGlyphPlan glyph = glyphPlanSeq[i];
+
                     TextureFontGlyphData glyphData;
                     if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                     {

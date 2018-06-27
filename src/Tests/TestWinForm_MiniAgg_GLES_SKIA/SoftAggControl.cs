@@ -79,8 +79,8 @@ namespace Mini
 
                 //TODO: review text printer here again***
                 //
-                FontAtlasTextPrinter textPrinter = new FontAtlasTextPrinter(aggPainter);
-                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
+                //FontAtlasTextPrinter textPrinter = new FontAtlasTextPrinter(aggPainter);
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
                 aggPainter.TextPrinter = textPrinter;
                 painter = aggPainter;
             }

@@ -117,21 +117,18 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             float gx = 0;
             float gy = 0;
             int baseY = (int)Math.Round(y);
-            int n = glyphPlanSeq.len;
-            int endBefore = glyphPlanSeq.startAt + n;
-            //------------------------------------- 
 
             float acc_x = 0;
             float acc_y = 0;
-            UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
 
             int lineHeight = (int)_font.LineSpacingInPx;//temp
             //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
             painter.DestBitmapBlender.OutputPixelBlender = _maskPixelBlenderPerCompo; //change to new blender  
 
-            for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
+            int seqLen = glyphPlanSeq.Count;
+            for (int i = 0; i < seqLen; ++i)
             {
-                UnscaledGlyphPlan glyph = glyphPlanList[i];
+                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
                 TextureFontGlyphData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                 {
@@ -214,7 +211,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             }
         }
 
-       
+
         public override void Draw(Painter p)
         {
 

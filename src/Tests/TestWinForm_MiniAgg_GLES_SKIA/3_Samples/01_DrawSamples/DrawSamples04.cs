@@ -10,13 +10,13 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using PixelFarm;
-using PixelFarm.Drawing.Fonts; 
+using PixelFarm.Drawing.Fonts;
 using Mini;
 
 
-using Typography.OpenFont; 
+using Typography.OpenFont;
 using Typography.Rendering;
-using Typography.TextLayout;  
+using Typography.TextLayout;
 namespace PixelFarm.CpuBlit.Sample_Draw
 {
 
@@ -24,11 +24,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     public class DrawSample04 : DemoBase
     {
 
-        
+
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<ActualBitmap> _bmpFontMx;
         SimpleFontAtlas _fontAtlas;
-        RequestFont _font; 
+        RequestFont _font;
         ActualBitmap _fontBmp;
 
 
@@ -66,7 +66,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
         float _finalTextureScale = 1;
-        
+
 
         public void DrawString(Painter p, string text, double x, double y)
         {
@@ -111,24 +111,21 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             float g_x = 0;
             float g_y = 0;
             int baseY = (int)Math.Round(y);
-            int n = glyphPlanSeq.len;
-            int endBefore = glyphPlanSeq.startAt + n;
 
             //-------------------------------------
             //load texture 
             //_glsx.LoadTexture1(_glBmp);
             //-------------------------------------
- 
+
 
             float acc_x = 0;
             float acc_y = 0;
 
 
-
-            UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
-            for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
+            int seqLen = glyphPlanSeq.Count; 
+            for (int i = 0; i < seqLen; ++i)
             {
-                UnscaledGlyphPlan glyph = glyphPlanList[i];
+                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
                 TextureFontGlyphData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                 {
@@ -176,7 +173,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                         }
                         break;
                 }
-                
+
 
 
                 //copy some part from the bitmap 
@@ -250,7 +247,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //-------- 
 
             DrawString(p, "1234567890", 10, 20);
-             
+
         }
     }
 
