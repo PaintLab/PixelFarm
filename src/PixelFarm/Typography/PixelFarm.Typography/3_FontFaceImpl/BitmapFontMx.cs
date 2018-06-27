@@ -145,17 +145,17 @@ namespace Typography.Rendering
                             fontAtlas.TotalGlyph = ReadGlyphImages(fontTextureImg);
                             fontAtlas.OriginalFontSizePts = reqFont.SizeInPoints;
                             _createdAtlases.Add(fontKey, fontAtlas);
-                            //
-                            //calculate some commonly used values
-                            fontAtlas.SetTextureScaleInfo(
-                                resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
-                                resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
-                            //TODO: review here, use scaled or unscaled values
-                            fontAtlas.SetCommonFontMetricValues(
-                                resolvedTypeface.Ascender,
-                                resolvedTypeface.Descender,
-                                resolvedTypeface.LineGap,
-                                resolvedTypeface.CalculateRecommendLineSpacing());
+                            ////
+                            ////calculate some commonly used values
+                            //fontAtlas.SetTextureScaleInfo(
+                            //    resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
+                            //    resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
+                            ////TODO: review here, use scaled or unscaled values
+                            //fontAtlas.SetCommonFontMetricValues(
+                            //    resolvedTypeface.Ascender,
+                            //    resolvedTypeface.Descender,
+                            //    resolvedTypeface.LineGap,
+                            //    resolvedTypeface.CalculateRecommendLineSpacing());
                         }
                         catch (Exception ex)
                         {
