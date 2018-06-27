@@ -326,8 +326,8 @@ namespace PixelFarm.CpuBlit
             int angleRadians = 0;
             // exit early if the dest and source bounds don't touch.
             // TODO: <BUG> make this do rotation and scalling
-
-            RectInt sourceBounds = new RectInt((int)destX, (int)destY, (int)destX + subBitmap.Width, (int)destY+ subBitmap.Height);
+           
+            RectInt sourceBounds = new RectInt((int)destX, (int)destY, (int)destX + source.Width, (int)destY+ source.Height);
             //sourceBounds.Offset((int)destX, (int)destY);
 
             RectInt destBounds = this.destImageReaderWriter.GetBounds();
