@@ -38,7 +38,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="glyphIndex"></param>
         /// <param name="img"></param>
-        public void AddGlyph(int glyphIndex, GlyphImage img)
+        public void AddGlyph(ushort glyphIndex, GlyphImage img)
         {
             var glyphCache = new CacheGlyph();
             glyphCache.glyphIndex = glyphIndex;

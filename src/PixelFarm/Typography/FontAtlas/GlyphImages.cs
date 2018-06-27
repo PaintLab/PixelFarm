@@ -50,37 +50,11 @@ namespace Typography.Rendering
         /// </summary>
         public double TextureOffsetX { get; set; }
 
-        double _textureOffsetY;
+
         /// <summary>
         /// texture offset Y from original glyph 
         /// </summary>
-        public double TextureOffsetY
-        {
-            get { return _textureOffsetY; }
-            set
-            {
-                _textureOffsetY = value;
-            }
-        }
-        //public void FlipY()
-        //{
-        //    //flip this img vertically
-        //    int[] newBuffer = new int[pixelBuffer.Length];
-
-        //    int w = this.Width;///pixel width
-        //    int stride = w * 4; //bytes
-        //    int readAt = stride * (Height - 1); //bytes
-        //    int writeAt = 0;
-
-        //    for (int row = Height - 1; row >= 0; --row)
-        //    {
-        //        //each row
-        //        Buffer.BlockCopy(pixelBuffer, readAt, newBuffer, writeAt, stride);
-        //        readAt -= stride;
-        //        writeAt += stride;
-        //    }
-
-        //}
+        public double TextureOffsetY { get; set; }
     }
 
 
@@ -92,8 +66,7 @@ namespace Typography.Rendering
         internal GlyphImage img;
         public Rectangle area;
         public char character; //TODO: this should be code point(int32)
-        public int glyphIndex;
-
+        public ushort glyphIndex;
     }
 
     public class TextureFontGlyphData
@@ -133,5 +106,5 @@ namespace Typography.Rendering
             h = Rect.Height;
         }
 
-    } 
+    }
 }
