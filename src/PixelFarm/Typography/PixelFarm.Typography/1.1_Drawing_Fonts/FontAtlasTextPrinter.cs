@@ -178,7 +178,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
                 ChangeFont(_painter.CurrentFont);
-            } 
+            }
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             //TODO...
         }
-        public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(GlyphPlanSequence glyphPlanList, int startAt, int len, float x, float y)
         {
             //TODO...
 
@@ -239,13 +239,10 @@ namespace PixelFarm.Drawing.Fonts
             float gx = 0;
             float gy = 0;
             int baseY = (int)Math.Round(y);
-            int n = glyphPlanSeq.len;
-            int endBefore = glyphPlanSeq.startAt + n;
-            //------------------------------------- 
+
 
             float acc_x = 0;
             float acc_y = 0;
-            UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
 
             int lineHeight = (int)_font.LineSpacingInPx;//temp
 
@@ -260,9 +257,11 @@ namespace PixelFarm.Drawing.Fonts
                 //fill glyph-by-glyh
 
                 var aaTech = this.AntialiasTech;
-                for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
+
+                int seqLen = glyphPlanSeq.Count;
+                for (int i = 0; i < seqLen; ++i)
                 {
-                    UnscaledGlyphPlan unscaledGlyphPlan = glyphPlanList[i];
+                    UnscaledGlyphPlan unscaledGlyphPlan = glyphPlanSeq[i];
                     TextureFontGlyphData glyphData;
                     if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(unscaledGlyphPlan.glyphIndex, out glyphData))
                     {
@@ -334,9 +333,12 @@ namespace PixelFarm.Drawing.Fonts
                 int startX = 0, startY = 0;
                 float lenW = 0;
                 float lenH = 0;
-                for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
+
+                int seqLen = glyphPlanSeq.Count;
+                for (int i = 0; i < seqLen; ++i)
                 {
-                    UnscaledGlyphPlan glyph = glyphPlanList[i];
+                    UnscaledGlyphPlan glyph = glyphPlanSeq[i];
+
                     TextureFontGlyphData glyphData;
                     if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                     {

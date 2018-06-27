@@ -172,7 +172,7 @@ namespace PixelFarmTextBox.WinForms
             painter.Clear(PixelFarm.Drawing.Color.White);
             painter.UseSubPixelLcdEffect = false;
             painter.FillColor = PixelFarm.Drawing.Color.Black;
-             
+
 
             List<EditableTextLine> textlines = editableTextBlockLayoutEngine.UnsafeGetEditableTextLine();
             //render eachline with painter
@@ -195,11 +195,7 @@ namespace PixelFarmTextBox.WinForms
                     if (textRun == null) continue;
                     //
                     GlyphPlanSequence seq = textRun.GetGlyphPlanSeq();
-                    _devVxsTextPrinter.DrawFromGlyphPlans(
-                        GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq),
-                        seq.startAt,
-                        seq.len,
-                        x, y);
+                    _devVxsTextPrinter.DrawFromGlyphPlans(seq, x, y);
                     x += run.Width;
                     y -= lineSpacing; //next line?
                 }

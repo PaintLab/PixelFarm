@@ -6,6 +6,31 @@ using Typography.OpenFont;
 using Typography.WordBreaks;
 namespace Typography.TextLayout
 {
+
+    public class UnscaledGlyphPlanList : IUnscaledGlyphPlanList
+    {
+        List<UnscaledGlyphPlan> list = new List<UnscaledGlyphPlan>();
+        public int Count
+        {
+            get { return list.Count; }
+        }
+        public UnscaledGlyphPlan this[int index]
+        {
+            get
+            {
+                return list[index];
+            }
+        }
+        public void Append(UnscaledGlyphPlan unscaledGlyphPlan)
+        {
+            list.Add(unscaledGlyphPlan);
+        }
+        public void Clear()
+        {
+            list.Clear();
+        }
+    }
+
     /// <summary>
     /// collect and managed editable text line
     /// </summary>
@@ -97,10 +122,9 @@ namespace Typography.TextLayout
             //we known more about font of each style 
         }
 
-
-
-
+       
         UnscaledGlyphPlanList _outputGlyphPlan = new UnscaledGlyphPlanList();
+
         public void DoLayout()
         {
 
@@ -108,7 +132,7 @@ namespace Typography.TextLayout
             //TODO: use typography text service
             //it should be faster since it has glyph-plan cache
             //----------------
-             
+
             //user can use other native methods 
             //to do the layout ***
 
@@ -123,7 +147,7 @@ namespace Typography.TextLayout
             _glyphLayout.EnableLigature = true;
             int lineCount = _lines.Count;
 
-            
+
             Typeface selectedTypeface = this.DefaultTypeface;
             float pxscale = selectedTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPts);
             for (int i = 0; i < lineCount; ++i)

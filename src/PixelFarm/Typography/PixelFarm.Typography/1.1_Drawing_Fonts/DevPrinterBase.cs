@@ -86,7 +86,7 @@ namespace Typography.Rendering
         /// <param name="glyphPlanList"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public abstract void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y);
+        public abstract void DrawFromGlyphPlans(GlyphPlanSequence glyphPlanList, int startAt, int len, float x, float y);
         public abstract void DrawFromGlyphPlans(PxScaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y);
         /// <summary>
         /// draw caret at xpos,ypos (sample only)
@@ -102,10 +102,10 @@ namespace Typography.Rendering
         {
             DrawString(textBuffer, 0, textBuffer.Length, x, y);
         }
-        public void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, float x, float y)
+        public void DrawFromGlyphPlans(GlyphPlanSequence glyphPlanSeq, float x, float y)
         {
 
-            DrawFromGlyphPlans(glyphPlanList, 0, glyphPlanList.Count, x, y);
+            DrawFromGlyphPlans(glyphPlanSeq, 0, glyphPlanSeq.Count, x, y);
         }
         public void DrawFromGlyphPlans(PxScaledGlyphPlanList glyphPlanList, float x, float y)
         {

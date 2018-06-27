@@ -81,39 +81,6 @@ namespace Typography.TextLayout
 
     }
 
-    public struct GlyphPlanSequence
-    {
-        //
-        public static GlyphPlanSequence Empty = new GlyphPlanSequence();
-        //
-        readonly UnscaledGlyphPlanList glyphBuffer;
-        public readonly int startAt;
-        public readonly ushort len;
-        internal GlyphPlanSequence(UnscaledGlyphPlanList glyphBuffer, int startAt, int len)
-        {
-            this.glyphBuffer = glyphBuffer;
-            this.startAt = startAt;
-            this.len = (ushort)len;
-        }
-        public float CalculateWidth()
-        {
-            UnscaledGlyphPlanList plans = glyphBuffer;
-            int end = startAt + len;
-            float width = 0;
-            for (int i = startAt; i < end; ++i)
-            {
-                width += plans[i].AdvanceX;
-            }
-            return width;
-        }
-        public bool IsEmpty()
-        {
-            return glyphBuffer == null;
-        }
-        public static UnscaledGlyphPlanList UnsafeGetInteralGlyphPlanList(GlyphPlanSequence planSeq)
-        {
-            return planSeq.glyphBuffer;
-        }
-    }
+   
 
 }
