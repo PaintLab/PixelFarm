@@ -32,10 +32,10 @@ namespace PixelFarm.CpuBlit.SimplePainter
 
             // and an outline around it
             p.DrawRectangle(60, 260, 200, 280, Drawing.Color.Magenta);
-            p.DrawString("Ap Simple Example", 20, 400);
-            //p.DrawString("A Simple Example2", 300, 350);
-            //p.DrawString("A Simple Example3", 300, 300);
-            //p.DrawString("A Simple Example4", 300, 250);
+            p.DrawString("A Simple Example", 20, 400);
+            p.DrawString("A Simple Example2", 300, 350);
+            p.DrawString("A Simple Example3", 300, 300);
+            p.DrawString("A Simple Example4", 300, 250);
         }
     }
 }
