@@ -280,8 +280,13 @@ namespace PixelFarm.Drawing.Fonts
                     // -glyphData.TextureXOffset => restore to original pos
                     // -glyphData.TextureYOffset => restore to original pos 
                     //--------------------------
+
+                    //if (glyphData.TextureXOffset != 0)
+                    //{
+                    //}
+
                     gx = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                    gy = (float)(y + (ngy - glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
+                    gy = (float)(y + (ngy + glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
 
                     acc_x += (float)Math.Round(unscaledGlyphPlan.AdvanceX * scale);
                     gy = (float)Math.Floor(gy) + lineHeight;
