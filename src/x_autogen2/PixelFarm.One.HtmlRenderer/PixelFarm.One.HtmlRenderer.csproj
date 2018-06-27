@@ -3086,11 +3086,17 @@
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\DevPrinterBase.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\DevPrinterBase.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs">
+      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshCollection.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs">
+      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs</Link>
@@ -3106,9 +3112,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs">
-      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs</Link>
