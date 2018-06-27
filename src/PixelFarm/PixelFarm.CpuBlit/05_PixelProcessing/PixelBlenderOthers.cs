@@ -952,7 +952,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                             {
                                 *dstPtr =
                                  ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                 (b << 16) |
+                                 (r << 16) |
                                  (g << 8) |
                                  ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                             }
