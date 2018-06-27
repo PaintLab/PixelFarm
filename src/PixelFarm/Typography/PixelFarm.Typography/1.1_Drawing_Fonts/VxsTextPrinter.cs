@@ -16,7 +16,7 @@ using Typography.TextServices;
 namespace PixelFarm.Drawing.Fonts
 {
 
-    public class VxsTextPrinter : DevTextPrinterBase, ITextPrinter
+    public class VxsTextPrinter : TextPrinterBase, ITextPrinter
     {
         LayoutFarm.OpenFontTextService _textServices;
 
@@ -27,7 +27,7 @@ namespace PixelFarm.Drawing.Fonts
         RequestFont _reqFont;
         //----------------------------------------------------------- 
 
-        UnscaledGlyphPlanList _outputUnscaledGlyphPlans = new UnscaledGlyphPlanList();
+
         PxScaledGlyphPlanList _outputPxScaledGlyphPlans = new PxScaledGlyphPlanList();
 
         Typeface _currentTypeface;
@@ -344,7 +344,8 @@ namespace PixelFarm.Drawing.Fonts
             //restore prev origin
             _painter.SetOrigin(ox, oy);
         }
-        public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
+
+        public override void DrawFromGlyphPlans(GlyphPlanSequence seq, int startAt, int len, float x, float y)
         {
 
             if (StartDrawOnLeftTop)
@@ -360,7 +361,7 @@ namespace PixelFarm.Drawing.Fonts
             //4. render each glyph 
             float ox = _painter.OriginX;
             float oy = _painter.OriginY;
-            int endBefore = startAt + len;
+
 
             Typography.OpenFont.Tables.COLR colrTable = _currentTypeface.COLRTable;
             Typography.OpenFont.Tables.CPAL cpalTable = _currentTypeface.CPALTable;
@@ -386,13 +387,20 @@ namespace PixelFarm.Drawing.Fonts
                 float acc_x = 0; //acummulate x
                 float acc_y = 0; //acummulate y
 
-                for (int i = startAt; i < endBefore; ++i)
+                int seqLen = seq.Count;
+
+                if (len > seqLen)
+                {
+                    len = seqLen;
+                }
+
+                for (int i = startAt; i < len; ++i)
                 {   //-----------------------------------
                     //TODO: review here ***
                     //PERFORMANCE revisit here 
                     //if we have create a vxs we can cache it for later use?
                     //-----------------------------------   
-                    UnscaledGlyphPlan glyphPlan = glyphPlanList[i];
+                    UnscaledGlyphPlan glyphPlan = seq[i];
 
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
@@ -400,7 +408,7 @@ namespace PixelFarm.Drawing.Fonts
                     //glyph width 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
 
-                    gx = ngx;
+                    gx = x + ngx;
                     gy = y + ngy;
                     //move start draw point to gx and gy
                     //I found that ... if we render this with Lcd Effect =>  +0.33px, (1/3 px) make this look sharp.
@@ -423,15 +431,22 @@ namespace PixelFarm.Drawing.Fonts
 
                 float acc_x = 0;
                 float acc_y = 0;
-                for (int i = startAt; i < endBefore; ++i)
+                int seqLen = seq.Count;
+
+                if (len > seqLen)
                 {
-                    UnscaledGlyphPlan glyphPlan = glyphPlanList[i];
+                    len = seqLen;
+                }
+
+                for (int i = startAt; i < len; ++i)
+                {
+                    UnscaledGlyphPlan glyphPlan = seq[i];
 
                     float ngx = acc_x + (float)Math.Round(glyphPlan.OffsetX * scale);
                     float ngy = acc_y + (float)Math.Round(glyphPlan.OffsetY * scale);
 
-                    gx = ngx;
-                    gy = ngy;
+                    gx = x + ngx;
+                    gy = y + ngy;
 
                     acc_x += (float)Math.Round(glyphPlan.AdvanceX * scale);
                     _painter.SetOrigin(gx, gy);
@@ -474,6 +489,7 @@ namespace PixelFarm.Drawing.Fonts
             _painter.SetOrigin(ox, oy);
         }
 
+
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
             InternalDrawString(text, startAt, len, (float)x, (float)y);
@@ -490,7 +506,7 @@ namespace PixelFarm.Drawing.Fonts
             //unscale layout, with design unit scale
             TextBufferSpan buffSpan = new TextBufferSpan(buffer, startAt, len);
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref buffSpan, _reqFont);
-            DrawFromGlyphPlans(GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq), glyphPlanSeq.startAt, glyphPlanSeq.len, x, y);
+            DrawFromGlyphPlans(glyphPlanSeq, x, y);
         }
     }
     public static class TextPrinterHelper
@@ -538,7 +554,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             renderVx.glyphList = renderVxGlyphPlans;
         }
-        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, UnscaledGlyphPlanList glyphPlans, float scale)
+        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, GlyphPlanSequence glyphPlans, float scale)
         {
             int n = glyphPlans.Count;
             //copy 

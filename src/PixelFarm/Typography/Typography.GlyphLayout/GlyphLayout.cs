@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 namespace Typography.TextLayout
 {
-     
+
 
     /// <summary>
     /// scaled glyph plan to specfic font size.
@@ -124,50 +124,100 @@ namespace Typography.TextLayout
 
 
 
-    /// <summary>
-    /// expandable list of glyph plan
-    /// </summary>
-    public class UnscaledGlyphPlanList
+
+    public interface IUnscaledGlyphPlanList
     {
-        List<UnscaledGlyphPlan> _glyphPlans = new List<UnscaledGlyphPlan>();
-        float _accumAdvanceX;
-
-        public void Clear()
+        void Append(UnscaledGlyphPlan glyphPlan);
+        int Count { get; }
+        UnscaledGlyphPlan this[int index] { get; }
+    }
+    public struct GlyphPlanSequence
+    {
+        //
+        public static GlyphPlanSequence Empty = new GlyphPlanSequence();
+        //
+        readonly IUnscaledGlyphPlanList glyphBuffer;
+        internal readonly int startAt;
+        internal readonly ushort len;
+        public GlyphPlanSequence(IUnscaledGlyphPlanList glyphBuffer, int startAt, int len)
         {
-            _glyphPlans.Clear();
-            _accumAdvanceX = 0;
+            this.glyphBuffer = glyphBuffer;
+            this.startAt = startAt;
+            this.len = (ushort)len;
         }
-        public void Append(UnscaledGlyphPlan glyphPlan)
-        {
-            _glyphPlans.Add(glyphPlan);
-            _accumAdvanceX += glyphPlan.AdvanceX;
-        }
-        public float AccumAdvanceX { get { return _accumAdvanceX; } }
-
         public UnscaledGlyphPlan this[int index]
         {
             get
             {
-                return _glyphPlans[index];
+                if (index >= 0 && index < (startAt + len))
+                {
+                    return glyphBuffer[startAt + index];
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException();
+                }
             }
         }
         public int Count
         {
             get
             {
-                return _glyphPlans.Count;
+                if (glyphBuffer != null)
+                {
+                    return len;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
-
-#if DEBUG
-        public UnscaledGlyphPlanList()
+        public float CalculateWidth()
         {
-
+            if (glyphBuffer == null) return 0;
+            //
+            IUnscaledGlyphPlanList plans = glyphBuffer;
+            int end = startAt + len;
+            float width = 0;
+            for (int i = startAt; i < end; ++i)
+            {
+                width += plans[i].AdvanceX;
+            }
+            return width;
         }
-#endif
+        public bool IsEmpty()
+        {
+            return glyphBuffer == null;
+        }
+
+
+        /// <summary>
+        /// generate scaled from unscale glyph size to specific scale
+        /// </summary>
+        /// <param name="glyphPositions"></param>
+        /// <param name="pxscale"></param>
+        /// <param name="outputGlyphPlanList"></param>
+        public static void GenerateUnscaledGlyphPlans(IGlyphPositions glyphPositions, IUnscaledGlyphPlanList outputGlyphPlanList)
+        {
+            //user can implement this with some 'PixelScaleEngine'
+
+            int finalGlyphCount = glyphPositions.Count;
+            for (int i = 0; i < finalGlyphCount; ++i)
+            {
+                short input_offset, offsetX, offsetY, advW; //all from pen-pos
+                ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
+
+                outputGlyphPlanList.Append(new UnscaledGlyphPlan(
+                    input_offset,
+                    glyphIndex,
+                    advW,
+                    offsetX,
+                    offsetY
+                    ));
+            }
+        }
     }
-
-
 
     public enum PositionTechnique
     {
@@ -482,31 +532,7 @@ namespace Typography.TextLayout
 
 #endif
 
-        /// <summary>
-        /// generate scaled from unscale glyph size to specific scale
-        /// </summary>
-        /// <param name="glyphPositions"></param>
-        /// <param name="pxscale"></param>
-        /// <param name="outputGlyphPlanList"></param>
-        public static void GenerateUnscaledGlyphPlans(IGlyphPositions glyphPositions, UnscaledGlyphPlanList outputGlyphPlanList)
-        {
-            //user can implement this with some 'PixelScaleEngine'
 
-            int finalGlyphCount = glyphPositions.Count;
-            for (int i = 0; i < finalGlyphCount; ++i)
-            {
-                short input_offset, offsetX, offsetY, advW; //all from pen-pos
-                ushort glyphIndex = glyphPositions.GetGlyph(i, out input_offset, out offsetX, out offsetY, out advW);
-
-                outputGlyphPlanList.Append(new UnscaledGlyphPlan(
-                    input_offset,
-                    glyphIndex,
-                    advW,
-                    offsetX,
-                    offsetY
-                    ));
-            }
-        }
         /// <summary>
         /// generate scaled from unscale glyph size to specific scale
         /// </summary>

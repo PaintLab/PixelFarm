@@ -16,7 +16,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         FontAtlasTextPrinter _fontAtlasTextPrinter;
         VxsTextPrinter _vxsTextPrinter;
 
-        DevTextPrinterBase _printer;
+        TextPrinterBase _printer;
 
         public MiniAggWithTextPrinterDemo()
         {
@@ -26,14 +26,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         public override void Init()
         {
         }
-        public void DrawString(Painter p, string text, double x, double y)
+        void DrawString(AggPainter p, string text, double x, double y)
         {
             if (text != null)
             {
-                AggPainter painter = p as AggPainter;
-                if (painter == null) return;
-                //
-                DrawString(painter, text.ToCharArray(), 0, text.Length, x, y);
+                DrawString(p, text.ToCharArray(), 0, text.Length, x, y);
             }
         }
 
@@ -47,7 +44,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             {
                 _useFontAtlas = value;
                 _printer = (_useFontAtlas) ?
-                    (DevTextPrinterBase)_fontAtlasTextPrinter :
+                    (TextPrinterBase)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
                 this.NeedRedraw = true;
 
@@ -91,15 +88,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             }
 
             _printer = (_useFontAtlas) ?
-                    (DevTextPrinterBase)_fontAtlasTextPrinter :
+                    (TextPrinterBase)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
 
             _fontAtlasPrinterReady = true;
         }
         public void DrawString(AggPainter painter, char[] buffer, int startAt, int len, double x, double y)
         {
-
-
             if (!_fontAtlasPrinterReady)
             {
                 SetupFontAtlasPrinter(painter);
@@ -107,13 +102,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             _printer.DrawString(buffer, startAt, len, (float)x, (float)y);
         }
-        public override void Draw(Painter p)
+        public override void Draw(Painter painter)
         {
-            AggPainter painter = p as AggPainter;
-            if (painter == null) return;
+            AggPainter p = painter as AggPainter;
+            if (p == null) return;
             if (!_fontAtlasPrinterReady)
             {
-                SetupFontAtlasPrinter(painter);
+                SetupFontAtlasPrinter(p);
             }
 
             p.RenderQuality = RenderQualtity.HighQuality;
@@ -121,11 +116,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             //clear the image to white         
             // draw a circle
-            p.Clear(Drawing.Color.White);
+            p.Clear(Drawing.Color.Yellow);
             p.FillColor = Color.Black;
 
 
-            int lineSpaceInPx = (int)painter.CurrentFont.LineSpacingInPx;
+            int lineSpaceInPx = (int)p.CurrentFont.LineSpacingInPx;
             int ypos = 0;
 
 
@@ -133,7 +128,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             ypos += lineSpaceInPx;
             //--------  
 
-            p.FillColor = Color.Green;
+            p.FillColor = Color.Black;
             if (_useFontAtlas)
             {
                 DrawString(p, "Hello World from FontAtlasTextPrinter", 10, ypos);
