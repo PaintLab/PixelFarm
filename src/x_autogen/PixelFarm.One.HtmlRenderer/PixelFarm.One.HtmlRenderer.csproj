@@ -1052,14 +1052,15 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\..\Typography.MsdfGen\MsdfGen.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\..\Typography.MsdfGen\SignedDistance.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\DevPrinterBase.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshCollection.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilderBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\HintTechnique.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.3_DrawingFonts\ActualFont.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\1.3_DrawingFonts\FontFace.cs" />
