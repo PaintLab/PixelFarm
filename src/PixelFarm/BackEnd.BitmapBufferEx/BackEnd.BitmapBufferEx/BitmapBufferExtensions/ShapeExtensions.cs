@@ -50,14 +50,15 @@ namespace PixelFarm.BitmapBufferEx
                 int x1 = points[0];
                 int y1 = points[1];
 
-                for (int i = 2; i < points.Length; i += 2)
+                int len = points.Length;
+                for (int i = 2; i < len; i += 2)
                 {
-                    int x2 = points[i];
-                    int y2 = points[i + 1];
 
-                    DrawLine(context, w, h, x1, y1, x2, y2, color);
-                    x1 = x2;
-                    y1 = y2;
+                    DrawLine(context, w, h,
+                        x1, y1, 
+                        x1 += points[i], y1 += points[i + 1], //also update x1,y1 
+                        color);
+
                 }
             }
         }
@@ -92,12 +93,15 @@ namespace PixelFarm.BitmapBufferEx
 
                 for (int i = 2; i < points.Length; i += 2)
                 {
-                    int x2 = points[i];
-                    int y2 = points[i + 1];
+                    //int x2 = points[i];
+                    //int y2 = points[i + 1];
 
-                    DrawLineAa(context, w, h, x1, y1, x2, y2, color);
-                    x1 = x2;
-                    y1 = y2;
+                    DrawLineAa(context, w, h,
+                        x1, y1,
+                        x1 += points[i], y1 += points[i + 1], //also update x1,y1 
+                        color);
+                    //x1 = x2;
+                    //y1 = y2;
                 }
             }
         }
@@ -115,7 +119,7 @@ namespace PixelFarm.BitmapBufferEx
         /// <param name="color">The color.</param>
         public static void DrawTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, ColorInt color)
         {
-          
+
             bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, color.ToPreMultAlphaColor());
         }
 
@@ -159,7 +163,7 @@ namespace PixelFarm.BitmapBufferEx
         /// <param name="color">The color.</param>
         public static void DrawQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, ColorInt color)
         {
-           
+
             bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, color.ToPreMultAlphaColor());
         }
 
@@ -205,7 +209,7 @@ namespace PixelFarm.BitmapBufferEx
         /// <param name="color">The color.</param>
         public static void DrawRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
-         
+
             bmp.DrawRectangle(x1, y1, x2, y2, color.ToPreMultAlphaColor());
         }
 
@@ -289,7 +293,7 @@ namespace PixelFarm.BitmapBufferEx
         /// <param name="color">The color for the line.</param>
         public static void DrawEllipse(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
-        
+
             bmp.DrawEllipse(x1, y1, x2, y2, color.ToPreMultAlphaColor());
         }
 
@@ -324,7 +328,7 @@ namespace PixelFarm.BitmapBufferEx
         /// <param name="yr">The radius of the ellipse in y-direction.</param>
         /// <param name="color">The color for the line.</param>
         public static void DrawEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, ColorInt color)
-        { 
+        {
             bmp.DrawEllipseCentered(xc, yc, xr, yr, color.ToPreMultAlphaColor());
         }
 

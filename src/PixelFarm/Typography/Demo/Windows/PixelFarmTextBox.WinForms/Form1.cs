@@ -28,7 +28,7 @@ namespace PixelFarmTextBox.WinForms
         ActualBitmap destImg;
         Bitmap winBmp;
 
-        DevTextPrinterBase selectedTextPrinter = null;
+        TextPrinterBase selectedTextPrinter = null;
         VxsTextPrinter _devVxsTextPrinter = null;
         SampleWinForms.UI.SampleTextBoxControllerForPixelFarm _controllerForPixelFarm = new SampleWinForms.UI.SampleTextBoxControllerForPixelFarm();
 
@@ -73,8 +73,8 @@ namespace PixelFarmTextBox.WinForms
             g = this.sampleTextBox1.CreateGraphics();
 
             painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-            var openFontStore = new Typography.TextServices.OpenFontStore();
-            _devVxsTextPrinter = new VxsTextPrinter(painter, openFontStore);
+
+            _devVxsTextPrinter = new VxsTextPrinter(painter);
 
             _devVxsTextPrinter.ScriptLang = _basicOptions.ScriptLang;
             _devVxsTextPrinter.PositionTechnique = Typography.TextLayout.PositionTechnique.OpenFont;
@@ -98,7 +98,8 @@ namespace PixelFarmTextBox.WinForms
 
             //test option use be used with lcd subpixel rendering.
             //this demonstrate how we shift a pixel for subpixel rendering tech
-            _devVxsTextPrinter.UseWithLcdSubPixelRenderingTechnique = true;
+
+            //TODO: set lcd effect to printer
 
             //1. read typeface from font file 
             TypographyTest.RenderChoice renderChoice = _basicOptions.RenderChoice;
@@ -171,7 +172,7 @@ namespace PixelFarmTextBox.WinForms
             painter.Clear(PixelFarm.Drawing.Color.White);
             painter.UseSubPixelLcdEffect = false;
             painter.FillColor = PixelFarm.Drawing.Color.Black;
-            _devVxsTextPrinter.TargetCanvasPainter = painter;
+
 
             List<EditableTextLine> textlines = editableTextBlockLayoutEngine.UnsafeGetEditableTextLine();
             //render eachline with painter
@@ -194,11 +195,7 @@ namespace PixelFarmTextBox.WinForms
                     if (textRun == null) continue;
                     //
                     GlyphPlanSequence seq = textRun.GetGlyphPlanSeq();
-                    _devVxsTextPrinter.DrawFromGlyphPlans(
-                        GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq),
-                        seq.startAt,
-                        seq.len,
-                        x, y);
+                    _devVxsTextPrinter.DrawFromGlyphPlans(seq, x, y);
                     x += run.Width;
                     y -= lineSpacing; //next line?
                 }

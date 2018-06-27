@@ -328,26 +328,33 @@ namespace PixelFarm.PaintFx
             return scans;
         }
 
-        public static Scanline[] GetRegionScans(Rectangle[] region)
+        public static Scanline[] GetRegionScans(Rectangle[] regions)
         {
             int scanCount = 0;
 
-            for (int i = 0; i < region.Length; ++i)
+            int rgnLen = regions.Length;
+            for (int i = 0; i < rgnLen; ++i)
             {
-                scanCount += region[i].Height;
+                scanCount += regions[i].Height;
             }
 
             Scanline[] scans = new Scanline[scanCount];
             int scanIndex = 0;
 
-            foreach (Rectangle rect in region)
+
+            for (int i = 0; i < rgnLen; ++i)
             {
-                for (int y = 0; y < rect.Height; ++y)
+                Rectangle rect = regions[i];
+                int h = rect.Height;
+                int w = rect.Width;
+                for (int y = 0; y < h; ++y)
                 {
-                    scans[scanIndex] = new Scanline(rect.X, rect.Y + y, rect.Width);
+                    scans[scanIndex] = new Scanline(rect.X, rect.Y + y, w);
                     ++scanIndex;
                 }
+
             }
+
 
             return scans;
         }
@@ -393,7 +400,7 @@ namespace PixelFarm.PaintFx
         /// Prodige Software Corporation
         /// ---
         /// </summary>
-        /// <param name="rectsF"></param>
+        /// <param name="rects"></param>
         /// <param name="startIndex"></param>
         /// <param name="length"></param>
         ///// <returns></returns>
@@ -501,11 +508,11 @@ namespace PixelFarm.PaintFx
         //    return RectanglesToRegion(rects, 0, rects.Length);
         //}
 
-        public static int GetRegionArea(RectangleF[] rectsF)
+        public static int GetRegionArea(RectangleF[] rects)
         {
             int area = 0;
 
-            foreach (RectangleF rectF in rectsF)
+            foreach (RectangleF rectF in rects)
             {
                 Rectangle rect = Rectangle.Truncate(rectF);
                 area += rect.Width * rect.Height;
@@ -539,7 +546,7 @@ namespace PixelFarm.PaintFx
 
             for (int i = 0; i < ret.Length; ++i)
             {
-                ret[i] = (PointF)ptArray[i];
+                ret[i] = ptArray[i];
             }
 
             return ret;

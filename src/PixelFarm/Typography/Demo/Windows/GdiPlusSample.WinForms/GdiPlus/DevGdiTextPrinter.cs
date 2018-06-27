@@ -16,7 +16,7 @@ namespace SampleWinForms
     /// <summary>
     /// developer's version, Gdi+ text printer
     /// </summary>
-    class DevGdiTextPrinter : DevTextPrinterBase
+    class DevGdiTextPrinter : TextPrinterBase
     {
         Typeface _currentTypeface;
         GlyphPathBuilder _currentGlyphPathBuilder;
@@ -96,7 +96,8 @@ namespace SampleWinForms
             this.TargetGraphics.DrawLine(Pens.Red, x, y, x, y + this.FontAscendingPx);
         }
 
-        UnscaledGlyphPlanList _resuableGlyphPlanList = new UnscaledGlyphPlanList();//for internal use
+
+        UnscaledGlyphPlanList _resuableGlyphPlanList = new UnscaledGlyphPlanList();
         PxScaledGlyphPlanList _reusablePxScaleGlyphPlanList = new PxScaledGlyphPlanList();
 
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
@@ -121,7 +122,7 @@ namespace SampleWinForms
                 false,
                 _reusablePxScaleGlyphPlanList);
 
-            DrawFromGlyphPlans(_resuableGlyphPlanList, x, y);
+            DrawFromGlyphPlans(_reusablePxScaleGlyphPlanList, x, y);
         }
         public void UpdateGlyphLayoutSettings()
         {
@@ -206,11 +207,8 @@ namespace SampleWinForms
                 //and then we reset back ***
                 g.TranslateTransform(-g_x, -g_y);
             }
-
-
-
         }
-        public override void DrawFromGlyphPlans(UnscaledGlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(GlyphPlanSequence glyphPlanList, int startAt, int len, float x, float y)
         {
             UpdateVisualOutputSettings();
 

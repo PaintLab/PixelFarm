@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT, 2016-present, WinterDev
+using System;
 using Typography.Contours;
 namespace Typography.Rendering
 {

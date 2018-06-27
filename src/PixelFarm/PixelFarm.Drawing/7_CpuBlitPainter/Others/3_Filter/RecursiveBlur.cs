@@ -389,8 +389,7 @@ namespace PixelFarm.CpuBlit.Imaging
 
         void StackBlurRGBA32(BitmapBlenderBase img, int radius, int ry)
         {
-            int width = img.Width;
-            int w4 = img.Width * 4;
+            int width = img.Width; 
             int height = img.Height;
 
             //TODO: review here again
@@ -404,6 +403,8 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 for (int x = 0; x < width; ++x)
                 {
+                    //TODO: review here again=>
+                    //find a better way to set pixel...
                     int dest = srcBuffer[i];
                     img.SetPixel(x, y,
                          Color.FromArgb(
@@ -486,6 +487,8 @@ namespace PixelFarm.CpuBlit.Imaging
 
             for (y = 0; y < h; y++)
             {
+
+                //TODO: review get pixel here...
                 RecursizeBlurCalculator c = m_RecursizeBlurCalculatorFactory;
                 c.FromPix(img.GetPixel(0, y));
                 Sum1Array[0].Calc(b, b1, b2, b3, c, c, c, c);

@@ -8,8 +8,6 @@
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-using PixelFarm.CpuBlit.VertexProcessing;
-
 using Mini;
 
 namespace PixelFarm.CpuBlit.Sample_Draw
@@ -145,7 +143,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         public override void Init()
         {
-            
+
         }
         [DemoConfig]
         public bool UseBitmapExt
@@ -237,8 +235,6 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             ////g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
         }
     }
-
-
 
 
 }

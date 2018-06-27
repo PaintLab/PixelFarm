@@ -1,11 +1,36 @@
 ﻿//MIT, 2014-present, WinterDev
 using System.Collections.Generic;
-using System.IO;
+
 
 using Typography.OpenFont;
 using Typography.WordBreaks;
 namespace Typography.TextLayout
 {
+
+    public class UnscaledGlyphPlanList : IUnscaledGlyphPlanList
+    {
+        List<UnscaledGlyphPlan> list = new List<UnscaledGlyphPlan>();
+        public int Count
+        {
+            get { return list.Count; }
+        }
+        public UnscaledGlyphPlan this[int index]
+        {
+            get
+            {
+                return list[index];
+            }
+        }
+        public void Append(UnscaledGlyphPlan unscaledGlyphPlan)
+        {
+            list.Add(unscaledGlyphPlan);
+        }
+        public void Clear()
+        {
+            list.Clear();
+        }
+    }
+
     /// <summary>
     /// collect and managed editable text line
     /// </summary>
@@ -98,9 +123,8 @@ namespace Typography.TextLayout
         }
 
 
-
-
         UnscaledGlyphPlanList _outputGlyphPlan = new UnscaledGlyphPlanList();
+
         public void DoLayout()
         {
 
@@ -108,7 +132,7 @@ namespace Typography.TextLayout
             //TODO: use typography text service
             //it should be faster since it has glyph-plan cache
             //----------------
-             
+
             //user can use other native methods 
             //to do the layout ***
 
@@ -123,7 +147,7 @@ namespace Typography.TextLayout
             _glyphLayout.EnableLigature = true;
             int lineCount = _lines.Count;
 
-            
+
             Typeface selectedTypeface = this.DefaultTypeface;
             float pxscale = selectedTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPts);
             for (int i = 0; i < lineCount; ++i)
@@ -145,15 +169,21 @@ namespace Typography.TextLayout
                     TextBuffer buffer = tt.TextBuffer;
                     char[] rawBuffer = buffer.UnsafeGetInternalBuffer();
 
+
+                    //TODO: review here again
+
                     int preCount = _outputGlyphPlan.Count;
+
                     _glyphLayout.Typeface = selectedTypeface;
                     _glyphLayout.Layout(rawBuffer, tt.StartAt, tt.Len);
 
+                    GlyphPlanSequence.GenerateUnscaledGlyphPlans(
+                        _glyphLayout.ResultUnscaledGlyphPositions,
+                        _outputGlyphPlan);
+
                     //use pixel-scale-layout-engine to scale to specific font size
-                    //or scale it manually
-
+                    //or scale it manually 
                     int postCount = _outputGlyphPlan.Count;
-
                     //
                     tt.SetGlyphPlanSeq(new GlyphPlanSequence(_outputGlyphPlan, preCount, postCount - preCount));
                     tt.IsMeasured = true;

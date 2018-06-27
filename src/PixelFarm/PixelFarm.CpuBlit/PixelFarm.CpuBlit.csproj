@@ -64,7 +64,7 @@
     <Compile Include="04_FragmentProcessing\0_ISpanGenerator.cs" />
     <Compile Include="04_FragmentProcessing\1_ImgSpanGen.cs" />
     <Compile Include="04_FragmentProcessing\3_ImgSpanGenRGBA.cs" />
-    <Compile Include="04_FragmentProcessing\4_ImgSpanGenGray.cs" />
+    <Content Include="x_backup\4_ImgSpanGenGray.txt" />
     <Compile Include="04_FragmentProcessing\IGammaFunction.cs" />
     <Compile Include="04_FragmentProcessing\ISpanInterpolator.cs" />
     <Compile Include="05_PixelProcessing\PixelBlenders.cs" />

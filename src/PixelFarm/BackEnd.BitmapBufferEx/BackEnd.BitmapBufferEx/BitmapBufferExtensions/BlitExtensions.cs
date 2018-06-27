@@ -162,8 +162,8 @@ namespace PixelFarm.BitmapBufferEx
                 int dpw = destContext.Width;
                 int dph = destContext.Height;
 
-                Rectnt32 intersect = new Rectnt32(0, 0, dpw, dph);
-                intersect.Intersect(new Rectnt32(dstX, dstY, dstW, dstH));
+                RectInt32 intersect = new RectInt32(0, 0, dpw, dph);
+                intersect.Intersect(new RectInt32(dstX, dstY, dstW, dstH));
                 if (intersect.IsEmpty)
                 {
                     return;
@@ -531,9 +531,9 @@ namespace PixelFarm.BitmapBufferEx
                 int dpw = destContext.Width;
                 int dph = destContext.Height;
 
-                Rectnt32 intersect = new Rectnt32(0, 0, dpw, dph);
+                RectInt32 intersect = new RectInt32(0, 0, dpw, dph);
 
-                intersect.Intersect(new Rectnt32(dstX, dstY, dstW, dstH));
+                intersect.Intersect(new RectInt32(dstX, dstY, dstW, dstH));
                 if (intersect.IsEmpty)
                 {
                     return;
@@ -919,7 +919,7 @@ namespace PixelFarm.BitmapBufferEx
 
             using (BitmapContext destContext = bmp.GetBitmapContext())
             {
-                if (transform == null) transform = new MatrixTransform(Affine.IdentityMatrix);
+                if (transform == null) transform = new MatrixTransform(PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix);
 
                 int[] destPixels = destContext.Pixels;
                 int destWidth = destContext.Width;

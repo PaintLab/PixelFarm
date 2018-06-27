@@ -26,15 +26,13 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class SubBitmapBlender : BitmapBlenderBase
     {
-
-
         public SubBitmapBlender(IBitmapBlender image,
-        int arrayOffset32,
-        int width,
-        int height)
+            int arrayOffset32,
+            int width,
+            int height)
         {
             this.OutputPixelBlender = image.OutputPixelBlender;
-            AttachBuffer(image.GetInt32Buffer(),
+            AttachBuffer(image.GetOrgInt32Buffer(),
                 arrayOffset32,
                 width,
                 height,
@@ -112,8 +110,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 bitsPerPixel,
                 distanceBetweenPixelsInclusive);
 
-            int srcOffset32 = sourceImage.GetByteBufferOffsetXY(0, 0) / 4;
-            int[] buffer = sourceImage.GetInt32Buffer();
+            int srcOffset32 = sourceImage.GetBufferOffsetXY32(0, 0);
+            int[] buffer = sourceImage.GetOrgInt32Buffer();
             SetBuffer(buffer, srcOffset32 + arrayElemOffset);
 
             this.OutputPixelBlender = outputPxBlender;
@@ -186,8 +184,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             int bottom = Math.Max(0, subImgBounds.Bottom);
             int width = Math.Min(parentImage.Width - left, subImgBounds.Width);
             int height = Math.Min(parentImage.Height - bottom, subImgBounds.Height);
-            int bufferOffsetToFirstPixel = parentImage.GetByteBufferOffsetXY(left, bottom);
-            return new SubBitmapBlender(parentImage, bufferOffsetToFirstPixel / 4, width, height);
+            return new SubBitmapBlender(parentImage, parentImage.GetBufferOffsetXY32(left, bottom), width, height);
         }
     }
 

@@ -96,16 +96,11 @@ namespace Typography.TextServices
         {
             return typefaceStore.GetTypeface(name, installedFontStyle);
         }
-
-
         public GlyphPlanSequence GetUnscaledGlyphPlanSequence(TextBuffer buffer, int start, int len)
         {
             //under current typeface + scriptlang setting 
             return _currentGlyphPlanSeqCache.GetUnscaledGlyphPlanSequence(_glyphLayout, buffer, start, len);
-
         }
-
-
         internal void ClearAllRegisteredShapingContext()
         {
             _registerShapingContexts.Clear();
@@ -172,9 +167,57 @@ namespace Typography.TextServices
 
         }
 
-        UnscaledGlyphPlanList _reusableGlyphPlanList = new UnscaledGlyphPlanList();
+
+
+
+        /// <summary>
+        /// expandable list of glyph plan
+        /// </summary>
+        class UnscaledGlyphPlanList : IUnscaledGlyphPlanList
+        {
+            List<UnscaledGlyphPlan> _glyphPlans = new List<UnscaledGlyphPlan>();
+            float _accumAdvanceX;
+
+            public void Clear()
+            {
+                _glyphPlans.Clear();
+                _accumAdvanceX = 0;
+            }
+            public void Append(UnscaledGlyphPlan glyphPlan)
+            {
+                _glyphPlans.Add(glyphPlan);
+                _accumAdvanceX += glyphPlan.AdvanceX;
+            }
+            public float AccumAdvanceX { get { return _accumAdvanceX; } }
+
+            public UnscaledGlyphPlan this[int index]
+            {
+                get
+                {
+                    return _glyphPlans[index];
+                }
+            }
+            public int Count
+            {
+                get
+                {
+                    return _glyphPlans.Count;
+                }
+            }
+
+#if DEBUG
+            public UnscaledGlyphPlanList()
+            {
+
+            }
+#endif
+        }
+
+
         PxScaledGlyphPlanList _reusableScaledGlyphPlanList = new PxScaledGlyphPlanList();
         List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
+
+        UnscaledGlyphPlanList _reusableGlyphPlanList = new UnscaledGlyphPlanList();
 
         public void MeasureString(char[] str, int startAt, int len, out int w, out int h)
         {
@@ -257,7 +300,7 @@ namespace Typography.TextServices
                 //measure string at specific px scale 
                 _glyphLayout.Layout(str, breakSpan.startAt, breakSpan.len);
                 //
-                 
+
                 _reusableScaledGlyphPlanList.Clear();
                 GlyphLayoutExtensions.GenerateGlyphPlans(
                     _glyphLayout.ResultUnscaledGlyphPositions,
@@ -343,6 +386,9 @@ namespace Typography.TextServices
             }
 #endif
         }
+
+
+      
     }
 
 
@@ -400,6 +446,9 @@ namespace Typography.TextServices
         }
     }
 
+
+
+
     /// <summary>
     /// glyph-cache based on typeface and script-lang with specific gsub/gpos features
     /// </summary>
@@ -410,29 +459,25 @@ namespace Typography.TextServices
         Typeface _typeface;
         ScriptLang _scLang;
         GlyphPlanSeqSet _glyphPlanSeqSet;
-        UnscaledGlyphPlanList _planList = new UnscaledGlyphPlanList();
+        UnscaledGlyphPlanList _reusableGlyphPlanList = new UnscaledGlyphPlanList();
 
         public GlyphPlanCacheForTypefaceAndScriptLang(Typeface typeface, ScriptLang scLang)
         {
             _typeface = typeface;
             _scLang = scLang;
             _glyphPlanSeqSet = new GlyphPlanSeqSet();
-
         }
-
-
         static int CalculateHash(TextBuffer buffer, int startAt, int len)
         {
             //reference,
             //https://stackoverflow.com/questions/2351087/what-is-the-best-32bit-hash-function-for-short-strings-tag-names
             return CRC32.CalculateCRC32(buffer.UnsafeGetInternalBuffer(), startAt, len);
         }
-
-
-
-        public GlyphPlanSequence GetUnscaledGlyphPlanSequence(GlyphLayout glyphLayout,
+        public GlyphPlanSequence GetUnscaledGlyphPlanSequence(
+            GlyphLayout glyphLayout,
             TextBuffer buffer, int start, int seqLen)
         {
+
             //UNSCALED VERSION
             //use current typeface + scriptlang
             int seqHashValue = CalculateHash(buffer, start, seqLen);
@@ -459,18 +504,20 @@ namespace Typography.TextServices
                     start,
                     seqLen);
 
-                int pre_count = _planList.Count;
+                int pre_count = _reusableGlyphPlanList.Count;
                 //create glyph-plan ( UnScaled version) and add it to planList                
-                GlyphLayoutExtensions.GenerateUnscaledGlyphPlans(glyphLayout.ResultUnscaledGlyphPositions, _planList);
-                int post_count = _planList.Count;
-                planSeq = new GlyphPlanSequence(_planList, pre_count, post_count - pre_count);
+                GlyphPlanSequence.GenerateUnscaledGlyphPlans(
+                    glyphLayout.ResultUnscaledGlyphPositions,
+                    _reusableGlyphPlanList);
+                int post_count = _reusableGlyphPlanList.Count;
+                planSeq = new GlyphPlanSequence(_reusableGlyphPlanList, pre_count, post_count - pre_count);
                 //
                 seqCol.Register(seqHashValue, planSeq);
-
-
             }
             return planSeq;
         }
+
+
     }
 
     class GlyphPlanSeqCollection

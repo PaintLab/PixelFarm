@@ -36,6 +36,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class PixelBlenderGrey : PixelBlender32
     {
+         
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
@@ -308,11 +309,12 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             SelectedMaskComponent = PixelBlenderColorComponent.R; //default
         }
+        
         /// <summary>
         /// set mask image, please note that size of mask must be the same size of the dest buffer
         /// </summary>
         /// <param name="maskBmp"></param>
-        public void SetMaskImage(ActualBitmap maskBmp)
+        public void SetMaskBitmap(ActualBitmap maskBmp)
         {
             //please note that size of mask must be the same size of the dest buffer
 
@@ -614,7 +616,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class PixelBlenderPerColorComponentWithMask : PixelBlender32
     {
-
+ 
 
         int[] _maskInnerBuffer;
         int _mask_shift = 16;//default
@@ -626,16 +628,18 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             SelectedMaskComponent = PixelBlenderColorComponent.R; //default
             EnableOutputColorComponent = EnableOutputColorComponent.EnableAll;
-        }
+        } 
         /// <summary>
         /// set mask image, please note that size of mask must be the same size of the dest buffer
         /// </summary>
         /// <param name="maskBmp"></param>
-        public void SetMaskImage(ActualBitmap maskBmp)
+        public void SetMaskBitmap(ActualBitmap maskBmp)
         {
+            //in this version
             //please note that size of mask must be the same size of the dest buffer
             _maskInnerBuffer = ActualBitmap.GetBuffer(maskBmp);
         }
+       
         public EnableOutputColorComponent EnableOutputColorComponent
         {
             get
@@ -674,7 +678,12 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 }
             }
         }
-
+        /// <summary>
+        /// new color output after applying with mask
+        /// </summary>
+        /// <param name="srcColor"></param>
+        /// <param name="arrayOffset"></param>
+        /// <returns></returns>
         Color NewColorFromMask(Color srcColor, int arrayOffset)
         {
             return srcColor.NewFromChangeCoverage((byte)((_maskInnerBuffer[arrayOffset]) >> _mask_shift));
@@ -943,7 +952,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                             {
                                 *dstPtr =
                                  ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
-                                 (b << 16) |
+                                 (r << 16) |
                                  (g << 8) |
                                  ((byte)(((srcColor.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                             }

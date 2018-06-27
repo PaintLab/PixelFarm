@@ -14,12 +14,10 @@ using PixelFarm.Drawing;
 namespace PixelFarm.PaintFx
 {
 
-    public class MemHolder
+    class MemHolder
     {
         unsafe int* memAddress;
-        int len; //len of int32 array
-
-
+        int len; //len of int32 array 
         /// <param name="ptr">ptr to int32*</param>
         /// <param name="len">length of this int32[]</param>
         public MemHolder(IntPtr ptr, int len)
@@ -47,8 +45,6 @@ namespace PixelFarm.PaintFx
                 }
             }
         }
-
-
         public MemHolder CreateSubMem(int startOffset, int len)
         {
             if (startOffset >= 0 && len <= this.len)
@@ -77,15 +73,15 @@ namespace PixelFarm.PaintFx
         int width;
         int height;
         int stride;
-        MemHolder memHolder;
+        MemHolder memHolder; 
+        bool disposed = false;
 
-        private bool disposed = false;
         /// <summary>
         /// Creates a new instance of the Surface class.
         /// </summary>
         /// <param name="width">The width, in pixels, of the new Surface.</param>
         /// <param name="height">The height, in pixels, of the new Surface.</param>
-        public Surface(int stride, int width, int height, MemHolder memHolder)
+        internal Surface(int stride, int width, int height, MemHolder memHolder)
         {
             this.stride = stride;
             this.width = width;

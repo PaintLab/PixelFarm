@@ -150,9 +150,7 @@ namespace PixelFarm.CpuBlit.Imaging
     struct BufferReader4
     {
         //matrix four ,four reader
-        unsafe int* buffer;
-
-
+        unsafe int* buffer; 
         int width;
         int height;
         int cX;
@@ -195,6 +193,13 @@ namespace PixelFarm.CpuBlit.Imaging
                 return FromInt(buffer[(this.cY * width) + cX]);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x0y0"></param>
+        /// <param name="x1y0"></param>
+        /// <param name="x0y1"></param>
+        /// <param name="x1y1"></param>
         public void Read4(out Color x0y0, out Color x1y0, out Color x0y1, out Color x1y1)
         {
             //byte b, g, r, a; 
@@ -219,6 +224,10 @@ namespace PixelFarm.CpuBlit.Imaging
             }
 
         }
+        /// <summary>
+        /// read 4 x 4 pixels
+        /// </summary>
+        /// <param name="outputBuffer"></param>
         public void Read16(Color[] outputBuffer)
         {
             //bgra to argb

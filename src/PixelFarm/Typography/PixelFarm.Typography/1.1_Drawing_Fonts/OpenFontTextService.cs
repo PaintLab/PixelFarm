@@ -96,14 +96,10 @@ namespace LayoutFarm
                      lineSeg.StartAt,
                      lineSeg.Length);
 
-                UnscaledGlyphPlanList planList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq);
+
                 //IMPORTANT
                 //num of glyph may more or less than original user input char buffer
                 // 
-                int endAt = seq.startAt + seq.len;
-                int seq_startAt = seq.startAt;
-
-
 
 
                 //float g_x = 0;
@@ -191,12 +187,12 @@ namespace LayoutFarm
                 ////---------
 
 
+                int seqLen = seq.Count;
 
-
-                for (int s = seq_startAt; s < endAt; ++s)
+                for (int s = 0; s < seqLen; ++s)
                 {
-                    UnscaledGlyphPlan glyphPlan = planList[s];
- 
+                    UnscaledGlyphPlan glyphPlan = seq[s];
+
                     double actualAdvX = glyphPlan.AdvanceX;
 
                     outputTotalW +=
@@ -240,7 +236,7 @@ namespace LayoutFarm
 
             float pxscale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
 
-            float recommedLineSpacing = typeface.CalculateRecommendLineSpacing() * pxscale;
+            float recommedLineSpacingInPx = typeface.CalculateRecommendLineSpacing() * pxscale;
             float descentInPx = typeface.Descender * pxscale;
             float ascentInPx = typeface.Ascender * pxscale;
             float lineGapInPx = typeface.LineGap * pxscale;
@@ -251,7 +247,7 @@ namespace LayoutFarm
                 ascentInPx,
                 descentInPx,
                 lineGapInPx,
-                recommedLineSpacing);
+                recommedLineSpacingInPx);
 
             return typeface;
         }
@@ -259,8 +255,6 @@ namespace LayoutFarm
         {
             throw new NotImplementedException();
         }
-
-
 
         public GlyphPlanSequence CreateGlyphPlanSeq(ref TextBufferSpan textBufferSpan, RequestFont font)
         {
@@ -328,14 +322,6 @@ namespace LayoutFarm
             {
                 get { return startAt; }
             }
-            //public string GetText()
-            //{
-            //    return owner.GetSegmentText(this.startAt, len);
-            //}
-            //public int GetHashKey()
-            //{
-            //    return owner.GetHashKey(this.startAt, len);
-            //}
         }
         class MyLineSegmentList : ILineSegmentList
         {

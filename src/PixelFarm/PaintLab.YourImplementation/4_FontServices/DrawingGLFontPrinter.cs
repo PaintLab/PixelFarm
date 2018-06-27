@@ -48,8 +48,7 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             _aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            var openFontStore = new Typography.TextServices.OpenFontStore();
-            _vxsTextPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
+            _vxsTextPrinter = new VxsTextPrinter(_aggPainter);
             _aggPainter.TextPrinter = _vxsTextPrinter;
         }
         public bool StartDrawOnLeftTop { get; set; }
@@ -406,8 +405,9 @@ namespace PixelFarm.DrawingGL
             float g_x = 0;
             float g_y = 0;
             int baseY = (int)Math.Round(y);
-            int n = glyphPlanSeq.len;
-            int endBefore = glyphPlanSeq.startAt + n;
+
+            //int n = glyphPlanSeq.len;
+            //int endBefore = glyphPlanSeq.startAt + n;
 
             //-------------------------------------
             _glsx.LoadTexture1(_glBmp);
@@ -420,11 +420,11 @@ namespace PixelFarm.DrawingGL
             float acc_x = 0;
             float acc_y = 0;
 
-            for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
-            {
-                UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
-                UnscaledGlyphPlan glyph = glyphPlanList[i];
 
+            int seqLen = glyphPlanSeq.Count;
+            for (int i = 0; i < seqLen; ++i)
+            {
+                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
                 Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                 {
@@ -560,8 +560,7 @@ namespace PixelFarm.DrawingGL
             float g_x = 0;
             float g_y = 0;
             int baseY = (int)Math.Round(y);
-            int n = glyphPlanSeq.len;
-            int endBefore = glyphPlanSeq.startAt + n;
+
 
             //***
             _glsx.SetAssociatedTextureInfo(_glBmp);
@@ -572,10 +571,10 @@ namespace PixelFarm.DrawingGL
             float acc_x = 0;
             float acc_y = 0;
 
-            for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
+            int seqLen = glyphPlanSeq.Count;
+            for (int i = 0; i < seqLen; ++i)
             {
-                UnscaledGlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
-                UnscaledGlyphPlan glyph = glyphPlanList[i];
+                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
                 Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))

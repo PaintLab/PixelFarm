@@ -27,8 +27,7 @@ namespace PixelFarm.PaintFx
     ///         // etc.
     ///     }
     /// </remarks>
-    public sealed class RenderArgs
-        : IDisposable
+    public sealed class RenderArgs : IDisposable
     {
         private Surface surface;
         //private Bitmap bitmap;

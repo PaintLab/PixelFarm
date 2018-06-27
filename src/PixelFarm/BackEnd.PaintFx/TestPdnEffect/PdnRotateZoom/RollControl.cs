@@ -13,12 +13,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-using PixelFarm.PaintFx.Effects;
-
 namespace PaintDotNet.Effects
 {
-    public partial class RollControl
-        : System.Windows.Forms.UserControl
+    public partial class RollControl : UserControl
     {
 
         static class Utility

@@ -28,7 +28,7 @@ namespace SampleWinForms
 
 
 
-        DevTextPrinterBase selectedTextPrinter = null;
+        TextPrinterBase selectedTextPrinter = null;
         VxsTextPrinter _devVxsTextPrinter = null;
 
         UI.DebugGlyphVisualizer debugGlyphVisualizer = new UI.DebugGlyphVisualizer();
@@ -116,8 +116,8 @@ namespace SampleWinForms
 
                 painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
-                _devVxsTextPrinter = new VxsTextPrinter(painter, _basicOptions.OpenFontStore);
-                _devVxsTextPrinter.TargetCanvasPainter = painter;
+                _devVxsTextPrinter = new VxsTextPrinter(painter);
+
                 _devVxsTextPrinter.ScriptLang = _basicOptions.ScriptLang;
                 _devVxsTextPrinter.PositionTechnique = Typography.TextLayout.PositionTechnique.OpenFont;
                 //_devGdiTextPrinter.TargetGraphics = g;
@@ -130,8 +130,17 @@ namespace SampleWinForms
 
             //test option use be used with lcd subpixel rendering.
             //this demonstrate how we shift a pixel for subpixel rendering tech
-            _devVxsTextPrinter.UseWithLcdSubPixelRenderingTechnique = _contourAnalysisOpts.SetupPrinterLayoutForLcdSubPix;
+            if (_contourAnalysisOpts.SetupPrinterLayoutForLcdSubPix)
+            {
+                //TODO: set lcd or not here
+            }
+            else
+            {
+                //TODO: set lcd or not here
 
+            }
+
+            //-----------------
 
 
 
