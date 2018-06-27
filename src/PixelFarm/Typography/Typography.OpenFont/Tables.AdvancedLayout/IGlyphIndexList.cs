@@ -9,7 +9,11 @@ namespace Typography.OpenFont.Tables
     public interface IGlyphIndexList
     {
         void Clear();
-        
+        /// <summary>
+        /// add original char and its glyph index
+        /// </summary>
+        /// <param name="glyphIndex"></param>
+        void AddGlyph(int originalChar, ushort glyphIndex);
         int Count { get; }
         ushort this[int index] { get; }
 
@@ -34,5 +38,4 @@ namespace Typography.OpenFont.Tables
         void Replace(int index, ushort[] newGlyphIndices);
     }
 
-   
 }
