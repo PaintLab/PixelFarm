@@ -106,7 +106,7 @@ namespace Typography.OpenFont
                 VerticalHeader vhea = ReadTableIfExists(tables, input, new VerticalHeader());
                 if (vhea != null)
                 {
-                    VerticalMatrics vmtx = ReadTableIfExists(tables, input, new VerticalMatrics(vhea.NumOfLongVerMetrics));
+                    VerticalMetrics vmtx = ReadTableIfExists(tables, input, new VerticalMetrics(vhea.NumOfLongVerMetrics));
                 }
 
                 EBLCTable fontBmpTable = ReadTableIfExists(tables, input, new EBLCTable());

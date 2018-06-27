@@ -5,9 +5,9 @@ using System.IO;
 namespace Typography.OpenFont.Tables
 {
     /// <summary>
-    /// vertical matric table
+    /// vertical metrics table
     /// </summary>
-    class VerticalMatrics : TableEntry
+    class VerticalMetrics : TableEntry
     {
         // https://www.microsoft.com/typography/otspec/vmtx.htm
         // vmtx - Vertical Metrics Table
@@ -57,7 +57,7 @@ namespace Typography.OpenFont.Tables
 
         ushort _numOfLongVerMetrics;
         AdvanceHeightAndTopSideBearing[] _advHeightAndTopSideBearings;
-        public VerticalMatrics(ushort numOfLongVerMetrics)
+        public VerticalMetrics(ushort numOfLongVerMetrics)
         {
             this._numOfLongVerMetrics = numOfLongVerMetrics;
         }
