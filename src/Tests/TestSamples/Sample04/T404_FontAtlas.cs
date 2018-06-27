@@ -31,7 +31,7 @@ namespace OpenTkEssTest
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.xml", System.IO.FileMode.Open))
             {
-                fontAtlas = atlasBuilder.LoadAtlasInfo(fs);
+                fontAtlas = atlasBuilder.LoadFontInfo(fs);
             }
 
 
@@ -71,7 +71,7 @@ namespace OpenTkEssTest
             //painter.DrawString("hello!", 0, 20);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
-            Typography.Rendering.TextureFontGlyphData glyphData;
+            Typography.Rendering.TextureGlyphMapData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             fontAtlas.TryGetGlyphDataByGlyphIndex(codepoint[0], out glyphData);

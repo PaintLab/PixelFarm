@@ -301,7 +301,7 @@ namespace PixelFarm.DrawingGL
         //        GlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
         //        GlyphPlan glyph = glyphPlanList[i];
 
-        //        Typography.Rendering.TextureFontGlyphData glyphData;
+        //        Typography.Rendering.TextureGlyphMapData glyphData;
         //        if (!_fontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
         //        {
         //            //if no glyph data, we should render a missing glyph ***
@@ -389,13 +389,14 @@ namespace PixelFarm.DrawingGL
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
 
-            float scale = _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
+
+            float scale = 1;// _fontAtlas.TargetTextureScale;
+            int recommendLineSpacing = (int)font.LineSpacingInPx;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((_fontAtlas.OriginalRecommendLineSpacing) * scale);
+            y -= ((font.LineSpacingInPx) * scale);
 
             EnsureLoadGLBmp();
             // 
@@ -425,7 +426,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                Typography.Rendering.TextureFontGlyphData glyphData;
+                Typography.Rendering.TextureGlyphMapData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
@@ -530,8 +531,8 @@ namespace PixelFarm.DrawingGL
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
 
-            float scale = _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
+            float scale = 1;// _fontAtlas.TargetTextureScale;
+            int recommendLineSpacing = (int)font.LineSpacingInPx;
 
             //--------------------------
             //TODO:
@@ -576,7 +577,7 @@ namespace PixelFarm.DrawingGL
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
-                Typography.Rendering.TextureFontGlyphData glyphData;
+                Typography.Rendering.TextureGlyphMapData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***

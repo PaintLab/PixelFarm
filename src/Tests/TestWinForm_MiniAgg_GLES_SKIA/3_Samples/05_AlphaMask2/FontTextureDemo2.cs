@@ -102,13 +102,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
-            float scale = _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
+            float scale = 1;// _fontAtlas.TargetTextureScale;
+            int recommendLineSpacing = (int)_font.LineSpacingInPx;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((_fontAtlas.OriginalRecommendLineSpacing) * scale);
+            y -= ((_font.LineSpacingInPx) * scale);
 
             // 
             float scaleFromTexture = _finalTextureScale;
@@ -129,7 +129,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                TextureFontGlyphData glyphData;
+                TextureGlyphMapData glyphData;
                 if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***

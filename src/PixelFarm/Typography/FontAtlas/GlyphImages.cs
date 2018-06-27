@@ -50,37 +50,11 @@ namespace Typography.Rendering
         /// </summary>
         public double TextureOffsetX { get; set; }
 
-        double _textureOffsetY;
+
         /// <summary>
         /// texture offset Y from original glyph 
         /// </summary>
-        public double TextureOffsetY
-        {
-            get { return _textureOffsetY; }
-            set
-            {
-                _textureOffsetY = value;
-            }
-        }
-        //public void FlipY()
-        //{
-        //    //flip this img vertically
-        //    int[] newBuffer = new int[pixelBuffer.Length];
-
-        //    int w = this.Width;///pixel width
-        //    int stride = w * 4; //bytes
-        //    int readAt = stride * (Height - 1); //bytes
-        //    int writeAt = 0;
-
-        //    for (int row = Height - 1; row >= 0; --row)
-        //    {
-        //        //each row
-        //        Buffer.BlockCopy(pixelBuffer, readAt, newBuffer, writeAt, stride);
-        //        readAt -= stride;
-        //        writeAt += stride;
-        //    }
-
-        //}
+        public double TextureOffsetY { get; set; }
     }
 
 
@@ -92,14 +66,19 @@ namespace Typography.Rendering
         internal GlyphImage img;
         public Rectangle area;
         public char character; //TODO: this should be code point(int32)
-        public int glyphIndex;
-
+        public ushort glyphIndex;
     }
 
-    public class TextureFontGlyphData
+    public class TextureGlyphMapData
     {
+        public int Left { get; set; }
+        public int Top { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
         public float BorderX { get; set; }
         public float BorderY { get; set; }
+
         public float AdvanceX { get; set; }
         public float AdvanceY { get; set; }
         public float BBoxXMin { get; set; }
@@ -122,16 +101,23 @@ namespace Typography.Rendering
 
         public Rectangle Rect
         {
-            get;
-            set;
-        }
-        public void GetGlyphRect(out int x, out int y, out int w, out int h)
-        {
-            x = Rect.X;
-            y = Rect.Y;
-            w = Rect.Width;
-            h = Rect.Height;
+            get { return new Rectangle(Left, Top, Width, Height); }
+            set
+            {
+                Left = value.Left;
+                Top = value.Top;
+                Width = value.Width;
+                Height = value.Height;
+            }
         }
 
-    } 
+        public void GetGlyphRect(out int x, out int y, out int w, out int h)
+        {
+            x = Left;
+            y = Top;
+            w = Width;
+            h = Height;
+        }
+
+    }
 }
