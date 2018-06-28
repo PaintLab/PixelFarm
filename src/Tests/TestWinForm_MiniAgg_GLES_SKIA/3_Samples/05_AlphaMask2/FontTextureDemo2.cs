@@ -1,6 +1,4 @@
-﻿//BSD, 2018-present, WinterDev 
-
-
+﻿//BSD, 2018-present, WinterDev  
 
 using System;
 using System.Collections.Generic;

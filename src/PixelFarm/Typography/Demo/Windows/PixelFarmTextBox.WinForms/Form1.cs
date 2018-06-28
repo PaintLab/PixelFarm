@@ -11,11 +11,8 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.Fonts;
 
 using Typography.OpenFont;
-using Typography.Rendering;
 using Typography.Contours;
 using Typography.TextLayout;
-
-
 
 
 namespace PixelFarmTextBox.WinForms
