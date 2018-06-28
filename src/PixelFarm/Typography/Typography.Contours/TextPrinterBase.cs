@@ -1,8 +1,9 @@
 ﻿//MIT, 2016-present, WinterDev
 using System.Collections.Generic;
+using Typography.OpenFont;
 using Typography.TextLayout;
 
-namespace Typography.Rendering
+namespace Typography.Contours
 {
     /// <summary>
     /// base TextPrinter class for developer only, 
@@ -115,5 +116,23 @@ namespace Typography.Rendering
 
 
     }
-
+    public enum HintTechnique : byte
+    {
+        /// <summary>
+        /// no hinting
+        /// </summary>
+        None,
+        /// <summary>
+        /// truetype instruction
+        /// </summary>
+        TrueTypeInstruction,
+        /// <summary>
+        /// truetype instruction vertical only
+        /// </summary>
+        TrueTypeInstruction_VerticalOnly,
+        /// <summary>
+        /// custom hint
+        /// </summary>
+        CustomAutoFit
+    }
 }

@@ -6,6 +6,7 @@ using PixelFarm.CpuBlit.PixelProcessing;
 using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.TextLayout;
+using Typography.Contours;
 
 namespace PixelFarm.Drawing.Fonts
 {
