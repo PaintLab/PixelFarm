@@ -6,7 +6,8 @@ namespace LayoutFarm.UI
     //platform specific code 
     public class UIPlatformWinNeutral : UIPlatform
     {
-        OpenFontStore s_fontStore;
+
+        TypefaceStore s_fontStore;
 
         static UIPlatformWinNeutral()
         {
@@ -17,7 +18,7 @@ namespace LayoutFarm.UI
         {
             LayoutFarm.UI.Clipboard.SetUIPlatform(this);
 
-            s_fontStore = new OpenFontStore();
+            s_fontStore = new TypefaceStore();
 
             //no gdi+
             // PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);

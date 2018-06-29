@@ -20,12 +20,9 @@ namespace SampleWinForms
     public partial class Form1 : Form
     {
         Graphics g;
-        AggPainter painter;
-
+        AggPainter painter; 
         ActualBitmap destImg;
-        Bitmap winBmp;
-
-
+        Bitmap winBmp; 
 
         TextPrinterBase selectedTextPrinter = null;
         VxsTextPrinter _devVxsTextPrinter = null;

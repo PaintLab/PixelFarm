@@ -1,6 +1,5 @@
 ﻿//MIT, 2014-present, WinterDev
 using PixelFarm.CpuBlit;
-using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using System;
 using System.Numerics;
@@ -42,7 +41,7 @@ namespace SampleWinForms.UI
         Typeface _typeface;
         float _sizeInPoint;
         GlyphPathBuilder builder;
-       
+
         PixelFarm.Drawing.Painter painter;
         float _pxscale;
         HintTechnique _latestHint;
