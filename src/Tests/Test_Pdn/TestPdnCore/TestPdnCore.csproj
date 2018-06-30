@@ -5,8 +5,4 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PdnCore\PdnCore.csproj" />
-  </ItemGroup>
-
 </Project>
