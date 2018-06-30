@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EC1307C6-309F-43EA-BFCC-5219E2F5A103}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PixelFarm.Typography</RootNamespace>
+    <AssemblyName>PixelFarm.Typography</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs">
+      <Link>1.1_Drawing_Fonts\FontAtlasTextPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs">
+      <Link>1.1_Drawing_Fonts\FontStyleExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs">
+      <Link>1.1_Drawing_Fonts\GlyphMeshStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs">
+      <Link>1.1_Drawing_Fonts\GlyphPathBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs">
+      <Link>1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontIFonts.cs">
+      <Link>1.1_Drawing_Fonts\OpenFontIFonts.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs">
+      <Link>1.1_Drawing_Fonts\OpenFontTextService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs">
+      <Link>1.1_Drawing_Fonts\VxsTextPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.3_DrawingFonts\ManagedShapingService.cs">
+      <Link>1.3_DrawingFonts\ManagedShapingService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.3_DrawingFonts\TextShapingAndLayoutService.cs">
+      <Link>1.3_DrawingFonts\TextShapingAndLayoutService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\ActualFont.cs">
+      <Link>2_Drawing_Text\ActualFont.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\FontFace.cs">
+      <Link>2_Drawing_Text\FontFace.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\FontGlyph.cs">
+      <Link>2_Drawing_Text\FontGlyph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs">
+      <Link>3_FontFaceImpl\AggGlyphTextureGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs">
+      <Link>3_FontFaceImpl\BitmapFontMx.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs">
+      <Link>3_FontFaceImpl\GlyphTextureBitmapGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\NOpenFontFace.cs">
+      <Link>3_FontFaceImpl\NOpenFontFace.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\OpenFontLoader.cs">
+      <Link>3_FontFaceImpl\OpenFontLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs">
+      <Link>3_FontFaceImpl\ScriptLangConv.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs">
+      <Link>3_FontFaceImpl\TextureFontLoader.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
+      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
+      <Name>Typography.One</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\..\..\..\Typography\FontAtlas\FontAtlas.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.Contours\Typography.Contours.projitems" Label="Shared" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

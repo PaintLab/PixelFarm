@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{12B80332-37D2-4C53-8775-93D595E21CAF}</ProjectGuid>
+    <ProjectGuid>{5278FAB9-33F0-40E0-ADCA-7237EA0E935B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.Drawing.Pdf</RootNamespace>
-    <AssemblyName>PixelFarm.Drawing.Pdf</AssemblyName>
+    <RootNamespace>Typography.One</RootNamespace>
+    <AssemblyName>Typography.One</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET20</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -34,29 +34,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
-    <Compile Include="DrawBoard\1_MyPdfDrawBoard_Specific.cs" />
-    <Compile Include="DrawBoard\2_MyPdfDrawBoard_CoordinateAndClip.cs" />
-    <Compile Include="DrawBoard\3_MyPdfDrawBoard_DrawGraphics.cs" />
-    <Compile Include="DrawBoard\4_MyPdfDrawBoard_TextAndFonts.cs" />
-    <Compile Include="DrawBoard\Conv.cs" />
-    <Compile Include="Painter\PdfPainter.cs" />
-    <Compile Include="Painter\PdfRenderVx.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
-      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
-      <Name>Typography.One</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\..\..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.TextServices\Typography.TextServices.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
