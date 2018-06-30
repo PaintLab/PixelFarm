@@ -35,6 +35,18 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs">
+      <Link>AdditionalInfo\AdobeGlyphList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs">
+      <Link>AdditionalInfo\AdobeGlyphListForNewFont.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs">
+      <Link>AdditionalInfo\MacPostFormat1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Typography.OpenFont\AdditionalInfo\OS2_IBMFontClassParameters.cs">
+      <Link>AdditionalInfo\OS2_IBMFontClassParameters.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\Typography.OpenFont\Bounds.cs">
       <Link>Bounds.cs</Link>
     </Compile>
@@ -115,6 +127,18 @@
     </Compile>
     <Compile Include="..\..\..\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs">
       <Link>Tables.AdvanceLayout\ScriptTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Typography.OpenFont\Tables.CFF\CFF.cs">
+      <Link>Tables.CFF\CFF.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Typography.OpenFont\Tables.CFF\CffEvaluationEngine.cs">
+      <Link>Tables.CFF\CffEvaluationEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Typography.OpenFont\Tables.CFF\CFFTable.cs">
+      <Link>Tables.CFF\CFFTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs">
+      <Link>Tables.CFF\Type2CharStringParser.cs</Link>
     </Compile>
     <Compile Include="..\..\..\Typography.OpenFont\Tables.Others\EBLCTable.cs">
       <Link>Tables.Others\EBLCTable.cs</Link>

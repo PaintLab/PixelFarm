@@ -233,7 +233,7 @@ namespace TypographyTest.WinForms
 
                        using (System.IO.FileStream fs = new System.IO.FileStream(bitmapImgSaveFileName + ".xml", System.IO.FileMode.Create))
                        {
-                           atlasBuilder.SaveAtlasInfo(fs);
+                           atlasBuilder.SaveFontInfo(fs);
                        }
 
                        MessageBox.Show("glyph gen " + bitmapImgSaveFileName);
@@ -285,7 +285,7 @@ namespace TypographyTest.WinForms
                       SaveImgBufferToFile(totalGlyphs, bitmapImgSaveFileName + ".png");
                       using (System.IO.FileStream fs = new System.IO.FileStream(bitmapImgSaveFileName + ".xml", System.IO.FileMode.Create))
                       {
-                          atlasBuilder.SaveAtlasInfo(fs);
+                          atlasBuilder.SaveFontInfo(fs);
                       }
 
 

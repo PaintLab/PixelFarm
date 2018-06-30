@@ -119,7 +119,7 @@ namespace LayoutFarm
                 //    GlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
                 //    GlyphPlan glyph = glyphPlanList[i];
 
-                //    Typography.Rendering.TextureFontGlyphData glyphData;
+                //    Typography.Rendering.TextureGlyphMapData glyphData;
                 //    if (!_fontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
                 //    {
                 //        //if no glyph data, we should render a missing glyph ***

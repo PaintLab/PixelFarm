@@ -80,21 +80,21 @@ namespace Typography.Rendering
         public BinPackRect Insert(int width, int height)
         {
             var bestNode = new BinPackRect();
-            var bestShortFit = int.MaxValue;
-            var bestLongFit = int.MaxValue;
+            int bestShortFit = int.MaxValue;
+            int bestLongFit = int.MaxValue;
 
-            var count = freeList.Count;
+            int count = freeList.Count;
             for (int i = 0; i < count; i++)
             {
                 // try to place the rect
-                var rect = freeList[i];
+                BinPackRect rect = freeList[i];
                 if (rect.Width < width || rect.Height < height)
                     continue;
 
-                var leftoverX = Math.Abs(rect.Width - width);
-                var leftoverY = Math.Abs(rect.Height - height);
-                var shortFit = Math.Min(leftoverX, leftoverY);
-                var longFit = Math.Max(leftoverX, leftoverY);
+                int leftoverX = Math.Abs(rect.Width - width);
+                int leftoverY = Math.Abs(rect.Height - height);
+                int shortFit = Math.Min(leftoverX, leftoverY);
+                int longFit = Math.Max(leftoverX, leftoverY);
 
                 if (shortFit < bestShortFit || (shortFit == bestShortFit && longFit < bestLongFit))
                 {
@@ -123,8 +123,8 @@ namespace Typography.Rendering
             {
                 for (int j = i + 1; j < freeList.Count; j++)
                 {
-                    var idata = freeList[i];
-                    var jdata = freeList[j];
+                    BinPackRect idata = freeList[i];
+                    BinPackRect jdata = freeList[j];
                     if (jdata.Contains(idata))
                     {
                         freeList.RemoveAt(i);
@@ -156,7 +156,7 @@ namespace Typography.Rendering
                 // new node at the top side of the used node
                 if (usedNode.Y > freeNode.Y && usedNode.Y < freeNode.Bottom)
                 {
-                    var newNode = freeNode;
+                    BinPackRect newNode = freeNode;
                     newNode.Height = usedNode.Y - newNode.Y;
                     freeList.Add(newNode);
                 }
@@ -184,7 +184,7 @@ namespace Typography.Rendering
                 // new node at the right side of the used node
                 if (usedNode.Right < freeNode.Right)
                 {
-                    var newNode = freeNode;
+                    BinPackRect newNode = freeNode;
                     newNode.X = usedNode.Right;
                     newNode.Width = freeNode.Right - usedNode.Right;
                     freeList.Add(newNode);

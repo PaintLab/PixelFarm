@@ -333,7 +333,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return this.charAbcWidths;
         }
-        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        public override FontGlyph GetGlyphByIndex(ushort glyphIndex)
         {
             throw new NotImplementedException();
         }

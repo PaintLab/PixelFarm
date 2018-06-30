@@ -1,4 +1,4 @@
-﻿//MIT, 2016-present, WinterDev
+﻿//Apache2, 2016-present, WinterDev 
 using System.IO;
 
 namespace Typography.OpenFont.Tables
@@ -573,7 +573,4 @@ namespace Typography.OpenFont.Tables
             this.usUpperOpticalPointSize = reader.ReadUInt16();
         }
     }
-
-
-  
 }

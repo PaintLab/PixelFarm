@@ -50,37 +50,11 @@ namespace Typography.Rendering
         /// </summary>
         public double TextureOffsetX { get; set; }
 
-        double _textureOffsetY;
+
         /// <summary>
         /// texture offset Y from original glyph 
         /// </summary>
-        public double TextureOffsetY
-        {
-            get { return _textureOffsetY; }
-            set
-            {
-                _textureOffsetY = value;
-            }
-        }
-        //public void FlipY()
-        //{
-        //    //flip this img vertically
-        //    int[] newBuffer = new int[pixelBuffer.Length];
-
-        //    int w = this.Width;///pixel width
-        //    int stride = w * 4; //bytes
-        //    int readAt = stride * (Height - 1); //bytes
-        //    int writeAt = 0;
-
-        //    for (int row = Height - 1; row >= 0; --row)
-        //    {
-        //        //each row
-        //        Buffer.BlockCopy(pixelBuffer, readAt, newBuffer, writeAt, stride);
-        //        readAt -= stride;
-        //        writeAt += stride;
-        //    }
-
-        //}
+        public double TextureOffsetY { get; set; }
     }
 
 
@@ -92,46 +66,31 @@ namespace Typography.Rendering
         internal GlyphImage img;
         public Rectangle area;
         public char character; //TODO: this should be code point(int32)
-        public int glyphIndex;
-
+        public ushort glyphIndex;
     }
 
-    public class TextureFontGlyphData
+    public class TextureGlyphMapData
     {
+        public int Left { get; set; }
+        public int Top { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
         public float BorderX { get; set; }
         public float BorderY { get; set; }
-        public float AdvanceX { get; set; }
-        public float AdvanceY { get; set; }
-        public float BBoxXMin { get; set; }
-        public float BBoxXMax { get; set; }
-        public float BBoxYMin { get; set; }
-        public float BBoxYMax { get; set; }
-        public float ImgWidth { get; set; }
-        public float ImgHeight { get; set; }
-        //-----
-        public float HAdvance { get; set; }
-        public float HBearingX { get; set; }
-        public float HBearingY { get; set; }
-        //-----
-        public float VAdvance { get; set; }
-        public float VBearingX { get; set; }
-        public float VBearingY { get; set; }
-        //---
-        public double TextureXOffset { get; set; }
-        public double TextureYOffset { get; set; }
 
-        public Rectangle Rect
+
+        public float TextureXOffset { get; set; }
+        public float TextureYOffset { get; set; }
+
+
+        public void GetRect(out int x, out int y, out int w, out int h)
         {
-            get;
-            set;
-        }
-        public void GetGlyphRect(out int x, out int y, out int w, out int h)
-        {
-            x = Rect.X;
-            y = Rect.Y;
-            w = Rect.Width;
-            h = Rect.Height;
+            x = Left;
+            y = Top;
+            w = Width;
+            h = Height;
         }
 
-    } 
+    }
 }

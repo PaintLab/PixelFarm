@@ -173,7 +173,7 @@ namespace Typography.TextServices
         /// <summary>
         /// expandable list of glyph plan
         /// </summary>
-        class UnscaledGlyphPlanList : IUnscaledGlyphPlanList
+        class InternalUnscaledGlyphPlanList : IUnscaledGlyphPlanList
         {
             List<UnscaledGlyphPlan> _glyphPlans = new List<UnscaledGlyphPlan>();
             float _accumAdvanceX;
@@ -206,7 +206,7 @@ namespace Typography.TextServices
             }
 
 #if DEBUG
-            public UnscaledGlyphPlanList()
+            public InternalUnscaledGlyphPlanList()
             {
 
             }
@@ -217,7 +217,7 @@ namespace Typography.TextServices
         PxScaledGlyphPlanList _reusableScaledGlyphPlanList = new PxScaledGlyphPlanList();
         List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
 
-        UnscaledGlyphPlanList _reusableGlyphPlanList = new UnscaledGlyphPlanList();
+        InternalUnscaledGlyphPlanList _reusableGlyphPlanList = new InternalUnscaledGlyphPlanList();
 
         public void MeasureString(char[] str, int startAt, int len, out int w, out int h)
         {
@@ -388,7 +388,7 @@ namespace Typography.TextServices
         }
 
 
-      
+
     }
 
 

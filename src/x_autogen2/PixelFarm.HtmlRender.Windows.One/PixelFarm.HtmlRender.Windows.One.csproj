@@ -1121,71 +1121,71 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\AdvancingFront.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\AdvancingFront.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFront.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFront.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\AdvancingFrontNode.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\AdvancingFrontNode.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\DelaunayTriangle.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\DelaunayTriangle.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\DTSweep.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\DTSweep.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweep.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweep.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\DTSweepConstraint.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\DTSweepConstraint.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\DTSweepContext.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\DTSweepContext.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepContext.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\DTSweepDebugContext.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\DTSweepDebugContext.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\delaunay\PointOnEdgeException.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\delaunay\PointOnEdgeException.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\P2T.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\P2T.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\P2T.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\P2T.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\polygon\Polygon.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\polygon\Polygon.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\polygon\Polygon.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\polygon\Polygon.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\sets\ConstrainedPointSet.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\sets\ConstrainedPointSet.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\sets\ConstrainedPointSet.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\sets\ConstrainedPointSet.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\sets\PointSet.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\sets\PointSet.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\sets\PointSet.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\sets\PointSet.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\ITriangulatable.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\ITriangulatable.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\ITriangulatable.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\ITriangulatable.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\Orientation.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\Orientation.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\Orientation.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\Orientation.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationAlgorithm.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationAlgorithm.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationContext.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationContext.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationContext.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationDebugContext.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationDebugContext.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationMode.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationMode.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationMode.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationMode.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationPoint.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationPoint.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationPoint.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationPoint.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationUtil.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\triangulation\TriangulationUtil.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationUtil.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationUtil.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\util\PointGenerator.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\util\PointGenerator.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\util\PointGenerator.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\util\PointGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\util\PolygonGenerator.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\util\PolygonGenerator.cs</Link>
+    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\util\PolygonGenerator.cs">
+      <Link>PixelFarm\pixelfarm.triangulation\util\PolygonGenerator.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs">
       <Link>PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs</Link>
@@ -1388,6 +1388,18 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs">
       <Link>PixelFarm\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\OS2_IBMFontClassParameters.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\AdditionalInfo\OS2_IBMFontClassParameters.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Bounds.cs">
       <Link>PixelFarm\Typography\Typography.OpenFont\Bounds.cs</Link>
     </Compile>
@@ -1468,6 +1480,18 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs">
       <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Tables.CFF\CFF.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.CFF\CFF.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Tables.CFF\CffEvaluationEngine.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.CFF\CffEvaluationEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Tables.CFF\CFFTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.CFF\CFFTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs">
       <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs</Link>
@@ -1580,6 +1604,9 @@
     <Compile Include="..\..\PixelFarm\Typography\FontAtlas\BinPacker.cs">
       <Link>PixelFarm\Typography\FontAtlas\BinPacker.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\FontAtlas\FontAtlasFile.cs">
+      <Link>PixelFarm\Typography\FontAtlas\FontAtlasFile.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\FontAtlas\GlyphImages.cs">
       <Link>PixelFarm\Typography\FontAtlas\GlyphImages.cs</Link>
     </Compile>
@@ -1613,32 +1640,23 @@
     <Compile Include="..\..\PixelFarm\Typography\Typography.MsdfGen\SignedDistance.cs">
       <Link>PixelFarm\Typography\Typography.MsdfGen\SignedDistance.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\DevPrinterBase.cs">
-      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\DevPrinterBase.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs">
+      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshCollection.cs">
-      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshCollection.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs">
+      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilderBase.cs">
-      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilderBase.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\HintTechnique.cs">
-      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\HintTechnique.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs">
-      <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs</Link>
@@ -1729,6 +1747,15 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs">
       <Link>PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphMeshCollection.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphMeshCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphPathBuilderBase.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphPathBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\TextPrinterBase.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\TextPrinterBase.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

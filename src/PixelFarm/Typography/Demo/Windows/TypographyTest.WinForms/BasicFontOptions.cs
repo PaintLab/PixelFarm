@@ -26,13 +26,13 @@ namespace TypographyTest
 
         TypefaceStore _typefaceStore;
         InstalledFontCollection _installedFontCollection;
-        OpenFontStore _openFontStore;
+       
         InstalledFont _installedFont;
         Typeface _selectedTypeface;
         bool _typefaceChanged = false;
         public BasicFontOptions()
         {
-            _openFontStore = new OpenFontStore();
+            _typefaceStore = new TypefaceStore();
             FontSizeInPoints = 10;
             this.RenderChoice = RenderChoice.RenderWithTextPrinterAndMiniAgg;
         }
@@ -44,7 +44,7 @@ namespace TypographyTest
         public void LoadFontList()
         {
 
-            _openFontStore = new OpenFontStore();
+           
             _typefaceStore = new TypefaceStore();
             //
             _installedFontCollection = new InstalledFontCollection();
@@ -62,11 +62,7 @@ namespace TypographyTest
             PositionTech = PositionTechnique.OpenFont;
         }
         public PositionTechnique PositionTech { get; set; }
-        public OpenFontStore OpenFontStore
-        {
-            get { return _openFontStore; }
-            set { _openFontStore = value; }
-        }
+       
         public Typeface Typeface
         {
             get

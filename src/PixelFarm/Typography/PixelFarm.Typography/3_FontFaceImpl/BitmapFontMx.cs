@@ -141,21 +141,21 @@ namespace Typography.Rendering
                     {
                         try
                         {
-                            fontAtlas = atlasBuilder2.LoadAtlasInfo(dataStream);
+                            fontAtlas = atlasBuilder2.LoadFontInfo(dataStream);
                             fontAtlas.TotalGlyph = ReadGlyphImages(fontTextureImg);
                             fontAtlas.OriginalFontSizePts = reqFont.SizeInPoints;
                             _createdAtlases.Add(fontKey, fontAtlas);
-                            //
-                            //calculate some commonly used values
-                            fontAtlas.SetTextureScaleInfo(
-                                resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
-                                resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
-                            //TODO: review here, use scaled or unscaled values
-                            fontAtlas.SetCommonFontMetricValues(
-                                resolvedTypeface.Ascender,
-                                resolvedTypeface.Descender,
-                                resolvedTypeface.LineGap,
-                                resolvedTypeface.CalculateRecommendLineSpacing());
+                            ////
+                            ////calculate some commonly used values
+                            //fontAtlas.SetTextureScaleInfo(
+                            //    resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
+                            //    resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
+                            ////TODO: review here, use scaled or unscaled values
+                            //fontAtlas.SetCommonFontMetricValues(
+                            //    resolvedTypeface.Ascender,
+                            //    resolvedTypeface.Descender,
+                            //    resolvedTypeface.LineGap,
+                            //    resolvedTypeface.CalculateRecommendLineSpacing());
                         }
                         catch (Exception ex)
                         {
@@ -211,16 +211,16 @@ namespace Typography.Rendering
                     //cache the atlas
                     _createdAtlases.Add(fontKey, fontAtlas);
                     //
-                    //calculate some commonly used values
-                    fontAtlas.SetTextureScaleInfo(
-                        resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
-                        resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
-                    //TODO: review here, use scaled or unscaled values
-                    fontAtlas.SetCommonFontMetricValues(
-                        resolvedTypeface.Ascender,
-                        resolvedTypeface.Descender,
-                        resolvedTypeface.LineGap,
-                        resolvedTypeface.CalculateRecommendLineSpacing());
+                    ////calculate some commonly used values
+                    //fontAtlas.SetTextureScaleInfo(
+                    //    resolvedTypeface.CalculateScaleToPixelFromPointSize(fontAtlas.OriginalFontSizePts),
+                    //    resolvedTypeface.CalculateScaleToPixelFromPointSize(reqFont.SizeInPoints));
+                    ////TODO: review here, use scaled or unscaled values
+                    //fontAtlas.SetCommonFontMetricValues(
+                    //    resolvedTypeface.Ascender,
+                    //    resolvedTypeface.Descender,
+                    //    resolvedTypeface.LineGap,
+                    //    resolvedTypeface.CalculateRecommendLineSpacing());
 
                     ///
 #if DEBUG
@@ -232,14 +232,14 @@ namespace Typography.Rendering
                     //save font info to cache
                     using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
                     {
-                        atlasBuilder.SaveAtlasInfo(ms);
+                        atlasBuilder.SaveFontInfo(ms);
                         System.IO.File.WriteAllBytes(fontTextureInfoFile, ms.ToArray());
 
                         StorageService.Provider.SaveData(fontTextureInfoFile, ms.ToArray());
                     }
                 }
             }
-           
+
             outputBitmap = _loadedGlyphs.GetOrCreateNewOne(fontAtlas);
             return fontAtlas;
         }

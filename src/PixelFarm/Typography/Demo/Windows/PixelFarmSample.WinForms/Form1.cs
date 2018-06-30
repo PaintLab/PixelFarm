@@ -13,7 +13,6 @@ using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.Contours;
-using Typography.TextLayout;
 
 
 namespace SampleWinForms
@@ -21,12 +20,9 @@ namespace SampleWinForms
     public partial class Form1 : Form
     {
         Graphics g;
-        AggPainter painter;
-
+        AggPainter painter; 
         ActualBitmap destImg;
-        Bitmap winBmp;
-
-
+        Bitmap winBmp; 
 
         TextPrinterBase selectedTextPrinter = null;
         VxsTextPrinter _devVxsTextPrinter = null;

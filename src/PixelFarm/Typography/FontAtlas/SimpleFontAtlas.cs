@@ -8,9 +8,9 @@ using Typography.Rendering;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    public enum TextureKind
+    public enum TextureKind : byte
     {
-        StencilLcdEffect,
+        StencilLcdEffect,//default
         StencilGreyScale,
         Msdf,
         Bitmap,
@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.Fonts
     public class SimpleFontAtlas
     {
         GlyphImage totalGlyphImage;
-        Dictionary<int, TextureFontGlyphData> glyphLocations = new Dictionary<int, TextureFontGlyphData>();
+        Dictionary<ushort, TextureGlyphMapData> _glyphLocations = new Dictionary<ushort, TextureGlyphMapData>();
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -27,9 +27,9 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         public float OriginalFontSizePts { get; set; }
         public TextureKind TextureKind { get; set; }
-        public void AddGlyph(int glyphIndex, TextureFontGlyphData glyphData)
+        public void AddGlyph(ushort glyphIndex, TextureGlyphMapData glyphData)
         {
-            glyphLocations.Add(glyphIndex, glyphData);
+            _glyphLocations.Add(glyphIndex, glyphData);
         }
 
         public GlyphImage TotalGlyph
@@ -37,51 +37,16 @@ namespace PixelFarm.Drawing.Fonts
             get { return totalGlyphImage; }
             set { totalGlyphImage = value; }
         }
-        public bool TryGetGlyphDataByGlyphIndex(int glyphIndex, out TextureFontGlyphData glyphdata)
+        public bool TryGetGlyphMapData(ushort glyphIndex, out TextureGlyphMapData glyphdata)
         {
-            if (!glyphLocations.TryGetValue(glyphIndex, out glyphdata))
+            if (!_glyphLocations.TryGetValue(glyphIndex, out glyphdata))
             {
                 glyphdata = null;
                 return false;
             }
             return true;
         }
-
-
-        //-----
-        //pre-calculate values 
-        public float SourceTextureScale { get; private set; }
-        public float TargetTextureScale { get; private set; }
-        public float FinalTextureScale { get; private set; }
-        //TODO: review here, or we should use scaled
-        //UNSCALED version
-        public int OriginalRecommendLineSpacing { get; private set; }
-        public int OriginalAscending { get; private set; }
-        public int OriginalDescending { get; private set; }
-        public int OriginalLineGap { get; private set; }
-
-
-        public void SetTextureScaleInfo(float sourceTextureScale, float targetTextureScale)
-        {
-            this.SourceTextureScale = sourceTextureScale;
-            this.TargetTextureScale = targetTextureScale;
-            this.FinalTextureScale = targetTextureScale / sourceTextureScale;
-        }
-
-        public void SetCommonFontMetricValues(int ascending, int descending, int linegap, int recommendLineSpacing)
-        {
-            //TODO: review here, or we should use scaled
-            //UNSCALED version
-
-
-            this.OriginalAscending = ascending;
-            this.OriginalDescending = descending;
-            this.OriginalLineGap = linegap;
-
-            this.OriginalRecommendLineSpacing = recommendLineSpacing;
-
-        }
-
+        public string FontFilename { get; set; }
     }
 
 }
