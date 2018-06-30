@@ -177,7 +177,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_TreeCollection", "Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.BitmapBufferEx", "PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx.csproj", "{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PaintFx.Shared", "PixelFarm\BackEnd.PaintFx\PdnSharedProject\PaintFx.Shared.shproj", "{536B9B08-98D7-4261-A78D-3B1CCD11D5EF}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PaintFx.Shared", "PixelFarm\BackEnd.PaintFx\PdnSharedProject\PaintFx.Shared.shproj", "{6FF96BFB-9E4B-4634-B682-7DE60468DA38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.8_BackEnd", "0.8_BackEnd", "{ABA16C8F-2363-4B10-ADE5-C168383C13CC}"
 EndProject
@@ -207,7 +207,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PixelFarm\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{235a071b-8d06-40ae-a5c5-b1ce59715ee9}*SharedItemsImports = 13
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
-		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{536b9b08-98d7-4261-a78d-3b1ccd11d5ef}*SharedItemsImports = 13
+		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{6ff96bfb-9e4b-4634-b682-7de60468da38}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Compatibility-GLFW2|Any CPU = Compatibility-GLFW2|Any CPU
@@ -10356,7 +10356,7 @@ Global
 		{2AB24EA5-039E-4BAB-A7DF-6F64C9F363E9} = {A2D588B0-C60B-4C1E-B5EE-7B506C99C8C2}
 		{2A3DABCE-F953-4A79-BFFC-7E9C52660D62} = {2AB24EA5-039E-4BAB-A7DF-6F64C9F363E9}
 		{5EB9544F-51E1-42CC-ABFD-B9AFBA6A2A0D} = {AC10C2FA-8476-4818-ABFF-2E83739B8A57}
-		{536B9B08-98D7-4261-A78D-3B1CCD11D5EF} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
+		{6FF96BFB-9E4B-4634-B682-7DE60468DA38} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
 		{ABA16C8F-2363-4B10-ADE5-C168383C13CC} = {A2D588B0-C60B-4C1E-B5EE-7B506C99C8C2}
 		{466DD2AE-EADC-4E20-82B3-DA6D018006C5} = {B8B57320-63FF-453D-9892-671E48F8F084}
 		{5F72F6FB-89BC-439F-989A-5B9581A50CC5} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
