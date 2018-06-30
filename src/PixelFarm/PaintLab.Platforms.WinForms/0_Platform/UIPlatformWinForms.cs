@@ -90,7 +90,7 @@ namespace LayoutFarm.UI
                 SetAsDefaultPlatform();
             }
 
-            var fontLoader = new Typography.TextServices.OpenFontStore();
+            var fontLoader = new Typography.TextServices.TypefaceStore();
             try
             {
                 //set up winform platform 

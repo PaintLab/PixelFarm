@@ -127,11 +127,11 @@ namespace TestGlfw
     {
 
         static Mini.GLDemoContext demoContext2 = null;
-        static OpenFontStore s_fontstore;
+        static TypefaceStore s_fontstore;
         static LayoutFarm.OpenFontTextService s_textServices;
         public GlfwGLES2()
         {
-            s_fontstore = new OpenFontStore();
+            s_fontstore = new TypefaceStore();
             s_textServices = new LayoutFarm.OpenFontTextService();
 
         }

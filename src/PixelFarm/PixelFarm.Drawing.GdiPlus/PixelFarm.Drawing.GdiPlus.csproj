@@ -89,17 +89,13 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{f7d71e61-9342-4dd7-9afd-69045f2ec98b}</Project>
-      <Name>Typography.OpenFont</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography\Typography.TextServices\Typography.TextServices.csproj">
-      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
-      <Name>Typography.TextServices</Name>
+    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
+      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
+      <Name>Typography.One</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
