@@ -70,7 +70,7 @@ namespace YourImplementation
             //this set some essentail values for Typography Text Serice
             //
             //2.1 Font Loader: how to load a font
-            myFontLoader = new OpenFontStore();
+            myFontLoader = new TypefaceStore();
             //2.2 Icu Text Break info
             //test Typography's custom text break,
             //check if we have that data?             

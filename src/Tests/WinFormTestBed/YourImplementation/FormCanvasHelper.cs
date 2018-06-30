@@ -18,7 +18,7 @@ namespace LayoutFarm.UI
             if (s_platform != null) return;
             //----------------------------------------------------
             s_platform = new LayoutFarm.UI.UIPlatformWinForm();
-            s_fontstore = new OpenFontStore();
+            s_fontstore = new TypefaceStore();
         }
         public static Form CreateNewFormCanvas(
            int w, int h,

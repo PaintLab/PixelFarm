@@ -2,8 +2,9 @@
 
 using Mini;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-using Typography.Rendering;
+using PixelFarm.Drawing.Fonts; 
+using Typography.Contours;
+
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
 

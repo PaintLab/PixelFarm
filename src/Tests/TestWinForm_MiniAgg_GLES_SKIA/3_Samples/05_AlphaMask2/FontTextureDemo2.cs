@@ -1,6 +1,4 @@
-﻿//BSD, 2018-present, WinterDev 
-
-
+﻿//BSD, 2018-present, WinterDev  
 
 using System;
 using System.Collections.Generic;
@@ -102,13 +100,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
-            float scale = _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = _fontAtlas.OriginalRecommendLineSpacing;
+            float scale = 1;// _fontAtlas.TargetTextureScale;
+            int recommendLineSpacing = (int)_font.LineSpacingInPx;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((_fontAtlas.OriginalRecommendLineSpacing) * scale);
+            y -= ((_font.LineSpacingInPx) * scale);
 
             // 
             float scaleFromTexture = _finalTextureScale;
@@ -129,8 +127,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                TextureFontGlyphData glyphData;
-                if (!_fontAtlas.TryGetGlyphDataByGlyphIndex(glyph.glyphIndex, out glyphData))
+                TextureGlyphMapData glyphData;
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -139,7 +137,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 int srcX, srcY, srcW, srcH;
-                glyphData.GetGlyphRect(out srcX, out srcY, out srcW, out srcH);
+                glyphData.GetRect(out srcX, out srcY, out srcW, out srcH);
 
                 float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
                 float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);

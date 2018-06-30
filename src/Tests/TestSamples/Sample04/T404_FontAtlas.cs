@@ -31,7 +31,7 @@ namespace OpenTkEssTest
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.xml", System.IO.FileMode.Open))
             {
-                fontAtlas = atlasBuilder.LoadAtlasInfo(fs);
+                fontAtlas = atlasBuilder.LoadFontInfo(fs);
             }
 
 
@@ -71,16 +71,23 @@ namespace OpenTkEssTest
             //painter.DrawString("hello!", 0, 20);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
-            Typography.Rendering.TextureFontGlyphData glyphData;
+            Typography.Rendering.TextureGlyphMapData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
-            fontAtlas.TryGetGlyphDataByGlyphIndex(codepoint[0], out glyphData);
-            PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);
+            fontAtlas.TryGetGlyphMapData(codepoint[0], out glyphData);
+            PixelFarm.Drawing.Rectangle r =
+                   new PixelFarm.Drawing.Rectangle(glyphData.Left,
+                   glyphData.Top,
+                   glyphData.Width,
+                   glyphData.Height);
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             _glsx.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
 
-            fontAtlas.TryGetGlyphDataByGlyphIndex(codepoint[1], out glyphData);
-            PixelFarm.Drawing.Rectangle r2 = ConvToRect(glyphData.Rect);
+            fontAtlas.TryGetGlyphMapData(codepoint[1], out glyphData);
+            PixelFarm.Drawing.Rectangle r2 = new PixelFarm.Drawing.Rectangle(glyphData.Left,
+                   glyphData.Top,
+                   glyphData.Width,
+                   glyphData.Height);
             _glsx.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);
 
             //full image
