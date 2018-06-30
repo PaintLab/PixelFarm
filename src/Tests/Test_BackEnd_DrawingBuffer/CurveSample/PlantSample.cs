@@ -17,7 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.BitmapBufferEx;
+using BitmapBufferEx;
 namespace WinFormGdiPlus.PlantDemo
 {
   

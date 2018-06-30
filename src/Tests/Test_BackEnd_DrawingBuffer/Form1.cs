@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using PixelFarm.BitmapBufferEx;
+using BitmapBufferEx;
 
 namespace WinFormGdiPlus
 {
@@ -28,22 +28,22 @@ namespace WinFormGdiPlus
 
                 int y = 0;
 
-                wb.DrawLine(0, y, 100, y + 100,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0)); //red
-                wb.DrawLine(0, y + 100, 100, y + 0,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue
+                wb.DrawLine(0, y, 100, y + 100,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0)); //red
+                wb.DrawLine(0, y + 100, 100, y + 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue
 
 #if DEBUG
-                wb.DrawLineAa(100, y, 200, y + 100,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
-                wb.DrawLineAa(100, y + 100, 200, y + 0,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue 
+                wb.DrawLineAa(100, y, 200, y + 100,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
+                wb.DrawLineAa(100, y + 100, 200, y + 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue 
 #endif
 
 
                 //----------
                 y += 150;
-                wb.DrawLineDDA(0, y, 100, y + 100,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0)); //red
-                wb.DrawLineDDA(0, y + 100, 100, y + 0,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue
+                wb.DrawLineDDA(0, y, 100, y + 100,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0)); //red
+                wb.DrawLineDDA(0, y + 100, 100, y + 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue
 
 
-                wb.DrawEllipse(200, 0, 300, 100,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
+                wb.DrawEllipse(200, 0, 300, 100,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
 
                 //
                 bmplock.WriteAndUnlock();
@@ -61,8 +61,8 @@ namespace WinFormGdiPlus
                 BitmapBuffer wb = bmplock.CreateNewBitmapBuffer();
 
                 int y = 0;
-                wb.FillRectangle(5, 5, 20, 20,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
-                wb.FillTriangle(100, 0, 150, 150, 200, 0,PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255));
+                wb.FillRectangle(5, 5, 20, 20,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
+                wb.FillTriangle(100, 0, 150, 150, 200, 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255));
                 bmplock.WriteAndUnlock();
                 bmp1.Save("d:\\WImageTest\\a0003.png");
             }
@@ -78,7 +78,7 @@ namespace WinFormGdiPlus
                 BitmapBuffer dstWb = dstLock.CreateNewBitmapBuffer();
                 BitmapBuffer srcWb = srcLock.CreateNewBitmapBuffer();
                 int y = 0;
-                dstWb.Clear(PixelFarm.BitmapBufferEx.ColorInt.FromArgb(255, 255, 255, 255));
+                dstWb.Clear(BitmapBufferEx.ColorInt.FromArgb(255, 255, 255, 255));
 
                 dstWb.Blit(new RectD(10, 10, src.Width, src.Height),
                         srcWb,

@@ -1,6 +1,6 @@
 ﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 
-using PixelFarm.BitmapBufferEx;
+using BitmapBufferEx;
 namespace WinFormGdiPlus
 {
     public class Particle
@@ -25,11 +25,11 @@ namespace WinFormGdiPlus
             if (Elapsed > Lifespan)
             {
 
-                Color =PixelFarm.BitmapBufferEx.ColorInt.CreateNew(Color, 0);
+                Color =BitmapBufferEx.ColorInt.CreateNew(Color, 0);
                 return;
             }
      
-            Color =PixelFarm.BitmapBufferEx.ColorInt.CreateNew(Color, (byte)(255 - ((255 * Elapsed)) / Lifespan));
+            Color =BitmapBufferEx.ColorInt.CreateNew(Color, (byte)(255 - ((255 * Elapsed)) / Lifespan));
             Position.X += Velocity.X * elapsedSeconds;
             Position.Y += Velocity.Y * elapsedSeconds;
         }
