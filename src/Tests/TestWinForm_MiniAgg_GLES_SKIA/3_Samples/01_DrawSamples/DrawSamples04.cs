@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             float acc_x = 0;
             float acc_y = 0;
-
+            p.DrawImage(_fontBmp, 100, 100);
 
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
@@ -165,7 +165,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //2. then copy content to this
 
                 //p.DrawImage(_stencilBmp, 100, 100);
-                p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
+                p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY + srcH), srcW, srcH);
                 switch (textureKind)
                 {
                     default:
