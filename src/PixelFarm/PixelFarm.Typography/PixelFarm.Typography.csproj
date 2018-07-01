@@ -49,9 +49,6 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs">
       <Link>1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontIFonts.cs">
-      <Link>1.1_Drawing_Fonts\OpenFontIFonts.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs">
       <Link>1.1_Drawing_Fonts\OpenFontTextService.cs</Link>
     </Compile>
