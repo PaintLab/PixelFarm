@@ -1,6 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using Typography.TextServices;
+using Typography.FontManagement;
+
 namespace LayoutFarm.UI
 {
     //platform specific code 
@@ -25,13 +26,13 @@ namespace LayoutFarm.UI
             //gles2 
             //
             PixelFarm.Drawing.GLES2.GLES2Platform.TextService = new OpenFontTextService();
-            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(s_fontStore);
+            PixelFarm.Drawing.GLES2.GLES2Platform.SetInstalledTypefaceProvider(s_fontStore);
             //skia
 
             if (!YourImplementation.BootStrapSkia.IsNativeLibAvailable())
             {
                 //set font not found handler
-                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetFontLoader(s_fontStore);
+                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetInstalledTypefaceProvider(s_fontStore);
 
             }
         }

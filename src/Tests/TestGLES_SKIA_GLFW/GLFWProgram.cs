@@ -8,7 +8,7 @@ using PixelFarm.Forms;
 using OpenTK.Graphics.ES20;
 using OpenTkEssTest;
 
-using Typography.TextServices;
+using Typography.FontManagement;
 
 namespace TestGlfw
 {

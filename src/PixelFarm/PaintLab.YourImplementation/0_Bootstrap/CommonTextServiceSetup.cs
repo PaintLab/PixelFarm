@@ -1,7 +1,8 @@
 ﻿//MIT, 2017-present, WinterDev
 
 using System.IO;
-using Typography.TextServices;
+using Typography.FontManagement;
+
 namespace YourImplementation
 {
     class MyIcuDataProvider
@@ -31,13 +32,13 @@ namespace YourImplementation
     {
         static bool s_isInit;
         static MyIcuDataProvider s_icuDataProvider;
-        static IFontLoader myFontLoader;
+        static IInstalledTypefaceProvider myFontLoader;
 
 
         static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
         static FileDBStorageProvider s_filedb;
 
-        public static IFontLoader FontLoader
+        public static IInstalledTypefaceProvider FontLoader
         {
             get
             {

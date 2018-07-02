@@ -5,14 +5,14 @@ using System;
 using System.Windows.Forms;
 
 using PixelFarm.Drawing;
-using Typography.TextServices;
+using Typography.FontManagement;
 
 namespace LayoutFarm.UI
 {
     public static partial class FormCanvasHelper
     {
         static LayoutFarm.UI.UIPlatformWinForm s_platform;
-        static IFontLoader s_fontstore;
+        static IInstalledTypefaceProvider s_fontstore;
         static void InitWinform()
         {
             if (s_platform != null) return;
@@ -38,7 +38,7 @@ namespace LayoutFarm.UI
         {
             //1. init
             InitWinform();
-            IFontLoader fontLoader = s_fontstore;
+            IInstalledTypefaceProvider fontLoader = s_fontstore;
             //2. 
             PixelFarm.Drawing.ITextService ifont = null;
             switch (internalViewportKind)
@@ -53,7 +53,7 @@ namespace LayoutFarm.UI
 
             }
 
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
 
             //
 
@@ -133,7 +133,7 @@ namespace LayoutFarm.UI
         {
             //1. init
             InitWinform();
-            IFontLoader fontLoader = s_fontstore;
+            IInstalledTypefaceProvider fontLoader = s_fontstore;
             //2. 
             PixelFarm.Drawing.ITextService ifont = null;
             switch (internalViewportKind)
@@ -148,7 +148,7 @@ namespace LayoutFarm.UI
 
             }
 
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
 
             //
 
