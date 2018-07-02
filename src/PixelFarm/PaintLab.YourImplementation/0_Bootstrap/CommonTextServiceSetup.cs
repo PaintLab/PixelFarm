@@ -32,9 +32,7 @@ namespace YourImplementation
     {
         static bool s_isInit;
         static MyIcuDataProvider s_icuDataProvider;
-        static IInstalledTypefaceProvider myFontLoader;
-
-
+        static Typography.FontManagement.InstalledTypefaceCollection s_typefaceCollection;
         static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
         static FileDBStorageProvider s_filedb;
 
@@ -42,7 +40,7 @@ namespace YourImplementation
         {
             get
             {
-                return myFontLoader;
+                return s_typefaceCollection;
             }
         }
         public static void SetupDefaultValues()
@@ -70,8 +68,8 @@ namespace YourImplementation
             //2. Typography's Text Service settings...
             //this set some essentail values for Typography Text Serice
             //
-            //2.1 Font Loader: how to load a font
-            myFontLoader = new TypefaceStore();
+
+            s_typefaceCollection = new InstalledTypefaceCollection();
             //2.2 Icu Text Break info
             //test Typography's custom text break,
             //check if we have that data?             

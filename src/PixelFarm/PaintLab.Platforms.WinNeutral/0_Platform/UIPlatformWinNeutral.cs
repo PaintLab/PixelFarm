@@ -8,7 +8,8 @@ namespace LayoutFarm.UI
     public class UIPlatformWinNeutral : UIPlatform
     {
 
-        TypefaceStore s_fontStore;
+
+        InstalledTypefaceCollection s_fontCollection;
 
         static UIPlatformWinNeutral()
         {
@@ -19,20 +20,20 @@ namespace LayoutFarm.UI
         {
             LayoutFarm.UI.Clipboard.SetUIPlatform(this);
 
-            s_fontStore = new TypefaceStore();
+            s_fontCollection = new InstalledTypefaceCollection();
 
             //no gdi+
             // PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
             //gles2 
             //
             PixelFarm.Drawing.GLES2.GLES2Platform.TextService = new OpenFontTextService();
-            PixelFarm.Drawing.GLES2.GLES2Platform.SetInstalledTypefaceProvider(s_fontStore);
+            PixelFarm.Drawing.GLES2.GLES2Platform.SetInstalledTypefaceProvider(s_fontCollection);
             //skia
 
             if (!YourImplementation.BootStrapSkia.IsNativeLibAvailable())
             {
                 //set font not found handler
-                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetInstalledTypefaceProvider(s_fontStore);
+                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetInstalledTypefaceProvider(s_fontCollection);
 
             }
         }

@@ -92,12 +92,12 @@ namespace LayoutFarm.UI
                 SetAsDefaultPlatform();
             }
 
-            var fontLoader = new Typography.FontManagement.TypefaceStore();
+            var installedTypefaceCollection = new Typography.FontManagement.InstalledTypefaceCollection();
             try
             {
                 //set up winform platform 
                 ////gdi+
-                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
+                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(installedTypefaceCollection);
                 LayoutFarm.UI.Clipboard.SetUIPlatform(this);
             }
             catch (System.Exception ex)
