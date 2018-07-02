@@ -44,7 +44,7 @@ namespace LayoutFarm.UI
             switch (internalViewportKind)
             {
                 default:
-                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetIFonts();
+                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
                 case InnerViewportKind.GL:
@@ -139,7 +139,7 @@ namespace LayoutFarm.UI
             switch (internalViewportKind)
             {
                 default:
-                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetIFonts();
+                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
                 case InnerViewportKind.GL:
