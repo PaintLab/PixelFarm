@@ -176,7 +176,7 @@ namespace BuildMergeProject
                 throw new NotSupportedException();
             }
         }
-        public void BuildPathRelativeToOther(string mainPath, string subpath, out string leftPart, out string rightPart)
+        public string BuildPathRelativeToOther(string mainPath, string subpath, out string leftPart, out string rightPart)
         {
             //s1.Length must >= s0.Length
             string[] a_splits = mainPath.Split('\\');
@@ -184,6 +184,8 @@ namespace BuildMergeProject
 
             string[] s0_splits;
             string[] s1_splits;
+
+            //string leftPart, rightPart;
 
             if (a_splits.Length > b_splits.Length)
             {
@@ -214,6 +216,8 @@ namespace BuildMergeProject
 
                 }
                 leftPart = beginAt;
+
+                return leftPart + rightPart;
             }
             else
             {
@@ -243,6 +247,8 @@ namespace BuildMergeProject
 
                 }
                 leftPart = beginAt;
+
+                return leftPart + rightPart;
             }
         }
         public string GetFullProjectPath(string projectRelativePath)
@@ -294,29 +300,14 @@ namespace BuildMergeProject
             string onlyFileName = Path.GetFileName(srcProject);
             string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
-            string rightPart;
 
-            string beginAt = slnMx.BuildPathRelativeToSolution(targetSaveFolder, out rightPart);
             foreach (XmlElement elem in compileNodes)
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
-                string combinedPath = SolutionMx.CombineRelativePath(includeAttr.Value);
 
-                // includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath);
-
-                slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath, out string leftPart, out rightPart);
-                includeAttr.Value = leftPart + rightPart;
-                //}
-                //else
-                //{
-                //    //this version:
-                //    //auto gen project is lower than original 1 level
-                //    //so change the original src location
-                //    //and create linked child node
-                //    includeAttr.Value = "..\\" + beginAt + rightPart;
-                //}
-
-
+                includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                    SolutionMx.CombineRelativePath(includeAttr.Value),
+                    out string leftPart, out string rightPart);
 
                 XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
                 linkNode.InnerText = rightPart;
