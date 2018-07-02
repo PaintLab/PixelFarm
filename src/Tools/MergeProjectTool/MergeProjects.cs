@@ -147,6 +147,8 @@ namespace BuildMergeProject
             rightPart = sub;
             return beginAt;
         }
+
+
         static int FindFirstDiff(string[] s0_splits, string[] s1_splits)
         {
             int j = 0;
@@ -174,36 +176,80 @@ namespace BuildMergeProject
                 throw new NotSupportedException();
             }
         }
-        public string BuildPathRelativeToOther(string mainPath, string subpath, out string rightPart)
+        public string BuildPathRelativeToOther(string mainPath, string subpath, out string leftPart, out string rightPart)
         {
             //s1.Length must >= s0.Length
+            string[] a_splits = mainPath.Split('\\');
+            string[] b_splits = subpath.Split('\\');
 
-            string[] s0_splits = mainPath.Split('\\');
-            string[] s1_splits = subpath.Split('\\');
+            string[] s0_splits;
+            string[] s1_splits;
 
-            int diffPos = FindFirstDiff(s0_splits, s1_splits);
-            //same at diffPos-1
+            //string leftPart, rightPart;
 
-            int nsteps = diffPos - 1;
-            string beginAt = "";
-            for (int i = 0; i < nsteps; ++i)
+            if (a_splits.Length > b_splits.Length)
             {
-                beginAt += "..\\";
-            }
-            rightPart = "";
-            int j = s1_splits.Length;
-            int m = 0;
-            for (int n = diffPos; n < j; ++n)
-            {
-                if (m > 0 && m < j - 1)
+                //swap...
+                s0_splits = b_splits;
+                s1_splits = a_splits;
+
+                int diffPos = FindFirstDiff(s0_splits, s1_splits);
+                //same at diffPos-1
+
+                int nsteps = a_splits.Length - diffPos;
+                string beginAt = "";
+                for (int i = 0; i < nsteps; ++i)
                 {
-                    rightPart += '\\';
+                    beginAt += "..\\";
                 }
-                rightPart += s1_splits[n];
-                m++;
+                rightPart = "";
+                int j = s0_splits.Length;
+                int m = 0;
+                for (int n = diffPos; n < j; ++n)
+                {
+                    if (m > 0 && m < j - 1)
+                    {
+                        rightPart += '\\';
+                    }
+                    rightPart += s0_splits[n];
+                    m++;
 
+                }
+                leftPart = beginAt;
+
+                return leftPart + rightPart;
             }
-            return beginAt;
+            else
+            {
+                s0_splits = a_splits;
+                s1_splits = b_splits;
+                int diffPos = FindFirstDiff(s0_splits, s1_splits);
+                //same at diffPos-1
+
+                //int nsteps = diffPos - 1;
+                int nsteps = a_splits.Length - diffPos;
+                string beginAt = "";
+                for (int i = 0; i < nsteps; ++i)
+                {
+                    beginAt += "..\\";
+                }
+                rightPart = "";
+                int j = s1_splits.Length;
+                int m = 0;
+                for (int n = diffPos; n < j; ++n)
+                {
+                    if (m > 0 && m < j - 1)
+                    {
+                        rightPart += '\\';
+                    }
+                    rightPart += s1_splits[n];
+                    m++;
+
+                }
+                leftPart = beginAt;
+
+                return leftPart + rightPart;
+            }
         }
         public string GetFullProjectPath(string projectRelativePath)
         {
@@ -254,23 +300,14 @@ namespace BuildMergeProject
             string onlyFileName = Path.GetFileName(srcProject);
             string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
-            string rightPart;
 
-            string beginAt = slnMx.BuildPathRelativeToSolution(targetSaveFolder, out rightPart);
             foreach (XmlElement elem in compileNodes)
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
-                string includeValue = includeAttr.Value;
-                string combinedPath = SolutionMx.CombineRelativePath(includeValue);
 
-
-                string b2 = slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath, out rightPart);
-                //this version:
-                //auto gen project is lower than original 1 level
-                //so change the original src location
-                //and create linked child node
-                includeAttr.Value = "..\\" + beginAt + rightPart;
-
+                includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                    SolutionMx.CombineRelativePath(includeAttr.Value),
+                    out string leftPart, out string rightPart);
 
                 XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
                 linkNode.InnerText = rightPart;
