@@ -176,7 +176,7 @@ namespace BuildMergeProject
                 throw new NotSupportedException();
             }
         }
-        public bool BuildPathRelativeToOther(string mainPath, string subpath, out string leftPart, out string rightPart)
+        public void BuildPathRelativeToOther(string mainPath, string subpath, out string leftPart, out string rightPart)
         {
             //s1.Length must >= s0.Length
             string[] a_splits = mainPath.Split('\\');
@@ -214,8 +214,6 @@ namespace BuildMergeProject
 
                 }
                 leftPart = beginAt;
-                return true;
-                //return leftPart + rightPart;
             }
             else
             {
@@ -245,7 +243,6 @@ namespace BuildMergeProject
 
                 }
                 leftPart = beginAt;
-                return true;
             }
         }
         public string GetFullProjectPath(string projectRelativePath)
@@ -305,21 +302,19 @@ namespace BuildMergeProject
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
                 string combinedPath = SolutionMx.CombineRelativePath(includeAttr.Value);
 
-               // includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath);
+                // includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath);
 
-                if (slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath, out string leftPart, out rightPart))
-                {
-
-                    includeAttr.Value = leftPart + rightPart;
-                }
-                else
-                {
-                    //this version:
-                    //auto gen project is lower than original 1 level
-                    //so change the original src location
-                    //and create linked child node
-                    includeAttr.Value = "..\\" + beginAt + rightPart;
-                }
+                slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath, out string leftPart, out rightPart);
+                includeAttr.Value = leftPart + rightPart;
+                //}
+                //else
+                //{
+                //    //this version:
+                //    //auto gen project is lower than original 1 level
+                //    //so change the original src location
+                //    //and create linked child node
+                //    includeAttr.Value = "..\\" + beginAt + rightPart;
+                //}
 
 
 
