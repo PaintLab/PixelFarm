@@ -311,6 +311,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                         var curveVxs = new VertexStore();
                         curveFlattener.MakeVxs(t_glyph, curveVxs);
+
                         CreateAndRenderCombined(p, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
                         p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
                         p.Fill(stroke.MakeVxs(sp1, v3));

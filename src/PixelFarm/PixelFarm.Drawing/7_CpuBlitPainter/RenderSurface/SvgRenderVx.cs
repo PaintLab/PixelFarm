@@ -297,11 +297,13 @@ namespace PixelFarm.CpuBlit
                 return strokeVxs;
             }
 
-            var new_output = new VertexStore();
-            p.VectorTool.CreateStroke(s.GetVxs(), strokeW, new_output);
-            s.StrokeVxs = new_output;
 
-            return new_output;
+            VectorToolBox.GetFreeVxs(out VertexStore vxs);
+            p.VectorTool.CreateStroke(s.GetVxs(), strokeW, vxs);
+            s.StrokeVxs = vxs.CreateTrim();
+            VectorToolBox.ReleaseVxs(ref vxs);
+
+            return s.StrokeVxs;
         }
 
         public SvgPart GetInnerVx(int index)
@@ -420,9 +422,10 @@ namespace PixelFarm.CpuBlit
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (originalSvgVx._vxs != null)
             {
-                VertexStore vxs = new VertexStore();
+                VectorToolBox.GetFreeVxs(out VertexStore vxs);
                 tx.TransformToVxs(originalSvgVx._vxs, vxs);
-                newSx._vxs = vxs;
+                newSx._vxs = vxs.CreateTrim();
+                VectorToolBox.ReleaseVxs(ref vxs);
             }
 
             if (originalSvgVx.HasFillColor)
@@ -444,9 +447,10 @@ namespace PixelFarm.CpuBlit
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (newSx._vxs != null)
             {
-                VertexStore vxs = new VertexStore();
+                VectorToolBox.GetFreeVxs(out VertexStore vxs);
                 tx.TransformToVxs(originalSvgVx._vxs, vxs);
-                newSx._vxs = vxs;
+                newSx._vxs = vxs.CreateTrim();
+                VectorToolBox.ReleaseVxs(ref vxs);
             }
 
             if (originalSvgVx.HasFillColor)

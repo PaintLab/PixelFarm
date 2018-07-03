@@ -54,7 +54,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         outputPathWriter.CloseFigure();
                         resultList.Add(outputPathWriter.Vxs);
                         //---
-                        //clear 
+                        //clear and set an new Vxs for next operation...
+                        //TODO: review here again
                         outputPathWriter.ResetWithExternalVxs(new VertexStore());
                     }
                 }

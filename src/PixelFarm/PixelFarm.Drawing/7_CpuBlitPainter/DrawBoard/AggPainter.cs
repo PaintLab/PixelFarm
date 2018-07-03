@@ -297,9 +297,11 @@ namespace PixelFarm.CpuBlit
                 _lineGen.Clear();
                 _lineGen.MoveTo(x1, y1);
                 _lineGen.LineTo(x2, y2);
-                var v1 = GetFreeVxs();
-                _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
-                ReleaseVxs(ref v1);
+
+                using (VxsContext.Temp(out var v1))
+                {
+                    _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
+                }
             }
             else
             {
@@ -310,10 +312,10 @@ namespace PixelFarm.CpuBlit
                 _lineGen.MoveTo(x1, h - y1);
                 _lineGen.LineTo(x2, h - y2);
 
-
-                var v1 = GetFreeVxs();
-                _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
-                ReleaseVxs(ref v1);
+                using (VxsContext.Temp(out var v1))
+                {
+                    _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
+                }
             }
 
 
@@ -327,21 +329,19 @@ namespace PixelFarm.CpuBlit
         {
             if (_lineDashGen == null)
             {
-                var v1 = GetFreeVxs();
-                _aggsx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
-                ReleaseVxs(ref v1);
+                using (VxsContext.Temp(out var v1))
+                {
+                    _aggsx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
+                }
             }
             else
             {
-                var v1 = GetFreeVxs();
-                var v2 = GetFreeVxs();
-
-                _lineDashGen.CreateDash(vxs, v1);
-                stroke.MakeVxs(v1, v2);
-                _aggsx.Render(v2, this.strokeColor);
-
-                ReleaseVxs(ref v1);
-                ReleaseVxs(ref v2);
+                using (VxsContext.Temp(out var v1, out var v2))
+                {
+                    _lineDashGen.CreateDash(vxs, v1);
+                    stroke.MakeVxs(v1, v2);
+                    _aggsx.Render(v2, this.strokeColor);
+                }
             }
         }
 
@@ -396,14 +396,12 @@ namespace PixelFarm.CpuBlit
                 _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
 
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
 
-            //
-            _aggsx.Render(stroke.MakeVxs(_simpleRectVxsGen.MakeVxs(v1), v2), this.strokeColor);
-            //
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
+            using (VxsContext.Temp(out var v1, out var v2))
+            {
+                _aggsx.Render(stroke.MakeVxs(_simpleRectVxsGen.MakeVxs(v1), v2), this.strokeColor);
+            }
+
         }
 
         public override void DrawEllipse(double left, double top, double width, double height)

@@ -326,8 +326,8 @@ namespace PixelFarm.CpuBlit
             int angleRadians = 0;
             // exit early if the dest and source bounds don't touch.
             // TODO: <BUG> make this do rotation and scalling
-           
-            RectInt sourceBounds = new RectInt((int)destX, (int)destY, (int)destX + source.Width, (int)destY+ source.Height);
+
+            RectInt sourceBounds = new RectInt((int)destX, (int)destY, (int)destX + source.Width, (int)destY + source.Height);
             //sourceBounds.Offset((int)destX, (int)destY);
 
             RectInt destBounds = this.destImageReaderWriter.GetBounds();
@@ -385,7 +385,7 @@ namespace PixelFarm.CpuBlit
             bool needSourceResampling = isScale || isRotated;// || destX != (int)destX || destY != (int)destY;
 
 
-            VectorToolBox.GetFreeVxs(out VertexStore imgBoundsPath);
+            //VectorToolBox.GetFreeVxs(out VertexStore imgBoundsPath);
             // this is the fast drawing path
             if (needSourceResampling)
             {
@@ -412,26 +412,46 @@ namespace PixelFarm.CpuBlit
 #endif
 
 
-                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+                using (VxsContext.Temp(out var imgBoundsPath, out var v1))
+                {
+                    BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+                    //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
+                    //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
 
-                //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
-                //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
+                    Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                    //TODO: review reusable span generator an interpolator ***
+                    var spanInterpolator = new SpanInterpolatorLinear();
+                    // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                    spanInterpolator.Transformer = destRectTransform.CreateInvert();
 
-                Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
-                //TODO: review reusable span generator an interpolator ***
-                var spanInterpolator = new SpanInterpolatorLinear();
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                spanInterpolator.Transformer = destRectTransform.CreateInvert();
+                    var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+                        source,
+                        Drawing.Color.Black,
+                        spanInterpolator);
 
-                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
-                    source,
-                    Drawing.Color.Black,
-                    spanInterpolator);
+                    destRectTransform.TransformToVxs(imgBoundsPath, v1);
+                    Render(v1, imgSpanGen);
+                }
 
-                VectorToolBox.GetFreeVxs(out VertexStore v1);
-                destRectTransform.TransformToVxs(imgBoundsPath, v1);
-                Render(v1, imgSpanGen);
-                VectorToolBox.ReleaseVxs(ref v1);
+
+                ////Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
+                ////    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
+
+                //Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                ////TODO: review reusable span generator an interpolator ***
+                //var spanInterpolator = new SpanInterpolatorLinear();
+                //// We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                //spanInterpolator.Transformer = destRectTransform.CreateInvert();
+
+                //var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+                //    source,
+                //    Drawing.Color.Black,
+                //    spanInterpolator);
+
+                //VectorToolBox.GetFreeVxs(out VertexStore v1);
+                //destRectTransform.TransformToVxs(imgBoundsPath, v1);
+                //Render(v1, imgSpanGen);
+                //VectorToolBox.ReleaseVxs(ref v1);
 
 
 #if false // this is some debug you can enable to visualize the dest bounding box
@@ -447,44 +467,44 @@ namespace PixelFarm.CpuBlit
                 //Affine destRectTransform = BuildImageBoundsPath(
                 //    source.Width, source.Height,
                 //    destX, destY, imgBoundsPath);
-
-
-                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
-                //...
-                Affine destRectTransform = CreateAffine(destX, destY);
-
-                //TODO: review reusable span generator an interpolator ***
-                var interpolator = new SpanInterpolatorLinear();
-
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                interpolator.Transformer = destRectTransform.CreateInvert();
-
-                //we generate image by this imagespan generator
-
-                ImgSpanGen imgSpanGen = null;
-                switch (source.BitDepth)
+                using (VxsContext.Temp(out var imgBoundsPath, out var v1))
                 {
-                    case 32:
-                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
-                        break;
-                    //case 8:
-                    //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
-                    //    break;
-                    default:
-                        throw new NotImplementedException();
+                    BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+                    //...
+                    Affine destRectTransform = CreateAffine(destX, destY);
+
+                    //TODO: review reusable span generator an interpolator ***
+                    var interpolator = new SpanInterpolatorLinear();
+
+                    // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                    interpolator.Transformer = destRectTransform.CreateInvert();
+
+                    //we generate image by this imagespan generator
+
+                    ImgSpanGen imgSpanGen = null;
+                    switch (source.BitDepth)
+                    {
+                        case 32:
+                            imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
+                            break;
+                        //case 8:
+                        //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
+                        //    break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+
+                    destRectTransform.TransformToVxs(imgBoundsPath, v1);
+                    //...
+                    Render(v1, imgSpanGen);
+
                 }
 
-                VectorToolBox.GetFreeVxs(out VertexStore v1);
 
-                destRectTransform.TransformToVxs(imgBoundsPath, v1);
-                //...
-                Render(v1, imgSpanGen);
-
-                VectorToolBox.ReleaseVxs(ref v1);
                 //
                 unchecked { destImageChanged++; };
             }
-            VectorToolBox.ReleaseVxs(ref imgBoundsPath);
+
         }
     }
 

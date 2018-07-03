@@ -24,7 +24,7 @@ using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
 
-
+   
 
     public sealed class VertexStore
     {

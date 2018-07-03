@@ -577,8 +577,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 AddVertex(x, y, cmd);
             }
 
-
-
             Render(false);
         }
         public void RenderVertexSnap(VertexStoreSnap s, Drawing.Color c)

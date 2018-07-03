@@ -720,10 +720,11 @@ namespace PaintLab.Svg
         {
 
 
-           
+
 
             //
             VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
+
             VectorToolBox.GetFreeVxs(out VertexStore flattenVxs);
 
             _svgPathDataParser.SetPathWriter(pathWriter);
