@@ -1,7 +1,7 @@
 ﻿//MIT, 2017-present, WinterDev
 
 
-using Typography.TextServices;
+using Typography.FontManagement;
 
 namespace YourImplementation
 {
@@ -9,14 +9,14 @@ namespace YourImplementation
 
     public static class BootStrapWinGdi
     {
-        public static IFontLoader GetFontLoader()
+        public static IInstalledTypefaceProvider GetFontLoader()
         {
             return CommonTextServiceSetup.FontLoader;
         }
         public static void SetupDefaultValues()
         {
             CommonTextServiceSetup.SetupDefaultValues();
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(CommonTextServiceSetup.FontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(CommonTextServiceSetup.FontLoader);
         }
     }
 }

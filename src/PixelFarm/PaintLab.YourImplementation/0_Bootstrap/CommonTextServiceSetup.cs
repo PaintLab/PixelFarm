@@ -1,7 +1,8 @@
 ﻿//MIT, 2017-present, WinterDev
 
 using System.IO;
-using Typography.TextServices;
+using Typography.FontManagement;
+
 namespace YourImplementation
 {
     class MyIcuDataProvider
@@ -31,17 +32,15 @@ namespace YourImplementation
     {
         static bool s_isInit;
         static MyIcuDataProvider s_icuDataProvider;
-        static IFontLoader myFontLoader;
-
-
+        static Typography.FontManagement.InstalledTypefaceCollection s_intalledTypefaces;
         static LocalFileStorageProvider s_localFileStorageProvider = new LocalFileStorageProvider();
         static FileDBStorageProvider s_filedb;
 
-        public static IFontLoader FontLoader
+        public static IInstalledTypefaceProvider FontLoader
         {
             get
             {
-                return myFontLoader;
+                return s_intalledTypefaces;
             }
         }
         public static void SetupDefaultValues()
@@ -69,8 +68,10 @@ namespace YourImplementation
             //2. Typography's Text Service settings...
             //this set some essentail values for Typography Text Serice
             //
-            //2.1 Font Loader: how to load a font
-            myFontLoader = new TypefaceStore();
+
+            s_intalledTypefaces = new InstalledTypefaceCollection();
+            s_intalledTypefaces.LoadSystemFonts();
+
             //2.2 Icu Text Break info
             //test Typography's custom text break,
             //check if we have that data?             

@@ -14,7 +14,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Contours;
-using Typography.TextServices;
+using Typography.FontManagement;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.Sample_Draw
 {
@@ -30,7 +30,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
 
 
-            string fontfile = YourImplementation.BootStrapWinGdi.GetFontLoader().GetFont("tahoma", InstalledFontStyle.Normal).FontPath;
+            string fontfile = YourImplementation.BootStrapWinGdi.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Normal).FontPath;
 
             this.FillBG = true;
             int size = 72;

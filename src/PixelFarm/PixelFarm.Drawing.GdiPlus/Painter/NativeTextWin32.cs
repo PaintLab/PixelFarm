@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Typography.TextServices;
+using Typography.FontManagement;
 
 using PixelFarm.Drawing.Fonts;
 
@@ -501,13 +502,13 @@ namespace PixelFarm.Drawing.WinGdi
     {
         FontFace nopenTypeFontFace;
         FontStyle style;
-        static IFontLoader s_fontLoader;
+        static IInstalledTypefaceProvider s_installledTypefaceProvider;
 
         public WinGdiFontFace(RequestFont f)
         {
             this.style = f.Style;
             //resolve
-            InstalledFont foundInstalledFont = s_fontLoader.GetFont(f.Name, style.ConvToInstalledFontStyle());
+            InstalledTypeface foundInstalledFont = s_installledTypefaceProvider.GetInstalledTypeface(f.Name, style.ConvToInstalledFontStyle());
             //TODO: review 
             this.nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
         }
@@ -518,18 +519,18 @@ namespace PixelFarm.Drawing.WinGdi
                 return nopenTypeFontFace.RecommendedLineHeight;
             }
         }
-        public static void SetFontLoader(IFontLoader fontLoader)
+        public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {
             //warning if duplicate
-            if (s_fontLoader != null)
+            if (s_installledTypefaceProvider != null)
             {
 
             }
-            s_fontLoader = fontLoader;
+            s_installledTypefaceProvider = provider;
         }
         protected override void OnDispose()
         {
-            s_fontLoader = null;
+            s_installledTypefaceProvider = null;
         }
         public override string FontPath
         {

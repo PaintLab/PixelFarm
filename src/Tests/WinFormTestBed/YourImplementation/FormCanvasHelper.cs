@@ -5,20 +5,23 @@ using System;
 using System.Windows.Forms;
 
 using PixelFarm.Drawing;
-using Typography.TextServices;
+using Typography.FontManagement;
 
 namespace LayoutFarm.UI
 {
     public static partial class FormCanvasHelper
     {
         static LayoutFarm.UI.UIPlatformWinForm s_platform;
-        static IFontLoader s_fontstore;
+        static IInstalledTypefaceProvider s_fontstore;
         static void InitWinform()
         {
             if (s_platform != null) return;
             //----------------------------------------------------
             s_platform = new LayoutFarm.UI.UIPlatformWinForm();
-            s_fontstore = new TypefaceStore();
+            var instTypefaces = new InstalledTypefaceCollection();
+            instTypefaces.LoadSystemFonts();
+            s_fontstore = instTypefaces;
+
         }
         public static Form CreateNewFormCanvas(
            int w, int h,
@@ -38,13 +41,13 @@ namespace LayoutFarm.UI
         {
             //1. init
             InitWinform();
-            IFontLoader fontLoader = s_fontstore;
+            IInstalledTypefaceProvider fontLoader = s_fontstore;
             //2. 
             PixelFarm.Drawing.ITextService ifont = null;
             switch (internalViewportKind)
             {
                 default:
-                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetIFonts();
+                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
                 case InnerViewportKind.GL:
@@ -53,7 +56,7 @@ namespace LayoutFarm.UI
 
             }
 
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
 
             //
 
@@ -133,13 +136,13 @@ namespace LayoutFarm.UI
         {
             //1. init
             InitWinform();
-            IFontLoader fontLoader = s_fontstore;
+            IInstalledTypefaceProvider fontLoader = s_fontstore;
             //2. 
             PixelFarm.Drawing.ITextService ifont = null;
             switch (internalViewportKind)
             {
                 default:
-                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetIFonts();
+                    ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
                 case InnerViewportKind.GL:
@@ -148,7 +151,7 @@ namespace LayoutFarm.UI
 
             }
 
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
 
             //
 

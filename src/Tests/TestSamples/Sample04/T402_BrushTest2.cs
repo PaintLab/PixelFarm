@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
-using Typography.TextServices;
+using Typography.FontManagement;
 
 namespace OpenTkEssTest
 {
@@ -28,9 +28,9 @@ namespace OpenTkEssTest
         {
 
 
-            InstalledFontCollection collection = new InstalledFontCollection();
+            InstalledTypefaceCollection collection = new InstalledTypefaceCollection();
             collection.LoadSystemFonts();
-            InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Normal);
+            InstalledTypeface tahomaFont = collection.GetInstalledTypeface("tahoma", TypefaceStyle.Normal);
             FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath);
             ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
             FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');
