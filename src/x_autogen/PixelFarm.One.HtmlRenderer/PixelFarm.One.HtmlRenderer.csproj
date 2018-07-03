@@ -1143,7 +1143,6 @@
     <Compile Include="D:\projects\Typography\Typography.TextFlow\Simple\SmallLine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextFlow\TextLexer\TextLexer.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\IFontLoader.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\IcuData\LangCodes.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\TextServices.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\Utils\CRC32.cs" />

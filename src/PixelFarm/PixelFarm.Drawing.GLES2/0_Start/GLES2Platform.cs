@@ -2,7 +2,7 @@
 
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.DrawingGL;
-using Typography.TextServices;
+using Typography.FontManagement;
 
 namespace PixelFarm.Drawing.GLES2
 {
@@ -34,11 +34,11 @@ namespace PixelFarm.Drawing.GLES2
             return glsx;
         }
 
-        public static void SetFontLoader(IFontLoader fontLoader)
+        public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {
-            GLES2PlatformFontMx.SetFontLoader(fontLoader);
+            GLES2PlatformFontMx.SetInstalledTypefaceProvider(provider);
         }
-        public static InstalledFont GetInstalledFont(string fontName, InstalledFontStyle style)
+        public static InstalledTypeface GetInstalledFont(string fontName, Typography.FontManagement.TypefaceStyle style)
         {
             return GLES2PlatformFontMx.GetInstalledFont(fontName, style);
         }

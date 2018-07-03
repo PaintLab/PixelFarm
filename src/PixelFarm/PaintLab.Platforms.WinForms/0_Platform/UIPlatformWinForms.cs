@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Typography.FontManagement;
+
 namespace LayoutFarm.UI
 {
     //platform specific code
@@ -90,12 +92,14 @@ namespace LayoutFarm.UI
                 SetAsDefaultPlatform();
             }
 
-            var fontLoader = new Typography.TextServices.TypefaceStore();
+            var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
+            installedTypefaces.LoadSystemFonts();
+
             try
             {
                 //set up winform platform 
                 ////gdi+
-                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
+                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(installedTypefaces);
                 LayoutFarm.UI.Clipboard.SetUIPlatform(this);
             }
             catch (System.Exception ex)
