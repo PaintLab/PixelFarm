@@ -572,10 +572,18 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             double y;
             VertexCmd cmd;
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+            try
             {
-                AddVertex(x, y, cmd);
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+                {
+                    AddVertex(x, y, cmd);
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+            
 
             Render(false);
         }

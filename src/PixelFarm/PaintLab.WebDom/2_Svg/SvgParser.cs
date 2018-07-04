@@ -719,31 +719,19 @@ namespace PaintLab.Svg
         public VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
 
+            using (VxsContext.Temp(out var flattenVxs))
+            {
+                VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
+                _svgPathDataParser.SetPathWriter(pathWriter);
+                _svgPathDataParser.Parse(buffer);
 
+                _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
 
+                //create a small copy of the vxs 
+                VectorToolBox.ReleasePathWriter(ref pathWriter);
 
-            //
-            VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
-
-            VectorToolBox.GetFreeVxs(out VertexStore flattenVxs);
-
-            _svgPathDataParser.SetPathWriter(pathWriter);
-            //tokenize the path definition data
-            _svgPathDataParser.Parse(buffer);
-
-
-            _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
-            //------------------------------------------------- 
-
-            //create a small copy of the vxs 
-            VertexStore vxs = flattenVxs.CreateTrim();
-
-            VectorToolBox.ReleaseVxs(ref flattenVxs);
-            VectorToolBox.ReleasePathWriter(ref pathWriter);
-
-
-
-            return vxs;
+                return flattenVxs.CreateTrim();
+            }
         }
 
 

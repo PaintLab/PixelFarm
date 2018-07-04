@@ -197,9 +197,11 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         //stroke_gb_poly.Width = 0.1;
                         p.FillColor = ColorEx.Make(0, 0, 0);
 
+
                         VectorToolBox.GetFreeVxs(out var v1);
                         p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v1));
                         VectorToolBox.ReleaseVxs(ref v1);
+
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
                         //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
                         p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);

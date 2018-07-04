@@ -35,8 +35,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             // _circularGrBrush.AddMoreColorStop(new PointF(100, 0), PixelFarm.Drawing.Color.Green);
             //_circularGrBrush.AddMoreColorStop(new PointF(140, 0), PixelFarm.Drawing.Color.Yellow);
 
-
-            PixelFarm.CpuBlit.PathWriter p = new PathWriter();
+           
+            PathWriter p = new PathWriter();
             p.MoveTo(0, 0);
             p.LineToRel(100, 100);
             p.LineToRel(100, -100);
