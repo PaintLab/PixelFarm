@@ -292,11 +292,11 @@ namespace BuildMergeProject
 
     public static class LinkProjectConverter
     {
-        public static void ConvertToLinkProject2(SolutionMx slnMx, string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
+        public static void ConvertToLinkProject(SolutionMx slnMx, string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
         {
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
-            var compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+            List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
             string onlyFileName = Path.GetFileName(srcProject);
             string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
@@ -326,35 +326,179 @@ namespace BuildMergeProject
                 File.Delete(srcProject);
             }
         }
-        public static void ConvertToLinkProject(string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
+
+        class SimpleNetStdProj
         {
+            class SimpleCompileNode
+            {
+                public string Link { get; set; }
+                public string Include { get; set; }
+            }
+            delegate bool XmlElemEval(XmlElement testnode);
+
+            List<SimpleCompileNode> _compileNodes = new List<SimpleCompileNode>();
+            Dictionary<string, string> _linkFolders = new Dictionary<string, string>();
+            List<XmlElement> _xmlElementFromOthers;
+            public string SdkVersion { get; set; }
+            public string TargetFramework { get; set; }
+            public void AddCompileNode(string include, string link)
+            {
+                _compileNodes.Add(new SimpleCompileNode() { Include = include, Link = link });
+                if (link != null && !link.StartsWith("."))
+                {
+                    string onlyDir = Path.GetDirectoryName(link);
+
+                    if (!_linkFolders.ContainsKey(onlyDir.ToUpper()))
+                    {
+                        _linkFolders.Add(onlyDir.ToUpper(), onlyDir);
+                    }
+                }
+            }
+            public void AddPropertyGroups(List<XmlElement> xmlElementFromOthers)
+            {
+                _xmlElementFromOthers = xmlElementFromOthers;
+            }
+            public void Save(string filename)
+            {
+                XmlDocument outputDoc = new XmlDocument();
+                XmlElement root = outputDoc.CreateElement("Project");
+                outputDoc.AppendChild(root);
+                //
+                AppendAttribute(root, "Sdk", this.SdkVersion);
+                //target framework
+                CreateAndAppendChild(CreateAndAppendChild(root, "PropertyGroup"),
+                            "TargetFramework").InnerText = this.TargetFramework;
+                //other property groups
+                if (_xmlElementFromOthers != null)
+                {
+                    foreach (XmlElement other in _xmlElementFromOthers)
+                    {
+                        XmlElement newnode = CreateAndAppendChild(root, other.Name);
+                        CloneXmlElem(other, newnode, (other_child_node) =>
+                        {
+                            //check if we will include this node or not
+                            if (other_child_node.Name == "TargetFrameworkVersion")
+                            {
+                                //exclude TargetFramework node
+                                return false;
+                            }
+
+                            return true;
+                        });
+                    }
+                }
+                //ItemGroup compile
+                XmlElement itemGroupCompiles = CreateAndAppendChild(root, "ItemGroup");
+                foreach (SimpleCompileNode simpleCompileNode in this._compileNodes)
+                {
+                    XmlElement compileNode = CreateAndAppendChild(itemGroupCompiles, "Compile");
+                    AppendAttribute(compileNode, "Include", simpleCompileNode.Include);
+                    AppendAttribute(compileNode, "Link", simpleCompileNode.Link);
+                }
+
+                //ItemGroup folders
+                XmlElement itemGroupFolders = CreateAndAppendChild(root, "ItemGroup");
+                foreach (string folderNode in _linkFolders.Values)
+                {
+                    XmlElement compileNode = CreateAndAppendChild(itemGroupFolders, "Folder");
+                    AppendAttribute(compileNode, "Include", folderNode);
+                }
+                outputDoc.Save(filename);
+            }
+
+            static void CloneXmlElem(XmlElement other, XmlElement newnode, XmlElemEval xmlElemEvalator)
+            {
+                //recursive
+                foreach (XmlAttribute attr in other.Attributes)
+                {
+                    AppendAttribute(newnode, attr.Name, attr.Value);
+                }
+                //
+                foreach (XmlNode child in other.ChildNodes)
+                {
+                    if (child is XmlElement)
+                    {
+                        XmlElement child_elem = (XmlElement)child;
+                        //
+                       
+                        if (xmlElemEvalator(child_elem))
+                        {   //recursive
+                            XmlElement newsubChild = CreateAndAppendChild(newnode, child_elem.Name);
+                            CloneXmlElem(child_elem, newsubChild, xmlElemEvalator);
+                        }
+                    }
+                    else if (child is XmlText)
+                    {
+                        //create textnode
+                        XmlText newTextNode = newnode.OwnerDocument.CreateTextNode(((XmlText)child).Value);
+                        newnode.AppendChild(newTextNode);
+                    }
+                }
+            }
+            static XmlElement CreateAndAppendChild(XmlElement parent, string nodeName)
+            {
+                XmlElement newChild = parent.OwnerDocument.CreateElement(nodeName);
+                parent.AppendChild(newChild);
+                return newChild;
+            }
+            static void AppendAttribute(XmlElement xmlElem, string attrName, string attrValue)
+            {
+                XmlAttribute attr = xmlElem.OwnerDocument.CreateAttribute(attrName);
+                attr.Value = attrValue;
+                xmlElem.Attributes.Append(attr);
+            }
+        }
+
+        public static void ConvertToLinkProjectNetStd(SolutionMx slnMx,
+            string srcProject,
+            string autoGenFolder,
+            string targetFramework,
+            bool removeOriginalSrcProject)
+        {
+            SimpleNetStdProj netstdProj = new SimpleNetStdProj();
+            netstdProj.SdkVersion = "Microsoft.NET.Sdk";
+            netstdProj.TargetFramework = targetFramework;
+            //copy 'condition' nodes 
+            //------------------------------------
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
-            var compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+
+
+            netstdProj.AddPropertyGroups(SelectPropertyGroups(xmldoc.DocumentElement));
+
+            List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+
+            string onlyFileName = Path.GetFileName(srcProject);
+            string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
+            string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+
+            //------------------------------------
             foreach (XmlElement elem in compileNodes)
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
-                string includeValue = includeAttr.Value;
-                //this version:
-                //auto gen project is lower than original 1 level
-                //so change the original src location
-                //and create linked child node
-                includeAttr.Value = "..\\" + includeAttr.Value;
-                XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
-                linkNode.InnerText = includeValue;
-                elem.AppendChild(linkNode);
+
+                netstdProj.AddCompileNode(
+                    slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                    SolutionMx.CombineRelativePath(includeAttr.Value),
+                    out string leftPart, out string rightPart),
+                    //
+                    rightPart
+                    );
             }
 
-            string onlyFileName = Path.GetFileName(srcProject);
-            if (!Directory.Exists(autoGenFolder))
+            string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
+            if (!Directory.Exists(targetSaveDir))
             {
-                Directory.CreateDirectory(autoGenFolder);
+                Directory.CreateDirectory(targetSaveDir);
             }
-            xmldoc.Save(autoGenFolder + "\\" + onlyFileName);
+
+            //xmldoc.Save(saveFileName);
+            netstdProj.Save(saveFileName);
             if (removeOriginalSrcProject)
             {
                 File.Delete(srcProject);
             }
+            //------------------------------------
         }
         static List<XmlElement> SelectCompileNodes(XmlElement projectNode)
         {
@@ -375,6 +519,20 @@ namespace BuildMergeProject
                 }
             }
             return compileNodes;
+        }
+        static List<XmlElement> SelectPropertyGroups(XmlElement projectNode)
+        {
+            //TODO: use xpath ...
+
+            List<XmlElement> nodes = new List<XmlElement>();
+            foreach (XmlElement item in projectNode)
+            {
+                if (item.Name == "PropertyGroup")
+                {
+                    nodes.Add(item);
+                }
+            }
+            return nodes;
         }
     }
     public class MergeProject

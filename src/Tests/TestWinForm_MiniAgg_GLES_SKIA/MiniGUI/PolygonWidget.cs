@@ -251,19 +251,20 @@ namespace PixelFarm.CpuBlit.UI
             RectD localBounds = new RectD(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
             this.RewindZero();
 
-
-            VectorToolBox.GetFreeVxs(out VertexStore v1);
-            this.MakeVxs(v1);
-            int j = v1.Count;
-            for (int i = 0; i < j; ++i)
+            using (VxsContext.Temp(out var v1))
             {
-                double x, y;
-                v1.GetVertexXY(i, out x, out y);
-                localBounds.ExpandToInclude(x, y);
+                this.MakeVxs(v1);
+                int j = v1.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    double x, y;
+                    v1.GetVertexXY(i, out x, out y);
+                    localBounds.ExpandToInclude(x, y);
+                }
+                return localBounds;
             }
-            VectorToolBox.ReleaseVxs(ref v1);
-            return localBounds;
-            throw new NotImplementedException();
+
+            //throw new NotImplementedException();
         }
 
 
@@ -535,9 +536,10 @@ namespace PixelFarm.CpuBlit.UI
         {
             p.FillColor = LineColor;
 
-            VectorToolBox.GetFreeVxs(out var v1);
-            p.Draw(new VertexStoreSnap(this.MakeVxs(v1)));
-            VectorToolBox.ReleaseVxs(ref v1);
+            using (VxsContext.Temp(out var v1))
+            {
+                p.Draw(new VertexStoreSnap(this.MakeVxs(v1)));
+            }
         }
     }
 }

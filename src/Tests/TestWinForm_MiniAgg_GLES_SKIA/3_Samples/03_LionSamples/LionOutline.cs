@@ -157,7 +157,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 {
                     case SvgRenderVxKind.Path:
                         {
-                            rasterizer.AddPath(new PixelFarm.Drawing.VertexStoreSnap(svgPart.GetVxs(), 0));
+                            rasterizer.AddPath(svgPart.GetVxs());
                             bmpRas.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
                         }
                         break;
@@ -237,8 +237,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     case SvgRenderVxKind.Path:
                         {
                             //temp
+                            
                             rasterizer.RenderVertexSnap(
-                              new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs(), 0),
+                              new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
                               new Drawing.Color(255, 0, 0));
                         }
                         break;

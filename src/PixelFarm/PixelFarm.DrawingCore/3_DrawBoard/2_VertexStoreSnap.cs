@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
-    //----------------------------------------
+
     public struct VertexSnapIter
     {
         int currentIterIndex;

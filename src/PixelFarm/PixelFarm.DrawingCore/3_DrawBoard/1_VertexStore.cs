@@ -43,6 +43,10 @@ namespace PixelFarm.Drawing
         public VertexStore()
         {
             AllocIfRequired(2);
+            if (dbugId == 30)
+            {
+
+            }
         }
 
 
@@ -154,8 +158,12 @@ namespace PixelFarm.Drawing
         }
 
 
-
 #if DEBUG
+        public override string ToString()
+        {
+            return m_num_vertices.ToString();
+        }
+
         public bool _dbugIsChanged;
         public static bool dbugCheckNANs(double x, double y)
         {
@@ -256,6 +264,8 @@ namespace PixelFarm.Drawing
             m_CommandAndFlags = vstore.m_cmds;
         }
 
+        public bool _isTrimed;
+
         private VertexStore(VertexStore src, bool trim)
         {
             //for copy from src to this instance
@@ -265,11 +275,18 @@ namespace PixelFarm.Drawing
 
             if (trim)
             {
-                int coord_len = m_num_vertices + 1; //+1 for no more cmd
-                int cmds_len = m_num_vertices + 1; //+1 for no more cmd
+#if DEBUG
+                if (this.dbugId == 30)
+                {
 
-                this.m_coord_xy = new double[coord_len << 1];//*2
-                this.m_cmds = new byte[cmds_len];
+                }
+#endif
+                _isTrimed = true;
+                int coord_len = m_num_vertices; //+1 for no more cmd
+                int cmds_len = m_num_vertices; //+1 for no more cmd
+
+                this.m_coord_xy = new double[(coord_len + 1) << 1];//*2
+                this.m_cmds = new byte[(cmds_len + 1)];
 
                 System.Array.Copy(
                      src.m_coord_xy,

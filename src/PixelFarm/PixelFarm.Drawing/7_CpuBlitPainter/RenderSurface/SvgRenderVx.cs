@@ -297,11 +297,13 @@ namespace PixelFarm.CpuBlit
                 return strokeVxs;
             }
 
-            var new_output = new VertexStore();
-            p.VectorTool.CreateStroke(s.GetVxs(), strokeW, new_output);
-            s.StrokeVxs = new_output;
+            using (VxsContext.Temp(out var vxs))
+            {
+                p.VectorTool.CreateStroke(s.GetVxs(), strokeW, vxs);
+                s.StrokeVxs = vxs.CreateTrim();
+            }
 
-            return new_output;
+            return s.StrokeVxs;
         }
 
         public SvgPart GetInnerVx(int index)
@@ -321,9 +323,6 @@ namespace PixelFarm.CpuBlit
         {
             _vxList = _originalVxs;
         }
-
-
-
     }
 
 
@@ -344,6 +343,9 @@ namespace PixelFarm.CpuBlit
         public SvgPart(SvgRenderVxKind kind)
         {
 
+#if DEBUG
+            //Console.WriteLine(dbugId);
+#endif
             this.Kind = kind;
         }
         public bool HasFillColor { get; private set; }
@@ -420,9 +422,11 @@ namespace PixelFarm.CpuBlit
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (originalSvgVx._vxs != null)
             {
-                VertexStore vxs = new VertexStore();
-                tx.TransformToVxs(originalSvgVx._vxs, vxs);
-                newSx._vxs = vxs;
+                using (VxsContext.Temp(out var vxs))
+                {
+                    tx.TransformToVxs(originalSvgVx._vxs, vxs);
+                    newSx._vxs = vxs.CreateTrim();
+                }
             }
 
             if (originalSvgVx.HasFillColor)
@@ -444,9 +448,11 @@ namespace PixelFarm.CpuBlit
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (newSx._vxs != null)
             {
-                VertexStore vxs = new VertexStore();
-                tx.TransformToVxs(originalSvgVx._vxs, vxs);
-                newSx._vxs = vxs;
+                using (VxsContext.Temp(out var vxs))
+                {
+                    tx.TransformToVxs(originalSvgVx._vxs, vxs);
+                    newSx._vxs = vxs.CreateTrim();
+                } 
             }
 
             if (originalSvgVx.HasFillColor)

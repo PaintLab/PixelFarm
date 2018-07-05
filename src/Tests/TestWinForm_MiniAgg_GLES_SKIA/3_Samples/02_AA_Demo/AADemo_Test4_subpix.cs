@@ -339,7 +339,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            p.DrawLine(2, 0, 10, 15);
+            //p.DrawLine(2, 0, 10, 15);
 
             int lineLen = 10;
             int x = 30;
@@ -354,14 +354,19 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 
 
                 var builder = new Typography.Contours.GlyphPathBuilder(typeface);
-                builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 16);
+                builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 24);
+
                 PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
-                VertexStore vxs = new VertexStore();
-                tovxs.WriteOutput(vxs);
-                p.Fill(vxs);
+
+                using (VxsContext.Temp(out var vxs))
+                {
+                    tovxs.WriteOutput(vxs);
+                    p.Fill(vxs);
+                }
+
             }
-            p.FillRect(0, 0, 20, 20);
+            // p.FillRect(0, 0, 20, 20);
 
         }
 
