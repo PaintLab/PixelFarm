@@ -47,15 +47,17 @@ namespace OpenTkEssTest
             _glsx.ClearColorBuffer();
             //-------------------------------
 
-            int j = lionShape.NumPaths;
-            int[] pathList = lionShape.PathIndexList;
-            Color[] colors = lionShape.Colors;
-            VertexStore myvxs = lionVxs;
-            for (int i = 0; i < j; ++i)
-            {
-                painter.FillColor = colors[i];
-                painter.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-            }
+            lionShape.Paint(painter);
+
+            //int j = lionShape.NumPaths;
+            //int[] pathList = lionShape.PathIndexList;
+            //Color[] colors = lionShape.Colors;
+            //VertexStore myvxs = lionVxs;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    painter.FillColor = colors[i];
+            //    painter.Fill(new VertexStoreSnap(myvxs, pathList[i]));
+            //}
             //-------------------------------
             SwapBuffers();
         }

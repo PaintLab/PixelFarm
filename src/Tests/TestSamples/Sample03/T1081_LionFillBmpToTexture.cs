@@ -57,14 +57,16 @@ namespace OpenTkEssTest
         }
         static void DrawLion(Painter p, SpriteShape shape, VertexStore myvxs)
         {
-            int j = shape.NumPaths;
-            int[] pathList = shape.PathIndexList;
-            Color[] colors = shape.Colors;
-            for (int i = 0; i < j; ++i)
-            {
-                p.FillColor = colors[i];
-                p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-            }
+            shape.Paint(p);
+
+            //int j = shape.NumPaths;
+            //int[] pathList = shape.PathIndexList;
+            //Color[] colors = shape.Colors;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    p.FillColor = colors[i];
+            //    p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
+            //}
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {

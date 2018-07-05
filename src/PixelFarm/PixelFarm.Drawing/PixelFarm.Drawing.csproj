@@ -484,6 +484,9 @@
     <Compile Include="..\pixelfarm.miniagg.complements\rendersurface\AggRenderSurface_RenderImages.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\SvgRenderVx\SvgRenderVx.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\SvgRenderVx\SvgRenderVx.cs</Link>
+    </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ColorOrder.cs</Link>
     </Compile>

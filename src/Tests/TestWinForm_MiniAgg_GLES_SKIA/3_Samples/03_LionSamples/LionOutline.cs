@@ -153,49 +153,42 @@ namespace PixelFarm.Agg.Sample_LionOutline
             var p1 = p as AggPainter;
             if (p1 == null)
             {
-                int j = lionShape.NumPaths;
-                int[] pathList = lionShape.PathIndexList;
-                Drawing.Color[] colors = lionShape.Colors;
-                //graphics2D.UseSubPixelRendering = true; 
-                var vxs = GetFreeVxs();
-                affTx.TransformToVxs(lionShape.Vxs, vxs);
-                p.StrokeWidth = 1;
-                for (int i = 0; i < j; ++i)
-                {
-                    p.StrokeColor = colors[i];
-                    p.Draw(new PixelFarm.Drawing.VertexStoreSnap(vxs, pathList[i]));
+                //TODO: review here
 
-                }
-                //not agg   
-                Release(ref vxs);
-                return; //**
+                lionShape.Paint(p, affTx);
+
+                //int j = lionShape.NumPaths;
+                //int[] pathList = lionShape.PathIndexList; 
+
+                //Drawing.Color[] colors = lionShape.Colors;
+                ////graphics2D.UseSubPixelRendering = true; 
+                //var vxs = GetFreeVxs();
+                //affTx.TransformToVxs(lionShape.Vxs, vxs);
+
+
+                //p.StrokeWidth = 1;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    p.StrokeColor = colors[i];
+                //    p.Draw(new PixelFarm.Drawing.VertexStoreSnap(vxs, pathList[i]));
+
+                //}
+                ////not agg   
+                //Release(ref vxs);
+                //return; //**
             }
 
 
             if (UseBitmapExt)
             {
                 p.RenderQuality = Drawing.RenderQualtity.Fast;
-                int j = lionShape.NumPaths;
-                int[] pathList = lionShape.PathIndexList;
-                Drawing.Color[] colors = lionShape.Colors;
-
                 p.Clear(Drawing.Color.White);
-
-                var vxs = GetFreeVxs();
-                var vxs2 = stroke1.MakeVxs(affTx.TransformToVxs(lionShape.Vxs, vxs), GetFreeVxs());
-
                 p.StrokeWidth = 1;
 
-                for (int i = 0; i < j; ++i)
-                {
-                    p.StrokeColor = colors[i];
-                    p.Draw(new PixelFarm.Drawing.VertexStoreSnap(vxs2, pathList[i]));
+                //-------------------------
+                lionShape.DrawOutline(p);
 
-                }
-                //not agg   
-                Release(ref vxs);
-                Release(ref vxs2);
-                return; //**
+               
 
             }
             else

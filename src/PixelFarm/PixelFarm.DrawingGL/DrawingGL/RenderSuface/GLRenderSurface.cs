@@ -519,12 +519,16 @@ namespace PixelFarm.DrawingGL
         //RenderVx
         public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            if (glRenderVx == null) return;
+            //
             FillGfxPath(brush, glRenderVx.gxpth);
         }
         public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            if (glRenderVx == null) return;
+            //
             if (glRenderVx.multipartTessResult != null)
             {
                 FillGfxPath(color, glRenderVx.multipartTessResult);
@@ -542,7 +546,9 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            GLRenderVx glRenderVx = renderVx as GLRenderVx;
+            if (glRenderVx == null) return;
+            
             DrawGfxPath(color, glRenderVx.gxpth);
         }
         //------------------------------------------------------------------------------- 

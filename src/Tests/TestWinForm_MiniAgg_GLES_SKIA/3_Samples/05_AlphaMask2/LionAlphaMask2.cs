@@ -262,23 +262,28 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 lionGfx.Clear(System.Drawing.Color.White);
                 int n = lionShape.NumPaths;
                 int[] indexList = lionShape.PathIndexList;
-                var colors = lionShape.Colors;
-                //var lionVxs = lionShape.Path.Vxs;// transform.TransformToVxs(lionShape.Path.Vxs);
 
-                var lionVxs = new VertexStore();
-                transform.TransformToVxs(lionShape.Vxs, lionVxs);
-                for (int i = 0; i < n; ++i)
-                {
-                    VxsHelper.FillVxsSnap(lionGfx,
-                        new VertexStoreSnap(lionVxs, indexList[i]),
-                        colors[i]);
-                }
-                using (var mergeBmp = MergeAlphaChannel(lionBmp, a_alphaBmp))
-                {
-                    //gx.InternalGraphics.DrawImage(this.a_alphaBmp, new System.Drawing.PointF(0, 0));
-                    //gx.InternalGraphics.DrawImage(bmp, new System.Drawing.PointF(0, 0));                      
-                    p.DrawImage(mergeBmp, 0, 0);
-                }
+
+                //TODO: review here again
+                throw new NotSupportedException();
+
+                //Color[] colors = lionShape.Colors;
+                ////var lionVxs = lionShape.Path.Vxs;// transform.TransformToVxs(lionShape.Path.Vxs);
+
+                //var lionVxs = new VertexStore();
+                //transform.TransformToVxs(lionShape.Vxs, lionVxs);
+                //for (int i = 0; i < n; ++i)
+                //{
+                //    VxsHelper.FillVxsSnap(lionGfx,
+                //        new VertexStoreSnap(lionVxs, indexList[i]),
+                //        colors[i]);
+                //}
+                //using (var mergeBmp = MergeAlphaChannel(lionBmp, a_alphaBmp))
+                //{
+                //    //gx.InternalGraphics.DrawImage(this.a_alphaBmp, new System.Drawing.PointF(0, 0));
+                //    //gx.InternalGraphics.DrawImage(bmp, new System.Drawing.PointF(0, 0));                      
+                //    p.DrawImage(mergeBmp, 0, 0);
+                //}
             }
         }
         static System.Drawing.Bitmap MergeAlphaChannel(System.Drawing.Bitmap original, System.Drawing.Bitmap alphaChannelBmp)
