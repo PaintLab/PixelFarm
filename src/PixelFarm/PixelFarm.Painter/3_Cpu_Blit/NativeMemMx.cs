@@ -4,7 +4,7 @@ namespace PixelFarm.CpuBlit
 {
 
 
-    [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
+    //[System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
     static class NativeMemMx
     {
         //check this ....
