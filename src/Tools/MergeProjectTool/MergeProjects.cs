@@ -334,6 +334,7 @@ namespace BuildMergeProject
                 public string Link { get; set; }
                 public string Include { get; set; }
             }
+            delegate bool XmlElemEval(XmlElement testnode);
 
             List<SimpleCompileNode> _compileNodes = new List<SimpleCompileNode>();
             Dictionary<string, string> _linkFolders = new Dictionary<string, string>();
@@ -373,7 +374,17 @@ namespace BuildMergeProject
                     foreach (XmlElement other in _xmlElementFromOthers)
                     {
                         XmlElement newnode = CreateAndAppendChild(root, other.Name);
-                        CloneXmlElem(other, newnode);
+                        CloneXmlElem(other, newnode, (other_child_node) =>
+                        {
+                            //check if we will include this node or not
+                            if (other_child_node.Name == "TargetFrameworkVersion")
+                            {
+                                //exclude TargetFramework node
+                                return false;
+                            }
+
+                            return true;
+                        });
                     }
                 }
                 //ItemGroup compile
@@ -392,25 +403,29 @@ namespace BuildMergeProject
                     XmlElement compileNode = CreateAndAppendChild(itemGroupFolders, "Folder");
                     AppendAttribute(compileNode, "Include", folderNode);
                 }
-
                 outputDoc.Save(filename);
             }
-            static void CloneXmlElem(XmlElement other, XmlElement newnode)
+
+            static void CloneXmlElem(XmlElement other, XmlElement newnode, XmlElemEval xmlElemEvalator)
             {
                 //recursive
                 foreach (XmlAttribute attr in other.Attributes)
                 {
                     AppendAttribute(newnode, attr.Name, attr.Value);
                 }
+                //
                 foreach (XmlNode child in other.ChildNodes)
                 {
                     if (child is XmlElement)
                     {
                         XmlElement child_elem = (XmlElement)child;
                         //
-                        //recursive
-                        XmlElement newsubChild = CreateAndAppendChild(newnode, child_elem.Name);
-                        CloneXmlElem(child_elem, newsubChild);
+                       
+                        if (xmlElemEvalator(child_elem))
+                        {   //recursive
+                            XmlElement newsubChild = CreateAndAppendChild(newnode, child_elem.Name);
+                            CloneXmlElem(child_elem, newsubChild, xmlElemEvalator);
+                        }
                     }
                     else if (child is XmlText)
                     {
