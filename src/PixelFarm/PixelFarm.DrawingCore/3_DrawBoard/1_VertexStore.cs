@@ -22,10 +22,7 @@
 
 using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
-{
-
-
-
+{   
     public sealed class VertexStore
     {
         int m_num_vertices;
@@ -43,10 +40,10 @@ namespace PixelFarm.Drawing
         public VertexStore()
         {
             AllocIfRequired(2);
-            if (dbugId == 30)
-            {
+            //if (dbugId == 30)
+            //{
 
-            }
+            //}
         }
 
 

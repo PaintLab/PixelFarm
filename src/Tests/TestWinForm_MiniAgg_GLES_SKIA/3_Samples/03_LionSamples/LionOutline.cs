@@ -237,7 +237,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     case SvgRenderVxKind.Path:
                         {
                             //temp
-                            
+
                             rasterizer.RenderVertexSnap(
                               new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
                               new Drawing.Color(255, 0, 0));
@@ -397,20 +397,14 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-
-
-
             //-----------------------
             AggRenderSurface aggsx = p1.RenderSurface;
-            //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-            //int width = widgetsSubImage.Width;
-            //int height = widgetsSubImage.Height; 
-
+            //-----------------------
+            //TODO: make this reusable ...
             SubBitmapBlender widgetsSubImage = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
             SubBitmapBlender clippedSubImage = new SubBitmapBlender(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
-
 
             if (RenderAsScanline)
             {
@@ -419,21 +413,14 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 //Stroke stroke = new Stroke(strokeWidth);
                 //stroke.LineJoin = LineJoin.Round; 
                 lionShape.ApplyTransform(affTx);
-
-
                 DrawAsScanline(imageClippingProxy, aggsx, rasterizer, aggsx.BitmapRasterizer);
-
-
-
                 lionShape.ResetTransform();
-
-
             }
             else
             {
 
-                //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone());
-                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
+                //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
+                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null); //without gamma
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
                 rasterizer.LineJoin = (RenderAccurateJoins ?
