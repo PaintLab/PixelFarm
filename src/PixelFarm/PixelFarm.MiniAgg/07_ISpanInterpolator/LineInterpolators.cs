@@ -84,9 +84,9 @@ namespace PixelFarm.Agg.Transform
     //=================================================dda2_line_interpolator
     sealed class LineInterpolatorDDA2
     {
-        int m_cnt;
-        int m_lft;
-        int m_rem;
+        readonly int m_cnt;
+        readonly int m_lft;
+        readonly int m_rem;
         int m_mod;
         int m_y;
         //--------------------------------------------------------------------
@@ -95,6 +95,7 @@ namespace PixelFarm.Agg.Transform
         //-------------------------------------------- Forward-adjusted line
         public LineInterpolatorDDA2(int y1, int y2, int count)
         {
+            dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
             m_rem = ((y2 - y1) % m_cnt);
@@ -112,6 +113,7 @@ namespace PixelFarm.Agg.Transform
         //-------------------------------------------- Backward-adjusted line
         public LineInterpolatorDDA2(int y1, int y2, int count, int unused)
         {
+            dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
             m_rem = ((y2 - y1) % m_cnt);
@@ -159,8 +161,13 @@ namespace PixelFarm.Agg.Transform
 
         //--------------------------------------------------------------------
         //public void operator++()
+#if DEBUG
+          int dbugIdN = 0;
+#endif
         public void Next()
         {
+            dbugIdN++;
+
             m_mod += m_rem;
             m_y += m_lft;
             if (m_mod > 0)
@@ -196,9 +203,9 @@ namespace PixelFarm.Agg.Transform
         }
 
         //--------------------------------------------------------------------
-        public int mod() { return m_mod; }
-        public int rem() { return m_rem; }
-        public int lft() { return m_lft; }
+        //public int mod() { return m_mod; }
+        //public int rem() { return m_rem; }
+        //public int lft() { return m_lft; }
 
         //--------------------------------------------------------------------
         public int Y { get { return m_y; } }

@@ -64,8 +64,29 @@ namespace PixelFarm.Agg.Lines
         }
         public int SubPixelWidth { get { return m_subpixel_width; } }
 
+#if DEBUG
+        static int dbugCount1;
+#endif
         public byte GetProfileValue(int dist)
         {
+#if DEBUG
+            dbugCount1++;
+            if (dbugCount1 < 17)
+            {
+                Console.WriteLine(dbugCount1 + " " + dist);
+            }
+            else
+            {
+
+            }
+
+            int tmp = dist + SUBPIX_SCALE * 2;
+            if (tmp < 0 || tmp > m_profile.Length)
+            {
+                //?
+                return 255;
+            }
+#endif
             //#if DEBUG
             //            int tmp = dist + SUBPIX_SCALE * 2;
             //            if (tmp < 0 || tmp > m_profile.Length)
