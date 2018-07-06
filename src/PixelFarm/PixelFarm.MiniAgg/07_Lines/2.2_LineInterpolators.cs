@@ -21,29 +21,38 @@ namespace PixelFarm.Agg.Lines
     //================================================line_interpolator_aa_base
     struct LineInterpolatorAAData
     {
-        public LineParameters m_lp;
-        public LineInterpolatorDDA2 m_li;
+        public readonly LineParameters m_lp;
+        public readonly LineInterpolatorDDA2 m_li;
 
-        int m_len;
+        readonly int m_len;
+        public readonly int m_count;
+        public readonly int m_width;
+        public readonly int m_max_extent;
+        public readonly int[] m_dist;
+        public readonly byte[] m_covers;
+
         public int m_x;
         public int m_y;
         public int m_old_x;
         public int m_old_y;
-        public int m_count;
-        public int m_width;
-        public int m_max_extent;
         public int m_step;
-        public int[] m_dist;
-        public byte[] m_covers;
+
+
         public const int MAX_HALF_WIDTH = 64;
+
         public LineInterpolatorAAData(OutlineRenderer ren, LineParameters lp)
         {
+
+            //TODO: consider resuable array
             m_dist = new int[MAX_HALF_WIDTH + 1];
             m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
 
             m_lp = lp;
-            m_li = new LineInterpolatorDDA2(lp.vertical ? LineAA.DblHr(lp.x2 - lp.x1) : LineAA.DblHr(lp.y2 - lp.y1),
-                lp.vertical ? Math.Abs(lp.y2 - lp.y1) : Math.Abs(lp.x2 - lp.x1) + 1);
+            m_li = new LineInterpolatorDDA2(
+                lp.vertical ? LineAA.DblHr(lp.x2 - lp.x1) :
+                              LineAA.DblHr(lp.y2 - lp.y1),
+                lp.vertical ? Math.Abs(lp.y2 - lp.y1) :
+                              Math.Abs(lp.x2 - lp.x1) + 1);
 
             m_len = ((lp.vertical == (lp.inc > 0)) ? -lp.len : lp.len);
             m_x = (lp.x1 >> LineAA.SUBPIXEL_SHIFT);
@@ -51,20 +60,33 @@ namespace PixelFarm.Agg.Lines
             m_old_x = (m_x);
             m_old_y = (m_y);
             m_count = ((lp.vertical ? Math.Abs((lp.y2 >> LineAA.SUBPIXEL_SHIFT) - m_y) :
-                                   Math.Abs((lp.x2 >> LineAA.SUBPIXEL_SHIFT) - m_x)));
+                                      Math.Abs((lp.x2 >> LineAA.SUBPIXEL_SHIFT) - m_x)));
             m_width = (ren.SubPixelWidth);
             //m_max_extent(m_width >> (line_subpixel_shift - 2));
             m_max_extent = ((m_width + LineAA.SUBPIXEL_MARK) >> LineAA.SUBPIXEL_SHIFT);
             m_step = 0;
-            LineInterpolatorDDA2 li = new LineInterpolatorDDA2(0,
-                lp.vertical ? (lp.dy << LineAA.SUBPIXEL_SHIFT) : (lp.dx << LineAA.SUBPIXEL_SHIFT),
+
+            //-------------------
+            var li = new LineInterpolatorDDA2(0, lp.vertical ?
+                (lp.dy << LineAA.SUBPIXEL_SHIFT) :
+                (lp.dx << LineAA.SUBPIXEL_SHIFT),
                 lp.len);
+
             int i;
             int stop = m_width + LineAA.SUBPIXEL_SCALE * 2;
             for (i = 0; i < MAX_HALF_WIDTH; ++i)
             {
-                m_dist[i] = li.Y;
-                if (m_dist[i] >= stop) break;
+                //assign and eval
+#if DEBUG
+                if (li.Y == 194)
+                {
+                }
+#endif
+                if ((m_dist[i] = li.Y) >= stop)
+                {
+
+                    break;
+                }
                 li.Next();
             }
             m_dist[i++] = 0x7FFF0000;
@@ -75,9 +97,12 @@ namespace PixelFarm.Agg.Lines
             m_li.Next();
             m_x += m_lp.inc;
             m_y = (m_lp.y1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+            //
             if (m_lp.inc > 0) di.IncX(m_y - m_old_y);
-            else di.DecX(m_y - m_old_y);
+            else /**/         di.DecX(m_y - m_old_y);
+            //
             m_old_y = m_y;
+            //
             return di.Distance / m_len;
         }
 
@@ -86,20 +111,24 @@ namespace PixelFarm.Agg.Lines
             m_li.Next();
             m_x += m_lp.inc;
             m_y = (m_lp.y1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+            //
             if (m_lp.inc > 0) di.IncX(m_y - m_old_y);
-            else di.DecX(m_y - m_old_y);
+            else/**/          di.DecX(m_y - m_old_y);
+            //
             m_old_y = m_y;
             return di.Distance / m_len;
         }
-
         public int BaseStepH(ref DistanceInterpolator3 di)
         {
             m_li.Next();
             m_x += m_lp.inc;
             m_y = (m_lp.y1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+            //
             if (m_lp.inc > 0) di.IncX(m_y - m_old_y);
-            else di.DecX(m_y - m_old_y);
+            else /**/         di.DecX(m_y - m_old_y);
+            //
             m_old_y = m_y;
+            //
             return di.Distance / m_len;
         }
 
@@ -178,56 +207,62 @@ namespace PixelFarm.Agg.Lines
         }
         bool StepH()
         {
-            int dist;
-            int dy;
-            int s1 = _aa_data.BaseStepH(ref _m_di);
-            int Offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = Offset0;
-            _aa_data.m_covers[Offset1++] = (byte)_ren.GetCover(s1);
-            dy = 1;
-            while ((dist = _aa_data.m_dist[dy] - s1) <= _aa_data.m_width)
+            try
             {
-                _aa_data.m_covers[Offset1++] = (byte)_ren.GetCover(dist);
-                ++dy;
+                int dist;
+                int s1 = _aa_data.BaseStepH(ref _m_di);
+                int offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+                int offset1 = offset0;
+                _aa_data.m_covers[offset1++] = _ren.GetCover(s1);
+                int dy = 1;
+                while ((dist = _aa_data.m_dist[dy] - s1) <= _aa_data.m_width)
+                {
+                    _aa_data.m_covers[offset1++] = _ren.GetCover(dist);
+                    ++dy;
+                }
+
+                dy = 1;
+                while ((dist = _aa_data.m_dist[dy] + s1) <= _aa_data.m_width)
+                {
+                    _aa_data.m_covers[--offset0] = _ren.GetCover(dist);
+                    ++dy;
+                }
+                _ren.BlendSolidVSpan(_aa_data.m_x,
+                                     _aa_data.m_y - dy + 1,
+                                     offset1 - offset0,
+                                     _aa_data.m_covers, offset0);
+                return ++_aa_data.m_step < _aa_data.m_count;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
 
-            dy = 1;
-            while ((dist = _aa_data.m_dist[dy] + s1) <= _aa_data.m_width)
-            {
-                _aa_data.m_covers[--Offset0] = (byte)_ren.GetCover(dist);
-                ++dy;
-            }
-            _ren.BlendSolidVSpan(_aa_data.m_x,
-                                               _aa_data.m_y - dy + 1,
-                                               Offset1 - Offset0,
-                                               _aa_data.m_covers, Offset0);
-            return ++_aa_data.m_step < _aa_data.m_count;
         }
         bool StepV()
         {
             int dist;
-            int dx;
             int s1 = _aa_data.BaseStepV(ref _m_di);
-            int Offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = Offset0;
-            _aa_data.m_covers[Offset1++] = (byte)_ren.GetCover(s1);
-            dx = 1;
+            int offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+            int offset1 = offset0;
+            _aa_data.m_covers[offset1++] = _ren.GetCover(s1);
+            int dx = 1;
             while ((dist = _aa_data.m_dist[dx] - s1) <= _aa_data.m_width)
             {
-                _aa_data.m_covers[Offset1++] = (byte)_ren.GetCover(dist);
+                _aa_data.m_covers[offset1++] = _ren.GetCover(dist);
                 ++dx;
             }
 
             dx = 1;
             while ((dist = _aa_data.m_dist[dx] + s1) <= _aa_data.m_width)
             {
-                _aa_data.m_covers[--Offset0] = (byte)_ren.GetCover(dist);
+                _aa_data.m_covers[--offset0] = _ren.GetCover(dist);
                 ++dx;
             }
             _ren.BlendSolidHSpan(_aa_data.m_x - dx + 1,
                                                _aa_data.m_y,
-                                               Offset1 - Offset0,
-                                               _aa_data.m_covers, Offset0);
+                                               offset1 - offset0,
+                                               _aa_data.m_covers, offset0);
             return ++_aa_data.m_step < _aa_data.m_count;
         }
     }
@@ -241,7 +276,7 @@ namespace PixelFarm.Agg.Lines
         public LineInterpolatorAA1(OutlineRenderer ren, LineParameters lp, int sx, int sy)
         {
             this._ren = ren;
-            _aa_data = new Lines.LineInterpolatorAAData(ren, lp);
+            _aa_data = new LineInterpolatorAAData(ren, lp);
             _m_di = new DistanceInterpolator2(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy,
                  lp.x1 & ~LineAA.SUBPIXEL_MARK, lp.y1 & ~LineAA.SUBPIXEL_MARK);
 
@@ -256,9 +291,12 @@ namespace PixelFarm.Agg.Lines
                     _aa_data.m_li.Prev();
                     _aa_data.m_y -= lp.inc;
                     _aa_data.m_x = (_aa_data.m_lp.x1 + _aa_data.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+                    //
                     if (lp.inc > 0) _m_di.DecY(_aa_data.m_x - _aa_data.m_old_x);
-                    else _m_di.IncY(_aa_data.m_x - _aa_data.m_old_x);
+                    else/**/        _m_di.IncY(_aa_data.m_x - _aa_data.m_old_x);
+                    //
                     _aa_data.m_old_x = _aa_data.m_x;
+                    //
                     dist1_start = dist2_start = _m_di.DistanceStart;
                     int dx = 0;
                     if (dist1_start < 0) ++npix;
@@ -269,8 +307,8 @@ namespace PixelFarm.Agg.Lines
                         if (dist1_start < 0) ++npix;
                         if (dist2_start < 0) ++npix;
                         ++dx;
-                    }
-                    while (_aa_data.m_dist[dx] <= _aa_data.m_width);
+
+                    } while (_aa_data.m_dist[dx] <= _aa_data.m_width);
                     --_aa_data.m_step;
                     if (npix == 0) break;
                     npix = 0;
@@ -284,9 +322,12 @@ namespace PixelFarm.Agg.Lines
                     _aa_data.m_li.Prev();
                     _aa_data.m_x -= lp.inc;
                     _aa_data.m_y = (_aa_data.m_lp.y1 + _aa_data.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+                    //
                     if (lp.inc > 0) _m_di.DecX(_aa_data.m_y - _aa_data.m_old_y);
-                    else _m_di.IncX(_aa_data.m_y - _aa_data.m_old_y);
+                    else /**/       _m_di.IncX(_aa_data.m_y - _aa_data.m_old_y);
+                    //
                     _aa_data.m_old_y = _aa_data.m_y;
+                    //
                     dist1_start = dist2_start = _m_di.DistanceStart;
                     int dy = 0;
                     if (dist1_start < 0) ++npix;
@@ -297,8 +338,8 @@ namespace PixelFarm.Agg.Lines
                         if (dist1_start < 0) ++npix;
                         if (dist2_start < 0) ++npix;
                         ++dy;
-                    }
-                    while (_aa_data.m_dist[dy] <= _aa_data.m_width);
+                    } while (_aa_data.m_dist[dy] <= _aa_data.m_width);
+                    //
                     --_aa_data.m_step;
                     if (npix == 0) break;
                     npix = 0;
@@ -323,31 +364,31 @@ namespace PixelFarm.Agg.Lines
             }
         }
         //---------------------------------------------------------------------
+        //bool step_hor()
         bool StepH()
         {
-            int dist_start;
+
             int dist;
-            int dy;
             int s1 = _aa_data.BaseStepH(ref _m_di);
-            dist_start = _m_di.DistanceStart;
-            int Offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = Offset0;
-            _aa_data.m_covers[Offset1] = 0;
+            int dist_start = _m_di.DistanceStart;
+            int p0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+            int p1 = p0;
+            _aa_data.m_covers[p1] = 0;
             if (dist_start <= 0)
             {
-                _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(s1);
+                _aa_data.m_covers[p1] = _ren.GetCover(s1);
             }
-            ++Offset1;
-            dy = 1;
+            ++p1;
+            int dy = 1;
             while ((dist = _aa_data.m_dist[dy] - s1) <= _aa_data.m_width)
             {
                 dist_start -= _m_di.DxStart;
-                _aa_data.m_covers[Offset1] = 0;
+                _aa_data.m_covers[p1] = 0;
                 if (dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[p1] = _ren.GetCover(dist);
                 }
-                ++Offset1;
+                ++p1;
                 ++dy;
             }
 
@@ -356,49 +397,50 @@ namespace PixelFarm.Agg.Lines
             while ((dist = _aa_data.m_dist[dy] + s1) <= _aa_data.m_width)
             {
                 dist_start += _m_di.DxStart;
-                _aa_data.m_covers[--Offset0] = 0;
+                _aa_data.m_covers[--p0] = 0;
                 if (dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset0] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[p0] = _ren.GetCover(dist);
                 }
                 ++dy;
             }
 
-            int len = Offset1 - Offset0;
+
             _ren.BlendSolidVSpan(_aa_data.m_x,
-                                               _aa_data.m_y - dy + 1,
-                                               len, _aa_data.m_covers,
-                                               Offset0);
+                                 _aa_data.m_y - dy + 1,
+                                 p1 - p0,
+                                 _aa_data.m_covers,
+                                 p0);
             return ++_aa_data.m_step < _aa_data.m_count;
         }
 
 
         //---------------------------------------------------------------------
+        //                                                   bool step_ver()
         bool StepV()
         {
-            int dist_start;
+
             int dist;
-            int dx;
             int s1 = _aa_data.BaseStepV(ref _m_di);
-            int Offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = Offset0;
-            dist_start = _m_di.DistanceStart;
-            _aa_data.m_covers[Offset1] = 0;
+            int p0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+            int p1 = p0;
+            int dist_start = _m_di.DistanceStart;
+            _aa_data.m_covers[p1] = 0;
             if (dist_start <= 0)
             {
-                _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(s1);
+                _aa_data.m_covers[p1] = _ren.GetCover(s1);
             }
-            ++Offset1;
-            dx = 1;
+            ++p1;
+            int dx = 1;
             while ((dist = _aa_data.m_dist[dx] - s1) <= _aa_data.m_width)
             {
                 dist_start += _m_di.DyStart;
-                _aa_data.m_covers[Offset1] = 0;
+                _aa_data.m_covers[p1] = 0;
                 if (dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[p1] = _ren.GetCover(dist);
                 }
-                ++Offset1;
+                ++p1;
                 ++dx;
             }
 
@@ -407,17 +449,17 @@ namespace PixelFarm.Agg.Lines
             while ((dist = _aa_data.m_dist[dx] + s1) <= _aa_data.m_width)
             {
                 dist_start -= _m_di.DyStart;
-                _aa_data.m_covers[--Offset0] = 0;
+                _aa_data.m_covers[--p0] = 0;
                 if (dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset0] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[p0] = _ren.GetCover(dist);
                 }
                 ++dx;
             }
             _ren.BlendSolidHSpan(_aa_data.m_x - dx + 1,
                                                _aa_data.m_y,
-                                               Offset1 - Offset0, _aa_data.m_covers,
-                                               Offset0);
+                                               p1 - p0, _aa_data.m_covers,
+                                               p0);
             return ++_aa_data.m_step < _aa_data.m_count;
         }
     }
@@ -433,7 +475,7 @@ namespace PixelFarm.Agg.Lines
             int ex, int ey)
         {
             this._ren = ren;
-            _aa_data = new Lines.LineInterpolatorAAData(ren, lp);
+            _aa_data = new LineInterpolatorAAData(ren, lp);
             _m_di = new DistanceInterpolator2(lp.x1, lp.y1, lp.x2, lp.y2, ex, ey,
                  lp.x1 & ~LineAA.SUBPIXEL_MARK, lp.y1 & ~LineAA.SUBPIXEL_MARK,
                  0);
@@ -459,32 +501,31 @@ namespace PixelFarm.Agg.Lines
 
         bool StepH()
         {
-            int dist_end;
+
             int dist;
-            int dy;
             int s1 = _aa_data.BaseStepH(ref _m_di);
-            int Offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = Offset0;
-            dist_end = _m_di.DistanceEnd;
+            int offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+            int offset1 = offset0;
+            int dist_end = _m_di.DistanceEnd;
             int npix = 0;
-            _aa_data.m_covers[Offset1] = 0;
+            _aa_data.m_covers[offset1] = 0;
             if (dist_end > 0)
             {
-                _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(s1);
+                _aa_data.m_covers[offset1] = _ren.GetCover(s1);
                 ++npix;
             }
-            ++Offset1;
-            dy = 1;
+            ++offset1;
+            int dy = 1;
             while ((dist = _aa_data.m_dist[dy] - s1) <= _aa_data.m_width)
             {
                 dist_end -= _m_di.DxEnd;
-                _aa_data.m_covers[Offset1] = 0;
+                _aa_data.m_covers[offset1] = 0;
                 if (dist_end > 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset1] = _ren.GetCover(dist);
                     ++npix;
                 }
-                ++Offset1;
+                ++offset1;
                 ++dy;
             }
 
@@ -493,50 +534,50 @@ namespace PixelFarm.Agg.Lines
             while ((dist = _aa_data.m_dist[dy] + s1) <= _aa_data.m_width)
             {
                 dist_end += _m_di.DxEnd;
-                _aa_data.m_covers[--Offset0] = 0;
+                _aa_data.m_covers[--offset0] = 0;
                 if (dist_end > 0)
                 {
-                    _aa_data.m_covers[Offset0] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset0] = _ren.GetCover(dist);
                     ++npix;
                 }
                 ++dy;
             }
             _ren.BlendSolidVSpan(_aa_data.m_x,
                                                _aa_data.m_y - dy + 1,
-                                               Offset1 - Offset0, _aa_data.m_covers,
-                                               Offset0);
+                                               offset1 - offset0, _aa_data.m_covers,
+                                               offset0);
             return npix != 0 && ++_aa_data.m_step < _aa_data.m_count;
         }
 
         //---------------------------------------------------------------------
         bool StepV()
         {
-            int dist_end;
+
+
             int dist;
-            int dx;
             int s1 = _aa_data.BaseStepV(ref _m_di);
-            int offset_0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = offset_0;
-            dist_end = _m_di.DistanceEnd;
+            int offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+            int offset1 = offset0;
+            int dist_end = _m_di.DistanceEnd;
             int npix = 0;
-            _aa_data.m_covers[Offset1] = 0;
+            _aa_data.m_covers[offset1] = 0;
             if (dist_end > 0)
             {
-                _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(s1);
+                _aa_data.m_covers[offset1] = _ren.GetCover(s1);
                 ++npix;
             }
-            ++Offset1;
-            dx = 1;
+            ++offset1;
+            int dx = 1;
             while ((dist = _aa_data.m_dist[dx] - s1) <= _aa_data.m_width)
             {
                 dist_end += _m_di.DyEnd;
-                _aa_data.m_covers[Offset1] = 0;
+                _aa_data.m_covers[offset1] = 0;
                 if (dist_end > 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset1] = _ren.GetCover(dist);
                     ++npix;
                 }
-                ++Offset1;
+                ++offset1;
                 ++dx;
             }
 
@@ -545,19 +586,22 @@ namespace PixelFarm.Agg.Lines
             while ((dist = _aa_data.m_dist[dx] + s1) <= _aa_data.m_width)
             {
                 dist_end -= _m_di.DyEnd;
-                _aa_data.m_covers[--offset_0] = 0;
+                _aa_data.m_covers[--offset0] = 0;
                 if (dist_end > 0)
                 {
-                    _aa_data.m_covers[offset_0] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset0] = _ren.GetCover(dist);
                     ++npix;
                 }
                 ++dx;
             }
             _ren.BlendSolidHSpan(_aa_data.m_x - dx + 1,
                                                _aa_data.m_y,
-                                               Offset1 - offset_0, _aa_data.m_covers,
-                                               offset_0);
+                                               offset1 - offset0, _aa_data.m_covers,
+                                               offset0);
             return npix != 0 && ++_aa_data.m_step < _aa_data.m_count;
+
+
+
         }
     }
 
@@ -571,7 +615,7 @@ namespace PixelFarm.Agg.Lines
                               int sx, int sy, int ex, int ey)
         {
             this._ren = ren;
-            _aa_data = new Lines.LineInterpolatorAAData(ren, lp);
+            _aa_data = new LineInterpolatorAAData(ren, lp);
             _m_di = new DistanceInterpolator3(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey,
                  lp.x1 & ~LineAA.SUBPIXEL_MARK, lp.y1 & ~LineAA.SUBPIXEL_MARK);
             int dist1_start;
@@ -584,8 +628,15 @@ namespace PixelFarm.Agg.Lines
                     _aa_data.m_li.Prev();
                     _aa_data.m_y -= lp.inc;
                     _aa_data.m_x = (_aa_data.m_lp.x1 + _aa_data.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
-                    if (lp.inc > 0) _m_di.DecY(_aa_data.m_x - _aa_data.m_old_x);
-                    else _m_di.IncY(_aa_data.m_x - _aa_data.m_old_x);
+                    if (lp.inc > 0)
+                    {
+                        _m_di.DecY(_aa_data.m_x - _aa_data.m_old_x);
+                    }
+                    else
+                    {
+                        _m_di.IncY(_aa_data.m_x - _aa_data.m_old_x);
+                    }
+
                     _aa_data.m_old_x = _aa_data.m_x;
                     dist1_start = dist2_start = _m_di.dist_start;
                     int dx = 0;
@@ -611,8 +662,10 @@ namespace PixelFarm.Agg.Lines
                     _aa_data.m_li.Prev();
                     _aa_data.m_x -= lp.inc;
                     _aa_data.m_y = (_aa_data.m_lp.y1 + _aa_data.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
+                    //
                     if (lp.inc > 0) _m_di.DecX(_aa_data.m_y - _aa_data.m_old_y);
                     else _m_di.IncX(_aa_data.m_y - _aa_data.m_old_y);
+                    //
                     _aa_data.m_old_y = _aa_data.m_y;
                     dist1_start = dist2_start = _m_di.dist_start;
                     int dy = 0;
@@ -653,38 +706,36 @@ namespace PixelFarm.Agg.Lines
 
         bool StepH()
         {
-            int dist_start;
-            int dist_end;
+
             int dist;
-            int dy;
             int s1 = _aa_data.BaseStepH(ref _m_di);
-            int Offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = Offset0;
-            dist_start = _m_di.dist_start;
-            dist_end = _m_di.dist_end;
+            int offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+            int offset1 = offset0;
+            int dist_start = _m_di.dist_start;
+            int dist_end = _m_di.dist_end;
             int npix = 0;
-            _aa_data.m_covers[Offset1] = 0;
+            _aa_data.m_covers[offset1] = 0;
             if (dist_end > 0)
             {
                 if (dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(s1);
+                    _aa_data.m_covers[offset1] = _ren.GetCover(s1);
                 }
                 ++npix;
             }
-            ++Offset1;
-            dy = 1;
+            ++offset1;
+            int dy = 1;
             while ((dist = _aa_data.m_dist[dy] - s1) <= _aa_data.m_width)
             {
                 dist_start -= _m_di.DxStart;
                 dist_end -= _m_di.DxEnd;
-                _aa_data.m_covers[Offset1] = 0;
+                _aa_data.m_covers[offset1] = 0;
                 if (dist_end > 0 && dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset1] = _ren.GetCover(dist);
                     ++npix;
                 }
-                ++Offset1;
+                ++offset1;
                 ++dy;
             }
 
@@ -695,56 +746,55 @@ namespace PixelFarm.Agg.Lines
             {
                 dist_start += _m_di.DxStart;
                 dist_end += _m_di.DxEnd;
-                _aa_data.m_covers[--Offset0] = 0;
+                _aa_data.m_covers[--offset0] = 0;
                 if (dist_end > 0 && dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset0] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset0] = _ren.GetCover(dist);
                     ++npix;
                 }
                 ++dy;
             }
             _ren.BlendSolidVSpan(_aa_data.m_x,
                                                _aa_data.m_y - dy + 1,
-                                               Offset1 - Offset0, _aa_data.m_covers,
-                                               Offset0);
+                                               offset1 - offset0, _aa_data.m_covers,
+                                               offset0);
             return npix != 0 && ++_aa_data.m_step < _aa_data.m_count;
         }
 
         //---------------------------------------------------------------------
         bool StepV()
         {
-            int dist_start;
-            int dist_end;
+
             int dist;
-            int dx;
+
             int s1 = _aa_data.BaseStepV(ref _m_di);
-            int Offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
-            int Offset1 = Offset0;
-            dist_start = _m_di.dist_start;
-            dist_end = _m_di.dist_end;
+            int offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
+            int offset1 = offset0;
+            int dist_start = _m_di.dist_start;
+            int dist_end = _m_di.dist_end;
             int npix = 0;
-            _aa_data.m_covers[Offset1] = 0;
+            _aa_data.m_covers[offset1] = 0;
             if (dist_end > 0)
             {
                 if (dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(s1);
+                    _aa_data.m_covers[offset1] = _ren.GetCover(s1);
                 }
                 ++npix;
             }
-            ++Offset1;
-            dx = 1;
+            ++offset1;
+            int dx = 1;
             while ((dist = _aa_data.m_dist[dx] - s1) <= _aa_data.m_width)
             {
                 dist_start += _m_di.DyStart;
                 dist_end += _m_di.DyEnd;
-                _aa_data.m_covers[Offset1] = 0;
+                _aa_data.m_covers[offset1] = 0;
                 if (dist_end > 0 && dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset1] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset1] = _ren.GetCover(dist);
                     ++npix;
                 }
-                ++Offset1;
+                ++offset1;
                 ++dx;
             }
 
@@ -755,18 +805,18 @@ namespace PixelFarm.Agg.Lines
             {
                 dist_start -= _m_di.DyStart;
                 dist_end -= _m_di.DyEnd;
-                _aa_data.m_covers[--Offset0] = 0;
+                _aa_data.m_covers[--offset0] = 0;
                 if (dist_end > 0 && dist_start <= 0)
                 {
-                    _aa_data.m_covers[Offset0] = (byte)_ren.GetCover(dist);
+                    _aa_data.m_covers[offset0] = _ren.GetCover(dist);
                     ++npix;
                 }
                 ++dx;
             }
             _ren.BlendSolidHSpan(_aa_data.m_x - dx + 1,
                                                _aa_data.m_y,
-                                               Offset1 - Offset0, _aa_data.m_covers,
-                                               Offset0);
+                                               offset1 - offset0, _aa_data.m_covers,
+                                               offset0);
             return npix != 0 && ++_aa_data.m_step < _aa_data.m_count;
         }
     }

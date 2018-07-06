@@ -20,14 +20,17 @@ using System;
 namespace PixelFarm.Agg.Lines
 {
     //==========================================================line_parameters
-    public class LineParameters
+    public struct LineParameters
     {
         //---------------------------------------------------------------------
-        public int x1, y1, x2, y2, dx, dy, sx, sy;
-        public bool vertical;
-        public int inc;
-        public int len;
-        public int octant;
+
+        public readonly int x1, y1, x2, y2, len;
+        public readonly short inc;
+        public readonly bool vertical;
+        readonly byte octant;
+
+
+
         // The number of the octant is determined as a 3-bit value as follows:
         // bit 0 = vertical flag
         // bit 1 = sx < 0
@@ -51,35 +54,64 @@ namespace PixelFarm.Agg.Lines
         //   [2]          |          [3]
         //               <3> 
         //                                                        0,1,2,3,4,5,6,7 
-        public static readonly byte[] s_orthogonal_quadrant = { 0, 0, 1, 1, 3, 3, 2, 2 };
-        public static readonly byte[] s_diagonal_quadrant = { 0, 1, 2, 1, 0, 3, 2, 3 };
+        static readonly byte[] s_orthogonal_quadrant = { 0, 0, 1, 1, 3, 3, 2, 2 };
+        static readonly byte[] s_diagonal_quadrant = { 0, 1, 2, 1, 0, 3, 2, 3 };
         //---------------------------------------------------------------------
-        public LineParameters(int x1_, int y1_, int x2_, int y2_, int len_)
+        public LineParameters(int x1, int y1, int x2, int y2, int len)
         {
-            x1 = (x1_);
-            y1 = (y1_);
-            x2 = (x2_);
-            y2 = (y2_);
-            dx = (Math.Abs(x2_ - x1_));
-            dy = (Math.Abs(y2_ - y1_));
-            sx = ((x2_ > x1_) ? 1 : -1);
-            sy = ((y2_ > y1_) ? 1 : -1);
-            vertical = (dy >= dx);
-            inc = (vertical ? sy : sx);
-            len = (len_);
-            octant = ((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
+            this.x1 = (x1);
+            this.y1 = (y1);
+            this.x2 = (x2);
+            this.y2 = (y2);
+
+            short sx = (short)((x2 > x1) ? 1 : -1); //sx =1 or -1
+            short sy = (short)((y2 > y1) ? 1 : -1); //sy = 1 or -1
+
+            //line_parameters(int x1_, int y1_, int x2_, int y2_, int len_) :
+            //x1(x1_), y1(y1_), x2(x2_), y2(y2_), 
+            //dx(abs(x2_ - x1_)),
+            //dy(abs(y2_ - y1_)),
+            //sx((x2_ > x1_) ? 1 : -1),
+            //sy((y2_ > y1_) ? 1 : -1),
+            //vertical(dy >= dx),
+            //inc(vertical ? sy : sx),
+            //len(len_),
+            //octant((sy & 4) | (sx & 2) | int(vertical))
+
+            //assign vertical value and evaluate inc value ***
+            this.inc = ((vertical = (Math.Abs(y2 - y1) >= (Math.Abs(x2 - x1)))) ?
+                        sy :
+                        sx); //inc is 1 or -1
+
+            this.len = (len);
+
+            //1 byte is enough
+            this.octant = (byte)((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
         }
 
         //---------------------------------------------------------------------
         public uint OrthogonalQuadrant { get { return s_orthogonal_quadrant[octant]; } }
         public uint DiagonalQuadrant { get { return s_diagonal_quadrant[octant]; } }
 
+        public int dx
+        {
+            get
+            {
+                return Math.Abs(x2 - x1);
+            }
+        }
+        public int dy
+        {
+            get
+            {
+                return Math.Abs(y2 - y1);
+            }
+        }
         //---------------------------------------------------------------------
         public bool IsSameOrthogonalQuadrant(LineParameters lp)
         {
             return s_orthogonal_quadrant[octant] == s_orthogonal_quadrant[lp.octant];
         }
-
         //---------------------------------------------------------------------
         public bool IsSameDiagonalQuadrant(LineParameters lp)
         {
@@ -87,26 +119,42 @@ namespace PixelFarm.Agg.Lines
         }
 
         //---------------------------------------------------------------------
+
         public void Divide(out LineParameters lp1, out LineParameters lp2)
         {
             int xmid = (x1 + x2) >> 1;
             int ymid = (y1 + y2) >> 1;
             int len2 = len >> 1;
-            //lp1 = this; // it is a struct so this is a copy
-            //lp2 = this; // it is a struct so this is a copy
 
-            lp1 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
-            lp2 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
-            lp1.x2 = xmid;
-            lp1.y2 = ymid;
-            lp1.len = len2;
-            lp1.dx = Math.Abs(lp1.x2 - lp1.x1);
-            lp1.dy = Math.Abs(lp1.y2 - lp1.y1);
-            lp2.x1 = xmid;
-            lp2.y1 = ymid;
-            lp2.len = len2;
-            lp2.dx = Math.Abs(lp2.x2 - lp2.x1);
-            lp2.dy = Math.Abs(lp2.y2 - lp2.y1);
+            lp1 = new LineParameters(this.x1, this.y1, xmid, ymid, len2);
+            lp2 = new LineParameters(xmid, ymid, this.x2, this.y2, this.len);
+            //lp1.x2 = xmid;
+            //lp1.y2 = ymid;
+            //lp1.len = len2;
+            //lp1.dx = Math.Abs(lp1.x2 - lp1.x1);
+            //lp1.dy = Math.Abs(lp1.y2 - lp1.y1);
+            ////------------------------------------
+            //lp2.x1 = xmid;
+            //lp2.y1 = ymid;
+            //lp2.len = len2;
+            //lp2.dx = Math.Abs(lp2.x2 - lp2.x1);
+            //lp2.dy = Math.Abs(lp2.y2 - lp2.y1);
+
+
+            //old version
+            //lp1 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
+            //lp2 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
+            //lp1.x2 = xmid;
+            //lp1.y2 = ymid;
+            //lp1.len = len2;
+            //lp1.dx = Math.Abs(lp1.x2 - lp1.x1);
+            //lp1.dy = Math.Abs(lp1.y2 - lp1.y1);
+            ////------------------------------------
+            //lp2.x1 = xmid;
+            //lp2.y1 = ymid;
+            //lp2.len = len2;
+            //lp2.dx = Math.Abs(lp2.x2 - lp2.x1);
+            //lp2.dy = Math.Abs(lp2.y2 - lp2.y1);
         }
     };
 }

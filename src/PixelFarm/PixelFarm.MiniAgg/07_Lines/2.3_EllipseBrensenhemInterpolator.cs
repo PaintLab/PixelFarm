@@ -16,7 +16,7 @@
 
 namespace PixelFarm.Agg.Lines
 {
-    public class EllipseBresenhamInterpolator
+    public struct EllipseBresenhamInterpolator
     {
         int m_rx2;
         int m_ry2;

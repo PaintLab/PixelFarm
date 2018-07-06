@@ -235,7 +235,7 @@ namespace PixelFarm.Agg.Lines
         }
 
         //---------------------------------------------------------------------
-        public int GetCover(int d)
+        public byte GetCover(int d)
         {
             return lineProfile.GetProfileValue(d);
         }
