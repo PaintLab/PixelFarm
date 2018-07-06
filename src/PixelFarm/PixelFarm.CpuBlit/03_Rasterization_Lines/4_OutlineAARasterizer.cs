@@ -449,7 +449,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                             x2 = v.x;
                             y2 = v.y;
                             dv.lcurr = v.len;
-                            LineParameters prev = new LineParameters(x1, y1, x2, y2, lprev);
+                            var prev = new LineParameters(x1, y1, x2, y2, lprev);
                             v = m_src_vertices[2];
                             dv1.x1 = v.x;
                             dv1.y1 = v.y;
