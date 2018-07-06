@@ -61,7 +61,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         IPatternFilter m_filter;
         int m_dilation;
         int m_dilation_hr;
-        PixelProcessing.SubBitmapBlender m_buf;
+        SubBitmapBlender m_buf;
         int[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
@@ -164,7 +164,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                     {
                         int sourceOffset = src.GetBufferOffsetXY32(x, y);
                         int destOffset = m_buf.GetBufferOffsetXY32(m_dilation, y + m_dilation);
-                        destBuffer[destOffset] = srcBuffer[sourceOffset]; 
+                        destBuffer[destOffset] = srcBuffer[sourceOffset];
                     }
                 }
 
@@ -179,7 +179,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                     for (int x = 0; x < m_dilation; x++)
                     {
                         destBuffer[d1Offset++] = srcBuffer[s1Offset++];
-                        destBuffer[d2Offset++] = srcBuffer[s2Offset++]; 
+                        destBuffer[d2Offset++] = srcBuffer[s2Offset++];
                     }
                 }
 
