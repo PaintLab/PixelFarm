@@ -68,7 +68,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             m_step = 0;
 
             //-------------------
-            var li = new LineInterpolatorDDA2(0, lp.vertical ?
+            var li = new LineInterpolatorDDA2S(0, lp.vertical ?
                 (lp.dy << LineAA.SUBPIXEL_SHIFT) :
                 (lp.dx << LineAA.SUBPIXEL_SHIFT),
                 lp.len);
@@ -78,11 +78,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             for (i = 0; i < MAX_HALF_WIDTH; ++i)
             {
                 //assign and eval
-//#if DEBUG
-//                if (li.Y == 194)
-//                {
-//                }
-//#endif
+                //#if DEBUG
+                //                if (li.Y == 194)
+                //                {
+                //                }
+                //#endif
                 if ((m_dist[i] = li.Y) >= stop)
                 {
                     break;

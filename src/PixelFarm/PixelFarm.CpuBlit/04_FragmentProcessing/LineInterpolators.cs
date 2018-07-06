@@ -79,6 +79,11 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
     class LineInterpolatorDDA2
     {
+
+        //----------------------
+        //this need to be class ***
+        //----------------------
+
         readonly int m_cnt;
         readonly int m_lft;
         readonly int m_rem;
@@ -100,30 +105,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 m_rem += count;
                 m_lft--;
             }
-            m_mod -= count; 
-            //if (m_lft == 194)
-            //{ 
-            //} 
+            m_mod -= count;
         }
-
-        //-------------------------------------------- Backward-adjusted line
-        public LineInterpolatorDDA2(int y1, int y2, int count, int unused)
-        {
-            //dbugIdN = 0;
-            m_cnt = (count <= 0 ? 1 : count);
-            m_lft = ((y2 - y1) / m_cnt);
-            m_rem = ((y2 - y1) % m_cnt);
-            m_mod = (m_rem);
-            m_y = (y1);
-            if (m_mod <= 0)
-            {
-                m_mod += count;
-                m_rem += count;
-                m_lft--;
-            }
-        }
-
-        //-------------------------------------------- Backward-adjusted line
         public LineInterpolatorDDA2(int y, int count)
         {
             //dbugIdN = 0;
@@ -139,25 +122,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 m_lft--;
             }
         }
-
-        /*
-        //--------------------------------------------------------------------
-        public void save(save_data_type* data)
-        {
-            data[0] = m_mod;
-            data[1] = m_y;
-        }
-
-        //--------------------------------------------------------------------
-        public void load(save_data_type* data)
-        {
-            m_mod = data[0];
-            m_y   = data[1];
-        }
-         */
-
-        //--------------------------------------------------------------------
-        //
 #if DEBUG
         //static int dbugIdN;
 #endif
@@ -193,22 +157,54 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         {
             m_mod -= m_cnt;
         }
-
         //--------------------------------------------------------------------
         public void adjust_backward()
         {
             m_mod += m_cnt;
         }
-
-        //--------------------------------------------------------------------
-        //public int mod() { return m_mod; }
-        //public int rem() { return m_rem; }
-        //public int lft() { return m_lft; }
-
-        //--------------------------------------------------------------------
         public int Y { get { return m_y; } }
     }
 
+
+    struct LineInterpolatorDDA2S
+    {
+        readonly int m_cnt;
+        readonly int m_lft;
+        readonly int m_rem;
+        int m_mod;
+        int m_y;
+        //-------------------------------------------- Forward-adjusted line
+        public LineInterpolatorDDA2S(int y1, int y2, int count)
+        {
+            //dbugIdN = 0;
+            m_cnt = (count <= 0 ? 1 : count);
+            m_lft = ((y2 - y1) / m_cnt);
+            m_rem = ((y2 - y1) % m_cnt);
+
+            m_mod = (m_rem);
+            m_y = (y1);
+            if (m_mod <= 0)
+            {
+                m_mod += count;
+                m_rem += count;
+                m_lft--;
+            }
+            m_mod -= count;
+        }
+
+        //public void operator ++()
+        public void Next()
+        {
+            m_mod += m_rem;
+            m_y += m_lft;
+            if (m_mod > 0)
+            {
+                m_mod -= m_cnt;
+                m_y++;
+            }
+        }
+        public int Y { get { return m_y; } }
+    }
 
     //---------------------------------------------line_bresenham_interpolator
     sealed class LineInterpolatorBresenham
