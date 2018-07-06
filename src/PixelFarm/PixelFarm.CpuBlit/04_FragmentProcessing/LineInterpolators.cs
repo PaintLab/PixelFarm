@@ -176,7 +176,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         //-------------------------------------------- Forward-adjusted line
         public LineInterpolatorDDA2S(int y1, int y2, int count)
         {
-            //dbugIdN = 0;
+
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
             m_rem = ((y2 - y1) % m_cnt);
@@ -243,7 +243,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             m_inc = (m_ver ? ((y2 > y1) ? 1 : -1) : ((x2 > x1) ? 1 : -1));
             m_interpolator = new LineInterpolatorDDA2(m_ver ? x1 : y1,
                            m_ver ? x2 : y2,
-                           (int)m_len);
+                           m_len);
         }
 
         //--------------------------------------------------------------------
