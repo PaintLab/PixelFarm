@@ -263,6 +263,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             clippingRectangle.Bottom = LineCoordSat.Convert(y1);
             clippingRectangle.Right = LineCoordSat.Convert(x2);
             clippingRectangle.Top = LineCoordSat.Convert(y2);
+
+            //clippingRectangle.Left = LineCoordSat.Convert(x1);
+            //clippingRectangle.Top = LineCoordSat.Convert(y1);
+            //clippingRectangle.Right = LineCoordSat.Convert(x2);
+            //clippingRectangle.Bottom = LineCoordSat.Convert(y2);
             doClipping = true;
         }
 
