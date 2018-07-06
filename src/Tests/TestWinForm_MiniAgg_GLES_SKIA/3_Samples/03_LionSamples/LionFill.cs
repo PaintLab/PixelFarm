@@ -66,7 +66,7 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public override void MouseDrag(int x, int y)
         {
-            lionFill.Move(x, y); 
+            lionFill.Move(x, y);
         }
         [DemoConfig]
         public bool UseBitmapExt
@@ -156,7 +156,7 @@ namespace PixelFarm.CpuBlit.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            foreach (var lion in lionList)
+            foreach (MyTestSprite lion in lionList)
             {
                 lion.Draw(p);
             }

@@ -167,9 +167,17 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             int start,
             int end)
         {
-            int i;
-            for (i = start; i < end; i++)
+
+
+            for (int i = start; i < end; i++)
             {
+
+                //dbuglatest_i = i;
+                //if (i == 22)
+                //{
+
+                //}
+
                 if (m_line_join == OutlineJoin.Round)
                 {
                     dv2.xb1 = curr.x1 + (curr.y2 - curr.y1);
@@ -441,7 +449,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                             x2 = v.x;
                             y2 = v.y;
                             dv.lcurr = v.len;
-                            LineParameters prev = new LineParameters(x1, y1, x2, y2, lprev);
+                            var prev = new LineParameters(x1, y1, x2, y2, lprev);
                             v = m_src_vertices[2];
                             dv1.x1 = v.x;
                             dv1.y1 = v.y;
@@ -566,17 +574,33 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
+        //#if DEBUG
+        //        static int dbugAddPathCount = 0;
+        //#endif
         void AddPath(VertexStoreSnap s)
         {
             double x;
             double y;
             VertexCmd cmd;
             var snapIter = s.GetVertexSnapIter();
+            //try
+            //{
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
             {
+                //#if DEBUG
+                //                    dbugAddPathCount++;
+                //                    if (dbugAddPathCount >= 2441)
+                //                    {
+
+                //                    }
+                //#endif
                 AddVertex(x, y, cmd);
             }
+            //}
+            //catch (Exception ex)
+            //{
 
+            //}
 
 
             Render(false);

@@ -157,7 +157,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 {
                     case SvgRenderVxKind.Path:
                         {
-                            rasterizer.AddPath(new PixelFarm.Drawing.VertexStoreSnap(svgPart.GetVxs(), 0));
+                            rasterizer.AddPath(svgPart.GetVxs());
                             bmpRas.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
                         }
                         break;
@@ -237,8 +237,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     case SvgRenderVxKind.Path:
                         {
                             //temp
+
                             rasterizer.RenderVertexSnap(
-                              new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs(), 0),
+                              new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
                               new Drawing.Color(255, 0, 0));
                         }
                         break;
@@ -396,44 +397,35 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-
-
-
             //-----------------------
             AggRenderSurface aggsx = p1.RenderSurface;
-            //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-            //int width = widgetsSubImage.Width;
-            //int height = widgetsSubImage.Height; 
-
+            //-----------------------
+            //TODO: make this reusable ...
             SubBitmapBlender widgetsSubImage = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
             SubBitmapBlender clippedSubImage = new SubBitmapBlender(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
 
-
             if (RenderAsScanline)
             {
+                //a low-level example, expose scanline rasterizer
+
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
                 //Stroke stroke = new Stroke(strokeWidth);
                 //stroke.LineJoin = LineJoin.Round; 
                 lionShape.ApplyTransform(affTx);
-
-
                 DrawAsScanline(imageClippingProxy, aggsx, rasterizer, aggsx.BitmapRasterizer);
-
-
-
                 lionShape.ResetTransform();
-
-
             }
             else
             {
 
-                //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone());
+                //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
+                outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
+
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
                 rasterizer.LineJoin = (RenderAccurateJoins ?
                     OutlineAARasterizer.OutlineJoin.AccurateJoin

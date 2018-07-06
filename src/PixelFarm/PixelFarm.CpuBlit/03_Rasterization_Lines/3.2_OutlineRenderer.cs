@@ -61,21 +61,40 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
             //2. set gamma before set width
             SetGamma(gamma_function);
-            //3. set width tabve
+            //3. set width table
             SetWidth(w);
         }
-        public int SubPixelWidth { get { return m_subpixel_width; } }
-
+        public int SubPixelWidth
+        {
+            get
+            {
+                return m_subpixel_width;
+            }
+        }
+        //#if DEBUG
+        //        static int dbugCount1;
+        //#endif
         public byte GetProfileValue(int dist)
         {
-            //#if DEBUG
-            //            int tmp = dist + SUBPIX_SCALE * 2;
-            //            if (tmp < 0 || tmp > m_profile.Length)
-            //            {
-            //                //?
-            //                return 255;
-            //            }
-            //#endif
+#if DEBUG
+            //dbugCount1++;
+            //if (dbugCount1 < 17)
+            //{
+            //    Console.WriteLine(dbugCount1 + " " + dist);
+            //}
+            //else
+            //{
+
+            //}
+            //int tmp = dist + SUBPIX_SCALE * 2;
+            //if (tmp < 0 || tmp > m_profile.Length)
+            //{
+            //    throw new NotSupportedException();
+            //    //?
+            //    return 255;
+            //}
+#endif
+
             return m_profile[dist + SUBPIX_SCALE * 2];
         }
         byte[] GetProfileBuffer(double w)
@@ -108,12 +127,15 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-
+        //---------------------------------------------
+        // void line_profile_aa::width(double w)
         void SetWidth(double w)
         {
             if (w < 0.0) w = 0.0;
+            //
             if (w < m_smoother_width) w += w;
-            else w += m_smoother_width;
+            else/**/                  w += m_smoother_width;
+            //
             w *= 0.5;
             w -= m_smoother_width;
             double s = m_smoother_width;
@@ -124,7 +146,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
             SetCenterAndSmootherWidth(w, s);
         }
-
+        //---------------------------------------------
+        //  void line_profile_aa::set(double center_width, double smoother_width)
         void SetCenterAndSmootherWidth(double center_width, double smoother_width)
         {
             double base_val = 1.0;
@@ -143,6 +166,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             byte[] ch = GetProfileBuffer(center_width + smoother_width);
             int chIndex = 0;
             //
+#if DEBUG
+            if (center_width * SUBPIX_SCALE > int.MaxValue ||
+               smoother_width * SUBPIX_SCALE > int.MaxValue)
+            {
+
+            }
+#endif
             int subpixel_center_width = (int)(center_width * SUBPIX_SCALE);
             int subpixel_smoother_width = (int)(smoother_width * SUBPIX_SCALE);
             //
@@ -233,11 +263,16 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             clippingRectangle.Bottom = LineCoordSat.Convert(y1);
             clippingRectangle.Right = LineCoordSat.Convert(x2);
             clippingRectangle.Top = LineCoordSat.Convert(y2);
+
+            //clippingRectangle.Left = LineCoordSat.Convert(x1);
+            //clippingRectangle.Top = LineCoordSat.Convert(y1);
+            //clippingRectangle.Right = LineCoordSat.Convert(x2);
+            //clippingRectangle.Bottom = LineCoordSat.Convert(y2);
             doClipping = true;
         }
 
         //---------------------------------------------------------------------
-        public int GetCover(int d)
+        public byte GetCover(int d)
         {
             return lineProfile.GetProfileValue(d);
         }
@@ -276,7 +311,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 covers[offset1] = 0;
                 if (cmp(di.Distance) && d <= w)
                 {
-                    covers[offset1] = (byte)GetCover(d);
+                    covers[offset1] = GetCover(d);
                 }
                 ++offset1;
                 dx += LineAA.SUBPIXEL_SCALE;
@@ -340,7 +375,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 covers[index1] = 0;
                 if (di.Distance1 <= 0 && di.Distance2 > 0 && d <= w)
                 {
-                    covers[index1] = (byte)GetCover(d);
+                    covers[index1] = GetCover(d);
                 }
                 ++index1;
                 dx += LineAA.SUBPIXEL_SCALE;
@@ -378,17 +413,27 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             PineHLine(xc, yc, x1, y1, x2, y2, x - dx0, y + dy0, x + dx0);
         }
 
-        void Line0NoClip(LineParameters lp)
+        const int MAX_LINE0_NO_CLIP_RECURSIVE = 32;
+
+        void Line0NoClip(int level, LineParameters lp)
         {
-            if (lp.len > LineAA.MAX_LENGTH)
+            if (level > MAX_LINE0_NO_CLIP_RECURSIVE)
             {
-                LineParameters lp1, lp2;
-                lp.HalfDivide(out lp1, out lp2);
-                Line0NoClip(lp1);
-                Line0NoClip(lp2);
                 return;
             }
 
+            //recursive
+            if (lp.len > LineAA.MAX_LENGTH)
+            {
+                LineParameters lp1, lp2;
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    //recursive
+                    Line0NoClip(level + 1, lp1);
+                    Line0NoClip(level + 1, lp2);
+                }
+                return;
+            }
             (new LineInterpolatorAA0(this, lp)).Loop();
         }
 
@@ -406,18 +451,18 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
-                        Line0NoClip(lp2);
+                                                AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                        Line0NoClip(0, lp2);
                     }
                     else
                     {
-                        Line0NoClip(lp);
+                        Line0NoClip(0, lp);
                     }
                 }
             }
             else
             {
-                Line0NoClip(lp);
+                Line0NoClip(0, lp);
             }
         }
 
@@ -426,9 +471,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.HalfDivide(out lp1, out lp2);
-                Line1NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
-                Line1NoClip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    Line1NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
+                    Line1NoClip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
+                }
                 return;
             }
 
@@ -483,9 +530,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.HalfDivide(out lp1, out lp2);
-                Line2NoClip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
-                Line2NoClip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    Line2NoClip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
+                    Line2NoClip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                }
                 return;
             }
 
@@ -542,11 +591,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.HalfDivide(out lp1, out lp2);
-                int mx = lp1.x2 + (lp1.y2 - lp1.y1);
-                int my = lp1.y2 - (lp1.x2 - lp1.x1);
-                Line3NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);
-                Line3NoClip(lp2, mx, my, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    int mx = lp1.x2 + (lp1.y2 - lp1.y1);
+                    int my = lp1.y2 - (lp1.x2 - lp1.x1);
+                    Line3NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);
+                    Line3NoClip(lp2, mx, my, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                }
                 return;
             }
 

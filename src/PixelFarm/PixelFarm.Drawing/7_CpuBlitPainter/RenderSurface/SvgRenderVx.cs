@@ -297,11 +297,13 @@ namespace PixelFarm.CpuBlit
                 return strokeVxs;
             }
 
-            var new_output = new VertexStore();
-            p.VectorTool.CreateStroke(s.GetVxs(), strokeW, new_output);
-            s.StrokeVxs = new_output;
+            using (VxsContext.Temp(out var vxs))
+            {
+                p.VectorTool.CreateStroke(s.GetVxs(), strokeW, vxs);
+                s.StrokeVxs = vxs.CreateTrim();
+            }
 
-            return new_output;
+            return s.StrokeVxs;
         }
 
         public SvgPart GetInnerVx(int index)
@@ -321,9 +323,6 @@ namespace PixelFarm.CpuBlit
         {
             _vxList = _originalVxs;
         }
-
-
-
     }
 
 
@@ -344,6 +343,13 @@ namespace PixelFarm.CpuBlit
         public SvgPart(SvgRenderVxKind kind)
         {
 
+#if DEBUG
+            //if (dbugId == 37)
+            //{
+
+            //}
+            //Console.WriteLine(dbugId);
+#endif
             this.Kind = kind;
         }
         public bool HasFillColor { get; private set; }
@@ -372,19 +378,32 @@ namespace PixelFarm.CpuBlit
         {
             this._vxs = vxs;
             this._vxs_org = vxs;
+            if (_vxs == null)
+            {
+
+            }
         }
         public void RestoreOrg()
         {
             _vxs = _vxs_org;
+            if (_vxs == null)
+            {
+
+            }
         }
         public void SetVxs(VertexStore vxs)
         {
             this._vxs = vxs;
+
+            if (_vxs == null)
+            {
+
+            }
         }
         public VertexStore GetVxs()
         {
 #if DEBUG
-            if (_vxs._dbugIsChanged)
+            if (_vxs != null && _vxs._dbugIsChanged)
             {
 
             }
@@ -420,9 +439,11 @@ namespace PixelFarm.CpuBlit
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
             if (originalSvgVx._vxs != null)
             {
-                VertexStore vxs = new VertexStore();
-                tx.TransformToVxs(originalSvgVx._vxs, vxs);
-                newSx._vxs = vxs;
+                using (VxsContext.Temp(out var vxs))
+                {
+                    tx.TransformToVxs(originalSvgVx._vxs, vxs);
+                    newSx._vxs = vxs.CreateTrim();
+                }
             }
 
             if (originalSvgVx.HasFillColor)
@@ -442,11 +463,15 @@ namespace PixelFarm.CpuBlit
         public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.VertexProcessing.Bilinear tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
+            newSx.SetVxsAsOriginal(originalSvgVx.GetVxs());
+
             if (newSx._vxs != null)
             {
-                VertexStore vxs = new VertexStore();
-                tx.TransformToVxs(originalSvgVx._vxs, vxs);
-                newSx._vxs = vxs;
+                using (VxsContext.Temp(out var vxs))
+                {
+                    tx.TransformToVxs(originalSvgVx._vxs, vxs);
+                    newSx._vxs = vxs.CreateTrim();
+                }
             }
 
             if (originalSvgVx.HasFillColor)

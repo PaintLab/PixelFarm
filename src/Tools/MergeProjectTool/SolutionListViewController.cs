@@ -174,7 +174,7 @@ namespace BuildMergeProject
                 ProjectAsmReference asmRef = asmRefs[i];
                 switch (asmRef.Kind)
                 {
-                      
+
                     case ProjectAsmReferenceKind.ProjectReference:
                         string result = System.IO.Path.Combine(fullProjectDir, asmRef.Name);
                         if (!System.IO.File.Exists(result))
@@ -209,6 +209,13 @@ namespace BuildMergeProject
             }
             return mergePro;
         }
+
+        public string NetStdVersion
+        {
+            get;
+            set;
+        }
+
         public void BuildMergeProjectFromSelectedItem()
         {
             if (_currentSelectedMergePro == null) return;
@@ -235,12 +242,26 @@ namespace BuildMergeProject
                mergePro.DefineConstants,//additional define constant
                asmReferences);
 
+            if (NetStdVersion != null)
+            {
+                //generate as dotnet std project
+                LinkProjectConverter.ConvertToLinkProjectNetStd(
+                    _solutionMx,
+                    saveProjectName,
+                    "x_autogen_" + NetStdVersion + "\\" + targetProjectName,
+                    NetStdVersion,
+                    false);//after link project is created, we remove the targetProjectFile
+            }
+            else
+            {
+                LinkProjectConverter.ConvertToLinkProject(
+                    _solutionMx,
+                    saveProjectName,
+                    "x_autogen2\\" + targetProjectName,
+                    false);//after link project is created, we remove the targetProjectFile
+            }
             //-----------
-            LinkProjectConverter.ConvertToLinkProject2(
-                _solutionMx,
-                saveProjectName,
-                "x_autogen2\\" + targetProjectName,
-                false);//after link project is created, we remove the targetProjectFile
+
         }
     }
 
