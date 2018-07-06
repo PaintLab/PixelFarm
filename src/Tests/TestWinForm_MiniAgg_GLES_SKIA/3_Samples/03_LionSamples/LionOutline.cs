@@ -408,6 +408,8 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
             if (RenderAsScanline)
             {
+                //a low-level example, expose scanline rasterizer
+
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
                 //Stroke stroke = new Stroke(strokeWidth);

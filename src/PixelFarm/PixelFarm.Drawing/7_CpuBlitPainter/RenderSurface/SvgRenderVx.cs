@@ -344,10 +344,10 @@ namespace PixelFarm.CpuBlit
         {
 
 #if DEBUG
-            if (dbugId == 37)
-            {
+            //if (dbugId == 37)
+            //{
 
-            }
+            //}
             //Console.WriteLine(dbugId);
 #endif
             this.Kind = kind;
