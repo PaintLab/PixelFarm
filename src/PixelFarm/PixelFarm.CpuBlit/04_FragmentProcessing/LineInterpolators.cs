@@ -29,9 +29,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     public struct LineInterpolatorDDA
     {
         int m_y;
-        int m_inc;
         int m_dy;
-        int m_fractionShift;
+        readonly int m_inc;
+        readonly int m_fractionShift;
 
         public LineInterpolatorDDA(int y1, int y2, int count, int fractionShift)
         {
@@ -59,14 +59,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         //public void operator += (int n)
         public void Next(int n)
         {
-            m_dy += m_inc * (int)n;
+            m_dy += m_inc * n;
         }
 
         //--------------------------------------------------------------------
         //public void operator -= (int n)
         public void Prev(int n)
         {
-            m_dy -= m_inc * (int)n;
+            m_dy -= m_inc * n;
         }
 
 
@@ -78,20 +78,22 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     //=================================================dda2_line_interpolator
     struct LineInterpolatorDDA2
     {
-        int m_cnt;
-        int m_lft;
-        int m_rem;
+        readonly int m_cnt;
+        readonly int m_lft;
+        readonly int m_rem;
         int m_mod;
         int m_y;
-        //--------------------------------------------------------------------
-        //public LineInterpolatorDDA2() { }
+
 
         //-------------------------------------------- Forward-adjusted line
         public LineInterpolatorDDA2(int y1, int y2, int count)
         {
+            dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
             m_rem = ((y2 - y1) % m_cnt);
+
+
             m_mod = (m_rem);
             m_y = (y1);
             if (m_mod <= 0)
@@ -101,11 +103,18 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 m_lft--;
             }
             m_mod -= count;
+
+            //if (m_lft == 194)
+            //{
+
+            //}
+
         }
 
         //-------------------------------------------- Backward-adjusted line
         public LineInterpolatorDDA2(int y1, int y2, int count, int unused)
         {
+            dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
             m_rem = ((y2 - y1) % m_cnt);
@@ -122,6 +131,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         //-------------------------------------------- Backward-adjusted line
         public LineInterpolatorDDA2(int y, int count)
         {
+            dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y) / m_cnt);
             m_rem = ((y) % m_cnt);
@@ -153,8 +163,13 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
         //--------------------------------------------------------------------
         //public void operator++()
+#if DEBUG
+        int dbugIdN;
+#endif
         public void Next()
         {
+            dbugIdN++;
+
             m_mod += m_rem;
             m_y += m_lft;
             if (m_mod > 0)
@@ -190,9 +205,9 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         }
 
         //--------------------------------------------------------------------
-        public int mod() { return m_mod; }
-        public int rem() { return m_rem; }
-        public int lft() { return m_lft; }
+        //public int mod() { return m_mod; }
+        //public int rem() { return m_rem; }
+        //public int lft() { return m_lft; }
 
         //--------------------------------------------------------------------
         public int Y { get { return m_y; } }
