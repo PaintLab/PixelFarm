@@ -422,6 +422,8 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
+                outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
+
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
                 rasterizer.LineJoin = (RenderAccurateJoins ?
                     OutlineAARasterizer.OutlineJoin.AccurateJoin

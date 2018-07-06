@@ -408,20 +408,28 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             PineHLine(xc, yc, x1, y1, x2, y2, x - dx0, y + dy0, x + dx0);
         }
 
-        void Line0NoClip(LineParameters lp)
+        const int MAX_LINE0_NO_CLIP_RECURSIVE = 32;
+
+        void Line0NoClip(int level, LineParameters lp)
         {
-            if (lp.len > LineAA.MAX_LENGTH)
+            if (level > MAX_LINE0_NO_CLIP_RECURSIVE)
             {
-                LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
-                Line0NoClip(lp1);
-                Line0NoClip(lp2);
                 return;
             }
 
-            LineInterpolatorAA0 li = new LineInterpolatorAA0(this, lp);
-            li.Loop();
-            //(new LineInterpolatorAA0(this, lp)).Loop();
+            //recursive
+            if (lp.len > LineAA.MAX_LENGTH)
+            {
+                LineParameters lp1, lp2;
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    //recursive
+                    Line0NoClip(level + 1, lp1);
+                    Line0NoClip(level + 1, lp2);
+                }
+                return;
+            }
+            (new LineInterpolatorAA0(this, lp)).Loop();
         }
 
         public override void Line0(LineParameters lp)
@@ -438,18 +446,18 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
-                        Line0NoClip(lp2);
+                                                AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                        Line0NoClip(0, lp2);
                     }
                     else
                     {
-                        Line0NoClip(lp);
+                        Line0NoClip(0, lp);
                     }
                 }
             }
             else
             {
-                Line0NoClip(lp);
+                Line0NoClip(0, lp);
             }
         }
 
@@ -458,9 +466,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
-                Line1NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
-                Line1NoClip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    Line1NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
+                    Line1NoClip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
+                }
                 return;
             }
 
@@ -515,9 +525,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
-                Line2NoClip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
-                Line2NoClip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    Line2NoClip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
+                    Line2NoClip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                }
                 return;
             }
 
@@ -574,11 +586,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             if (lp.len > LineAA.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.Divide(out lp1, out lp2);
-                int mx = lp1.x2 + (lp1.y2 - lp1.y1);
-                int my = lp1.y2 - (lp1.x2 - lp1.x1);
-                Line3NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);
-                Line3NoClip(lp2, mx, my, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                if (lp.Divide(out lp1, out lp2))
+                {
+                    int mx = lp1.x2 + (lp1.y2 - lp1.y1);
+                    int my = lp1.y2 - (lp1.x2 - lp1.x1);
+                    Line3NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);
+                    Line3NoClip(lp2, mx, my, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                }
                 return;
             }
 

@@ -79,7 +79,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
     class LineInterpolatorDDA2
     {
-
+        
         //----------------------
         //this need to be class ***
         //----------------------

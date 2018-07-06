@@ -120,41 +120,31 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         //---------------------------------------------------------------------
 
-        public void Divide(out LineParameters lp1, out LineParameters lp2)
+        public bool Divide(out LineParameters lp1, out LineParameters lp2)
         {
+
             int xmid = (x1 + x2) >> 1;
             int ymid = (y1 + y2) >> 1;
+            if (xmid == x1 && ymid == y1)
+            {
+                //stop
+                lp1 = lp2 = new LineParameters(); //empty
+                return false;
+            }
+
             int len2 = len >> 1;
+
+#if DEBUG
+            if (len2 == 0)
+            {
+
+            }
+#endif
 
             lp1 = new LineParameters(this.x1, this.y1, xmid, ymid, len2);
             lp2 = new LineParameters(xmid, ymid, this.x2, this.y2, this.len);
-            //lp1.x2 = xmid;
-            //lp1.y2 = ymid;
-            //lp1.len = len2;
-            //lp1.dx = Math.Abs(lp1.x2 - lp1.x1);
-            //lp1.dy = Math.Abs(lp1.y2 - lp1.y1);
-            ////------------------------------------
-            //lp2.x1 = xmid;
-            //lp2.y1 = ymid;
-            //lp2.len = len2;
-            //lp2.dx = Math.Abs(lp2.x2 - lp2.x1);
-            //lp2.dy = Math.Abs(lp2.y2 - lp2.y1);
 
-
-            //old version
-            //lp1 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
-            //lp2 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
-            //lp1.x2 = xmid;
-            //lp1.y2 = ymid;
-            //lp1.len = len2;
-            //lp1.dx = Math.Abs(lp1.x2 - lp1.x1);
-            //lp1.dy = Math.Abs(lp1.y2 - lp1.y1);
-            ////------------------------------------
-            //lp2.x1 = xmid;
-            //lp2.y1 = ymid;
-            //lp2.len = len2;
-            //lp2.dx = Math.Abs(lp2.x2 - lp2.x1);
-            //lp2.dy = Math.Abs(lp2.y2 - lp2.y1);
+            return true;
         }
-    };
+    }
 }
