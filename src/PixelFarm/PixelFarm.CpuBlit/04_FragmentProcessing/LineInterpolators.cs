@@ -76,6 +76,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     }
 
     //=================================================dda2_line_interpolator
+
     class LineInterpolatorDDA2
     {
         readonly int m_cnt;
@@ -83,16 +84,13 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         readonly int m_rem;
         int m_mod;
         int m_y;
-
-
         //-------------------------------------------- Forward-adjusted line
         public LineInterpolatorDDA2(int y1, int y2, int count)
         {
-            dbugIdN = 0;
+            //dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
             m_rem = ((y2 - y1) % m_cnt);
-
 
             m_mod = (m_rem);
             m_y = (y1);
@@ -102,19 +100,16 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 m_rem += count;
                 m_lft--;
             }
-            m_mod -= count;
-
+            m_mod -= count; 
             //if (m_lft == 194)
-            //{
-
-            //}
-
+            //{ 
+            //} 
         }
 
         //-------------------------------------------- Backward-adjusted line
         public LineInterpolatorDDA2(int y1, int y2, int count, int unused)
         {
-            dbugIdN = 0;
+            //dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
             m_rem = ((y2 - y1) % m_cnt);
@@ -131,7 +126,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         //-------------------------------------------- Backward-adjusted line
         public LineInterpolatorDDA2(int y, int count)
         {
-            dbugIdN = 0;
+            //dbugIdN = 0;
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y) / m_cnt);
             m_rem = ((y) % m_cnt);
@@ -162,13 +157,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
          */
 
         //--------------------------------------------------------------------
-        //public void operator++()
+        //
 #if DEBUG
-        int dbugIdN;
+        //static int dbugIdN;
 #endif
+        //public void operator ++()
         public void Next()
         {
-            dbugIdN++;
+            //dbugIdN++;
 
             m_mod += m_rem;
             m_y += m_lft;
