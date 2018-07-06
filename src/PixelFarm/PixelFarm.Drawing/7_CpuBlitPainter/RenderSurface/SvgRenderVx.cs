@@ -344,6 +344,10 @@ namespace PixelFarm.CpuBlit
         {
 
 #if DEBUG
+            if (dbugId == 37)
+            {
+
+            }
             //Console.WriteLine(dbugId);
 #endif
             this.Kind = kind;
@@ -374,19 +378,32 @@ namespace PixelFarm.CpuBlit
         {
             this._vxs = vxs;
             this._vxs_org = vxs;
+            if (_vxs == null)
+            {
+
+            }
         }
         public void RestoreOrg()
         {
             _vxs = _vxs_org;
+            if (_vxs == null)
+            {
+
+            }
         }
         public void SetVxs(VertexStore vxs)
         {
             this._vxs = vxs;
+
+            if (_vxs == null)
+            {
+
+            }
         }
         public VertexStore GetVxs()
         {
 #if DEBUG
-            if (_vxs._dbugIsChanged)
+            if (_vxs != null && _vxs._dbugIsChanged)
             {
 
             }
@@ -446,13 +463,15 @@ namespace PixelFarm.CpuBlit
         public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.VertexProcessing.Bilinear tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
+            newSx.SetVxsAsOriginal(originalSvgVx.GetVxs());
+
             if (newSx._vxs != null)
             {
                 using (VxsContext.Temp(out var vxs))
                 {
                     tx.TransformToVxs(originalSvgVx._vxs, vxs);
                     newSx._vxs = vxs.CreateTrim();
-                } 
+                }
             }
 
             if (originalSvgVx.HasFillColor)
