@@ -76,7 +76,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     }
 
     //=================================================dda2_line_interpolator
-    struct LineInterpolatorDDA2
+    class LineInterpolatorDDA2
     {
         readonly int m_cnt;
         readonly int m_lft;
