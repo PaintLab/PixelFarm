@@ -3,8 +3,9 @@ using System.Runtime.InteropServices;
 namespace PixelFarm.CpuBlit
 {
 
-
-    //[System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
+#if !COSMOS
+    [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
+#endif
     static class NativeMemMx
     {
         //check this ....

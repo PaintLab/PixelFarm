@@ -36,7 +36,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class PixelBlenderGrey : PixelBlender32
     {
-         
+
         internal override void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
@@ -168,17 +168,16 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             unsafe
             {
-                unchecked
-                {
-                    fixed (int* ptr = &dstBuffer[arrayOffset])
-                    {
-                        //TODO: consider use memcpy() impl*** 
-                        byte y = (byte)(((srcColor.red * 77) + (srcColor.green * 151) + (srcColor.blue * 28)) >> 8);
-                        srcColor = new Color(srcColor.alpha, y, y, y);
 
-                        *ptr = srcColor.ToARGB();
-                    }
+                fixed (int* ptr = &dstBuffer[arrayOffset])
+                {
+                    //TODO: consider use memcpy() impl*** 
+                    byte y = (byte)(((srcColor.red * 77) + (srcColor.green * 151) + (srcColor.blue * 28)) >> 8);
+                    srcColor = new Color(srcColor.alpha, y, y, y);
+
+                    *ptr = srcColor.ToARGB();
                 }
+
             }
 
         }
@@ -309,7 +308,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             SelectedMaskComponent = PixelBlenderColorComponent.R; //default
         }
-        
+
         /// <summary>
         /// set mask image, please note that size of mask must be the same size of the dest buffer
         /// </summary>
@@ -616,7 +615,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     /// </summary>
     public class PixelBlenderPerColorComponentWithMask : PixelBlender32
     {
- 
+
 
         int[] _maskInnerBuffer;
         int _mask_shift = 16;//default
@@ -628,7 +627,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             SelectedMaskComponent = PixelBlenderColorComponent.R; //default
             EnableOutputColorComponent = EnableOutputColorComponent.EnableAll;
-        } 
+        }
         /// <summary>
         /// set mask image, please note that size of mask must be the same size of the dest buffer
         /// </summary>
@@ -639,7 +638,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             //please note that size of mask must be the same size of the dest buffer
             _maskInnerBuffer = ActualBitmap.GetBuffer(maskBmp);
         }
-       
+
         public EnableOutputColorComponent EnableOutputColorComponent
         {
             get
