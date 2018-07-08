@@ -22,7 +22,7 @@
 
 using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
-{   
+{
     public sealed class VertexStore
     {
         int m_num_vertices;
@@ -211,6 +211,10 @@ namespace PixelFarm.Drawing
                     //----------------------------- 
                     unsafe
                     {
+#if COSMOS
+                        System.Array.Copy(m_coord_xy, new_xy, actualLen);
+                        System.Array.Copy(m_cmds, newCmd, m_num_vertices);
+#else
                         //unsafed version?
                         fixed (double* srcH = &m_coord_xy[0])
                         {
@@ -228,6 +232,8 @@ namespace PixelFarm.Drawing
                                 0,
                                 m_num_vertices);
                         }
+#endif
+
                     }
                 }
                 m_coord_xy = new_xy;

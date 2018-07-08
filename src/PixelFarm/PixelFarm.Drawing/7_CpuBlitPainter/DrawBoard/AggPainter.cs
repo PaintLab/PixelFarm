@@ -1243,7 +1243,7 @@ namespace PixelFarm.CpuBlit
 
             _grSpanGenPart = _moreSpanGenertors[0];
 
-
+#if !COSMOS
             for (int i = 0; i < partCount - 1; ++i)
             {
                 GradientSpanPart part = _moreSpanGenertors[i];
@@ -1259,6 +1259,7 @@ namespace PixelFarm.CpuBlit
                     }
                 };
             }
+#endif
         }
 
 
@@ -1331,6 +1332,7 @@ namespace PixelFarm.CpuBlit
 
             _grSpanGenPart = _moreSpanGenertors[0];
 
+#if !COSMOS
 
             for (int i = 0; i < partCount - 1; ++i)
             {
@@ -1347,7 +1349,9 @@ namespace PixelFarm.CpuBlit
                     }
                 };
             }
+#endif
         }
+
 
 
         public void SetOffset(float x, float y)
