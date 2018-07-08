@@ -36,12 +36,26 @@ namespace PixelFarm.CpuBlit.Imaging
     public struct TempMemPtr
     {
         int _lenInBytes; //in bytes
-        System.Runtime.InteropServices.GCHandle handle1;
 
+#if COSMOS
+        IntPtr _cosmosFixedPtr;
+#else
+        System.Runtime.InteropServices.GCHandle handle1;
+#endif
         public TempMemPtr(int[] buffer) //in element count
         {
-            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
             this._lenInBytes = buffer.Length * 4;
+#if COSMOS
+            unsafe
+            {
+                fixed (int* h = &buffer[0])
+                {
+                    _cosmosFixedPtr = (IntPtr)h;
+                }
+            }
+#else
+            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+#endif
         }
 
         public int LengthInBytes
@@ -53,20 +67,22 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             get
             {
-                return handle1.AddrOfPinnedObject();
+#if COSMOS
+                return _cosmosFixedPtr;
+#else
+             return handle1.AddrOfPinnedObject();
+#endif
             }
         }
         public void Release()
         {
-            this.handle1.Free();
+#if COSMOS
+
+#else
+           this.handle1.Free();
+#endif
         }
-        //public unsafe byte* BytePtr
-        //{
-        //    get { return (byte*)handle1.AddrOfPinnedObject(); }
-        //}
-
     }
-
 }
 namespace PixelFarm.CpuBlit
 {
@@ -267,7 +283,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-#if DEBUG 
+#if DEBUG
         public void dbugSaveToPngFile(string filename)
         {
             SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
@@ -361,9 +377,9 @@ namespace PixelFarm.CpuBlit
         int[] GetOrgInt32Buffer();
         int GetBufferOffsetXY32(int x, int y);
 
-        Imaging.TempMemPtr GetBufferPtr(); 
+        Imaging.TempMemPtr GetBufferPtr();
 
-       
+
         int BytesBetweenPixelsInclusive { get; }
         void ReplaceBuffer(int[] newBuffer);
         Color GetPixel(int x, int y);
