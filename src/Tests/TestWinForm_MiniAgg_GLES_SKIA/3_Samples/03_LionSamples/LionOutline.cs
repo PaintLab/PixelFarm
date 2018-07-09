@@ -59,7 +59,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            lionFill.Draw(p);
+            lionFill.Render(p);
 
         }
         public override void MouseDrag(int x, int y)
@@ -346,7 +346,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 }
             }
         }
-        public override void Draw(PixelFarm.Drawing.Painter p)
+        public override void Render(PixelFarm.Drawing.Painter p)
         {
 
 
@@ -427,7 +427,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             {
 
                 //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
-                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
+                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(
+                    strokeWidth * affTx.GetScale(), 
+                    null);
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                 outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
 
@@ -445,7 +447,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                 lionShape.ResetTransform();
             }
-            base.Draw(p);
+            base.Render(p);
         }
     }
 }
