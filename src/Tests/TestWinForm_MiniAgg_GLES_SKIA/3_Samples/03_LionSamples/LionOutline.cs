@@ -185,7 +185,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             renderState.fillColor = PixelFarm.Drawing.Color.Black;
             renderState.affineTx = null;
 
-
+            Drawing.Color fillColor = Drawing.Color.Red;
+            Drawing.Color strokeColor = Drawing.Color.Red;
+            float strokeWidth = 1;
             for (int i = 0; i < num_paths; ++i)
             {
                 SvgPart vx = renderVx.GetInnerVx(i);
@@ -196,32 +198,33 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                             ////1. save current state before enter new state 
                             //p.StackPushUserObject(renderState);
 
-                            ////2. enter new px context
-                            //if (vx.HasFillColor)
-                            //{
-                            //    p.FillColor = renderState.fillColor = vx.FillColor;
-                            //}
-                            //if (vx.HasStrokeColor)
-                            //{
-                            //    p.StrokeColor = renderState.strokeColor = vx.StrokeColor;
-                            //}
-                            //if (vx.HasStrokeWidth)
-                            //{
-                            //    p.StrokeWidth = renderState.strokeWidth = vx.StrokeWidth;
-                            //}
-                            //if (vx.AffineTx != null)
-                            //{
-                            //    //apply this to current tx
-                            //    if (currentTx != null)
-                            //    {
-                            //        currentTx = currentTx * vx.AffineTx;
-                            //    }
-                            //    else
-                            //    {
-                            //        currentTx = vx.AffineTx;
-                            //    }
-                            //    renderState.affineTx = currentTx;
-                            //}
+                            //2. enter new px context
+                            if (vx.HasFillColor)
+                            {
+                                //ONLY in this example: test , set strokeColor = fillColor
+                                strokeColor = fillColor = renderState.fillColor = vx.FillColor;
+                            }
+                            if (vx.HasStrokeColor)
+                            {
+                                strokeColor = renderState.strokeColor = vx.StrokeColor;
+                            }
+                            if (vx.HasStrokeWidth)
+                            {
+                                strokeWidth = renderState.strokeWidth = vx.StrokeWidth;
+                            }
+                            if (vx.AffineTx != null)
+                            {
+                                //apply this to current tx
+                                //if (currentTx != null)
+                                //{
+                                //    currentTx = currentTx * vx.AffineTx;
+                                //}
+                                //else
+                                //{
+                                //    currentTx = vx.AffineTx;
+                                //}
+                                //renderState.affineTx = currentTx;
+                            }
                         }
                         break;
                     case SvgRenderVxKind.EndGroup:
@@ -240,7 +243,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                             rasterizer.RenderVertexSnap(
                               new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
-                              new Drawing.Color(255, 0, 0));
+                              strokeColor);
                         }
                         break;
                         //{
@@ -397,10 +400,12 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
+
             //-----------------------
             AggRenderSurface aggsx = p1.RenderSurface;
             //-----------------------
             //TODO: make this reusable ...
+            //
             SubBitmapBlender widgetsSubImage = BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
             SubBitmapBlender clippedSubImage = new SubBitmapBlender(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);

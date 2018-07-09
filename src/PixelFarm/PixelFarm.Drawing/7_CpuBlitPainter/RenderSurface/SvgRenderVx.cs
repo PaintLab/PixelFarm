@@ -448,7 +448,7 @@ namespace PixelFarm.CpuBlit
 
             if (originalSvgVx.HasFillColor)
             {
-                newSx._fillColor = originalSvgVx._fillColor;
+                newSx.FillColor = originalSvgVx._fillColor;
             }
             if (originalSvgVx.HasStrokeColor)
             {
