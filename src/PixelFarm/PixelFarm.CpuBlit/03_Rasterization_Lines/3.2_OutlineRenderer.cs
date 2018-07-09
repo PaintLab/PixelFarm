@@ -36,7 +36,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         byte[] m_profile = new byte[64];
         byte[] m_gamma;
-        int m_subpixel_width;
+        float m_subpixel_width;
         double m_min_width;
         double m_smoother_width;
 
@@ -64,13 +64,19 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             //3. set width table
             SetWidth(w);
         }
-        public int SubPixelWidth
+        public float SubPixelWidth
         {
             get
             {
                 return m_subpixel_width;
             }
+            set
+            {
+                //subpixel width
+                SetWidth(value);
+            }
         }
+
         //#if DEBUG
         //        static int dbugCount1;
         //#endif
@@ -99,8 +105,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
         byte[] GetProfileBuffer(double w)
         {
-            m_subpixel_width = (int)AggMath.uround(w * SUBPIX_SCALE);
-            int size = m_subpixel_width + SUBPIX_SCALE * 6;
+            m_subpixel_width = AggMath.uround(w * SUBPIX_SCALE);
+            int size = (int)m_subpixel_width + SUBPIX_SCALE * 6;
             if (size > m_profile.Length)
             {
                 //clear ?
@@ -242,7 +248,9 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(PixelProcessing.IBitmapBlender destImage, PixelProcessing.PixelBlender32 destPixelBlender, LineProfileAnitAlias profile)
+        public OutlineRenderer(PixelProcessing.IBitmapBlender destImage,
+            PixelProcessing.PixelBlender32 destPixelBlender,
+            LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;
@@ -253,7 +261,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
 
         //---------------------------------------------------------------------
-        public int SubPixelWidth { get { return lineProfile.SubPixelWidth; } }
+        public int SubPixelWidth { get { return (int)lineProfile.SubPixelWidth; } }
 
         //---------------------------------------------------------------------
         public void ResetClipping() { doClipping = false; }

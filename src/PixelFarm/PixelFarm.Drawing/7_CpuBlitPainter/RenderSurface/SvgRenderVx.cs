@@ -130,9 +130,7 @@ namespace PixelFarm.CpuBlit
             renderState.fillColor = p.FillColor;
             renderState.affineTx = currentTx;
 
-            //------------------
-            VertexStore tempVxs = p.GetTempVxsStore();
-
+            //------------------ 
             int j = _vxList.Length;
             for (int i = 0; i < j; ++i)
             {
@@ -199,9 +197,11 @@ namespace PixelFarm.CpuBlit
                                     else
                                     {
                                         //have some tx
-                                        tempVxs.Clear();
-                                        currentTx.TransformToVxs(vxs, tempVxs);
-                                        p.Fill(tempVxs, vx.FillColor);
+                                        using (VxsContext.Temp(out var v1))
+                                        {
+                                            currentTx.TransformToVxs(vxs, v1);
+                                            p.Fill(v1, vx.FillColor);
+                                        }
                                     }
                                 }
                             }
@@ -216,78 +216,114 @@ namespace PixelFarm.CpuBlit
                                     else
                                     {
                                         //have some tx
-                                        tempVxs.Clear();
-                                        currentTx.TransformToVxs(vxs, tempVxs);
-                                        p.Fill(tempVxs);
-                                    }
 
+                                        using (VxsContext.Temp(out var v1))
+                                        {
+                                            currentTx.TransformToVxs(vxs, v1);
+                                            p.Fill(v1, vx.FillColor);
+                                        }
+                                    }
                                 }
                             }
+
+
 
                             if (p.StrokeWidth > 0)
                             {
                                 //check if we have a stroke version of this render vx
                                 //if not then request a new one  
-                                if (vx.HasStrokeColor)
-                                {
-                                    //has specific stroke color 
-                                    p.StrokeWidth = vx.StrokeWidth;
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
 
-                                    if (currentTx == null)
+                                p.StrokeWidth = vx.StrokeWidth;
+
+                                if (vx.HasStrokeColor || p.StrokeColor.A > 0)
+                                {
+                                    //has specific stroke color  
+                                    AggPainter aggPainter = p as AggPainter;
+                                    if (aggPainter != null && aggPainter.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
                                     {
-                                        p.Fill(strokeVxs, vx.StrokeColor);
+                                        //TODO: review here again
+                                        aggPainter.Draw(new VertexStoreSnap(vx.GetVxs()), vx.StrokeColor);
                                     }
                                     else
                                     {
-                                        //have some tx
-                                        tempVxs.Clear();
-                                        currentTx.TransformToVxs(strokeVxs, tempVxs);
-                                        p.Fill(tempVxs, vx.StrokeColor);
-                                    }
+                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                                        if (currentTx == null)
+                                        {
+                                            p.Fill(strokeVxs, vx.StrokeColor);
+                                        }
+                                        else
+                                        {
+                                            //have some tx 
 
-                                }
-                                else if (p.StrokeColor.A > 0)
-                                {
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                                    if (currentTx == null)
-                                    {
-                                        p.Fill(strokeVxs, p.StrokeColor);
-                                    }
-                                    else
-                                    {
-                                        tempVxs.Clear();
-                                        currentTx.TransformToVxs(strokeVxs, tempVxs);
-                                        p.Fill(tempVxs, p.StrokeColor);
+                                            using (VxsContext.Temp(out var v1))
+                                            {
+                                                currentTx.TransformToVxs(strokeVxs, v1);
+                                                p.Fill(v1, vx.StrokeColor);
+                                            }
+                                        }
                                     }
                                 }
-                                else
-                                {
+                                //else if (p.StrokeColor.A > 0)
+                                //{
+                                //    AggPainter aggPainter = p as AggPainter;
+                                //    if (aggPainter != null && aggPainter.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                //    {
+                                //        //TODO: review here again
+                                //        aggPainter.Draw(new VertexStoreSnap(vx.GetVxs()), vx.StrokeColor);
+                                //    }
+                                //    else
+                                //    {
+                                //        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                                //        if (currentTx == null)
+                                //        {
+                                //            p.Fill(strokeVxs, p.StrokeColor);
+                                //        }
+                                //        else
+                                //        {
 
-                                }
+                                //            using (VxsContext.Temp(out var v1))
+                                //            {
+                                //                currentTx.TransformToVxs(strokeVxs, v1);
+                                //                p.Fill(v1, vx.StrokeColor);
+                                //            }
+                                //        }
+                                //    }
+
+                                //}
+                                //else
+                                //{
+
+                                //}
                             }
                             else
                             {
 
-                                if (vx.HasStrokeColor)
+                                if (vx.HasStrokeColor || p.StrokeColor.A > 0)
                                 {
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                                    p.Fill(strokeVxs);
+                                    AggPainter aggPainter = p as AggPainter;
+                                    if (aggPainter != null && aggPainter.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                    {
+                                        aggPainter.Draw(new VertexStoreSnap(vx.GetVxs()), vx.StrokeColor);
+                                    }
+                                    else
+                                    {
+                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                                        p.Fill(strokeVxs);
+                                    }
+                                    
                                 }
-                                else if (p.StrokeColor.A > 0)
-                                {
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                                    p.Fill(strokeVxs, p.StrokeColor);
-                                }
+                                //else if (p.StrokeColor.A > 0)
+                                //{
+                                //    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                                //    p.Fill(strokeVxs, p.StrokeColor);
+                                //}
                             }
                         }
                         break;
                 }
             }
-
-
-            p.ReleaseTempVxsStore(tempVxs);
         }
+
 
         static VertexStore GetStrokeVxsOrCreateNew(SvgPart s, Painter p, float strokeW)
         {
