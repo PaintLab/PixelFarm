@@ -209,7 +209,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _aa_data = new LineInterpolatorAAData(ren, lp);
             _m_di = new DistanceInterpolator1(lp.x1, lp.y1, lp.x2, lp.y2,
                  lp.x1 & ~LineAA.SUBPIXEL_MARK, lp.y1 & ~LineAA.SUBPIXEL_MARK);
-            //_aa_data.m_li.adjust_forward();
+            
             _aa_data.AdjustForward();
         }
         public void Dispose()
