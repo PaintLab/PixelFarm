@@ -86,12 +86,28 @@ namespace PixelFarm.CpuBlit
             p.Draw(vxs);
             p.StrokeColor = prevColor;
         }
+#if DEBUG
+        static int dbugId = 0;
+#endif
         public static void Draw(this Painter p, VertexStoreSnap vxs, Color color)
         {
+            //try
+            //{
+            //    dbugId++;
+            //    if (dbugId == 12)
+            //    {
+
+            //    }
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
             p.Draw(vxs);
             p.StrokeColor = prevColor;
+            //}
+            //catch (System.Exception ex)
+            //{
+
+            //}
+
         }
 
     }

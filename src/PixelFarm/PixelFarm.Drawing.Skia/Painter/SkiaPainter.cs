@@ -372,7 +372,7 @@ namespace PixelFarm.Drawing.Skia
                                     //    newBmp.GetPixels(),
                                     //    actualImgBuffer.Length); 
                                 }
-                                bufferPtr.Release();
+                                bufferPtr.Dispose();
                                 newBmp.UnlockPixels();
                             }
                             //newBmp.internalBmp.LockPixels();

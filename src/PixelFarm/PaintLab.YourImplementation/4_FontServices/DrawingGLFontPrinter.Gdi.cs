@@ -98,37 +98,37 @@ namespace PixelFarm.DrawingGL
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   
-            CpuBlit.Imaging.TempMemPtr buffer = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(actualImg);
             unsafe
             {
-                byte* header = (byte*)memdc.PPVBits;
-                byte* dest0 = (byte*)buffer.Ptr;
+                using (CpuBlit.Imaging.TempMemPtr.FromBmp(actualImg, out byte* dest0))
                 {
-                    byte* dest = dest0;
-                    byte* rowHead = header;
-                    int rowLen = bmpWidth * 4;
-                    for (int h = 0; h < bmpHeight; ++h)
+                    byte* header = (byte*)memdc.PPVBits;
                     {
-
-                        header = rowHead;
-                        for (int n = 0; n < rowLen;)
+                        byte* dest = dest0;
+                        byte* rowHead = header;
+                        int rowLen = bmpWidth * 4;
+                        for (int h = 0; h < bmpHeight; ++h)
                         {
-                            //move next
-                            *(dest + 0) = *(header + 0);
-                            *(dest + 1) = *(header + 1);
-                            *(dest + 2) = *(header + 2);
-                            //*(dest + 3) = *(header + 3);
-                            *(dest + 3) = 255;
-                            header += 4;
-                            dest += 4;
-                            n += 4;
+
+                            header = rowHead;
+                            for (int n = 0; n < rowLen;)
+                            {
+                                //move next
+                                *(dest + 0) = *(header + 0);
+                                *(dest + 1) = *(header + 1);
+                                *(dest + 2) = *(header + 2);
+                                //*(dest + 3) = *(header + 3);
+                                *(dest + 3) = 255;
+                                header += 4;
+                                dest += 4;
+                                n += 4;
+                            }
+                            //finish one row
+                            rowHead += stride;
                         }
-                        //finish one row
-                        rowHead += stride;
                     }
                 }
             }
-            buffer.Release();
 
             //------------------------------------------------------
             GLBitmap glBmp = new GLBitmap(actualImg);

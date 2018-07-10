@@ -73,7 +73,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 }
             }
 
-            srcMemPtr.Release();
+            srcMemPtr.Dispose();
             return greyScaleBuffer;
         }
         void Blend(ActualBitmap destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
@@ -136,7 +136,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                     srcImgIndex += 3;
                     width -= 3;
                 }
-                memPtr.Release();
+                memPtr.Dispose();
             }
 
         }

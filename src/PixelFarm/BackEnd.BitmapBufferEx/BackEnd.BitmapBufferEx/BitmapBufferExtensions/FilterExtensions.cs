@@ -23,6 +23,7 @@ namespace BitmapBufferEx
     /// </summary>
     public static partial class BitmapBufferExtensions
     {
+#if !COSMOS
 
         ///<summary>
         /// Gaussian blur kernel with the size 5x5
@@ -53,7 +54,7 @@ namespace BitmapBufferEx
                                                  { 0, -2,  0}
                                               };
 
-
+#endif
 
 
         /// <summary>

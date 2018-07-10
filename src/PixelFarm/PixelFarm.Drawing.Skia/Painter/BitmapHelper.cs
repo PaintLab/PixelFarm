@@ -71,7 +71,7 @@ namespace PixelFarm.Drawing.Skia
                             target += stride;
                         }
                     }
-                    srcBufferPtr.Release();
+                    srcBufferPtr.Dispose();
                 }
                 skBmp.UnlockPixels();
                 //}

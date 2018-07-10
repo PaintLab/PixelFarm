@@ -497,6 +497,54 @@ namespace PixelFarm.CpuBlit.Rasterization
                 {
                     unsafe
                     {
+#if COSMOS
+                        int pnt = 0;
+                        CellAA cell = cells[pnt + offset];
+                        int x = cell.x;
+                        int area = cell.area;
+                        cover += cell.cover;
+                        //accumulate all cells with the same X
+                        while (--num_cells != 0)
+                        {
+                            offset++; //move next
+                            cell = cells[pnt + offset];
+                            if (cell.x != x)
+                            {
+                                break;
+                            }
+
+                            area += cell.area;
+                            cover += cell.cover;
+                        }
+                        if (area != 0)
+                        {
+                            //-----------------------------------------------
+                            //single cell, for antialias look
+                            //-----------------------------------------------
+                            //calculate alpha from coverage value
+                            int alpha = CalculateAlpha((cover << (poly_subpix.SHIFT + 1)) - area);
+                            if (alpha != 0)
+                            {
+                                scline.AddCell(x, alpha);
+                            }
+
+                            x++;
+                        }
+
+                        if ((num_cells != 0) && (cell.x > x))
+                        {
+                            //-----------------------------------------------
+                            //this is long span , continuous color, solid look
+                            //-----------------------------------------------
+                            //calculate alpha from coverage value
+                            int alpha = CalculateAlpha(cover << (poly_subpix.SHIFT + 1));
+                            if (alpha != 0)
+                            {
+                                scline.AddSpan(x, (cell.x - x), alpha);
+                            }
+                        }
+
+#else
                         fixed (CellAA* cur_cell_h = &cells[0])
                         {
                             CellAA* cur_cell_ptr = cur_cell_h + offset;
@@ -544,6 +592,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                                 }
                             }
                         }
+#endif
                     }
                 }
 
