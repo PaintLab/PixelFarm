@@ -648,6 +648,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 AggPainter aggPainter = (AggPainter)p;
                 if (aggPainter != null)
                 {
+                    aggPainter.StrokeWidth = 1;
                     aggPainter.LineRenderingTech = LineRenderingTechnique.OutlineAARenderer;
                     DrawWithLineProfile2(aggPainter);
 

@@ -126,12 +126,11 @@ namespace PixelFarm.CpuBlit
                 if (value == LineRenderingTechnique.OutlineAARenderer
                      && _outlineRas == null)
                 {
-                    this.StrokeWidth = 1;
+
+                  
                     _lineProfileAA = new Rasterization.Lines.LineProfileAnitAlias(this.StrokeWidth, null);
 
                     var blender = new PixelBlenderBGRA();
-
-                    //ClipProxyImage imageClippingProxy = new ClipProxyImage(new SubBitmapBlender(_aggsx.DestActualImage, blender));
 
                     var outlineRenderer = new Rasterization.Lines.OutlineRenderer(
                         new ClipProxyImage(new SubBitmapBlender(_aggsx.DestActualImage, blender)), //Need ClipProxyImage
