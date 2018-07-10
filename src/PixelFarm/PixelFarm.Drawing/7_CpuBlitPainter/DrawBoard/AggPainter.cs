@@ -122,27 +122,31 @@ namespace PixelFarm.CpuBlit
             get { return _lineRenderingTech; }
             set
             {
-                _lineRenderingTech = value;
+
                 if (value == LineRenderingTechnique.OutlineAARenderer
                      && _outlineRas == null)
                 {
-                    PixelBlenderBGRA blender = new PixelBlenderBGRA();
+                    this.StrokeWidth = 1;
                     _lineProfileAA = new Rasterization.Lines.LineProfileAnitAlias(this.StrokeWidth, null);
+
+                    var blender = new PixelBlenderBGRA();
+
+                    //ClipProxyImage imageClippingProxy = new ClipProxyImage(new SubBitmapBlender(_aggsx.DestActualImage, blender));
+
                     var outlineRenderer = new Rasterization.Lines.OutlineRenderer(
-                        new ClipProxyImage(new MyBitmapBlender(_aggsx.DestActualImage, blender)),
+                        new ClipProxyImage(new SubBitmapBlender(_aggsx.DestActualImage, blender)), //Need ClipProxyImage
                         blender,
                         _lineProfileAA);
                     outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
-                    //
+
+                    //TODO: impl 'Pen'
+
                     _outlineRas = new Rasterization.Lines.OutlineAARasterizer(outlineRenderer);
                     _outlineRas.LineJoin = Rasterization.Lines.OutlineAARasterizer.OutlineJoin.Round;
                     _outlineRas.RoundCap = true;
 
-                    //_outlineRas.LineJoin = (RenderAccurateJoins ?
-                    //OutlineAARasterizer.OutlineJoin.AccurateJoin
-                    //: OutlineAARasterizer.OutlineJoin.Round);
-                    //rasterizer.RoundCap = true;
                 }
+                _lineRenderingTech = value;
             }
         }
         public override Brush CurrentBrush
