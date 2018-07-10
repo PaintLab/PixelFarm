@@ -20,7 +20,7 @@ using PixelFarm.CpuBlit.FragmentProcessing;
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     //================================================line_interpolator_aa_base
-    struct LineInterpolatorAAData
+    struct LineInterpolatorAAData : IDisposable
     {
         public readonly LineParameters m_lp;
         readonly LineInterpolatorDDA2 m_li;
@@ -29,6 +29,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public readonly int m_count;
         public readonly int m_width;
         public readonly int m_max_extent;
+        //
         public readonly int[] m_dist;
         public readonly byte[] m_covers;
 
@@ -41,20 +42,24 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         public const int MAX_HALF_WIDTH = 64;
 
+        OutlineRenderer ren;
         public LineInterpolatorAAData(OutlineRenderer ren, LineParameters lp)
         {
 
+            this.ren = ren;
             //TODO: consider resuable array
-            m_dist = new int[MAX_HALF_WIDTH + 1];
-            m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+            m_dist = ren.GetFreeDistArray();// new int[MAX_HALF_WIDTH + 1];
+            m_covers = ren.GetFreeConvArray(); // new byte[MAX_HALF_WIDTH * 2 + 4];
 
-            m_lp = lp;
+
             m_li = new LineInterpolatorDDA2(
                 lp.vertical ? LineAA.DblHr(lp.x2 - lp.x1) :
                               LineAA.DblHr(lp.y2 - lp.y1),
                 lp.vertical ? Math.Abs(lp.y2 - lp.y1) :
                               Math.Abs(lp.x2 - lp.x1) + 1);
 
+            //---------------------------------------------------------
+            m_lp = lp;
             m_len = ((lp.vertical == (lp.inc > 0)) ? -lp.len : lp.len);
             m_x = (lp.x1 >> LineAA.SUBPIXEL_SHIFT);
             m_y = (lp.y1 >> LineAA.SUBPIXEL_SHIFT);
@@ -92,6 +97,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             m_dist[i++] = 0x7FFF0000;
         }
 
+        public void Dispose()
+        {
+            ren.ReleaseConvArray(m_covers);
+            ren.ReleaseDistArray(m_dist);
+
+
+        }
 
         public void AdjustForward()
         {
@@ -185,7 +197,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     }
 
     //====================================================line_interpolator_aa0
-    struct LineInterpolatorAA0
+    struct LineInterpolatorAA0 : IDisposable
     {
         DistanceInterpolator1 _m_di;
         LineInterpolatorAAData _aa_data;
@@ -197,10 +209,14 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _aa_data = new LineInterpolatorAAData(ren, lp);
             _m_di = new DistanceInterpolator1(lp.x1, lp.y1, lp.x2, lp.y2,
                  lp.x1 & ~LineAA.SUBPIXEL_MARK, lp.y1 & ~LineAA.SUBPIXEL_MARK);
-            //_aa_data.m_li.adjust_forward();
+            
             _aa_data.AdjustForward();
         }
+        public void Dispose()
+        {
+            _aa_data.Dispose();
 
+        }
 
         int Count { get { return _aa_data.Count; } }
         bool IsVertical
@@ -301,7 +317,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     }
 
     //====================================================line_interpolator_aa1
-    struct LineInterpolatorAA1
+    struct LineInterpolatorAA1 : IDisposable
     {
         DistanceInterpolator2 _m_di;
         LineInterpolatorAAData _aa_data;
@@ -384,6 +400,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
             //_aa_data.m_li.adjust_forward();
             _aa_data.AdjustForward();
+        }
+
+        public void Dispose()
+        {
+            _aa_data.Dispose();
         }
         bool IsVertical
         {
@@ -502,13 +523,14 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     }
 
     //====================================================line_interpolator_aa2
-    struct LineInterpolatorAA2
+    struct LineInterpolatorAA2 : IDisposable
     {
         DistanceInterpolator2 _m_di;
         LineInterpolatorAAData _aa_data;
         readonly OutlineRenderer _ren;
         public LineInterpolatorAA2(
-            OutlineRenderer ren, LineParameters lp,
+            OutlineRenderer ren,
+            LineParameters lp,
             int ex, int ey)
         {
             this._ren = ren;
@@ -519,6 +541,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             //_aa_data.m_li.adjust_forward();
             _aa_data.AdjustForward();
             _aa_data.m_step -= _aa_data.m_max_extent;
+        }
+        public void Dispose()
+        {
+            _aa_data.Dispose();
         }
         public void Loop()
         {
@@ -644,7 +670,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     }
 
     //====================================================line_interpolator_aa3
-    struct LineInterpolatorAA3
+    struct LineInterpolatorAA3 : IDisposable
     {
         DistanceInterpolator3 _m_di;
         LineInterpolatorAAData _aa_data;
@@ -726,7 +752,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _aa_data.AdjustForward();
             _aa_data.m_step -= _aa_data.m_max_extent;
         }
-
+        public void Dispose()
+        {
+            _aa_data.Dispose();
+        }
         public void Loop()
         {
             if (IsVertical)

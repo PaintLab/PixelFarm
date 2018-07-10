@@ -155,9 +155,7 @@ namespace PixelFarm.CpuBlit
         }
         public override void Dispose()
         {
-
-
-
+            pixelBuffer = null;
         }
         public override int Width
         {
@@ -480,7 +478,7 @@ namespace PixelFarm.CpuBlit
                             destHead2 += destStride;
                         }
                     }
-                } 
+                }
             }
 
             return buff2;
