@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit
         public int Height { get; set; }
 
 
-        public virtual void Draw(PixelFarm.Drawing.Painter p)
+        public virtual void Render(PixelFarm.Drawing.Painter p)
         {
         }
         protected void UpdateTransform(double width, double height, double x, double y)

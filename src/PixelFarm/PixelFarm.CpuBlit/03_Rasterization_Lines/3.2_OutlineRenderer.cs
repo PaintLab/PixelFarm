@@ -15,6 +15,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.CpuBlit.PrimitiveProcessing;
 using PixelFarm.CpuBlit.FragmentProcessing;
 
@@ -36,7 +37,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         byte[] m_profile = new byte[64];
         byte[] m_gamma;
-        int m_subpixel_width;
+        float m_subpixel_width;
         double m_min_width;
         double m_smoother_width;
 
@@ -64,13 +65,19 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             //3. set width table
             SetWidth(w);
         }
-        public int SubPixelWidth
+        public float SubPixelWidth
         {
             get
             {
                 return m_subpixel_width;
             }
+            set
+            {
+                //subpixel width
+                SetWidth(value);
+            }
         }
+
         //#if DEBUG
         //        static int dbugCount1;
         //#endif
@@ -99,8 +106,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
         byte[] GetProfileBuffer(double w)
         {
-            m_subpixel_width = (int)AggMath.uround(w * SUBPIX_SCALE);
-            int size = m_subpixel_width + SUBPIX_SCALE * 6;
+            m_subpixel_width = AggMath.uround(w * SUBPIX_SCALE);
+            int size = (int)m_subpixel_width + SUBPIX_SCALE * 6;
             if (size > m_profile.Length)
             {
                 //clear ?
@@ -242,7 +249,9 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(PixelProcessing.IBitmapBlender destImage, PixelProcessing.PixelBlender32 destPixelBlender, LineProfileAnitAlias profile)
+        public OutlineRenderer(PixelProcessing.IBitmapBlender destImage,
+            PixelProcessing.PixelBlender32 destPixelBlender,
+            LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;
@@ -253,7 +262,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
 
         //---------------------------------------------------------------------
-        public int SubPixelWidth { get { return lineProfile.SubPixelWidth; } }
+        public int SubPixelWidth { get { return (int)lineProfile.SubPixelWidth; } }
 
         //---------------------------------------------------------------------
         public void ResetClipping() { doClipping = false; }
@@ -480,7 +489,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
 
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
-            (new LineInterpolatorAA1(this, lp, sx, sy)).Loop();
+            using (var aa = new LineInterpolatorAA1(this, lp, sx, sy))
+            {
+                aa.Loop();
+            }
         }
 
         public override void Line1(LineParameters lp, int sx, int sy)
@@ -539,7 +551,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
 
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
-            (new LineInterpolatorAA2(this, lp, ex, ey)).Loop();
+            using (var aa = new LineInterpolatorAA2(this, lp, ex, ey))
+            {
+                aa.Loop();
+            }
 
         }
 
@@ -603,7 +618,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
-            (new LineInterpolatorAA3(this, lp, sx, sy, ex, ey)).Loop();
+            using (var aa = new LineInterpolatorAA3(this, lp, sx, sy, ex, ey))
+            {
+                aa.Loop();
+            }
 
         }
 
@@ -661,6 +679,54 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             {
                 Line3NoClip(lp, sx, sy, ex, ey);
             }
+        }
+
+        //LineInterpolatorAAData.max
+        //m_dist = new int[MAX_HALF_WIDTH + 1];
+        //    m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+
+        Stack<int[]> _freeDistPool = new Stack<int[]>();
+        Stack<byte[]> _freeConvPool = new Stack<byte[]>();
+
+        internal int[] GetFreeDistArray()
+        {
+            if (_freeDistPool.Count > 0)
+            {
+                return _freeDistPool.Pop();
+            }
+            else
+            {
+                //m_dist = new int[MAX_HALF_WIDTH + 1];
+                //m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+
+
+                return new int[LineInterpolatorAAData.MAX_HALF_WIDTH + 1];
+            }
+        }
+        internal void ReleaseDistArray(int[] distArray)
+        {
+            //clear and add to list
+            Array.Clear(distArray, 0, distArray.Length);
+            _freeDistPool.Push(distArray);
+        }
+        internal byte[] GetFreeConvArray()
+        {
+            if (_freeConvPool.Count > 0)
+            {
+                return _freeConvPool.Pop();
+            }
+            else
+            {
+                //m_dist = new int[MAX_HALF_WIDTH + 1];
+                //m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+                return new byte[(MAX_HALF_WIDTH + 1) * 2];
+            }
+        }
+        internal void ReleaseConvArray(byte[] convArray)
+        {
+            //clear and add to list
+            Array.Clear(convArray, 0, convArray.Length);
+            _freeConvPool.Push(convArray);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace PixelFarm.Drawing.WinGdi
                     var tmpPtr = CpuBlit.ActualBitmap.GetBufferPtr(img);
                     byte* head = (byte*)tmpPtr.Ptr;
                     _gdigsx.RenderTo(head);
-                    tmpPtr.Release();
+                    tmpPtr.Dispose();
                 }
             }
         }

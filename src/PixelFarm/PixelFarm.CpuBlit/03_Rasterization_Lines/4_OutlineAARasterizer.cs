@@ -159,6 +159,9 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             public int xb1, yb1, xb2, yb2;
         }
 
+#if DEBUG
+        static int dbuglatest_i = 0;
+#endif
         void Draw(ref DrawVarsPart0 dv,
             ref DrawVarsPart1 dv1,
             ref DrawVarsPart2 dv2,
@@ -168,78 +171,85 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             int end)
         {
 
-
-            for (int i = start; i < end; i++)
+            try
             {
-
-                //dbuglatest_i = i;
-                //if (i == 22)
-                //{
-
-                //}
-
-                if (m_line_join == OutlineJoin.Round)
+                for (int i = start; i < end; i++)
                 {
-                    dv2.xb1 = curr.x1 + (curr.y2 - curr.y1);
-                    dv2.yb1 = curr.y1 - (curr.x2 - curr.x1);
-                    dv2.xb2 = curr.x2 + (curr.y2 - curr.y1);
-                    dv2.yb2 = curr.y2 - (curr.x2 - curr.x1);
-                }
 
-                switch (dv.flags)
-                {
-                    case 0: m_ren.Line3(curr, dv2.xb1, dv2.yb1, dv2.xb2, dv2.yb2); break;
-                    case 1: m_ren.Line2(curr, dv2.xb2, dv2.yb2); break;
-                    case 2: m_ren.Line1(curr, dv2.xb1, dv2.yb1); break;
-                    case 3: m_ren.Line0(curr); break;
-                }
+                    dbuglatest_i = i;
+                    if (i == 6)
+                    {
 
-                if (m_line_join == OutlineJoin.Round && (dv.flags & 2) == 0)
-                {
-                    m_ren.Pie(curr.x2, curr.y2,
-                               curr.x2 + (curr.y2 - curr.y1),
-                               curr.y2 - (curr.x2 - curr.x1),
-                               curr.x2 + (next.y2 - next.y1),
-                               curr.y2 - (next.x2 - next.x1));
-                }
+                    }
 
-                dv1.x1 = dv1.x2;
-                dv1.y1 = dv1.y2;
-                dv.lcurr = dv.lnext;
-                dv.lnext = m_src_vertices[dv.idx].len;
-                ++dv.idx;
-                if (dv.idx >= m_src_vertices.Count) dv.idx = 0;
-                dv1.x2 = m_src_vertices[dv.idx].x;
-                dv1.y2 = m_src_vertices[dv.idx].y;
-                curr = next;
-                next = new LineParameters(dv1.x1, dv1.y1, dv1.x2, dv1.y2, dv.lnext);
-                dv2.xb1 = dv2.xb2;
-                dv2.yb1 = dv2.yb2;
-                switch (m_line_join)
-                {
-                    case OutlineJoin.NoJoin:
-                        dv.flags = 3;
-                        break;
-                    case OutlineJoin.Mitter:
-                        dv.flags >>= 1;
-                        dv.flags |= (curr.DiagonalQuadrant ==
-                            next.DiagonalQuadrant ? 1 : 0);
-                        if ((dv.flags & 2) == 0)
-                        {
+                    if (m_line_join == OutlineJoin.Round)
+                    {
+                        dv2.xb1 = curr.x1 + (curr.y2 - curr.y1);
+                        dv2.yb1 = curr.y1 - (curr.x2 - curr.x1);
+                        dv2.xb2 = curr.x2 + (curr.y2 - curr.y1);
+                        dv2.yb2 = curr.y2 - (curr.x2 - curr.x1);
+                    }
+
+                    switch (dv.flags)
+                    {
+                        case 0: m_ren.Line3(curr, dv2.xb1, dv2.yb1, dv2.xb2, dv2.yb2); break;
+                        case 1: m_ren.Line2(curr, dv2.xb2, dv2.yb2); break;
+                        case 2: m_ren.Line1(curr, dv2.xb1, dv2.yb1); break;
+                        case 3: m_ren.Line0(curr); break;
+                    }
+
+                    if (m_line_join == OutlineJoin.Round && (dv.flags & 2) == 0)
+                    {
+                        m_ren.Pie(curr.x2, curr.y2,
+                                   curr.x2 + (curr.y2 - curr.y1),
+                                   curr.y2 - (curr.x2 - curr.x1),
+                                   curr.x2 + (next.y2 - next.y1),
+                                   curr.y2 - (next.x2 - next.x1));
+                    }
+
+                    dv1.x1 = dv1.x2;
+                    dv1.y1 = dv1.y2;
+                    dv.lcurr = dv.lnext;
+                    dv.lnext = m_src_vertices[dv.idx].len;
+                    ++dv.idx;
+                    if (dv.idx >= m_src_vertices.Count) dv.idx = 0;
+                    dv1.x2 = m_src_vertices[dv.idx].x;
+                    dv1.y2 = m_src_vertices[dv.idx].y;
+                    curr = next;
+                    next = new LineParameters(dv1.x1, dv1.y1, dv1.x2, dv1.y2, dv.lnext);
+                    dv2.xb1 = dv2.xb2;
+                    dv2.yb1 = dv2.yb2;
+                    switch (m_line_join)
+                    {
+                        case OutlineJoin.NoJoin:
+                            dv.flags = 3;
+                            break;
+                        case OutlineJoin.Mitter:
+                            dv.flags >>= 1;
+                            dv.flags |= (curr.DiagonalQuadrant ==
+                                next.DiagonalQuadrant ? 1 : 0);
+                            if ((dv.flags & 2) == 0)
+                            {
+                                LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
+                            }
+                            break;
+                        case OutlineJoin.Round:
+                            dv.flags >>= 1;
+                            dv.flags |= (((curr.DiagonalQuadrant ==
+                                next.DiagonalQuadrant) ? 1 : 0) << 1);
+                            break;
+                        case OutlineJoin.AccurateJoin:
+                            dv.flags = 0;
                             LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
-                        }
-                        break;
-                    case OutlineJoin.Round:
-                        dv.flags >>= 1;
-                        dv.flags |= (((curr.DiagonalQuadrant ==
-                            next.DiagonalQuadrant) ? 1 : 0) << 1);
-                        break;
-                    case OutlineJoin.AccurateJoin:
-                        dv.flags = 0;
-                        LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
-                        break;
+                            break;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+
+            }
+
         }
 
         public OutlineAARasterizer(LineRenderer ren)
@@ -348,15 +358,19 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                             break;
                     }
 
-                    if ((dv.flags & 1) == 0 && m_line_join != OutlineJoin.Round)
+                    if (m_line_join != OutlineJoin.Round)
                     {
-                        LineAA.Bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
+                        if ((dv.flags & 1) == 0)
+                        {
+                            LineAA.Bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
+                        }
+
+                        if ((dv.flags & 2) == 0)
+                        {
+                            LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
+                        }
                     }
 
-                    if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
-                    {
-                        LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
-                    }
                     Draw(ref dv, ref dv1, ref dv2, ref curr, ref next, 0, m_src_vertices.Count);
                 }
             }
@@ -507,6 +521,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                                              x1 + (y2 - y1),
                                              y1 - (x2 - x1));
                             }
+
                             if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
                             {
                                 LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
@@ -574,9 +589,9 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-        //#if DEBUG
-        //        static int dbugAddPathCount = 0;
-        //#endif
+#if DEBUG
+        static int dbugAddPathCount = 0;
+#endif
         void AddPath(VertexStoreSnap s)
         {
             double x;
@@ -588,17 +603,18 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
             {
                 //#if DEBUG
-                //                    dbugAddPathCount++;
-                //                    if (dbugAddPathCount >= 2441)
-                //                    {
+                //                dbugAddPathCount++;
+                //                if (dbugAddPathCount >= 2163)
+                //                {
 
-                //                    }
+                //                }
                 //#endif
                 AddVertex(x, y, cmd);
             }
             //}
             //catch (Exception ex)
             //{
+
 
             //}
 
