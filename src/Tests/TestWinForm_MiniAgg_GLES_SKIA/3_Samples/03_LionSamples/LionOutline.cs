@@ -172,9 +172,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             public PixelFarm.Drawing.Color fillColor;
             public PixelFarm.CpuBlit.VertexProcessing.Affine affineTx;
         }
-
-
-        void DrawWithLineProfile(OutlineAARasterizer rasterizer)
+        void DrawWithLineProfile2(AggPainter painter)
         {
             SvgRenderVx renderVx = lionShape.GetRenderVx();
             int num_paths = renderVx.SvgVxCount;
@@ -239,8 +237,209 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                         break;
                     case SvgRenderVxKind.Path:
                         {
+                            //if (i == 34)
+                            //{
+                            //    Drawing.VertexStore innerVxs = vx.GetVxs();
+                            //    int j = innerVxs.Count; 
+                            //    for (int m = 0; m < j; ++m)
+                            //    {
+                            //        innerVxs.GetVertex(m, out double x, out double y);
+                            //        Console.WriteLine(x + "," + y);
+                            //    } 
+                            //}
                             //temp
+                            painter.Draw(
+                                new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
+                                strokeColor);
 
+                        }
+                        break;
+                        //{
+
+                        //    VertexStore vxs = vx.GetVxs();
+                        //    if (vx.HasFillColor)
+                        //    {
+                        //        //has specific fill color
+                        //        if (vx.FillColor.A > 0)
+                        //        {
+                        //            if (currentTx == null)
+                        //            {
+                        //                p.Fill(vxs, vx.FillColor);
+                        //            }
+                        //            else
+                        //            {
+                        //                //have some tx
+                        //                tempVxs.Clear();
+                        //                currentTx.TransformToVxs(vxs, tempVxs);
+                        //                p.Fill(tempVxs, vx.FillColor);
+                        //            }
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        if (p.FillColor.A > 0)
+                        //        {
+                        //            if (currentTx == null)
+                        //            {
+                        //                p.Fill(vxs);
+                        //            }
+                        //            else
+                        //            {
+                        //                //have some tx
+                        //                tempVxs.Clear();
+                        //                currentTx.TransformToVxs(vxs, tempVxs);
+                        //                p.Fill(tempVxs);
+                        //            }
+
+                        //        }
+                        //    }
+
+                        //    if (p.StrokeWidth > 0)
+                        //    {
+                        //        //check if we have a stroke version of this render vx
+                        //        //if not then request a new one 
+
+                        //        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                        //        if (vx.HasStrokeColor)
+                        //        {
+                        //            //has speciic stroke color 
+                        //            p.StrokeWidth = vx.StrokeWidth;
+                        //            if (currentTx == null)
+                        //            {
+                        //                p.Fill(strokeVxs, vx.StrokeColor);
+                        //            }
+                        //            else
+                        //            {
+                        //                //have some tx
+                        //                tempVxs.Clear();
+                        //                currentTx.TransformToVxs(strokeVxs, tempVxs);
+                        //                p.Fill(tempVxs, vx.StrokeColor);
+                        //            }
+
+                        //        }
+                        //        else if (p.StrokeColor.A > 0)
+                        //        {
+                        //            if (currentTx == null)
+                        //            {
+                        //                p.Fill(strokeVxs, p.StrokeColor);
+                        //            }
+                        //            else
+                        //            {
+                        //                tempVxs.Clear();
+                        //                currentTx.TransformToVxs(strokeVxs, tempVxs);
+                        //                p.Fill(tempVxs, p.StrokeColor);
+                        //            }
+                        //        }
+                        //        else
+                        //        {
+
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+
+                        //        if (vx.HasStrokeColor)
+                        //        {
+                        //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                        //            p.Fill(strokeVxs);
+                        //        }
+                        //        else if (p.StrokeColor.A > 0)
+                        //        {
+                        //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+                        //            p.Fill(strokeVxs, p.StrokeColor);
+                        //        }
+                        //    }
+                        //}
+                        break;
+                }
+            }
+        }
+
+        void DrawWithLineProfile(OutlineAARasterizer rasterizer)
+        {
+            SvgRenderVx renderVx = lionShape.GetRenderVx();
+            int num_paths = renderVx.SvgVxCount;
+
+            var renderState = new TempRenderState();
+            renderState.strokeColor = PixelFarm.Drawing.Color.Black;
+            renderState.strokeWidth = 1;
+            renderState.fillColor = PixelFarm.Drawing.Color.Black;
+            renderState.affineTx = null;
+
+            Drawing.Color fillColor = Drawing.Color.Red;
+            Drawing.Color strokeColor = Drawing.Color.Red;
+            float strokeWidth = 1;
+            for (int i = 0; i < num_paths; ++i)
+            {
+
+                SvgPart vx = renderVx.GetInnerVx(i);
+
+                switch (vx.Kind)
+                {
+                    case SvgRenderVxKind.BeginGroup:
+                        {
+                            ////1. save current state before enter new state 
+                            //p.StackPushUserObject(renderState);
+
+                            //2. enter new px context
+                            if (vx.HasFillColor)
+                            {
+                                //ONLY in this example: test , set strokeColor = fillColor
+                                strokeColor = fillColor = renderState.fillColor = vx.FillColor;
+                            }
+                            if (vx.HasStrokeColor)
+                            {
+                                strokeColor = renderState.strokeColor = vx.StrokeColor;
+                            }
+                            if (vx.HasStrokeWidth)
+                            {
+                                strokeWidth = renderState.strokeWidth = vx.StrokeWidth;
+                            }
+                            if (vx.AffineTx != null)
+                            {
+                                //apply this to current tx
+                                //if (currentTx != null)
+                                //{
+                                //    currentTx = currentTx * vx.AffineTx;
+                                //}
+                                //else
+                                //{
+                                //    currentTx = vx.AffineTx;
+                                //}
+                                //renderState.affineTx = currentTx;
+                            }
+                        }
+                        break;
+                    case SvgRenderVxKind.EndGroup:
+                        {
+                            ////restore to prev state
+                            //renderState = (TempRenderState)p.StackPopUserObject();
+                            //p.FillColor = renderState.fillColor;
+                            //p.StrokeColor = renderState.strokeColor;
+                            //p.StrokeWidth = renderState.strokeWidth;
+                            //currentTx = renderState.affineTx;
+                        }
+                        break;
+                    case SvgRenderVxKind.Path:
+                        {
+                            //temp
+                            //if (i == 34)
+                            //{
+                            //    var innerVxs = vx.GetVxs();
+                            //    int j = innerVxs.Count;
+
+                            //    for (int m = 0; m < j; ++m)
+                            //    {
+                            //        innerVxs.GetVertex(m, out double x, out double y);
+                            //        Console.WriteLine(x + "," + y);
+                            //    }
+
+                            //}
+                            var innerVxs = vx.GetVxs();
+                            if (innerVxs.dbugId == 28)
+                            {
+
+                            }
                             rasterizer.RenderVertexSnap(
                               new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
                               strokeColor);
@@ -364,8 +563,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             var p1 = p as AggPainter;
             if (p1 == null)
             {
-                //TODO: review here
-
+                //TODO: review here 
                 lionShape.Paint(p, affTx);
                 //int j = lionShape.NumPaths;
                 //int[] pathList = lionShape.PathIndexList;  
@@ -425,27 +623,60 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             }
             else
             {
+                //{
+                //    LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(
+                //           strokeWidth * affTx.GetScale(),
+                //           null);
+                //    OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
+                //    outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
 
-                //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
-                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(
-                    strokeWidth * affTx.GetScale(), 
-                    null);
-                OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
-                outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
+                //    OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
+                //    rasterizer.LineJoin = (RenderAccurateJoins ?
+                //        OutlineAARasterizer.OutlineJoin.AccurateJoin
+                //        : OutlineAARasterizer.OutlineJoin.Round);
+                //    rasterizer.RoundCap = true;
 
-                OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
-                rasterizer.LineJoin = (RenderAccurateJoins ?
-                    OutlineAARasterizer.OutlineJoin.AccurateJoin
-                    : OutlineAARasterizer.OutlineJoin.Round);
-                rasterizer.RoundCap = true;
+                //    SvgRenderVx renderVx = lionShape.GetRenderVx();
 
-                SvgRenderVx renderVx = lionShape.GetRenderVx();
+                //    lionShape.ApplyTransform(affTx);
 
-                lionShape.ApplyTransform(affTx);
+                //    DrawWithLineProfile(rasterizer);
 
-                DrawWithLineProfile(rasterizer);
+                //    lionShape.ResetTransform();
+                //}
 
-                lionShape.ResetTransform();
+                AggPainter aggPainter = (AggPainter)p;
+                if (aggPainter != null)
+                {
+                    aggPainter.LineRenderingTech = LineRenderingTechnique.OutlineAARenderer;
+                    DrawWithLineProfile2(aggPainter);
+
+                }
+                else
+                {
+
+                    ////LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
+                    //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(
+                    //    strokeWidth * affTx.GetScale(),
+                    //    null);
+                    //OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
+                    //outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
+
+                    //OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
+                    //rasterizer.LineJoin = (RenderAccurateJoins ?
+                    //    OutlineAARasterizer.OutlineJoin.AccurateJoin
+                    //    : OutlineAARasterizer.OutlineJoin.Round);
+                    //rasterizer.RoundCap = true;
+
+                    //SvgRenderVx renderVx = lionShape.GetRenderVx();
+
+                    //lionShape.ApplyTransform(affTx);
+
+                    //DrawWithLineProfile(rasterizer);
+
+                    // lionShape.ResetTransform();
+                }
+
             }
             base.Render(p);
         }
