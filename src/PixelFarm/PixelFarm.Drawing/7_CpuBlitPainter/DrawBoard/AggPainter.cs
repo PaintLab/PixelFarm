@@ -21,11 +21,7 @@ namespace PixelFarm.CpuBlit
         public MyBitmapBlender(ActualBitmap actualImage, PixelProcessing.PixelBlender32 pxBlender)
         {
             this.actualImage = actualImage;
-            Attach(actualImage.Width,
-                           actualImage.Height,
-                           actualImage.BitDepth,
-                           ActualBitmap.GetBuffer(actualImage),
-                           pxBlender); //set default px blender
+            Attach(actualImage);
         }
         public override void ReplaceBuffer(int[] newbuffer)
         {
@@ -44,21 +40,38 @@ namespace PixelFarm.CpuBlit
         }
     }
 
+
+    public enum LineRenderingTechnique
+    {
+        StrokeVxsGenerator,
+        OutlineAARenderer,
+
+    }
     public class AggPainter : Painter
     {
         AggRenderSurface _aggsx; //target rendering surface
+
+
         //low-level rasterizer
         ScanlinePacked8 scline;
         ScanlineRasterizer sclineRas;
+
+
+        //low-level outline renderer
+        LineRenderingTechnique _lineRenderingTech;
+
+        Rasterization.Lines.LineProfileAnitAlias _lineProfileAA;
+        Rasterization.Lines.OutlineAARasterizer _outlineRas;
+
+
         /// <summary>
         /// scanline rasterizer to bitmap
         /// </summary>
         DestBitmapRasterizer _bmpRasterizer;
-
         //--------------------
         //pen 
-        Stroke stroke;
-        Color strokeColor;
+        Stroke _stroke;
+        Color _strokeColor;
         //--------------------
         //brush
         Color fillColor;
@@ -71,7 +84,7 @@ namespace PixelFarm.CpuBlit
         //-------------
         //vector generators for various object
         SimpleRect _simpleRectVxsGen = new SimpleRect();
-        Ellipse ellipse = new Ellipse();
+        Ellipse _ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
 
         LineDashGenerator _lineDashGen;
@@ -91,19 +104,50 @@ namespace PixelFarm.CpuBlit
             //painter paint to target surface
             this._aggsx = aggsx;
             this.sclineRas = _aggsx.ScanlineRasterizer;
-            this.stroke = new Stroke(1);//default
+            this._stroke = new Stroke(1);//default
             this.scline = aggsx.ScanlinePacked8;
             this._bmpRasterizer = aggsx.BitmapRasterizer;
             _orientation = DrawBoardOrientation.LeftBottom;
             //from membuffer
             _bxt = new BitmapBuffer(aggsx.Width,
                 aggsx.Height,
-                PixelFarm.CpuBlit.ActualBitmap.GetBuffer(aggsx.DestActualImage));
+                 ActualBitmap.GetBuffer(aggsx.DestActualImage));
             _vectorTool = new VectorTool();
             _useDefaultBrush = true;
 
         }
 
+        public LineRenderingTechnique LineRenderingTech
+        {
+            get { return _lineRenderingTech; }
+            set
+            {
+
+                if (value == LineRenderingTechnique.OutlineAARenderer
+                     && _outlineRas == null)
+                {
+
+                  
+                    _lineProfileAA = new Rasterization.Lines.LineProfileAnitAlias(this.StrokeWidth, null);
+
+                    var blender = new PixelBlenderBGRA();
+
+                    var outlineRenderer = new Rasterization.Lines.OutlineRenderer(
+                        new ClipProxyImage(new SubBitmapBlender(_aggsx.DestActualImage, blender)), //Need ClipProxyImage
+                        blender,
+                        _lineProfileAA);
+                    outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
+
+                    //TODO: impl 'Pen'
+
+                    _outlineRas = new Rasterization.Lines.OutlineAARasterizer(outlineRenderer);
+                    _outlineRas.LineJoin = Rasterization.Lines.OutlineAARasterizer.OutlineJoin.Round;
+                    _outlineRas.RoundCap = true;
+
+                }
+                _lineRenderingTech = value;
+            }
+        }
         public override Brush CurrentBrush
         {
             get
@@ -261,7 +305,17 @@ namespace PixelFarm.CpuBlit
 
         public override void Draw(VertexStoreSnap vxs)
         {
-            this.Fill(vxs);
+            if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            {
+                using (VxsContext.Temp(out var v1))
+                {
+                    _aggsx.Render(vxs, this._strokeColor);
+                }
+            }
+            else
+            {
+                _outlineRas.RenderVertexSnap(vxs, this._strokeColor);
+            }
         }
 
 
@@ -283,7 +337,7 @@ namespace PixelFarm.CpuBlit
                     (int)Math.Round(y1),
                     (int)Math.Round(x2),
                     (int)Math.Round(y2),
-                    this.strokeColor.ToARGB()
+                    this._strokeColor.ToARGB()
                     );
 
                 return;
@@ -297,11 +351,6 @@ namespace PixelFarm.CpuBlit
                 _lineGen.Clear();
                 _lineGen.MoveTo(x1, y1);
                 _lineGen.LineTo(x2, y2);
-
-                using (VxsContext.Temp(out var v1))
-                {
-                    _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
-                }
             }
             else
             {
@@ -311,37 +360,84 @@ namespace PixelFarm.CpuBlit
                 _lineGen.Clear();
                 _lineGen.MoveTo(x1, h - y1);
                 _lineGen.LineTo(x2, h - y2);
-
+            }
+            //----------------------------------------------------------
+            if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            {
                 using (VxsContext.Temp(out var v1))
                 {
-                    _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
+                    _aggsx.Render(_stroke.MakeVxs(_lineGen.Vxs, v1), this._strokeColor);
                 }
             }
-
-
+            else
+            {
+                _outlineRas.RenderVertexSnap(new VertexStoreSnap(_lineGen.Vxs), this._strokeColor);
+            }
         }
+
+        double _strokeW;
         public override double StrokeWidth
         {
-            get { return this.stroke.Width; }
-            set { this.stroke.Width = value; }
+            get
+            {
+                return _strokeW;
+            }
+            set
+            {
+                if (value != _strokeW)
+                {
+                    //strokeW change
+                    _strokeW = value;
+                    if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+                    {
+                        this._stroke.Width = value;
+                    }
+                    else
+                    {
+                        _lineProfileAA.SubPixelWidth = (float)value;
+                    }
+                }
+            }
         }
         public override void Draw(VertexStore vxs)
         {
             if (_lineDashGen == null)
             {
-                using (VxsContext.Temp(out var v1))
+                //no line dash
+
+                if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
-                    _aggsx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
+                    using (VxsContext.Temp(out var v1))
+                    {
+                        _aggsx.Render(_stroke.MakeVxs(vxs, v1), this._strokeColor);
+                    }
+                }
+                else
+                {
+                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(vxs), this._strokeColor);
                 }
             }
             else
             {
-                using (VxsContext.Temp(out var v1, out var v2))
+                if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
-                    _lineDashGen.CreateDash(vxs, v1);
-                    stroke.MakeVxs(v1, v2);
-                    _aggsx.Render(v2, this.strokeColor);
+
+                    using (VxsContext.Temp(out var v1, out var v2))
+                    {
+                        _lineDashGen.CreateDash(vxs, v1);
+                        _stroke.MakeVxs(v1, v2);
+                        _aggsx.Render(v2, this._strokeColor);
+                    }
                 }
+                else
+                {
+                    using (VxsContext.Temp(out var v1))
+                    {
+                        _lineDashGen.CreateDash(vxs, v1);
+                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(v1), this._strokeColor);
+                    }
+                }
+
             }
         }
 
@@ -356,12 +452,12 @@ namespace PixelFarm.CpuBlit
                 {
 
                     this._bxt.DrawRectangle(
-                    (int)Math.Round(left),
-                    (int)Math.Round(top),
-                    (int)Math.Round(left + width),
-                    (int)Math.Round(top + height),
+                        (int)Math.Round(left),
+                        (int)Math.Round(top),
+                        (int)Math.Round(left + width),
+                        (int)Math.Round(top + height),
 
-                    ColorInt.FromArgb(this.strokeColor.ToARGB()));
+                    ColorInt.FromArgb(this._strokeColor.ToARGB()));
                 }
                 else
                 {
@@ -396,11 +492,21 @@ namespace PixelFarm.CpuBlit
                 _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
 
-
-            using (VxsContext.Temp(out var v1, out var v2))
+            if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
             {
-                _aggsx.Render(stroke.MakeVxs(_simpleRectVxsGen.MakeVxs(v1), v2), this.strokeColor);
+                using (VxsContext.Temp(out var v1, out var v2))
+                {
+                    _aggsx.Render(_stroke.MakeVxs(_simpleRectVxsGen.MakeVxs(v1), v2), this._strokeColor);
+                }
             }
+            else
+            {
+                using (VxsContext.Temp(out var v1))
+                {
+                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(_simpleRectVxsGen.MakeVxs(v1)), this._strokeColor);
+                }
+            }
+
 
         }
 
@@ -424,23 +530,33 @@ namespace PixelFarm.CpuBlit
                    (int)Math.Round(ox), (int)Math.Round(oy),
                    (int)Math.Round(width / 2),
                    (int)Math.Round(height / 2),
-                   this.strokeColor.ToARGB());
+                   this._strokeColor.ToARGB());
 
                 return;
             }
 
             //Agg
             //---------------------------------------------------------- 
-            ellipse.Reset(ox,
+            _ellipse.Reset(ox,
                          oy,
                          width / 2,
                          height / 2,
                          ellipseGenNSteps);
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
-            _aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.strokeColor);
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
+
+            if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            {
+                using (VxsContext.Temp(out var v1, out var v2))
+                {
+                    _aggsx.Render(_stroke.MakeVxs(_ellipse.MakeVxs(v1), v2), this._strokeColor);
+                }
+            }
+            else
+            {
+                using (VxsContext.Temp(out var v1))
+                {
+                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(_ellipse.MakeVxs(v1)), this._strokeColor);
+                }
+            }
         }
         public override void FillEllipse(double left, double top, double width, double height)
         {
@@ -466,14 +582,17 @@ namespace PixelFarm.CpuBlit
 
             //Agg
             //---------------------------------------------------------- 
-            ellipse.Reset(ox,
+            _ellipse.Reset(ox,
                           oy,
                           width / 2,
                           height / 2,
                           ellipseGenNSteps);
-            var v1 = GetFreeVxs();
-            _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
-            ReleaseVxs(ref v1);
+
+
+            using (VxsContext.Temp(out var v1))
+            {
+                _aggsx.Render(_ellipse.MakeVxs(v1), this.fillColor);
+            }
         }
         public override void FillRect(double left, double top, double width, double height)
         {
@@ -527,67 +646,54 @@ namespace PixelFarm.CpuBlit
                 _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
 
-            var v1 = GetFreeVxs();
-            //---------------------------------------------------------- 
-            if (!_useDefaultBrush)
+            using (VxsContext.Temp(out var v1))
             {
-                Brush br = _curBrush;
-                switch (br.BrushKind)
+                //---------------------------------------------------------- 
+                if (!_useDefaultBrush)
                 {
-                    case BrushKind.LinearGradient:
-                        {
-                            //fill linear gradient brush
-                            //....
+                    Brush br = _curBrush;
+                    switch (br.BrushKind)
+                    {
+                        case BrushKind.LinearGradient:
+                            {
+                                //fill linear gradient brush
+                                //....
 
-                            //check resolved object for br 
-                            //if not then create a new one
-                            //------------------------------------------- 
-                            //original agg's gradient fill 
+                                //check resolved object for br 
+                                //if not then create a new one
+                                //------------------------------------------- 
+                                //original agg's gradient fill 
 
-                            _aggGradientBrush.ResolveBrush((LinearGradientBrush)br);
-                            _aggGradientBrush.SetOffset((float)-left, (float)-top);
-                            Fill(_simpleRectVxsGen.MakeVxs(v1), _aggGradientBrush);
-                        }
-                        break;
-                    case BrushKind.CircularGraident:
-                        {
-                            _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
-                            _circularGradBrush.SetOffset((float)-left, (float)-top);
-                            Fill(_simpleRectVxsGen.MakeVxs(v1), _circularGradBrush);
-                        }
-                        break;
-                    default:
-                        {
-                            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
-                        }
-                        break;
+                                _aggGradientBrush.ResolveBrush((LinearGradientBrush)br);
+                                _aggGradientBrush.SetOffset((float)-left, (float)-top);
+                                Fill(_simpleRectVxsGen.MakeVxs(v1), _aggGradientBrush);
+                            }
+                            break;
+                        case BrushKind.CircularGraident:
+                            {
+                                _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
+                                _circularGradBrush.SetOffset((float)-left, (float)-top);
+                                Fill(_simpleRectVxsGen.MakeVxs(v1), _circularGradBrush);
+                            }
+                            break;
+                        default:
+                            {
+                                _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
                 }
             }
-            else
-            {
-                _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
-            }
-            ReleaseVxs(ref v1);
         }
-
-
-
-
-
         AggLinearGradientBrush _aggGradientBrush = new AggLinearGradientBrush();
         AggCircularGradientBrush _circularGradBrush = new AggCircularGradientBrush();
 
 
 
-        VertexStore GetFreeVxs()
-        {
-            VectorToolBox.GetFreeVxs(out VertexStore v);
-            return v;
-        }
-        void ReleaseVxs(ref VertexStore v)
-        {
-            VectorToolBox.ReleaseVxs(ref v);
-        }
         public override RequestFont CurrentFont
         {
             get
@@ -863,8 +969,8 @@ namespace PixelFarm.CpuBlit
         }
         public override Color StrokeColor
         {
-            get { return strokeColor; }
-            set { this.strokeColor = value; }
+            get { return _strokeColor; }
+            set { this._strokeColor = value; }
         }
 
         /// <summary>
@@ -1084,18 +1190,18 @@ namespace PixelFarm.CpuBlit
         }
         public LineJoin LineJoin
         {
-            get { return stroke.LineJoin; }
+            get { return _stroke.LineJoin; }
             set
             {
-                stroke.LineJoin = value;
+                _stroke.LineJoin = value;
             }
         }
         public LineCap LineCap
         {
-            get { return stroke.LineCap; }
+            get { return _stroke.LineCap; }
             set
             {
-                stroke.LineCap = value;
+                _stroke.LineCap = value;
             }
         }
         public LineDashGenerator LineDashGen

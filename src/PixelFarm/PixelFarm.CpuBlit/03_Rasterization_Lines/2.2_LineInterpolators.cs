@@ -253,10 +253,21 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             {
                 return false;
             }
-
         }
+
+#if DEBUG
+        static int dbugCount = 0;
+#endif
         bool StepV()
         {
+            //try
+            //{
+            //    dbugCount++;
+
+            //    if (dbugCount == 2668)
+            //    {
+
+            //    }
             int dist;
             int s1 = _aa_data.BaseStepV(ref _m_di);
             int offset0 = LineInterpolatorAAData.MAX_HALF_WIDTH + 2;
@@ -280,6 +291,12 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                                                offset1 - offset0,
                                                _aa_data.m_covers, offset0);
             return ++_aa_data.m_step < _aa_data.m_count;
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    return false;
+            //}
         }
     }
 

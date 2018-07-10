@@ -78,7 +78,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             }
             //-----------------------------------
             painter.Clear(Drawing.Color.White);
-            lionFill.Draw(painter);
+            lionFill.Render(painter);
             
             //IBitmapBlender backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
             //ChildImage image;
