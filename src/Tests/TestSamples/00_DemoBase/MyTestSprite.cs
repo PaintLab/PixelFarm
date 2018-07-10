@@ -116,7 +116,7 @@ namespace PixelFarm.CpuBlit
             return false;
         }
 
-        public override void Draw(PixelFarm.Drawing.Painter p)
+        public override void Render(PixelFarm.Drawing.Painter p)
         {
             if (recreatePathAgain)
             {

@@ -62,7 +62,7 @@ namespace PixelFarm.CpuBlit.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            lionFill.Draw(p);
+            lionFill.Render(p);
         }
         public override void MouseDrag(int x, int y)
         {
@@ -158,7 +158,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             foreach (MyTestSprite lion in lionList)
             {
-                lion.Draw(p);
+                lion.Render(p);
             }
         }
 

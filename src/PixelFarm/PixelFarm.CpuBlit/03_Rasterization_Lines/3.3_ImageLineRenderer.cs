@@ -152,39 +152,38 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
             unsafe
             {
-                CpuBlit.Imaging.TempMemPtr destMemPtr = m_buf.GetBufferPtr();
-                CpuBlit.Imaging.TempMemPtr srcMemPtr = src.GetBufferPtr();
 
-                int* destBuffer = (int*)destMemPtr.Ptr;
-                int* srcBuffer = (int*)srcMemPtr.Ptr;
-                // copy the image into the middle of the dest
-                for (int y = 0; y < m_height; y++)
+                using (CpuBlit.Imaging.TempMemPtr destMemPtr = m_buf.GetBufferPtr())
+                using (CpuBlit.Imaging.TempMemPtr srcMemPtr = src.GetBufferPtr())
                 {
-                    for (int x = 0; x < m_width; x++)
+                    int* destBuffer = (int*)destMemPtr.Ptr;
+                    int* srcBuffer = (int*)srcMemPtr.Ptr;
+                    // copy the image into the middle of the dest
+                    for (int y = 0; y < m_height; y++)
                     {
-                        int sourceOffset = src.GetBufferOffsetXY32(x, y);
-                        int destOffset = m_buf.GetBufferOffsetXY32(m_dilation, y + m_dilation);
-                        destBuffer[destOffset] = srcBuffer[sourceOffset];
+                        for (int x = 0; x < m_width; x++)
+                        {
+                            int sourceOffset = src.GetBufferOffsetXY32(x, y);
+                            int destOffset = m_buf.GetBufferOffsetXY32(m_dilation, y + m_dilation);
+                            destBuffer[destOffset] = srcBuffer[sourceOffset];
+                        }
+                    }
+
+                    // copy the first two pixels form the end into the begining and from the begining into the end
+                    for (int y = 0; y < m_height; y++)
+                    {
+                        int s1Offset = src.GetBufferOffsetXY32(0, y);
+                        int d1Offset = m_buf.GetBufferOffsetXY32(m_dilation + m_width, y);
+                        int s2Offset = src.GetBufferOffsetXY32(m_width - m_dilation, y);
+                        int d2Offset = m_buf.GetBufferOffsetXY32(0, y);
+
+                        for (int x = 0; x < m_dilation; x++)
+                        {
+                            destBuffer[d1Offset++] = srcBuffer[s1Offset++];
+                            destBuffer[d2Offset++] = srcBuffer[s2Offset++];
+                        }
                     }
                 }
-
-                // copy the first two pixels form the end into the begining and from the begining into the end
-                for (int y = 0; y < m_height; y++)
-                {
-                    int s1Offset = src.GetBufferOffsetXY32(0, y);
-                    int d1Offset = m_buf.GetBufferOffsetXY32(m_dilation + m_width, y);
-                    int s2Offset = src.GetBufferOffsetXY32(m_width - m_dilation, y);
-                    int d2Offset = m_buf.GetBufferOffsetXY32(0, y);
-
-                    for (int x = 0; x < m_dilation; x++)
-                    {
-                        destBuffer[d1Offset++] = srcBuffer[s1Offset++];
-                        destBuffer[d2Offset++] = srcBuffer[s2Offset++];
-                    }
-                }
-
-                srcMemPtr.Release();
-                destMemPtr.Release();
             }
 
 

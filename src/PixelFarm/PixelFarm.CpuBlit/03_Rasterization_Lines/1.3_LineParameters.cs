@@ -132,16 +132,16 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 return false;
             }
 
-            int len2 = len >> 1;
+//            int len2 = len >> 1;
 
-#if DEBUG
-            if (len2 == 0)
-            {
+//#if DEBUG
+//            if (len2 == 0)
+//            {
 
-            }
-#endif
+//            }
+//#endif
 
-            lp1 = new LineParameters(this.x1, this.y1, xmid, ymid, len2);
+            lp1 = new LineParameters(this.x1, this.y1, xmid, ymid, len >> 1);
             lp2 = new LineParameters(xmid, ymid, this.x2, this.y2, this.len);
 
             return true;

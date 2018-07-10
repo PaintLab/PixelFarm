@@ -33,15 +33,29 @@ namespace PixelFarm.CpuBlit.Imaging
         GrayScale8,
     }
 
-    public struct TempMemPtr
+    public struct TempMemPtr : IDisposable
     {
         int _lenInBytes; //in bytes
-        System.Runtime.InteropServices.GCHandle handle1;
 
+#if COSMOS
+        IntPtr _cosmosFixedPtr;
+#else
+        System.Runtime.InteropServices.GCHandle handle1;
+#endif
         public TempMemPtr(int[] buffer) //in element count
         {
-            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
             this._lenInBytes = buffer.Length * 4;
+#if COSMOS
+            unsafe
+            {
+                fixed (int* h = &buffer[0])
+                {
+                    _cosmosFixedPtr = (IntPtr)h;
+                }
+            }
+#else
+            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+#endif
         }
 
         public int LengthInBytes
@@ -53,20 +67,50 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             get
             {
+#if COSMOS
+                return _cosmosFixedPtr;
+#else
                 return handle1.AddrOfPinnedObject();
+#endif
             }
         }
-        public void Release()
+        public void Dispose()
         {
+
+#if COSMOS
+            _cosmosFixedPtr = IntPtr.Zero;
+#else
             this.handle1.Free();
+#endif
         }
-        //public unsafe byte* BytePtr
-        //{
-        //    get { return (byte*)handle1.AddrOfPinnedObject(); }
-        //}
 
+
+        //---------------
+        //helper...
+        public static TempMemPtr FromBmp(ActualBitmap actualBmp)
+        {
+            return ActualBitmap.GetBufferPtr(actualBmp);
+        }
+        public unsafe static TempMemPtr FromBmp(IBitmapSrc actualBmp, out int* headPtr)
+        {
+            TempMemPtr ptr = actualBmp.GetBufferPtr();
+            headPtr = (int*)ptr.Ptr;
+            return ptr;
+        }
+
+        public unsafe static TempMemPtr FromBmp(ActualBitmap actualBmp, out int* headPtr)
+        {
+            TempMemPtr ptr = ActualBitmap.GetBufferPtr(actualBmp);
+            headPtr = (int*)ptr.Ptr;
+            return ptr;
+        }
+        public unsafe static TempMemPtr FromBmp(ActualBitmap actualBmp, out byte* headPtr)
+        {
+            TempMemPtr ptr = ActualBitmap.GetBufferPtr(actualBmp);
+            headPtr = (byte*)ptr.Ptr;
+            return ptr;
+        }
     }
-
 }
 namespace PixelFarm.CpuBlit
 {
@@ -111,9 +155,7 @@ namespace PixelFarm.CpuBlit
         }
         public override void Dispose()
         {
-
-
-
+            pixelBuffer = null;
         }
         public override int Width
         {
@@ -226,14 +268,15 @@ namespace PixelFarm.CpuBlit
             int[] buff2 = new int[img.Width * img.Height];
             unsafe
             {
-                //byte[] pixelBuffer = ActualImage.GetBuffer(img);
-                CpuBlit.Imaging.TempMemPtr pixBuffer = ActualBitmap.GetBufferPtr(img);
-                //fixed (byte* header = &pixelBuffer[0])
-                byte* header = (byte*)pixBuffer.Ptr;
+
+                using (CpuBlit.Imaging.TempMemPtr pixBuffer = ActualBitmap.GetBufferPtr(img))
                 {
-                    System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);//length in bytes
+                    //fixed (byte* header = &pixelBuffer[0])
+                    byte* header = (byte*)pixBuffer.Ptr;
+                    {
+                        System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);//length in bytes
+                    }
                 }
-                pixBuffer.Release();
             }
 
             return buff2;
@@ -267,7 +310,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-#if DEBUG 
+#if DEBUG
         public void dbugSaveToPngFile(string filename)
         {
             SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
@@ -361,9 +404,9 @@ namespace PixelFarm.CpuBlit
         int[] GetOrgInt32Buffer();
         int GetBufferOffsetXY32(int x, int y);
 
-        Imaging.TempMemPtr GetBufferPtr(); 
+        Imaging.TempMemPtr GetBufferPtr();
 
-       
+
         int BytesBetweenPixelsInclusive { get; }
         void ReplaceBuffer(int[] newBuffer);
         Color GetPixel(int x, int y);
@@ -383,22 +426,23 @@ namespace PixelFarm.CpuBlit
             unsafe
             {
 
-                CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(img);
-                byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
-                int srcIndex = 0;
-                int srcStride = img.Stride;
-                fixed (int* destHead = &buff2[0])
+                using (CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(img))
                 {
-                    byte* destHead2 = (byte*)destHead;
-                    for (int line = 0; line < h; ++line)
+                    byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
+                    int srcIndex = 0;
+                    int srcStride = img.Stride;
+                    fixed (int* destHead = &buff2[0])
                     {
-                        //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
-                        NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
-                        srcIndex += srcStride;
-                        destHead2 += destStride;
+                        byte* destHead2 = (byte*)destHead;
+                        for (int line = 0; line < h; ++line)
+                        {
+                            //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
+                            NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
+                            srcIndex += srcStride;
+                            destHead2 += destStride;
+                        }
                     }
                 }
-                srcBufferPtr.Release();
             }
             return buff2;
         }
@@ -413,27 +457,28 @@ namespace PixelFarm.CpuBlit
             unsafe
             {
 
-                CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(src);
-                byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
-                int srcIndex = 0;
-                int srcStride = src.Stride;
-                fixed (int* destHead = &buff2[0])
+                using (CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(src))
                 {
-                    byte* destHead2 = (byte*)destHead;
-
-                    //move to specific src line
-                    srcIndex += srcStride * srcY;
-
-                    int lineEnd = srcY + srcH;
-                    for (int line = srcY; line < lineEnd; ++line)
+                    byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
+                    int srcIndex = 0;
+                    int srcStride = src.Stride;
+                    fixed (int* destHead = &buff2[0])
                     {
-                        //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
-                        NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
-                        srcIndex += srcStride;
-                        destHead2 += destStride;
+                        byte* destHead2 = (byte*)destHead;
+
+                        //move to specific src line
+                        srcIndex += srcStride * srcY;
+
+                        int lineEnd = srcY + srcH;
+                        for (int line = srcY; line < lineEnd; ++line)
+                        {
+                            //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
+                            NativeMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
+                            srcIndex += srcStride;
+                            destHead2 += destStride;
+                        }
                     }
                 }
-                srcBufferPtr.Release();
             }
 
             return buff2;
