@@ -129,11 +129,19 @@ namespace PixelFarm.CpuBlit
                     PixelBlenderBGRA blender = new PixelBlenderBGRA();
                     _lineProfileAA = new Rasterization.Lines.LineProfileAnitAlias(this.StrokeWidth, null);
                     var outlineRenderer = new Rasterization.Lines.OutlineRenderer(
-                        new MyBitmapBlender(_aggsx.DestActualImage, blender),
+                        new ClipProxyImage(new MyBitmapBlender(_aggsx.DestActualImage, blender)),
                         blender,
                         _lineProfileAA);
+                    outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
                     //
                     _outlineRas = new Rasterization.Lines.OutlineAARasterizer(outlineRenderer);
+                    _outlineRas.LineJoin = Rasterization.Lines.OutlineAARasterizer.OutlineJoin.Round;
+                    _outlineRas.RoundCap = true;
+
+                    //_outlineRas.LineJoin = (RenderAccurateJoins ?
+                    //OutlineAARasterizer.OutlineJoin.AccurateJoin
+                    //: OutlineAARasterizer.OutlineJoin.Round);
+                    //rasterizer.RoundCap = true;
                 }
             }
         }
@@ -294,7 +302,17 @@ namespace PixelFarm.CpuBlit
 
         public override void Draw(VertexStoreSnap vxs)
         {
-            this.Fill(vxs);
+            if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            {
+                using (VxsContext.Temp(out var v1))
+                {
+                    _aggsx.Render(vxs, this._strokeColor);
+                }
+            }
+            else
+            {
+                _outlineRas.RenderVertexSnap(vxs, this._strokeColor);
+            }
         }
 
 
@@ -666,13 +684,13 @@ namespace PixelFarm.CpuBlit
                 {
                     _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
                 }
-            } 
-        } 
+            }
+        }
         AggLinearGradientBrush _aggGradientBrush = new AggLinearGradientBrush();
-        AggCircularGradientBrush _circularGradBrush = new AggCircularGradientBrush(); 
+        AggCircularGradientBrush _circularGradBrush = new AggCircularGradientBrush();
 
 
-       
+
         public override RequestFont CurrentFont
         {
             get
