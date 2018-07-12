@@ -38,22 +38,29 @@ namespace LayoutFarm
         public static Image LoadBitmap(string filename)
         {
             System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
-            DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+            GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
             return bmp;
         }
     }
 
-    public sealed class DemoBitmap : Image
+    public sealed class GdiPlusBitmap : Image
     {
         int width;
         int height;
-        System.Drawing.Bitmap innerImage;
-        public DemoBitmap(int w, int h, System.Drawing.Bitmap innerImage)
+        System.Drawing.Bitmap _innerBmp;
+        public GdiPlusBitmap(int w, int h, System.Drawing.Bitmap innerImage)
         {
             this.width = w;
             this.height = h;
-            this.innerImage = innerImage;
+            this._innerBmp = innerImage;
             SetCacheInnerImage(this, innerImage);
+        }
+        public override Image CreateAnother(float scaleW, float scaleH)
+        {
+            int bmpW = _innerBmp.Width;
+            int bmpH = _innerBmp.Height;
+            System.Drawing.Bitmap newclone = new System.Drawing.Bitmap(_innerBmp, (int)(bmpW * scaleW), (int)(bmpH * scaleH));
+            return new GdiPlusBitmap((int)(width * scaleW), (int)(height * scaleH), newclone);
         }
         public override int Width
         {
@@ -63,13 +70,18 @@ namespace LayoutFarm
         {
             get { return this.height; }
         }
-
         public override void Dispose()
         {
+            ClearCache(this);
+            if (_innerBmp != null)
+            {
+                _innerBmp.Dispose();
+                _innerBmp = null;
+            }
         }
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
-            var bmpData = innerImage.LockBits(new System.Drawing.Rectangle(0, 0, width, height),
+            var bmpData = _innerBmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height),
              System.Drawing.Imaging.ImageLockMode.ReadOnly,
              System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
@@ -77,7 +89,7 @@ namespace LayoutFarm
             int size = bmpData.Width * bmpData.Height;
             int[] newBuff = new int[size];
             System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, newBuff, 0, size);
-            innerImage.UnlockBits(bmpData);
+            _innerBmp.UnlockBits(bmpData);
 
             buffRequest.OutputBuffer32 = newBuff;
         }
