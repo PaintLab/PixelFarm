@@ -42,7 +42,7 @@ namespace PixelFarm.Drawing
         }
 
 
-
+        public abstract Image CreateAnother(float scaleW, float scaleH);
 
         //----------------------------
         public enum RequestType
@@ -55,13 +55,13 @@ namespace PixelFarm.Drawing
             public ImgBufferRequestArgs(int requestPixelFormat, RequestType reqType)
             {
                 this.RequestType = reqType;
-                this.RequestPixelFormat = requestPixelFormat; 
+                this.RequestPixelFormat = requestPixelFormat;
                 this.IsInvertedImage = true;
                 this.OutputBuffer32 = null;
             }
             public bool IsInvertedImage { get; set; }
             public int RequestPixelFormat { get; private set; }
-            public RequestType RequestType { get; private set; } 
+            public RequestType RequestType { get; private set; }
             public int[] OutputBuffer32 { get; set; }
         }
     }

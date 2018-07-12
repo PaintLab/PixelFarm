@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
- 
+
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
 using LayoutFarm.UI;
@@ -47,7 +47,7 @@ namespace LayoutFarm
         public static Image LoadBitmap(string filename)
         {
             System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
-            DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+            GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
             return bmp;
         }
         void LazyImageLoad(ImageBinder binder)
@@ -93,11 +93,22 @@ namespace LayoutFarm
             return clientImgBinder;
         }
 
+        public ImageBinder GetImageBinder3(string src, float scale)
+        {
+            //scale image to fit the viewport 
+            //
+            ClientImageBinder clientImgBinder = new ClientImageBinderWithScale(src, scale);
+            clientImgBinder.SetLazyLoaderFunc(LazyImageLoad);
+            //if use lazy img load func
+            imageContentMan.AddRequestImage(clientImgBinder);
+            return clientImgBinder;
+        }
+
         public Image LoadImage(string imgName)
         {
             return LoadBitmap(imgName);
         }
-        
+
         //----------------------------------------
 
         //UIRootElement _uiRootElement;
