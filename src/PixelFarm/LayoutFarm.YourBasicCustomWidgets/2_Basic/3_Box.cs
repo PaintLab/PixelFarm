@@ -27,7 +27,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void SetInnerContentSize(int w, int h)
         {   
-            SetDesiredSize(w, h);
+            base.SetInnerContentSize(w, h);
         }
         public override void Walk(UIVisitor visitor)
         {

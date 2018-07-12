@@ -638,7 +638,7 @@ namespace LayoutFarm.CustomWidgets
             int finW = System.Math.Max(InnerWidth, widthSum);
             int finH = System.Math.Max(InnerHeight, heightSum);
 
-            SetDesiredSize(finW, finH);
+            SetInnerContentSize(finW, finH);
 
             RaiseLayoutFinished();
         }

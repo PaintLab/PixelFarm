@@ -85,7 +85,10 @@ namespace LayoutFarm
         }
         public PixelFarm.Drawing.Image Image
         {
-            get { return this._image; }
+            get
+            {
+                return this._image;
+            }
         }
 
         public int ImageWidth
@@ -118,7 +121,7 @@ namespace LayoutFarm
             }
         }
 
-        public void SetImage(PixelFarm.Drawing.Image image)
+        public virtual void SetImage(PixelFarm.Drawing.Image image)
         {
             //set image to this binder
             if (image != null)

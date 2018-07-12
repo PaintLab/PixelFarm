@@ -339,7 +339,7 @@ namespace LayoutFarm.CustomWidgets
                 return this._innerHeight;
             }
         }
-        protected void SetDesiredSize(int w, int h)
+        protected void SetInnerContentSize(int w, int h)
         {
             this._innerWidth = w;
             this._innerHeight = h;
@@ -479,7 +479,7 @@ namespace LayoutFarm.CustomWidgets
                             }
                         }
 
-                        this.SetDesiredSize(maxRight, ypos);
+                        this.SetInnerContentSize(maxRight, ypos);
                     }
                     break;
                 case CustomWidgets.BoxContentLayoutKind.HorizontalStack:
@@ -503,7 +503,7 @@ namespace LayoutFarm.CustomWidgets
                             }
                         }
 
-                        this.SetDesiredSize(xpos, maxBottom);
+                        this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
                 default:
@@ -532,11 +532,11 @@ namespace LayoutFarm.CustomWidgets
 
                         if (!this.HasSpecificWidth)
                         {
-                            this.SetDesiredSize(maxRight, this.InnerHeight);
+                            this.SetInnerContentSize(maxRight, this.InnerHeight);
                         }
                         if (!this.HasSpecificHeight)
                         {
-                            this.SetDesiredSize(this.InnerWidth, maxBottom);
+                            this.SetInnerContentSize(this.InnerWidth, maxBottom);
                         }
                     }
                     break;
