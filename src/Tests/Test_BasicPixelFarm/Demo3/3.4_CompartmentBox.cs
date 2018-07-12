@@ -125,7 +125,7 @@ namespace LayoutFarm
             {
                 SetupDockSpaces();
             }
-            public LayoutFarm.UI.AbstractRect Target
+            public LayoutFarm.UI.AbstractRectUI Target
             {
                 get;
                 set;

@@ -9,7 +9,7 @@ namespace LayoutFarm.CustomWidgets
     /// <summary>
     /// abstract box ui element
     /// </summary>
-    public abstract class AbstractBox : AbstractRect
+    public abstract class AbstractBox : AbstractRectUI
     {
         BoxContentLayoutKind panelLayoutKind;
         bool needContentLayout;
@@ -457,7 +457,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxRight = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as AbstractRect;
+                            var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
 
@@ -489,7 +489,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as AbstractRect;
+                            var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
                                 element.PerformContentLayout();
@@ -513,7 +513,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as AbstractRect;
+                            var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
                                 element.PerformContentLayout();

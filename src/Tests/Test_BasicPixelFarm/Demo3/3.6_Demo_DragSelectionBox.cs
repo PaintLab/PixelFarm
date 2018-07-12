@@ -167,10 +167,10 @@ namespace LayoutFarm
             var primSelectionBox = selectionBox.GetPrimaryRenderElement(rootgfx);
             var primGlobalPoint = primSelectionBox.GetGlobalLocation();
             var selectedRectArea = new Rectangle(primGlobalPoint, primSelectionBox.Size);
-            List<AbstractRect> selectedList = new List<AbstractRect>();
+            List<AbstractRectUI> selectedList = new List<AbstractRectUI>();
             for (int i = 0; i < j; ++i)
             {
-                var box = bgbox.GetChild(i) as AbstractRect;
+                var box = bgbox.GetChild(i) as AbstractRectUI;
                 if (box == null)
                 {
                     continue;
@@ -261,7 +261,7 @@ namespace LayoutFarm
                         {
                             //drop
                             var sender = e.Sender as UIControllerBox;
-                            var droppingBox = sender.TargetBox as AbstractRect;
+                            var droppingBox = sender.TargetBox as AbstractRectUI;
                             if (droppingBox != null)
                             {
                                 //move from original 
@@ -339,7 +339,7 @@ namespace LayoutFarm
             int nearestX = (int)((newX + halfGrid) / gridSize) * gridSize;
             int nearestY = (int)((newY + halfGrid) / gridSize) * gridSize;
             controllerBox.SetLocation(nearestX, nearestY);
-            AbstractRect targetBox = controllerBox.TargetBox;
+            AbstractRectUI targetBox = controllerBox.TargetBox;
             if (targetBox != null)
             {
                 int xdiff = nearestX - pos.X;
@@ -347,14 +347,14 @@ namespace LayoutFarm
                 targetBox.SetLocation(targetBox.Left + xdiff, targetBox.Top + ydiff);
             }
         }
-        List<LayoutFarm.UI.AbstractRect> FindUnderlyingElements(UIControllerBox controllerBox)
+        List<LayoutFarm.UI.AbstractRectUI> FindUnderlyingElements(UIControllerBox controllerBox)
         {
-            var dragOverElements = new List<LayoutFarm.UI.AbstractRect>();
+            var dragOverElements = new List<LayoutFarm.UI.AbstractRectUI>();
             Rectangle controllerBoxArea = controllerBox.Bounds;
             int j = bgbox.ChildCount;
             for (int i = 0; i < j; ++i)
             {
-                var box = bgbox.GetChild(i) as LayoutFarm.UI.AbstractRect;
+                var box = bgbox.GetChild(i) as LayoutFarm.UI.AbstractRectUI;
                 if (box == null || controllerBox.TargetBox == box)
                 {
                     continue;
@@ -495,13 +495,13 @@ namespace LayoutFarm
             LayoutFarm.CustomWidgets.Box boxRightBottom;
             DockSpacesController dockspaceController;
             Dictionary<UIElement, int> latestDragOverElements;
-            LayoutFarm.UI.AbstractRect targetBox;
+            LayoutFarm.UI.AbstractRectUI targetBox;
             public UIControllerBox(int w, int h)
                 : base(w, h)
             {
                 SetupDockSpaces();
             }
-            public LayoutFarm.UI.AbstractRect TargetBox
+            public LayoutFarm.UI.AbstractRectUI TargetBox
             {
                 get { return this.targetBox; }
                 set

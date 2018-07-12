@@ -33,8 +33,8 @@ namespace LayoutFarm.UI
         protected int sizeW;
         protected int sizeH;
         protected SpaceConcept dockSpaceConcept = SpaceConcept.FiveSpace;
-        protected AbstractRect myOwner;
-        public NinespaceController(AbstractRect owner, SpaceConcept initConcept)
+        protected AbstractRectUI myOwner;
+        public NinespaceController(AbstractRectUI owner, SpaceConcept initConcept)
         {
             this.myOwner = owner;
             this.dockSpaceConcept = initConcept;
@@ -62,7 +62,7 @@ namespace LayoutFarm.UI
             SpacePart dockspace = new SpacePart(this, 10, 10, name);
             return dockspace;
         }
-        public AbstractRect Owner
+        public AbstractRectUI Owner
         {
             get
             {
@@ -331,7 +331,7 @@ namespace LayoutFarm.UI
                 return topSpaceHeight;
             }
         }
-        protected AbstractRect OwnerVisualElement
+        protected AbstractRectUI OwnerVisualElement
         {
             get
             {
