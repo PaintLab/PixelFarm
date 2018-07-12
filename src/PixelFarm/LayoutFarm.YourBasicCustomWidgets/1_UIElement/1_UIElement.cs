@@ -140,11 +140,13 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBoundsWH(float width, float height)
         {
+ 
             _right = _left + width;
             _bottom = _top + height;
         }
         protected void SetElementBoundsLTWH(float left, float top, float width, float height)
         {
+ 
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
@@ -152,7 +154,10 @@ namespace LayoutFarm.UI
             _bottom = top + height;
         }
         protected void SetElementBounds(float left, float top, float right, float bottom)
-        {   //change 'TransparentBounds' => not effect visual presentation
+        {
+
+ 
+            //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
             _right = right;

@@ -5,9 +5,7 @@ namespace LayoutFarm.CustomWidgets
 {
     public class CustomImageRenderBox : CustomRenderBox
     {
-#if DEBUG
-        public bool dbugBreak;
-#endif
+ 
         ImageBinder imageBinder;
         public CustomImageRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
@@ -23,6 +21,7 @@ namespace LayoutFarm.CustomWidgets
             get { return this.imageBinder; }
             set { this.imageBinder = value; }
         }
+
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             if (this.imageBinder != null)
@@ -31,6 +30,10 @@ namespace LayoutFarm.CustomWidgets
                 {
                     case ImageBinderState.Loaded:
                         {
+                            //if (this.dbugBreak)
+                            //{
+                            //}
+
                             //canvas.FillRectangle(Color.Red, 0, 0, this.Width, this.Height);
                             canvas.DrawImage(imageBinder.Image,
                                 new RectangleF(0, 0, this.Width, this.Height));
