@@ -25,16 +25,16 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
-        public void SetInnerContentSize(int w, int h)
-        {   
-            base.SetInnerContentSize(w, h);
-        }
         public override void Walk(UIVisitor visitor)
         {
             visitor.BeginElement(this, "box");
             this.Describe(visitor);
             //descrube child 
             visitor.EndElement();
+        }
+        public void BoxSetInnerContentSize(int innerW, int innerH)
+        {
+            SetInnerContentSize(innerW, innerH);
         }
     }
 }
