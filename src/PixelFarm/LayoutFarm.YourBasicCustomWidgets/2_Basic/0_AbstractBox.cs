@@ -246,6 +246,14 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
+        public int ViewportBottom
+        {
+            get { return this.ViewportY + this.Height; }
+        }
+        public int ViewportRight
+        {
+            get { return this.ViewportX + this.Width; }
+        }
         public override void SetViewport(int x, int y, object reqBy)
         {
             //check if viewport is changed or not
