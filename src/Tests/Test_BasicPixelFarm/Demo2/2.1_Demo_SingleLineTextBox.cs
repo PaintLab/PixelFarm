@@ -3,9 +3,9 @@
 namespace LayoutFarm
 {
     [DemoNote("2.1 SingleLineText")]
-    class Demo_SingleLineText : DemoBase
+    class Demo_SingleLineText : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
             var textSpanStyle = new Text.TextSpanStyle();

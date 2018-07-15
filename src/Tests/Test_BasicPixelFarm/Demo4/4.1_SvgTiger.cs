@@ -9,13 +9,13 @@ using PixelFarm.CpuBlit;
 namespace LayoutFarm
 {
     [DemoNote("4.1 DemoSvgTiger")]
-    class Demo_SvgTiger : DemoBase
+    class Demo_SvgTiger : App
     {
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
         LayoutFarm.CustomWidgets.Box box1;
         BackDrawBoardUI _backBoard;
 
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
 
 

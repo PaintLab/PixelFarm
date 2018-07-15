@@ -4,9 +4,9 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("3.1 DemoVisible")]
-    class Demo_Visible : DemoBase
+    class Demo_Visible : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;

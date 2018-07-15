@@ -5,10 +5,10 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.3 Demo_ControllerBoxs2")]
-    class Demo_ControllerBoxs2 : DemoBase
+    class Demo_ControllerBoxs2 : App
     {
         UIControllerBox controllerBox1;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
 

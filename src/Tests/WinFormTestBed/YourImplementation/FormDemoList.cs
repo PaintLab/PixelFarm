@@ -38,7 +38,7 @@ namespace LayoutFarm.Dev
             if (selectedDemoInfo == null) return;
          
 
-            DemoBase selectedDemo = (DemoBase)Activator.CreateInstance(selectedDemoInfo.DemoType);
+            App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
             RunDemo(selectedDemo);
 
             //------------------------------------------------------------ 
@@ -58,12 +58,12 @@ namespace LayoutFarm.Dev
 
         LayoutFarm.UI.UISurfaceViewportControl _latestviewport;
         Form _latest_formCanvas;
-        public void RunDemo(DemoBase selectedDemo)
+        public void RunDemo(App selectedDemo)
         {
 
             YourImplementation.DemoFormCreatorHelper.CreateReadyForm(out _latestviewport, out _latest_formCanvas);
 
-            selectedDemo.StartDemo(new AppHost(_latestviewport));
+            selectedDemo.Start(new AppHost(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
             _latestviewport.PaintMe();
@@ -113,7 +113,7 @@ namespace LayoutFarm.Dev
 
         public void LoadDemoList(Type sampleAssemblySpecificType)
         {
-            Type demoBaseType = typeof(DemoBase);
+            Type demoBaseType = typeof(App);
              
 
             var thisAssem = System.Reflection.Assembly.GetAssembly(sampleAssemblySpecificType);

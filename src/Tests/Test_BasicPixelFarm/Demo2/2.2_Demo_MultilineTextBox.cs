@@ -3,9 +3,9 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("2.2 MultiLineTextBox")]
-    class Demo_MultiLineTextBox : DemoBase
+    class Demo_MultiLineTextBox : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
 
             var textbox1 = new LayoutFarm.CustomWidgets.TextBox(400, 100, true);

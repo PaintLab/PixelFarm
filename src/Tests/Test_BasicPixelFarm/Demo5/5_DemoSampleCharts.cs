@@ -34,7 +34,7 @@ using PixelFarm.CpuBlit;
 namespace LayoutFarm.ColorBlenderSample
 {
     [DemoNote("5 DemoSampleCharts")]
-    class DemoSampleCharts : DemoBase
+    class DemoSampleCharts : App
     {
 
         //sample chart! 
@@ -225,7 +225,7 @@ namespace LayoutFarm.ColorBlenderSample
 
         int _chartHeight = 300;
 
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var sampleButton = new LayoutFarm.CustomWidgets.Box(100, _chartHeight);
             host.AddChild(sampleButton);

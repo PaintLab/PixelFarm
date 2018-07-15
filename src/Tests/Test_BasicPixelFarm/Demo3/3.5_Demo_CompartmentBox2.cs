@@ -6,10 +6,10 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("3.5 Demo_CompartmentBox2")]
-    class Demo_CompartmentBox2 : DemoBase
+    class Demo_CompartmentBox2 : App
     {
         UINinespaceBox ninespaceBox;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
             {

@@ -11,14 +11,14 @@ using PixelFarm.CpuBlit;
 namespace LayoutFarm
 {
     [DemoNote("4.2 ShapeControls")]
-    class DemoShapeControl : DemoBase
+    class DemoShapeControl : App
     {
         LayoutFarm.CustomWidgets.PolygonController polygonController = new CustomWidgets.PolygonController();
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
         LayoutFarm.CustomWidgets.Box box1;
 
 
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
 
 

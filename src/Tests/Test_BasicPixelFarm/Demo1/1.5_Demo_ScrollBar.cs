@@ -3,9 +3,9 @@
 namespace LayoutFarm
 {
     [DemoNote("1.5 ScrollBar")]
-    class Demo_ScrollBar : DemoBase
+    class Demo_ScrollBar : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
 
 

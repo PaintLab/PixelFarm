@@ -4,9 +4,9 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.7 ListView")]
-    class Demo_ListView : DemoBase
+    class Demo_ListView : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var listview = new LayoutFarm.CustomWidgets.ListView(300, 400);
             listview.SetLocation(10, 10);

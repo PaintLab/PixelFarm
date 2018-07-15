@@ -1,26 +1,23 @@
 ﻿//Apache2, 2014-present, WinterDev
 using System;
 using PixelFarm.Drawing;
-using LayoutFarm.UI;
 
 namespace LayoutFarm
 {
 
-    public abstract class DemoBase
+    public abstract class App
     {
-        public void StartDemo(AppHost host)
+        public void Start(AppHost host)
         {
-            OnStartDemo(host);
+            OnStart(host);
         }
-        protected virtual void OnStartDemo(AppHost host)
+        protected virtual void OnStart(AppHost host)
         {
         }
         public virtual string Desciption
         {
             get { return ""; }
         }
-
-
         public static Image LoadBitmap(string filename)
         {
             System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);

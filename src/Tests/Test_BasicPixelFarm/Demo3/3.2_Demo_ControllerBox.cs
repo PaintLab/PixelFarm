@@ -5,10 +5,10 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.2 DemoControllerBox")]
-    class Demo_ControllerBoxs : DemoBase
+    class Demo_ControllerBoxs : App
     {
         UIControllerBox controllerBox1;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
@@ -99,11 +99,11 @@ namespace LayoutFarm
 
 
     [DemoNote("3.2.1 DemoControllerBox")]
-    class Demo_ControllerBoxs3_1 : DemoBase
+    class Demo_ControllerBoxs3_1 : App
     {
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
 
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;

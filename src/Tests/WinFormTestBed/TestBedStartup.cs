@@ -41,7 +41,7 @@ namespace YourImplementation
         }
 
         static UISurfaceViewportControl _latestviewport;
-        public static void RunSpecificDemo(LayoutFarm.DemoBase demo)
+        public static void RunSpecificDemo(LayoutFarm.App demo)
         {
             //-------------------------------
             Application.EnableVisualStyles();
@@ -59,7 +59,7 @@ namespace YourImplementation
                out _latestviewport);
             formCanvas.Text = "PixelFarm" + innerViewportKind;
 
-            demo.StartDemo(new LayoutFarm.AppHost(_latestviewport));
+            demo.Start(new LayoutFarm.AppHost(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
             _latestviewport.PaintMe();

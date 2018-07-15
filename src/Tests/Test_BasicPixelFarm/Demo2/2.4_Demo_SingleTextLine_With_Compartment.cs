@@ -8,13 +8,13 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("2.4 Demo_SingleTextLine_With_Compartment")]
-    class Demo_SingleTextLine_With_Compartment : DemoBase
+    class Demo_SingleTextLine_With_Compartment : App
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
         UINinespaceBox ninespaceBox;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
             {

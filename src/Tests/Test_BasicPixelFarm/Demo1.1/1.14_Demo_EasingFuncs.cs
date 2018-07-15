@@ -6,11 +6,11 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("1.14 EasingFuncs")]
-    class Demo_EasingFuncs : DemoBase
+    class Demo_EasingFuncs : App
     {
         Box animationBoard;
         AppHost _host;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             this._host = host;
             {

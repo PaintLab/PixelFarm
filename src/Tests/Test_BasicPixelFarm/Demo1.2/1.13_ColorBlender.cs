@@ -11,7 +11,7 @@ using ColorBlender;
 namespace LayoutFarm.ColorBlenderSample
 {
     [DemoNote("1.13 ColorBlenderExample")]
-    class DemoColorBlender : DemoBase
+    class DemoColorBlender : App
     {
         ColorMatch colorMatch;
         Box r_sampleBox, g_sampleBox, b_sampleBox;
@@ -26,7 +26,7 @@ namespace LayoutFarm.ColorBlenderSample
         ListView lstvw_blendAlgo;
 
         IAlgorithm blenderAlgo;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
 
             colorMatch = new ColorMatch();

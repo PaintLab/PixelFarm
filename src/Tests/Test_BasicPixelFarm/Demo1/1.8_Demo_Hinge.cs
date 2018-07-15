@@ -4,12 +4,12 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.8 Hinge")]
-    class Demo_Hinge : DemoBase
+    class Demo_Hinge : App
     {
         ImageBinder arrowBmp;
         AppHost viewport;
 
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             this.viewport = host;
             var comboBox1 = CreateComboBox(20, 20);

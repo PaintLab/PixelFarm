@@ -4,9 +4,9 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.9 TreeView")]
-    class Demo_TreeView : DemoBase
+    class Demo_TreeView : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var treeView = new LayoutFarm.CustomWidgets.TreeView(300, 400);
             treeView.SetLocation(10, 10);

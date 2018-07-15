@@ -3,9 +3,9 @@
 namespace LayoutFarm
 {
     [DemoNote("1.12 MultipleImages")]
-    class Demo_SmallAnimation : DemoBase
+    class Demo_SmallAnimation : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             ImageBinder imgBinder = host.GetImageBinder2("../../Data/imgs/favorites32.png");
             

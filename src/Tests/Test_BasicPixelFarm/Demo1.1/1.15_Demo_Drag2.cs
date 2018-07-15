@@ -5,9 +5,9 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.15 Demo_Drag2")]
-    class Demo_Drag2 : DemoBase
+    class Demo_Drag2 : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             {
                 var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);

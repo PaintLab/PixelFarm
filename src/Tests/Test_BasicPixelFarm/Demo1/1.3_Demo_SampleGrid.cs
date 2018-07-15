@@ -5,9 +5,9 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.3 Grid")]
-    class Demo_Grid : DemoBase
+    class Demo_Grid : App
     {
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             //grid0
             {

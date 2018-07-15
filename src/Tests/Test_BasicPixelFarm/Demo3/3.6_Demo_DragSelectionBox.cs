@@ -6,7 +6,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.6 Demo_DragSelectionBox")]
-    class Demo_DragSelectionBox : DemoBase
+    class Demo_DragSelectionBox : App
     {
         enum ControllerBoxMode
         {
@@ -23,7 +23,7 @@ namespace LayoutFarm
         UIControllerBox singleControllerBox;
         AppHost _host;
         LayoutFarm.CustomWidgets.Box bgbox;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             this._host = host;
             this.rootgfx = host.RootGfx;

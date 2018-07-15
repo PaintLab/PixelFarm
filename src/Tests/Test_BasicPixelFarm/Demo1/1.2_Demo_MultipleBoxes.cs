@@ -6,10 +6,10 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.2 MultpleBox")]
-    class Demo_MultipleBox : DemoBase
+    class Demo_MultipleBox : App
     {
         LayoutFarm.CustomWidgets.CheckBox currentSingleCheckedBox;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             SetupImageList(host);
             for (int i = 1; i < 5; ++i)

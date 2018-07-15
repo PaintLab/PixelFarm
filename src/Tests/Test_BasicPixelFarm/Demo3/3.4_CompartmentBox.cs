@@ -5,10 +5,10 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.4 Demo_CompartmentBox")]
-    class Demo_CompartmentBox : DemoBase
+    class Demo_CompartmentBox : App
     {
         UIControllerBox controllerBox1;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
             bgbox.BackColor = Color.White;

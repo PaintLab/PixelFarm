@@ -3,9 +3,9 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("1.10 MultipleImages")]
-    class Demo_MultipleImages : DemoBase
+    class Demo_MultipleImages : App
     {
-        protected override void OnStartDemo(AppHost viewport)
+        protected override void OnStart(AppHost viewport)
         {
 
             ImageBinder imgBinder = viewport.GetImageBinder2("../../Data/imgs/favorites32.png");
@@ -21,9 +21,9 @@ namespace LayoutFarm
     }
 
     [DemoNote("1.10_1 MultipleLabels")]
-    class Demo_MultipleLabels : DemoBase
+    class Demo_MultipleLabels : App
     {
-        protected override void OnStartDemo(AppHost viewport)
+        protected override void OnStart(AppHost viewport)
         {
             for (int i = 0; i < 10; ++i)
             {

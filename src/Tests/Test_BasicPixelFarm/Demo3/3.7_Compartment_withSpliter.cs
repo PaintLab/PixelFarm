@@ -5,10 +5,10 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("3.7 Demo_CompartmentWithSpliter")]
-    class Demo_CompartmentWithSpliter : DemoBase
+    class Demo_CompartmentWithSpliter : App
     {
         NinespaceBox ninespaceBox;
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
             {

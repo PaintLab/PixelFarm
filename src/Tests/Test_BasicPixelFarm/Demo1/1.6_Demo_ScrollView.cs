@@ -6,10 +6,10 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.6 ScrollView")]
-    class Demo_ScrollView : DemoBase
+    class Demo_ScrollView : App
     {
 
-        protected override void OnStartDemo(AppHost host)
+        protected override void OnStart(AppHost host)
         {
             //AddScrollView1(viewport, 0, 0);
             AddScrollView2(host, 10, 0);
