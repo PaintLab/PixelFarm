@@ -36,17 +36,10 @@ namespace LayoutFarm.Dev
             //load demo sample
             DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
             if (selectedDemoInfo == null) return;
-            //------------------------------------------------------------ 
-            if (selectedDemoInfo.demoBaseTypeKind == 1)
-            {
-                DemoBase2 selectedDemo = (DemoBase2)Activator.CreateInstance(selectedDemoInfo.DemoType);
-                RunDemo(selectedDemo);
-            }
-            else
-            {
-                DemoBase selectedDemo = (DemoBase)Activator.CreateInstance(selectedDemoInfo.DemoType);
-                RunDemo(selectedDemo);
-            }
+         
+
+            DemoBase selectedDemo = (DemoBase)Activator.CreateInstance(selectedDemoInfo.DemoType);
+            RunDemo(selectedDemo);
 
             //------------------------------------------------------------ 
             //LayoutFarm.UI.UISurfaceViewportControl viewport; 
@@ -85,25 +78,7 @@ namespace LayoutFarm.Dev
                 ShowFormPrint(_latestviewport);
             }
         }
-        public void RunDemo(DemoBase2 selectedDemo)
-        {
-            YourImplementation.DemoFormCreatorHelper.CreateReadyForm(out _latestviewport, out _latest_formCanvas);
-            selectedDemo.StartDemo(new SampleViewport(_latestviewport));
-            _latestviewport.TopDownRecalculateContent();
-            //==================================================  
-            _latestviewport.PaintMe();
-
-            if (this.chkShowLayoutInspector.Checked)
-            {
-                ShowFormLayoutInspector(_latestviewport);
-            }
-
-            if (this.chkShowFormPrint.Checked)
-            {
-                ShowFormPrint(_latestviewport);
-            }
-
-        }
+       
         static void ShowFormLayoutInspector(LayoutFarm.UI.UISurfaceViewportControl viewport)
         {
 
@@ -139,7 +114,7 @@ namespace LayoutFarm.Dev
         public void LoadDemoList(Type sampleAssemblySpecificType)
         {
             Type demoBaseType = typeof(DemoBase);
-            Type demoBase2Type = typeof(DemoBase2);
+             
 
             var thisAssem = System.Reflection.Assembly.GetAssembly(sampleAssemblySpecificType);
             List<DemoInfo> demoInfoList = new List<DemoInfo>();
@@ -162,22 +137,7 @@ namespace LayoutFarm.Dev
                     }
                     demoInfoList.Add(new DemoInfo(t, noteMsg));
                 }
-                else if (demoBase2Type.IsAssignableFrom(t) && t != demoBase2Type && !t.IsAbstract)
-                {
-                    string demoTypeName = t.Name;
-                    object[] notes = t.GetCustomAttributes(typeof(DemoNoteAttribute), false);
-                    string noteMsg = null;
-                    if (notes != null && notes.Length > 0)
-                    {
-                        //get one only
-                        DemoNoteAttribute note = notes[0] as DemoNoteAttribute;
-                        if (note != null)
-                        {
-                            noteMsg = note.Message;
-                        }
-                    }
-                    demoInfoList.Add(new DemoInfo(t, noteMsg) { demoBaseTypeKind = 1 });
-                }
+                 
 
             }
             demoInfoList.Sort((d1, d2) =>

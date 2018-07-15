@@ -6,20 +6,6 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
 
-    public abstract class DemoBase2
-    {
-        public void StartDemo(IViewport viewport)
-        {
-            OnStartDemo(viewport);
-        }
-        protected virtual void OnStartDemo(IViewport viewport)
-        {
-        }
-        public virtual string Desciption
-        {
-            get { return ""; }
-        }
-    }
     public abstract class DemoBase
     {
         public void StartDemo(SampleViewport viewport)
