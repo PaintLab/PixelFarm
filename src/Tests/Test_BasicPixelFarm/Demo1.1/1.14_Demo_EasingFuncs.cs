@@ -9,14 +9,14 @@ namespace LayoutFarm
     class Demo_EasingFuncs : DemoBase
     {
         Box animationBoard;
-        SampleViewport viewport;
-        protected override void OnStartDemo(SampleViewport viewport)
+        AppHost _host;
+        protected override void OnStartDemo(AppHost host)
         {
-            this.viewport = viewport;
+            this._host = host;
             {
                 animationBoard = new Box(800, 800);
                 animationBoard.BackColor = PixelFarm.Drawing.Color.White;
-                viewport.AddChild(animationBoard);
+                host.AddChild(animationBoard);
             }
             //
             {
@@ -24,7 +24,7 @@ namespace LayoutFarm
                 List<PennerAnimationInfo> pennerAnimationList = LoadAllPennerAnimationList();
                 ListView easingFuncs_List = new ListView(200, 850);
                 easingFuncs_List.SetLocation(600, 20);
-                viewport.AddChild(easingFuncs_List);
+                host.AddChild(easingFuncs_List);
                 easingFuncs_List.ListItemMouseEvent += (s, e) =>
                 {
 

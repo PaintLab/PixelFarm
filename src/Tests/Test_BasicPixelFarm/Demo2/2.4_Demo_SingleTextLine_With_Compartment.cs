@@ -14,7 +14,7 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
         UINinespaceBox ninespaceBox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             //--------------------------------
             {
@@ -23,12 +23,12 @@ namespace LayoutFarm
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddChild(bgbox);
+                host.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new UINinespaceBox(800, 600);
-            viewport.AddChild(ninespaceBox);
+            host.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
             //--------------------------------
             //test add some content to the ninespace box

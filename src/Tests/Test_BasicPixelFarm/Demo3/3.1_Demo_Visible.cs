@@ -6,16 +6,16 @@ namespace LayoutFarm
     [DemoNote("3.1 DemoVisible")]
     class Demo_Visible : DemoBase
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
-            viewport.AddChild(box1);
+            host.AddChild(box1);
             //--------------------------------
             var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
             box2.SetLocation(50, 50);
-            viewport.AddChild(box2);
+            host.AddChild(box2);
             //1. mouse down         
             box1.MouseDown += (s, e) =>
             {

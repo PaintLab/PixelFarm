@@ -18,7 +18,7 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.Box box1;
 
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
 
 
@@ -37,7 +37,7 @@ namespace LayoutFarm
 
             var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0) 
             uiSprite.LoadSvg(svgRenderVx);
-            viewport.AddChild(uiSprite); 
+            host.AddChild(uiSprite); 
 
             var spriteEvListener = new GeneralEventListener();
             uiSprite.AttachExternalEventListener(spriteEvListener);
@@ -53,9 +53,9 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //polygonController.Visible = false;
-            viewport.AddChild(polygonController);
+            host.AddChild(polygonController);
             //-------------------------------------------
-            viewport.AddChild(rectBoxController);
+            host.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{

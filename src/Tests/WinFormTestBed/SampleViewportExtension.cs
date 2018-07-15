@@ -5,7 +5,7 @@ namespace LayoutFarm
 {
     public static class SampleViewportExtension
     {
-        public static void AddChild(this SampleViewport viewport, UIElement ui)
+        public static void AddChild(this AppHost viewport, UIElement ui)
         {
             viewport.ViewportControl.AddChild(
                 ui.GetPrimaryRenderElement(viewport.ViewportControl.RootGfx),

@@ -14,7 +14,7 @@ namespace LayoutFarm
         Point textBoxGlobalOffset;
         bool alreadyHasTextBoxGlobalOffset;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             textbox.SetLocation(20, 20);
@@ -39,8 +39,8 @@ namespace LayoutFarm
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
-            viewport.AddChild(textbox);
-            viewport.AddChild(sgBox.GetPrimaryUI());
+            host.AddChild(textbox);
+            host.AddChild(sgBox.GetPrimaryUI());
             //------------------------------------ 
             BuildSampleCountryList();
         }

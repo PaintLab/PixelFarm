@@ -59,7 +59,7 @@ namespace YourImplementation
                out _latestviewport);
             formCanvas.Text = "PixelFarm" + innerViewportKind;
 
-            demo.StartDemo(new LayoutFarm.SampleViewport(_latestviewport));
+            demo.StartDemo(new LayoutFarm.AppHost(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
             _latestviewport.PaintMe();

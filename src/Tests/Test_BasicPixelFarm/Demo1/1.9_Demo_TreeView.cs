@@ -6,15 +6,15 @@ namespace LayoutFarm
     [DemoNote("1.9 TreeView")]
     class Demo_TreeView : DemoBase
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             var treeView = new LayoutFarm.CustomWidgets.TreeView(300, 400);
             treeView.SetLocation(10, 10);
             treeView.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
-            viewport.AddChild(treeView);
+            host.AddChild(treeView);
             //prepare node icon
 
-            ImageBinder nodeOpen = viewport.GetImageBinder2("../../Data/imgs/arrow_open.png");             
+            ImageBinder nodeOpen = host.GetImageBinder2("../../Data/imgs/arrow_open.png");             
 
             //add 
             for (int i = 0; i < 10; ++i)

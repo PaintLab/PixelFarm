@@ -9,23 +9,23 @@ namespace LayoutFarm
     class Demo_MultipleBox : DemoBase
     {
         LayoutFarm.CustomWidgets.CheckBox currentSingleCheckedBox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
-            SetupImageList(viewport);
+            SetupImageList(host);
             for (int i = 1; i < 5; ++i)
             {
                 var textbox = new LayoutFarm.CustomWidgets.Box(30, 30);
                 textbox.SetLocation(i * 40, i * 40);
-                viewport.AddChild(textbox);
+                host.AddChild(textbox);
             }
             //--------------------
             //image box
             //load bitmap with gdi+           
-            ImageBinder imgBinder = viewport.GetImageBinder2("../../Data/imgs/favorites32.png");
+            ImageBinder imgBinder = host.GetImageBinder2("../../Data/imgs/favorites32.png");
 
             var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
             imgBox.ImageBinder = imgBinder;
-            viewport.AddChild(imgBox);
+            host.AddChild(imgBox);
             //--------------------
             //checked box
             int boxHeight = 20;
@@ -36,7 +36,7 @@ namespace LayoutFarm
                 var statedBox = new LayoutFarm.CustomWidgets.CheckBox(20, boxHeight);
                 statedBox.SetLocation(10, boxY);
                 boxY += boxHeight + 5;
-                viewport.AddChild(statedBox);
+                host.AddChild(statedBox);
             }
             //-------------------------------------------------------------------------
             //single select 
@@ -46,7 +46,7 @@ namespace LayoutFarm
                 var statedBox = new LayoutFarm.CustomWidgets.CheckBox(20, boxHeight);
                 statedBox.SetLocation(10, boxY);
                 boxY += boxHeight + 5;
-                viewport.AddChild(statedBox);
+                host.AddChild(statedBox);
                 statedBox.WhenChecked += (s, e) =>
                 {
                     var selectedBox = (LayoutFarm.CustomWidgets.CheckBox)s;
@@ -64,7 +64,7 @@ namespace LayoutFarm
             //test canvas
             var canvasBox = new MyDrawingCanvas(300, 300);
             canvasBox.SetLocation(400, 150);
-            viewport.AddChild(canvasBox);
+            host.AddChild(canvasBox);
             //-------------------------------------------------------------------
 
         }
@@ -117,14 +117,14 @@ namespace LayoutFarm
             }
         }
 
-        static void SetupImageList(SampleViewport viewport)
+        static void SetupImageList(AppHost host)
         {
             if (!LayoutFarm.CustomWidgets.ResImageList.HasImages)
             {
                 //set imagelists
                 var imgdic = new Dictionary<CustomWidgets.ImageName, Image>();
-                imgdic[CustomWidgets.ImageName.CheckBoxUnChecked] = viewport.LoadImage("../../Data/imgs/arrow_close.png");
-                imgdic[CustomWidgets.ImageName.CheckBoxChecked] = viewport.LoadImage("../../Data/imgs/arrow_open.png");
+                imgdic[CustomWidgets.ImageName.CheckBoxUnChecked] = host.LoadImage("../../Data/imgs/arrow_close.png");
+                imgdic[CustomWidgets.ImageName.CheckBoxChecked] = host.LoadImage("../../Data/imgs/arrow_open.png");
                 LayoutFarm.CustomWidgets.ResImageList.SetImageList(imgdic);
             }
         }

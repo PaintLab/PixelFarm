@@ -12,7 +12,7 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             textbox.SetLocation(20, 20);
@@ -36,8 +36,8 @@ namespace LayoutFarm
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
-            viewport.AddChild(textbox);
-            viewport.AddChild(listView);
+            host.AddChild(textbox);
+            host.AddChild(listView);
             //------------------------------------ 
             BuildSampleCountryList();
         }

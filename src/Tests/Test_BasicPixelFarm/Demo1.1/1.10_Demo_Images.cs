@@ -5,7 +5,7 @@ namespace LayoutFarm
     [DemoNote("1.10 MultipleImages")]
     class Demo_MultipleImages : DemoBase
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost viewport)
         {
 
             ImageBinder imgBinder = viewport.GetImageBinder2("../../Data/imgs/favorites32.png");
@@ -23,7 +23,7 @@ namespace LayoutFarm
     [DemoNote("1.10_1 MultipleLabels")]
     class Demo_MultipleLabels : DemoBase
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost viewport)
         {
             for (int i = 0; i < 10; ++i)
             {

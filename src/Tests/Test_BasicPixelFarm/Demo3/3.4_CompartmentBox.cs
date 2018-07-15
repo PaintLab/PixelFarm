@@ -8,13 +8,13 @@ namespace LayoutFarm
     class Demo_CompartmentBox : DemoBase
     {
         UIControllerBox controllerBox1;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
             bgbox.BackColor = Color.White;
             bgbox.SetLocation(0, 0);
             SetupBackgroundProperties(bgbox);
-            viewport.AddChild(bgbox);
+            host.AddChild(bgbox);
             //--------------------------------
 
             var box1 = new LayoutFarm.CustomWidgets.Box(150, 150);
@@ -22,13 +22,13 @@ namespace LayoutFarm
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
-            viewport.AddChild(box1);
+            host.AddChild(box1);
             //--------------------------------
             var box2 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
-            viewport.AddChild(box2);
+            host.AddChild(box2);
             controllerBox1 = new UIControllerBox(40, 40);
             Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
             controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
@@ -36,7 +36,7 @@ namespace LayoutFarm
             //controllerBox1.dbugTag = 3;
             controllerBox1.Visible = false;
             SetupControllerBoxProperties(controllerBox1);
-            viewport.AddChild(controllerBox1);
+            host.AddChild(controllerBox1);
         }
         void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {

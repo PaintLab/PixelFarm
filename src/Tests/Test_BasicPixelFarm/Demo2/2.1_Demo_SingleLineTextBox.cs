@@ -5,7 +5,7 @@ namespace LayoutFarm
     [DemoNote("2.1 SingleLineText")]
     class Demo_SingleLineText : DemoBase
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
             var textSpanStyle = new Text.TextSpanStyle();
@@ -16,7 +16,7 @@ namespace LayoutFarm
             //set default style
             textbox.DefaultSpanStyle = textSpanStyle;
 
-            viewport.AddChild(textbox);
+            host.AddChild(textbox);
             textbox.InvalidateGraphics();
         }
     }

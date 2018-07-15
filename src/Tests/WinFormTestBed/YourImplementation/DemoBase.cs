@@ -8,11 +8,11 @@ namespace LayoutFarm
 
     public abstract class DemoBase
     {
-        public void StartDemo(SampleViewport viewport)
+        public void StartDemo(AppHost host)
         {
-            OnStartDemo(viewport);
+            OnStartDemo(host);
         }
-        protected virtual void OnStartDemo(SampleViewport viewport)
+        protected virtual void OnStartDemo(AppHost host)
         {
         }
         public virtual string Desciption

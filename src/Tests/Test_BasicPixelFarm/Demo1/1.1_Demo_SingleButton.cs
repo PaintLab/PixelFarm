@@ -7,10 +7,10 @@ namespace LayoutFarm
     [DemoNote("1.1 SingleButton")]
     class Demo_SingleButton : DemoBase
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
-            viewport.AddChild(sampleButton);
+            host.AddChild(sampleButton);
             int count = 0;
             sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
             {

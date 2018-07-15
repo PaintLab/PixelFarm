@@ -15,14 +15,14 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.Box box1;
         BackDrawBoardUI _backBoard;
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
 
 
             PaintLab.Svg.SvgParser parser = new SvgParser();
             _backBoard = new BackDrawBoardUI(400, 400);
             _backBoard.BackColor = Color.White;
-            viewport.AddChild(_backBoard);
+            host.AddChild(_backBoard);
 
 
 
@@ -48,7 +48,7 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //------------
-            viewport.AddChild(rectBoxController);
+            host.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{

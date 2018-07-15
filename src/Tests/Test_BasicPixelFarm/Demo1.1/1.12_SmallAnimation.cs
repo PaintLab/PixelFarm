@@ -5,9 +5,9 @@ namespace LayoutFarm
     [DemoNote("1.12 MultipleImages")]
     class Demo_SmallAnimation : DemoBase
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
-            ImageBinder imgBinder = viewport.GetImageBinder2("../../Data/imgs/favorites32.png");
+            ImageBinder imgBinder = host.GetImageBinder2("../../Data/imgs/favorites32.png");
             
             for (int i = 0; i < 100; ++i)
             {
@@ -32,7 +32,7 @@ namespace LayoutFarm
                         }
                     });
                 };
-                viewport.AddChild(imgBox);
+                host.AddChild(imgBox);
             }
 
         }

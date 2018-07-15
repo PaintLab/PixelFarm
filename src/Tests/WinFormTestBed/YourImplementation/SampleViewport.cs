@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 
 namespace LayoutFarm
 {
-    public class SampleViewport : IViewport
+    public class AppHost : IAppHost
     {
         ImageContentManager imageContentMan;
         LayoutFarm.UI.UISurfaceViewportControl vw;
@@ -15,7 +15,7 @@ namespace LayoutFarm
         int primaryScreenWorkingAreaH;
         int _formTitleBarHeight;
         System.Windows.Forms.Form ownerForm;
-        public SampleViewport(LayoutFarm.UI.UISurfaceViewportControl vw)
+        public AppHost(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
             this.vw = vw;
             ownerForm = this.vw.FindForm();
@@ -92,7 +92,6 @@ namespace LayoutFarm
             clientImgBinder.State = ImageBinderState.Loaded;
             return clientImgBinder;
         }
-
         public ImageBinder GetImageBinder3(string src, float scale)
         {
             //scale image to fit the viewport 
@@ -109,35 +108,7 @@ namespace LayoutFarm
             return LoadBitmap(imgName);
         }
 
-        //----------------------------------------
 
-        //UIRootElement _uiRootElement;
-
-        //IUIRootElement IViewport.Root
-        //{
-        //    get
-        //    {
-        //        if (_uiRootElement == null)
-        //        {
-        //            _uiRootElement = new UIRootElement();
-        //            _uiRootElement._viewport = this;
-        //        }
-        //        return _uiRootElement;
-        //    }
-        //}
-        //MyAppHost _myAppHost;
-        //IAppHost IViewport.AppHost
-        //{
-        //    get
-        //    {
-        //        if (_myAppHost == null)
-        //        {
-        //            _myAppHost = new MyAppHost();
-        //            _myAppHost.clientViewport = this;
-        //        }
-        //        return _myAppHost;
-        //    }
-        //}
     }
 
 

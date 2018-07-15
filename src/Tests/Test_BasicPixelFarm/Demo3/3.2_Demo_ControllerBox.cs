@@ -8,19 +8,19 @@ namespace LayoutFarm
     class Demo_ControllerBoxs : DemoBase
     {
         UIControllerBox controllerBox1;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
-            viewport.AddChild(box1);
+            host.AddChild(box1);
             var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
-            viewport.AddChild(box2);
+            host.AddChild(box2);
             controllerBox1 = new UIControllerBox(40, 40);
             Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
             controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
@@ -28,7 +28,7 @@ namespace LayoutFarm
             //controllerBox1.dbugTag = 3;
             controllerBox1.Visible = false;
             SetupControllerBoxProperties(controllerBox1);
-            viewport.AddChild(controllerBox1);
+            host.AddChild(controllerBox1);
         }
 
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
@@ -103,23 +103,23 @@ namespace LayoutFarm
     {
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStartDemo(AppHost host)
         {
             var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
-            viewport.AddChild(box1);
+            host.AddChild(box1);
             var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
-            viewport.AddChild(box2);
+            host.AddChild(box2);
             rectBoxController.Init();
             //------------
 
-            viewport.AddChild(rectBoxController);
+            host.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{
