@@ -994,7 +994,9 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\SampleViewportExtension.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\SimpleDelegates.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\TestBedStartup.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\DemoBase.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\App.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\AppHost.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\DemoNote.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormCanvasHelper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs" />
@@ -1007,8 +1009,8 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\GdiPlusBitmap.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\MyTextBreaker.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\SampleViewport.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\BinPacker.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\FontAtlasFile.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\GlyphImages.cs" />

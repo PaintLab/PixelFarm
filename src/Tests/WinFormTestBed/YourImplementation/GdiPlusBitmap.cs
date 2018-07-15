@@ -5,27 +5,6 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
 
-    public abstract class App
-    {
-        public void Start(AppHost host)
-        {
-            OnStart(host);
-        }
-        protected virtual void OnStart(AppHost host)
-        {
-        }
-        public virtual string Desciption
-        {
-            get { return ""; }
-        }
-        public static Image LoadBitmap(string filename)
-        {
-            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
-            GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-            return bmp;
-        }
-    }
-
     public sealed class GdiPlusBitmap : Image
     {
         int width;
@@ -90,39 +69,6 @@ namespace LayoutFarm
             get { return 0; }
         }
 
-    }
-
-
-    public class DemoNoteAttribute : Attribute
-    {
-        public DemoNoteAttribute(string msg)
-        {
-            this.Message = msg;
-        }
-        public string Message { get; set; }
-    }
-    public class DemoInfo
-    {
-        public readonly Type DemoType;
-        public readonly string DemoNote;
-        public int demoBaseTypeKind; // 0,1
-
-        public DemoInfo(Type demoType, string demoNote)
-        {
-            this.DemoType = demoType;
-            this.DemoNote = demoNote;
-        }
-        public override string ToString()
-        {
-            if (string.IsNullOrEmpty(DemoNote))
-            {
-                return this.DemoType.Name;
-            }
-            else
-            {
-                return this.DemoNote + " : " + this.DemoType.Name;
-            }
-        }
     }
 
 }
