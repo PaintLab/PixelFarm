@@ -292,6 +292,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (this.isOpen) return;
             this.isOpen = true;
+
             this.TreeView.PerformContentLayout();
         }
         public void Collapse()
