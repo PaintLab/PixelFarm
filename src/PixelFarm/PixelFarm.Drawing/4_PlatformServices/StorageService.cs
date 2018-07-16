@@ -55,6 +55,8 @@ namespace LayoutFarm
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
+    
+
     public abstract class ImageBinder
     {
         PixelFarm.Drawing.Image _image;
@@ -78,7 +80,7 @@ namespace LayoutFarm
         {
             get { return this._imageSource; }
         }
-        public ImageBinderState State
+        public BinderState State
         {
             get;
             set;
@@ -121,17 +123,21 @@ namespace LayoutFarm
             }
         }
 
+        protected virtual void InternalSetImage(PixelFarm.Drawing.Image image)
+        {
+            this._image = image;
+        }
         public virtual void SetImage(PixelFarm.Drawing.Image image)
         {
             //set image to this binder
             if (image != null)
             {
                 this._image = image;
-                this.State = ImageBinderState.Loaded;
-                this.OnImageChanged();
+                this.State = BinderState.Loaded;
+                this.RaiseImageChanged();
             }
         }
-        protected virtual void OnImageChanged()
+        protected virtual void RaiseImageChanged()
         {
             ImageChanged?.Invoke(this, System.EventArgs.Empty);
         }
@@ -158,7 +164,7 @@ namespace LayoutFarm
         {
             public NoImageImageBinder()
             {
-                this.State = ImageBinderState.NoImage;
+                this.State = BinderState.Blank;
             }
         }
 
@@ -166,13 +172,13 @@ namespace LayoutFarm
 
 
     public delegate void LazyLoadImageFunc(ImageBinder binder);
-    public enum ImageBinderState
+    public enum BinderState
     {
         Unload,
         Loaded,
         Loading,
         Error,
-        NoImage
+        Blank
     }
 
 

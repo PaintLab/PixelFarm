@@ -6,7 +6,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.6 Demo_DragSelectionBox")]
-    class Demo_DragSelectionBox : DemoBase
+    class Demo_DragSelectionBox : App
     {
         enum ControllerBoxMode
         {
@@ -21,19 +21,19 @@ namespace LayoutFarm
         List<UIControllerBox> workingControllerBoxes = new List<UIControllerBox>();
         ControllerBoxMode controllerBoxMode;
         UIControllerBox singleControllerBox;
-        SampleViewport viewport;
+        AppHost _host;
         LayoutFarm.CustomWidgets.Box bgbox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
-            this.viewport = viewport;
-            this.rootgfx = viewport.RootGfx;
+            this._host = host;
+            this.rootgfx = host.RootGfx;
             //--------------------------------
 
             bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
             bgbox.BackColor = Color.White;
             bgbox.SetLocation(0, 0);
             SetupBackgroundProperties(bgbox);
-            viewport.AddChild(bgbox);
+            host.AddChild(bgbox);
             //user box1
             var box1 = new LayoutFarm.CustomWidgets.Box(150, 150);
             box1.BackColor = Color.Red;
@@ -53,7 +53,7 @@ namespace LayoutFarm
             selectionBox = new UISelectionBox(1, 1);
             selectionBox.Visible = false;
             selectionBox.BackColor = Color.FromArgb(80, Color.Green);
-            viewport.AddChild(selectionBox);
+            host.AddChild(selectionBox);
             SetupSelectionBoxProperties(selectionBox);
         }
 
@@ -195,7 +195,7 @@ namespace LayoutFarm
                     userControllerBox.SetLocation(globalTargetPos.X - 5, globalTargetPos.Y - 5);
                     userControllerBox.SetSize(box.Width + 10, box.Height + 10);
                     userControllerBox.Visible = true;
-                    viewport.AddChild(userControllerBox);
+                    _host.AddChild(userControllerBox);
                 }
             }
         }
@@ -224,7 +224,7 @@ namespace LayoutFarm
                 }
                 //request user controller for this box
                 userControllerBox.TargetBox = box;
-                viewport.AddChild(userControllerBox);
+                _host.AddChild(userControllerBox);
                 //location relative to global position of target box
                 var globalTargetPos = box.GetGlobalLocation();
                 userControllerBox.SetLocation(globalTargetPos.X - 5, globalTargetPos.Y - 5);

@@ -8,13 +8,13 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("2.4 Demo_SingleTextLine_With_Compartment")]
-    class Demo_SingleTextLine_With_Compartment : DemoBase
+    class Demo_SingleTextLine_With_Compartment : App
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
         UINinespaceBox ninespaceBox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
             {
@@ -23,12 +23,12 @@ namespace LayoutFarm
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddChild(bgbox);
+                host.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new UINinespaceBox(800, 600);
-            viewport.AddChild(ninespaceBox);
+            host.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
             //--------------------------------
             //test add some content to the ninespace box

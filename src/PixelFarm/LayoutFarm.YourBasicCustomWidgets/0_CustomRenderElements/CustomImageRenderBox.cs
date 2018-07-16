@@ -28,7 +28,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 switch (imageBinder.State)
                 {
-                    case ImageBinderState.Loaded:
+                    case BinderState.Loaded:
                         {
                             //if (this.dbugBreak)
                             //{
@@ -39,7 +39,7 @@ namespace LayoutFarm.CustomWidgets
                                 new RectangleF(0, 0, this.Width, this.Height));
                         }
                         break;
-                    case ImageBinderState.Unload:
+                    case BinderState.Unload:
                         {
                             if (this.imageBinder.HasLazyFunc)
                             {

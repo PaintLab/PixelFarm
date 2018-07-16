@@ -4,23 +4,23 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.8 Hinge")]
-    class Demo_Hinge : DemoBase
+    class Demo_Hinge : App
     {
         ImageBinder arrowBmp;
-        SampleViewport viewport;
+        AppHost viewport;
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
-            this.viewport = viewport;
+            this.viewport = host;
             var comboBox1 = CreateComboBox(20, 20);
-            viewport.AddChild(comboBox1);
+            host.AddChild(comboBox1);
             var comboBox2 = CreateComboBox(50, 50);
-            viewport.AddChild(comboBox2);
+            host.AddChild(comboBox2);
             //------------
             var menuItem = CreateMenuItem(50, 100);
             var menuItem2 = CreateMenuItem(5, 5);
             menuItem.AddSubMenuItem(menuItem2);
-            viewport.AddChild(menuItem);
+            host.AddChild(menuItem);
         }
 
         LayoutFarm.CustomWidgets.ComboBox CreateComboBox(int x, int y)

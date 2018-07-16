@@ -572,6 +572,7 @@
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\SvgRenderVx.cs" />
+    <Compile Include="8_ImgReaders\ImageReaders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

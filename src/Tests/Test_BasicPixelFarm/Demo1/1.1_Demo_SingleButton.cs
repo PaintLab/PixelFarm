@@ -5,12 +5,12 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.1 SingleButton")]
-    class Demo_SingleButton : DemoBase
+    class Demo_SingleButton : App
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
-            viewport.AddChild(sampleButton);
+            host.AddChild(sampleButton);
             int count = 0;
             sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
             {
