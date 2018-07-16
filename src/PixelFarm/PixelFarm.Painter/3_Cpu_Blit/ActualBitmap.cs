@@ -287,40 +287,42 @@ namespace PixelFarm.CpuBlit
             return buff2;
         }
 
-        public static void SaveImgBufferToPngFile(int[] imgBuffer, int stride, int width, int height, string filename)
-        {
-            if (s_saveToPngFileDel != null)
-            {
-                unsafe
-                {
-                    fixed (int* head = &imgBuffer[0])
-                    {
-                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
-                    }
-                }
-            }
-        }
-        static SaveToPngFileDelegate s_saveToPngFileDel;
-        public delegate void SaveToPngFileDelegate(IntPtr imgBuffer, int stride, int width, int height, string filename);
-
-        public static bool HasDefaultSavePngToFileDelegate()
-        {
-            return s_saveToPngFileDel != null;
-        }
 
 
-        public static void InstallImageSaveToFileService(SaveToPngFileDelegate saveToPngFileDelegate)
-        {
-            s_saveToPngFileDel = saveToPngFileDelegate;
-        }
+//        public static void SaveImgBufferToPngFile(int[] imgBuffer, int stride, int width, int height, string filename)
+//        {
+//            if (s_saveToPngFileDel != null)
+//            {
+//                unsafe
+//                {
+//                    fixed (int* head = &imgBuffer[0])
+//                    {
+//                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
+//                    }
+//                }
+//            }
+//        }
+//        static SaveToPngFileDelegate s_saveToPngFileDel;
+//        public delegate void SaveToPngFileDelegate(IntPtr imgBuffer, int stride, int width, int height, string filename);
+
+//        public static bool HasDefaultSavePngToFileDelegate()
+//        {
+//            return s_saveToPngFileDel != null;
+//        }
 
 
-#if DEBUG
-        public void dbugSaveToPngFile(string filename)
-        {
-            SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
-        }
-#endif
+//        public static void InstallImageSaveToFileService(SaveToPngFileDelegate saveToPngFileDelegate)
+//        {
+//            s_saveToPngFileDel = saveToPngFileDelegate;
+//        }
+
+
+//#if DEBUG
+//        public void dbugSaveToPngFile(string filename)
+//        {
+//            SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
+//        }
+//#endif
         int IBitmapSrc.BitDepth
         {
             get

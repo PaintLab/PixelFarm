@@ -13,7 +13,7 @@ namespace YourImplementation
 #else
             CommonTextServiceSetup.SetupDefaultValues();
 #endif 
-            PixelFarm.CpuBlit.ActualBitmap.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
+            PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 
                 using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -63,7 +63,7 @@ namespace YourImplementation
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
             _latestviewport.PaintMe();
-          
+
 
             //_latestviewport.PaintMe();
 
