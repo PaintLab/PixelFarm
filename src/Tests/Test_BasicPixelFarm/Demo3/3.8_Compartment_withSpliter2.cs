@@ -5,10 +5,10 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("3.8 Demo_CompartmentWithSpliter2")]
-    class Demo_CompartmentWithSpliter2 : DemoBase
+    class Demo_CompartmentWithSpliter2 : App
     {
         NinespaceBox ninespaceBox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
             {
@@ -17,13 +17,13 @@ namespace LayoutFarm
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddChild(bgbox);
+                host.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new NinespaceBox(800, 600);
             ninespaceBox.ShowGrippers = true;
-            viewport.AddChild(ninespaceBox);
+            host.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
             //--------------------------------
 

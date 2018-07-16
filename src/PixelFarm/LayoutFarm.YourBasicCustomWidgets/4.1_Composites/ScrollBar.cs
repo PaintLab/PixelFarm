@@ -107,7 +107,7 @@ namespace LayoutFarm.CustomWidgets
 
     public delegate void UIEventHandler<S, T>(S sender, T arg);
 
-    public class SliderBox : AbstractRect
+    public class SliderBox : AbstractRectUI
     {
 
         ScrollRangeLogic scrollRangeLogic;
@@ -744,7 +744,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
-    public class ScrollBar : AbstractRect
+    public class ScrollBar : AbstractRectUI
     {
 
         ScrollBarButton minButton;

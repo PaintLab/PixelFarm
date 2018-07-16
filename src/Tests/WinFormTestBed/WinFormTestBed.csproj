@@ -43,9 +43,10 @@
     <Compile Include="Interfaces\Interfaces.cs" />
     <Compile Include="Interfaces_Impl\InterfaceImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleViewportExtension.cs" />
+    <Compile Include="AppHostExtensions.cs" />
     <Compile Include="SimpleDelegates.cs" />
-    <Compile Include="YourImplementation\DemoBase.cs" />
+    <Compile Include="YourImplementation\App.cs" />
+    <Compile Include="YourImplementation\DemoNote.cs" />
     <Compile Include="YourImplementation\FormCanvasHelper.cs" />
     <Compile Include="YourImplementation\FormDemoList.cs">
       <SubType>Form</SubType>
@@ -78,8 +79,9 @@
     <Compile Include="YourImplementation\FormPrint.Designer.cs">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </Compile>
+    <Compile Include="YourImplementation\GdiPlusBitmap.cs" />
     <Compile Include="YourImplementation\MyTextBreaker.cs" />
-    <Compile Include="YourImplementation\SampleViewport.cs" />
+    <Compile Include="YourImplementation\AppHost.cs" />
     <Compile Include="TestBedStartup.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,12 +7,12 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("2.5 MultiLineText_WithSuggestion")]
-    class Demo_MultiLineText_WithSuggestion : DemoBase
+    class Demo_MultiLineText_WithSuggestion : App
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             textbox.SetLocation(20, 20);
@@ -36,8 +36,8 @@ namespace LayoutFarm
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
-            viewport.AddChild(textbox);
-            viewport.AddChild(listView);
+            host.AddChild(textbox);
+            host.AddChild(listView);
             //------------------------------------ 
             BuildSampleCountryList();
         }

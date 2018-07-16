@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyName>PixelFarm.MiniAgg.One</AssemblyName>
+    <AssemblyName>PixelFarm.Cosmos.One</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -17,7 +17,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20</DefineConstants>
+    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,COSMOS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -26,7 +26,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20</DefineConstants>
+    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,COSMOS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -803,8 +803,314 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\SvgRenderVx.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\SvgRenderVx.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs</Link>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphIndexList.cs">
+      <Link>Typography\Typography.GlyphLayout\GlyphIndexList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphLayout.cs">
+      <Link>Typography\Typography.GlyphLayout\GlyphLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphPosition.cs">
+      <Link>Typography\Typography.GlyphLayout\GlyphPosition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphSubstitution.cs">
+      <Link>Typography\Typography.GlyphLayout\GlyphSubstitution.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\MeasureStringBox.cs">
+      <Link>Typography\Typography.GlyphLayout\MeasureStringBox.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs">
+      <Link>Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs">
+      <Link>Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs">
+      <Link>Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs">
+      <Link>Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs">
+      <Link>Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\AdditionalInfo\OS2_IBMFontClassParameters.cs">
+      <Link>Typography\Typography.OpenFont\AdditionalInfo\OS2_IBMFontClassParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Bounds.cs">
+      <Link>Typography\Typography.OpenFont\Bounds.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\CharacterMap.cs">
+      <Link>Typography\Typography.OpenFont\CharacterMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Geometry.cs">
+      <Link>Typography\Typography.OpenFont\Geometry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Glyph.cs">
+      <Link>Typography\Typography.OpenFont\Glyph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\IGlyphTranslator.cs">
+      <Link>Typography\Typography.OpenFont\IGlyphTranslator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\IO\ByteOrderSwappingBinaryReader.cs">
+      <Link>Typography\Typography.OpenFont\IO\ByteOrderSwappingBinaryReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\OpenFontReader.cs">
+      <Link>Typography\Typography.OpenFont\OpenFontReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\AttachmentListTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\AttachmentListTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\Base.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\Base.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ClassDefTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\ClassDefTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\COLR.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\COLR.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\CoverageTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\CoverageTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\CPAL.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\CPAL.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\FeatureInfo.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\FeatureInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\FeatureList.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\FeatureList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\GDEF.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\GDEF.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\GlyphShapingTableEntry.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\GlyphShapingTableEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\GPOS.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\GPOS.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\GPOS.Others.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\GPOS.Others.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\GSUB.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\GSUB.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\IGlyphIndexList.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\IGlyphIndexList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\JustificationTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\JustificationTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\LigatureCaretListTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\LigatureCaretListTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\SvgTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\SvgTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\CFF.cs">
+      <Link>Typography\Typography.OpenFont\Tables.CFF\CFF.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\CffEvaluationEngine.cs">
+      <Link>Typography\Typography.OpenFont\Tables.CFF\CffEvaluationEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\CFFTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.CFF\CFFTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs">
+      <Link>Typography\Typography.OpenFont\Tables.CFF\Type2CharStringParser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMetrics.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\Kern.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\Kern.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\LinearThreashold.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\LinearThreashold.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\Merge.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\Merge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\Meta.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\Meta.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\STAT.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\STAT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\VerticalDeviceMetrics.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\VerticalDeviceMetrics.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\VerticalMetrics.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\VerticalMetrics.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Others\VerticalMetricsHeader.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Others\VerticalMetricsHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.TrueType\Cvt_Programs.cs">
+      <Link>Typography\Typography.OpenFont\Tables.TrueType\Cvt_Programs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.TrueType\Gasp.cs">
+      <Link>Typography\Typography.OpenFont\Tables.TrueType\Gasp.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.TrueType\Glyf.cs">
+      <Link>Typography\Typography.OpenFont\Tables.TrueType\Glyf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.TrueType\GlyphLocations.cs">
+      <Link>Typography\Typography.OpenFont\Tables.TrueType\GlyphLocations.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\AVar.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\AVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\FVar.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\FVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\GVar.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\GVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\HVar.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\HVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\MVar.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\MVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.Variations\VVar.cs">
+      <Link>Typography\Typography.OpenFont\Tables.Variations\VVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\Cmap.cs">
+      <Link>Typography\Typography.OpenFont\Tables\Cmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\Head.cs">
+      <Link>Typography\Typography.OpenFont\Tables\Head.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\HorizontalHeader.cs">
+      <Link>Typography\Typography.OpenFont\Tables\HorizontalHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\HorizontalMetrics.cs">
+      <Link>Typography\Typography.OpenFont\Tables\HorizontalMetrics.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\MaxProfile.cs">
+      <Link>Typography\Typography.OpenFont\Tables\MaxProfile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\NameEntry.cs">
+      <Link>Typography\Typography.OpenFont\Tables\NameEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\OS2.cs">
+      <Link>Typography\Typography.OpenFont\Tables\OS2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\Post.cs">
+      <Link>Typography\Typography.OpenFont\Tables\Post.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\TableEntry.cs">
+      <Link>Typography\Typography.OpenFont\Tables\TableEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\TableEntryCollection.cs">
+      <Link>Typography\Typography.OpenFont\Tables\TableEntryCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\TableHeader.cs">
+      <Link>Typography\Typography.OpenFont\Tables\TableHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables\Utils.cs">
+      <Link>Typography\Typography.OpenFont\Tables\Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\ForNet20.cs">
+      <Link>Typography\Typography.OpenFont\TrueTypeInterperter\ForNet20.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs">
+      <Link>Typography\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs">
+      <Link>Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface.cs">
+      <Link>Typography\Typography.OpenFont\Typeface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\BurneseBreakingEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\BurneseBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\CJBreakingEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\CJBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerDictionaryBreakingEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\KhmerDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs">
+      <Link>Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\EditableTextLine.cs">
+      <Link>Typography\Typography.TextFlow\Dom\EditableTextLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\IRun.cs">
+      <Link>Typography\Typography.TextFlow\Dom\IRun.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\TextBuffer.cs">
+      <Link>Typography\Typography.TextFlow\Dom\TextBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\TextRun.cs">
+      <Link>Typography\Typography.TextFlow\Dom\TextRun.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Simple\SmallLine.cs">
+      <Link>Typography\Typography.TextFlow\Simple\SmallLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextFlow\TextLexer\TextLexer.cs">
+      <Link>Typography\Typography.TextFlow\TextLexer\TextLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs">
+      <Link>Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\IcuData\LangCodes.cs">
+      <Link>Typography\Typography.TextServices\IcuData\LangCodes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextServices.cs">
+      <Link>Typography\Typography.TextServices\TextServices.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\Utils\CRC32.cs">
+      <Link>Typography\Typography.TextServices\Utils\CRC32.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

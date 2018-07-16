@@ -7,6 +7,10 @@ namespace LayoutFarm
 {
     partial class RenderElement : IParentLink
     {
+
+#if DEBUG
+        public bool dbugBreak;
+#endif
         internal LinkedListNode<RenderElement> internalLinkedNode;
         protected virtual bool _MayHasOverlapChild()
         {

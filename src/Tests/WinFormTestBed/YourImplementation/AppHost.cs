@@ -1,13 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 
- 
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
 using LayoutFarm.UI;
 
 namespace LayoutFarm
 {
-    public class SampleViewport : IViewport
+    public class AppHost : IAppHost
     {
         ImageContentManager imageContentMan;
         LayoutFarm.UI.UISurfaceViewportControl vw;
@@ -15,8 +14,11 @@ namespace LayoutFarm
         int primaryScreenWorkingAreaH;
         int _formTitleBarHeight;
         System.Windows.Forms.Form ownerForm;
-        public SampleViewport(LayoutFarm.UI.UISurfaceViewportControl vw)
+        public AppHost(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
+            //---------------------------------------
+            //this specific for WindowForm viewport
+            //---------------------------------------
             this.vw = vw;
             ownerForm = this.vw.FindForm();
             System.Drawing.Rectangle screenRectangle = ownerForm.RectangleToScreen(ownerForm.ClientRectangle);
@@ -31,7 +33,7 @@ namespace LayoutFarm
             imageContentMan = new ImageContentManager();
             imageContentMan.ImageLoadingRequest += (s, e) =>
             {
-                e.SetResultImage(LoadBitmap(e.ImagSource));
+                e.SetResultImage(LoadImage(e.ImagSource));
             };
         }
         public string OwnerFormTitle
@@ -44,12 +46,23 @@ namespace LayoutFarm
         }
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
 
-        public static Image LoadBitmap(string filename)
+        public Image LoadImage(string imgName)
         {
-            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
-            DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
+            GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
             return bmp;
         }
+
+
+        public System.IO.Stream GetReadStream(string src)
+        {
+            //load stream from specific file provider
+            //handle IO-permission
+
+            //TODO: impl ...
+            return null;
+        }
+
         void LazyImageLoad(ImageBinder binder)
         {
             //load here as need
@@ -88,46 +101,9 @@ namespace LayoutFarm
         public ImageBinder GetImageBinder2(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetImage(LoadBitmap(src));
-            clientImgBinder.State = ImageBinderState.Loaded;
+            clientImgBinder.SetImage(LoadImage(src));
+            clientImgBinder.State = BinderState.Loaded;
             return clientImgBinder;
         }
-
-        public Image LoadImage(string imgName)
-        {
-            return LoadBitmap(imgName);
-        }
-        
-        //----------------------------------------
-
-        //UIRootElement _uiRootElement;
-
-        //IUIRootElement IViewport.Root
-        //{
-        //    get
-        //    {
-        //        if (_uiRootElement == null)
-        //        {
-        //            _uiRootElement = new UIRootElement();
-        //            _uiRootElement._viewport = this;
-        //        }
-        //        return _uiRootElement;
-        //    }
-        //}
-        //MyAppHost _myAppHost;
-        //IAppHost IViewport.AppHost
-        //{
-        //    get
-        //    {
-        //        if (_myAppHost == null)
-        //        {
-        //            _myAppHost = new MyAppHost();
-        //            _myAppHost.clientViewport = this;
-        //        }
-        //        return _myAppHost;
-        //    }
-        //}
     }
-
-
 }

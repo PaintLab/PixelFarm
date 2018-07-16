@@ -34,7 +34,7 @@ using PixelFarm.CpuBlit;
 namespace LayoutFarm.ColorBlenderSample
 {
     [DemoNote("5 DemoSampleCharts")]
-    class DemoSampleCharts : DemoBase
+    class DemoSampleCharts : App
     {
 
         //sample chart! 
@@ -225,20 +225,20 @@ namespace LayoutFarm.ColorBlenderSample
 
         int _chartHeight = 300;
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             var sampleButton = new LayoutFarm.CustomWidgets.Box(100, _chartHeight);
-            viewport.AddChild(sampleButton);
+            host.AddChild(sampleButton);
             int count = 0;
             sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
             {
                 Console.WriteLine("click :" + (count++));
             });
 
-            TestSimplePlot1(viewport);
+            TestSimplePlot1(host);
 
         }
-        void TestSimplePlot1(SampleViewport viewport)
+        void TestSimplePlot1(AppHost host)
         {
             //------------
             //create sample data
@@ -267,7 +267,7 @@ namespace LayoutFarm.ColorBlenderSample
                 pt.BackColor = Color.Red;
 
                 plotBoxes.Add(pt);
-                viewport.AddChild(pt);
+                host.AddChild(pt);
             }
 
 
@@ -279,7 +279,7 @@ namespace LayoutFarm.ColorBlenderSample
                 PlotBox p0 = plotBoxes[i];
                 PlotBox p1 = plotBoxes[i + 1];
                 PlotLine line = new PlotLine(p0, p1);
-                viewport.AddChild(line);
+                host.AddChild(line);
             }
         }
 

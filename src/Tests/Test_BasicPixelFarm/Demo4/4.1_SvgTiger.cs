@@ -5,24 +5,25 @@ using PaintLab.Svg;
 using LayoutFarm.UI;
 using PaintLab;
 using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.Imaging;
 
 namespace LayoutFarm
 {
     [DemoNote("4.1 DemoSvgTiger")]
-    class Demo_SvgTiger : DemoBase
+    class Demo_SvgTiger : App
     {
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
         LayoutFarm.CustomWidgets.Box box1;
         BackDrawBoardUI _backBoard;
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
 
 
             PaintLab.Svg.SvgParser parser = new SvgParser();
             _backBoard = new BackDrawBoardUI(400, 400);
             _backBoard.BackColor = Color.White;
-            viewport.AddChild(_backBoard);
+            host.AddChild(_backBoard);
 
 
 
@@ -48,7 +49,7 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //------------
-            viewport.AddChild(rectBoxController);
+            host.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{

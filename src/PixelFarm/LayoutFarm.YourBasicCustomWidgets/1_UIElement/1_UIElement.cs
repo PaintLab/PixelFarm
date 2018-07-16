@@ -61,16 +61,26 @@ namespace LayoutFarm.UI
         public abstract void InvalidateGraphics();
 
 
-        System.WeakReference _tag;
+        System.WeakReference _weakTag;
         /// <summary>
         /// general purpose element
         /// </summary>
-        public object Tag
+        public object WeakTag
         {
-            get { return (_tag != null && _tag.IsAlive) ? _tag.Target : null; }
+            get { return (_weakTag != null && _weakTag.IsAlive) ? _weakTag.Target : null; }
             set
             {
-                _tag = (value != null) ? new System.WeakReference(value) : null;
+                _weakTag = (value != null) ? new System.WeakReference(value) : null;
+            }
+        }
+
+        object _tag;
+        public object Tag
+        {
+            get { return _tag; }
+            set
+            {
+                _tag = value;
             }
         }
         //----------------------------------- 
@@ -140,11 +150,13 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBoundsWH(float width, float height)
         {
+
             _right = _left + width;
             _bottom = _top + height;
         }
         protected void SetElementBoundsLTWH(float left, float top, float width, float height)
         {
+
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
@@ -152,7 +164,10 @@ namespace LayoutFarm.UI
             _bottom = top + height;
         }
         protected void SetElementBounds(float left, float top, float right, float bottom)
-        {   //change 'TransparentBounds' => not effect visual presentation
+        {
+
+
+            //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
             _right = right;

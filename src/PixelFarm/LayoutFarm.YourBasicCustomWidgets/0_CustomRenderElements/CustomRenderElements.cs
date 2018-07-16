@@ -6,9 +6,7 @@ namespace LayoutFarm.CustomWidgets
     public class CustomRenderBox : RenderBoxBase
     {
         Color backColor;
-#if DEBUG
-        public bool dbugBreak;
-#endif
+
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {

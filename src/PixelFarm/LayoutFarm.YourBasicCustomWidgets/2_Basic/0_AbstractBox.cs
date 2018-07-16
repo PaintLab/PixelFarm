@@ -9,7 +9,7 @@ namespace LayoutFarm.CustomWidgets
     /// <summary>
     /// abstract box ui element
     /// </summary>
-    public abstract class AbstractBox : AbstractRect
+    public abstract class AbstractBox : AbstractRectUI
     {
         BoxContentLayoutKind panelLayoutKind;
         bool needContentLayout;
@@ -36,13 +36,16 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
+        bool _needClipArea;
+        bool _supportViewport;
         public AbstractBox(int width, int height)
             : base(width, height)
         {
-            this._innerHeight = height;
-            this._innerWidth = width;
+            _innerHeight = height;
+            _innerWidth = width;
+            _supportViewport = true;
         }
-        bool _needClipArea;
+
         public bool NeedClipArea
         {
             get { return _needClipArea; }
@@ -246,6 +249,14 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
+        public int ViewportBottom
+        {
+            get { return this.ViewportY + this.Height; }
+        }
+        public int ViewportRight
+        {
+            get { return this.ViewportX + this.Width; }
+        }
         public override void SetViewport(int x, int y, object reqBy)
         {
             //check if viewport is changed or not
@@ -339,7 +350,8 @@ namespace LayoutFarm.CustomWidgets
                 return this._innerHeight;
             }
         }
-        protected void SetDesiredSize(int w, int h)
+
+        protected virtual void SetInnerContentSize(int w, int h)
         {
             this._innerWidth = w;
             this._innerHeight = h;
@@ -357,6 +369,8 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+
         public void AddChild(UIElement ui)
         {
             if (this.uiList == null)
@@ -369,7 +383,12 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 primElement.AddChild(ui);
-                if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //{
+                //    this.InvalidateLayout();
+                //}
+                //check if we support
+                if (_supportViewport)
                 {
                     this.InvalidateLayout();
                 }
@@ -386,7 +405,11 @@ namespace LayoutFarm.CustomWidgets
             this.uiList.RemoveUI(ui);
             if (this.HasReadyRenderElement)
             {
-                if (this.ContentLayoutKind != BoxContentLayoutKind.Absolute)
+                //if (this.ContentLayoutKind != BoxContentLayoutKind.Absolute)
+                //{
+                //    this.InvalidateLayout();
+                //}
+                if (_supportViewport)
                 {
                     this.InvalidateLayout();
                 }
@@ -403,7 +426,11 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 primElement.ClearAllChildren();
-                if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //{
+                //    this.InvalidateLayout();
+                //}
+                if (_supportViewport)
                 {
                     this.InvalidateLayout();
                 }
@@ -457,7 +484,7 @@ namespace LayoutFarm.CustomWidgets
                         int maxRight = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as AbstractRect;
+                            var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
 
@@ -471,7 +498,7 @@ namespace LayoutFarm.CustomWidgets
                                 //element.SetBounds(0, ypos, element.Width, elemH);
                                 element.SetLocationAndSize(0, ypos, element.Width, element.Height);
                                 ypos += element.Height;
-                                int tmp_right = element.InnerWidth + element.Left;
+                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
@@ -479,7 +506,7 @@ namespace LayoutFarm.CustomWidgets
                             }
                         }
 
-                        this.SetDesiredSize(maxRight, ypos);
+                        this.SetInnerContentSize(maxRight, ypos);
                     }
                     break;
                 case CustomWidgets.BoxContentLayoutKind.HorizontalStack:
@@ -489,13 +516,13 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as AbstractRect;
+                            var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
                                 element.PerformContentLayout();
                                 element.SetLocationAndSize(xpos, 0, element.InnerWidth, element.InnerHeight);
                                 xpos += element.InnerWidth;
-                                int tmp_bottom = element.InnerHeight + element.Top;
+                                int tmp_bottom = element.Bottom;
                                 if (tmp_bottom > maxBottom)
                                 {
                                     maxBottom = tmp_bottom;
@@ -503,7 +530,7 @@ namespace LayoutFarm.CustomWidgets
                             }
                         }
 
-                        this.SetDesiredSize(xpos, maxBottom);
+                        this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
                 default:
@@ -513,16 +540,16 @@ namespace LayoutFarm.CustomWidgets
                         int maxBottom = 0;
                         for (int i = 0; i < count; ++i)
                         {
-                            var element = this.GetChild(i) as AbstractRect;
+                            var element = this.GetChild(i) as AbstractRectUI;
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                int tmp_right = element.InnerWidth + element.Left;
+                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
                                 }
-                                int tmp_bottom = element.InnerHeight + element.Top;
+                                int tmp_bottom = element.Bottom;// element.InnerHeight + element.Top;
                                 if (tmp_bottom > maxBottom)
                                 {
                                     maxBottom = tmp_bottom;
@@ -532,11 +559,11 @@ namespace LayoutFarm.CustomWidgets
 
                         if (!this.HasSpecificWidth)
                         {
-                            this.SetDesiredSize(maxRight, this.InnerHeight);
+                            this.SetInnerContentSize(maxRight, this.InnerHeight);
                         }
                         if (!this.HasSpecificHeight)
                         {
-                            this.SetDesiredSize(this.InnerWidth, maxBottom);
+                            this.SetInnerContentSize(this.InnerWidth, maxBottom);
                         }
                     }
                     break;
