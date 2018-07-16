@@ -83,7 +83,7 @@ namespace LayoutFarm
             get;
             set;
         }
-        public PixelFarm.Drawing.Image Image
+        public virtual PixelFarm.Drawing.Image Image
         {
             get
             {

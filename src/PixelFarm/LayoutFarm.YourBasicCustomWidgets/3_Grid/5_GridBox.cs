@@ -517,10 +517,7 @@ namespace LayoutFarm.CustomWidgets
             this.NeedClipArea = true;
 
             //scrollable content box is inside this grid box
-            _scrollableViewPanel = new Box(this.Width, this.Height);
-
-
-
+            _scrollableViewPanel = new Box(this.Width, this.Height); 
             this.AddChild(_scrollableViewPanel);
 
             {

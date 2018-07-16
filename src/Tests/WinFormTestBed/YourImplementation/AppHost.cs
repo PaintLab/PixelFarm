@@ -17,6 +17,9 @@ namespace LayoutFarm
         System.Windows.Forms.Form ownerForm;
         public AppHost(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
+            //---------------------------------------
+            //this specific for WindowForm viewport
+            //---------------------------------------
             this.vw = vw;
             ownerForm = this.vw.FindForm();
             System.Drawing.Rectangle screenRectangle = ownerForm.RectangleToScreen(ownerForm.ClientRectangle);
@@ -92,16 +95,7 @@ namespace LayoutFarm
             clientImgBinder.State = ImageBinderState.Loaded;
             return clientImgBinder;
         }
-        public ImageBinder GetImageBinder3(string src, float scale)
-        {
-            //scale image to fit the viewport 
-            //
-            ClientImageBinder clientImgBinder = new ClientImageBinderWithScale(src, scale);
-            clientImgBinder.SetLazyLoaderFunc(LazyImageLoad);
-            //if use lazy img load func
-            imageContentMan.AddRequestImage(clientImgBinder);
-            return clientImgBinder;
-        }
+     
 
         public Image LoadImage(string imgName)
         {
