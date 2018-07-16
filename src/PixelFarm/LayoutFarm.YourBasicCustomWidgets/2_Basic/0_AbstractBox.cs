@@ -480,7 +480,7 @@ namespace LayoutFarm.CustomWidgets
                                 //element.SetBounds(0, ypos, element.Width, elemH);
                                 element.SetLocationAndSize(0, ypos, element.Width, element.Height);
                                 ypos += element.Height;
-                                int tmp_right = element.InnerWidth + element.Left;
+                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
@@ -504,7 +504,7 @@ namespace LayoutFarm.CustomWidgets
                                 element.PerformContentLayout();
                                 element.SetLocationAndSize(xpos, 0, element.InnerWidth, element.InnerHeight);
                                 xpos += element.InnerWidth;
-                                int tmp_bottom = element.InnerHeight + element.Top;
+                                int tmp_bottom = element.Bottom;
                                 if (tmp_bottom > maxBottom)
                                 {
                                     maxBottom = tmp_bottom;
