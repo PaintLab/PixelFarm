@@ -65,6 +65,7 @@ namespace LayoutFarm
         void AddScrollView2(AppHost viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.Box(800, 1000);
+            panel.HasSpecificSize = true;
             panel.NeedClipArea = true;
             panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
@@ -132,13 +133,13 @@ namespace LayoutFarm
                 hscbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
                 hscbar.SetLocation(x + 30, y + 10);
                 hscbar.MinValue = 0;
-                hscbar.MaxValue = 170;
+                hscbar.MaxValue = panel.Width;//just init
                 hscbar.SmallChange = 20;
                 viewport.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
-            panel.PerformContentLayout();
+            //panel.PerformContentLayout();
         }
 
     }
