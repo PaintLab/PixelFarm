@@ -83,7 +83,7 @@ namespace LayoutFarm
             get;
             set;
         }
-        public virtual PixelFarm.Drawing.Image Image
+        public PixelFarm.Drawing.Image Image
         {
             get
             {
@@ -121,6 +121,10 @@ namespace LayoutFarm
             }
         }
 
+        protected virtual void InternalSetImage(PixelFarm.Drawing.Image image)
+        {
+            this._image = image;
+        }
         public virtual void SetImage(PixelFarm.Drawing.Image image)
         {
             //set image to this binder
@@ -128,10 +132,10 @@ namespace LayoutFarm
             {
                 this._image = image;
                 this.State = ImageBinderState.Loaded;
-                this.OnImageChanged();
+                this.RaiseImageChanged();
             }
         }
-        protected virtual void OnImageChanged()
+        protected virtual void RaiseImageChanged()
         {
             ImageChanged?.Invoke(this, System.EventArgs.Empty);
         }

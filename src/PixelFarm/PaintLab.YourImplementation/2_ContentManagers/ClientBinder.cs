@@ -15,9 +15,9 @@ namespace LayoutFarm
             : base(src)
         {
         }
-        protected override void OnImageChanged()
+        protected override void RaiseImageChanged()
         {
-            base.OnImageChanged();
+            base.RaiseImageChanged();
         }
     }
    
