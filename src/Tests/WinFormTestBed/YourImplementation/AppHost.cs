@@ -1,6 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
 using LayoutFarm.UI;
@@ -46,12 +45,12 @@ namespace LayoutFarm
             }
         }
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
-         
+
         public Image LoadImage(string imgName)
         {
             System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
             GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-            return bmp; 
+            return bmp;
         }
         void LazyImageLoad(ImageBinder binder)
         {
@@ -95,12 +94,5 @@ namespace LayoutFarm
             clientImgBinder.State = BinderState.Loaded;
             return clientImgBinder;
         }
-
-
-
-
-
     }
-
-
 }
