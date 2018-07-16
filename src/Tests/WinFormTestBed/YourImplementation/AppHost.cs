@@ -34,7 +34,7 @@ namespace LayoutFarm
             imageContentMan = new ImageContentManager();
             imageContentMan.ImageLoadingRequest += (s, e) =>
             {
-                e.SetResultImage(LoadBitmap(e.ImagSource));
+                e.SetResultImage(LoadImage(e.ImagSource));
             };
         }
         public string OwnerFormTitle
@@ -46,12 +46,12 @@ namespace LayoutFarm
             }
         }
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
-
-        public static Image LoadBitmap(string filename)
+         
+        public Image LoadImage(string imgName)
         {
-            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
+            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
             GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-            return bmp;
+            return bmp; 
         }
         void LazyImageLoad(ImageBinder binder)
         {
@@ -91,16 +91,13 @@ namespace LayoutFarm
         public ImageBinder GetImageBinder2(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetImage(LoadBitmap(src));
-            clientImgBinder.State = ImageBinderState.Loaded;
+            clientImgBinder.SetImage(LoadImage(src));
+            clientImgBinder.State = BinderState.Loaded;
             return clientImgBinder;
         }
-     
 
-        public Image LoadImage(string imgName)
-        {
-            return LoadBitmap(imgName);
-        }
+
+
 
 
     }

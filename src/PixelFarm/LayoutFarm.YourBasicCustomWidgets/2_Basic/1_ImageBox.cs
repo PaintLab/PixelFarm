@@ -82,7 +82,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnContentUpdate()
         {
-            if (imageBinder.State == ImageBinderState.Loaded)
+            if (imageBinder.State == BinderState.Loaded)
             {
                 SetProperSize();
                 this.ParentUI?.InvalidateLayout();
@@ -96,7 +96,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void PerformContentLayout()
         {
-            if (imageBinder.State == ImageBinderState.Loaded)
+            if (imageBinder.State == BinderState.Loaded)
             {
                 SetProperSize();
             }

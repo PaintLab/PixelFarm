@@ -98,7 +98,7 @@ namespace LayoutFarm.ContentManagers
                     //....
                     //process image infomation
                     //.... 
-                    if (binder.State == ImageBinderState.Loaded)
+                    if (binder.State == BinderState.Loaded)
                     {
                         //store to cache 
                         //TODO: implement caching policy  
@@ -119,12 +119,12 @@ namespace LayoutFarm.ContentManagers
         {
             if (contentReq.ImageSource == null && !contentReq.HasLazyFunc)
             {
-                contentReq.State = ImageBinderState.NoImage;
+                contentReq.State = BinderState.Blank;
                 return;
             }
             //binder and req box 
             //1. 
-            contentReq.State = ImageBinderState.Loading;
+            contentReq.State = BinderState.Loading;
             //2.
             inputList.AddLast(contentReq);
             //another thread will manage this request 
