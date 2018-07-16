@@ -3,7 +3,7 @@
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
-    public static class SampleViewportExtension
+    public static class AppHostExtensions
     {
         public static void AddChild(this AppHost viewport, UIElement ui)
         {
