@@ -11,7 +11,7 @@ namespace LayoutFarm
 
         protected override void OnStart(AppHost host)
         {
-            //AddScrollView1(viewport, 0, 0);
+            //AddScrollView1(host, 0, 0);
             AddScrollView2(host, 10, 0);
         }
 
@@ -59,8 +59,8 @@ namespace LayoutFarm
                 panel.AddChild(box1);
             }
             //--------------------------   
-            panel.PerformContentLayout();
-            panel.SetViewport(0, 0);
+            //panel.PerformContentLayout();
+
         }
         void AddScrollView2(AppHost viewport, int x, int y)
         {

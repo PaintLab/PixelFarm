@@ -36,13 +36,16 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
 
+        bool _needClipArea;
+        bool _supportViewport;
         public AbstractBox(int width, int height)
             : base(width, height)
         {
-            this._innerHeight = height;
-            this._innerWidth = width;
+            _innerHeight = height;
+            _innerWidth = width;
+            _supportViewport = true;
         }
-        bool _needClipArea;
+
         public bool NeedClipArea
         {
             get { return _needClipArea; }
@@ -366,6 +369,8 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+
         public void AddChild(UIElement ui)
         {
             if (this.uiList == null)
@@ -378,7 +383,12 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 primElement.AddChild(ui);
-                if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //{
+                //    this.InvalidateLayout();
+                //}
+                //check if we support
+                if (_supportViewport)
                 {
                     this.InvalidateLayout();
                 }
@@ -395,7 +405,11 @@ namespace LayoutFarm.CustomWidgets
             this.uiList.RemoveUI(ui);
             if (this.HasReadyRenderElement)
             {
-                if (this.ContentLayoutKind != BoxContentLayoutKind.Absolute)
+                //if (this.ContentLayoutKind != BoxContentLayoutKind.Absolute)
+                //{
+                //    this.InvalidateLayout();
+                //}
+                if (_supportViewport)
                 {
                     this.InvalidateLayout();
                 }
@@ -412,7 +426,11 @@ namespace LayoutFarm.CustomWidgets
             if (this.HasReadyRenderElement)
             {
                 primElement.ClearAllChildren();
-                if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
+                //{
+                //    this.InvalidateLayout();
+                //}
+                if (_supportViewport)
                 {
                     this.InvalidateLayout();
                 }
@@ -526,12 +544,12 @@ namespace LayoutFarm.CustomWidgets
                             if (element != null)
                             {
                                 element.PerformContentLayout();
-                                int tmp_right = element.InnerWidth + element.Left;
+                                int tmp_right = element.Right;// element.InnerWidth + element.Left;
                                 if (tmp_right > maxRight)
                                 {
                                     maxRight = tmp_right;
                                 }
-                                int tmp_bottom = element.InnerHeight + element.Top;
+                                int tmp_bottom = element.Bottom;// element.InnerHeight + element.Top;
                                 if (tmp_bottom > maxBottom)
                                 {
                                     maxBottom = tmp_bottom;

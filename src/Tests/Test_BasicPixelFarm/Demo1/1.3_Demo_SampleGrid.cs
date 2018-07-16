@@ -128,7 +128,7 @@ namespace LayoutFarm
                 }
 
                 //perform content layout again***
-                gridView.PerformContentLayout();
+                //gridView.PerformContentLayout();
             }
         }
     }
