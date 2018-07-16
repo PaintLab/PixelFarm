@@ -52,6 +52,17 @@ namespace LayoutFarm
             GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
             return bmp;
         }
+
+
+        public System.IO.Stream GetReadStream(string src)
+        {
+            //load stream from specific file provider
+            //handle IO-permission
+
+            //TODO: impl ...
+            return null;
+        }
+
         void LazyImageLoad(ImageBinder binder)
         {
             //load here as need

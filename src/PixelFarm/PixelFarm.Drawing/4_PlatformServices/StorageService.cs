@@ -55,8 +55,7 @@ namespace LayoutFarm
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
-
-
+    
 
     public abstract class ImageBinder
     {
