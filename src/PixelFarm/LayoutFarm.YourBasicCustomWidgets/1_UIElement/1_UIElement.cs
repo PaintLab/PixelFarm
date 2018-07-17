@@ -21,10 +21,9 @@ namespace LayoutFarm.UI
             int count = s_layoutQueue.Count;
             for (int i = count - 1; i >= 0; --i)
             {
-                UIElement ui = s_layoutQueue.Dequeue();
+                UIElement ui = s_layoutQueue.Dequeue(); 
                 ui.IsInLayoutQueue = false;
                 UIElement.InvokeContentLayout(ui);
-
             }
         }
     }
@@ -60,20 +59,7 @@ namespace LayoutFarm.UI
         }
         public abstract void InvalidateGraphics();
 
-
-        System.WeakReference _weakTag;
-        /// <summary>
-        /// general purpose element
-        /// </summary>
-        public object WeakTag
-        {
-            get { return (_weakTag != null && _weakTag.IsAlive) ? _weakTag.Target : null; }
-            set
-            {
-                _weakTag = (value != null) ? new System.WeakReference(value) : null;
-            }
-        }
-
+         
         object _tag;
         public object Tag
         {
@@ -107,12 +93,15 @@ namespace LayoutFarm.UI
         System.WeakReference _parent;
         public UIElement ParentUI
         {
+
             get { return (_parent != null && _parent.IsAlive) ? (UIElement)_parent.Target : null; }
             set
             {
                 _parent = (value != null) ? new System.WeakReference(value) : null;
             }
         }
+
+
         public virtual bool Visible
         {
             get { return !this._hide; }
@@ -266,6 +255,10 @@ namespace LayoutFarm.UI
         {
             //add to layout queue
             UISystem.AddToLayoutQueue(this);
+        }
+        public virtual void NotifyContentUpdate(UIElement childContent)
+        {
+            //
         }
         internal static void InvokeContentLayout(UIElement ui)
         {

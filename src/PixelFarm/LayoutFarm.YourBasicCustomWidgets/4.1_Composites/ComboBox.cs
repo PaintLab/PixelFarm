@@ -49,7 +49,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
                 renderE.SetController(this);
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer
 

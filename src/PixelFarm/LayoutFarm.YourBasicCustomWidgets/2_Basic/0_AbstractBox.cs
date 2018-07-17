@@ -106,7 +106,7 @@ namespace LayoutFarm.CustomWidgets
                 ((CustomRenderBox)parent).BackColor = backColor;
             }
 
-            parent.HasSpecificSize = true;
+            parent.HasSpecificWidthAndHeight = true;
             parent.SetViewport(this.ViewportX, this.ViewportY);
             //------------------------------------------------
 

@@ -36,5 +36,19 @@ namespace LayoutFarm.CustomWidgets
         {
             SetInnerContentSize(innerW, innerH);
         }
+        public override void NotifyContentUpdate(UIElement childContent)
+        {
+            //set propersize
+
+            if (childContent is ImageBox)
+            {
+                ImageBox imgBox = (ImageBox)childContent;
+                this.SetSize(imgBox.Width, imgBox.Height);
+
+            }
+            this.InvalidateLayout();
+            //this.ParentUI?.NotifyContentUpdate(this);
+            this.ParentUI?.InvalidateLayout();
+        }
     }
 }

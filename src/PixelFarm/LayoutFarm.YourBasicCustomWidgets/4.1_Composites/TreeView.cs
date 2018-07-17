@@ -55,7 +55,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
                 renderE.SetController(this);
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer 
                 int n = this.uiList.Count;
@@ -182,7 +182,7 @@ namespace LayoutFarm.CustomWidgets
                 var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = this.backColor;
-                element.HasSpecificSize = true;
+                element.HasSpecificWidthAndHeight = true;
                 element.NeedClipArea = true;
                 //-----------------------------
                 // create default layer for node content

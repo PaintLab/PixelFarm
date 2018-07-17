@@ -84,7 +84,10 @@ namespace LayoutFarm.CustomWidgets
         {
             if (imageBinder.State == BinderState.Loaded)
             {
+
                 SetProperSize();
+ 
+                this.ParentUI?.NotifyContentUpdate(this);
                 this.ParentUI?.InvalidateLayout();
             }
         }
@@ -105,7 +108,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //auto scale image
 
-            if (this.HasSpecificSize)
+            if (this.HasSpecificWidthAndHeight)
             {
                 switch (_imgStretch)
                 {

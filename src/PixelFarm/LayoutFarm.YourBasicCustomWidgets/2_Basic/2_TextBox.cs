@@ -198,7 +198,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
-                tbox.HasSpecificSize = true;
+                tbox.HasSpecificWidthAndHeight = true;
                 if (this.defaultSpanStyle.IsEmpty())
                 {
                     this.defaultSpanStyle = new TextSpanStyle();
