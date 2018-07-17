@@ -59,20 +59,7 @@ namespace LayoutFarm.UI
         }
         public abstract void InvalidateGraphics();
 
-
-        System.WeakReference _weakTag;
-        /// <summary>
-        /// general purpose element
-        /// </summary>
-        public object WeakTag
-        {
-            get { return (_weakTag != null && _weakTag.IsAlive) ? _weakTag.Target : null; }
-            set
-            {
-                _weakTag = (value != null) ? new System.WeakReference(value) : null;
-            }
-        }
-
+         
         object _tag;
         public object Tag
         {
