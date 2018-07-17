@@ -65,7 +65,7 @@ namespace LayoutFarm
         void AddScrollView2(AppHost viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.Box(800, 1000);
-            panel.HasSpecificSize = true;
+            panel.HasSpecificWidthAndHeight = true;
             panel.NeedClipArea = true;
             panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
