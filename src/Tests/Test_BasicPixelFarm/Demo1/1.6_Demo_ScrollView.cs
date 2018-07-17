@@ -28,7 +28,7 @@ namespace LayoutFarm
                 var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, 200);
                 vscbar.SetLocation(x + 10, y + 10);
                 vscbar.MinValue = 0;
-                vscbar.MaxValue = 170;
+                vscbar.MaxValue = 170; //just init
                 vscbar.SmallChange = 20;
                 host.AddChild(vscbar);
                 //add relation between viewpanel and scroll bar 
@@ -41,7 +41,7 @@ namespace LayoutFarm
                 hscbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
                 hscbar.SetLocation(x + 30, y + 10);
                 hscbar.MinValue = 0;
-                hscbar.MaxValue = 170;
+                hscbar.MaxValue = 170;//just init
                 hscbar.SmallChange = 20;
                 host.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
