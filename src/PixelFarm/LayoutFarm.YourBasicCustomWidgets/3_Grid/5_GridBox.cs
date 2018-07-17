@@ -890,7 +890,7 @@ namespace LayoutFarm.CustomWidgets
             if (_gridViewRenderE == null)
             {
                 var myGridBox = new GridViewRenderBox(rootgfx, this.Width, this.Height);
-                myGridBox.HasSpecificSize = true;//***
+                myGridBox.HasSpecificWidthAndHeight = true;//***
                 myGridBox.NeedClipArea = this.NeedClipArea;
 
                 myGridBox.SetLocation(this.Left, this.Top);

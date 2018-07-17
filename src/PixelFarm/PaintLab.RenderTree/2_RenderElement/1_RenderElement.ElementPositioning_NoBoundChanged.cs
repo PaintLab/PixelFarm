@@ -176,7 +176,8 @@ namespace LayoutFarm
                     uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_HEIGHT;
             }
         }
-        public bool HasSpecificSize
+
+        public bool HasSpecificWidthAndHeight
         {
             get
             {

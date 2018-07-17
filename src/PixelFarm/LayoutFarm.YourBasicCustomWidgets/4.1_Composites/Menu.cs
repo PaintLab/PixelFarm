@@ -51,7 +51,7 @@ namespace LayoutFarm.CustomWidgets
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 renderE.SetController(this);
                 //------------------------------------------------
                 //create visual layer                 

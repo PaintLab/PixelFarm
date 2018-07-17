@@ -108,7 +108,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //auto scale image
 
-            if (this.HasSpecificSize)
+            if (this.HasSpecificWidthAndHeight)
             {
                 switch (_imgStretch)
                 {

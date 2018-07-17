@@ -279,7 +279,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public bool HasSpecificSize
+        public bool HasSpecificWidthAndHeight
         {
             get { return this.specificHeight && specificWidth; }
             set
