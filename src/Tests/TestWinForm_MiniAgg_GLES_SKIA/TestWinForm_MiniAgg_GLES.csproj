@@ -169,11 +169,11 @@
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
     <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoftAggControl.cs">
+    <Compile Include="TestCanvasControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SoftAggControl.Designer.cs">
-      <DependentUpon>SoftAggControl.cs</DependentUpon>
+    <Compile Include="TestCanvasControl.Designer.cs">
+      <DependentUpon>TestCanvasControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Experiment\xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
@@ -210,8 +210,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SoftAggControl.resx">
-      <DependentUpon>SoftAggControl.cs</DependentUpon>
+    <EmbeddedResource Include="TestCanvasControl.resx">
+      <DependentUpon>TestCanvasControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
