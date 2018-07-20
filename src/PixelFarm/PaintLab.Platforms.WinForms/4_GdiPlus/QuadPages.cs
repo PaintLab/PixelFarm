@@ -7,26 +7,29 @@ namespace PixelFarm.Drawing.WinGdi
     class QuadPages
     {
         GdiPlusDrawBoard _pageA;
-        CanvasCollection physicalCanvasCollection;
+        //CanvasCollection physicalCanvasCollection;
 
         public QuadPages(
             int cachedPageNum,
             int eachCachedPageWidth,
             int eachCachedPageHeight)
         {
-            physicalCanvasCollection = new CanvasCollection(
-                cachedPageNum,
-                eachCachedPageWidth,
-                eachCachedPageHeight);
+
+            _pageA = new GdiPlusDrawBoard(0, 0, eachCachedPageWidth, eachCachedPageHeight);
+
+            //physicalCanvasCollection = new CanvasCollection(
+            //    cachedPageNum,
+            //    eachCachedPageWidth,
+            //    eachCachedPageHeight);
         }
 
         public void Dispose()
         {
-            if (physicalCanvasCollection != null)
-            {
-                physicalCanvasCollection.Dispose();
-                physicalCanvasCollection = null;
-            }
+            //if (physicalCanvasCollection != null)
+            //{
+            //    physicalCanvasCollection.Dispose();
+            //    physicalCanvasCollection = null;
+            //}
         }
         public void CanvasInvalidate(Rectangle rect)
         {
@@ -123,10 +126,10 @@ namespace PixelFarm.Drawing.WinGdi
             //int firstVerticalPageNum = viewportY / physicalCanvasCollection.EachPageHeight;
             //int firstHorizontalPageNum = viewportX / physicalCanvasCollection.EachPageWidth;
             ////render_parts = PAGE_A;
-            if (_pageA == null)
-            {
-                _pageA = physicalCanvasCollection.GetCanvasPage(0, 0);
-            }
+            //if (_pageA == null)
+            //{
+            //    _pageA = physicalCanvasCollection.GetCanvasPage(0, 0);
+            //}
             //else
             //{
             //    if (!pageA.IsPageNumber(firstHorizontalPageNum, firstVerticalPageNum))
@@ -139,13 +142,13 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void ResizeAllPages(int newWidth, int newHeight)
         {
-            physicalCanvasCollection.Dispose();
-            physicalCanvasCollection.ResizeAllPages(newWidth, newHeight);
-            if (_pageA != null)
-            {
-                _pageA.IsUnused = true;
-                _pageA = null;
-            }
+            //physicalCanvasCollection.Dispose();
+            //physicalCanvasCollection.ResizeAllPages(newWidth, newHeight);
+            //if (_pageA != null)
+            //{
+            //    _pageA.IsUnused = true;
+            //    _pageA = null;
+            //}
         }
     }
 }
