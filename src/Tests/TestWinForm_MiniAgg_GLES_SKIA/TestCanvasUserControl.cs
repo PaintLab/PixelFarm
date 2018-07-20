@@ -12,7 +12,7 @@ using PixelFarm.Drawing.Fonts;
 namespace Mini
 {
 
-    public partial class SoftAggControl : UserControl
+    public partial class TestCanvasUserControl : UserControl
     {
         bool isMouseDown;
         DemoBase exampleBase;
@@ -28,12 +28,12 @@ namespace Mini
 
         //Bitmap bufferBmp = null;
         System.Drawing.Rectangle bufferBmpRect;
-        public SoftAggControl()
+        public TestCanvasUserControl()
         {
             bitmapBackBuffer = new GdiBitmapBackBuffer();
             _useGdiPlusOutput = false;
             InitializeComponent();
-            this.Load += new EventHandler(SoftAggControl_Load);
+            this.Load += new EventHandler(TestCanvasUserControl_Load);
         }
 
         public bool UseGdiPlusOutput
@@ -46,7 +46,7 @@ namespace Mini
             get { return _gdiAntiAlias; }
             set { _gdiAntiAlias = value; }
         }
-        void SoftAggControl_Load(object sender, EventArgs e)
+        void TestCanvasUserControl_Load(object sender, EventArgs e)
         {
             if (_useGdiPlusOutput)
             {

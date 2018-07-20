@@ -1,6 +1,6 @@
 ﻿namespace Mini
 {
-    partial class SoftAggControl
+    partial class TestCanvasUserControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,12 +29,12 @@
         {
             this.SuspendLayout();
             // 
-            // SoftAggControl
+            // TestCanvasUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.DoubleBuffered = true;
-            this.Name = "SoftAggControl";
+            this.Name = "TestCanvasUserControl";
             this.Size = new System.Drawing.Size(658, 472);
             this.ResumeLayout(false);
 

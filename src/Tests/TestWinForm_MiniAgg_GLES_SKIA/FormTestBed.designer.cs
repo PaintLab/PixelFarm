@@ -30,7 +30,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.softAggControl2 = new Mini.TestCanvasControl();
+            this.softAggControl2 = new Mini.TestCanvasUserControl();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -103,7 +103,7 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel panel1;
-        private TestCanvasControl softAggControl2;
+        private TestCanvasUserControl softAggControl2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
