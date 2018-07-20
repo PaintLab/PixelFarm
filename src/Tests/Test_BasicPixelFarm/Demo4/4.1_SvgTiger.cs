@@ -2,10 +2,8 @@
 
 using PixelFarm.Drawing;
 using PaintLab.Svg;
-using LayoutFarm.UI;
-using PaintLab;
-using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.Imaging;
+using LayoutFarm.UI; 
+using PixelFarm.CpuBlit; 
 
 namespace LayoutFarm
 {
@@ -21,7 +19,7 @@ namespace LayoutFarm
 
 
             PaintLab.Svg.SvgParser parser = new SvgParser();
-            _backBoard = new BackDrawBoardUI(400, 400);
+            _backBoard = new BackDrawBoardUI(800, 600);
             _backBoard.BackColor = Color.White;
             host.AddChild(_backBoard);
 
@@ -79,19 +77,19 @@ namespace LayoutFarm
 
 #if DEBUG
                     //test save some area
-                    int w = rectBoxController.ControllerBoxMain.Width;
-                    int h = rectBoxController.ControllerBoxMain.Height;
+                    //int w = rectBoxController.ControllerBoxMain.Width;
+                    //int h = rectBoxController.ControllerBoxMain.Height;
 
-                    using (DrawBoard gdiDrawBoard = DrawBoardCreator.CreateNewDrawBoard(1, w, h))
-                    {
-                        gdiDrawBoard.OffsetCanvasOrigin(rectBoxController.ControllerBoxMain.Left, rectBoxController.ControllerBoxMain.Top);
-                        _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, w, h));
-                        var img2 = new ActualBitmap(w, h);
-                        //copy content from drawboard to target image and save
-                        gdiDrawBoard.RenderTo(img2, 0, 0, w, h);
+                    //using (DrawBoard gdiDrawBoard = DrawBoardCreator.CreateNewDrawBoard(1, w, h))
+                    //{
+                    //    gdiDrawBoard.OffsetCanvasOrigin(rectBoxController.ControllerBoxMain.Left, rectBoxController.ControllerBoxMain.Top);
+                    //    _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, w, h));
+                    //    var img2 = new ActualBitmap(w, h);
+                    //    //copy content from drawboard to target image and save
+                    //    gdiDrawBoard.RenderTo(img2, 0, 0, w, h);
 
-                        img2.dbugSaveToPngFile("d:\\WImageTest\\ddd001.png");
-                    }
+                    //    img2.dbugSaveToPngFile("d:\\WImageTest\\ddd001.png");
+                    //}
 #endif                    
 
                 }
