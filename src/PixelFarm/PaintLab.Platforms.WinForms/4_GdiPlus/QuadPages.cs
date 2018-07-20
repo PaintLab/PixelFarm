@@ -7,29 +7,17 @@ namespace PixelFarm.Drawing.WinGdi
     class QuadPages
     {
         GdiPlusDrawBoard _pageA;
-        //CanvasCollection physicalCanvasCollection;
-
         public QuadPages(
             int cachedPageNum,
             int eachCachedPageWidth,
             int eachCachedPageHeight)
         {
-
             _pageA = new GdiPlusDrawBoard(0, 0, eachCachedPageWidth, eachCachedPageHeight);
-
-            //physicalCanvasCollection = new CanvasCollection(
-            //    cachedPageNum,
-            //    eachCachedPageWidth,
-            //    eachCachedPageHeight);
         }
 
         public void Dispose()
         {
-            //if (physicalCanvasCollection != null)
-            //{
-            //    physicalCanvasCollection.Dispose();
-            //    physicalCanvasCollection = null;
-            //}
+
         }
         public void CanvasInvalidate(Rectangle rect)
         {
@@ -118,8 +106,6 @@ namespace PixelFarm.Drawing.WinGdi
                     viewportX, invalidateArea.Top - viewportY,
                     invalidateArea.Width, invalidateArea.Height));
             _pageA.ResetInvalidateArea();
-
-
         }
         public void CalculateCanvasPages(int viewportX, int viewportY, int viewportWidth, int viewportHeight)
         {
