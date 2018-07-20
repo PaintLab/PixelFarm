@@ -220,7 +220,7 @@ namespace PixelFarm.CpuBlit
                                         using (VxsContext.Temp(out var v1))
                                         {
                                             currentTx.TransformToVxs(vxs, v1);
-                                            p.Fill(v1, vx.FillColor);
+                                            p.Fill(v1);
                                         }
                                     }
                                 }
@@ -233,7 +233,7 @@ namespace PixelFarm.CpuBlit
                                 //check if we have a stroke version of this render vx
                                 //if not then request a new one  
 
-                                p.StrokeWidth = vx.StrokeWidth;
+                                //p.StrokeWidth = vx.StrokeWidth;
 
                                 if (vx.HasStrokeColor || p.StrokeColor.A > 0)
                                 {
@@ -258,7 +258,7 @@ namespace PixelFarm.CpuBlit
                                             using (VxsContext.Temp(out var v1))
                                             {
                                                 currentTx.TransformToVxs(strokeVxs, v1);
-                                                p.Fill(v1, vx.StrokeColor);
+                                                p.Fill(v1, renderState.strokeColor);
                                             }
                                         }
                                     }
