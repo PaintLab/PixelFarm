@@ -2,8 +2,8 @@
 
 using PixelFarm.Drawing;
 using PaintLab.Svg;
-using LayoutFarm.UI; 
-using PixelFarm.CpuBlit; 
+using LayoutFarm.UI;
+using PixelFarm.CpuBlit;
 
 namespace LayoutFarm
 {
@@ -18,7 +18,7 @@ namespace LayoutFarm
         {
 
 
-            PaintLab.Svg.SvgParser parser = new SvgParser();
+
             _backBoard = new BackDrawBoardUI(800, 600);
             _backBoard.BackColor = Color.White;
             host.AddChild(_backBoard);
@@ -35,15 +35,12 @@ namespace LayoutFarm
             //----------------------
 
             //load lion svg
-            string file = @"tiger.svg";
-            string svgContent = System.IO.File.ReadAllText(file);
-            WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
-            parser.ParseDocument(textSnapshot);
-            //
-            SvgRenderVx svgRenderVx = parser.GetResultAsRenderVx();
+
+            SvgRenderVx svgRenderVx = ReadSvgFile("tiger.svg");
             var uiSprite = new UISprite(10, 10);
             uiSprite.LoadSvg(svgRenderVx);
             _backBoard.AddChild(uiSprite);
+
             //-------- 
             rectBoxController.Init();
             //------------
@@ -95,6 +92,17 @@ namespace LayoutFarm
                 }
             };
         }
+        SvgRenderVx ReadSvgFile(string filename)
+        {
+
+            string svgContent = System.IO.File.ReadAllText(filename);
+            PaintLab.Svg.SvgParser parser = new SvgParser();
+            WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
+            parser.ParseDocument(textSnapshot);
+            //
+            SvgRenderVx svgRenderVx = parser.GetResultAsRenderVx();
+            return svgRenderVx;
+        }
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
@@ -120,5 +128,5 @@ namespace LayoutFarm
 
 
 
- 
+
 }

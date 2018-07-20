@@ -828,16 +828,16 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else if (!svgVx.HasBitmapSnapshot)
             {
+
                 CpuBlit.RectD bound = svgVx.GetBounds();
 
                 //create 
                 CpuBlit.ActualBitmap backimg = new CpuBlit.ActualBitmap((int)bound.Width, (int)bound.Height);
-                CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg);
-                 
-                svgVx.Render(painter);
+                CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg); 
+                svgVx.Render(painter); 
 #if DEBUG
                 //test
-                 
+
                 //PixelFarm.CpuBlit.Imaging.PngImageWriter.dbugSaveToPngFile(backimg, "d:\\WImageTest\\subimg1.png");
 #endif
 
