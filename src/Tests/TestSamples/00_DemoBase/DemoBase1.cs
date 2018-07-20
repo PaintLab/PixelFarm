@@ -103,7 +103,8 @@ namespace Mini
                 _swapBufferDelegate();
             }
         }
-        public void SetEssentialGLHandlers(GLSwapBufferDelegate swapBufferDelegate,
+        public void SetEssentialGLHandlers(
+            GLSwapBufferDelegate swapBufferDelegate,
             GetGLControlDisplay getGLControlDisplay,
             GetGLSurface getGLSurface)
         {
