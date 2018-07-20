@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using Win32;
 using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Drawing.WinGdi
 {
 
@@ -787,7 +788,7 @@ namespace PixelFarm.Drawing.WinGdi
         CpuBlit.AggPainter _painter;
         CpuBlit.ActualBitmap _aggActualImg;
 
-       
+
         Painter GetAggPainter()
         {
             if (_painter == null)
@@ -797,7 +798,7 @@ namespace PixelFarm.Drawing.WinGdi
                 var aggPainter = CpuBlit.AggPainter.Create(_aggActualImg);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
-                
+
 
                 VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
                 aggPainter.TextPrinter = textPrinter;
@@ -832,14 +833,12 @@ namespace PixelFarm.Drawing.WinGdi
                 //create 
                 CpuBlit.ActualBitmap backimg = new CpuBlit.ActualBitmap((int)bound.Width, (int)bound.Height);
                 CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg);
+                 
                 svgVx.Render(painter);
-
 #if DEBUG
                 //test
-                //int[] rgba32Buffer = ActualImageExtensions.CopyImgBuffer(backimg, 0 + 20, 0 + 20, backimg.Width - 20, backimg.Height - 20);
-                //ActualImage newImg = ActualImage.CreateFromBuffer(backimg.Width - 20, backimg.Height - 20, PixelFormat.ARGB32, rgba32Buffer);
-                //newImg.dbugSaveToPngFile("d:\\WImageTest\\subimg1.png");
-
+                 
+                //PixelFarm.CpuBlit.Imaging.PngImageWriter.dbugSaveToPngFile(backimg, "d:\\WImageTest\\subimg1.png");
 #endif
 
 
