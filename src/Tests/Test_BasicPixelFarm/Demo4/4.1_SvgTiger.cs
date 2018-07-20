@@ -37,7 +37,7 @@ namespace LayoutFarm
             //----------------------
 
             //load lion svg
-            string file = @"d:\\WImageTest\\lion.svg";
+            string file = @"tiger.svg";
             string svgContent = System.IO.File.ReadAllText(file);
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
