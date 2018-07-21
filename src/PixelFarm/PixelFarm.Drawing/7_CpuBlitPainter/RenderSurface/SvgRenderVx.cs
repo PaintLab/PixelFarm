@@ -204,8 +204,6 @@ namespace PixelFarm.CpuBlit
                                         {
                                             currentTx.TransformToVxs(vxs, v1);
                                             p.Fill(v1, vx.FillColor);
-
-                                            //p.Fill(vxs, vx.FillColor);
                                         }
                                     }
                                 }
@@ -226,8 +224,6 @@ namespace PixelFarm.CpuBlit
                                         {
                                             currentTx.TransformToVxs(vxs, v1);
                                             p.Fill(v1);
-
-                                            //p.Fill(vxs);
                                         }
                                     }
                                 }
