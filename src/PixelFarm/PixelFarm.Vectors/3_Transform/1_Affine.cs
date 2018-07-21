@@ -100,8 +100,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public double sx, shy, shx, sy, tx, ty;
 
         public void SetValues(double v0_sx, double v1_shy,
-                      double v2_shx, double v3_sy,
-                      double v4_tx, double v5_ty)
+                              double v2_shx, double v3_sy,
+                              double v4_tx, double v5_ty)
         {
             sx = v0_sx; shy = v1_shy;
             shx = v2_shx; sy = v3_sy;
@@ -536,13 +536,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return new Affine(IdentityMatrix, creationPlan);
         }
 
-        public static Affine NewCustomMatrix(double sx, double shx, double sy, double shy, double tx, double ty)
-        {
-            return new Affine(
-                sx, shx,
-                sy, shy,
-                tx, ty);
-        }
+        
         //====================================================trans_affine_rotation
         // Rotation matrix. sin() and cos() are calculated twice for the same angle.
         // There's no harm because the performance of sin()/cos() is very good on all

@@ -33,7 +33,6 @@ using PixelFarm;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.VertexProcessing;
 
 
 namespace PaintLab.Svg
@@ -589,39 +588,66 @@ namespace PaintLab.Svg
                             break;
                         case "matrix":
                             {
+                                //https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Transformations
+                                //... transformations can be expressed by a 2x3 transformation matrix.
+                                //To combine several transformations,
+                                //one can set the resulting matrix directly with the
+                                //matrix
+                                //(a, b,
+                                // c, d,
+                                // e, f) 
+                                //transformation which maps coordinates from a previous coordinate system into a new coordinate system by ...
+
+                                //x1= ax0 + cy0 + e
+                                //y1= bx0 + dy0 + f
+
+
+                                //or
+                                //matrix
+                                //(v0_sx,  v1_shy,
+                                // v2_shx, v3_sy,
+                                // v4_tx,  v5_ty) 
+
+
                                 //read matrix args
                                 double[] matrixArgs = ParseMatrixArgs(right);
-                                //create affine matrix 
-                                spec.Transform = Affine.NewCustomMatrix(
-                                    matrixArgs[0], matrixArgs[1],
-                                    matrixArgs[2], matrixArgs[3],
-                                    matrixArgs[4], matrixArgs[5]
-                                    );
+                                spec.Transform = new Affine(
+                                      matrixArgs[0], matrixArgs[1],
+                                      matrixArgs[2], matrixArgs[3],
+                                      matrixArgs[4], matrixArgs[5]
+                                      );
                             }
                             break;
                         case "translate":
                             {
+                                //translate matrix
                                 double[] matrixArgs = ParseMatrixArgs(right);
+                                spec.Transform = Affine.NewTranslation(matrixArgs[0], matrixArgs[1]);
                             }
                             break;
                         case "rotate":
                             {
                                 double[] matrixArgs = ParseMatrixArgs(right);
+                                spec.Transform = Affine.NewRotation(matrixArgs[0]);
                             }
                             break;
                         case "scale":
                             {
                                 double[] matrixArgs = ParseMatrixArgs(right);
+                                spec.Transform = Affine.NewScaling(matrixArgs[0], matrixArgs[1]);
+
                             }
                             break;
                         case "skewX":
                             {
                                 double[] matrixArgs = ParseMatrixArgs(right);
+                                spec.Transform = Affine.NewSkewing(matrixArgs[0], 0);
                             }
                             break;
                         case "skewY":
                             {
                                 double[] matrixArgs = ParseMatrixArgs(right);
+                                spec.Transform = Affine.NewSkewing(0, matrixArgs[1]);
                             }
                             break;
                     }
@@ -684,14 +710,14 @@ namespace PaintLab.Svg
             }
             public override void VisitContext()
             {
-                beginVx = new SvgPart(SvgRenderVxKind.BeginGroup);
+                beginVx = new SvgBeginGroup();
                 _ownerParser._renderVxList.Add(beginVx);
                 base.VisitContext();
             }
             public override void ExitingContent()
             {
                 base.ExitingContent();
-                _ownerParser._renderVxList.Add(new SvgPart(SvgRenderVxKind.EndGroup));
+                _ownerParser._renderVxList.Add(new SvgEndGroup());
             }
         }
         class SvgTitleContext : ParsingContext
@@ -756,6 +782,7 @@ namespace PaintLab.Svg
             }
             public override bool AddAttribute(string name, string value)
             {
+
                 if (name == "d")
                 {
                     d_attribute = value;
@@ -797,11 +824,60 @@ namespace PaintLab.Svg
         }
 
 
+        /// <summary>
+        ///   svg
+        /// </summary>
         class SvgContext : ParsingContext
         {
 
         }
 
+
+        /// <summary>
+        ///   defs
+        /// </summary>
+        class SvgDefsParsingContext : ParsingContext
+        {
+            SvgDefs _svgDef;
+            public override void VisitContext()
+            {
+                _svgDef = new SvgDefs();
+                _ownerParser._renderVxList.Add(_svgDef);
+
+                base.VisitContext();
+            }
+            public override void EnterContent()
+            {
+                base.EnterContent();
+            }
+            public override void ExitingContent()
+            {
+                base.ExitingContent();
+            }
+        }
+        /// <summary>
+        /// clipPath
+        /// </summary>
+        class SvgClipPathParsingContext : ParsingContext
+        {
+
+            SvgClipPath _svgClipPath;
+            public override void VisitContext()
+            {
+                _svgClipPath = new SvgClipPath();
+                _ownerParser._renderVxList.Add(_svgClipPath);
+
+                base.VisitContext();
+            }
+            public override void EnterContent()
+            {
+                base.EnterContent();
+            }
+            public override void ExitingContent()
+            {
+                base.ExitingContent();
+            }
+        }
         protected override void OnVisitNewElement(TextSpan ns, TextSpan localName)
         {
             throw new NotSupportedException();
@@ -820,6 +896,12 @@ namespace PaintLab.Svg
 #if DEBUG
                     Console.WriteLine("svg unimplemented element: " + elemName);
 #endif
+                    break;
+                case "defs":
+                    currentContex = new SvgDefsParsingContext();
+                    break;
+                case "clipPath":
+                    currentContex = new SvgClipPathParsingContext();
                     break;
                 case "svg":
                     currentContex = new SvgContext();

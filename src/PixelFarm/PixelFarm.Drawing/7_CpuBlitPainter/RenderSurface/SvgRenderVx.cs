@@ -162,7 +162,8 @@ namespace PixelFarm.CpuBlit
                                 //apply this to current tx
                                 if (currentTx != null)
                                 {
-                                    currentTx = currentTx * vx.AffineTx;
+                                    //*** IMPORTANT : matrix transform order !***
+                                    currentTx = vx.AffineTx * currentTx;
                                 }
                                 else
                                 {
