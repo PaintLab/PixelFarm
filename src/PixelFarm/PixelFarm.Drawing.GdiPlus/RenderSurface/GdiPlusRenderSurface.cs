@@ -832,9 +832,10 @@ namespace PixelFarm.Drawing.WinGdi
                 CpuBlit.RectD bound = svgVx.GetBounds();
 
                 //create 
-                CpuBlit.ActualBitmap backimg = new CpuBlit.ActualBitmap((int)bound.Width, (int)bound.Height);
-                CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg); 
-                svgVx.Render(painter); 
+                CpuBlit.ActualBitmap backimg = new CpuBlit.ActualBitmap((int)bound.Width + 200, (int)bound.Height + 200);
+                CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg);
+
+                svgVx.Render(painter);
 #if DEBUG
                 //test
 

@@ -9,15 +9,20 @@
 </metadata>
 
 <defs id="defs6">
-  <clipPath id="clipPath16" clipPathUnits="userSpaceOnUse">
-    <path id="path18" d="M 0,38 38,38 38,0 0,0 0,38 Z" />
-  </clipPath>
-<clipPath id="clipPath28" clipPathUnits="userSpaceOnUse">
-  <path id="path30" d="M 5,37 C 5,37 1,37 1,33 L 1,33 1,5 C 1,1 5,1 5,1 l 0,0 28,0 c 4,0 4,4 4,4 l 0,0 0,28 c 0,0 0,4 -4,4 l 0,0 -28,0 z" />
-</clipPath>
+	<clipPath id="clipPath16" clipPathUnits="userSpaceOnUse">
+		<path id="path18" d="M 0,38 38,38 38,0 0,0 0,38 Z" />
+	</clipPath>
+	<clipPath id="clipPath28" clipPathUnits="userSpaceOnUse">
+		<path id="path30" d="M 5,37 C 5,37 1,37 1,33 L 1,33 1,5 C 1,1 5,1 5,1 l 0,0 28,0 c 4,0 4,4 4,4 l 0,0 0,28 c 0,0 0,4 -4,4 l 0,0 -28,0 z" />
+	</clipPath>
 
-<clipPath id="clipPath40" clipPathUnits="userSpaceOnUse">
-  <path id="path42" d="M 15,24 C 13,20 1,11 1,11 L 1,11 1,5 C 1,1 5,1 5,1 l 0,0 28,0 c 4,0 4,4 4,4 l 0,0 0,6 c 0,0 -9,5 -14,13 l 0,0 c -0.75,1.199 -2,-2 -4,-2 l 0,0 c -1.6,0 -2.56,2.56 -3.392,2.56 l 0,0 C 15.4,24.56 15.2,24.4 15,24" /></clipPath><clipPath id="clipPath52" clipPathUnits="userSpaceOnUse"><path id="path54" d="M 0,38 38,38 38,0 0,0 0,38 Z" /></clipPath></defs><g transform="matrix(1.25,0,0,-1.25,0,47.5)" id="g10">
+	<clipPath id="clipPath40" clipPathUnits="userSpaceOnUse">
+		<path id="path42" d="M 15,24 C 13,20 1,11 1,11 L 1,11 1,5 C 1,1 5,1 5,1 l 0,0 28,0 c 4,0 4,4 4,4 l 0,0 0,6 c 0,0 -9,5 -14,13 l 0,0 c -0.75,1.199 -2,-2 -4,-2 l 0,0 c -1.6,0 -2.56,2.56 -3.392,2.56 l 0,0 C 15.4,24.56 15.2,24.4 15,24" /></clipPath>
+	<clipPath id="clipPath52" clipPathUnits="userSpaceOnUse">
+		<path id="path54" d="M 0,38 38,38 38,0 0,0 0,38 Z" /></clipPath>
+</defs>
+
+<g transform="matrix(1.25,0,0,-1.25,0,47.5)" id="g10">
     <g id="g12">
 		<g clip-path="url(#clipPath16)" id="g14">
 			<g transform="translate(37,5)" id="g20">
@@ -37,6 +42,9 @@
 		<g clip-path="url(#clipPath52)" id="g50">
 			<g transform="translate(23,24)" id="g56">
 				<path id="path58" style="fill:#ffcc4d;fill-opacity:1;fill-rule:nonzero;stroke:none" d="m 0,0 c 0,-1.104 -1.791,-2 -4,-2 -2.209,0 -4,0.896 -4,2 0,1.104 1.791,2 4,2 2.209,0 4,-0.896 4,-2" /></g>
-				<g transform="translate(19,24)" id="g60"><path id="path62" style="fill:#ffac33;fill-opacity:1;fill-rule:nonzero;stroke:none" d="M 0,0 C -1.562,0 -1.5,2.031 -5,4 -7.756,5.55 -10.5,4.531 -12.438,1.937 -14.592,-0.947 -18.002,2.003 -14,5 -7.531,9.844 -3.313,3.406 -1.687,4.125 -0.876,4.484 -2.496,7.178 -5.007,8.317 -7.206,9.315 -8.439,11 -6.937,11.5 c 2.999,1 5.125,-2.719 6.125,-4.719 0.999,-2 2.124,-1.156 3.843,1.5 1,1.545 2.65,3.141 4.063,3.386 C 9.188,12.031 11.719,9.625 8.969,9.5 6.658,9.395 4,8 3,6 2,4 4.386,4.99 6.312,6.125 10.344,8.5 16,8 15,5 14,2 11.714,8.022 3.688,3.469 1.228,2.073 1.562,0 0,0" />
-				</g></g></g></g>
+			<g transform="translate(19,24)" id="g60">
+				<path id="path62" style="fill:#ffac33;fill-opacity:1;fill-rule:nonzero;stroke:none" d="M 0,0 C -1.562,0 -1.5,2.031 -5,4 -7.756,5.55 -10.5,4.531 -12.438,1.937 -14.592,-0.947 -18.002,2.003 -14,5 -7.531,9.844 -3.313,3.406 -1.687,4.125 -0.876,4.484 -2.496,7.178 -5.007,8.317 -7.206,9.315 -8.439,11 -6.937,11.5 c 2.999,1 5.125,-2.719 6.125,-4.719 0.999,-2 2.124,-1.156 3.843,1.5 1,1.545 2.65,3.141 4.063,3.386 C 9.188,12.031 11.719,9.625 8.969,9.5 6.658,9.395 4,8 3,6 2,4 4.386,4.99 6.312,6.125 10.344,8.5 16,8 15,5 14,2 11.714,8.022 3.688,3.469 1.228,2.073 1.562,0 0,0" />
+			</g>
+		</g></g>
+		</g>
 </svg>
