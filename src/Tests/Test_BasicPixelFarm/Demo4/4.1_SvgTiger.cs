@@ -36,7 +36,9 @@ namespace LayoutFarm
 
             //load lion svg
 
-            SvgRenderVx svgRenderVx = ReadSvgFile("tiger.svg");
+            //string svgfile = "tiger.svg";
+            string svgfile = "1f30b.svg";
+            SvgRenderVx svgRenderVx = ReadSvgFile(svgfile);
             var uiSprite = new UISprite(10, 10);
             uiSprite.LoadSvg(svgRenderVx);
             _backBoard.AddChild(uiSprite);
