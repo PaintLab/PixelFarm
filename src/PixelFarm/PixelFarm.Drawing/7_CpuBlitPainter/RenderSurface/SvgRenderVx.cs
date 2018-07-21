@@ -13,7 +13,9 @@ namespace PixelFarm.CpuBlit
     {
         BeginGroup,
         EndGroup,
-        Path
+        Path,
+        Defs,
+        ClipPath,
     }
 
     public class VxsRenderVx : RenderVx
@@ -130,6 +132,7 @@ namespace PixelFarm.CpuBlit
             renderState.fillColor = p.FillColor;
             renderState.affineTx = currentTx;
 
+
             //------------------ 
             int j = _vxList.Length;
             for (int i = 0; i < j; ++i)
@@ -141,7 +144,6 @@ namespace PixelFarm.CpuBlit
                         {
                             //1. save current state before enter new state 
                             p.StackPushUserObject(renderState);
-
                             //2. enter new px context
                             if (vx.HasFillColor)
                             {
@@ -201,6 +203,8 @@ namespace PixelFarm.CpuBlit
                                         {
                                             currentTx.TransformToVxs(vxs, v1);
                                             p.Fill(v1, vx.FillColor);
+
+                                            //p.Fill(vxs, vx.FillColor);
                                         }
                                     }
                                 }
@@ -221,6 +225,8 @@ namespace PixelFarm.CpuBlit
                                         {
                                             currentTx.TransformToVxs(vxs, v1);
                                             p.Fill(v1);
+
+                                            //p.Fill(vxs);
                                         }
                                     }
                                 }
@@ -325,6 +331,36 @@ namespace PixelFarm.CpuBlit
         }
     }
 
+    public class SvgDefs : SvgPart
+    {
+        public SvgDefs()
+            : base(SvgRenderVxKind.Defs)
+        {
+
+        }
+    }
+    public class SvgClipPath : SvgPart
+    {
+        public SvgClipPath()
+            : base(SvgRenderVxKind.ClipPath)
+        {
+        }
+    }
+
+    public class SvgBeginGroup : SvgPart
+    {
+        public SvgBeginGroup() : base(SvgRenderVxKind.BeginGroup)
+        {
+
+        }
+    }
+    public class SvgEndGroup : SvgPart
+    {
+        public SvgEndGroup() : base(SvgRenderVxKind.EndGroup)
+        {
+
+        }
+    }
 
     public class SvgPart
     {
@@ -335,7 +371,6 @@ namespace PixelFarm.CpuBlit
         float _strokeWidth;
 
         double _strokeVxsStrokeWidth;
-
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -352,6 +387,12 @@ namespace PixelFarm.CpuBlit
 #endif
             this.Kind = kind;
         }
+        public SvgRenderVxKind Kind
+        {
+            get;
+            private set;
+        }
+
         public bool HasFillColor { get; private set; }
         public bool HasStrokeColor { get; private set; }
         public bool HasStrokeWidth { get; private set; }
@@ -419,21 +460,12 @@ namespace PixelFarm.CpuBlit
                 HasStrokeWidth = true;
             }
         }
-        public SvgRenderVxKind Kind
-        {
-            get;
-            private set;
-        }
         public Affine AffineTx { get; set; }
-
-
         public VertexStore StrokeVxs
         {
             get;
             set;
         }
-
-
         public static SvgPart TransformToNew(SvgPart originalSvgVx, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
         {
             SvgPart newSx = new SvgPart(originalSvgVx.Kind);
