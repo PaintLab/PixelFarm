@@ -2,6 +2,8 @@
 //MIT, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.PainterExtensions;
 using PixelFarm.CpuBlit.VertexProcessing;
@@ -14,7 +16,6 @@ namespace PixelFarm.CpuBlit
         BeginGroup,
         EndGroup,
         Path,
-        Defs,
         ClipPath,
     }
 
@@ -39,6 +40,8 @@ namespace PixelFarm.CpuBlit
 
     }
 
+   
+
     public class SvgRenderVx : RenderVx
     {
 
@@ -48,6 +51,7 @@ namespace PixelFarm.CpuBlit
             public Color strokeColor;
             public Color fillColor;
             public Affine affineTx;
+            public SvgClipPath clipPath;
         }
 
         Image _backimg;
@@ -57,14 +61,17 @@ namespace PixelFarm.CpuBlit
         RectD _boundRect;
         bool _needBoundUpdate;
 
+        
+
         public SvgRenderVx(SvgPart[] svgVxList)
         {
             //this is original version of the element
             this._originalVxs = svgVxList;
             this._vxList = svgVxList;
             _needBoundUpdate = true;
-
         }
+
+        
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
@@ -170,6 +177,13 @@ namespace PixelFarm.CpuBlit
                                     currentTx = vx.AffineTx;
                                 }
                                 renderState.affineTx = currentTx;
+                            }
+                            //
+                            //
+
+                            if (vx.SvgClipPath != null)
+                            {
+                                 
                             }
                         }
                         break;
@@ -328,16 +342,10 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-    public class SvgDefs : SvgPart
-    {
-        public SvgDefs()
-            : base(SvgRenderVxKind.Defs)
-        {
 
-        }
-    }
     public class SvgClipPath : SvgPart
     {
+        public List<SvgPart> _svgParts;
         public SvgClipPath()
             : base(SvgRenderVxKind.ClipPath)
         {
@@ -393,6 +401,9 @@ namespace PixelFarm.CpuBlit
         public bool HasFillColor { get; private set; }
         public bool HasStrokeColor { get; private set; }
         public bool HasStrokeWidth { get; private set; }
+
+        public SvgClipPath SvgClipPath { get; set; }
+
         public Color FillColor
         {
             get { return _fillColor; }

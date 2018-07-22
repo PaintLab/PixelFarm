@@ -21,9 +21,10 @@ namespace PixelFarm.CpuBlit
             SvgParser svg = new SvgParser();
             //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
-            svg.ReadSvgFile(filename);               
-            return svg.GetResultAsRenderVx(); 
+            svg.ReadSvgFile(filename);
+            return svg.GetResultAsRenderVx();
         }
 
     }
+ 
 }

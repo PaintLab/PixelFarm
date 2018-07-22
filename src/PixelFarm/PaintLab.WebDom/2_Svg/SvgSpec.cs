@@ -1,23 +1,25 @@
 ﻿//Apache2, 2014-present, WinterDev
 //MS-PL,  
 
-using System.Collections.Generic;
-using PixelFarm.Drawing;
+using LayoutFarm.WebDom;
+
 using LayoutFarm.Css;
 namespace LayoutFarm.Svg
 {
+
+
     public class SvgVisualSpec
     {
-        Color fillColor = Color.Black;
-        Color strokeColor = Color.Transparent;
+        CssColor fillColor = CssColor.Black;
+        CssColor strokeColor = CssColor.Transparent;
         CssLength cssLen;
 
         public bool HasFillColor { get; set; }
         public bool HasStrokeColor { get; set; }
         public bool HasStrokeWidth { get; set; }
 
-        public PixelFarm.CpuBlit.VertexProcessing.Affine Transform { get; set; }
-        public Color FillColor
+        public SvgTransform Transform { get; set; }
+        public CssColor FillColor
         {
             get { return this.fillColor; }
             set
@@ -26,7 +28,7 @@ namespace LayoutFarm.Svg
                 this.HasFillColor = true;
             }
         }
-        public Color StrokeColor
+        public CssColor StrokeColor
         {
             get { return this.strokeColor; }
             set
@@ -48,6 +50,27 @@ namespace LayoutFarm.Svg
         public string Id { get; set; }
         public string Class { get; set; }
 
+        public SvgAttributeLink ClipPath { get; set; }
+    }
+    public enum SvgAttributeLinkKind
+    {
+        Id,
+    }
+    public class SvgAttributeLink
+    {
+        public SvgAttributeLink(SvgAttributeLinkKind kind, string value)
+        {
+            this.Kind = kind;
+            this.Value = value;
+        }
+        public string Value { get; private set; }
+        public SvgAttributeLinkKind Kind { get; private set; }
+#if DEBUG
+        public override string ToString()
+        {
+            return Value;
+        }
+#endif
     }
     public class SvgRectSpec : SvgVisualSpec
     {
@@ -126,11 +149,11 @@ namespace LayoutFarm.Svg
     }
     public class SvgPolygonSpec : SvgVisualSpec
     {
-        public PointF[] Points { get; set; }
+        public CssPoint[] Points { get; set; }
     }
     public class SvgPolylineSpec : SvgVisualSpec
     {
-        public PointF[] Points { get; set; }
+        public CssPoint[] Points { get; set; }
     }
 
     public class SvgPathSpec : SvgVisualSpec
@@ -181,7 +204,7 @@ namespace LayoutFarm.Svg
     }
     public class StopColorPoint
     {
-        public Color StopColor
+        public CssColor StopColor
         {
             get;
             set;
