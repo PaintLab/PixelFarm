@@ -50,7 +50,7 @@ namespace LayoutFarm.Svg
         public string Id { get; set; }
         public string Class { get; set; }
 
-        public SvgAttributeLink ClipPath { get; set; }
+        public SvgAttributeLink ClipPathLink { get; set; }        
     }
     public enum SvgAttributeLinkKind
     {

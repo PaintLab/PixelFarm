@@ -552,7 +552,7 @@ namespace PaintLab.Svg
                     string url_value = value.Substring(4, endAt - 4);
                     if (url_value.StartsWith("#"))
                     {
-                        spec.ClipPath = new SvgAttributeLink(SvgAttributeLinkKind.Id, url_value.Substring(1));
+                        spec.ClipPathLink = new SvgAttributeLink(SvgAttributeLinkKind.Id, url_value.Substring(1));
                     }
                     else
                     {
@@ -749,12 +749,6 @@ namespace PaintLab.Svg
 
         }
 
-        //------------------------------------------------------------------------
-        //static PixelFarm.Drawing.Color ConvToActualColor(CssColor color)
-        //{
-        //    return new Color(color.A, color.R, color.G, color.B);
-        //}
-
         static void ParseTransform(string value, SvgVisualSpec spec)
         {
             //TODO: ....
@@ -829,34 +823,6 @@ namespace PaintLab.Svg
             return elem_values;
         }
 
-        //protected static void AssignValues(SvgNode svgPart, SvgVisualSpec spec)
-        //{
-
-        //    //if (spec.HasFillColor)
-        //    //{
-        //    //    svgPart.FillColor = spec.FillColor;
-        //    //}
-        //    //if (spec.HasStrokeColor)
-        //    //{
-        //    //    svgPart.StrokeColor = spec.StrokeColor;
-        //    //}
-        //    //if (spec.HasStrokeWidth)
-        //    //{
-        //    //    //assume this is in pixel unit
-        //    //    svgPart.StrokeWidth = spec.StrokeWidth.Number;
-        //    //}
-        //    //if (spec.Transform != null)
-        //    //{
-        //    //    svgPart.AffineTx = spec.Transform;
-        //    //}
-        //    //if (spec.ClipPath != null)
-        //    //{
-        //    //    //need to be resolved later
-
-        //    //}
-        //}
-
-
     }
 
 
@@ -864,13 +830,6 @@ namespace PaintLab.Svg
     {
 
         ISvgDocBuilder _svgDocBuilder;
-        //internal CssParser _cssParser = new CssParser(); //built in css parser
-        //CurveFlattener _curveFlattener = new CurveFlattener();
-        //MySvgPathDataParser _svgPathDataParser = new MySvgPathDataParser(); 
-        //Stack<ParsingContext> openElemStack = new Stack<ParsingContext>();
-        //Stack<SvgDefsParsingContext> _defParsingContextStack = new Stack<SvgDefsParsingContext>();
-        //List<SvgDefs> _defsList = new List<SvgDefs>();
-        //ParsingContext _currentContex;
 
         public SvgParser(ISvgDocBuilder svgDocBuilder)
         {
@@ -879,9 +838,6 @@ namespace PaintLab.Svg
 
         protected override void OnBegin()
         {
-            //_renderVxList.Clear();
-            //openElemStack.Clear();
-            //_currentContex = null;
             _svgDocBuilder.OnBegin();
             base.OnBegin();
         }

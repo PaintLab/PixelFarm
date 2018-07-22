@@ -18,6 +18,8 @@ namespace PixelFarm.CpuBlit
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
         PixelFarm.CpuBlit.VertexProcessing.CurveFlattener _curveFlatter = new VertexProcessing.CurveFlattener();
 
+        Dictionary<string, SvgClipPath> _clipPathDic = new Dictionary<string, SvgClipPath>();
+
         public SvgRenderVx CreateRenderVx(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
@@ -56,7 +58,8 @@ namespace PixelFarm.CpuBlit
                     RenderPathElement(elem, parts);
                     return;
                 case WellknownSvgElementName.ClipPath:
-                    break;
+                    CreateClipPath(elem, parts);
+                    return;
                 case WellknownSvgElementName.Group:
                     RenderGroupElement(elem, parts);
                     return;
@@ -69,6 +72,48 @@ namespace PixelFarm.CpuBlit
                 //translate SvgElement to  
                 //command stream?
                 RenderSvgElements(elem.GetChild(i), parts);
+            }
+        }
+        void CreateClipPath(SvgElement elem, List<SvgPart> parts)
+        {
+
+            int childCount = elem.ChildCount;
+            for (int i = 0; i < childCount; ++i)
+            {
+                //translate SvgElement to  
+                //command stream?
+                RenderSvgElements(elem.GetChild(i), parts);
+            }
+        }
+        bool _buildDefs = false;
+        void BuildDefinitionNodes()
+        {
+            if (_buildDefs)
+            {
+                return;
+            }
+            _buildDefs = true;
+
+            int j = _defsList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                SvgElement defsElem = _defsList[i];
+                //get definition content
+                int childCount = defsElem.ChildCount;
+                for (int c = 0; c < childCount; ++c)
+                {
+                    SvgElement child = defsElem.GetChild(c);
+                    if (child.WellknowElemName == WellknownSvgElementName.ClipPath)
+                    {
+                        //make this as a clip path
+                        List<SvgPart> parts = new List<SvgPart>();
+                        SvgClipPath clipPath = new SvgClipPath();
+                        RenderSvgElements(child, parts);
+
+                        clipPath._svgParts = parts;
+                        _clipPathDic.Add(child._visualSpec.Id, clipPath);
+                    }
+                }
             }
         }
 
@@ -89,6 +134,15 @@ namespace PixelFarm.CpuBlit
             {
                 //convert from svg transform to
                 part.AffineTx = CreateAffine(spec.Transform);
+            }
+            if (spec.ClipPathLink != null)
+            {
+                //resolve this clip
+                BuildDefinitionNodes();
+                if (_clipPathDic.TryGetValue(spec.ClipPathLink.Value, out SvgClipPath clip))
+                {
+                    part.ClipPath = clip;
+                }
             }
         }
         void RenderPathElement(SvgElement elem, List<SvgPart> parts)

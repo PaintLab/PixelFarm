@@ -40,7 +40,7 @@ namespace PixelFarm.CpuBlit
 
     }
 
-   
+
 
     public class SvgRenderVx : RenderVx
     {
@@ -61,7 +61,7 @@ namespace PixelFarm.CpuBlit
         RectD _boundRect;
         bool _needBoundUpdate;
 
-        
+
 
         public SvgRenderVx(SvgPart[] svgVxList)
         {
@@ -71,7 +71,7 @@ namespace PixelFarm.CpuBlit
             _needBoundUpdate = true;
         }
 
-        
+
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
@@ -179,11 +179,13 @@ namespace PixelFarm.CpuBlit
                                 renderState.affineTx = currentTx;
                             }
                             //
-                            //
-
-                            if (vx.SvgClipPath != null)
+                            // 
+                            if (vx.ClipPath != null)
                             {
-                                 
+                                //implement region
+
+
+
                             }
                         }
                         break;
@@ -375,6 +377,7 @@ namespace PixelFarm.CpuBlit
         Color _strokeColor;
         float _strokeWidth;
 
+
         double _strokeVxsStrokeWidth;
 #if DEBUG
         static int dbugTotalId;
@@ -402,7 +405,7 @@ namespace PixelFarm.CpuBlit
         public bool HasStrokeColor { get; private set; }
         public bool HasStrokeWidth { get; private set; }
 
-        public SvgClipPath SvgClipPath { get; set; }
+
 
         public Color FillColor
         {
@@ -468,6 +471,8 @@ namespace PixelFarm.CpuBlit
                 HasStrokeWidth = true;
             }
         }
+
+        public SvgClipPath ClipPath { get; set; }
         public Affine AffineTx { get; set; }
         public VertexStore StrokeVxs
         {
