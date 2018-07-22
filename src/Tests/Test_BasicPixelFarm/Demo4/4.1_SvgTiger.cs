@@ -101,8 +101,7 @@ namespace LayoutFarm
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
             //
-            SvgRenderVx svgRenderVx = parser.GetResultAsRenderVx();
-            return svgRenderVx;
+            return docBuidler.ResultDocument.CreateRenderVx();
         }
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {

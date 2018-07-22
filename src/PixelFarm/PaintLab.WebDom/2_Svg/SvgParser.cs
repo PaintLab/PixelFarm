@@ -29,6 +29,7 @@ using LayoutFarm.WebLexer;
 using LayoutFarm.Svg.Pathing;
 
 
+using LayoutFarm.Svg;
 
 namespace PaintLab.Svg
 {
@@ -340,581 +341,118 @@ namespace PaintLab.Svg
     }
 
 
-    ////TODO: optimize and refactor here 
-
-    //namespace Internal
-    //{
-    //    class dummy1 { }
-    //    //        abstract class ParsingContext
-    //    //        {
-    //    //            protected SvgVisualSpec spec;
-    //    //            internal SvgParser _ownerParser;
-    //    //            public ParsingContext()
-    //    //            {
-
-    //    //            }
-    //    //            public virtual void VisitContext()
-    //    //            {
-    //    //                spec = new SvgVisualSpec();
-    //    //            }
-    //    //            public virtual bool AddAttribute(string name, string value)
-    //    //            {
-    //    //                switch (name)
-    //    //                {
-
-    //    //                    default:
-    //    //                        return false;
-    //    //                    case "class":
-    //    //                        spec.Class = value;
-    //    //                        break;
-    //    //                    case "id":
-    //    //                        spec.Id = value;
-    //    //                        return true;
-    //    //                    case "style":
-    //    //                        AddStyle(spec, value);
-    //    //                        break;
-    //    //                    case "clip-path":
-    //    //                        AddClipPathLink(spec, value);
-    //    //                        break;
-    //    //                    case "fill":
-    //    //                        {
-    //    //                            if (value != "none")
-    //    //                            {
-    //    //                                //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-    //    //                                spec.FillColor = CssValueParser2.GetActualColor(value);
-    //    //                            }
-    //    //                        }
-    //    //                        break;
-    //    //                    case "fill-opacity":
-    //    //                        {
-    //    //                            //adjust fill opacity
-    //    //                            //0f-1f?
-
-    //    //                        }
-    //    //                        break;
-    //    //                    case "stroke-width":
-    //    //                        {
-    //    //                            spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
-    //    //                        }
-    //    //                        break;
-    //    //                    case "stroke":
-    //    //                        {
-    //    //                            if (value != "none")
-    //    //                            {
-    //    //                                //spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-    //    //                                spec.StrokeColor = CssValueParser2.GetActualColor(value);
-    //    //                            }
-    //    //                        }
-    //    //                        break;
-    //    //                    case "stroke-linecap":
-    //    //                        //set line-cap and line join again
-
-    //    //                        break;
-    //    //                    case "stroke-linejoin":
-
-    //    //                        break;
-    //    //                    case "stroke-miterlimit":
-
-    //    //                        break;
-    //    //                    case "stroke-opacity":
-
-    //    //                        break;
-    //    //                    case "transform":
-    //    //                        {
-    //    //                            //parse trans
-    //    //                            ParseTransform(value, spec);
-    //    //                        }
-    //    //                        break;
-    //    //                }
-    //    //                return true;
-    //    //            }
-    //    //            public virtual void EnterContent()
-    //    //            {
-
-    //    //            }
-    //    //            public virtual void ExitingContent()
-    //    //            {
-
-    //    //            }
-    //    //            static void AddClipPathLink(SvgVisualSpec spec, string value)
-    //    //            {
-    //    //                //eg. url(#aaa)
-    //    //                if (value.StartsWith("url("))
-    //    //                {
-    //    //                    int endAt = value.IndexOf(')', 4);
-    //    //                    if (endAt > -1)
-    //    //                    {
-    //    //                        //get value 
-    //    //                        string url_value = value.Substring(4, endAt - 4);
-    //    //                        if (url_value.StartsWith("#"))
-    //    //                        {
-    //    //                            spec.ClipPath = new SvgAttributeLink(SvgAttributeLinkKind.Id, url_value.Substring(1));
-    //    //                        }
-    //    //                        else
-    //    //                        {
-
-    //    //                        }
-    //    //                    }
-    //    //                    else
-    //    //                    {
-
-    //    //                    }
-    //    //                }
-    //    //                else
-    //    //                {
-
-    //    //                }
-
-    //    //            }
-
-    //    //#if DEBUG
-    //    //            static int s_dbugIdCount;
-    //    //#endif
-    //    //            void AddStyle(SvgVisualSpec spec, string cssStyle)
-    //    //            {
-    //    //                if (!String.IsNullOrEmpty(cssStyle))
-    //    //                {
-
-    //    //#if DEBUG
-    //    //                    s_dbugIdCount++;
-
-    //    //#endif
-    //    //                    //***                
-    //    //                    CssRuleSet cssRuleSet = _ownerParser._cssParser.ParseCssPropertyDeclarationList(cssStyle.ToCharArray());
-
-    //    //                    foreach (CssPropertyDeclaration propDecl in cssRuleSet.GetAssignmentIter())
-    //    //                    {
-    //    //                        switch (propDecl.UnknownRawName)
-    //    //                        {
-
-    //    //                            default:
-    //    //                                break;
-    //    //                            case "fill":
-    //    //                                {
-
-    //    //                                    int valueCount = propDecl.ValueCount;
-    //    //                                    //1
-    //    //                                    string value = propDecl.GetPropertyValue(0).ToString();
-    //    //                                    if (value != "none")
-    //    //                                    {
-    //    //                                        //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-    //    //                                        spec.FillColor = CssValueParser2.GetActualColor(value);
-    //    //                                    }
-    //    //                                }
-    //    //                                break;
-    //    //                            case "fill-opacity":
-    //    //                                {
-    //    //                                    //TODO:
-    //    //                                    //adjust fill opacity
-    //    //                                }
-    //    //                                break;
-    //    //                            case "stroke-width":
-    //    //                                {
-    //    //                                    int valueCount = propDecl.ValueCount;
-    //    //                                    //1
-    //    //                                    string value = propDecl.GetPropertyValue(0).ToString();
-
-    //    //                                    spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
-    //    //                                }
-    //    //                                break;
-    //    //                            case "stroke":
-    //    //                                {
-    //    //                                    //TODO:
-    //    //                                    //if (attr.Value != "none")
-    //    //                                    //{
-    //    //                                    //    spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
-    //    //                                    //}
-    //    //                                }
-    //    //                                break;
-    //    //                            case "stroke-linecap":
-    //    //                                //set line-cap and line join again
-    //    //                                //TODO:
-    //    //                                break;
-    //    //                            case "stroke-linejoin":
-    //    //                                //TODO:
-    //    //                                break;
-    //    //                            case "stroke-miterlimit":
-    //    //                                //TODO:
-    //    //                                break;
-    //    //                            case "stroke-opacity":
-    //    //                                //TODO:
-    //    //                                break;
-    //    //                            case "transform":
-    //    //                                {
-    //    //                                    ////parse trans
-    //    //                                    //ParseTransform(attr.Value, spec);
-    //    //                                }
-    //    //                                break;
-    //    //                        }
-    //    //                    }
-    //    //                }
-    //    //            }
-
-    //    //            //static PixelFarm.Drawing.Color ConvToActualColor(CssColor color)
-    //    //            //{
-    //    //            //    return new Color(color.A, color.R, color.G, color.B);
-    //    //            //}
-
-    //    //            static void ParseTransform(string value, SvgVisualSpec spec)
-    //    //            {
-    //    //                //TODO: ....
-
-    //    //                int openParPos = value.IndexOf('(');
-    //    //                if (openParPos > -1)
-    //    //                {
-    //    //                    string right = value.Substring(openParPos + 1, value.Length - (openParPos + 1)).Trim();
-    //    //                    string left = value.Substring(0, openParPos);
-    //    //                    switch (left)
-    //    //                    {
-    //    //                        default:
-    //    //                            break;
-    //    //                        case "matrix":
-    //    //                            {
-    //    //                                //read matrix args  
-    //    //                                spec.Transform = new SvgTransformMatrix(ParseMatrixArgs(right));
-    //    //                            }
-    //    //                            break;
-    //    //                        case "translate":
-    //    //                            {
-    //    //                                //translate matrix
-    //    //                                float[] matrixArgs = ParseMatrixArgs(right);
-    //    //                                spec.Transform = new SvgTranslate(matrixArgs[0], matrixArgs[1]);
-    //    //                            }
-    //    //                            break;
-    //    //                        case "rotate":
-    //    //                            {
-    //    //                                float[] matrixArgs = ParseMatrixArgs(right);
-    //    //                                spec.Transform = new SvgRotate(matrixArgs[0]);
-    //    //                            }
-    //    //                            break;
-    //    //                        case "scale":
-    //    //                            {
-    //    //                                float[] matrixArgs = ParseMatrixArgs(right);
-    //    //                                spec.Transform = new SvgScale(matrixArgs[0], matrixArgs[1]);
-    //    //                            }
-    //    //                            break;
-    //    //                        case "skewX":
-    //    //                            {
-    //    //                                float[] matrixArgs = ParseMatrixArgs(right);
-    //    //                                spec.Transform = new SvgSkew(matrixArgs[0], 0);
-    //    //                            }
-    //    //                            break;
-    //    //                        case "skewY":
-    //    //                            {
-    //    //                                float[] matrixArgs = ParseMatrixArgs(right);
-    //    //                                spec.Transform = new SvgSkew(0, matrixArgs[1]);
-    //    //                            }
-    //    //                            break;
-    //    //                    }
-    //    //                }
-    //    //                else
-    //    //                {
-    //    //                    //?
-    //    //                }
-    //    //            }
-
-    //    //            static float[] ParseMatrixArgs(string matrixTransformArgs)
-    //    //            {
-
-
-    //    //                int close_paren = matrixTransformArgs.IndexOf(')');
-    //    //                matrixTransformArgs = matrixTransformArgs.Substring(0, close_paren);
-    //    //                string[] elem_string_args = matrixTransformArgs.Split(',');
-    //    //                int j = elem_string_args.Length;
-    //    //                float[] elem_values = new float[j];
-    //    //                for (int i = 0; i < j; ++i)
-    //    //                {
-    //    //                    elem_values[i] = float.Parse(elem_string_args[i]);
-    //    //                }
-    //    //                return elem_values;
-    //    //            }
-    //    //            protected static void AssignValues(SvgNode svgPart, SvgVisualSpec spec)
-    //    //            {
-
-    //    //                //if (spec.HasFillColor)
-    //    //                //{
-    //    //                //    svgPart.FillColor = spec.FillColor;
-    //    //                //}
-    //    //                //if (spec.HasStrokeColor)
-    //    //                //{
-    //    //                //    svgPart.StrokeColor = spec.StrokeColor;
-    //    //                //}
-    //    //                //if (spec.HasStrokeWidth)
-    //    //                //{
-    //    //                //    //assume this is in pixel unit
-    //    //                //    svgPart.StrokeWidth = spec.StrokeWidth.Number;
-    //    //                //}
-    //    //                //if (spec.Transform != null)
-    //    //                //{
-    //    //                //    svgPart.AffineTx = spec.Transform;
-    //    //                //}
-    //    //                //if (spec.ClipPath != null)
-    //    //                //{
-    //    //                //    //need to be resolved later
-
-    //    //                //}
-    //    //            }
-
-    //    //        }
-    //    //        /// <summary>
-    //    //        /// g
-    //    //        /// </summary>
-    //    //        class SvgGroupParsingContext : ParsingContext
-    //    //        {
-    //    //            SvgGroup svgGroup;
-    //    //            public override void VisitContext()
-    //    //            {
-    //    //                svgGroup = new SvgGroup();
-    //    //                _ownerParser.AddSvgPart(svgGroup);
-    //    //                base.VisitContext();
-    //    //            }
-
-    //    //            public override void EnterContent()
-    //    //            {
-    //    //                //AssignValues(beginVx, spec);
-    //    //                base.EnterContent();
-    //    //            }
-
-    //    //            public override void ExitingContent()
-    //    //            {
-    //    //                base.ExitingContent();
-    //    //                //_ownerParser.AddSvgPart(new SvgEndGroup());
-    //    //            }
-    //    //        }
-
-    //    //        /// <summary>
-    //    //        /// title
-    //    //        /// </summary>
-    //    //        class SvgTitleParsingeContext : ParsingContext
-    //    //        {
-
-    //    //        }
-
-    //    //        //------------------------------------
-
-    //    //        /// <summary>
-    //    //        /// path
-    //    //        /// </summary>
-    //    //        class SvgPathParsingContext : ParsingContext
-    //    //        {
-    //    //            SvgPath svgPart;
-    //    //            string d_attribute;
-
-    //    //            public SvgPathParsingContext()
-    //    //            {
-
-    //    //            }
-    //    //            public override void VisitContext()
-    //    //            {
-    //    //                svgPart = new SvgPath();
-    //    //                _ownerParser.AddSvgPart(svgPart);
-    //    //                base.VisitContext();
-    //    //            }
-    //    //            public override bool AddAttribute(string name, string value)
-    //    //            {
-
-    //    //                if (name == "d")
-    //    //                {
-    //    //                    d_attribute = value;
-    //    //                    return true;
-    //    //                }
-    //    //                return base.AddAttribute(name, value);
-    //    //            }
-    //    //            public override void ExitingContent()
-    //    //            {
-    //    //                EvaluatePathDefinition();
-    //    //                base.ExitingContent();
-    //    //            }
-    //    //            void EvaluatePathDefinition()
-    //    //            {
-    //    //                //if (d_attribute != null)
-    //    //                //{
-    //    //                //    //create new path 
-    //    //                //    AssignValues(svgPart, spec);
-
-    //    //                //    svgPart.SetVxsAsOriginal(
-    //    //                //        _ownerParser.ParseSvgPathDefinitionToVxs(
-    //    //                //            d_attribute.ToCharArray()));
-
-
-    //    //                //    if (svgPart.HasStrokeWidth && svgPart.StrokeWidth > 0)
-    //    //                //    {
-    //    //                //        //TODO: implement stroke rendering 
-    //    //                //    }
-
-
-    //    //                //    d_attribute = null;
-    //    //                //}
-    //    //            }
-    //    //            public override void EnterContent()
-    //    //            {
-
-    //    //                EvaluatePathDefinition();
-    //    //                base.EnterContent();
-    //    //            }
-    //    //        }
-
-
-    //    //        /// <summary>
-    //    //        ///   svg
-    //    //        /// </summary>
-    //    //        class SvgParsingContext : ParsingContext
-    //    //        {
-
-    //    //        }
-
-
-    //    //        /// <summary>
-    //    //        ///  defs
-    //    //        /// </summary>
-    //    //        class SvgDefsParsingContext : ParsingContext
-    //    //        {
-    //    //            internal List<SvgNode> _renderVxList = new List<SvgNode>();
-
-    //    //            public override void VisitContext()
-    //    //            {
-
-    //    //                _ownerParser.BeginDefs();
-    //    //                base.VisitContext();
-    //    //            }
-    //    //            public override void EnterContent()
-    //    //            {
-    //    //                base.EnterContent();
-    //    //            }
-    //    //            public override void ExitingContent()
-    //    //            {
-    //    //                base.ExitingContent();
-    //    //                _ownerParser.EndDefs();
-    //    //            }
-    //    //        }
-    //    //        /// <summary>
-    //    //        /// clipPath
-    //    //        /// </summary>
-    //    //        class SvgClipPathParsingContext : ParsingContext
-    //    //        {
-
-    //    //            SvgClipPath _svgClipPath;
-    //    //            public override void VisitContext()
-    //    //            {
-    //    //                _svgClipPath = new SvgClipPath();
-    //    //                _ownerParser.AddSvgPart(_svgClipPath);
-
-    //    //                base.VisitContext();
-    //    //            }
-    //    //            public override void EnterContent()
-    //    //            {
-    //    //                base.EnterContent();
-    //    //            }
-    //    //            public override void ExitingContent()
-    //    //            {
-    //    //                base.ExitingContent();
-    //    //            }
-    //    //        }
-
-
-    //    //        class SvgShapeContext : ParsingContext
-    //    //        {
-    //    //            SvgShape svgPart;
-    //    //            public SvgShapeContext(string shapeName)
-    //    //            {
-    //    //                ShapeName = shapeName;
-    //    //                svgPart = new SvgShape(shapeName);
-    //    //            }
-    //    //            public string ShapeName { get; set; }
-    //    //            public override void EnterContent()
-    //    //            {
-    //    //                AssignValues(svgPart, spec);
-    //    //                base.EnterContent();
-    //    //            }
-    //    //        }
-
-    //}
-
-
-
-    public abstract class SvgElement
+    public enum WellknownSvgElementName
     {
+        Unknown,
+        /// <summary>
+        /// svg  
+        /// </summary>
+        Svg,
+        /// <summary>
+        /// g
+        /// </summary>
+        Group,
+        /// <summary>
+        /// path
+        /// </summary>
+        Path,
+        /// <summary>
+        /// defs
+        /// </summary>
+        Defs,
+        /// <summary>
+        /// line
+        /// </summary>
+        Line,
+        /// <summary>
+        /// polyline
+        /// </summary>
+        Polyline,
+        /// <summary>
+        /// polygon
+        /// </summary>
+        Polygon,
+        /// <summary>
+        /// title
+        /// </summary>
+        Title,
+        /// <summary>
+        /// rect
+        /// </summary>
+        Rect,
+        /// <summary>
+        /// ellipse
+        /// </summary>
+        Ellipse,
+        /// <summary>
+        /// circle
+        /// </summary>
+        Circle,
+        /// <summary>
+        /// clipPath
+        /// </summary>
+        ClipPath,
+
+    }
+    public class SvgElement
+    {
+        readonly WellknownSvgElementName _wellknownName;
+        readonly string _unknownElemName;
+
         public SvgVisualSpec _visualSpec = new SvgVisualSpec();
 
         List<SvgElement> _childNodes = new List<SvgElement>();
+
+        public SvgElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualspec = null)
+        {
+            _wellknownName = wellknownName;
+            if (visualspec == null)
+            {
+                visualspec = new SvgVisualSpec();
+            }
+            _visualSpec = visualspec;
+        }
+        public SvgElement(WellknownSvgElementName wellknownName, string name)
+        {
+            _wellknownName = wellknownName;
+            _unknownElemName = name;
+        }
+        public WellknownSvgElementName WellknowElemName { get { return _wellknownName; } }
+
+        public string ElemName
+        {
+            get
+            {
+                switch (_wellknownName)
+                {
+                    default:
+                        throw new NotSupportedException();
+                    case WellknownSvgElementName.Unknown:
+                        return _unknownElemName;
+                    case WellknownSvgElementName.Circle: return "circle";
+                    case WellknownSvgElementName.ClipPath: return "clipPath";
+                    case WellknownSvgElementName.Rect: return "rect";
+                    case WellknownSvgElementName.Path: return "path";
+                    case WellknownSvgElementName.Polygon: return "polygon";
+                    case WellknownSvgElementName.Polyline: return "polyline";
+                    case WellknownSvgElementName.Line: return "line";
+                    case WellknownSvgElementName.Defs: return "defs";
+                    case WellknownSvgElementName.Title: return "title";
+                }
+            }
+        }
         public virtual void AddElement(SvgElement elem)
         {
+            _childNodes.Add(elem);
         }
-    }
-
-    public class SvgGroup : SvgElement
-    {
-
-    }
-    public class SvgPath : SvgShape
-    {
-
-    }
-
-    public abstract class SvgShape : SvgElement
-    {
-
-
-    }
-
-    public class SvgRect : SvgShape
-    {
-
-    }
-    public class SvgPolygon : SvgShape
-    {
-
-    }
-    public class SvgPolyLine : SvgShape
-    {
-
-    }
-    public class SvgLine : SvgShape
-    {
-
-    }
-    public class SvgCicle : SvgShape
-    {
-
-    }
-    public class SvgEllipse : SvgShape
-    {
-    }
-    public enum ShapeName
-    {
-        Rect,
-        Line,
-        Ellise,
-        Polyline,
-        Polygon
-    }
-
-    class SvgDefs : SvgElement
-    {
-
-    }
-
-    class SvgClipPath : SvgElement
-    {
-
-    }
-
-    class SvgClipPathReference : SvgElement
-    {
-        public SvgClipPathReference(string pathRef)
+        public int ChildCount
         {
-
+            get { return _childNodes.Count; }
         }
-        public string ReferenceName { get; set; }
-    }
-
-    class SvgRoot : SvgElement
-    {
-
-    }
-    class SvgTitle : SvgElement
-    {
-
+        public SvgElement GetChild(int index)
+        {
+            return _childNodes[index];
+        }
     }
 
     public interface ISvgDocBuilder
@@ -928,26 +466,12 @@ namespace PaintLab.Svg
         void OnEnd();
     }
 
-    public class SvgDocBuilder : ISvgDocBuilder
+
+    public class SvgDocument
     {
-        Stack<SvgElement> _elems = new Stack<SvgElement>();
-        SvgElement _currentElem;
-        CssParser _cssParser = new CssParser();
-
-        public SvgDocBuilder()
+        SvgElement _rootElement = new SvgElement(WellknownSvgElementName.Svg);
+        public SvgElement CreateElement(string elemName)
         {
-
-        }
-        public void OnBegin()
-        {
-            _elems.Clear();
-        }
-        public void OnVisitNewElement(string elemName)
-        {
-            if (_currentElem != null)
-            {
-                _elems.Push(_currentElem);
-            }
             //------
             switch (elemName)
             {
@@ -955,38 +479,65 @@ namespace PaintLab.Svg
 #if DEBUG
                     Console.WriteLine("svg unimplemented element: " + elemName);
 #endif
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Unknown, elemName);
                 case "defs":
-                    _currentElem = new SvgDefs();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Defs);
                 case "clipPath":
-                    _currentElem = new SvgClipPath();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.ClipPath);
                 case "svg":
-                    _currentElem = new SvgRoot();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Svg);
                 case "g":
-                    _currentElem = new SvgGroup();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Group);
                 case "title":
-                    _currentElem = new SvgTitle();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Title);
                 case "rect":
-                    _currentElem = new SvgRect();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Rect);
                 case "line":
-                    _currentElem = new SvgLine();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Line);
                 case "polyline":
-                    _currentElem = new SvgPolyLine();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Polyline);
                 case "polygon":
-                    _currentElem = new SvgPolygon();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Polygon);
                 case "path":
-                    _currentElem = new SvgPath();
-                    break;
+                    return new SvgElement(WellknownSvgElementName.Path, new SvgPathSpec());
             }
+        }
+
+        public SvgElement Root
+        {
+            get { return _rootElement; }
+        }
+    }
+
+    public class SvgDocBuilder : ISvgDocBuilder
+    {
+        Stack<SvgElement> _elems = new Stack<SvgElement>();
+        SvgElement _currentElem;
+        CssParser _cssParser = new CssParser();
+        SvgDocument _svgDoc = new SvgDocument();
+
+        public SvgDocBuilder()
+        {
+            _currentElem = _svgDoc.Root;
+        }
+        public SvgDocument ResultDocument
+        {
+            get { return _svgDoc; }
+        }
+        public void OnBegin()
+        {
+            _elems.Clear();
+        }
+        public void OnVisitNewElement(string elemName)
+        {
+            SvgElement newElem = _svgDoc.CreateElement(elemName);
+            if (_currentElem != null)
+            {
+                _elems.Push(_currentElem);
+                _currentElem.AddElement(newElem);
+            }
+            _currentElem = newElem;
+
         }
 
         static void AddClipPathLink(SvgVisualSpec spec, string value)
@@ -1096,6 +647,109 @@ namespace PaintLab.Svg
             }
         }
 
+        public void OnAttribute(string attrName, string value)
+        {
+            SvgVisualSpec spec = _currentElem._visualSpec;
+            switch (attrName)
+            {
+                default:
+                    {
+                        //unknown attribute
+                        //some specfic attr for some elem
+                        if (_currentElem.WellknowElemName == WellknownSvgElementName.Path)
+                        {
+                            if (attrName == "d")
+                            {
+                                SvgPathSpec pathSpec = (SvgPathSpec)spec;
+                                pathSpec.D = value;
+                            }
+                        }
+                    }
+                    break;
+                case "class":
+                    spec.Class = value;
+                    break;
+                case "id":
+                    spec.Id = value;
+                    break;
+                case "style":
+                    AddStyle(spec, value);
+                    break;
+                case "clip-path":
+                    AddClipPathLink(spec, value);
+                    break;
+                case "fill":
+                    {
+                        if (value != "none")
+                        {
+                            //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
+                            spec.FillColor = CssValueParser2.GetActualColor(value);
+                        }
+                    }
+                    break;
+                case "fill-opacity":
+                    {
+                        //adjust fill opacity
+                        //0f-1f?
+
+                    }
+                    break;
+                case "stroke-width":
+                    {
+                        spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
+                    }
+                    break;
+                case "stroke":
+                    {
+                        if (value != "none")
+                        {
+                            //spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
+                            spec.StrokeColor = CssValueParser2.GetActualColor(value);
+                        }
+                    }
+                    break;
+                case "stroke-linecap":
+                    //set line-cap and line join again
+
+                    break;
+                case "stroke-linejoin":
+
+                    break;
+                case "stroke-miterlimit":
+
+                    break;
+                case "stroke-opacity":
+
+                    break;
+                case "transform":
+                    {
+                        //parse trans
+                        ParseTransform(value, spec);
+                    }
+                    break;
+            }
+
+        }
+        public void OnEnteringElementBody()
+        {
+
+        }
+
+        public void OnExtingElementBody()
+        {
+            if (_elems.Count > 0)
+            {
+                _currentElem = _elems.Pop();
+            }
+        }
+
+        public void OnEnd()
+        {
+
+
+        }
+
+        //------------------------------------------------------------------------
         //static PixelFarm.Drawing.Color ConvToActualColor(CssColor color)
         //{
         //    return new Color(color.A, color.R, color.G, color.B);
@@ -1203,93 +857,6 @@ namespace PaintLab.Svg
         //}
 
 
-        public void OnAttribute(string attrName, string value)
-        {
-            SvgVisualSpec spec = _currentElem._visualSpec;
-            switch (attrName)
-            {
-                default:
-
-                case "class":
-
-                    spec.Class = value;
-                    break;
-                case "id":
-                    spec.Id = value;
-                    break;
-                case "style":
-                    AddStyle(spec, value);
-                    break;
-                case "clip-path":
-                    AddClipPathLink(spec, value);
-                    break;
-                case "fill":
-                    {
-                        if (value != "none")
-                        {
-                            //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-                            spec.FillColor = CssValueParser2.GetActualColor(value);
-                        }
-                    }
-                    break;
-                case "fill-opacity":
-                    {
-                        //adjust fill opacity
-                        //0f-1f?
-
-                    }
-                    break;
-                case "stroke-width":
-                    {
-                        spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
-                    }
-                    break;
-                case "stroke":
-                    {
-                        if (value != "none")
-                        {
-                            //spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-                            spec.StrokeColor = CssValueParser2.GetActualColor(value);
-                        }
-                    }
-                    break;
-                case "stroke-linecap":
-                    //set line-cap and line join again
-
-                    break;
-                case "stroke-linejoin":
-
-                    break;
-                case "stroke-miterlimit":
-
-                    break;
-                case "stroke-opacity":
-
-                    break;
-                case "transform":
-                    {
-                        //parse trans
-                        ParseTransform(value, spec);
-                    }
-                    break;
-            }
-
-        }
-        public void OnEnteringElementBody()
-        {
-
-        }
-
-        public void OnExtingElementBody()
-        {
-
-        }
-
-        public void OnEnd()
-        {
-
-
-        }
     }
 
 
@@ -1363,123 +930,4 @@ namespace PaintLab.Svg
         }
     }
 
-    //class MySvgPathDataParser : SvgPathDataParser
-    //{
-    //    PathWriter _writer;
-    //    public void SetPathWriter(PathWriter writer)
-    //    {
-    //        this._writer = writer;
-    //        _writer.StartFigure();
-    //    }
-    //    protected override void OnArc(float r1, float r2, float xAxisRotation, int largeArcFlag, int sweepFlags, float x, float y, bool isRelative)
-    //    {
-
-    //        //TODO: implement arc again
-    //        throw new NotSupportedException();
-    //        //base.OnArc(r1, r2, xAxisRotation, largeArcFlag, sweepFlags, x, y, isRelative);
-    //    }
-    //    protected override void OnCloseFigure()
-    //    {
-    //        _writer.CloseFigure();
-
-    //    }
-    //    protected override void OnCurveToCubic(
-    //        float x1, float y1,
-    //        float x2, float y2,
-    //        float x, float y, bool isRelative)
-    //    {
-
-    //        if (isRelative)
-    //        {
-    //            _writer.Curve4Rel(x1, y1, x2, y2, x, y);
-    //        }
-    //        else
-    //        {
-    //            _writer.Curve4(x1, y1, x2, y2, x, y);
-    //        }
-    //    }
-    //    protected override void OnCurveToCubicSmooth(float x2, float y2, float x, float y, bool isRelative)
-    //    {
-    //        if (isRelative)
-    //        {
-    //            _writer.SmoothCurve4Rel(x2, y2, x, y);
-    //        }
-    //        else
-    //        {
-    //            _writer.SmoothCurve4(x2, y2, x, y);
-    //        }
-
-    //    }
-    //    protected override void OnCurveToQuadratic(float x1, float y1, float x, float y, bool isRelative)
-    //    {
-    //        if (isRelative)
-    //        {
-    //            _writer.Curve3Rel(x1, y1, x, y);
-    //        }
-    //        else
-    //        {
-    //            _writer.Curve3(x1, y1, x, y);
-    //        }
-    //    }
-    //    protected override void OnCurveToQuadraticSmooth(float x, float y, bool isRelative)
-    //    {
-    //        if (isRelative)
-    //        {
-    //            _writer.SmoothCurve3Rel(x, y);
-    //        }
-    //        else
-    //        {
-    //            _writer.SmoothCurve3(x, y);
-    //        }
-
-    //    }
-    //    protected override void OnHLineTo(float x, bool relative)
-    //    {
-    //        if (relative)
-    //        {
-    //            _writer.HorizontalLineToRel(x);
-    //        }
-    //        else
-    //        {
-    //            _writer.HorizontalLineTo(x);
-    //        }
-    //    }
-
-    //    protected override void OnLineTo(float x, float y, bool relative)
-    //    {
-    //        if (relative)
-    //        {
-    //            _writer.LineToRel(x, y);
-    //        }
-    //        else
-    //        {
-    //            _writer.LineTo(x, y);
-    //        }
-    //    }
-    //    protected override void OnMoveTo(float x, float y, bool relative)
-    //    {
-
-    //        if (relative)
-    //        {
-    //            _writer.MoveToRel(x, y);
-    //        }
-    //        else
-    //        {
-
-
-    //            _writer.MoveTo(x, y);
-    //        }
-    //    }
-    //    protected override void OnVLineTo(float y, bool relative)
-    //    {
-    //        if (relative)
-    //        {
-    //            _writer.VerticalLineToRel(y);
-    //        }
-    //        else
-    //        {
-    //            _writer.VerticalLineTo(y);
-    //        }
-    //    }
-    //}
 }

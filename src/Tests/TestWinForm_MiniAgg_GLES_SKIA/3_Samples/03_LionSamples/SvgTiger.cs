@@ -27,9 +27,7 @@ namespace PixelFarm.CpuBlit.Samples
             SvgParser svg = new SvgParser(svgDoc);
 
             svg.ReadSvgFile("Samples\\tiger002.svg");
-            _renderVx = svg.GetResultAsRenderVx();
-
-
+            _renderVx = svgDoc.ResultDocument.CreateRenderVx();
         }
 #if DEBUG
         System.Diagnostics.Stopwatch _dbugSW = new System.Diagnostics.Stopwatch();
@@ -81,7 +79,8 @@ namespace PixelFarm.CpuBlit.Samples
             //svg.ReadSvgFile("Samples\\tiger002.svg");
             svg.ReadSvgFile("Samples\\arrow2.svg");
 
-            SvgRenderVx renderVx = svg.GetResultAsRenderVx();
+
+            SvgRenderVx renderVx = docBuilder.ResultDocument.CreateRenderVx();
             //renderVx.ApplyTransform(Transform.Affine.NewScaling(0.1, 0.1));
 
             for (int i = 0; i < 1; ++i)

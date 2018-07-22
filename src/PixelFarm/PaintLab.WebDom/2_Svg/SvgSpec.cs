@@ -178,7 +178,11 @@ namespace LayoutFarm.Svg
             get;
             set;
         }
+
+        public string D { get; set; }
     }
+     
+
     public class SvgLineSpec : SvgVisualSpec
     {
         public CssLength X1

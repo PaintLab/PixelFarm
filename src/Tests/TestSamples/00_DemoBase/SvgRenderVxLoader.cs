@@ -23,9 +23,9 @@ namespace PixelFarm.CpuBlit
             //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
             svg.ReadSvgFile(filename);
-            return svg.GetResultAsRenderVx();
+            return docBuilder.ResultDocument.CreateRenderVx();             
         }
 
     }
- 
+
 }
