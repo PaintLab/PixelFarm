@@ -1,10 +1,13 @@
 ﻿//----------------------------------------------------------------------------
 //MIT, 2014-present, WinterDev
 
-
+using System;
 using System.Collections.Generic;
+
 using PaintLab.Svg;
+using PixelFarm.Drawing;
 using LayoutFarm.Svg;
+using LayoutFarm.Svg.Pathing;
 
 namespace PixelFarm.CpuBlit
 {
@@ -12,7 +15,8 @@ namespace PixelFarm.CpuBlit
     {
         SvgDocument _svgdoc;
         List<SvgElement> _defsList = new List<SvgElement>();
-
+        MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
+        PixelFarm.CpuBlit.VertexProcessing.CurveFlattener _curveFlatter = new VertexProcessing.CurveFlattener();
 
         public SvgRenderVx CreateRenderVx(SvgDocument svgdoc)
         {
@@ -68,19 +72,92 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        void AssignAttributes(SvgPart part)
+        void AssignAttributes(SvgVisualSpec spec, SvgPart part)
         {
-
+            if (spec.HasFillColor)
+            {
+                part.FillColor = ConvertToActualColor(spec.FillColor);
+            }
+            if (spec.HasStrokeColor)
+            {
+            }
+            if (spec.HasStrokeWidth)
+            {
+                part.StrokeColor = ConvertToActualColor(spec.StrokeColor);
+            }
+            if (spec.Transform != null)
+            {
+                //convert from svg transform to
+                part.AffineTx = CreateAffine(spec.Transform);
+            }
         }
         void RenderPathElement(SvgElement elem, List<SvgPart> parts)
         {
             SvgPathSpec pathSpec = elem._visualSpec as SvgPathSpec;
             //d
+            SvgPart part = new SvgPart(SvgRenderVxKind.Path);
+            // 
+            part.SetVxsAsOriginal(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
 
+            AssignAttributes(pathSpec, part);
+
+            parts.Add(part);
+        }
+        VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
+        {
+
+            using (VxsContext.Temp(out var flattenVxs))
+            {
+                VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
+                _pathDataParser.SetPathWriter(pathWriter);
+                _pathDataParser.Parse(buffer);
+                _curveFlatter.MakeVxs(pathWriter.Vxs, flattenVxs);
+
+                //create a small copy of the vxs 
+                VectorToolBox.ReleasePathWriter(ref pathWriter);
+
+                return flattenVxs.CreateTrim();
+            }
+        }
+
+        static PixelFarm.CpuBlit.VertexProcessing.Affine CreateAffine(SvgTransform transformation)
+        {
+            switch (transformation.TransformKind)
+            {
+                default: throw new NotSupportedException();
+
+                case SvgTransformKind.Matrix:
+
+                    SvgTransformMatrix matrixTx = (SvgTransformMatrix)transformation;
+                    float[] elems = matrixTx.Elements;
+                    PixelFarm.CpuBlit.VertexProcessing.Affine affine = new VertexProcessing.Affine(
+                        elems[0], elems[1],
+                        elems[2], elems[3],
+                        elems[4], elems[5]);
+                    return affine;
+                case SvgTransformKind.Rotation:
+                    SvgRotate rotateTx = (SvgRotate)transformation;
+                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(rotateTx.Angle);
+
+                case SvgTransformKind.Scale:
+                    SvgScale scaleTx = (SvgScale)transformation;
+                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(scaleTx.X, scaleTx.Y);
+                case SvgTransformKind.Shear:
+                    SvgShear shearTx = (SvgShear)transformation;
+                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewSkewing(shearTx.X, shearTx.Y);
+                case SvgTransformKind.Translation:
+                    SvgTranslate translateTx = (SvgTranslate)transformation;
+                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
+            }
+        }
+        static Color ConvertToActualColor(LayoutFarm.WebDom.CssColor color)
+        {
+            return new Color(color.A, color.R, color.G, color.B);
         }
         void RenderGroupElement(SvgElement elem, List<SvgPart> parts)
         {
             var beginGroup = new SvgBeginGroup();
+            AssignAttributes(elem._visualSpec, beginGroup);
 
             parts.Add(beginGroup);
             //
@@ -267,23 +344,6 @@ namespace PixelFarm.CpuBlit
 
     //    ////   ------------------------------------
 
-    //    //public static VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
-    //    //{
-
-    //    //    using (VxsContext.Temp(out var flattenVxs))
-    //    //    {
-    //    //        VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
-    //    //        _svgPathDataParser.SetPathWriter(pathWriter);
-    //    //        _svgPathDataParser.Parse(buffer);
-
-    //    //        _curveFlattener.MakeVxs(pathWriter.Vxs, flattenVxs);
-
-    //    //        //create a small copy of the vxs 
-    //    //        VectorToolBox.ReleasePathWriter(ref pathWriter);
-
-    //    //        return flattenVxs.CreateTrim();
-    //    //    }
-    //    //}
 
     //}
 

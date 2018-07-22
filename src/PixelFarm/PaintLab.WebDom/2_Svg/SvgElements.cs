@@ -5,10 +5,18 @@
 namespace LayoutFarm.Svg
 {
 
-
+    public enum SvgTransformKind
+    {
+        Matrix,
+        Translation,
+        Scale,
+        Skew,
+        Rotation,
+        Shear
+    }
     public abstract class SvgTransform
     {
-
+        public abstract SvgTransformKind TransformKind { get; }
     }
 
     /// <summary>
@@ -55,8 +63,8 @@ namespace LayoutFarm.Svg
         public float[] Elements
         {
             get { return this._elements; }
-
         }
+        public override SvgTransformKind TransformKind => SvgTransformKind.Matrix;
     }
 
 
@@ -83,6 +91,7 @@ namespace LayoutFarm.Svg
             : this(x, 0.0f)
         {
         }
+        public override SvgTransformKind TransformKind => SvgTransformKind.Translation;
     }
     /// <summary>
     /// The class which applies the specified skew vector to this Matrix.
@@ -96,6 +105,7 @@ namespace LayoutFarm.Svg
             AngleX = x;
             AngleY = y;
         }
+        public override SvgTransformKind TransformKind => SvgTransformKind.Skew;
     }
 
     /// <summary>
@@ -121,6 +131,7 @@ namespace LayoutFarm.Svg
             this.X = x;
             this.Y = y;
         }
+        public override SvgTransformKind TransformKind => SvgTransformKind.Shear;
     }
 
     public sealed class SvgScale : SvgTransform
@@ -143,7 +154,7 @@ namespace LayoutFarm.Svg
             this.X = x;
             this.Y = y;
         }
-
+        public override SvgTransformKind TransformKind => SvgTransformKind.Scale;
     }
 
     public sealed class SvgRotate : SvgTransform
@@ -174,10 +185,11 @@ namespace LayoutFarm.Svg
             this.CenterX = centerX;
             this.CenterY = centerY;
         }
+        public override SvgTransformKind TransformKind => SvgTransformKind.Rotation;
     }
 
 
     //----------------------
- 
-   
+
+
 }
