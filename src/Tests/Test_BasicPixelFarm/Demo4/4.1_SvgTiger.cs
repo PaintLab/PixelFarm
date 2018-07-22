@@ -16,10 +16,10 @@ namespace LayoutFarm
 
         protected override void OnStart(AppHost host)
         {
-             
+
             _backBoard = new BackDrawBoardUI(800, 600);
             _backBoard.BackColor = Color.White;
-            host.AddChild(_backBoard); 
+            host.AddChild(_backBoard);
             box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
@@ -96,7 +96,8 @@ namespace LayoutFarm
         {
 
             string svgContent = System.IO.File.ReadAllText(filename);
-            PaintLab.Svg.SvgParser parser = new SvgParser();
+            SvgDocBuilder docBuidler = new SvgDocBuilder();
+            PaintLab.Svg.SvgParser parser = new SvgParser(docBuidler);
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
             //

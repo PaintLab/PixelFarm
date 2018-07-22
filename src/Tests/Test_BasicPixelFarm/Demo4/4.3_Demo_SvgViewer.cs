@@ -15,11 +15,16 @@ namespace LayoutFarm.ColorBlenderSample
 
         ListView _lstvw_svgFiles;
         BackDrawBoardUI _backBoard;
-        PaintLab.Svg.SvgParser parser = new PaintLab.Svg.SvgParser();
+        PaintLab.Svg.SvgParser parser;
+
+
         protected override void OnStart(AppHost host)
         {
             this.host = host;
             base.OnStart(host);
+
+            PaintLab.Svg.SvgDocBuilder docBuilder = new PaintLab.Svg.SvgDocBuilder();
+            parser = new PaintLab.Svg.SvgParser(docBuilder);
 
             {
                 _backBoard = new BackDrawBoardUI(800, 600);

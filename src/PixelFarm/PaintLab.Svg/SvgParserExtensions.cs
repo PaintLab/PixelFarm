@@ -2,10 +2,11 @@
 //MIT, 2014-present, WinterDev
 
 
+using System.Collections.Generic;
 
 namespace PixelFarm.CpuBlit
 {
-
+   
     public static class SvgParserExt
     {
         public static SvgRenderVx GetResultAsRenderVx(this PaintLab.Svg.SvgParser parser)
