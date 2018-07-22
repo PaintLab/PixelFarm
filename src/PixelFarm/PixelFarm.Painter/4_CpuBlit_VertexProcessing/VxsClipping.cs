@@ -15,6 +15,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public static class VxsClipper
     {
+
+
         public static List<VertexStore> CombinePaths(
             VertexStoreSnap a,
             VertexStoreSnap b,
@@ -30,8 +32,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             Clipper clipper = new Clipper();
             clipper.AddPaths(aPolys, PolyType.ptSubject, true);
             clipper.AddPaths(bPolys, PolyType.ptClip, true);
+
+            //
             List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
+
             clipper.Execute(clipType, intersectedPolys);
+
             List<VertexStore> resultList = new List<VertexStore>();
 
             PathWriter outputPathWriter = new PathWriter();
