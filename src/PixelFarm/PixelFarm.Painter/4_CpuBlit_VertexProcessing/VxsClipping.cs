@@ -15,13 +15,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public static class VxsClipper
     {
-        public static List<VertexStore> CombinePaths(VertexStoreSnap a, VertexStoreSnap b, VxsClipperType vxsClipType, bool separateIntoSmallSubPaths)
+        public static List<VertexStore> CombinePaths(
+            VertexStoreSnap a,
+            VertexStoreSnap b,
+            VxsClipperType vxsClipType,
+            bool separateIntoSmallSubPaths)
         {
             //TODO: optimize here
 
             ClipType clipType = (ClipType)vxsClipType;
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
+            //
             Clipper clipper = new Clipper();
             clipper.AddPaths(aPolys, PolyType.ptSubject, true);
             clipper.AddPaths(bPolys, PolyType.ptClip, true);
