@@ -656,14 +656,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssColor.cs">
-      <Link>PixelFarm\PaintLab.CssBase\CssBase\CssColor.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssConstants.cs">
       <Link>PixelFarm\PaintLab.CssBase\CssBase\CssConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssKnownColor.cs">
-      <Link>PixelFarm\PaintLab.CssBase\CssBase\CssKnownColor.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssLength.cs">
       <Link>PixelFarm\PaintLab.CssBase\CssBase\CssLength.cs</Link>
