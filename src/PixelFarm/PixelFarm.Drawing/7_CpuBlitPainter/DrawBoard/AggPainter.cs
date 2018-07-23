@@ -52,14 +52,7 @@ namespace PixelFarm.CpuBlit
 
     public class AggPainter : Painter
     {
-        AggRenderSurface _aggsx; //target rendering surface
-
-        //--------------------
-        //low-level rasterizer 
-        /// <summary>
-        /// scanline rasterizer to bitmap
-        /// </summary>
-        DestBitmapRasterizer _bmpRasterizer;
+        AggRenderSurface _aggsx; //target rendering surface  
         BitmapBuffer _bxt;
         //--------------------
 
@@ -108,11 +101,7 @@ namespace PixelFarm.CpuBlit
         {
             //painter paint to target surface
             _orientation = DrawBoardOrientation.LeftBottom;
-
-            this._aggsx = aggsx;
-         
-
-            this._bmpRasterizer = aggsx.BitmapRasterizer;
+            _aggsx = aggsx;
             _bxt = new BitmapBuffer(
                 aggsx.Width,
                 aggsx.Height,
@@ -1051,7 +1040,7 @@ namespace PixelFarm.CpuBlit
             //save, restore later... 
             bool useSubPix = UseSubPixelLcdEffect;
             //before render an image we turn off vxs subpixel rendering
-            this.UseSubPixelLcdEffect = false; 
+            this.UseSubPixelLcdEffect = false;
 
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
@@ -1066,7 +1055,7 @@ namespace PixelFarm.CpuBlit
             }
 
             //restore...
-            this.UseSubPixelLcdEffect = useSubPix; 
+            this.UseSubPixelLcdEffect = useSubPix;
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
@@ -1121,11 +1110,11 @@ namespace PixelFarm.CpuBlit
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
             this.UseSubPixelLcdEffect = false;
-            
+
             this._aggsx.Render(actualImg, affinePlans);
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
-           
+
         }
         public override void ApplyFilter(ImageFilter imgFilter)
         {
