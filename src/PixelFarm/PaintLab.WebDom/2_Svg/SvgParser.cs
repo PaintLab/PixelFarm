@@ -28,7 +28,7 @@ using LayoutFarm.WebLexer;
 
 using LayoutFarm.Svg.Pathing;
 
- 
+
 namespace PaintLab.Svg
 {
 
@@ -391,7 +391,11 @@ namespace PaintLab.Svg
         /// </summary>
         ClipPath,
 
+        Gradient,
+        Image,
     }
+
+
     public class SvgElement
     {
         readonly WellknownSvgElementName _wellknownName;
@@ -400,6 +404,8 @@ namespace PaintLab.Svg
         public SvgVisualSpec _visualSpec = new SvgVisualSpec();
 
         List<SvgElement> _childNodes = new List<SvgElement>();
+
+        object _controller;
 
         public SvgElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualspec = null)
         {
@@ -415,6 +421,16 @@ namespace PaintLab.Svg
             _wellknownName = wellknownName;
             _unknownElemName = name;
         }
+        protected void SetController(object controller)
+        {
+            _controller = controller;
+        }
+
+        public static object UnsafeGetController(SvgElement elem)
+        {
+            return elem._controller;
+        }
+
         public WellknownSvgElementName WellknowElemName { get { return _wellknownName; } }
 
         public string ElemName
@@ -443,6 +459,10 @@ namespace PaintLab.Svg
         {
             _childNodes.Add(elem);
         }
+        public virtual void AddChild(SvgElement elem)
+        {
+            _childNodes.Add(elem);
+        }
         public int ChildCount
         {
             get { return _childNodes.Count; }
@@ -463,7 +483,59 @@ namespace PaintLab.Svg
         void OnExtingElementBody();
         void OnEnd();
     }
+    //----------------------
+    public class SvgHitChain
+    {
+        float rootGlobalX;
+        float rootGlobalY;
+        List<SvgHitInfo> svgList = new List<SvgHitInfo>();
+        public SvgHitChain()
+        {
+        }
+        public void AddHit(SvgElement svg, float x, float y)
+        {
+            svgList.Add(new SvgHitInfo(svg, x, y));
+        }
+        public int Count
+        {
+            get
+            {
+                return this.svgList.Count;
+            }
+        }
+        public SvgHitInfo GetHitInfo(int index)
+        {
+            return this.svgList[index];
+        }
+        public SvgHitInfo GetLastHitInfo()
+        {
+            return this.svgList[svgList.Count - 1];
+        }
+        public void Clear()
+        {
+            this.rootGlobalX = this.rootGlobalY = 0;
+            this.svgList.Clear();
+        }
+        public void SetRootGlobalPosition(float x, float y)
+        {
+            this.rootGlobalX = x;
+            this.rootGlobalY = y;
+        }
+    }
 
+
+    public struct SvgHitInfo
+    {
+        public readonly SvgElement svg;
+        public readonly float x;
+        public readonly float y;
+        public SvgHitInfo(SvgElement svg, float x, float y)
+        {
+            this.svg = svg;
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     public class SvgDocument
     {
