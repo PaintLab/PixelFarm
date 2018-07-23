@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -836,7 +835,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
@@ -849,7 +847,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
@@ -1366,7 +1363,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -1388,14 +1384,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
@@ -1405,7 +1399,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
@@ -1427,99 +1420,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssConstants.cs">
-      <Link>PixelFarm\PaintLab.CssBase\CssBase\CssConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssLength.cs">
-      <Link>PixelFarm\PaintLab.CssBase\CssBase\CssLength.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssProps.cs">
-      <Link>PixelFarm\PaintLab.CssBase\CssBase\CssProps.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\CssUnitOrNames.cs">
-      <Link>PixelFarm\PaintLab.CssBase\CssBase\CssUnitOrNames.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.CssBase\CssBase\MapAttribute.cs">
-      <Link>PixelFarm\PaintLab.CssBase\CssBase\MapAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssActiveSheet.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\CssActiveSheet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssAttributeSelector.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\CssAttributeSelector.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssCodeValueExpressions.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\CssCodeValueExpressions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssDocMembers.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\CssDocMembers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssDocument.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\CssDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssElementSelectors.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\CssElementSelectors.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\CssPropertyDeclaration.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\CssPropertyDeclaration.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\UserMapUtil.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\UserMapUtil.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\ValueMaps.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\ValueMaps.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css\WellknownCssPropertyName.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css\WellknownCssPropertyName.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParser.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParser.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParserHelper.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css_Parser\CssParserHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\1_Css_Parser\CssValueParser.cs">
-      <Link>PixelFarm\PaintLab.WebDom\1_Css_Parser\CssValueParser.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgElements.cs">
-      <Link>PixelFarm\PaintLab.WebDom\2_Svg\SvgElements.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgParser.cs">
-      <Link>PixelFarm\PaintLab.WebDom\2_Svg\SvgParser.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgPathDataParser.cs">
-      <Link>PixelFarm\PaintLab.WebDom\2_Svg\SvgPathDataParser.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\2_Svg\SvgSpec.cs">
-      <Link>PixelFarm\PaintLab.WebDom\2_Svg\SvgSpec.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebDom\IScriptable\JsScriptAttributes.cs">
-      <Link>PixelFarm\PaintLab.WebDom\IScriptable\JsScriptAttributes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\CssLexer.cs">
-      <Link>PixelFarm\PaintLab.WebLexer\CssLexer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\dbugLexerReport.cs">
-      <Link>PixelFarm\PaintLab.WebLexer\dbugLexerReport.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\MyXmlLexer.cs">
-      <Link>PixelFarm\PaintLab.WebLexer\MyXmlLexer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\TextSnapshot.cs">
-      <Link>PixelFarm\PaintLab.WebLexer\TextSnapshot.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\XmlLexer.cs">
-      <Link>PixelFarm\PaintLab.WebLexer\XmlLexer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.WebLexer\XmlLexer_debug.cs">
-      <Link>PixelFarm\PaintLab.WebLexer\XmlLexer_debug.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Svg\SvgParserExtensions.cs">
-      <Link>PixelFarm\PaintLab.Svg\SvgParserExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Svg\SvgRenderVx.cs">
-      <Link>PixelFarm\PaintLab.Svg\SvgRenderVx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs</Link>
@@ -2216,6 +2116,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs</Link>
@@ -3026,21 +2929,18 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs</Link>
@@ -3050,14 +2950,12 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs">
       <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs</Link>
