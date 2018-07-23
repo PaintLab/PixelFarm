@@ -168,7 +168,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\08_imageresampling\ImageInterpolationQuality.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.CpuBlit\08_imageresampling\ImageTransform.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Color.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\CombineMode.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\DashStyle.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\GraphicsPath.cs" />
@@ -210,6 +209,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VxsClipping.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\AffinePlan.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Color.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Rectangle.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\RectangleF.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\RectInt.cs" />
@@ -288,7 +288,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Transposer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\SvgRenderVx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphIndexList.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphLayout.cs" />
