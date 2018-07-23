@@ -47,27 +47,28 @@ namespace PixelFarm.CpuBlit
         OutlineAARenderer,
 
     }
+
+
+
     public class AggPainter : Painter
     {
         AggRenderSurface _aggsx; //target rendering surface
 
-
-        //low-level rasterizer
-        ScanlinePacked8 scline;
-        ScanlineRasterizer sclineRas;
-
-
-        //low-level outline renderer
-        LineRenderingTechnique _lineRenderingTech;
-
-        Rasterization.Lines.LineProfileAnitAlias _lineProfileAA;
-        Rasterization.Lines.OutlineAARasterizer _outlineRas;
-
-
+        //--------------------
+        //low-level rasterizer 
         /// <summary>
         /// scanline rasterizer to bitmap
         /// </summary>
         DestBitmapRasterizer _bmpRasterizer;
+        BitmapBuffer _bxt;
+        //--------------------
+
+
+        //low-level outline renderer
+        LineRenderingTechnique _lineRenderingTech;
+        Rasterization.Lines.LineProfileAnitAlias _lineProfileAA;
+        Rasterization.Lines.OutlineAARasterizer _outlineRas; //low-level outline aa
+
         //--------------------
         //pen 
         Stroke _stroke;
@@ -90,31 +91,37 @@ namespace PixelFarm.CpuBlit
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
-        BitmapBuffer _bxt;
+
         VectorTool _vectorTool;
 
         Brush _curBrush;
         Pen _curPen;
 
+        //
+        PixelBlenderWithMask maskPixelBlender;
+        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo;
+        //
 
         bool _useDefaultBrush;
 
         public AggPainter(AggRenderSurface aggsx)
         {
             //painter paint to target surface
-            this._aggsx = aggsx;
-            this.sclineRas = _aggsx.ScanlineRasterizer;
-            this._stroke = new Stroke(1);//default
-            this.scline = aggsx.ScanlinePacked8;
-            this._bmpRasterizer = aggsx.BitmapRasterizer;
             _orientation = DrawBoardOrientation.LeftBottom;
-            //from membuffer
-            _bxt = new BitmapBuffer(aggsx.Width,
+
+            this._aggsx = aggsx;
+         
+
+            this._bmpRasterizer = aggsx.BitmapRasterizer;
+            _bxt = new BitmapBuffer(
+                aggsx.Width,
                 aggsx.Height,
-                 ActualBitmap.GetBuffer(aggsx.DestActualImage));
+                ActualBitmap.GetBuffer(aggsx.DestActualImage));
+            //----------------------------------------------------
+
+            this._stroke = new Stroke(1);//default
             _vectorTool = new VectorTool();
             _useDefaultBrush = true;
-
         }
 
         public LineRenderingTechnique LineRenderingTech
@@ -127,7 +134,7 @@ namespace PixelFarm.CpuBlit
                      && _outlineRas == null)
                 {
 
-                  
+
                     _lineProfileAA = new Rasterization.Lines.LineProfileAnitAlias(this.StrokeWidth, null);
 
                     var blender = new PixelBlenderBGRA();
@@ -249,16 +256,16 @@ namespace PixelFarm.CpuBlit
         }
         public override float OriginX
         {
-            get { return sclineRas.OffsetOriginX; }
+            get { return _aggsx.ScanlineRasOriginX; }
         }
         public override float OriginY
         {
-            get { return sclineRas.OffsetOriginY; }
+            get { return _aggsx.ScanlineRasOriginY; }
         }
         public override void SetOrigin(float x, float y)
         {
-            sclineRas.OffsetOriginX = x;
-            sclineRas.OffsetOriginY = y;
+            _aggsx.SetScanlineRasOrigin(x, y);
+
         }
         RenderQualtity _renderQuality;
         public override RenderQualtity RenderQuality
@@ -282,12 +289,12 @@ namespace PixelFarm.CpuBlit
                         //TODO: review here
                         //anti alias != lcd technique 
                         this.RenderQuality = RenderQualtity.HighQuality;
-                        _aggsx.UseSubPixelRendering = true;
+                        _aggsx.UseSubPixelLcdEffect = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
                     default:
                         this.RenderQuality = RenderQualtity.Fast;
-                        _aggsx.UseSubPixelRendering = false;
+                        _aggsx.UseSubPixelLcdEffect = false;
                         break;
                 }
             }
@@ -878,9 +885,11 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-            //Agg
-            sclineRas.AddPath(snap);
-            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            _aggsx.Render(snap, fillColor);
+
+            //_sclineRas.Reset();
+            //_sclineRas.AddPath(snap);
+            //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
         }
         /// <summary>
         /// fill vxs, we do NOT store vxs
@@ -923,17 +932,20 @@ namespace PixelFarm.CpuBlit
                         break;
                     default:
                         {
-                            sclineRas.AddPath(vxs);
-                            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                            //_sclineRas.AddPath(vxs);
+                            //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
 
+                            _aggsx.Render(vxs, fillColor);
                         }
                         break;
                 }
             }
             else
             {
-                sclineRas.AddPath(vxs);
-                _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                _aggsx.Render(vxs, fillColor);
+
+                //_sclineRas.AddPath(vxs);
+                //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
             }
 
 
@@ -942,21 +954,11 @@ namespace PixelFarm.CpuBlit
         {
             get
             {
-                return this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect;
+                return _aggsx.UseSubPixelLcdEffect;
             }
             set
             {
-                if (value)
-                {
-                    //TODO: review here again             
-                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = true;
-                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
-                }
-                else
-                {
-                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = false;
-                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.Default;
-                }
+                _aggsx.UseSubPixelLcdEffect = value;
             }
         }
         public override Color FillColor
@@ -980,8 +982,10 @@ namespace PixelFarm.CpuBlit
         /// <param name="spanGen"></param>
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
-            this.sclineRas.AddPath(vxs);
-            _bmpRasterizer.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
+            _aggsx.Render(vxs, spanGen);
+
+            //this._sclineRas.AddPath(vxs);
+            //_bmpRasterizer.RenderWithSpan(this._aggsx.DestImage, _sclineRas, _scline, spanGen);
         }
         void DrawBitmap(ActualBitmap actualBmp, double left, double top)
         {
@@ -1005,7 +1009,7 @@ namespace PixelFarm.CpuBlit
             bool useSubPix = UseSubPixelLcdEffect;
             //before render an image we turn off vxs subpixel rendering
             this.UseSubPixelLcdEffect = false;
-            _aggsx.UseSubPixelRendering = false;
+            _aggsx.UseSubPixelLcdEffect = false;
 
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
@@ -1021,7 +1025,7 @@ namespace PixelFarm.CpuBlit
 
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
-            _aggsx.UseSubPixelRendering = useSubPix;
+            _aggsx.UseSubPixelLcdEffect = useSubPix;
         }
         void DrawBitmap(ActualBitmap actualBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
@@ -1047,8 +1051,7 @@ namespace PixelFarm.CpuBlit
             //save, restore later... 
             bool useSubPix = UseSubPixelLcdEffect;
             //before render an image we turn off vxs subpixel rendering
-            this.UseSubPixelLcdEffect = false;
-            _aggsx.UseSubPixelRendering = false;
+            this.UseSubPixelLcdEffect = false; 
 
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
@@ -1063,8 +1066,7 @@ namespace PixelFarm.CpuBlit
             }
 
             //restore...
-            this.UseSubPixelLcdEffect = useSubPix;
-            _aggsx.UseSubPixelRendering = useSubPix;
+            this.UseSubPixelLcdEffect = useSubPix; 
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
@@ -1119,11 +1121,11 @@ namespace PixelFarm.CpuBlit
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
             this.UseSubPixelLcdEffect = false;
-            _aggsx.UseSubPixelRendering = false;
+            
             this._aggsx.Render(actualImg, affinePlans);
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
-            _aggsx.UseSubPixelRendering = useSubPix;
+           
         }
         public override void ApplyFilter(ImageFilter imgFilter)
         {
@@ -1209,7 +1211,74 @@ namespace PixelFarm.CpuBlit
             get { return this._lineDashGen; }
             set { this._lineDashGen = value; }
         }
+
+
+
+        //---------------------------------------------------------------
+        TargetBufferName _targetBufferName;
+        bool _enableBuiltInMaskComposite;
+        ActualBitmap _alphaBitmap;
+        AggPainter _alphaMaskPainter; //TODO: review here
+
+        void SetupMaskPixelBlender()
+        {
+            if (_alphaBitmap != null) return;
+            //----------
+            //same size                  
+
+            _alphaBitmap = new ActualBitmap(_aggsx.Width, _aggsx.Height);
+            _alphaMaskPainter = AggPainter.Create(_alphaBitmap, new PixelBlenderBGRA());
+            _alphaMaskPainter.Clear(Color.Black);
+
+            maskPixelBlender = new PixelBlenderWithMask();
+            maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
+
+            maskPixelBlender.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
+            maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
+        }
+        public TargetBufferName TargetBufferName
+        {
+            get { return _targetBufferName; }
+            set
+            {
+                //change or not
+                if (_targetBufferName != value)
+                {
+                    switch (value)
+                    {
+                        case TargetBufferName.Color:
+                            //default 
+
+                            break;
+                        case TargetBufferName.AlphaMask:
+
+                            break;
+                    }
+                    _targetBufferName = value;
+
+                }
+
+            }
+        }
+        public bool EnableBuiltInMaskComposite
+        {
+            get { return _enableBuiltInMaskComposite; }
+            set
+            {
+                _enableBuiltInMaskComposite = value;
+
+            }
+        }
     }
+
+
+    public enum TargetBufferName
+    {
+        Color,
+        AlphaMask
+    }
+
+
 
 
 

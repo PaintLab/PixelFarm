@@ -35,7 +35,7 @@ namespace PixelFarm.CpuBlit
         public bool UseSubPixelRendering
         {
             get { return this._bmpRasterizer.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
-            set { this._bmpRasterizer.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
+            //set { this._bmpRasterizer.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
         }
 
         static void BuildOrgImgRectVxs(int srcW, int srcH, VertexStore output)
@@ -96,12 +96,12 @@ namespace PixelFarm.CpuBlit
         /// </summary>
         /// <param name="vxs"></param>
         /// <param name="spanGen"></param>
-        void Render(VertexStore vxs, ISpanGenerator spanGen)
+        public void Render(VertexStore vxs, ISpanGenerator spanGen)
         {
-            sclineRas.AddPath(vxs);
+            _sclineRas.AddPath(vxs);
             _bmpRasterizer.RenderWithSpan(
                 destImageReaderWriter,
-                sclineRas,
+                _sclineRas,
                 sclinePack8,
                 spanGen);
         }
