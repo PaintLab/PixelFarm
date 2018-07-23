@@ -35,14 +35,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PaintLab.CssBase\CssBase\CssColor.cs">
-      <Link>REF_CssBase\CssColor.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.CssBase\CssBase\CssConstants.cs">
       <Link>REF_CssBase\CssConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.CssBase\CssBase\CssKnownColor.cs">
-      <Link>REF_CssBase\CssKnownColor.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.CssBase\CssBase\CssLength.cs">
       <Link>REF_CssBase\CssLength.cs</Link>

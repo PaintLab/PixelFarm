@@ -65,6 +65,10 @@
       <Project>{8fba6297-44a9-4c3f-b22d-d33e00669942}</Project>
       <Name>PaintLab.WebLexer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
+      <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
+      <Name>PixelFarm.PrimitiveGeo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,9 +28,7 @@ using LayoutFarm.WebLexer;
 
 using LayoutFarm.Svg.Pathing;
 
-
-using LayoutFarm.Svg;
-
+ 
 namespace PaintLab.Svg
 {
 
@@ -595,7 +593,7 @@ namespace PaintLab.Svg
                                 if (value != "none")
                                 {
                                     //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-                                    spec.FillColor = CssValueParser2.GetActualColor(value);
+                                    spec.FillColor = CssValueParser2.ParseCssColor(value);
                                 }
                             }
                             break;
@@ -683,7 +681,7 @@ namespace PaintLab.Svg
                         if (value != "none")
                         {
                             //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-                            spec.FillColor = CssValueParser2.GetActualColor(value);
+                            spec.FillColor = CssValueParser2.ParseCssColor(value);
                         }
                     }
                     break;
@@ -704,7 +702,7 @@ namespace PaintLab.Svg
                         if (value != "none")
                         {
                             //spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-                            spec.StrokeColor = CssValueParser2.GetActualColor(value);
+                            spec.StrokeColor = CssValueParser2.ParseCssColor(value);
                         }
                     }
                     break;

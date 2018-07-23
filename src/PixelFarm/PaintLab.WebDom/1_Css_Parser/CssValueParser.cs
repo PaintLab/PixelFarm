@@ -14,22 +14,21 @@
 // "The Art of War"
 
 using System;
-using LayoutFarm.WebDom;
 namespace LayoutFarm.HtmlBoxes
 {
     /// <summary>
     /// Parse CSS properties values like numbers, urls, etc.
     /// </summary>
-    static class CssValueParser2
+    public static class CssValueParser2
     {
         /// <summary>
         /// Parses a color value in CSS style; e.g. #ff0000, red, rgb(255,0,0), rgb(100%, 0, 0)
         /// </summary>
         /// <param name="colorValue">color string value to parse</param>
         /// <returns>Color value</returns>
-        public static CssColor GetActualColor(string colorValue)
+        public static PixelFarm.Drawing.Color ParseCssColor(string colorValue)
         {
-            CssColor color;
+            PixelFarm.Drawing.Color color;
             TryGetColor(colorValue, 0, colorValue.Length, out color);
             return color;
         }
@@ -43,7 +42,7 @@ namespace LayoutFarm.HtmlBoxes
         /// <param name="length">substring length</param>
         /// <param name="color">return the parsed color</param>
         /// <returns>true - valid color, false - otherwise</returns>
-        static bool TryGetColor(string str, int idx, int length, out CssColor color)
+        static bool TryGetColor(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             try
             {
@@ -68,8 +67,11 @@ namespace LayoutFarm.HtmlBoxes
                 }
             }
             catch
-            { }
-            color = CssColor.Black;
+            {
+                //TODO: review here ?????
+
+            }
+            color = PixelFarm.Drawing.Color.Black;
             return false;
         }
         /// <summary>
@@ -94,7 +96,7 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by parsing given hex value color string (#A28B34).
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByHex(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByHex(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             int r = -1;
             int g = -1;
@@ -116,10 +118,10 @@ namespace LayoutFarm.HtmlBoxes
             }
             if (r > -1 && g > -1 && b > -1)
             {
-                color = CssColor.FromArgb(r, g, b);
+                color = PixelFarm.Drawing.Color.FromArgb(r, g, b);
                 return true;
             }
-            color = CssColor.Empty;
+            color = PixelFarm.Drawing.Color.Empty;
             return false;
         }
 
@@ -127,7 +129,7 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by parsing given RGB value color string (RGB(255,180,90))
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByRgb(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByRgb(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             int r = -1;
             int g = -1;
@@ -148,10 +150,10 @@ namespace LayoutFarm.HtmlBoxes
 
             if (r > -1 && g > -1 && b > -1)
             {
-                color = CssColor.FromArgb(r, g, b);
+                color = PixelFarm.Drawing.Color.FromArgb(r, g, b);
                 return true;
             }
-            color = CssColor.Empty;
+            color = PixelFarm.Drawing.Color.Empty;
             return false;
         }
 
@@ -159,7 +161,7 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by parsing given RGBA value color string (RGBA(255,180,90,180))
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByRgba(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByRgba(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             int r = -1;
             int g = -1;
@@ -185,10 +187,10 @@ namespace LayoutFarm.HtmlBoxes
 
             if (r > -1 && g > -1 && b > -1 && a > -1)
             {
-                color = CssColor.FromArgb(a, r, g, b);
+                color = PixelFarm.Drawing.Color.FromArgb(a, r, g, b);
                 return true;
             }
-            color = CssColor.Empty;
+            color = PixelFarm.Drawing.Color.Empty;
             return false;
         }
 
@@ -196,9 +198,9 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by given name, including .NET name.
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByName(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByName(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
-            color = CssColor.FromName(str.Substring(idx, length));
+            color = LayoutFarm.WebDom.KnownColors.FromKnownColor(str.Substring(idx, length));
             return color.A > 0;
         }
 

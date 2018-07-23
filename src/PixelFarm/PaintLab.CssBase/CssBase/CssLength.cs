@@ -5,23 +5,7 @@ using System;
 using System.Globalization;
 namespace LayoutFarm.Css
 {
-    public struct CssPoint
-    {
-        public readonly float X;
-        public readonly float Y;
-        public CssPoint(float x, float y)
-        {
-            X = x;
-            Y = y;
-        }
-#if DEBUG
-        public override string ToString()
-        {
-            return X + "," + Y;
-        }
-#endif
-
-    }
+ 
     /// <summary>
     /// Represents and gets info about a CSS Length
     /// </summary>
