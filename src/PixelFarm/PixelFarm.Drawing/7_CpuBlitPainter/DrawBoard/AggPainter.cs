@@ -55,8 +55,12 @@ namespace PixelFarm.CpuBlit
         AggRenderSurface _aggsx; //target rendering surface  
         BitmapBuffer _bxt;
         //--------------------
+        AggRenderSurface _aggsx_0; //primary render surface
+        AggRenderSurface _aggsx_mask;
 
 
+
+        //--------------------
         //low-level outline renderer
         LineRenderingTechnique _lineRenderingTech;
         Rasterization.Lines.LineProfileAnitAlias _lineProfileAA;
@@ -100,13 +104,13 @@ namespace PixelFarm.CpuBlit
         public AggPainter(AggRenderSurface aggsx)
         {
             //painter paint to target surface
+
             _orientation = DrawBoardOrientation.LeftBottom;
-            _aggsx = aggsx;
-            _bxt = new BitmapBuffer(
-                aggsx.Width,
-                aggsx.Height,
-                ActualBitmap.GetBuffer(aggsx.DestActualImage));
+
             //----------------------------------------------------
+            _aggsx_0 = aggsx; //set this as default ***            
+            TargetBufferName = TargetBufferName.Default;
+
 
             this._stroke = new Stroke(1);//default
             _vectorTool = new VectorTool();
@@ -1207,17 +1211,15 @@ namespace PixelFarm.CpuBlit
         TargetBufferName _targetBufferName;
         bool _enableBuiltInMaskComposite;
         ActualBitmap _alphaBitmap;
-        AggPainter _alphaMaskPainter; //TODO: review here
 
         void SetupMaskPixelBlender()
         {
-            if (_alphaBitmap != null) return;
+            if (_aggsx_mask != null) return;
             //----------
             //same size                  
 
-            _alphaBitmap = new ActualBitmap(_aggsx.Width, _aggsx.Height);
-            _alphaMaskPainter = AggPainter.Create(_alphaBitmap, new PixelBlenderBGRA());
-            _alphaMaskPainter.Clear(Color.Black);
+            _alphaBitmap = new ActualBitmap(_aggsx_0.Width, _aggsx_0.Height);
+            _aggsx_mask = new AggRenderSurface(_alphaBitmap) { PixelBlender = new PixelBlenderBGRA() };
 
             maskPixelBlender = new PixelBlenderWithMask();
             maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
@@ -1235,16 +1237,23 @@ namespace PixelFarm.CpuBlit
                 {
                     switch (value)
                     {
-                        case TargetBufferName.Color:
+                        default: throw new NotSupportedException();
+                        case TargetBufferName.Default:
                             //default 
-
+                            _aggsx = _aggsx_0; //*** 
                             break;
                         case TargetBufferName.AlphaMask:
-
+                            SetupMaskPixelBlender(); 
+                            _aggsx = _aggsx_mask;//*** 
                             break;
-                    }
-                    _targetBufferName = value;
+                    } 
 
+                    _bxt = new BitmapBuffer(
+                         _aggsx.Width,
+                         _aggsx.Height,
+                         ActualBitmap.GetBuffer(_aggsx.DestActualImage)); 
+
+                    _targetBufferName = value;
                 }
 
             }
@@ -1263,7 +1272,8 @@ namespace PixelFarm.CpuBlit
 
     public enum TargetBufferName
     {
-        Color,
+        Unknown,
+        Default,
         AlphaMask
     }
 
