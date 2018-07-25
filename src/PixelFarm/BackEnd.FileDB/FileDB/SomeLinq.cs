@@ -91,7 +91,7 @@ namespace System.Collections.Generic
         {
             return Distinct<TSource>(source, null);
         }
-        public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static TSource First<TSource>(this IEnumerable<TSource> source, MyFunc<TSource, bool> predicate)
         {
             foreach (TSource t in source)
             {
@@ -102,7 +102,7 @@ namespace System.Collections.Generic
             }
             return default(TSource);
         }
-        public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, MyFunc<TSource, bool> predicate)
         {
             foreach (TSource t in source)
             {
@@ -139,7 +139,7 @@ namespace System.Collections.Generic
         public static readonly T[] Instance = new T[0];
     }
 
-
-    public delegate R Func<T, R>(T t);
+    public delegate R MyFunc<T, R>(T t);
+     
 }
 #endif
