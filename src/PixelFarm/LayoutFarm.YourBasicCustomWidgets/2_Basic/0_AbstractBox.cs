@@ -425,15 +425,12 @@ namespace LayoutFarm.CustomWidgets
             }
             if (this.HasReadyRenderElement)
             {
-                primElement.ClearAllChildren();
-                //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
-                //{
-                //    this.InvalidateLayout();
-                //}
+                primElement.ClearAllChildren();                
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
                 }
+
             }
         }
 

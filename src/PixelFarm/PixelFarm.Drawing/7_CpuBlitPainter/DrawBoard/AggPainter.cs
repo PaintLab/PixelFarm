@@ -16,9 +16,7 @@ namespace PixelFarm.CpuBlit
     class MyBitmapBlender : BitmapBlenderBase
     {
         ActualBitmap actualImage;
-
-
-        public MyBitmapBlender(ActualBitmap actualImage, PixelProcessing.PixelBlender32 pxBlender)
+        public MyBitmapBlender(ActualBitmap actualImage, PixelBlender32 pxBlender)
         {
             this.actualImage = actualImage;
             Attach(actualImage);
