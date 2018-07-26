@@ -92,7 +92,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             painter.TargetBufferName = TargetBufferName.AlphaMask;
             //draw white rect on the mask
             painter.FillColor = Color.White;
-            painter.FillRect(20, 20, 100, 100);
+            painter.FillRect(20, 20, 50, 50);
+            painter.FillRect(20, 5, 20, 10);
 
             //------------------------------------
             //switch back to default color
