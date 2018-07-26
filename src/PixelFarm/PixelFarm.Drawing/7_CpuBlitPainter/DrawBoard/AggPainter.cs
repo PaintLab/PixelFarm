@@ -95,6 +95,7 @@ namespace PixelFarm.CpuBlit
         Pen _curPen;
 
         //
+        PixelBlender32 _defaultPixelBlender;
         PixelBlenderWithMask maskPixelBlender;
         PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo;
         //
@@ -115,6 +116,8 @@ namespace PixelFarm.CpuBlit
             this._stroke = new Stroke(1);//default
             _vectorTool = new VectorTool();
             _useDefaultBrush = true;
+
+            _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
         public LineRenderingTechnique LineRenderingTech
@@ -1243,15 +1246,15 @@ namespace PixelFarm.CpuBlit
                             _aggsx = _aggsx_0; //*** 
                             break;
                         case TargetBufferName.AlphaMask:
-                            SetupMaskPixelBlender(); 
+                            SetupMaskPixelBlender();
                             _aggsx = _aggsx_mask;//*** 
                             break;
-                    } 
+                    }
 
                     _bxt = new BitmapBuffer(
                          _aggsx.Width,
                          _aggsx.Height,
-                         ActualBitmap.GetBuffer(_aggsx.DestActualImage)); 
+                         ActualBitmap.GetBuffer(_aggsx.DestActualImage));
 
                     _targetBufferName = value;
                 }
@@ -1263,8 +1266,20 @@ namespace PixelFarm.CpuBlit
             get { return _enableBuiltInMaskComposite; }
             set
             {
-                _enableBuiltInMaskComposite = value;
-
+                if (_enableBuiltInMaskComposite != value)
+                {
+                    _enableBuiltInMaskComposite = value;
+                    if (value)
+                    {
+                        //use mask composite
+                        this.DestBitmapBlender.OutputPixelBlender = maskPixelBlender;
+                    }
+                    else
+                    {
+                        //use default composite
+                        this.DestBitmapBlender.OutputPixelBlender = _defaultPixelBlender;
+                    }
+                }
             }
         }
     }
