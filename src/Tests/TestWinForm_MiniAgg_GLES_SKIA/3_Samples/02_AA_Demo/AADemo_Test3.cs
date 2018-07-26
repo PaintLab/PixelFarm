@@ -252,7 +252,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
 
 
-                var widgetsSubImage = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
+                var widgetsSubImage = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestBitmapBlender, aggsx.GetClippingRect());
                 aggsx.UseSubPixelLcdEffect = false;
                 PixelProcessing.PixelBlenderBGRA normalBlender = new PixelProcessing.PixelBlenderBGRA();
                 PixelProcessing.PixelBlenderBGRA gammaBlender = new PixelProcessing.PixelBlenderBGRA(); //TODO: revisit, and fix this again

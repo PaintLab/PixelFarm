@@ -29,7 +29,7 @@ namespace PixelFarm.CpuBlit
 {
     public sealed partial class AggRenderSurface
     {
-        MyBitmapBlender destImageReaderWriter;
+        MyBitmapBlender _destBitmapBlender;
         ScanlinePacked8 sclinePack8;
 
         DestBitmapRasterizer _bmpRasterizer;
@@ -48,7 +48,7 @@ namespace PixelFarm.CpuBlit
 
             this.destActualImage = destImage;
 
-            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
+            this._destBitmapBlender = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
             this._sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this._bmpRasterizer = new DestBitmapRasterizer();
@@ -73,9 +73,9 @@ namespace PixelFarm.CpuBlit
         {
             get { return this.destActualImage; }
         }
-        public BitmapBlenderBase DestImage
+        public BitmapBlenderBase DestBitmapBlender
         {
-            get { return this.destImageReaderWriter; }
+            get { return this._destBitmapBlender; }
         }
 
         public ScanlinePacked8 ScanlinePacked8
@@ -86,11 +86,11 @@ namespace PixelFarm.CpuBlit
         {
             get
             {
-                return this.destImageReaderWriter.OutputPixelBlender;
+                return this._destBitmapBlender.OutputPixelBlender;
             }
             set
             {
-                this.destImageReaderWriter.OutputPixelBlender = value;
+                this._destBitmapBlender.OutputPixelBlender = value;
             }
         }
 
@@ -115,7 +115,7 @@ namespace PixelFarm.CpuBlit
         public void Clear(Color color)
         {
             RectInt clippingRectInt = GetClippingRect();
-            var destImage = this.DestImage;
+            var destImage = this.DestBitmapBlender;
             int width = destImage.Width;
             int height = destImage.Height;
             int[] buffer = destImage.GetBuffer32();
@@ -328,7 +328,7 @@ namespace PixelFarm.CpuBlit
             {
                 _sclineRas.AddPath(vxsSnap);
             }
-            _bmpRasterizer.RenderWithColor(destImageReaderWriter, _sclineRas, sclinePack8, color);
+            _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, sclinePack8, color);
             unchecked { destImageChanged++; };
             //-----------------------------
         }

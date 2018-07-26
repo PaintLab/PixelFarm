@@ -100,7 +100,7 @@ namespace PixelFarm.CpuBlit
         {
             _sclineRas.AddPath(vxs);
             _bmpRasterizer.RenderWithSpan(
-                destImageReaderWriter,
+                _destBitmapBlender,
                 _sclineRas,
                 sclinePack8,
                 spanGen);
@@ -114,7 +114,7 @@ namespace PixelFarm.CpuBlit
             {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
                 RectInt sourceBounds = source.GetBounds();
-                RectInt destBounds = this.destImageReaderWriter.GetBounds();
+                RectInt destBounds = this._destBitmapBlender.GetBounds();
                 sourceBounds.Offset((int)destX, (int)destY);
                 if (!RectInt.DoIntersect(sourceBounds, destBounds))
                 {
@@ -330,7 +330,7 @@ namespace PixelFarm.CpuBlit
             RectInt sourceBounds = new RectInt((int)destX, (int)destY, (int)destX + source.Width, (int)destY + source.Height);
             //sourceBounds.Offset((int)destX, (int)destY);
 
-            RectInt destBounds = this.destImageReaderWriter.GetBounds();
+            RectInt destBounds = this._destBitmapBlender.GetBounds();
             if (!RectInt.DoIntersect(sourceBounds, destBounds))
             {
                 //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)

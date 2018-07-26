@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
 using PixelFarm.CpuBlit.PixelProcessing;
 
@@ -219,7 +218,7 @@ namespace PixelFarm.CpuBlit
 
         public BitmapBlenderBase DestBitmapBlender
         {
-            get { return this._aggsx.DestImage; }
+            get { return this._aggsx.DestBitmapBlender; }
         }
 
 
