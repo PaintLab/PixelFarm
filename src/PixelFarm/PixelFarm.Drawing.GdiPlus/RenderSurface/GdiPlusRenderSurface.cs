@@ -810,7 +810,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
         GdiPlusPainter _gdiPlusPainter;
-        public void FillPath(PixelFarm.CpuBlit.SvgRenderVx svgVx)
+        public void FillPath(PixelFarm.CpuBlit.VgRenderVx svgVx)
         {
             if (svgVx == null) return;
             //-------------------------

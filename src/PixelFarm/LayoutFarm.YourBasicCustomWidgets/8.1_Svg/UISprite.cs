@@ -21,7 +21,7 @@ namespace LayoutFarm.UI
             this.TransparentForAllEvents = true;
 
         }
-        public SvgRenderVx RenderVx { get; set; }
+        public VgRenderVx RenderVx { get; set; }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
@@ -39,7 +39,7 @@ namespace LayoutFarm.UI
 
             base.ChildrenHitTestCore(hitChain);
         }
-        static bool HitTestOnSubPart(SvgRenderVx _svgRenderVx, float x, float y)
+        static bool HitTestOnSubPart(VgRenderVx _svgRenderVx, float x, float y)
         {
             int partCount = _svgRenderVx.VgCmdCount;
 
@@ -81,7 +81,7 @@ namespace LayoutFarm.UI
     {
 
         SvgRenderElement _svgRenderElement;
-        SvgRenderVx _svgRenderVx;
+        VgRenderVx _svgRenderVx;
 
 #if DEBUG
         static int dbugTotalId;
@@ -93,7 +93,7 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
 
         }
-        public void LoadSvg(SvgRenderVx renderVx)
+        public void LoadSvg(VgRenderVx renderVx)
         {
             _svgRenderVx = renderVx;
             if (_svgRenderElement != null)

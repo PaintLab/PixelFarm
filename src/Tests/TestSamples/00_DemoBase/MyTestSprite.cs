@@ -158,7 +158,7 @@ namespace PixelFarm.CpuBlit
                 //-----------------------
 
                 //(2) or just transform when draw => not affect its org shape
-                SvgRenderVx renderVx = _spriteShape.GetRenderVx();
+                VgRenderVx renderVx = _spriteShape.GetRenderVx();
                 renderVx.PrefixCommand = new VgCmdAffineTransform(transform);
 
 

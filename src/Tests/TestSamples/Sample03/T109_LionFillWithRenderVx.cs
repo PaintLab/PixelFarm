@@ -90,7 +90,7 @@ namespace OpenTkEssTest
 
                 if (multipartTessResult != null)
                 {
-                    SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
+                    VgRenderVx renderVx = (VgRenderVx)lionShape.GetRenderVx();
                     int partCount = renderVx.VgCmdCount;
 
                     int partIndex = 0;
@@ -122,7 +122,7 @@ namespace OpenTkEssTest
             {
                 Color fillColor = Color.Transparent;
                 int j = lionRenderVxList.Count;
-                SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
+                VgRenderVx renderVx = (VgRenderVx)lionShape.GetRenderVx();
                 int partCount = renderVx.VgCmdCount;
                 int partIndex = 0;
                 for (int i = 0; i < partCount; ++i)

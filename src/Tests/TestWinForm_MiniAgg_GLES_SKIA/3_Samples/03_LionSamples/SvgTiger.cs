@@ -15,7 +15,7 @@ namespace PixelFarm.CpuBlit.Samples
     {
 
 
-        SvgRenderVx _renderVx;
+        VgRenderVx _renderVx;
         public override void Init()
         {
             char[] lionSvgBase64 =
@@ -64,7 +64,7 @@ namespace PixelFarm.CpuBlit.Samples
     {
 
 
-        List<SvgRenderVx> _renderVxList = new List<SvgRenderVx>();
+        List<VgRenderVx> _renderVxList = new List<VgRenderVx>();
 
         public override void Init()
         {
@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.Samples
             svg.ReadSvgFile("Samples\\arrow2.svg");
 
 
-            SvgRenderVx renderVx = docBuilder.ResultDocument.CreateRenderVx();
+            VgRenderVx renderVx = docBuilder.ResultDocument.CreateRenderVx();
             //renderVx.ApplyTransform(Transform.Affine.NewScaling(0.1, 0.1));
 
             for (int i = 0; i < 1; ++i)
@@ -92,7 +92,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             foreach (RenderVx vx in _renderVxList)
             {
-                SvgRenderVx svgVx = vx as SvgRenderVx;
+                VgRenderVx svgVx = vx as VgRenderVx;
                 if (svgVx != null && !svgVx.HasBitmapSnapshot)
                 {
                     RectD bound = svgVx.GetBounds();

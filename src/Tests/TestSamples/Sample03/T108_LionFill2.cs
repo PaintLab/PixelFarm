@@ -23,7 +23,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            SvgRenderVx svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile("d:\\WImageTest\\lion.svg"); 
+            VgRenderVx svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile("d:\\WImageTest\\lion.svg"); 
             lionShape = new SpriteShape(svgRenderVx);
 
 

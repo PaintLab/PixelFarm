@@ -18,12 +18,12 @@ namespace PixelFarm.CpuBlit
 
     public class SpriteShape
     {
-        SvgRenderVx _org;
-        SvgRenderVx _svgRenderVx;
+        VgRenderVx _org;
+        VgRenderVx _svgRenderVx;
         PathWriter path = new PathWriter();
         Vector2 center;
         RectD boundingRect;
-        public SpriteShape(SvgRenderVx svgRenderVx)
+        public SpriteShape(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
             //create a copy 
@@ -70,7 +70,7 @@ namespace PixelFarm.CpuBlit
                 return center;
             }
         }
-        public SvgRenderVx GetRenderVx()
+        public VgRenderVx GetRenderVx()
         {
             return _svgRenderVx;
         }
@@ -141,7 +141,7 @@ namespace PixelFarm.CpuBlit
 
         }
 
-        public void LoadFromSvg(SvgRenderVx svgRenderVx)
+        public void LoadFromSvg(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
             UpdateBounds();

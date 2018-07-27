@@ -20,7 +20,7 @@ namespace PixelFarm.CpuBlit
 
         Dictionary<string, VgCmdClipPath> _clipPathDic = new Dictionary<string, VgCmdClipPath>();
 
-        public SvgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
 
@@ -33,7 +33,7 @@ namespace PixelFarm.CpuBlit
                 //command stream?
                 RenderSvgElements(svgdoc.Root.GetChild(i), cmds);
             }
-            SvgRenderVx renderVx = new SvgRenderVx(cmds.ToArray());
+            VgRenderVx renderVx = new VgRenderVx(cmds.ToArray());
             return renderVx;
         }
         void RenderSvgElements(SvgElement elem, List<VgCmd> cmds)
@@ -117,16 +117,15 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        void AssignAttributes(SvgVisualSpec spec, List<VgCmd> parts)
+        void AssignAttributes(SvgVisualSpec spec, List<VgCmd> cmds)
         {
             if (spec.HasFillColor)
             {
-                //part.FillColor = spec.FillColor;
-                parts.Add(new VgCmdFillColor() { Color = spec.FillColor });
+                cmds.Add(new VgCmdFillColor(spec.FillColor));
             }
             if (spec.HasStrokeColor)
             {
-                parts.Add(new VgCmdStrokeColor() { Color = spec.FillColor });
+                cmds.Add(new VgCmdStrokeColor(spec.StrokeColor));
             }
             if (spec.HasStrokeWidth)
             {
@@ -134,9 +133,8 @@ namespace PixelFarm.CpuBlit
             }
             if (spec.Transform != null)
             {
-                //convert from svg transform to
-                //part.AffineTx = CreateAffine(spec.Transform);
-                parts.Add(new VgCmdAffineTransform(CreateAffine(spec.Transform)));
+                //convert from svg transform to 
+                cmds.Add(new VgCmdAffineTransform(CreateAffine(spec.Transform)));
             }
             //
             if (spec.ClipPathLink != null)
@@ -145,8 +143,7 @@ namespace PixelFarm.CpuBlit
                 BuildDefinitionNodes();
                 if (_clipPathDic.TryGetValue(spec.ClipPathLink.Value, out VgCmdClipPath clip))
                 {
-                    parts.Add(clip);
-                    //part.ClipPath = clip;
+                    cmds.Add(clip);
                 }
             }
         }
@@ -211,9 +208,6 @@ namespace PixelFarm.CpuBlit
             var beginGroup = new VgCmdBeginGroup();
             cmds.Add(beginGroup);
             AssignAttributes(elem._visualSpec, cmds);
-
-            cmds.Add(beginGroup);
-            //
             int childCount = elem.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
@@ -227,7 +221,7 @@ namespace PixelFarm.CpuBlit
     }
     public static class SvgRenderVxDocBuilderExt
     {
-        public static SvgRenderVx CreateRenderVx(this SvgDocument svgdoc)
+        public static VgRenderVx CreateRenderVx(this SvgDocument svgdoc)
         {
             //create svg render vx from svgdoc
             //resolve the svg 

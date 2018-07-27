@@ -145,7 +145,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             ScanlineRasterizer rasterizer,
             DestBitmapRasterizer bmpRas)
         {
-            SvgRenderVx renderVx = lionShape.GetRenderVx();
+            VgRenderVx renderVx = lionShape.GetRenderVx();
             int num_paths = renderVx.VgCmdCount;
 
             for (int i = 0; i < num_paths; ++i)
@@ -175,7 +175,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         }
         void DrawWithLineProfile2(AggPainter painter)
         {
-            SvgRenderVx renderVx = lionShape.GetRenderVx();
+            VgRenderVx renderVx = lionShape.GetRenderVx();
             int num_paths = renderVx.VgCmdCount;
 
             var renderState = new TempRenderState();
@@ -268,7 +268,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
         void DrawWithLineProfile(OutlineAARasterizer rasterizer)
         {
-            SvgRenderVx renderVx = lionShape.GetRenderVx();
+            VgRenderVx renderVx = lionShape.GetRenderVx();
             int num_paths = renderVx.VgCmdCount;
 
             var renderState = new TempRenderState();

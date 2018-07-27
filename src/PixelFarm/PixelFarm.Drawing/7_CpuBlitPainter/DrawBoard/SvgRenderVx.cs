@@ -188,51 +188,73 @@ namespace PixelFarm.CpuBlit
     {
         //-----------------------------------
         [System.ThreadStatic]
-        static Stack<Stack<ClipingTechnique>> s_boolStacks = new Stack<Stack<ClipingTechnique>>();
-        public static void GetFreeBoolStack(out Stack<ClipingTechnique> boolStack)
+        static Stack<Stack<ClipingTechnique>> s_clipingTechStack = new Stack<Stack<ClipingTechnique>>();
+        public static void GetFreeBoolStack(out Stack<ClipingTechnique> clipTechStack)
         {
-            if (s_boolStacks.Count > 0)
+            if (s_clipingTechStack.Count > 0)
             {
-                boolStack = s_boolStacks.Pop();
+                clipTechStack = s_clipingTechStack.Pop();
             }
             else
             {
-                boolStack = new Stack<ClipingTechnique>();
+                clipTechStack = new Stack<ClipingTechnique>();
             }
         }
-        public static void ReleaseBoolStack(ref Stack<ClipingTechnique> boolStack)
+        public static void ReleaseBoolStack(ref Stack<ClipingTechnique> clipTechStack)
         {
-            boolStack.Clear();
-            s_boolStacks.Push(boolStack);
-            boolStack = null;
+            clipTechStack.Clear();
+            s_clipingTechStack.Push(clipTechStack);
+            clipTechStack = null;
+        }
+
+        //-----
+
+        [System.ThreadStatic]
+        static Stack<Stack<TempVgRenderState>> s_tempVgRenderStates = new Stack<Stack<TempVgRenderState>>();
+        public static void GetFreeTempVgRenderState(out Stack<TempVgRenderState> tmpVgStateStack)
+        {
+            if (s_tempVgRenderStates.Count > 0)
+            {
+                tmpVgStateStack = s_tempVgRenderStates.Pop();
+            }
+            else
+            {
+                tmpVgStateStack = new Stack<TempVgRenderState>();
+            }
+        }
+        public static void ReleaseTempVgRenderState(ref Stack<TempVgRenderState> tmpVgStateStack)
+        {
+            tmpVgStateStack.Clear();
+            s_tempVgRenderStates.Push(tmpVgStateStack);
+            tmpVgStateStack = null;
         }
     }
 
 
+    struct TempVgRenderState
+    {
+        public float strokeWidth;
+        public Color strokeColor;
+        public Color fillColor;
+        public Affine affineTx;
+        public ClipingTechnique clippingTech;
+    }
 
-    public class SvgRenderVx : RenderVx
+    public class VgRenderVx : RenderVx
     {
 
-        struct TempRenderState
-        {
-            public float strokeWidth;
-            public Color strokeColor;
-            public Color fillColor;
-            public Affine affineTx;
-
-        }
 
         Image _backimg;
         VgCmd[] _cmds;
         RectD _boundRect;
         bool _needBoundUpdate;
-        public SvgRenderVx(VgCmd[] svgVxList)
+        public VgRenderVx(VgCmd[] svgVxList)
         {
             //this is original version of the element 
             this._cmds = svgVxList;
             _needBoundUpdate = true;
         }
-        public SvgRenderVx Clone()
+        public VgRenderVx Clone()
         {
             //make a copy of cmd stream
             int j = _cmds.Length;
@@ -242,7 +264,7 @@ namespace PixelFarm.CpuBlit
                 copy[i] = _cmds[i].Clone();
             }
 
-            return new SvgRenderVx(copy);
+            return new VgRenderVx(copy);
         }
 
         public void InvalidateBounds()
@@ -306,15 +328,16 @@ namespace PixelFarm.CpuBlit
             }
 
             Affine currentTx = null;
-            var renderState = new TempRenderState();
+            var renderState = new TempVgRenderState();
             renderState.strokeColor = p.StrokeColor;
             renderState.strokeWidth = (float)p.StrokeWidth;
             renderState.fillColor = p.FillColor;
             renderState.affineTx = currentTx;
+            renderState.clippingTech = ClipingTechnique.None;
             //------------------ 
             int j = _cmds.Length;
 
-            ClipStateStore.GetFreeBoolStack(out Stack<ClipingTechnique> hasClipPaths);
+            ClipStateStore.GetFreeTempVgRenderState(out Stack<TempVgRenderState> vgStateStack);
             int i = 0;
 
             if (this.PrefixCommand != null)
@@ -337,6 +360,48 @@ namespace PixelFarm.CpuBlit
 
                 switch (vx.Name)
                 {
+                    case VgCommandName.BeginGroup:
+                        {
+                            //1. save current state before enter new state 
+                            vgStateStack.Push(renderState);//save prev state
+                            renderState.clippingTech = ClipingTechnique.None;//reset for this
+                        }
+                        break;
+                    case VgCommandName.EndGroup:
+                        {
+                            switch (renderState.clippingTech)
+                            {
+                                case ClipingTechnique.None: break;
+                                case ClipingTechnique.ClipMask:
+                                    {
+                                        //clear mask filter                               
+                                        //remove from current clip
+                                        AggPainter aggPainter = (AggPainter)p;
+                                        aggPainter.EnableBuiltInMaskComposite = false;
+                                        aggPainter.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
+                                        aggPainter.Clear(Color.Black);
+                                        aggPainter.TargetBufferName = TargetBufferName.Default;
+                                    }
+                                    break;
+                                case ClipingTechnique.ClipSimpleRect:
+                                    {
+
+                                        AggPainter aggPainter = (AggPainter)p;
+                                        aggPainter.SetClipBox(0, 0, aggPainter.Width, aggPainter.Height);
+                                    }
+                                    break;
+                            }
+
+                            //restore to prev state
+                            renderState = vgStateStack.Pop();
+
+                            p.FillColor = renderState.fillColor;
+                            p.StrokeColor = renderState.strokeColor;
+                            p.StrokeWidth = renderState.strokeWidth;
+                            currentTx = renderState.affineTx;
+
+                        }
+                        break;
                     case VgCommandName.FillColor:
                         p.FillColor = renderState.fillColor = ((VgCmdFillColor)vx).Color;
                         break;
@@ -385,14 +450,15 @@ namespace PixelFarm.CpuBlit
                                         {
                                             //use simple rect technique
                                             aggPainter.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
-                                            hasClipPaths.Push(ClipingTechnique.ClipSimpleRect);
+                                            renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
+                                            //hasClipPaths.Push(ClipingTechnique.ClipSimpleRect);
                                         }
                                         else
                                         {
                                             //not simple rect => 
                                             //use mask technique
-                                            hasClipPaths.Push(ClipingTechnique.ClipMask);
-
+                                            //hasClipPaths.Push(ClipingTechnique.ClipMask);
+                                            renderState.clippingTech = ClipingTechnique.ClipMask;
                                             aggPainter.TargetBufferName = TargetBufferName.AlphaMask;
                                             //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
                                             var prevColor = aggPainter.FillColor;
@@ -417,13 +483,13 @@ namespace PixelFarm.CpuBlit
                                     {
                                         //use simple rect technique
                                         aggPainter.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
-                                        hasClipPaths.Push(ClipingTechnique.ClipSimpleRect);
+                                        renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
                                     }
                                     else
                                     {
                                         //not simple rect => 
                                         //use mask technique
-                                        hasClipPaths.Push(ClipingTechnique.ClipMask);
+                                        renderState.clippingTech = ClipingTechnique.ClipMask;
 
                                         aggPainter.TargetBufferName = TargetBufferName.AlphaMask;
                                         //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
@@ -443,51 +509,7 @@ namespace PixelFarm.CpuBlit
                             }
                         }
                         break;
-                    case VgCommandName.BeginGroup:
-                        {
-                            //1. save current state before enter new state 
-                            p.StackPushUserObject(renderState);
-                        }
-                        break;
-                    case VgCommandName.EndGroup:
-                        {
-                            //restore to prev state
-                            renderState = (TempRenderState)p.StackPopUserObject();
-                            p.FillColor = renderState.fillColor;
-                            p.StrokeColor = renderState.strokeColor;
-                            p.StrokeWidth = renderState.strokeWidth;
-                            currentTx = renderState.affineTx;
-                            if (hasClipPaths.Count > 0)
-                            {
 
-                            }
-                            //ClipingTechnique clipTech = hasClipPaths.Pop();
-                            //switch (clipTech)
-                            //{
-                            //    default: throw new NotSupportedException();
-                            //    //
-                            //    case ClipingTechnique.None: break;
-                            //    case ClipingTechnique.ClipMask:
-                            //        {
-                            //            //clear mask filter                               
-                            //            //remove from current clip
-                            //            AggPainter aggPainter = (AggPainter)p;
-                            //            aggPainter.EnableBuiltInMaskComposite = false;
-                            //            aggPainter.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
-                            //            aggPainter.Clear(Color.Black);
-                            //            aggPainter.TargetBufferName = TargetBufferName.Default;
-                            //        }
-                            //        break;
-                            //    case ClipingTechnique.ClipSimpleRect:
-                            //        {
-
-                            //            AggPainter aggPainter = (AggPainter)p;
-                            //            aggPainter.SetClipBox(0, 0, aggPainter.Width, aggPainter.Height);
-                            //        }
-                            //        break;
-                            //}
-                        }
-                        break;
                     case VgCommandName.Path:
                         {
                             VgCmdPath path = (VgCmdPath)vx;
@@ -621,7 +643,7 @@ namespace PixelFarm.CpuBlit
                         break;
                 }
             }
-            ClipStateStore.ReleaseBoolStack(ref hasClipPaths); //temp
+            ClipStateStore.ReleaseTempVgRenderState(ref vgStateStack);
         }
 
         static VertexStore GetStrokeVxsOrCreateNew(VgCmd s, Painter p, float strokeW)
@@ -716,20 +738,20 @@ namespace PixelFarm.CpuBlit
     //-------------------------------------------------
     public class VgCmdFillColor : VgCmd
     {
-        public VgCmdFillColor() : base(VgCommandName.FillColor) { }
+        public VgCmdFillColor(Color color) : base(VgCommandName.FillColor) { Color = color; }
         public Color Color { get; set; }
         public override VgCmd Clone()
         {
-            return new VgCmdFillColor { Color = this.Color };
+            return new VgCmdFillColor(Color);
         }
     }
     public class VgCmdStrokeColor : VgCmd
     {
-        public VgCmdStrokeColor() : base(VgCommandName.StrokeColor) { }
+        public VgCmdStrokeColor(Color color) : base(VgCommandName.StrokeColor) { Color = color; }
         public Color Color { get; set; }
         public override VgCmd Clone()
         {
-            return new VgCmdStrokeColor { Color = this.Color };
+            return new VgCmdStrokeColor(Color);
         }
     }
     public class VgCmdAffineTransform : VgCmd
