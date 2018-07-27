@@ -41,22 +41,23 @@ namespace LayoutFarm.UI
         }
         static bool HitTestOnSubPart(SvgRenderVx _svgRenderVx, float x, float y)
         {
-            int partCount = _svgRenderVx.SvgVxCount;
+            int partCount = _svgRenderVx.VgCmdCount;
 
 
             for (int i = partCount - 1; i >= 0; --i)
             {
                 //we do hittest top to bottom => (so => iter backward)
 
-                SvgPart vx = _svgRenderVx.GetInnerVx(i);
-                if (vx.Kind != SvgRenderVxKind.Path)
+                VgCmd vx = _svgRenderVx.GetVgCmd(i);
+                if (vx.Name != VgCommandName.Path)
                 {
                     continue;
                 }
-                VertexStore innerVxs = vx.GetVxs();
+                //
+                VgCmdPath path = (VgCmdPath)vx;                 
                 //fine tune
                 //hit test ***
-                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(innerVxs, x, y))
+                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(path.Vxs, x, y))
                 {
                     return true;
                 }

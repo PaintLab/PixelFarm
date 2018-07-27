@@ -22,7 +22,7 @@ namespace LayoutFarm
         {
 
 
-            SvgPart svgPart = new SvgPart(SvgRenderVxKind.Path);
+            VgCmdPath path = new VgCmdPath();
             //------------------------------------------- 
             using (VxsContext.Temp(out VertexStore vxs))
             {
@@ -30,12 +30,12 @@ namespace LayoutFarm
                 vxs.AddLineTo(150, 50);
                 vxs.AddLineTo(110, 80);
                 vxs.AddCloseFigure();
-                svgPart.SetVxs(vxs.CreateTrim());
+                path.SetVxsAsOriginal(vxs.CreateTrim());
             }
 
-
-            svgPart.FillColor = Color.Red;
-            SvgRenderVx svgRenderVx = new SvgRenderVx(new SvgPart[] { svgPart });
+            SvgRenderVx svgRenderVx = new SvgRenderVx(new VgCmd[] {
+                new VgCmdFillColor(){Color = Color.Red},
+                path });
             svgRenderVx.DisableBackingImage = true;
 
 
@@ -71,7 +71,7 @@ namespace LayoutFarm
                 //mousedown on ui sprite
                 polygonController.SetPosition((int)uiSprite.Left, (int)uiSprite.Top);
                 polygonController.SetTargetUISprite(uiSprite);
-                polygonController.UpdateControlPoints(svgPart);
+                polygonController.UpdateControlPoints(path);
 
             };
             spriteEvListener.MouseMove += e1 =>

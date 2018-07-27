@@ -18,14 +18,14 @@ namespace PixelFarm.CpuBlit
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
         PixelFarm.CpuBlit.VertexProcessing.CurveFlattener _curveFlatter = new VertexProcessing.CurveFlattener();
 
-        Dictionary<string, SvgClipPath> _clipPathDic = new Dictionary<string, SvgClipPath>();
+        Dictionary<string, VgCmdClipPath> _clipPathDic = new Dictionary<string, VgCmdClipPath>();
 
         public SvgRenderVx CreateRenderVx(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
 
             int childCount = svgdoc.Root.ChildCount;
-            List<SvgPart> parts = new List<SvgPart>();
+            List<VgCmd> parts = new List<VgCmd>();
 
             for (int i = 0; i < childCount; ++i)
             {
@@ -36,7 +36,7 @@ namespace PixelFarm.CpuBlit
             SvgRenderVx renderVx = new SvgRenderVx(parts.ToArray());
             return renderVx;
         }
-        void RenderSvgElements(SvgElement elem, List<SvgPart> parts)
+        void RenderSvgElements(SvgElement elem, List<VgCmd> parts)
         {
             switch (elem.WellknowElemName)
             {
@@ -74,7 +74,7 @@ namespace PixelFarm.CpuBlit
                 RenderSvgElements(elem.GetChild(i), parts);
             }
         }
-        void CreateClipPath(SvgElement elem, List<SvgPart> parts)
+        void CreateClipPath(SvgElement elem, List<VgCmd> parts)
         {
 
             int childCount = elem.ChildCount;
@@ -106,8 +106,8 @@ namespace PixelFarm.CpuBlit
                     if (child.WellknowElemName == WellknownSvgElementName.ClipPath)
                     {
                         //make this as a clip path
-                        List<SvgPart> parts = new List<SvgPart>();
-                        SvgClipPath clipPath = new SvgClipPath();
+                        List<VgCmd> parts = new List<VgCmd>();
+                        VgCmdClipPath clipPath = new VgCmdClipPath();
                         RenderSvgElements(child, parts);
 
                         clipPath._svgParts = parts;
@@ -117,49 +117,51 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        void AssignAttributes(SvgVisualSpec spec, SvgPart part, List<SvgPart> parts)
+        void AssignAttributes(SvgVisualSpec spec, List<VgCmd> parts)
         {
             if (spec.HasFillColor)
             {
-                part.FillColor = spec.FillColor;
+                //part.FillColor = spec.FillColor;
+                parts.Add(new VgCmdFillColor() { Color = spec.FillColor });
             }
             if (spec.HasStrokeColor)
             {
+                parts.Add(new VgCmdStrokeColor() { Color = spec.FillColor });
             }
             if (spec.HasStrokeWidth)
             {
-                part.StrokeColor = spec.StrokeColor;
+                //part.StrokeColor = spec.StrokeColor;
             }
             if (spec.Transform != null)
             {
                 //convert from svg transform to
-                part.AffineTx = CreateAffine(spec.Transform);
+                //part.AffineTx = CreateAffine(spec.Transform);
+                parts.Add(new VgCmdAffineTransform(CreateAffine(spec.Transform)));
             }
+            //
             if (spec.ClipPathLink != null)
             {
                 //resolve this clip
                 BuildDefinitionNodes();
-                if (_clipPathDic.TryGetValue(spec.ClipPathLink.Value, out SvgClipPath clip))
+                if (_clipPathDic.TryGetValue(spec.ClipPathLink.Value, out VgCmdClipPath clip))
                 {
-                    part.ClipPath = clip;
+                    parts.Add(clip);
+                    //part.ClipPath = clip;
                 }
             }
         }
-        void RenderPathElement(SvgElement elem, List<SvgPart> parts)
+        void RenderPathElement(SvgElement elem, List<VgCmd> parts)
         {
             SvgPathSpec pathSpec = elem._visualSpec as SvgPathSpec;
-            //d
-            SvgPart part = new SvgPart(SvgRenderVxKind.Path);
-            // 
-            part.SetVxsAsOriginal(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
+            //d             
+            VgCmdPath pathCmd = new VgCmdPath();
+            pathCmd.SetVxsAsOriginal(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
+            AssignAttributes(pathSpec, parts);
 
-            AssignAttributes(pathSpec, part, parts);
-
-            parts.Add(part);
+            parts.Add(pathCmd);
         }
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
-
             using (VxsContext.Temp(out var flattenVxs))
             {
                 VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
@@ -169,7 +171,6 @@ namespace PixelFarm.CpuBlit
 
                 //create a small copy of the vxs 
                 VectorToolBox.ReleasePathWriter(ref pathWriter);
-
                 return flattenVxs.CreateTrim();
             }
         }
@@ -205,10 +206,11 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        void RenderGroupElement(SvgElement elem, List<SvgPart> parts)
+        void RenderGroupElement(SvgElement elem, List<VgCmd> parts)
         {
-            var beginGroup = new SvgBeginGroup();
-            AssignAttributes(elem._visualSpec, beginGroup, parts);
+            var beginGroup = new VgCmdBeginGroup();
+            parts.Add(beginGroup);
+            AssignAttributes(elem._visualSpec, parts);
 
             parts.Add(beginGroup);
             //
@@ -220,7 +222,7 @@ namespace PixelFarm.CpuBlit
                 RenderSvgElements(elem.GetChild(i), parts);
             }
 
-            parts.Add(new SvgEndGroup());
+            parts.Add(new VgCmdEndGroup());
         }
     }
     public static class SvgRenderVxDocBuilderExt

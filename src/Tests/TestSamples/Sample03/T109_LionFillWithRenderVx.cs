@@ -2,8 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Drawing;
+
 using Mini;
+
+using PixelFarm.Drawing;
 using PixelFarm.DrawingGL;
 using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
@@ -89,43 +91,60 @@ namespace OpenTkEssTest
                 if (multipartTessResult != null)
                 {
                     SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
-                    int partCount = renderVx.SvgVxCount;
+                    int partCount = renderVx.VgCmdCount;
 
                     int partIndex = 0;
+                    Color fillColor = Color.Transparent;
                     for (int i = 0; i < partCount; ++i)
                     {
-                        SvgPart vx = renderVx.GetInnerVx(i);
-                        if (vx.Kind != SvgRenderVxKind.Path)
+                        VgCmd vx = renderVx.GetVgCmd(i);
+                        switch (vx.Name)
                         {
-                            continue;
+                            default:
+                                break;
+                            case VgCommandName.Path:
+                                {
+                                    _glsx.FillRenderVx(fillColor, multipartTessResult, partIndex);
+                                }
+                                break;
+                            case VgCommandName.FillColor:
+                                {
+                                    fillColor = ((VgCmdFillColor)vx).Color;
+                                }
+                                break;
                         }
-                        _glsx.FillRenderVx(vx.FillColor, multipartTessResult, partIndex);
                         partIndex++;
                     }
-
-                    //Color[] colors = lionShape.Colors;
-                    //int j = multipartTessResult.PartCount;
-                    //for (int i = 0; i < j; ++i)
-                    //{
-
-                    //}
                 }
 
             }
             else
             {
+                Color fillColor = Color.Transparent;
                 int j = lionRenderVxList.Count;
                 SvgRenderVx renderVx = (SvgRenderVx)lionShape.GetRenderVx();
-                int partCount = renderVx.SvgVxCount;
+                int partCount = renderVx.VgCmdCount;
                 int partIndex = 0;
                 for (int i = 0; i < partCount; ++i)
                 {
-                    SvgPart vx = renderVx.GetInnerVx(i);
-                    if (vx.Kind != SvgRenderVxKind.Path)
+                    VgCmd vx = renderVx.GetVgCmd(i);
+                     
+                    switch (vx.Name)
                     {
-                        continue;
+                        default:
+                            break;
+                        case VgCommandName.Path:
+                            {
+                                _glsx.FillRenderVx(fillColor, multipartTessResult, partIndex);
+                            }
+                            break;
+                        case VgCommandName.FillColor:
+                            {
+                                fillColor = ((VgCmdFillColor)vx).Color;
+                            }
+                            break;
                     }
-                    _glsx.FillRenderVx(vx.FillColor, lionRenderVxList[partIndex]);
+                  
                     partIndex++;
                 }
 

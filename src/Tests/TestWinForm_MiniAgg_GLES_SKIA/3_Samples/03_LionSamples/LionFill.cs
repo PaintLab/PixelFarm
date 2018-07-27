@@ -45,7 +45,8 @@ namespace PixelFarm.CpuBlit.Samples
         MyTestSprite lionFill;
         public override void Init()
         {
-            lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg")));
+            SvgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
+            lionFill = new MyTestSprite(new SpriteShape(renderVx));
             //lionFill.AutoFlipY = true;
         }
 

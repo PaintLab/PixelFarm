@@ -132,27 +132,43 @@ namespace PixelFarm.CpuBlit
                 //create vertextStore again from original path
 
 
+
                 //temp fix
+
+                //-----------------------
+                //(1) reset to original shape
+                //_spriteShape.ResetTransform();
+                //SvgRenderVx renderVx = _spriteShape.GetRenderVx();
+                //int count = renderVx.VgCmdCount;
+                //for (int i = 0; i < count; ++i)
+                //{
+                //    VgCmd vx = renderVx.GetVgCmd(i);
+                //    if (vx.Name != VgCommandName.Path)
+                //    {
+                //        continue;
+                //    }
+                //    VgCmdPath path = (VgCmdPath)vx;
+                //    using (VxsContext.Temp(out VertexStore tmp))
+                //    {
+                //        transform.TransformToVxs(path.Vxs, tmp);
+                //        path.SetVxsAsOriginal(tmp.CreateTrim());
+                //    }
+                //}
+                //_spriteShape.UpdateBounds();
+                //-----------------------
+
+                //(2) or just transform when draw => not affect its org shape
                 SvgRenderVx renderVx = _spriteShape.GetRenderVx();
-                int count = renderVx.SvgVxCount;
-                for (int i = 0; i < count; ++i)
-                {
-                    SvgPart vx = renderVx.GetInnerVx(i);
-                    if (vx.Kind != SvgRenderVxKind.Path)
-                    {
-                        continue;
-                    }
-                    //Temp fix, 
-                    //TODO: review here,
-                    //permanent transform each part?
-                    //or create a copy. 
-                    vx.RestoreOrg();
-                    VertexStore vxvxs = vx.GetVxs();
-                    VertexStore newVxs = new VertexStore();
-                    transform.TransformToVxs(vxvxs, newVxs);
-                    vx.SetVxs(newVxs);
-                }
-                _spriteShape.UpdateBounds();
+                renderVx.PrefixCommand = new VgCmdAffineTransform(transform);
+
+
+
+
+
+
+
+
+
 
                 //if (AutoFlipY)
                 //{
@@ -172,7 +188,10 @@ namespace PixelFarm.CpuBlit
                 float ox = p.OriginX;
                 float oy = p.OriginY;
                 p.SetOrigin(ox + _posX, oy + _posY);
+
                 _spriteShape.Paint(p);
+
+
                 //#if DEBUG
                 //                RectD bounds = lionShape.Bounds;
                 //                bounds.Offset(_posX, _posY);
@@ -195,10 +214,8 @@ namespace PixelFarm.CpuBlit
                 //                p.FillColor = savedFillColor;
 
 
-                //#endif
-
+                //#endif 
                 p.SetOrigin(ox, oy);
-
 
                 //int j = lionShape.NumPaths;
                 //int[] pathList = lionShape.PathIndexList;
