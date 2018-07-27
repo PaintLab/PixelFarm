@@ -127,6 +127,7 @@ namespace LayoutFarm.CustomWidgets
             if (primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                renderE.SetLocation(this.Left, this.Top);
                 renderE.NeedClipArea = this.NeedClipArea;
                 renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
                 BuildChildrenRenderElement(renderE);

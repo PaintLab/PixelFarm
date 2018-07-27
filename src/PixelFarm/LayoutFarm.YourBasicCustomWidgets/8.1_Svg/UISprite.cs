@@ -136,6 +136,8 @@ namespace LayoutFarm.UI
             if (_svgRenderElement == null)
             {
                 _svgRenderElement = new SvgRenderElement(rootgfx, 10, 10);
+                _svgRenderElement.SetLocation((int)this.Left, (int)this.Top);
+
                 _svgRenderElement.SetController(this);
                 if (_svgRenderVx != null)
                 {
