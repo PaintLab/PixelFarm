@@ -29,7 +29,7 @@ namespace PixelFarm.CpuBlit
 {
     public sealed partial class AggRenderSurface
     {
-        MyBitmapBlender destImageReaderWriter;
+        MyBitmapBlender _destBitmapBlender;
         ScanlinePacked8 sclinePack8;
 
         DestBitmapRasterizer _bmpRasterizer;
@@ -48,16 +48,16 @@ namespace PixelFarm.CpuBlit
 
             this.destActualImage = destImage;
 
-            this.destImageReaderWriter = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
+            this._destBitmapBlender = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
-            this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
+            this._sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this._bmpRasterizer = new DestBitmapRasterizer();
             //
             this.destWidth = destImage.Width;
             this.destHeight = destImage.Height;
             //
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
-            this.sclineRas.SetClipBox(this.clipBox);
+            this._sclineRas.SetClipBox(this.clipBox);
             this.sclinePack8 = new ScanlinePacked8();
         }
 
@@ -67,15 +67,15 @@ namespace PixelFarm.CpuBlit
 
         public ScanlineRasterizer ScanlineRasterizer
         {
-            get { return sclineRas; }
+            get { return _sclineRas; }
         }
         public ActualBitmap DestActualImage
         {
             get { return this.destActualImage; }
         }
-        public BitmapBlenderBase DestImage
+        public BitmapBlenderBase DestBitmapBlender
         {
-            get { return this.destImageReaderWriter; }
+            get { return this._destBitmapBlender; }
         }
 
         public ScanlinePacked8 ScanlinePacked8
@@ -86,11 +86,11 @@ namespace PixelFarm.CpuBlit
         {
             get
             {
-                return this.destImageReaderWriter.OutputPixelBlender;
+                return this._destBitmapBlender.OutputPixelBlender;
             }
             set
             {
-                this.destImageReaderWriter.OutputPixelBlender = value;
+                this._destBitmapBlender.OutputPixelBlender = value;
             }
         }
 
@@ -115,7 +115,7 @@ namespace PixelFarm.CpuBlit
         public void Clear(Color color)
         {
             RectInt clippingRectInt = GetClippingRect();
-            var destImage = this.DestImage;
+            var destImage = this.DestBitmapBlender;
             int width = destImage.Width;
             int height = destImage.Height;
             int[] buffer = destImage.GetBuffer32();
@@ -310,14 +310,14 @@ namespace PixelFarm.CpuBlit
         {
             //reset rasterizer before render each vertextSnap 
             //-----------------------------
-            sclineRas.Reset();
+            _sclineRas.Reset();
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
 
                 VectorToolBox.GetFreeVxs(out var v1);
                 transform.TransformToVxs(vxsSnap, v1);
-                sclineRas.AddPath(v1);
+                _sclineRas.AddPath(v1);
                 VectorToolBox.ReleaseVxs(ref v1);
                 //-------------------------
                 //since sclineRas do NOT store vxs
@@ -326,9 +326,9 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                sclineRas.AddPath(vxsSnap);
+                _sclineRas.AddPath(vxsSnap);
             }
-            _bmpRasterizer.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+            _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, sclinePack8, color);
             unchecked { destImageChanged++; };
             //-----------------------------
         }
@@ -345,7 +345,7 @@ namespace PixelFarm.CpuBlit
             Render(new VertexStoreSnap(vxs), c);
         }
         ActualBitmap destActualImage;
-        ScanlineRasterizer sclineRas;
+        ScanlineRasterizer _sclineRas;
         Affine currentTxMatrix = Affine.IdentityMatrix;
         public Affine CurrentTransformMatrix
         {
@@ -353,6 +353,40 @@ namespace PixelFarm.CpuBlit
             set
             {
                 this.currentTxMatrix = value;
+            }
+        }
+        public float ScanlineRasOriginX
+        {
+            get { return _sclineRas.OffsetOriginX; }
+        }
+        public float ScanlineRasOriginY
+        {
+            get { return _sclineRas.OffsetOriginY; }
+        }
+        public void SetScanlineRasOrigin(float x, float y)
+        {
+            _sclineRas.OffsetOriginX = x;
+            _sclineRas.OffsetOriginY = y;
+        }
+        public bool UseSubPixelLcdEffect
+        {
+            get
+            {
+                return this._sclineRas.ExtendWidthX3ForSubPixelLcdEffect;
+            }
+            set
+            {
+                if (value)
+                {
+                    //TODO: review here again             
+                    this._sclineRas.ExtendWidthX3ForSubPixelLcdEffect = true;
+                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
+                }
+                else
+                {
+                    this._sclineRas.ExtendWidthX3ForSubPixelLcdEffect = false;
+                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.Default;
+                }
             }
         }
 #if DEBUG

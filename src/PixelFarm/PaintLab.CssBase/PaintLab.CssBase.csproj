@@ -30,9 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CssBase\CssColor.cs" />
     <Compile Include="CssBase\CssConstants.cs" />
-    <Compile Include="CssBase\CssKnownColor.cs" />
     <Compile Include="CssBase\CssLength.cs" />
     <Compile Include="CssBase\CssProps.cs" />
     <Compile Include="CssBase\CssUnitOrNames.cs" />

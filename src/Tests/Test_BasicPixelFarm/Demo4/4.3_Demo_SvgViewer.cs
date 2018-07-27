@@ -69,14 +69,12 @@ namespace LayoutFarm.ColorBlenderSample
 
             string svgContent = System.IO.File.ReadAllText(svgFile);
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
-
             parser.ParseDocument(textSnapshot);
             //
             SvgRenderVx svgRenderVx = _docBuilder.ResultDocument.CreateRenderVx();
             var uiSprite = new UISprite(10, 10);
             uiSprite.LoadSvg(svgRenderVx);
             _backBoard.ClearChildren();
-
             _backBoard.AddChild(uiSprite);
         }
     }

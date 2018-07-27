@@ -121,14 +121,14 @@ namespace PixelFarm.CpuBlit
         {
             if (spec.HasFillColor)
             {
-                part.FillColor = ConvertToActualColor(spec.FillColor);
+                part.FillColor = spec.FillColor;
             }
             if (spec.HasStrokeColor)
             {
             }
             if (spec.HasStrokeWidth)
             {
-                part.StrokeColor = ConvertToActualColor(spec.StrokeColor);
+                part.StrokeColor = spec.StrokeColor;
             }
             if (spec.Transform != null)
             {
@@ -204,10 +204,7 @@ namespace PixelFarm.CpuBlit
                     return PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
             }
         }
-        static Color ConvertToActualColor(LayoutFarm.WebDom.CssColor color)
-        {
-            return new Color(color.A, color.R, color.G, color.B);
-        }
+        
         void RenderGroupElement(SvgElement elem, List<SvgPart> parts)
         {
             var beginGroup = new SvgBeginGroup();

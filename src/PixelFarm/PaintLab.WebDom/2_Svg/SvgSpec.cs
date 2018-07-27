@@ -4,14 +4,16 @@
 using LayoutFarm.WebDom;
 
 using LayoutFarm.Css;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.Svg
 {
 
 
     public class SvgVisualSpec
     {
-        CssColor fillColor = CssColor.Black;
-        CssColor strokeColor = CssColor.Transparent;
+        Color fillColor = Color.Black;
+        Color strokeColor = Color.Transparent;
         CssLength cssLen;
 
         public bool HasFillColor { get; set; }
@@ -19,7 +21,7 @@ namespace LayoutFarm.Svg
         public bool HasStrokeWidth { get; set; }
 
         public SvgTransform Transform { get; set; }
-        public CssColor FillColor
+        public PixelFarm.Drawing.Color FillColor
         {
             get { return this.fillColor; }
             set
@@ -28,7 +30,7 @@ namespace LayoutFarm.Svg
                 this.HasFillColor = true;
             }
         }
-        public CssColor StrokeColor
+        public Color StrokeColor
         {
             get { return this.strokeColor; }
             set
@@ -50,7 +52,7 @@ namespace LayoutFarm.Svg
         public string Id { get; set; }
         public string Class { get; set; }
 
-        public SvgAttributeLink ClipPathLink { get; set; }        
+        public SvgAttributeLink ClipPathLink { get; set; }
     }
     public enum SvgAttributeLinkKind
     {
@@ -149,11 +151,11 @@ namespace LayoutFarm.Svg
     }
     public class SvgPolygonSpec : SvgVisualSpec
     {
-        public CssPoint[] Points { get; set; }
+        public PixelFarm.Drawing.PointF[] Points { get; set; }
     }
     public class SvgPolylineSpec : SvgVisualSpec
     {
-        public CssPoint[] Points { get; set; }
+        public PixelFarm.Drawing.PointF[] Points { get; set; }
     }
 
     public class SvgPathSpec : SvgVisualSpec
@@ -181,7 +183,7 @@ namespace LayoutFarm.Svg
 
         public string D { get; set; }
     }
-     
+
 
     public class SvgLineSpec : SvgVisualSpec
     {
@@ -208,7 +210,7 @@ namespace LayoutFarm.Svg
     }
     public class StopColorPoint
     {
-        public CssColor StopColor
+        public Color StopColor
         {
             get;
             set;
