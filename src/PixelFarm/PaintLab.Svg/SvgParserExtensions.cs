@@ -117,7 +117,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        void AssignAttributes(SvgVisualSpec spec, SvgPart part)
+        void AssignAttributes(SvgVisualSpec spec, SvgPart part, List<SvgPart> parts)
         {
             if (spec.HasFillColor)
             {
@@ -153,7 +153,7 @@ namespace PixelFarm.CpuBlit
             // 
             part.SetVxsAsOriginal(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
 
-            AssignAttributes(pathSpec, part);
+            AssignAttributes(pathSpec, part, parts);
 
             parts.Add(part);
         }
@@ -204,11 +204,11 @@ namespace PixelFarm.CpuBlit
                     return PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
             }
         }
-        
+
         void RenderGroupElement(SvgElement elem, List<SvgPart> parts)
         {
             var beginGroup = new SvgBeginGroup();
-            AssignAttributes(elem._visualSpec, beginGroup);
+            AssignAttributes(elem._visualSpec, beginGroup, parts);
 
             parts.Add(beginGroup);
             //

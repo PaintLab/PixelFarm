@@ -647,6 +647,13 @@ namespace PixelFarm.CpuBlit
         }
     }
 
+    public class SvgPath : SvgPart
+    {
+        public SvgPath() : base(SvgRenderVxKind.Path)
+        {
+
+        }
+    }
     public class SvgPart
     {
         VertexStore _vxs;
@@ -681,9 +688,7 @@ namespace PixelFarm.CpuBlit
 
         public bool HasFillColor { get; private set; }
         public bool HasStrokeColor { get; private set; }
-        public bool HasStrokeWidth { get; private set; }
-
-
+        public bool HasStrokeWidth { get; private set; } 
 
         public Color FillColor
         {
