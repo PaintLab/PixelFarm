@@ -193,26 +193,7 @@ namespace PixelFarm.Drawing
             p = null;
         }
 
-        //-----------------------------------
-        [System.ThreadStatic]
-        static Stack<Stack<bool>> s_boolStacks = new Stack<Stack<bool>>();
-        public static void GetFreeBoolStack(out Stack<bool> boolStack)
-        {
-            if (s_boolStacks.Count > 0)
-            {
-                boolStack = s_boolStacks.Pop();
-            }
-            else
-            {
-                boolStack = new Stack<bool>();
-            }
-        }
-        public static void ReleaseBoolStack(ref Stack<bool> boolStack)
-        {
-            boolStack.Clear();
-            s_boolStacks.Push(boolStack);
-            boolStack = null;
-        }
+        
 
         //-----------------------------------
     }

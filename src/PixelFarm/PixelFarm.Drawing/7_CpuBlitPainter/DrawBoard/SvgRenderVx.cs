@@ -42,6 +42,172 @@ namespace PixelFarm.CpuBlit
 
 
 
+
+    static class SimpleRectClipEvaluator
+    {
+        enum RectSide
+        {
+            None,
+            Vertical,
+            Horizontal
+        }
+
+        static RectSide FindRectSide(float x0, float y0, float x1, float y1)
+        {
+            if (x0 == x1 && y0 != y1)
+            {
+                return RectSide.Vertical;
+            }
+            else if (y0 == y1 && x0 != x1)
+            {
+                return RectSide.Horizontal;
+            }
+            return RectSide.None;
+        }
+
+        /// <summary>
+        /// check if this is a simple rect
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <returns></returns>
+        public static bool EvaluateRectClip(VertexStore vxs, out RectangleF clipRect)
+        {
+            float x0 = 0, y0 = 0;
+            float x1 = 0, y1 = 0;
+            float x2 = 0, y2 = 0;
+            float x3 = 0, y3 = 0;
+            float x4 = 0, y4 = 0;
+            clipRect = new RectangleF();
+
+            int sideCount = 0;
+
+            int j = vxs.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                VertexCmd cmd = vxs.GetVertex(i, out double x, out double y);
+                switch (cmd)
+                {
+                    default: return false;
+                    case VertexCmd.NoMore:
+                        if (i > 6) return false;
+                        break;
+                    case VertexCmd.Close:
+                        if (i > 5)
+                        {
+                            return false;
+                        }
+                        break;
+                    case VertexCmd.LineTo:
+                        {
+                            switch (i)
+                            {
+                                case 1:
+                                    x1 = (float)x;
+                                    y1 = (float)y;
+                                    sideCount++;
+                                    break;
+                                case 2:
+                                    x2 = (float)x;
+                                    y2 = (float)y;
+                                    sideCount++;
+                                    break;
+                                case 3:
+                                    x3 = (float)x;
+                                    y3 = (float)y;
+                                    sideCount++;
+                                    break;
+                                case 4:
+                                    x4 = (float)x;
+                                    y4 = (float)y;
+                                    sideCount++;
+                                    break;
+                            }
+                        }
+                        break;
+                    case VertexCmd.MoveTo:
+                        {
+                            if (i == 0)
+                            {
+                                x0 = (float)x;
+                                y0 = (float)y;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            if (sideCount == 4)
+            {
+                RectSide s0 = FindRectSide(x0, y0, x1, y1);
+                if (s0 == RectSide.None) return false;
+                //
+                RectSide s1 = FindRectSide(x1, y1, x2, y2);
+                if (s1 == RectSide.None || s0 == s1) return false;
+                //
+                RectSide s2 = FindRectSide(x2, y2, x3, y3);
+                if (s2 == RectSide.None || s1 == s2) return false;
+                //
+                RectSide s3 = FindRectSide(x3, y3, x4, y4);
+                if (s3 == RectSide.None || s2 == s3) return false;
+                //
+                if (x4 == x0 && y4 == y0)
+                {
+
+                    if (s0 == RectSide.Horizontal)
+                    {
+                        clipRect = new RectangleF(x0, y0, x1 - x0, y3 - y0);
+                    }
+                    else
+                    {
+                        clipRect = new RectangleF(x0, y0, x3 - x0, y3 - y0);
+                    }
+
+                    return true;
+
+                }
+            }
+            return false;
+
+        }
+    }
+
+    enum ClipingTechnique
+    {
+        None,
+        ClipMask,
+        ClipSimpleRect
+    }
+
+    static class ClipStateStore
+    {
+        //-----------------------------------
+        [System.ThreadStatic]
+        static Stack<Stack<ClipingTechnique>> s_boolStacks = new Stack<Stack<ClipingTechnique>>();
+        public static void GetFreeBoolStack(out Stack<ClipingTechnique> boolStack)
+        {
+            if (s_boolStacks.Count > 0)
+            {
+                boolStack = s_boolStacks.Pop();
+            }
+            else
+            {
+                boolStack = new Stack<ClipingTechnique>();
+            }
+        }
+        public static void ReleaseBoolStack(ref Stack<ClipingTechnique> boolStack)
+        {
+            boolStack.Clear();
+            s_boolStacks.Push(boolStack);
+            boolStack = null;
+        }
+    }
+
+
+
     public class SvgRenderVx : RenderVx
     {
 
@@ -121,6 +287,7 @@ namespace PixelFarm.CpuBlit
         public float Y { get; set; }
 
 
+
         public void Render(Painter p)
         {
 
@@ -138,12 +305,10 @@ namespace PixelFarm.CpuBlit
             renderState.strokeWidth = (float)p.StrokeWidth;
             renderState.fillColor = p.FillColor;
             renderState.affineTx = currentTx;
-
-
             //------------------ 
             int j = _vxList.Length;
 
-            VectorToolBox.GetFreeBoolStack(out Stack<bool> hasClipPaths);
+            ClipStateStore.GetFreeBoolStack(out Stack<ClipingTechnique> hasClipPaths);
 
             for (int i = 0; i < j; ++i)
             {
@@ -184,43 +349,92 @@ namespace PixelFarm.CpuBlit
                             }
                             //
                             // 
-                            hasClipPaths.Push((vx.ClipPath != null));
 
-                            if (vx.ClipPath != null)
+
+                            if (vx.ClipPath == null)
                             {
-                                //implement region 
+                                hasClipPaths.Push(ClipingTechnique.None);
+                            }
+                            else
+                            {
+
                                 if (p is AggPainter)
                                 {
-                                    AggPainter aggPainter = (AggPainter)p;
-                                    aggPainter.TargetBufferName = TargetBufferName.AlphaMask;
-
-                                    //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
-
-                                    var prevColor = aggPainter.FillColor;
-                                    aggPainter.FillColor = Color.White;
-                                    //aggPainter.StrokeColor = Color.Black; //for debug
-                                    //aggPainter.StrokeWidth = 1; //for debug
-
                                     VertexStore clipVxs = vx.ClipPath._svgParts[0].GetVxs();
+                                    //----------
+                                    //for optimization check if clip path is Rect
+                                    //if yes => do simple rect clip 
+                                    //----------
+                                    AggPainter aggPainter = (AggPainter)p;
+
                                     if (currentTx != null)
                                     {
                                         //have some tx
                                         using (VxsContext.Temp(out var v1))
                                         {
                                             currentTx.TransformToVxs(clipVxs, v1);
-                                            //p.Draw(v1); //for debug
-                                            p.Fill(v1);
+                                            //after transform
+                                            //check if v1 is rect clip or not
+                                            //if yes => then just use simple rect clip
+                                            if (SimpleRectClipEvaluator.EvaluateRectClip(v1, out RectangleF clipRect))
+                                            {
+                                                //use simple rect technique
+                                                aggPainter.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
+                                                hasClipPaths.Push(ClipingTechnique.ClipSimpleRect);
+                                            }
+                                            else
+                                            {
+                                                //not simple rect => 
+                                                //use mask technique
+                                                hasClipPaths.Push(ClipingTechnique.ClipMask);
+
+                                                aggPainter.TargetBufferName = TargetBufferName.AlphaMask;
+                                                //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
+                                                var prevColor = aggPainter.FillColor;
+                                                aggPainter.FillColor = Color.White;
+                                                //aggPainter.StrokeColor = Color.Black; //for debug
+                                                //aggPainter.StrokeWidth = 1; //for debug 
+
+                                                //p.Draw(v1); //for debug
+                                                p.Fill(v1);
+
+                                                aggPainter.FillColor = prevColor;
+                                                aggPainter.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
+                                                aggPainter.EnableBuiltInMaskComposite = true;
+                                            }
                                         }
                                     }
                                     else
                                     {
-                                        //aggPainter.Draw(clipVxs); //for debug
-                                        aggPainter.Fill(clipVxs);
-                                    }
+                                        //aggPainter.Draw(clipVxs); //for debug 
+                                        //check if clipVxs is rect or not
+                                        if (SimpleRectClipEvaluator.EvaluateRectClip(clipVxs, out RectangleF clipRect))
+                                        {
+                                            //use simple rect technique
+                                            aggPainter.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
+                                            hasClipPaths.Push(ClipingTechnique.ClipSimpleRect);
+                                        }
+                                        else
+                                        {
+                                            //not simple rect => 
+                                            //use mask technique
+                                            hasClipPaths.Push(ClipingTechnique.ClipMask);
 
-                                    aggPainter.FillColor = prevColor;
-                                    aggPainter.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
-                                    aggPainter.EnableBuiltInMaskComposite = true;
+                                            aggPainter.TargetBufferName = TargetBufferName.AlphaMask;
+                                            //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
+                                            var prevColor = aggPainter.FillColor;
+                                            aggPainter.FillColor = Color.White;
+                                            //aggPainter.StrokeColor = Color.Black; //for debug
+                                            //aggPainter.StrokeWidth = 1; //for debug 
+
+                                            //p.Draw(v1); //for debug
+                                            aggPainter.Fill(clipVxs);
+
+                                            aggPainter.FillColor = prevColor;
+                                            aggPainter.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
+                                            aggPainter.EnableBuiltInMaskComposite = true;
+                                        }
+                                    }
                                 }
                             }
 
@@ -235,16 +449,30 @@ namespace PixelFarm.CpuBlit
                             p.StrokeWidth = renderState.strokeWidth;
                             currentTx = renderState.affineTx;
 
-                            bool hasClip = hasClipPaths.Pop();
-                            if (hasClip)
+                            ClipingTechnique clipTech = hasClipPaths.Pop();
+                            switch (clipTech)
                             {
-                                //clear mask filter                               
-                                //remove from current clip
-                                AggPainter aggPainter = (AggPainter)p;
-                                aggPainter.EnableBuiltInMaskComposite = false;
-                                aggPainter.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
-                                aggPainter.Clear(Color.Black);
-                                aggPainter.TargetBufferName = TargetBufferName.Default;
+                                default: throw new NotSupportedException();
+                                //
+                                case ClipingTechnique.None: break;
+                                case ClipingTechnique.ClipMask:
+                                    {
+                                        //clear mask filter                               
+                                        //remove from current clip
+                                        AggPainter aggPainter = (AggPainter)p;
+                                        aggPainter.EnableBuiltInMaskComposite = false;
+                                        aggPainter.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
+                                        aggPainter.Clear(Color.Black);
+                                        aggPainter.TargetBufferName = TargetBufferName.Default;
+                                    }
+                                    break;
+                                case ClipingTechnique.ClipSimpleRect:
+                                    {
+
+                                        AggPainter aggPainter = (AggPainter)p;
+                                        aggPainter.SetClipBox(0, 0, aggPainter.Width, aggPainter.Height);
+                                    }
+                                    break;
                             }
                         }
                         break;
@@ -353,7 +581,7 @@ namespace PixelFarm.CpuBlit
                         break;
                 }
             }
-            VectorToolBox.ReleaseBoolStack(ref hasClipPaths); //temp
+            ClipStateStore.ReleaseBoolStack(ref hasClipPaths); //temp
         }
 
         static VertexStore GetStrokeVxsOrCreateNew(SvgPart s, Painter p, float strokeW)
@@ -395,11 +623,13 @@ namespace PixelFarm.CpuBlit
 
     public class SvgClipPath : SvgPart
     {
+
         public List<SvgPart> _svgParts;
         public SvgClipPath()
             : base(SvgRenderVxKind.ClipPath)
         {
         }
+
     }
 
     public class SvgBeginGroup : SvgPart
