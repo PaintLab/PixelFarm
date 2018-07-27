@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.PainterExtensions;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.CpuBlit
@@ -184,30 +183,10 @@ namespace PixelFarm.CpuBlit
         ClipSimpleRect
     }
 
-    static class ClipStateStore
-    {
-        //-----------------------------------
-        [System.ThreadStatic]
-        static Stack<Stack<ClipingTechnique>> s_clipingTechStack = new Stack<Stack<ClipingTechnique>>();
-        public static void GetFreeBoolStack(out Stack<ClipingTechnique> clipTechStack)
-        {
-            if (s_clipingTechStack.Count > 0)
-            {
-                clipTechStack = s_clipingTechStack.Pop();
-            }
-            else
-            {
-                clipTechStack = new Stack<ClipingTechnique>();
-            }
-        }
-        public static void ReleaseBoolStack(ref Stack<ClipingTechnique> clipTechStack)
-        {
-            clipTechStack.Clear();
-            s_clipingTechStack.Push(clipTechStack);
-            clipTechStack = null;
-        }
 
-        //-----
+
+    static class TempVgRenderStateStore
+    {
 
         [System.ThreadStatic]
         static Stack<Stack<TempVgRenderState>> s_tempVgRenderStates = new Stack<Stack<TempVgRenderState>>();
@@ -228,9 +207,7 @@ namespace PixelFarm.CpuBlit
             s_tempVgRenderStates.Push(tmpVgStateStack);
             tmpVgStateStack = null;
         }
-    }
-
-
+    } 
     struct TempVgRenderState
     {
         public float strokeWidth;
@@ -240,8 +217,11 @@ namespace PixelFarm.CpuBlit
         public ClipingTechnique clippingTech;
     }
 
+
     public class VgRenderVx : RenderVx
     {
+
+       
 
 
         Image _backimg;
@@ -337,7 +317,7 @@ namespace PixelFarm.CpuBlit
             //------------------ 
             int j = _cmds.Length;
 
-            ClipStateStore.GetFreeTempVgRenderState(out Stack<TempVgRenderState> vgStateStack);
+            TempVgRenderStateStore.GetFreeTempVgRenderState(out Stack<TempVgRenderState> vgStateStack);
             int i = 0;
 
             if (this.PrefixCommand != null)
@@ -643,7 +623,7 @@ namespace PixelFarm.CpuBlit
                         break;
                 }
             }
-            ClipStateStore.ReleaseTempVgRenderState(ref vgStateStack);
+            TempVgRenderStateStore.ReleaseTempVgRenderState(ref vgStateStack);
         }
 
         static VertexStore GetStrokeVxsOrCreateNew(VgCmd s, Painter p, float strokeW)
