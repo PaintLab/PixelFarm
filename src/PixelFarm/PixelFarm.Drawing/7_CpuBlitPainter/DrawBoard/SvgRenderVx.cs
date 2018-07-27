@@ -51,7 +51,6 @@ namespace PixelFarm.CpuBlit
             public Color strokeColor;
             public Color fillColor;
             public Affine affineTx;
-            public SvgClipPath clipPath;
 
         }
 
@@ -143,7 +142,8 @@ namespace PixelFarm.CpuBlit
 
             //------------------ 
             int j = _vxList.Length;
-            Stack<bool> _hasClipPaths = new Stack<bool>();
+
+            VectorToolBox.GetFreeBoolStack(out Stack<bool> hasClipPaths);
 
             for (int i = 0; i < j; ++i)
             {
@@ -184,7 +184,7 @@ namespace PixelFarm.CpuBlit
                             }
                             //
                             // 
-                            _hasClipPaths.Push((vx.ClipPath != null));
+                            hasClipPaths.Push((vx.ClipPath != null));
 
                             if (vx.ClipPath != null)
                             {
@@ -193,7 +193,7 @@ namespace PixelFarm.CpuBlit
                                 {
                                     AggPainter aggPainter = (AggPainter)p;
                                     aggPainter.TargetBufferName = TargetBufferName.AlphaMask;
-                                    
+
                                     //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
 
                                     var prevColor = aggPainter.FillColor;
@@ -235,7 +235,7 @@ namespace PixelFarm.CpuBlit
                             p.StrokeWidth = renderState.strokeWidth;
                             currentTx = renderState.affineTx;
 
-                            bool hasClip = _hasClipPaths.Pop();
+                            bool hasClip = hasClipPaths.Pop();
                             if (hasClip)
                             {
                                 //clear mask filter                               
@@ -243,7 +243,7 @@ namespace PixelFarm.CpuBlit
                                 AggPainter aggPainter = (AggPainter)p;
                                 aggPainter.EnableBuiltInMaskComposite = false;
                                 aggPainter.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
-                                aggPainter.Clear(Color.Black);                               
+                                aggPainter.Clear(Color.Black);
                                 aggPainter.TargetBufferName = TargetBufferName.Default;
                             }
                         }
@@ -353,8 +353,8 @@ namespace PixelFarm.CpuBlit
                         break;
                 }
             }
+            VectorToolBox.ReleaseBoolStack(ref hasClipPaths); //temp
         }
-
 
         static VertexStore GetStrokeVxsOrCreateNew(SvgPart s, Painter p, float strokeW)
         {
