@@ -23,13 +23,17 @@ namespace LayoutFarm
 
 
             SvgPart svgPart = new SvgPart(SvgRenderVxKind.Path);
-            VertexStore vxs = new VertexStore();
-            vxs.AddMoveTo(100, 20);
-            vxs.AddLineTo(150, 50);
-            vxs.AddLineTo(110, 80);
-            vxs.AddCloseFigure();
-            //-------------------------------------------
-            svgPart.SetVxsAsOriginal(vxs);
+            //------------------------------------------- 
+            using (VxsContext.Temp(out VertexStore vxs))
+            {
+                vxs.AddMoveTo(100, 20);
+                vxs.AddLineTo(150, 50);
+                vxs.AddLineTo(110, 80);
+                vxs.AddCloseFigure();
+                svgPart.SetVxs(vxs.CreateTrim());
+            }
+
+
             svgPart.FillColor = Color.Red;
             SvgRenderVx svgRenderVx = new SvgRenderVx(new SvgPart[] { svgPart });
             svgRenderVx.DisableBackingImage = true;
@@ -37,7 +41,7 @@ namespace LayoutFarm
 
             var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0) 
             uiSprite.LoadSvg(svgRenderVx);
-            host.AddChild(uiSprite); 
+            host.AddChild(uiSprite);
 
             var spriteEvListener = new GeneralEventListener();
             uiSprite.AttachExternalEventListener(spriteEvListener);
