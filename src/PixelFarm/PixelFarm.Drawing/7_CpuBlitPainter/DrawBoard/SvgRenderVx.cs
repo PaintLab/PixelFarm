@@ -30,7 +30,6 @@ namespace PixelFarm.CpuBlit
             _vxs = vxs;
 
         }
-
         object _resolvedObject;
         public static object GetResolvedObject(VxsRenderVx vxsRenerVx)
         {
@@ -679,7 +678,6 @@ namespace PixelFarm.CpuBlit
     {
         public VgCmdBeginGroup() : base(VgCommandName.BeginGroup)
         {
-
         }
         public override VgCmd Clone()
         {
@@ -758,174 +756,5 @@ namespace PixelFarm.CpuBlit
         public abstract VgCmd Clone();
     }
 
-    //    public class SvgCmd
-    //    {
-    //        VertexStore _vxs;
-    //        VertexStore _vxs_org;
-    //        Color _fillColor;
-    //        Color _strokeColor;
-    //        float _strokeWidth;
-
-
-    //        double _strokeVxsStrokeWidth;
-    //#if DEBUG
-    //        static int dbugTotalId;
-    //        public readonly int dbugId = dbugTotalId++;
-    //#endif
-    //        public SvgCmd(VgCommandKind kind)
-    //        {
-
-    //#if DEBUG
-    //            //if (dbugId == 37)
-    //            //{
-
-    //            //}
-    //            //Console.WriteLine(dbugId);
-    //#endif
-    //            this.Kind = kind;
-    //        }
-    //        public VgCommandKind Kind
-    //        {
-    //            get;
-    //            private set;
-    //        }
-
-    //        public bool HasFillColor { get; private set; }
-    //        public bool HasStrokeColor { get; private set; }
-    //        public bool HasStrokeWidth { get; private set; }
-
-    //        public Color FillColor
-    //        {
-    //            get { return _fillColor; }
-    //            set
-    //            {
-    //                _fillColor = value;
-    //                HasFillColor = true;
-    //            }
-    //        }
-    //        public Color StrokeColor
-    //        {
-    //            get { return _strokeColor; }
-    //            set
-    //            {
-    //                _strokeColor = value;
-    //                HasStrokeColor = true;
-    //            }
-    //        }
-
-
-    //        public void RestoreOrg()
-    //        {
-    //            _vxs = _vxs_org;
-    //            if (_vxs == null)
-    //            {
-
-    //            }
-    //        }
-    //        public void SetVxs(VertexStore vxs)
-    //        {
-    //            this._vxs = vxs;
-
-    //            if (_vxs == null)
-    //            {
-
-    //            }
-    //        }
-    //        public VertexStore GetVxs()
-    //        {
-    //#if DEBUG
-    //            if (_vxs != null && _vxs._dbugIsChanged)
-    //            {
-
-    //            }
-    //#endif
-    //            return _vxs;
-    //        }
-    //        public float StrokeWidth
-    //        {
-    //            get { return _strokeWidth; }
-    //            set
-    //            {
-    //                _strokeWidth = value;
-    //                HasStrokeWidth = true;
-    //            }
-    //        }
-
-    //        public SvgClipPath ClipPath { get; set; }
-    //        public Affine AffineTx { get; set; }
-    //        public VertexStore StrokeVxs
-    //        {
-    //            get;
-    //            set;
-    //        }
-    //        public static SvgCmd TransformToNew(SvgCmd originalSvgVx, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
-    //        {
-    //            SvgCmd newSx = new SvgCmd(originalSvgVx.Kind);
-    //            if (originalSvgVx._vxs != null)
-    //            {
-    //                using (VxsContext.Temp(out var vxs))
-    //                {
-    //                    tx.TransformToVxs(originalSvgVx._vxs, vxs);
-    //                    newSx._vxs = vxs.CreateTrim();
-    //                }
-    //            }
-
-    //            if (originalSvgVx.HasFillColor)
-    //            {
-    //                newSx.FillColor = originalSvgVx._fillColor;
-    //            }
-    //            if (originalSvgVx.HasStrokeColor)
-    //            {
-    //                newSx.StrokeColor = originalSvgVx.StrokeColor;
-    //            }
-    //            if (originalSvgVx.HasStrokeWidth)
-    //            {
-    //                newSx.StrokeWidth = originalSvgVx.StrokeWidth;
-    //            }
-    //            return newSx;
-    //        }
-    //        public static SvgCmd TransformToNew(SvgCmd originalSvgVx, PixelFarm.CpuBlit.VertexProcessing.Bilinear tx)
-    //        {
-    //            SvgCmd newSx = new SvgCmd(originalSvgVx.Kind);
-    //            newSx.SetVxsAsOriginal(originalSvgVx.GetVxs());
-
-    //            if (newSx._vxs != null)
-    //            {
-    //                using (VxsContext.Temp(out var vxs))
-    //                {
-    //                    tx.TransformToVxs(originalSvgVx._vxs, vxs);
-    //                    newSx._vxs = vxs.CreateTrim();
-    //                }
-    //            }
-
-    //            if (originalSvgVx.HasFillColor)
-    //            {
-    //                newSx._fillColor = originalSvgVx._fillColor;
-    //            }
-    //            if (originalSvgVx.HasStrokeColor)
-    //            {
-    //                newSx.StrokeColor = originalSvgVx.StrokeColor;
-    //            }
-    //            if (originalSvgVx.HasStrokeWidth)
-    //            {
-    //                newSx.StrokeWidth = originalSvgVx.StrokeWidth;
-    //            }
-
-
-    //            return newSx;
-    //        }
-
-
-    //        //
-    //        object _resolvedObject; //platform's object
-    //        public static object GetResolvedObject(SvgCmd vxsRenerVx)
-    //        {
-    //            return vxsRenerVx._resolvedObject;
-    //        }
-    //        public static void SetResolvedObject(SvgCmd vxsRenerVx, object obj)
-    //        {
-    //            vxsRenerVx._resolvedObject = obj;
-    //        }
-    //    }
 
 }
