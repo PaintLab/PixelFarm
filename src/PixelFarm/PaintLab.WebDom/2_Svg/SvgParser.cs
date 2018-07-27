@@ -582,13 +582,14 @@ namespace PaintLab.Svg
     public class SvgDocBuilder : ISvgDocBuilder
     {
         Stack<SvgElement> _elems = new Stack<SvgElement>();
-        SvgElement _currentElem;
         CssParser _cssParser = new CssParser();
-        SvgDocument _svgDoc = new SvgDocument();
+
+        SvgElement _currentElem;
+        SvgDocument _svgDoc;
 
         public SvgDocBuilder()
         {
-            _currentElem = _svgDoc.Root;
+            
         }
         public SvgDocument ResultDocument
         {
@@ -597,6 +598,8 @@ namespace PaintLab.Svg
         public void OnBegin()
         {
             _elems.Clear();
+            _svgDoc = new SvgDocument();
+            _currentElem = _svgDoc.Root;             
         }
         public void OnVisitNewElement(string elemName)
         {
