@@ -97,6 +97,8 @@ namespace PixelFarm.Drawing
         public abstract void FillRenderVx(Brush brush, RenderVx renderVx);
         public abstract void FillRenderVx(RenderVx renderVx);
         public abstract void DrawRenderVx(RenderVx renderVx);
+        public abstract void Render(RenderVx renderVx);
+
         //////////////////////////////////////////////////////////////////////////////
         //text,string
         //TODO: review text drawing funcs 

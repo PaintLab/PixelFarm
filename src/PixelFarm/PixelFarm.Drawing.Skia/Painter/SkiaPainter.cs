@@ -2,7 +2,6 @@
 using System;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing.PainterExtensions;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
@@ -36,6 +35,10 @@ namespace PixelFarm.Drawing.Skia
             _height = h;
 
             _vectorTool = new PixelFarm.CpuBlit.VectorTool();
+        }
+        public override void Render(RenderVx renderVx)
+        {
+            throw new NotImplementedException();
         }
         public override PainterExtensions.VectorTool VectorTool
         {

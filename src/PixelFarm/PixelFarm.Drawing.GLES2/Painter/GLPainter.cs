@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing.PainterExtensions;
+using PixelFarm.CpuBlit.VertexProcessing; 
 
 namespace PixelFarm.DrawingGL
 {
@@ -53,7 +52,10 @@ namespace PixelFarm.DrawingGL
 
             _vectorTool = new CpuBlit.VectorTool();
         }
-
+        public override void Render(RenderVx renderVx)
+        {
+            throw new NotImplementedException();
+        }
         public override Drawing.PainterExtensions.VectorTool VectorTool
         {
             get { return _vectorTool; }

@@ -3,7 +3,6 @@
 using System;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -534,6 +533,10 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
+        public override void Render(RenderVx renderVx)
+        {
+            throw new NotImplementedException();
+        }
         //VertexStorePool _vxsPool = new VertexStorePool();
         //VertexStore GetFreeVxs()
         //{

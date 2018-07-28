@@ -35,6 +35,10 @@ namespace PixelFarm.Drawing.Pdf
         {
             _vectorTool = new PixelFarm.CpuBlit.VectorTool();
         }
+        public override void Render(RenderVx renderVx)
+        {
+            throw new NotImplementedException();
+        }
         public override PainterExtensions.VectorTool VectorTool
         {
             get { return _vectorTool; }

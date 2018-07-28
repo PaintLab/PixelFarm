@@ -94,16 +94,21 @@ namespace PixelFarm.CpuBlit
         }
         public void Paint(Painter p)
         {
-            _svgRenderVx.Render(p);
+            p.Render(_svgRenderVx);
+            //_svgRenderVx.Render(p);
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
         {
-            _svgRenderVx.Render(p);
+            //TODO: implement this...
+            //use prefix command for render vx
+            p.Render(_svgRenderVx);
+            //_svgRenderVx.Render(p);
         }
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
         {
-
+            //TODO: implement this...
+            //use prefix command for render vx
         }
         public void DrawOutline(Painter p)
         {
