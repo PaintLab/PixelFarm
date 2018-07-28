@@ -56,7 +56,7 @@ namespace LayoutFarm.UI
 
             }
 
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
+            //PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
 
             //
 

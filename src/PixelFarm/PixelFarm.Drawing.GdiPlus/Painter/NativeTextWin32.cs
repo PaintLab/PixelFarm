@@ -502,14 +502,19 @@ namespace PixelFarm.Drawing.WinGdi
     {
         FontFace nopenTypeFontFace;
         FontStyle style;
-        static IInstalledTypefaceProvider s_installledTypefaceProvider;
+        static IInstalledTypefaceProvider s_installedTypefaceProvider;
 
         public WinGdiFontFace(RequestFont f)
         {
             this.style = f.Style;
             //resolve
-            InstalledTypeface foundInstalledFont = s_installledTypefaceProvider.GetInstalledTypeface(f.Name, style.ConvToInstalledFontStyle());
+            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, style.ConvToInstalledFontStyle());
             //TODO: review 
+            if (foundInstalledFont == null)
+            {
+                //not found
+
+            }
             this.nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
         }
         public override int RecommendedLineHeight
@@ -522,15 +527,15 @@ namespace PixelFarm.Drawing.WinGdi
         public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {
             //warning if duplicate
-            if (s_installledTypefaceProvider != null)
+            if (s_installedTypefaceProvider != null)
             {
 
             }
-            s_installledTypefaceProvider = provider;
+            s_installedTypefaceProvider = provider;
         }
         protected override void OnDispose()
         {
-            s_installledTypefaceProvider = null;
+            s_installedTypefaceProvider = null;
         }
         public override string FontPath
         {

@@ -58,6 +58,31 @@ namespace YourImplementation
             s_isInit = true;
             s_intalledTypefaces = new InstalledTypefaceCollection();
             s_intalledTypefaces.LoadSystemFonts();
+            s_intalledTypefaces.SetFontNotFoundHandler((collection, fontName, subFam) =>
+            {
+
+                if (fontName == "Tahoma")
+                {
+                    if (subFam == "BOLD")
+                    {
+                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "GRAS");
+                        if (anotherCandidate != null)
+                        {
+                            return anotherCandidate;
+                        }
+                    }
+                    else if (subFam == "ITALIC")
+                    {
+                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "NORMAL");
+                        if (anotherCandidate != null)
+                        {
+                            return anotherCandidate;
+                        }
+                    }
+                }
+
+                return null;
+            });
             //--------------------
 
             //1. Storage provider
