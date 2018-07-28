@@ -542,21 +542,7 @@ namespace PixelFarm.CpuBlit
                                             else
                                             {
                                                 VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, p, (float)p.StrokeWidth);
-                                                p.Fill(strokeVxs, renderState.strokeColor);
-
-                                                //if (currentTx == null)
-                                                //{
-
-                                                //}
-                                                //else
-                                                //{
-                                                //    //have some tx  
-                                                //    using (VxsContext.Temp(out var v2))
-                                                //    {
-                                                //        currentTx.TransformToVxs(strokeVxs, v2);
-                                                //        p.Fill(v2, renderState.strokeColor);
-                                                //    }
-                                                //}
+                                                p.Fill(strokeVxs, renderState.strokeColor); 
                                             }
                                         }
                                     }
