@@ -18,6 +18,7 @@ namespace PixelFarm.CpuBlit
         ClipPath,
         FillColor,
         StrokeColor,
+        StrokeWidth,
         AffineTransform,
     }
 
@@ -310,7 +311,7 @@ namespace PixelFarm.CpuBlit
             Affine currentTx = null;
             var renderState = new TempVgRenderState();
             renderState.strokeColor = p.StrokeColor;
-            p.StrokeWidth = renderState.strokeWidth = 1;//default (float)p.StrokeWidth;
+            p.StrokeWidth = renderState.strokeWidth = 1;//default  
             renderState.fillColor = p.FillColor;
             renderState.affineTx = currentTx;
             renderState.clippingTech = ClipingTechnique.None;
@@ -387,6 +388,9 @@ namespace PixelFarm.CpuBlit
                         break;
                     case VgCommandName.StrokeColor:
                         p.StrokeColor = renderState.strokeColor = ((VgCmdStrokeColor)vx).Color;
+                        break;
+                    case VgCommandName.StrokeWidth:
+                        p.StrokeWidth = renderState.strokeWidth = ((VgCmdStrokeWidth)vx).Width;
                         break;
                     case VgCommandName.AffineTransform:
                         {
@@ -515,24 +519,9 @@ namespace PixelFarm.CpuBlit
                                         else
                                         {
                                             VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, p, (float)p.StrokeWidth);
-                                            if (currentTx == null)
-                                            {
-                                                p.Fill(strokeVxs, renderState.strokeColor);
-                                            }
-                                            else
-                                            {
-                                                //have some tx 
-
-                                                using (VxsContext.Temp(out var v1))
-                                                {
-                                                    currentTx.TransformToVxs(strokeVxs, v1);
-                                                    p.Fill(v1, renderState.strokeColor);
-                                                }
-                                            }
+                                            p.Fill(strokeVxs, renderState.strokeColor);
                                         }
                                     }
-
-
                                 }
                                 else
                                 {
@@ -541,6 +530,7 @@ namespace PixelFarm.CpuBlit
                                     {
                                         currentTx.TransformToVxs(vxs, v1);
                                         p.Fill(v1);
+
                                         //to draw stroke
                                         //stroke width must > 0 and stroke-color must not be transparent color 
                                         if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
@@ -555,122 +545,26 @@ namespace PixelFarm.CpuBlit
                                             else
                                             {
                                                 VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, p, (float)p.StrokeWidth);
-                                                if (currentTx == null)
-                                                {
-                                                    p.Fill(strokeVxs, renderState.strokeColor);
-                                                }
-                                                else
-                                                {
-                                                    //have some tx  
-                                                    using (VxsContext.Temp(out var v2))
-                                                    {
-                                                        currentTx.TransformToVxs(strokeVxs, v2);
-                                                        p.Fill(v2, renderState.strokeColor);
-                                                    }
-                                                }
+                                                p.Fill(strokeVxs, renderState.strokeColor);
+
+                                                //if (currentTx == null)
+                                                //{
+
+                                                //}
+                                                //else
+                                                //{
+                                                //    //have some tx  
+                                                //    using (VxsContext.Temp(out var v2))
+                                                //    {
+                                                //        currentTx.TransformToVxs(strokeVxs, v2);
+                                                //        p.Fill(v2, renderState.strokeColor);
+                                                //    }
+                                                //}
                                             }
                                         }
                                     }
                                 }
                             }
-
-                            //if (vx.HasFillColor)
-                            //{
-                            //    //has specific fill color
-                            //    if (vx.FillColor.A > 0)
-                            //    {
-                            //        if (currentTx == null)
-                            //        {
-                            //            p.Fill(vxs, vx.FillColor);
-                            //        }
-                            //        else
-                            //        {
-                            //            //have some tx
-                            //            using (VxsContext.Temp(out var v1))
-                            //            {
-                            //                currentTx.TransformToVxs(vxs, v1);
-                            //                p.Fill(v1, vx.FillColor);
-                            //            }
-                            //        }
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    if (p.FillColor.A > 0)
-                            //    {
-                            //        if (currentTx == null)
-                            //        {
-                            //            p.Fill(vxs);
-                            //        }
-                            //        else
-                            //        {
-                            //            //have some tx
-
-                            //            using (VxsContext.Temp(out var v1))
-                            //            {
-                            //                currentTx.TransformToVxs(vxs, v1);
-                            //                p.Fill(v1);
-                            //            }
-                            //        }
-                            //    }
-                            //}
-
-
-
-                            //if (p.StrokeWidth > 0)
-                            //{
-                            //    //check if we have a stroke version of this render vx
-                            //    //if not then request a new one  
-
-                            //    //p.StrokeWidth = vx.StrokeWidth;
-
-                            //    if (vx.HasStrokeColor || p.StrokeColor.A > 0)
-                            //    {
-                            //        //has specific stroke color  
-                            //        AggPainter aggPainter = p as AggPainter;
-                            //        if (aggPainter != null && aggPainter.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                            //        {
-                            //            //TODO: review here again
-                            //            aggPainter.Draw(new VertexStoreSnap(vx.GetVxs()), vx.StrokeColor);
-                            //        }
-                            //        else
-                            //        {
-                            //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                            //            if (currentTx == null)
-                            //            {
-                            //                p.Fill(strokeVxs, vx.StrokeColor);
-                            //            }
-                            //            else
-                            //            {
-                            //                //have some tx 
-
-                            //                using (VxsContext.Temp(out var v1))
-                            //                {
-                            //                    currentTx.TransformToVxs(strokeVxs, v1);
-                            //                    p.Fill(v1, renderState.strokeColor);
-                            //                }
-                            //            }
-                            //        }
-                            //    }
-
-                            //}
-                            //else
-                            //{
-
-                            //    if (vx.HasStrokeColor || p.StrokeColor.A > 0)
-                            //    {
-                            //        AggPainter aggPainter = p as AggPainter;
-                            //        if (aggPainter != null && aggPainter.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                            //        {
-                            //            aggPainter.Draw(new VertexStoreSnap(vx.GetVxs()), vx.StrokeColor);
-                            //        }
-                            //        else
-                            //        {
-                            //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                            //            p.Fill(strokeVxs);
-                            //        }
-                            //    }
-                            //}
                         }
                         break;
                 }
@@ -775,6 +669,15 @@ namespace PixelFarm.CpuBlit
         public override VgCmd Clone()
         {
             return new VgCmdStrokeColor(Color);
+        }
+    }
+    public class VgCmdStrokeWidth : VgCmd
+    {
+        public VgCmdStrokeWidth(float w) : base(VgCommandName.StrokeWidth) { Width = w; }
+        public float Width { get; set; }
+        public override VgCmd Clone()
+        {
+            return new VgCmdStrokeWidth(Width);
         }
     }
     public class VgCmdAffineTransform : VgCmd

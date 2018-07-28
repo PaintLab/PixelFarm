@@ -129,7 +129,7 @@ namespace PixelFarm.CpuBlit
             }
             if (spec.HasStrokeWidth)
             {
-                //part.StrokeColor = spec.StrokeColor;
+                cmds.Add(new VgCmdStrokeWidth(spec.StrokeWidth.Number)); 
             }
             if (spec.Transform != null)
             {
