@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.FragmentProcessing;
 using PixelFarm.CpuBlit.PixelProcessing;
 
@@ -16,9 +15,7 @@ namespace PixelFarm.CpuBlit
     class MyBitmapBlender : BitmapBlenderBase
     {
         ActualBitmap actualImage;
-
-
-        public MyBitmapBlender(ActualBitmap actualImage, PixelProcessing.PixelBlender32 pxBlender)
+        public MyBitmapBlender(ActualBitmap actualImage, PixelBlender32 pxBlender)
         {
             this.actualImage = actualImage;
             Attach(actualImage);
@@ -29,16 +26,6 @@ namespace PixelFarm.CpuBlit
         }
 
     }
-    public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
-    {
-        Stroke _stroke = new Stroke(1);
-        public override void CreateStroke(VertexStore orgVxs, float strokeW, VertexStore output)
-        {
-            _stroke.Width = strokeW;
-            _stroke.MakeVxs(orgVxs, output);
-
-        }
-    }
 
 
     public enum LineRenderingTechnique
@@ -47,27 +34,25 @@ namespace PixelFarm.CpuBlit
         OutlineAARenderer,
 
     }
+
+
+
     public class AggPainter : Painter
     {
-        AggRenderSurface _aggsx; //target rendering surface
+        AggRenderSurface _aggsx; //target rendering surface  
+        BitmapBuffer _bxt;
+        //--------------------
+        AggRenderSurface _aggsx_0; //primary render surface
+        AggRenderSurface _aggsx_mask;
 
 
-        //low-level rasterizer
-        ScanlinePacked8 scline;
-        ScanlineRasterizer sclineRas;
 
-
+        //--------------------
         //low-level outline renderer
         LineRenderingTechnique _lineRenderingTech;
-
         Rasterization.Lines.LineProfileAnitAlias _lineProfileAA;
-        Rasterization.Lines.OutlineAARasterizer _outlineRas;
+        Rasterization.Lines.OutlineAARasterizer _outlineRas; //low-level outline aa
 
-
-        /// <summary>
-        /// scanline rasterizer to bitmap
-        /// </summary>
-        DestBitmapRasterizer _bmpRasterizer;
         //--------------------
         //pen 
         Stroke _stroke;
@@ -90,31 +75,36 @@ namespace PixelFarm.CpuBlit
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
-        BitmapBuffer _bxt;
-        VectorTool _vectorTool;
+
+
 
         Brush _curBrush;
         Pen _curPen;
 
+        //
+        PixelBlender32 _defaultPixelBlender;
+        PixelBlenderWithMask maskPixelBlender;
+        PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo;
+        //
 
         bool _useDefaultBrush;
 
         public AggPainter(AggRenderSurface aggsx)
         {
             //painter paint to target surface
-            this._aggsx = aggsx;
-            this.sclineRas = _aggsx.ScanlineRasterizer;
-            this._stroke = new Stroke(1);//default
-            this.scline = aggsx.ScanlinePacked8;
-            this._bmpRasterizer = aggsx.BitmapRasterizer;
+
             _orientation = DrawBoardOrientation.LeftBottom;
-            //from membuffer
-            _bxt = new BitmapBuffer(aggsx.Width,
-                aggsx.Height,
-                 ActualBitmap.GetBuffer(aggsx.DestActualImage));
-            _vectorTool = new VectorTool();
+
+            //----------------------------------------------------
+            _aggsx_0 = aggsx; //set this as default ***            
+            TargetBufferName = TargetBufferName.Default;
+
+
+            this._stroke = new Stroke(1);//default
+
             _useDefaultBrush = true;
 
+            _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
         public LineRenderingTechnique LineRenderingTech
@@ -127,7 +117,7 @@ namespace PixelFarm.CpuBlit
                      && _outlineRas == null)
                 {
 
-                  
+
                     _lineProfileAA = new Rasterization.Lines.LineProfileAnitAlias(this.StrokeWidth, null);
 
                     var blender = new PixelBlenderBGRA();
@@ -205,12 +195,6 @@ namespace PixelFarm.CpuBlit
             return new AggPainter(renderSx);
         }
 
-
-        public override Drawing.PainterExtensions.VectorTool VectorTool
-        {
-            get { return _vectorTool; }
-        }
-
         public AggRenderSurface RenderSurface
         {
             get { return this._aggsx; }
@@ -218,7 +202,7 @@ namespace PixelFarm.CpuBlit
 
         public BitmapBlenderBase DestBitmapBlender
         {
-            get { return this._aggsx.DestImage; }
+            get { return this._aggsx.DestBitmapBlender; }
         }
 
 
@@ -249,16 +233,16 @@ namespace PixelFarm.CpuBlit
         }
         public override float OriginX
         {
-            get { return sclineRas.OffsetOriginX; }
+            get { return _aggsx.ScanlineRasOriginX; }
         }
         public override float OriginY
         {
-            get { return sclineRas.OffsetOriginY; }
+            get { return _aggsx.ScanlineRasOriginY; }
         }
         public override void SetOrigin(float x, float y)
         {
-            sclineRas.OffsetOriginX = x;
-            sclineRas.OffsetOriginY = y;
+            _aggsx.SetScanlineRasOrigin(x, y);
+
         }
         RenderQualtity _renderQuality;
         public override RenderQualtity RenderQuality
@@ -282,12 +266,12 @@ namespace PixelFarm.CpuBlit
                         //TODO: review here
                         //anti alias != lcd technique 
                         this.RenderQuality = RenderQualtity.HighQuality;
-                        _aggsx.UseSubPixelRendering = true;
+                        _aggsx.UseSubPixelLcdEffect = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
                     default:
                         this.RenderQuality = RenderQualtity.Fast;
-                        _aggsx.UseSubPixelRendering = false;
+                        _aggsx.UseSubPixelLcdEffect = false;
                         break;
                 }
             }
@@ -878,9 +862,11 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-            //Agg
-            sclineRas.AddPath(snap);
-            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            _aggsx.Render(snap, fillColor);
+
+            //_sclineRas.Reset();
+            //_sclineRas.AddPath(snap);
+            //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
         }
         /// <summary>
         /// fill vxs, we do NOT store vxs
@@ -923,40 +909,44 @@ namespace PixelFarm.CpuBlit
                         break;
                     default:
                         {
-                            sclineRas.AddPath(vxs);
-                            _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                            //_sclineRas.AddPath(vxs);
+                            //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
 
+                            _aggsx.Render(vxs, fillColor);
                         }
                         break;
                 }
             }
             else
             {
-                sclineRas.AddPath(vxs);
-                _bmpRasterizer.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+                _aggsx.Render(vxs, fillColor);
+
+                //_sclineRas.AddPath(vxs);
+                //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
             }
-
-
         }
+        public override void Render(RenderVx renderVx)
+        {
+            if (renderVx is VgRenderVx)
+            {
+                Render((VgRenderVx)renderVx);
+            }
+            else
+            {
+                //?
+                throw new NotSupportedException();
+            }
+        }
+
         public override bool UseSubPixelLcdEffect
         {
             get
             {
-                return this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect;
+                return _aggsx.UseSubPixelLcdEffect;
             }
             set
             {
-                if (value)
-                {
-                    //TODO: review here again             
-                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = true;
-                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.SubPixelLcdEffect;
-                }
-                else
-                {
-                    this.sclineRas.ExtendWidthX3ForSubPixelLcdEffect = false;
-                    this._bmpRasterizer.ScanlineRenderMode = ScanlineRenderMode.Default;
-                }
+                _aggsx.UseSubPixelLcdEffect = value;
             }
         }
         public override Color FillColor
@@ -980,8 +970,10 @@ namespace PixelFarm.CpuBlit
         /// <param name="spanGen"></param>
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
-            this.sclineRas.AddPath(vxs);
-            _bmpRasterizer.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
+            _aggsx.Render(vxs, spanGen);
+
+            //this._sclineRas.AddPath(vxs);
+            //_bmpRasterizer.RenderWithSpan(this._aggsx.DestImage, _sclineRas, _scline, spanGen);
         }
         void DrawBitmap(ActualBitmap actualBmp, double left, double top)
         {
@@ -1005,7 +997,7 @@ namespace PixelFarm.CpuBlit
             bool useSubPix = UseSubPixelLcdEffect;
             //before render an image we turn off vxs subpixel rendering
             this.UseSubPixelLcdEffect = false;
-            _aggsx.UseSubPixelRendering = false;
+            _aggsx.UseSubPixelLcdEffect = false;
 
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
@@ -1021,7 +1013,7 @@ namespace PixelFarm.CpuBlit
 
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
-            _aggsx.UseSubPixelRendering = useSubPix;
+            _aggsx.UseSubPixelLcdEffect = useSubPix;
         }
         void DrawBitmap(ActualBitmap actualBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
@@ -1048,7 +1040,6 @@ namespace PixelFarm.CpuBlit
             bool useSubPix = UseSubPixelLcdEffect;
             //before render an image we turn off vxs subpixel rendering
             this.UseSubPixelLcdEffect = false;
-            _aggsx.UseSubPixelRendering = false;
 
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
@@ -1064,7 +1055,6 @@ namespace PixelFarm.CpuBlit
 
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
-            _aggsx.UseSubPixelRendering = useSubPix;
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
@@ -1119,11 +1109,11 @@ namespace PixelFarm.CpuBlit
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
             this.UseSubPixelLcdEffect = false;
-            _aggsx.UseSubPixelRendering = false;
+
             this._aggsx.Render(actualImg, affinePlans);
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
-            _aggsx.UseSubPixelRendering = useSubPix;
+
         }
         public override void ApplyFilter(ImageFilter imgFilter)
         {
@@ -1209,7 +1199,360 @@ namespace PixelFarm.CpuBlit
             get { return this._lineDashGen; }
             set { this._lineDashGen = value; }
         }
+
+
+
+        //---------------------------------------------------------------
+        TargetBufferName _targetBufferName;
+        bool _enableBuiltInMaskComposite;
+        ActualBitmap _alphaBitmap;
+
+        void SetupMaskPixelBlender()
+        {
+            if (_aggsx_mask != null) return;
+            //----------
+            //same size                  
+
+            _alphaBitmap = new ActualBitmap(_aggsx_0.Width, _aggsx_0.Height);
+            _aggsx_mask = new AggRenderSurface(_alphaBitmap) { PixelBlender = new PixelBlenderBGRA() };
+
+            maskPixelBlender = new PixelBlenderWithMask();
+            maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
+
+            maskPixelBlender.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
+            maskPixelBlenderPerCompo.SetMaskBitmap(_alphaBitmap); //same alpha bitmap
+        }
+        public TargetBufferName TargetBufferName
+        {
+            get { return _targetBufferName; }
+            set
+            {
+                //change or not
+                if (_targetBufferName != value)
+                {
+                    switch (value)
+                    {
+                        default: throw new NotSupportedException();
+                        case TargetBufferName.Default:
+                            //default 
+                            _aggsx = _aggsx_0; //*** 
+                            break;
+                        case TargetBufferName.AlphaMask:
+                            SetupMaskPixelBlender();
+                            _aggsx = _aggsx_mask;//*** 
+                            break;
+                    }
+
+                    _bxt = new BitmapBuffer(
+                         _aggsx.Width,
+                         _aggsx.Height,
+                         ActualBitmap.GetBuffer(_aggsx.DestActualImage));
+
+                    _targetBufferName = value;
+                }
+
+            }
+        }
+        public bool EnableBuiltInMaskComposite
+        {
+            get { return _enableBuiltInMaskComposite; }
+            set
+            {
+                if (_enableBuiltInMaskComposite != value)
+                {
+                    _enableBuiltInMaskComposite = value;
+                    if (value)
+                    {
+                        //use mask composite
+                        this.DestBitmapBlender.OutputPixelBlender = maskPixelBlender;
+                    }
+                    else
+                    {
+                        //use default composite
+                        this.DestBitmapBlender.OutputPixelBlender = _defaultPixelBlender;
+                    }
+                }
+            }
+        }
+
+
+        //--------------------------------------------------------------------------
+        void Render(VgRenderVx renderVx)
+        {
+            if (renderVx.HasBitmapSnapshot)
+            {
+                this.DrawImage(renderVx.BackingImage, renderVx.X, renderVx.Y);
+                return;
+            }
+
+            Affine currentTx = null;
+            var renderState = new TempVgRenderState();
+            renderState.strokeColor = this.StrokeColor;
+            this.StrokeWidth = renderState.strokeWidth = 1;//default  
+            renderState.fillColor = this.FillColor;
+            renderState.affineTx = currentTx;
+            renderState.clippingTech = ClipingTechnique.None;
+            //------------------ 
+
+            int j = renderVx.VgCmdCount;
+
+            TempVgRenderStateStore.GetFreeTempVgRenderState(out Stack<TempVgRenderState> vgStateStack);
+            int i = 0;
+
+            if (renderVx.PrefixCommand != null)
+            {
+                i = -1;
+            }
+
+            VgCmd vx = null;
+
+            for (; i < j; ++i)
+            {
+                if (i < 0)
+                {
+                    vx = renderVx.PrefixCommand;
+                }
+                else
+                {
+                    vx = renderVx.GetVgCmd(i);
+                }
+
+                switch (vx.Name)
+                {
+                    case VgCommandName.BeginGroup:
+                        {
+                            //1. save current state before enter new state 
+                            vgStateStack.Push(renderState);//save prev state
+                            renderState.clippingTech = ClipingTechnique.None;//reset for this
+                        }
+                        break;
+                    case VgCommandName.EndGroup:
+                        {
+                            switch (renderState.clippingTech)
+                            {
+                                case ClipingTechnique.None: break;
+                                case ClipingTechnique.ClipMask:
+                                    {
+                                        //clear mask filter                               
+                                        //remove from current clip
+
+                                        this.EnableBuiltInMaskComposite = false;
+                                        this.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
+                                        this.Clear(Color.Black);
+                                        this.TargetBufferName = TargetBufferName.Default;
+                                    }
+                                    break;
+                                case ClipingTechnique.ClipSimpleRect:
+                                    {
+                                        this.SetClipBox(0, 0, this.Width, this.Height);
+                                    }
+                                    break;
+                            }
+
+                            //restore to prev state
+                            renderState = vgStateStack.Pop();
+
+                            this.FillColor = renderState.fillColor;
+                            this.StrokeColor = renderState.strokeColor;
+                            this.StrokeWidth = renderState.strokeWidth;
+                            currentTx = renderState.affineTx;
+
+                        }
+                        break;
+                    case VgCommandName.FillColor:
+                        this.FillColor = renderState.fillColor = ((VgCmdFillColor)vx).Color;
+                        break;
+                    case VgCommandName.StrokeColor:
+                        this.StrokeColor = renderState.strokeColor = ((VgCmdStrokeColor)vx).Color;
+                        break;
+                    case VgCommandName.StrokeWidth:
+                        this.StrokeWidth = renderState.strokeWidth = ((VgCmdStrokeWidth)vx).Width;
+                        break;
+                    case VgCommandName.AffineTransform:
+                        {
+                            //apply this to current tx 
+                            if (currentTx != null)
+                            {
+                                //*** IMPORTANT : matrix transform order !***
+                                currentTx = ((VgCmdAffineTransform)vx).TransformMatrix * currentTx;
+                            }
+                            else
+                            {
+                                currentTx = ((VgCmdAffineTransform)vx).TransformMatrix;
+                            }
+                            renderState.affineTx = currentTx;
+                        }
+                        break;
+                    case VgCommandName.ClipPath:
+                        {
+                            //clip-path
+
+                            VgCmdClipPath clipPath = (VgCmdClipPath)vx;
+                            VertexStore clipVxs = ((VgCmdPath)clipPath._svgParts[0]).Vxs;
+
+                            //----------
+                            //for optimization check if clip path is Rect
+                            //if yes => do simple rect clip 
+
+                            if (currentTx != null)
+                            {
+                                //have some tx
+                                using (VxsContext.Temp(out var v1))
+                                {
+                                    currentTx.TransformToVxs(clipVxs, v1);
+                                    //after transform
+                                    //check if v1 is rect clip or not
+                                    //if yes => then just use simple rect clip
+                                    if (SimpleRectClipEvaluator.EvaluateRectClip(v1, out RectangleF clipRect))
+                                    {
+                                        //use simple rect technique
+                                        this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
+                                        renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
+
+                                    }
+                                    else
+                                    {
+                                        //not simple rect => 
+                                        //use mask technique
+
+                                        renderState.clippingTech = ClipingTechnique.ClipMask;
+                                        this.TargetBufferName = TargetBufferName.AlphaMask;
+                                        //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
+                                        var prevColor = this.FillColor;
+                                        this.FillColor = Color.White;
+                                        //aggPainter.StrokeColor = Color.Black; //for debug
+                                        //aggPainter.StrokeWidth = 1; //for debug  
+                                        //p.Draw(v1); //for debug
+                                        this.Fill(v1);
+
+                                        this.FillColor = prevColor;
+                                        this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
+                                        this.EnableBuiltInMaskComposite = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //aggPainter.Draw(clipVxs); //for debug 
+                                //check if clipVxs is rect or not
+                                if (SimpleRectClipEvaluator.EvaluateRectClip(clipVxs, out RectangleF clipRect))
+                                {
+                                    //use simple rect technique
+                                    this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
+                                    renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
+                                }
+                                else
+                                {
+                                    //not simple rect => 
+                                    //use mask technique
+                                    renderState.clippingTech = ClipingTechnique.ClipMask;
+
+                                    this.TargetBufferName = TargetBufferName.AlphaMask;
+                                    //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
+                                    var prevColor = this.FillColor;
+                                    this.FillColor = Color.White;
+                                    //aggPainter.StrokeColor = Color.Black; //for debug
+                                    //aggPainter.StrokeWidth = 1; //for debug 
+
+                                    //p.Draw(v1); //for debug
+                                    this.Fill(clipVxs);
+                                    this.FillColor = prevColor;
+                                    this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
+                                    this.EnableBuiltInMaskComposite = true;
+                                }
+                            }
+
+                        }
+                        break;
+
+                    case VgCommandName.Path:
+                        {
+                            VgCmdPath path = (VgCmdPath)vx;
+                            VertexStore vxs = path.Vxs;
+
+                            if (renderState.fillColor.A > 0)
+                            {
+                                if (currentTx == null)
+                                {
+                                    this.Fill(vxs);
+
+                                    //to draw stroke
+                                    //stroke width must > 0 and stroke-color must not be transparent color
+
+                                    if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
+                                    {
+                                        //has specific stroke color  
+
+                                        if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                        {
+                                            //TODO: review here again
+                                            this.Draw(new VertexStoreSnap(vxs), renderState.strokeColor);
+                                        }
+                                        else
+                                        {
+                                            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, (float)this.StrokeWidth);
+                                            this.Fill(strokeVxs, renderState.strokeColor);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //have some tx
+                                    using (VxsContext.Temp(out var v1))
+                                    {
+                                        currentTx.TransformToVxs(vxs, v1);
+                                        this.Fill(v1);
+
+                                        //to draw stroke
+                                        //stroke width must > 0 and stroke-color must not be transparent color 
+                                        if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
+                                        {
+                                            //has specific stroke color  
+
+                                            if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                            {
+                                                this.Draw(new VertexStoreSnap(v1), renderState.strokeColor);
+                                            }
+                                            else
+                                            {
+                                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)this.StrokeWidth);
+                                                this.Fill(strokeVxs, renderState.strokeColor);
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+            TempVgRenderStateStore.ReleaseTempVgRenderState(ref vgStateStack);
+        }
+        static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
+        {
+
+            using (VxsContext.Temp(out var v1))
+            {
+                TempStrokeTool.GetFreeStroke(out Stroke stroke);
+                stroke.Width = strokeW;
+                stroke.MakeVxs(vxs, v1);
+                VertexStore vx = v1.CreateTrim();
+                TempStrokeTool.ReleaseStroke(ref stroke);
+                return vx;
+            }
+        }
+
     }
+
+
+    public enum TargetBufferName
+    {
+        Unknown,
+        Default,
+        AlphaMask
+    }
+
+
 
 
 

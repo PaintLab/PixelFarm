@@ -146,8 +146,9 @@ namespace LayoutFarm.CustomWidgets
                 this.SetInnerContentSize(
                    (int)innerW,
                    (int)innerH);
-
+#if DEBUG
                 imgRenderBox.dbugBreak = true;
+#endif
             }
             else if (this.HasSpecificHeight)
             {

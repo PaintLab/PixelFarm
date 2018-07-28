@@ -41,6 +41,9 @@
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>1_PrimitiveGeo\BasicGeometries.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
+      <Link>1_PrimitiveGeo\Color.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
       <Link>1_PrimitiveGeo\Rectangle.cs</Link>
     </Compile>
@@ -51,7 +54,6 @@
       <Link>1_PrimitiveGeo\RectInt.cs</Link>
     </Compile>
     <Compile Include="2_Abstract_DrawingElements\Brushes_Pens.cs" />
-    <Compile Include="2_Abstract_DrawingElements\Color.cs" />
     <Compile Include="2_Abstract_DrawingElements\CombineMode.cs" />
     <Compile Include="2_Abstract_DrawingElements\DashStyle.cs" />
     <Compile Include="2_Abstract_DrawingElements\GraphicsPath.cs" />

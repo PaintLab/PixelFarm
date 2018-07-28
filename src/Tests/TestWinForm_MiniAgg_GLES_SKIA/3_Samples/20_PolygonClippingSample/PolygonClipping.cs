@@ -331,7 +331,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
 
 
-        void CreateAndRenderCombined(Painter p, VertexStoreSnap ps1, VertexStoreSnap ps2)
+        void CreateAndRenderCombined(Painter p, VertexStoreSnap vxsSnap1, VertexStoreSnap vxsSnap2)
         {
             List<VertexStore> combined = null;
             switch (this.OpOption)
@@ -340,19 +340,19 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 case OperationOption.None:
                     return;
                 case OperationOption.OR:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Union, false);
+                    combined = VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Union, false);
                     break;
                 case OperationOption.AND:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.InterSect, false);
+                    combined = VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.InterSect, false);
                     break;
                 case OperationOption.XOR:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Xor, false);
+                    combined = VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Xor, false);
                     break;
                 case OperationOption.A_B:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Difference, false);
+                    combined = VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Difference, false);
                     break;
                 case OperationOption.B_A:
-                    combined = VxsClipper.CombinePaths(ps2, ps1, VxsClipperType.Difference, false);
+                    combined = VxsClipper.CombinePaths(vxsSnap2, vxsSnap1, VxsClipperType.Difference, false);
                     break;
             }
 

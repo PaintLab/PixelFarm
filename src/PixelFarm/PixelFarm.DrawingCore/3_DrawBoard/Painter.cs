@@ -97,6 +97,8 @@ namespace PixelFarm.Drawing
         public abstract void FillRenderVx(Brush brush, RenderVx renderVx);
         public abstract void FillRenderVx(RenderVx renderVx);
         public abstract void DrawRenderVx(RenderVx renderVx);
+        public abstract void Render(RenderVx renderVx);
+
         //////////////////////////////////////////////////////////////////////////////
         //text,string
         //TODO: review text drawing funcs 
@@ -111,26 +113,23 @@ namespace PixelFarm.Drawing
         //user's object 
         internal Stack<object> _userObjectStack = new Stack<object>();
         internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
-        public abstract PainterExtensions.VectorTool VectorTool { get; }
+         
     }
 
     namespace PainterExtensions
     {
-        public abstract class VectorTool
-        {
-            public abstract void CreateStroke(VertexStore orgVxs, float strokeW, VertexStore output);
-        }
+         
 
         public static class PainterExt
         {
-            public static void StackPushUserObject(this Painter p, object o)
-            {
-                p._userObjectStack.Push(o);
-            }
-            public static object StackPopUserObject(this Painter p)
-            {
-                return p._userObjectStack.Pop();
-            }
+            //public static void StackPushUserObject(this Painter p, object o)
+            //{
+            //    p._userObjectStack.Push(o);
+            //}
+            //public static object StackPopUserObject(this Painter p)
+            //{
+            //    return p._userObjectStack.Pop();
+            //}
             public static void StackClearUserObject(this Painter p)
             {
                 p._userObjectStack.Clear();

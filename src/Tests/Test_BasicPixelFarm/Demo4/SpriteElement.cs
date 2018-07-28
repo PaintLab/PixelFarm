@@ -6,7 +6,7 @@ using PixelFarm.CpuBlit;
 
 namespace LayoutFarm.UI
 {
-   
+
 
 
     class BackBoardRenderElement : LayoutFarm.CustomWidgets.CustomRenderBox
@@ -44,6 +44,7 @@ namespace LayoutFarm.UI
                 return _backboardRenderE;
             }
             _backboardRenderE = new BackBoardRenderElement(rootgfx, this.Width, this.Height);
+            _backboardRenderE.SetLocation(this.Left, this.Top);
             _backboardRenderE.NeedClipArea = true;
 
             SetPrimaryRenderElement(_backboardRenderE);

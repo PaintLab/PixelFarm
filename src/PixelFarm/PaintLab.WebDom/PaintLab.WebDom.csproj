@@ -31,9 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
+      <Link>Net20\ExtensionAttribute.cs</Link>
+    </Compile>
     <Compile Include="1_Css_Parser\CssParser.cs" />
     <Compile Include="1_Css_Parser\CssParserHelper.cs" />
     <Compile Include="1_Css_Parser\CssValueParser.cs" />
@@ -47,6 +49,7 @@
     <Compile Include="1_Css\UserMapUtil.cs" />
     <Compile Include="1_Css\ValueMaps.cs" />
     <Compile Include="1_Css\WellknownCssPropertyName.cs" />
+    <Compile Include="2_Svg\SvgElements.cs" />
     <Compile Include="2_Svg\SvgPathDataParser.cs" />
     <Compile Include="2_Svg\SvgSpec.cs" />
     <Compile Include="2_Svg\SvgParser.cs" />
@@ -62,9 +65,9 @@
       <Project>{8fba6297-44a9-4c3f-b22d-d33e00669942}</Project>
       <Name>PaintLab.WebLexer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
+    <ProjectReference Include="..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
+      <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
+      <Name>PixelFarm.PrimitiveGeo</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

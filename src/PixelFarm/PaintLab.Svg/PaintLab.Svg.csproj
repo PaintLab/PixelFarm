@@ -35,14 +35,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PaintLab.CssBase\CssBase\CssColor.cs">
-      <Link>REF_CssBase\CssColor.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.CssBase\CssBase\CssConstants.cs">
       <Link>REF_CssBase\CssConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.CssBase\CssBase\CssKnownColor.cs">
-      <Link>REF_CssBase\CssKnownColor.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.CssBase\CssBase\CssLength.cs">
       <Link>REF_CssBase\CssLength.cs</Link>
@@ -95,6 +89,9 @@
     <Compile Include="..\PaintLab.WebDom\1_Css_Parser\CssValueParser.cs">
       <Link>REF_WebDom\1_Css_Parser\CssValueParser.cs</Link>
     </Compile>
+    <Compile Include="..\PaintLab.WebDom\2_Svg\SvgElements.cs">
+      <Link>REF_WebDom\2_Svg\SvgElements.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.WebDom\2_Svg\SvgParser.cs">
       <Link>REF_WebDom\2_Svg\SvgParser.cs</Link>
     </Compile>
@@ -125,7 +122,11 @@
     <Compile Include="..\PaintLab.WebLexer\XmlLexer_debug.cs">
       <Link>REF_WebLexer\XmlLexer_debug.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
+      <Link>REF_WebDom\Net20\ExtensionAttribute.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SvgParserExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
@@ -133,6 +134,5 @@
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

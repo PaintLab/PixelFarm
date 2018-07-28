@@ -21,9 +21,17 @@ namespace LayoutFarm.UI
             int count = s_layoutQueue.Count;
             for (int i = count - 1; i >= 0; --i)
             {
-                UIElement ui = s_layoutQueue.Dequeue(); 
+                UIElement ui = s_layoutQueue.Dequeue();
                 ui.IsInLayoutQueue = false;
                 UIElement.InvokeContentLayout(ui);
+
+#if DEBUG
+                if (ui.IsInLayoutQueue)
+                {
+                    //should not occur
+                    throw new System.NotSupportedException();
+                }
+#endif
             }
         }
     }
@@ -42,9 +50,6 @@ namespace LayoutFarm.UI
         float _right;
         float _bottom;
 
-
-        //~
-
         public UIElement()
         {
         }
@@ -59,7 +64,7 @@ namespace LayoutFarm.UI
         }
         public abstract void InvalidateGraphics();
 
-         
+
         object _tag;
         public object Tag
         {
