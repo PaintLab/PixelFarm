@@ -5,9 +5,6 @@
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-using PaintLab.Svg;
-
-using System.Text;
 
 namespace PixelFarm.CpuBlit
 {
@@ -40,11 +37,6 @@ namespace PixelFarm.CpuBlit
         public void ResetTransform()
         {
             _svgRenderVx = _org.Clone();
-            //int elemCount = _svgRenderVx.VgCmdCount;
-            //for (int i = 0; i < elemCount; ++i)
-            //{
-            //    //_svgRenderVx.ResetTransform();
-            //}
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {

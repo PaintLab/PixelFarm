@@ -222,9 +222,6 @@ namespace PixelFarm.CpuBlit
     public class VgRenderVx : RenderVx
     {
 
-
-
-
         Image _backimg;
         VgCmd[] _cmds;
         RectD _boundRect;
