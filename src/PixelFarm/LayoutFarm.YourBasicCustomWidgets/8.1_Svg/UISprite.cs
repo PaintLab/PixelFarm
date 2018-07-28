@@ -21,7 +21,7 @@ namespace LayoutFarm.UI
             this.TransparentForAllEvents = true;
 
         }
-        public SvgRenderVx RenderVx { get; set; }
+        public VgRenderVx RenderVx { get; set; }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
@@ -39,24 +39,25 @@ namespace LayoutFarm.UI
 
             base.ChildrenHitTestCore(hitChain);
         }
-        static bool HitTestOnSubPart(SvgRenderVx _svgRenderVx, float x, float y)
+        static bool HitTestOnSubPart(VgRenderVx _svgRenderVx, float x, float y)
         {
-            int partCount = _svgRenderVx.SvgVxCount;
+            int partCount = _svgRenderVx.VgCmdCount;
 
 
             for (int i = partCount - 1; i >= 0; --i)
             {
                 //we do hittest top to bottom => (so => iter backward)
 
-                SvgPart vx = _svgRenderVx.GetInnerVx(i);
-                if (vx.Kind != SvgRenderVxKind.Path)
+                VgCmd vx = _svgRenderVx.GetVgCmd(i);
+                if (vx.Name != VgCommandName.Path)
                 {
                     continue;
                 }
-                VertexStore innerVxs = vx.GetVxs();
+                //
+                VgCmdPath path = (VgCmdPath)vx;                 
                 //fine tune
                 //hit test ***
-                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(innerVxs, x, y))
+                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(path.Vxs, x, y))
                 {
                     return true;
                 }
@@ -80,7 +81,7 @@ namespace LayoutFarm.UI
     {
 
         SvgRenderElement _svgRenderElement;
-        SvgRenderVx _svgRenderVx;
+        VgRenderVx _svgRenderVx;
 
 #if DEBUG
         static int dbugTotalId;
@@ -92,7 +93,7 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
 
         }
-        public void LoadSvg(SvgRenderVx renderVx)
+        public void LoadSvg(VgRenderVx renderVx)
         {
             _svgRenderVx = renderVx;
             if (_svgRenderElement != null)

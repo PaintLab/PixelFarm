@@ -331,13 +331,13 @@ namespace LayoutFarm.CustomWidgets
         {
             _ui = ui;
         }
-        PixelFarm.CpuBlit.SvgPart _svgPath;
-        public void UpdateControlPoints(PixelFarm.CpuBlit.SvgPart svgPath)
+        PixelFarm.CpuBlit.VgCmdPath _svgPath;
+        public void UpdateControlPoints(PixelFarm.CpuBlit.VgCmdPath svgPath)
         {
             //1. we remove existing point from root
 
             _svgPath = svgPath;
-            VertexStore vxs = svgPath.GetVxs();
+            VertexStore vxs = svgPath.Vxs;
 
             int m = _controls.Count;
             for (int n = 0; n < m; ++n)
@@ -422,9 +422,10 @@ namespace LayoutFarm.CustomWidgets
                 }
 
                 //then update the vxs shape
-                VertexStore vxs = _svgPath.GetVxs();
+                VertexStore vxs = _svgPath.Vxs;
                 vxs.ReplaceVertex(cornerBox.Index, newX, newY);
-                PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
+
+                //PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
 
                 _ui.HandleElementUpdate();
 

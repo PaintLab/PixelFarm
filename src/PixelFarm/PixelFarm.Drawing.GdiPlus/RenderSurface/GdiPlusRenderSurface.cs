@@ -704,14 +704,15 @@ namespace PixelFarm.Drawing.WinGdi
             gx.FillPath(internalSolidBrush, innerPath);
             internalSolidBrush.Color = prevColor;
         }
-        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.SvgPart vxsRenderVx)
+        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VgCmd vxsRenderVx)
         {
-            var gpath = PixelFarm.CpuBlit.SvgPart.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
-            if (gpath != null) return gpath;
+            return null;
+            //var gpath = PixelFarm.CpuBlit.SvgCmd.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
+            //if (gpath != null) return gpath;
 
-            gpath = CreateGraphicsPath(vxsRenderVx.GetVxs());
-            PixelFarm.CpuBlit.SvgPart.SetResolvedObject(vxsRenderVx, gpath);
-            return gpath;
+            //gpath = CreateGraphicsPath(vxsRenderVx.GetVxs());
+            //PixelFarm.CpuBlit.SvgCmd.SetResolvedObject(vxsRenderVx, gpath);
+            //return gpath;
         }
         static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
@@ -809,7 +810,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
         GdiPlusPainter _gdiPlusPainter;
-        public void FillPath(PixelFarm.CpuBlit.SvgRenderVx svgVx)
+        public void FillPath(PixelFarm.CpuBlit.VgRenderVx svgVx)
         {
             if (svgVx == null) return;
             //-------------------------
