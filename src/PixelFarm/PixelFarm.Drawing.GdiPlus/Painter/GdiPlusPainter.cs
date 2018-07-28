@@ -3,7 +3,6 @@
 using System;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -15,20 +14,16 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _currentFillBrush;
 
         GdiPlusRenderSurface _renderSurface;
-        PixelFarm.CpuBlit.VectorTool _vectorTool;
-
+    
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
             this._renderSurface = renderSurface;
 
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
+            
         }
-        public override PainterExtensions.VectorTool VectorTool
-        {
-            get { return _vectorTool; }
-        }
+      
 
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
@@ -534,6 +529,10 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
+        public override void Render(RenderVx renderVx)
+        {
+            throw new NotImplementedException();
+        }
         //VertexStorePool _vxsPool = new VertexStorePool();
         //VertexStore GetFreeVxs()
         //{

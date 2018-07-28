@@ -42,7 +42,8 @@ namespace PixelFarm.CpuBlit.Samples
             //            _dbugSW.Reset();
             //            _dbugSW.Start();
             //#endif 
-            _renderVx.Render(p);
+
+            p.Render(_renderVx);
 
             //#if DEBUG
             //            _dbugSW.Stop();
@@ -92,16 +93,15 @@ namespace PixelFarm.CpuBlit.Samples
 
             foreach (RenderVx vx in _renderVxList)
             {
-                VgRenderVx svgVx = vx as VgRenderVx;
-                if (svgVx != null && !svgVx.HasBitmapSnapshot)
+                VgRenderVx vgRenerVx = vx as VgRenderVx;
+                if (vgRenerVx != null && !vgRenerVx.HasBitmapSnapshot)
                 {
-                    RectD bound = svgVx.GetBounds();
+                    RectD bound = vgRenerVx.GetBounds();
 
                     //create 
                     ActualBitmap backimg = new ActualBitmap((int)bound.Width, (int)bound.Height);
                     AggPainter painter = AggPainter.Create(backimg);
-                    svgVx.Render(painter);
-
+                    painter.Render(vgRenerVx);
 #if DEBUG
                     //test
                     //int[] rgba32Buffer = ActualImageExtensions.CopyImgBuffer(backimg, 0 + 20, 0 + 20, backimg.Width - 20, backimg.Height - 20);
@@ -111,7 +111,7 @@ namespace PixelFarm.CpuBlit.Samples
 #endif
 
 
-                    svgVx.SetBitmapSnapshot(backimg);
+                    vgRenerVx.SetBitmapSnapshot(backimg);
                 }
             }
             //if (!_renderVx.HasBitmapSnapshot)
@@ -140,8 +140,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             for (int i = 0; i < _renderVxList.Count; ++i)
             {
-
-                _renderVxList[i].Render(p);
+                p.Render(_renderVxList[i]);
             }
 
 
