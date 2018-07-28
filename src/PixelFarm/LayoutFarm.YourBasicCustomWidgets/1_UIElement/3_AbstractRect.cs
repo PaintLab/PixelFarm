@@ -7,7 +7,7 @@ namespace LayoutFarm.UI
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
-    public abstract class AbstractRect : UIElement, IScrollable, IBoxElement
+    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement
     {
 
         bool specificWidth, specificHeight;
@@ -18,7 +18,7 @@ namespace LayoutFarm.UI
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public AbstractRect(int width, int height)
+        public AbstractRectUI(int width, int height)
         {
             SetElementBoundsWH(width, height);
             //default for box
@@ -226,6 +226,7 @@ namespace LayoutFarm.UI
             //if you want viewport you must overide this
             SetViewport(x, y, this);
         }
+        
         //------------------------------
         public virtual void PerformContentLayout()
         {
@@ -278,7 +279,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public bool HasSpecificSize
+        public bool HasSpecificWidthAndHeight
         {
             get { return this.specificHeight && specificWidth; }
             set

@@ -252,8 +252,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
 
 
-                var widgetsSubImage = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
-                aggsx.UseSubPixelRendering = false;
+                var widgetsSubImage = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestBitmapBlender, aggsx.GetClippingRect());
+                aggsx.UseSubPixelLcdEffect = false;
                 PixelProcessing.PixelBlenderBGRA normalBlender = new PixelProcessing.PixelBlenderBGRA();
                 PixelProcessing.PixelBlenderBGRA gammaBlender = new PixelProcessing.PixelBlenderBGRA(); //TODO: revisit, and fix this again
                 gammaBlender.GammaValue = this.GammaValue;
@@ -273,10 +273,10 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //----------------------------------------
                 DestBitmapRasterizer sclineRasToBmp = aggsx.BitmapRasterizer;
-                aggsx.UseSubPixelRendering = false;
+                aggsx.UseSubPixelLcdEffect = false;
                 sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 rasterizer.ResetGamma(new GammaNone());
-                aggsx.UseSubPixelRendering = false;
+                aggsx.UseSubPixelLcdEffect = false;
                 //----------------------------------------
                 PathWriter ps = new PathWriter();
                 ps.Clear();

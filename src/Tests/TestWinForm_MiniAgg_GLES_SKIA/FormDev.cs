@@ -372,7 +372,7 @@ namespace Mini
 
 
                     vxs = vxs.TranslateToNewVxs(15, 0, new PixelFarm.Drawing.VertexStore());
-                    gfx.UseSubPixelRendering = true;
+                    gfx.UseSubPixelLcdEffect = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(
                       actualImage, //src from actual img buffer

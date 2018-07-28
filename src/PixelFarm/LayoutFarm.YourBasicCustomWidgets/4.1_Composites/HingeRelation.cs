@@ -8,13 +8,13 @@ namespace LayoutFarm.CustomWidgets
     {
         bool isOpen;
         //1. land part
-        AbstractRect landPart;
+        AbstractRectUI landPart;
         //2. float part   
-        AbstractRect floatPart;
+        AbstractRectUI floatPart;
         RenderElement floatPartRenderElement;
         HingeFloatPartStyle floatPartStyle;
         //----------------------------------------------------  
-        public AbstractRect LandPart
+        public AbstractRectUI LandPart
         {
             get { return this.landPart; }
             set
@@ -48,7 +48,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public AbstractRect FloatPart
+        public AbstractRectUI FloatPart
         {
             get { return this.floatPart; }
             set

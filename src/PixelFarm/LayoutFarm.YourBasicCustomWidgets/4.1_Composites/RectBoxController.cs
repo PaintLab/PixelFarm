@@ -14,7 +14,7 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
         }
-        public LayoutFarm.UI.AbstractRect TargetBox
+        public LayoutFarm.UI.AbstractRectUI TargetBox
         {
             get;
             set;
@@ -78,7 +78,7 @@ namespace LayoutFarm.CustomWidgets
             controllerBox1.AcceptKeyboardFocus = true;
             controllerBox1.Focus();
         }
-        public void UpdateControllerBoxes(LayoutFarm.UI.AbstractRect box)
+        public void UpdateControllerBoxes(LayoutFarm.UI.AbstractRectUI box)
         {
 
             //move controller here 
@@ -140,7 +140,7 @@ namespace LayoutFarm.CustomWidgets
             _boxLeftTop.MouseDrag += (s1, e1) =>
             {
                 //move other boxes ...
-                AbstractRect target1 = _boxLeftTop.TargetBox;
+                AbstractRectUI target1 = _boxLeftTop.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
@@ -156,7 +156,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxLeftBottom);
             _boxLeftBottom.MouseDrag += (s1, e1) =>
             {
-                AbstractRect target1 = _boxLeftBottom.TargetBox;
+                AbstractRectUI target1 = _boxLeftBottom.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftBottom.Right,
                                       _boxLeftTop.Bottom,
@@ -172,7 +172,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxRightTop);
             _boxRightTop.MouseDrag += (s1, e1) =>
             {
-                AbstractRect target1 = _boxRightTop.TargetBox;
+                AbstractRectUI target1 = _boxRightTop.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxRightTop.Bottom,
@@ -188,7 +188,7 @@ namespace LayoutFarm.CustomWidgets
             SetupCornerBoxController(_boxRightBottom);
             _boxRightBottom.MouseDrag += (s1, e1) =>
             {
-                AbstractRect target1 = _boxRightBottom.TargetBox;
+                AbstractRectUI target1 = _boxRightBottom.TargetBox;
                 //update target
                 target1.SetLocationAndSize(_boxLeftTop.Right,
                                       _boxLeftTop.Bottom,
@@ -331,13 +331,13 @@ namespace LayoutFarm.CustomWidgets
         {
             _ui = ui;
         }
-        PixelFarm.CpuBlit.SvgPart _svgPath;
-        public void UpdateControlPoints(PixelFarm.CpuBlit.SvgPart svgPath)
+        PixelFarm.CpuBlit.VgCmdPath _svgPath;
+        public void UpdateControlPoints(PixelFarm.CpuBlit.VgCmdPath svgPath)
         {
             //1. we remove existing point from root
 
             _svgPath = svgPath;
-            VertexStore vxs = svgPath.GetVxs();
+            VertexStore vxs = svgPath.Vxs;
 
             int m = _controls.Count;
             for (int n = 0; n < m; ++n)
@@ -422,9 +422,10 @@ namespace LayoutFarm.CustomWidgets
                 }
 
                 //then update the vxs shape
-                VertexStore vxs = _svgPath.GetVxs();
+                VertexStore vxs = _svgPath.Vxs;
                 vxs.ReplaceVertex(cornerBox.Index, newX, newY);
-                PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
+
+                //PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
 
                 _ui.HandleElementUpdate();
 

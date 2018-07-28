@@ -5,15 +5,15 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ComboBox : AbstractRect
+    public class ComboBox : AbstractRectUI
     {
         CustomRenderBox primElement;//background 
         Color backColor = Color.LightGray;
         bool isOpen;
         //1. land part
-        AbstractRect landPart;
+        AbstractRectUI landPart;
         //2. float part   
-        AbstractRect floatPart;
+        AbstractRectUI floatPart;
         RenderElement floatPartRenderElement;
         HingeFloatPartStyle floatPartStyle;
         public ComboBox(int width, int height)
@@ -49,7 +49,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
                 renderE.SetController(this);
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer
 
@@ -86,7 +86,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
         //----------------------------------------------------  
-        public AbstractRect LandPart
+        public AbstractRectUI LandPart
         {
             get { return this.landPart; }
             set
@@ -118,7 +118,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public AbstractRect FloatPart
+        public AbstractRectUI FloatPart
         {
             get { return this.floatPart; }
             set

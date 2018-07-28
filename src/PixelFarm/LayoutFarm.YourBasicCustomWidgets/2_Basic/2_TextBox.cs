@@ -9,7 +9,7 @@ using LayoutFarm.Text;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TextBox : AbstractRect
+    public class TextBox : AbstractRectUI
     {
         TextSurfaceEventListener textSurfaceListener;
         TextEditRenderBox textEditRenderElement;
@@ -198,7 +198,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
-                tbox.HasSpecificSize = true;
+                tbox.HasSpecificWidthAndHeight = true;
                 if (this.defaultSpanStyle.IsEmpty())
                 {
                     this.defaultSpanStyle = new TextSpanStyle();

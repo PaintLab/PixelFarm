@@ -2,7 +2,7 @@
  
 namespace LayoutFarm.UI
 {
-    public interface IViewport
+    public interface IAppHost
     {
 
     }

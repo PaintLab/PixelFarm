@@ -6,7 +6,7 @@ namespace LayoutFarm.UI
     {
         NamedSpaceContainerOverlapMode overlapMode;
         SpaceName spaceName;
-        AbstractRect spaceContent;
+        AbstractRectUI spaceContent;
         NinespaceController ownerDockspaceController;
         int spaceWidth;
         int spaceHeight;
@@ -28,7 +28,7 @@ namespace LayoutFarm.UI
                 return this.ownerDockspaceController;
             }
         }
-        public AbstractRect Content
+        public AbstractRectUI Content
         {
             get
             {
@@ -155,10 +155,6 @@ namespace LayoutFarm.UI
         {
             get { return this.hasCalculatedSize; }
         }
-        //public void InvalidateArrangeStatus()
-        //{
-        //}
-
 #if DEBUG
         public override string ToString()
         {

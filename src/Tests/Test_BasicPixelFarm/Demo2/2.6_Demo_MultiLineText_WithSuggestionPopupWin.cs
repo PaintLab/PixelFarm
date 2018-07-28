@@ -7,14 +7,14 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("2.6 Demo_MultiLineText_WithSuggestionPopupWin")]
-    class Demo_MultiLineText_WithSuggestionPopupWin : DemoBase
+    class Demo_MultiLineText_WithSuggestionPopupWin : App
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
         SuggestionWindowMx sgBox;
         Point textBoxGlobalOffset;
         bool alreadyHasTextBoxGlobalOffset;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             textbox.SetLocation(20, 20);
@@ -39,8 +39,8 @@ namespace LayoutFarm
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
-            viewport.AddChild(textbox);
-            viewport.AddChild(sgBox.GetPrimaryUI());
+            host.AddChild(textbox);
+            host.AddChild(sgBox.GetPrimaryUI());
             //------------------------------------ 
             BuildSampleCountryList();
         }

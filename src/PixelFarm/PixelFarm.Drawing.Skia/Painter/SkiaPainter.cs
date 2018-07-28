@@ -2,7 +2,6 @@
 using System;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing.PainterExtensions;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
@@ -25,7 +24,7 @@ namespace PixelFarm.Drawing.Skia
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
-        PixelFarm.CpuBlit.VectorTool _vectorTool;
+         
         public SkiaPainter(int w, int h)
         {
 
@@ -35,12 +34,13 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
 
-            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
+             
         }
-        public override PainterExtensions.VectorTool VectorTool
+        public override void Render(RenderVx renderVx)
         {
-            get { return _vectorTool; }
+            throw new NotImplementedException();
         }
+       
         Brush _currentBrush;
         public override Brush CurrentBrush
         {

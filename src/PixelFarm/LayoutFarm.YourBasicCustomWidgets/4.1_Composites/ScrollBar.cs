@@ -107,7 +107,7 @@ namespace LayoutFarm.CustomWidgets
 
     public delegate void UIEventHandler<S, T>(S sender, T arg);
 
-    public class SliderBox : AbstractRect
+    public class SliderBox : AbstractRectUI
     {
 
         ScrollRangeLogic scrollRangeLogic;
@@ -258,7 +258,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateVScrollbarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
-            bgBox.HasSpecificSize = true;
+            bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
 
@@ -269,7 +269,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateHScrollbarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
-            bgBox.HasSpecificSize = true;
+            bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
 
@@ -744,7 +744,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
-    public class ScrollBar : AbstractRect
+    public class ScrollBar : AbstractRectUI
     {
 
         ScrollBarButton minButton;
@@ -845,7 +845,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateVScrollbarContent(RootGraphic rootgfx)
         {
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
-            bgBox.HasSpecificSize = true;
+            bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             //---------------------------------------------------------
@@ -870,7 +870,7 @@ namespace LayoutFarm.CustomWidgets
 
 
             CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
-            bgBox.HasSpecificSize = true;
+            bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             //---------------------------------------------------------

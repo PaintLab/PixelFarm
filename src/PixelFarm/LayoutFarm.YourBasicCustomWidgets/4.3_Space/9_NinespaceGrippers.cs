@@ -10,23 +10,23 @@ namespace LayoutFarm.UI
         {
             this.ninespaceController = ninespaceController;
         }
-        public AbstractRect LeftGripper
+        public AbstractRectUI LeftGripper
         {
             get;
             set;
         }
-        public AbstractRect TopGripper
+        public AbstractRectUI TopGripper
         {
             get;
             set;
         }
 
-        public AbstractRect RightGripper
+        public AbstractRectUI RightGripper
         {
             get;
             set;
         }
-        public AbstractRect BottomGripper
+        public AbstractRectUI BottomGripper
         {
             get;
             set;

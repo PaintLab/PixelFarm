@@ -11,33 +11,37 @@ using PixelFarm.CpuBlit;
 namespace LayoutFarm
 {
     [DemoNote("4.2 ShapeControls")]
-    class DemoShapeControl : DemoBase
+    class DemoShapeControl : App
     {
         LayoutFarm.CustomWidgets.PolygonController polygonController = new CustomWidgets.PolygonController();
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
         LayoutFarm.CustomWidgets.Box box1;
 
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
 
 
-            SvgPart svgPart = new SvgPart(SvgRenderVxKind.Path);
-            VertexStore vxs = new VertexStore();
-            vxs.AddMoveTo(100, 20);
-            vxs.AddLineTo(150, 50);
-            vxs.AddLineTo(110, 80);
-            vxs.AddCloseFigure();
-            //-------------------------------------------
-            svgPart.SetVxsAsOriginal(vxs);
-            svgPart.FillColor = Color.Red;
-            SvgRenderVx svgRenderVx = new SvgRenderVx(new SvgPart[] { svgPart });
+            VgCmdPath path = new VgCmdPath();
+            //------------------------------------------- 
+            using (VxsContext.Temp(out VertexStore vxs))
+            {
+                vxs.AddMoveTo(100, 20);
+                vxs.AddLineTo(150, 50);
+                vxs.AddLineTo(110, 80);
+                vxs.AddCloseFigure();
+                path.SetVxsAsOriginal(vxs.CreateTrim());
+            }
+
+            VgRenderVx svgRenderVx = new VgRenderVx(new VgCmd[] {
+                new VgCmdFillColor(Color.Red),
+                path });
             svgRenderVx.DisableBackingImage = true;
 
 
             var uiSprite = new UISprite(10, 10); //init size = (10,10), location=(0,0) 
             uiSprite.LoadSvg(svgRenderVx);
-            viewport.AddChild(uiSprite); 
+            host.AddChild(uiSprite);
 
             var spriteEvListener = new GeneralEventListener();
             uiSprite.AttachExternalEventListener(spriteEvListener);
@@ -53,9 +57,9 @@ namespace LayoutFarm
             //-------- 
             rectBoxController.Init();
             //polygonController.Visible = false;
-            viewport.AddChild(polygonController);
+            host.AddChild(polygonController);
             //-------------------------------------------
-            viewport.AddChild(rectBoxController);
+            host.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{
@@ -67,7 +71,7 @@ namespace LayoutFarm
                 //mousedown on ui sprite
                 polygonController.SetPosition((int)uiSprite.Left, (int)uiSprite.Top);
                 polygonController.SetTargetUISprite(uiSprite);
-                polygonController.UpdateControlPoints(svgPart);
+                polygonController.UpdateControlPoints(path);
 
             };
             spriteEvListener.MouseMove += e1 =>

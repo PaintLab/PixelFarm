@@ -3,29 +3,23 @@
 using PixelFarm.Drawing;
 using PaintLab.Svg;
 using LayoutFarm.UI;
-using PaintLab;
 using PixelFarm.CpuBlit;
 
 namespace LayoutFarm
 {
     [DemoNote("4.1 DemoSvgTiger")]
-    class Demo_SvgTiger : DemoBase
+    class Demo_SvgTiger : App
     {
         LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
         LayoutFarm.CustomWidgets.Box box1;
         BackDrawBoardUI _backBoard;
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
 
-
-            PaintLab.Svg.SvgParser parser = new SvgParser();
-            _backBoard = new BackDrawBoardUI(400, 400);
+            _backBoard = new BackDrawBoardUI(800, 600);
             _backBoard.BackColor = Color.White;
-            viewport.AddChild(_backBoard);
-
-
-
+            host.AddChild(_backBoard);
             box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
@@ -36,19 +30,21 @@ namespace LayoutFarm
             //----------------------
 
             //load lion svg
-            string file = @"d:\\WImageTest\\lion.svg";
-            string svgContent = System.IO.File.ReadAllText(file);
-            WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
-            parser.ParseDocument(textSnapshot);
-            //
-            SvgRenderVx svgRenderVx = parser.GetResultAsRenderVx();
+
+            string svgfile = "tiger.svg";
+            //string svgfile = "1f30b.svg";
+            //string svgfile = "../Data/Svg/twemoji/1f30b.svg";
+            //string svgfile = "../Data/1f30b.svg";
+            //string svgfile = "../Data/Svg/twemoji/1f370.svg";
+            VgRenderVx svgRenderVx = ReadSvgFile(svgfile);
             var uiSprite = new UISprite(10, 10);
             uiSprite.LoadSvg(svgRenderVx);
             _backBoard.AddChild(uiSprite);
+
             //-------- 
             rectBoxController.Init();
             //------------
-            viewport.AddChild(rectBoxController);
+            host.AddChild(rectBoxController);
 
             //foreach (var ui in rectBoxController.GetControllerIter())
             //{
@@ -78,23 +74,34 @@ namespace LayoutFarm
 
 #if DEBUG
                     //test save some area
-                    int w = rectBoxController.ControllerBoxMain.Width;
-                    int h = rectBoxController.ControllerBoxMain.Height;
+                    //int w = rectBoxController.ControllerBoxMain.Width;
+                    //int h = rectBoxController.ControllerBoxMain.Height;
 
-                    using (DrawBoard gdiDrawBoard = DrawBoardCreator.CreateNewDrawBoard(1, w, h))
-                    {
-                        gdiDrawBoard.OffsetCanvasOrigin(rectBoxController.ControllerBoxMain.Left, rectBoxController.ControllerBoxMain.Top);
-                        _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, w, h));
-                        var img2 = new ActualBitmap(w, h);
-                        //copy content from drawboard to target image and save
-                        gdiDrawBoard.RenderTo(img2, 0, 0, w, h);
+                    //using (DrawBoard gdiDrawBoard = DrawBoardCreator.CreateNewDrawBoard(1, w, h))
+                    //{
+                    //    gdiDrawBoard.OffsetCanvasOrigin(rectBoxController.ControllerBoxMain.Left, rectBoxController.ControllerBoxMain.Top);
+                    //    _backBoard.CurrentPrimaryRenderElement.CustomDrawToThisCanvas(gdiDrawBoard, new Rectangle(0, 0, w, h));
+                    //    var img2 = new ActualBitmap(w, h);
+                    //    //copy content from drawboard to target image and save
+                    //    gdiDrawBoard.RenderTo(img2, 0, 0, w, h);
 
-                        img2.dbugSaveToPngFile("d:\\WImageTest\\ddd001.png");
-                    }
+                    //    img2.dbugSaveToPngFile("d:\\WImageTest\\ddd001.png");
+                    //}
 #endif                    
 
                 }
             };
+        }
+        VgRenderVx ReadSvgFile(string filename)
+        {
+
+            string svgContent = System.IO.File.ReadAllText(filename);
+            SvgDocBuilder docBuidler = new SvgDocBuilder();
+            PaintLab.Svg.SvgParser parser = new SvgParser(docBuidler);
+            WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
+            parser.ParseDocument(textSnapshot);
+            //
+            return docBuidler.ResultDocument.CreateRenderVx();
         }
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
@@ -121,5 +128,5 @@ namespace LayoutFarm
 
 
 
- 
+
 }

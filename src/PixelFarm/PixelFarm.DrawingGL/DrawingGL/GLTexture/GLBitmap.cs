@@ -2,6 +2,7 @@
 
 using System;
 using OpenTK.Graphics.ES20;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -66,6 +67,11 @@ namespace PixelFarm.DrawingGL
             this.rawIntBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualImg);
         }
 
+        public override Image CreateAnother(float scaleW, float scaleH)
+        {
+
+            throw new NotImplementedException();
+        }
         public bool IsBigEndianPixel { get; set; }
 
         public bool IsInvert

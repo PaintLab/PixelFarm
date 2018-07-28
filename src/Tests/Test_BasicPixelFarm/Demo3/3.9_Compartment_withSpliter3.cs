@@ -5,29 +5,29 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("3.9 Demo_CompartmentWithSpliter3")]
-    class Demo_CompartmentWithSpliter3 : DemoBase
+    class Demo_CompartmentWithSpliter3 : App
     {
         NinespaceBox ninespaceBox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
             {
                 //background element
-                var bgbox = new LayoutFarm.CustomWidgets.Box(viewport.PrimaryScreenWidth, viewport.PrimaryScreenHeight);
+                var bgbox = new LayoutFarm.CustomWidgets.Box(host.PrimaryScreenWidth, host.PrimaryScreenHeight);
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddChild(bgbox);
+                host.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
-            ninespaceBox = new NinespaceBox(viewport.PrimaryScreenWidth, viewport.PrimaryScreenHeight - 15);
+            ninespaceBox = new NinespaceBox(host.PrimaryScreenWidth, host.PrimaryScreenHeight - 15);
             ninespaceBox.ShowGrippers = true;
             var ninespace2 = new NinespaceBox(400, 600);
             ninespace2.SetLeftSpaceWidth(150);
             ninespace2.ShowGrippers = true;
             ninespaceBox.RightSpace.AddChild(ninespace2);
-            viewport.AddChild(ninespaceBox);
+            host.AddChild(ninespaceBox);
             // ninespaceBox.SetSize(800, 600);
 
             ////test add some content to the ninespace box

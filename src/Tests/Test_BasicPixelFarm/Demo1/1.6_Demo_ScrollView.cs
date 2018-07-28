@@ -6,31 +6,31 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.6 ScrollView")]
-    class Demo_ScrollView : DemoBase
+    class Demo_ScrollView : App
     {
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
-            //AddScrollView1(viewport, 0, 0);
-            AddScrollView2(viewport, 10, 0);
+            //AddScrollView1(host, 0, 0);
+            AddScrollView2(host, 10, 0);
         }
 
-        void AddScrollView1(SampleViewport viewport, int x, int y)
+        void AddScrollView1(AppHost host, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.Box(200, 175);
             panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
             panel.BackColor = Color.LightGray;
-            viewport.AddChild(panel);
+            host.AddChild(panel);
             //-------------------------  
             {
                 //vertical scrollbar
                 var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, 200);
                 vscbar.SetLocation(x + 10, y + 10);
                 vscbar.MinValue = 0;
-                vscbar.MaxValue = 170;
+                vscbar.MaxValue = 170; //just init
                 vscbar.SmallChange = 20;
-                viewport.AddChild(vscbar);
+                host.AddChild(vscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
@@ -41,9 +41,9 @@ namespace LayoutFarm
                 hscbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
                 hscbar.SetLocation(x + 30, y + 10);
                 hscbar.MinValue = 0;
-                hscbar.MaxValue = 170;
+                hscbar.MaxValue = 170;//just init
                 hscbar.SmallChange = 20;
-                viewport.AddChild(hscbar);
+                host.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
@@ -59,12 +59,13 @@ namespace LayoutFarm
                 panel.AddChild(box1);
             }
             //--------------------------   
-            panel.PerformContentLayout();
-            panel.SetViewport(0, 0);
+            //panel.PerformContentLayout();
+
         }
-        void AddScrollView2(SampleViewport viewport, int x, int y)
+        void AddScrollView2(AppHost viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.Box(800, 1000);
+            panel.HasSpecificWidthAndHeight = true;
             panel.NeedClipArea = true;
             panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
@@ -132,13 +133,13 @@ namespace LayoutFarm
                 hscbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
                 hscbar.SetLocation(x + 30, y + 10);
                 hscbar.MinValue = 0;
-                hscbar.MaxValue = 170;
+                hscbar.MaxValue = panel.Width;//just init
                 hscbar.SmallChange = 20;
                 viewport.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
-            panel.PerformContentLayout();
+            //panel.PerformContentLayout();
         }
 
     }

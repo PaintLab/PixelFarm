@@ -502,61 +502,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public class GridBox : AbstractBox
-    {
-        //grid view + scollable view+ header
-        GridView _gridView;
-        Box _scrollableViewPanel;
-
-        public GridBox(int width, int height)
-            : base(width, height)
-        {
-            //this grid box acts as viewport
-            this.HasSpecificHeight = true;
-            this.HasSpecificWidth = true;
-            this.NeedClipArea = true;
-
-            //scrollable content box is inside this grid box
-            _scrollableViewPanel = new Box(this.Width, this.Height);
-
-
-
-            this.AddChild(_scrollableViewPanel);
-
-            {
-                //vertical scrollbar
-                var vscbar = new LayoutFarm.CustomWidgets.ScrollBar(15, this.Height);
-                vscbar.SetLocation(this.Width - 15, 0);
-                vscbar.MinValue = 0;
-                vscbar.MaxValue = this.Height;
-                vscbar.SmallChange = 20;
-                this.AddChild(vscbar);
-                //add relation between _scrollableViewPanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, _scrollableViewPanel);
-            }
-            //-------------------------  
-            {
-                //horizontal scrollbar
-                var hscbar = new LayoutFarm.CustomWidgets.ScrollBar(150, 15);
-                hscbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
-                hscbar.SetLocation(30, 10);
-                hscbar.MinValue = 0;
-                hscbar.MaxValue = this.Width - 20;
-                hscbar.SmallChange = 20;
-                this.AddChild(hscbar);
-                //add relation between _scrollableViewPanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, _scrollableViewPanel);
-            }
-            _scrollableViewPanel.PerformContentLayout();
-        }
-        public void SetGridView(GridView gridView)
-        {
-            _gridView = gridView;
-            _scrollableViewPanel.AddChild(gridView);
-        }
-
-    }
-
+   
     public class GridView : AbstractBox
     {
         GridViewRenderBox _gridViewRenderE;
@@ -613,6 +559,9 @@ namespace LayoutFarm.CustomWidgets
             {
                 rows.Add(new GridRow(eachRowHeight));
             }
+
+            //***
+            this.InvalidateLayout();
         }
         public override void PerformContentLayout()
         {
@@ -638,7 +587,7 @@ namespace LayoutFarm.CustomWidgets
             int finW = System.Math.Max(InnerWidth, widthSum);
             int finH = System.Math.Max(InnerHeight, heightSum);
 
-            SetDesiredSize(finW, finH);
+            SetInnerContentSize(finW, finH);
 
             RaiseLayoutFinished();
         }
@@ -941,7 +890,7 @@ namespace LayoutFarm.CustomWidgets
             if (_gridViewRenderE == null)
             {
                 var myGridBox = new GridViewRenderBox(rootgfx, this.Width, this.Height);
-                myGridBox.HasSpecificSize = true;//***
+                myGridBox.HasSpecificWidthAndHeight = true;//***
                 myGridBox.NeedClipArea = this.NeedClipArea;
 
                 myGridBox.SetLocation(this.Left, this.Top);

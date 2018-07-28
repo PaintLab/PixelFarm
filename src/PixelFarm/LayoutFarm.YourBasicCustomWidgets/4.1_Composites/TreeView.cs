@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TreeView : AbstractRect
+    public class TreeView : AbstractRectUI
     {
         //composite          
         CustomRenderBox primElement;//background
@@ -55,7 +55,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
                 renderE.SetController(this);
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer 
                 int n = this.uiList.Count;
@@ -132,7 +132,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public class TreeNode : AbstractRect
+    public class TreeNode : AbstractRectUI
     {
         const int NODE_DEFAULT_HEIGHT = 17;
         CustomRenderBox primElement;//bg primary render element
@@ -182,7 +182,7 @@ namespace LayoutFarm.CustomWidgets
                 var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = this.backColor;
-                element.HasSpecificSize = true;
+                element.HasSpecificWidthAndHeight = true;
                 element.NeedClipArea = true;
                 //-----------------------------
                 // create default layer for node content
@@ -292,6 +292,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (this.isOpen) return;
             this.isOpen = true;
+
             this.TreeView.PerformContentLayout();
         }
         public void Collapse()

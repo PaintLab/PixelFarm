@@ -25,6 +25,13 @@ namespace LayoutFarm.UI
                 ui.IsInLayoutQueue = false;
                 UIElement.InvokeContentLayout(ui);
 
+#if DEBUG
+                if (ui.IsInLayoutQueue)
+                {
+                    //should not occur
+                    throw new System.NotSupportedException();
+                }
+#endif
             }
         }
     }
@@ -43,9 +50,6 @@ namespace LayoutFarm.UI
         float _right;
         float _bottom;
 
-
-        //~
-
         public UIElement()
         {
         }
@@ -61,16 +65,13 @@ namespace LayoutFarm.UI
         public abstract void InvalidateGraphics();
 
 
-        System.WeakReference _tag;
-        /// <summary>
-        /// general purpose element
-        /// </summary>
+        object _tag;
         public object Tag
         {
-            get { return (_tag != null && _tag.IsAlive) ? _tag.Target : null; }
+            get { return _tag; }
             set
             {
-                _tag = (value != null) ? new System.WeakReference(value) : null;
+                _tag = value;
             }
         }
         //----------------------------------- 
@@ -97,12 +98,15 @@ namespace LayoutFarm.UI
         System.WeakReference _parent;
         public UIElement ParentUI
         {
+
             get { return (_parent != null && _parent.IsAlive) ? (UIElement)_parent.Target : null; }
             set
             {
                 _parent = (value != null) ? new System.WeakReference(value) : null;
             }
         }
+
+
         public virtual bool Visible
         {
             get { return !this._hide; }
@@ -140,11 +144,13 @@ namespace LayoutFarm.UI
         }
         protected void SetElementBoundsWH(float width, float height)
         {
+
             _right = _left + width;
             _bottom = _top + height;
         }
         protected void SetElementBoundsLTWH(float left, float top, float width, float height)
         {
+
             //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
@@ -152,7 +158,10 @@ namespace LayoutFarm.UI
             _bottom = top + height;
         }
         protected void SetElementBounds(float left, float top, float right, float bottom)
-        {   //change 'TransparentBounds' => not effect visual presentation
+        {
+
+
+            //change 'TransparentBounds' => not effect visual presentation
             _left = left;
             _top = top;
             _right = right;
@@ -251,6 +260,10 @@ namespace LayoutFarm.UI
         {
             //add to layout queue
             UISystem.AddToLayoutQueue(this);
+        }
+        public virtual void NotifyContentUpdate(UIElement childContent)
+        {
+            //
         }
         internal static void InvokeContentLayout(UIElement ui)
         {

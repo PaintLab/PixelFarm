@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class Label : AbstractRect
+    public class Label : AbstractRectUI
     {
         string text;
         Color textColor;
@@ -14,6 +14,7 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
         }
+        
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (this.myTextRun == null)
@@ -22,7 +23,10 @@ namespace LayoutFarm.CustomWidgets
                 trun.SetLocation(this.Left, this.Top);
                 trun.TextColor = this.textColor;
                 trun.Text = this.Text;
-                if(_font != null)
+                //
+                trun.SetController(this);
+                //
+                if (_font != null)
                 {
                     trun.RequestFont = _font;
                 }

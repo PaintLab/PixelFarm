@@ -37,11 +37,11 @@ namespace LayoutFarm.CustomWidgets
             {
                 //default bg => transparent !, 
                 //gfx2d.Clear(ColorRGBA.White);//if want opaque bg
-                ReleaseUnmanagedResources();
-                if (bmp != null)
-                {
-                    bmp.Dispose();
-                }
+                //ReleaseUnmanagedResources();
+                //if (bmp != null)
+                //{
+                //    bmp.Dispose();
+                //}
 
                 this.bmp = this.actualImage;// new Bitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
                 // canvas.Platform.CreatePlatformBitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
@@ -69,11 +69,11 @@ namespace LayoutFarm.CustomWidgets
             //TODO: review this again 
             //about resource mx
             //------------------------- 
-            if (bmp != null)
-            {
-                bmp.Dispose();
-                bmp = null;
-            }
+            //if (bmp != null)
+            //{
+            //    bmp.Dispose();
+            //    bmp = null;
+            //}
             //if (currentGdiPlusBmp != null)
             //{
             //    currentGdiPlusBmp.Dispose();

@@ -14,22 +14,21 @@
 // "The Art of War"
 
 using System;
-using LayoutFarm.WebDom;
 namespace LayoutFarm.HtmlBoxes
 {
     /// <summary>
     /// Parse CSS properties values like numbers, urls, etc.
     /// </summary>
-    static class CssValueParser2
+    public static class CssValueParser2
     {
         /// <summary>
         /// Parses a color value in CSS style; e.g. #ff0000, red, rgb(255,0,0), rgb(100%, 0, 0)
         /// </summary>
         /// <param name="colorValue">color string value to parse</param>
         /// <returns>Color value</returns>
-        public static CssColor GetActualColor(string colorValue)
+        public static PixelFarm.Drawing.Color ParseCssColor(string colorValue)
         {
-            CssColor color;
+            PixelFarm.Drawing.Color color;
             TryGetColor(colorValue, 0, colorValue.Length, out color);
             return color;
         }
@@ -43,8 +42,20 @@ namespace LayoutFarm.HtmlBoxes
         /// <param name="length">substring length</param>
         /// <param name="color">return the parsed color</param>
         /// <returns>true - valid color, false - otherwise</returns>
-        static bool TryGetColor(string str, int idx, int length, out CssColor color)
+        static bool TryGetColor(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
+
+            //https://www.w3.org/TR/SVGColor12/
+            //1) Three digit hex — #rgb
+            //    Each hexadecimal digit, in the range 0 to F, represents one sRGB color component in the order red, green and blue.The digits A to F may be in either uppercase or lowercase. The value of the color component is obtained by replicating digits, so 0 become 00, 1 becomes 11, F becomes FF.This compact syntactical form can represent only 4096 colors.Examples: #000 (i.e. black) #fff (i.e. white) #6CF (i.e. #66CCFF, rgb(102, 204, 255)).
+            //2) Six digit hex — #rrggbb
+            //    Each pair of hexadecimal digits, in the range 0 to F, represents one sRGB color component in the order red, green and blue.The digits A to F may be in either uppercase or lowercase.This syntactical form, originally introduced by HTML, can represent 16777216 colors.Examples: #9400D3 (i.e. a dark violet), #FFD700 (i.e. a golden color). 
+            //3) Integer functional — rgb(rrr, ggg, bbb)
+            //    Each integer represents one sRGB color component in the order red, green and blue, separated by a comma and optionally by white space.Each integer is in the range 0 to 255.This syntactical form can represent 16777216 colors.Examples: rgb(233, 150, 122)(i.e.a salmon pink), rgb(255, 165, 0)(i.e.an orange).
+            //4) Float functional — rgb(R %, G %, B %)
+            //    Each percentage value represents one sRGB color component in the order red, green and blue, separated by a comma and optionally by white space.For colors inside the sRGB gamut, the range of each component is 0.0 % to 100.0 % and an arbitrary number of decimal places may be supplied.Scientific notation is not supported. This syntactical form can represent an arbitrary range of colors, completely covering the sRGB gamut. Color values where one or more components are below 0.0 % or above 100.0 % represent colors outside the sRGB gamut.Examples: rgb(12.375 %, 34.286 %, 28.97 %).
+            //5) Color keyword
+            //    Originally implemented in HTML browsers and eventually standardized in SVG 1.1, the full list of color keywords and their corresponding sRGB values are given in the SVG 1.1 specification.SVG Tiny 1.2 required only a subset of these, sixteen color keywords. SVG Color requires the full set to be supported.
             try
             {
                 if (!string.IsNullOrEmpty(str))
@@ -68,8 +79,11 @@ namespace LayoutFarm.HtmlBoxes
                 }
             }
             catch
-            { }
-            color = CssColor.Black;
+            {
+                //TODO: review here ?????
+
+            }
+            color = PixelFarm.Drawing.Color.Black;
             return false;
         }
         /// <summary>
@@ -94,8 +108,22 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by parsing given hex value color string (#A28B34).
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByHex(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByHex(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
+
+            //from //https://www.w3.org/TR/SVGColor12/
+            //1) Three digit hex — #rgb
+            //    Each hexadecimal digit, in the range 0 to F, represents one sRGB color component in the order red, green and blue.
+            //    The digits A to F may be in either uppercase or lowercase.
+            //    The value of the color component is obtained by replicating digits,
+            //    so 0 become 00, 1 becomes 11, F becomes FF.
+            //    This compact syntactical form can represent only 4096 colors.Examples: #000 (i.e. black) #fff (i.e. white) #6CF (i.e. #66CCFF, rgb(102, 204, 255)).
+            //2) Six digit hex — #rrggbb
+            //    Each pair of hexadecimal digits, in the range 0 to F, represents one sRGB color component in the order red, green and blue.
+            //    The digits A to F may be in either uppercase or lowercase.
+            //    This syntactical form, originally introduced by HTML, can represent 16777216 colors.
+            //... more...
+
             int r = -1;
             int g = -1;
             int b = -1;
@@ -116,10 +144,10 @@ namespace LayoutFarm.HtmlBoxes
             }
             if (r > -1 && g > -1 && b > -1)
             {
-                color = CssColor.FromArgb(r, g, b);
+                color = PixelFarm.Drawing.Color.FromArgb(r, g, b);
                 return true;
             }
-            color = CssColor.Empty;
+            color = PixelFarm.Drawing.Color.Empty;
             return false;
         }
 
@@ -127,7 +155,7 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by parsing given RGB value color string (RGB(255,180,90))
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByRgb(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByRgb(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             int r = -1;
             int g = -1;
@@ -148,10 +176,10 @@ namespace LayoutFarm.HtmlBoxes
 
             if (r > -1 && g > -1 && b > -1)
             {
-                color = CssColor.FromArgb(r, g, b);
+                color = PixelFarm.Drawing.Color.FromArgb(r, g, b);
                 return true;
             }
-            color = CssColor.Empty;
+            color = PixelFarm.Drawing.Color.Empty;
             return false;
         }
 
@@ -159,7 +187,7 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by parsing given RGBA value color string (RGBA(255,180,90,180))
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByRgba(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByRgba(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
             int r = -1;
             int g = -1;
@@ -185,10 +213,10 @@ namespace LayoutFarm.HtmlBoxes
 
             if (r > -1 && g > -1 && b > -1 && a > -1)
             {
-                color = CssColor.FromArgb(a, r, g, b);
+                color = PixelFarm.Drawing.Color.FromArgb(a, r, g, b);
                 return true;
             }
-            color = CssColor.Empty;
+            color = PixelFarm.Drawing.Color.Empty;
             return false;
         }
 
@@ -196,9 +224,9 @@ namespace LayoutFarm.HtmlBoxes
         /// Get color by given name, including .NET name.
         /// </summary>
         /// <returns>true - valid color, false - otherwise</returns>
-        private static bool GetColorByName(string str, int idx, int length, out CssColor color)
+        private static bool GetColorByName(string str, int idx, int length, out PixelFarm.Drawing.Color color)
         {
-            color = CssColor.FromName(str.Substring(idx, length));
+            color = LayoutFarm.WebDom.KnownColors.FromKnownColor(str.Substring(idx, length));
             return color.A > 0;
         }
 

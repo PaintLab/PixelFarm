@@ -127,9 +127,6 @@
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Color.cs">
-      <Link>1_DrawingCore\2_Abstract_DrawingElements\Color.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\CombineMode.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\CombineMode.cs</Link>
     </Compile>
@@ -385,6 +382,9 @@
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>1_DrawingCore\1_PrimitiveGeo\BasicGeometries.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\Color.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
       <Link>1_DrawingCore\1_PrimitiveGeo\Rectangle.cs</Link>
     </Compile>
@@ -553,6 +553,7 @@
     <Compile Include="7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" />
+    <Compile Include="7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" />
     <Compile Include="7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs" />
@@ -571,7 +572,7 @@
     <Compile Include="7_CpuBlitPainter\Others\4_Image\Transposer.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
-    <Compile Include="7_CpuBlitPainter\RenderSurface\SvgRenderVx.cs" />
+    <Compile Include="8_ImgReaders\ImageReaders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MiniAggCanvasBox : AbstractRect
+    public class MiniAggCanvasBox : AbstractRectUI
     {
         MiniAggCanvasRenderElement canvasRenderElement;
         public MiniAggCanvasBox(int w, int h)
