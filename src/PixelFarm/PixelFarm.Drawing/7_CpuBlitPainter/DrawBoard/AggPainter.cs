@@ -32,7 +32,6 @@ namespace PixelFarm.CpuBlit
     {
         StrokeVxsGenerator,
         OutlineAARenderer,
-
     }
 
 
@@ -68,16 +67,12 @@ namespace PixelFarm.CpuBlit
         RequestFont currentFont;
         //-------------
         //vector generators for various object
-        SimpleRect _simpleRectVxsGen = new SimpleRect();
-        Ellipse _ellipse = new Ellipse();
+
         PathWriter _lineGen = new PathWriter();
 
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
-
-
-
         Brush _curBrush;
         Pen _curPen;
 
@@ -461,11 +456,12 @@ namespace PixelFarm.CpuBlit
 
             //----------------------------------------------------------
             //Agg
+            VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
                 double right = left + width;
                 double bottom = top + height;
-                _simpleRectVxsGen.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
+                rectTool.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
             }
             else
             {
@@ -473,25 +469,25 @@ namespace PixelFarm.CpuBlit
                 double bottom = top - height;
                 int canvasH = this.Height;
                 //_simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5), right - 0.5, canvasH - (top - 0.5));
-                _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
+                rectTool.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
 
             if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
             {
                 using (VxsContext.Temp(out var v1, out var v2))
                 {
-                    _aggsx.Render(_stroke.MakeVxs(_simpleRectVxsGen.MakeVxs(v1), v2), this._strokeColor);
+                    _aggsx.Render(_stroke.MakeVxs(rectTool.MakeVxs(v1), v2), this._strokeColor);
                 }
             }
             else
             {
                 using (VxsContext.Temp(out var v1))
                 {
-                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(_simpleRectVxsGen.MakeVxs(v1)), this._strokeColor);
+                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(rectTool.MakeVxs(v1)), this._strokeColor);
                 }
             }
 
-
+            VectorToolBox.ReleaseRectTool(ref rectTool);
         }
 
         public override void DrawEllipse(double left, double top, double width, double height)
@@ -519,9 +515,10 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-            //Agg
+
             //---------------------------------------------------------- 
-            _ellipse.Reset(ox,
+            VectorToolBox.GetFreeEllipseTool(out Ellipse ellpseTool);
+            ellpseTool.Reset(ox,
                          oy,
                          width / 2,
                          height / 2,
@@ -531,16 +528,18 @@ namespace PixelFarm.CpuBlit
             {
                 using (VxsContext.Temp(out var v1, out var v2))
                 {
-                    _aggsx.Render(_stroke.MakeVxs(_ellipse.MakeVxs(v1), v2), this._strokeColor);
+                    _aggsx.Render(_stroke.MakeVxs(ellpseTool.MakeVxs(v1), v2), this._strokeColor);
                 }
             }
             else
             {
                 using (VxsContext.Temp(out var v1))
                 {
-                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(_ellipse.MakeVxs(v1)), this._strokeColor);
+                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(ellpseTool.MakeVxs(v1)), this._strokeColor);
                 }
             }
+            VectorToolBox.ReleaseEllipseTool(ref ellpseTool);
+
         }
         public override void FillEllipse(double left, double top, double width, double height)
         {
@@ -566,7 +565,10 @@ namespace PixelFarm.CpuBlit
 
             //Agg
             //---------------------------------------------------------- 
-            _ellipse.Reset(ox,
+
+
+            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipseTool);
+            ellipseTool.Reset(ox,
                           oy,
                           width / 2,
                           height / 2,
@@ -575,8 +577,10 @@ namespace PixelFarm.CpuBlit
 
             using (VxsContext.Temp(out var v1))
             {
-                _aggsx.Render(_ellipse.MakeVxs(v1), this.fillColor);
+                _aggsx.Render(ellipseTool.MakeVxs(v1), this.fillColor);
             }
+
+            VectorToolBox.ReleaseEllipseTool(ref ellipseTool);
         }
         public override void FillRect(double left, double top, double width, double height)
         {
@@ -597,6 +601,9 @@ namespace PixelFarm.CpuBlit
 
             //Agg 
             //---------------------------------------------------------- 
+
+            VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
+
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
                 double right = left + width;
@@ -610,7 +617,7 @@ namespace PixelFarm.CpuBlit
 #endif
                 }
 
-                _simpleRectVxsGen.SetRect(left + 0.5, (bottom + 0.5) + height, right - 0.5, (top - 0.5) + height);
+                rectTool.SetRect(left + 0.5, (bottom + 0.5) + height, right - 0.5, (top - 0.5) + height);
             }
             else
             {
@@ -627,12 +634,12 @@ namespace PixelFarm.CpuBlit
                 }
 
                 int canvasH = this.Height;
-                _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
+                rectTool.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
 
             using (VxsContext.Temp(out var v1))
             {
-                //---------------------------------------------------------- 
+
                 if (!_useDefaultBrush)
                 {
                     Brush br = _curBrush;
@@ -650,33 +657,36 @@ namespace PixelFarm.CpuBlit
 
                                 _aggGradientBrush.ResolveBrush((LinearGradientBrush)br);
                                 _aggGradientBrush.SetOffset((float)-left, (float)-top);
-                                Fill(_simpleRectVxsGen.MakeVxs(v1), _aggGradientBrush);
+                                Fill(rectTool.MakeVxs(v1), _aggGradientBrush);
                             }
                             break;
                         case BrushKind.CircularGraident:
                             {
                                 _circularGradBrush.ResolveBrush((CircularGradientBrush)br);
                                 _circularGradBrush.SetOffset((float)-left, (float)-top);
-                                Fill(_simpleRectVxsGen.MakeVxs(v1), _circularGradBrush);
+                                Fill(rectTool.MakeVxs(v1), _circularGradBrush);
                             }
                             break;
                         default:
                             {
-                                _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+                                _aggsx.Render(rectTool.MakeVertexSnap(v1), this.fillColor);
                             }
                             break;
                     }
                 }
                 else
                 {
-                    _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+                    _aggsx.Render(rectTool.MakeVertexSnap(v1), this.fillColor);
                 }
             }
+
+            VectorToolBox.ReleaseRectTool(ref rectTool);
         }
+
+
+
         AggLinearGradientBrush _aggGradientBrush = new AggLinearGradientBrush();
         AggCircularGradientBrush _circularGradBrush = new AggCircularGradientBrush();
-
-
 
         public override RequestFont CurrentFont
         {
@@ -1517,7 +1527,7 @@ namespace PixelFarm.CpuBlit
                                             {
                                                 VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)this.StrokeWidth);
                                                 this.Fill(strokeVxs, renderState.strokeColor);
-                                            } 
+                                            }
                                         }
                                     }
                                 }
