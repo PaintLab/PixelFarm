@@ -98,7 +98,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
             {
                 AggPainter p2 = (AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
-                PixelProcessing.SubBitmapBlender subImg = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestImage, aggsx.GetClippingRect());
+                PixelProcessing.SubBitmapBlender subImg = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestBitmapBlender, aggsx.GetClippingRect());
 
                 //TODO: review here again
                 PixelBlenderBGRA blenderWithGamma = new PixelProcessing.PixelBlenderBGRA();

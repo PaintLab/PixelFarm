@@ -392,6 +392,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             isIdenHint = false;
         }
 
+        public Affine Clone()
+        {
+            return new Affine(this);
+        }
         //public double m11 { get { return sx; } }
         //public double m12 { get { return shy; } }
         //public double m21 { get { return shx; } }
@@ -536,7 +540,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return new Affine(IdentityMatrix, creationPlan);
         }
 
-        
+
         //====================================================trans_affine_rotation
         // Rotation matrix. sin() and cos() are calculated twice for the same angle.
         // There's no harm because the performance of sin()/cos() is very good on all

@@ -16,10 +16,10 @@ namespace LayoutFarm
 
         protected override void OnStart(AppHost host)
         {
-             
+
             _backBoard = new BackDrawBoardUI(800, 600);
             _backBoard.BackColor = Color.White;
-            host.AddChild(_backBoard); 
+            host.AddChild(_backBoard);
             box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
@@ -31,12 +31,12 @@ namespace LayoutFarm
 
             //load lion svg
 
-            //string svgfile = "tiger.svg";
+            string svgfile = "tiger.svg";
             //string svgfile = "1f30b.svg";
             //string svgfile = "../Data/Svg/twemoji/1f30b.svg";
-            string svgfile = "../Data/1f30b.svg";
+            //string svgfile = "../Data/1f30b.svg";
             //string svgfile = "../Data/Svg/twemoji/1f370.svg";
-            SvgRenderVx svgRenderVx = ReadSvgFile(svgfile);
+            VgRenderVx svgRenderVx = ReadSvgFile(svgfile);
             var uiSprite = new UISprite(10, 10);
             uiSprite.LoadSvg(svgRenderVx);
             _backBoard.AddChild(uiSprite);
@@ -92,16 +92,16 @@ namespace LayoutFarm
                 }
             };
         }
-        SvgRenderVx ReadSvgFile(string filename)
+        VgRenderVx ReadSvgFile(string filename)
         {
 
             string svgContent = System.IO.File.ReadAllText(filename);
-            PaintLab.Svg.SvgParser parser = new SvgParser();
+            SvgDocBuilder docBuidler = new SvgDocBuilder();
+            PaintLab.Svg.SvgParser parser = new SvgParser(docBuidler);
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
             //
-            SvgRenderVx svgRenderVx = parser.GetResultAsRenderVx();
-            return svgRenderVx;
+            return docBuidler.ResultDocument.CreateRenderVx();
         }
         void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {

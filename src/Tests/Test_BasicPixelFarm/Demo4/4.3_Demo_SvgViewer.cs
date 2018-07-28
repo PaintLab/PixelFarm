@@ -15,11 +15,17 @@ namespace LayoutFarm.ColorBlenderSample
 
         ListView _lstvw_svgFiles;
         BackDrawBoardUI _backBoard;
-        PaintLab.Svg.SvgParser parser = new PaintLab.Svg.SvgParser();
+        PaintLab.Svg.SvgParser parser;
+
+        PaintLab.Svg.SvgDocBuilder _docBuilder;
+
         protected override void OnStart(AppHost host)
         {
             this.host = host;
             base.OnStart(host);
+
+            _docBuilder = new PaintLab.Svg.SvgDocBuilder();
+            parser = new PaintLab.Svg.SvgParser(_docBuilder);
 
             {
                 _backBoard = new BackDrawBoardUI(800, 600);
@@ -65,11 +71,10 @@ namespace LayoutFarm.ColorBlenderSample
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
             //
-            SvgRenderVx svgRenderVx = parser.GetResultAsRenderVx();
+            VgRenderVx svgRenderVx = _docBuilder.ResultDocument.CreateRenderVx();
             var uiSprite = new UISprite(10, 10);
             uiSprite.LoadSvg(svgRenderVx);
             _backBoard.ClearChildren();
-
             _backBoard.AddChild(uiSprite);
         }
     }

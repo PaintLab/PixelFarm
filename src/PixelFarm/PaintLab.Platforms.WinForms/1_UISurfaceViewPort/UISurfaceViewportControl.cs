@@ -243,6 +243,8 @@ namespace LayoutFarm.UI
                         newForm.PopupShadow = popupShadow1;
 
 
+                        //TODO: review here=> 300,200
+
                         UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
@@ -251,7 +253,8 @@ namespace LayoutFarm.UI
                         newSurfaceViewport.AddChild(vi);
                         //-----------------------------------------------------                        
                         s_tmpHandle = newForm.Handle;//force newform to create window handle
-                        //----------
+
+                        //-----------------------------------------------------              
 
                         var platformWinBox = new PlatformWinBoxForm(newForm);
                         topWinBox.PlatformWinBox = platformWinBox;

@@ -109,20 +109,28 @@ namespace LayoutFarm.Svg.Pathing
                                         //move to 
                                         ParseNumberList(pathDataBuffer, i + 1, out i, _reusable_nums);
 
+                                        //from https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
+
+                                        //M(x, y)+      Move the beginning of the next subpath to the coordinate x, y. 
+                                        //              All subsequent pairs of coordinates are considered implicit absolute LineTo (L) commands (see below).
+                                        //m(dx, dy)+    Move the begining of the next subpath by shifting the last known position of the path by dx along the x-axis and dy along the y - axis.
+                                        //              All subsequente pair of coordinates are considered implicite relative LineTo(l)
+
                                         int numCount = _reusable_nums.Count;
                                         if ((numCount % 2) == 0)
                                         {
                                             bool isRelative = c == 'm';
-                                            for (int m1 = 0; m1 < numCount;)
+                                            //first pair
+                                            if (numCount > 1)
                                             {
-                                                //var moveTo = new SvgPathSegMoveTo(
-                                                // numbers[m1],
-                                                // numbers[m1 + 1]); 
-                                                //moveTo.IsRelative = isRelative; 
-                                                //pathSegments.Add(moveTo);
-                                                OnMoveTo(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
-                                                m1 += 2;
+                                                OnMoveTo(_reusable_nums[0], _reusable_nums[1], isRelative);
+                                                for (int m1 = 2; m1 < numCount;)
+                                                {
+                                                    OnLineTo(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
+                                                    m1 += 2;
+                                                }
                                             }
+
                                         }
                                         else
                                         {
@@ -146,10 +154,6 @@ namespace LayoutFarm.Svg.Pathing
                                             for (int m1 = 0; m1 < numCount;)
                                             {
                                                 OnLineTo(_reusable_nums[m1], _reusable_nums[m1 + 1], isRelative);
-                                                //var lineTo = new SvgPathSegLineTo(
-                                                // numbers[m1], numbers[m1 + 1]);
-                                                //lineTo.IsRelative = isRelative;
-                                                //pathSegments.Add(lineTo);
                                                 m1 += 2;
                                             }
                                         }
@@ -756,6 +760,6 @@ namespace LayoutFarm.Svg.Pathing
                 currentState = 0;//reset
             }
         }
-     
+
     }
 }

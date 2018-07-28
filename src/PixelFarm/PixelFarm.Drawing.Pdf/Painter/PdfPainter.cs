@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.Pdf
         //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
 
-        PixelFarm.CpuBlit.VectorTool _vectorTool;
+        
         CpuBlit.VertexProcessing.RoundedRect roundRect;
 
 
@@ -33,12 +33,13 @@ namespace PixelFarm.Drawing.Pdf
 
         public PdfPainter()
         {
-            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
+            
         }
-        public override PainterExtensions.VectorTool VectorTool
+        public override void Render(RenderVx renderVx)
         {
-            get { return _vectorTool; }
+            throw new NotImplementedException();
         }
+        
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {

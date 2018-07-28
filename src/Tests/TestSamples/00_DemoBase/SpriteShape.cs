@@ -5,9 +5,6 @@
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-using PaintLab.Svg;
-
-using System.Text;
 
 namespace PixelFarm.CpuBlit
 {
@@ -18,15 +15,16 @@ namespace PixelFarm.CpuBlit
 
     public class SpriteShape
     {
-
-        SvgRenderVx _svgRenderVx;
+        VgRenderVx _org;
+        VgRenderVx _svgRenderVx;
         PathWriter path = new PathWriter();
         Vector2 center;
         RectD boundingRect;
-
-        public SpriteShape(SvgRenderVx svgRenderVx)
+        public SpriteShape(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
+            //create a copy 
+            _org = svgRenderVx.Clone();
         }
 
         public RectD Bounds
@@ -36,31 +34,26 @@ namespace PixelFarm.CpuBlit
                 return boundingRect;
             }
         }
-
         public void ResetTransform()
         {
-            int elemCount = _svgRenderVx.SvgVxCount;
-            for (int i = 0; i < elemCount; ++i)
-            {
-                _svgRenderVx.ResetTransform();
-            }
+            _svgRenderVx = _org.Clone();
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {
-            int elemCount = _svgRenderVx.SvgVxCount;
-            for (int i = 0; i < elemCount; ++i)
-            {
-                _svgRenderVx.SetInnerVx(i, SvgPart.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
-            }
+            //int elemCount = _svgRenderVx.SvgVxCount;
+            //for (int i = 0; i < elemCount; ++i)
+            //{
+            //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
+            //}
         }
 
         public void ApplyTransform(CpuBlit.VertexProcessing.Bilinear tx)
         {
-            int elemCount = _svgRenderVx.SvgVxCount;
-            for (int i = 0; i < elemCount; ++i)
-            {
-                _svgRenderVx.SetInnerVx(i, SvgPart.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
-            }
+            //int elemCount = _svgRenderVx.SvgVxCount;
+            //for (int i = 0; i < elemCount; ++i)
+            //{
+            //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
+            //}
         }
         public Vector2 Center
         {
@@ -69,7 +62,7 @@ namespace PixelFarm.CpuBlit
                 return center;
             }
         }
-        public SvgRenderVx GetRenderVx()
+        public VgRenderVx GetRenderVx()
         {
             return _svgRenderVx;
         }
@@ -78,38 +71,50 @@ namespace PixelFarm.CpuBlit
         {
             //Temp fix,            
 
-            int elemCount = _svgRenderVx.SvgVxCount;
+            int elemCount = _svgRenderVx.VgCmdCount;
             for (int i = 0; i < elemCount; ++i)
             {
-                SvgPart vx = _svgRenderVx.GetInnerVx(i);
-                if (vx.HasFillColor)
+                VgCmd vx = _svgRenderVx.GetVgCmd(i);
+                switch (vx.Name)
                 {
-                    vx.FillColor = vx.FillColor.NewFromChangeAlpha(alphaValue0_255);
-                }
-                if (vx.HasStrokeColor)
-                {
-                    vx.StrokeColor = vx.StrokeColor.NewFromChangeAlpha(alphaValue0_255);
+                    case VgCommandName.FillColor:
+                        {
+                            VgCmdFillColor fillColor = (VgCmdFillColor)vx;
+                            fillColor.Color = fillColor.Color.NewFromChangeAlpha(alphaValue0_255);
+                        }
+                        break;
+                    case VgCommandName.StrokeColor:
+                        {
+                            VgCmdStrokeColor strokColor = (VgCmdStrokeColor)vx;
+                            strokColor.Color = strokColor.Color.NewFromChangeAlpha(alphaValue0_255);
+                        }
+                        break;
                 }
             }
         }
         public void Paint(Painter p)
         {
-            _svgRenderVx.Render(p);
+            p.Render(_svgRenderVx);
+            //_svgRenderVx.Render(p);
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
         {
-            _svgRenderVx.Render(p);
+            //TODO: implement this...
+            //use prefix command for render vx
+            p.Render(_svgRenderVx);
+            //_svgRenderVx.Render(p);
         }
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
         {
-
+            //TODO: implement this...
+            //use prefix command for render vx
         }
         public void DrawOutline(Painter p)
         {
             //walk all parts and draw only outline 
             //not fill
-            int renderVxCount = _svgRenderVx.SvgVxCount;
+            int renderVxCount = _svgRenderVx.VgCmdCount;
             for (int i = 0; i < renderVxCount; ++i)
             {
 
@@ -133,7 +138,7 @@ namespace PixelFarm.CpuBlit
 
         }
 
-        public void LoadFromSvg(SvgRenderVx svgRenderVx)
+        public void LoadFromSvg(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
             UpdateBounds();
@@ -146,17 +151,17 @@ namespace PixelFarm.CpuBlit
         {
             //find bound
             //TODO: review here
-            int partCount = _svgRenderVx.SvgVxCount;
+            int partCount = _svgRenderVx.VgCmdCount;
             RectD rectTotal = new RectD();
             for (int i = 0; i < partCount; ++i)
             {
-                SvgPart vx = _svgRenderVx.GetInnerVx(i);
-                if (vx.Kind != SvgRenderVxKind.Path)
+                VgCmd vx = _svgRenderVx.GetVgCmd(i);
+                if (vx.Name != VgCommandName.Path)
                 {
                     continue;
                 }
-                VertexStore innerVxs = vx.GetVxs();
-                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
+                VgCmdPath path = (VgCmdPath)vx;
+                BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
             }
             this.boundingRect = rectTotal;
         }
@@ -164,19 +169,20 @@ namespace PixelFarm.CpuBlit
         VertexStore _selectedVxs = null;
         public bool HitTestOnSubPart(float x, float y)
         {
-            int partCount = _svgRenderVx.SvgVxCount;
+            int partCount = _svgRenderVx.VgCmdCount;
 
             _selectedVxs = null;//reset
             for (int i = partCount - 1; i >= 0; --i)
             {
                 //we do hittest top to bottom => (so => iter backward)
 
-                SvgPart vx = _svgRenderVx.GetInnerVx(i);
-                if (vx.Kind != SvgRenderVxKind.Path)
+                VgCmd vx = _svgRenderVx.GetVgCmd(i);
+                if (vx.Name != VgCommandName.Path)
                 {
                     continue;
                 }
-                VertexStore innerVxs = vx.GetVxs();
+                VgCmdPath path = (VgCmdPath)vx;
+                VertexStore innerVxs = path.Vxs;
                 //fine tune
                 //hit test ***
                 if (VertexHitTester.IsPointInVxs(innerVxs, x, y))
@@ -186,10 +192,8 @@ namespace PixelFarm.CpuBlit
                     {
                         //de-selected this first
                     }
-
-
                     _selectedVxs = innerVxs;
-                    vx.FillColor = Color.Black;
+                    //vx.FillColor = Color.Black;
                     return true;
                 }
             }

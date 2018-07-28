@@ -176,12 +176,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 for (int i = start; i < end; i++)
                 {
 
+#if DEBUG
                     dbuglatest_i = i;
                     if (i == 6)
                     {
 
                     }
-
+#endif
                     if (m_line_join == OutlineJoin.Round)
                     {
                         dv2.xb1 = curr.x1 + (curr.y2 - curr.y1);

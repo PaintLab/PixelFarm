@@ -57,6 +57,7 @@
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
