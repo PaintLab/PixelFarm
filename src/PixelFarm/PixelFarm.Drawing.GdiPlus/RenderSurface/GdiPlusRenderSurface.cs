@@ -809,13 +809,11 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        GdiPlusPainter _gdiPlusPainter;
-        public void FillPath(PixelFarm.CpuBlit.VgRenderVx svgVx)
+        GdiPlusPainter _gdiPlusPainter; 
+        public void Render(PixelFarm.CpuBlit.VgRenderVx svgVx)
         {
             if (svgVx == null) return;
-            //-------------------------
-
-
+            //------------------------- 
             if (svgVx.DisableBackingImage)
             {
 
@@ -824,7 +822,7 @@ namespace PixelFarm.Drawing.WinGdi
                 {
                     _gdiPlusPainter = new GdiPlusPainter(this);
                 }
-                svgVx.Render(_gdiPlusPainter);
+                //svgVx.Render(_gdiPlusPainter);
 
             }
             else if (!svgVx.HasBitmapSnapshot)
@@ -835,8 +833,8 @@ namespace PixelFarm.Drawing.WinGdi
                 //create 
                 CpuBlit.ActualBitmap backimg = new CpuBlit.ActualBitmap((int)bound.Width + 200, (int)bound.Height + 200);
                 CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg);
-                 
-                svgVx.Render(painter);
+
+                painter.Render(svgVx);
 #if DEBUG
                 //test
 
@@ -867,11 +865,7 @@ namespace PixelFarm.Drawing.WinGdi
             ////
             //img = painter.RenderSurface.DestActualImage;
             ////img.dbugSaveToPngFile("d:\\WImageTest\\a001.png"); 
-            //this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
-
-
-
-
+            //this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height)); 
         }
         public void FillPath(Brush brush, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
