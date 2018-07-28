@@ -60,27 +60,41 @@ namespace YourImplementation
             s_intalledTypefaces.LoadSystemFonts();
             s_intalledTypefaces.SetFontNotFoundHandler((collection, fontName, subFam) =>
             {
-
-                if (fontName == "Tahoma")
+                //This is application specific ***
+                //
+                switch (fontName.ToUpper())
                 {
-                    if (subFam == "BOLD")
-                    {
-                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "GRAS");
-                        if (anotherCandidate != null)
+                    case "TAHOMA":
                         {
-                            return anotherCandidate;
+                            switch (subFam)
+                            {
+                                case "BOLD":
+                                    {
+                                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "GRAS");
+                                        if (anotherCandidate != null)
+                                        {
+                                            return anotherCandidate;
+                                        }
+                                    }
+                                    break;
+                                case "ITALIC":
+                                    {
+                                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "NORMAL");
+                                        if (anotherCandidate != null)
+                                        {
+                                            return anotherCandidate;
+                                        }
+                                    }
+                                    break;
+                            }
                         }
-                    }
-                    else if (subFam == "ITALIC")
-                    {
-                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "NORMAL");
-                        if (anotherCandidate != null)
-                        {
-                            return anotherCandidate;
-                        }
-                    }
-                }
-
+                        break;
+                    case "MONOSPACE": 
+                        //use Courier New
+                        return collection.GetInstalledTypeface("Courier New", subFam); 
+                    case "HELVETICA":
+                        return collection.GetInstalledTypeface("Arial", subFam);
+                } 
                 return null;
             });
             //--------------------
