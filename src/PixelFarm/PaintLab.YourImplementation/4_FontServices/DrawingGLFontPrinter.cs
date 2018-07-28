@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
         int bmpHeight;
         GLRenderSurface _glsx;
         GLPainter canvasPainter;
-
+        LayoutFarm.OpenFontTextService _openFontTextServices;
         public AggTextSpanPrinter(GLPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
@@ -48,7 +48,9 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             _aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            _vxsTextPrinter = new VxsTextPrinter(_aggPainter);
+
+            _openFontTextServices = new LayoutFarm.OpenFontTextService();
+            _vxsTextPrinter = new VxsTextPrinter(_aggPainter, _openFontTextServices);
             _aggPainter.TextPrinter = _vxsTextPrinter;
         }
         public bool StartDrawOnLeftTop { get; set; }

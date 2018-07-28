@@ -42,7 +42,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush internalSolidBrush;
         System.Drawing.Rectangle currentClipRect;
         //------------------------------- 
-
+        LayoutFarm.OpenFontTextService _openFontTextServices;
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
 #if DEBUG
@@ -65,6 +65,7 @@ namespace PixelFarm.Drawing.WinGdi
             internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
+
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
@@ -800,8 +801,12 @@ namespace PixelFarm.Drawing.WinGdi
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
 
+                if (_openFontTextServices == null)
+                {
+                    _openFontTextServices = new LayoutFarm.OpenFontTextService();
+                }
 
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices);
                 aggPainter.TextPrinter = textPrinter;
                 _painter = aggPainter;
             }
@@ -809,7 +814,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        GdiPlusPainter _gdiPlusPainter; 
+        GdiPlusPainter _gdiPlusPainter;
         public void Render(PixelFarm.CpuBlit.VgRenderVx svgVx)
         {
             if (svgVx == null) return;
