@@ -25,8 +25,7 @@ using LayoutFarm.Svg;
 using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
 using LayoutFarm.WebLexer;
-
-using LayoutFarm.Svg.Pathing;
+ 
 
 
 namespace PaintLab.Svg

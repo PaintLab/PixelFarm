@@ -24,14 +24,15 @@ namespace PixelFarm.CpuBlit
         {
             _svgdoc = svgdoc;
 
-            int childCount = svgdoc.Root.ChildCount;
+            SvgElement rootElem = svgdoc.Root;
+            int childCount = rootElem.ChildCount;
             List<VgCmd> cmds = new List<VgCmd>();
 
             for (int i = 0; i < childCount; ++i)
             {
                 //translate SvgElement to  
                 //command stream?
-                RenderSvgElements(svgdoc.Root.GetChild(i), cmds);
+                RenderSvgElements(rootElem.GetChild(i), cmds);
             }
             VgRenderVx renderVx = new VgRenderVx(cmds.ToArray());
             return renderVx;
@@ -50,6 +51,8 @@ namespace PixelFarm.CpuBlit
                     _defsList.Add(elem);
                     return;
                 case WellknownSvgElementName.Rect:
+                    RenderRectElement(elem, cmds);
+                    break;
                 case WellknownSvgElementName.Polyline:
                 case WellknownSvgElementName.Polygon:
                 case WellknownSvgElementName.Ellipse:
@@ -155,6 +158,32 @@ namespace PixelFarm.CpuBlit
             pathCmd.SetVxsAsOriginal(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
             AssignAttributes(pathSpec, cmds);
 
+            cmds.Add(pathCmd);
+        }
+
+
+        PathWriter _pathWriter;
+
+        void RenderRectElement(SvgElement elem, List<VgCmd> cmds)
+        {
+            SvgRectSpec pathSpec = elem._visualSpec as SvgRectSpec;
+            VgCmdPath pathCmd = new VgCmdPath();
+
+            //convert rect to path
+            if (_pathWriter == null)
+            {
+                _pathWriter = new PathWriter();
+            }
+            _pathWriter.Clear();
+
+            //pathSpec.X;
+            //pathSpec.Y;
+            //pathSpec.Width;
+            //pathSpec.Height;
+
+
+            //pathCmd.SetVxsAsOriginal(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
+            AssignAttributes(pathSpec, cmds);
             cmds.Add(pathCmd);
         }
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
