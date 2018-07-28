@@ -34,9 +34,7 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         RenderQualtity _renderQuality;
 
-        PixelFarm.CpuBlit.VectorTool _vectorTool;
-
-
+      
         public GLPainter(GLRenderSurface glsx)
         {
             _glsx = glsx;
@@ -50,16 +48,13 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
 
-            _vectorTool = new CpuBlit.VectorTool();
+           
         }
         public override void Render(RenderVx renderVx)
         {
             throw new NotImplementedException();
         }
-        public override Drawing.PainterExtensions.VectorTool VectorTool
-        {
-            get { return _vectorTool; }
-        }
+      
         Color _fontFillColor;
         public Color FontFillColor
         {

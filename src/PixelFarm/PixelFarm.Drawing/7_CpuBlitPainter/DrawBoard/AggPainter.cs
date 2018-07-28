@@ -26,16 +26,6 @@ namespace PixelFarm.CpuBlit
         }
 
     }
-    public class VectorTool : PixelFarm.Drawing.PainterExtensions.VectorTool
-    {
-        Stroke _stroke = new Stroke(1);
-        public override void CreateStroke(VertexStore orgVxs, float strokeW, VertexStore output)
-        {
-            _stroke.Width = strokeW;
-            _stroke.MakeVxs(orgVxs, output);
-
-        }
-    }
 
 
     public enum LineRenderingTechnique
@@ -86,7 +76,7 @@ namespace PixelFarm.CpuBlit
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
 
-        VectorTool _vectorTool;
+
 
         Brush _curBrush;
         Pen _curPen;
@@ -111,7 +101,7 @@ namespace PixelFarm.CpuBlit
 
 
             this._stroke = new Stroke(1);//default
-            _vectorTool = new VectorTool();
+
             _useDefaultBrush = true;
 
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
@@ -203,12 +193,6 @@ namespace PixelFarm.CpuBlit
             renderSx.PixelBlender = blender;
 
             return new AggPainter(renderSx);
-        }
-
-
-        public override Drawing.PainterExtensions.VectorTool VectorTool
-        {
-            get { return _vectorTool; }
         }
 
         public AggRenderSurface RenderSurface
@@ -1506,7 +1490,7 @@ namespace PixelFarm.CpuBlit
                                         }
                                         else
                                         {
-                                            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, this, (float)this.StrokeWidth);
+                                            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, (float)this.StrokeWidth);
                                             this.Fill(strokeVxs, renderState.strokeColor);
                                         }
                                     }
@@ -1524,17 +1508,16 @@ namespace PixelFarm.CpuBlit
                                         if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
                                         {
                                             //has specific stroke color  
-                                            
+
                                             if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
                                             {
                                                 this.Draw(new VertexStoreSnap(v1), renderState.strokeColor);
                                             }
                                             else
                                             {
-                                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, this, (float)this.StrokeWidth);
+                                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)this.StrokeWidth);
                                                 this.Fill(strokeVxs, renderState.strokeColor);
-                                            }
-
+                                            } 
                                         }
                                     }
                                 }
@@ -1545,13 +1528,17 @@ namespace PixelFarm.CpuBlit
             }
             TempVgRenderStateStore.ReleaseTempVgRenderState(ref vgStateStack);
         }
-        static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, Painter p, float strokeW)
+        static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
         {
 
             using (VxsContext.Temp(out var v1))
             {
-                p.VectorTool.CreateStroke(vxs, strokeW, v1);
-                return v1.CreateTrim();
+                TempStrokeTool.GetFreeStroke(out Stroke stroke);
+                stroke.Width = strokeW;
+                stroke.MakeVxs(vxs, v1);
+                VertexStore vx = v1.CreateTrim();
+                TempStrokeTool.ReleaseStroke(ref stroke);
+                return vx;
             }
         }
 

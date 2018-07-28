@@ -14,20 +14,16 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _currentFillBrush;
 
         GdiPlusRenderSurface _renderSurface;
-        PixelFarm.CpuBlit.VectorTool _vectorTool;
-
+    
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
             this._renderSurface = renderSurface;
 
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-            _vectorTool = new PixelFarm.CpuBlit.VectorTool();
+            
         }
-        public override PainterExtensions.VectorTool VectorTool
-        {
-            get { return _vectorTool; }
-        }
+      
 
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
