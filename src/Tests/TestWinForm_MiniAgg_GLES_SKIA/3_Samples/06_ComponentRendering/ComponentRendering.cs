@@ -44,9 +44,9 @@ namespace PixelFarm.CpuBlit
 
             AggPainter p2 = (AggPainter)p;
             AggRenderSurface asx = p2.RenderSurface;
-            if (asx.DestImage != null)
+            if (asx.DestBitmapBlender != null)
             {
-                IBitmapBlender backBuffer = asx.DestImage;
+                IBitmapBlender backBuffer = asx.DestBitmapBlender;
 
                 
 

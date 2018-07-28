@@ -99,6 +99,9 @@ namespace PixelFarm.Drawing
 
     public static class VectorToolBox
     {
+        //for net20 -- check this
+        //TODO: https://stackoverflow.com/questions/18333885/threadstatic-v-s-threadlocalt-is-generic-better-than-attribute
+
         [System.ThreadStatic]
         static Stack<VertexStore> s_vxsPool = new Stack<VertexStore>();
 
@@ -189,6 +192,9 @@ namespace PixelFarm.Drawing
             s_pathWriters.Push(p);
             p = null;
         }
+
+        
+
         //-----------------------------------
     }
 }

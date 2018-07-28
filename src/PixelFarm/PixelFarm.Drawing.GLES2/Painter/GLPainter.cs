@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing.PainterExtensions;
+using PixelFarm.CpuBlit.VertexProcessing; 
 
 namespace PixelFarm.DrawingGL
 {
@@ -35,9 +34,7 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         RenderQualtity _renderQuality;
 
-        PixelFarm.CpuBlit.VectorTool _vectorTool;
-
-
+      
         public GLPainter(GLRenderSurface glsx)
         {
             _glsx = glsx;
@@ -51,13 +48,13 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
 
-            _vectorTool = new CpuBlit.VectorTool();
+           
         }
-
-        public override Drawing.PainterExtensions.VectorTool VectorTool
+        public override void Render(RenderVx renderVx)
         {
-            get { return _vectorTool; }
+            throw new NotImplementedException();
         }
+      
         Color _fontFillColor;
         public Color FontFillColor
         {

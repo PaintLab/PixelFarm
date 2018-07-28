@@ -15,6 +15,9 @@ BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri
 
 SGI, 2000, Eric Veach, Tesselate.
 
+MS-PL, 2018, SVG.NET https://github.com/vvvv/SVG
+
+
 **Image Processing**
 
 BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
