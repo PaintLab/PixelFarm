@@ -1480,58 +1480,62 @@ namespace PixelFarm.CpuBlit
                             VgCmdPath path = (VgCmdPath)vx;
                             VertexStore vxs = path.Vxs;
 
-                            if (renderState.fillColor.A > 0)
+
+                            if (currentTx == null)
                             {
-                                if (currentTx == null)
+                                if (renderState.fillColor.A > 0)
                                 {
                                     this.Fill(vxs);
+                                }
+                                //to draw stroke
+                                //stroke width must > 0 and stroke-color must not be transparent color
+
+                                if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
+                                {
+                                    //has specific stroke color  
+
+                                    if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                    {
+                                        //TODO: review here again
+                                        this.Draw(new VertexStoreSnap(vxs), renderState.strokeColor);
+                                    }
+                                    else
+                                    {
+                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, (float)this.StrokeWidth);
+                                        this.Fill(strokeVxs, renderState.strokeColor);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //have some tx
+                                using (VxsContext.Temp(out var v1))
+                                {
+                                    currentTx.TransformToVxs(vxs, v1);
+                                    if (renderState.fillColor.A > 0)
+                                    {
+                                        this.Fill(v1);
+                                    }
 
                                     //to draw stroke
-                                    //stroke width must > 0 and stroke-color must not be transparent color
-
+                                    //stroke width must > 0 and stroke-color must not be transparent color 
                                     if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
                                     {
                                         //has specific stroke color  
 
                                         if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
                                         {
-                                            //TODO: review here again
-                                            this.Draw(new VertexStoreSnap(vxs), renderState.strokeColor);
+                                            this.Draw(new VertexStoreSnap(v1), renderState.strokeColor);
                                         }
                                         else
                                         {
-                                            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, (float)this.StrokeWidth);
+                                            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)this.StrokeWidth);
                                             this.Fill(strokeVxs, renderState.strokeColor);
                                         }
                                     }
                                 }
-                                else
-                                {
-                                    //have some tx
-                                    using (VxsContext.Temp(out var v1))
-                                    {
-                                        currentTx.TransformToVxs(vxs, v1);
-                                        this.Fill(v1);
-
-                                        //to draw stroke
-                                        //stroke width must > 0 and stroke-color must not be transparent color 
-                                        if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
-                                        {
-                                            //has specific stroke color  
-
-                                            if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                            {
-                                                this.Draw(new VertexStoreSnap(v1), renderState.strokeColor);
-                                            }
-                                            else
-                                            {
-                                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)this.StrokeWidth);
-                                                this.Fill(strokeVxs, renderState.strokeColor);
-                                            }
-                                        }
-                                    }
-                                }
                             }
+
                         }
                         break;
                 }
