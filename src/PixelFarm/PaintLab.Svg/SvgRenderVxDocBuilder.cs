@@ -256,8 +256,7 @@ namespace PixelFarm.CpuBlit
             SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;
             VgCmdPath pathCmd = new VgCmdPath();
 
-            //convert rect to path
-
+            //convert rect to path 
             //pathSpec.X;
             //pathSpec.Y;
             //pathSpec.Width;
@@ -358,15 +357,29 @@ namespace PixelFarm.CpuBlit
 
                     SvgTransformMatrix matrixTx = (SvgTransformMatrix)transformation;
                     float[] elems = matrixTx.Elements;
-                    PixelFarm.CpuBlit.VertexProcessing.Affine affine = new VertexProcessing.Affine(
-                        elems[0], elems[1],
-                        elems[2], elems[3],
-                        elems[4], elems[5]);
-                    return affine;
+                    return new VertexProcessing.Affine(
+                         elems[0], elems[1],
+                         elems[2], elems[3],
+                         elems[4], elems[5]);
                 case SvgTransformKind.Rotation:
                     SvgRotate rotateTx = (SvgRotate)transformation;
-                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(rotateTx.Angle);
+                    if (rotateTx.SpecificRotationCenter)
+                    {
+                        //https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform
+                        //svg's rotation=> angle in degree, so convert to rad ...
 
+                        //translate to center 
+                        //rotate and the translate back
+                        return VertexProcessing.Affine.NewMatix(
+                                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
+                                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(AggMath.deg2rad(rotateTx.Angle)),
+                                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
+                            );
+                    }
+                    else
+                    {
+                        return PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(AggMath.deg2rad(rotateTx.Angle));
+                    }
                 case SvgTransformKind.Scale:
                     SvgScale scaleTx = (SvgScale)transformation;
                     return PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(scaleTx.X, scaleTx.Y);

@@ -179,6 +179,14 @@ namespace LayoutFarm.Svg
             set;
         }
     }
+    public class SvgLinearGradientSpec : SvgVisualSpec
+    {
+        public System.Collections.Generic.List<StopColorPoint> StopList { get; set; }
+        public CssLength X1 { get; set; }
+        public CssLength Y1 { get; set; }
+        public CssLength X2 { get; set; }
+        public CssLength Y2 { get; set; }
+    }
     public class SvgPolygonSpec : SvgVisualSpec
     {
         public PixelFarm.Drawing.PointF[] Points { get; set; }
