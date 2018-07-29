@@ -554,8 +554,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
 
 
-    public class StrokeGen2
+    class StrokeGen2
     {
+
 
         LineStrokeGenerator lineGen = new LineStrokeGenerator();
         List<Vector> positiveSideVectors = new List<Vector>();
