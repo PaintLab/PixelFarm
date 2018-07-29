@@ -30,23 +30,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     class StrokeGenerator
     {
 
-        /// <summary>
-        /// stroke generator's status
-        /// </summary>
-        enum Status
-        {
-            Init,
-            Ready,
-            Cap1,
-            Cap2,
-            Outline1,
-            CloseFirst,
-            Outline2,
-            OutVertices,
-            EndPoly1,
-            EndPoly2,
-            Stop
-        }
+
 
 
         StrokeMath m_stroker;
@@ -54,15 +38,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         VertexStore m_out_vertices;
         double m_shorten;
         bool m_closed;
-        Status m_status;
-        Status m_prev_status;
         int m_src_vertex;
-        int m_out_vertex;
         public StrokeGenerator()
         {
             m_stroker = new StrokeMath();
             m_out_vertices = new VertexStore();
-            m_status = Status.Init;
+
             m_closed = false;
         }
 
@@ -120,8 +101,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             multipartVertexDistanceList.Clear();
             m_closed = false;
-
-            m_status = Status.Init;
         }
         public void Close()
         {
@@ -131,7 +110,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
             //TODO: review 
-            m_status = Status.Init;
+
             switch (cmd)
             {
                 case VertexCmd.MoveTo:
@@ -154,18 +133,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         void Rewind()
         {
-            if (m_status == Status.Init)
+            multipartVertexDistanceList.Rewind();
+            if (multipartVertexDistanceList.CurrentRangeLen < 3)
             {
-                multipartVertexDistanceList.Rewind();
-                if (multipartVertexDistanceList.CurrentRangeLen < 3)
-                {
-                    //force
-                    m_closed = false;
-                }
+                //force
+                m_closed = false;
             }
-            m_status = Status.Ready;
             m_src_vertex = 0;
-            m_out_vertex = 0;
             multipartVertexDistanceList.Rewind();
         }
 
@@ -204,27 +178,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             if (!m_closed)
             {
                 //cap1
-                Vertex2d v0, v1;
-                multipartVertexDistanceList.GetFirst2(out v0, out v1);
+
+                multipartVertexDistanceList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
                 m_stroker.CreateCap(
                     m_out_vertices,
                     v0,
                     v1,
                     v0.CalLen(v1));
-                m_src_vertex = 1;
-                m_prev_status = Status.Outline1;
-                m_status = Status.OutVertices;
-                m_out_vertex = 0;
+
+                m_out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
                 AppendVertices(output, m_out_vertices);
             }
             else
             {
 
-                Vertex2d v0, v1;
-                multipartVertexDistanceList.GetFirst2(out v0, out v1);
 
-                Vertex2d v_beforeLast, v_last;
-                multipartVertexDistanceList.GetLast2(out v_beforeLast, out v_last);
+                multipartVertexDistanceList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+                multipartVertexDistanceList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
 
                 if (v_last.x == v0.x && v_last.y == v0.y)
                 {
@@ -238,31 +208,24 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     v1,
                     v_last.CalLen(v0),
                     v0.CalLen(v1));
-
-                m_prev_status = m_status;
-                m_status = Status.OutVertices;
-                m_out_vertex = 0;
-
-
-                m_out_vertices.GetVertex(0, out double moveX, out double moveY);
-                output.AddMoveTo(moveX, moveY);
-                //others
-
+                m_out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
+                output.AddMoveTo(latest_moveX, latest_moveY);
+                //others 
                 AppendVertices(output, m_out_vertices, 1);
 
-                m_src_vertex = 1;
-                m_out_vertex = 1;
             }
+            //----------------
+            m_src_vertex = 1;
+            //----------------
 
             //line until end cap 
             while (m_src_vertex < multipartVertexDistanceList.CurrentRangeLen - 1)
             {
-                Vertex2d prev, cur, next;
 
                 multipartVertexDistanceList.GetTripleVertices(m_src_vertex,
-                    out prev,
-                    out cur,
-                    out next);
+                    out Vertex2d prev,
+                    out Vertex2d cur,
+                    out Vertex2d next);
                 //check if we should join or not ?
 
                 //don't join it
@@ -274,9 +237,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                    cur.CalLen(next));
 
                 ++m_src_vertex;
-                m_prev_status = m_status;
-                m_status = Status.OutVertices;
-                m_out_vertex = 0;
+
 
                 AppendVertices(output, m_out_vertices);
             }
@@ -285,33 +246,28 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 if (!m_closed)
                 {
-                    Vertex2d beforeLast, last;
-                    multipartVertexDistanceList.GetLast2(out beforeLast, out last);
+
+                    multipartVertexDistanceList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
                     m_stroker.CreateCap(m_out_vertices,
                         last, //**please note different direction (compare with above)
                         beforeLast,
                         beforeLast.CalLen(last));
-                    m_prev_status = Status.Outline2;
-                    m_status = Status.OutVertices;
-                    m_out_vertex = 0;
 
                     AppendVertices(output, m_out_vertices);
                 }
                 else
                 {
 
-                    output.GetVertex(0, out double firstX, out double firstY);
-                    output.AddLineTo(firstX, firstY);
+                    output.GetVertex(0, out latest_moveX, out latest_moveY);
+                    output.AddLineTo(latest_moveX, latest_moveY);
                     output.AddCloseFigure();
                     //begin inner
                     //move to inner 
 
                     // v_last <- v0 <- v1
-                    Vertex2d v0, v1;
-                    multipartVertexDistanceList.GetFirst2(out v0, out v1);
 
-                    Vertex2d v_beforeLast, v_last;
-                    multipartVertexDistanceList.GetLast2(out v_beforeLast, out v_last);
+                    multipartVertexDistanceList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+                    multipartVertexDistanceList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
 
                     if (v_last.x == v0.x && v_last.y == v0.y)
                     {
@@ -327,13 +283,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         v1.CalLen(v0),
                         v0.CalLen(v_last));
 
-                    m_prev_status = m_status;
-                    m_status = Status.OutVertices;
-                    m_out_vertex = 0;
 
-
-                    m_out_vertices.GetVertex(0, out double moveX, out double moveY);
-                    output.AddMoveTo(latest_moveX = moveX, latest_moveY = moveY);
+                    m_out_vertices.GetVertex(0, out latest_moveX, out latest_moveY);
+                    output.AddMoveTo(latest_moveX, latest_moveY);
                     //others 
                     AppendVertices(output, m_out_vertices, 1);
 
@@ -344,11 +296,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             while (m_src_vertex > 0)
             {
 
-                Vertex2d prev, cur, next;
+
                 multipartVertexDistanceList.GetTripleVertices(m_src_vertex,
-                    out prev,
-                    out cur,
-                    out next);
+                    out Vertex2d prev,
+                    out Vertex2d cur,
+                    out Vertex2d next);
 
                 m_stroker.CreateJoin(m_out_vertices,
                   next, //**please note different direction (compare with above)
@@ -356,10 +308,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                   prev,
                   cur.CalLen(next),
                   prev.CalLen(cur));
-
-                m_prev_status = m_status;
-                m_status = Status.OutVertices;
-                m_out_vertex = 0;
 
                 --m_src_vertex;
 
@@ -369,15 +317,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 if (!m_closed)
                 {
-                    output.GetVertex(0, out double firstX, out double firstY);
-                    output.AddLineTo(firstX, firstY);
-                    output.AddCloseFigure();
+                    output.GetVertex(0, out latest_moveX, out latest_moveY);
+
                 }
-                else
-                {
-                    output.AddLineTo(latest_moveX, latest_moveY);
-                    output.AddCloseFigure();
-                }
+                output.AddLineTo(latest_moveX, latest_moveY);
+                output.AddCloseFigure();
+
             }
         }
 
