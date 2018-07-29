@@ -58,6 +58,45 @@ namespace YourImplementation
             s_isInit = true;
             s_intalledTypefaces = new InstalledTypefaceCollection();
             s_intalledTypefaces.LoadSystemFonts();
+            s_intalledTypefaces.SetFontNotFoundHandler((collection, fontName, subFam) =>
+            {
+                //This is application specific ***
+                //
+                switch (fontName.ToUpper())
+                {
+                    case "TAHOMA":
+                        {
+                            switch (subFam)
+                            {
+                                case "BOLD":
+                                    {
+                                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "GRAS");
+                                        if (anotherCandidate != null)
+                                        {
+                                            return anotherCandidate;
+                                        }
+                                    }
+                                    break;
+                                case "ITALIC":
+                                    {
+                                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "NORMAL");
+                                        if (anotherCandidate != null)
+                                        {
+                                            return anotherCandidate;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+                    case "MONOSPACE": 
+                        //use Courier New
+                        return collection.GetInstalledTypeface("Courier New", subFam); 
+                    case "HELVETICA":
+                        return collection.GetInstalledTypeface("Arial", subFam);
+                } 
+                return null;
+            });
             //--------------------
 
             //1. Storage provider

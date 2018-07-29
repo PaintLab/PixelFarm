@@ -166,7 +166,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageInterpolationQuality.cs" Link="PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageInterpolationQuality.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageTransform.cs" Link="PixelFarm\PixelFarm.CpuBlit\08_imageresampling\ImageTransform.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs" Link="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Color.cs" Link="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Color.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\CombineMode.cs" Link="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\CombineMode.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\DashStyle.cs" Link="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\DashStyle.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\GraphicsPath.cs" Link="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\GraphicsPath.cs" />
@@ -196,8 +195,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\RoundedRect.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\RoundedRect.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\SimpleRect.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\SimpleRect.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\Stroke.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\Stroke.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGenerator.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGenerator.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen_Old.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen_Old.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VectorToolBox.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VectorToolBox.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VertexData.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VertexData.cs" />
@@ -208,6 +207,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VxsClipping.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\VxsClipping.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\AffinePlan.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\AffinePlan.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Color.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs" />
@@ -268,6 +268,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\Canvas2dExtension.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\dbugVertexSourceIO.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\LineDashGenerator.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\DrawBoard\SvgRenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs" />
@@ -286,7 +287,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Transposer.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image\Transposer.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\SvgRenderVx.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface\SvgRenderVx.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" Link="PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color" />
@@ -338,5 +339,6 @@
     <Folder Include="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter" />
     <Folder Include="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\4_Image" />
     <Folder Include="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\RenderSurface" />
+    <Folder Include="PixelFarm\PixelFarm.Drawing\8_ImgReaders" />
   </ItemGroup>
 </Project>

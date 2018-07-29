@@ -26,7 +26,6 @@ using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
 using LayoutFarm.WebLexer;
 
-using LayoutFarm.Svg.Pathing;
 
 
 namespace PaintLab.Svg
@@ -401,10 +400,8 @@ namespace PaintLab.Svg
         readonly WellknownSvgElementName _wellknownName;
         readonly string _unknownElemName;
 
-        public SvgVisualSpec _visualSpec = new SvgVisualSpec();
-
+        public SvgVisualSpec _visualSpec;
         List<SvgElement> _childNodes = new List<SvgElement>();
-
         object _controller;
 
         public SvgElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualspec = null)
@@ -420,6 +417,7 @@ namespace PaintLab.Svg
         {
             _wellknownName = wellknownName;
             _unknownElemName = name;
+            _visualSpec = new SvgVisualSpec();
         }
         protected void SetController(object controller)
         {
@@ -452,6 +450,7 @@ namespace PaintLab.Svg
                     case WellknownSvgElementName.Line: return "line";
                     case WellknownSvgElementName.Defs: return "defs";
                     case WellknownSvgElementName.Title: return "title";
+                    case WellknownSvgElementName.Image: return "image";
                 }
             }
         }
@@ -570,6 +569,8 @@ namespace PaintLab.Svg
                     return new SvgElement(WellknownSvgElementName.Polygon);
                 case "path":
                     return new SvgElement(WellknownSvgElementName.Path, new SvgPathSpec());
+                case "image":
+                    return new SvgElement(WellknownSvgElementName.Image);
             }
         }
 
@@ -589,7 +590,7 @@ namespace PaintLab.Svg
 
         public SvgDocBuilder()
         {
-            
+
         }
         public SvgDocument ResultDocument
         {
@@ -599,7 +600,7 @@ namespace PaintLab.Svg
         {
             _elems.Clear();
             _svgDoc = new SvgDocument();
-            _currentElem = _svgDoc.Root;             
+            _currentElem = _svgDoc.Root;
         }
         public void OnVisitNewElement(string elemName)
         {
