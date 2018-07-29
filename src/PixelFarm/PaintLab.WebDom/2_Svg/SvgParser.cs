@@ -539,6 +539,10 @@ namespace PaintLab.Svg
     public class SvgDocument
     {
         SvgElement _rootElement = new SvgElement(WellknownSvgElementName.Svg);
+        public SvgDocument()
+        {
+        }
+
         public SvgElement CreateElement(string elemName)
         {
             //------
@@ -583,8 +587,8 @@ namespace PaintLab.Svg
     public class SvgDocBuilder : ISvgDocBuilder
     {
         Stack<SvgElement> _elems = new Stack<SvgElement>();
-        CssParser _cssParser = new CssParser();
 
+        SvgElementSpecEvaluator _specEvaluator = new SvgElementSpecEvaluator();
         SvgElement _currentElem;
         SvgDocument _svgDoc;
 
@@ -596,9 +600,11 @@ namespace PaintLab.Svg
         {
             get { return _svgDoc; }
         }
+
         public void OnBegin()
         {
-            _elems.Clear();
+            _elems.Clear();//**
+
             _svgDoc = new SvgDocument();
             _currentElem = _svgDoc.Root;
         }
@@ -611,45 +617,42 @@ namespace PaintLab.Svg
                 _currentElem.AddElement(newElem);
             }
             _currentElem = newElem;
+            _specEvaluator.SetCurrentElement(_currentElem);
+        } 
+        public void OnAttribute(string attrName, string value)
+        {
+            _specEvaluator.OnAttribute(attrName, value);
+        }
+        public void OnEnteringElementBody()
+        {
 
         }
 
-        static void AddClipPathLink(SvgVisualSpec spec, string value)
+        public void OnExtingElementBody()
         {
-            //eg. url(#aaa)
-            if (value.StartsWith("url("))
+            if (_elems.Count > 0)
             {
-                int endAt = value.IndexOf(')', 4);
-                if (endAt > -1)
-                {
-                    //get value 
-                    string url_value = value.Substring(4, endAt - 4);
-                    if (url_value.StartsWith("#"))
-                    {
-                        spec.ClipPathLink = new SvgAttributeLink(SvgAttributeLinkKind.Id, url_value.Substring(1));
-                    }
-                    else
-                    {
-
-                    }
-                }
-                else
-                {
-
-                }
+                _currentElem = _elems.Pop();
             }
-            else
-            {
+        }
 
-            }
+        public void OnEnd()
+        {
+        }
+    }
 
+    public class SvgElementSpecEvaluator
+    {
+        CssParser _cssParser = new CssParser();
+        SvgElement _currentElem;
+        public void SetCurrentElement(SvgElement elem)
+        {
+            _currentElem = elem;
         }
         void AddStyle(SvgVisualSpec spec, string cssStyle)
         {
             if (!String.IsNullOrEmpty(cssStyle))
             {
-
-
                 //***                
                 CssRuleSet cssRuleSet = _cssParser.ParseCssPropertyDeclarationList(cssStyle.ToCharArray());
 
@@ -690,6 +693,8 @@ namespace PaintLab.Svg
                             break;
                         case "stroke":
                             {
+                                //stroke color
+
                                 //TODO:
                                 //if (attr.Value != "none")
                                 //{
@@ -798,32 +803,104 @@ namespace PaintLab.Svg
                 case "transform":
                     {
                         //parse trans
-                        ParseTransform(value, spec);
+                        SvgParser.ParseTransform(value, spec);
                     }
                     break;
             }
-
         }
-        public void OnEnteringElementBody()
+        static void AddClipPathLink(SvgVisualSpec spec, string value)
         {
-
-        }
-
-        public void OnExtingElementBody()
-        {
-            if (_elems.Count > 0)
+            //eg. url(#aaa)
+            if (value.StartsWith("url("))
             {
-                _currentElem = _elems.Pop();
+                int endAt = value.IndexOf(')', 4);
+                if (endAt > -1)
+                {
+                    //get value 
+                    string url_value = value.Substring(4, endAt - 4);
+                    if (url_value.StartsWith("#"))
+                    {
+                        spec.ClipPathLink = new SvgAttributeLink(SvgAttributeLinkKind.Id, url_value.Substring(1));
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+
             }
         }
 
-        public void OnEnd()
+    }
+
+
+    public class SvgParser : XmlParserBase
+    {
+
+        ISvgDocBuilder _svgDocBuilder;
+
+        public SvgParser(ISvgDocBuilder svgDocBuilder)
         {
-
-
+            _svgDocBuilder = svgDocBuilder;
         }
 
-        static void ParseTransform(string value, SvgVisualSpec spec)
+        protected override void OnBegin()
+        {
+            _svgDocBuilder.OnBegin();
+            base.OnBegin();
+        }
+        public void ReadSvgString(string svgString)
+        {
+            ParseDocument(new TextSnapshot(svgString));
+        }
+        public void ReadSvgCharBuffer(char[] svgBuffer)
+        {
+            ParseDocument(new TextSnapshot(svgBuffer));
+        }
+        public void ReadSvgFile(string svgFileName)
+        {
+            ReadSvgString(System.IO.File.ReadAllText(svgFileName));
+        }
+        protected override void OnVisitNewElement(TextSpan ns, TextSpan localName)
+        {
+            throw new NotSupportedException();
+        }
+        protected override void OnVisitNewElement(TextSpan localName)
+        {
+            string elemName = _textSnapshot.Substring(localName.startIndex, localName.len);
+            _svgDocBuilder.OnVisitNewElement(elemName);
+        }
+
+        protected override void OnAttribute(TextSpan localAttr, TextSpan value)
+        {
+            string attrLocalName = _textSnapshot.Substring(localAttr.startIndex, localAttr.len);
+            string attrValue = _textSnapshot.Substring(value.startIndex, value.len);
+            _svgDocBuilder.OnAttribute(attrLocalName, attrValue);
+        }
+        protected override void OnAttribute(TextSpan ns, TextSpan localAttr, TextSpan value)
+        {
+            string attrLocalName = _textSnapshot.Substring(localAttr.startIndex, localAttr.len);
+            string attrValue = _textSnapshot.Substring(value.startIndex, value.len);
+            _svgDocBuilder.OnAttribute(attrLocalName, attrValue);
+
+        }
+        protected override void OnEnteringElementBody()
+        {
+            _svgDocBuilder.OnEnteringElementBody();
+        }
+        protected override void OnExitingElementBody()
+        {
+            _svgDocBuilder.OnExtingElementBody();
+        }
+
+        public static void ParseTransform(string value, SvgVisualSpec spec)
         {
             //TODO: ....
 
@@ -897,67 +974,6 @@ namespace PaintLab.Svg
             return elem_values;
         }
 
-    }
-
-
-    public class SvgParser : XmlParserBase
-    {
-
-        ISvgDocBuilder _svgDocBuilder;
-
-        public SvgParser(ISvgDocBuilder svgDocBuilder)
-        {
-            _svgDocBuilder = svgDocBuilder;
-        }
-
-        protected override void OnBegin()
-        {
-            _svgDocBuilder.OnBegin();
-            base.OnBegin();
-        }
-        public void ReadSvgString(string svgString)
-        {
-            ParseDocument(new TextSnapshot(svgString));
-        }
-        public void ReadSvgCharBuffer(char[] svgBuffer)
-        {
-            ParseDocument(new TextSnapshot(svgBuffer));
-        }
-        public void ReadSvgFile(string svgFileName)
-        {
-            ReadSvgString(System.IO.File.ReadAllText(svgFileName));
-        }
-        protected override void OnVisitNewElement(TextSpan ns, TextSpan localName)
-        {
-            throw new NotSupportedException();
-        }
-        protected override void OnVisitNewElement(TextSpan localName)
-        {
-            string elemName = _textSnapshot.Substring(localName.startIndex, localName.len);
-            _svgDocBuilder.OnVisitNewElement(elemName);
-        }
-
-        protected override void OnAttribute(TextSpan localAttr, TextSpan value)
-        {
-            string attrLocalName = _textSnapshot.Substring(localAttr.startIndex, localAttr.len);
-            string attrValue = _textSnapshot.Substring(value.startIndex, value.len);
-            _svgDocBuilder.OnAttribute(attrLocalName, attrValue);
-        }
-        protected override void OnAttribute(TextSpan ns, TextSpan localAttr, TextSpan value)
-        {
-            string attrLocalName = _textSnapshot.Substring(localAttr.startIndex, localAttr.len);
-            string attrValue = _textSnapshot.Substring(value.startIndex, value.len);
-            _svgDocBuilder.OnAttribute(attrLocalName, attrValue);
-
-        }
-        protected override void OnEnteringElementBody()
-        {
-            _svgDocBuilder.OnEnteringElementBody();
-        }
-        protected override void OnExitingElementBody()
-        {
-            _svgDocBuilder.OnExtingElementBody();
-        }
     }
 
 }

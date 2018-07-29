@@ -843,7 +843,7 @@ namespace PixelFarm.Drawing.WinGdi
 #if DEBUG
                 //test
 
-                //PixelFarm.CpuBlit.Imaging.PngImageWriter.dbugSaveToPngFile(backimg, "d:\\WImageTest\\subimg1.png");
+               // PixelFarm.CpuBlit.Imaging.PngImageWriter.dbugSaveToPngFile(backimg, "d:\\WImageTest\\subimg1.png");
 #endif
 
 
