@@ -384,7 +384,7 @@ namespace PixelFarm.CpuBlit
         {
         }
         public VertexStore Vxs { get; private set; }
-        public void SetVxsAsOriginal(VertexStore vxs)
+        public void SetVxs(VertexStore vxs)
         {
             Vxs = vxs;
         }

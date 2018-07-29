@@ -30,7 +30,7 @@ namespace LayoutFarm
                 vxs.AddLineTo(150, 50);
                 vxs.AddLineTo(110, 80);
                 vxs.AddCloseFigure();
-                path.SetVxsAsOriginal(vxs.CreateTrim());
+                path.SetVxs(vxs.CreateTrim());
             }
 
             VgRenderVx svgRenderVx = new VgRenderVx(new VgCmd[] {

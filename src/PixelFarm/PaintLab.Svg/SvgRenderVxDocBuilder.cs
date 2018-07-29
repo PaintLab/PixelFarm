@@ -163,7 +163,7 @@ namespace PixelFarm.CpuBlit
             SvgPathSpec pathSpec = elem._visualSpec as SvgPathSpec;
             //d             
             VgCmdPath pathCmd = new VgCmdPath();
-            pathCmd.SetVxsAsOriginal(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
+            pathCmd.SetVxs(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
             AssignAttributes(pathSpec, cmds);
 
             cmds.Add(pathCmd);
@@ -197,7 +197,7 @@ namespace PixelFarm.CpuBlit
             ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step 
             using (VxsContext.Temp(out var v1))
             {
-                pathCmd.SetVxsAsOriginal(
+                pathCmd.SetVxs(
                     PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
             }
 
@@ -228,6 +228,36 @@ namespace PixelFarm.CpuBlit
             AssignAttributes(imgspec, cmds);
             cmds.Add(imgCmd);
         }
+        void RenderPolygon(SvgElement elem, List<VgCmd> cmds)
+        {
+            SvgPolygonSpec polygonSpec = elem._visualSpec as SvgPolygonSpec;
+            VgCmdPath pathCmd = new VgCmdPath();
+
+
+        }
+        void RenderPolyLine(SvgElement elem, List<VgCmd> cmds)
+        {
+            SvgPolylineSpec polylineSpec = elem._visualSpec as SvgPolylineSpec;
+            VgCmdPath pathCmd = new VgCmdPath();
+
+            PointF[] points = polylineSpec.Points;
+            int j = points.Length;
+            if (j > 1)
+            {
+                using (VxsContext.Temp(out VertexStore v1))
+                {
+                    PointF p = points[0];
+                    v1.AddMoveTo(p.X, p.Y);
+                    for (int i = 1; i < j; ++i)
+                    {
+                        p = points[i];
+                        v1.AddLineTo(p.X, p.Y);
+                    }
+                    pathCmd.SetVxs(v1.CreateTrim());
+                }
+            }
+
+        }
         void RenderCircleElement(SvgElement elem, List<VgCmd> cmds)
         {
             SvgCircleSpec ellipseSpec = elem._visualSpec as SvgCircleSpec;
@@ -242,7 +272,7 @@ namespace PixelFarm.CpuBlit
             ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
             using (VxsContext.Temp(out var v1))
             {
-                pathCmd.SetVxsAsOriginal(
+                pathCmd.SetVxs(
                     PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
             }
 
@@ -276,7 +306,7 @@ namespace PixelFarm.CpuBlit
 
                 using (VxsContext.Temp(out var v1))
                 {
-                    pathCmd.SetVxsAsOriginal(roundRect.MakeVxs(v1).CreateTrim());
+                    pathCmd.SetVxs(roundRect.MakeVxs(v1).CreateTrim());
                 }
                 VectorToolBox.ReleaseRoundRect(ref roundRect);
             }
@@ -292,7 +322,7 @@ namespace PixelFarm.CpuBlit
                 //
                 using (VxsContext.Temp(out var v1))
                 {
-                    pathCmd.SetVxsAsOriginal(rectTool.MakeVxs(v1).CreateTrim());
+                    pathCmd.SetVxs(rectTool.MakeVxs(v1).CreateTrim());
                 }
                 VectorToolBox.ReleaseRectTool(ref rectTool);
             }
