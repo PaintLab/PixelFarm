@@ -24,14 +24,15 @@ namespace PixelFarm.CpuBlit
         {
             _svgdoc = svgdoc;
 
-            int childCount = svgdoc.Root.ChildCount;
+            SvgElement rootElem = svgdoc.Root;
+            int childCount = rootElem.ChildCount;
             List<VgCmd> cmds = new List<VgCmd>();
 
             for (int i = 0; i < childCount; ++i)
             {
                 //translate SvgElement to  
                 //command stream?
-                RenderSvgElements(svgdoc.Root.GetChild(i), cmds);
+                RenderSvgElements(rootElem.GetChild(i), cmds);
             }
             VgRenderVx renderVx = new VgRenderVx(cmds.ToArray());
             return renderVx;
@@ -50,9 +51,19 @@ namespace PixelFarm.CpuBlit
                     _defsList.Add(elem);
                     return;
                 case WellknownSvgElementName.Rect:
+                    RenderRectElement(elem, cmds);
+                    break;
+                case WellknownSvgElementName.Image:
+                    RenderImageElement(elem, cmds);
+                    break;
                 case WellknownSvgElementName.Polyline:
                 case WellknownSvgElementName.Polygon:
+                    break;
                 case WellknownSvgElementName.Ellipse:
+                    RenderEllipseElement(elem, cmds);
+                    break;
+                case WellknownSvgElementName.Circle:
+                    RenderCircleElement(elem, cmds);
                     break;
                 case WellknownSvgElementName.Path:
                     RenderPathElement(elem, cmds);
@@ -157,6 +168,171 @@ namespace PixelFarm.CpuBlit
 
             cmds.Add(pathCmd);
         }
+
+        struct ReEvaluateArgs
+        {
+            public readonly float containerW;
+            public readonly float containerH;
+            public readonly float emHeight;
+
+            public ReEvaluateArgs(float containerW, float containerH, float emHeight)
+            {
+                this.containerW = containerW;
+                this.containerH = containerH;
+                this.emHeight = emHeight;
+            }
+        }
+        void RenderEllipseElement(SvgElement elem, List<VgCmd> cmds)
+        {
+            SvgEllipseSpec ellipseSpec = elem._visualSpec as SvgEllipseSpec;
+            VgCmdPath pathCmd = new VgCmdPath();
+            VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
+            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+
+            double x = ConvertToPx(ellipseSpec.X, ref a);
+            double y = ConvertToPx(ellipseSpec.Y, ref a);
+            double rx = ConvertToPx(ellipseSpec.RadiusX, ref a);
+            double ry = ConvertToPx(ellipseSpec.RadiusY, ref a);
+
+            ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step 
+            using (VxsContext.Temp(out var v1))
+            {
+                pathCmd.SetVxsAsOriginal(
+                    PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
+            }
+
+            VectorToolBox.ReleaseEllipseTool(ref ellipse);
+
+            AssignAttributes(ellipseSpec, cmds);
+            cmds.Add(pathCmd);
+        }
+        void RenderImageElement(SvgElement elem, List<VgCmd> cmds)
+        {
+            SvgImageSpec imgspec = elem._visualSpec as SvgImageSpec;
+            VgCmdImage imgCmd = new VgCmdImage();
+
+            VectorToolBox.GetFreeRectTool(out VertexProcessing.SimpleRect rectTool);
+
+            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
+            rectTool.SetRect(
+                ConvertToPx(imgspec.X, ref a),
+                ConvertToPx(imgspec.Y, ref a) + ConvertToPx(imgspec.Height, ref a),
+                ConvertToPx(imgspec.X, ref a) + ConvertToPx(imgspec.Width, ref a),
+                ConvertToPx(imgspec.Y, ref a));
+            //
+            using (VxsContext.Temp(out var v1))
+            {
+                imgCmd.SetVxsAsOriginal(rectTool.MakeVxs(v1).CreateTrim());
+            }
+            VectorToolBox.ReleaseRectTool(ref rectTool);
+            AssignAttributes(imgspec, cmds);
+            cmds.Add(imgCmd);
+        }
+        void RenderCircleElement(SvgElement elem, List<VgCmd> cmds)
+        {
+            SvgCircleSpec ellipseSpec = elem._visualSpec as SvgCircleSpec;
+
+            VgCmdPath pathCmd = new VgCmdPath();
+            VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
+            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            double x = ConvertToPx(ellipseSpec.X, ref a);
+            double y = ConvertToPx(ellipseSpec.Y, ref a);
+            double r = ConvertToPx(ellipseSpec.Radius, ref a);
+
+            ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
+            using (VxsContext.Temp(out var v1))
+            {
+                pathCmd.SetVxsAsOriginal(
+                    PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
+            }
+
+            VectorToolBox.ReleaseEllipseTool(ref ellipse);
+
+            AssignAttributes(ellipseSpec, cmds);
+            cmds.Add(pathCmd);
+        }
+        void RenderRectElement(SvgElement elem, List<VgCmd> cmds)
+        {
+            SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;
+            VgCmdPath pathCmd = new VgCmdPath();
+
+            //convert rect to path
+
+            //pathSpec.X;
+            //pathSpec.Y;
+            //pathSpec.Width;
+            //pathSpec.Height;
+
+            if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
+            {
+                VectorToolBox.GetFreeRoundRectTool(out VertexProcessing.RoundedRect roundRect);
+                ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+                roundRect.SetRect(
+                    ConvertToPx(rectSpec.X, ref a),
+                    ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
+                    ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
+                    ConvertToPx(rectSpec.Y, ref a));
+
+                roundRect.SetRadius(ConvertToPx(rectSpec.CornerRadiusX, ref a), ConvertToPx(rectSpec.CornerRadiusY, ref a));
+
+                using (VxsContext.Temp(out var v1))
+                {
+                    pathCmd.SetVxsAsOriginal(roundRect.MakeVxs(v1).CreateTrim());
+                }
+                VectorToolBox.ReleaseRoundRect(ref roundRect);
+            }
+            else
+            {
+                VectorToolBox.GetFreeRectTool(out VertexProcessing.SimpleRect rectTool);
+                ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
+                rectTool.SetRect(
+                    ConvertToPx(rectSpec.X, ref a),
+                    ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
+                    ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
+                    ConvertToPx(rectSpec.Y, ref a));
+                //
+                using (VxsContext.Temp(out var v1))
+                {
+                    pathCmd.SetVxsAsOriginal(rectTool.MakeVxs(v1).CreateTrim());
+                }
+                VectorToolBox.ReleaseRectTool(ref rectTool);
+            }
+
+
+            AssignAttributes(rectSpec, cmds);
+            cmds.Add(pathCmd);
+        }
+        static float ConvertToPx(LayoutFarm.Css.CssLength length, ref ReEvaluateArgs args)
+        {
+            //Return zero if no length specified, zero specified      
+            switch (length.UnitOrNames)
+            {
+                case LayoutFarm.Css.CssUnitOrNames.EmptyValue:
+                    return 0;
+                case LayoutFarm.Css.CssUnitOrNames.Percent:
+                    return (length.Number / 100f) * args.containerW;
+                case LayoutFarm.Css.CssUnitOrNames.Ems:
+                    return length.Number * args.emHeight;
+                case LayoutFarm.Css.CssUnitOrNames.Ex:
+                    return length.Number * (args.emHeight / 2);
+                case LayoutFarm.Css.CssUnitOrNames.Pixels:
+                    //atodo: check support for hi dpi
+                    return length.Number;
+                case LayoutFarm.Css.CssUnitOrNames.Milimeters:
+                    return length.Number * 3.779527559f; //3 pixels per millimeter      
+                case LayoutFarm.Css.CssUnitOrNames.Centimeters:
+                    return length.Number * 37.795275591f; //37 pixels per centimeter 
+                case LayoutFarm.Css.CssUnitOrNames.Inches:
+                    return length.Number * 96f; //96 pixels per inch 
+                case LayoutFarm.Css.CssUnitOrNames.Points:
+                    return length.Number * (96f / 72f); // 1 point = 1/72 of inch   
+                case LayoutFarm.Css.CssUnitOrNames.Picas:
+                    return length.Number * 16f; // 1 pica = 12 points 
+                default:
+                    return 0;
+            }
+        }
+
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
             using (VxsContext.Temp(out var flattenVxs))

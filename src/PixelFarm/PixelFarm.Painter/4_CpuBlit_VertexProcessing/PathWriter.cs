@@ -105,8 +105,10 @@ namespace PixelFarm.CpuBlit
         SvgPathCommand latestSVGPathCmd;
         int figureCount = 0;
         VertexStore myvxs;
+
         public PathWriter()
         {
+            //TODO: review here
             myvxs = new VertexStore();
         }
         public PathWriter(VertexStore externalVxs)
@@ -126,9 +128,9 @@ namespace PixelFarm.CpuBlit
             latestSVGPathCmd = SvgPathCommand.MoveTo;
             figureCount = 0;
         }
-         
+
         public void ResetWithExternalVxs(VertexStore newVxsOutput)
-        {   
+        {
             myvxs = newVxsOutput;
             Clear();
         }

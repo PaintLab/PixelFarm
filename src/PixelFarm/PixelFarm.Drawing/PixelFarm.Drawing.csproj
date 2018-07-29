@@ -346,11 +346,11 @@
     <Compile Include="..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\Stroke.cs">
       <Link>2_Painter\4_CpuBlit_VertexProcessing\Stroke.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen.cs">
+      <Link>2_Painter\4_CpuBlit_VertexProcessing\StrokeGen.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGenerator.cs">
       <Link>2_Painter\4_CpuBlit_VertexProcessing\StrokeGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeGen_Old.cs">
-      <Link>2_Painter\4_CpuBlit_VertexProcessing\StrokeGen_Old.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs">
       <Link>2_Painter\4_CpuBlit_VertexProcessing\StrokeMath.cs</Link>

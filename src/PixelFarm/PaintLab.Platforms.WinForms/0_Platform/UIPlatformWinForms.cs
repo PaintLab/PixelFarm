@@ -21,12 +21,25 @@ namespace LayoutFarm.UI
         static bool s_readyToInvoke;
         public delegate void SimpleAction();
         static SimpleAction s_timerAction;
+        static SimpleAction s_tickAction;
+
         public static void Init(int minInterval, SimpleAction timerAction)
         {
             if (s_isInit) return;
             //
             s_isInit = true;
+
             s_timerAction = timerAction;
+
+            s_tickAction = new SimpleAction(() =>
+            {
+                //stop all timer
+                s_uiTimer.Enabled = false; //temporary pause 
+                s_timerAction();
+                s_uiTimer.Enabled = true;//enable again
+            });
+
+
             s_msg_window.Visible = false;
             s_uiTimer.Interval = minInterval;
             s_uiTimer.Tick += timer_tick;
@@ -34,8 +47,9 @@ namespace LayoutFarm.UI
             //force form to created?
             IntPtr formHandle = s_msg_window.Handle;
             s_uiTimer.Enabled = true;//last
-        }
 
+
+        }
         static void timer_tick(object sender, System.EventArgs e)
         {
             if (!s_readyToInvoke)
@@ -46,13 +60,8 @@ namespace LayoutFarm.UI
                 }
                 return;
             }
-            s_msg_window.Invoke(new SimpleAction(() =>
-            {
-                //stop all timer
-                s_uiTimer.Enabled = false; //temporary pause
-                s_timerAction();
-                s_uiTimer.Enabled = true;//enable again
-            }));
+            s_msg_window.Invoke(s_tickAction);
+
             //TODO: review here,again eg.post custom msg to the window event queue?
         }
     }
@@ -92,14 +101,14 @@ namespace LayoutFarm.UI
                 SetAsDefaultPlatform();
             }
 
-            var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
-            installedTypefaces.LoadSystemFonts();
+            //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
+            //installedTypefaces.LoadSystemFonts();
 
             try
             {
                 //set up winform platform 
                 ////gdi+
-                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(installedTypefaces);
+                //PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(installedTypefaces);
                 LayoutFarm.UI.Clipboard.SetUIPlatform(this);
             }
             catch (System.Exception ex)

@@ -192,9 +192,65 @@ namespace PixelFarm.Drawing
             s_pathWriters.Push(p);
             p = null;
         }
-
-        
+        //-----------------------------------
+        [System.ThreadStatic]
+        static Stack<SimpleRect> s_simpleRects = new Stack<SimpleRect>();
+        public static void GetFreeRectTool(out SimpleRect rectTool)
+        {
+            if (s_simpleRects.Count > 0)
+            {
+                rectTool = s_simpleRects.Pop();
+            }
+            else
+            {
+                rectTool = new SimpleRect();
+            }
+        }
+        public static void ReleaseRectTool(ref SimpleRect rectTool)
+        {
+            s_simpleRects.Push(rectTool);
+            rectTool = null;
+        }
 
         //-----------------------------------
+        [System.ThreadStatic]
+        static Stack<Ellipse> s_ellipses = new Stack<Ellipse>();
+        public static void GetFreeEllipseTool(out Ellipse ellipseTool)
+        {
+            if (s_ellipses.Count > 0)
+            {
+                ellipseTool = s_ellipses.Pop();
+            }
+            else
+            {
+                ellipseTool = new Ellipse();
+            }
+        }
+        public static void ReleaseEllipseTool(ref Ellipse ellipseTool)
+        {
+            s_ellipses.Push(ellipseTool);
+            ellipseTool = null;
+        }
+
+        //-------------
+      
+        [System.ThreadStatic]
+        static Stack<RoundedRect> s_roundRects = new Stack<RoundedRect>();
+        public static void GetFreeRoundRectTool(out RoundedRect roundRect)
+        {
+            if (s_roundRects.Count > 0)
+            {
+                roundRect = s_roundRects.Pop();
+            }
+            else
+            {
+                roundRect = new RoundedRect();
+            }
+        }
+        public static void ReleaseRoundRect(ref RoundedRect roundRect)
+        {
+            s_roundRects.Push(roundRect);
+            roundRect = null;
+        }
     }
 }

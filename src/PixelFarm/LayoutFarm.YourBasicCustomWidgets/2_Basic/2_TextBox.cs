@@ -14,6 +14,8 @@ namespace LayoutFarm.CustomWidgets
         TextSurfaceEventListener textSurfaceListener;
         TextEditRenderBox textEditRenderElement;
         bool _multiline;
+        bool _hideTextLayer;
+
         TextSpanStyle defaultSpanStyle;
         Color backgroundColor = Color.White;
         string userTextContent;
@@ -38,6 +40,18 @@ namespace LayoutFarm.CustomWidgets
                 if (textEditRenderElement != null)
                 {
                     textEditRenderElement.BackgroundColor = value;
+                }
+            }
+        }
+        public bool HideTextLayer
+        {
+            get { return _hideTextLayer; }
+            set
+            {
+                _hideTextLayer = value;
+                if (textEditRenderElement != null)
+                {
+                    textEditRenderElement.HideTextLayer = value;
                 }
             }
         }
@@ -211,6 +225,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 tbox.BackgroundColor = this.backgroundColor;
                 tbox.SetController(this);
+                tbox.HideTextLayer = this.HideTextLayer;
 
                 if (this.textSurfaceListener != null)
                 {
