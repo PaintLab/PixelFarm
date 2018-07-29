@@ -63,7 +63,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             m_stroker = new StrokeMath();
             m_out_vertices = new VertexStore();
             m_status = Status.Init;
-            m_closed = true;
+            m_closed = false;
         }
 
         public LineCap LineCap
@@ -119,12 +119,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void Reset()
         {
             multipartVertexDistanceList.Clear();
-            m_closed = true;
+            m_closed = false;
 
             m_status = Status.Init;
         }
         public void Close()
         {
+            m_closed = true;
             multipartVertexDistanceList.Close();
         }
         public void AddVertex(double x, double y, VertexCmd cmd)
@@ -149,73 +150,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void WriteTo(VertexStore outputVxs)
         {
             GenStroke(outputVxs);
-
-            //this.Rewind();
-            //int currentRangeIndex = 0;
-            //double x = 0, y = 0;
-            ////int n = 0;
-            //for (; ; )
-            //{
-            //    VertexCmd cmd = GetNextVertex(out x, out y);
-            //    if (cmd == VertexCmd.NoMore)
-            //    {
-            //        if (currentRangeIndex + 1 < multipartVertexDistanceList.RangeCount)
-            //        {
-            //            //move to next range
-            //            multipartVertexDistanceList.SetRangeIndex(currentRangeIndex + 1);
-            //            currentRangeIndex++;
-
-            //            m_status = Status.Ready;
-            //            m_src_vertex = 0;
-            //            m_out_vertex = 0;
-            //            continue;
-            //        }
-            //        else
-            //        {
-            //            break;//exit from loop
-            //        }
-            //    }
-            //    outputVxs.AddVertex(x, y, cmd);
-            //}
         }
-        //public void WriteTo3(VertexStore outputVxs)
-        //{
 
-        //    this.Rewind();
-        //    int currentRangeIndex = 0;
-        //    double x = 0, y = 0;
-        //    //int n = 0;
-        //    for (; ; )
-        //    {
-        //        VertexCmd cmd = GetNextVertex(out x, out y);
-        //        if (cmd == VertexCmd.NoMore)
-        //        {
-        //            if (currentRangeIndex + 1 < multipartVertexDistanceList.RangeCount)
-        //            {
-        //                //move to next range
-        //                multipartVertexDistanceList.SetRangeIndex(currentRangeIndex + 1);
-        //                currentRangeIndex++;
-
-        //                m_status = Status.Ready;
-        //                m_src_vertex = 0;
-        //                m_out_vertex = 0;
-        //                continue;
-        //            }
-        //            else
-        //            {
-        //                break;//exit from loop
-        //            }
-        //        }
-        //        outputVxs.AddVertex(x, y, cmd);
-
-
-        //        //Console.WriteLine(n + " " + x + "," + y);
-        //        //n++;
-        //        //if (n == 419)
-        //        //{ 
-        //        //}
-        //    }
-        //}
         void Rewind()
         {
             if (m_status == Status.Init)
@@ -226,19 +162,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     //force
                     m_closed = false;
                 }
-                //_curCurtexDistanceList.Close(m_closed);
-                //VertexHelper.ShortenPath(_curCurtexDistanceList, m_shorten, m_closed);
-                //if (_curCurtexDistanceList.Count < 3) { m_closed = false; }
             }
             m_status = Status.Ready;
             m_src_vertex = 0;
             m_out_vertex = 0;
-            //if (_vertextDistanceListQueue.Count > 0)
-            //{
-            //    _vertextDistanceListQueue.Enqueue(_curCurtexDistanceList);
-            //    //switch to first one
-            //    _curCurtexDistanceList = _vertextDistanceListQueue.Dequeue();
-            //}
             multipartVertexDistanceList.Rewind();
         }
 
@@ -256,10 +183,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         void GenStroke(VertexStore output)
         {
-            //agg_vcgen_stroke.cpp
-
-
-
+            //agg_vcgen_stroke.cpp 
             this.Rewind();//1.  
             //ready
             if (multipartVertexDistanceList.CurrentRangeLen < 2 + (m_closed ? 1 : 0))
@@ -375,24 +299,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 else
                 {
-                    //Vertex2d beforeLast, last;
-                    //multipartVertexDistanceList.GetLast2(out beforeLast, out last);
-                    //m_stroker.CreateCap(m_out_vertices,
-                    //    last, //**please note different direction (compare with above)
-                    //    beforeLast,
-                    //    beforeLast.CalLen(last));
-                    //m_prev_status = Status.Outline2;
-                    //m_status = Status.OutVertices;
-                    //m_out_vertex = 0;
 
-                    //AppendVertices(output, m_out_vertices);
-                    //
                     output.GetVertex(0, out double firstX, out double firstY);
                     output.AddLineTo(firstX, firstY);
                     output.AddCloseFigure();
                     //begin inner
                     //move to inner 
-
 
                     // v_last <- v0 <- v1
                     Vertex2d v0, v1;
@@ -468,166 +380,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
-        //VertexCmd GetNextVertex(out double x, out double y)
-        //{
-        //    //agg_vcgen_stroke.cpp
 
-        //    x = 0; y = 0;
-        //    VertexCmd cmd = VertexCmd.LineTo;
-        //    do
-        //    {
-        //        switch (m_status)
-        //        {
-        //            case Status.Init:
-        //                this.Rewind();
-        //                goto case Status.Ready;
-        //            case Status.Ready:
-
-        //                if (multipartVertexDistanceList.CurrentRangeLen < 2 + (m_closed ? 1 : 0))
-        //                {
-        //                    cmd = VertexCmd.NoMore;
-        //                    break;
-        //                }
-        //                m_status = m_closed ? Status.Outline1 : Status.Cap1;
-        //                cmd = VertexCmd.MoveTo;
-        //                m_src_vertex = 0;
-        //                m_out_vertex = 0;
-        //                break;
-
-        //            case Status.Cap1:
-        //                {
-        //                    Vertex2d v0, v1;
-
-        //                    multipartVertexDistanceList.GetFirst2(out v0, out v1);
-        //                    m_stroker.CreateCap(
-        //                        m_out_vertices,
-        //                        v0,
-        //                        v1,
-        //                        v0.CalLen(v1));
-
-        //                    m_src_vertex = 1;
-        //                    m_prev_status = Status.Outline1;
-        //                    m_status = Status.OutVertices;
-        //                    m_out_vertex = 0;
-        //                }
-        //                break;
-        //            case Status.Cap2:
-        //                {
-        //                    Vertex2d beforeLast, last;
-        //                    multipartVertexDistanceList.GetLast2(out beforeLast, out last);
-        //                    m_stroker.CreateCap(m_out_vertices,
-        //                        last,
-        //                        beforeLast,
-        //                        beforeLast.CalLen(last));
-        //                    m_prev_status = Status.Outline2;
-        //                    m_status = Status.OutVertices;
-        //                    m_out_vertex = 0;
-        //                }
-        //                break;
-        //            case Status.Outline1:
-        //                {
-        //                    if (m_closed)
-        //                    {
-        //                        if (m_src_vertex >= multipartVertexDistanceList.CurrentRangeLen)
-        //                        {
-        //                            m_prev_status = Status.CloseFirst;
-        //                            m_status = Status.EndPoly1;
-        //                            break;
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if (m_src_vertex >= multipartVertexDistanceList.CurrentRangeLen - 1)
-        //                        {
-        //                            m_status = Status.Cap2;
-        //                            break;
-        //                        }
-        //                    }
-
-        //                    Vertex2d prev, cur, next;
-        //                    multipartVertexDistanceList.GetTripleVertices(m_src_vertex,
-        //                        out prev,
-        //                        out cur,
-        //                        out next);
-        //                    //check if we should join or not ?
-
-        //                    //don't join it
-        //                    m_stroker.CreateJoin(m_out_vertices,
-        //                   prev,
-        //                   cur,
-        //                   next,
-        //                   prev.CalLen(cur),
-        //                   cur.CalLen(next));
-
-        //                    ++m_src_vertex;
-        //                    m_prev_status = m_status;
-        //                    m_status = Status.OutVertices;
-        //                    m_out_vertex = 0;
-
-        //                }
-        //                break;
-        //            case Status.CloseFirst:
-        //                m_status = Status.Outline2;
-        //                cmd = VertexCmd.MoveTo;
-        //                goto case Status.Outline2;//***
-        //            case Status.Outline2:
-        //                {
-        //                    if (m_src_vertex <= (!m_closed ? 1 : 0))
-        //                    {
-        //                        m_status = Status.EndPoly2;
-        //                        m_prev_status = Status.Stop;
-        //                        break;
-        //                    }
-
-        //                    --m_src_vertex;
-
-        //                    Vertex2d prev, cur, next;
-        //                    multipartVertexDistanceList.GetTripleVertices(m_src_vertex,
-        //                        out prev,
-        //                        out cur,
-        //                        out next);
-
-        //                    m_stroker.CreateJoin(m_out_vertices,
-        //                      next,
-        //                      cur,
-        //                      prev,
-        //                      cur.CalLen(next),
-        //                      prev.CalLen(cur));
-        //                    m_prev_status = m_status;
-        //                    m_status = Status.OutVertices;
-        //                    m_out_vertex = 0;
-
-        //                }
-        //                break;
-        //            case Status.OutVertices:
-        //                if (m_out_vertex >= m_out_vertices.Count)
-        //                {
-        //                    m_status = m_prev_status;
-        //                }
-        //                else
-        //                {
-        //                    m_out_vertices.GetVertex(m_out_vertex++, out x, out y);
-        //                    return cmd;
-        //                }
-        //                break;
-        //            case Status.EndPoly1:
-        //                m_status = m_prev_status;
-        //                x = (int)EndVertexOrientation.CCW;
-        //                y = 0;
-        //                return VertexCmd.Close;
-        //            case Status.EndPoly2:
-        //                m_status = m_prev_status;
-        //                x = (int)EndVertexOrientation.CW;
-        //                y = 0;
-        //                return VertexCmd.Close;
-        //            case Status.Stop:
-        //                cmd = VertexCmd.NoMore;
-        //                break;
-        //        }
-
-        //    } while (!VertexHelper.IsEmpty(cmd));
-        //    return cmd;
-        //}
     }
 
     class MultiPartsVertexList
