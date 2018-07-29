@@ -163,15 +163,24 @@ namespace LayoutFarm.Svg
             get;
             set;
         }
+
+        float _cx, _cy;
         public float CenterX
         {
-            get;
-            set;
+            get { return _cx; }
+            private set
+            {
+                _cx = value;
+            }
         }
         public float CenterY
         {
-            get;
-            set;
+            get { return _cy; }
+            private set
+            {
+                _cy = value;
+
+            }
         }
         public SvgRotate(float angle)
         {
@@ -183,13 +192,15 @@ namespace LayoutFarm.Svg
         {
             this.CenterX = centerX;
             this.CenterY = centerY;
+            SpecificRotationCenter = true;
         }
         public override SvgTransformKind TransformKind => SvgTransformKind.Rotation;
+        public bool SpecificRotationCenter { get; private set; }
     }
 
 
 
     //-------------------------------------------------------------------
-   
+
 
 }

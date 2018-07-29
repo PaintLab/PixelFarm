@@ -841,9 +841,8 @@ namespace PixelFarm.Drawing.WinGdi
 
                 painter.Render(svgVx);
 #if DEBUG
-                //test
-
-               // PixelFarm.CpuBlit.Imaging.PngImageWriter.dbugSaveToPngFile(backimg, "d:\\WImageTest\\subimg1.png");
+                //test 
+                //PixelFarm.CpuBlit.Imaging.PngImageWriter.dbugSaveToPngFile(backimg, "d:\\WImageTest\\subimg1.png");
 #endif
 
 

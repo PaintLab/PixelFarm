@@ -1163,7 +1163,16 @@ namespace PaintLab.Svg
                     case "rotate":
                         {
                             float[] matrixArgs = ParseMatrixArgs(right);
-                            spec.Transform = new SvgRotate(matrixArgs[0]);
+                            if (matrixArgs.Length == 1)
+                            {
+                                spec.Transform = new SvgRotate(matrixArgs[0]);
+                            }
+                            else if (matrixArgs.Length == 3)
+                            {
+                                //rotate around the axis
+                                spec.Transform = new SvgRotate(matrixArgs[0], matrixArgs[1], matrixArgs[2]);
+                            }
+
                         }
                         break;
                     case "scale":
