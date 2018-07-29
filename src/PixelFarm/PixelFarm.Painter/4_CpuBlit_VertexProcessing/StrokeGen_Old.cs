@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.VectorMath;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
@@ -29,10 +28,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     class StrokeGenerator
     {
-
-
-
-
+         
         StrokeMath m_stroker;
         MultiPartsVertexList multipartVertexDistanceList = new MultiPartsVertexList();
         VertexStore m_out_vertices;
