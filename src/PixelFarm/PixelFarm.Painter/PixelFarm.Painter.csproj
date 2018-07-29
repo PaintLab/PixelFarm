@@ -162,7 +162,7 @@
     <Compile Include="4_CpuBlit_VertexProcessing\SimpleRect.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\Stroke.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\StrokeGenerator.cs" />
-    <Compile Include="4_CpuBlit_VertexProcessing\StrokeGen_Old.cs" />
+    <Compile Include="4_CpuBlit_VertexProcessing\StrokeGen.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\StrokeMath.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\VectorToolBox.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\VertexData.cs" />
