@@ -57,7 +57,10 @@ namespace PixelFarm.CpuBlit
                     RenderImageElement(elem, cmds);
                     break;
                 case WellknownSvgElementName.Polyline:
+                    RenderPolyLine(elem, cmds);
+                    break;
                 case WellknownSvgElementName.Polygon:
+                    RenderPolygon(elem, cmds);
                     break;
                 case WellknownSvgElementName.Ellipse:
                     RenderEllipseElement(elem, cmds);
@@ -233,7 +236,29 @@ namespace PixelFarm.CpuBlit
             SvgPolygonSpec polygonSpec = elem._visualSpec as SvgPolygonSpec;
             VgCmdPath pathCmd = new VgCmdPath();
 
+            PointF[] points = polygonSpec.Points;
+            int j = points.Length;
+            if (j > 1)
+            {
+                using (VxsContext.Temp(out VertexStore v1))
+                {
+                    PointF p = points[0];
+                    PointF p0 = p;
+                    v1.AddMoveTo(p.X, p.Y);
 
+                    for (int i = 1; i < j; ++i)
+                    {
+                        p = points[i];
+                        v1.AddLineTo(p.X, p.Y);
+                    }
+                    //close
+                    v1.AddMoveTo(p0.X, p0.Y);
+                    v1.AddCloseFigure();
+
+                    pathCmd.SetVxs(v1.CreateTrim());
+                }
+                cmds.Add(pathCmd);
+            }
         }
         void RenderPolyLine(SvgElement elem, List<VgCmd> cmds)
         {
@@ -255,7 +280,9 @@ namespace PixelFarm.CpuBlit
                     }
                     pathCmd.SetVxs(v1.CreateTrim());
                 }
+                cmds.Add(pathCmd);
             }
+
 
         }
         void RenderCircleElement(SvgElement elem, List<VgCmd> cmds)
