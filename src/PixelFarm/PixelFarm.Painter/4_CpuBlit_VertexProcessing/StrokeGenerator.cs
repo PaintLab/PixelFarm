@@ -554,7 +554,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
 
 
-    class StrokeGen2
+    public class StrokeGen2
     {
 
 
