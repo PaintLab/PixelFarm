@@ -33,7 +33,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <summary>
         /// stroke generator's status
         /// </summary>
-        public enum Status
+        enum Status
         {
             Init,
             Ready,
@@ -211,6 +211,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         VertexCmd GetNextVertex(out double x, out double y)
         {
+            //agg_vcgen_stroke.cpp
+
             x = 0; y = 0;
             VertexCmd cmd = VertexCmd.LineTo;
             do
@@ -232,10 +234,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         m_src_vertex = 0;
                         m_out_vertex = 0;
                         break;
-                    case Status.CloseFirst:
-                        m_status = Status.Outline2;
-                        cmd = VertexCmd.MoveTo;
-                        goto case Status.Outline2;
+                    
                     case Status.Cap1:
                         {
                             Vertex2d v0, v1;
@@ -308,7 +307,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                         }
                         break;
-
+                    case Status.CloseFirst:
+                        m_status = Status.Outline2;
+                        cmd = VertexCmd.MoveTo;
+                        goto case Status.Outline2;//***
                     case Status.Outline2:
                         {
                             if (m_src_vertex <= (!m_closed ? 1 : 0))
