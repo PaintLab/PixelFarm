@@ -30,17 +30,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
 
         StrokeMath m_stroker;
-        VertexStore _tmp_inputVxs;
-
+        Vertex2dList _vtx2dList = new Vertex2dList();
         VertexStore m_out_vertices;
         double m_shorten;
         bool m_closed;
+
 
         public StrokeGenerator()
         {
             m_stroker = new StrokeMath();
             m_out_vertices = new VertexStore();
-            _tmp_inputVxs = new VertexStore();
+
             m_closed = false;
         }
 
@@ -96,51 +96,39 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         // Vertex Generator Interface
         public void Reset()
         {
-            _tmp_inputVxs.Clear();
+            _vtx2dList.Clear();
             m_closed = false;
-            _latest_moveX = _latest_moveY = 0;
         }
         public void Close()
         {
             m_closed = true;
-            _tmp_inputVxs.AddMoveTo(_latest_moveX, _latest_moveY);
+            _vtx2dList.Close();
         }
-
-        double _latest_moveX = 0;
-        double _latest_moveY = 0;
-        double _latestX = 0;
-        double _latestY = 0;
-
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
             //TODO: review 
+
             switch (cmd)
             {
                 case VertexCmd.MoveTo:
-                    _tmp_inputVxs.AddMoveTo(_latest_moveX = x, _latest_moveY = y);
+                    _vtx2dList.AddMoveTo(x, y);
                     break;
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
-
-                    m_closed = true;
-                    if(_latest_moveX != _latestX && _latest_moveX != _latestY)
-                    {
-                        _tmp_inputVxs.AddMoveTo(_latest_moveX, _latest_moveY);
-                    }                    
-
+                    //  m_closed = true;
+                    _vtx2dList.Close();
                     break;
                 default:
-                    _tmp_inputVxs.AddLineTo(x, y);
+                    _vtx2dList.AddVertex(new Vertex2d(x, y));
                     break;
             }
-            _latestX = x;
-            _latestY = y;
-
         }
         public void WriteTo(VertexStore outputVxs)
         {
             GenStroke(outputVxs);
         }
+
+
         void AppendVertices(VertexStore dest, VertexStore src, int src_index = 0)
         {
             int j = src.Count;
@@ -156,19 +144,26 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         void GenStroke(VertexStore output)
         {
             //agg_vcgen_stroke.cpp 
-            int m_src_vertex = 0;
+
+            if (_vtx2dList.Count < 3)
+            {
+                //force
+                m_closed = false;
+            }
 
             //ready
-            if (_tmp_inputVxs.Count < 2 + (m_closed ? 1 : 0))
+            if (_vtx2dList.Count < 2 + (m_closed ? 1 : 0))
             {
+
                 return;
             }
+
             //
             //we start at cap1 
             //check if close polygon or not
             //if lines( not close) => then start with some kind of line cap
             //if closed polygon => start with outline
-
+            int m_src_vertex = 0;
 
             double latest_moveX = 0;
             double latest_moveY = 0;
@@ -177,7 +172,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 //cap1
 
-                GetFirst2(_tmp_inputVxs, out Vertex2d v0, out Vertex2d v1);
+                _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
                 m_stroker.CreateCap(
                     m_out_vertices,
                     v0,
@@ -191,8 +186,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
 
 
-                GetFirst2(_tmp_inputVxs, out Vertex2d v0, out Vertex2d v1);
-                GetLast2(_tmp_inputVxs, out Vertex2d v_beforeLast, out Vertex2d v_last);
+                _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+                _vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
 
                 if (v_last.x == v0.x && v_last.y == v0.y)
                 {
@@ -217,14 +212,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //----------------
 
             //line until end cap 
-            while (m_src_vertex < _tmp_inputVxs.Count - 1)
+            while (m_src_vertex < _vtx2dList.Count - 1)
             {
 
-                GetTripleVertices(_tmp_inputVxs,
-                     m_src_vertex,
-                     out Vertex2d prev,
-                     out Vertex2d cur,
-                     out Vertex2d next);
+                _vtx2dList.GetTripleVertices(m_src_vertex,
+                    out Vertex2d prev,
+                    out Vertex2d cur,
+                    out Vertex2d next);
                 //check if we should join or not ?
 
                 //don't join it
@@ -246,7 +240,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 if (!m_closed)
                 {
 
-                    GetLast2(_tmp_inputVxs, out Vertex2d beforeLast, out Vertex2d last);
+                    _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
                     m_stroker.CreateCap(m_out_vertices,
                         last, //**please note different direction (compare with above)
                         beforeLast,
@@ -265,8 +259,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                     // v_last <- v0 <- v1
 
-                    GetFirst2(_tmp_inputVxs, out Vertex2d v0, out Vertex2d v1);
-                    GetLast2(_tmp_inputVxs, out Vertex2d v_beforeLast, out Vertex2d v_last);
+                    _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
+                    _vtx2dList.GetLast2(out Vertex2d v_beforeLast, out Vertex2d v_last);
 
                     if (v_last.x == v0.x && v_last.y == v0.y)
                     {
@@ -296,12 +290,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
 
 
-                GetTripleVertices(
-                   _tmp_inputVxs,
-                   m_src_vertex,
-                   out Vertex2d prev,
-                   out Vertex2d cur,
-                   out Vertex2d next);
+                _vtx2dList.GetTripleVertices(m_src_vertex,
+                    out Vertex2d prev,
+                    out Vertex2d cur,
+                    out Vertex2d next);
 
                 m_stroker.CreateJoin(m_out_vertices,
                   next, //**please note different direction (compare with above)
@@ -326,37 +318,90 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             }
         }
-        static void GetTripleVertices(VertexStore vxs, int idx, out Vertex2d prev, out Vertex2d cur, out Vertex2d next)
+
+
+
+        class Vertex2dList
         {
-            //we want 3 vertices
-            int len = vxs.Count;
-            if (idx > 0 && idx + 2 <= len)
+            Vertex2d _latestVertex = new Vertex2d();
+            List<Vertex2d> _list = new List<Vertex2d>();
+
+            double _latestMoveToX;
+            double _latestMoveToY;
+
+            public Vertex2dList()
             {
-                prev = GetVertex2d(vxs, idx - 1);
-                cur = GetVertex2d(vxs, idx);
-                next = GetVertex2d(vxs, idx + 1);
             }
-            else
+            public int Count
             {
-                prev = cur = next = new Vertex2d();
+                get { return _list.Count; }
             }
-        }
-        static Vertex2d GetVertex2d(VertexStore vxs, int index)
-        {
-            vxs.GetVertex(index, out double x0, out double y0);
-            return new Vertex2d(x0, y0);
-        }
-        static void GetFirst2(VertexStore vxs, out Vertex2d first, out Vertex2d second)
-        {
-            first = GetVertex2d(vxs, 0);
-            second = GetVertex2d(vxs, 1);
-        }
-        static void GetLast2(VertexStore vxs, out Vertex2d beforeLast, out Vertex2d last)
-        {
-            int len = vxs.Count;
-            beforeLast = GetVertex2d(vxs, len - 2);
-            last = GetVertex2d(vxs, len - 1);
+            public void AddVertex(Vertex2d val)
+            {
+                int count = _list.Count;
+                if (count == 0)
+                {
+                    _list.Add(_latestVertex = val);
+                }
+                else
+                {
+                    //Ensure that the new one is not duplicate with the last one
+                    if (!_latestVertex.IsEqual(val))
+                    {
+
+                        _list.Add(_latestVertex = val);
+                    }
+                }
+
+            }
+            public void Close()
+            {
+                //close current range
+                AddVertex(new Vertex2d(_latestMoveToX, _latestMoveToY));
+
+            }
+            public void AddMoveTo(double x, double y)
+            {
+
+                AddVertex(new Vertex2d(x, y));
+                _latestMoveToX = x;
+                _latestMoveToY = y;
+            }
+            public void Clear()
+            {
+                //_ranges.Clear();
+                _list.Clear();
+                _latestVertex = new Vertex2d();
+            }
+
+            public void GetTripleVertices(int idx, out Vertex2d prev, out Vertex2d cur, out Vertex2d next)
+            {
+                //we want 3 vertices
+                if (idx > 0 && idx + 2 <= _list.Count)
+                {
+                    prev = _list[idx - 1];
+                    cur = _list[idx];
+                    next = _list[idx + 1];
+                }
+                else
+                {
+                    prev = cur = next = new Vertex2d();
+                }
+            }
+            public void GetFirst2(out Vertex2d first, out Vertex2d second)
+            {
+                first = _list[0];
+                second = _list[1];
+            }
+            public void GetLast2(out Vertex2d beforeLast, out Vertex2d last)
+            {
+                beforeLast = _list[_list.Count - 2];
+                last = _list[_list.Count - 1];
+            }
+
         }
     }
+
+
 
 }
