@@ -599,13 +599,17 @@ namespace PaintLab.Svg
         public SvgDocument ResultDocument
         {
             get { return _svgDoc; }
+            set { _svgDoc = value; }
         }
 
         public void OnBegin()
         {
-            _elems.Clear();//**
+            _elems.Clear();//** reset
 
-            _svgDoc = new SvgDocument();
+            if (_svgDoc == null)
+            {
+                _svgDoc = new SvgDocument();
+            }
             _currentElem = _svgDoc.Root;
         }
         public void OnVisitNewElement(string elemName)
@@ -618,7 +622,7 @@ namespace PaintLab.Svg
             }
             _currentElem = newElem;
             _specEvaluator.SetCurrentElement(_currentElem);
-        } 
+        }
         public void OnAttribute(string attrName, string value)
         {
             _specEvaluator.OnAttribute(attrName, value);
