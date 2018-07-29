@@ -20,6 +20,7 @@ namespace PixelFarm.CpuBlit
         StrokeColor,
         StrokeWidth,
         AffineTransform,
+        Image,
     }
 
     public class VxsRenderVx : RenderVx
@@ -393,6 +394,26 @@ namespace PixelFarm.CpuBlit
             VgCmdPath vgPath = new VgCmdPath();
             vgPath.Vxs = this.Vxs.CreateTrim();
             return vgPath;
+        }
+    }
+    public class VgCmdImage : VgCmd
+    {
+        public VgCmdImage() : base(VgCommandName.Image)
+        {
+        }
+        public Image Image { get; set; }
+        public VertexStore Vxs { get; private set; }
+        public void SetVxsAsOriginal(VertexStore vxs)
+        {
+            Vxs = vxs;
+        }
+
+        public override VgCmd Clone()
+        {
+            VgCmdImage vgImg = new VgCmdImage();
+            vgImg.Image = this.Image;
+            vgImg.Vxs = this.Vxs.CreateTrim();
+            return vgImg;
         }
     }
     //-------------------------------------------------

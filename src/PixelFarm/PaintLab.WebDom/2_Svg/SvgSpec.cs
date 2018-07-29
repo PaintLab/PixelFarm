@@ -126,6 +126,36 @@ namespace LayoutFarm.Svg
             set;
         }
     }
+    public class SvgImageSpec : SvgVisualSpec
+    {
+        public CssLength X
+        {
+            get;
+            set;
+        }
+        public CssLength Y
+        {
+            get;
+            set;
+        }
+        public CssLength Width
+        {
+            get;
+            set;
+        }
+        public CssLength Height
+        {
+            get;
+            set;
+        }
+
+        public string ImageSrc
+        {
+            get;
+            set;
+        }
+    }
+
     public class SvgEllipseSpec : SvgVisualSpec
     {
         public CssLength X
@@ -160,6 +190,10 @@ namespace LayoutFarm.Svg
 
     public class SvgPathSpec : SvgVisualSpec
     {
+        public SvgPathSpec()
+        {
+        }
+
         public CssLength X
         {
             get;
@@ -181,7 +215,11 @@ namespace LayoutFarm.Svg
             set;
         }
 
-        public string D { get; set; }
+        public string D
+        {
+            get;
+            set;
+        }
     }
 
 
