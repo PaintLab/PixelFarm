@@ -26,8 +26,6 @@ using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
 using LayoutFarm.WebLexer;
 
-
-
 namespace PaintLab.Svg
 {
 
@@ -389,9 +387,12 @@ namespace PaintLab.Svg
         /// clipPath
         /// </summary>
         ClipPath,
-
-        Gradient,
+        /// <summary>
+        /// linear gradient
+        /// </summary>
+        LinearGradient,
         Image,
+
     }
 
 
@@ -419,7 +420,7 @@ namespace PaintLab.Svg
             _unknownElemName = name;
             _visualSpec = new SvgVisualSpec();
         }
-        protected void SetController(object controller)
+        public void SetController(object controller)
         {
             _controller = controller;
         }
@@ -556,7 +557,7 @@ namespace PaintLab.Svg
                 case "defs":
                     return new SvgElement(WellknownSvgElementName.Defs);
                 case "clipPath":
-                    return new SvgElement(WellknownSvgElementName.ClipPath);
+                    return new SvgElement(WellknownSvgElementName.ClipPath, new SvgPathSpec());
                 case "svg":
                     return new SvgElement(WellknownSvgElementName.Svg);
                 case "g":
@@ -564,17 +565,23 @@ namespace PaintLab.Svg
                 case "title":
                     return new SvgElement(WellknownSvgElementName.Title);
                 case "rect":
-                    return new SvgElement(WellknownSvgElementName.Rect);
+                    return new SvgElement(WellknownSvgElementName.Rect, new SvgRectSpec());
                 case "line":
-                    return new SvgElement(WellknownSvgElementName.Line);
+                    return new SvgElement(WellknownSvgElementName.Line, new SvgLineSpec());
                 case "polyline":
-                    return new SvgElement(WellknownSvgElementName.Polyline);
+                    return new SvgElement(WellknownSvgElementName.Polyline, new SvgPolylineSpec());
                 case "polygon":
-                    return new SvgElement(WellknownSvgElementName.Polygon);
+                    return new SvgElement(WellknownSvgElementName.Polygon, new SvgPolygonSpec());
                 case "path":
                     return new SvgElement(WellknownSvgElementName.Path, new SvgPathSpec());
                 case "image":
-                    return new SvgElement(WellknownSvgElementName.Image);
+                    return new SvgElement(WellknownSvgElementName.Image, new SvgImageSpec());
+                case "linearGradient":
+                    return new SvgElement(WellknownSvgElementName.LinearGradient, new SvgLinearGradientSpec());
+                case "circle":
+                    return new SvgElement(WellknownSvgElementName.Circle, new SvgCircleSpec());
+                case "ellipse":
+                    return new SvgElement(WellknownSvgElementName.Ellipse, new SvgEllipseSpec());
             }
         }
 
@@ -601,6 +608,10 @@ namespace PaintLab.Svg
             get { return _svgDoc; }
             set { _svgDoc = value; }
         }
+        public SvgElement CurrentSvgElem
+        {
+            get { return _currentElem; }
+        }
 
         public void OnBegin()
         {
@@ -623,6 +634,7 @@ namespace PaintLab.Svg
             _currentElem = newElem;
             _specEvaluator.SetCurrentElement(_currentElem);
         }
+
         public void OnAttribute(string attrName, string value)
         {
             _specEvaluator.OnAttribute(attrName, value);
@@ -730,6 +742,201 @@ namespace PaintLab.Svg
             }
         }
 
+
+        void AssignPathSpecData(SvgPathSpec pathspec, string attrName, string attrValue)
+        {
+            if (attrName == "d")
+            {
+                pathspec.D = attrValue;
+            }
+        }
+        static void AssignLinearGradientSpec(SvgLinearGradientSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                //rect 
+                case "x1":
+                    spec.X1 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y1":
+                    spec.Y1 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "x2":
+                    spec.X2 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y2":
+                    spec.Y2 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+            }
+        }
+        static PixelFarm.Drawing.PointF[] ParsePointList(string str)
+        {
+            //
+            List<PixelFarm.Drawing.PointF> output = new List<PixelFarm.Drawing.PointF>();
+            ParsePointList(str, output);
+            return output.ToArray();
+        }
+
+        static void ParsePointList(string str, List<PixelFarm.Drawing.PointF> output)
+        {
+            //easy parse 01
+            string[] allPoints = str.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            //should be even number
+            int j = allPoints.Length - 1;
+            if (j > 1)
+            {
+
+                for (int i = 0; i < j; i += 2)
+                {
+                    float x, y;
+                    if (!float.TryParse(allPoints[i], out x))
+                    {
+                        x = 0;
+                    }
+                    if (!float.TryParse(allPoints[i + 1], out y))
+                    {
+                        y = 0;
+                    }
+                    output.Add(new PixelFarm.Drawing.PointF(x, y));
+                }
+            }
+        }
+        static void AssignRectSpec(SvgRectSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                //rect 
+                case "x":
+                    spec.X = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y":
+                    spec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "width":
+                    spec.Width = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "height":
+                    spec.Height = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "rx":
+                    spec.CornerRadiusX = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "ry":
+                    spec.CornerRadiusY = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                default:
+
+                    break;
+            }
+        }
+        static void AssignImageSpec(SvgImageSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                case "href":
+                    //image spec
+                    break;
+            }
+        }
+        static void AssignPolygonSpec(SvgPolygonSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                case "points":
+                    //image spec
+                    spec.Points = ParsePointList(attrValue);
+                    break;
+            }
+        }
+        static void AssignPolylineSpec(SvgPolylineSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                case "points":
+                    //image spec
+                    spec.Points = ParsePointList(attrValue);
+                    break;
+            }
+        }
+
+
+        static void AssignEllipseSpec(SvgEllipseSpec spec, string attrName, string attrValue)
+        {
+
+            switch (attrName)
+            {
+                case "cx":
+                    //image spec
+                    spec.X = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "cy":
+                    spec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "rx":
+                    spec.RadiusX = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "ry":
+                    spec.RadiusY = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+            }
+        }
+        static void AssignCircleSpec(SvgCircleSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                case "cx":
+                    //image spec
+                    spec.X = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "cy":
+                    spec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "r":
+                    spec.Radius = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+            }
+        }
+
+
+        ////------------------------------------------------------------
+        //int j = elem.ChildrenCount;
+        //List<StopColorPoint> stopColorPoints = new List<StopColorPoint>(j);
+        //for (int i = 0; i < j; ++i)
+        //{
+        //    HtmlElement node = elem.GetChildNode(i) as HtmlElement;
+        //    if (node == null)
+        //    {
+        //        continue;
+        //    }
+        //    switch (node.WellknownElementName)
+        //    {
+        //        case WellKnownDomNodeName.svg_stop:
+        //            {
+        //                //stop point
+        //                StopColorPoint stopPoint = new StopColorPoint();
+        //                foreach (WebDom.DomAttribute attr in node.GetAttributeIterForward())
+        //                {
+        //                    WebDom.WellknownName wellknownName = (WebDom.WellknownName)attr.LocalNameIndex;
+        //                    switch (wellknownName)
+        //                    {
+        //                        case WellknownName.Svg_StopColor:
+        //                            {
+        //                                stopPoint.StopColor = CssValueParser2.ParseCssColor(attr.Value);
+        //                            }
+        //                            break;
+        //                        case WellknownName.Svg_Offset:
+        //                            {
+        //                                stopPoint.Offset = UserMapUtil.ParseGenericLength(attr.Value);
+        //                            }
+        //                            break;
+        //                    }
+        //                }
+        //                stopColorPoints.Add(stopPoint);
+        //            }
+        //            break;
+        //    }
+        //}
+
         public void OnAttribute(string attrName, string value)
         {
             SvgVisualSpec spec = _currentElem._visualSpec;
@@ -739,13 +946,35 @@ namespace PaintLab.Svg
                     {
                         //unknown attribute
                         //some specfic attr for some elem
-                        if (_currentElem.WellknowElemName == WellknownSvgElementName.Path)
+                        switch (_currentElem.WellknowElemName)
                         {
-                            if (attrName == "d")
-                            {
-                                SvgPathSpec pathSpec = (SvgPathSpec)spec;
-                                pathSpec.D = value;
-                            }
+                            default:
+
+                                break;
+                            case WellknownSvgElementName.Path:
+                                AssignPathSpecData((SvgPathSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Rect:
+                                AssignRectSpec((SvgRectSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.LinearGradient:
+                                AssignLinearGradientSpec((SvgLinearGradientSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Polyline:
+                                AssignPolylineSpec((SvgPolylineSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Polygon:
+                                AssignPolygonSpec((SvgPolygonSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Image:
+                                AssignImageSpec((SvgImageSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Ellipse:
+                                AssignEllipseSpec((SvgEllipseSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Circle:
+                                AssignCircleSpec((SvgCircleSpec)spec, attrName, value);
+                                break;
                         }
                     }
                     break;
@@ -810,6 +1039,7 @@ namespace PaintLab.Svg
                         SvgParser.ParseTransform(value, spec);
                     }
                     break;
+
             }
         }
         static void AddClipPathLink(SvgVisualSpec spec, string value)
@@ -962,13 +1192,12 @@ namespace PaintLab.Svg
             }
         }
 
+        static readonly char[] s_matrixStrSplitters = new char[] { ',', ' ' };
         static float[] ParseMatrixArgs(string matrixTransformArgs)
         {
-
-
             int close_paren = matrixTransformArgs.IndexOf(')');
             matrixTransformArgs = matrixTransformArgs.Substring(0, close_paren);
-            string[] elem_string_args = matrixTransformArgs.Split(',');
+            string[] elem_string_args = matrixTransformArgs.Split(s_matrixStrSplitters);
             int j = elem_string_args.Length;
             float[] elem_values = new float[j];
             for (int i = 0; i < j; ++i)
