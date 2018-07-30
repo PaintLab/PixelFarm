@@ -257,6 +257,7 @@ namespace PixelFarm.CpuBlit
 
                     pathCmd.SetVxs(v1.CreateTrim());
                 }
+                AssignAttributes(polygonSpec, cmds);
                 cmds.Add(pathCmd);
             }
         }
@@ -280,6 +281,8 @@ namespace PixelFarm.CpuBlit
                     }
                     pathCmd.SetVxs(v1.CreateTrim());
                 }
+                
+                AssignAttributes(polylineSpec, cmds);
                 cmds.Add(pathCmd);
             }
 
