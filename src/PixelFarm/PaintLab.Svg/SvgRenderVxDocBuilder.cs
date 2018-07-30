@@ -45,6 +45,9 @@ namespace PixelFarm.CpuBlit
                     throw new KeyNotFoundException();
                 case WellknownSvgElementName.Unknown:
                     return;
+                case WellknownSvgElementName.Text:
+
+                    break;
                 case WellknownSvgElementName.Svg:
                     break;
                 case WellknownSvgElementName.Defs:
@@ -281,7 +284,7 @@ namespace PixelFarm.CpuBlit
                     }
                     pathCmd.SetVxs(v1.CreateTrim());
                 }
-                
+
                 AssignAttributes(polylineSpec, cmds);
                 cmds.Add(pathCmd);
             }
@@ -311,6 +314,8 @@ namespace PixelFarm.CpuBlit
             AssignAttributes(ellipseSpec, cmds);
             cmds.Add(pathCmd);
         }
+
+         
         void RenderRectElement(SvgElement elem, List<VgCmd> cmds)
         {
             SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;

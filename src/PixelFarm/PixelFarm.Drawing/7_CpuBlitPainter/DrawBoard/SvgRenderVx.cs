@@ -21,6 +21,7 @@ namespace PixelFarm.CpuBlit
         StrokeWidth,
         AffineTransform,
         Image,
+        TextSpan,
     }
 
     public class VxsRenderVx : RenderVx
@@ -396,6 +397,17 @@ namespace PixelFarm.CpuBlit
             return vgPath;
         }
     }
+    public class VgCmdTextSpan : VgCmd
+    {
+        public VgCmdTextSpan() : base(VgCommandName.TextSpan)
+        {
+        }
+        public override VgCmd Clone()
+        {
+            return new VgCmdTextSpan();
+        }
+    }
+
     public class VgCmdImage : VgCmd
     {
         public VgCmdImage() : base(VgCommandName.Image)

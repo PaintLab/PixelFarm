@@ -391,8 +391,14 @@ namespace PaintLab.Svg
         /// linear gradient
         /// </summary>
         LinearGradient,
+        /// <summary>
+        /// text
+        /// </summary>
+        Text,
+        /// <summary>
+        /// image
+        /// </summary>
         Image,
-
     }
 
 
@@ -452,6 +458,8 @@ namespace PaintLab.Svg
                     case WellknownSvgElementName.Defs: return "defs";
                     case WellknownSvgElementName.Title: return "title";
                     case WellknownSvgElementName.Image: return "image";
+                    case WellknownSvgElementName.Text: return "text";
+                    case WellknownSvgElementName.LinearGradient: return "linearGradient";
                 }
             }
         }
@@ -480,7 +488,7 @@ namespace PaintLab.Svg
 
         void OnAttribute(string attrName, string value);
         void OnEnteringElementBody();
-        void OnExtingElementBody();
+        void OnExitingElementBody();
         void OnEnd();
     }
     //----------------------
@@ -554,6 +562,8 @@ namespace PaintLab.Svg
                     Console.WriteLine("svg unimplemented element: " + elemName);
 #endif
                     return new SvgElement(WellknownSvgElementName.Unknown, elemName);
+                case "text":
+                    return new SvgElement(WellknownSvgElementName.Text, new SvgTextSpec());
                 case "defs":
                     return new SvgElement(WellknownSvgElementName.Defs);
                 case "clipPath":
@@ -644,7 +654,7 @@ namespace PaintLab.Svg
 
         }
 
-        public void OnExtingElementBody()
+        public void OnExitingElementBody()
         {
             if (_elems.Count > 0)
             {
@@ -1131,7 +1141,7 @@ namespace PaintLab.Svg
         }
         protected override void OnExitingElementBody()
         {
-            _svgDocBuilder.OnExtingElementBody();
+            _svgDocBuilder.OnExitingElementBody();
         }
 
         public static void ParseTransform(string value, SvgVisualSpec spec)

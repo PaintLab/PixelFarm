@@ -229,7 +229,12 @@ namespace LayoutFarm.Svg
             set;
         }
     }
-
+    public class SvgTextSpec:SvgVisualSpec
+    {
+        public string Font { get; set; }
+        public string TextContent { get; set; }
+        public object ExternalTextNode { get; set; }
+    }
 
     public class SvgLineSpec : SvgVisualSpec
     {
