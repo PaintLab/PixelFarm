@@ -32,6 +32,9 @@ namespace PixelFarm.CpuBlit
         {
             //paint with painter interface
         }
+#if DEBUG
+        public bool dbugHasParent;
+#endif
     }
     public class SvgTextNode : SvgRenderElementBase
     {
@@ -394,15 +397,15 @@ namespace PixelFarm.CpuBlit
 
                 if (_visualSpec.Transform != null)
                 {
-                    VertexProcessing.Affine aff = CreateAffine(_visualSpec.Transform);
+                    VertexProcessing.Affine latest = CreateAffine(_visualSpec.Transform);
                     if (currentTx != null)
                     {
-                        //*** IMPORTANT : matrix transform order !*** 
-                        currentTx = aff * svgPainter._currentTx;
+                        //*** IMPORTANT : matrix transform order !***                         
+                        currentTx = latest * svgPainter._currentTx;
                     }
                     else
                     {
-                        currentTx = aff;
+                        currentTx = latest;
                     }
                     svgPainter._currentTx = currentTx;
                 }
@@ -470,15 +473,15 @@ namespace PixelFarm.CpuBlit
                     //unknown
                     break;
                 case WellknownSvgElementName.Group:
-
-
-                    break;
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
                     break;
                 case WellknownSvgElementName.Path:
-                case WellknownSvgElementName.Ellipse:
                 case WellknownSvgElementName.Line:
+                case WellknownSvgElementName.Ellipse:
+                case WellknownSvgElementName.Circle:
+                case WellknownSvgElementName.Polygon:
+                case WellknownSvgElementName.Polyline:
                 case WellknownSvgElementName.Rect:
                     {
                         //render with rect spec 
@@ -570,11 +573,19 @@ namespace PixelFarm.CpuBlit
         {
             if (renderE == null) return;
             //
+#if DEBUG
+            if (renderE.dbugHasParent)
+            {
+                throw new NotSupportedException();
+            }
+            renderE.dbugHasParent = true;
+#endif
             if (_childNodes == null)
             {
                 _childNodes = new List<SvgRenderElementBase>();
             }
             _childNodes.Add(renderE);
+
         }
         public int ChildCount
         {
@@ -709,8 +720,15 @@ namespace PixelFarm.CpuBlit
             for (int i = 0; i < childCount; ++i)
             {
                 SvgRenderElement path = EvalOtherElem(clipPath, elem.GetChild(i));
-                clipPath.AddChildElement(path);
+#if DEBUG
+                if (!path.dbugHasParent)
+                {
+                    clipPath.AddChildElement(path);
+                }
+#endif
+
             }
+            parentNode.AddChildElement(clipPath);
             return clipPath;
         }
         bool _buildDefs = false;
@@ -788,6 +806,8 @@ namespace PixelFarm.CpuBlit
             AssignAttributes(pathSpec);
 
             path._vxsPath = pathCmd;
+
+            parentNode.AddChildElement(path);
             return path;
         }
 
@@ -1055,7 +1075,10 @@ namespace PixelFarm.CpuBlit
                 SvgRenderElement child = EvalOtherElem(renderE, elem.GetChild(i));
                 if (child != null)
                 {
-                    renderE.AddChildElement(child);
+                    if (!child.dbugHasParent)
+                    {
+                        renderE.AddChildElement(child);
+                    }
                 }
             }
 
