@@ -28,10 +28,7 @@ using LayoutFarm.WebLexer;
 
 namespace PaintLab.Svg
 {
-
-
-
-
+    
     public abstract class XmlParserBase
     {
         int parseState = 0;

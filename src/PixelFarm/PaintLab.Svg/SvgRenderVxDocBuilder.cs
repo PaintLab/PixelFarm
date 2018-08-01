@@ -13,12 +13,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.CpuBlit
 {
-    enum ClipingTechnique
-    {
-        None,
-        ClipMask,
-        ClipSimpleRect
-    }
+    
 
     public class SvgPainter
     {
@@ -54,6 +49,7 @@ namespace PixelFarm.CpuBlit
             WithSubPartTest = false;
         }
     }
+
     public class SvgRenderElement : SvgRenderElementBase
     {
 
@@ -644,9 +640,9 @@ namespace PixelFarm.CpuBlit
         bool _needBoundUpdate;
         public object _renderE;
 
-        public VgRenderVx(object renderE)
+        public VgRenderVx(SvgRenderElement svgRenderE)
         {
-            _renderE = renderE;
+            _renderE = svgRenderE;
             ////this is original version of the element 
             //this._cmds = cmds;
             //_needBoundUpdate = true;
@@ -727,16 +723,7 @@ namespace PixelFarm.CpuBlit
         }
 
         public float X { get; set; }
-        public float Y { get; set; }
-        //public VgCmd GetVgCmd(int index)
-        //{
-        //    return _cmds[index];
-        //}
-        //public int VgCmdCount
-        //{
-        //    get { return _cmds.Length; }
-        //}
-        //public VgCmd PrefixCommand { get; set; }
+        public float Y { get; set; } 
     }
 
 
