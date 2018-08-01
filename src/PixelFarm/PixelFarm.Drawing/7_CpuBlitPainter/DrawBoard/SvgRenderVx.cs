@@ -185,33 +185,7 @@ namespace PixelFarm.CpuBlit
         ClipMask,
         ClipSimpleRect
     }
-
-
-
-    static class TempVgRenderStateStore
-    {
-
-        [System.ThreadStatic]
-        static Stack<Stack<TempVgRenderState>> s_tempVgRenderStates = new Stack<Stack<TempVgRenderState>>();
-        public static void GetFreeTempVgRenderState(out Stack<TempVgRenderState> tmpVgStateStack)
-        {
-            if (s_tempVgRenderStates.Count > 0)
-            {
-                tmpVgStateStack = s_tempVgRenderStates.Pop();
-            }
-            else
-            {
-                tmpVgStateStack = new Stack<TempVgRenderState>();
-            }
-        }
-        public static void ReleaseTempVgRenderState(ref Stack<TempVgRenderState> tmpVgStateStack)
-        {
-            tmpVgStateStack.Clear();
-            s_tempVgRenderStates.Push(tmpVgStateStack);
-            tmpVgStateStack = null;
-        }
-    }
-
+ 
 
     public static class TempStrokeTool
     {
@@ -238,15 +212,7 @@ namespace PixelFarm.CpuBlit
     }
 
 
-    struct TempVgRenderState
-    {
-        public float strokeWidth;
-        public Color strokeColor;
-        public Color fillColor;
-        public Affine affineTx;
-        public ClipingTechnique clippingTech;
-    }
-
+     
 
 
 
@@ -406,110 +372,6 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-    //public class VgCmdBeginGroup : VgCmd
-    //{
-    //    public VgCmdBeginGroup() : base(VgCommandName.BeginGroup)
-    //    {
-    //    }
-    //    public override VgCmd Clone()
-    //    {
-    //        return new VgCmdBeginGroup();
-    //    }
-    //}
-    //public class VgCmdEndGroup : VgCmd
-    //{
-    //    public VgCmdEndGroup() : base(VgCommandName.EndGroup)
-    //    {
-    //    }
-    //    public override VgCmd Clone()
-    //    {
-    //        return new VgCmdEndGroup();
-    //    }
-    //}
-
-
-    //public class VgCmdTextSpan : VgCmd
-    //{
-    //    public VgCmdTextSpan() : base(VgCommandName.TextSpan)
-    //    {
-    //    }
-    //    public override VgCmd Clone()
-    //    {
-    //        return new VgCmdTextSpan();
-    //    }
-    //}
-
-    //public class VgCmdImage : VgCmd
-    //{
-    //    public VgCmdImage() : base(VgCommandName.Image)
-    //    {
-    //    }
-    //    public Image Image { get; set; }
-    //    public VertexStore Vxs { get; private set; }
-    //    public void SetVxsAsOriginal(VertexStore vxs)
-    //    {
-    //        Vxs = vxs;
-    //    }
-
-    //    public override VgCmd Clone()
-    //    {
-    //        VgCmdImage vgImg = new VgCmdImage();
-    //        vgImg.Image = this.Image;
-    //        vgImg.Vxs = this.Vxs.CreateTrim();
-    //        return vgImg;
-    //    }
-    //}
-    ////-------------------------------------------------
-    //public class VgCmdFillColor : VgCmd
-    //{
-    //    public VgCmdFillColor(Color color) : base(VgCommandName.FillColor) { Color = color; }
-    //    public Color Color { get; set; }
-    //    public override VgCmd Clone()
-    //    {
-    //        return new VgCmdFillColor(Color);
-    //    }
-    //}
-    //public class VgCmdStrokeColor : VgCmd
-    //{
-    //    public VgCmdStrokeColor(Color color) : base(VgCommandName.StrokeColor) { Color = color; }
-    //    public Color Color { get; set; }
-    //    public override VgCmd Clone()
-    //    {
-    //        return new VgCmdStrokeColor(Color);
-    //    }
-    //}
-    //public class VgCmdStrokeWidth : VgCmd
-    //{
-    //    public VgCmdStrokeWidth(float w) : base(VgCommandName.StrokeWidth) { Width = w; }
-    //    public float Width { get; set; }
-    //    public override VgCmd Clone()
-    //    {
-    //        return new VgCmdStrokeWidth(Width);
-    //    }
-    //}
-    //public class VgCmdAffineTransform : VgCmd
-    //{
-    //    public VgCmdAffineTransform(Affine affine) : base(VgCommandName.AffineTransform)
-    //    {
-    //        TransformMatrix = affine;
-    //    }
-    //    public Affine TransformMatrix { get; private set; }
-
-    //    public override VgCmd Clone()
-    //    {
-    //        return new VgCmdAffineTransform(this.TransformMatrix.Clone());
-    //    }
-    //}
-
-    //public abstract class VgCmd
-    //{
-    //    public VgCmd(VgCommandName cmdKind)
-    //    {
-    //        Name = cmdKind;
-    //    }
-    //    public VgCommandName Name { get; set; }
-    //    public abstract VgCmd Clone();
-    //}
-
+   
 
 }
