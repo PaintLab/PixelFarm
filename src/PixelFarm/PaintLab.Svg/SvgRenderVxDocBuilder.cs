@@ -318,6 +318,10 @@ namespace PixelFarm.CpuBlit
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
                     break;
+                case WellknownSvgElementName.Ellipse:
+                    break;
+                case WellknownSvgElementName.Line:
+                    break;
                 case WellknownSvgElementName.Rect:
                     {
                         //render with rect spec
