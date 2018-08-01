@@ -41,10 +41,7 @@ namespace LayoutFarm.UI
         }
         static bool HitTestOnSubPart(VgRenderVx _svgRenderVx, float x, float y)
         {
-            throw new NotSupportedException();
-            //int partCount = _svgRenderVx.VgCmdCount;
-
-
+            //int partCount = _svgRenderVx.VgCmdCount; 
             //for (int i = partCount - 1; i >= 0; --i)
             //{
             //    //we do hittest top to bottom => (so => iter backward)
@@ -64,6 +61,10 @@ namespace LayoutFarm.UI
             //    }
             //}
             //return false;
+
+
+            return false;
+
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {

@@ -37,7 +37,7 @@ namespace LayoutFarm
             //    new VgCmdFillColor(Color.Red),
             //    path });
 
-            VgRenderVx svgRenderVx = new VgRenderVx();
+            VgRenderVx svgRenderVx = new VgRenderVx(null);
             svgRenderVx.DisableBackingImage = true;
 
 

@@ -100,6 +100,7 @@ namespace PixelFarm.CpuBlit
                 y -= _posY;
                 if (withSubPathTest)
                 {
+                    _hitTestArgs.Reset();
                     _hitTestArgs.X = x;
                     _hitTestArgs.Y = y;
                     _hitTestArgs.WithSubPartTest = withSubPathTest;

@@ -76,7 +76,6 @@ namespace PixelFarm.CpuBlit
         {
             _controller = o;
         }
-
         public void HitTest(SvgHitTestArgs hitArgs)
         {
 
