@@ -24,8 +24,8 @@ namespace PixelFarm.CpuBlit
     {
         public Painter P;
         public Affine _currentTx;
-        internal ClipingTechnique clipingTech;
     }
+
     public abstract class SvgRenderElementBase
     {
         public virtual void Paint(SvgPainter p)
