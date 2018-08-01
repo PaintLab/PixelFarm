@@ -255,7 +255,6 @@ namespace PixelFarm.CpuBlit
     {
 
         Image _backimg;
-        //VgCmd[] _cmds;
         RectD _boundRect;
         bool _needBoundUpdate;
         public object _renderE;
@@ -285,8 +284,24 @@ namespace PixelFarm.CpuBlit
             _needBoundUpdate = true;
             _boundRect = new RectD(this.X, this.Y, 2, 2);
         }
+        
         public RectD GetBounds()
         {
+
+            //int partCount = _svgRenderVx.VgCmdCount;
+            //RectD rectTotal = new RectD();
+            //for (int i = 0; i < partCount; ++i)
+            //{
+            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
+            //    if (vx.Name != VgCommandName.Path)
+            //    {
+            //        continue;
+            //    }
+            //    VgCmdPath path = (VgCmdPath)vx;
+            //    BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
+            //}
+            //this.boundingRect = rectTotal;
+
             //find bound
             //TODO: review here
             return new RectD(0, 0, 100, 100);

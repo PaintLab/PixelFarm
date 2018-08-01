@@ -41,6 +41,19 @@ namespace PixelFarm.CpuBlit
         public string TextContent { get; set; }
     }
 
+    public class SvgHitTestArgs
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public bool WithSubPartTest { get; set; }
+        //
+        public bool Result { get; set; }
+        public void Reset()
+        {
+            X = Y = 0;
+            WithSubPartTest = false;
+        }
+    }
     public class SvgRenderElement : SvgRenderElementBase
     {
         public VgCmdPath _vxsPath;
@@ -64,7 +77,10 @@ namespace PixelFarm.CpuBlit
             _controller = o;
         }
 
+        public void HitTest(SvgHitTestArgs hitArgs)
+        {
 
+        }
         //--------------------------------------------------------------------------
         //void Render(VgRenderVx renderVx)
         //{

@@ -153,57 +153,16 @@ namespace PixelFarm.CpuBlit
 
         public void UpdateBounds()
         {
-            //find bound
-            //TODO: review here
-            int partCount = _svgRenderVx.VgCmdCount;
-            RectD rectTotal = new RectD();
-            for (int i = 0; i < partCount; ++i)
-            {
-                VgCmd vx = _svgRenderVx.GetVgCmd(i);
-                if (vx.Name != VgCommandName.Path)
-                {
-                    continue;
-                }
-                VgCmdPath path = (VgCmdPath)vx;
-                BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
-            }
-            this.boundingRect = rectTotal;
+            _svgRenderVx.InvalidateBounds();
+            this.boundingRect = _svgRenderVx.GetBounds();
         }
 
         VertexStore _selectedVxs = null;
-        public bool HitTestOnSubPart(float x, float y)
+        public void HitTestOnSubPart(SvgHitTestArgs hitArgs)
         {
-            throw new System.NotSupportedException();
+            var renderE = ((PixelFarm.CpuBlit.SvgRenderElement)_svgRenderVx._renderE);
+            renderE.HitTest(hitArgs);
 
-            int partCount = _svgRenderVx.VgCmdCount;
-
-            _selectedVxs = null;//reset
-            for (int i = partCount - 1; i >= 0; --i)
-            {
-                //we do hittest top to bottom => (so => iter backward)
-
-                VgCmd vx = _svgRenderVx.GetVgCmd(i);
-                if (vx.Name != VgCommandName.Path)
-                {
-                    continue;
-                }
-                VgCmdPath path = (VgCmdPath)vx;
-                VertexStore innerVxs = path.Vxs;
-                //fine tune
-                //hit test ***
-                if (VertexHitTester.IsPointInVxs(innerVxs, x, y))
-                {
-
-                    if (_selectedVxs != null)
-                    {
-                        //de-selected this first
-                    }
-                    _selectedVxs = innerVxs;
-                    //vx.FillColor = Color.Black;
-                    return true;
-                }
-            }
-            return false;
         }
 
     }
