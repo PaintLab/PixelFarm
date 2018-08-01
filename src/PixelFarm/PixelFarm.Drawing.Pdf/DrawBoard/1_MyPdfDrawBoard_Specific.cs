@@ -27,7 +27,10 @@ namespace PixelFarm.Drawing.Pdf
         {
         }
 
-
+        public override Painter GetPainter()
+        {
+            throw new NotImplementedException();
+        }
         internal MyPdfDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,

@@ -33,9 +33,11 @@ namespace LayoutFarm
                 path.SetVxs(vxs.CreateTrim());
             }
 
-            VgRenderVx svgRenderVx = new VgRenderVx(new VgCmd[] {
-                new VgCmdFillColor(Color.Red),
-                path });
+            //VgRenderVx svgRenderVx = new VgRenderVx(new VgCmd[] {
+            //    new VgCmdFillColor(Color.Red),
+            //    path });
+
+            VgRenderVx svgRenderVx = new VgRenderVx();
             svgRenderVx.DisableBackingImage = true;
 
 

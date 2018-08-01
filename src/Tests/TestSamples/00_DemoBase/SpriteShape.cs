@@ -70,32 +70,33 @@ namespace PixelFarm.CpuBlit
         public void ApplyNewAlpha(byte alphaValue0_255)
         {
             //Temp fix,            
+            throw new System.NotSupportedException();
 
-            int elemCount = _svgRenderVx.VgCmdCount;
-            for (int i = 0; i < elemCount; ++i)
-            {
-                VgCmd vx = _svgRenderVx.GetVgCmd(i);
-                switch (vx.Name)
-                {
-                    case VgCommandName.FillColor:
-                        {
-                            VgCmdFillColor fillColor = (VgCmdFillColor)vx;
-                            fillColor.Color = fillColor.Color.NewFromChangeAlpha(alphaValue0_255);
-                        }
-                        break;
-                    case VgCommandName.StrokeColor:
-                        {
-                            VgCmdStrokeColor strokColor = (VgCmdStrokeColor)vx;
-                            strokColor.Color = strokColor.Color.NewFromChangeAlpha(alphaValue0_255);
-                        }
-                        break;
-                }
-            }
+            //int elemCount = _svgRenderVx.VgCmdCount;
+            //for (int i = 0; i < elemCount; ++i)
+            //{
+            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
+            //    switch (vx.Name)
+            //    {
+            //        case VgCommandName.FillColor:
+            //            {
+            //                VgCmdFillColor fillColor = (VgCmdFillColor)vx;
+            //                fillColor.Color = fillColor.Color.NewFromChangeAlpha(alphaValue0_255);
+            //            }
+            //            break;
+            //        case VgCommandName.StrokeColor:
+            //            {
+            //                VgCmdStrokeColor strokColor = (VgCmdStrokeColor)vx;
+            //                strokColor.Color = strokColor.Color.NewFromChangeAlpha(alphaValue0_255);
+            //            }
+            //            break;
+            //    }
+            //}
         }
         public void Paint(Painter p)
         {
             p.Render(_svgRenderVx);
-            //_svgRenderVx.Render(p);
+
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
@@ -114,11 +115,14 @@ namespace PixelFarm.CpuBlit
         {
             //walk all parts and draw only outline 
             //not fill
-            int renderVxCount = _svgRenderVx.VgCmdCount;
-            for (int i = 0; i < renderVxCount; ++i)
-            {
+            //int renderVxCount = _svgRenderVx.VgCmdCount;
+            //for (int i = 0; i < renderVxCount; ++i)
+            //{
 
-            }
+            //}
+
+
+
             //int j = lionShape.NumPaths;
             //int[] pathList = lionShape.PathIndexList;
             //Drawing.Color[] colors = lionShape.Colors;
@@ -169,6 +173,8 @@ namespace PixelFarm.CpuBlit
         VertexStore _selectedVxs = null;
         public bool HitTestOnSubPart(float x, float y)
         {
+            throw new System.NotSupportedException();
+
             int partCount = _svgRenderVx.VgCmdCount;
 
             _selectedVxs = null;//reset

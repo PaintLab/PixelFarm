@@ -399,6 +399,8 @@ namespace PaintLab.Svg
         /// image
         /// </summary>
         Image,
+
+        RootSvg,
     }
 
 
@@ -406,6 +408,7 @@ namespace PaintLab.Svg
     {
         readonly WellknownSvgElementName _wellknownName;
         readonly string _unknownElemName;
+        object _visualE;
 
         public SvgVisualSpec _visualSpec;
         List<SvgElement> _childNodes = new List<SvgElement>();
@@ -431,6 +434,10 @@ namespace PaintLab.Svg
             _controller = controller;
         }
 
+        public void SetVisualElement(object visualE)
+        {
+            _visualE = visualE;
+        }
         public static object UnsafeGetController(SvgElement elem)
         {
             return elem._controller;
