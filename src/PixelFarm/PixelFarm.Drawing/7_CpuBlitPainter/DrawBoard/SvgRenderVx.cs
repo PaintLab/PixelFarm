@@ -47,7 +47,7 @@ namespace PixelFarm.CpuBlit
 
 
 
-    static class SimpleRectClipEvaluator
+    public static class SimpleRectClipEvaluator
     {
         enum RectSide
         {
@@ -213,7 +213,7 @@ namespace PixelFarm.CpuBlit
     }
 
 
-    static class TempStrokeTool
+    public static class TempStrokeTool
     {
 
         [System.ThreadStatic]
@@ -248,30 +248,35 @@ namespace PixelFarm.CpuBlit
     }
 
 
+
+
+
     public class VgRenderVx : RenderVx
     {
 
         Image _backimg;
-        VgCmd[] _cmds;
         RectD _boundRect;
         bool _needBoundUpdate;
-        public VgRenderVx(VgCmd[] svgVxList)
+        public object _renderE;
+
+        public VgRenderVx(object renderE)
         {
-            //this is original version of the element 
-            this._cmds = svgVxList;
-            _needBoundUpdate = true;
+            _renderE = renderE;
+            ////this is original version of the element 
+            //this._cmds = cmds;
+            //_needBoundUpdate = true;
         }
         public VgRenderVx Clone()
         {
             //make a copy of cmd stream
-            int j = _cmds.Length;
-            var copy = new VgCmd[j];
-            for (int i = 0; i < j; ++i)
-            {
-                copy[i] = _cmds[i].Clone();
-            }
+            //int j = _cmds.Length;
+            //var copy = new VgCmd[j];
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    copy[i] = _cmds[i].Clone();
+            //}
 
-            return new VgRenderVx(copy);
+            return new VgRenderVx(null);
         }
 
         public void InvalidateBounds()
@@ -279,32 +284,50 @@ namespace PixelFarm.CpuBlit
             _needBoundUpdate = true;
             _boundRect = new RectD(this.X, this.Y, 2, 2);
         }
+        
         public RectD GetBounds()
         {
+
+            //int partCount = _svgRenderVx.VgCmdCount;
+            //RectD rectTotal = new RectD();
+            //for (int i = 0; i < partCount; ++i)
+            //{
+            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
+            //    if (vx.Name != VgCommandName.Path)
+            //    {
+            //        continue;
+            //    }
+            //    VgCmdPath path = (VgCmdPath)vx;
+            //    BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
+            //}
+            //this.boundingRect = rectTotal;
+
             //find bound
             //TODO: review here
-            if (_needBoundUpdate)
-            {
-                int partCount = _cmds.Length;
+            return new RectD(0, 0, 100, 100);
 
-                for (int i = 0; i < partCount; ++i)
-                {
-                    VgCmd vx = _cmds[i];
-                    if (vx.Name != VgCommandName.Path)
-                    {
-                        continue;
-                    }
+            //if (_needBoundUpdate)
+            //{
+            //    int partCount = _cmds.Length;
 
-                    RectD rectTotal = new RectD();
-                    VertexStore innerVxs = ((VgCmdPath)vx).Vxs;
-                    BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
+            //    for (int i = 0; i < partCount; ++i)
+            //    {
+            //        VgCmd vx = _cmds[i];
+            //        if (vx.Name != VgCommandName.Path)
+            //        {
+            //            continue;
+            //        }
 
-                    _boundRect.ExpandToInclude(rectTotal);
-                }
+            //        RectD rectTotal = new RectD();
+            //        VertexStore innerVxs = ((VgCmdPath)vx).Vxs;
+            //        BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
 
-                _needBoundUpdate = false;
-            }
-            return _boundRect;
+            //        _boundRect.ExpandToInclude(rectTotal);
+            //    }
+
+            //    _needBoundUpdate = false;
+            //}
+            //return _boundRect;
         }
 
         public bool HasBitmapSnapshot { get; internal set; }
@@ -320,62 +343,28 @@ namespace PixelFarm.CpuBlit
 
         public float X { get; set; }
         public float Y { get; set; }
-
-
-
-
-
-
-        public VgCmd GetVgCmd(int index)
-        {
-            return _cmds[index];
-        }
-        public int VgCmdCount
-        {
-            get { return _cmds.Length; }
-        }
-        public VgCmd PrefixCommand { get; set; }
+        //public VgCmd GetVgCmd(int index)
+        //{
+        //    return _cmds[index];
+        //}
+        //public int VgCmdCount
+        //{
+        //    get { return _cmds.Length; }
+        //}
+        //public VgCmd PrefixCommand { get; set; }
     }
 
 
-    public class VgCmdClipPath : VgCmd
+    public abstract class VgCmd
     {
-        public List<VgCmd> _svgParts;
-        public VgCmdClipPath()
-            : base(VgCommandName.ClipPath)
+        public VgCmd(VgCommandName name)
         {
+            Name = name;
         }
-        public override VgCmd Clone()
+        public VgCommandName Name { get; set; }
+        public virtual VgCmd Clone()
         {
-            VgCmdClipPath clipPath = new VgCmdClipPath();
-            clipPath._svgParts = new List<VgCmd>();
-            int j = _svgParts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                clipPath._svgParts[i] = _svgParts[i].Clone();
-            }
-            return clipPath;
-        }
-    }
-
-    public class VgCmdBeginGroup : VgCmd
-    {
-        public VgCmdBeginGroup() : base(VgCommandName.BeginGroup)
-        {
-        }
-        public override VgCmd Clone()
-        {
-            return new VgCmdBeginGroup();
-        }
-    }
-    public class VgCmdEndGroup : VgCmd
-    {
-        public VgCmdEndGroup() : base(VgCommandName.EndGroup)
-        {
-        }
-        public override VgCmd Clone()
-        {
-            return new VgCmdEndGroup();
+            return null;
         }
     }
 
@@ -397,88 +386,130 @@ namespace PixelFarm.CpuBlit
             return vgPath;
         }
     }
-    public class VgCmdTextSpan : VgCmd
+    public class VgCmdClipPath : VgCmd
     {
-        public VgCmdTextSpan() : base(VgCommandName.TextSpan)
+        public List<VgCmd> _svgParts;
+        public VgCmdClipPath()
+            : base(VgCommandName.ClipPath)
         {
         }
         public override VgCmd Clone()
         {
-            return new VgCmdTextSpan();
+            VgCmdClipPath clipPath = new VgCmdClipPath();
+            clipPath._svgParts = new List<VgCmd>();
+            int j = _svgParts.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                clipPath._svgParts[i] = _svgParts[i].Clone();
+            }
+            return clipPath;
         }
     }
 
-    public class VgCmdImage : VgCmd
-    {
-        public VgCmdImage() : base(VgCommandName.Image)
-        {
-        }
-        public Image Image { get; set; }
-        public VertexStore Vxs { get; private set; }
-        public void SetVxsAsOriginal(VertexStore vxs)
-        {
-            Vxs = vxs;
-        }
+    //public class VgCmdBeginGroup : VgCmd
+    //{
+    //    public VgCmdBeginGroup() : base(VgCommandName.BeginGroup)
+    //    {
+    //    }
+    //    public override VgCmd Clone()
+    //    {
+    //        return new VgCmdBeginGroup();
+    //    }
+    //}
+    //public class VgCmdEndGroup : VgCmd
+    //{
+    //    public VgCmdEndGroup() : base(VgCommandName.EndGroup)
+    //    {
+    //    }
+    //    public override VgCmd Clone()
+    //    {
+    //        return new VgCmdEndGroup();
+    //    }
+    //}
 
-        public override VgCmd Clone()
-        {
-            VgCmdImage vgImg = new VgCmdImage();
-            vgImg.Image = this.Image;
-            vgImg.Vxs = this.Vxs.CreateTrim();
-            return vgImg;
-        }
-    }
-    //-------------------------------------------------
-    public class VgCmdFillColor : VgCmd
-    {
-        public VgCmdFillColor(Color color) : base(VgCommandName.FillColor) { Color = color; }
-        public Color Color { get; set; }
-        public override VgCmd Clone()
-        {
-            return new VgCmdFillColor(Color);
-        }
-    }
-    public class VgCmdStrokeColor : VgCmd
-    {
-        public VgCmdStrokeColor(Color color) : base(VgCommandName.StrokeColor) { Color = color; }
-        public Color Color { get; set; }
-        public override VgCmd Clone()
-        {
-            return new VgCmdStrokeColor(Color);
-        }
-    }
-    public class VgCmdStrokeWidth : VgCmd
-    {
-        public VgCmdStrokeWidth(float w) : base(VgCommandName.StrokeWidth) { Width = w; }
-        public float Width { get; set; }
-        public override VgCmd Clone()
-        {
-            return new VgCmdStrokeWidth(Width);
-        }
-    }
-    public class VgCmdAffineTransform : VgCmd
-    {
-        public VgCmdAffineTransform(Affine affine) : base(VgCommandName.AffineTransform)
-        {
-            TransformMatrix = affine;
-        }
-        public Affine TransformMatrix { get; private set; }
 
-        public override VgCmd Clone()
-        {
-            return new VgCmdAffineTransform(this.TransformMatrix.Clone());
-        }
-    }
+    //public class VgCmdTextSpan : VgCmd
+    //{
+    //    public VgCmdTextSpan() : base(VgCommandName.TextSpan)
+    //    {
+    //    }
+    //    public override VgCmd Clone()
+    //    {
+    //        return new VgCmdTextSpan();
+    //    }
+    //}
 
-    public abstract class VgCmd
-    {
-        public VgCmd(VgCommandName cmdKind)
-        {
-            Name = cmdKind;
-        }
-        public VgCommandName Name { get; set; }
-        public abstract VgCmd Clone();
-    }
+    //public class VgCmdImage : VgCmd
+    //{
+    //    public VgCmdImage() : base(VgCommandName.Image)
+    //    {
+    //    }
+    //    public Image Image { get; set; }
+    //    public VertexStore Vxs { get; private set; }
+    //    public void SetVxsAsOriginal(VertexStore vxs)
+    //    {
+    //        Vxs = vxs;
+    //    }
+
+    //    public override VgCmd Clone()
+    //    {
+    //        VgCmdImage vgImg = new VgCmdImage();
+    //        vgImg.Image = this.Image;
+    //        vgImg.Vxs = this.Vxs.CreateTrim();
+    //        return vgImg;
+    //    }
+    //}
+    ////-------------------------------------------------
+    //public class VgCmdFillColor : VgCmd
+    //{
+    //    public VgCmdFillColor(Color color) : base(VgCommandName.FillColor) { Color = color; }
+    //    public Color Color { get; set; }
+    //    public override VgCmd Clone()
+    //    {
+    //        return new VgCmdFillColor(Color);
+    //    }
+    //}
+    //public class VgCmdStrokeColor : VgCmd
+    //{
+    //    public VgCmdStrokeColor(Color color) : base(VgCommandName.StrokeColor) { Color = color; }
+    //    public Color Color { get; set; }
+    //    public override VgCmd Clone()
+    //    {
+    //        return new VgCmdStrokeColor(Color);
+    //    }
+    //}
+    //public class VgCmdStrokeWidth : VgCmd
+    //{
+    //    public VgCmdStrokeWidth(float w) : base(VgCommandName.StrokeWidth) { Width = w; }
+    //    public float Width { get; set; }
+    //    public override VgCmd Clone()
+    //    {
+    //        return new VgCmdStrokeWidth(Width);
+    //    }
+    //}
+    //public class VgCmdAffineTransform : VgCmd
+    //{
+    //    public VgCmdAffineTransform(Affine affine) : base(VgCommandName.AffineTransform)
+    //    {
+    //        TransformMatrix = affine;
+    //    }
+    //    public Affine TransformMatrix { get; private set; }
+
+    //    public override VgCmd Clone()
+    //    {
+    //        return new VgCmdAffineTransform(this.TransformMatrix.Clone());
+    //    }
+    //}
+
+    //public abstract class VgCmd
+    //{
+    //    public VgCmd(VgCommandName cmdKind)
+    //    {
+    //        Name = cmdKind;
+    //    }
+    //    public VgCommandName Name { get; set; }
+    //    public abstract VgCmd Clone();
+    //}
 
 
 }

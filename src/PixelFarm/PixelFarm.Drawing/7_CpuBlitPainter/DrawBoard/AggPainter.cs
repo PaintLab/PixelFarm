@@ -102,6 +102,62 @@ namespace PixelFarm.CpuBlit
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
+
+        ClipingTechnique _currentClipTech;
+
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            //clip rgn implementation
+            //this version replace only
+            //TODO: add append clip rgn
+            if (vxs != null)
+            {
+                if (SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
+                {
+                    //use simple rect technique
+                    this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
+                    _currentClipTech = ClipingTechnique.ClipSimpleRect;
+                }
+                else
+                {
+                    //not simple rect => 
+                    //use mask technique
+
+                    _currentClipTech = ClipingTechnique.ClipMask;
+                    this.TargetBufferName = TargetBufferName.AlphaMask;
+                    //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
+                    var prevColor = this.FillColor;
+                    this.FillColor = Color.White;
+                    //aggPainter.StrokeColor = Color.Black; //for debug
+                    //aggPainter.StrokeWidth = 1; //for debug  
+                    //p.Draw(v1); //for debug
+                    this.Fill(vxs);
+                    this.FillColor = prevColor;
+                    this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
+                    this.EnableBuiltInMaskComposite = true;
+                }
+            }
+            else
+            {
+                //remove clip rgn if exists
+                switch (_currentClipTech)
+                {
+                    case ClipingTechnique.ClipMask:
+                        this.EnableBuiltInMaskComposite = false;
+                        this.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
+                        this.Clear(Color.Black);
+                        this.TargetBufferName = TargetBufferName.Default;
+
+                        break;
+                    case ClipingTechnique.ClipSimpleRect:
+
+                        this.SetClipBox(0, 0, this.Width, this.Height);
+                        break;
+                }
+
+                _currentClipTech = ClipingTechnique.None;
+            }
+        }
         public LineRenderingTechnique LineRenderingTech
         {
             get { return _lineRenderingTech; }
@@ -939,7 +995,7 @@ namespace PixelFarm.CpuBlit
         {
             if (renderVx is VgRenderVx)
             {
-                Render((VgRenderVx)renderVx);
+
             }
             else
             {
@@ -1286,262 +1342,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        //--------------------------------------------------------------------------
-        void Render(VgRenderVx renderVx)
-        {
-            if (renderVx.HasBitmapSnapshot)
-            {
-                this.DrawImage(renderVx.BackingImage, renderVx.X, renderVx.Y);
-                return;
-            }
 
-            Affine currentTx = null;
-            var renderState = new TempVgRenderState();
-            renderState.strokeColor = this.StrokeColor;
-            this.StrokeWidth = renderState.strokeWidth = 1;//default  
-            renderState.fillColor = this.FillColor;
-            renderState.affineTx = currentTx;
-            renderState.clippingTech = ClipingTechnique.None;
-            //------------------ 
-
-            int j = renderVx.VgCmdCount;
-
-            TempVgRenderStateStore.GetFreeTempVgRenderState(out Stack<TempVgRenderState> vgStateStack);
-            int i = 0;
-
-            if (renderVx.PrefixCommand != null)
-            {
-                i = -1;
-            }
-
-            VgCmd vx = null;
-
-            for (; i < j; ++i)
-            {
-                if (i < 0)
-                {
-                    vx = renderVx.PrefixCommand;
-                }
-                else
-                {
-                    vx = renderVx.GetVgCmd(i);
-                }
-
-                switch (vx.Name)
-                {
-                    case VgCommandName.BeginGroup:
-                        {
-                            //1. save current state before enter new state 
-                            vgStateStack.Push(renderState);//save prev state
-                            renderState.clippingTech = ClipingTechnique.None;//reset for this
-                        }
-                        break;
-                    case VgCommandName.EndGroup:
-                        {
-                            switch (renderState.clippingTech)
-                            {
-                                case ClipingTechnique.None: break;
-                                case ClipingTechnique.ClipMask:
-                                    {
-                                        //clear mask filter                               
-                                        //remove from current clip
-
-                                        this.EnableBuiltInMaskComposite = false;
-                                        this.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
-                                        this.Clear(Color.Black);
-                                        this.TargetBufferName = TargetBufferName.Default;
-                                    }
-                                    break;
-                                case ClipingTechnique.ClipSimpleRect:
-                                    {
-                                        this.SetClipBox(0, 0, this.Width, this.Height);
-                                    }
-                                    break;
-                            }
-
-                            //restore to prev state
-                            renderState = vgStateStack.Pop();
-
-                            this.FillColor = renderState.fillColor;
-                            this.StrokeColor = renderState.strokeColor;
-                            this.StrokeWidth = renderState.strokeWidth;
-                            currentTx = renderState.affineTx;
-
-                        }
-                        break;
-                    case VgCommandName.FillColor:
-                        this.FillColor = renderState.fillColor = ((VgCmdFillColor)vx).Color;
-                        break;
-                    case VgCommandName.StrokeColor:
-                        this.StrokeColor = renderState.strokeColor = ((VgCmdStrokeColor)vx).Color;
-                        break;
-                    case VgCommandName.StrokeWidth:
-                        this.StrokeWidth = renderState.strokeWidth = ((VgCmdStrokeWidth)vx).Width;
-                        break;
-                    case VgCommandName.AffineTransform:
-                        {
-                            //apply this to current tx 
-                            if (currentTx != null)
-                            {
-                                //*** IMPORTANT : matrix transform order !***
-                                currentTx = ((VgCmdAffineTransform)vx).TransformMatrix * currentTx;
-                            }
-                            else
-                            {
-                                currentTx = ((VgCmdAffineTransform)vx).TransformMatrix;
-                            }
-                            renderState.affineTx = currentTx;
-                        }
-                        break;
-                    case VgCommandName.ClipPath:
-                        {
-                            //clip-path
-
-                            VgCmdClipPath clipPath = (VgCmdClipPath)vx;
-                            VertexStore clipVxs = ((VgCmdPath)clipPath._svgParts[0]).Vxs;
-
-                            //----------
-                            //for optimization check if clip path is Rect
-                            //if yes => do simple rect clip 
-
-                            if (currentTx != null)
-                            {
-                                //have some tx
-                                using (VxsContext.Temp(out var v1))
-                                {
-                                    currentTx.TransformToVxs(clipVxs, v1);
-                                    //after transform
-                                    //check if v1 is rect clip or not
-                                    //if yes => then just use simple rect clip
-                                    if (SimpleRectClipEvaluator.EvaluateRectClip(v1, out RectangleF clipRect))
-                                    {
-                                        //use simple rect technique
-                                        this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
-                                        renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
-
-                                    }
-                                    else
-                                    {
-                                        //not simple rect => 
-                                        //use mask technique
-
-                                        renderState.clippingTech = ClipingTechnique.ClipMask;
-                                        this.TargetBufferName = TargetBufferName.AlphaMask;
-                                        //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
-                                        var prevColor = this.FillColor;
-                                        this.FillColor = Color.White;
-                                        //aggPainter.StrokeColor = Color.Black; //for debug
-                                        //aggPainter.StrokeWidth = 1; //for debug  
-                                        //p.Draw(v1); //for debug
-                                        this.Fill(v1);
-
-                                        this.FillColor = prevColor;
-                                        this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
-                                        this.EnableBuiltInMaskComposite = true;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                //aggPainter.Draw(clipVxs); //for debug 
-                                //check if clipVxs is rect or not
-                                if (SimpleRectClipEvaluator.EvaluateRectClip(clipVxs, out RectangleF clipRect))
-                                {
-                                    //use simple rect technique
-                                    this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
-                                    renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
-                                }
-                                else
-                                {
-                                    //not simple rect => 
-                                    //use mask technique
-                                    renderState.clippingTech = ClipingTechnique.ClipMask;
-
-                                    this.TargetBufferName = TargetBufferName.AlphaMask;
-                                    //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
-                                    var prevColor = this.FillColor;
-                                    this.FillColor = Color.White;
-                                    //aggPainter.StrokeColor = Color.Black; //for debug
-                                    //aggPainter.StrokeWidth = 1; //for debug 
-
-                                    //p.Draw(v1); //for debug
-                                    this.Fill(clipVxs);
-                                    this.FillColor = prevColor;
-                                    this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
-                                    this.EnableBuiltInMaskComposite = true;
-                                }
-                            }
-
-                        }
-                        break;
-
-                    case VgCommandName.Path:
-                        {
-                            VgCmdPath path = (VgCmdPath)vx;
-                            VertexStore vxs = path.Vxs;
-
-
-                            if (currentTx == null)
-                            {
-                                if (renderState.fillColor.A > 0)
-                                {
-                                    this.Fill(vxs);
-                                }
-                                //to draw stroke
-                                //stroke width must > 0 and stroke-color must not be transparent color
-
-                                if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
-                                {
-                                    //has specific stroke color  
-
-                                    if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                    {
-                                        //TODO: review here again
-                                        this.Draw(new VertexStoreSnap(vxs), renderState.strokeColor);
-                                    }
-                                    else
-                                    {
-                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, (float)this.StrokeWidth);
-                                        this.Fill(strokeVxs, renderState.strokeColor);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                //have some tx
-                                using (VxsContext.Temp(out var v1))
-                                {
-                                    currentTx.TransformToVxs(vxs, v1);
-                                    if (renderState.fillColor.A > 0)
-                                    {
-                                        this.Fill(v1);
-                                    }
-
-                                    //to draw stroke
-                                    //stroke width must > 0 and stroke-color must not be transparent color 
-                                    if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
-                                    {
-                                        //has specific stroke color  
-
-                                        if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                        {
-                                            this.Draw(new VertexStoreSnap(v1), renderState.strokeColor);
-                                        }
-                                        else
-                                        {
-                                            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)this.StrokeWidth);
-                                            this.Fill(strokeVxs, renderState.strokeColor);
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                        break;
-                }
-            }
-            TempVgRenderStateStore.ReleaseTempVgRenderState(ref vgStateStack);
-        }
         static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
         {
 

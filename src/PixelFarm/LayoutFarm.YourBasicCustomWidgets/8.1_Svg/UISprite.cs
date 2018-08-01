@@ -41,31 +41,36 @@ namespace LayoutFarm.UI
         }
         static bool HitTestOnSubPart(VgRenderVx _svgRenderVx, float x, float y)
         {
-            int partCount = _svgRenderVx.VgCmdCount;
+            //int partCount = _svgRenderVx.VgCmdCount; 
+            //for (int i = partCount - 1; i >= 0; --i)
+            //{
+            //    //we do hittest top to bottom => (so => iter backward)
+
+            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
+            //    if (vx.Name != VgCommandName.Path)
+            //    {
+            //        continue;
+            //    }
+            //    //
+            //    VgCmdPath path = (VgCmdPath)vx;
+            //    //fine tune
+            //    //hit test ***
+            //    if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(path.Vxs, x, y))
+            //    {
+            //        return true;
+            //    }
+            //}
+            //return false;
 
 
-            for (int i = partCount - 1; i >= 0; --i)
-            {
-                //we do hittest top to bottom => (so => iter backward)
-
-                VgCmd vx = _svgRenderVx.GetVgCmd(i);
-                if (vx.Name != VgCommandName.Path)
-                {
-                    continue;
-                }
-                //
-                VgCmdPath path = (VgCmdPath)vx;                 
-                //fine tune
-                //hit test ***
-                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(path.Vxs, x, y))
-                {
-                    return true;
-                }
-            }
             return false;
+
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
+            if (RenderVx == null) return;
+            //--------------------------
+
             if (RenderVx != null)
             {
                 canvas.DrawRenderVx(RenderVx, this.X, this.Y);

@@ -814,38 +814,27 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        GdiPlusPainter _gdiPlusPainter;
+        //GdiPlusPainter _gdiPlusPainter;
+
+          
         public void Render(PixelFarm.CpuBlit.VgRenderVx svgVx)
         {
             if (svgVx == null) return;
             //------------------------- 
             if (svgVx.DisableBackingImage)
             {
-
-                //solid color 
-                if (_gdiPlusPainter == null)
-                {
-                    _gdiPlusPainter = new GdiPlusPainter(this);
-                }
-                //svgVx.Render(_gdiPlusPainter);
+                throw new NotSupportedException();
+                ////solid color 
+                //if (_gdiPlusPainter == null)
+                //{
+                //    _gdiPlusPainter = new GdiPlusPainter(this);
+                //}
+                ////svgVx.Render(_gdiPlusPainter);
 
             }
             else if (!svgVx.HasBitmapSnapshot)
             {
-
-                CpuBlit.RectD bound = svgVx.GetBounds();
-
-                //create 
-                CpuBlit.ActualBitmap backimg = new CpuBlit.ActualBitmap((int)bound.Width + 200, (int)bound.Height + 200);
-                CpuBlit.AggPainter painter = CpuBlit.AggPainter.Create(backimg);
-
-                painter.Render(svgVx);
-#if DEBUG
-                //test 
-                //PixelFarm.CpuBlit.Imaging.PngImageWriter.dbugSaveToPngFile(backimg, "d:\\WImageTest\\subimg1.png");
-#endif  
-                svgVx.SetBitmapSnapshot(backimg);
-                this.DrawImage(backimg, new RectangleF(0, 0, backimg.Width, backimg.Height));
+                throw new NotSupportedException();               
             }
             else
             {

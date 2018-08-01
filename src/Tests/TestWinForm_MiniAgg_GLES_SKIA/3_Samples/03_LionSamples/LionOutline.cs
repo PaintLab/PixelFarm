@@ -145,26 +145,27 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             ScanlineRasterizer rasterizer,
             DestBitmapRasterizer bmpRas)
         {
-            VgRenderVx renderVx = lionShape.GetRenderVx();
-            int num_paths = renderVx.VgCmdCount;
+            VgRenderVx renderVx = lionShape.GetRenderVx(); 
+            //var renderE = ((PixelFarm.CpuBlit.SvgRenderElement)renderVx._renderE);
 
-            for (int i = 0; i < num_paths; ++i)
-            {
-                rasterizer.Reset();
-                VgCmd svgPart = renderVx.GetVgCmd(i);
+            //int num_paths = renderVx.VgCmdCount;
 
-                switch (svgPart.Name)
-                {
-                    case VgCommandName.Path:
-                        {
-                            VgCmdPath path = (VgCmdPath)svgPart;
-                            rasterizer.AddPath(path.Vxs);
-                            bmpRas.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
-                        }
-                        break;
-                }
+            //for (int i = 0; i < num_paths; ++i)
+            //{
+            //    rasterizer.Reset();
+            //    VgCmd svgPart = renderVx.GetVgCmd(i);
 
-            }
+            //    switch (svgPart.Name)
+            //    {
+            //        case VgCommandName.Path:
+            //            {
+            //                VgCmdPath path = (VgCmdPath)svgPart;
+            //                rasterizer.AddPath(path.Vxs);
+            //                bmpRas.RenderWithColor(imageClippingProxy, rasterizer, aggsx.ScanlinePacked8, new Drawing.Color(255, 0, 0));
+            //            }
+            //            break;
+            //    } 
+            //}
         }
         struct TempRenderState
         {
@@ -176,285 +177,295 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         void DrawWithLineProfile2(AggPainter painter)
         {
             VgRenderVx renderVx = lionShape.GetRenderVx();
-            int num_paths = renderVx.VgCmdCount;
 
-            var renderState = new TempRenderState();
-            renderState.strokeColor = PixelFarm.Drawing.Color.Black;
-            renderState.strokeWidth = 1;
-            renderState.fillColor = PixelFarm.Drawing.Color.Black;
-            renderState.affineTx = null;
+            SvgPainter svgPainter = new SvgPainter();
+            svgPainter.P = painter;
+            var renderE = ((PixelFarm.CpuBlit.SvgRenderElement)renderVx._renderE);
 
-            Drawing.Color fillColor = Drawing.Color.Red;
-            Drawing.Color strokeColor = Drawing.Color.Red;
-            float strokeWidth = 1;
+            //make a custom draw ?
+            //custom draw
 
-            for (int i = 0; i < num_paths; ++i)
-            {
-                VgCmd vx = renderVx.GetVgCmd(i);
-                switch (vx.Name)
-                {
-                    case VgCommandName.FillColor:
-                        {
 
-                        }
-                        break;
-                    case VgCommandName.StrokeColor:
-                        {
+            //int num_paths = renderVx.VgCmdCount; 
+            //var renderState = new TempRenderState();
+            //renderState.strokeColor = PixelFarm.Drawing.Color.Black;
+            //renderState.strokeWidth = 1;
+            //renderState.fillColor = PixelFarm.Drawing.Color.Black;
+            //renderState.affineTx = null;
 
-                        }
-                        break;
-                    case VgCommandName.AffineTransform:
-                        {
+            //Drawing.Color fillColor = Drawing.Color.Red;
+            //Drawing.Color strokeColor = Drawing.Color.Red;
+            //float strokeWidth = 1;
 
-                        }
-                        break; 
-                    case VgCommandName.BeginGroup:
-                        {
-                            //////1. save current state before enter new state 
-                            ////p.StackPushUserObject(renderState);
+            //for (int i = 0; i < num_paths; ++i)
+            //{
+            //    VgCmd vx = renderVx.GetVgCmd(i);
+            //    switch (vx.Name)
+            //    {
+            //        case VgCommandName.FillColor:
+            //            {
 
-                            ////2. enter new px context
-                            //if (vx.HasFillColor)
-                            //{
-                            //    //ONLY in this example: test , set strokeColor = fillColor
-                            //    strokeColor = fillColor = renderState.fillColor = vx.FillColor;
-                            //}
-                            //if (vx.HasStrokeColor)
-                            //{
-                            //    strokeColor = renderState.strokeColor = vx.StrokeColor;
-                            //}
-                            //if (vx.HasStrokeWidth)
-                            //{
-                            //    strokeWidth = renderState.strokeWidth = vx.StrokeWidth;
-                            //}
-                            //if (vx.AffineTx != null)
-                            //{
-                            //    //apply this to current tx
-                            //    //if (currentTx != null)
-                            //    //{
-                            //    //    currentTx = currentTx * vx.AffineTx;
-                            //    //}
-                            //    //else
-                            //    //{
-                            //    //    currentTx = vx.AffineTx;
-                            //    //}
-                            //    //renderState.affineTx = currentTx;
-                            //}
-                        }
-                        break;
-                    case VgCommandName.EndGroup:
-                        {
-                            ////restore to prev state
-                            //renderState = (TempRenderState)p.StackPopUserObject();
-                            //p.FillColor = renderState.fillColor;
-                            //p.StrokeColor = renderState.strokeColor;
-                            //p.StrokeWidth = renderState.strokeWidth;
-                            //currentTx = renderState.affineTx;
-                        }
-                        break;
-                    case VgCommandName.Path:
-                        { 
-                            //temp
-                            VgCmdPath path = (VgCmdPath)vx;
-                            painter.Draw(
-                                new PixelFarm.Drawing.VertexStoreSnap(path.Vxs),
-                                strokeColor);
+            //            }
+            //            break;
+            //        case VgCommandName.StrokeColor:
+            //            {
 
-                        }
-                        break; 
-                }
-            }
+            //            }
+            //            break;
+            //        case VgCommandName.AffineTransform:
+            //            {
+
+            //            }
+            //            break;
+            //        case VgCommandName.BeginGroup:
+            //            {
+            //                //////1. save current state before enter new state 
+            //                ////p.StackPushUserObject(renderState);
+
+            //                ////2. enter new px context
+            //                //if (vx.HasFillColor)
+            //                //{
+            //                //    //ONLY in this example: test , set strokeColor = fillColor
+            //                //    strokeColor = fillColor = renderState.fillColor = vx.FillColor;
+            //                //}
+            //                //if (vx.HasStrokeColor)
+            //                //{
+            //                //    strokeColor = renderState.strokeColor = vx.StrokeColor;
+            //                //}
+            //                //if (vx.HasStrokeWidth)
+            //                //{
+            //                //    strokeWidth = renderState.strokeWidth = vx.StrokeWidth;
+            //                //}
+            //                //if (vx.AffineTx != null)
+            //                //{
+            //                //    //apply this to current tx
+            //                //    //if (currentTx != null)
+            //                //    //{
+            //                //    //    currentTx = currentTx * vx.AffineTx;
+            //                //    //}
+            //                //    //else
+            //                //    //{
+            //                //    //    currentTx = vx.AffineTx;
+            //                //    //}
+            //                //    //renderState.affineTx = currentTx;
+            //                //}
+            //            }
+            //            break;
+            //        case VgCommandName.EndGroup:
+            //            {
+            //                ////restore to prev state
+            //                //renderState = (TempRenderState)p.StackPopUserObject();
+            //                //p.FillColor = renderState.fillColor;
+            //                //p.StrokeColor = renderState.strokeColor;
+            //                //p.StrokeWidth = renderState.strokeWidth;
+            //                //currentTx = renderState.affineTx;
+            //            }
+            //            break;
+            //        case VgCommandName.Path:
+            //            {
+            //                //temp
+            //                VgCmdPath path = (VgCmdPath)vx;
+            //                painter.Draw(
+            //                    new PixelFarm.Drawing.VertexStoreSnap(path.Vxs),
+            //                    strokeColor);
+
+            //            }
+            //            break;
+            //    }
+            //}
         }
 
         void DrawWithLineProfile(OutlineAARasterizer rasterizer)
         {
             VgRenderVx renderVx = lionShape.GetRenderVx();
-            int num_paths = renderVx.VgCmdCount;
+            //draw with rasterizer
 
-            var renderState = new TempRenderState();
-            renderState.strokeColor = PixelFarm.Drawing.Color.Black;
-            renderState.strokeWidth = 1;
-            renderState.fillColor = PixelFarm.Drawing.Color.Black;
-            renderState.affineTx = null;
+            //int num_paths = renderVx.VgCmdCount;
 
-            Drawing.Color fillColor = Drawing.Color.Red;
-            Drawing.Color strokeColor = Drawing.Color.Red;
-            float strokeWidth = 1;
-            for (int i = 0; i < num_paths; ++i)
-            {
+            //var renderState = new TempRenderState();
+            //renderState.strokeColor = PixelFarm.Drawing.Color.Black;
+            //renderState.strokeWidth = 1;
+            //renderState.fillColor = PixelFarm.Drawing.Color.Black;
+            //renderState.affineTx = null;
 
-                VgCmd vx = renderVx.GetVgCmd(i);
+            //Drawing.Color fillColor = Drawing.Color.Red;
+            //Drawing.Color strokeColor = Drawing.Color.Red;
+            //float strokeWidth = 1;
+            //for (int i = 0; i < num_paths; ++i)
+            //{
 
-                switch (vx.Name)
-                {
-                    case VgCommandName.BeginGroup:
-                        {
-                            //////1. save current state before enter new state 
-                            ////p.StackPushUserObject(renderState);
+            //    VgCmd vx = renderVx.GetVgCmd(i);
 
-                            ////2. enter new px context
-                            //if (vx.HasFillColor)
-                            //{
-                            //    //ONLY in this example: test , set strokeColor = fillColor
-                            //    strokeColor = fillColor = renderState.fillColor = vx.FillColor;
-                            //}
-                            //if (vx.HasStrokeColor)
-                            //{
-                            //    strokeColor = renderState.strokeColor = vx.StrokeColor;
-                            //}
-                            //if (vx.HasStrokeWidth)
-                            //{
-                            //    strokeWidth = renderState.strokeWidth = vx.StrokeWidth;
-                            //}
-                            //if (vx.AffineTx != null)
-                            //{
-                            //    //apply this to current tx
-                            //    //if (currentTx != null)
-                            //    //{
-                            //    //    currentTx = currentTx * vx.AffineTx;
-                            //    //}
-                            //    //else
-                            //    //{
-                            //    //    currentTx = vx.AffineTx;
-                            //    //}
-                            //    //renderState.affineTx = currentTx;
-                            //}
-                        }
-                        break;
-                    case VgCommandName.EndGroup:
-                        {
-                            ////restore to prev state
-                            //renderState = (TempRenderState)p.StackPopUserObject();
-                            //p.FillColor = renderState.fillColor;
-                            //p.StrokeColor = renderState.strokeColor;
-                            //p.StrokeWidth = renderState.strokeWidth;
-                            //currentTx = renderState.affineTx;
-                        }
-                        break;
-                    case VgCommandName.Path:
-                        {
-                            ////temp
-                            ////if (i == 34)
-                            ////{
-                            ////    var innerVxs = vx.GetVxs();
-                            ////    int j = innerVxs.Count;
+            //    switch (vx.Name)
+            //    {
+            //        case VgCommandName.BeginGroup:
+            //            {
+            //                //////1. save current state before enter new state 
+            //                ////p.StackPushUserObject(renderState);
 
-                            ////    for (int m = 0; m < j; ++m)
-                            ////    {
-                            ////        innerVxs.GetVertex(m, out double x, out double y);
-                            ////        Console.WriteLine(x + "," + y);
-                            ////    }
+            //                ////2. enter new px context
+            //                //if (vx.HasFillColor)
+            //                //{
+            //                //    //ONLY in this example: test , set strokeColor = fillColor
+            //                //    strokeColor = fillColor = renderState.fillColor = vx.FillColor;
+            //                //}
+            //                //if (vx.HasStrokeColor)
+            //                //{
+            //                //    strokeColor = renderState.strokeColor = vx.StrokeColor;
+            //                //}
+            //                //if (vx.HasStrokeWidth)
+            //                //{
+            //                //    strokeWidth = renderState.strokeWidth = vx.StrokeWidth;
+            //                //}
+            //                //if (vx.AffineTx != null)
+            //                //{
+            //                //    //apply this to current tx
+            //                //    //if (currentTx != null)
+            //                //    //{
+            //                //    //    currentTx = currentTx * vx.AffineTx;
+            //                //    //}
+            //                //    //else
+            //                //    //{
+            //                //    //    currentTx = vx.AffineTx;
+            //                //    //}
+            //                //    //renderState.affineTx = currentTx;
+            //                //}
+            //            }
+            //            break;
+            //        case VgCommandName.EndGroup:
+            //            {
+            //                ////restore to prev state
+            //                //renderState = (TempRenderState)p.StackPopUserObject();
+            //                //p.FillColor = renderState.fillColor;
+            //                //p.StrokeColor = renderState.strokeColor;
+            //                //p.StrokeWidth = renderState.strokeWidth;
+            //                //currentTx = renderState.affineTx;
+            //            }
+            //            break;
+            //        case VgCommandName.Path:
+            //            {
+            //                ////temp
+            //                ////if (i == 34)
+            //                ////{
+            //                ////    var innerVxs = vx.GetVxs();
+            //                ////    int j = innerVxs.Count;
 
-                            ////}
-                            //var innerVxs = vx.GetVxs();
-                            //if (innerVxs.dbugId == 28)
-                            //{
+            //                ////    for (int m = 0; m < j; ++m)
+            //                ////    {
+            //                ////        innerVxs.GetVertex(m, out double x, out double y);
+            //                ////        Console.WriteLine(x + "," + y);
+            //                ////    }
 
-                            //}
-                            //rasterizer.RenderVertexSnap(
-                            //  new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
-                            //  strokeColor);
-                        }
-                        break;
-                        //{
+            //                ////}
+            //                //var innerVxs = vx.GetVxs();
+            //                //if (innerVxs.dbugId == 28)
+            //                //{
 
-                        //    VertexStore vxs = vx.GetVxs();
-                        //    if (vx.HasFillColor)
-                        //    {
-                        //        //has specific fill color
-                        //        if (vx.FillColor.A > 0)
-                        //        {
-                        //            if (currentTx == null)
-                        //            {
-                        //                p.Fill(vxs, vx.FillColor);
-                        //            }
-                        //            else
-                        //            {
-                        //                //have some tx
-                        //                tempVxs.Clear();
-                        //                currentTx.TransformToVxs(vxs, tempVxs);
-                        //                p.Fill(tempVxs, vx.FillColor);
-                        //            }
-                        //        }
-                        //    }
-                        //    else
-                        //    {
-                        //        if (p.FillColor.A > 0)
-                        //        {
-                        //            if (currentTx == null)
-                        //            {
-                        //                p.Fill(vxs);
-                        //            }
-                        //            else
-                        //            {
-                        //                //have some tx
-                        //                tempVxs.Clear();
-                        //                currentTx.TransformToVxs(vxs, tempVxs);
-                        //                p.Fill(tempVxs);
-                        //            }
+            //                //}
+            //                //rasterizer.RenderVertexSnap(
+            //                //  new PixelFarm.Drawing.VertexStoreSnap(vx.GetVxs()),
+            //                //  strokeColor);
+            //            }
+            //            break;
+            //            //{
 
-                        //        }
-                        //    }
+            //            //    VertexStore vxs = vx.GetVxs();
+            //            //    if (vx.HasFillColor)
+            //            //    {
+            //            //        //has specific fill color
+            //            //        if (vx.FillColor.A > 0)
+            //            //        {
+            //            //            if (currentTx == null)
+            //            //            {
+            //            //                p.Fill(vxs, vx.FillColor);
+            //            //            }
+            //            //            else
+            //            //            {
+            //            //                //have some tx
+            //            //                tempVxs.Clear();
+            //            //                currentTx.TransformToVxs(vxs, tempVxs);
+            //            //                p.Fill(tempVxs, vx.FillColor);
+            //            //            }
+            //            //        }
+            //            //    }
+            //            //    else
+            //            //    {
+            //            //        if (p.FillColor.A > 0)
+            //            //        {
+            //            //            if (currentTx == null)
+            //            //            {
+            //            //                p.Fill(vxs);
+            //            //            }
+            //            //            else
+            //            //            {
+            //            //                //have some tx
+            //            //                tempVxs.Clear();
+            //            //                currentTx.TransformToVxs(vxs, tempVxs);
+            //            //                p.Fill(tempVxs);
+            //            //            }
 
-                        //    if (p.StrokeWidth > 0)
-                        //    {
-                        //        //check if we have a stroke version of this render vx
-                        //        //if not then request a new one 
+            //            //        }
+            //            //    }
 
-                        //        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                        //        if (vx.HasStrokeColor)
-                        //        {
-                        //            //has speciic stroke color 
-                        //            p.StrokeWidth = vx.StrokeWidth;
-                        //            if (currentTx == null)
-                        //            {
-                        //                p.Fill(strokeVxs, vx.StrokeColor);
-                        //            }
-                        //            else
-                        //            {
-                        //                //have some tx
-                        //                tempVxs.Clear();
-                        //                currentTx.TransformToVxs(strokeVxs, tempVxs);
-                        //                p.Fill(tempVxs, vx.StrokeColor);
-                        //            }
+            //            //    if (p.StrokeWidth > 0)
+            //            //    {
+            //            //        //check if we have a stroke version of this render vx
+            //            //        //if not then request a new one 
 
-                        //        }
-                        //        else if (p.StrokeColor.A > 0)
-                        //        {
-                        //            if (currentTx == null)
-                        //            {
-                        //                p.Fill(strokeVxs, p.StrokeColor);
-                        //            }
-                        //            else
-                        //            {
-                        //                tempVxs.Clear();
-                        //                currentTx.TransformToVxs(strokeVxs, tempVxs);
-                        //                p.Fill(tempVxs, p.StrokeColor);
-                        //            }
-                        //        }
-                        //        else
-                        //        {
+            //            //        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+            //            //        if (vx.HasStrokeColor)
+            //            //        {
+            //            //            //has speciic stroke color 
+            //            //            p.StrokeWidth = vx.StrokeWidth;
+            //            //            if (currentTx == null)
+            //            //            {
+            //            //                p.Fill(strokeVxs, vx.StrokeColor);
+            //            //            }
+            //            //            else
+            //            //            {
+            //            //                //have some tx
+            //            //                tempVxs.Clear();
+            //            //                currentTx.TransformToVxs(strokeVxs, tempVxs);
+            //            //                p.Fill(tempVxs, vx.StrokeColor);
+            //            //            }
 
-                        //        }
-                        //    }
-                        //    else
-                        //    {
+            //            //        }
+            //            //        else if (p.StrokeColor.A > 0)
+            //            //        {
+            //            //            if (currentTx == null)
+            //            //            {
+            //            //                p.Fill(strokeVxs, p.StrokeColor);
+            //            //            }
+            //            //            else
+            //            //            {
+            //            //                tempVxs.Clear();
+            //            //                currentTx.TransformToVxs(strokeVxs, tempVxs);
+            //            //                p.Fill(tempVxs, p.StrokeColor);
+            //            //            }
+            //            //        }
+            //            //        else
+            //            //        {
 
-                        //        if (vx.HasStrokeColor)
-                        //        {
-                        //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                        //            p.Fill(strokeVxs);
-                        //        }
-                        //        else if (p.StrokeColor.A > 0)
-                        //        {
-                        //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
-                        //            p.Fill(strokeVxs, p.StrokeColor);
-                        //        }
-                        //    }
-                        //}
-                        break;
-                }
-            }
+            //            //        }
+            //            //    }
+            //            //    else
+            //            //    {
+
+            //            //        if (vx.HasStrokeColor)
+            //            //        {
+            //            //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+            //            //            p.Fill(strokeVxs);
+            //            //        }
+            //            //        else if (p.StrokeColor.A > 0)
+            //            //        {
+            //            //            VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vx, p, (float)p.StrokeWidth);
+            //            //            p.Fill(strokeVxs, p.StrokeColor);
+            //            //        }
+            //            //    }
+            //            //}
+            //            break;
+            //    }
+            //}
         }
         public override void Render(PixelFarm.Drawing.Painter p)
         {
