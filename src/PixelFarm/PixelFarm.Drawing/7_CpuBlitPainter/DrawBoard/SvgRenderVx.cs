@@ -9,21 +9,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.CpuBlit
 {
-    //very simple svg parser  
-    public enum VgCommandName
-    {
-        BeginGroup,
-        EndGroup,
-        Path,
-        ClipPath,
-        FillColor,
-        StrokeColor,
-        StrokeWidth,
-        AffineTransform,
-        Image,
-        TextSpan,
-    }
-
+   
     public class VxsRenderVx : RenderVx
     {
         public VertexStore _vxs;
@@ -42,10 +28,7 @@ namespace PixelFarm.CpuBlit
             vxsRenerVx._resolvedObject = obj;
         }
 
-    }
-
-
-
+    } 
 
     public static class SimpleRectClipEvaluator
     {
@@ -206,161 +189,7 @@ namespace PixelFarm.CpuBlit
     }
 
      
-    public class VgRenderVx : RenderVx
-    {
-
-        Image _backimg;
-        RectD _boundRect;
-        bool _needBoundUpdate;
-        public object _renderE;
-
-        public VgRenderVx(object renderE)
-        {
-            _renderE = renderE;
-            ////this is original version of the element 
-            //this._cmds = cmds;
-            //_needBoundUpdate = true;
-        }
-        public VgRenderVx Clone()
-        {
-            //make a copy of cmd stream
-            //int j = _cmds.Length;
-            //var copy = new VgCmd[j];
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    copy[i] = _cmds[i].Clone();
-            //}
-
-            return new VgRenderVx(null);
-        }
-
-        public void InvalidateBounds()
-        {
-            _needBoundUpdate = true;
-            _boundRect = new RectD(this.X, this.Y, 2, 2);
-        }
-        
-        public RectD GetBounds()
-        {
-
-            //int partCount = _svgRenderVx.VgCmdCount;
-            //RectD rectTotal = new RectD();
-            //for (int i = 0; i < partCount; ++i)
-            //{
-            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
-            //    if (vx.Name != VgCommandName.Path)
-            //    {
-            //        continue;
-            //    }
-            //    VgCmdPath path = (VgCmdPath)vx;
-            //    BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
-            //}
-            //this.boundingRect = rectTotal;
-
-            //find bound
-            //TODO: review here
-            return new RectD(0, 0, 100, 100);
-
-            //if (_needBoundUpdate)
-            //{
-            //    int partCount = _cmds.Length;
-
-            //    for (int i = 0; i < partCount; ++i)
-            //    {
-            //        VgCmd vx = _cmds[i];
-            //        if (vx.Name != VgCommandName.Path)
-            //        {
-            //            continue;
-            //        }
-
-            //        RectD rectTotal = new RectD();
-            //        VertexStore innerVxs = ((VgCmdPath)vx).Vxs;
-            //        BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
-
-            //        _boundRect.ExpandToInclude(rectTotal);
-            //    }
-
-            //    _needBoundUpdate = false;
-            //}
-            //return _boundRect;
-        }
-
-        public bool HasBitmapSnapshot { get; internal set; }
-
-        public Image BackingImage { get { return _backimg; } }
-        public bool DisableBackingImage { get; set; }
-
-        public void SetBitmapSnapshot(Image img)
-        {
-            this._backimg = img;
-            HasBitmapSnapshot = img != null;
-        }
-
-        public float X { get; set; }
-        public float Y { get; set; }
-        //public VgCmd GetVgCmd(int index)
-        //{
-        //    return _cmds[index];
-        //}
-        //public int VgCmdCount
-        //{
-        //    get { return _cmds.Length; }
-        //}
-        //public VgCmd PrefixCommand { get; set; }
-    }
-
-
-    public abstract class VgCmd
-    {
-        public VgCmd(VgCommandName name)
-        {
-            Name = name;
-        }
-        public VgCommandName Name { get; set; }
-        public virtual VgCmd Clone()
-        {
-            return null;
-        }
-    }
-
-    public class VgCmdPath : VgCmd
-    {
-        public VgCmdPath() : base(VgCommandName.Path)
-        {
-        }
-        public VertexStore Vxs { get; private set; }
-        public void SetVxs(VertexStore vxs)
-        {
-            Vxs = vxs;
-        }
-        internal VertexStore StrokeVxs { get; set; } //transient obj
-        public override VgCmd Clone()
-        {
-            VgCmdPath vgPath = new VgCmdPath();
-            vgPath.Vxs = this.Vxs.CreateTrim();
-            return vgPath;
-        }
-    }
-    public class VgCmdClipPath : VgCmd
-    {
-        public List<VgCmd> _svgParts;
-        public VgCmdClipPath()
-            : base(VgCommandName.ClipPath)
-        {
-        }
-        public override VgCmd Clone()
-        {
-            VgCmdClipPath clipPath = new VgCmdClipPath();
-            clipPath._svgParts = new List<VgCmd>();
-            int j = _svgParts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                clipPath._svgParts[i] = _svgParts[i].Clone();
-            }
-            return clipPath;
-        }
-    }
-
-   
+    
+     
 
 }

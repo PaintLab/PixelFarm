@@ -19,18 +19,15 @@ namespace LayoutFarm.UI
             //this.NeedClipArea = false;
             this.MayHasChild = true;
             this.TransparentForAllEvents = true;
-
         }
-        public VgRenderVx RenderVx { get; set; }
-
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
-            RectD bound = RenderVx.GetBounds();
+            RectD bound = new RectD();
 
             if (bound.Contains(hitChain.TestPoint.x, hitChain.TestPoint.y))
             {
                 //check exact hit or the vxs part
-                if (HitTestOnSubPart(RenderVx, hitChain.TextPointX, hitChain.TextPointY))
+                if (HitTestOnSubPart(this, hitChain.TextPointX, hitChain.TextPointY))
                 {
                     hitChain.AddHitObject(this);
                     return; //return after first hit
@@ -39,7 +36,7 @@ namespace LayoutFarm.UI
 
             base.ChildrenHitTestCore(hitChain);
         }
-        static bool HitTestOnSubPart(VgRenderVx _svgRenderVx, float x, float y)
+        static bool HitTestOnSubPart(SvgRenderElement _svgRenderVx, float x, float y)
         {
             //int partCount = _svgRenderVx.VgCmdCount; 
             //for (int i = partCount - 1; i >= 0; --i)
@@ -68,13 +65,14 @@ namespace LayoutFarm.UI
         }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            if (RenderVx == null) return;
-            //--------------------------
+            throw new NotSupportedException();
+            //if (RenderVx == null) return;
+            ////--------------------------
 
-            if (RenderVx != null)
-            {
-                canvas.DrawRenderVx(RenderVx, this.X, this.Y);
-            }
+            //if (RenderVx != null)
+            //{
+            //    canvas.DrawRenderVx(RenderVx, this.X, this.Y);
+            //}
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -86,8 +84,6 @@ namespace LayoutFarm.UI
     {
 
         SvgRenderElement _svgRenderElement;
-        VgRenderVx _svgRenderVx;
-
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -98,26 +94,26 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
 
         }
-        public void LoadSvg(VgRenderVx renderVx)
+        public void LoadSvg(object renderVx)
         {
-            _svgRenderVx = renderVx;
-            if (_svgRenderElement != null)
-            {
-                _svgRenderElement.RenderVx = renderVx;
-                RectD bound = renderVx.GetBounds();
-                this.SetSize((float)bound.Width, (float)bound.Height);
-            }
+            //_svgRenderVx = renderVx;
+            //if (_svgRenderElement != null)
+            //{
+            //    _svgRenderElement.RenderVx = renderVx;
+            //    RectD bound = renderVx.GetBounds();
+            //    this.SetSize((float)bound.Width, (float)bound.Height);
+            //}
         }
         protected override void OnElementChanged()
         {
 
             if (_svgRenderElement != null)
             {
-                _svgRenderVx.SetBitmapSnapshot(null);
+                //_svgRenderVx.SetBitmapSnapshot(null);
 
-                _svgRenderElement.RenderVx = _svgRenderVx;
-                _svgRenderVx.InvalidateBounds();
-                RectD bound1 = _svgRenderVx.GetBounds();
+                //_svgRenderElement.RenderVx = _svgRenderVx;
+                //_svgRenderVx.InvalidateBounds();
+                //RectD bound1 = _svgRenderVx.GetBounds();
 
             }
         }
@@ -145,12 +141,12 @@ namespace LayoutFarm.UI
                 _svgRenderElement.SetLocation((int)this.Left, (int)this.Top);
 
                 _svgRenderElement.SetController(this);
-                if (_svgRenderVx != null)
-                {
-                    _svgRenderElement.RenderVx = _svgRenderVx;
-                    RectD bound = _svgRenderVx.GetBounds();
-                    this.SetSize((int)bound.Width, (int)bound.Height);
-                }
+                //if (_svgRenderVx != null)
+                //{
+                //    _svgRenderElement.RenderVx = _svgRenderVx;
+                //    RectD bound = _svgRenderVx.GetBounds();
+                //    this.SetSize((int)bound.Width, (int)bound.Height);
+                //}
             }
             return _svgRenderElement;
         }

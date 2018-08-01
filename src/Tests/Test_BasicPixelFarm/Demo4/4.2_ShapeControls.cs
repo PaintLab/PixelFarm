@@ -21,23 +21,26 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
 
+            Svg.SvgPathSpec spec = new Svg.SvgPathSpec();
+            spec.FillColor = Color.Red;
 
-            VgCmdPath path = new VgCmdPath();
-            //------------------------------------------- 
+            SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Path, spec);
+            VgRenderVx svgRenderVx = new VgRenderVx(renderE);
             using (VxsContext.Temp(out VertexStore vxs))
             {
                 vxs.AddMoveTo(100, 20);
                 vxs.AddLineTo(150, 50);
                 vxs.AddLineTo(110, 80);
                 vxs.AddCloseFigure();
-                path.SetVxs(vxs.CreateTrim());
+
+                renderE._vxsPath = vxs.CreateTrim();
             }
 
             //VgRenderVx svgRenderVx = new VgRenderVx(new VgCmd[] {
             //    new VgCmdFillColor(Color.Red),
             //    path });
 
-            VgRenderVx svgRenderVx = new VgRenderVx(null);
+
             svgRenderVx.DisableBackingImage = true;
 
 
@@ -73,7 +76,7 @@ namespace LayoutFarm
                 //mousedown on ui sprite
                 polygonController.SetPosition((int)uiSprite.Left, (int)uiSprite.Top);
                 polygonController.SetTargetUISprite(uiSprite);
-                polygonController.UpdateControlPoints(path);
+                polygonController.UpdateControlPoints(renderE._vxsPath);
 
             };
             spriteEvListener.MouseMove += e1 =>

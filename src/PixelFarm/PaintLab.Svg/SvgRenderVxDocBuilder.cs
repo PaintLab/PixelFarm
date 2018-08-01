@@ -56,7 +56,8 @@ namespace PixelFarm.CpuBlit
     }
     public class SvgRenderElement : SvgRenderElementBase
     {
-        public VgCmdPath _vxsPath;
+
+        public VertexStore _vxsPath;
         List<SvgRenderElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
         object _controller;
@@ -458,7 +459,7 @@ namespace PixelFarm.CpuBlit
                     hasClip = true;
 
                     SvgRenderElement clipPath = (SvgRenderElement)_visualSpec.ResolvedClipPath;
-                    VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath.Vxs;
+                    VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath;
                     //VertexStore clipVxs = ((VgCmdPath)clipPath._svgParts[0]).Vxs;
 
                     //----------
@@ -505,7 +506,7 @@ namespace PixelFarm.CpuBlit
                         {
                             if (p.FillColor.A > 0)
                             {
-                                p.Fill(_vxsPath.Vxs);
+                                p.Fill(_vxsPath);
                             }
                             //to draw stroke
                             //stroke width must > 0 and stroke-color must not be transparent color
@@ -523,7 +524,7 @@ namespace PixelFarm.CpuBlit
                                 //else
                                 //{
                                 VertexStore strokeVxs = GetStrokeVxsOrCreateNew(
-                                    _vxsPath.Vxs,
+                                    _vxsPath,
                                     (float)p.StrokeWidth);
                                 p.Fill(strokeVxs, p.StrokeColor);
                                 //}
@@ -534,7 +535,7 @@ namespace PixelFarm.CpuBlit
                             //have some tx
                             using (VxsContext.Temp(out var v1))
                             {
-                                currentTx.TransformToVxs(_vxsPath.Vxs, v1);
+                                currentTx.TransformToVxs(_vxsPath, v1);
                                 if (p.FillColor.A > 0)
                                 {
                                     p.Fill(v1);
@@ -635,6 +636,108 @@ namespace PixelFarm.CpuBlit
     }
 
 
+    public class VgRenderVx : RenderVx
+    {
+
+        Image _backimg;
+        RectD _boundRect;
+        bool _needBoundUpdate;
+        public object _renderE;
+
+        public VgRenderVx(object renderE)
+        {
+            _renderE = renderE;
+            ////this is original version of the element 
+            //this._cmds = cmds;
+            //_needBoundUpdate = true;
+        }
+        public VgRenderVx Clone()
+        {
+            //make a copy of cmd stream
+            //int j = _cmds.Length;
+            //var copy = new VgCmd[j];
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    copy[i] = _cmds[i].Clone();
+            //}
+
+            return new VgRenderVx(null);
+        }
+
+        public void InvalidateBounds()
+        {
+            _needBoundUpdate = true;
+            _boundRect = new RectD(this.X, this.Y, 2, 2);
+        }
+
+        public RectD GetBounds()
+        {
+
+            //int partCount = _svgRenderVx.VgCmdCount;
+            //RectD rectTotal = new RectD();
+            //for (int i = 0; i < partCount; ++i)
+            //{
+            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
+            //    if (vx.Name != VgCommandName.Path)
+            //    {
+            //        continue;
+            //    }
+            //    VgCmdPath path = (VgCmdPath)vx;
+            //    BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
+            //}
+            //this.boundingRect = rectTotal;
+
+            //find bound
+            //TODO: review here
+            return new RectD(0, 0, 100, 100);
+
+            //if (_needBoundUpdate)
+            //{
+            //    int partCount = _cmds.Length;
+
+            //    for (int i = 0; i < partCount; ++i)
+            //    {
+            //        VgCmd vx = _cmds[i];
+            //        if (vx.Name != VgCommandName.Path)
+            //        {
+            //            continue;
+            //        }
+
+            //        RectD rectTotal = new RectD();
+            //        VertexStore innerVxs = ((VgCmdPath)vx).Vxs;
+            //        BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
+
+            //        _boundRect.ExpandToInclude(rectTotal);
+            //    }
+
+            //    _needBoundUpdate = false;
+            //}
+            //return _boundRect;
+        }
+
+        public bool HasBitmapSnapshot { get; internal set; }
+
+        public Image BackingImage { get { return _backimg; } }
+        public bool DisableBackingImage { get; set; }
+
+        public void SetBitmapSnapshot(Image img)
+        {
+            this._backimg = img;
+            HasBitmapSnapshot = img != null;
+        }
+
+        public float X { get; set; }
+        public float Y { get; set; }
+        //public VgCmd GetVgCmd(int index)
+        //{
+        //    return _cmds[index];
+        //}
+        //public int VgCmdCount
+        //{
+        //    get { return _cmds.Length; }
+        //}
+        //public VgCmd PrefixCommand { get; set; }
+    }
 
 
     public class SvgRenderVxDocBuilder
@@ -816,11 +919,10 @@ namespace PixelFarm.CpuBlit
             SvgRenderElement path = new SvgRenderElement(WellknownSvgElementName.Path, elem._visualSpec); //**
             SvgPathSpec pathSpec = elem._visualSpec as SvgPathSpec;
             //d             
-            VgCmdPath pathCmd = new VgCmdPath();
-            pathCmd.SetVxs(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
+
             AssignAttributes(pathSpec);
 
-            path._vxsPath = pathCmd;
+            path._vxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
 
             parentNode.AddChildElement(path);
             return path;
@@ -843,8 +945,8 @@ namespace PixelFarm.CpuBlit
         {
             SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, elem._visualSpec);
             SvgEllipseSpec ellipseSpec = elem._visualSpec as SvgEllipseSpec;
-            VgCmdPath pathCmd = new VgCmdPath();
-            ellipseRenderE._vxsPath = pathCmd;
+
+
             VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
 
@@ -856,8 +958,7 @@ namespace PixelFarm.CpuBlit
             ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step 
             using (VxsContext.Temp(out var v1))
             {
-                pathCmd.SetVxs(
-                    PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
+                ellipseRenderE._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
 
             VectorToolBox.ReleaseEllipseTool(ref ellipse);
@@ -896,8 +997,7 @@ namespace PixelFarm.CpuBlit
 
             SvgPolygonSpec polygonSpec = elem._visualSpec as SvgPolygonSpec;
 
-            VgCmdPath pathCmd = new VgCmdPath();
-            polygon._vxsPath = pathCmd;
+
 
 
 
@@ -920,7 +1020,7 @@ namespace PixelFarm.CpuBlit
                     v1.AddMoveTo(p0.X, p0.Y);
                     v1.AddCloseFigure();
 
-                    pathCmd.SetVxs(v1.CreateTrim());
+                    polygon._vxsPath = v1.CreateTrim();
                 }
                 AssignAttributes(polygonSpec);
             }
@@ -930,8 +1030,8 @@ namespace PixelFarm.CpuBlit
         {
             SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Polyline, elem._visualSpec);
             SvgPolylineSpec polylineSpec = elem._visualSpec as SvgPolylineSpec;
-            VgCmdPath pathCmd = new VgCmdPath();
-            renderE._vxsPath = pathCmd;
+
+
             PointF[] points = polylineSpec.Points;
             int j = points.Length;
             if (j > 1)
@@ -945,7 +1045,7 @@ namespace PixelFarm.CpuBlit
                         p = points[i];
                         v1.AddLineTo(p.X, p.Y);
                     }
-                    pathCmd.SetVxs(v1.CreateTrim());
+                    renderE._vxsPath = v1.CreateTrim();
                 }
 
                 AssignAttributes(polylineSpec);
@@ -957,8 +1057,8 @@ namespace PixelFarm.CpuBlit
             SvgRenderElement cir = new SvgRenderElement(WellknownSvgElementName.Circle, elem._visualSpec);
             SvgCircleSpec ellipseSpec = elem._visualSpec as SvgCircleSpec;
 
-            VgCmdPath pathCmd = new VgCmdPath();
-            cir._vxsPath = pathCmd;
+
+
             VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
             double x = ConvertToPx(ellipseSpec.X, ref a);
@@ -968,8 +1068,7 @@ namespace PixelFarm.CpuBlit
             ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
             using (VxsContext.Temp(out var v1))
             {
-                pathCmd.SetVxs(
-                    PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
+                cir._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
 
             VectorToolBox.ReleaseEllipseTool(ref ellipse);
@@ -985,8 +1084,8 @@ namespace PixelFarm.CpuBlit
             SvgRenderElement rect = new SvgRenderElement(WellknownSvgElementName.Rect, elem._visualSpec);
             SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;
 
-            VgCmdPath pathCmd = new VgCmdPath();
-            rect._vxsPath = pathCmd;
+
+
 
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
@@ -1002,7 +1101,8 @@ namespace PixelFarm.CpuBlit
 
                 using (VxsContext.Temp(out var v1))
                 {
-                    pathCmd.SetVxs(roundRect.MakeVxs(v1).CreateTrim());
+
+                    rect._vxsPath = roundRect.MakeVxs(v1).CreateTrim();
                 }
                 VectorToolBox.ReleaseRoundRect(ref roundRect);
             }
@@ -1018,7 +1118,7 @@ namespace PixelFarm.CpuBlit
                 //
                 using (VxsContext.Temp(out var v1))
                 {
-                    pathCmd.SetVxs(rectTool.MakeVxs(v1).CreateTrim());
+                    rect._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
                 }
                 VectorToolBox.ReleaseRectTool(ref rectTool);
             }
