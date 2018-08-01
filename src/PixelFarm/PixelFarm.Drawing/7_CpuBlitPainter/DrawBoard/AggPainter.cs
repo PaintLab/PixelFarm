@@ -102,6 +102,62 @@ namespace PixelFarm.CpuBlit
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
+
+        ClipingTechnique _currentClipTech;
+
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            //clip rgn implementation
+            //this version replace only
+            //TODO: add append clip rgn
+            if (vxs != null)
+            {
+                if (SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
+                {
+                    //use simple rect technique
+                    this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
+                    _currentClipTech = ClipingTechnique.ClipSimpleRect;
+                }
+                else
+                {
+                    //not simple rect => 
+                    //use mask technique
+
+                    _currentClipTech = ClipingTechnique.ClipMask;
+                    this.TargetBufferName = TargetBufferName.AlphaMask;
+                    //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
+                    var prevColor = this.FillColor;
+                    this.FillColor = Color.White;
+                    //aggPainter.StrokeColor = Color.Black; //for debug
+                    //aggPainter.StrokeWidth = 1; //for debug  
+                    //p.Draw(v1); //for debug
+                    this.Fill(vxs);
+                    this.FillColor = prevColor;
+                    this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
+                    this.EnableBuiltInMaskComposite = true;
+                }
+            }
+            else
+            {
+                //remove clip rgn if exists
+                switch (_currentClipTech)
+                {
+                    case ClipingTechnique.ClipMask:
+                        this.EnableBuiltInMaskComposite = false;
+                        this.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
+                        this.Clear(Color.Black);
+                        this.TargetBufferName = TargetBufferName.Default;
+
+                        break;
+                    case ClipingTechnique.ClipSimpleRect:
+
+                        this.SetClipBox(0, 0, this.Width, this.Height);
+                        break;
+                }
+
+                _currentClipTech = ClipingTechnique.None;
+            }
+        }
         public LineRenderingTechnique LineRenderingTech
         {
             get { return _lineRenderingTech; }

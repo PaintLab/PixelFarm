@@ -47,7 +47,7 @@ namespace PixelFarm.CpuBlit
 
 
 
-    static class SimpleRectClipEvaluator
+    public static class SimpleRectClipEvaluator
     {
         enum RectSide
         {
@@ -213,7 +213,7 @@ namespace PixelFarm.CpuBlit
     }
 
 
-    static class TempStrokeTool
+    public static class TempStrokeTool
     {
 
         [System.ThreadStatic]
