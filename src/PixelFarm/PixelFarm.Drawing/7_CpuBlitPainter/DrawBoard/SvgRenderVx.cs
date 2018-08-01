@@ -179,13 +179,7 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-    enum ClipingTechnique
-    {
-        None,
-        ClipMask,
-        ClipSimpleRect
-    }
- 
+  
 
     public static class TempStrokeTool
     {
@@ -211,12 +205,7 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-
      
-
-
-
-
     public class VgRenderVx : RenderVx
     {
 

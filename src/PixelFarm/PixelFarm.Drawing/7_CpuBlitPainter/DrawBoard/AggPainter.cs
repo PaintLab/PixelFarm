@@ -102,6 +102,12 @@ namespace PixelFarm.CpuBlit
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
+        enum ClipingTechnique
+        {
+            None,
+            ClipMask,
+            ClipSimpleRect
+        }
 
         ClipingTechnique _currentClipTech;
 
