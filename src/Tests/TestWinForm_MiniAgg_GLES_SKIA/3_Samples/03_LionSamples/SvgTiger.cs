@@ -25,9 +25,10 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder svgDoc = new SvgDocBuilder();
             SvgParser svg = new SvgParser(svgDoc);
+            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
 
             svg.ReadSvgFile("Samples\\tiger002.svg");
-            _renderVx = svgDoc.ResultDocument.CreateRenderVx();
+            _renderVx = builder.CreateRenderVx(svgDoc.ResultDocument);
         }
 
 
@@ -83,20 +84,19 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
+            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+
             //svg.ReadSvgFile("Samples\\lion.svg"); 
             //svg.ReadSvgFile("Samples\\tiger002.svg");
             svg.ReadSvgFile("Samples\\arrow2.svg");
 
 
-            VgRenderVx renderVx = docBuilder.ResultDocument.CreateRenderVx();
+            VgRenderVx renderVx = builder.CreateRenderVx(docBuilder.ResultDocument);
             //renderVx.ApplyTransform(Transform.Affine.NewScaling(0.1, 0.1));
 
-            for (int i = 0; i < 1; ++i)
-            {
-                renderVx.X = i * 20;
-                renderVx.Y = i * 20;
-                _renderVxList.Add(renderVx);
-            }
+
+            _renderVxList.Add(renderVx);
+
 
             foreach (RenderVx vx in _renderVxList)
             {
@@ -108,7 +108,21 @@ namespace PixelFarm.CpuBlit.Samples
                     //create 
                     ActualBitmap backimg = new ActualBitmap((int)bound.Width, (int)bound.Height);
                     AggPainter painter = AggPainter.Create(backimg);
-                    painter.Render(vgRenerVx);
+
+
+                    painter.Clear(Drawing.Color.White);
+                    painter.StrokeColor = Color.Transparent;
+                    painter.StrokeWidth = 1;//svg standard, init stroke-width =1
+
+                    //#if DEBUG
+                    //            _dbugSW.Reset();
+                    //            _dbugSW.Start();
+                    //#endif 
+
+                    VgPainterArgsPool.GetFreePainterArgs(painter, out VgPaintArgs paintArgs);
+                    (((VgRenderVx)vx)._renderE).Paint(paintArgs);
+                    VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
 #if DEBUG
                     //test
                     //int[] rgba32Buffer = ActualImageExtensions.CopyImgBuffer(backimg, 0 + 20, 0 + 20, backimg.Width - 20, backimg.Height - 20);
@@ -142,9 +156,7 @@ namespace PixelFarm.CpuBlit.Samples
             //#if DEBUG
             //            _dbugSW.Reset();
             //            _dbugSW.Start();
-            //#endif
-
-
+            //#endif 
             for (int i = 0; i < _renderVxList.Count; ++i)
             {
                 p.Render(_renderVxList[i]);

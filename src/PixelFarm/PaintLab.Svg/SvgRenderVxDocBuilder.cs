@@ -91,6 +91,8 @@ namespace PaintLab.Svg
         }
     }
 
+
+
     public class SvgRenderElement : SvgRenderElementBase
     {
 
@@ -137,10 +139,8 @@ namespace PaintLab.Svg
                 }
                 clone._childNodes = cloneChildNodes;
             }
-
             //assign the same controller
             clone._controller = _controller;
-
             return clone;
         }
 
@@ -800,15 +800,13 @@ namespace PaintLab.Svg
 
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
 
-        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
-
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             SvgRenderElement rootSvgElem = new SvgRenderElement(WellknownSvgElementName.RootSvg, null);
             rootElem.SetVisualElement(rootSvgElem);
-
             int childCount = rootElem.ChildCount;
 
             for (int i = 0; i < childCount; ++i)
@@ -817,10 +815,11 @@ namespace PaintLab.Svg
                 //command stream?
                 EvalOtherElem(rootSvgElem, rootElem.GetChild(i));
             }
-
-            //
-            VgRenderVx renderVx = new VgRenderVx(rootSvgElem);
-            return renderVx;
+            return rootSvgElem;
+        }
+        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        {
+            return new VgRenderVx(CreateSvgRenderElement(svgdoc));
         }
         SvgRenderElement EvalOtherElem(SvgRenderElement parentNode, SvgElement elem)
         {
@@ -1251,17 +1250,7 @@ namespace PaintLab.Svg
             return renderE;
         }
     }
-    public static class SvgRenderVxDocBuilderExt
-    {
-        public static VgRenderVx CreateRenderVx(this SvgDocument svgdoc)
-        {
-            //create svg render vx from svgdoc
-            //resolve the svg 
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
-            return builder.CreateRenderVx(svgdoc);
-        }
-    }
-
+  
 
 
 

@@ -20,6 +20,8 @@ namespace PixelFarm.CpuBlit
         PathWriter path = new PathWriter();
         Vector2 center;
         RectD boundingRect;
+        CpuBlit.VertexProcessing.Affine _currentTx;
+
         public SpriteShape(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
@@ -40,6 +42,11 @@ namespace PixelFarm.CpuBlit
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {
+            //apply transform to all part
+            _currentTx = tx;
+
+            //SvgRenderElement svgRenderE = _svgRenderVx._renderE;
+
             //int elemCount = _svgRenderVx.SvgVxCount;
             //for (int i = 0; i < elemCount; ++i)
             //{
@@ -99,6 +106,7 @@ namespace PixelFarm.CpuBlit
         {
 
             VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
+            paintArgs._currentTx = _currentTx;
             _svgRenderVx._renderE.Paint(paintArgs);
             VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
         }
