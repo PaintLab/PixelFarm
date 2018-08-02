@@ -8,12 +8,14 @@ using PaintLab.Svg;
 using PixelFarm.Drawing;
 using LayoutFarm.Svg;
 using LayoutFarm.Svg.Pathing;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 
-namespace PixelFarm.CpuBlit
+
+namespace LayoutFarm.Svg
 {
-    
+
 
     public class SvgPainter
     {
@@ -344,7 +346,7 @@ namespace PixelFarm.CpuBlit
 
                     SvgTransformMatrix matrixTx = (SvgTransformMatrix)transformation;
                     float[] elems = matrixTx.Elements;
-                    return new VertexProcessing.Affine(
+                    return new Affine(
                          elems[0], elems[1],
                          elems[2], elems[3],
                          elems[4], elems[5]);
@@ -357,7 +359,7 @@ namespace PixelFarm.CpuBlit
 
                         //translate to center 
                         //rotate and the translate back
-                        return VertexProcessing.Affine.NewMatix(
+                        return Affine.NewMatix(
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(AggMath.deg2rad(rotateTx.Angle)),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
@@ -400,8 +402,9 @@ namespace PixelFarm.CpuBlit
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
 
-            VertexProcessing.Affine prevTx = svgPainter._currentTx; //backup
-            VertexProcessing.Affine currentTx = svgPainter._currentTx;
+
+            Affine prevTx = svgPainter._currentTx; //backup
+            Affine currentTx = svgPainter._currentTx;
             bool hasClip = false;
 
             if (_visualSpec != null)
@@ -409,7 +412,7 @@ namespace PixelFarm.CpuBlit
 
                 if (_visualSpec.Transform != null)
                 {
-                    VertexProcessing.Affine latest = CreateAffine(_visualSpec.Transform);
+                    Affine latest = CreateAffine(_visualSpec.Transform);
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
@@ -563,7 +566,7 @@ namespace PixelFarm.CpuBlit
             int childCount = this.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
-                var node = GetChildNode(i) as PixelFarm.CpuBlit.SvgRenderElement;
+                var node = GetChildNode(i) as SvgRenderElement;
                 if (node != null)
                 {
                     node.Paint(svgPainter);
@@ -723,7 +726,7 @@ namespace PixelFarm.CpuBlit
         }
 
         public float X { get; set; }
-        public float Y { get; set; } 
+        public float Y { get; set; }
     }
 
 
@@ -732,7 +735,7 @@ namespace PixelFarm.CpuBlit
         SvgDocument _svgdoc;
         List<SvgElement> _defsList = new List<SvgElement>();
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
-        VertexProcessing.CurveFlattener _curveFlatter = new VertexProcessing.CurveFlattener();
+        CurveFlattener _curveFlatter = new CurveFlattener();
 
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
 
@@ -934,7 +937,7 @@ namespace PixelFarm.CpuBlit
             SvgEllipseSpec ellipseSpec = elem._visualSpec as SvgEllipseSpec;
 
 
-            VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
+            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
 
             double x = ConvertToPx(ellipseSpec.X, ref a);
@@ -960,7 +963,7 @@ namespace PixelFarm.CpuBlit
             SvgImageSpec imgspec = elem._visualSpec as SvgImageSpec;
 
 
-            VectorToolBox.GetFreeRectTool(out VertexProcessing.SimpleRect rectTool);
+            VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
 
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
             rectTool.SetRect(
@@ -1046,7 +1049,7 @@ namespace PixelFarm.CpuBlit
 
 
 
-            VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
+            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
             double x = ConvertToPx(ellipseSpec.X, ref a);
             double y = ConvertToPx(ellipseSpec.Y, ref a);
@@ -1073,10 +1076,9 @@ namespace PixelFarm.CpuBlit
 
 
 
-
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
-                VectorToolBox.GetFreeRoundRectTool(out VertexProcessing.RoundedRect roundRect);
+                VectorToolBox.GetFreeRoundRectTool(out RoundedRect roundRect);
                 ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
                 roundRect.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
@@ -1095,7 +1097,7 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                VectorToolBox.GetFreeRectTool(out VertexProcessing.SimpleRect rectTool);
+                VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
                 ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
                 rectTool.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
