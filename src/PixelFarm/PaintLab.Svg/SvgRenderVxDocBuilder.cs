@@ -869,10 +869,11 @@ namespace PaintLab.Svg
             if (_needBoundUpdate)
             {
                 VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
-                RectD rectTotal = new RectD();
+                RectD rectTotal = RectD.ZeroIntersection;
+              
                 paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
-                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), false, ref rectTotal);
                 };
 
                 _renderE.Walk(paintArgs);
