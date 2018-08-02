@@ -23,7 +23,10 @@ namespace PaintLab.Svg
         {
             P = null;
             _currentTx = null;
+            ExternalVxsPaintHandler = null;
         }
+        public Action<VertexStore, VgPaintArgs> ExternalVxsPaintHandler;
+
     }
 
     public static class VgPainterArgsPool
@@ -459,17 +462,17 @@ namespace PaintLab.Svg
             }
         }
 
-        public override void Paint(VgPaintArgs svgPainter)
+        public override void Paint(VgPaintArgs vgPainterArgs)
         {
             //save
-            Painter p = svgPainter.P;
+            Painter p = vgPainterArgs.P;
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
 
 
-            Affine prevTx = svgPainter._currentTx; //backup
-            Affine currentTx = svgPainter._currentTx;
+            Affine prevTx = vgPainterArgs._currentTx; //backup
+            Affine currentTx = vgPainterArgs._currentTx;
             bool hasClip = false;
 
             if (_visualSpec != null)
@@ -481,13 +484,13 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest * svgPainter._currentTx;
+                        currentTx = latest * vgPainterArgs._currentTx;
                     }
                     else
                     {
                         currentTx = latest;
                     }
-                    svgPainter._currentTx = currentTx;
+                    vgPainterArgs._currentTx = currentTx;
                 }
                 //apply this to current tx 
 
@@ -568,33 +571,39 @@ namespace PaintLab.Svg
 
                         if (currentTx == null)
                         {
-                            if (p.FillColor.A > 0)
+                            if (vgPainterArgs.ExternalVxsPaintHandler == null)
                             {
-                                p.Fill(_vxsPath);
-                            }
-                            //to draw stroke
-                            //stroke width must > 0 and stroke-color must not be transparent color
-
-                            if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
-                            {
-                                //has specific stroke color   
-                                //temp1
-                                //if (p.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                //{
-                                //    //TODO: review here again
-                                //    p.Draw(new VertexStoreSnap(_vxsPath.Vxs), p.StrokeColor);
-                                //}
-                                //else
-                                //{ 
-                                //check if we need to create a new stroke or not
-                                if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
+                                if (p.FillColor.A > 0)
                                 {
-                                    //regen again
-                                    _latestStrokeW = (float)p.StrokeWidth;
-                                    _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
-                                    p.Fill(_strokeVxs, p.StrokeColor);
+                                    p.Fill(_vxsPath);
                                 }
-                                //}
+                                //to draw stroke
+                                //stroke width must > 0 and stroke-color must not be transparent color
+                                if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                {
+                                    //has specific stroke color   
+                                    //temp1
+                                    //if (p.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                    //{
+                                    //    //TODO: review here again
+                                    //    p.Draw(new VertexStoreSnap(_vxsPath.Vxs), p.StrokeColor);
+                                    //}
+                                    //else
+                                    //{ 
+                                    //check if we need to create a new stroke or not
+                                    if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
+                                    {
+                                        //regen again
+                                        _latestStrokeW = (float)p.StrokeWidth;
+                                        _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
+                                        p.Fill(_strokeVxs, p.StrokeColor);
+                                    }
+                                    //}
+                                }
+                            }
+                            else
+                            {
+                                vgPainterArgs.ExternalVxsPaintHandler(_vxsPath, vgPainterArgs);
                             }
                         }
                         else
@@ -603,26 +612,34 @@ namespace PaintLab.Svg
                             using (VxsContext.Temp(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
-                                if (p.FillColor.A > 0)
+
+                                if (vgPainterArgs.ExternalVxsPaintHandler == null)
                                 {
-                                    p.Fill(v1);
+                                    if (p.FillColor.A > 0)
+                                    {
+                                        p.Fill(v1);
+                                    }
+
+                                    //to draw stroke
+                                    //stroke width must > 0 and stroke-color must not be transparent color 
+                                    if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                    {
+                                        //has specific stroke color  
+
+                                        //if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                        //{
+                                        //    p.Draw(new VertexStoreSnap(v1), p.StrokeColor);
+                                        //}
+                                        //else
+                                        //{
+                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
+                                        p.Fill(strokeVxs, p.StrokeColor);
+                                        //}
+                                    }
                                 }
-
-                                //to draw stroke
-                                //stroke width must > 0 and stroke-color must not be transparent color 
-                                if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                else
                                 {
-                                    //has specific stroke color  
-
-                                    //if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                    //{
-                                    //    p.Draw(new VertexStoreSnap(v1), p.StrokeColor);
-                                    //}
-                                    //else
-                                    //{
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
-                                    p.Fill(strokeVxs, p.StrokeColor);
-                                    //}
+                                    vgPainterArgs.ExternalVxsPaintHandler(v1, vgPainterArgs);
                                 }
                             }
                         }
@@ -637,7 +654,7 @@ namespace PaintLab.Svg
                 var node = GetChildNode(i) as SvgRenderElement;
                 if (node != null)
                 {
-                    node.Paint(svgPainter);
+                    node.Paint(vgPainterArgs);
                 }
             }
 
@@ -646,7 +663,7 @@ namespace PaintLab.Svg
             p.StrokeColor = strokeColor;
             p.StrokeWidth = strokeW;
             //
-            svgPainter._currentTx = prevTx;
+            vgPainterArgs._currentTx = prevTx;
             if (hasClip)
             {
                 p.SetClipRgn(null);
@@ -1250,7 +1267,7 @@ namespace PaintLab.Svg
             return renderE;
         }
     }
-  
+
 
 
 
