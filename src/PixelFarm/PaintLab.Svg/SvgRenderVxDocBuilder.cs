@@ -18,7 +18,7 @@ namespace PaintLab.Svg
     public class VgPaintArgs
     {
         public Painter P;
-        public Affine _currentTx; 
+        public Affine _currentTx;
         internal void Reset()
         {
             P = null;
@@ -87,6 +87,11 @@ namespace PaintLab.Svg
         public VertexStore _vxsPath;
         List<SvgRenderElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
+
+        VertexStore _strokeVxs;
+        double _latestStrokeW;
+
+
         object _controller;
         public SvgVisualSpec _visualSpec;
         public SvgRenderElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualSpec)
@@ -108,6 +113,7 @@ namespace PaintLab.Svg
         {
 
         }
+
         //--------------------------------------------------------------------------
         //void Render(VgRenderVx renderVx)
         //{
@@ -551,10 +557,19 @@ namespace PaintLab.Svg
                                 //}
                                 //else
                                 //{
-                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(
-                                    _vxsPath,
-                                    (float)p.StrokeWidth);
-                                p.Fill(strokeVxs, p.StrokeColor);
+
+
+                                //check if we need to create a new stroke or not
+                                if (_strokeVxs == null || (float)_latestStrokeW != (float)p.StrokeWidth)
+                                {
+                                    //regen again
+                                    _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
+                                    p.Fill(_strokeVxs, p.StrokeColor);
+
+                                }
+
+
+
                                 //}
                             }
                         }
@@ -1100,10 +1115,10 @@ namespace PaintLab.Svg
 
         SvgRenderElement EvalRect(SvgRenderElement parentNode, SvgElement elem)
         {
+
+
             SvgRenderElement rect = new SvgRenderElement(WellknownSvgElementName.Rect, elem._visualSpec);
             SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;
-
-
 
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
