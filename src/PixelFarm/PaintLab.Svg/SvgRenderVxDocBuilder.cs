@@ -33,12 +33,12 @@ namespace PaintLab.Svg
     {
 
         [System.ThreadStatic]
-        static Stack<VgPaintArgs> s_pathWriters = new Stack<VgPaintArgs>();
+        static Stack<VgPaintArgs> s_vgPaintArgs = new Stack<VgPaintArgs>();
         public static void GetFreePainterArgs(Painter painter, out VgPaintArgs p)
         {
-            if (s_pathWriters.Count > 0)
+            if (s_vgPaintArgs.Count > 0)
             {
-                p = s_pathWriters.Pop();
+                p = s_vgPaintArgs.Pop();
                 p.P = painter;
             }
             else
@@ -49,7 +49,7 @@ namespace PaintLab.Svg
         public static void ReleasePainterArgs(ref VgPaintArgs p)
         {
             p.Reset();
-            s_pathWriters.Push(p);
+            s_vgPaintArgs.Push(p);
             p = null;
         }
         //-----------------------------------
@@ -82,17 +82,18 @@ namespace PaintLab.Svg
         }
     }
 
-    public class SvgHitTestArgs
+    public class VgHitTestArgs
     {
         public float X { get; set; }
         public float Y { get; set; }
         public bool WithSubPartTest { get; set; }
         //
         public bool Result { get; set; }
-        public void Reset()
+        public void Clear()
         {
             X = Y = 0;
             WithSubPartTest = false;
+            Result = false;
         }
     }
 
@@ -121,8 +122,49 @@ namespace PaintLab.Svg
         {
             _controller = o;
         }
-        public void HitTest(SvgHitTestArgs hitArgs)
+        public bool HitTest(VgHitTestArgs hitArgs)
         {
+            if (_vxsPath != null)
+            {
+                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitArgs.X, hitArgs.Y))
+                {
+                    return hitArgs.Result = true;
+                }
+            }
+
+            if (_childNodes != null)
+            {
+                int childCount = _childNodes.Count;
+                for (int i = 0; i < childCount; ++i)
+                {
+                    SvgRenderElement child = _childNodes[i] as SvgRenderElement;
+                    if (child != null && child.HitTest(hitArgs))
+                    {
+                        return hitArgs.Result = true;
+                    }
+                }
+            }
+            return hitArgs.Result = false;
+            //int partCount = _svgRenderVx.VgCmdCount; 
+            //for (int i = partCount - 1; i >= 0; --i)
+            //{
+            //    //we do hittest top to bottom => (so => iter backward)
+
+            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
+            //    if (vx.Name != VgCommandName.Path)
+            //    {
+            //        continue;
+            //    }
+            //    //
+            //    VgCmdPath path = (VgCmdPath)vx;
+            //    //fine tune
+            //    //hit test ***
+            //    if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(path.Vxs, x, y))
+            //    {
+            //        return true;
+            //    }
+            //}
+            //return false;
 
         }
 
@@ -870,7 +912,7 @@ namespace PaintLab.Svg
             {
                 VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
                 RectD rectTotal = RectD.ZeroIntersection;
-              
+
                 paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
                     BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), false, ref rectTotal);
