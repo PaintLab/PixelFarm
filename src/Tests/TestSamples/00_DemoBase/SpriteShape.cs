@@ -46,7 +46,6 @@ namespace PixelFarm.CpuBlit
             //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             //}
         }
-
         public void ApplyTransform(CpuBlit.VertexProcessing.Bilinear tx)
         {
             //int elemCount = _svgRenderVx.SvgVxCount;
@@ -70,7 +69,10 @@ namespace PixelFarm.CpuBlit
         public void ApplyNewAlpha(byte alphaValue0_255)
         {
             //Temp fix,            
-            throw new System.NotSupportedException();
+            //apply alpha to all paint
+
+
+            //throw new System.NotSupportedException();
 
             //int elemCount = _svgRenderVx.VgCmdCount;
             //for (int i = 0; i < elemCount; ++i)
@@ -95,8 +97,10 @@ namespace PixelFarm.CpuBlit
         }
         public void Paint(Painter p)
         {
-            p.Render(_svgRenderVx);
 
+            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
+            _svgRenderVx._renderE.Paint(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)

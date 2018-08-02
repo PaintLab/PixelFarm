@@ -47,10 +47,9 @@ namespace PixelFarm.CpuBlit.Samples
             //#endif 
 
 
-            VgPainterArgsPool.GetFreePainterArg(out VgPaintArgs paintArgs);
-            paintArgs.P = p;
+            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
             (_renderVx._renderE).Paint(paintArgs);
-            VgPainterArgsPool.ReleaseSvgPainter(ref paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
             // p.Render(_renderVx);
 
             //#if DEBUG

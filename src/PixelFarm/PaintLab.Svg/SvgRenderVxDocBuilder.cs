@@ -31,18 +31,19 @@ namespace PaintLab.Svg
 
         [System.ThreadStatic]
         static Stack<VgPaintArgs> s_pathWriters = new Stack<VgPaintArgs>();
-        public static void GetFreePainterArg(out VgPaintArgs p)
+        public static void GetFreePainterArgs(Painter painter, out VgPaintArgs p)
         {
             if (s_pathWriters.Count > 0)
             {
                 p = s_pathWriters.Pop();
+                p.P = painter;
             }
             else
             {
-                p = new VgPaintArgs();
+                p = new VgPaintArgs { P = painter };
             }
         }
-        public static void ReleaseSvgPainter(ref VgPaintArgs p)
+        public static void ReleasePainterArgs(ref VgPaintArgs p)
         {
             p.Reset();
             s_pathWriters.Push(p);
@@ -58,6 +59,11 @@ namespace PaintLab.Svg
         {
             //paint with painter interface
         }
+        /// <summary>
+        /// clone visual part
+        /// </summary>
+        /// <returns></returns>
+        public abstract SvgRenderElementBase Clone();
 #if DEBUG
         public bool dbugHasParent;
 #endif
@@ -65,6 +71,10 @@ namespace PaintLab.Svg
     public class SvgTextNode : SvgRenderElementBase
     {
         public string TextContent { get; set; }
+        public override SvgRenderElementBase Clone()
+        {
+            return new SvgTextNode { TextContent = this.TextContent };
+        }
     }
 
     public class SvgHitTestArgs
@@ -87,24 +97,19 @@ namespace PaintLab.Svg
         public VertexStore _vxsPath;
         List<SvgRenderElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
-
         VertexStore _strokeVxs;
-        double _latestStrokeW;
-
-
+        float _latestStrokeW;
         object _controller;
         public SvgVisualSpec _visualSpec;
         public SvgRenderElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualSpec)
         {
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
-
         }
         public WellknownSvgElementName ElemName
         {
             get { return _wellknownName; }
         }
-
         public void SetController(object o)
         {
             _controller = o;
@@ -112,6 +117,31 @@ namespace PaintLab.Svg
         public void HitTest(SvgHitTestArgs hitArgs)
         {
 
+        }
+
+        public override SvgRenderElementBase Clone()
+        {
+            SvgRenderElement clone = new SvgRenderElement(_wellknownName, _visualSpec);
+            if (_vxsPath != null)
+            {
+                clone._vxsPath = this._vxsPath.CreateTrim();
+            }
+            if (_childNodes != null)
+            {
+                //deep clone
+                int j = _childNodes.Count;
+                List<SvgRenderElementBase> cloneChildNodes = new List<SvgRenderElementBase>(j);
+                for (int i = 0; i < j; ++i)
+                {
+                    cloneChildNodes.Add(_childNodes[i].Clone());
+                }
+                clone._childNodes = cloneChildNodes;
+            }
+
+            //assign the same controller
+            clone._controller = _controller;
+
+            return clone;
         }
 
         //--------------------------------------------------------------------------
@@ -547,8 +577,7 @@ namespace PaintLab.Svg
 
                             if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
                             {
-                                //has specific stroke color  
-
+                                //has specific stroke color   
                                 //temp1
                                 //if (p.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
                                 //{
@@ -556,20 +585,15 @@ namespace PaintLab.Svg
                                 //    p.Draw(new VertexStoreSnap(_vxsPath.Vxs), p.StrokeColor);
                                 //}
                                 //else
-                                //{
-
-
+                                //{ 
                                 //check if we need to create a new stroke or not
-                                if (_strokeVxs == null || (float)_latestStrokeW != (float)p.StrokeWidth)
+                                if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
                                 {
                                     //regen again
+                                    _latestStrokeW = (float)p.StrokeWidth;
                                     _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
                                     p.Fill(_strokeVxs, p.StrokeColor);
-
                                 }
-
-
-
                                 //}
                             }
                         }
@@ -674,7 +698,10 @@ namespace PaintLab.Svg
     public class SvgForeignNode : SvgRenderElementBase
     {
         public object _foriegnNode;
-
+        public override SvgRenderElementBase Clone()
+        {
+            return new SvgForeignNode { _foriegnNode = this._foriegnNode };
+        }
 
     }
 
@@ -690,21 +717,11 @@ namespace PaintLab.Svg
         public VgRenderVx(SvgRenderElement svgRenderE)
         {
             _renderE = svgRenderE;
-            ////this is original version of the element 
-            //this._cmds = cmds;
-            //_needBoundUpdate = true;
+            _needBoundUpdate = true;
         }
         public VgRenderVx Clone()
         {
-            //make a copy of cmd stream
-            //int j = _cmds.Length;
-            //var copy = new VgCmd[j];
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    copy[i] = _cmds[i].Clone();
-            //}
-
-            return new VgRenderVx(null);
+            return new VgRenderVx((SvgRenderElement)_renderE.Clone());
         }
 
         public void InvalidateBounds()
