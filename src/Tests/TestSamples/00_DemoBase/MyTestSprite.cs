@@ -86,7 +86,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        SvgHitTestArgs _hitTestArgs = new SvgHitTestArgs();
+        VgHitTestArgs _hitTestArgs = new VgHitTestArgs();
 
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
@@ -102,7 +102,7 @@ namespace PixelFarm.CpuBlit
                 y -= _posY;
                 if (withSubPathTest)
                 {
-                    _hitTestArgs.Reset();
+                    _hitTestArgs.Clear();
                     _hitTestArgs.X = x;
                     _hitTestArgs.Y = y;
                     _hitTestArgs.WithSubPartTest = withSubPathTest;

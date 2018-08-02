@@ -9,7 +9,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.CpuBlit
 {
-   
+
     public class VxsRenderVx : RenderVx
     {
         public VertexStore _vxs;
@@ -28,9 +28,9 @@ namespace PixelFarm.CpuBlit
             vxsRenerVx._resolvedObject = obj;
         }
 
-    } 
+    }
 
-    public static class SimpleRectClipEvaluator
+    static class SimpleRectClipEvaluator
     {
         enum RectSide
         {
@@ -162,7 +162,7 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-  
+
 
     public static class TempStrokeTool
     {
@@ -188,8 +188,8 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-     
-    
-     
+
+
+
 
 }
