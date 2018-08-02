@@ -10,20 +10,51 @@ using LayoutFarm.Svg;
 using LayoutFarm.Svg.Pathing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
- 
+
 namespace PaintLab.Svg
 {
 
 
-    public class SvgPainter
+    public class VgPaintArgs
     {
         public Painter P;
-        public Affine _currentTx;
+        public Affine _currentTx; 
+        internal void Reset()
+        {
+            P = null;
+            _currentTx = null;
+        }
     }
+
+    public static class VgPainterArgsPool
+    {
+
+        [System.ThreadStatic]
+        static Stack<VgPaintArgs> s_pathWriters = new Stack<VgPaintArgs>();
+        public static void GetFreePainterArg(out VgPaintArgs p)
+        {
+            if (s_pathWriters.Count > 0)
+            {
+                p = s_pathWriters.Pop();
+            }
+            else
+            {
+                p = new VgPaintArgs();
+            }
+        }
+        public static void ReleaseSvgPainter(ref VgPaintArgs p)
+        {
+            p.Reset();
+            s_pathWriters.Push(p);
+            p = null;
+        }
+        //-----------------------------------
+    }
+
 
     public abstract class SvgRenderElementBase
     {
-        public virtual void Paint(SvgPainter p)
+        public virtual void Paint(VgPaintArgs p)
         {
             //paint with painter interface
         }
@@ -392,7 +423,7 @@ namespace PaintLab.Svg
             }
         }
 
-        public override void Paint(SvgPainter svgPainter)
+        public override void Paint(VgPaintArgs svgPainter)
         {
             //save
             Painter p = svgPainter.P;

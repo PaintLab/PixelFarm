@@ -145,7 +145,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             ScanlineRasterizer rasterizer,
             DestBitmapRasterizer bmpRas)
         {
-            VgRenderVx renderVx = lionShape.GetRenderVx(); 
+            VgRenderVx renderVx = lionShape.GetRenderVx();
             //var renderE = ((PixelFarm.CpuBlit.SvgRenderElement)renderVx._renderE);
 
             //int num_paths = renderVx.VgCmdCount;
@@ -178,9 +178,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         {
             VgRenderVx renderVx = lionShape.GetRenderVx();
 
-            SvgPainter svgPainter = new SvgPainter();
-            svgPainter.P = painter;
-            var renderE = ((SvgRenderElement)renderVx._renderE);
+            //SvgPainter svgPainter = new SvgPainter(); 
+            //svgPainter.P = painter;
+            //var renderE = ((SvgRenderElement)renderVx._renderE);
 
             //make a custom draw ?
             //custom draw

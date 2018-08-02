@@ -29,6 +29,9 @@ namespace PixelFarm.CpuBlit.Samples
             svg.ReadSvgFile("Samples\\tiger002.svg");
             _renderVx = svgDoc.ResultDocument.CreateRenderVx();
         }
+
+
+
 #if DEBUG
         System.Diagnostics.Stopwatch _dbugSW = new System.Diagnostics.Stopwatch();
 #endif
@@ -43,7 +46,12 @@ namespace PixelFarm.CpuBlit.Samples
             //            _dbugSW.Start();
             //#endif 
 
-            p.Render(_renderVx);
+
+            VgPainterArgsPool.GetFreePainterArg(out VgPaintArgs paintArgs);
+            paintArgs.P = p;
+            (_renderVx._renderE).Paint(paintArgs);
+            VgPainterArgsPool.ReleaseSvgPainter(ref paintArgs);
+            // p.Render(_renderVx);
 
             //#if DEBUG
             //            _dbugSW.Stop();
