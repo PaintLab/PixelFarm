@@ -8,30 +8,67 @@ using PaintLab.Svg;
 using PixelFarm.Drawing;
 using LayoutFarm.Svg;
 using LayoutFarm.Svg.Pathing;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
-
-namespace PixelFarm.CpuBlit
+namespace PaintLab.Svg
 {
-    enum ClipingTechnique
-    {
-        None,
-        ClipMask,
-        ClipSimpleRect
-    }
 
-    public class SvgPainter
+
+    public class VgPaintArgs
     {
         public Painter P;
         public Affine _currentTx;
+        internal void Reset()
+        {
+            P = null;
+            _currentTx = null;
+            ExternalVxsVisitHandler = null;
+        }
+        public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
+
     }
+
+    public static class VgPainterArgsPool
+    {
+
+        [System.ThreadStatic]
+        static Stack<VgPaintArgs> s_pathWriters = new Stack<VgPaintArgs>();
+        public static void GetFreePainterArgs(Painter painter, out VgPaintArgs p)
+        {
+            if (s_pathWriters.Count > 0)
+            {
+                p = s_pathWriters.Pop();
+                p.P = painter;
+            }
+            else
+            {
+                p = new VgPaintArgs { P = painter };
+            }
+        }
+        public static void ReleasePainterArgs(ref VgPaintArgs p)
+        {
+            p.Reset();
+            s_pathWriters.Push(p);
+            p = null;
+        }
+        //-----------------------------------
+    }
+
 
     public abstract class SvgRenderElementBase
     {
-        public virtual void Paint(SvgPainter p)
+        public virtual void Paint(VgPaintArgs p)
         {
             //paint with painter interface
         }
+        public virtual void Walk(VgPaintArgs p) { }
+
+        /// <summary>
+        /// clone visual part
+        /// </summary>
+        /// <returns></returns>
+        public abstract SvgRenderElementBase Clone();
 #if DEBUG
         public bool dbugHasParent;
 #endif
@@ -39,6 +76,10 @@ namespace PixelFarm.CpuBlit
     public class SvgTextNode : SvgRenderElementBase
     {
         public string TextContent { get; set; }
+        public override SvgRenderElementBase Clone()
+        {
+            return new SvgTextNode { TextContent = this.TextContent };
+        }
     }
 
     public class SvgHitTestArgs
@@ -54,24 +95,28 @@ namespace PixelFarm.CpuBlit
             WithSubPartTest = false;
         }
     }
+
+
+
     public class SvgRenderElement : SvgRenderElementBase
     {
-        public VgCmdPath _vxsPath;
+
+        public VertexStore _vxsPath;
         List<SvgRenderElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
+        VertexStore _strokeVxs;
+        float _latestStrokeW;
         object _controller;
         public SvgVisualSpec _visualSpec;
         public SvgRenderElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualSpec)
         {
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
-
         }
         public WellknownSvgElementName ElemName
         {
             get { return _wellknownName; }
         }
-
         public void SetController(object o)
         {
             _controller = o;
@@ -80,6 +125,30 @@ namespace PixelFarm.CpuBlit
         {
 
         }
+
+        public override SvgRenderElementBase Clone()
+        {
+            SvgRenderElement clone = new SvgRenderElement(_wellknownName, _visualSpec);
+            if (_vxsPath != null)
+            {
+                clone._vxsPath = this._vxsPath.CreateTrim();
+            }
+            if (_childNodes != null)
+            {
+                //deep clone
+                int j = _childNodes.Count;
+                List<SvgRenderElementBase> cloneChildNodes = new List<SvgRenderElementBase>(j);
+                for (int i = 0; i < j; ++i)
+                {
+                    cloneChildNodes.Add(_childNodes[i].Clone());
+                }
+                clone._childNodes = cloneChildNodes;
+            }
+            //assign the same controller
+            clone._controller = _controller;
+            return clone;
+        }
+
         //--------------------------------------------------------------------------
         //void Render(VgRenderVx renderVx)
         //{
@@ -347,7 +416,7 @@ namespace PixelFarm.CpuBlit
 
                     SvgTransformMatrix matrixTx = (SvgTransformMatrix)transformation;
                     float[] elems = matrixTx.Elements;
-                    return new VertexProcessing.Affine(
+                    return new Affine(
                          elems[0], elems[1],
                          elems[2], elems[3],
                          elems[4], elems[5]);
@@ -360,7 +429,7 @@ namespace PixelFarm.CpuBlit
 
                         //translate to center 
                         //rotate and the translate back
-                        return VertexProcessing.Affine.NewMatix(
+                        return Affine.NewMatix(
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(AggMath.deg2rad(rotateTx.Angle)),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
@@ -394,17 +463,133 @@ namespace PixelFarm.CpuBlit
                 return vx;
             }
         }
+        public override void Walk(VgPaintArgs vgPainterArgs)
+        {
+            if (vgPainterArgs.ExternalVxsVisitHandler == null)
+            {
+                return;
+            }
 
-        public override void Paint(SvgPainter svgPainter)
+            //----------------------------------------------------
+            Affine prevTx = vgPainterArgs._currentTx; //backup
+            Affine currentTx = vgPainterArgs._currentTx;
+
+            if (_visualSpec != null)
+            {
+
+                if (_visualSpec.Transform != null)
+                {
+                    Affine latest = CreateAffine(_visualSpec.Transform);
+                    if (currentTx != null)
+                    {
+                        //*** IMPORTANT : matrix transform order !***                         
+                        currentTx = latest * vgPainterArgs._currentTx;
+                    }
+                    else
+                    {
+                        currentTx = latest;
+                    }
+                    vgPainterArgs._currentTx = currentTx;
+                }
+
+                //***SKIP CLIPPING***
+                //if (_visualSpec.ResolvedClipPath != null)
+                //{
+                //    //clip-path
+                //    hasClip = true;
+
+                //    SvgRenderElement clipPath = (SvgRenderElement)_visualSpec.ResolvedClipPath;
+                //    VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath;
+                //    //----------
+                //    //for optimization check if clip path is Rect
+                //    //if yes => do simple rect clip  
+                //    if (currentTx != null)
+                //    {
+                //        //have some tx
+                //        using (VxsContext.Temp(out var v1))
+                //        {
+                //            currentTx.TransformToVxs(clipVxs, v1);
+                //            p.SetClipRgn(v1);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        p.SetClipRgn(clipVxs);
+                //    }
+                //}
+                //***SKIP CLIPPING***
+            }
+
+
+            switch (this.ElemName)
+            {
+                default:
+                    //unknown
+                    break;
+                case WellknownSvgElementName.Group:
+                case WellknownSvgElementName.RootSvg:
+                case WellknownSvgElementName.Svg:
+                    break;
+                case WellknownSvgElementName.Path:
+                case WellknownSvgElementName.Line:
+                case WellknownSvgElementName.Ellipse:
+                case WellknownSvgElementName.Circle:
+                case WellknownSvgElementName.Polygon:
+                case WellknownSvgElementName.Polyline:
+                case WellknownSvgElementName.Rect:
+                    {
+                        //render with rect spec 
+
+                        if (currentTx == null)
+                        {
+
+                            vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
+
+                        }
+                        else
+                        {
+                            //have some tx
+                            using (VxsContext.Temp(out var v1))
+                            {
+                                currentTx.TransformToVxs(_vxsPath, v1);
+                                vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            //-------------------------------------------------------
+            int childCount = this.ChildCount;
+            for (int i = 0; i < childCount; ++i)
+            {
+                var node = GetChildNode(i) as SvgRenderElement;
+                if (node != null)
+                {
+                    node.Walk(vgPainterArgs);
+                }
+            }
+
+
+            vgPainterArgs._currentTx = prevTx;
+            //***SKIP CLIPPING***
+            //if (hasClip)
+            //{
+            //    p.SetClipRgn(null);
+            //}
+            //***SKIP CLIPPING***
+        }
+        public override void Paint(VgPaintArgs vgPainterArgs)
         {
             //save
-            Painter p = svgPainter.P;
+            Painter p = vgPainterArgs.P;
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
 
-            VertexProcessing.Affine prevTx = svgPainter._currentTx; //backup
-            VertexProcessing.Affine currentTx = svgPainter._currentTx;
+
+            Affine prevTx = vgPainterArgs._currentTx; //backup
+            Affine currentTx = vgPainterArgs._currentTx;
             bool hasClip = false;
 
             if (_visualSpec != null)
@@ -412,17 +597,17 @@ namespace PixelFarm.CpuBlit
 
                 if (_visualSpec.Transform != null)
                 {
-                    VertexProcessing.Affine latest = CreateAffine(_visualSpec.Transform);
+                    Affine latest = CreateAffine(_visualSpec.Transform);
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest * svgPainter._currentTx;
+                        currentTx = latest * vgPainterArgs._currentTx;
                     }
                     else
                     {
                         currentTx = latest;
                     }
-                    svgPainter._currentTx = currentTx;
+                    vgPainterArgs._currentTx = currentTx;
                 }
                 //apply this to current tx 
 
@@ -435,7 +620,6 @@ namespace PixelFarm.CpuBlit
                 {
                     //temp fix
                     p.StrokeColor = _visualSpec.StrokeColor;
-
                 }
                 else
                 {
@@ -458,7 +642,7 @@ namespace PixelFarm.CpuBlit
                     hasClip = true;
 
                     SvgRenderElement clipPath = (SvgRenderElement)_visualSpec.ResolvedClipPath;
-                    VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath.Vxs;
+                    VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath;
                     //VertexStore clipVxs = ((VgCmdPath)clipPath._svgParts[0]).Vxs;
 
                     //----------
@@ -503,30 +687,39 @@ namespace PixelFarm.CpuBlit
 
                         if (currentTx == null)
                         {
-                            if (p.FillColor.A > 0)
+                            if (vgPainterArgs.ExternalVxsVisitHandler == null)
                             {
-                                p.Fill(_vxsPath.Vxs);
+                                if (p.FillColor.A > 0)
+                                {
+                                    p.Fill(_vxsPath);
+                                }
+                                //to draw stroke
+                                //stroke width must > 0 and stroke-color must not be transparent color
+                                if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                {
+                                    //has specific stroke color   
+                                    //temp1
+                                    //if (p.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                    //{
+                                    //    //TODO: review here again
+                                    //    p.Draw(new VertexStoreSnap(_vxsPath.Vxs), p.StrokeColor);
+                                    //}
+                                    //else
+                                    //{ 
+                                    //check if we need to create a new stroke or not
+                                    if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
+                                    {
+                                        //regen again
+                                        _latestStrokeW = (float)p.StrokeWidth;
+                                        _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
+                                        p.Fill(_strokeVxs, p.StrokeColor);
+                                    }
+                                    //}
+                                }
                             }
-                            //to draw stroke
-                            //stroke width must > 0 and stroke-color must not be transparent color
-
-                            if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                            else
                             {
-                                //has specific stroke color  
-
-                                //temp1
-                                //if (p.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                //{
-                                //    //TODO: review here again
-                                //    p.Draw(new VertexStoreSnap(_vxsPath.Vxs), p.StrokeColor);
-                                //}
-                                //else
-                                //{
-                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(
-                                    _vxsPath.Vxs,
-                                    (float)p.StrokeWidth);
-                                p.Fill(strokeVxs, p.StrokeColor);
-                                //}
+                                vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
                             }
                         }
                         else
@@ -534,27 +727,35 @@ namespace PixelFarm.CpuBlit
                             //have some tx
                             using (VxsContext.Temp(out var v1))
                             {
-                                currentTx.TransformToVxs(_vxsPath.Vxs, v1);
-                                if (p.FillColor.A > 0)
+                                currentTx.TransformToVxs(_vxsPath, v1);
+
+                                if (vgPainterArgs.ExternalVxsVisitHandler == null)
                                 {
-                                    p.Fill(v1);
+                                    if (p.FillColor.A > 0)
+                                    {
+                                        p.Fill(v1);
+                                    }
+
+                                    //to draw stroke
+                                    //stroke width must > 0 and stroke-color must not be transparent color 
+                                    if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                    {
+                                        //has specific stroke color  
+
+                                        //if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                        //{
+                                        //    p.Draw(new VertexStoreSnap(v1), p.StrokeColor);
+                                        //}
+                                        //else
+                                        //{
+                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
+                                        p.Fill(strokeVxs, p.StrokeColor);
+                                        //}
+                                    }
                                 }
-
-                                //to draw stroke
-                                //stroke width must > 0 and stroke-color must not be transparent color 
-                                if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                else
                                 {
-                                    //has specific stroke color  
-
-                                    //if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                    //{
-                                    //    p.Draw(new VertexStoreSnap(v1), p.StrokeColor);
-                                    //}
-                                    //else
-                                    //{
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
-                                    p.Fill(strokeVxs, p.StrokeColor);
-                                    //}
+                                    vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
                                 }
                             }
                         }
@@ -566,10 +767,10 @@ namespace PixelFarm.CpuBlit
             int childCount = this.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
-                var node = GetChildNode(i) as PixelFarm.CpuBlit.SvgRenderElement;
+                var node = GetChildNode(i) as SvgRenderElement;
                 if (node != null)
                 {
-                    node.Paint(svgPainter);
+                    node.Paint(vgPainterArgs);
                 }
             }
 
@@ -578,7 +779,7 @@ namespace PixelFarm.CpuBlit
             p.StrokeColor = strokeColor;
             p.StrokeWidth = strokeW;
             //
-            svgPainter._currentTx = prevTx;
+            vgPainterArgs._currentTx = prevTx;
             if (hasClip)
             {
                 p.SetClipRgn(null);
@@ -630,11 +831,75 @@ namespace PixelFarm.CpuBlit
     public class SvgForeignNode : SvgRenderElementBase
     {
         public object _foriegnNode;
-
+        public override SvgRenderElementBase Clone()
+        {
+            return new SvgForeignNode { _foriegnNode = this._foriegnNode };
+        }
 
     }
 
 
+    public class VgRenderVx : RenderVx
+    {
+
+        Image _backimg;
+        RectD _boundRect;
+        bool _needBoundUpdate;
+        public SvgRenderElement _renderE;
+
+        public VgRenderVx(SvgRenderElement svgRenderE)
+        {
+            _renderE = svgRenderE;
+            _needBoundUpdate = true;
+        }
+        public VgRenderVx Clone()
+        {
+            return new VgRenderVx((SvgRenderElement)_renderE.Clone());
+        }
+
+        public void InvalidateBounds()
+        {
+            _needBoundUpdate = true;
+            _boundRect = new RectD(this.X, this.Y, 2, 2);
+        }
+
+        public RectD GetBounds()
+        {
+            //***
+            if (_needBoundUpdate)
+            {
+                VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
+                RectD rectTotal = new RectD();
+                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                {
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
+                };
+
+                _renderE.Walk(paintArgs);
+                VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
+                _needBoundUpdate = false;
+                return this._boundRect = rectTotal;
+            }
+
+            return this._boundRect;
+
+        }
+
+        public bool HasBitmapSnapshot { get; internal set; }
+
+        public Image BackingImage { get { return _backimg; } }
+        public bool DisableBackingImage { get; set; }
+
+        public void SetBitmapSnapshot(Image img)
+        {
+            this._backimg = img;
+            HasBitmapSnapshot = img != null;
+        }
+
+        public float X { get; set; }
+        public float Y { get; set; }
+    }
 
 
     public class SvgRenderVxDocBuilder
@@ -642,19 +907,17 @@ namespace PixelFarm.CpuBlit
         SvgDocument _svgdoc;
         List<SvgElement> _defsList = new List<SvgElement>();
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
-        VertexProcessing.CurveFlattener _curveFlatter = new VertexProcessing.CurveFlattener();
+        CurveFlattener _curveFlatter = new CurveFlattener();
 
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
 
-        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
-
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             SvgRenderElement rootSvgElem = new SvgRenderElement(WellknownSvgElementName.RootSvg, null);
             rootElem.SetVisualElement(rootSvgElem);
-
             int childCount = rootElem.ChildCount;
 
             for (int i = 0; i < childCount; ++i)
@@ -663,10 +926,11 @@ namespace PixelFarm.CpuBlit
                 //command stream?
                 EvalOtherElem(rootSvgElem, rootElem.GetChild(i));
             }
-
-            //
-            VgRenderVx renderVx = new VgRenderVx(rootSvgElem);
-            return renderVx;
+            return rootSvgElem;
+        }
+        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        {
+            return new VgRenderVx(CreateSvgRenderElement(svgdoc));
         }
         SvgRenderElement EvalOtherElem(SvgRenderElement parentNode, SvgElement elem)
         {
@@ -816,11 +1080,10 @@ namespace PixelFarm.CpuBlit
             SvgRenderElement path = new SvgRenderElement(WellknownSvgElementName.Path, elem._visualSpec); //**
             SvgPathSpec pathSpec = elem._visualSpec as SvgPathSpec;
             //d             
-            VgCmdPath pathCmd = new VgCmdPath();
-            pathCmd.SetVxs(ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray()));
+
             AssignAttributes(pathSpec);
 
-            path._vxsPath = pathCmd;
+            path._vxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
 
             parentNode.AddChildElement(path);
             return path;
@@ -843,9 +1106,9 @@ namespace PixelFarm.CpuBlit
         {
             SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, elem._visualSpec);
             SvgEllipseSpec ellipseSpec = elem._visualSpec as SvgEllipseSpec;
-            VgCmdPath pathCmd = new VgCmdPath();
-            ellipseRenderE._vxsPath = pathCmd;
-            VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
+
+
+            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
 
             double x = ConvertToPx(ellipseSpec.X, ref a);
@@ -856,8 +1119,7 @@ namespace PixelFarm.CpuBlit
             ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step 
             using (VxsContext.Temp(out var v1))
             {
-                pathCmd.SetVxs(
-                    PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
+                ellipseRenderE._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
 
             VectorToolBox.ReleaseEllipseTool(ref ellipse);
@@ -872,7 +1134,7 @@ namespace PixelFarm.CpuBlit
             SvgImageSpec imgspec = elem._visualSpec as SvgImageSpec;
 
 
-            VectorToolBox.GetFreeRectTool(out VertexProcessing.SimpleRect rectTool);
+            VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
 
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
             rectTool.SetRect(
@@ -896,8 +1158,7 @@ namespace PixelFarm.CpuBlit
 
             SvgPolygonSpec polygonSpec = elem._visualSpec as SvgPolygonSpec;
 
-            VgCmdPath pathCmd = new VgCmdPath();
-            polygon._vxsPath = pathCmd;
+
 
 
 
@@ -920,7 +1181,7 @@ namespace PixelFarm.CpuBlit
                     v1.AddMoveTo(p0.X, p0.Y);
                     v1.AddCloseFigure();
 
-                    pathCmd.SetVxs(v1.CreateTrim());
+                    polygon._vxsPath = v1.CreateTrim();
                 }
                 AssignAttributes(polygonSpec);
             }
@@ -930,8 +1191,8 @@ namespace PixelFarm.CpuBlit
         {
             SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Polyline, elem._visualSpec);
             SvgPolylineSpec polylineSpec = elem._visualSpec as SvgPolylineSpec;
-            VgCmdPath pathCmd = new VgCmdPath();
-            renderE._vxsPath = pathCmd;
+
+
             PointF[] points = polylineSpec.Points;
             int j = points.Length;
             if (j > 1)
@@ -945,7 +1206,7 @@ namespace PixelFarm.CpuBlit
                         p = points[i];
                         v1.AddLineTo(p.X, p.Y);
                     }
-                    pathCmd.SetVxs(v1.CreateTrim());
+                    renderE._vxsPath = v1.CreateTrim();
                 }
 
                 AssignAttributes(polylineSpec);
@@ -957,9 +1218,9 @@ namespace PixelFarm.CpuBlit
             SvgRenderElement cir = new SvgRenderElement(WellknownSvgElementName.Circle, elem._visualSpec);
             SvgCircleSpec ellipseSpec = elem._visualSpec as SvgCircleSpec;
 
-            VgCmdPath pathCmd = new VgCmdPath();
-            cir._vxsPath = pathCmd;
-            VectorToolBox.GetFreeEllipseTool(out VertexProcessing.Ellipse ellipse);
+
+
+            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
             double x = ConvertToPx(ellipseSpec.X, ref a);
             double y = ConvertToPx(ellipseSpec.Y, ref a);
@@ -968,8 +1229,7 @@ namespace PixelFarm.CpuBlit
             ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
             using (VxsContext.Temp(out var v1))
             {
-                pathCmd.SetVxs(
-                    PixelFarm.CpuBlit.VertexProcessing.VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim());
+                cir._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
 
             VectorToolBox.ReleaseEllipseTool(ref ellipse);
@@ -982,15 +1242,14 @@ namespace PixelFarm.CpuBlit
 
         SvgRenderElement EvalRect(SvgRenderElement parentNode, SvgElement elem)
         {
+
+
             SvgRenderElement rect = new SvgRenderElement(WellknownSvgElementName.Rect, elem._visualSpec);
             SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;
 
-            VgCmdPath pathCmd = new VgCmdPath();
-            rect._vxsPath = pathCmd;
-
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
-                VectorToolBox.GetFreeRoundRectTool(out VertexProcessing.RoundedRect roundRect);
+                VectorToolBox.GetFreeRoundRectTool(out RoundedRect roundRect);
                 ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
                 roundRect.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
@@ -1002,13 +1261,14 @@ namespace PixelFarm.CpuBlit
 
                 using (VxsContext.Temp(out var v1))
                 {
-                    pathCmd.SetVxs(roundRect.MakeVxs(v1).CreateTrim());
+
+                    rect._vxsPath = roundRect.MakeVxs(v1).CreateTrim();
                 }
                 VectorToolBox.ReleaseRoundRect(ref roundRect);
             }
             else
             {
-                VectorToolBox.GetFreeRectTool(out VertexProcessing.SimpleRect rectTool);
+                VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
                 ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
                 rectTool.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
@@ -1018,7 +1278,7 @@ namespace PixelFarm.CpuBlit
                 //
                 using (VxsContext.Temp(out var v1))
                 {
-                    pathCmd.SetVxs(rectTool.MakeVxs(v1).CreateTrim());
+                    rect._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
                 }
                 VectorToolBox.ReleaseRectTool(ref rectTool);
             }
@@ -1099,16 +1359,6 @@ namespace PixelFarm.CpuBlit
 
             parentNode.AddChildElement(renderE);
             return renderE;
-        }
-    }
-    public static class SvgRenderVxDocBuilderExt
-    {
-        public static VgRenderVx CreateRenderVx(this SvgDocument svgdoc)
-        {
-            //create svg render vx from svgdoc
-            //resolve the svg 
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
-            return builder.CreateRenderVx(svgdoc);
         }
     }
 

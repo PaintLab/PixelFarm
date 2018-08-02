@@ -102,6 +102,12 @@ namespace PixelFarm.CpuBlit
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
+        enum ClipingTechnique
+        {
+            None,
+            ClipMask,
+            ClipSimpleRect
+        }
 
         ClipingTechnique _currentClipTech;
 
@@ -993,15 +999,15 @@ namespace PixelFarm.CpuBlit
         }
         public override void Render(RenderVx renderVx)
         {
-            if (renderVx is VgRenderVx)
-            {
+            //if (renderVx is VgRenderVx)
+            //{
 
-            }
-            else
-            {
-                //?
-                throw new NotSupportedException();
-            }
+            //}
+            //else
+            //{
+            //    //?
+            //    throw new NotSupportedException();
+            //}
         }
 
         public override bool UseSubPixelLcdEffect
