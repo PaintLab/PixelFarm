@@ -23,9 +23,9 @@ namespace PaintLab.Svg
         {
             P = null;
             _currentTx = null;
-            ExternalVxsPaintHandler = null;
+            ExternalVxsVisitHandler = null;
         }
-        public Action<VertexStore, VgPaintArgs> ExternalVxsPaintHandler;
+        public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
 
     }
 
@@ -62,6 +62,8 @@ namespace PaintLab.Svg
         {
             //paint with painter interface
         }
+        public virtual void Walk(VgPaintArgs p) { }
+
         /// <summary>
         /// clone visual part
         /// </summary>
@@ -461,7 +463,122 @@ namespace PaintLab.Svg
                 return vx;
             }
         }
+        public override void Walk(VgPaintArgs vgPainterArgs)
+        {
+            if (vgPainterArgs.ExternalVxsVisitHandler == null)
+            {
+                return;
+            }
 
+            //----------------------------------------------------
+            Affine prevTx = vgPainterArgs._currentTx; //backup
+            Affine currentTx = vgPainterArgs._currentTx;
+
+            if (_visualSpec != null)
+            {
+
+                if (_visualSpec.Transform != null)
+                {
+                    Affine latest = CreateAffine(_visualSpec.Transform);
+                    if (currentTx != null)
+                    {
+                        //*** IMPORTANT : matrix transform order !***                         
+                        currentTx = latest * vgPainterArgs._currentTx;
+                    }
+                    else
+                    {
+                        currentTx = latest;
+                    }
+                    vgPainterArgs._currentTx = currentTx;
+                }
+
+                //***SKIP CLIPPING***
+                //if (_visualSpec.ResolvedClipPath != null)
+                //{
+                //    //clip-path
+                //    hasClip = true;
+
+                //    SvgRenderElement clipPath = (SvgRenderElement)_visualSpec.ResolvedClipPath;
+                //    VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath;
+                //    //----------
+                //    //for optimization check if clip path is Rect
+                //    //if yes => do simple rect clip  
+                //    if (currentTx != null)
+                //    {
+                //        //have some tx
+                //        using (VxsContext.Temp(out var v1))
+                //        {
+                //            currentTx.TransformToVxs(clipVxs, v1);
+                //            p.SetClipRgn(v1);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        p.SetClipRgn(clipVxs);
+                //    }
+                //}
+                //***SKIP CLIPPING***
+            }
+
+
+            switch (this.ElemName)
+            {
+                default:
+                    //unknown
+                    break;
+                case WellknownSvgElementName.Group:
+                case WellknownSvgElementName.RootSvg:
+                case WellknownSvgElementName.Svg:
+                    break;
+                case WellknownSvgElementName.Path:
+                case WellknownSvgElementName.Line:
+                case WellknownSvgElementName.Ellipse:
+                case WellknownSvgElementName.Circle:
+                case WellknownSvgElementName.Polygon:
+                case WellknownSvgElementName.Polyline:
+                case WellknownSvgElementName.Rect:
+                    {
+                        //render with rect spec 
+
+                        if (currentTx == null)
+                        {
+
+                            vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
+
+                        }
+                        else
+                        {
+                            //have some tx
+                            using (VxsContext.Temp(out var v1))
+                            {
+                                currentTx.TransformToVxs(_vxsPath, v1);
+                                vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            //-------------------------------------------------------
+            int childCount = this.ChildCount;
+            for (int i = 0; i < childCount; ++i)
+            {
+                var node = GetChildNode(i) as SvgRenderElement;
+                if (node != null)
+                {
+                    node.Walk(vgPainterArgs);
+                }
+            }
+
+
+            vgPainterArgs._currentTx = prevTx;
+            //***SKIP CLIPPING***
+            //if (hasClip)
+            //{
+            //    p.SetClipRgn(null);
+            //}
+            //***SKIP CLIPPING***
+        }
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
             //save
@@ -503,7 +620,6 @@ namespace PaintLab.Svg
                 {
                     //temp fix
                     p.StrokeColor = _visualSpec.StrokeColor;
-
                 }
                 else
                 {
@@ -571,7 +687,7 @@ namespace PaintLab.Svg
 
                         if (currentTx == null)
                         {
-                            if (vgPainterArgs.ExternalVxsPaintHandler == null)
+                            if (vgPainterArgs.ExternalVxsVisitHandler == null)
                             {
                                 if (p.FillColor.A > 0)
                                 {
@@ -603,7 +719,7 @@ namespace PaintLab.Svg
                             }
                             else
                             {
-                                vgPainterArgs.ExternalVxsPaintHandler(_vxsPath, vgPainterArgs);
+                                vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
                             }
                         }
                         else
@@ -613,7 +729,7 @@ namespace PaintLab.Svg
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
 
-                                if (vgPainterArgs.ExternalVxsPaintHandler == null)
+                                if (vgPainterArgs.ExternalVxsVisitHandler == null)
                                 {
                                     if (p.FillColor.A > 0)
                                     {
@@ -639,7 +755,7 @@ namespace PaintLab.Svg
                                 }
                                 else
                                 {
-                                    vgPainterArgs.ExternalVxsPaintHandler(v1, vgPainterArgs);
+                                    vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
                                 }
                             }
                         }
@@ -749,47 +865,25 @@ namespace PaintLab.Svg
 
         public RectD GetBounds()
         {
+            //***
+            if (_needBoundUpdate)
+            {
+                VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
+                RectD rectTotal = new RectD();
+                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                {
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
+                };
 
-            //int partCount = _svgRenderVx.VgCmdCount;
-            //RectD rectTotal = new RectD();
-            //for (int i = 0; i < partCount; ++i)
-            //{
-            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
-            //    if (vx.Name != VgCommandName.Path)
-            //    {
-            //        continue;
-            //    }
-            //    VgCmdPath path = (VgCmdPath)vx;
-            //    BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
-            //}
-            //this.boundingRect = rectTotal;
+                _renderE.Walk(paintArgs);
+                VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
 
-            //find bound
-            //TODO: review here
-            return new RectD(0, 0, 100, 100);
+                _needBoundUpdate = false;
+                return this._boundRect = rectTotal;
+            }
 
-            //if (_needBoundUpdate)
-            //{
-            //    int partCount = _cmds.Length;
+            return this._boundRect;
 
-            //    for (int i = 0; i < partCount; ++i)
-            //    {
-            //        VgCmd vx = _cmds[i];
-            //        if (vx.Name != VgCommandName.Path)
-            //        {
-            //            continue;
-            //        }
-
-            //        RectD rectTotal = new RectD();
-            //        VertexStore innerVxs = ((VgCmdPath)vx).Vxs;
-            //        BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
-
-            //        _boundRect.ExpandToInclude(rectTotal);
-            //    }
-
-            //    _needBoundUpdate = false;
-            //}
-            //return _boundRect;
         }
 
         public bool HasBitmapSnapshot { get; internal set; }
