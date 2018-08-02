@@ -5,7 +5,7 @@
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-
+using PaintLab.Svg;
 namespace PixelFarm.CpuBlit
 {
 
@@ -20,6 +20,8 @@ namespace PixelFarm.CpuBlit
         PathWriter path = new PathWriter();
         Vector2 center;
         RectD boundingRect;
+        CpuBlit.VertexProcessing.Affine _currentTx;
+
         public SpriteShape(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
@@ -40,13 +42,17 @@ namespace PixelFarm.CpuBlit
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {
+            //apply transform to all part
+            _currentTx = tx;
+
+            //SvgRenderElement svgRenderE = _svgRenderVx._renderE;
+
             //int elemCount = _svgRenderVx.SvgVxCount;
             //for (int i = 0; i < elemCount; ++i)
             //{
             //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             //}
         }
-
         public void ApplyTransform(CpuBlit.VertexProcessing.Bilinear tx)
         {
             //int elemCount = _svgRenderVx.SvgVxCount;
@@ -70,7 +76,10 @@ namespace PixelFarm.CpuBlit
         public void ApplyNewAlpha(byte alphaValue0_255)
         {
             //Temp fix,            
-            throw new System.NotSupportedException();
+            //apply alpha to all paint
+
+
+            //throw new System.NotSupportedException();
 
             //int elemCount = _svgRenderVx.VgCmdCount;
             //for (int i = 0; i < elemCount; ++i)
@@ -95,8 +104,11 @@ namespace PixelFarm.CpuBlit
         }
         public void Paint(Painter p)
         {
-            p.Render(_svgRenderVx);
 
+            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
+            paintArgs._currentTx = _currentTx;
+            _svgRenderVx._renderE.Paint(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
@@ -160,7 +172,7 @@ namespace PixelFarm.CpuBlit
         VertexStore _selectedVxs = null;
         public void HitTestOnSubPart(SvgHitTestArgs hitArgs)
         {
-            var renderE = ((PixelFarm.CpuBlit.SvgRenderElement)_svgRenderVx._renderE);
+            var renderE = ((SvgRenderElement)_svgRenderVx._renderE);
             renderE.HitTest(hitArgs);
 
         }

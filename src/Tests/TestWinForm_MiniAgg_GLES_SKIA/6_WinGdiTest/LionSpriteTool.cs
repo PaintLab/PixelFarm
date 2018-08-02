@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.WinGdi;
+using PaintLab.Svg;
+
 namespace Mini.WinForms
 {
     class MyLionSpriteTool : PixelToolController

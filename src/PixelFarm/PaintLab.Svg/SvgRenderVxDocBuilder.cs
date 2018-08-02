@@ -11,24 +11,64 @@ using LayoutFarm.Svg.Pathing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
-
-
-namespace LayoutFarm.Svg
+namespace PaintLab.Svg
 {
 
 
-    public class SvgPainter
+    public class VgPaintArgs
     {
         public Painter P;
         public Affine _currentTx;
+        internal void Reset()
+        {
+            P = null;
+            _currentTx = null;
+            ExternalVxsVisitHandler = null;
+        }
+        public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
+
     }
+
+    public static class VgPainterArgsPool
+    {
+
+        [System.ThreadStatic]
+        static Stack<VgPaintArgs> s_pathWriters = new Stack<VgPaintArgs>();
+        public static void GetFreePainterArgs(Painter painter, out VgPaintArgs p)
+        {
+            if (s_pathWriters.Count > 0)
+            {
+                p = s_pathWriters.Pop();
+                p.P = painter;
+            }
+            else
+            {
+                p = new VgPaintArgs { P = painter };
+            }
+        }
+        public static void ReleasePainterArgs(ref VgPaintArgs p)
+        {
+            p.Reset();
+            s_pathWriters.Push(p);
+            p = null;
+        }
+        //-----------------------------------
+    }
+
 
     public abstract class SvgRenderElementBase
     {
-        public virtual void Paint(SvgPainter p)
+        public virtual void Paint(VgPaintArgs p)
         {
             //paint with painter interface
         }
+        public virtual void Walk(VgPaintArgs p) { }
+
+        /// <summary>
+        /// clone visual part
+        /// </summary>
+        /// <returns></returns>
+        public abstract SvgRenderElementBase Clone();
 #if DEBUG
         public bool dbugHasParent;
 #endif
@@ -36,6 +76,10 @@ namespace LayoutFarm.Svg
     public class SvgTextNode : SvgRenderElementBase
     {
         public string TextContent { get; set; }
+        public override SvgRenderElementBase Clone()
+        {
+            return new SvgTextNode { TextContent = this.TextContent };
+        }
     }
 
     public class SvgHitTestArgs
@@ -52,25 +96,27 @@ namespace LayoutFarm.Svg
         }
     }
 
+
+
     public class SvgRenderElement : SvgRenderElementBase
     {
 
         public VertexStore _vxsPath;
         List<SvgRenderElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
+        VertexStore _strokeVxs;
+        float _latestStrokeW;
         object _controller;
         public SvgVisualSpec _visualSpec;
         public SvgRenderElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualSpec)
         {
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
-
         }
         public WellknownSvgElementName ElemName
         {
             get { return _wellknownName; }
         }
-
         public void SetController(object o)
         {
             _controller = o;
@@ -79,6 +125,30 @@ namespace LayoutFarm.Svg
         {
 
         }
+
+        public override SvgRenderElementBase Clone()
+        {
+            SvgRenderElement clone = new SvgRenderElement(_wellknownName, _visualSpec);
+            if (_vxsPath != null)
+            {
+                clone._vxsPath = this._vxsPath.CreateTrim();
+            }
+            if (_childNodes != null)
+            {
+                //deep clone
+                int j = _childNodes.Count;
+                List<SvgRenderElementBase> cloneChildNodes = new List<SvgRenderElementBase>(j);
+                for (int i = 0; i < j; ++i)
+                {
+                    cloneChildNodes.Add(_childNodes[i].Clone());
+                }
+                clone._childNodes = cloneChildNodes;
+            }
+            //assign the same controller
+            clone._controller = _controller;
+            return clone;
+        }
+
         //--------------------------------------------------------------------------
         //void Render(VgRenderVx renderVx)
         //{
@@ -393,18 +463,133 @@ namespace LayoutFarm.Svg
                 return vx;
             }
         }
+        public override void Walk(VgPaintArgs vgPainterArgs)
+        {
+            if (vgPainterArgs.ExternalVxsVisitHandler == null)
+            {
+                return;
+            }
 
-        public override void Paint(SvgPainter svgPainter)
+            //----------------------------------------------------
+            Affine prevTx = vgPainterArgs._currentTx; //backup
+            Affine currentTx = vgPainterArgs._currentTx;
+
+            if (_visualSpec != null)
+            {
+
+                if (_visualSpec.Transform != null)
+                {
+                    Affine latest = CreateAffine(_visualSpec.Transform);
+                    if (currentTx != null)
+                    {
+                        //*** IMPORTANT : matrix transform order !***                         
+                        currentTx = latest * vgPainterArgs._currentTx;
+                    }
+                    else
+                    {
+                        currentTx = latest;
+                    }
+                    vgPainterArgs._currentTx = currentTx;
+                }
+
+                //***SKIP CLIPPING***
+                //if (_visualSpec.ResolvedClipPath != null)
+                //{
+                //    //clip-path
+                //    hasClip = true;
+
+                //    SvgRenderElement clipPath = (SvgRenderElement)_visualSpec.ResolvedClipPath;
+                //    VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath;
+                //    //----------
+                //    //for optimization check if clip path is Rect
+                //    //if yes => do simple rect clip  
+                //    if (currentTx != null)
+                //    {
+                //        //have some tx
+                //        using (VxsContext.Temp(out var v1))
+                //        {
+                //            currentTx.TransformToVxs(clipVxs, v1);
+                //            p.SetClipRgn(v1);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        p.SetClipRgn(clipVxs);
+                //    }
+                //}
+                //***SKIP CLIPPING***
+            }
+
+
+            switch (this.ElemName)
+            {
+                default:
+                    //unknown
+                    break;
+                case WellknownSvgElementName.Group:
+                case WellknownSvgElementName.RootSvg:
+                case WellknownSvgElementName.Svg:
+                    break;
+                case WellknownSvgElementName.Path:
+                case WellknownSvgElementName.Line:
+                case WellknownSvgElementName.Ellipse:
+                case WellknownSvgElementName.Circle:
+                case WellknownSvgElementName.Polygon:
+                case WellknownSvgElementName.Polyline:
+                case WellknownSvgElementName.Rect:
+                    {
+                        //render with rect spec 
+
+                        if (currentTx == null)
+                        {
+
+                            vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
+
+                        }
+                        else
+                        {
+                            //have some tx
+                            using (VxsContext.Temp(out var v1))
+                            {
+                                currentTx.TransformToVxs(_vxsPath, v1);
+                                vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            //-------------------------------------------------------
+            int childCount = this.ChildCount;
+            for (int i = 0; i < childCount; ++i)
+            {
+                var node = GetChildNode(i) as SvgRenderElement;
+                if (node != null)
+                {
+                    node.Walk(vgPainterArgs);
+                }
+            }
+
+
+            vgPainterArgs._currentTx = prevTx;
+            //***SKIP CLIPPING***
+            //if (hasClip)
+            //{
+            //    p.SetClipRgn(null);
+            //}
+            //***SKIP CLIPPING***
+        }
+        public override void Paint(VgPaintArgs vgPainterArgs)
         {
             //save
-            Painter p = svgPainter.P;
+            Painter p = vgPainterArgs.P;
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
 
 
-            Affine prevTx = svgPainter._currentTx; //backup
-            Affine currentTx = svgPainter._currentTx;
+            Affine prevTx = vgPainterArgs._currentTx; //backup
+            Affine currentTx = vgPainterArgs._currentTx;
             bool hasClip = false;
 
             if (_visualSpec != null)
@@ -416,13 +601,13 @@ namespace LayoutFarm.Svg
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest * svgPainter._currentTx;
+                        currentTx = latest * vgPainterArgs._currentTx;
                     }
                     else
                     {
                         currentTx = latest;
                     }
-                    svgPainter._currentTx = currentTx;
+                    vgPainterArgs._currentTx = currentTx;
                 }
                 //apply this to current tx 
 
@@ -435,7 +620,6 @@ namespace LayoutFarm.Svg
                 {
                     //temp fix
                     p.StrokeColor = _visualSpec.StrokeColor;
-
                 }
                 else
                 {
@@ -503,30 +687,39 @@ namespace LayoutFarm.Svg
 
                         if (currentTx == null)
                         {
-                            if (p.FillColor.A > 0)
+                            if (vgPainterArgs.ExternalVxsVisitHandler == null)
                             {
-                                p.Fill(_vxsPath);
+                                if (p.FillColor.A > 0)
+                                {
+                                    p.Fill(_vxsPath);
+                                }
+                                //to draw stroke
+                                //stroke width must > 0 and stroke-color must not be transparent color
+                                if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                {
+                                    //has specific stroke color   
+                                    //temp1
+                                    //if (p.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                    //{
+                                    //    //TODO: review here again
+                                    //    p.Draw(new VertexStoreSnap(_vxsPath.Vxs), p.StrokeColor);
+                                    //}
+                                    //else
+                                    //{ 
+                                    //check if we need to create a new stroke or not
+                                    if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
+                                    {
+                                        //regen again
+                                        _latestStrokeW = (float)p.StrokeWidth;
+                                        _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
+                                        p.Fill(_strokeVxs, p.StrokeColor);
+                                    }
+                                    //}
+                                }
                             }
-                            //to draw stroke
-                            //stroke width must > 0 and stroke-color must not be transparent color
-
-                            if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                            else
                             {
-                                //has specific stroke color  
-
-                                //temp1
-                                //if (p.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                //{
-                                //    //TODO: review here again
-                                //    p.Draw(new VertexStoreSnap(_vxsPath.Vxs), p.StrokeColor);
-                                //}
-                                //else
-                                //{
-                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(
-                                    _vxsPath,
-                                    (float)p.StrokeWidth);
-                                p.Fill(strokeVxs, p.StrokeColor);
-                                //}
+                                vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
                             }
                         }
                         else
@@ -535,26 +728,34 @@ namespace LayoutFarm.Svg
                             using (VxsContext.Temp(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
-                                if (p.FillColor.A > 0)
+
+                                if (vgPainterArgs.ExternalVxsVisitHandler == null)
                                 {
-                                    p.Fill(v1);
+                                    if (p.FillColor.A > 0)
+                                    {
+                                        p.Fill(v1);
+                                    }
+
+                                    //to draw stroke
+                                    //stroke width must > 0 and stroke-color must not be transparent color 
+                                    if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                    {
+                                        //has specific stroke color  
+
+                                        //if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
+                                        //{
+                                        //    p.Draw(new VertexStoreSnap(v1), p.StrokeColor);
+                                        //}
+                                        //else
+                                        //{
+                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
+                                        p.Fill(strokeVxs, p.StrokeColor);
+                                        //}
+                                    }
                                 }
-
-                                //to draw stroke
-                                //stroke width must > 0 and stroke-color must not be transparent color 
-                                if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
+                                else
                                 {
-                                    //has specific stroke color  
-
-                                    //if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                    //{
-                                    //    p.Draw(new VertexStoreSnap(v1), p.StrokeColor);
-                                    //}
-                                    //else
-                                    //{
-                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
-                                    p.Fill(strokeVxs, p.StrokeColor);
-                                    //}
+                                    vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
                                 }
                             }
                         }
@@ -569,7 +770,7 @@ namespace LayoutFarm.Svg
                 var node = GetChildNode(i) as SvgRenderElement;
                 if (node != null)
                 {
-                    node.Paint(svgPainter);
+                    node.Paint(vgPainterArgs);
                 }
             }
 
@@ -578,7 +779,7 @@ namespace LayoutFarm.Svg
             p.StrokeColor = strokeColor;
             p.StrokeWidth = strokeW;
             //
-            svgPainter._currentTx = prevTx;
+            vgPainterArgs._currentTx = prevTx;
             if (hasClip)
             {
                 p.SetClipRgn(null);
@@ -630,7 +831,10 @@ namespace LayoutFarm.Svg
     public class SvgForeignNode : SvgRenderElementBase
     {
         public object _foriegnNode;
-
+        public override SvgRenderElementBase Clone()
+        {
+            return new SvgForeignNode { _foriegnNode = this._foriegnNode };
+        }
 
     }
 
@@ -641,26 +845,16 @@ namespace LayoutFarm.Svg
         Image _backimg;
         RectD _boundRect;
         bool _needBoundUpdate;
-        public object _renderE;
+        public SvgRenderElement _renderE;
 
         public VgRenderVx(SvgRenderElement svgRenderE)
         {
             _renderE = svgRenderE;
-            ////this is original version of the element 
-            //this._cmds = cmds;
-            //_needBoundUpdate = true;
+            _needBoundUpdate = true;
         }
         public VgRenderVx Clone()
         {
-            //make a copy of cmd stream
-            //int j = _cmds.Length;
-            //var copy = new VgCmd[j];
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    copy[i] = _cmds[i].Clone();
-            //}
-
-            return new VgRenderVx(null);
+            return new VgRenderVx((SvgRenderElement)_renderE.Clone());
         }
 
         public void InvalidateBounds()
@@ -671,47 +865,25 @@ namespace LayoutFarm.Svg
 
         public RectD GetBounds()
         {
+            //***
+            if (_needBoundUpdate)
+            {
+                VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
+                RectD rectTotal = new RectD();
+                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                {
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
+                };
 
-            //int partCount = _svgRenderVx.VgCmdCount;
-            //RectD rectTotal = new RectD();
-            //for (int i = 0; i < partCount; ++i)
-            //{
-            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
-            //    if (vx.Name != VgCommandName.Path)
-            //    {
-            //        continue;
-            //    }
-            //    VgCmdPath path = (VgCmdPath)vx;
-            //    BoundingRect.GetBoundingRect(new VertexStoreSnap(path.Vxs), ref rectTotal);
-            //}
-            //this.boundingRect = rectTotal;
+                _renderE.Walk(paintArgs);
+                VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
 
-            //find bound
-            //TODO: review here
-            return new RectD(0, 0, 100, 100);
+                _needBoundUpdate = false;
+                return this._boundRect = rectTotal;
+            }
 
-            //if (_needBoundUpdate)
-            //{
-            //    int partCount = _cmds.Length;
+            return this._boundRect;
 
-            //    for (int i = 0; i < partCount; ++i)
-            //    {
-            //        VgCmd vx = _cmds[i];
-            //        if (vx.Name != VgCommandName.Path)
-            //        {
-            //            continue;
-            //        }
-
-            //        RectD rectTotal = new RectD();
-            //        VertexStore innerVxs = ((VgCmdPath)vx).Vxs;
-            //        BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
-
-            //        _boundRect.ExpandToInclude(rectTotal);
-            //    }
-
-            //    _needBoundUpdate = false;
-            //}
-            //return _boundRect;
         }
 
         public bool HasBitmapSnapshot { get; internal set; }
@@ -739,15 +911,13 @@ namespace LayoutFarm.Svg
 
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
 
-        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
-
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             SvgRenderElement rootSvgElem = new SvgRenderElement(WellknownSvgElementName.RootSvg, null);
             rootElem.SetVisualElement(rootSvgElem);
-
             int childCount = rootElem.ChildCount;
 
             for (int i = 0; i < childCount; ++i)
@@ -756,10 +926,11 @@ namespace LayoutFarm.Svg
                 //command stream?
                 EvalOtherElem(rootSvgElem, rootElem.GetChild(i));
             }
-
-            //
-            VgRenderVx renderVx = new VgRenderVx(rootSvgElem);
-            return renderVx;
+            return rootSvgElem;
+        }
+        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        {
+            return new VgRenderVx(CreateSvgRenderElement(svgdoc));
         }
         SvgRenderElement EvalOtherElem(SvgRenderElement parentNode, SvgElement elem)
         {
@@ -1071,10 +1242,10 @@ namespace LayoutFarm.Svg
 
         SvgRenderElement EvalRect(SvgRenderElement parentNode, SvgElement elem)
         {
+
+
             SvgRenderElement rect = new SvgRenderElement(WellknownSvgElementName.Rect, elem._visualSpec);
             SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;
-
-
 
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
@@ -1188,16 +1359,6 @@ namespace LayoutFarm.Svg
 
             parentNode.AddChildElement(renderE);
             return renderE;
-        }
-    }
-    public static class SvgRenderVxDocBuilderExt
-    {
-        public static VgRenderVx CreateRenderVx(this SvgDocument svgdoc)
-        {
-            //create svg render vx from svgdoc
-            //resolve the svg 
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
-            return builder.CreateRenderVx(svgdoc);
         }
     }
 
