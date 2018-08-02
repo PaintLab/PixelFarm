@@ -5,7 +5,7 @@
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-
+using PaintLab.Svg;
 namespace PixelFarm.CpuBlit
 {
 
@@ -160,7 +160,7 @@ namespace PixelFarm.CpuBlit
         VertexStore _selectedVxs = null;
         public void HitTestOnSubPart(SvgHitTestArgs hitArgs)
         {
-            var renderE = ((PixelFarm.CpuBlit.SvgRenderElement)_svgRenderVx._renderE);
+            var renderE = ((SvgRenderElement)_svgRenderVx._renderE);
             renderE.HitTest(hitArgs);
 
         }

@@ -10,10 +10,8 @@ using LayoutFarm.Svg;
 using LayoutFarm.Svg.Pathing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-
-
-
-namespace LayoutFarm.Svg
+ 
+namespace PaintLab.Svg
 {
 
 
@@ -641,7 +639,7 @@ namespace LayoutFarm.Svg
         Image _backimg;
         RectD _boundRect;
         bool _needBoundUpdate;
-        public object _renderE;
+        public SvgRenderElement _renderE;
 
         public VgRenderVx(SvgRenderElement svgRenderE)
         {

@@ -4,7 +4,7 @@ using System;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.CpuBlit;
-
+using PaintLab.Svg;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "108")]

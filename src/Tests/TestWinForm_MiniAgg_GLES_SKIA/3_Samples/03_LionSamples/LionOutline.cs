@@ -37,7 +37,7 @@ using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.PixelProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.Rasterization.Lines;
-
+using PaintLab.Svg;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_LionOutline
 {
@@ -180,7 +180,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
             SvgPainter svgPainter = new SvgPainter();
             svgPainter.P = painter;
-            var renderE = ((PixelFarm.CpuBlit.SvgRenderElement)renderVx._renderE);
+            var renderE = ((SvgRenderElement)renderVx._renderE);
 
             //make a custom draw ?
             //custom draw
