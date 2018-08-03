@@ -39,7 +39,6 @@
             this.button7 = new System.Windows.Forms.Button();
             this.cmdTestNativeLib = new System.Windows.Forms.Button();
             this.cmdSignedDistance = new System.Windows.Forms.Button();
-            this.cmdTestColorBlend = new System.Windows.Forms.Button();
             this.lstBackEndRenderer = new System.Windows.Forms.ListBox();
             this.button8 = new System.Windows.Forms.Button();
             this.cmdFreeTransform = new System.Windows.Forms.Button();
@@ -162,16 +161,6 @@
             this.cmdSignedDistance.UseVisualStyleBackColor = true;
             this.cmdSignedDistance.Click += new System.EventHandler(this.cmdSignedDistance_Click);
             // 
-            // cmdTestColorBlend
-            // 
-            this.cmdTestColorBlend.Location = new System.Drawing.Point(417, 527);
-            this.cmdTestColorBlend.Name = "cmdTestColorBlend";
-            this.cmdTestColorBlend.Size = new System.Drawing.Size(150, 32);
-            this.cmdTestColorBlend.TabIndex = 15;
-            this.cmdTestColorBlend.Text = "Test Color Blend";
-            this.cmdTestColorBlend.UseVisualStyleBackColor = true;
-            this.cmdTestColorBlend.Click += new System.EventHandler(this.cmdTestColorBlend_Click);
-            // 
             // lstBackEndRenderer
             // 
             this.lstBackEndRenderer.FormattingEnabled = true;
@@ -208,7 +197,6 @@
             this.Controls.Add(this.cmdFreeTransform);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.lstBackEndRenderer);
-            this.Controls.Add(this.cmdTestColorBlend);
             this.Controls.Add(this.cmdSignedDistance);
             this.Controls.Add(this.cmdTestNativeLib);
             this.Controls.Add(this.button7);
@@ -242,7 +230,6 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button cmdTestNativeLib;
         private System.Windows.Forms.Button cmdSignedDistance;
-        private System.Windows.Forms.Button cmdTestColorBlend;
         private System.Windows.Forms.ListBox lstBackEndRenderer;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button cmdFreeTransform;

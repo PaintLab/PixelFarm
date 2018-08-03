@@ -445,18 +445,7 @@ namespace Mini
             double lowerEq = Math.Sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1)));
             return upperEq / lowerEq;
         }
-
-        private void cmdTestColorBlend_Click(object sender, EventArgs e)
-        {
-            //double r0 = Math.Atan2(0, 1);
-            //double r90 = Math.Atan2(1, 0); 
-            //double r180 = Math.Atan2(0, -1);
-            //double r270 = Math.Atan2(-1, 0);
-
-            //FormTestColorBlend formTestColorBlend = new Mini.FormTestColorBlend();
-            //formTestColorBlend.Show();
-
-        }
+ 
 
         private void button8_Click(object sender, EventArgs e)
         {
