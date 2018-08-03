@@ -398,6 +398,11 @@ namespace PaintLab.Svg
         Image,
 
         RootSvg,
+
+        /// <summary>
+        /// style
+        /// </summary>
+        Style,
     }
 
 
@@ -570,6 +575,8 @@ namespace PaintLab.Svg
                     return new SvgElement(WellknownSvgElementName.Text, new SvgTextSpec());
                 case "defs":
                     return new SvgElement(WellknownSvgElementName.Defs);
+                case "style":
+                    return new SvgElement(WellknownSvgElementName.Style, new SvgStyleSpec());
                 case "clipPath":
                     return new SvgElement(WellknownSvgElementName.ClipPath, new SvgPathSpec());
                 case "svg":
@@ -596,6 +603,8 @@ namespace PaintLab.Svg
                     return new SvgElement(WellknownSvgElementName.Circle, new SvgCircleSpec());
                 case "ellipse":
                     return new SvgElement(WellknownSvgElementName.Ellipse, new SvgEllipseSpec());
+
+
             }
         }
 
@@ -774,7 +783,7 @@ namespace PaintLab.Svg
                     break;
                 case "y":
                     textspec.Y = UserMapUtil.ParseGenericLength(attrValue);
-                    break; 
+                    break;
             }
         }
         static void AssignLinearGradientSpec(SvgLinearGradientSpec spec, string attrName, string attrValue)
@@ -1009,7 +1018,7 @@ namespace PaintLab.Svg
                     }
                     break;
                 case "class":
-                    spec.Class = value;
+                    spec.Class = value; //solve it later
                     break;
                 case "id":
                     spec.Id = value;
@@ -1024,7 +1033,6 @@ namespace PaintLab.Svg
                     {
                         if (value != "none")
                         {
-                            //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
                             spec.FillColor = CssValueParser2.ParseCssColor(value);
                         }
                     }

@@ -692,6 +692,8 @@ namespace PaintLab.Svg
     {
         SvgDocument _svgdoc;
         List<SvgElement> _defsList = new List<SvgElement>();
+        List<SvgElement> _styleList = new List<SvgElement>();
+
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
         CurveFlattener _curveFlatter = new CurveFlattener();
 
@@ -732,7 +734,10 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Defs:
                     _defsList.Add(elem);
                     return null;
-
+                case WellknownSvgElementName.Style:
+                    EvalStyleElement(parentNode, elem);
+                    _styleList.Add(elem);
+                    return null;
                 //-----------------
                 case WellknownSvgElementName.Unknown:
                     return null;
@@ -741,7 +746,6 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Svg:
                     renderE = new SvgRenderElement(WellknownSvgElementName.Svg, null);
                     break;
-
                 case WellknownSvgElementName.Rect:
                     renderE = EvalRect(parentNode, elem);
                     break;
@@ -833,24 +837,7 @@ namespace PaintLab.Svg
 
         void AssignAttributes(SvgVisualSpec spec)
         {
-            //if (spec.HasFillColor)
-            //{
-            //    cmds.Add(new VgCmdFillColor(spec.FillColor));
-            //}
-            //if (spec.HasStrokeColor)
-            //{
-            //    cmds.Add(new VgCmdStrokeColor(spec.StrokeColor));
-            //}
-            //if (spec.HasStrokeWidth)
-            //{
-            //    cmds.Add(new VgCmdStrokeWidth(spec.StrokeWidth.Number));
-            //}
-            //if (spec.Transform != null)
-            //{
-            //    //convert from svg transform to  
-            //    cmds.Add(new VgCmdAffineTransform(CreateAffine(spec.Transform)));
-            //}
-            //
+
 
             if (spec.ClipPathLink != null)
             {
@@ -919,6 +906,8 @@ namespace PaintLab.Svg
         }
         SvgRenderElement EvalImage(SvgRenderElement parentNode, SvgElement elem)
         {
+            //TODO: svg image
+
             SvgRenderElement img = new SvgRenderElement(WellknownSvgElementName.Image, elem._visualSpec);
             SvgImageSpec imgspec = elem._visualSpec as SvgImageSpec;
 
@@ -1028,18 +1017,64 @@ namespace PaintLab.Svg
             return cir;
         }
 
+
+        LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1
+
+        void EvalStyleElement(SvgRenderElement parentNode, SvgElement elem)
+        {
+            //parse css content of the style element
+            SvgStyleSpec styleSpec = elem._visualSpec as SvgStyleSpec;
+            //parse content of the style elem
+
+            _activeSheet1 = new LayoutFarm.WebDom.CssActiveSheet();
+            LayoutFarm.WebDom.Parser.CssParserHelper.ParseStyleSheet(_activeSheet1, styleSpec.TextContent);
+
+        }
+
         SvgRenderElement EvalTextElem(SvgRenderElement parentNode, SvgElement elem)
         {
             //text render element 
             SvgRenderElement textRenderElem = new SvgRenderElement(WellknownSvgElementName.Text, elem._visualSpec);
             SvgTextSpec textspec = elem._visualSpec as SvgTextSpec;
-            //if (textspec.ExternalTextNode != null)
-            //{
-            //    //in this case this is CssTextRun
-            //}
-            //else
-            //{
-            //}
+
+            if (textspec.Class != null && _activeSheet1 != null)
+            {
+                //resolve style definition
+                LayoutFarm.WebDom.CssRuleSetGroup ruleSetGroup = _activeSheet1.GetRuleSetForClassName(textspec.Class);
+                if (ruleSetGroup != null)
+                {
+                    //assign
+                    foreach (LayoutFarm.WebDom.CssPropertyDeclaration propDecl in ruleSetGroup.GetPropertyDeclIter())
+                    {
+                        switch (propDecl.WellknownPropertyName)
+                        {
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.Font:
+                                //set font detail
+
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.FontStyle:
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.FontSize:
+
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.FontFamily:
+                                break;
+                            
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.Unknown:
+                                {
+                                    switch (propDecl.UnknownRawName)
+                                    {
+                                        case "fill":
+                                            //svg 
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+
             ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
             textspec.ActualX = ConvertToPx(textspec.X, ref a);
             textspec.ActualY = ConvertToPx(textspec.Y, ref a);

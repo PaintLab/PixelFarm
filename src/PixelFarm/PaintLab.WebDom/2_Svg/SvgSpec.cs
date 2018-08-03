@@ -13,8 +13,8 @@ namespace LayoutFarm.Svg
         Color fillColor = Color.Black;
         Color strokeColor = Color.Transparent;
         CssLength cssLen;
-        
-        
+
+
         public bool HasFillColor { get; set; }
         public bool HasStrokeColor { get; set; }
         public bool HasStrokeWidth { get; set; }
@@ -54,9 +54,9 @@ namespace LayoutFarm.Svg
         public string Class { get; set; }
 
         public SvgAttributeLink ClipPathLink { get; set; }
-        
+
         public object ResolvedClipPath { get; set; }
-        
+
 
     }
     public enum SvgAttributeLinkKind
@@ -233,6 +233,11 @@ namespace LayoutFarm.Svg
             get;
             set;
         }
+    }
+    public class SvgStyleSpec : SvgVisualSpec
+    {
+        public string TextContent { get; set; }
+
     }
     public class SvgTextSpec : SvgVisualSpec
     {
