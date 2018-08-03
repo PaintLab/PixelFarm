@@ -213,5 +213,9 @@ namespace LayoutFarm.WebDom
         [Map("flex-ext-part")]
         FlexExtensionPart,
         //----------------------------------
+        //svg
+        [Map("fill")]
+        Fill,
+        //----------------------------------
     }
 }
