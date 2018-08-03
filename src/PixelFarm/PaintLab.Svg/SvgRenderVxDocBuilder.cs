@@ -72,12 +72,12 @@ namespace PaintLab.Svg
         public bool dbugHasParent;
 #endif
     }
-    public class SvgTextNode : SvgRenderElementBase
+    public class VgTextNodeRenderElement : SvgRenderElementBase
     {
         public string TextContent { get; set; }
         public override SvgRenderElementBase Clone()
         {
-            return new SvgTextNode { TextContent = this.TextContent };
+            return new VgTextNodeRenderElement { TextContent = this.TextContent };
         }
     }
 
@@ -290,6 +290,9 @@ namespace PaintLab.Svg
                 default:
                     //unknown
                     break;
+                case WellknownSvgElementName.Text:
+
+                    break;
                 case WellknownSvgElementName.Group:
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
@@ -439,6 +442,17 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
                     break;
+                case WellknownSvgElementName.Text:
+                    {
+                        //TODO: review here
+                        //temp fix 
+                        SvgTextSpec textSpec = this._visualSpec as SvgTextSpec;
+                        if (textSpec != null)
+                        {
+                            p.DrawString(textSpec.TextContent, textSpec.ActualX, textSpec.ActualY);
+                        }
+                    }
+                    break;
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Ellipse:
@@ -473,7 +487,9 @@ namespace PaintLab.Svg
                                     //check if we need to create a new stroke or not
                                     if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
                                     {
-                                        //regen again
+                                        //TODO: review here again***
+                                        //vxs caching 
+
                                         _latestStrokeW = (float)p.StrokeWidth;
                                         _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
                                         p.Fill(_strokeVxs, p.StrokeColor);
@@ -512,6 +528,8 @@ namespace PaintLab.Svg
                                         //}
                                         //else
                                         //{
+                                        //TODO: review this again***
+
                                         VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
                                         p.Fill(strokeVxs, p.StrokeColor);
                                         //}
@@ -629,14 +647,17 @@ namespace PaintLab.Svg
 
         public RectD GetBounds()
         {
+
             //***
             if (_needBoundUpdate)
             {
                 VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
                 RectD rectTotal = RectD.ZeroIntersection;
+                bool evaluated = false;
 
                 paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
+                    evaluated = true;//once
                     BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), false, ref rectTotal);
                 };
 
@@ -644,7 +665,7 @@ namespace PaintLab.Svg
                 VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
 
                 _needBoundUpdate = false;
-                return this._boundRect = rectTotal;
+                return this._boundRect = evaluated ? rectTotal : new RectD();
             }
 
             return this._boundRect;
@@ -697,6 +718,8 @@ namespace PaintLab.Svg
         {
             return new VgRenderVx(CreateSvgRenderElement(svgdoc));
         }
+
+
         SvgRenderElement EvalOtherElem(SvgRenderElement parentNode, SvgElement elem)
         {
             SvgRenderElement renderE = null;
@@ -704,20 +727,21 @@ namespace PaintLab.Svg
             {
                 default:
                     throw new KeyNotFoundException();
-                case WellknownSvgElementName.Unknown:
-                    return null;
-                case WellknownSvgElementName.Text:
-                    {
-                        //text node of the parent
 
-                        return null;
-                    }
-                case WellknownSvgElementName.Svg:
-                    renderE = new SvgRenderElement(WellknownSvgElementName.Svg, null);
-                    break;
+                //-----------------
                 case WellknownSvgElementName.Defs:
                     _defsList.Add(elem);
                     return null;
+
+                //-----------------
+                case WellknownSvgElementName.Unknown:
+                    return null;
+                case WellknownSvgElementName.Text:
+                    return EvalTextElem(parentNode, elem);
+                case WellknownSvgElementName.Svg:
+                    renderE = new SvgRenderElement(WellknownSvgElementName.Svg, null);
+                    break;
+
                 case WellknownSvgElementName.Rect:
                     renderE = EvalRect(parentNode, elem);
                     break;
@@ -1004,7 +1028,31 @@ namespace PaintLab.Svg
             return cir;
         }
 
+        SvgRenderElement EvalTextElem(SvgRenderElement parentNode, SvgElement elem)
+        {
+            //text render element 
+            SvgRenderElement textRenderElem = new SvgRenderElement(WellknownSvgElementName.Text, elem._visualSpec);
+            SvgTextSpec textspec = elem._visualSpec as SvgTextSpec;
+            //if (textspec.ExternalTextNode != null)
+            //{
+            //    //in this case this is CssTextRun
+            //}
+            //else
+            //{
+            //}
+            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            textspec.ActualX = ConvertToPx(textspec.X, ref a);
+            textspec.ActualY = ConvertToPx(textspec.Y, ref a);
 
+
+            AssignAttributes(textspec);
+
+            //text x,y
+
+
+            parentNode.AddChildElement(textRenderElem);
+            return textRenderElem;
+        }
         SvgRenderElement EvalRect(SvgRenderElement parentNode, SvgElement elem)
         {
 
@@ -1048,9 +1096,7 @@ namespace PaintLab.Svg
                 VectorToolBox.ReleaseRectTool(ref rectTool);
             }
 
-
             AssignAttributes(rectSpec);
-
             return rect;
         }
 
