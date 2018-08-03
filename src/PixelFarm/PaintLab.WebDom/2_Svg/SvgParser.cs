@@ -29,9 +29,6 @@ using LayoutFarm.WebLexer;
 namespace PaintLab.Svg
 {
 
-
-
-
     public abstract class XmlParserBase
     {
         int parseState = 0;
@@ -391,8 +388,16 @@ namespace PaintLab.Svg
         /// linear gradient
         /// </summary>
         LinearGradient,
+        /// <summary>
+        /// text
+        /// </summary>
+        Text,
+        /// <summary>
+        /// image
+        /// </summary>
         Image,
 
+        RootSvg,
     }
 
 
@@ -400,6 +405,7 @@ namespace PaintLab.Svg
     {
         readonly WellknownSvgElementName _wellknownName;
         readonly string _unknownElemName;
+        object _visualE;
 
         public SvgVisualSpec _visualSpec;
         List<SvgElement> _childNodes = new List<SvgElement>();
@@ -425,6 +431,10 @@ namespace PaintLab.Svg
             _controller = controller;
         }
 
+        public void SetVisualElement(object visualE)
+        {
+            _visualE = visualE;
+        }
         public static object UnsafeGetController(SvgElement elem)
         {
             return elem._controller;
@@ -452,6 +462,8 @@ namespace PaintLab.Svg
                     case WellknownSvgElementName.Defs: return "defs";
                     case WellknownSvgElementName.Title: return "title";
                     case WellknownSvgElementName.Image: return "image";
+                    case WellknownSvgElementName.Text: return "text";
+                    case WellknownSvgElementName.LinearGradient: return "linearGradient";
                 }
             }
         }
@@ -480,7 +492,7 @@ namespace PaintLab.Svg
 
         void OnAttribute(string attrName, string value);
         void OnEnteringElementBody();
-        void OnExtingElementBody();
+        void OnExitingElementBody();
         void OnEnd();
     }
     //----------------------
@@ -554,6 +566,8 @@ namespace PaintLab.Svg
                     Console.WriteLine("svg unimplemented element: " + elemName);
 #endif
                     return new SvgElement(WellknownSvgElementName.Unknown, elemName);
+                case "text":
+                    return new SvgElement(WellknownSvgElementName.Text, new SvgTextSpec());
                 case "defs":
                     return new SvgElement(WellknownSvgElementName.Defs);
                 case "clipPath":
@@ -644,7 +658,7 @@ namespace PaintLab.Svg
 
         }
 
-        public void OnExtingElementBody()
+        public void OnExitingElementBody()
         {
             if (_elems.Count > 0)
             {
@@ -743,11 +757,24 @@ namespace PaintLab.Svg
         }
 
 
-        void AssignPathSpecData(SvgPathSpec pathspec, string attrName, string attrValue)
+        static void AssignPathSpecData(SvgPathSpec pathspec, string attrName, string attrValue)
         {
             if (attrName == "d")
             {
                 pathspec.D = attrValue;
+            }
+        }
+        static void AssignTextSpecData(SvgTextSpec textspec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                //rect 
+                case "x":
+                    textspec.X = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y":
+                    textspec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break; 
             }
         }
         static void AssignLinearGradientSpec(SvgLinearGradientSpec spec, string attrName, string attrValue)
@@ -951,6 +978,9 @@ namespace PaintLab.Svg
                             default:
 
                                 break;
+                            case WellknownSvgElementName.Text:
+                                AssignTextSpecData((SvgTextSpec)spec, attrName, value);
+                                break;
                             case WellknownSvgElementName.Path:
                                 AssignPathSpecData((SvgPathSpec)spec, attrName, value);
                                 break;
@@ -1131,7 +1161,7 @@ namespace PaintLab.Svg
         }
         protected override void OnExitingElementBody()
         {
-            _svgDocBuilder.OnExtingElementBody();
+            _svgDocBuilder.OnExitingElementBody();
         }
 
         public static void ParseTransform(string value, SvgVisualSpec spec)

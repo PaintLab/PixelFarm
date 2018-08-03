@@ -6,6 +6,8 @@ using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Imaging;
 using Mini;
 using PixelFarm.Drawing;
+using PaintLab.Svg;
+
 namespace PixelFarm.CpuBlit.Sample_Perspective
 {
     [Info(OrderCode = "04")]

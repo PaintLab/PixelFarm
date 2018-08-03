@@ -50,6 +50,10 @@ namespace PixelFarm.DrawingGL
 
            
         }
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
         public override void Render(RenderVx renderVx)
         {
             throw new NotImplementedException();

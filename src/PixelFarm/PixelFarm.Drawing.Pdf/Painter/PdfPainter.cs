@@ -39,7 +39,10 @@ namespace PixelFarm.Drawing.Pdf
         {
             throw new NotImplementedException();
         }
-        
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {

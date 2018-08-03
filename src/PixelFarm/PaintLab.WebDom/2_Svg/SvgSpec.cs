@@ -1,8 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 //MS-PL,  
 
-using LayoutFarm.WebDom;
-
 using LayoutFarm.Css;
 using PixelFarm.Drawing;
 
@@ -15,7 +13,8 @@ namespace LayoutFarm.Svg
         Color fillColor = Color.Black;
         Color strokeColor = Color.Transparent;
         CssLength cssLen;
-
+        
+        
         public bool HasFillColor { get; set; }
         public bool HasStrokeColor { get; set; }
         public bool HasStrokeWidth { get; set; }
@@ -49,10 +48,16 @@ namespace LayoutFarm.Svg
                 this.HasStrokeWidth = true;
             }
         }
+
+        //TODO: review here
         public string Id { get; set; }
         public string Class { get; set; }
 
         public SvgAttributeLink ClipPathLink { get; set; }
+        
+        public object ResolvedClipPath { get; set; }
+        
+
     }
     public enum SvgAttributeLinkKind
     {
@@ -229,7 +234,17 @@ namespace LayoutFarm.Svg
             set;
         }
     }
+    public class SvgTextSpec : SvgVisualSpec
+    {
+        public string Font { get; set; }
+        public string TextContent { get; set; }
+        public object ExternalTextNode { get; set; }
+        public CssLength X { get; set; }
+        public CssLength Y { get; set; }
 
+        public float ActualX { get; set; }
+        public float ActualY { get; set; }
+    }
 
     public class SvgLineSpec : SvgVisualSpec
     {
