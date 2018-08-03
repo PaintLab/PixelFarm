@@ -239,6 +239,11 @@ namespace LayoutFarm.Svg
         public string Font { get; set; }
         public string TextContent { get; set; }
         public object ExternalTextNode { get; set; }
+        public CssLength X { get; set; }
+        public CssLength Y { get; set; }
+
+        public float ActualX { get; set; }
+        public float ActualY { get; set; }
     }
 
     public class SvgLineSpec : SvgVisualSpec

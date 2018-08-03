@@ -28,7 +28,7 @@ using LayoutFarm.WebLexer;
 
 namespace PaintLab.Svg
 {
-    
+
     public abstract class XmlParserBase
     {
         int parseState = 0;
@@ -757,11 +757,24 @@ namespace PaintLab.Svg
         }
 
 
-        void AssignPathSpecData(SvgPathSpec pathspec, string attrName, string attrValue)
+        static void AssignPathSpecData(SvgPathSpec pathspec, string attrName, string attrValue)
         {
             if (attrName == "d")
             {
                 pathspec.D = attrValue;
+            }
+        }
+        static void AssignTextSpecData(SvgTextSpec textspec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                //rect 
+                case "x":
+                    textspec.X = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y":
+                    textspec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break; 
             }
         }
         static void AssignLinearGradientSpec(SvgLinearGradientSpec spec, string attrName, string attrValue)
@@ -964,6 +977,9 @@ namespace PaintLab.Svg
                         {
                             default:
 
+                                break;
+                            case WellknownSvgElementName.Text:
+                                AssignTextSpecData((SvgTextSpec)spec, attrName, value);
                                 break;
                             case WellknownSvgElementName.Path:
                                 AssignPathSpecData((SvgPathSpec)spec, attrName, value);

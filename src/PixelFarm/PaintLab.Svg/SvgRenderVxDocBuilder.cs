@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 
-using PaintLab.Svg;
 using PixelFarm.Drawing;
 using LayoutFarm.Svg;
 using LayoutFarm.Svg.Pathing;
@@ -33,12 +32,12 @@ namespace PaintLab.Svg
     {
 
         [System.ThreadStatic]
-        static Stack<VgPaintArgs> s_pathWriters = new Stack<VgPaintArgs>();
+        static Stack<VgPaintArgs> s_vgPaintArgs = new Stack<VgPaintArgs>();
         public static void GetFreePainterArgs(Painter painter, out VgPaintArgs p)
         {
-            if (s_pathWriters.Count > 0)
+            if (s_vgPaintArgs.Count > 0)
             {
-                p = s_pathWriters.Pop();
+                p = s_vgPaintArgs.Pop();
                 p.P = painter;
             }
             else
@@ -49,7 +48,7 @@ namespace PaintLab.Svg
         public static void ReleasePainterArgs(ref VgPaintArgs p)
         {
             p.Reset();
-            s_pathWriters.Push(p);
+            s_vgPaintArgs.Push(p);
             p = null;
         }
         //-----------------------------------
@@ -73,26 +72,27 @@ namespace PaintLab.Svg
         public bool dbugHasParent;
 #endif
     }
-    public class SvgTextNode : SvgRenderElementBase
+    public class VgTextNodeRenderElement : SvgRenderElementBase
     {
         public string TextContent { get; set; }
         public override SvgRenderElementBase Clone()
         {
-            return new SvgTextNode { TextContent = this.TextContent };
+            return new VgTextNodeRenderElement { TextContent = this.TextContent };
         }
     }
 
-    public class SvgHitTestArgs
+    public class VgHitTestArgs
     {
         public float X { get; set; }
         public float Y { get; set; }
         public bool WithSubPartTest { get; set; }
         //
         public bool Result { get; set; }
-        public void Reset()
+        public void Clear()
         {
             X = Y = 0;
             WithSubPartTest = false;
+            Result = false;
         }
     }
 
@@ -121,8 +121,29 @@ namespace PaintLab.Svg
         {
             _controller = o;
         }
-        public void HitTest(SvgHitTestArgs hitArgs)
+        public bool HitTest(VgHitTestArgs hitArgs)
         {
+            if (_vxsPath != null)
+            {
+                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitArgs.X, hitArgs.Y))
+                {
+                    return hitArgs.Result = true;
+                }
+            }
+
+            if (_childNodes != null)
+            {
+                int childCount = _childNodes.Count;
+                for (int i = 0; i < childCount; ++i)
+                {
+                    SvgRenderElement child = _childNodes[i] as SvgRenderElement;
+                    if (child != null && child.HitTest(hitArgs))
+                    {
+                        return hitArgs.Result = true;
+                    }
+                }
+            }
+            return hitArgs.Result = false;
 
         }
 
@@ -148,263 +169,6 @@ namespace PaintLab.Svg
             clone._controller = _controller;
             return clone;
         }
-
-        //--------------------------------------------------------------------------
-        //void Render(VgRenderVx renderVx)
-        //{
-        //    if (renderVx.HasBitmapSnapshot)
-        //    {
-        //        this.DrawImage(renderVx.BackingImage, renderVx.X, renderVx.Y);
-        //        return;
-        //    }
-
-        //    Affine currentTx = null;
-        //    var renderState = new TempVgRenderState();
-        //    renderState.strokeColor = this.StrokeColor;
-        //    this.StrokeWidth = renderState.strokeWidth = 1;//default  
-        //    renderState.fillColor = this.FillColor;
-        //    renderState.affineTx = currentTx;
-        //    renderState.clippingTech = ClipingTechnique.None;
-        //    //------------------ 
-
-        //    int j = renderVx.VgCmdCount;
-
-        //    TempVgRenderStateStore.GetFreeTempVgRenderState(out Stack<TempVgRenderState> vgStateStack);
-        //    int i = 0;
-
-        //    if (renderVx.PrefixCommand != null)
-        //    {
-        //        i = -1;
-        //    }
-
-        //    VgCmd vx = null;
-
-        //    for (; i < j; ++i)
-        //    {
-        //        if (i < 0)
-        //        {
-        //            vx = renderVx.PrefixCommand;
-        //        }
-        //        else
-        //        {
-        //            vx = renderVx.GetVgCmd(i);
-        //        }
-
-        //        switch (vx.Name)
-        //        {
-        //            case VgCommandName.BeginGroup:
-        //                {
-        //                    //1. save current state before enter new state 
-        //                    vgStateStack.Push(renderState);//save prev state
-        //                    renderState.clippingTech = ClipingTechnique.None;//reset for this
-        //                }
-        //                break;
-        //            case VgCommandName.EndGroup:
-        //                {
-        //                    switch (renderState.clippingTech)
-        //                    {
-        //                        case ClipingTechnique.None: break;
-        //                        case ClipingTechnique.ClipMask:
-        //                            {
-        //                                //clear mask filter                               
-        //                                //remove from current clip
-
-        //                                this.EnableBuiltInMaskComposite = false;
-        //                                this.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
-        //                                this.Clear(Color.Black);
-        //                                this.TargetBufferName = TargetBufferName.Default;
-        //                            }
-        //                            break;
-        //                        case ClipingTechnique.ClipSimpleRect:
-        //                            {
-        //                                this.SetClipBox(0, 0, this.Width, this.Height);
-        //                            }
-        //                            break;
-        //                    }
-
-        //                    //restore to prev state
-        //                    renderState = vgStateStack.Pop();
-
-        //                    this.FillColor = renderState.fillColor;
-        //                    this.StrokeColor = renderState.strokeColor;
-        //                    this.StrokeWidth = renderState.strokeWidth;
-        //                    currentTx = renderState.affineTx;
-
-        //                }
-        //                break;
-        //            case VgCommandName.FillColor:
-        //                this.FillColor = renderState.fillColor = ((VgCmdFillColor)vx).Color;
-        //                break;
-        //            case VgCommandName.StrokeColor:
-        //                this.StrokeColor = renderState.strokeColor = ((VgCmdStrokeColor)vx).Color;
-        //                break;
-        //            case VgCommandName.StrokeWidth:
-        //                this.StrokeWidth = renderState.strokeWidth = ((VgCmdStrokeWidth)vx).Width;
-        //                break;
-        //            case VgCommandName.AffineTransform:
-        //                {
-        //                    //apply this to current tx 
-        //                    if (currentTx != null)
-        //                    {
-        //                        //*** IMPORTANT : matrix transform order !***
-        //                        currentTx = ((VgCmdAffineTransform)vx).TransformMatrix * currentTx;
-        //                    }
-        //                    else
-        //                    {
-        //                        currentTx = ((VgCmdAffineTransform)vx).TransformMatrix;
-        //                    }
-        //                    renderState.affineTx = currentTx;
-        //                }
-        //                break;
-        //            case VgCommandName.ClipPath:
-        //                {
-        //                    //clip-path
-
-        //                    VgCmdClipPath clipPath = (VgCmdClipPath)vx;
-        //                    VertexStore clipVxs = ((VgCmdPath)clipPath._svgParts[0]).Vxs;
-
-        //                    //----------
-        //                    //for optimization check if clip path is Rect
-        //                    //if yes => do simple rect clip 
-
-        //                    if (currentTx != null)
-        //                    {
-        //                        //have some tx
-        //                        using (VxsContext.Temp(out var v1))
-        //                        {
-        //                            currentTx.TransformToVxs(clipVxs, v1);
-        //                            //after transform
-        //                            //check if v1 is rect clip or not
-        //                            //if yes => then just use simple rect clip
-        //                            if (SimpleRectClipEvaluator.EvaluateRectClip(v1, out RectangleF clipRect))
-        //                            {
-        //                                //use simple rect technique
-        //                                this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
-        //                                renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
-
-        //                            }
-        //                            else
-        //                            {
-        //                                //not simple rect => 
-        //                                //use mask technique
-
-        //                                renderState.clippingTech = ClipingTechnique.ClipMask;
-        //                                this.TargetBufferName = TargetBufferName.AlphaMask;
-        //                                //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
-        //                                var prevColor = this.FillColor;
-        //                                this.FillColor = Color.White;
-        //                                //aggPainter.StrokeColor = Color.Black; //for debug
-        //                                //aggPainter.StrokeWidth = 1; //for debug  
-        //                                //p.Draw(v1); //for debug
-        //                                this.Fill(v1);
-
-        //                                this.FillColor = prevColor;
-        //                                this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
-        //                                this.EnableBuiltInMaskComposite = true;
-        //                            }
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        //aggPainter.Draw(clipVxs); //for debug 
-        //                        //check if clipVxs is rect or not
-        //                        if (SimpleRectClipEvaluator.EvaluateRectClip(clipVxs, out RectangleF clipRect))
-        //                        {
-        //                            //use simple rect technique
-        //                            this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
-        //                            renderState.clippingTech = ClipingTechnique.ClipSimpleRect;
-        //                        }
-        //                        else
-        //                        {
-        //                            //not simple rect => 
-        //                            //use mask technique
-        //                            renderState.clippingTech = ClipingTechnique.ClipMask;
-
-        //                            this.TargetBufferName = TargetBufferName.AlphaMask;
-        //                            //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
-        //                            var prevColor = this.FillColor;
-        //                            this.FillColor = Color.White;
-        //                            //aggPainter.StrokeColor = Color.Black; //for debug
-        //                            //aggPainter.StrokeWidth = 1; //for debug 
-
-        //                            //p.Draw(v1); //for debug
-        //                            this.Fill(clipVxs);
-        //                            this.FillColor = prevColor;
-        //                            this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
-        //                            this.EnableBuiltInMaskComposite = true;
-        //                        }
-        //                    }
-
-        //                }
-        //                break;
-
-        //            case VgCommandName.Path:
-        //                {
-        //                    VgCmdPath path = (VgCmdPath)vx;
-        //                    VertexStore vxs = path.Vxs;
-
-
-        //                    if (currentTx == null)
-        //                    {
-        //                        if (renderState.fillColor.A > 0)
-        //                        {
-        //                            this.Fill(vxs);
-        //                        }
-        //                        //to draw stroke
-        //                        //stroke width must > 0 and stroke-color must not be transparent color
-
-        //                        if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
-        //                        {
-        //                            //has specific stroke color  
-
-        //                            if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-        //                            {
-        //                                //TODO: review here again
-        //                                this.Draw(new VertexStoreSnap(vxs), renderState.strokeColor);
-        //                            }
-        //                            else
-        //                            {
-        //                                VertexStore strokeVxs = GetStrokeVxsOrCreateNew(vxs, (float)this.StrokeWidth);
-        //                                this.Fill(strokeVxs, renderState.strokeColor);
-        //                            }
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        //have some tx
-        //                        using (VxsContext.Temp(out var v1))
-        //                        {
-        //                            currentTx.TransformToVxs(vxs, v1);
-        //                            if (renderState.fillColor.A > 0)
-        //                            {
-        //                                this.Fill(v1);
-        //                            }
-
-        //                            //to draw stroke
-        //                            //stroke width must > 0 and stroke-color must not be transparent color 
-        //                            if (renderState.strokeWidth > 0 && renderState.strokeColor.A > 0)
-        //                            {
-        //                                //has specific stroke color  
-
-        //                                if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-        //                                {
-        //                                    this.Draw(new VertexStoreSnap(v1), renderState.strokeColor);
-        //                                }
-        //                                else
-        //                                {
-        //                                    VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)this.StrokeWidth);
-        //                                    this.Fill(strokeVxs, renderState.strokeColor);
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-
-        //                }
-        //                break;
-        //        }
-        //    }
-        //    TempVgRenderStateStore.ReleaseTempVgRenderState(ref vgStateStack);
-        //}
 
         static PixelFarm.CpuBlit.VertexProcessing.Affine CreateAffine(SvgTransform transformation)
         {
@@ -525,6 +289,9 @@ namespace PaintLab.Svg
             {
                 default:
                     //unknown
+                    break;
+                case WellknownSvgElementName.Text:
+
                     break;
                 case WellknownSvgElementName.Group:
                 case WellknownSvgElementName.RootSvg:
@@ -675,6 +442,17 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
                     break;
+                case WellknownSvgElementName.Text:
+                    {
+                        //TODO: review here
+                        //temp fix 
+                        SvgTextSpec textSpec = this._visualSpec as SvgTextSpec;
+                        if (textSpec != null)
+                        {
+                            p.DrawString(textSpec.TextContent, textSpec.ActualX, textSpec.ActualY);
+                        }
+                    }
+                    break;
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Ellipse:
@@ -709,7 +487,9 @@ namespace PaintLab.Svg
                                     //check if we need to create a new stroke or not
                                     if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
                                     {
-                                        //regen again
+                                        //TODO: review here again***
+                                        //vxs caching 
+
                                         _latestStrokeW = (float)p.StrokeWidth;
                                         _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
                                         p.Fill(_strokeVxs, p.StrokeColor);
@@ -748,6 +528,8 @@ namespace PaintLab.Svg
                                         //}
                                         //else
                                         //{
+                                        //TODO: review this again***
+
                                         VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
                                         p.Fill(strokeVxs, p.StrokeColor);
                                         //}
@@ -865,21 +647,25 @@ namespace PaintLab.Svg
 
         public RectD GetBounds()
         {
+
             //***
             if (_needBoundUpdate)
             {
                 VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
-                RectD rectTotal = new RectD();
+                RectD rectTotal = RectD.ZeroIntersection;
+                bool evaluated = false;
+
                 paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
-                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
+                    evaluated = true;//once
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), false, ref rectTotal);
                 };
 
                 _renderE.Walk(paintArgs);
                 VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
 
                 _needBoundUpdate = false;
-                return this._boundRect = rectTotal;
+                return this._boundRect = evaluated ? rectTotal : new RectD();
             }
 
             return this._boundRect;
@@ -932,6 +718,8 @@ namespace PaintLab.Svg
         {
             return new VgRenderVx(CreateSvgRenderElement(svgdoc));
         }
+
+
         SvgRenderElement EvalOtherElem(SvgRenderElement parentNode, SvgElement elem)
         {
             SvgRenderElement renderE = null;
@@ -939,20 +727,21 @@ namespace PaintLab.Svg
             {
                 default:
                     throw new KeyNotFoundException();
-                case WellknownSvgElementName.Unknown:
-                    return null;
-                case WellknownSvgElementName.Text:
-                    {
-                        //text node of the parent
 
-                        return null;
-                    }
-                case WellknownSvgElementName.Svg:
-                    renderE = new SvgRenderElement(WellknownSvgElementName.Svg, null);
-                    break;
+                //-----------------
                 case WellknownSvgElementName.Defs:
                     _defsList.Add(elem);
                     return null;
+
+                //-----------------
+                case WellknownSvgElementName.Unknown:
+                    return null;
+                case WellknownSvgElementName.Text:
+                    return EvalTextElem(parentNode, elem);
+                case WellknownSvgElementName.Svg:
+                    renderE = new SvgRenderElement(WellknownSvgElementName.Svg, null);
+                    break;
+
                 case WellknownSvgElementName.Rect:
                     renderE = EvalRect(parentNode, elem);
                     break;
@@ -1239,7 +1028,31 @@ namespace PaintLab.Svg
             return cir;
         }
 
+        SvgRenderElement EvalTextElem(SvgRenderElement parentNode, SvgElement elem)
+        {
+            //text render element 
+            SvgRenderElement textRenderElem = new SvgRenderElement(WellknownSvgElementName.Text, elem._visualSpec);
+            SvgTextSpec textspec = elem._visualSpec as SvgTextSpec;
+            //if (textspec.ExternalTextNode != null)
+            //{
+            //    //in this case this is CssTextRun
+            //}
+            //else
+            //{
+            //}
+            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            textspec.ActualX = ConvertToPx(textspec.X, ref a);
+            textspec.ActualY = ConvertToPx(textspec.Y, ref a);
 
+
+            AssignAttributes(textspec);
+
+            //text x,y
+
+
+            parentNode.AddChildElement(textRenderElem);
+            return textRenderElem;
+        }
         SvgRenderElement EvalRect(SvgRenderElement parentNode, SvgElement elem)
         {
 
@@ -1283,9 +1096,7 @@ namespace PaintLab.Svg
                 VectorToolBox.ReleaseRectTool(ref rectTool);
             }
 
-
             AssignAttributes(rectSpec);
-
             return rect;
         }
 
@@ -1350,10 +1161,12 @@ namespace PaintLab.Svg
                 SvgRenderElement child = EvalOtherElem(renderE, elem.GetChild(i));
                 if (child != null)
                 {
+#if DEBUG
                     if (!child.dbugHasParent)
                     {
                         renderE.AddChildElement(child);
                     }
+#endif
                 }
             }
 
