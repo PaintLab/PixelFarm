@@ -697,70 +697,87 @@ namespace PaintLab.Svg
 
                 foreach (CssPropertyDeclaration propDecl in cssRuleSet.GetAssignmentIter())
                 {
-                    switch (propDecl.UnknownRawName)
+                    switch (propDecl.WellknownPropertyName)
                     {
-
                         default:
-                            break;
-                        case "fill":
+                            //handle unknown prop name
                             {
+                                switch (propDecl.UnknownRawName)
+                                {
 
+                                    default:
+                                        break;
+
+                                    case "fill-opacity":
+                                        {
+                                            //TODO:
+                                            //adjust fill opacity
+                                        }
+                                        break;
+                                    case "stroke-width":
+                                        {
+                                            int valueCount = propDecl.ValueCount;
+                                            //1
+                                            string value = propDecl.GetPropertyValue(0).ToString();
+
+                                            spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
+                                        }
+                                        break;
+                                    case "stroke":
+                                        {
+                                            //stroke color
+
+                                            //TODO:
+                                            //if (attr.Value != "none")
+                                            //{
+                                            //    spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
+                                            //}
+                                        }
+                                        break;
+                                    case "stroke-linecap":
+                                        //set line-cap and line join again
+                                        //TODO:
+                                        break;
+                                    case "stroke-linejoin":
+                                        //TODO:
+                                        break;
+                                    case "stroke-miterlimit":
+                                        //TODO:
+                                        break;
+                                    case "stroke-opacity":
+                                        //TODO:
+                                        break;
+                                    case "transform":
+                                        {
+                                            ////parse trans
+                                            //ParseTransform(attr.Value, spec);
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case WellknownCssPropertyName.Font:
+                            break;
+                        case WellknownCssPropertyName.FontFamily:
+                            break;
+                        case WellknownCssPropertyName.FontWeight:
+                            break;
+                        case WellknownCssPropertyName.FontStyle:
+                            break;
+                        case WellknownCssPropertyName.Fill:
+                            {
                                 int valueCount = propDecl.ValueCount;
                                 //1
                                 string value = propDecl.GetPropertyValue(0).ToString();
                                 if (value != "none")
                                 {
-                                    //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
+
                                     spec.FillColor = CssValueParser2.ParseCssColor(value);
                                 }
                             }
                             break;
-                        case "fill-opacity":
-                            {
-                                //TODO:
-                                //adjust fill opacity
-                            }
-                            break;
-                        case "stroke-width":
-                            {
-                                int valueCount = propDecl.ValueCount;
-                                //1
-                                string value = propDecl.GetPropertyValue(0).ToString();
-
-                                spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
-                            }
-                            break;
-                        case "stroke":
-                            {
-                                //stroke color
-
-                                //TODO:
-                                //if (attr.Value != "none")
-                                //{
-                                //    spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
-                                //}
-                            }
-                            break;
-                        case "stroke-linecap":
-                            //set line-cap and line join again
-                            //TODO:
-                            break;
-                        case "stroke-linejoin":
-                            //TODO:
-                            break;
-                        case "stroke-miterlimit":
-                            //TODO:
-                            break;
-                        case "stroke-opacity":
-                            //TODO:
-                            break;
-                        case "transform":
-                            {
-                                ////parse trans
-                                //ParseTransform(attr.Value, spec);
-                            }
-                            break;
                     }
+                    
                 }
             }
         }
@@ -783,6 +800,10 @@ namespace PaintLab.Svg
                     break;
                 case "y":
                     textspec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "font":
+                    //parse font
+
                     break;
             }
         }

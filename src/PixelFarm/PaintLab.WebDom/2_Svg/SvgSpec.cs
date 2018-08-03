@@ -20,6 +20,7 @@ namespace LayoutFarm.Svg
         public bool HasStrokeWidth { get; set; }
 
         public SvgTransform Transform { get; set; }
+
         public PixelFarm.Drawing.Color FillColor
         {
             get { return this.fillColor; }
@@ -241,7 +242,9 @@ namespace LayoutFarm.Svg
     }
     public class SvgTextSpec : SvgVisualSpec
     {
-        public string Font { get; set; }
+        public string FontFace { get; set; }
+        public CssLength FontSize { get; set; }
+
         public string TextContent { get; set; }
         public object ExternalTextNode { get; set; }
         public CssLength X { get; set; }

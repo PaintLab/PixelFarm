@@ -9,6 +9,7 @@ using LayoutFarm.Svg;
 using LayoutFarm.Svg.Pathing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+using LayoutFarm.WebDom;
 
 namespace PaintLab.Svg
 {
@@ -354,10 +355,13 @@ namespace PaintLab.Svg
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
 
+            RequestFont currentFont = p.CurrentFont;
 
             Affine prevTx = vgPainterArgs._currentTx; //backup
             Affine currentTx = vgPainterArgs._currentTx;
             bool hasClip = false;
+            bool newFontReq = false;
+
 
             if (_visualSpec != null)
             {
@@ -449,7 +453,39 @@ namespace PaintLab.Svg
                         SvgTextSpec textSpec = this._visualSpec as SvgTextSpec;
                         if (textSpec != null)
                         {
+                            Color prevColor = p.FillColor;
+                            if (textSpec.HasFillColor)
+                            {
+                                p.FillColor = textSpec.FillColor;
+                            }
+
+                      
+
+                            if (!textSpec.FontSize.IsEmpty && textSpec.FontFace != null)
+                            {
+                                p.CurrentFont = new RequestFont(
+                                      textSpec.FontFace,
+                                      textSpec.FontSize.Number);
+                                newFontReq = true;
+                            }
+                            else if (textSpec.FontFace != null)
+                            {
+                                p.CurrentFont = new RequestFont(
+                                        textSpec.FontFace,
+                                        currentFont.SizeInPixels); //TODO: size in pts vs in px
+                                newFontReq = true;
+                            }
+                            else if (!textSpec.FontSize.IsEmpty)
+                            {
+                                p.CurrentFont = new RequestFont(
+                                     currentFont.Name,
+                                     textSpec.FontSize.Number); //TODO: number, size in pts vs in px
+                                newFontReq = true;
+                            }
+
                             p.DrawString(textSpec.TextContent, textSpec.ActualX, textSpec.ActualY);
+                            p.FillColor = prevColor;//restore back
+                                                    //change font or not
                         }
                     }
                     break;
@@ -565,6 +601,10 @@ namespace PaintLab.Svg
             if (hasClip)
             {
                 p.SetClipRgn(null);
+            }
+            if (newFontReq)
+            {
+                p.CurrentFont = currentFont;
             }
         }
         public void AddChildElement(SvgRenderElementBase renderE)
@@ -1053,13 +1093,17 @@ namespace PaintLab.Svg
 
                                 break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.FontStyle:
+                                //convert font style
                                 break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.FontSize:
-
+                                textspec.FontSize = propDecl.GetPropertyValue(0).AsLength();
                                 break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.FontFamily:
+                                textspec.FontFace = propDecl.GetPropertyValue(0).ToString();
                                 break;
-                            
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.Fill:
+                                textspec.FillColor = LayoutFarm.HtmlBoxes.CssValueParser2.ParseCssColor(propDecl.GetPropertyValue(0).ToString());
+                                break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.Unknown:
                                 {
                                     switch (propDecl.UnknownRawName)
@@ -1072,6 +1116,10 @@ namespace PaintLab.Svg
                                 break;
                         }
                     }
+                    //
+
+
+
                 }
             }
 
