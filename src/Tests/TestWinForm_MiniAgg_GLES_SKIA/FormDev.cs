@@ -183,68 +183,6 @@ namespace Mini
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //--------------
-#if DEBUG
-
-            ////test01
-            //var lionShape = new PixelFarm.Agg.SpriteShape();
-            //lionShape.ParseLion();
-            ////test path serialize to binary stream
-            //System.Diagnostics.Debugger.Break();
-            //using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Create))
-            //{
-            //    var writer = new System.IO.BinaryWriter(fs);
-            //    //1. all coords and commands
-            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteToStream(
-            //        writer,
-            //        lionShape.Path);
-            //    //2. colors
-            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteColorsToStream(
-            //       writer, lionShape.Colors
-            //       );
-            //    //---------------------------------------
-            //    //3. num paths, & path index 
-            //    int npath = lionShape.NumPaths;
-            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WritePathIndexListToStream(
-            //      writer, lionShape.PathIndexList,
-            //      npath
-            //      );
-            //    writer.Close();
-            //    fs.Close();
-            //}
-            ////--------------
-            ////test load path from binary stream
-            //using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
-            //{
-            //    var reader = new System.IO.BinaryReader(fs);
-            //    var lionShape2 = new PixelFarm.Agg.SpriteShape();
-            //    PixelFarm.Agg.VertexSource.PathWriter path;
-            //    PixelFarm.Drawing.Color[] colors;
-            //    int[] pathIndexList;
-            //    //1. path and command
-            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
-            //      reader, out path
-            //      );
-            //    //2. colors
-            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadColorDataFromStream(
-            //      reader, out colors
-            //      );
-            //    //3. path indice
-            //    int npaths;
-            //    PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathIndexListFromStream(
-            //      reader, out npaths, out pathIndexList
-            //     );
-            //    PixelFarm.Agg.SpriteShape.UnsafeDirectSetData(
-            //         lionShape2,
-            //         npaths,
-            //         path, colors, pathIndexList);
-            //    fs.Close();
-            //}
-            //------------
-#endif
-        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -271,119 +209,8 @@ namespace Mini
                 bmp.Save("d:\\WImageTest\\test002_2.png");
             }
         }
-        private void cmdTestRasterImage_Click(object sender, EventArgs e)
-        {
-        }
+        
 
-        //PixelFarm.Drawing.Fonts.GdiPathFontStore gdiPathFontStore = new PixelFarm.Drawing.Fonts.GdiPathFontStore();
-        private void button3_Click(object sender, EventArgs e)
-        {
-            ////----------------------
-            ////1. test gdi+ font path
-            //char testChar = 'b';
-            //float fontSize = 20;
-            //string fontName = "tahoma";
-            //using (System.Drawing.Font ff = new Font(fontName, fontSize))
-            //using (Graphics g = this.pictureBox1.CreateGraphics())
-            //{
-            //    g.SmoothingMode = SmoothingMode.HighQuality;
-            //    g.Clear(System.Drawing.Color.White);
-
-
-            //    PixelFarm.Drawing.Fonts.ActualFont winFont = gdiPathFontStore.LoadFont(fontName, fontSize);
-
-            //    var winFontGlyph = winFont.GetGlyph(testChar);
-            //    //convert Agg vxs to bitmap
-            //    int bmpW = 50;
-            //    int bmpH = 50;
-            //    using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
-            //    {
-            //        ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-            //        Graphics2D gfx = Graphics2D.CreateFromImage(actualImage, Program._winGdiPlatForm);
-            //        var vxs = winFontGlyph.originalVxs;
-            //        gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-            //        //test subpixel rendering 
-            //        vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
-            //        gfx.UseSubPixelRendering = true;
-            //        gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-            //        PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
-            //          actualImage, //src from actual img buffer
-            //          bufferBmp, //dest to buffer bmp
-            //         new RectInt(0, 0, bmpW, bmpH));
-            //        //-----------------------------------------
-            //        bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            //        g.DrawImage(bufferBmp, new Point(0, 30));
-            //    }
-            //    //----------------------------------------------
-
-
-
-            //    //----------------------------------------------
-            //    //compare with GraphicsPath's Font                
-            //    using (GraphicsPath gpath = new GraphicsPath())
-            //    {
-            //        gpath.AddString(testChar.ToString(), ff.FontFamily, 1, ff.Size,
-            //            new Point(0, 0), null);
-            //        g.FillPath(Brushes.Black, gpath);
-            //        //g.DrawPath(Pens.Black, gpath);
-            //    }
-            //    //-------------------------------------------------
-            //    //Compare with Gdi+ Font
-            //    g.DrawString(testChar.ToString(), ff, Brushes.Black, new PointF(0, 50));
-            //}
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            //----------------------
-            //1. test gdi+ font path
-            char testChar = 'b';
-            float fontSize = 20;
-
-            using (Graphics g = this.pictureBox1.CreateGraphics())
-            {
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                g.Clear(System.Drawing.Color.White);
-                //convert Agg vxs to bitmap
-                int bmpW = 500;
-                int bmpH = 500;
-                using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
-                {
-                    ActualBitmap actualImage = new ActualBitmap(bmpW, bmpH);
-                    AggRenderSurface gfx = new AggRenderSurface(actualImage);
-                    var vxs = new PixelFarm.Drawing.VertexStore();
-                    //vxs.AddMoveTo(0, 0);
-                    ////vxs.AddP3c(100, 0);
-                    ////vxs.AddP3c(100,150);
-                    ////vxs.AddLineTo(0,0);
-                    //vxs.AddLineTo(0, 0);
-                    //vxs.AddP3c(100, 0);
-                    ////vxs.AddLineTo(100, 0);
-                    ////vxs.AddLineTo(100, 150);
-                    //vxs.AddP3c(100, 150);
-                    //vxs.AddLineTo(0, 150);
-                    //vxs.AddCloseFigure();
-
-                    //PixelFarm.Agg.VertexSource.CurveFlattener cflat = new PixelFarm.Agg.VertexSource.CurveFlattener();
-                    //vxs = cflat.MakeVxs(vxs);
-
-                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-                    //test subpixel rendering 
-
-
-                    vxs = vxs.TranslateToNewVxs(15, 0, new PixelFarm.Drawing.VertexStore());
-                    gfx.UseSubPixelLcdEffect = true;
-                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(
-                      actualImage, //src from actual img buffer
-                      bufferBmp //dest to buffer bmp
-                     );
-                    //-----------------------------------------
-                    bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                    g.DrawImage(bufferBmp, new System.Drawing.Point(0, 30));
-                }
-            }
-        }
         private void button5_Click(object sender, EventArgs e)
         {
             FormGdiTest formGdiTest = new FormGdiTest();
@@ -396,25 +223,9 @@ namespace Mini
             formGLTest.Show();
             formGLTest.WindowState = FormWindowState.Maximized;
         }
-        private void button7_Click(object sender, EventArgs e)
-        {
-
-            //var installFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
-            //List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = 
-            //    PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadPreviewFontData(installFontProvider.GetInstalledFontIter());
 
 
-            //System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            //PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);
 
-        }
-
-        private void cmdTestNativeLib_Click(object sender, EventArgs e)
-        {
-            //#if DEBUG
-            //            PixelFarm.Drawing.Text.dbugTestMyFtLib.Test1();
-            //#endif
-        }
 
         private void cmdSignedDistance_Click(object sender, EventArgs e)
         {
@@ -445,98 +256,13 @@ namespace Mini
             double lowerEq = Math.Sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1)));
             return upperEq / lowerEq;
         }
- 
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            //read a lion file
-            //and create base64
-            //string lionSvg = System.IO.File.ReadAllText("d:\\WImageTest\\lion.svg");
-            //string base64 = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(lionSvg.ToCharArray()));
-
-            ////--------------------------
-            ////save original lion to svg
-
-            //StringBuilder stbuilder = new StringBuilder();
-            //stbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-            //stbuilder.Append("<svg id=\"svg2\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 900 900\" version=\"1.1\">");
-            //int j = pathIndexList.Length;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    int pathIndex = pathIndexList[i];
-            //    if (i > 0 && pathIndex == 0)
-            //        break;
-            //    VertexStoreSnap snap = new VertexStoreSnap(_lionVxs, pathIndex);
-            //    //read content from the snap iter
-            //    VertexSnapIter snapIter = snap.GetVertexSnapIter();
-
-            //    Color c = colors[i];
-
-            //    stbuilder.Append("<g fill=\"" + ColorToHex(c) + "\">");
-
-
-            //    StringBuilder pathdef = new StringBuilder();
-
-            //    double x, y;
-            //    VertexCmd cmd;
-            //    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-            //    {
-            //        switch (cmd)
-            //        {
-            //            case VertexCmd.LineTo:
-            //                pathdef.Append("L");
-            //                pathdef.Append(((float)x).ToString());
-            //                pathdef.Append(",");
-            //                pathdef.Append(((float)y).ToString());
-            //                pathdef.Append(" ");
-
-            //                break;
-            //            case VertexCmd.MoveTo:
-            //                pathdef.Append("M");
-            //                pathdef.Append(((float)x).ToString());
-            //                pathdef.Append(",");
-            //                pathdef.Append(((float)y).ToString());
-            //                pathdef.Append(" ");
-            //                break;
-            //            case VertexCmd.Close:
-            //                pathdef.Append("z");
-            //                break;
-            //            case VertexCmd.CloseAndEndFigure:
-            //                pathdef.Append("z");
-            //                break;
-            //            case VertexCmd.EndFigure:
-            //                pathdef.Append("z");
-            //                break;
-            //            default:
-            //                break;
-
-            //        }
-            //    }
-            //    stbuilder.Append("<path d=\"" + pathdef.ToString() + "\"/>");
-
-
-            //    stbuilder.Append("</g>");
-
-
-            //}
-            //stbuilder.Append("</svg>");
-
-            //////since lion is bottom-up
-            //////we invert it
-            ////Transform.Affine aff = Transform.Affine.NewMatix(
-            ////    new Transform.AffinePlan(Transform.AffineMatrixCommand.Scale, 1, -1));
-            ////VertexStore newvxs = new VertexStore();
-            ////_lionVxs = aff.TransformToVxs(_lionVxs, newvxs);
-
-            //System.IO.File.WriteAllText("d:\\WImageTest\\lion.svg", stbuilder.ToString());
-        }
 
         private void cmdFreeTransform_Click(object sender, EventArgs e)
         {
 
             PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
             ActualBitmap img = LoadImage("Samples\\lion1.png");
-             
+
 
             freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
             freeTx.SetFourCorners(
