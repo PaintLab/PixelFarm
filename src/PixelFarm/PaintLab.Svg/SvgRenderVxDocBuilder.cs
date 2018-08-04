@@ -459,7 +459,7 @@ namespace PaintLab.Svg
                                 p.FillColor = textSpec.FillColor;
                             }
 
-                      
+
 
                             if (!textSpec.FontSize.IsEmpty && textSpec.FontFace != null)
                             {
@@ -697,8 +697,8 @@ namespace PaintLab.Svg
 
                 paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
-                    evaluated = true;//once
-                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), false, ref rectTotal);
+                    evaluated = true;//once 
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
                 };
 
                 _renderE.Walk(paintArgs);
