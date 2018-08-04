@@ -212,5 +212,3 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 }
-
-//#endif
