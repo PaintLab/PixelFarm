@@ -235,11 +235,7 @@ namespace LayoutFarm.Svg
             set;
         }
     }
-    public class SvgStyleSpec : SvgVisualSpec
-    {
-        public string TextContent { get; set; }
-
-    }
+    
     public class SvgTextSpec : SvgVisualSpec
     {
         public string FontFace { get; set; }

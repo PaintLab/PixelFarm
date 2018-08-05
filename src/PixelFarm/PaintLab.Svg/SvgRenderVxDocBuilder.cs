@@ -737,14 +737,23 @@ namespace PaintLab.Svg
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
         CurveFlattener _curveFlatter = new CurveFlattener();
 
+
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
 
+        float _containerWidth = 500;//default?
+        float _containerHeight = 500;//default?
+        float _emHeight = 17;//default
+        public SvgRenderVxDocBuilder()
+        {
+
+        }
         public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             SvgRenderElement rootSvgElem = new SvgRenderElement(WellknownSvgElementName.RootSvg, null);
+
             rootElem.SetVisualElement(rootSvgElem);
             int childCount = rootElem.ChildCount;
 
@@ -761,6 +770,11 @@ namespace PaintLab.Svg
             return new VgRenderVx(CreateSvgRenderElement(svgdoc));
         }
 
+        public void SetContainerSize(float width, float height)
+        {
+            _containerWidth = width;
+            _containerHeight = height;
+        }
 
         SvgRenderElement EvalOtherElem(SvgRenderElement parentNode, SvgElement elem)
         {
@@ -925,7 +939,7 @@ namespace PaintLab.Svg
 
 
             VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
 
             double x = ConvertToPx(ellipseSpec.X, ref a);
             double y = ConvertToPx(ellipseSpec.Y, ref a);
@@ -954,7 +968,7 @@ namespace PaintLab.Svg
 
             VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
 
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
             rectTool.SetRect(
                 ConvertToPx(imgspec.X, ref a),
                 ConvertToPx(imgspec.Y, ref a) + ConvertToPx(imgspec.Height, ref a),
@@ -1039,7 +1053,7 @@ namespace PaintLab.Svg
 
 
             VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
             double x = ConvertToPx(ellipseSpec.X, ref a);
             double y = ConvertToPx(ellipseSpec.Y, ref a);
             double r = ConvertToPx(ellipseSpec.Radius, ref a);
@@ -1058,19 +1072,7 @@ namespace PaintLab.Svg
         }
 
 
-        LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1
-
-        void EvalStyleElement(SvgRenderElement parentNode, SvgElement elem)
-        {
-            //parse css content of the style element
-            SvgStyleSpec styleSpec = elem._visualSpec as SvgStyleSpec;
-            //parse content of the style elem
-
-            _activeSheet1 = new LayoutFarm.WebDom.CssActiveSheet();
-            LayoutFarm.WebDom.Parser.CssParserHelper.ParseStyleSheet(_activeSheet1, styleSpec.TextContent);
-
-        }
-
+     
         SvgRenderElement EvalTextElem(SvgRenderElement parentNode, SvgElement elem)
         {
             //text render element 
@@ -1123,7 +1125,7 @@ namespace PaintLab.Svg
                 }
             }
 
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
             textspec.ActualX = ConvertToPx(textspec.X, ref a);
             textspec.ActualY = ConvertToPx(textspec.Y, ref a);
 
@@ -1146,7 +1148,7 @@ namespace PaintLab.Svg
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
                 VectorToolBox.GetFreeRoundRectTool(out RoundedRect roundRect);
-                ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                 roundRect.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
                     ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
@@ -1165,7 +1167,7 @@ namespace PaintLab.Svg
             else
             {
                 VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
-                ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
+                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                 rectTool.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
                     ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
