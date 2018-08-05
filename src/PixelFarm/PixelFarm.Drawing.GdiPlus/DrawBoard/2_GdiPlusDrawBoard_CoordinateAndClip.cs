@@ -99,6 +99,12 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
+#if DEBUG
+                if(right -left == 863)
+                {
+
+                }
+#endif
                 return right - left;
             }
         }
