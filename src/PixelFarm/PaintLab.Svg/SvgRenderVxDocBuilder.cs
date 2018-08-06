@@ -852,23 +852,23 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Text:
                     return CreateTextElem(parentNode, (SvgTextSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Svg:
-                    renderE = new SvgRenderElement(WellknownSvgElementName.Svg, null);
+                    renderE = new SvgRenderElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Rect:
-                    renderE = CreateRect(parentNode, (SvgRectSpec)elem.ElemSpec); 
+                    renderE = CreateRect(parentNode, (SvgRectSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Image:
                     renderE = CreateImage(parentNode, (SvgImageSpec)elem.ElemSpec);
-                    
+
                     break;
                 case WellknownSvgElementName.Polyline:
-                    renderE = CreatePolyline(parentNode, (SvgPolylineSpec)elem.ElemSpec); 
+                    renderE = CreatePolyline(parentNode, (SvgPolylineSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Polygon:
-                    renderE = CreatePolygon(parentNode, (SvgPolygonSpec)elem.ElemSpec); 
+                    renderE = CreatePolygon(parentNode, (SvgPolygonSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Ellipse:
-                    renderE = CreateEllipse(parentNode, (SvgEllipseSpec)elem.ElemSpec); 
+                    renderE = CreateEllipse(parentNode, (SvgEllipseSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Circle:
                     renderE = CreateCircle(parentNode, (SvgCircleSpec)elem.ElemSpec);
