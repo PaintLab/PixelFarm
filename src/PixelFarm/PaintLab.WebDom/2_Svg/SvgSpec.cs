@@ -55,7 +55,7 @@ namespace LayoutFarm.Svg
             }
         }
 
-   
+
         public string Class { get; set; }
 
         public SvgAttributeLink ClipPathLink { get; set; }
@@ -65,6 +65,7 @@ namespace LayoutFarm.Svg
     public class SvgStyleSpec : SvgElemSpec
     {
         public string RawTextContent { get; set; }
+        public LayoutFarm.WebDom.CssActiveSheet CssSheet { get; set; }        
     }
 
     public enum SvgAttributeLinkKind
@@ -256,7 +257,7 @@ namespace LayoutFarm.Svg
         public float ActualX { get; set; }
         public float ActualY { get; set; }
     }
-   
+
     public class SvgLineSpec : SvgVisualSpec
     {
         public CssLength X1
