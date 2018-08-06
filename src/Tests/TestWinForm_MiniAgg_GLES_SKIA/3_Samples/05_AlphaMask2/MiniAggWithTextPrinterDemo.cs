@@ -39,7 +39,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         bool _useFontAtlas;
 
         [DemoConfig]
-        public bool UseFontAtlasOrVxs
+        public bool UseFontAtlas
         {
             get { return _useFontAtlas; }
             set
@@ -49,7 +49,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                     (TextPrinterBase)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
                 this.NeedRedraw = true;
-
             }
         }
 

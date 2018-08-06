@@ -154,7 +154,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //ready
             if (_vtx2dList.Count < 2 + (m_closed ? 1 : 0))
             {
-
                 return;
             }
 
@@ -235,7 +234,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AppendVertices(output, m_out_vertices);
             }
 
-            //do cap 2 => turn back
+            //draw end line
             {
                 if (!m_closed)
                 {
@@ -400,5 +399,5 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
 
         }
-    } 
+    }
 }
