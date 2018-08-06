@@ -4,8 +4,8 @@
 
 
 using System;
+using LayoutFarm.Svg;
 using PaintLab.Svg;
-
 namespace PixelFarm.CpuBlit
 {
     public class SvgRenderVxLoader
@@ -18,7 +18,7 @@ namespace PixelFarm.CpuBlit
         {
 
             //string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
-            PaintLab.Svg.SvgDocBuilder docBuilder = new PaintLab.Svg.SvgDocBuilder();
+            SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
             SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
 
