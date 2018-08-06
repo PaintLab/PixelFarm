@@ -66,16 +66,19 @@ namespace LayoutFarm.Svg.Pathing
             //List<SvgPathSeg> pathSegments = new List<SvgPathSeg>();
 
             int j = pathDataBuffer.Length;
-      
+
             for (int i = 0; i < j;)
             {
                 //lex and parse
-                char c = pathDataBuffer[i]; 
+                char c = pathDataBuffer[i];
                 //init state
                 switch (c)
                 {
                     default:
                         {
+#if DEBUG
+                            throw new NotSupportedException();
+#endif
                         }
                         break;
                     case '\r':
