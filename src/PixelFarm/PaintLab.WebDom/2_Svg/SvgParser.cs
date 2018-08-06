@@ -20,8 +20,6 @@
 using System;
 using System.Collections.Generic;
 
-using LayoutFarm.HtmlBoxes; //temp 
-using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
 using LayoutFarm.WebLexer;
 
@@ -332,7 +330,7 @@ namespace LayoutFarm.Svg
     }
 
 
-   
+
 
     public class SvgParser : XmlParserBase
     {
