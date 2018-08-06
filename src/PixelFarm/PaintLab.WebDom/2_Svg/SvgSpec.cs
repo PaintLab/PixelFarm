@@ -7,8 +7,13 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Svg
 {
 
+    public abstract class SvgElemSpec
+    {
+        //TODO: review here
+        public string Id { get; set; }
+    }
 
-    public class SvgVisualSpec
+    public class SvgVisualSpec : SvgElemSpec
     {
         Color fillColor = Color.Black;
         Color strokeColor = Color.Transparent;
@@ -50,16 +55,19 @@ namespace LayoutFarm.Svg
             }
         }
 
-        //TODO: review here
-        public string Id { get; set; }
+
         public string Class { get; set; }
 
         public SvgAttributeLink ClipPathLink { get; set; }
-
         public object ResolvedClipPath { get; set; }
-
-
     }
+
+    public class SvgStyleSpec : SvgElemSpec
+    {
+        public string RawTextContent { get; set; }
+        public LayoutFarm.WebDom.CssActiveSheet CssSheet { get; set; }        
+    }
+
     public enum SvgAttributeLinkKind
     {
         Id,
@@ -235,11 +243,7 @@ namespace LayoutFarm.Svg
             set;
         }
     }
-    public class SvgStyleSpec : SvgVisualSpec
-    {
-        public string TextContent { get; set; }
 
-    }
     public class SvgTextSpec : SvgVisualSpec
     {
         public string FontFace { get; set; }

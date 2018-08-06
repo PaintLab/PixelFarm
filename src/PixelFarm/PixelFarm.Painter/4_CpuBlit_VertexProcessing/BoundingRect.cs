@@ -177,11 +177,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double y_d = 0;
             int x = 0;
             int y = 0;
-            bool first = true;
-            x1 = 1;
-            y1 = 1;
-            x2 = 0;
-            y2 = 0;
+
+            x1 = int.MaxValue;
+            y1 = int.MaxValue;
+            x2 = int.MinValue;
+            y2 = int.MinValue;
 
             VertexSnapIter vsnapIter = vs.GetVertexSnapIter();
             VertexCmd PathAndFlags;
@@ -190,22 +190,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 x = (int)x_d;
                 y = (int)y_d;
                 if (VertexHelper.IsVertextCommand(PathAndFlags))
-                {
-                    if (first)
-                    {
-                        x1 = x;
-                        y1 = y;
-                        x2 = x;
-                        y2 = y;
-                        first = false;
-                    }
-                    else
-                    {
-                        if (x < x1) x1 = x;
-                        if (y < y1) y1 = y;
-                        if (x > x2) x2 = x;
-                        if (y > y2) y2 = y;
-                    }
+                { 
+                    if (x < x1) x1 = x;
+                    if (y < y1) y1 = y;
+                    if (x > x2) x2 = x;
+                    if (y > y2) y2 = y; 
                 }
             }
             return x1 <= x2 && y1 <= y2;
