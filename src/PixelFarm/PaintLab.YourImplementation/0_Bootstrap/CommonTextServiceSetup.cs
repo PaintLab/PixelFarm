@@ -57,6 +57,10 @@ namespace YourImplementation
 
             s_isInit = true;
             s_intalledTypefaces = new InstalledTypefaceCollection();
+            s_intalledTypefaces.SetFontNameDuplicatedHandler((existing, newone) =>
+            {
+                return FontNameDuplicatedDecision.Skip;
+            });
             s_intalledTypefaces.LoadSystemFonts();
             s_intalledTypefaces.SetFontNotFoundHandler((collection, fontName, subFam) =>
             {
@@ -66,7 +70,7 @@ namespace YourImplementation
                 {
                     default:
                         {
-                           
+
                         }
                         break;
                     case "SANS-SERIF":
