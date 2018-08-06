@@ -20,10 +20,13 @@ namespace PixelFarm.CpuBlit
             //string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             PaintLab.Svg.SvgDocBuilder docBuilder = new PaintLab.Svg.SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
+            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+
             //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
             svg.ReadSvgFile(filename);
-            return docBuilder.ResultDocument.CreateRenderVx();             
+            return builder.CreateRenderVx(docBuilder.ResultDocument);
+
         }
 
     }

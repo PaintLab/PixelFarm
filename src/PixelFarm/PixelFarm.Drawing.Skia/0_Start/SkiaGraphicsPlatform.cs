@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing.Skia
         internal static SkiaSharp.SKTypeface GetInstalledFont(string typefaceName)
         {
 
-            InstalledTypeface installedFont = s_installedTypefaceProvider.GetInstalledTypeface(typefaceName, Typography.FontManagement.TypefaceStyle.Normal);
+            InstalledTypeface installedFont = s_installedTypefaceProvider.GetInstalledTypeface(typefaceName, Typography.FontManagement.TypefaceStyle.Regular);
             if (installedFont == null)
             {
                 return null;

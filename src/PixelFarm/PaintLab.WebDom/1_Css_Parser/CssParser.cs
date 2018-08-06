@@ -375,8 +375,8 @@ namespace LayoutFarm.WebDom.Parser
                                     //block name
 
                                     //create css property 
-                                    string cssPropName = new string(this.textBuffer, start, len);
-                                    var wellknownName = UserMapUtil.GetWellKnownPropName(cssPropName);
+                                    string cssPropName = new string(this.textBuffer, start, len).ToLower();
+                                    LayoutFarm.WebDom.WellknownCssPropertyName wellknownName = UserMapUtil.GetWellKnownPropName(cssPropName);
                                     if (wellknownName == WellknownCssPropertyName.Unknown)
                                     {
                                         _currentRuleSet.AddCssCodeProperty(this._currentProperty =

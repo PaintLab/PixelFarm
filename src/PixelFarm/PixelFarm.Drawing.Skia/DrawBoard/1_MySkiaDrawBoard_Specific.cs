@@ -47,6 +47,10 @@ namespace PixelFarm.Drawing.Skia
 
             this.StrokeWidth = 1;
         }
+        public override Painter GetPainter()
+        {
+            throw new NotSupportedException();
+        }
         public override void Dispose()
         {
 

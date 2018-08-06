@@ -23,7 +23,10 @@ namespace PixelFarm.Drawing.WinGdi
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             
         }
-      
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
 
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {

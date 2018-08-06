@@ -30,7 +30,7 @@ namespace OpenTkEssTest
 
             InstalledTypefaceCollection collection = new InstalledTypefaceCollection();
             collection.LoadSystemFonts();
-            InstalledTypeface tahomaFont = collection.GetInstalledTypeface("tahoma", TypefaceStyle.Normal);
+            InstalledTypeface tahomaFont = collection.GetInstalledTypeface("tahoma", TypefaceStyle.Regular);
             FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath);
             ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
             FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');

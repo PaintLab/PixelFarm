@@ -24,7 +24,7 @@ using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
 
-
+    
     /// <summary>
     /// this class provides drawing method on specific drawboard,
     /// (0,0) is on left-lower corner for every implementaion
@@ -48,6 +48,7 @@ namespace PixelFarm.Drawing
         public abstract int Height { get; }
         public abstract RectInt ClipBox { get; set; }
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
+        public abstract void SetClipRgn(VertexStore vxs);
         //
         public abstract double StrokeWidth { get; set; }
         public abstract SmoothingMode SmoothingMode { get; set; }
@@ -113,12 +114,12 @@ namespace PixelFarm.Drawing
         //user's object 
         internal Stack<object> _userObjectStack = new Stack<object>();
         internal Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
-         
+
     }
 
     namespace PainterExtensions
     {
-         
+
 
         public static class PainterExt
         {
