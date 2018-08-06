@@ -32,9 +32,11 @@ namespace PixelFarm.Drawing.Skia
             _stroke = new SKPaint();
             _stroke.IsStroke = true;
             _width = w;
-            _height = h;
-
-             
+            _height = h; 
+        }
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            throw new NotImplementedException();
         }
         public override void Render(RenderVx renderVx)
         {

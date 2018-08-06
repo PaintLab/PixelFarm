@@ -41,6 +41,10 @@ namespace PixelFarm.Drawing.GLES2
             this.StrokeWidth = 1;
         }
 
+        public override Painter GetPainter()
+        {
+            return painter1;
+        }
         public override void Dispose()
         {
 

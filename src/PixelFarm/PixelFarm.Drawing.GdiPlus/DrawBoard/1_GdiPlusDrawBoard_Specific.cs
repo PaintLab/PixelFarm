@@ -14,7 +14,7 @@
 // "The Art of War"
 
 using System;
- 
+
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.WinGdi
         int pageFlags;
         bool isDisposed;
 
-        GdiPlusRenderSurface _gdigsx; 
+        GdiPlusRenderSurface _gdigsx;
         static GdiPlusDrawBoard()
         {
             DrawBoardCreator.RegisterCreator(1, (w, h) => new GdiPlusDrawBoard(0, 0, w, h));
@@ -60,6 +60,13 @@ namespace PixelFarm.Drawing.WinGdi
         }
 #endif
 
+        public override Painter GetPainter()
+        {
+            //create agg painter
+            //
+            return null;
+
+        }
         public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
         {
 
@@ -91,7 +98,7 @@ namespace PixelFarm.Drawing.WinGdi
             //}
         }
 
-      
+
         public override void CloseCanvas()
         {
             if (isDisposed)

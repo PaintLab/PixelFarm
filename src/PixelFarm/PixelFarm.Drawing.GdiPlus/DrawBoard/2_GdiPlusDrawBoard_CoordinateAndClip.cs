@@ -99,6 +99,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
+ 
                 return right - left;
             }
         }

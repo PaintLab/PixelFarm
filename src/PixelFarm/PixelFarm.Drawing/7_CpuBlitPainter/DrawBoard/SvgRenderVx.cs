@@ -9,19 +9,6 @@ using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.CpuBlit
 {
-    //very simple svg parser  
-    public enum VgCommandName
-    {
-        BeginGroup,
-        EndGroup,
-        Path,
-        ClipPath,
-        FillColor,
-        StrokeColor,
-        StrokeWidth,
-        AffineTransform,
-        Image,
-    }
 
     public class VxsRenderVx : RenderVx
     {
@@ -42,9 +29,6 @@ namespace PixelFarm.CpuBlit
         }
 
     }
-
-
-
 
     static class SimpleRectClipEvaluator
     {
@@ -178,41 +162,9 @@ namespace PixelFarm.CpuBlit
         }
     }
 
-    enum ClipingTechnique
-    {
-        None,
-        ClipMask,
-        ClipSimpleRect
-    }
 
 
-
-    static class TempVgRenderStateStore
-    {
-
-        [System.ThreadStatic]
-        static Stack<Stack<TempVgRenderState>> s_tempVgRenderStates = new Stack<Stack<TempVgRenderState>>();
-        public static void GetFreeTempVgRenderState(out Stack<TempVgRenderState> tmpVgStateStack)
-        {
-            if (s_tempVgRenderStates.Count > 0)
-            {
-                tmpVgStateStack = s_tempVgRenderStates.Pop();
-            }
-            else
-            {
-                tmpVgStateStack = new Stack<TempVgRenderState>();
-            }
-        }
-        public static void ReleaseTempVgRenderState(ref Stack<TempVgRenderState> tmpVgStateStack)
-        {
-            tmpVgStateStack.Clear();
-            s_tempVgRenderStates.Push(tmpVgStateStack);
-            tmpVgStateStack = null;
-        }
-    }
-
-
-    static class TempStrokeTool
+    public static class TempStrokeTool
     {
 
         [System.ThreadStatic]
@@ -237,236 +189,7 @@ namespace PixelFarm.CpuBlit
     }
 
 
-    struct TempVgRenderState
-    {
-        public float strokeWidth;
-        public Color strokeColor;
-        public Color fillColor;
-        public Affine affineTx;
-        public ClipingTechnique clippingTech;
-    }
 
-
-    public class VgRenderVx : RenderVx
-    {
-
-        Image _backimg;
-        VgCmd[] _cmds;
-        RectD _boundRect;
-        bool _needBoundUpdate;
-        public VgRenderVx(VgCmd[] svgVxList)
-        {
-            //this is original version of the element 
-            this._cmds = svgVxList;
-            _needBoundUpdate = true;
-        }
-        public VgRenderVx Clone()
-        {
-            //make a copy of cmd stream
-            int j = _cmds.Length;
-            var copy = new VgCmd[j];
-            for (int i = 0; i < j; ++i)
-            {
-                copy[i] = _cmds[i].Clone();
-            }
-
-            return new VgRenderVx(copy);
-        }
-
-        public void InvalidateBounds()
-        {
-            _needBoundUpdate = true;
-            _boundRect = new RectD(this.X, this.Y, 2, 2);
-        }
-        public RectD GetBounds()
-        {
-            //find bound
-            //TODO: review here
-            if (_needBoundUpdate)
-            {
-                int partCount = _cmds.Length;
-
-                for (int i = 0; i < partCount; ++i)
-                {
-                    VgCmd vx = _cmds[i];
-                    if (vx.Name != VgCommandName.Path)
-                    {
-                        continue;
-                    }
-
-                    RectD rectTotal = new RectD();
-                    VertexStore innerVxs = ((VgCmdPath)vx).Vxs;
-                    BoundingRect.GetBoundingRect(new VertexStoreSnap(innerVxs), ref rectTotal);
-
-                    _boundRect.ExpandToInclude(rectTotal);
-                }
-
-                _needBoundUpdate = false;
-            }
-            return _boundRect;
-        }
-
-        public bool HasBitmapSnapshot { get; internal set; }
-
-        public Image BackingImage { get { return _backimg; } }
-        public bool DisableBackingImage { get; set; }
-
-        public void SetBitmapSnapshot(Image img)
-        {
-            this._backimg = img;
-            HasBitmapSnapshot = img != null;
-        }
-
-        public float X { get; set; }
-        public float Y { get; set; }
-
-
-
-
-
-
-        public VgCmd GetVgCmd(int index)
-        {
-            return _cmds[index];
-        }
-        public int VgCmdCount
-        {
-            get { return _cmds.Length; }
-        }
-        public VgCmd PrefixCommand { get; set; }
-    }
-
-
-    public class VgCmdClipPath : VgCmd
-    {
-        public List<VgCmd> _svgParts;
-        public VgCmdClipPath()
-            : base(VgCommandName.ClipPath)
-        {
-        }
-        public override VgCmd Clone()
-        {
-            VgCmdClipPath clipPath = new VgCmdClipPath();
-            clipPath._svgParts = new List<VgCmd>();
-            int j = _svgParts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                clipPath._svgParts[i] = _svgParts[i].Clone();
-            }
-            return clipPath;
-        }
-    }
-
-    public class VgCmdBeginGroup : VgCmd
-    {
-        public VgCmdBeginGroup() : base(VgCommandName.BeginGroup)
-        {
-        }
-        public override VgCmd Clone()
-        {
-            return new VgCmdBeginGroup();
-        }
-    }
-    public class VgCmdEndGroup : VgCmd
-    {
-        public VgCmdEndGroup() : base(VgCommandName.EndGroup)
-        {
-        }
-        public override VgCmd Clone()
-        {
-            return new VgCmdEndGroup();
-        }
-    }
-
-    public class VgCmdPath : VgCmd
-    {
-        public VgCmdPath() : base(VgCommandName.Path)
-        {
-        }
-        public VertexStore Vxs { get; private set; }
-        public void SetVxs(VertexStore vxs)
-        {
-            Vxs = vxs;
-        }
-        internal VertexStore StrokeVxs { get; set; } //transient obj
-        public override VgCmd Clone()
-        {
-            VgCmdPath vgPath = new VgCmdPath();
-            vgPath.Vxs = this.Vxs.CreateTrim();
-            return vgPath;
-        }
-    }
-    public class VgCmdImage : VgCmd
-    {
-        public VgCmdImage() : base(VgCommandName.Image)
-        {
-        }
-        public Image Image { get; set; }
-        public VertexStore Vxs { get; private set; }
-        public void SetVxsAsOriginal(VertexStore vxs)
-        {
-            Vxs = vxs;
-        }
-
-        public override VgCmd Clone()
-        {
-            VgCmdImage vgImg = new VgCmdImage();
-            vgImg.Image = this.Image;
-            vgImg.Vxs = this.Vxs.CreateTrim();
-            return vgImg;
-        }
-    }
-    //-------------------------------------------------
-    public class VgCmdFillColor : VgCmd
-    {
-        public VgCmdFillColor(Color color) : base(VgCommandName.FillColor) { Color = color; }
-        public Color Color { get; set; }
-        public override VgCmd Clone()
-        {
-            return new VgCmdFillColor(Color);
-        }
-    }
-    public class VgCmdStrokeColor : VgCmd
-    {
-        public VgCmdStrokeColor(Color color) : base(VgCommandName.StrokeColor) { Color = color; }
-        public Color Color { get; set; }
-        public override VgCmd Clone()
-        {
-            return new VgCmdStrokeColor(Color);
-        }
-    }
-    public class VgCmdStrokeWidth : VgCmd
-    {
-        public VgCmdStrokeWidth(float w) : base(VgCommandName.StrokeWidth) { Width = w; }
-        public float Width { get; set; }
-        public override VgCmd Clone()
-        {
-            return new VgCmdStrokeWidth(Width);
-        }
-    }
-    public class VgCmdAffineTransform : VgCmd
-    {
-        public VgCmdAffineTransform(Affine affine) : base(VgCommandName.AffineTransform)
-        {
-            TransformMatrix = affine;
-        }
-        public Affine TransformMatrix { get; private set; }
-
-        public override VgCmd Clone()
-        {
-            return new VgCmdAffineTransform(this.TransformMatrix.Clone());
-        }
-    }
-
-    public abstract class VgCmd
-    {
-        public VgCmd(VgCommandName cmdKind)
-        {
-            Name = cmdKind;
-        }
-        public VgCommandName Name { get; set; }
-        public abstract VgCmd Clone();
-    }
 
 
 }

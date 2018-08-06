@@ -5,6 +5,8 @@
 using System;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
+using PaintLab.Svg;
+
 namespace PixelFarm.CpuBlit
 {
 
@@ -83,6 +85,9 @@ namespace PixelFarm.CpuBlit
                 return result;
             }
         }
+
+        VgHitTestArgs _hitTestArgs = new VgHitTestArgs();
+
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
             RectD bounds = _spriteShape.Bounds;
@@ -97,7 +102,12 @@ namespace PixelFarm.CpuBlit
                 y -= _posY;
                 if (withSubPathTest)
                 {
-                    return _spriteShape.HitTestOnSubPart(x, y);
+                    _hitTestArgs.Clear();
+                    _hitTestArgs.X = x;
+                    _hitTestArgs.Y = y;
+                    _hitTestArgs.WithSubPartTest = withSubPathTest;
+                    _spriteShape.HitTestOnSubPart(_hitTestArgs);
+                    return _hitTestArgs.Result;
                 }
 
 
@@ -159,7 +169,7 @@ namespace PixelFarm.CpuBlit
 
                 //(2) or just transform when draw => not affect its org shape
                 VgRenderVx renderVx = _spriteShape.GetRenderVx();
-                renderVx.PrefixCommand = new VgCmdAffineTransform(transform);
+                //renderVx.PrefixCommand = new VgCmdAffineTransform(transform);
 
 
 
