@@ -64,19 +64,35 @@ namespace YourImplementation
                 //
                 switch (fontName.ToUpper())
                 {
+                    default:
+                        {
+                           
+                        }
+                        break;
+                    case "SANS-SERIF":
+                        {
+                            //temp fix
+                            InstalledTypeface ss = collection.GetInstalledTypeface("Microsoft Sans Serif", "REGULAR");
+                            if (ss != null)
+                            {
+                                return ss;
+                            }
+                        }
+                        break;
+                    case "SERIF":
+                        {
+                            //temp fix
+                            InstalledTypeface ss = collection.GetInstalledTypeface("Palatino linotype", "REGULAR");
+                            if (ss != null)
+                            {
+                                return ss;
+                            }
+                        }
+                        break;
                     case "TAHOMA":
                         {
                             switch (subFam)
                             {
-                                case "BOLD":
-                                    {
-                                        InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "GRAS");
-                                        if (anotherCandidate != null)
-                                        {
-                                            return anotherCandidate;
-                                        }
-                                    }
-                                    break;
                                 case "ITALIC":
                                     {
                                         InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, "NORMAL");
@@ -89,15 +105,16 @@ namespace YourImplementation
                             }
                         }
                         break;
-                    case "MONOSPACE": 
+                    case "MONOSPACE":
                         //use Courier New
-                        return collection.GetInstalledTypeface("Courier New", subFam); 
+                        return collection.GetInstalledTypeface("Courier New", subFam);
                     case "HELVETICA":
                         return collection.GetInstalledTypeface("Arial", subFam);
-                } 
+                }
                 return null;
             });
             //--------------------
+            InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);
 
             //1. Storage provider
             s_localFileStorageProvider = new LocalFileStorageProvider();

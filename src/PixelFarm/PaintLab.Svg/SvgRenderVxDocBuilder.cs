@@ -9,6 +9,7 @@ using LayoutFarm.Svg;
 using LayoutFarm.Svg.Pathing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+using LayoutFarm.WebDom;
 
 namespace PaintLab.Svg
 {
@@ -346,6 +347,38 @@ namespace PaintLab.Svg
             //}
             //***SKIP CLIPPING***
         }
+
+
+        //---------------------------
+        //TODO: review here again
+        //a COPY from Typography.OpenFont.Typeface =
+        const int pointsPerInch = 72;
+
+        /// <summary>
+        /// convert from point-unit value to pixel value
+        /// </summary>
+        /// <param name="pointSize"></param>
+        /// <param name="resolution"></param>
+        /// <returns></returns>
+        static float ConvPointsToPixels(float pointSize, int resolution = 96)
+        {
+            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
+            //points = pixels * 72 / 96
+            //------------------------------------------------
+            //pixels = targetPointSize * 96 /72
+            //pixels = targetPointSize * resolution / pointPerInch
+            return pointSize * resolution / pointsPerInch;
+        }
+        static float ConvPixelsToPoints(float pixelSize, int resolution = 96)
+        {
+            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
+            //points = pixels * 72 / 96
+            //------------------------------------------------
+            //pixels = targetPointSize * 96 /72
+            //pixels = targetPointSize * resolution / pointPerInch
+            return pixelSize * pointsPerInch / resolution;
+        }
+        //---------------------------
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
             //save
@@ -354,10 +387,13 @@ namespace PaintLab.Svg
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
 
+            RequestFont currentFont = p.CurrentFont;
 
             Affine prevTx = vgPainterArgs._currentTx; //backup
             Affine currentTx = vgPainterArgs._currentTx;
             bool hasClip = false;
+            bool newFontReq = false;
+
 
             if (_visualSpec != null)
             {
@@ -449,7 +485,58 @@ namespace PaintLab.Svg
                         SvgTextSpec textSpec = this._visualSpec as SvgTextSpec;
                         if (textSpec != null)
                         {
+                            Color prevColor = p.FillColor;
+                            if (textSpec.HasFillColor)
+                            {
+                                p.FillColor = textSpec.FillColor;
+                            }
+                            if (!textSpec.FontSize.IsEmpty && textSpec.FontFace != null)
+                            {
+                                //TODO: review this with CssValue Parser again
+                                //check if input text size is in point or pixel
+                                if (textSpec.FontSize.UnitOrNames == LayoutFarm.Css.CssUnitOrNames.Points)
+                                {
+                                    p.CurrentFont = new RequestFont(
+                                      textSpec.FontFace,
+                                      textSpec.FontSize.Number);
+                                }
+                                else
+                                {
+                                    //assum pixel unit , so we convert it to point
+                                    p.CurrentFont = new RequestFont(
+                                      textSpec.FontFace,
+                                      ConvPixelsToPoints(textSpec.FontSize.Number));
+                                }
+                                newFontReq = true;
+                            }
+                            else if (textSpec.FontFace != null)
+                            {
+                                if (textSpec.FontSize.UnitOrNames == LayoutFarm.Css.CssUnitOrNames.Points)
+                                {
+                                    p.CurrentFont = new RequestFont(
+                                      textSpec.FontFace,
+                                      textSpec.FontSize.Number);
+                                }
+                                else
+                                {
+                                    //assum pixel unit , so we convert it to point
+                                    p.CurrentFont = new RequestFont(
+                                      textSpec.FontFace,
+                                      ConvPixelsToPoints(textSpec.FontSize.Number));
+                                }
+                                newFontReq = true;
+                            }
+                            else if (!textSpec.FontSize.IsEmpty)
+                            {
+                                p.CurrentFont = new RequestFont(
+                                     currentFont.Name,
+                                     textSpec.FontSize.Number); //TODO: number, size in pts vs in px
+                                newFontReq = true;
+                            }
+
                             p.DrawString(textSpec.TextContent, textSpec.ActualX, textSpec.ActualY);
+                            p.FillColor = prevColor;//restore back
+                                                    //change font or not
                         }
                     }
                     break;
@@ -566,7 +653,13 @@ namespace PaintLab.Svg
             {
                 p.SetClipRgn(null);
             }
+            if (newFontReq)
+            {
+                p.CurrentFont = currentFont;
+            }
         }
+
+
         public void AddChildElement(SvgRenderElementBase renderE)
         {
             if (renderE == null) return;
@@ -657,8 +750,8 @@ namespace PaintLab.Svg
 
                 paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
-                    evaluated = true;//once
-                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), false, ref rectTotal);
+                    evaluated = true;//once 
+                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
                 };
 
                 _renderE.Walk(paintArgs);
@@ -692,25 +785,39 @@ namespace PaintLab.Svg
     {
         SvgDocument _svgdoc;
         List<SvgElement> _defsList = new List<SvgElement>();
+        List<SvgElement> _styleList = new List<SvgElement>();
+
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
         CurveFlattener _curveFlatter = new CurveFlattener();
 
+
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
+
+        float _containerWidth = 500;//default?
+        float _containerHeight = 500;//default?
+        float _emHeight = 17;//default
+        LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
+
+        public SvgRenderVxDocBuilder()
+        {
+
+        }
 
         public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc)
         {
             _svgdoc = svgdoc;
+            _activeSheet1 = svgdoc.CssActiveSheet;
+
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             SvgRenderElement rootSvgElem = new SvgRenderElement(WellknownSvgElementName.RootSvg, null);
-            rootElem.SetVisualElement(rootSvgElem);
             int childCount = rootElem.ChildCount;
 
             for (int i = 0; i < childCount; ++i)
             {
                 //translate SvgElement to  
                 //command stream?
-                EvalOtherElem(rootSvgElem, rootElem.GetChild(i));
+                CreateSvgRenderElement(rootSvgElem, rootElem.GetChild(i));
             }
             return rootSvgElem;
         }
@@ -719,85 +826,80 @@ namespace PaintLab.Svg
             return new VgRenderVx(CreateSvgRenderElement(svgdoc));
         }
 
+        public void SetContainerSize(float width, float height)
+        {
+            _containerWidth = width;
+            _containerHeight = height;
+        }
 
-        SvgRenderElement EvalOtherElem(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreateSvgRenderElement(SvgRenderElement parentNode, SvgElement elem)
         {
             SvgRenderElement renderE = null;
             switch (elem.WellknowElemName)
             {
                 default:
                     throw new KeyNotFoundException();
-
                 //-----------------
                 case WellknownSvgElementName.Defs:
                     _defsList.Add(elem);
                     return null;
-
+                case WellknownSvgElementName.Style:
+                    _styleList.Add(elem);
+                    return null;
                 //-----------------
                 case WellknownSvgElementName.Unknown:
                     return null;
                 case WellknownSvgElementName.Text:
-                    return EvalTextElem(parentNode, elem);
+                    return CreateTextElem(parentNode, (SvgTextSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Svg:
                     renderE = new SvgRenderElement(WellknownSvgElementName.Svg, null);
                     break;
-
                 case WellknownSvgElementName.Rect:
-                    renderE = EvalRect(parentNode, elem);
+                    renderE = CreateRect(parentNode, (SvgRectSpec)elem.ElemSpec); 
                     break;
                 case WellknownSvgElementName.Image:
-                    renderE = EvalImage(parentNode, elem);
+                    renderE = CreateImage(parentNode, (SvgImageSpec)elem.ElemSpec);
+                    
                     break;
                 case WellknownSvgElementName.Polyline:
-                    renderE = EvalPolyline(parentNode, elem);
+                    renderE = CreatePolyline(parentNode, (SvgPolylineSpec)elem.ElemSpec); 
                     break;
                 case WellknownSvgElementName.Polygon:
-                    renderE = EvalPolygon(parentNode, elem);
+                    renderE = CreatePolygon(parentNode, (SvgPolygonSpec)elem.ElemSpec); 
                     break;
                 case WellknownSvgElementName.Ellipse:
-                    renderE = EvalEllipse(parentNode, elem);
+                    renderE = CreateEllipse(parentNode, (SvgEllipseSpec)elem.ElemSpec); 
                     break;
                 case WellknownSvgElementName.Circle:
-                    renderE = EvalCircle(parentNode, elem);
+                    renderE = CreateCircle(parentNode, (SvgCircleSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Path:
-                    renderE = EvalPath(parentNode, elem);
+                    renderE = CreatePath(parentNode, (SvgPathSpec)elem.ElemSpec);
                     return renderE;
                 case WellknownSvgElementName.ClipPath:
-                    renderE = EvalClipPath(parentNode, elem);
-                    return renderE;
+                    renderE = CreateClipPath(parentNode, (SvgVisualSpec)elem.ElemSpec);
+                    break;
                 case WellknownSvgElementName.Group:
-                    renderE = EvalGroup(parentNode, elem);
-                    return renderE;
+                    renderE = CreateGroup(parentNode, (SvgVisualSpec)elem.ElemSpec);
+                    break;
             }
 
+            renderE.SetController(elem);
             parentNode.AddChildElement(renderE);
             int childCount = elem.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
-                EvalOtherElem(renderE, elem.GetChild(i));
+                CreateSvgRenderElement(renderE, elem.GetChild(i));
             }
 
             return renderE;
-
         }
-        SvgRenderElement EvalClipPath(SvgRenderElement parentNode, SvgElement elem)
-        {
-            SvgRenderElement clipPath = new SvgRenderElement(WellknownSvgElementName.ClipPath, elem._visualSpec);
-            int childCount = elem.ChildCount;
-            for (int i = 0; i < childCount; ++i)
-            {
-                SvgRenderElement path = EvalOtherElem(clipPath, elem.GetChild(i));
-#if DEBUG
-                if (!path.dbugHasParent)
-                {
-                    clipPath.AddChildElement(path);
-                }
-#endif
 
-            }
-            parentNode.AddChildElement(clipPath);
-            return clipPath;
+        SvgRenderElement CreateClipPath(SvgRenderElement parentNode, SvgVisualSpec visualSpec)
+        {
+            var renderE = new SvgRenderElement(WellknownSvgElementName.ClipPath, visualSpec);
+            AssignAttributes(visualSpec);
+            return renderE;
         }
         bool _buildDefs = false;
         void BuildDefinitionNodes()
@@ -824,8 +926,8 @@ namespace PaintLab.Svg
                     {
                         //clip path definition  
                         //make this as a clip path 
-                        SvgRenderElement renderE = EvalOtherElem(definitionRoot, child);
-                        _clipPathDic.Add(child._visualSpec.Id, renderE);
+                        SvgRenderElement renderE = CreateSvgRenderElement(definitionRoot, child);
+                        _clipPathDic.Add(child.ElemSpecId, renderE);
                     }
                 }
             }
@@ -833,24 +935,6 @@ namespace PaintLab.Svg
 
         void AssignAttributes(SvgVisualSpec spec)
         {
-            //if (spec.HasFillColor)
-            //{
-            //    cmds.Add(new VgCmdFillColor(spec.FillColor));
-            //}
-            //if (spec.HasStrokeColor)
-            //{
-            //    cmds.Add(new VgCmdStrokeColor(spec.StrokeColor));
-            //}
-            //if (spec.HasStrokeWidth)
-            //{
-            //    cmds.Add(new VgCmdStrokeWidth(spec.StrokeWidth.Number));
-            //}
-            //if (spec.Transform != null)
-            //{
-            //    //convert from svg transform to  
-            //    cmds.Add(new VgCmdAffineTransform(CreateAffine(spec.Transform)));
-            //}
-            //
 
             if (spec.ClipPathLink != null)
             {
@@ -863,11 +947,10 @@ namespace PaintLab.Svg
                 }
             }
         }
-        SvgRenderElement EvalPath(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreatePath(SvgRenderElement parentNode, SvgPathSpec pathSpec)
         {
+            SvgRenderElement path = new SvgRenderElement(WellknownSvgElementName.Path, pathSpec); //**
 
-            SvgRenderElement path = new SvgRenderElement(WellknownSvgElementName.Path, elem._visualSpec); //**
-            SvgPathSpec pathSpec = elem._visualSpec as SvgPathSpec;
             //d             
 
             AssignAttributes(pathSpec);
@@ -891,14 +974,12 @@ namespace PaintLab.Svg
                 this.emHeight = emHeight;
             }
         }
-        SvgRenderElement EvalEllipse(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreateEllipse(SvgRenderElement parentNode, SvgEllipseSpec ellipseSpec)
         {
-            SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, elem._visualSpec);
-            SvgEllipseSpec ellipseSpec = elem._visualSpec as SvgEllipseSpec;
 
-
+            SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, ellipseSpec);
             VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
 
             double x = ConvertToPx(ellipseSpec.X, ref a);
             double y = ConvertToPx(ellipseSpec.Y, ref a);
@@ -917,15 +998,12 @@ namespace PaintLab.Svg
 
             return ellipseRenderE;
         }
-        SvgRenderElement EvalImage(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreateImage(SvgRenderElement parentNode, SvgImageSpec imgspec)
         {
-            SvgRenderElement img = new SvgRenderElement(WellknownSvgElementName.Image, elem._visualSpec);
-            SvgImageSpec imgspec = elem._visualSpec as SvgImageSpec;
-
-
+            SvgRenderElement img = new SvgRenderElement(WellknownSvgElementName.Image, imgspec);
             VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
 
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
             rectTool.SetRect(
                 ConvertToPx(imgspec.X, ref a),
                 ConvertToPx(imgspec.Y, ref a) + ConvertToPx(imgspec.Height, ref a),
@@ -941,15 +1019,9 @@ namespace PaintLab.Svg
 
             return img;
         }
-        SvgRenderElement EvalPolygon(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreatePolygon(SvgRenderElement parentNode, SvgPolygonSpec polygonSpec)
         {
-            SvgRenderElement polygon = new SvgRenderElement(WellknownSvgElementName.Polygon, elem._visualSpec);
-
-            SvgPolygonSpec polygonSpec = elem._visualSpec as SvgPolygonSpec;
-
-
-
-
+            SvgRenderElement polygon = new SvgRenderElement(WellknownSvgElementName.Polygon, polygonSpec);
 
             PointF[] points = polygonSpec.Points;
             int j = points.Length;
@@ -976,12 +1048,9 @@ namespace PaintLab.Svg
             }
             return polygon;
         }
-        SvgRenderElement EvalPolyline(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreatePolyline(SvgRenderElement parentNode, SvgPolylineSpec polylineSpec)
         {
-            SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Polyline, elem._visualSpec);
-            SvgPolylineSpec polylineSpec = elem._visualSpec as SvgPolylineSpec;
-
-
+            SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Polyline, polylineSpec);
             PointF[] points = polylineSpec.Points;
             int j = points.Length;
             if (j > 1)
@@ -1002,18 +1071,15 @@ namespace PaintLab.Svg
             }
             return renderE;
         }
-        SvgRenderElement EvalCircle(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreateCircle(SvgRenderElement parentNode, SvgCircleSpec cirSpec)
         {
-            SvgRenderElement cir = new SvgRenderElement(WellknownSvgElementName.Circle, elem._visualSpec);
-            SvgCircleSpec ellipseSpec = elem._visualSpec as SvgCircleSpec;
 
-
-
+            SvgRenderElement cir = new SvgRenderElement(WellknownSvgElementName.Circle, cirSpec);
             VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
-            double x = ConvertToPx(ellipseSpec.X, ref a);
-            double y = ConvertToPx(ellipseSpec.Y, ref a);
-            double r = ConvertToPx(ellipseSpec.Radius, ref a);
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
+            double x = ConvertToPx(cirSpec.X, ref a);
+            double y = ConvertToPx(cirSpec.Y, ref a);
+            double r = ConvertToPx(cirSpec.Radius, ref a);
 
             ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
             using (VxsContext.Temp(out var v1))
@@ -1023,24 +1089,60 @@ namespace PaintLab.Svg
 
             VectorToolBox.ReleaseEllipseTool(ref ellipse);
 
-            AssignAttributes(ellipseSpec);
+            AssignAttributes(cirSpec);
 
             return cir;
         }
 
-        SvgRenderElement EvalTextElem(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreateTextElem(SvgRenderElement parentNode, SvgTextSpec textspec)
         {
-            //text render element 
-            SvgRenderElement textRenderElem = new SvgRenderElement(WellknownSvgElementName.Text, elem._visualSpec);
-            SvgTextSpec textspec = elem._visualSpec as SvgTextSpec;
-            //if (textspec.ExternalTextNode != null)
-            //{
-            //    //in this case this is CssTextRun
-            //}
-            //else
-            //{
-            //}
-            ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+            //text render element  
+            SvgRenderElement textRenderElem = new SvgRenderElement(WellknownSvgElementName.Text, textspec);
+            //some att
+
+            if (textspec.Class != null && _activeSheet1 != null)
+            {
+                //resolve style definition
+                LayoutFarm.WebDom.CssRuleSetGroup ruleSetGroup = _activeSheet1.GetRuleSetForClassName(textspec.Class);
+                if (ruleSetGroup != null)
+                {
+                    //assign
+                    foreach (LayoutFarm.WebDom.CssPropertyDeclaration propDecl in ruleSetGroup.GetPropertyDeclIter())
+                    {
+                        switch (propDecl.WellknownPropertyName)
+                        {
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.Font:
+                                //set font detail 
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.FontStyle:
+                                //convert font style
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.FontSize:
+                                textspec.FontSize = propDecl.GetPropertyValue(0).AsLength();
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.FontFamily:
+                                textspec.FontFace = propDecl.GetPropertyValue(0).ToString();
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.Fill:
+                                textspec.FillColor = LayoutFarm.HtmlBoxes.CssValueParser2.ParseCssColor(propDecl.GetPropertyValue(0).ToString());
+                                break;
+                            case LayoutFarm.WebDom.WellknownCssPropertyName.Unknown:
+                                {
+                                    switch (propDecl.UnknownRawName)
+                                    {
+                                        case "fill":
+                                            //svg 
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+
+
+            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
             textspec.ActualX = ConvertToPx(textspec.X, ref a);
             textspec.ActualY = ConvertToPx(textspec.Y, ref a);
 
@@ -1053,17 +1155,15 @@ namespace PaintLab.Svg
             parentNode.AddChildElement(textRenderElem);
             return textRenderElem;
         }
-        SvgRenderElement EvalRect(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreateRect(SvgRenderElement parentNode, SvgRectSpec rectSpec)
         {
 
-
-            SvgRenderElement rect = new SvgRenderElement(WellknownSvgElementName.Rect, elem._visualSpec);
-            SvgRectSpec rectSpec = elem._visualSpec as SvgRectSpec;
+            SvgRenderElement rect = new SvgRenderElement(WellknownSvgElementName.Rect, rectSpec);
 
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
                 VectorToolBox.GetFreeRoundRectTool(out RoundedRect roundRect);
-                ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17); //temp fix
+                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                 roundRect.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
                     ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
@@ -1082,7 +1182,7 @@ namespace PaintLab.Svg
             else
             {
                 VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
-                ReEvaluateArgs a = new ReEvaluateArgs(500, 500, 17);//temp fix
+                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                 rectTool.SetRect(
                     ConvertToPx(rectSpec.X, ref a),
                     ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
@@ -1145,32 +1245,11 @@ namespace PaintLab.Svg
                 return flattenVxs.CreateTrim();
             }
         }
-
-
-
-        SvgRenderElement EvalGroup(SvgRenderElement parentNode, SvgElement elem)
+        SvgRenderElement CreateGroup(SvgRenderElement parentNode, SvgVisualSpec visSpec)
         {
-            SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Group, elem._visualSpec);
 
-            AssignAttributes(elem._visualSpec);
-            int childCount = elem.ChildCount;
-            for (int i = 0; i < childCount; ++i)
-            {
-                //translate SvgElement to  
-                //command stream?
-                SvgRenderElement child = EvalOtherElem(renderE, elem.GetChild(i));
-                if (child != null)
-                {
-#if DEBUG
-                    if (!child.dbugHasParent)
-                    {
-                        renderE.AddChildElement(child);
-                    }
-#endif
-                }
-            }
-
-            parentNode.AddChildElement(renderE);
+            SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Group, visSpec);
+            AssignAttributes(visSpec);
             return renderE;
         }
     }

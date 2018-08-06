@@ -34,10 +34,10 @@ namespace LayoutFarm.UI
 
 
         public static Form CreateNewFormCanvas(
-        int xpos, int ypos,
-        int w, int h,
-        InnerViewportKind internalViewportKind,
-        out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+            int xpos, int ypos,
+            int w, int h,
+            InnerViewportKind internalViewportKind,
+            out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
         {
             //1. init
             InitWinform();

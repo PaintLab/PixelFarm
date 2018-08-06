@@ -398,6 +398,11 @@ namespace PaintLab.Svg
         Image,
 
         RootSvg,
+
+        /// <summary>
+        /// style
+        /// </summary>
+        Style,
     }
 
 
@@ -405,36 +410,28 @@ namespace PaintLab.Svg
     {
         readonly WellknownSvgElementName _wellknownName;
         readonly string _unknownElemName;
-        object _visualE;
 
-        public SvgVisualSpec _visualSpec;
-        List<SvgElement> _childNodes = new List<SvgElement>();
+
+        SvgElemSpec _elemSpec;
+        List<SvgElement> _childNodes;
         object _controller;
 
-        public SvgElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualspec = null)
+        public SvgElement(WellknownSvgElementName wellknownName, SvgElemSpec elemSpec)
         {
             _wellknownName = wellknownName;
-            if (visualspec == null)
-            {
-                visualspec = new SvgVisualSpec();
-            }
-            _visualSpec = visualspec;
+            _elemSpec = elemSpec;
         }
         public SvgElement(WellknownSvgElementName wellknownName, string name)
         {
             _wellknownName = wellknownName;
             _unknownElemName = name;
-            _visualSpec = new SvgVisualSpec();
         }
+
         public void SetController(object controller)
         {
             _controller = controller;
         }
 
-        public void SetVisualElement(object visualE)
-        {
-            _visualE = visualE;
-        }
         public static object UnsafeGetController(SvgElement elem)
         {
             return elem._controller;
@@ -469,19 +466,32 @@ namespace PaintLab.Svg
         }
         public virtual void AddElement(SvgElement elem)
         {
+            if (_childNodes == null)
+            {
+                _childNodes = new List<SvgElement>();
+            }
             _childNodes.Add(elem);
         }
-        public virtual void AddChild(SvgElement elem)
-        {
-            _childNodes.Add(elem);
-        }
+
         public int ChildCount
         {
-            get { return _childNodes.Count; }
+            get { return _childNodes == null ? 0 : _childNodes.Count; }
         }
         public SvgElement GetChild(int index)
         {
             return _childNodes[index];
+        }
+        public SvgElemSpec ElemSpec
+        {
+            get { return _elemSpec; }
+        }
+        public string ElemSpecId
+        {
+            get
+            {
+                if (_elemSpec == null) return null;
+                return _elemSpec.Id;
+            }
         }
     }
 
@@ -551,13 +561,14 @@ namespace PaintLab.Svg
 
     public class SvgDocument
     {
-        SvgElement _rootElement = new SvgElement(WellknownSvgElementName.Svg);
+        SvgElement _rootElement = new SvgElement(WellknownSvgElementName.Svg, null as string);
         public SvgDocument()
         {
         }
 
         public SvgElement CreateElement(string elemName)
         {
+            //TODO: review here again***
             //------
             switch (elemName)
             {
@@ -566,18 +577,25 @@ namespace PaintLab.Svg
                     Console.WriteLine("svg unimplemented element: " + elemName);
 #endif
                     return new SvgElement(WellknownSvgElementName.Unknown, elemName);
+                case "svg":
+                    return new SvgElement(WellknownSvgElementName.Svg, new SvgVisualSpec());
+
+                case "defs":
+                    return new SvgElement(WellknownSvgElementName.Defs, null as string);
+                case "title":
+                    return new SvgElement(WellknownSvgElementName.Title, null as string);
+
+                //------------------------------------------------------------------------------
+                case "style":
+                    return new SvgElement(WellknownSvgElementName.Style, new SvgStyleSpec());
+                //------------------------------------------------------------------------------
+
                 case "text":
                     return new SvgElement(WellknownSvgElementName.Text, new SvgTextSpec());
-                case "defs":
-                    return new SvgElement(WellknownSvgElementName.Defs);
                 case "clipPath":
                     return new SvgElement(WellknownSvgElementName.ClipPath, new SvgPathSpec());
-                case "svg":
-                    return new SvgElement(WellknownSvgElementName.Svg);
                 case "g":
-                    return new SvgElement(WellknownSvgElementName.Group);
-                case "title":
-                    return new SvgElement(WellknownSvgElementName.Title);
+                    return new SvgElement(WellknownSvgElementName.Group, new SvgVisualSpec());
                 case "rect":
                     return new SvgElement(WellknownSvgElementName.Rect, new SvgRectSpec());
                 case "line":
@@ -603,6 +621,7 @@ namespace PaintLab.Svg
         {
             get { return _rootElement; }
         }
+        public CssActiveSheet CssActiveSheet { get; set; }
     }
 
     public class SvgDocBuilder : ISvgDocBuilder
@@ -660,6 +679,9 @@ namespace PaintLab.Svg
 
         public void OnExitingElementBody()
         {
+
+            //
+
             if (_elems.Count > 0)
             {
                 _currentElem = _elems.Pop();
@@ -688,70 +710,86 @@ namespace PaintLab.Svg
 
                 foreach (CssPropertyDeclaration propDecl in cssRuleSet.GetAssignmentIter())
                 {
-                    switch (propDecl.UnknownRawName)
+                    switch (propDecl.WellknownPropertyName)
                     {
-
                         default:
-                            break;
-                        case "fill":
+                            //handle unknown prop name
                             {
+                                switch (propDecl.UnknownRawName)
+                                {
 
+                                    default:
+                                        break;
+
+                                    case "fill-opacity":
+                                        {
+                                            //TODO:
+                                            //adjust fill opacity
+                                        }
+                                        break;
+                                    case "stroke-width":
+                                        {
+                                            int valueCount = propDecl.ValueCount;
+                                            //1
+                                            string value = propDecl.GetPropertyValue(0).ToString();
+                                            spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
+                                        }
+                                        break;
+                                    case "stroke":
+                                        {
+                                            //stroke color
+
+                                            //TODO:
+                                            //if (attr.Value != "none")
+                                            //{
+                                            //    spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
+                                            //}
+                                        }
+                                        break;
+                                    case "stroke-linecap":
+                                        //set line-cap and line join again
+                                        //TODO:
+                                        break;
+                                    case "stroke-linejoin":
+                                        //TODO:
+                                        break;
+                                    case "stroke-miterlimit":
+                                        //TODO:
+                                        break;
+                                    case "stroke-opacity":
+                                        //TODO:
+                                        break;
+                                    case "transform":
+                                        {
+                                            ////parse trans
+                                            //ParseTransform(attr.Value, spec);
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case WellknownCssPropertyName.Font:
+                            break;
+                        case WellknownCssPropertyName.FontFamily:
+                            break;
+                        case WellknownCssPropertyName.FontWeight:
+                            break;
+                        case WellknownCssPropertyName.FontStyle:
+                            break;
+                        case WellknownCssPropertyName.Fill:
+                            {
                                 int valueCount = propDecl.ValueCount;
                                 //1
                                 string value = propDecl.GetPropertyValue(0).ToString();
                                 if (value != "none")
                                 {
-                                    //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
+
                                     spec.FillColor = CssValueParser2.ParseCssColor(value);
                                 }
                             }
                             break;
-                        case "fill-opacity":
-                            {
-                                //TODO:
-                                //adjust fill opacity
-                            }
-                            break;
-                        case "stroke-width":
-                            {
-                                int valueCount = propDecl.ValueCount;
-                                //1
-                                string value = propDecl.GetPropertyValue(0).ToString();
-
-                                spec.StrokeWidth = UserMapUtil.ParseGenericLength(value);
-                            }
-                            break;
-                        case "stroke":
-                            {
-                                //stroke color
-
-                                //TODO:
-                                //if (attr.Value != "none")
-                                //{
-                                //    spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(attr.Value));
-                                //}
-                            }
-                            break;
-                        case "stroke-linecap":
-                            //set line-cap and line join again
-                            //TODO:
-                            break;
-                        case "stroke-linejoin":
-                            //TODO:
-                            break;
-                        case "stroke-miterlimit":
-                            //TODO:
-                            break;
-                        case "stroke-opacity":
-                            //TODO:
-                            break;
-                        case "transform":
-                            {
-                                ////parse trans
-                                //ParseTransform(attr.Value, spec);
-                            }
-                            break;
                     }
+
                 }
             }
         }
@@ -774,7 +812,11 @@ namespace PaintLab.Svg
                     break;
                 case "y":
                     textspec.Y = UserMapUtil.ParseGenericLength(attrValue);
-                    break; 
+                    break;
+                case "font":
+                    //parse font
+
+                    break;
             }
         }
         static void AssignLinearGradientSpec(SvgLinearGradientSpec spec, string attrName, string attrValue)
@@ -966,7 +1008,10 @@ namespace PaintLab.Svg
 
         public void OnAttribute(string attrName, string value)
         {
-            SvgVisualSpec spec = _currentElem._visualSpec;
+            SvgElemSpec elemSpec = _currentElem.ElemSpec;
+            if (elemSpec == null) return;
+
+            SvgVisualSpec spec = elemSpec as SvgVisualSpec;
             switch (attrName)
             {
                 default:
@@ -1009,7 +1054,7 @@ namespace PaintLab.Svg
                     }
                     break;
                 case "class":
-                    spec.Class = value;
+                    spec.Class = value; //solve it later
                     break;
                 case "id":
                     spec.Id = value;
@@ -1024,7 +1069,6 @@ namespace PaintLab.Svg
                     {
                         if (value != "none")
                         {
-                            //spec.FillColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
                             spec.FillColor = CssValueParser2.ParseCssColor(value);
                         }
                     }

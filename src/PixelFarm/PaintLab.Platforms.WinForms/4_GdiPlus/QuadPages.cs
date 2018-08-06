@@ -144,6 +144,21 @@ namespace PixelFarm.Drawing.WinGdi
             //    _pageA.IsUnused = true;
             //    _pageA = null;
             //}
+            if (_pageA != null)
+            {
+                if (_pageA.Height < newHeight || _pageA.Width < newWidth)
+                {
+                    _pageA.IsUnused = true;
+                    _pageA.Dispose();
+                    _pageA = null;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            _pageA = new GdiPlusDrawBoard(0, 0, newWidth, newHeight);
         }
     }
 }
