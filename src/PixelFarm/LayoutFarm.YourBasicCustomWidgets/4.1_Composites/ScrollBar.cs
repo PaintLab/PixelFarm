@@ -703,10 +703,13 @@ namespace LayoutFarm.CustomWidgets
             get { return scrollRangeLogic.CurrentValue; }
             set
             {
-                scrollRangeLogic.SetValue(value);
-                //need update 
-                ReEvaluateScrollBar();
-                UpdateScrollButtonPosition();
+                if (scrollRangeLogic.SetValue(value))
+                {
+                    //need update 
+                    ReEvaluateScrollBar();
+                    UpdateScrollButtonPosition();
+                }              
+
             }
         }
         //-----------------------------------------------------------------------
@@ -1174,7 +1177,6 @@ namespace LayoutFarm.CustomWidgets
                 sc.MaxValue = (contentLength > scrollableSurface.ViewportWidth) ?
                     contentLength - scrollableSurface.ViewportWidth :
                     0;
-
 
             });
             //--------------------------------------------------------------------------------------
