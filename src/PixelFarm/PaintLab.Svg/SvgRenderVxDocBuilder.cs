@@ -11,6 +11,63 @@ using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using LayoutFarm.WebDom;
 
+namespace LayoutFarm.Svg
+{
+    //----------------------
+    public class SvgHitChain
+    {
+        float rootGlobalX;
+        float rootGlobalY;
+        List<SvgHitInfo> svgList = new List<SvgHitInfo>();
+        public SvgHitChain()
+        {
+        }
+        public void AddHit(SvgElement svg, float x, float y)
+        {
+            svgList.Add(new SvgHitInfo(svg, x, y));
+        }
+        public int Count
+        {
+            get
+            {
+                return this.svgList.Count;
+            }
+        }
+        public SvgHitInfo GetHitInfo(int index)
+        {
+            return this.svgList[index];
+        }
+        public SvgHitInfo GetLastHitInfo()
+        {
+            return this.svgList[svgList.Count - 1];
+        }
+        public void Clear()
+        {
+            this.rootGlobalX = this.rootGlobalY = 0;
+            this.svgList.Clear();
+        }
+        public void SetRootGlobalPosition(float x, float y)
+        {
+            this.rootGlobalX = x;
+            this.rootGlobalY = y;
+        }
+    }
+
+
+    public struct SvgHitInfo
+    {
+        public readonly SvgElement svg;
+        public readonly float x;
+        public readonly float y;
+        public SvgHitInfo(SvgElement svg, float x, float y)
+        {
+            this.svg = svg;
+            this.x = x;
+            this.y = y;
+        }
+    }
+}
+
 namespace PaintLab.Svg
 {
 
@@ -19,6 +76,7 @@ namespace PaintLab.Svg
     {
         public Painter P;
         public Affine _currentTx;
+
         internal void Reset()
         {
             P = null;
@@ -98,6 +156,106 @@ namespace PaintLab.Svg
     }
 
 
+    class SvgPathRenderMarkers
+    {
+        public PointF StartMarkerPos { get; set; }
+        public PointF EndMarkerPos { get; set; }
+        public PointF[] AllPoints { get; set; }
+
+        public Affine StartMarkerAffine { get; set; }
+        public Affine MidMarkerAffine { get; set; }
+        public Affine EndMarkerAffine { get; set; }
+
+        public SvgRenderElement StartMarker { get; set; }
+        public SvgRenderElement MidMarker { get; set; }
+        public SvgRenderElement EndMarker { get; set; }
+    }
+
+    class SvgUseRenderElement : SvgRenderElement
+    {
+        public SvgUseRenderElement(SvgUseSpec useSpec)
+            : base(WellknownSvgElementName.Use, useSpec)
+        {
+
+        }
+        internal SvgRenderElement HRefSvgRenderElement { get; set; }
+        public override void Paint(VgPaintArgs vgPainterArgs)
+        {
+            Painter p = vgPainterArgs.P;
+            SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
+            Affine current_tx = vgPainterArgs._currentTx;
+
+            Color color = p.FillColor;
+            double strokeW = p.StrokeWidth;
+            Color strokeColor = p.StrokeColor;
+
+            if (current_tx != null)
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+            }
+            else
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number);
+            }
+
+            if (this._visualSpec.HasFillColor)
+            {
+                p.FillColor = _visualSpec.FillColor;
+            }
+
+            if (this._visualSpec.HasStrokeColor)
+            {
+                //temp fix
+                p.StrokeColor = _visualSpec.StrokeColor;
+            }
+            else
+            {
+
+            }
+
+            if (this._visualSpec.HasStrokeWidth)
+            {
+                //temp fix
+                p.StrokeWidth = _visualSpec.StrokeWidth.Number;
+            }
+            else
+            {
+
+            }
+
+            HRefSvgRenderElement.Paint(vgPainterArgs);
+            //base.Paint(vgPainterArgs);
+
+            //restore
+            p.FillColor = color;
+            p.StrokeColor = strokeColor;
+            p.StrokeWidth = strokeW;
+            //
+            vgPainterArgs._currentTx = current_tx;
+        }
+        public override void Walk(VgPaintArgs vgPainterArgs)
+        {
+
+            SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
+            Affine current_tx = vgPainterArgs._currentTx;
+
+            if (current_tx != null)
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+            }
+            else
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number);
+            }
+
+
+            HRefSvgRenderElement.Walk(vgPainterArgs);
+
+            vgPainterArgs._currentTx = current_tx;
+            //base.Walk(vgPainterArgs);
+
+        }
+    }
 
     public class SvgRenderElement : SvgRenderElementBase
     {
@@ -108,7 +266,9 @@ namespace PaintLab.Svg
         VertexStore _strokeVxs;
         float _latestStrokeW;
         object _controller;
-        public SvgVisualSpec _visualSpec;
+        internal SvgVisualSpec _visualSpec;
+        internal SvgPathRenderMarkers _pathMarkers;
+
         public SvgRenderElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualSpec)
         {
             _wellknownName = wellknownName;
@@ -310,9 +470,7 @@ namespace PaintLab.Svg
 
                         if (currentTx == null)
                         {
-
                             vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
-
                         }
                         else
                         {
@@ -321,6 +479,46 @@ namespace PaintLab.Svg
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
                                 vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
+                            }
+                        }
+                        //------
+                        if (this._pathMarkers != null)
+                        {
+                            //render each marker
+                            if (_pathMarkers.StartMarker != null)
+                            {
+                                //draw this
+                                //*** IMPORTANT : matrix transform order !***                 
+                                //*** IMPORTANT : matrix transform order !***    
+                                int cc = _pathMarkers.StartMarker.ChildCount;
+                                for (int i = 0; i < cc; ++i)
+                                {
+                                    //temp fix
+                                    //set offset   
+                                    if (_pathMarkers.StartMarkerAffine != null)
+                                    {
+                                        vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.StartMarkerPos.X, _pathMarkers.StartMarkerPos.Y) * _pathMarkers.StartMarkerAffine;
+                                    }
+
+                                    _pathMarkers.StartMarker.GetChildNode(i).Walk(vgPainterArgs);
+                                }
+                                vgPainterArgs._currentTx = currentTx;
+
+                            }
+                            if (_pathMarkers.EndMarker != null)
+                            {
+                                //draw this 
+                                int cc = _pathMarkers.EndMarker.ChildCount;
+                                for (int i = 0; i < cc; ++i)
+                                {
+                                    //temp fix 
+                                    if (_pathMarkers.EndMarkerAffine != null)
+                                    {
+                                        vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y) * _pathMarkers.EndMarkerAffine;
+                                    }
+                                    _pathMarkers.EndMarker.GetChildNode(i).Walk(vgPainterArgs);
+                                }
+                                vgPainterArgs._currentTx = currentTx;
                             }
                         }
                     }
@@ -386,7 +584,6 @@ namespace PaintLab.Svg
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
-
             RequestFont currentFont = p.CurrentFont;
 
             Affine prevTx = vgPainterArgs._currentTx; //backup
@@ -446,7 +643,6 @@ namespace PaintLab.Svg
 
                     SvgRenderElement clipPath = (SvgRenderElement)_visualSpec.ResolvedClipPath;
                     VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath;
-                    //VertexStore clipVxs = ((VgCmdPath)clipPath._svgParts[0]).Vxs;
 
                     //----------
                     //for optimization check if clip path is Rect
@@ -540,6 +736,7 @@ namespace PaintLab.Svg
                         }
                     }
                     break;
+
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Ellipse:
@@ -547,6 +744,9 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Polygon:
                 case WellknownSvgElementName.Polyline:
                 case WellknownSvgElementName.Rect:
+                case WellknownSvgElementName.Marker:
+
+
                     {
                         //render with rect spec 
 
@@ -588,6 +788,101 @@ namespace PaintLab.Svg
                             {
                                 vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
                             }
+
+
+                            //----------------------------------------------------------------------
+                            if (this._pathMarkers != null)
+                            {
+                                //render each marker
+                                if (_pathMarkers.StartMarker != null)
+                                {
+                                    //draw this
+                                    //*** IMPORTANT : matrix transform order !***                 
+                                    //*** IMPORTANT : matrix transform order !***    
+                                    //Color prevFillColor = p.FillColor;
+                                    //p.FillColor = Color.Red;
+                                    int cc = _pathMarkers.StartMarker.ChildCount;
+                                    for (int i = 0; i < cc; ++i)
+                                    {
+                                        //temp fix 
+                                        if (_pathMarkers.StartMarkerAffine != null)
+                                        {
+                                            vgPainterArgs._currentTx = _pathMarkers.StartMarkerAffine * Affine.NewTranslation(_pathMarkers.StartMarkerPos.X, _pathMarkers.StartMarkerPos.Y);
+                                        }
+                                        else
+                                        {
+                                            vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.StartMarkerPos.X, _pathMarkers.StartMarkerPos.Y);
+                                        }
+                                        _pathMarkers.StartMarker.GetChildNode(i).Paint(vgPainterArgs);
+
+                                    }
+                                    //p.FillColor = prevFillColor;
+                                    vgPainterArgs._currentTx = currentTx;
+                                }
+
+                                if (_pathMarkers.MidMarker != null)
+                                {
+                                    //draw this
+                                    //vgPainterArgs._currentTx = Affine.IdentityMatrix;// _pathMarkers.StartMarkerAffine;
+                                    //Color prevFillColor = p.FillColor;
+                                    //p.FillColor = Color.Red;
+
+                                    PointF[] allPoints = _pathMarkers.AllPoints;
+                                    int allPointCount = allPoints.Length;
+                                    if (allPointCount > 2)
+                                    {
+                                        //draw between first and last node
+
+                                        for (int mm = 1; mm < allPointCount - 1; ++mm)
+                                        {
+                                            int cc = _pathMarkers.MidMarker.ChildCount;
+                                            PointF btwPoint = allPoints[mm];
+                                            for (int i = 0; i < cc; ++i)
+                                            {
+                                                //temp fix   
+
+                                                if (_pathMarkers.MidMarkerAffine != null)
+                                                {
+                                                    vgPainterArgs._currentTx = _pathMarkers.MidMarkerAffine * Affine.NewTranslation(btwPoint.X, btwPoint.Y);
+                                                }
+                                                else
+                                                {
+                                                    vgPainterArgs._currentTx = Affine.NewTranslation(btwPoint.X, btwPoint.Y);
+                                                }
+
+                                                _pathMarkers.MidMarker.GetChildNode(i).Paint(vgPainterArgs);
+                                            }
+                                        }
+                                    }
+
+                                    //p.FillColor = prevFillColor;
+                                    vgPainterArgs._currentTx = currentTx;
+                                }
+
+                                if (_pathMarkers.EndMarker != null)
+                                {
+                                    //draw this
+                                    //vgPainterArgs._currentTx = Affine.IdentityMatrix;// _pathMarkers.StartMarkerAffine;
+                                    //Color prevFillColor = p.FillColor;
+                                    //p.FillColor = Color.Red;
+                                    int cc = _pathMarkers.EndMarker.ChildCount;
+                                    for (int i = 0; i < cc; ++i)
+                                    {
+                                        //temp fix 
+                                        if (_pathMarkers.EndMarkerAffine != null)
+                                        {
+                                            vgPainterArgs._currentTx = _pathMarkers.EndMarkerAffine * Affine.NewTranslation(_pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y);
+                                        }
+                                        else
+                                        {
+                                            vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y);
+                                        }
+                                        _pathMarkers.EndMarker.GetChildNode(i).Paint(vgPainterArgs);
+                                    }
+                                    //p.FillColor = prevFillColor;
+                                    vgPainterArgs._currentTx = currentTx;
+                                }
+                            }
                         }
                         else
                         {
@@ -626,6 +921,28 @@ namespace PaintLab.Svg
                                 {
                                     vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
                                 }
+                            }
+
+                            if (this._pathMarkers != null)
+                            {
+                                //render each marker
+                                if (_pathMarkers.StartMarker != null)
+                                {
+                                    //draw this
+                                    //*** IMPORTANT : matrix transform order !***                 
+                                    //*** IMPORTANT : matrix transform order !***                        
+
+                                    vgPainterArgs._currentTx = _pathMarkers.StartMarkerAffine;
+                                    _pathMarkers.StartMarker.Paint(vgPainterArgs);
+                                    vgPainterArgs._currentTx = currentTx;
+
+                                }
+                                if (_pathMarkers.EndMarker != null)
+                                {
+                                    //draw this
+
+                                }
+
                             }
                         }
                     }
@@ -787,11 +1104,16 @@ namespace PaintLab.Svg
         List<SvgElement> _defsList = new List<SvgElement>();
         List<SvgElement> _styleList = new List<SvgElement>();
 
+
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
         CurveFlattener _curveFlatter = new CurveFlattener();
 
 
+        List<SvgRenderElement> _waitingList = new List<SvgRenderElement>();
+        Dictionary<string, SvgRenderElement> _registeredElemsById = new Dictionary<string, SvgRenderElement>();
+
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
+        Dictionary<string, SvgRenderElement> _markerDic = new Dictionary<string, SvgRenderElement>();
 
         float _containerWidth = 500;//default?
         float _containerHeight = 500;//default?
@@ -819,6 +1141,24 @@ namespace PaintLab.Svg
                 //command stream?
                 CreateSvgRenderElement(rootSvgElem, rootElem.GetChild(i));
             }
+
+            //resolve
+            int j = _waitingList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //resolve
+                SvgUseRenderElement useRenderE = (SvgUseRenderElement)_waitingList[i];
+                if (useRenderE.HRefSvgRenderElement == null)
+                {
+                    //resolve
+                    SvgUseSpec useSpec = (SvgUseSpec)useRenderE._visualSpec;
+                    if (_registeredElemsById.TryGetValue(useSpec.Href.Value, out SvgRenderElement result))
+                    {
+                        useRenderE.HRefSvgRenderElement = result;
+                    }
+                }
+            }
+
             return rootSvgElem;
         }
         public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
@@ -846,9 +1186,14 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Style:
                     _styleList.Add(elem);
                     return null;
+                case WellknownSvgElementName.Marker:
+                    renderE = CreateMarker(parentNode, (SvgMarkerSpec)elem.ElemSpec);
+                    break;
                 //-----------------
                 case WellknownSvgElementName.Unknown:
                     return null;
+                case WellknownSvgElementName.Use:
+                    return CreateUseElement(parentNode, (SvgUseSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Text:
                     return CreateTextElem(parentNode, (SvgTextSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Svg:
@@ -859,7 +1204,6 @@ namespace PaintLab.Svg
                     break;
                 case WellknownSvgElementName.Image:
                     renderE = CreateImage(parentNode, (SvgImageSpec)elem.ElemSpec);
-
                     break;
                 case WellknownSvgElementName.Polyline:
                     renderE = CreatePolyline(parentNode, (SvgPolylineSpec)elem.ElemSpec);
@@ -884,6 +1228,16 @@ namespace PaintLab.Svg
                     break;
             }
 
+            if (renderE._visualSpec != null)
+            {
+                string id = renderE._visualSpec.Id;
+                if (id != null)
+                {
+                    //replace duplicated item
+                    _registeredElemsById[id] = renderE;
+                }
+            }
+
             renderE.SetController(elem);
             parentNode.AddChildElement(renderE);
             int childCount = elem.ChildCount;
@@ -898,6 +1252,12 @@ namespace PaintLab.Svg
         SvgRenderElement CreateClipPath(SvgRenderElement parentNode, SvgVisualSpec visualSpec)
         {
             var renderE = new SvgRenderElement(WellknownSvgElementName.ClipPath, visualSpec);
+            AssignAttributes(visualSpec);
+            return renderE;
+        }
+        SvgRenderElement CreateMarker(SvgRenderElement parentNode, SvgMarkerSpec visualSpec)
+        {
+            var renderE = new SvgRenderElement(WellknownSvgElementName.Marker, visualSpec);
             AssignAttributes(visualSpec);
             return renderE;
         }
@@ -922,12 +1282,24 @@ namespace PaintLab.Svg
                 for (int c = 0; c < childCount; ++c)
                 {
                     SvgElement child = defsElem.GetChild(c);
-                    if (child.WellknowElemName == WellknownSvgElementName.ClipPath)
+                    switch (child.WellknowElemName)
                     {
-                        //clip path definition  
-                        //make this as a clip path 
-                        SvgRenderElement renderE = CreateSvgRenderElement(definitionRoot, child);
-                        _clipPathDic.Add(child.ElemSpecId, renderE);
+                        case WellknownSvgElementName.ClipPath:
+                            {
+                                //clip path definition  
+                                //make this as a clip path 
+                                SvgRenderElement renderE = CreateSvgRenderElement(definitionRoot, child);
+                                _clipPathDic.Add(child.ElemSpecId, renderE);
+                            }
+                            break;
+                        case WellknownSvgElementName.Marker:
+                            {
+                                //clip path definition  
+                                //make this as a clip path 
+                                SvgRenderElement renderE = CreateSvgRenderElement(definitionRoot, child);
+                                _markerDic.Add(child.ElemSpecId, renderE);
+                            }
+                            break;
                     }
                 }
             }
@@ -949,16 +1321,24 @@ namespace PaintLab.Svg
         }
         SvgRenderElement CreatePath(SvgRenderElement parentNode, SvgPathSpec pathSpec)
         {
-            SvgRenderElement path = new SvgRenderElement(WellknownSvgElementName.Path, pathSpec); //**
+            SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Path, pathSpec); //**
 
             //d             
 
             AssignAttributes(pathSpec);
+            renderE._vxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
+            ResolveMarkers(renderE, pathSpec);
 
-            path._vxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
+            if (renderE._pathMarkers != null)
+            {
+                //create primary instance plan for this 
 
-            parentNode.AddChildElement(path);
-            return path;
+            }
+
+
+
+            parentNode.AddChildElement(renderE);
+            return renderE;
         }
 
         struct ReEvaluateArgs
@@ -1021,7 +1401,7 @@ namespace PaintLab.Svg
         }
         SvgRenderElement CreatePolygon(SvgRenderElement parentNode, SvgPolygonSpec polygonSpec)
         {
-            SvgRenderElement polygon = new SvgRenderElement(WellknownSvgElementName.Polygon, polygonSpec);
+            SvgRenderElement renderE = new SvgRenderElement(WellknownSvgElementName.Polygon, polygonSpec);
 
             PointF[] points = polygonSpec.Points;
             int j = points.Length;
@@ -1042,11 +1422,17 @@ namespace PaintLab.Svg
                     v1.AddMoveTo(p0.X, p0.Y);
                     v1.AddCloseFigure();
 
-                    polygon._vxsPath = v1.CreateTrim();
+                    renderE._vxsPath = v1.CreateTrim();
                 }
                 AssignAttributes(polygonSpec);
+                ResolveMarkers(renderE, polygonSpec);
+                if (renderE._pathMarkers != null)
+                {
+                    //create primary instance plan for this 
+
+                }
             }
-            return polygon;
+            return renderE;
         }
         SvgRenderElement CreatePolyline(SvgRenderElement parentNode, SvgPolylineSpec polylineSpec)
         {
@@ -1066,11 +1452,112 @@ namespace PaintLab.Svg
                     }
                     renderE._vxsPath = v1.CreateTrim();
                 }
-
                 AssignAttributes(polylineSpec);
+
+                //--------------------------------------------------------------------
+                ResolveMarkers(renderE, polylineSpec);
+                if (renderE._pathMarkers != null)
+                {
+
+                    //create primary instance plan for this polyline
+                    SvgPathRenderMarkers pathMarkers = renderE._pathMarkers;
+                    pathMarkers.AllPoints = points;
+
+                    //start, mid, end
+                    if (pathMarkers.StartMarker != null)
+                    {
+                        //turn marker to the start direction
+                        PointF p0 = points[0];
+                        PointF p1 = points[1];
+                        //find rotation angle
+                        double rotateRad = Math.Atan2(p0.Y - p1.Y, p0.X - p1.X);
+                        SvgMarkerSpec markerSpec = (SvgMarkerSpec)pathMarkers.StartMarker._visualSpec;
+
+                        //create local-transformation matrix
+                        pathMarkers.StartMarkerPos = new PointF(p0.X, p0.Y);
+                        pathMarkers.StartMarkerAffine = Affine.NewMatix(
+                            AffinePlan.Translate(-markerSpec.RefX.Number, -markerSpec.RefY.Number), //move to the ref point
+                            AffinePlan.Rotate(rotateRad) //rotate                            
+                        );
+                    }
+                    //-------------------------------
+                    if (pathMarkers.MidMarker != null)
+                    {
+                        SvgMarkerSpec markerSpec = (SvgMarkerSpec)pathMarkers.StartMarker._visualSpec;
+                        pathMarkers.MidMarkerAffine = Affine.NewTranslation(-markerSpec.RefX.Number, -markerSpec.RefY.Number);
+                    }
+                    //-------------------------------
+                    if (pathMarkers.EndMarker != null)
+                    {
+                        //turn marker to the start direction
+                        PointF p0 = points[j - 2]; //before the last one
+                        PointF p1 = points[j - 1];//the last one
+                        //find rotation angle
+                        double rotateRad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
+                        SvgMarkerSpec markerSpec = (SvgMarkerSpec)pathMarkers.EndMarker._visualSpec;
+
+
+                        //create local-transformation matrix
+                        pathMarkers.EndMarkerPos = new PointF(p1.X, p1.Y);
+                        pathMarkers.EndMarkerAffine = Affine.NewMatix(
+                            AffinePlan.Translate(-markerSpec.RefX.Number, -markerSpec.RefY.Number), //move to the ref point
+                            AffinePlan.Rotate(rotateRad) //rotate                            
+                        );
+                    }
+                }
+
             }
             return renderE;
         }
+        void ResolveMarkers(SvgRenderElement svgRenderE, IMayHaveMarkers mayHasMarkers)
+        {
+            //TODO: review here again***
+            //assume marker link by id
+
+            SvgPathRenderMarkers pathRenderMarkers = svgRenderE._pathMarkers;
+
+            if (mayHasMarkers.MarkerStart != null)
+            {
+                if (pathRenderMarkers == null)
+                {
+                    svgRenderE._pathMarkers = pathRenderMarkers = new SvgPathRenderMarkers();
+                }
+                BuildDefinitionNodes();
+
+                if (_markerDic.TryGetValue(mayHasMarkers.MarkerStart.Value, out SvgRenderElement marker))
+                {
+                    pathRenderMarkers.StartMarker = marker;
+                }
+
+            }
+            if (mayHasMarkers.MarkerMid != null)
+            {
+                if (pathRenderMarkers == null)
+                {
+                    svgRenderE._pathMarkers = pathRenderMarkers = new SvgPathRenderMarkers();
+                }
+                BuildDefinitionNodes();
+
+                if (_markerDic.TryGetValue(mayHasMarkers.MarkerMid.Value, out SvgRenderElement marker))
+                {
+                    pathRenderMarkers.MidMarker = marker;
+                }
+            }
+            if (mayHasMarkers.MarkerEnd != null)
+            {
+                if (pathRenderMarkers == null)
+                {
+                    svgRenderE._pathMarkers = pathRenderMarkers = new SvgPathRenderMarkers();
+                }
+                BuildDefinitionNodes();
+
+                if (_markerDic.TryGetValue(mayHasMarkers.MarkerEnd.Value, out SvgRenderElement marker))
+                {
+                    pathRenderMarkers.EndMarker = marker;
+                }
+            }
+        }
+
         SvgRenderElement CreateCircle(SvgRenderElement parentNode, SvgCircleSpec cirSpec)
         {
 
@@ -1094,6 +1581,21 @@ namespace PaintLab.Svg
             return cir;
         }
 
+
+        SvgRenderElement CreateUseElement(SvgRenderElement parentNode, SvgUseSpec spec)
+        {
+            SvgUseRenderElement renderE = new SvgUseRenderElement(spec);
+            AssignAttributes(spec);
+            if (spec.Href != null)
+            {
+                //add to waiting list
+                _waitingList.Add(renderE);
+            }
+
+            //text x,y
+            parentNode.AddChildElement(renderE);
+            return renderE;
+        }
         SvgRenderElement CreateTextElem(SvgRenderElement parentNode, SvgTextSpec textspec)
         {
             //text render element  

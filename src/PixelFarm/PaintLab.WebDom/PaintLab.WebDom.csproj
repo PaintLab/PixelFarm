@@ -53,6 +53,7 @@
     <Compile Include="2_Svg\SvgPathDataParser.cs" />
     <Compile Include="2_Svg\SvgSpec.cs" />
     <Compile Include="2_Svg\SvgParser.cs" />
+    <Compile Include="2_Svg\SvgTransformation.cs" />
     <Compile Include="IScriptable\JsScriptAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
