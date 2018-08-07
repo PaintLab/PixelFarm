@@ -711,8 +711,8 @@ namespace PaintLab.Svg
                                     //draw this
                                     //*** IMPORTANT : matrix transform order !***                 
                                     //*** IMPORTANT : matrix transform order !***    
-                                    Color prevFillColor = p.FillColor;
-                                    p.FillColor = Color.Red;
+                                    //Color prevFillColor = p.FillColor;
+                                    //p.FillColor = Color.Red;
                                     int cc = _pathMarkers.StartMarker.ChildCount;
                                     for (int i = 0; i < cc; ++i)
                                     {
@@ -728,7 +728,7 @@ namespace PaintLab.Svg
                                         _pathMarkers.StartMarker.GetChildNode(i).Paint(vgPainterArgs);
 
                                     }
-                                    p.FillColor = prevFillColor;
+                                    //p.FillColor = prevFillColor;
                                     vgPainterArgs._currentTx = currentTx;
                                 }
 
@@ -736,8 +736,8 @@ namespace PaintLab.Svg
                                 {
                                     //draw this
                                     //vgPainterArgs._currentTx = Affine.IdentityMatrix;// _pathMarkers.StartMarkerAffine;
-                                    Color prevFillColor = p.FillColor;
-                                    p.FillColor = Color.Red;
+                                    //Color prevFillColor = p.FillColor;
+                                    //p.FillColor = Color.Red;
 
                                     PointF[] allPoints = _pathMarkers.AllPoints;
                                     int allPointCount = allPoints.Length;
@@ -767,7 +767,7 @@ namespace PaintLab.Svg
                                         }
                                     }
 
-                                    p.FillColor = prevFillColor;
+                                    //p.FillColor = prevFillColor;
                                     vgPainterArgs._currentTx = currentTx;
                                 }
 
@@ -775,8 +775,8 @@ namespace PaintLab.Svg
                                 {
                                     //draw this
                                     //vgPainterArgs._currentTx = Affine.IdentityMatrix;// _pathMarkers.StartMarkerAffine;
-                                    Color prevFillColor = p.FillColor;
-                                    p.FillColor = Color.Red;
+                                    //Color prevFillColor = p.FillColor;
+                                    //p.FillColor = Color.Red;
                                     int cc = _pathMarkers.EndMarker.ChildCount;
                                     for (int i = 0; i < cc; ++i)
                                     {
@@ -791,7 +791,7 @@ namespace PaintLab.Svg
                                         }
                                         _pathMarkers.EndMarker.GetChildNode(i).Paint(vgPainterArgs);
                                     }
-                                    p.FillColor = prevFillColor;
+                                    //p.FillColor = prevFillColor;
                                     vgPainterArgs._currentTx = currentTx;
                                 }
                             }
