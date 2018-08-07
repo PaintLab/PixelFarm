@@ -91,7 +91,11 @@ namespace LayoutFarm.Svg
         /// <summary>
         /// pattern
         /// </summary>
-        Pattern
+        Pattern,
+        /// <summary>
+        /// use
+        /// </summary>
+        Use,
     }
 
 
@@ -150,6 +154,7 @@ namespace LayoutFarm.Svg
                     case WellknownSvgElementName.Image: return "image";
                     case WellknownSvgElementName.Text: return "text";
                     case WellknownSvgElementName.LinearGradient: return "linearGradient";
+                    case WellknownSvgElementName.Use: return "use";
                 }
             }
         }
@@ -251,6 +256,8 @@ namespace LayoutFarm.Svg
                     return new SvgElement(WellknownSvgElementName.Circle, new SvgCircleSpec());
                 case "ellipse":
                     return new SvgElement(WellknownSvgElementName.Ellipse, new SvgEllipseSpec());
+                case "use":
+                    return new SvgElement(WellknownSvgElementName.Use, new SvgUseSpec());
             }
         }
 
@@ -464,6 +471,22 @@ namespace LayoutFarm.Svg
                     break;
                 case "markerHeight":
                     markderSpec.MarkerHeight = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+            }
+        }
+        static void AssignUseSpec(SvgUseSpec useSpec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                //rect 
+                case "x":
+                    useSpec.X = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y":
+                    useSpec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "href":
+                    useSpec.Href = ParseAttributeLink(attrValue);
                     break;
             }
         }
@@ -712,6 +735,9 @@ namespace LayoutFarm.Svg
                             default:
 
                                 break;
+                            case WellknownSvgElementName.Use:
+                                AssignUseSpec((SvgUseSpec)spec, attrName, value);
+                                break;
                             case WellknownSvgElementName.Marker:
                                 AssignMarkerSpec((SvgMarkerSpec)spec, attrName, value);
                                 break;
@@ -825,6 +851,10 @@ namespace LayoutFarm.Svg
                 {
 
                 }
+            }
+            else if (value.StartsWith("#"))
+            {
+                return new SvgAttributeLink(SvgAttributeLinkKind.Id, value.Substring(1));
             }
             else
             {

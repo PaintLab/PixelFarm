@@ -72,6 +72,21 @@ namespace LayoutFarm.Svg
         public LayoutFarm.WebDom.CssActiveSheet CssSheet { get; set; }
     }
 
+    public class SvgUseSpec : SvgVisualSpec
+    {
+        public SvgAttributeLink Href { get; set; }
+        public CssLength X
+        {
+            get;
+            set;
+        }
+        public CssLength Y
+        {
+            get;
+            set;
+        }
+    }
+
     public enum SvgAttributeLinkKind
     {
         Id,

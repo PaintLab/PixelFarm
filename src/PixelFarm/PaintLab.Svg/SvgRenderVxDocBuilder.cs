@@ -171,6 +171,92 @@ namespace PaintLab.Svg
         public SvgRenderElement EndMarker { get; set; }
     }
 
+    class SvgUseRenderElement : SvgRenderElement
+    {
+        public SvgUseRenderElement(SvgUseSpec useSpec)
+            : base(WellknownSvgElementName.Use, useSpec)
+        {
+
+        }
+        internal SvgRenderElement HRefSvgRenderElement { get; set; }
+        public override void Paint(VgPaintArgs vgPainterArgs)
+        {
+            Painter p = vgPainterArgs.P;
+            SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
+            Affine current_tx = vgPainterArgs._currentTx;
+
+            Color color = p.FillColor;
+            double strokeW = p.StrokeWidth;
+            Color strokeColor = p.StrokeColor;
+
+            if (current_tx != null)
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+            }
+            else
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number);
+            }
+
+            if (this._visualSpec.HasFillColor)
+            {
+                p.FillColor = _visualSpec.FillColor;
+            }
+
+            if (this._visualSpec.HasStrokeColor)
+            {
+                //temp fix
+                p.StrokeColor = _visualSpec.StrokeColor;
+            }
+            else
+            {
+
+            }
+
+            if (this._visualSpec.HasStrokeWidth)
+            {
+                //temp fix
+                p.StrokeWidth = _visualSpec.StrokeWidth.Number;
+            }
+            else
+            {
+
+            }
+
+            HRefSvgRenderElement.Paint(vgPainterArgs);
+            //base.Paint(vgPainterArgs);
+
+            //restore
+            p.FillColor = color;
+            p.StrokeColor = strokeColor;
+            p.StrokeWidth = strokeW;
+            //
+            vgPainterArgs._currentTx = current_tx;
+        }
+        public override void Walk(VgPaintArgs vgPainterArgs)
+        {
+
+            SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
+            Affine current_tx = vgPainterArgs._currentTx;
+
+            if (current_tx != null)
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+            }
+            else
+            {
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number);
+            }
+
+
+            HRefSvgRenderElement.Walk(vgPainterArgs);
+
+            vgPainterArgs._currentTx = current_tx;
+            //base.Walk(vgPainterArgs);
+
+        }
+    }
+
     public class SvgRenderElement : SvgRenderElementBase
     {
 
@@ -498,7 +584,6 @@ namespace PaintLab.Svg
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
             Color strokeColor = p.StrokeColor;
-
             RequestFont currentFont = p.CurrentFont;
 
             Affine prevTx = vgPainterArgs._currentTx; //backup
@@ -651,6 +736,7 @@ namespace PaintLab.Svg
                         }
                     }
                     break;
+
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Ellipse:
@@ -659,6 +745,8 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Polyline:
                 case WellknownSvgElementName.Rect:
                 case WellknownSvgElementName.Marker:
+
+
                     {
                         //render with rect spec 
 
@@ -1016,9 +1104,13 @@ namespace PaintLab.Svg
         List<SvgElement> _defsList = new List<SvgElement>();
         List<SvgElement> _styleList = new List<SvgElement>();
 
+
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
         CurveFlattener _curveFlatter = new CurveFlattener();
 
+
+        List<SvgRenderElement> _waitingList = new List<SvgRenderElement>();
+        Dictionary<string, SvgRenderElement> _registeredElemsById = new Dictionary<string, SvgRenderElement>();
 
         Dictionary<string, SvgRenderElement> _clipPathDic = new Dictionary<string, SvgRenderElement>();
         Dictionary<string, SvgRenderElement> _markerDic = new Dictionary<string, SvgRenderElement>();
@@ -1049,6 +1141,24 @@ namespace PaintLab.Svg
                 //command stream?
                 CreateSvgRenderElement(rootSvgElem, rootElem.GetChild(i));
             }
+
+            //resolve
+            int j = _waitingList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //resolve
+                SvgUseRenderElement useRenderE = (SvgUseRenderElement)_waitingList[i];
+                if (useRenderE.HRefSvgRenderElement == null)
+                {
+                    //resolve
+                    SvgUseSpec useSpec = (SvgUseSpec)useRenderE._visualSpec;
+                    if (_registeredElemsById.TryGetValue(useSpec.Href.Value, out SvgRenderElement result))
+                    {
+                        useRenderE.HRefSvgRenderElement = result;
+                    }
+                }
+            }
+
             return rootSvgElem;
         }
         public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
@@ -1082,6 +1192,8 @@ namespace PaintLab.Svg
                 //-----------------
                 case WellknownSvgElementName.Unknown:
                     return null;
+                case WellknownSvgElementName.Use:
+                    return CreateUseElement(parentNode, (SvgUseSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Text:
                     return CreateTextElem(parentNode, (SvgTextSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Svg:
@@ -1092,7 +1204,6 @@ namespace PaintLab.Svg
                     break;
                 case WellknownSvgElementName.Image:
                     renderE = CreateImage(parentNode, (SvgImageSpec)elem.ElemSpec);
-
                     break;
                 case WellknownSvgElementName.Polyline:
                     renderE = CreatePolyline(parentNode, (SvgPolylineSpec)elem.ElemSpec);
@@ -1115,6 +1226,16 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Group:
                     renderE = CreateGroup(parentNode, (SvgVisualSpec)elem.ElemSpec);
                     break;
+            }
+
+            if (renderE._visualSpec != null)
+            {
+                string id = renderE._visualSpec.Id;
+                if (id != null)
+                {
+                    //replace duplicated item
+                    _registeredElemsById[id] = renderE;
+                }
             }
 
             renderE.SetController(elem);
@@ -1435,10 +1556,7 @@ namespace PaintLab.Svg
                     pathRenderMarkers.EndMarker = marker;
                 }
             }
-
         }
-
-
 
         SvgRenderElement CreateCircle(SvgRenderElement parentNode, SvgCircleSpec cirSpec)
         {
@@ -1463,6 +1581,21 @@ namespace PaintLab.Svg
             return cir;
         }
 
+
+        SvgRenderElement CreateUseElement(SvgRenderElement parentNode, SvgUseSpec spec)
+        {
+            SvgUseRenderElement renderE = new SvgUseRenderElement(spec);
+            AssignAttributes(spec);
+            if (spec.Href != null)
+            {
+                //add to waiting list
+                _waitingList.Add(renderE);
+            }
+
+            //text x,y
+            parentNode.AddChildElement(renderE);
+            return renderE;
+        }
         SvgRenderElement CreateTextElem(SvgRenderElement parentNode, SvgTextSpec textspec)
         {
             //text render element  
