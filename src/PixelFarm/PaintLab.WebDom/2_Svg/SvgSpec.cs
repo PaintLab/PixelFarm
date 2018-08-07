@@ -13,6 +13,7 @@ namespace LayoutFarm.Svg
         public string Id { get; set; }
     }
 
+
     public class SvgVisualSpec : SvgElemSpec
     {
         Color fillColor = Color.Black;
@@ -54,18 +55,21 @@ namespace LayoutFarm.Svg
                 this.HasStrokeWidth = true;
             }
         }
-
-
         public string Class { get; set; }
 
         public SvgAttributeLink ClipPathLink { get; set; }
-        public object ResolvedClipPath { get; set; }
+        public object ResolvedClipPath { get; set; } //TODO: review here
+
+        public float ViewBoxX { get; set; }
+        public float ViewBoxY { get; set; }
+        public float ViewBoxW { get; set; }
+        public float ViewBoxH { get; set; }
     }
 
     public class SvgStyleSpec : SvgElemSpec
     {
         public string RawTextContent { get; set; }
-        public LayoutFarm.WebDom.CssActiveSheet CssSheet { get; set; }        
+        public LayoutFarm.WebDom.CssActiveSheet CssSheet { get; set; }
     }
 
     public enum SvgAttributeLinkKind
@@ -193,6 +197,16 @@ namespace LayoutFarm.Svg
             set;
         }
     }
+
+
+
+    public interface IMayHaveMarkers
+    {
+        SvgAttributeLink MarkerStart { get; set; }
+        SvgAttributeLink MarkerMid { get; set; }
+        SvgAttributeLink MarkerEnd { get; set; }
+    }
+
     public class SvgLinearGradientSpec : SvgVisualSpec
     {
         public System.Collections.Generic.List<StopColorPoint> StopList { get; set; }
@@ -201,16 +215,26 @@ namespace LayoutFarm.Svg
         public CssLength X2 { get; set; }
         public CssLength Y2 { get; set; }
     }
-    public class SvgPolygonSpec : SvgVisualSpec
+
+    public class SvgPolygonSpec : SvgVisualSpec, IMayHaveMarkers
     {
         public PixelFarm.Drawing.PointF[] Points { get; set; }
+        //
+        public SvgAttributeLink MarkerStart { get; set; }
+        public SvgAttributeLink MarkerMid { get; set; }
+        public SvgAttributeLink MarkerEnd { get; set; }
     }
-    public class SvgPolylineSpec : SvgVisualSpec
+    public class SvgPolylineSpec : SvgVisualSpec, IMayHaveMarkers
     {
         public PixelFarm.Drawing.PointF[] Points { get; set; }
+        //
+        public SvgAttributeLink MarkerStart { get; set; }
+        public SvgAttributeLink MarkerMid { get; set; }
+        public SvgAttributeLink MarkerEnd { get; set; }
     }
 
-    public class SvgPathSpec : SvgVisualSpec
+
+    public class SvgPathSpec : SvgVisualSpec, IMayHaveMarkers
     {
         public SvgPathSpec()
         {
@@ -242,6 +266,12 @@ namespace LayoutFarm.Svg
             get;
             set;
         }
+
+
+        //
+        public SvgAttributeLink MarkerStart { get; set; }
+        public SvgAttributeLink MarkerMid { get; set; }
+        public SvgAttributeLink MarkerEnd { get; set; }
     }
 
     public class SvgTextSpec : SvgVisualSpec
@@ -258,7 +288,7 @@ namespace LayoutFarm.Svg
         public float ActualY { get; set; }
     }
 
-    public class SvgLineSpec : SvgVisualSpec
+    public class SvgLineSpec : SvgVisualSpec, IMayHaveMarkers
     {
         public CssLength X1
         {
@@ -280,6 +310,11 @@ namespace LayoutFarm.Svg
             get;
             set;
         }
+
+        //
+        public SvgAttributeLink MarkerStart { get; set; }
+        public SvgAttributeLink MarkerMid { get; set; }
+        public SvgAttributeLink MarkerEnd { get; set; }
     }
     public class StopColorPoint
     {
@@ -289,6 +324,30 @@ namespace LayoutFarm.Svg
             set;
         }
         public CssLength Offset
+        {
+            get;
+            set;
+        }
+    }
+
+    public class SvgMarkerSpec : SvgVisualSpec
+    {
+        public CssLength RefX
+        {
+            get;
+            set;
+        }
+        public CssLength RefY
+        {
+            get;
+            set;
+        }
+        public CssLength MarkerWidth
+        {
+            get;
+            set;
+        }
+        public CssLength MarkerHeight
         {
             get;
             set;

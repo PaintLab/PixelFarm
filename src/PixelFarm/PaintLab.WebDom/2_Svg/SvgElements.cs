@@ -79,6 +79,19 @@ namespace LayoutFarm.Svg
         /// style
         /// </summary>
         Style,
+
+        /// <summary>
+        /// marker
+        /// </summary>
+        Marker,
+        /// <summary>
+        /// mask
+        /// </summary>
+        Mask,
+        /// <summary>
+        /// pattern
+        /// </summary>
+        Pattern
     }
 
 
@@ -212,7 +225,8 @@ namespace LayoutFarm.Svg
                 case "style":
                     return new SvgElement(WellknownSvgElementName.Style, new SvgStyleSpec());
                 //------------------------------------------------------------------------------
-
+                case "marker":
+                    return new SvgElement(WellknownSvgElementName.Marker, new SvgMarkerSpec());
                 case "text":
                     return new SvgElement(WellknownSvgElementName.Text, new SvgTextSpec());
                 case "clipPath":
@@ -417,14 +431,6 @@ namespace LayoutFarm.Svg
             }
         }
 
-
-        static void AssignPathSpecData(SvgPathSpec pathspec, string attrName, string attrValue)
-        {
-            if (attrName == "d")
-            {
-                pathspec.D = attrValue;
-            }
-        }
         static void AssignTextSpecData(SvgTextSpec textspec, string attrName, string attrValue)
         {
             switch (attrName)
@@ -439,6 +445,25 @@ namespace LayoutFarm.Svg
                 case "font":
                     //parse font
 
+                    break;
+            }
+        }
+        static void AssignMarkerSpec(SvgMarkerSpec markderSpec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                //rect 
+                case "refX":
+                    markderSpec.RefX = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "refY":
+                    markderSpec.RefY = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "markerWidth":
+                    markderSpec.MarkerWidth = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "markerHeight":
+                    markderSpec.MarkerHeight = UserMapUtil.ParseGenericLength(attrValue);
                     break;
             }
         }
@@ -530,27 +555,68 @@ namespace LayoutFarm.Svg
                     break;
             }
         }
+        static void AssignMarker(IMayHaveMarkers mayHasMarker, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                case "marker-start":
+                    mayHasMarker.MarkerStart = ParseAttributeLink(attrValue);
+                    break;
+                case "marker-mid":
+                    mayHasMarker.MarkerMid = ParseAttributeLink(attrValue);
+                    break;
+                case "marker-end":
+                    mayHasMarker.MarkerEnd = ParseAttributeLink(attrValue);
+                    break;
+            }
+        }
         static void AssignPolygonSpec(SvgPolygonSpec spec, string attrName, string attrValue)
         {
             switch (attrName)
             {
+                default:
+                    AssignMarker(spec, attrName, attrValue);
+                    break;
                 case "points":
                     //image spec
                     spec.Points = ParsePointList(attrValue);
                     break;
+
             }
         }
-        static void AssignPolylineSpec(SvgPolylineSpec spec, string attrName, string attrValue)
+        static void AssignPathSpecData(SvgPathSpec spec, string attrName, string attrValue)
         {
             switch (attrName)
             {
-                case "points":
-                    //image spec
-                    spec.Points = ParsePointList(attrValue);
+                case "d":
+                    spec.D = attrValue;
+                    break;
+                //---------------------
+                default:
+                    AssignMarker(spec, attrName, attrValue);
                     break;
             }
         }
 
+        static void AssignPolylineSpec(SvgPolylineSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {   //---------------------
+                default:
+                    AssignMarker(spec, attrName, attrValue);
+                    break;
+                case "points":
+                    //image spec
+                    spec.Points = ParsePointList(attrValue);
+                    break;
+            }
+        }
+        static void AssignPolylineSpec(SvgLineSpec spec, string attrName, string attrValue)
+        {
+
+            AssignMarker(spec, attrName, attrValue);
+
+        }
 
         static void AssignEllipseSpec(SvgEllipseSpec spec, string attrName, string attrValue)
         {
@@ -646,6 +712,9 @@ namespace LayoutFarm.Svg
                             default:
 
                                 break;
+                            case WellknownSvgElementName.Marker:
+                                AssignMarkerSpec((SvgMarkerSpec)spec, attrName, value);
+                                break;
                             case WellknownSvgElementName.Text:
                                 AssignTextSpecData((SvgTextSpec)spec, attrName, value);
                                 break;
@@ -739,7 +808,8 @@ namespace LayoutFarm.Svg
 
             }
         }
-        static void AddClipPathLink(SvgVisualSpec spec, string value)
+
+        static SvgAttributeLink ParseAttributeLink(string value)
         {
             //eg. url(#aaa)
             if (value.StartsWith("url("))
@@ -749,14 +819,7 @@ namespace LayoutFarm.Svg
                 {
                     //get value 
                     string url_value = value.Substring(4, endAt - 4);
-                    if (url_value.StartsWith("#"))
-                    {
-                        spec.ClipPathLink = new SvgAttributeLink(SvgAttributeLinkKind.Id, url_value.Substring(1));
-                    }
-                    else
-                    {
-
-                    }
+                    return new SvgAttributeLink(SvgAttributeLinkKind.Id, url_value.Substring(1));
                 }
                 else
                 {
@@ -767,6 +830,17 @@ namespace LayoutFarm.Svg
             {
 
             }
+            return null;
+        }
+        static void AddClipPathLink(SvgVisualSpec spec, string value)
+        {
+            //eg. url(#aaa)
+            SvgAttributeLink attrLink = ParseAttributeLink(value);
+            if (attrLink != null)
+            {
+                spec.ClipPathLink = attrLink;
+            }
+
         }
 
     }
