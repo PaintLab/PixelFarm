@@ -160,8 +160,10 @@ namespace PaintLab.Svg
     {
         public PointF StartMarkerPos { get; set; }
         public PointF EndMarkerPos { get; set; }
+        public PointF[] AllPoints { get; set; }
 
         public Affine StartMarkerAffine { get; set; }
+        public Affine MidMarkerAffine { get; set; }
         public Affine EndMarkerAffine { get; set; }
 
         public SvgRenderElement StartMarker { get; set; }
@@ -557,7 +559,6 @@ namespace PaintLab.Svg
                     SvgRenderElement clipPath = (SvgRenderElement)_visualSpec.ResolvedClipPath;
                     VertexStore clipVxs = ((SvgRenderElement)clipPath.GetChildNode(0))._vxsPath;
 
-
                     //----------
                     //for optimization check if clip path is Rect
                     //if yes => do simple rect clip 
@@ -733,7 +734,41 @@ namespace PaintLab.Svg
 
                                 if (_pathMarkers.MidMarker != null)
                                 {
+                                    //draw this
+                                    //vgPainterArgs._currentTx = Affine.IdentityMatrix;// _pathMarkers.StartMarkerAffine;
+                                    Color prevFillColor = p.FillColor;
+                                    p.FillColor = Color.Red;
 
+                                    PointF[] allPoints = _pathMarkers.AllPoints;
+                                    int allPointCount = allPoints.Length;
+                                    if (allPointCount > 2)
+                                    {
+                                        //draw between first and last node
+
+                                        for (int mm = 1; mm < allPointCount - 1; ++mm)
+                                        {
+                                            int cc = _pathMarkers.MidMarker.ChildCount;
+                                            PointF btwPoint = allPoints[mm];
+                                            for (int i = 0; i < cc; ++i)
+                                            {
+                                                //temp fix   
+
+                                                if (_pathMarkers.MidMarkerAffine != null)
+                                                {
+                                                    vgPainterArgs._currentTx = _pathMarkers.MidMarkerAffine * Affine.NewTranslation(btwPoint.X, btwPoint.Y);
+                                                }
+                                                else
+                                                {
+                                                    vgPainterArgs._currentTx = Affine.NewTranslation(btwPoint.X, btwPoint.Y);
+                                                }
+
+                                                _pathMarkers.MidMarker.GetChildNode(i).Paint(vgPainterArgs);
+                                            }
+                                        }
+                                    }
+
+                                    p.FillColor = prevFillColor;
+                                    vgPainterArgs._currentTx = currentTx;
                                 }
 
                                 if (_pathMarkers.EndMarker != null)
@@ -1302,8 +1337,11 @@ namespace PaintLab.Svg
                 ResolveMarkers(renderE, polylineSpec);
                 if (renderE._pathMarkers != null)
                 {
+
                     //create primary instance plan for this polyline
                     SvgPathRenderMarkers pathMarkers = renderE._pathMarkers;
+                    pathMarkers.AllPoints = points;
+
                     //start, mid, end
                     if (pathMarkers.StartMarker != null)
                     {
@@ -1321,11 +1359,13 @@ namespace PaintLab.Svg
                             AffinePlan.Rotate(rotateRad) //rotate                            
                         );
                     }
+                    //-------------------------------
                     if (pathMarkers.MidMarker != null)
                     {
-
+                        SvgMarkerSpec markerSpec = (SvgMarkerSpec)pathMarkers.StartMarker._visualSpec;
+                        pathMarkers.MidMarkerAffine = Affine.NewTranslation(-markerSpec.RefX.Number, -markerSpec.RefY.Number);
                     }
-
+                    //-------------------------------
                     if (pathMarkers.EndMarker != null)
                     {
                         //turn marker to the start direction
