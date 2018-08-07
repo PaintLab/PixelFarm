@@ -701,6 +701,7 @@ namespace PaintLab.Svg
                             }
 
 
+                            //----------------------------------------------------------------------
                             if (this._pathMarkers != null)
                             {
                                 //render each marker
@@ -708,36 +709,33 @@ namespace PaintLab.Svg
                                 {
                                     //draw this
                                     //*** IMPORTANT : matrix transform order !***                 
-                                    //*** IMPORTANT : matrix transform order !***                        
-
-
+                                    //*** IMPORTANT : matrix transform order !***    
                                     Color prevFillColor = p.FillColor;
                                     p.FillColor = Color.Red;
                                     int cc = _pathMarkers.StartMarker.ChildCount;
                                     for (int i = 0; i < cc; ++i)
                                     {
-                                        //temp fix
-                                        float ox = p.OriginX;
-                                        float oy = p.OriginY;
-
-                                        // p.SetOrigin(_pathMarkers.StartMarkerPos.X, _pathMarkers.StartMarkerPos.Y);
-                                       
+                                        //temp fix 
                                         if (_pathMarkers.StartMarkerAffine != null)
                                         {
                                             vgPainterArgs._currentTx = _pathMarkers.StartMarkerAffine * Affine.NewTranslation(_pathMarkers.StartMarkerPos.X, _pathMarkers.StartMarkerPos.Y);
-
                                         }
                                         else
                                         {
                                             vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.StartMarkerPos.X, _pathMarkers.StartMarkerPos.Y);
                                         }
                                         _pathMarkers.StartMarker.GetChildNode(i).Paint(vgPainterArgs);
-                                        //p.SetOrigin(ox, oy);
+
                                     }
                                     p.FillColor = prevFillColor;
                                     vgPainterArgs._currentTx = currentTx;
+                                }
+
+                                if (_pathMarkers.MidMarker != null)
+                                {
 
                                 }
+
                                 if (_pathMarkers.EndMarker != null)
                                 {
                                     //draw this
@@ -747,11 +745,7 @@ namespace PaintLab.Svg
                                     int cc = _pathMarkers.EndMarker.ChildCount;
                                     for (int i = 0; i < cc; ++i)
                                     {
-                                        //temp fix
-                                        float ox = p.OriginX;
-                                        float oy = p.OriginY;
-
-                                        //p.SetOrigin(_pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y);
+                                        //temp fix 
                                         if (_pathMarkers.EndMarkerAffine != null)
                                         {
                                             vgPainterArgs._currentTx = _pathMarkers.EndMarkerAffine * Affine.NewTranslation(_pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y);
@@ -760,9 +754,7 @@ namespace PaintLab.Svg
                                         {
                                             vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y);
                                         }
-
                                         _pathMarkers.EndMarker.GetChildNode(i).Paint(vgPainterArgs);
-                                        //p.SetOrigin(ox, oy);
                                     }
                                     p.FillColor = prevFillColor;
                                     vgPainterArgs._currentTx = currentTx;
