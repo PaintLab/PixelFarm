@@ -7,12 +7,17 @@ namespace LayoutFarm.RenderBoxes
     public struct HitInfo
     {
         public readonly Point point;
-        public readonly RenderElement hitElement;
+
+        object _hitObject;
         public static readonly HitInfo Empty = new HitInfo();
-        public HitInfo(RenderElement hitObject, Point point)
+        public HitInfo(object hitObject, Point point)
         {
             this.point = point;
-            this.hitElement = hitObject;
+            this._hitObject = hitObject;
+        }
+        public RenderElement hitElement
+        {
+            get { return _hitObject as RenderElement; }
         }
 
         public static bool operator ==(HitInfo pair1, HitInfo pair2)
