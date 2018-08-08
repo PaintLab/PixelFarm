@@ -11,7 +11,8 @@ using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using LayoutFarm.WebDom;
 
-namespace LayoutFarm.Svg
+
+namespace PaintLab.Svg
 {
     //----------------------
     public class SvgHitChain
@@ -22,7 +23,15 @@ namespace LayoutFarm.Svg
         public SvgHitChain()
         {
         }
-        public void AddHit(SvgElement svg, float x, float y)
+        public float X { get; private set; }
+        public float Y { get; private set; }
+        public void SetHitTestPos(float x, float y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+        public bool WithSubPartTest { get; set; }
+        public void AddHit(SvgRenderElement svg, float x, float y)
         {
             svgList.Add(new SvgHitInfo(svg, x, y));
         }
@@ -43,8 +52,10 @@ namespace LayoutFarm.Svg
         }
         public void Clear()
         {
+            this.X = this.Y = 0;
             this.rootGlobalX = this.rootGlobalY = 0;
             this.svgList.Clear();
+            WithSubPartTest = false;
         }
         public void SetRootGlobalPosition(float x, float y)
         {
@@ -53,24 +64,22 @@ namespace LayoutFarm.Svg
         }
     }
 
-
     public struct SvgHitInfo
     {
-        public readonly SvgElement svg;
+        public readonly SvgRenderElement svg;
         public readonly float x;
         public readonly float y;
-        public SvgHitInfo(SvgElement svg, float x, float y)
+        public SvgHitInfo(SvgRenderElement svg, float x, float y)
         {
             this.svg = svg;
             this.x = x;
             this.y = y;
         }
+        public SvgElement GetSvgElement()
+        {
+            return svg.GetController() as SvgElement;
+        }
     }
-}
-
-namespace PaintLab.Svg
-{
-
 
     public class VgPaintArgs
     {
@@ -140,20 +149,6 @@ namespace PaintLab.Svg
         }
     }
 
-    public class VgHitTestArgs
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public bool WithSubPartTest { get; set; }
-        //
-        public bool Result { get; set; }
-        public void Clear()
-        {
-            X = Y = 0;
-            WithSubPartTest = false;
-            Result = false;
-        }
-    }
 
 
     class SvgPathRenderMarkers
@@ -282,16 +277,27 @@ namespace PaintLab.Svg
         {
             _controller = o;
         }
-        public bool HitTest(VgHitTestArgs hitArgs)
+        public object GetController() { return _controller; }
+
+        public bool HitTest(SvgHitChain hitArgs)
         {
             if (_vxsPath != null)
             {
                 if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitArgs.X, hitArgs.Y))
                 {
-                    return hitArgs.Result = true;
+                    //found this
+                    hitArgs.AddHit(this, hitArgs.X, hitArgs.Y);
                 }
             }
-
+            if (hitArgs.Count > 0)
+            {
+                //found some 
+                if (!hitArgs.WithSubPartTest)
+                {
+                    return true;
+                }
+            }
+            //-----------------------------------
             if (_childNodes != null)
             {
                 int childCount = _childNodes.Count;
@@ -300,12 +306,11 @@ namespace PaintLab.Svg
                     SvgRenderElement child = _childNodes[i] as SvgRenderElement;
                     if (child != null && child.HitTest(hitArgs))
                     {
-                        return hitArgs.Result = true;
+                        return true;
                     }
                 }
             }
-            return hitArgs.Result = false;
-
+            return hitArgs.Count > 0;
         }
 
         public override SvgRenderElementBase Clone()
