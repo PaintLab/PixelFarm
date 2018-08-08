@@ -15,18 +15,21 @@ namespace LayoutFarm.RenderBoxes
             this.point = point;
             this._hitObject = hitObject;
         }
-        public RenderElement hitElement
+        public RenderElement HitElemAsRenderElement
         {
             get { return _hitObject as RenderElement; }
         }
-
+        public object HitElem
+        {
+            get { return _hitObject; }
+        }
         public static bool operator ==(HitInfo pair1, HitInfo pair2)
         {
-            return ((pair1.hitElement == pair2.hitElement) && (pair1.point == pair2.point));
+            return ((pair1._hitObject == pair2._hitObject) && (pair1.point == pair2.point));
         }
         public static bool operator !=(HitInfo pair1, HitInfo pair2)
         {
-            return ((pair1.hitElement == pair2.hitElement) && (pair1.point == pair2.point));
+            return ((pair1._hitObject == pair2._hitObject) && (pair1.point == pair2.point));
         }
 
         public override int GetHashCode()
@@ -41,7 +44,7 @@ namespace LayoutFarm.RenderBoxes
 #if DEBUG
         public override string ToString()
         {
-            return hitElement.ToString();
+            return _hitObject.ToString();
         }
 #endif
     }
@@ -131,7 +134,7 @@ namespace LayoutFarm.RenderBoxes
             {
                 if (hitList.Count > 0)
                 {
-                    return hitList[hitList.Count - 1].hitElement;
+                    return hitList[hitList.Count - 1].HitElemAsRenderElement;
                 }
                 else
                 {
