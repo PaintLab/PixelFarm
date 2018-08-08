@@ -72,11 +72,23 @@ namespace LayoutFarm.UI
             this.winBridge.HandleMouseUp(e);
             base.OnMouseUp(e);
         }
+        //int mm = 0;
         protected override void OnPaint(PaintEventArgs e)
         {
-            this.winBridge.InvalidateRootArea(
-                e.ClipRectangle.ToRect());
-            this.winBridge.PaintToOutputWindow();
+            //on window paint msg            
+            this.winBridge.PaintToOutputWindow2(e.ClipRectangle.ToRect());
+            //if (mm < 30)
+            //{
+            //    this.winBridge.InvalidateRootArea(e.ClipRectangle.ToRect());
+            //    this.winBridge.PaintToOutputWindow(); 
+            //}
+            //else
+            //{
+            //    //this.winBridge.InvalidateRootArea(e.ClipRectangle.ToRect());
+            //    this.winBridge.PaintToOutputWindow2(e.ClipRectangle.ToRect());
+            //   // this.winBridge.PaintToOutputWindow2(); 
+            //}
+            //Console.WriteLine("mm" + mm++);
             base.OnPaint(e);
         }
 

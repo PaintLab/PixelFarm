@@ -13,7 +13,7 @@ namespace LayoutFarm.UI.GdiPlus
             Size viewportSize, int cachedPageNum)
             : base(rootgfx, viewportSize, cachedPageNum)
         {
-            quadPages = new QuadPages(cachedPageNum, viewportSize.Width, viewportSize.Height * 2);
+            quadPages = new QuadPages(cachedPageNum, viewportSize.Width, viewportSize.Height);
             this.CalculateCanvasPages();
         }
 
@@ -36,10 +36,15 @@ namespace LayoutFarm.UI.GdiPlus
             base.OnClosing();
         }
 
-        public override void CanvasInvlidateArea(Rectangle r)
+#if DEBUG
+        //int dbugCount;
+#endif
+        public override void CanvasInvalidateArea(Rectangle r)
         {
             quadPages.CanvasInvalidate(r);
-            //Console.WriteLine((dbugCount++).ToString() + " " + r.ToString());
+#if DEBUG
+            //Console.WriteLine("CanvasInvalidateArea:" + (dbugCount++).ToString() + " " + r.ToString());
+#endif
         }
         public override bool IsQuadPageValid
         {
@@ -57,10 +62,58 @@ namespace LayoutFarm.UI.GdiPlus
             quadPages.CalculateCanvasPages(this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             this.FullMode = true;
         }
+        public void PaintMe2(IntPtr hdc, Rectangle invalidateArea)
+        {
+            if (this.IsClosed) { return; }
+            //------------------------------------ 
 
+            this.rootGraphics.PrepareRender();
+            //---------------
+            this.rootGraphics.IsInRenderPhase = true;
+#if DEBUG
+            this.rootGraphics.dbug_rootDrawingMsg.Clear();
+            this.rootGraphics.dbug_drawLevel = 0;
+#endif
+            if (this.FullMode)
+            {
+                quadPages.RenderToOutputWindowFullMode(
+                    rootGraphics.TopWindowRenderBox, hdc,
+                    this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+            }
+            else
+            {
+                //temp to full mode
+                //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+                quadPages.RenderToOutputWindowPartialMode2(
+                   rootGraphics.TopWindowRenderBox, hdc,
+                   this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
+            }
+            this.rootGraphics.IsInRenderPhase = false;
+#if DEBUG
+
+            RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
+            if (visualroot.dbug_RecordDrawingChain)
+            {
+                List<dbugLayoutMsg> outputMsgs = dbugOutputWindow.dbug_rootDocDebugMsgs;
+                outputMsgs.Clear();
+                outputMsgs.Add(new dbugLayoutMsg(null as RenderElement, "[" + debug_render_to_output_count + "]"));
+                visualroot.dbug_DumpRootDrawingMsg(outputMsgs);
+                dbugOutputWindow.dbug_InvokeVisualRootDrawMsg();
+                debug_render_to_output_count++;
+            }
+
+
+            if (dbugHelper01.dbugVE_HighlightMe != null)
+            {
+                dbugOutputWindow.dbug_HighlightMeNow(dbugHelper01.dbugVE_HighlightMe.dbugGetGlobalRect());
+            }
+#endif
+        }
 
         public void PaintMe(IntPtr hdc)
         {
+            //paint the content to target hdc
+
             if (this.IsClosed) { return; }
             //------------------------------------ 
 

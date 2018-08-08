@@ -280,7 +280,7 @@ namespace LayoutFarm.Dev
         private void toolStripButton1_Click_1(object sender, EventArgs e)
         {
 #if DEBUG
-            vwport.PaintMeFullMode();
+            vwport.dbugPaintMeFullMode();
 #endif 
 
         }
