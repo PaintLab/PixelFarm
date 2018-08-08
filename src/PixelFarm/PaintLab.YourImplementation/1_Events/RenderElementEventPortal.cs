@@ -65,7 +65,7 @@ namespace LayoutFarm.UI
             if (count > 0)
             {
                 HitInfo hitInfo = hitChain.GetHitInfo(count - 1);
-                e.ExactHitObject = hitInfo.hitElement;
+                e.ExactHitObject = hitInfo.HitElemAsRenderElement;
             }
         }
 
@@ -87,7 +87,7 @@ namespace LayoutFarm.UI
                 for (int i = 0; i < j; ++i)
                 {
                     HitInfo hitInfo = previousChain.GetHitInfo(i);
-                    RenderElement elem = hitInfo.hitElement;
+                    RenderElement elem = hitInfo.HitElemAsRenderElement;
                     if (elem != null && elem.VisibleAndHasParent)
                     {
                         if (elem.Contains(hitInfo.point))
@@ -115,7 +115,7 @@ namespace LayoutFarm.UI
             //---------------------------------
             if (hitPointChain.Count > 0)
             {
-                var commonElement = hitPointChain.GetHitInfo(hitPointChain.Count - 1).hitElement;
+                var commonElement = hitPointChain.GetHitInfo(hitPointChain.Count - 1).HitElemAsRenderElement;
                 hitPointChain.RemoveCurrentHit();
                 return commonElement;
             }
@@ -190,13 +190,14 @@ namespace LayoutFarm.UI
 
 
             HitChain hitPointChain = GetFreeHitChain();
+
+            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
 #if DEBUG
             hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseDown;
 #endif
 
-            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             int hitCount = hitPointChain.Count;
-            RenderElement hitElement = hitPointChain.TopMostElement;
+           
             if (hitCount > 0)
             {
                 //------------------------------
@@ -258,7 +259,7 @@ namespace LayoutFarm.UI
                 for (int tt = hitPointChain.Count - 1; tt >= 0; --tt)
                 {
                     hitInfo = hitPointChain.GetHitInfo(tt);
-                    RenderElement ve = hitInfo.hitElement;
+                    RenderElement ve = hitInfo.HitElemAsRenderElement;
                     if (ve != null)
                     {
                         ve.dbug_WriteOwnerLayerInfo(visualroot, tt);
@@ -440,7 +441,7 @@ namespace LayoutFarm.UI
             for (int i = hitPointChain.Count - 1; i >= 0; --i)
             {
                 HitInfo hitPoint = hitPointChain.GetHitInfo(i);
-                object currentHitElement = hitPoint.hitElement.GetController();
+                object currentHitElement = hitPoint.HitElemAsRenderElement.GetController();
                 IEventPortal eventPortal = currentHitElement as IEventPortal;
                 if (eventPortal != null)
                 {
@@ -460,7 +461,7 @@ namespace LayoutFarm.UI
             for (int i = hitPointChain.Count - 1; i >= 0; --i)
             {
                 hitInfo = hitPointChain.GetHitInfo(i);
-                IUIEventListener listener = hitInfo.hitElement.GetController() as IUIEventListener;
+                IUIEventListener listener = hitInfo.HitElemAsRenderElement.GetController() as IUIEventListener;
                 if (listener != null)
                 {
                     if (e.SourceHitElement == null)
