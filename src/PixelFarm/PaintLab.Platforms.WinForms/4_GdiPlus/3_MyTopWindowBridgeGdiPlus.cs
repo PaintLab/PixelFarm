@@ -20,7 +20,7 @@ namespace LayoutFarm.UI.GdiPlus
             this.windowControl = windowControl;
             this.SetBaseCanvasViewport(this.gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize(), 4));
             this.RootGfx.SetPaintDelegates(
-                    this.gdiPlusViewport.CanvasInvlidateArea,
+                    this.gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;
@@ -36,13 +36,19 @@ namespace LayoutFarm.UI.GdiPlus
         {
             Rectangle rect = r;
             this.RootGfx.InvalidateGraphicArea(
-                RootGfx.TopWindowRenderBox,
-                ref rect);
+                    RootGfx.TopWindowRenderBox,
+                    ref rect);
         }
         public override void PaintToOutputWindow()
         {
             IntPtr hdc = GetDC(this.windowControl.Handle);
             this.gdiPlusViewport.PaintMe(hdc);
+            ReleaseDC(this.windowControl.Handle, hdc);
+        }
+        public override void PaintToOutputWindow2(Rectangle invalidateArea)
+        {
+            IntPtr hdc = GetDC(this.windowControl.Handle);
+            this.gdiPlusViewport.PaintMe2(hdc, invalidateArea);
             ReleaseDC(this.windowControl.Handle, hdc);
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)

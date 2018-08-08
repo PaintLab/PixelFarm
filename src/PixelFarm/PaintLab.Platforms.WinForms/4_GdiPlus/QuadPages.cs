@@ -17,7 +17,11 @@ namespace PixelFarm.Drawing.WinGdi
 
         public void Dispose()
         {
-
+            if (_pageA != null)
+            {
+                _pageA.Dispose();
+                _pageA = null;
+            }
         }
         public void CanvasInvalidate(Rectangle rect)
         {
@@ -109,6 +113,30 @@ namespace PixelFarm.Drawing.WinGdi
             }
 
             Rectangle invalidateArea = _pageA.InvalidateArea;
+
+            _pageA.RenderTo(destOutputHdc, invalidateArea.Left - _pageA.Left, invalidateArea.Top - _pageA.Top,
+                new Rectangle(invalidateArea.Left -
+                    viewportX, invalidateArea.Top - viewportY,
+                    invalidateArea.Width, invalidateArea.Height));
+            _pageA.ResetInvalidateArea();
+        }
+        public void RenderToOutputWindowPartialMode2(
+            IRenderElement renderE,
+            IntPtr destOutputHdc,
+            int viewportX, int viewportY,
+            int viewportWidth, int viewportHeight,
+            Rectangle windowMsgInvalidateArea)
+        {
+            if (!_pageA.IsContentReady)
+            {
+                UpdateInvalidArea(_pageA, renderE);
+            }
+
+            Rectangle invalidateArea = _pageA.InvalidateArea;
+            if (invalidateArea.Width == 0 || invalidateArea.Height == 0)
+            {
+                invalidateArea = windowMsgInvalidateArea;// new Rectangle(0, 0, _pageA.Width, _pageA.Height);
+            }
 
             _pageA.RenderTo(destOutputHdc, invalidateArea.Left - _pageA.Left, invalidateArea.Top - _pageA.Top,
                 new Rectangle(invalidateArea.Left -

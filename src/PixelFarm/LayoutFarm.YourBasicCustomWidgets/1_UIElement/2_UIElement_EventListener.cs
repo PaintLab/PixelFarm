@@ -7,6 +7,13 @@ namespace LayoutFarm.UI
         IEventListener _externalEventListener;
         public bool AttachExternalEventListener(IEventListener externalEventListener)
         {
+            if (externalEventListener == null)
+            {
+                //clear existing event listener
+                this._externalEventListener = null;
+                return false;
+            }
+            //--------------------------------------------------------
             if (_externalEventListener == null)
             {
                 this._externalEventListener = externalEventListener;
