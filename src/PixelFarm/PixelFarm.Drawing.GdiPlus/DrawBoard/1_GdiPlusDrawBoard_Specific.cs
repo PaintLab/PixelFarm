@@ -90,15 +90,8 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 _gdigsx.CloseCanvas();
                 _gdigsx = null;
-            }
-
-            //if (_painter != null)
-            //{
-            //    _painter = null;
-            //}
-        }
-
-
+            } 
+        } 
         public override void CloseCanvas()
         {
             if (isDisposed)

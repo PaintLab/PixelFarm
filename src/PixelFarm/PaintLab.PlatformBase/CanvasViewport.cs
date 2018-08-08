@@ -86,7 +86,7 @@ namespace LayoutFarm.UI
         {
             //EvaluateScrollBar();
         }
-        public abstract void CanvasInvlidateArea(Rectangle r);
+        public abstract void CanvasInvalidateArea(Rectangle r);
         public virtual bool IsQuadPageValid
         {
             get { return true; }

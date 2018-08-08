@@ -31,7 +31,7 @@ namespace LayoutFarm.UI
             this.topWinEventRoot = topWinEventRoot;
             this.rootGraphic = rootGraphic;
         }
-
+#if DEBUG
         static void SaveImage(byte[] imgBuffer, int pixelWidth, int pixelHeight)
         {
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(pixelWidth, pixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -42,6 +42,7 @@ namespace LayoutFarm.UI
                 bmp.Save("d:\\WImageTest\\test002.png");
             }
         }
+#endif
 
         public abstract void BindWindowControl(Control windowControl);
         public abstract void InvalidateRootArea(Rectangle r);
@@ -57,7 +58,8 @@ namespace LayoutFarm.UI
         internal virtual void OnHostControlLoaded()
         {
         }
-        public void PaintToOutputWindowFullMode()
+#if DEBUG
+        public void dbugPaintToOutputWindowFullMode()
         {
             Rectangle rect = new Rectangle(0, 0, rootGraphic.Width, rootGraphic.Height);
             rootGraphic.InvalidateGraphicArea(
@@ -65,9 +67,14 @@ namespace LayoutFarm.UI
                 ref rect);
             this.PaintToOutputWindow();
         }
-        public abstract void PaintToOutputWindow();
-        public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer);
+#endif
 
+
+        //-------------------------------------------------------------------
+        public abstract void PaintToOutputWindow();
+        public abstract void PaintToOutputWindow2(Rectangle invalidateArea);
+        //-------------------------------------------------------------------
+        public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer);
         public void UpdateCanvasViewportSize(int w, int h)
         {
             this.canvasViewport.UpdateCanvasViewportSize(w, h);
