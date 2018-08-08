@@ -190,11 +190,12 @@ namespace LayoutFarm.UI
 
 
             HitChain hitPointChain = GetFreeHitChain();
+
+            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
 #if DEBUG
             hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseDown;
 #endif
 
-            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             int hitCount = hitPointChain.Count;
            
             if (hitCount > 0)

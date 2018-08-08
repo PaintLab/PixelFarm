@@ -138,6 +138,9 @@ namespace PaintLab.Svg
         public abstract SvgRenderElementBase Clone();
 #if DEBUG
         public bool dbugHasParent;
+
+        public readonly int dbugId = s_dbugTotalId++;
+        static int s_dbugTotalId;
 #endif
     }
     public class VgTextNodeRenderElement : SvgRenderElementBase
@@ -306,7 +309,11 @@ namespace PaintLab.Svg
                     SvgRenderElement child = _childNodes[i] as SvgRenderElement;
                     if (child != null && child.HitTest(hitArgs))
                     {
-                        return true;
+                        //svg children may overlaped each other
+                        if (!hitArgs.WithSubPartTest)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
