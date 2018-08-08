@@ -40,6 +40,7 @@ namespace LayoutFarm.Text
             {
                 textLayer.SetUseDoubleCanvas(true, false);
             }
+            this.NeedClipArea = true;
             this.IsBlockElement = false;
         }
 
