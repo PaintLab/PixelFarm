@@ -10,10 +10,20 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.Samples
 {
+    public enum SmoothBrushMode
+    {
+        SolidBrush,
+        EraseBrush,
+        CutBrush
+    }
+    public enum EditMode
+    {
+        Draw,
+        Select
+    }
     class MyBrushPath
     {
-
-
+        
         bool validBoundingRect;
         VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();

@@ -10,7 +10,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "22")]
-    [Info("SmoothBrush3")]
+    [ Info("SmoothBrush3")]
     public class SmoothBrush3 : DemoBase
     {
         PixelFarm.Drawing.Point latestMousePoint;

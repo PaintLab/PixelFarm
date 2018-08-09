@@ -8,17 +8,7 @@ using Mini;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.Samples
 {
-    public enum SmoothBrushMode
-    {
-        SolidBrush,
-        EraseBrush,
-        CutBrush
-    }
-    public enum EditMode
-    {
-        Draw,
-        Select
-    }
+   
 
     [Info(OrderCode = "22")]
     [Info("SmoothBrush2")]
