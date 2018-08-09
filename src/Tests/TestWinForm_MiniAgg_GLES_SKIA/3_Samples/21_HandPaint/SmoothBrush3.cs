@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             _stroke1 = new Stroke(10);
             _stroke1.LineCap = LineCap.Round;
-            _stroke1.LineJoin = LineJoin.Round; 
+            _stroke1.LineJoin = LineJoin.Round;
         }
         public override void Init()
         {
@@ -127,12 +127,14 @@ namespace PixelFarm.CpuBlit.Samples
                                     for (int i = j; i >= 0; --i)
                                     {
                                         //cut each path
-                                        var lastPath = myBrushPathList[i];
+                                        MyBrushPath lastPath = myBrushPathList[i];
                                         //do path clip***
-                                        List<VertexStore> paths = PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
-                                                new VertexStoreSnap(lastPath.Vxs),
-                                                new VertexStoreSnap(currentBrushPath.Vxs), VertexProcessing.VxsClipperType.Difference,
-                                                true);
+                                        List<VertexStore> paths = new List<VertexStore>();
+                                        PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
+                                               new VertexStoreSnap(lastPath.Vxs),
+                                               new VertexStoreSnap(currentBrushPath.Vxs), VertexProcessing.VxsClipperType.Difference,
+                                               true,
+                                               paths);
 
                                         myBrushPathList.RemoveAt(i);
 
@@ -160,7 +162,6 @@ namespace PixelFarm.CpuBlit.Samples
                                                 newBrushPath.SetVxs(paths[s]);
                                                 myBrushPathList.Insert(i, newBrushPath);
                                             }
-
 
                                         }
                                     }

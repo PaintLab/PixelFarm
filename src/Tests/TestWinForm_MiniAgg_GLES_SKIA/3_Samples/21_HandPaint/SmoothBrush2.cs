@@ -133,10 +133,12 @@ namespace PixelFarm.CpuBlit.Samples
                                         //cut each path
                                         var lastPath = myBrushPathList[i];
                                         //do path clip***
-                                        List<VertexStore> paths = PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
-                                                new VertexStoreSnap(lastPath.Vxs),
-                                                new VertexStoreSnap(currentBrushPath.Vxs), VertexProcessing.VxsClipperType.Difference,
-                                                true);
+                                        List<VertexStore> paths = new List<VertexStore>();
+                                        PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
+                                               new VertexStoreSnap(lastPath.Vxs),
+                                               new VertexStoreSnap(currentBrushPath.Vxs), VertexProcessing.VxsClipperType.Difference,
+                                               true,
+                                               paths);
 
                                         myBrushPathList.RemoveAt(i);
 
