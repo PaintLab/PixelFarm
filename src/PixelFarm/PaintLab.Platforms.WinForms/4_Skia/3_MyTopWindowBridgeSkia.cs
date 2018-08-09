@@ -14,6 +14,10 @@ namespace LayoutFarm.UI.Skia
             : base(root, topWinEventRoot)
         {
         }
+        public override void PaintToOutputWindow2(Rectangle invalidateArea)
+        {
+            throw new NotImplementedException();
+        }
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
@@ -22,7 +26,7 @@ namespace LayoutFarm.UI.Skia
                 this.Size.ToSize(), 4));
 
             this.RootGfx.SetPaintDelegates(
-                    this.canvasViewport.CanvasInvlidateArea,
+                    this.canvasViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;

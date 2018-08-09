@@ -21,7 +21,7 @@ namespace LayoutFarm.UI.Skia
                 new Size(windowControl.Width, windowControl.Height), 4));
 
             this.RootGfx.SetPaintDelegates(
-                    this.canvasViewport.CanvasInvlidateArea,
+                    this.canvasViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;

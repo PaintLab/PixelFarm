@@ -33,7 +33,7 @@ namespace LayoutFarm.UI.Skia
             memdc.Dispose();
             base.OnClosing();
         }
-        public override void CanvasInvlidateArea(Rectangle r)
+        public override void CanvasInvalidateArea(Rectangle r)
         {
             //quadPages.CanvasInvalidate(r);
             //Console.WriteLine((dbugCount++).ToString() + " " + r.ToString());
