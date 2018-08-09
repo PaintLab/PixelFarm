@@ -23,6 +23,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             this._multiline = multiline;
+            
         }
         public void ClearText()
         {

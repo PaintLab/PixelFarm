@@ -530,13 +530,7 @@ namespace LayoutFarm.WebDom.Parser
                                     this._latestPropertyValue = codeBinaryOpExpr;
                                 }
                                 break;
-                            case CssTokenName.LiteralString:
-                                {
-                                    //TODO: review css
-                                    var literalValue = new string(this.textBuffer, start, len);
-                                    throw new NotSupportedException();
-                                }
-                                break;
+
                             case CssTokenName.LParen:
                                 {
                                     //function 
@@ -560,6 +554,15 @@ namespace LayoutFarm.WebDom.Parser
                                     //start new proeprty
                                     parseState = CssParseState.BlockBody;
                                     this._currentProperty = null;
+                                }
+                                break;
+                            case CssTokenName.LiteralString:
+                                {
+                                    //TODO: review css
+                                    //<p style="font: 20px '1 Smoothy DNA'">
+                                    var literalValue = new string(this.textBuffer, start, len);
+                                    this._currentProperty.AddValue(this._latestPropertyValue =
+                                        new CssCodePrimitiveExpression(literalValue, CssValueHint.LiteralString));
                                 }
                                 break;
                             case CssTokenName.Iden:
