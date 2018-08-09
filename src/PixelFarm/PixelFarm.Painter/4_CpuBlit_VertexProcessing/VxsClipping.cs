@@ -16,7 +16,28 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public static class VxsClipper
     {
 
-        
+        [System.ThreadStatic]
+        static Stack<List<IntPolygon>> s_polygonListPool;
+
+        static List<IntPolygon> GetFreeIntPolygonList()
+        {
+            if (s_polygonListPool == null) s_polygonListPool = new Stack<List<IntPolygon>>();
+            //---------------
+            if (s_polygonListPool.Count == 0)
+            {
+                return new List<IntPolygon>();
+            }
+            else
+            {
+                return s_polygonListPool.Pop();
+            }
+        }
+        static void ReleaseIntPolygonList(ref List<IntPolygon> list)
+        {
+            list.Clear();
+            s_polygonListPool.Push(list);
+            list = null;
+        }
 
         public static List<VertexStore> CombinePaths(
             VertexStoreSnap a,
@@ -27,21 +48,27 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //TODO: optimize here
 
             ClipType clipType = (ClipType)vxsClipType;
-            List<IntPolygon> aPolys = CreatePolygons(a);
-            List<IntPolygon> bPolys = CreatePolygons(b);
+
+            List<IntPolygon> aPolys = GetFreeIntPolygonList();
+            List<IntPolygon> bPolys = GetFreeIntPolygonList();
+            List<IntPolygon> intersectedPolys = GetFreeIntPolygonList();
+
+            CreatePolygons(a, aPolys);
+            CreatePolygons(b, bPolys);
+
+
             //
             Clipper clipper = new Clipper();
+            PathWriter outputPathWriter = new PathWriter();
+
             clipper.AddPaths(aPolys, PolyType.ptSubject, true);
             clipper.AddPaths(bPolys, PolyType.ptClip, true);
 
             //
-            List<IntPolygon> intersectedPolys = new List<IntPolygon>();
 
             clipper.Execute(clipType, intersectedPolys);
 
-            List<VertexStore> resultList = new List<VertexStore>();
-
-            PathWriter outputPathWriter = new PathWriter();
+            List<VertexStore> resultList = new List<VertexStore>(); 
 
             if (separateIntoSmallSubPaths)
             {
@@ -100,13 +127,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 resultList.Add(outputPathWriter.Vxs);
             }
 
+            //free resource
+            ReleaseIntPolygonList(ref aPolys);
+            ReleaseIntPolygonList(ref bPolys);
+            ReleaseIntPolygonList(ref intersectedPolys);
+
             return resultList;
         }
-        static List<IntPolygon> CreatePolygons(VertexStoreSnap a)
+        static void CreatePolygons(VertexStoreSnap a, List<IntPolygon> allPolys)
         {
-            List<IntPolygon> allPolys = new List<IntPolygon>();
-            IntPolygon currentPoly = null;
 
+            IntPolygon currentPoly = null;
             VertexData last = new VertexData();
             VertexData first = new VertexData();
             bool addedFirst = false;
@@ -148,7 +179,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 cmd = snapIter.GetNextVertex(out x, out y);
             } while (cmd != VertexCmd.NoMore);
-            return allPolys;
+
+
         }
     }
 }
