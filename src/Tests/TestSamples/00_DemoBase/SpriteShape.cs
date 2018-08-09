@@ -170,11 +170,10 @@ namespace PixelFarm.CpuBlit
         }
 
         VertexStore _selectedVxs = null;
-        public void HitTestOnSubPart(VgHitTestArgs hitArgs)
+        public void HitTestOnSubPart(SvgHitChain hitChain)
         {
             var renderE = ((SvgRenderElement)_svgRenderVx._renderE);
-            renderE.HitTest(hitArgs);
-
+            renderE.HitTest(hitChain);
         }
 
     }

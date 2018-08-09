@@ -22,7 +22,7 @@ namespace LayoutFarm.UI.OpenGL
                 canvas = null;
             }
         }
-        public override void CanvasInvlidateArea(Rectangle r)
+        public override void CanvasInvalidateArea(Rectangle r)
         {
         }
         internal void NotifyWindowControlBinding()

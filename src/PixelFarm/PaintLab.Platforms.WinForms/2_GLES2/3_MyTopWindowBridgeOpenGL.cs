@@ -18,8 +18,10 @@ namespace LayoutFarm.UI.OpenGL
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
-
-
+        }
+        public override void PaintToOutputWindow2(Rectangle invalidateArea)
+        {
+            throw new NotImplementedException();
         }
         public void SetCanvas(DrawBoard canvas)
         {

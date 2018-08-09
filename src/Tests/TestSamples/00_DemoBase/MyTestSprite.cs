@@ -86,28 +86,54 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        VgHitTestArgs _hitTestArgs = new VgHitTestArgs();
+        static class VgHitChainPool
+        {
+            //
+            //
+            [System.ThreadStatic]
+            static System.Collections.Generic.Stack<SvgHitChain> s_hitChains = new System.Collections.Generic.Stack< SvgHitChain>();
 
+            public static void GetFreeHitTestChain(out SvgHitChain hitTestArgs)
+            {
+                if (s_hitChains.Count > 0)
+                {
+                    hitTestArgs = s_hitChains.Pop();
+                }
+                else
+                {
+                    hitTestArgs = new SvgHitChain();
+                }
+            }
+            public static void ReleaseHitTestChain(ref SvgHitChain hitTestArgs)
+            {
+                hitTestArgs.Clear();
+                s_hitChains.Push(hitTestArgs);
+                hitTestArgs = null;
+            }
+        }
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
             RectD bounds = _spriteShape.Bounds;
             bounds.Offset(_posX, _posY);
             if (bounds.Contains(x, y))
             {
-
                 _mouseDownX = x;
                 _mouseDownY = y;
-
                 x -= _posX; //offset x to the coordinate of the sprite
                 y -= _posY;
                 if (withSubPathTest)
                 {
-                    _hitTestArgs.Clear();
-                    _hitTestArgs.X = x;
-                    _hitTestArgs.Y = y;
-                    _hitTestArgs.WithSubPartTest = withSubPathTest;
-                    _spriteShape.HitTestOnSubPart(_hitTestArgs);
-                    return _hitTestArgs.Result;
+                    VgHitChainPool.GetFreeHitTestChain(out SvgHitChain svgHitChain);
+                    svgHitChain.SetHitTestPos(x, y);
+                    svgHitChain.WithSubPartTest = withSubPathTest;
+                    _spriteShape.HitTestOnSubPart(svgHitChain);
+                    VgHitChainPool.ReleaseHitTestChain(ref svgHitChain);
+                    //_hitTestArgs.Clear();
+                    //_hitTestArgs.X = x;
+                    //_hitTestArgs.Y = y;
+                    //_hitTestArgs.WithSubPartTest = withSubPathTest;
+                    //_spriteShape.HitTestOnSubPart(_hitTestArgs);
+                    //return _hitTestArgs.Result;
                 }
 
 

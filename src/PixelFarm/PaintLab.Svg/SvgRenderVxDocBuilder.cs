@@ -282,20 +282,20 @@ namespace PaintLab.Svg
         }
         public object GetController() { return _controller; }
 
-        public bool HitTest(SvgHitChain hitArgs)
+        public bool HitTest(SvgHitChain hitChain)
         {
             if (_vxsPath != null)
             {
-                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitArgs.X, hitArgs.Y))
+                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitChain.X, hitChain.Y))
                 {
                     //found this
-                    hitArgs.AddHit(this, hitArgs.X, hitArgs.Y);
+                    hitChain.AddHit(this, hitChain.X, hitChain.Y);
                 }
             }
-            if (hitArgs.Count > 0)
+            if (hitChain.Count > 0)
             {
                 //found some 
-                if (!hitArgs.WithSubPartTest)
+                if (!hitChain.WithSubPartTest)
                 {
                     return true;
                 }
@@ -307,17 +307,17 @@ namespace PaintLab.Svg
                 for (int i = 0; i < childCount; ++i)
                 {
                     SvgRenderElement child = _childNodes[i] as SvgRenderElement;
-                    if (child != null && child.HitTest(hitArgs))
+                    if (child != null && child.HitTest(hitChain))
                     {
                         //svg children may overlaped each other
-                        if (!hitArgs.WithSubPartTest)
+                        if (!hitChain.WithSubPartTest)
                         {
                             return true;
                         }
                     }
                 }
             }
-            return hitArgs.Count > 0;
+            return hitChain.Count > 0;
         }
 
         public override SvgRenderElementBase Clone()
