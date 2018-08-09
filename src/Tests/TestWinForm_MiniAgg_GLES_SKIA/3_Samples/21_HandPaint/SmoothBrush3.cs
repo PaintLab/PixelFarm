@@ -26,10 +26,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             _stroke1 = new Stroke(10);
             _stroke1.LineCap = LineCap.Round;
-            _stroke1.LineJoin = LineJoin.Round;
-
-
-
+            _stroke1.LineJoin = LineJoin.Round; 
         }
         public override void Init()
         {

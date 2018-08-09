@@ -63,8 +63,8 @@ namespace ClipperLib
     using cInt = Int64;
 #endif
 
-    using Path = List<IntPoint>;
-    using Paths = List<List<IntPoint>>;
+    using Path = IntPolygon;
+    using Paths = List<IntPolygon>;
     public struct DoublePoint
     {
         public double X;
@@ -99,7 +99,9 @@ namespace ClipperLib
         public void Clear()
         {
             for (int i = 0; i < m_AllPolys.Count; i++)
+            {
                 m_AllPolys[i] = null;
+            }
             m_AllPolys.Clear();
             m_Childs.Clear();
         }
@@ -386,6 +388,7 @@ namespace ClipperLib
         }
     };
     //------------------------------------------------------------------------------
+
 
     public struct IntPoint
     {
@@ -1207,6 +1210,12 @@ namespace ClipperLib
         }
     } //end ClipperBase
 
+
+    public class IntPolygon : List<IntPoint>
+    {
+        public IntPolygon() { }
+        public IntPolygon(int capacity) : base(capacity) { }
+    }
     public class Clipper : ClipperBase
     {
         //InitOptions that can be passed to the constructor ...
@@ -2810,8 +2819,7 @@ namespace ClipperLib
                             else
                                 IntersectEdges(e, horzEdge, e.Top);
                             if (eMaxPair.OutIdx >= 0)
-                                throw
-        new ClipperException("ProcessHorizontal error");
+                                throw new ClipperException("ProcessHorizontal error");
                             return;
                         }
                         else if (dir == Direction.dLeftToRight)
@@ -4040,7 +4048,7 @@ new ClipperException("ProcessHorizontal error");
             Paths result = new Paths();
             ClipperOffset co = new ClipperOffset(MiterLimit, MiterLimit);
             co.AddPaths(polys, jointype, (EndType)endtype);
-            co.Execute(ref result, delta);
+            co.Execute(result, delta);
             return result;
         }
         //------------------------------------------------------------------------------
@@ -4613,7 +4621,7 @@ new ClipperException("ProcessHorizontal error");
         }
         //------------------------------------------------------------------------------
 
-        public void Execute(ref Paths solution, double delta)
+        public void Execute(Paths solution, double delta)
         {
             solution.Clear();
             FixOrientations();
@@ -4642,7 +4650,7 @@ new ClipperException("ProcessHorizontal error");
         }
         //------------------------------------------------------------------------------
 
-        public void Execute(ref PolyTree solution, double delta)
+        public void Execute(PolyTree solution, double delta)
         {
             solution.Clear();
             FixOrientations();
@@ -4689,13 +4697,16 @@ new ClipperException("ProcessHorizontal error");
             else if (m_sinA < -1.0) m_sinA = -1.0;
             if (m_sinA * m_delta < 0)
             {
-                m_destPoly.Add(new IntPoint(Round(m_srcPoly[j].X + m_normals[k].X * m_delta),
-                  Round(m_srcPoly[j].Y + m_normals[k].Y * m_delta)));
+                m_destPoly.Add(
+                    new IntPoint(Round(m_srcPoly[j].X + m_normals[k].X * m_delta),
+                    Round(m_srcPoly[j].Y + m_normals[k].Y * m_delta)));
                 m_destPoly.Add(m_srcPoly[j]);
-                m_destPoly.Add(new IntPoint(Round(m_srcPoly[j].X + m_normals[j].X * m_delta),
-                  Round(m_srcPoly[j].Y + m_normals[j].Y * m_delta)));
+                m_destPoly.Add(
+                    new IntPoint(Round(m_srcPoly[j].X + m_normals[j].X * m_delta),
+                    Round(m_srcPoly[j].Y + m_normals[j].Y * m_delta)));
             }
             else
+            {
                 switch (jointype)
                 {
                     case JoinType.jtMiter:
@@ -4708,6 +4719,7 @@ new ClipperException("ProcessHorizontal error");
                     case JoinType.jtSquare: DoSquare(j, k); break;
                     case JoinType.jtRound: DoRound(j, k); break;
                 }
+            }
             k = j;
         }
         //------------------------------------------------------------------------------

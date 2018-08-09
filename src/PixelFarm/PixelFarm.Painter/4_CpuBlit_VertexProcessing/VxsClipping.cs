@@ -16,6 +16,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public static class VxsClipper
     {
 
+        
 
         public static List<VertexStore> CombinePaths(
             VertexStoreSnap a,
@@ -26,15 +27,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //TODO: optimize here
 
             ClipType clipType = (ClipType)vxsClipType;
-            List<List<IntPoint>> aPolys = CreatePolygons(a);
-            List<List<IntPoint>> bPolys = CreatePolygons(b);
+            List<IntPolygon> aPolys = CreatePolygons(a);
+            List<IntPolygon> bPolys = CreatePolygons(b);
             //
             Clipper clipper = new Clipper();
             clipper.AddPaths(aPolys, PolyType.ptSubject, true);
             clipper.AddPaths(bPolys, PolyType.ptClip, true);
 
             //
-            List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
+            List<IntPolygon> intersectedPolys = new List<IntPolygon>();
 
             clipper.Execute(clipType, intersectedPolys);
 
@@ -101,10 +102,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             return resultList;
         }
-        static List<List<IntPoint>> CreatePolygons(VertexStoreSnap a)
+        static List<IntPolygon> CreatePolygons(VertexStoreSnap a)
         {
-            List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
-            List<IntPoint> currentPoly = null;
+            List<IntPolygon> allPolys = new List<IntPolygon>();
+            IntPolygon currentPoly = null;
+
             VertexData last = new VertexData();
             VertexData first = new VertexData();
             bool addedFirst = false;
@@ -115,6 +117,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 if (cmd == VertexCmd.LineTo)
                 {
+                    if (currentPoly == null)
+                    {
+                        currentPoly = new IntPolygon();
+                        allPolys.Add(currentPoly);
+                    }
+                    //
                     if (!addedFirst)
                     {
                         currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
@@ -127,7 +135,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 else
                 {
                     addedFirst = false;
-                    currentPoly = new List<IntPoint>();
+                    currentPoly = new IntPolygon();
                     allPolys.Add(currentPoly);
                     if (cmd == VertexCmd.MoveTo)
                     {

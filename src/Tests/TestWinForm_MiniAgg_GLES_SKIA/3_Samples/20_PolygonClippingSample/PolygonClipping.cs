@@ -359,8 +359,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             if (combined != null)
             {
                 p.FillColor = ColorEx.Make(0.5f, 0.0f, 0f, 0.5f);
+                //TODO=?
                 p.Fill(new VertexStoreSnap(combined[0]));
-                //graphics2D.Render(new VertexStoreSnap(combined[0]), ColorRGBAf.MakeColorRGBA(0.5f, 0.0f, 0f, 0.5f));
             }
         }
         public override void MouseDrag(int x, int y)
