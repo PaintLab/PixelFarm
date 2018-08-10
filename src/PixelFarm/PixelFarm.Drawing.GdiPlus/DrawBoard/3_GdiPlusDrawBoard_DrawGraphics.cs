@@ -53,7 +53,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override void Clear(PixelFarm.Drawing.Color c)
         {
             _gdigsx.Clear(c);
-          
+
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
@@ -142,6 +142,11 @@ namespace PixelFarm.Drawing.WinGdi
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
             _gdigsx.DrawImages(image, destAndSrcPairs);
+        }
+        public override void DrawImage(Image image, int x, int y)
+        {
+            //draw image unscale at specific pos
+            _gdigsx.DrawImage(image, x, y);
         }
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.

@@ -98,6 +98,7 @@ namespace PixelFarm.Drawing
         public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);
         public abstract void DrawImage(Image image, RectangleF dest);
         public abstract void DrawImages(Image image, RectangleF[] destAndSrcPairs);
+        public abstract void DrawImage(Image image, int x, int y);//draw image unscaled at specific pos
         //---------------------------------------------------------------------------
         //text ,font, strings 
         //TODO: review these funcs

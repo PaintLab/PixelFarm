@@ -650,6 +650,11 @@ namespace PixelFarm.Drawing.WinGdi
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
         }
+        public void DrawImage(Image image, int x, int y)
+        {
+            System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
+            gx.DrawImageUnscaled(resolvedImg, x, y);
+        }
         public void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
 
@@ -816,7 +821,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         //GdiPlusPainter _gdiPlusPainter;
 
-          
+
         //public void Render(PixelFarm.CpuBlit.VgRenderVx svgVx)
         //{
         //    if (svgVx == null) return;
