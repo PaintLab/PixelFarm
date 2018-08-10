@@ -83,8 +83,8 @@ namespace PaintLab.Svg
 
     public class VgPaintArgs
     {
-        internal Painter P;
-        internal Affine _currentTx;
+        public Painter P;
+        public Affine _currentTx;
 
         internal void Reset()
         {

@@ -337,9 +337,6 @@ namespace PixelFarm.Drawing.WinGdi
                 gx.SetClip(currentClipRect);
             }
         }
-
-
-
         public Rectangle CurrentClipRect
         {
             get
@@ -347,9 +344,6 @@ namespace PixelFarm.Drawing.WinGdi
                 return currentClipRect.ToRect();
             }
         }
-
-
-
         public int Top
         {
             get
@@ -663,7 +657,6 @@ namespace PixelFarm.Drawing.WinGdi
                     fixed (int* srcBufferPtr = &srcBuffer[0])
                     {
                         byte* srcBuffer2 = (byte*)srcBufferPtr;
-                        
                         win32MemDc.BltBitFrom(srcBuffer2, srcStride, 0, 0, actualBmp.Width, actualBmp.Height, x, y);
                     }
                 }
