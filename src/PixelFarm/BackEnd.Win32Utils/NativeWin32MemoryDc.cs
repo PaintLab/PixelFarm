@@ -135,6 +135,7 @@ namespace Win32
             Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)this.PPVBits, copyLen);
         }
 
+
         public unsafe void BltBitFrom(byte* srcH, int srcStrideInBytes,
             int srcX,
             int srcY,
@@ -144,11 +145,11 @@ namespace Win32
         {
 
 
-            PixelFarm.Drawing.Rectangle rect = PixelFarm.Drawing.Rectangle.Intersect(
-                         new PixelFarm.Drawing.Rectangle(destX, destY, srcWidth, srcHeight), //src rect
-                         new PixelFarm.Drawing.Rectangle(0, 0, this._width, this._height));//dest rectt
+            Rectangle rect = Rectangle.Intersect(
+                        new Rectangle(destX, destY, srcWidth, srcHeight), //src rect
+                        new Rectangle(0, 0, this._width, this._height));//dest rectt
 
-            if (rect.Width <= 0 || rect.Height <= 0)
+            if (rect.W <= 0 || rect.H <= 0)
             {
                 return;
             }
@@ -161,9 +162,8 @@ namespace Win32
             int destXOffset = destX * 4;//to bytes
             int srcXOffset = srcX * 4;
             //
-            int srcRowLenInBytes = rect.Width * 4;
-            int src_intersect_height = rect.Height;
-            //
+            int srcRowLenInBytes = rect.W * 4;
+            int src_intersect_height = rect.H;            //
 
 
             if (_invertedImage)

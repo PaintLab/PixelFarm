@@ -697,6 +697,14 @@ namespace PixelFarm.Drawing.WinGdi
         public void DrawImage(Image image, RectangleF destRect)
         {
 
+            //check if we need scale?
+            if (image.Width == destRect.Width &&
+                image.Height == destRect.Height)
+            {
+                DrawImage(image, (int)destRect.X, (int)destRect.Y);
+                return;
+            }
+
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
             if (image.IsReferenceImage)
             {
