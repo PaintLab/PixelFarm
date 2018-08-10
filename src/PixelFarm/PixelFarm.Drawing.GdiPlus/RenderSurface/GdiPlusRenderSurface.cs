@@ -649,17 +649,18 @@ namespace PixelFarm.Drawing.WinGdi
             PixelFarm.CpuBlit.ActualBitmap actualBmp = image as PixelFarm.CpuBlit.ActualBitmap;
             if (actualBmp != null)
             {
-                //draw direct to win32 dc
-                int[] srcBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualBmp);
-                unsafe
-                {
-                    int srcStride = actualBmp.Stride;
-                    fixed (int* srcBufferPtr = &srcBuffer[0])
-                    {
-                        byte* srcBuffer2 = (byte*)srcBufferPtr;
-                        win32MemDc.BltBitFrom(srcBuffer2, srcStride, 0, 0, actualBmp.Width, actualBmp.Height, x, y);
-                    }
-                }
+                System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
+                gx.DrawImageUnscaled(resolvedImg, x, y);
+
+                //int[] srcBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualBmp);
+                //unsafe
+                //{
+                //    int srcStride = actualBmp.Stride;
+                //    fixed (int* srcBufferPtr = &srcBuffer[0])
+                //    {
+                //        win32MemDc.BlendBltBitFrom((byte*)srcBufferPtr, srcStride, 0, 0, actualBmp.Width, actualBmp.Height, x, y);
+                //    }
+                //}
             }
             else
             {
