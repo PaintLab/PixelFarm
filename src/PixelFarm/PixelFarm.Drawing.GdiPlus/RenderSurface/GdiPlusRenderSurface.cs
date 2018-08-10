@@ -663,9 +663,8 @@ namespace PixelFarm.Drawing.WinGdi
                     fixed (int* srcBufferPtr = &srcBuffer[0])
                     {
                         byte* srcBuffer2 = (byte*)srcBufferPtr;
-                        //copy entire img  
+                        
                         win32MemDc.BltBitFrom(srcBuffer2, srcStride, 0, 0, actualBmp.Width, actualBmp.Height, x, y);
-
                     }
                 }
             }
