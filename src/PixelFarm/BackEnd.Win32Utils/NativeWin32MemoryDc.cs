@@ -9,16 +9,21 @@ namespace Win32
     {
         int _width;
         int _height;
+
         IntPtr memHdc;
         IntPtr dib;
         IntPtr ppvBits;
         IntPtr hRgn = IntPtr.Zero;
 
         bool isDisposed;
+        bool _invertedImage;
+
         public NativeWin32MemoryDc(int w, int h, bool invertImage = false)
         {
             this._width = w;
             this._height = h;
+
+            _invertedImage = invertImage;
 
             memHdc = MyWin32.CreateMemoryHdc(
                 IntPtr.Zero,
@@ -130,6 +135,57 @@ namespace Win32
             Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)this.PPVBits, copyLen);
         }
 
+        public unsafe void BltBitFrom(byte* srcH, int srcStrideInBytes,
+            int srcX,
+            int srcY,
+            int srcWidth,
+            int srcHeight,
+            int destX, int destY)
+        {
+
+
+            PixelFarm.Drawing.Rectangle rect = PixelFarm.Drawing.Rectangle.Intersect(
+                         new PixelFarm.Drawing.Rectangle(destX, destY, srcWidth, srcHeight), //src rect
+                         new PixelFarm.Drawing.Rectangle(0, 0, this._width, this._height));//dest rectt
+
+            if (rect.Width <= 0 || rect.Height <= 0)
+            {
+                return;
+            }
+            //----------------------------------------------------------------------------------------------
+
+            //copy line by line 
+            int destStrideInBytes = _width * 4; //**4 => 32 bits pixel (4 bytes per 1 pixel)
+
+            byte* destHead = (byte*)this.PPVBits;
+            int destXOffset = destX * 4;//to bytes
+            int srcXOffset = srcX * 4;
+            //
+            int srcRowLenInBytes = rect.Width * 4;
+            int src_intersect_height = rect.Height;
+            //
+
+
+            if (_invertedImage)
+            {
+                destHead += (destStrideInBytes) * (_height - 1); //*** 
+                for (int h = srcY; h < src_intersect_height; ++h)
+                {
+                    Win32.MyWin32.memcpy(destHead + destXOffset, srcH + srcXOffset, srcRowLenInBytes);
+                    srcH += srcStrideInBytes;
+                    destHead -= destStrideInBytes; //***
+                }
+            }
+            else
+            {
+                for (int h = srcY; h < src_intersect_height; ++h)
+                {
+                    Win32.MyWin32.memcpy(destHead + destXOffset, srcH + srcXOffset, srcRowLenInBytes);
+                    srcH += srcStrideInBytes;
+                    destHead += destStrideInBytes;
+                }
+            }
+        }
         public void MeasureTextSize(char[] textBuffer, out int width, out int height)
         {
             Size win32Size;
