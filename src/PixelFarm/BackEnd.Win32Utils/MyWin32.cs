@@ -72,6 +72,40 @@ namespace Win32
         public int Y;
         public int W;
         public int H;
+
+        public int Right { get { return X + W; } }
+        public int Bottom { get { return Y + H; } }
+
+
+        public Rectangle(int x, int y, int w, int h)
+        {
+            X = x;
+            Y = y;
+            W = w;
+            H = h;
+        }
+
+        private bool IntersectsWithInclusive(Rectangle r)
+        {
+            return !((X > r.Right) || (Right < r.X) ||
+                (Y > r.Bottom) || (Bottom < r.Y));
+        }
+
+        public static Rectangle Intersect(Rectangle a, Rectangle b)
+        {
+            // MS.NET returns a non-empty rectangle if the two rectangles
+            // touch each other
+            if (!a.IntersectsWithInclusive(b))
+                return new Rectangle();//empty
+
+            return new Rectangle()
+            {
+                X = Math.Max(a.X, b.X),
+                Y = Math.Max(a.Y, b.Y),
+                W = Math.Min(a.Right, b.Right),
+                H = Math.Min(a.Bottom, b.Bottom)
+            };
+        }
     }
     [StructLayout(LayoutKind.Sequential)]
     struct Size

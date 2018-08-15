@@ -151,6 +151,10 @@ namespace PixelFarm.Drawing.GLES2
                 painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
             }
         }
+        public override void DrawImage(Image image, int x, int y)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
             //...

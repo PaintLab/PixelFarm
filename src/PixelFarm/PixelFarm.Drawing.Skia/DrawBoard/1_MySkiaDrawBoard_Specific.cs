@@ -51,6 +51,10 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotSupportedException();
         }
+        public override void DrawImage(Image image, int x, int y)
+        {
+            throw new NotImplementedException();
+        }
         public override void Dispose()
         {
 

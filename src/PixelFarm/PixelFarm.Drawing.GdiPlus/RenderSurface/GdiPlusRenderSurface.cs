@@ -337,9 +337,6 @@ namespace PixelFarm.Drawing.WinGdi
                 gx.SetClip(currentClipRect);
             }
         }
-
-
-
         public Rectangle CurrentClipRect
         {
             get
@@ -347,9 +344,6 @@ namespace PixelFarm.Drawing.WinGdi
                 return currentClipRect.ToRect();
             }
         }
-
-
-
         public int Top
         {
             get
@@ -650,6 +644,30 @@ namespace PixelFarm.Drawing.WinGdi
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
         }
+        public void DrawImage(Image image, int x, int y)
+        {
+            PixelFarm.CpuBlit.ActualBitmap actualBmp = image as PixelFarm.CpuBlit.ActualBitmap;
+            if (actualBmp != null)
+            {
+                System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
+                gx.DrawImageUnscaled(resolvedImg, x, y);
+
+                //int[] srcBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualBmp);
+                //unsafe
+                //{
+                //    int srcStride = actualBmp.Stride;
+                //    fixed (int* srcBufferPtr = &srcBuffer[0])
+                //    {
+                //        win32MemDc.BlendBltBitFrom((byte*)srcBufferPtr, srcStride, 0, 0, actualBmp.Width, actualBmp.Height, x, y);
+                //    }
+                //}
+            }
+            else
+            {
+                System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
+                gx.DrawImageUnscaled(resolvedImg, x, y);
+            }
+        }
         public void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
 
@@ -679,6 +697,14 @@ namespace PixelFarm.Drawing.WinGdi
         /// <param name="image"><see cref="T:System.Drawing.Image"/> to draw. </param><param name="destRect"><see cref="T:System.Drawing.Rectangle"/> structure that specifies the location and size of the drawn image. </param><exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
         public void DrawImage(Image image, RectangleF destRect)
         {
+
+            //check if we need scale?
+            if (image.Width == destRect.Width &&
+                image.Height == destRect.Height)
+            {
+                DrawImage(image, (int)destRect.X, (int)destRect.Y);
+                return;
+            }
 
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
             if (image.IsReferenceImage)
@@ -816,7 +842,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         //GdiPlusPainter _gdiPlusPainter;
 
-          
+
         //public void Render(PixelFarm.CpuBlit.VgRenderVx svgVx)
         //{
         //    if (svgVx == null) return;
