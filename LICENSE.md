@@ -1,5 +1,10 @@
-Source code from multiple projects,
-here...
+**License**
+
+The project is based on multiple open-sourced projects (listed below) all using permissive licenses.
+
+A license for a whole project is **MIT**.
+
+but if you use some part of the code please check each source file's header for the licensing info.
 
 **Geometry**
 
