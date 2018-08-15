@@ -144,19 +144,20 @@ namespace LayoutFarm.UI
             else
             {
                 int j = this.fastIntervalTaskList.Count;
-                MyIntervalTaskEventArgs args = GetTaskEventArgs();
+
                 if (j > 0)
                 {
+                    MyIntervalTaskEventArgs args = GetTaskEventArgs();
                     for (int i = 0; i < j; ++i)
                     {
                         fastIntervalTaskList[i].InvokeHandler(args);
                         needUpdate |= args.NeedUpdate;
                     }
+                    FreeTaskEventArgs(args);
                 }
-                FreeTaskEventArgs(args);
             }
 
-
+            //remainnig tasks
             if (needUpdate > 0)
             {
                 this.rootgfx.PrepareRender();

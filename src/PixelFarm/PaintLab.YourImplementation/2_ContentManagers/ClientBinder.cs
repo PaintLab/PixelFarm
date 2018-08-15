@@ -1,8 +1,5 @@
 ﻿//BSD, 2014-present, WinterDev
 
-using System;
-using PixelFarm.Drawing;
-
 namespace LayoutFarm
 {
     public class ClientImageBinder : ImageBinder
@@ -20,5 +17,5 @@ namespace LayoutFarm
             base.RaiseImageChanged();
         }
     }
-   
+
 }
