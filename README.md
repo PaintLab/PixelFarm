@@ -112,10 +112,16 @@ _pic 2: Agg's result, bitmap zoom-in to see fine details_
  
 ---
 
-License:
+ 
+**License:**
 
-Source code from multiple projects,
-here...
+The project is based on multiple open-sourced projects (listed below) all using permissive licenses.
+
+A license for a whole project is **MIT**.
+
+but if you use some part of the code please check each source file's header for the licensing info.
+
+
 
 **Geometry**
 
