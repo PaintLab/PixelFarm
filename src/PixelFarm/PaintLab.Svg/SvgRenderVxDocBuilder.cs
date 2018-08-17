@@ -552,6 +552,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.RootSvg:
                 case WellknownSvgElementName.Svg:
                     break;
+                case WellknownSvgElementName.Image:
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Ellipse:
@@ -1244,6 +1245,7 @@ namespace PaintLab.Svg
         {
             this._backimg = img;
             HasBitmapSnapshot = img != null;
+
         }
 
         public float X { get; set; }
