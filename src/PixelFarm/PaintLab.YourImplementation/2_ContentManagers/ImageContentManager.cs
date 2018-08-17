@@ -37,7 +37,7 @@ namespace LayoutFarm.ContentManagers
         ImageCacheSystem imageCacheLevel0 = new ImageCacheSystem();
 
         bool hasSomeInputHint;
-       
+
         object outputListSync = new object();
         object inputListSync = new object();
         bool working = false;
@@ -46,6 +46,7 @@ namespace LayoutFarm.ContentManagers
             //TODO: review here**** 
 
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
+          
         }
 
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)
@@ -61,8 +62,8 @@ namespace LayoutFarm.ContentManagers
                     return;
                 }
                 working = true;
-            } 
-             
+            }
+
             int j = inputList.Count;
             //load image in this list
 
@@ -94,7 +95,7 @@ namespace LayoutFarm.ContentManagers
                     this.ImageLoadingRequest(
                         this,
                         new ImageRequestEventArgs(binder));
-                    
+
                     //....
                     //process image infomation
                     //.... 
@@ -112,9 +113,9 @@ namespace LayoutFarm.ContentManagers
             {
                 hasSomeInputHint = false;
             }
-             
+
             working = false;
-        } 
+        }
         public void AddRequestImage(ImageBinder contentReq)
         {
             if (contentReq.ImageSource == null && !contentReq.HasLazyFunc)

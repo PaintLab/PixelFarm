@@ -86,6 +86,11 @@ namespace PixelFarm.Drawing
         {
             return this._x == p._x && this._y == p._y;
         }
+        public void Offset(float dx, float dy)
+        {
+            _x += dx;
+            _y += dy;
+        }
 
 #if DEBUG
         public override string ToString()
