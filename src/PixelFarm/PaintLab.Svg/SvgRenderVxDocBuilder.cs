@@ -425,6 +425,11 @@ namespace PaintLab.Svg
             return clone;
         }
 
+        internal float _imgW;
+        internal float _imgH;
+        internal float _imgX;
+        internal float _imgY;
+
         static PixelFarm.CpuBlit.VertexProcessing.Affine CreateAffine(SvgTransform transformation)
         {
             switch (transformation.TransformKind)
@@ -796,33 +801,32 @@ namespace PaintLab.Svg
                                 //
                                 case LayoutFarm.BinderState.Loaded:
                                     {
-                                        p.DrawImage(this.ImageBinder.Image, 0, 0);
+                                        //check if we need scale or not
 
-                                        //1. in this version
-                                        //our svg need ActualBitmap object to draw a bitmap
-                                        //so convert input img to 
-                                        //    Image img;
-                                        //    if ((img = (Image)_imgRun.ImageBinder.Image) != null)
-                                        //    {
-                                        //        if (_imgRun.ImageRectangle == Rectangle.Empty)
-                                        //        {
-                                        //            p.DrawImage(img,
-                                        //                  r.Left, r.Top,
-                                        //                  img.Width, img.Height);
-                                        //        }
-                                        //        else
-                                        //        {
-                                        //            p.DrawImage(img, _imgRun.ImageRectangle);
-                                        //        }
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        RenderUtils.DrawImageLoadingIcon(p.InnerCanvas, r);
-                                        //        if (r.Width > 19 && r.Height > 19)
-                                        //        {
-                                        //            p.DrawRectangle(Color.LightGray, r.X, r.Y, r.Width, r.Height);
-                                        //        }
-                                        //    }
+                                        Image img = this.ImageBinder.Image;
+                                        if (this._imgW == 0 || this._imgH == 0)
+                                        {
+                                            //only X,and Y
+                                            RenderQualtity prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQualtity.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.RenderQuality = prevQ;
+                                        }
+                                        else if (_imgW == img.Width && _imgH == img.Height)
+                                        {
+                                            RenderQualtity prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQualtity.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.RenderQuality = prevQ;
+                                        }
+                                        else
+                                        {
+                                            //TODO:  impl img scale here
+                                            RenderQualtity prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQualtity.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.RenderQuality = prevQ;
+                                        }
                                     }
                                     break;
 
@@ -1541,11 +1545,19 @@ namespace PaintLab.Svg
             VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
 
             ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
+            img._imgX = ConvertToPx(imgspec.X, ref a);
+            img._imgY = ConvertToPx(imgspec.Y, ref a);
+            img._imgW = ConvertToPx(imgspec.Width, ref a);
+            img._imgH = ConvertToPx(imgspec.Height, ref a);
+
+
             rectTool.SetRect(
-                ConvertToPx(imgspec.X, ref a),
-                ConvertToPx(imgspec.Y, ref a) + ConvertToPx(imgspec.Height, ref a),
-                ConvertToPx(imgspec.X, ref a) + ConvertToPx(imgspec.Width, ref a),
-                ConvertToPx(imgspec.Y, ref a));
+                img._imgX,
+                img._imgY + img._imgH,
+                img._imgX + img._imgW,
+                img._imgY);
+
+
             //
             using (VxsContext.Temp(out var v1))
             {
