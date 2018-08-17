@@ -299,7 +299,18 @@ namespace PaintLab.Svg
 
     public class SvgRenderRootElement
     {
+        internal Action<SvgRenderElement> _invalidate;
+        public SvgRenderRootElement()
+        {
+        }
+        internal void Invalidate(SvgRenderElement e)
+        {
+            if (_invalidate != null)
+            {
+                _invalidate(e);
+            }
 
+        }
     }
     public class SvgRenderElement : SvgRenderElementBase
     {
@@ -1266,7 +1277,7 @@ namespace PaintLab.Svg
 
         }
         SvgRenderRootElement _renderRoot;
-        public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc)
+        public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc, Action<SvgRenderElement> invalidate)
         {
             _svgdoc = svgdoc;
             _activeSheet1 = svgdoc.CssActiveSheet;
