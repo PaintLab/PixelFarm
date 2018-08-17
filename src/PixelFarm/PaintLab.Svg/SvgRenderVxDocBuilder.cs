@@ -1042,6 +1042,7 @@ namespace PaintLab.Svg
 
     }
 
+   
 
     public class VgRenderVx : RenderVx
     {
@@ -1404,7 +1405,7 @@ namespace PaintLab.Svg
             //
             using (VxsContext.Temp(out var v1))
             {
-                //imgCmd.SetVxsAsOriginal(rectTool.MakeVxs(v1).CreateTrim());
+                img._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
             }
             VectorToolBox.ReleaseRectTool(ref rectTool);
             AssignAttributes(imgspec);
