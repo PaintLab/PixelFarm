@@ -575,6 +575,7 @@ namespace LayoutFarm.Svg
             {
                 case "href":
                     //image spec
+                    spec.ImageSrc = attrValue;//TODO: check if it is a valid value/path
                     break;
             }
         }
