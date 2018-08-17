@@ -309,7 +309,6 @@ namespace PaintLab.Svg
             {
                 _invalidate(e);
             }
-
         }
     }
     public class SvgRenderElement : SvgRenderElementBase
@@ -362,7 +361,7 @@ namespace PaintLab.Svg
         private void Value_ImageChanged(object sender, EventArgs e)
         {
             //
-
+            _renderRoot.Invalidate(this);
 
         }
         public bool HitTest(SvgHitChain hitChain)
@@ -796,6 +795,8 @@ namespace PaintLab.Svg
                                 //
                                 case LayoutFarm.BinderState.Loaded:
                                     {
+                                        p.DrawImage(this.ImageBinder.Image, 0, 0);
+
                                         //1. in this version
                                         //our svg need ActualBitmap object to draw a bitmap
                                         //so convert input img to 
@@ -1284,6 +1285,9 @@ namespace PaintLab.Svg
 
 
             _renderRoot = new SvgRenderRootElement();
+            _renderRoot._invalidate = invalidate;
+
+            //
 
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
@@ -1316,9 +1320,9 @@ namespace PaintLab.Svg
 
             return rootSvgElem;
         }
-        public VgRenderVx CreateRenderVx(SvgDocument svgdoc)
+        public VgRenderVx CreateRenderVx(SvgDocument svgdoc, Action<SvgRenderElement> invalidateAction)
         {
-            return new VgRenderVx(CreateSvgRenderElement(svgdoc));
+            return new VgRenderVx(CreateSvgRenderElement(svgdoc, invalidateAction));
         }
 
         public void SetContainerSize(float width, float height)
