@@ -1326,7 +1326,7 @@ namespace PaintLab.Svg
 
             return rootSvgElem;
         }
-        public VgRenderVx CreateRenderVx(SvgDocument svgdoc, Action<SvgRenderElement> invalidateAction)
+        public VgRenderVx CreateRenderVx(SvgDocument svgdoc, Action<SvgRenderElement> invalidateAction = null)
         {
             return new VgRenderVx(CreateSvgRenderElement(svgdoc, invalidateAction));
         }
