@@ -104,7 +104,6 @@ namespace LayoutFarm.Svg
         readonly WellknownSvgElementName _wellknownName;
         readonly string _unknownElemName;
 
-
         SvgElemSpec _elemSpec;
         List<SvgElement> _childNodes;
         object _controller;
