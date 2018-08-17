@@ -35,6 +35,10 @@ namespace LayoutFarm
             {
                 e.SetResultImage(LoadImage(e.ImagSource));
             };
+            //-------
+
+           
+
         }
         public string OwnerFormTitle
         {
