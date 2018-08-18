@@ -189,8 +189,9 @@ namespace LayoutFarm
                     {
                         elemClientRect.Intersect(elementRect);
                     }
-                    globalPoint.X = -fromElement.ViewportX;
-                    globalPoint.Y = -fromElement.ViewportY;
+
+                    globalPoint.X = -fromElement.ViewportX; //reset ?
+                    globalPoint.Y = -fromElement.ViewportY; //reset ?
                 }
 
                 if (fromElement.IsTopWindow)
@@ -208,7 +209,7 @@ namespace LayoutFarm
 #endif
 
 
-                    var parentLink = fromElement.MyParentLink;
+                    IParentLink parentLink = fromElement.MyParentLink;
                     if (parentLink == null)
                     {
                         return;
