@@ -34,6 +34,12 @@ namespace LayoutFarm.WebDom
         img,
         [Map("input")]
         input,
+
+        [Map("option")]
+        option,
+        [Map("select")]
+        select,
+
         [Map("canvas")]
         canvas,
         [Map("div")]
