@@ -112,7 +112,7 @@ namespace LayoutFarm.WebDom
         BackgroundImage,
         [Map("background-position")]
         BackgroundPosition,
-        [Map("background-gradient")]
+        [Map("background-gradient")] //TODO: move to Html5's linear gradient func
         BackgroundGradient,
         [Map("background-gradient-angle")]
         BackgroundGradientAngle,
