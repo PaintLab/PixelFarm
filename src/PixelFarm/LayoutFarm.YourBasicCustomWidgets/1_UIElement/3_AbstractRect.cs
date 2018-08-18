@@ -182,7 +182,7 @@ namespace LayoutFarm.UI
         {
             //if we have primary render element
             //invalidate 'bubble' rect start
-            CurrentPrimaryRenderElement?.InvalidateGraphicBounds();
+            CurrentPrimaryRenderElement?.InvalidateParentGraphics();
         }
         public override void GetViewport(out int x, out int y)
         {
