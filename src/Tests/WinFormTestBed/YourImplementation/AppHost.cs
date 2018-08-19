@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using System.IO;
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
 using LayoutFarm.UI;
@@ -37,7 +38,7 @@ namespace LayoutFarm
             };
             //-------
 
-           
+
 
         }
         public string OwnerFormTitle
@@ -52,9 +53,21 @@ namespace LayoutFarm
 
         public Image LoadImage(string imgName)
         {
-            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
-            GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-            return bmp;
+            if (File.Exists(imgName)) //resolve to actual img 
+            {
+                try
+                {
+                    System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
+                    GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+                    return bmp;
+                }
+                catch (System.Exception ex)
+                {
+                    //return error img
+                    return null;
+                }
+            }
+            return null;
         }
 
 
