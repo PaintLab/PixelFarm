@@ -60,16 +60,16 @@ namespace LayoutFarm.WebDom
         [Map("border-collapse")]
         BorderCollapse,
         //----------------------------------
-        [Map("corner-radius")]
-        CornerRadius,
-        [Map("corner-nw-radius")]
-        CornerNWRadius,
-        [Map("corner-ne-radius")]
-        CornerNERadius,
-        [Map("corner-sw-radius")]
-        CornerSWRadius,
-        [Map("corner-se-radius")]
-        CornerSERadius,
+        [Map("border-radius")]
+        BorderRadius,
+        [Map("border-nw-radius")] //extension
+        BorderNWRadius,
+        [Map("border-ne-radius")] //extension
+        BorderNERadius,
+        [Map("border-sw-radius")]//extension
+        BorderSWRadius,
+        [Map("border-se-radius")]//extension
+        BorderSERadius,
         //----------------------------------
         [Map("margin")]
         Margin,
@@ -112,7 +112,7 @@ namespace LayoutFarm.WebDom
         BackgroundImage,
         [Map("background-position")]
         BackgroundPosition,
-        [Map("background-gradient")]
+        [Map("background-gradient")] //TODO: move to Html5's linear gradient func
         BackgroundGradient,
         [Map("background-gradient-angle")]
         BackgroundGradientAngle,
