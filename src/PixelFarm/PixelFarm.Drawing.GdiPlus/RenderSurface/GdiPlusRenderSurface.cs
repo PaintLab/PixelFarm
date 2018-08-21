@@ -702,8 +702,12 @@ namespace PixelFarm.Drawing.WinGdi
             if (image.Width == destRect.Width &&
                 image.Height == destRect.Height)
             {
-                DrawImage(image, (int)destRect.X, (int)destRect.Y);
-                return;
+                System.Drawing.Bitmap inner2 = ResolveInnerBmp(image);
+                if (inner2.HorizontalResolution == gx.DpiX)
+                {
+                    DrawImage(image, (int)destRect.X, (int)destRect.Y);
+                    return;
+                } 
             }
 
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
