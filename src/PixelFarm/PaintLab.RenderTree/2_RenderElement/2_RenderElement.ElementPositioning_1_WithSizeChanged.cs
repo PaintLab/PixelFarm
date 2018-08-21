@@ -41,7 +41,7 @@ namespace LayoutFarm
             }
             else
             {
-                var prevBounds = this.RectBounds;
+                Rectangle prevBounds = this.RectBounds;
                 this.b_width = width;
                 this.b_height = height;
                 //combine before and after rect 
@@ -62,7 +62,7 @@ namespace LayoutFarm
             {
                 //set location not affect its content size 
 
-                var prevBounds = this.RectBounds;
+                Rectangle prevBounds = this.RectBounds;
                 //----------------
 
                 this.b_left = left;
@@ -87,7 +87,7 @@ namespace LayoutFarm
             }
             else
             {
-                var prevBounds = this.RectBounds;
+                Rectangle prevBounds = this.RectBounds;
                 this.b_left = left;
                 this.b_top = top;
                 this.b_width = width;
