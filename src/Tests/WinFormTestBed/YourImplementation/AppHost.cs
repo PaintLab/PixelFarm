@@ -112,7 +112,7 @@ namespace LayoutFarm
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
             clientImgBinder.SetLazyLoaderFunc(LazyImageLoad);
             //if use lazy img load func
-            imageContentMan.AddRequestImage(clientImgBinder);
+            //imageContentMan.AddRequestImage(clientImgBinder);
             return clientImgBinder;
         }
         public ImageBinder GetImageBinder2(string src)

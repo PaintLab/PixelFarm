@@ -55,7 +55,7 @@ namespace LayoutFarm
         void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
     }
 
-    
+
 
     public abstract class ImageBinder
     {
@@ -123,10 +123,10 @@ namespace LayoutFarm
             }
         }
 
-        protected virtual void InternalSetImage(PixelFarm.Drawing.Image image)
-        {
-            this._image = image;
-        }
+        //protected virtual void InternalSetImage(PixelFarm.Drawing.Image image)
+        //{
+        //    this._image = image;
+        //}
         public virtual void SetImage(PixelFarm.Drawing.Image image)
         {
             //set image to this binder

@@ -60,6 +60,7 @@ Hardware and Software 2D Rendering Library
  
 	![lcd_09](https://cloud.githubusercontent.com/assets/7447159/22780526/a0e65712-eef1-11e6-948a-eca8e8158aaa.png)
 
+	![typography_thanamas](https://user-images.githubusercontent.com/7447159/44314099-d4357180-a43e-11e8-95c3-56894bfea1e4.png)
 
 
 	--- 
