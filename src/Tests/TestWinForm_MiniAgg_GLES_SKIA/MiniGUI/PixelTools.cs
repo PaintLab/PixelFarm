@@ -212,11 +212,14 @@ namespace Mini.WinForms
                 {
                     PixelToolController prevPixTool = prevPixTools[n];
                     //do path clip*** 
-                    List<VertexStore> resultList = PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
+                    List<VertexStore> resultList = new List<VertexStore>();
+                    PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
                          new VertexStoreSnap(prevPixTool.GetVxs()),
                          new VertexStoreSnap(this.GetVxs()),
                          PixelFarm.CpuBlit.VertexProcessing.VxsClipperType.Difference,
-                         true);
+                         true,
+                         resultList
+                         );
                     int count;
                     switch (count = resultList.Count)
                     {

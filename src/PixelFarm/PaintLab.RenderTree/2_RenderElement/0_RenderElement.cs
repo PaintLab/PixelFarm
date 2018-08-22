@@ -174,7 +174,7 @@ namespace LayoutFarm
                     propFlags | RenderElementConst.HIDDEN;
                 if (parentLink != null)
                 {
-                    this.InvalidateGraphicBounds(this.RectBounds);
+                    this.InvalidateParentGraphics(this.RectBounds);
                 }
             }
         }

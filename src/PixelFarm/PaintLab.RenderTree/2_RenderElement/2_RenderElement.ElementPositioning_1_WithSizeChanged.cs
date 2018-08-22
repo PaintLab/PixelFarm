@@ -41,12 +41,12 @@ namespace LayoutFarm
             }
             else
             {
-                var prevBounds = this.RectBounds;
+                Rectangle prevBounds = this.RectBounds;
                 this.b_width = width;
                 this.b_height = height;
                 //combine before and after rect 
                 //add to invalidate root invalidate queue  
-                this.InvalidateGraphicBounds(Rectangle.Union(prevBounds, this.RectBounds));
+                this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
 
             }
         }
@@ -62,7 +62,7 @@ namespace LayoutFarm
             {
                 //set location not affect its content size 
 
-                var prevBounds = this.RectBounds;
+                Rectangle prevBounds = this.RectBounds;
                 //----------------
 
                 this.b_left = left;
@@ -70,7 +70,7 @@ namespace LayoutFarm
                 //----------------   
                 //combine before and after rect  
                 //add to invalidate root invalidate queue
-                this.InvalidateGraphicBounds(Rectangle.Union(prevBounds, this.RectBounds));
+                this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
 
             }
         }
@@ -87,12 +87,12 @@ namespace LayoutFarm
             }
             else
             {
-                var prevBounds = this.RectBounds;
+                Rectangle prevBounds = this.RectBounds;
                 this.b_left = left;
                 this.b_top = top;
                 this.b_width = width;
                 this.b_height = height;
-                this.InvalidateGraphicBounds(Rectangle.Union(prevBounds, this.RectBounds));
+                this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
 
             }
         }

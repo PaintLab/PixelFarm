@@ -104,7 +104,6 @@ namespace LayoutFarm.Svg
         readonly WellknownSvgElementName _wellknownName;
         readonly string _unknownElemName;
 
-
         SvgElemSpec _elemSpec;
         List<SvgElement> _childNodes;
         object _controller;
@@ -573,8 +572,21 @@ namespace LayoutFarm.Svg
         {
             switch (attrName)
             {
+                case "x":
+                    spec.X = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "y":
+                    spec.Y = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "width":
+                    spec.Width = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "height":
+                    spec.Height = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
                 case "href":
                     //image spec
+                    spec.ImageSrc = attrValue;//TODO: check if it is a valid value/path
                     break;
             }
         }

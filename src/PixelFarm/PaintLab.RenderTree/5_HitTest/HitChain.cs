@@ -44,7 +44,7 @@ namespace LayoutFarm.RenderBoxes
 #if DEBUG
         public override string ToString()
         {
-            return _hitObject.ToString();
+            return point + " :" + _hitObject.ToString();
         }
 #endif
     }

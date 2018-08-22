@@ -260,6 +260,10 @@ namespace PixelFarm.Drawing.Pdf
             //    gx.DrawImage(inner, destRect.ToRectF());
             //}
         }
+        public override void DrawImage(Image image, int x, int y)
+        {
+            
+        }
         public override void FillPath(Color color, GraphicsPath gfxPath)
         {
 

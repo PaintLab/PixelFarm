@@ -529,7 +529,8 @@ namespace PixelFarm.Drawing.WinGdi
             //warning if duplicate
             if (s_installedTypefaceProvider != null)
             {
-
+                //TODO: review here again
+                return;
             }
             s_installedTypefaceProvider = provider;
         }
