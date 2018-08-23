@@ -90,36 +90,18 @@ namespace PaintLab.Svg
         }
     }
 
-
-
     public class VgPaintArgs
     {
         public Painter P;
         public Affine _currentTx;
         public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
-        //public Action<LayoutFarm.ImageBinder, SvgRenderElement, object> RequestImgAsync;
-
         internal void Reset()
         {
             P = null;
             _currentTx = null;
             ExternalVxsVisitHandler = null;
-            //RequestImgAsync = null;
         }
-        ///// <summary>
-        ///// async request for image
-        ///// </summary>
-        ///// <param name="binder"></param>
-        ///// <param name="requestFrom"></param>
-        ///// 
-        //public void RequestImageAsync(LayoutFarm.ImageBinder binder, SvgRenderElement imgRun, object requestFrom)
-        //{
-        //    RequestImageAsync(binder, imgRun, requestFrom);
-        //}
     }
-
-
-
 
     public static class VgPainterArgsPool
     {
