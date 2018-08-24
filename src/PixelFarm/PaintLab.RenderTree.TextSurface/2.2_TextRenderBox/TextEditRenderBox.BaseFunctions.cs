@@ -668,7 +668,9 @@ namespace LayoutFarm.Text
                         {
                             if (!internalTextLayerController.IsOnStartOfLine)
                             {
+#if DEBUG
                                 Point prvCaretPos = internalTextLayerController.CaretPos;
+#endif
                                 internalTextLayerController.TryMoveCaretBackward();
                                 currentCaretPos = internalTextLayerController.CaretPos;
                             }
@@ -684,7 +686,9 @@ namespace LayoutFarm.Text
                             {
                                 if (!internalTextLayerController.IsOnStartOfLine)
                                 {
+#if DEBUG
                                     Point prvCaretPos = internalTextLayerController.CaretPos;
+#endif
                                     internalTextLayerController.TryMoveCaretBackward();
                                     currentCaretPos = internalTextLayerController.CaretPos;
                                 }
@@ -727,21 +731,11 @@ namespace LayoutFarm.Text
                         Point currentCaretPos = Point.Empty;
                         if (!isMultiLine)
                         {
-                            //while (!internalTextLayerController.IsOnEndOfLine)
-                            //{
+#if DEBUG
                             Point prvCaretPos = internalTextLayerController.CaretPos;
-                            //internalTextLayerController.CharIndex++;
+#endif
                             internalTextLayerController.TryMoveCaretForward();
                             currentCaretPos = internalTextLayerController.CaretPos;
-                            //if (currentCaretPos.X != prvCaretPos.X)
-                            //{
-                            //    int nextCharWidth = internalTextLayerController.GetNextCharacterWidth();
-                            //    if (nextCharWidth > 0)
-                            //    {
-                            //        break;
-                            //    }
-                            //}
-                            //}
                         }
                         else
                         {
@@ -752,21 +746,11 @@ namespace LayoutFarm.Text
                             }
                             else
                             {
-                                //while (!internalTextLayerController.IsOnEndOfLine)
-                                //{
+#if DEBUG
                                 Point prvCaretPos = internalTextLayerController.CaretPos;
+#endif
                                 internalTextLayerController.TryMoveCaretForward();
                                 currentCaretPos = internalTextLayerController.CaretPos;
-                                //if (currentCaretPos.X != prvCaretPos.X)
-                                //{
-                                //    //forward check next caret
-                                //    int nextCharWidth = internalTextLayerController.GetNextCharacterWidth();
-                                //    if (nextCharWidth > 0)
-                                //    {
-                                //        break;
-                                //    }
-                                //}
-                                //}
                             }
                         }
                         //-------------------
