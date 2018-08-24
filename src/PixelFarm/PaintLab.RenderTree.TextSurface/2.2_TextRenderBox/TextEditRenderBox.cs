@@ -24,7 +24,7 @@ namespace LayoutFarm.Text
         }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-            var enterFont = canvas.CurrentFont;
+            RequestFont enterFont = canvas.CurrentFont;
 
             canvas.CurrentFont = this.CurrentTextSpanStyle.FontInfo;
             if (vscrollableSurface != null)
@@ -37,12 +37,17 @@ namespace LayoutFarm.Text
 
                 canvas.FillRectangle(BackgroundColor, 0, 0, this.Width, this.Height);
             }
-            //2.1 markers 
 
-            foreach (VisualMarkerSelectionRange marker in internalTextLayerController.VisualMarkers)
+
+            //2.1 markers 
+            if (internalTextLayerController.VisualMarkerCount > 0)
             {
-                marker.Draw(canvas, updateArea);
+                foreach (VisualMarkerSelectionRange marker in internalTextLayerController.VisualMarkers)
+                {
+                    marker.Draw(canvas, updateArea);
+                }
             }
+
 
             //2.2 selection
             if (internalTextLayerController.SelectionRange != null)
