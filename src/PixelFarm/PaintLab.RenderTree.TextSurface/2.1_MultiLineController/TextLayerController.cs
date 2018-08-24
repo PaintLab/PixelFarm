@@ -46,6 +46,14 @@ namespace LayoutFarm.Text
             get { return _visualMarkers; }
         }
 
+        internal int VisualMarkerCount
+        {
+            get
+            {
+                return _visualMarkers.Count;
+            }
+        }
+
         public bool EnableUndoHistoryRecording
         {
             get
@@ -397,7 +405,7 @@ namespace LayoutFarm.Text
                         DoEnd();
                     }
                 }
-                
+
             }
             else
             {
