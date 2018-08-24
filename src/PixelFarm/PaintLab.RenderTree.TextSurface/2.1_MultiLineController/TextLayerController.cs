@@ -405,7 +405,6 @@ namespace LayoutFarm.Text
                         DoEnd();
                     }
                 }
-
             }
             else
             {
@@ -423,37 +422,26 @@ namespace LayoutFarm.Text
                     //check if we can stop at this char or not
                     if (backward)
                     {
+                        //move caret backward
                         char prevChar = textLineWriter.PrevChar;
-                        if (prevChar != '\0' && !CanCaretStopOnThisChar(prevChar))
+                        int tmp_index = value;
+                        while ((prevChar != '\0' && !CanCaretStopOnThisChar(prevChar)) && tmp_index > 0)
                         {
-
-                            int tmp_index = value - 1;
-                            while ((prevChar != '\0' && !CanCaretStopOnThisChar(prevChar)) && tmp_index > 0)
-                            {
-                                textLineWriter.SetCurrentCharStepLeft();
-                                prevChar = textLineWriter.PrevChar;
-                                tmp_index--;
-                            }
+                            textLineWriter.SetCurrentCharStepLeft();
+                            prevChar = textLineWriter.PrevChar;
+                            tmp_index--;
                         }
                     }
                     else
                     {
                         char nextChar = textLineWriter.NextChar;
-                        if (nextChar == '\0')
+                        int lineCharCount = textLineWriter.CharCount;
+                        int tmp_index = value + 1;
+                        while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
                         {
-                            //end 
-                            //textLineWriter.SetCurrentCharStepRight();
-                        }
-                        else if (!CanCaretStopOnThisChar(nextChar))
-                        {
-                            int lineCharCount = textLineWriter.CharCount;
-                            int tmp_index = value + 1;
-                            while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
-                            {
-                                textLineWriter.SetCurrentCharStepRight();
-                                nextChar = textLineWriter.NextChar;
-                                tmp_index++;
-                            }
+                            textLineWriter.SetCurrentCharStepRight();
+                            nextChar = textLineWriter.NextChar;
+                            tmp_index++;
                         }
 
                     }

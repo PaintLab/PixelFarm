@@ -10,7 +10,7 @@ namespace LayoutFarm.Text
 
         static bool CanCaretStopOnThisChar(char c)
         {
-            var unicodeCatg = char.GetUnicodeCategory(c);
+            UnicodeCategory unicodeCatg = char.GetUnicodeCategory(c);
             switch (unicodeCatg)
             {
                 case UnicodeCategory.SpaceSeparator:
