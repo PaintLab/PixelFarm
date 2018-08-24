@@ -442,8 +442,7 @@ namespace LayoutFarm.Text
                             textLineWriter.SetCurrentCharStepRight();
                             nextChar = textLineWriter.NextChar;
                             tmp_index++;
-                        }
-
+                        } 
                     }
 
                 }

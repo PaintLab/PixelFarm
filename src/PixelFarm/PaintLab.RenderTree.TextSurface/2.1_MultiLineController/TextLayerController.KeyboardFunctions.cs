@@ -8,7 +8,7 @@ namespace LayoutFarm.Text
     partial class InternalTextLayerController
     {
 
-        static bool CanCaretStopOnThisChar(char c)
+        internal static bool CanCaretStopOnThisChar(char c)
         {
             UnicodeCategory unicodeCatg = char.GetUnicodeCategory(c);
             switch (unicodeCatg)
