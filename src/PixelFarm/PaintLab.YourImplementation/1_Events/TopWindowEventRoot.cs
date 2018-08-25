@@ -123,6 +123,7 @@ namespace LayoutFarm
             this.prevLogicalMouseY = y;
             UIMouseEventArgs e = GetFreeMouseEvent();
             SetUIMouseEventArgsInfo(e, x, y, button, 0);
+
             e.SetDiff(xdiff, ydiff);
             //----------------------------------
             e.IsDragging = isDragging;
@@ -338,6 +339,7 @@ namespace LayoutFarm
 
         void SetKeyData(UIKeyEventArgs keyEventArgs, int keydata)
         {
+
             keyEventArgs.SetEventInfo(keydata, lastKeydownWithShift, lastKeydownWithAlt, lastKeydownWithControl);
         }
 
@@ -345,11 +347,13 @@ namespace LayoutFarm
         {
             mouseEventArg.SetEventInfo(
                 x, y,
-               (UIMouseButtons)button,
+                button,
                 0,
                 delta);
 
-
+            mouseEventArg.Alt = lastKeydownWithAlt;
+            mouseEventArg.Shift = lastKeydownWithShift;
+            mouseEventArg.Ctrl = lastKeydownWithControl;
         }
         //--------------------------------------------------------------------
         void OnMouseHover(UITimerTask timerTask)
