@@ -42,11 +42,12 @@ namespace PixelFarm.CpuBlit.Samples
       + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : DemoBase
     {
-        MyTestSprite lionFill;
+
+        MyTestSprite _testSprite;
         public override void Init()
         {
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
-            lionFill = new MyTestSprite(new SpriteShape(renderVx));
+            _testSprite = new MyTestSprite(new SpriteShape(renderVx));
             //lionFill.AutoFlipY = true;
         }
 
@@ -63,11 +64,11 @@ namespace PixelFarm.CpuBlit.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            lionFill.Render(p);
+            _testSprite.Render(p);
         }
         public override void MouseDrag(int x, int y)
         {
-            lionFill.Move(x, y);
+            _testSprite.Move(x, y);
         }
         [DemoConfig]
         public bool UseBitmapExt
@@ -79,17 +80,17 @@ namespace PixelFarm.CpuBlit.Samples
         public int SharpRadius
         {
             //test
-            get { return lionFill.SharpenRadius; }
-            set { lionFill.SharpenRadius = value; }
+            get { return _testSprite.SharpenRadius; }
+            set { _testSprite.SharpenRadius = value; }
 
         }
         [DemoConfig(MaxValue = 255)]
         public int AlphaValue
         {
-            get { return lionFill.AlphaValue; }
+            get { return _testSprite.AlphaValue; }
             set
             {
-                lionFill.AlphaValue = (byte)value;
+                _testSprite.AlphaValue = (byte)value;
             }
         }
     }

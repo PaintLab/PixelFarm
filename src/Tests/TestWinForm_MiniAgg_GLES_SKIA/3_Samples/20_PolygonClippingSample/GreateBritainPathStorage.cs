@@ -1,10 +1,7 @@
 ﻿//BSD, 2014-present, WinterDev
 //MatterHackers
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
     public static class GreatBritanPathStorage

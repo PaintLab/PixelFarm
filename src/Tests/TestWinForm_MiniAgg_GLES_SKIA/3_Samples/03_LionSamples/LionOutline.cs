@@ -51,20 +51,20 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
     public class LionFillOutlineExample : DemoBase
     {
-        LionOutlineSprite lionFill;
+        LionOutlineSprite _lionOutlineSprite;
         public override void Init()
         {
-            lionFill = new LionOutlineSprite();
+            _lionOutlineSprite = new LionOutlineSprite();
         }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            lionFill.Render(p);
+            _lionOutlineSprite.Render(p);
 
         }
         public override void MouseDrag(int x, int y)
         {
-            lionFill.Move(x, y);
+            _lionOutlineSprite.Move(x, y);
         }
 
         [DemoConfig]
@@ -72,11 +72,11 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         {
             get
             {
-                return this.lionFill.RenderAsScanline;
+                return this._lionOutlineSprite.RenderAsScanline;
             }
             set
             {
-                this.lionFill.RenderAsScanline = value;
+                this._lionOutlineSprite.RenderAsScanline = value;
             }
         }
 
@@ -85,41 +85,41 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         {
             get
             {
-                return this.lionFill.RenderAccurateJoins;
+                return this._lionOutlineSprite.RenderAccurateJoins;
             }
             set
             {
-                this.lionFill.RenderAccurateJoins = value;
+                this._lionOutlineSprite.RenderAccurateJoins = value;
             }
         }
 
         [DemoConfig]
         public bool UseBitmapExt
         {
-            get { return lionFill.UseBitmapExt; }
+            get { return _lionOutlineSprite.UseBitmapExt; }
             set
             {
-                lionFill.UseBitmapExt = value;
+                _lionOutlineSprite.UseBitmapExt = value;
             }
         }
         [DemoConfig]
         public bool UseBuiltInAggOutlineAATech
         {
-            get { return lionFill.UseBuiltInAggOutlineAATech; }
+            get { return _lionOutlineSprite.UseBuiltInAggOutlineAATech; }
             set
             {
-                lionFill.UseBuiltInAggOutlineAATech = value;
+                _lionOutlineSprite.UseBuiltInAggOutlineAATech = value;
             }
         }
     }
     //--------------------------------------------------
     public class LionOutlineSprite : BasicSprite
     {
-        private SpriteShape lionShape;
+        private SpriteShape _spriteShape;
         //special option 
         public LionOutlineSprite()
         {
-            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
+            _spriteShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
             this.Width = 500;
             this.Height = 500;
         }
@@ -155,7 +155,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             int height = p.Height;
 
             Affine affTx = Affine.NewMatix(
-                   AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                   AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
                    AffinePlan.Scale(spriteScale, spriteScale),
                    AffinePlan.Rotate(angle + Math.PI),
                    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
@@ -165,7 +165,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             if (p1 == null)
             {
                 //TODO: review here 
-                lionShape.Paint(p, affTx);
+                _spriteShape.Paint(p, affTx);
                 //int j = lionShape.NumPaths;
                 //int[] pathList = lionShape.PathIndexList;  
                 //Drawing.Color[] colors = lionShape.Colors;
@@ -192,7 +192,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 p.StrokeWidth = 1;
 
                 //-------------------------
-                lionShape.DrawOutline(p);
+                _spriteShape.DrawOutline(p);
             }
             else
             {
@@ -236,7 +236,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                 };
 
-                lionShape.GetRenderVx()._renderE.Paint(paintArgs);
+                _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
                 VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
                 //---------------------------- 
                 //lionShape.ResetTransform();
@@ -263,7 +263,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                         m_painter.StrokeColor = prevStrokeColor;
                     };
 
-                    lionShape.GetRenderVx()._renderE.Paint(paintArgs);
+                    _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
                     VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
 
                 }
@@ -299,7 +299,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                             painterA.P.FillColor);
                     };
 
-                    lionShape.GetRenderVx()._renderE.Paint(paintArgs);
+                    _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
                     VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
                     //----------------------------  
                     //lionShape.ResetTransform();  

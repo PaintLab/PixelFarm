@@ -30,7 +30,6 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit
 {
     public abstract class BasicSprite
@@ -56,10 +55,10 @@ namespace PixelFarm.CpuBlit
 
         public virtual bool Move(int mouseX, int mouseY)
         {
-            
+
             UpdateTransform((int)Width, (int)Height, mouseX, mouseY);
             return true;
         }
-       
+
     }
 }

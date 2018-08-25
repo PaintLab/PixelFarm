@@ -3,7 +3,6 @@
 //AGG 2.4
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using PaintLab.Svg;
 namespace PixelFarm.CpuBlit
@@ -115,13 +114,29 @@ namespace PixelFarm.CpuBlit
         {
             //TODO: implement this...
             //use prefix command for render vx
-            p.Render(_svgRenderVx);
+            //p.Render(_svgRenderVx);
             //_svgRenderVx.Render(p);
         }
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
         {
             //TODO: implement this...
-            //use prefix command for render vx
+            //use prefix command for render vx 
+            //------
+            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
+            paintArgs._currentTx = tx;
+            paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+            {
+                //use external painter handler
+                //draw only outline with its fill-color.
+                Drawing.Painter m_painter = paintArgs.P;
+                Drawing.Color prevFillColor = m_painter.FillColor;
+                m_painter.FillColor = m_painter.FillColor;
+                m_painter.Fill(vxs);
+                m_painter.FillColor = prevFillColor;
+            };
+            _svgRenderVx._renderE.Paint(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
         }
         public void DrawOutline(Painter p)
         {
@@ -129,12 +144,8 @@ namespace PixelFarm.CpuBlit
             //not fill
             //int renderVxCount = _svgRenderVx.VgCmdCount;
             //for (int i = 0; i < renderVxCount; ++i)
-            //{
-
-            //}
-
-
-
+            //{ 
+            //} 
             //int j = lionShape.NumPaths;
             //int[] pathList = lionShape.PathIndexList;
             //Drawing.Color[] colors = lionShape.Colors;
@@ -172,9 +183,37 @@ namespace PixelFarm.CpuBlit
         VertexStore _selectedVxs = null;
         public void HitTestOnSubPart(SvgHitChain hitChain)
         {
-            var renderE = ((SvgRenderElement)_svgRenderVx._renderE);
+            SvgRenderElement renderE = _svgRenderVx._renderE;
             renderE.HitTest(hitChain);
         }
 
+    }
+
+
+
+    static class VgHitChainPool
+    {
+        //
+        //
+        [System.ThreadStatic]
+        static System.Collections.Generic.Stack<SvgHitChain> s_hitChains = new System.Collections.Generic.Stack<SvgHitChain>();
+
+        public static void GetFreeHitTestChain(out SvgHitChain hitTestArgs)
+        {
+            if (s_hitChains.Count > 0)
+            {
+                hitTestArgs = s_hitChains.Pop();
+            }
+            else
+            {
+                hitTestArgs = new SvgHitChain();
+            }
+        }
+        public static void ReleaseHitTestChain(ref SvgHitChain hitTestArgs)
+        {
+            hitTestArgs.Clear();
+            s_hitChains.Push(hitTestArgs);
+            hitTestArgs = null;
+        }
     }
 }
