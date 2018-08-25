@@ -40,7 +40,9 @@ namespace YourImplementation
             Application.Run(formDemoList);
         }
 
-        static UISurfaceViewportControl _latestviewport;
+#if DEBUG
+        public static bool dbugShowLayoutInspectorForm { get; set; }
+#endif
         public static void RunSpecificDemo(LayoutFarm.App demo)
         {
             //-------------------------------
@@ -56,24 +58,43 @@ namespace YourImplementation
                workingArea.Width,
                workingArea.Height,
                innerViewportKind,
-               out _latestviewport);
+               out UISurfaceViewportControl latestviewport);
             formCanvas.Text = "PixelFarm" + innerViewportKind;
 
-            demo.Start(new LayoutFarm.AppHost(_latestviewport));
-            _latestviewport.TopDownRecalculateContent();
+
+            demo.Start(new LayoutFarm.AppHost(latestviewport));
+            latestviewport.TopDownRecalculateContent();
             //==================================================  
-            _latestviewport.PaintMe();
-
-
-            //_latestviewport.PaintMe();
+            latestviewport.PaintMe();
 
             //formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();
+#if DEBUG
+            if (dbugShowLayoutInspectorForm)
+            {
+                LayoutInspectorUtils.ShowFormLayoutInspector(latestviewport);
+
+            }
+#endif
+
+
             //got specfic example
             Application.Run(formCanvas);
         }
     }
 
+    public static class LayoutInspectorUtils
+    {
+
+        public static void ShowFormLayoutInspector(LayoutFarm.UI.UISurfaceViewportControl viewport)
+        {
+            var formLayoutInspector = new LayoutFarm.Dev.FormLayoutInspector();
+            formLayoutInspector.Show();
+ 
+            formLayoutInspector.Connect(viewport);
+            formLayoutInspector.Show();
+        }
+    }
 
     public static class DemoFormCreatorHelper
     {
