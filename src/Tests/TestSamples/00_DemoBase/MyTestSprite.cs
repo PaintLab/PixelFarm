@@ -4,7 +4,6 @@
 
 using System;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.Drawing;
 using PaintLab.Svg;
 
 namespace PixelFarm.CpuBlit

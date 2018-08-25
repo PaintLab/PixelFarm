@@ -47,7 +47,9 @@ namespace PixelFarm.CpuBlit.Samples
         public override void Init()
         {
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
-            _testSprite = new MyTestSprite(new SpriteShape(renderVx));
+            var spriteShape = new SpriteShape(renderVx);
+            spriteShape.UpdateBounds();
+            _testSprite = new MyTestSprite(spriteShape);
             //lionFill.AutoFlipY = true;
         }
 
@@ -108,16 +110,21 @@ namespace PixelFarm.CpuBlit.Samples
     public class LionFillExample_HitTest : DemoBase
     {
 
-        MyTestSprite _hitLion;
-        bool hitOnLion;
-        List<MyTestSprite> lionList = new List<MyTestSprite>();
 
+        bool hitOnLion;
+
+        List<MyTestSprite> _spriteList = new List<MyTestSprite>();
+        MyTestSprite _hitSprite;
 
         public override void Init()
         {
-            // lion
-            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
-            lionList.Add(new MyTestSprite(s));
+            // lion 
+
+            VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
+            var spriteShape = new SpriteShape(renderVx);
+            spriteShape.UpdateBounds();
+
+            _spriteList.Add(new MyTestSprite(spriteShape));
             //
             //lionFill.AutoFlipY = true;           
         }
@@ -130,7 +137,7 @@ namespace PixelFarm.CpuBlit.Samples
                 case System.Windows.Forms.Keys.A:
                     {
                         SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
-                        lionList.Add(new MyTestSprite(s) { JustMove = true });
+                        _spriteList.Add(new MyTestSprite(s) { JustMove = true });
                     }
                     break;
                 case System.Windows.Forms.Keys.Q:
@@ -158,7 +165,7 @@ namespace PixelFarm.CpuBlit.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            foreach (MyTestSprite lion in lionList)
+            foreach (MyTestSprite lion in _spriteList)
             {
                 lion.Render(p);
             }
@@ -183,16 +190,16 @@ namespace PixelFarm.CpuBlit.Samples
             }
 
             //-----------------------------------------------------
-            _hitLion = null;
+            _hitSprite = null;
             hitOnLion = false;
 
-            for (int i = lionList.Count - 1; i >= 0; --i)
+            for (int i = _spriteList.Count - 1; i >= 0; --i)
             {
-                MyTestSprite lion = lionList[i];
+                MyTestSprite lion = _spriteList[i];
                 if (lion.HitTest(x, y, isRightButton))
                 {
                     hitOnLion = true;
-                    _hitLion = lion;
+                    _hitSprite = lion;
                     break;
                 }
             }
@@ -207,9 +214,9 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public override void MouseDrag(int x, int y)
         {
-            if (hitOnLion && _hitLion != null)
+            if (hitOnLion && _hitSprite != null)
             {
-                _hitLion.Move(x, y);
+                _hitSprite.Move(x, y);
             }
         }
         [DemoConfig]
@@ -233,14 +240,14 @@ namespace PixelFarm.CpuBlit.Samples
                 {
                     default: break;
                     case LionMoveOption.Move:
-                        foreach (var lion in lionList)
+                        foreach (MyTestSprite lion in _spriteList)
                         {
                             lion.JustMove = true;
                         }
 
                         break;
                     case LionMoveOption.ZoomAndRotate:
-                        foreach (var lion in lionList)
+                        foreach (MyTestSprite lion in _spriteList)
                         {
                             lion.JustMove = false;
                         }
