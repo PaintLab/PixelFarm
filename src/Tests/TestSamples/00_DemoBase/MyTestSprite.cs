@@ -55,7 +55,7 @@ namespace PixelFarm.CpuBlit
             }
         }
         public bool JustMove { get; set; }
-
+        public Affine CurrentAffineTx { get { return _currentTx; } }
         public override bool Move(int mouseX, int mouseY)
         {
 

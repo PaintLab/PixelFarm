@@ -195,11 +195,19 @@ namespace PixelFarm.CpuBlit.Samples
 
             for (int i = _spriteList.Count - 1; i >= 0; --i)
             {
-                MyTestSprite lion = _spriteList[i];
-                if (lion.HitTest(x, y, isRightButton))
+                MyTestSprite sprite = _spriteList[i];
+
+                double testX = x;
+                double testY = y;
+                if (sprite.CurrentAffineTx != null)
+                {
+                    sprite.CurrentAffineTx.Transform(ref testX, ref testY);
+                }
+
+                if (sprite.HitTest((float)testX, (float)testY, isRightButton))
                 {
                     hitOnLion = true;
-                    _hitSprite = lion;
+                    _hitSprite = sprite;
                     break;
                 }
             }
