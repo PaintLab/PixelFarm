@@ -36,7 +36,7 @@ namespace LayoutFarm.Dev
             //load demo sample
             DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
             if (selectedDemoInfo == null) return;
-         
+
 
             App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
             RunDemo(selectedDemo);
@@ -70,7 +70,7 @@ namespace LayoutFarm.Dev
 
             if (this.chkShowLayoutInspector.Checked)
             {
-                ShowFormLayoutInspector(_latestviewport);
+                YourImplementation.LayoutInspectorUtils.ShowFormLayoutInspector(_latestviewport);
             }
 
             if (this.chkShowFormPrint.Checked)
@@ -78,21 +78,7 @@ namespace LayoutFarm.Dev
                 ShowFormPrint(_latestviewport);
             }
         }
-       
-        static void ShowFormLayoutInspector(LayoutFarm.UI.UISurfaceViewportControl viewport)
-        {
 
-            var formLayoutInspector = new LayoutFarm.Dev.FormLayoutInspector();
-            formLayoutInspector.Show();
-
-            formLayoutInspector.FormClosed += (s, e2) =>
-            {
-                formLayoutInspector = null;
-            };
-            formLayoutInspector.Connect(viewport);
-            formLayoutInspector.Show();
-
-        }
         static void ShowFormPrint(LayoutFarm.UI.UISurfaceViewportControl viewport)
         {
 
@@ -105,7 +91,7 @@ namespace LayoutFarm.Dev
             };
             formPrint.Connect(viewport);
         }
-       
+
         public void ClearDemoList()
         {
             this.lstDemoList.Items.Clear();
@@ -114,7 +100,7 @@ namespace LayoutFarm.Dev
         public void LoadDemoList(Type sampleAssemblySpecificType)
         {
             Type demoBaseType = typeof(App);
-             
+
 
             var thisAssem = System.Reflection.Assembly.GetAssembly(sampleAssemblySpecificType);
             List<DemoInfo> demoInfoList = new List<DemoInfo>();
@@ -137,7 +123,7 @@ namespace LayoutFarm.Dev
                     }
                     demoInfoList.Add(new DemoInfo(t, noteMsg));
                 }
-                 
+
 
             }
             demoInfoList.Sort((d1, d2) =>
