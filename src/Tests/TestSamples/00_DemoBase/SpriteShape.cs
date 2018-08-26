@@ -5,26 +5,22 @@
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 using PaintLab.Svg;
-
+using LayoutFarm;
 namespace PixelFarm.CpuBlit
 {
 
-
-    //TODO: review here again***
-    //move to SVG or renderVX
-
     public class SpriteShape
     {
-
         VgRenderVx _svgRenderVx;
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
         CpuBlit.VertexProcessing.Affine _currentTx;
 
-        public SpriteShape(VgRenderVx svgRenderVx)
+        public SpriteShape(VgRenderVx svgRenderVx)//, RootGraphic root, int w, int h)
+                                                  //: base(root, w, h)
         {
-            _svgRenderVx = svgRenderVx;
+            LoadFromSvg(svgRenderVx);
         }
         public RectD Bounds
         {
@@ -76,7 +72,6 @@ namespace PixelFarm.CpuBlit
         }
         public void Paint(Painter p)
         {
-
             VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
             paintArgs._currentTx = _currentTx;
             _svgRenderVx._renderE.Paint(paintArgs);
@@ -139,6 +134,7 @@ namespace PixelFarm.CpuBlit
             //Release(ref vxs2);
             //return; //** 
         }
+
         public void LoadFromSvg(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
@@ -157,11 +153,20 @@ namespace PixelFarm.CpuBlit
             _svgRenderVx._renderE.HitTest(hitChain);
         }
 
+        //public override void ResetRootGraphics(RootGraphic rootgfx)
+        //{
+        //    DirectSetRootGraphics(this, rootgfx);
+        //}
+
+        //public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 
 
 
-    static class VgHitChainPool
+    public static class VgHitChainPool
     {
         //
         //

@@ -156,9 +156,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
             Affine affTx = Affine.NewMatix(
                    AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-                   AffinePlan.Scale(spriteScale, spriteScale),
-                   AffinePlan.Rotate(angle + Math.PI),
-                   AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                   AffinePlan.Scale(_spriteScale, _spriteScale),
+                   AffinePlan.Rotate(_angle + Math.PI),
+                   AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
                    AffinePlan.Translate(width / 2, height / 2));
 
             var p1 = p as AggPainter;
@@ -304,7 +304,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     //lionShape.ResetTransform();  
                 }
             }
-            base.Render(p);
+          
         }
     }
 }

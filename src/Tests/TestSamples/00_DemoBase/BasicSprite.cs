@@ -30,28 +30,62 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
+using LayoutFarm;
+using LayoutFarm.UI;
+
 namespace PixelFarm.CpuBlit
 {
-    public abstract class BasicSprite
+    public abstract class BasicSprite : UIElement
     {
-        protected double angle = 0;
-        protected double spriteScale = 1.0;
-        protected double skewX = 0;
-        protected double skewY = 0;
+        protected double _angle = 0;
+        protected double _spriteScale = 1.0;
+        protected double _skewX = 0;
+        protected double _skewY = 0;
+
+
+        //------------------------------
+        protected override bool HasReadyRenderElement
+        {
+            get
+            {
+                throw new NotSupportedException();
+            }
+        }
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            throw new NotImplementedException();
+        }
+        public override RenderElement CurrentPrimaryRenderElement
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public override void Walk(UIVisitor visitor)
+        {
+            throw new NotImplementedException();
+        }
+        public override void InvalidateGraphics()
+        {
+            throw new NotImplementedException();
+        }
+        //------------------------------
         public int Width { get; set; }
         public int Height { get; set; }
+        //***
 
-
-        public virtual void Render(PixelFarm.Drawing.Painter p)
-        {
-        }
+        //***
+        public abstract void Render(PixelFarm.Drawing.Painter p);
         protected void UpdateTransform(double width, double height, double x, double y)
         {
             x -= width / 2;
             y -= height / 2;
-            angle = Math.Atan2(y, x);
-            spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
+            _angle = Math.Atan2(y, x);
+            _spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
         }
+
+
 
         public virtual bool Move(int mouseX, int mouseY)
         {
@@ -59,6 +93,8 @@ namespace PixelFarm.CpuBlit
             UpdateTransform((int)Width, (int)Height, mouseX, mouseY);
             return true;
         }
+
+
 
     }
 }
