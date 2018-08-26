@@ -233,10 +233,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                         imageClippingProxy, rasterizer,
                         aggsx.ScanlinePacked8,
                         aggPainter.FillColor); //draw line with external drawing handler
-
                 };
 
-                _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
+                _spriteShape.Paint(paintArgs);
                 VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
                 //---------------------------- 
                 //lionShape.ResetTransform();
@@ -263,7 +262,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                         m_painter.StrokeColor = prevStrokeColor;
                     };
 
-                    _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
+                    _spriteShape.Paint(paintArgs);
                     VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
 
                 }
@@ -299,7 +298,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                             painterA.P.FillColor);
                     };
 
-                    _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
+                    _spriteShape.Paint(paintArgs);
                     VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
                     //----------------------------  
                     //lionShape.ResetTransform();  
