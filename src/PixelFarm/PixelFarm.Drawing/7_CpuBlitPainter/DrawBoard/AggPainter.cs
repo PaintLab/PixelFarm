@@ -1052,16 +1052,19 @@ namespace PixelFarm.CpuBlit
             //check image caching system 
             if (this._renderQuality == RenderQualtity.Fast)
             {
-                BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
-                try
+                TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualBmp);
+                unsafe
                 {
-                    this._bxt.CopyBlit((int)left, (int)top, srcBmp);
-                }
-                catch (Exception ex)
-                {
+                    BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, tmp.Ptr, tmp.LengthInBytes);
+                    try
+                    {
+                        this._bxt.CopyBlit((int)left, (int)top, srcBmp);
+                    }
+                    catch (Exception ex)
+                    {
 
+                    }
                 }
-
                 return;
             }
 
@@ -1092,18 +1095,25 @@ namespace PixelFarm.CpuBlit
             //check image caching system 
             if (this._renderQuality == RenderQualtity.Fast)
             {
-                BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
-                try
+                TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualBmp);
+                unsafe
                 {
-                    var src = new BitmapBufferEx.RectD(srcX, srcY, srcW, srcH);
-                    var dest = new BitmapBufferEx.RectD(left, top, srcW, srcH);
-                    BitmapBuffer bmpBuffer = new BitmapBuffer(actualBmp.Width, actualBmp.Height, ActualBitmap.GetBuffer(actualBmp));
-                    this._bxt.CopyBlit(dest, bmpBuffer, src);
-                }
-                catch (Exception ex)
-                {
+                    BitmapBuffer srcBmp = new BitmapBuffer(actualBmp.Width, actualBmp.Height, tmp.Ptr, tmp.LengthInBytes);
+                    try
+                    {
+                        var src = new BitmapBufferEx.RectD(srcX, srcY, srcW, srcH);
+                        var dest = new BitmapBufferEx.RectD(left, top, srcW, srcH);
+
+                        BitmapBuffer bmpBuffer = new BitmapBuffer(actualBmp.Width, actualBmp.Height, tmp.Ptr, tmp.LengthInBytes);
+                        this._bxt.CopyBlit(dest, bmpBuffer, src);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
 
                 }
+
 
                 return;
             }
@@ -1166,16 +1176,21 @@ namespace PixelFarm.CpuBlit
             if (this._renderQuality == RenderQualtity.Fast)
             {
                 //todo, review here again
-                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, ActualBitmap.GetBuffer(actualImg));
-                if (affinePlans != null)
+                TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
+                unsafe
                 {
-                    this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
+                    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, tmp.Ptr, tmp.LengthInBytes);
+                    if (affinePlans != null)
+                    {
+                        this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
+                    }
+                    else
+                    {
+                        this._bxt.BlitRender(srcBmp, false, 1, null);
+                    }
+                    return;
                 }
-                else
-                {
-                    this._bxt.BlitRender(srcBmp, false, 1, null);
-                }
-                return;
+
             }
 
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
@@ -1315,10 +1330,17 @@ namespace PixelFarm.CpuBlit
                             break;
                     }
 
-                    _bxt = new BitmapBuffer(
-                         _aggsx.Width,
-                         _aggsx.Height,
-                         ActualBitmap.GetBuffer(_aggsx.DestActualImage));
+
+                    TempMemPtr tmp = ActualBitmap.GetBufferPtr(_aggsx.DestActualImage);
+                    unsafe
+                    {
+                        _bxt = new BitmapBuffer(
+                       _aggsx.Width,
+                       _aggsx.Height,
+                        tmp.Ptr,
+                        tmp.LengthInBytes);
+                    }
+
 
                     _targetBufferName = value;
                 }

@@ -133,7 +133,7 @@ namespace YourImplementation
 
         public static ActualBitmap Read(Stream strm)
         {
-            
+
             Hjg.Pngcs.PngReader reader = new Hjg.Pngcs.PngReader(strm);
             Hjg.Pngcs.ImageInfo imgInfo = reader.ImgInfo;
             Hjg.Pngcs.ImageLine iline2 = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
@@ -208,40 +208,45 @@ namespace YourImplementation
         public static void Save(ActualBitmap actualImg, Stream strm)
         {
             //-------------
-            int[] intBuffer = ActualBitmap.GetBuffer(actualImg);
-
-            int imgW = actualImg.Width;
-            int imgH = actualImg.Height;
-
-            Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
-            Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(strm, imgInfo);
-            Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
-            int startReadAt = 0;
-
-            int imgStride = imgW * 4;
-
-            int srcIndex = 0;
-            int srcIndexRowHead = intBuffer.Length - imgW;
-
-            for (int row = 0; row < imgH; row++)
+            unsafe
             {
-                byte[] scanlineBuffer = iline.ScanlineB;
-                srcIndex = srcIndexRowHead;
-                for (int b = 0; b < imgStride;)
+                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
+                int* intBuffer = (int*)tmp.Ptr;
+
+                int imgW = actualImg.Width;
+                int imgH = actualImg.Height;
+
+                Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
+                Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(strm, imgInfo);
+                Hjg.Pngcs.ImageLine iline = new Hjg.Pngcs.ImageLine(imgInfo, Hjg.Pngcs.ImageLine.ESampleType.BYTE);
+                int startReadAt = 0;
+
+                int imgStride = imgW * 4;
+
+                int srcIndex = 0;
+                int srcIndexRowHead = (tmp.LengthInBytes / 4) - imgW;
+
+                for (int row = 0; row < imgH; row++)
                 {
-                    int srcInt = intBuffer[srcIndex];
-                    srcIndex++;
-                    scanlineBuffer[b] = (byte)((srcInt >> 16) & 0xff);
-                    scanlineBuffer[b + 1] = (byte)((srcInt >> 8) & 0xff);
-                    scanlineBuffer[b + 2] = (byte)((srcInt) & 0xff);
-                    scanlineBuffer[b + 3] = (byte)((srcInt >> 24) & 0xff);
-                    b += 4;
+                    byte[] scanlineBuffer = iline.ScanlineB;
+                    srcIndex = srcIndexRowHead;
+                    for (int b = 0; b < imgStride;)
+                    {
+                        int srcInt = intBuffer[srcIndex];
+                        srcIndex++;
+                        scanlineBuffer[b] = (byte)((srcInt >> 16) & 0xff);
+                        scanlineBuffer[b + 1] = (byte)((srcInt >> 8) & 0xff);
+                        scanlineBuffer[b + 2] = (byte)((srcInt) & 0xff);
+                        scanlineBuffer[b + 3] = (byte)((srcInt >> 24) & 0xff);
+                        b += 4;
+                    }
+                    srcIndexRowHead -= imgW;
+                    startReadAt += imgStride;
+                    writer.WriteRow(iline, row);
                 }
-                srcIndexRowHead -= imgW;
-                startReadAt += imgStride;
-                writer.WriteRow(iline, row);
+                writer.End();
             }
-            writer.End();
+
 
         }
 

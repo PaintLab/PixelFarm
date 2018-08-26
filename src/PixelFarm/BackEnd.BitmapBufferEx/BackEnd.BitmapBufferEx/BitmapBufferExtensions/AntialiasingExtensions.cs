@@ -36,92 +36,232 @@ namespace BitmapBufferEx
 
             if (lineWidth <= 0) return;
 
-            int[] buffer = context.Pixels;
-
-            if (y1 > y2)
+            unsafe
             {
-                Swap(ref x1, ref x2);
-                Swap(ref y1, ref y2);
-            }
+                NativeInt32Arr buffer1 = context.Pixels;
+                int* buffer = buffer1._inf32Buffer;
 
-            if (x1 == x2)
-            {
-                x1 -= (int)lineWidth / 2;
-                x2 += (int)lineWidth / 2;
-
-                if (x1 < 0)
-                    x1 = 0;
-                if (x2 < 0)
-                    return;
-
-                if (x1 >= width)
-                    return;
-                if (x2 >= width)
-                    x2 = width - 1;
-
-                if (y1 >= height || y2 < 0)
-                    return;
-
-                if (y1 < 0)
-                    y1 = 0;
-                if (y2 >= height)
-                    y2 = height - 1;
-
-                for (int x = (int)x1; x <= x2; x++)
+                if (y1 > y2)
                 {
-                    for (int y = (int)y1; y <= y2; y++)
+                    Swap(ref x1, ref x2);
+                    Swap(ref y1, ref y2);
+                }
+
+                if (x1 == x2)
+                {
+                    x1 -= (int)lineWidth / 2;
+                    x2 += (int)lineWidth / 2;
+
+                    if (x1 < 0)
+                        x1 = 0;
+                    if (x2 < 0)
+                        return;
+
+                    if (x1 >= width)
+                        return;
+                    if (x2 >= width)
+                        x2 = width - 1;
+
+                    if (y1 >= height || y2 < 0)
+                        return;
+
+                    if (y1 < 0)
+                        y1 = 0;
+                    if (y2 >= height)
+                        y2 = height - 1;
+
+                    for (int x = (int)x1; x <= x2; x++)
                     {
-                        byte a = (byte)((color & 0xff000000) >> 24);
-                        byte r = (byte)((color & 0x00ff0000) >> 16);
-                        byte g = (byte)((color & 0x0000ff00) >> 8);
-                        byte b = (byte)((color & 0x000000ff) >> 0);
+                        for (int y = (int)y1; y <= y2; y++)
+                        {
+                            byte a = (byte)((color & 0xff000000) >> 24);
+                            byte r = (byte)((color & 0x00ff0000) >> 16);
+                            byte g = (byte)((color & 0x0000ff00) >> 8);
+                            byte b = (byte)((color & 0x000000ff) >> 0);
 
-                        byte rs, gs, bs;
-                        byte rd, gd, bd;
+                            byte rs, gs, bs;
+                            byte rd, gd, bd;
 
-                        int d;
+                            int d;
 
-                        rs = r;
-                        gs = g;
-                        bs = b;
+                            rs = r;
+                            gs = g;
+                            bs = b;
 
-                        d = buffer[y * width + x];
+                            d = buffer[y * width + x];
 
-                        rd = (byte)((d & 0x00ff0000) >> 16);
-                        gd = (byte)((d & 0x0000ff00) >> 8);
-                        bd = (byte)((d & 0x000000ff) >> 0);
+                            rd = (byte)((d & 0x00ff0000) >> 16);
+                            gd = (byte)((d & 0x0000ff00) >> 8);
+                            bd = (byte)((d & 0x000000ff) >> 0);
 
-                        rd = (byte)((rs * a + rd * (0xff - a)) >> 8);
-                        gd = (byte)((gs * a + gd * (0xff - a)) >> 8);
-                        bd = (byte)((bs * a + bd * (0xff - a)) >> 8);
+                            rd = (byte)((rs * a + rd * (0xff - a)) >> 8);
+                            gd = (byte)((gs * a + gd * (0xff - a)) >> 8);
+                            bd = (byte)((bs * a + bd * (0xff - a)) >> 8);
 
-                        buffer[y * width + x] = (0xff << 24) | (rd << 16) | (gd << 8) | (bd << 0);
+                            buffer[y * width + x] = (0xff << 24) | (rd << 16) | (gd << 8) | (bd << 0);
+                        }
+                    }
+
+                    return;
+                }
+                if (y1 == y2)
+                {
+                    if (x1 > x2) Swap(ref x1, ref x2);
+
+                    y1 -= (int)lineWidth / 2;
+                    y2 += (int)lineWidth / 2;
+
+                    if (y1 < 0) y1 = 0;
+                    if (y2 < 0) return;
+
+                    if (y1 >= height) return;
+                    if (y2 >= height) y2 = height - 1;
+
+                    if (x1 >= width || y2 < 0) return;
+
+                    if (x1 < 0) x1 = 0;
+                    if (x2 >= width) x2 = width - 1;
+
+                    for (int x = (int)x1; x <= x2; x++)
+                    {
+                        for (int y = (int)y1; y <= y2; y++)
+                        {
+                            byte a = (byte)((color & 0xff000000) >> 24);
+                            byte r = (byte)((color & 0x00ff0000) >> 16);
+                            byte g = (byte)((color & 0x0000ff00) >> 8);
+                            byte b = (byte)((color & 0x000000ff) >> 0);
+
+                            Byte rs, gs, bs;
+                            Byte rd, gd, bd;
+
+                            Int32 d;
+
+                            rs = r;
+                            gs = g;
+                            bs = b;
+
+                            d = buffer[y * width + x];
+
+                            rd = (byte)((d & 0x00ff0000) >> 16);
+                            gd = (byte)((d & 0x0000ff00) >> 8);
+                            bd = (byte)((d & 0x000000ff) >> 0);
+
+                            rd = (byte)((rs * a + rd * (0xff - a)) >> 8);
+                            gd = (byte)((gs * a + gd * (0xff - a)) >> 8);
+                            bd = (byte)((bs * a + bd * (0xff - a)) >> 8);
+
+                            buffer[y * width + x] = (0xff << 24) | (rd << 16) | (gd << 8) | (bd << 0);
+                        }
+                    }
+
+                    return;
+                }
+
+                y1 += 1;
+                y2 += 1;
+
+                float slope = (y2 - y1) / (x2 - x1);
+                float islope = (x2 - x1) / (y2 - y1);
+
+                float m = slope;
+                float w = lineWidth;
+
+                float dx = x2 - x1;
+                float dy = y2 - y1;
+
+                float xtot = (float)(w * dy / Math.Sqrt(dx * dx + dy * dy));
+                float ytot = (float)(w * dx / Math.Sqrt(dx * dx + dy * dy));
+
+                float sm = dx * dy / (dx * dx + dy * dy);
+
+                // Center it.
+
+                x1 += xtot / 2;
+                y1 -= ytot / 2;
+                x2 += xtot / 2;
+                y2 -= ytot / 2;
+
+                //
+                //
+
+                float sx = -xtot;
+                float sy = +ytot;
+
+                int ix1 = (int)x1;
+                int iy1 = (int)y1;
+
+                int ix2 = (int)x2;
+                int iy2 = (int)y2;
+
+                int ix3 = (int)(x1 + sx);
+                int iy3 = (int)(y1 + sy);
+
+                int ix4 = (int)(x2 + sx);
+                int iy4 = (int)(y2 + sy);
+
+                if (lineWidth == 2)
+                {
+                    if (Math.Abs(dy) < Math.Abs(dx))
+                    {
+                        if (x1 < x2)
+                        {
+                            iy3 = iy1 + 2;
+                            iy4 = iy2 + 2;
+                        }
+                        else
+                        {
+                            iy1 = iy3 + 2;
+                            iy2 = iy4 + 2;
+                        }
+                    }
+                    else
+                    {
+                        ix1 = ix3 + 2;
+                        ix2 = ix4 + 2;
                     }
                 }
 
-                return;
-            }
-            if (y1 == y2)
-            {
-                if (x1 > x2) Swap(ref x1, ref x2);
+                int starty = Math.Min(Math.Min(iy1, iy2), Math.Min(iy3, iy4));
+                int endy = Math.Max(Math.Max(iy1, iy2), Math.Max(iy3, iy4));
 
-                y1 -= (int)lineWidth / 2;
-                y2 += (int)lineWidth / 2;
+                if (starty < 0) starty = -1;
+                if (endy >= height) endy = height + 1;
 
-                if (y1 < 0) y1 = 0;
-                if (y2 < 0) return;
-
-                if (y1 >= height) return;
-                if (y2 >= height) y2 = height - 1;
-
-                if (x1 >= width || y2 < 0) return;
-
-                if (x1 < 0) x1 = 0;
-                if (x2 >= width) x2 = width - 1;
-
-                for (int x = (int)x1; x <= x2; x++)
+                for (int y = starty + 1; y < endy - 1; y++)
                 {
-                    for (int y = (int)y1; y <= y2; y++)
+                    leftEdgeX[y] = -1 << 16;
+                    rightEdgeX[y] = 1 << 16 - 1;
+                }
+
+
+                AALineQ1(width, height, context, ix1, iy1, ix2, iy2, color, sy > 0, false);
+                AALineQ1(width, height, context, ix3, iy3, ix4, iy4, color, sy < 0, true);
+
+                if (lineWidth > 1)
+                {
+                    AALineQ1(width, height, context, ix1, iy1, ix3, iy3, color, true, sy > 0);
+                    AALineQ1(width, height, context, ix2, iy2, ix4, iy4, color, false, sy < 0);
+                }
+
+                if (x1 < x2)
+                {
+                    if (iy2 >= 0 && iy2 < height) rightEdgeX[iy2] = Math.Min(ix2, rightEdgeX[iy2]);
+                    if (iy3 >= 0 && iy3 < height) leftEdgeX[iy3] = Math.Max(ix3, leftEdgeX[iy3]);
+                }
+                else
+                {
+                    if (iy1 >= 0 && iy1 < height) rightEdgeX[iy1] = Math.Min(ix1, rightEdgeX[iy1]);
+                    if (iy4 >= 0 && iy4 < height) leftEdgeX[iy4] = Math.Max(ix4, leftEdgeX[iy4]);
+                }
+
+                //return;
+
+                for (int y = starty + 1; y < endy - 1; y++)
+                {
+                    leftEdgeX[y] = Math.Max(leftEdgeX[y], 0);
+                    rightEdgeX[y] = Math.Min(rightEdgeX[y], width - 1);
+
+                    for (int x = leftEdgeX[y]; x <= rightEdgeX[y]; x++)
                     {
                         byte a = (byte)((color & 0xff000000) >> 24);
                         byte r = (byte)((color & 0x00ff0000) >> 16);
@@ -150,143 +290,8 @@ namespace BitmapBufferEx
                         buffer[y * width + x] = (0xff << 24) | (rd << 16) | (gd << 8) | (bd << 0);
                     }
                 }
-
-                return;
             }
 
-            y1 += 1;
-            y2 += 1;
-
-            float slope = (y2 - y1) / (x2 - x1);
-            float islope = (x2 - x1) / (y2 - y1);
-
-            float m = slope;
-            float w = lineWidth;
-
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-
-            float xtot = (float)(w * dy / Math.Sqrt(dx * dx + dy * dy));
-            float ytot = (float)(w * dx / Math.Sqrt(dx * dx + dy * dy));
-
-            float sm = dx * dy / (dx * dx + dy * dy);
-
-            // Center it.
-
-            x1 += xtot / 2;
-            y1 -= ytot / 2;
-            x2 += xtot / 2;
-            y2 -= ytot / 2;
-
-            //
-            //
-
-            float sx = -xtot;
-            float sy = +ytot;
-
-            int ix1 = (int)x1;
-            int iy1 = (int)y1;
-
-            int ix2 = (int)x2;
-            int iy2 = (int)y2;
-
-            int ix3 = (int)(x1 + sx);
-            int iy3 = (int)(y1 + sy);
-
-            int ix4 = (int)(x2 + sx);
-            int iy4 = (int)(y2 + sy);
-
-            if (lineWidth == 2)
-            {
-                if (Math.Abs(dy) < Math.Abs(dx))
-                {
-                    if (x1 < x2)
-                    {
-                        iy3 = iy1 + 2;
-                        iy4 = iy2 + 2;
-                    }
-                    else
-                    {
-                        iy1 = iy3 + 2;
-                        iy2 = iy4 + 2;
-                    }
-                }
-                else
-                {
-                    ix1 = ix3 + 2;
-                    ix2 = ix4 + 2;
-                }
-            }
-
-            int starty = Math.Min(Math.Min(iy1, iy2), Math.Min(iy3, iy4));
-            int endy = Math.Max(Math.Max(iy1, iy2), Math.Max(iy3, iy4));
-
-            if (starty < 0) starty = -1;
-            if (endy >= height) endy = height + 1;
-
-            for (int y = starty + 1; y < endy - 1; y++)
-            {
-                leftEdgeX[y] = -1 << 16;
-                rightEdgeX[y] = 1 << 16 - 1;
-            }
-
-
-            AALineQ1(width, height, context, ix1, iy1, ix2, iy2, color, sy > 0, false);
-            AALineQ1(width, height, context, ix3, iy3, ix4, iy4, color, sy < 0, true);
-
-            if (lineWidth > 1)
-            {
-                AALineQ1(width, height, context, ix1, iy1, ix3, iy3, color, true, sy > 0);
-                AALineQ1(width, height, context, ix2, iy2, ix4, iy4, color, false, sy < 0);
-            }
-
-            if (x1 < x2)
-            {
-                if (iy2 >= 0 && iy2 < height) rightEdgeX[iy2] = Math.Min(ix2, rightEdgeX[iy2]);
-                if (iy3 >= 0 && iy3 < height) leftEdgeX[iy3] = Math.Max(ix3, leftEdgeX[iy3]);
-            }
-            else
-            {
-                if (iy1 >= 0 && iy1 < height) rightEdgeX[iy1] = Math.Min(ix1, rightEdgeX[iy1]);
-                if (iy4 >= 0 && iy4 < height) leftEdgeX[iy4] = Math.Max(ix4, leftEdgeX[iy4]);
-            }
-
-            //return;
-
-            for (int y = starty + 1; y < endy - 1; y++)
-            {
-                leftEdgeX[y] = Math.Max(leftEdgeX[y], 0);
-                rightEdgeX[y] = Math.Min(rightEdgeX[y], width - 1);
-
-                for (int x = leftEdgeX[y]; x <= rightEdgeX[y]; x++)
-                {
-                    byte a = (byte)((color & 0xff000000) >> 24);
-                    byte r = (byte)((color & 0x00ff0000) >> 16);
-                    byte g = (byte)((color & 0x0000ff00) >> 8);
-                    byte b = (byte)((color & 0x000000ff) >> 0);
-
-                    Byte rs, gs, bs;
-                    Byte rd, gd, bd;
-
-                    Int32 d;
-
-                    rs = r;
-                    gs = g;
-                    bs = b;
-
-                    d = buffer[y * width + x];
-
-                    rd = (byte)((d & 0x00ff0000) >> 16);
-                    gd = (byte)((d & 0x0000ff00) >> 8);
-                    bd = (byte)((d & 0x000000ff) >> 0);
-
-                    rd = (byte)((rs * a + rd * (0xff - a)) >> 8);
-                    gd = (byte)((gs * a + gd * (0xff - a)) >> 8);
-                    bd = (byte)((bs * a + bd * (0xff - a)) >> 8);
-
-                    buffer[y * width + x] = (0xff << 24) | (rd << 16) | (gd << 8) | (bd << 0);
-                }
-            }
         }
 
         private static void Swap<T>(ref T a, ref T b)
@@ -296,7 +301,7 @@ namespace BitmapBufferEx
             b = t;
         }
 
-        private static void AALineQ1(int width, int height, BitmapContext context, int x1, int y1, int x2, int y2, Int32 color, bool minEdge, bool leftEdge)
+        private static unsafe void AALineQ1(int width, int height, BitmapContext context, int x1, int y1, int x2, int y2, Int32 color, bool minEdge, bool leftEdge)
         {
             Byte off = 0;
 
@@ -305,7 +310,7 @@ namespace BitmapBufferEx
             if (x1 == x2) return;
             if (y1 == y2) return;
 
-            int[] buffer = context.Pixels;
+            int* buffer = context.Pixels._inf32Buffer;
 
             if (y1 > y2)
             {

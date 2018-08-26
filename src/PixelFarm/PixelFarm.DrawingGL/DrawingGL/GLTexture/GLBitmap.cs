@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
         int height;
 
         int[] rawIntBuffer;
-       
+
         IntPtr nativeImgMem;
         LazyBitmapBufferProvider lazyProvider;
         bool isInvertImage = false;
@@ -31,7 +31,7 @@ namespace PixelFarm.DrawingGL
         {
             isLittleEndian = BitConverter.IsLittleEndian;
         }
-      
+
         public GLBitmap(int w, int h, int[] rawIntBuffer, bool isInvertImage)
         {
             this.width = w;
@@ -60,11 +60,19 @@ namespace PixelFarm.DrawingGL
             this.height = h;
         }
 
-        public GLBitmap(PixelFarm.CpuBlit.ActualBitmap actualImg)
+        public GLBitmap(PixelFarm.CpuBlit.ActualBitmap srcBmp)
         {
-            this.width = actualImg.Width;
-            this.height = actualImg.Height;
-            this.rawIntBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualImg);
+            this.width = srcBmp.Width;
+            this.height = srcBmp.Height;
+
+            int[] buffer = new int[srcBmp.Width * srcBmp.Height];
+            unsafe
+            {
+                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(srcBmp);
+                System.Runtime.InteropServices.Marshal.Copy(tmp.Ptr, buffer, 0, srcBmp.Width * srcBmp.Height); 
+            }
+            rawIntBuffer = buffer;
+
         }
 
         public override Image CreateAnother(float scaleW, float scaleH)

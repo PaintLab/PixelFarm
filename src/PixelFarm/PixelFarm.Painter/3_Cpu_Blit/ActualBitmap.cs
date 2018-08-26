@@ -35,29 +35,16 @@ namespace PixelFarm.CpuBlit.Imaging
 
     public struct TempMemPtr : IDisposable
     {
-        int _lenInBytes; //in bytes
+        int _lenInBytes; //in bytes 
+        IntPtr _nativeBuffer;
+        bool _isOwner;
 
-#if COSMOS
-        IntPtr _cosmosFixedPtr;
-#else
-        System.Runtime.InteropServices.GCHandle handle1;
-#endif
-        public TempMemPtr(int[] buffer) //in element count
+        public TempMemPtr(IntPtr nativeBuffer32, int lenInBytes, bool isOwner = false)
         {
-            this._lenInBytes = buffer.Length * 4;
-#if COSMOS
-            unsafe
-            {
-                fixed (int* h = &buffer[0])
-                {
-                    _cosmosFixedPtr = (IntPtr)h;
-                }
-            }
-#else
-            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
-#endif
+            this._lenInBytes = lenInBytes;
+            _nativeBuffer = nativeBuffer32;
+            _isOwner = isOwner;
         }
-
         public int LengthInBytes
         {
             get { return _lenInBytes; }
@@ -67,21 +54,18 @@ namespace PixelFarm.CpuBlit.Imaging
         {
             get
             {
-#if COSMOS
-                return _cosmosFixedPtr;
-#else
-                return handle1.AddrOfPinnedObject();
-#endif
+                return _nativeBuffer;
             }
         }
         public void Dispose()
         {
-
-#if COSMOS
-            _cosmosFixedPtr = IntPtr.Zero;
-#else
-            this.handle1.Free();
-#endif
+            if (_isOwner)
+            {
+                //destroy in
+                System.Runtime.InteropServices.Marshal.FreeHGlobal(_nativeBuffer);
+                _nativeBuffer = IntPtr.Zero;
+            }
+           
         }
 
 
@@ -117,13 +101,17 @@ namespace PixelFarm.CpuBlit
 
     public sealed class ActualBitmap : Image, IBitmapSrc
     {
+
+
         int width;
         int height;
         int stride;
         int bitDepth;
         CpuBlit.Imaging.PixelFormat pixelFormat;
 
-        int[] pixelBuffer;
+        //int[] pixelBuffer;
+        IntPtr _pixelBuffer;
+        int _pixelBufferInBytes;
 
         public ActualBitmap(int width, int height)
         {
@@ -135,27 +123,26 @@ namespace PixelFarm.CpuBlit
                 this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
+
             //alloc mem
 
-            this.pixelBuffer = new int[width * height];
+            _pixelBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(_pixelBufferInBytes = (width * height * 4));
+            //this.pixelBuffer = new int[width * height];
         }
         public ActualBitmap(int width, int height, int[] orgBuffer)
+            : this(width, height)
         {
-            //width and height must >0 
-            this.width = width;
-            this.height = height;
-            int bytesPerPixel;
-            this.stride = CalculateStride(width,
-                this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
-                out bitDepth,
-                out bytesPerPixel);
-            //alloc mem
-
-            this.pixelBuffer = orgBuffer;
+            //TODO: review here 2018-08-26 
+            System.Runtime.InteropServices.Marshal.Copy(orgBuffer, 0, _pixelBuffer, _pixelBufferInBytes/4);
         }
         public override void Dispose()
         {
-            pixelBuffer = null;
+            if (_pixelBuffer != IntPtr.Zero)
+            {
+                System.Runtime.InteropServices.Marshal.FreeHGlobal(_pixelBuffer);
+                _pixelBuffer = IntPtr.Zero;
+                _pixelBufferInBytes = 0;
+            }
         }
         public override Image CreateAnother(float scaleW, float scaleH)
         {
@@ -195,41 +182,38 @@ namespace PixelFarm.CpuBlit
 
         public static CpuBlit.Imaging.TempMemPtr GetBufferPtr(ActualBitmap img)
         {
-            return new CpuBlit.Imaging.TempMemPtr(img.pixelBuffer);
-        }
-
-        public static int[] GetBuffer(ActualBitmap img)
-        {
-            return img.pixelBuffer;
+            return new CpuBlit.Imaging.TempMemPtr(img._pixelBuffer, img._pixelBufferInBytes);
         }
 
         public static void ReplaceBuffer(ActualBitmap img, int[] pixelBuffer)
         {
-            img.pixelBuffer = pixelBuffer;
+            //TODO: review here 2018-08-26
+            //img.pixelBuffer = pixelBuffer;
+            System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, img._pixelBuffer, pixelBuffer.Length);
         }
         public static ActualBitmap CreateFromBuffer(int width, int height, int[] buffer)
         {
-
-            //
             var img = new ActualBitmap(width, height);
             unsafe
             {
-                fixed (int* header = &img.pixelBuffer[0])
+                int* header = (int*)img._pixelBuffer;
                 {
                     System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
                 }
             }
             return img;
         }
-
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
+            //TODO: review here 2018-08-26
             if (pixelFormat != CpuBlit.Imaging.PixelFormat.ARGB32)
             {
                 throw new NotSupportedException();
             }
-            int[] newBuff = new int[this.pixelBuffer.Length];
-            Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
+
+
+            int[] newBuff = new int[_pixelBufferInBytes / 4];
+            System.Runtime.InteropServices.Marshal.Copy(_pixelBuffer, newBuff, 0, newBuff.Length);
             buffRequest.OutputBuffer32 = newBuff;
         }
 
@@ -286,43 +270,6 @@ namespace PixelFarm.CpuBlit
 
             return buff2;
         }
-
-
-
-//        public static void SaveImgBufferToPngFile(int[] imgBuffer, int stride, int width, int height, string filename)
-//        {
-//            if (s_saveToPngFileDel != null)
-//            {
-//                unsafe
-//                {
-//                    fixed (int* head = &imgBuffer[0])
-//                    {
-//                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
-//                    }
-//                }
-//            }
-//        }
-//        static SaveToPngFileDelegate s_saveToPngFileDel;
-//        public delegate void SaveToPngFileDelegate(IntPtr imgBuffer, int stride, int width, int height, string filename);
-
-//        public static bool HasDefaultSavePngToFileDelegate()
-//        {
-//            return s_saveToPngFileDel != null;
-//        }
-
-
-//        public static void InstallImageSaveToFileService(SaveToPngFileDelegate saveToPngFileDelegate)
-//        {
-//            s_saveToPngFileDel = saveToPngFileDelegate;
-//        }
-
-
-//#if DEBUG
-//        public void dbugSaveToPngFile(string filename)
-//        {
-//            SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
-//        }
-//#endif
         int IBitmapSrc.BitDepth
         {
             get
@@ -362,19 +309,16 @@ namespace PixelFarm.CpuBlit
         {
             return new RectInt(0, 0, width, height);
         }
-        int[] IBitmapSrc.GetOrgInt32Buffer()
-        {
-            return this.pixelBuffer;
-        }
+        //int[] IBitmapSrc.GetOrgInt32Buffer()
+        //{
+        //    //TODO: review here 2018-08-26
+        //    return null;
+        //    //return this.pixelBuffer;
+        //}
         CpuBlit.Imaging.TempMemPtr IBitmapSrc.GetBufferPtr()
         {
-            return new CpuBlit.Imaging.TempMemPtr(pixelBuffer);
+            return new CpuBlit.Imaging.TempMemPtr(_pixelBuffer, _pixelBufferInBytes);
         }
-
-        //int IBitmapSrc.GetByteBufferOffsetXY(int x, int y)
-        //{
-        //    return ((y * width) + x) << 2;
-        //}
 
         int IBitmapSrc.GetBufferOffsetXY32(int x, int y)
         {
@@ -383,17 +327,24 @@ namespace PixelFarm.CpuBlit
 
         void IBitmapSrc.ReplaceBuffer(int[] newBuffer)
         {
-            pixelBuffer = newBuffer;
+            //TODO: review here 2018-08-26
+            //pixelBuffer = newBuffer;
+            System.Runtime.InteropServices.Marshal.Copy(newBuffer, 0, _pixelBuffer, newBuffer.Length);
         }
 
         Color IBitmapSrc.GetPixel(int x, int y)
         {
-            int pixelValue = pixelBuffer[y * width + x];
-            return new Color(
-              (byte)(pixelValue >> 24),
-              (byte)(pixelValue >> 16),
-              (byte)(pixelValue >> 8),
-              (byte)(pixelValue));
+            unsafe
+            {
+                int* pxBuff = (int*)_pixelBuffer;
+                int pixelValue = pxBuff[y * width + x];
+                return new Color(
+                  (byte)(pixelValue >> 24),
+                  (byte)(pixelValue >> 16),
+                  (byte)(pixelValue >> 8),
+                  (byte)(pixelValue));
+            }
+
         }
     }
 
@@ -408,7 +359,7 @@ namespace PixelFarm.CpuBlit
 
         RectInt GetBounds();
 
-        int[] GetOrgInt32Buffer();
+        //int[] GetOrgInt32Buffer();
         int GetBufferOffsetXY32(int x, int y);
 
         Imaging.TempMemPtr GetBufferPtr();
