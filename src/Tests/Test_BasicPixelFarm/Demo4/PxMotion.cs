@@ -424,12 +424,12 @@ namespace LayoutFarm.UI
 
             //AggRenderSurface surface= new AggRenderSurface()
             //AggPainter painter= new AggPainter()
-            if (p == null)
+            if (p != null)
             {
                 //create agg's painter?
                 Paint(p);
             }
-           
+
         }
     }
 
