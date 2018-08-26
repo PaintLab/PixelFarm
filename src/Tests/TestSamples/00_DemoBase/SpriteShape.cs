@@ -5,6 +5,7 @@
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 using PaintLab.Svg;
+
 namespace PixelFarm.CpuBlit
 {
 
@@ -14,43 +15,40 @@ namespace PixelFarm.CpuBlit
 
     public class SpriteShape
     {
-        VgRenderVx _org;
+
         VgRenderVx _svgRenderVx;
-        PathWriter path = new PathWriter();
-        Vector2 center;
-        RectD boundingRect;
+        byte _alpha;
+        Vector2 _center;
+        RectD _boundingRect;
         CpuBlit.VertexProcessing.Affine _currentTx;
 
         public SpriteShape(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
-            //create a copy 
-            _org = svgRenderVx.Clone();
         }
-
         public RectD Bounds
         {
             get
             {
-                return boundingRect;
+                return _boundingRect;
             }
         }
         public void ResetTransform()
         {
-            _svgRenderVx = _org.Clone();
+            _currentTx = null;
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {
             //apply transform to all part
-            _currentTx = tx;
-
-            //SvgRenderElement svgRenderE = _svgRenderVx._renderE;
-
-            //int elemCount = _svgRenderVx.SvgVxCount;
-            //for (int i = 0; i < elemCount; ++i)
-            //{
-            //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
-            //}
+            if (_currentTx == null)
+            {
+                _currentTx = tx;
+            }
+            else
+            {
+                //ORDER is IMPORTANT
+                _currentTx = _currentTx * tx;
+            }
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Bilinear tx)
         {
@@ -64,7 +62,7 @@ namespace PixelFarm.CpuBlit
         {
             get
             {
-                return center;
+                return _center;
             }
         }
         public VgRenderVx GetRenderVx()
@@ -74,32 +72,7 @@ namespace PixelFarm.CpuBlit
 
         public void ApplyNewAlpha(byte alphaValue0_255)
         {
-            //Temp fix,            
-            //apply alpha to all paint
-
-
-            //throw new System.NotSupportedException();
-
-            //int elemCount = _svgRenderVx.VgCmdCount;
-            //for (int i = 0; i < elemCount; ++i)
-            //{
-            //    VgCmd vx = _svgRenderVx.GetVgCmd(i);
-            //    switch (vx.Name)
-            //    {
-            //        case VgCommandName.FillColor:
-            //            {
-            //                VgCmdFillColor fillColor = (VgCmdFillColor)vx;
-            //                fillColor.Color = fillColor.Color.NewFromChangeAlpha(alphaValue0_255);
-            //            }
-            //            break;
-            //        case VgCommandName.StrokeColor:
-            //            {
-            //                VgCmdStrokeColor strokColor = (VgCmdStrokeColor)vx;
-            //                strokColor.Color = strokColor.Color.NewFromChangeAlpha(alphaValue0_255);
-            //            }
-            //            break;
-            //    }
-            //}
+            _alpha = alphaValue0_255;
         }
         public void Paint(Painter p)
         {
@@ -109,7 +82,10 @@ namespace PixelFarm.CpuBlit
             _svgRenderVx._renderE.Paint(paintArgs);
             VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
         }
-
+        public void Paint(VgPaintArgs paintArgs)
+        {
+            _svgRenderVx._renderE.Paint(paintArgs);
+        }
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
         {
             //TODO: implement this...
@@ -161,30 +137,24 @@ namespace PixelFarm.CpuBlit
             ////not agg   
             //Release(ref vxs);
             //Release(ref vxs2);
-            //return; //**
-
+            //return; //** 
         }
-
         public void LoadFromSvg(VgRenderVx svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
             UpdateBounds();
             //find center 
-            center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
+            _center.x = (_boundingRect.Right - _boundingRect.Left) / 2.0;
+            _center.y = (_boundingRect.Top - _boundingRect.Bottom) / 2.0;
         }
-
         public void UpdateBounds()
         {
             _svgRenderVx.InvalidateBounds();
-            this.boundingRect = _svgRenderVx.GetBounds();
+            this._boundingRect = _svgRenderVx.GetBounds();
         }
-
-        VertexStore _selectedVxs = null;
         public void HitTestOnSubPart(SvgHitChain hitChain)
         {
-            SvgRenderElement renderE = _svgRenderVx._renderE;
-            renderE.HitTest(hitChain);
+            _svgRenderVx._renderE.HitTest(hitChain);
         }
 
     }
