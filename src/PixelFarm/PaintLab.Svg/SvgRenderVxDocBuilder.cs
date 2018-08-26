@@ -346,8 +346,6 @@ namespace PaintLab.Svg
         object _controller;
         internal SvgVisualSpec _visualSpec;
         internal SvgPathRenderMarkers _pathMarkers;
-
-
         LayoutFarm.ImageBinder _imgBinder;
         SvgRenderRootElement _renderRoot;
         public SvgRenderElement(WellknownSvgElementName wellknownName,
@@ -672,6 +670,10 @@ namespace PaintLab.Svg
             //***SKIP CLIPPING***
         }
 
+        public SvgVisualSpec VisualSpec
+        {
+            get { return _visualSpec; }
+        }
 
         //---------------------------
         //TODO: review here again
