@@ -455,7 +455,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        internal override void CopyPixels(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
+        internal override void CopyPixel(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {
@@ -955,7 +955,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        internal override void CopyPixels(TempMemPtr dst, int arrayOffset, Color srcColor)
+        internal override void CopyPixel(TempMemPtr dst, int arrayOffset, Color srcColor)
         {
 
             unsafe
@@ -1524,7 +1524,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        internal override void CopyPixels(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
+        internal override void CopyPixel(TempMemPtr dstBuffer, int arrayOffset, Color srcColor)
         {
             unsafe
             {

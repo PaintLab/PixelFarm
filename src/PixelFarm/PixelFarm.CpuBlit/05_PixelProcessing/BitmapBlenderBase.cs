@@ -426,7 +426,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         }
         public void SetPixel(int x, int y, Color color)
         {
-            _outputPxBlender.CopyPixels(new Imaging.TempMemPtr(_raw_buffer32, _rawBufferLenInBytes), GetBufferOffsetXY32(x, y), color);
+            _outputPxBlender.CopyPixel(new Imaging.TempMemPtr(_raw_buffer32, _rawBufferLenInBytes), GetBufferOffsetXY32(x, y), color);
         }
 
         public void CopyHL(int x, int y, int len, Color sourceColor)
@@ -572,7 +572,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
                     if (alpha == BASE_MASK)
                     {
-                        _outputPxBlender.CopyPixels(buffer, bufferOffset32, sourceColor);
+                        _outputPxBlender.CopyPixel(buffer, bufferOffset32, sourceColor);
                     }
                     else
                     {
@@ -603,7 +603,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                         Color newcolor = sourceColor.NewFromChangeCoverage(covers[coversIndex++]);
                         if (newcolor.alpha == BASE_MASK)
                         {
-                            _outputPxBlender.CopyPixels(dst, bufferOffset32, newcolor);
+                            _outputPxBlender.CopyPixel(dst, bufferOffset32, newcolor);
                         }
                         else
                         {
@@ -624,7 +624,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             Imaging.TempMemPtr dst = new Imaging.TempMemPtr(_raw_buffer32, _rawBufferLenInBytes);
             do
             {
-                _outputPxBlender.CopyPixels(dst, bufferOffset32, colors[colorsIndex]);
+                _outputPxBlender.CopyPixel(dst, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
                 bufferOffset32++;
             }
@@ -638,7 +638,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             Imaging.TempMemPtr dst = new Imaging.TempMemPtr(_raw_buffer32, _rawBufferLenInBytes);
             do
             {
-                _outputPxBlender.CopyPixels(dst, bufferOffset32, colors[colorsIndex]);
+                _outputPxBlender.CopyPixel(dst, bufferOffset32, colors[colorsIndex]);
                 ++colorsIndex;
                 bufferOffset32 += actualW; //vertically move to next line ***
             }

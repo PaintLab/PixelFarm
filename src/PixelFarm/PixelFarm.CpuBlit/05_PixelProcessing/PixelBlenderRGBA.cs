@@ -43,23 +43,66 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <param name="arrayOffset"></param>
         /// <param name="srcColor"></param>
         internal abstract void BlendPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
+        //
+        /// <summary>
+        /// blend multiple pixels
+        /// </summary>
+        /// <param name="dstBuffer"></param>
+        /// <param name="arrayOffset"></param>
+        /// <param name="srcColor"></param>
         internal abstract void BlendPixels(Imaging.TempMemPtr dstBuffer, int arrayOffset, Color srcColor);
 
         internal abstract void BlendPixels(
             int[] dstBuffer, int arrayElemOffset,
             Color[] sourceColors, int sourceColorsOffset,
             byte[] covers, int coversIndex, bool firstCoverForAll, int count);
-        //
+        /// <summary>
+        /// blend multiple pixels
+        /// </summary>
+        /// <param name="dstBuffer"></param>
+        /// <param name="arrayElemOffset"></param>
+        /// <param name="sourceColors"></param>
+        /// <param name="sourceColorsOffset"></param>
+        /// <param name="covers"></param>
+        /// <param name="coversIndex"></param>
+        /// <param name="firstCoverForAll"></param>
+        /// <param name="count"></param>
         internal abstract void BlendPixels(
            Imaging.TempMemPtr dstBuffer, int arrayElemOffset,
            Color[] sourceColors, int sourceColorsOffset,
            byte[] covers, int coversIndex, bool firstCoverForAll, int count);
 
+        /// <summary>
+        /// copy multiple pixels
+        /// </summary>
+        /// <param name="dstBuffer"></param>
+        /// <param name="arrayOffset"></param>
+        /// <param name="srcColor"></param>
+        /// <param name="count"></param>
         internal abstract void CopyPixels(int[] dstBuffer, int arrayOffset, Color srcColor, int count);
+        /// <summary>
+        /// copy single pixel
+        /// </summary>
+        /// <param name="dstBuffer"></param>
+        /// <param name="arrayOffset"></param>
+        /// <param name="srcColor"></param>
         internal abstract void CopyPixel(int[] dstBuffer, int arrayOffset, Color srcColor);
 
+        /// <summary>
+        /// copy multiple pixels
+        /// </summary>
+        /// <param name="dstBuffer"></param>
+        /// <param name="arrayOffset"></param>
+        /// <param name="srcColor"></param>
+        /// <param name="count"></param>
         internal abstract void CopyPixels(Imaging.TempMemPtr dstBuffer, int arrayOffset, Color srcColor, int count);
-        internal abstract void CopyPixels(Imaging.TempMemPtr dstBuffer, int arrayOffset, Color srcColor);
+        /// <summary>
+        /// copy single pixel
+        /// </summary>
+        /// <param name="dstBuffer"></param>
+        /// <param name="arrayOffset"></param>
+        /// <param name="srcColor"></param>
+        internal abstract void CopyPixel(Imaging.TempMemPtr dstBuffer, int arrayOffset, Color srcColor);
 
 
         internal abstract unsafe void BlendPixel32(int* ptr, Color sc);

@@ -65,7 +65,7 @@ namespace PixelFarm.CpuBlit.Imaging
                 System.Runtime.InteropServices.Marshal.FreeHGlobal(_nativeBuffer);
                 _nativeBuffer = IntPtr.Zero;
             }
-           
+
         }
 
 
@@ -133,7 +133,7 @@ namespace PixelFarm.CpuBlit
             : this(width, height)
         {
             //TODO: review here 2018-08-26 
-            System.Runtime.InteropServices.Marshal.Copy(orgBuffer, 0, _pixelBuffer, _pixelBufferInBytes/4);
+            System.Runtime.InteropServices.Marshal.Copy(orgBuffer, 0, _pixelBuffer, _pixelBufferInBytes / 4);
         }
         public override void Dispose()
         {
@@ -359,7 +359,6 @@ namespace PixelFarm.CpuBlit
 
         RectInt GetBounds();
 
-        //int[] GetOrgInt32Buffer();
         int GetBufferOffsetXY32(int x, int y);
 
         Imaging.TempMemPtr GetBufferPtr();
