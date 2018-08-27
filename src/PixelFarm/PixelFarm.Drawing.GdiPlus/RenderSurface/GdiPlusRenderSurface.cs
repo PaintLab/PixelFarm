@@ -43,6 +43,9 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //------------------------------- 
         LayoutFarm.OpenFontTextService _openFontTextServices;
+        PixelFarm.CpuBlit.ActualBitmap _actualBmp;
+
+
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
 #if DEBUG
@@ -707,7 +710,7 @@ namespace PixelFarm.Drawing.WinGdi
                 {
                     DrawImage(image, (int)destRect.X, (int)destRect.Y);
                     return;
-                } 
+                }
             }
 
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
@@ -818,16 +821,18 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         CpuBlit.AggPainter _painter;
-        CpuBlit.ActualBitmap _aggActualImg;
-
-
-        Painter GetAggPainter()
+        internal Painter GetAggPainter()
         {
+            if (_actualBmp == null)
+            {
+                _actualBmp = new CpuBlit.ActualBitmap(this.Width, this.Height, win32MemDc.PPVBits);
+            }
+
             if (_painter == null)
             {
 
-                _aggActualImg = new CpuBlit.ActualBitmap(this.Width, this.Height);
-                var aggPainter = CpuBlit.AggPainter.Create(_aggActualImg);
+
+                var aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
 

@@ -63,8 +63,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override Painter GetPainter()
         {
             //create agg painter
-            //
-            return null;
+            return _gdigsx.GetAggPainter();
 
         }
         public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
@@ -90,8 +89,8 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 _gdigsx.CloseCanvas();
                 _gdigsx = null;
-            } 
-        } 
+            }
+        }
         public override void CloseCanvas()
         {
             if (isDisposed)

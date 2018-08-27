@@ -109,9 +109,10 @@ namespace PixelFarm.CpuBlit
         int bitDepth;
         CpuBlit.Imaging.PixelFormat pixelFormat;
 
-        //int[] pixelBuffer;
+
         IntPtr _pixelBuffer;
         int _pixelBufferInBytes;
+        bool _pixelBufferFromExternalSrc;
 
         public ActualBitmap(int width, int height)
         {
@@ -123,11 +124,10 @@ namespace PixelFarm.CpuBlit
                 this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
-
-            //alloc mem
-
+            //alloc mem 
             _pixelBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(_pixelBufferInBytes = (width * height * 4));
             //this.pixelBuffer = new int[width * height];
+
         }
         public ActualBitmap(int width, int height, int[] orgBuffer)
             : this(width, height)
@@ -135,9 +135,26 @@ namespace PixelFarm.CpuBlit
             //TODO: review here 2018-08-26 
             System.Runtime.InteropServices.Marshal.Copy(orgBuffer, 0, _pixelBuffer, _pixelBufferInBytes / 4);
         }
+        public ActualBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
+            : this(width, height)
+        {
+            //width and height must >0 
+            this.width = width;
+            this.height = height;
+            int bytesPerPixel;
+            this.stride = CalculateStride(width,
+                this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
+                out bitDepth,
+                out bytesPerPixel);
+
+            _pixelBufferFromExternalSrc = true;
+            //alloc mem 
+            _pixelBuffer = externalNativeInt32Ptr;
+
+        }
         public override void Dispose()
         {
-            if (_pixelBuffer != IntPtr.Zero)
+            if (_pixelBuffer != IntPtr.Zero && !_pixelBufferFromExternalSrc)
             {
                 System.Runtime.InteropServices.Marshal.FreeHGlobal(_pixelBuffer);
                 _pixelBuffer = IntPtr.Zero;

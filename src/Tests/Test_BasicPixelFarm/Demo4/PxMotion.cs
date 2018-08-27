@@ -51,7 +51,7 @@ namespace LayoutFarm.UI
         //***
 
         //***
-        public abstract void Render(PixelFarm.Drawing.Painter p);
+        //public abstract void Render(PixelFarm.Drawing.Painter p);
         protected void UpdateTransform(double width, double height, double x, double y)
         {
             x -= width / 2;
@@ -217,35 +217,35 @@ namespace LayoutFarm.UI
         }
 
 
-        public override void Render(PixelFarm.Drawing.Painter p)
-        {
-            if (_currentTx == null)
-            {
-                _currentTx = Affine.NewMatix(
-                      AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-                      AffinePlan.Scale(_spriteScale, _spriteScale),
-                      AffinePlan.Rotate(_angle + Math.PI),
-                      AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
-                      AffinePlan.Translate(Width / 2, Height / 2)
-              );
-            }
+        //public override void Render(PixelFarm.Drawing.Painter p)
+        //{
+        //    if (_currentTx == null)
+        //    {
+        //        _currentTx = Affine.NewMatix(
+        //              AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
+        //              AffinePlan.Scale(_spriteScale, _spriteScale),
+        //              AffinePlan.Rotate(_angle + Math.PI),
+        //              AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
+        //              AffinePlan.Translate(Width / 2, Height / 2)
+        //      );
+        //    }
 
-            if (JustMove)
-            {
-                float ox = p.OriginX;
-                float oy = p.OriginY;
+        //    if (JustMove)
+        //    {
+        //        float ox = p.OriginX;
+        //        float oy = p.OriginY;
 
-                p.SetOrigin(ox + _posX, oy + _posY);
-                _spriteShape.Paint(p);
-                p.SetOrigin(ox, oy);
+        //        p.SetOrigin(ox + _posX, oy + _posY);
+        //        _spriteShape.Paint(p);
+        //        p.SetOrigin(ox, oy);
 
-            }
-            else
-            {
-                _spriteShape.Paint(p, _currentTx);
-            }
+        //    }
+        //    else
+        //    {
+        //        _spriteShape.Paint(p, _currentTx);
+        //    }
 
-        }
+        //}
 
         public SpriteShape GetSpriteShape()
         {
