@@ -105,7 +105,8 @@ namespace PixelFarm.CpuBlit
 
         int width;
         int height;
-        int stride;
+
+        int _strideBytes;
         int bitDepth;
         CpuBlit.Imaging.PixelFormat pixelFormat;
 
@@ -120,7 +121,7 @@ namespace PixelFarm.CpuBlit
             this.width = width;
             this.height = height;
             int bytesPerPixel;
-            this.stride = CalculateStride(width,
+            this._strideBytes = CalculateStride(width,
                 this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
@@ -141,7 +142,7 @@ namespace PixelFarm.CpuBlit
             this.width = width;
             this.height = height;
             int bytesPerPixel;
-            this.stride = CalculateStride(width,
+            this._strideBytes = CalculateStride(width,
                 this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
@@ -186,7 +187,7 @@ namespace PixelFarm.CpuBlit
         }
 
         public CpuBlit.Imaging.PixelFormat PixelFormat { get { return this.pixelFormat; } }
-        public int Stride { get { return this.stride; } }
+        public int Stride { get { return this._strideBytes; } }
         public int BitDepth { get { return this.bitDepth; } }
         public bool IsBigEndian { get; set; }
 
@@ -307,7 +308,7 @@ namespace PixelFarm.CpuBlit
         {
             get
             {
-                return this.stride;
+                return this._strideBytes;
             }
         }
         int IBitmapSrc.BytesBetweenPixelsInclusive
