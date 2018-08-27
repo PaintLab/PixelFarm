@@ -160,11 +160,6 @@ namespace PixelFarm.CpuBlit
                 _pixelBufferInBytes = 0;
             }
         }
-        //public override Image CreateAnother(float scaleW, float scaleH)
-        //{
-        //    //TODO: impl
-        //    throw new NotImplementedException();
-        //}
         public override int Width
         {
             get { return this.width; }
