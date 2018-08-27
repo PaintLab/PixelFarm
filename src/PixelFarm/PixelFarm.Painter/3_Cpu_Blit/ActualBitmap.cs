@@ -105,13 +105,15 @@ namespace PixelFarm.CpuBlit
 
         int width;
         int height;
-        int stride;
+
+        int _strideBytes;
         int bitDepth;
         CpuBlit.Imaging.PixelFormat pixelFormat;
 
-        //int[] pixelBuffer;
+
         IntPtr _pixelBuffer;
         int _pixelBufferInBytes;
+        bool _pixelBufferFromExternalSrc;
 
         public ActualBitmap(int width, int height)
         {
@@ -119,35 +121,45 @@ namespace PixelFarm.CpuBlit
             this.width = width;
             this.height = height;
             int bytesPerPixel;
-            this.stride = CalculateStride(width,
+            this._strideBytes = CalculateStride(width,
                 this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
 
-            //alloc mem
-
+            //alloc mem ***
             _pixelBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(_pixelBufferInBytes = (width * height * 4));
-            //this.pixelBuffer = new int[width * height];
         }
         public ActualBitmap(int width, int height, int[] orgBuffer)
             : this(width, height)
         {
-            //TODO: review here 2018-08-26 
+            //copy from managed buffer
             System.Runtime.InteropServices.Marshal.Copy(orgBuffer, 0, _pixelBuffer, _pixelBufferInBytes / 4);
+        }
+        public ActualBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
+            : this(width, height)
+        {
+            //width and height must >0 
+            this.width = width;
+            this.height = height;
+            int bytesPerPixel;
+            this._strideBytes = CalculateStride(width,
+                this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
+                out bitDepth,
+                out bytesPerPixel);
+
+            _pixelBufferFromExternalSrc = true;
+            //alloc mem 
+            _pixelBuffer = externalNativeInt32Ptr;
+
         }
         public override void Dispose()
         {
-            if (_pixelBuffer != IntPtr.Zero)
+            if (_pixelBuffer != IntPtr.Zero && !_pixelBufferFromExternalSrc)
             {
                 System.Runtime.InteropServices.Marshal.FreeHGlobal(_pixelBuffer);
                 _pixelBuffer = IntPtr.Zero;
                 _pixelBufferInBytes = 0;
             }
-        }
-        public override Image CreateAnother(float scaleW, float scaleH)
-        {
-            //TODO: impl
-            throw new NotImplementedException();
         }
         public override int Width
         {
@@ -175,7 +187,7 @@ namespace PixelFarm.CpuBlit
         }
 
         public CpuBlit.Imaging.PixelFormat PixelFormat { get { return this.pixelFormat; } }
-        public int Stride { get { return this.stride; } }
+        public int Stride { get { return this._strideBytes; } }
         public int BitDepth { get { return this.bitDepth; } }
         public bool IsBigEndian { get; set; }
 
@@ -187,8 +199,6 @@ namespace PixelFarm.CpuBlit
 
         public static void ReplaceBuffer(ActualBitmap img, int[] pixelBuffer)
         {
-            //TODO: review here 2018-08-26
-            //img.pixelBuffer = pixelBuffer;
             System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, img._pixelBuffer, pixelBuffer.Length);
         }
         public static ActualBitmap CreateFromBuffer(int width, int height, int[] buffer)
@@ -298,7 +308,7 @@ namespace PixelFarm.CpuBlit
         {
             get
             {
-                return this.stride;
+                return this._strideBytes;
             }
         }
         int IBitmapSrc.BytesBetweenPixelsInclusive
@@ -309,12 +319,7 @@ namespace PixelFarm.CpuBlit
         {
             return new RectInt(0, 0, width, height);
         }
-        //int[] IBitmapSrc.GetOrgInt32Buffer()
-        //{
-        //    //TODO: review here 2018-08-26
-        //    return null;
-        //    //return this.pixelBuffer;
-        //}
+
         CpuBlit.Imaging.TempMemPtr IBitmapSrc.GetBufferPtr()
         {
             return new CpuBlit.Imaging.TempMemPtr(_pixelBuffer, _pixelBufferInBytes);

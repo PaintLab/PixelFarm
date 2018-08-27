@@ -63,8 +63,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override Painter GetPainter()
         {
             //create agg painter
-            //
-            return null;
+            return _gdigsx.GetAggPainter();
 
         }
         public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
@@ -77,7 +76,7 @@ namespace PixelFarm.Drawing.WinGdi
                 CpuBlit.ActualBitmap img = destImg as CpuBlit.ActualBitmap;
                 if (img != null)
                 {
-                    var tmpPtr = CpuBlit.ActualBitmap.GetBufferPtr(img);
+                    CpuBlit.Imaging.TempMemPtr tmpPtr = CpuBlit.ActualBitmap.GetBufferPtr(img);
                     byte* head = (byte*)tmpPtr.Ptr;
                     _gdigsx.RenderTo(head);
                     tmpPtr.Dispose();
@@ -90,8 +89,8 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 _gdigsx.CloseCanvas();
                 _gdigsx = null;
-            } 
-        } 
+            }
+        }
         public override void CloseCanvas()
         {
             if (isDisposed)
