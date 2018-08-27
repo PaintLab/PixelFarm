@@ -16,9 +16,14 @@ namespace PixelFarm.Drawing.Skia
            IntPtr hBmpScan0)
         {
             //1st, fast
-            int[] rawBuffer = ActualBitmap.GetBuffer(actualImage);
-            System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
-               hBmpScan0, rawBuffer.Length);
+            CpuBlit.Imaging.TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImage);
+            //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
+            //   hBmpScan0, rawBuffer.Length);
+            unsafe
+            {
+                NativeMemMx.memcpy((byte*)hBmpScan0, (byte*)tmp.Ptr, tmp.LengthInBytes);
+            }
+
         }
 
         /////////////////////////////////////////////////////////////////////////////////////

@@ -21,6 +21,19 @@ namespace LayoutFarm
             _mySprite = new MyTestSprite(_renderVx);
             host.AddChild(_mySprite);
 
+            //
+            var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
+            var textSpanStyle = new Text.TextSpanStyle();
+
+            //test with various font style
+            textSpanStyle.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 18);
+            textSpanStyle.FontColor = new PixelFarm.Drawing.Color(255, 0, 0);
+            //set default style
+            textbox.DefaultSpanStyle = textSpanStyle;
+
+            host.AddChild(textbox);
+
+
             //var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             //box1.BackColor = Color.Red;
             //box1.SetLocation(10, 10);

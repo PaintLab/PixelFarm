@@ -118,186 +118,88 @@ namespace PixelFarm.CpuBlit
             var destImage = this.DestBitmapBlender;
             int width = destImage.Width;
             int height = destImage.Height;
-            int[] buffer = destImage.GetBuffer32();
-            switch (destImage.BitDepth)
+
+
+            unsafe
             {
-                default: throw new NotSupportedException();
-                case 32:
-                    {
-                        //------------------------------
-                        //fast clear buffer
-                        //skip clipping ****
-                        //TODO: reimplement clipping***
-                        //------------------------------ 
-                        if (color == Color.White)
-                        {
-                            //fast cleat with white color
-                            int n = buffer.Length;
-                            unsafe
-                            {
-                                fixed (void* head = &buffer[0])
-                                {
-                                    uint* head_i32 = (uint*)head;
-                                    for (int i = n - 1; i >= 0; --i)
-                                    {
-                                        *head_i32 = 0xffffffff; //white (ARGB)
-                                        head_i32++;
-                                    }
-                                }
-                            }
-                        }
-                        else if (color == Color.Black)
-                        {
-                            //fast cleat with black color
-                            int n = buffer.Length;
-                            unsafe
-                            {
-                                fixed (void* head = &buffer[0])
-                                {
-                                    uint* head_i32 = (uint*)head;
-                                    for (int i = n - 1; i >= 0; --i)
-                                    {
-                                        *head_i32 = 0xff000000; //black (ARGB)
-                                        head_i32++;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //other color
-                            //#if WIN
-                            //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
-                            //#else
-                            //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
-                            //#endif
+                TempMemPtr tmp = destImage.GetBufferPtr();
+                int* buffer = (int*)tmp.Ptr;
+                int len32 = tmp.LengthInBytes / 4;
 
-                            //ARGB
-                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
-                            int n = buffer.Length;
-                            unsafe
+                switch (destImage.BitDepth)
+                {
+                    default: throw new NotSupportedException();
+                    case 32:
+                        {
+                            //------------------------------
+                            //fast clear buffer
+                            //skip clipping ****
+                            //TODO: reimplement clipping***
+                            //------------------------------ 
+                            if (color == Color.White)
                             {
-                                fixed (void* head = &buffer[0])
+                                //fast cleat with white color
+                                int n = len32;
+                                unsafe
                                 {
-                                    uint* head_i32 = (uint*)head;
-                                    for (int i = n - 1; i >= 0; --i)
+                                    //fixed (void* head = &buffer[0])
                                     {
-                                        *head_i32 = colorARGB;
-                                        head_i32++;
+                                        uint* head_i32 = (uint*)buffer;
+                                        for (int i = n - 1; i >= 0; --i)
+                                        {
+                                            *head_i32 = 0xffffffff; //white (ARGB)
+                                            head_i32++;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (color == Color.Black)
+                            {
+                                //fast cleat with black color
+                                int n = len32;
+                                unsafe
+                                {
+                                    //fixed (void* head = &buffer[0])
+                                    {
+                                        uint* head_i32 = (uint*)buffer; 
+                                        for (int i = n - 1; i >= 0; --i)
+                                        {
+                                            *head_i32 = 0xff000000; //black (ARGB)
+                                            head_i32++;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //other color
+                                //#if WIN
+                                //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                                //#else
+                                //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
+                                //#endif
+
+                                //ARGB
+                                uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                                int n = len32;
+                                unsafe
+                                {
+                                    //fixed (void* head = &buffer[0])
+                                    {
+                                        uint* head_i32 = (uint*)buffer;
+                                        for (int i = n - 1; i >= 0; --i)
+                                        {
+                                            *head_i32 = colorARGB;
+                                            head_i32++;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    break;
-
+                        break;
+                }
             }
 
-            //            switch (destImage.BitDepth)
-            //            {
-            //                case 8:
-            //                    {
-            //                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-            //                        //byte byteColor = color.Red0To255;
-            //                        //int clipRectLeft = clippingRectInt.Left;
-
-            //                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
-            //                        //{
-            //                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-            //                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
-            //                        //    {
-            //                        //        buffer[bufferOffset] = color.blue;
-            //                        //        bufferOffset += bytesBetweenPixels;
-            //                        //    }
-            //                        //}
-            //                        throw new NotSupportedException("temp");
-            //                    }
-            //                case 24:
-            //                    {
-            //                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-            //                        //int clipRectLeft = clippingRectInt.Left;
-            //                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
-            //                        //{
-            //                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-            //                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
-            //                        //    {
-            //                        //        buffer[bufferOffset + 0] = color.blue;
-            //                        //        buffer[bufferOffset + 1] = color.green;
-            //                        //        buffer[bufferOffset + 2] = color.red;
-            //                        //        bufferOffset += bytesBetweenPixels;
-            //                        //    }
-            //                        //}
-            //                        throw new NotSupportedException("temp");
-            //                    }
-            //                    break;
-            //                case 32:
-            //                    {
-            //                        //------------------------------
-            //                        //fast clear buffer
-            //                        //skip clipping ****
-            //                        //TODO: reimplement clipping***
-            //                        //------------------------------ 
-            //                        if (color == Color.White)
-            //                        {
-            //                            //fast cleat with white color
-            //                            int n = buffer.Length / 4;
-            //                            unsafe
-            //                            {
-            //                                fixed (void* head = &buffer[0])
-            //                                {
-            //                                    uint* head_i32 = (uint*)head;
-            //                                    for (int i = n - 1; i >= 0; --i)
-            //                                    {
-            //                                        *head_i32 = 0xffffffff; //white (ARGB)
-            //                                        head_i32++;
-            //                                    }
-            //                                }
-            //                            }
-            //                        }
-            //                        else if (color == Color.Black)
-            //                        {
-            //                            //fast cleat with black color
-            //                            int n = buffer.Length / 4;
-            //                            unsafe
-            //                            {
-            //                                fixed (void* head = &buffer[0])
-            //                                {
-            //                                    uint* head_i32 = (uint*)head;
-            //                                    for (int i = n - 1; i >= 0; --i)
-            //                                    {
-            //                                        *head_i32 = 0xff000000; //black (ARGB)
-            //                                        head_i32++;
-            //                                    }
-            //                                }
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            //other color
-            //#if WIN
-            //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
-            //#else
-            //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
-            //#endif
-            //                            int n = buffer.Length / 4;
-            //                            unsafe
-            //                            {
-            //                                fixed (void* head = &buffer[0])
-            //                                {
-            //                                    uint* head_i32 = (uint*)head;
-            //                                    for (int i = n - 1; i >= 0; --i)
-            //                                    {
-            //                                        *head_i32 = colorARGB;
-            //                                        head_i32++;
-            //                                    }
-            //                                }
-            //                            }
-            //                        }
-            //                    }
-            //                    break;
-            //                default:
-            //                    throw new NotImplementedException();
-            //            }
         }
 
 

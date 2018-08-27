@@ -47,12 +47,16 @@ namespace WinFormGdiPlus
             //create
             bufferLenInBytes = _bmpdata.Stride * _bmpdata.Height;
 
+            //copy*** original buffer to BitmapBuffer
+            IntPtr newBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(bufferLenInBytes);
+            //int[] buffer = new int[bufferLenInBytes / 4];
+            unsafe
+            {
+                PixelFarm.CpuBlit.NativeMemMx.memcpy((byte*)newBuffer, (byte*)_bmpdata.Scan0, bufferLenInBytes);
+            }
+            //System.Runtime.InteropServices.Marshal.Copy(_bmpdata.Scan0, newBuffer, 0, bufferLenInBytes / 4);
 
-            //copy*** original buffer ti iyr BitmapBuffer
-            int[] buffer = new int[bufferLenInBytes / 4];
-            System.Runtime.InteropServices.Marshal.Copy(_bmpdata.Scan0, buffer, 0, bufferLenInBytes / 4);
-
-            return _writeableBitmap = new BitmapBufferEx.BitmapBuffer(_bmp.Width, _bmp.Height, buffer);
+            return _writeableBitmap = new BitmapBufferEx.BitmapBuffer(_bmp.Width, _bmp.Height, newBuffer, bufferLenInBytes, true);
         }
         public void WriteAndUnlock()
         {
@@ -62,13 +66,19 @@ namespace WinFormGdiPlus
 
         public void Write()
         {
-            //write back
+            //write back**
 
             if (_writeableBitmap.IsEmpty) return;
 
             //write data back
-            System.Runtime.InteropServices.Marshal.Copy(_writeableBitmap.Pixels,
-                0, _bmpdata.Scan0, bufferLenInBytes / 4);
+            unsafe
+            {
+                PixelFarm.CpuBlit.NativeMemMx.memcpy((byte*)_writeableBitmap.Pixels, (byte*)_bmpdata.Scan0, bufferLenInBytes);
+            }
+
+            //System.Runtime.InteropServices.Marshal.Copy(
+            //    _writeableBitmap.Pixels,
+            //    0, _bmpdata.Scan0, bufferLenInBytes / 4);
 
         }
         public void Unlock()

@@ -163,8 +163,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.RenderQuality = RenderQualtity.HighQuality;
             }
 
-
-
+           
             int width = 800;
             int height = 600;
             //clear the image to white         

@@ -313,12 +313,6 @@
     <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>2_Painter\3_CpuBlit\ColorRGBAf.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs">
-      <Link>2_Painter\3_CpuBlit\MemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs">
-      <Link>2_Painter\3_CpuBlit\NativeMemMx.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs">
       <Link>2_Painter\3_CpuBlit\PainterExtensions.cs</Link>
     </Compile>
@@ -384,6 +378,12 @@
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
       <Link>1_DrawingCore\1_PrimitiveGeo\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\MemMx.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\MemMx.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\NativeMemMx.cs">
+      <Link>1_DrawingCore\1_PrimitiveGeo\NativeMemMx.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
       <Link>1_DrawingCore\1_PrimitiveGeo\Rectangle.cs</Link>

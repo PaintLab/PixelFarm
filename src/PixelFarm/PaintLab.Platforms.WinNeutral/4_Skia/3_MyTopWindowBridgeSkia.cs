@@ -18,7 +18,7 @@ namespace LayoutFarm.UI.Skia
             //bind to anycontrol GDI control  
             this.windowControl = windowControl;
             this.SetBaseCanvasViewport(this.canvasViewport = new SkiaCanvasViewport(this.RootGfx,
-                new Size(windowControl.Width, windowControl.Height), 4));
+                new Size(windowControl.Width, windowControl.Height) ));
 
             this.RootGfx.SetPaintDelegates(
                     this.canvasViewport.CanvasInvalidateArea,

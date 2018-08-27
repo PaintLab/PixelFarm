@@ -167,7 +167,7 @@ namespace WinFormGdiPlus
         static BitmapBuffer LoadBitmapAsReadonly(string path)
         {
             using (Bitmap bmp = new Bitmap(path))
-            using (var lockBmp = new LockBmp(bmp))
+            using (LockBmp lockBmp = new LockBmp(bmp))
             {
                 return lockBmp.CreateNewBitmapBuffer();
             }

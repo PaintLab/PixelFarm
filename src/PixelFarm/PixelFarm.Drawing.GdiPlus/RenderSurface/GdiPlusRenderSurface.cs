@@ -43,6 +43,12 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //------------------------------- 
         LayoutFarm.OpenFontTextService _openFontTextServices;
+
+        PixelFarm.CpuBlit.ActualBitmap _actualBmp;
+        CpuBlit.AggPainter _painter;
+        //------------------------------- 
+
+
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
 #if DEBUG
@@ -69,7 +75,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
-            win32MemDc = new NativeWin32MemoryDc(width, height, true);
+            win32MemDc = new NativeWin32MemoryDc(width, height, false);
             win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
             win32MemDc.SetBackTransparent(true);
             win32MemDc.SetClipRect(0, 0, width, height);
@@ -698,6 +704,24 @@ namespace PixelFarm.Drawing.WinGdi
         public void DrawImage(Image image, RectangleF destRect)
         {
 
+            //if (image is PixelFarm.CpuBlit.ActualBitmap)
+            //{
+
+            //    if (image.Width == destRect.Width &&
+            //        image.Height == destRect.Height)
+            //    {
+            //        Painter painter = GetAggPainter();
+            //        //RenderQualtity prev = painter.RenderQuality;
+            //        //painter.RenderQuality = RenderQualtity.Fast;
+            //        //draw image at current position
+
+            //        painter.DrawImage((PixelFarm.CpuBlit.ActualBitmap)image);
+
+            //        //painter.RenderQuality = prev;
+            //        return;
+            //    }
+            //}
+
             //check if we need scale?
             if (image.Width == destRect.Width &&
                 image.Height == destRect.Height)
@@ -707,7 +731,7 @@ namespace PixelFarm.Drawing.WinGdi
                 {
                     DrawImage(image, (int)destRect.X, (int)destRect.Y);
                     return;
-                } 
+                }
             }
 
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
@@ -817,20 +841,20 @@ namespace PixelFarm.Drawing.WinGdi
 
         }
 
-        CpuBlit.AggPainter _painter;
-        CpuBlit.ActualBitmap _aggActualImg;
 
-
-        Painter GetAggPainter()
+        internal Painter GetAggPainter()
         {
+            if (_actualBmp == null)
+            {
+                _actualBmp = new CpuBlit.ActualBitmap(this.Width, this.Height, win32MemDc.PPVBits);
+            }
+
             if (_painter == null)
             {
 
-                _aggActualImg = new CpuBlit.ActualBitmap(this.Width, this.Height);
-                var aggPainter = CpuBlit.AggPainter.Create(_aggActualImg);
+
+                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-
-
                 if (_openFontTextServices == null)
                 {
                     _openFontTextServices = new LayoutFarm.OpenFontTextService();
@@ -838,40 +862,12 @@ namespace PixelFarm.Drawing.WinGdi
 
                 VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices);
                 aggPainter.TextPrinter = textPrinter;
+                aggPainter.CurrentFont = new RequestFont("tahoma", 14);
+                //
                 _painter = aggPainter;
             }
             return _painter;
         }
-
-
-        //GdiPlusPainter _gdiPlusPainter;
-
-
-        //public void Render(PixelFarm.CpuBlit.VgRenderVx svgVx)
-        //{
-        //    if (svgVx == null) return;
-        //    //------------------------- 
-        //    if (svgVx.DisableBackingImage)
-        //    {
-        //        throw new NotSupportedException();
-        //        ////solid color 
-        //        //if (_gdiPlusPainter == null)
-        //        //{
-        //        //    _gdiPlusPainter = new GdiPlusPainter(this);
-        //        //}
-        //        ////svgVx.Render(_gdiPlusPainter);
-
-        //    }
-        //    else if (!svgVx.HasBitmapSnapshot)
-        //    {
-        //        throw new NotSupportedException();               
-        //    }
-        //    else
-        //    {
-        //        Image img = svgVx.BackingImage;
-        //        this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
-        //    }
-        //}
         public void FillPath(Brush brush, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 

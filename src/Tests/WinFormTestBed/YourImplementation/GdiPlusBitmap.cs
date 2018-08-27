@@ -17,13 +17,13 @@ namespace LayoutFarm
             this._innerBmp = innerImage;
             SetCacheInnerImage(this, innerImage);
         }
-        public override Image CreateAnother(float scaleW, float scaleH)
-        {
-            int bmpW = _innerBmp.Width;
-            int bmpH = _innerBmp.Height;
-            System.Drawing.Bitmap newclone = new System.Drawing.Bitmap(_innerBmp, (int)(bmpW * scaleW), (int)(bmpH * scaleH));
-            return new GdiPlusBitmap((int)(width * scaleW), (int)(height * scaleH), newclone);
-        }
+        //public override Image CreateAnother(float scaleW, float scaleH)
+        //{
+        //    int bmpW = _innerBmp.Width;
+        //    int bmpH = _innerBmp.Height;
+        //    System.Drawing.Bitmap newclone = new System.Drawing.Bitmap(_innerBmp, (int)(bmpW * scaleW), (int)(bmpH * scaleH));
+        //    return new GdiPlusBitmap((int)(width * scaleW), (int)(height * scaleH), newclone);
+        //}
         public override int Width
         {
             get { return this.width; }
