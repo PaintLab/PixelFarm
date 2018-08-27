@@ -4,11 +4,10 @@ using System;
 using LayoutFarm;
 namespace PixelFarm.Drawing.WinGdi
 {
-    class QuadPages
+    class QuadPages : IDisposable
     {
         GdiPlusDrawBoard _pageA;
         public QuadPages(
-            int cachedPageNum,
             int eachCachedPageWidth,
             int eachCachedPageHeight)
         {
@@ -57,7 +56,7 @@ namespace PixelFarm.Drawing.WinGdi
                 UpdateAllArea(_pageA, topWindowRenderBox);
             }
             _pageA.RenderTo(destOutputHdc, viewportX - _pageA.Left,
-                      viewportY - _pageA.Top,
+                          viewportY - _pageA.Top,
                           new Rectangle(0, 0,
                           viewportWidth,
                           viewportHeight));

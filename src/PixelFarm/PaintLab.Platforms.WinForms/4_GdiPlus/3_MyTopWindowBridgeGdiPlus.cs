@@ -18,7 +18,7 @@ namespace LayoutFarm.UI.GdiPlus
         {
             //bind to anycontrol GDI control  
             this.windowControl = windowControl;
-            this.SetBaseCanvasViewport(this.gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize(), 4));
+            this.SetBaseCanvasViewport(this.gdiPlusViewport = new GdiPlusCanvasViewport(this.RootGfx, this.Size.ToSize()));
             this.RootGfx.SetPaintDelegates(
                     this.gdiPlusViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);

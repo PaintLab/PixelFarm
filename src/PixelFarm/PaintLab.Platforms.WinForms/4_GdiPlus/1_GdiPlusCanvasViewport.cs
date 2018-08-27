@@ -8,30 +8,30 @@ namespace LayoutFarm.UI.GdiPlus
 {
     class GdiPlusCanvasViewport : CanvasViewport
     {
-        QuadPages quadPages = null;
+        QuadPages _quadPages = null;
         public GdiPlusCanvasViewport(RootGraphic rootgfx,
-            Size viewportSize, int cachedPageNum)
-            : base(rootgfx, viewportSize, cachedPageNum)
+            Size viewportSize)
+            : base(rootgfx, viewportSize)
         {
-            quadPages = new QuadPages(cachedPageNum, viewportSize.Width, viewportSize.Height);
+            _quadPages = new QuadPages(viewportSize.Width, viewportSize.Height);
             this.CalculateCanvasPages();
         }
 
         ~GdiPlusCanvasViewport()
         {
-            if (quadPages != null)
+            if (_quadPages != null)
             {
-                quadPages.Dispose();
+                _quadPages.Dispose();
             }
         }
 
         //static int dbugCount = 0;
         protected override void OnClosing()
         {
-            if (quadPages != null)
+            if (_quadPages != null)
             {
-                quadPages.Dispose();
-                quadPages = null;
+                _quadPages.Dispose();
+                _quadPages = null;
             }
             base.OnClosing();
         }
@@ -41,7 +41,7 @@ namespace LayoutFarm.UI.GdiPlus
 #endif
         public override void CanvasInvalidateArea(Rectangle r)
         {
-            quadPages.CanvasInvalidate(r);
+            _quadPages.CanvasInvalidate(r);
 #if DEBUG
             //Console.WriteLine("CanvasInvalidateArea:" + (dbugCount++).ToString() + " " + r.ToString());
 #endif
@@ -50,16 +50,16 @@ namespace LayoutFarm.UI.GdiPlus
         {
             get
             {
-                return this.quadPages.IsValid;
+                return this._quadPages.IsValid;
             }
         }
         protected override void ResetQuadPages(int viewportWidth, int viewportHeight)
         {
-            quadPages.ResizeAllPages(viewportWidth, viewportHeight);
+            _quadPages.ResizeAllPages(viewportWidth, viewportHeight);
         }
         protected override void CalculateCanvasPages()
         {
-            quadPages.CalculateCanvasPages(this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+            _quadPages.CalculateCanvasPages(this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             this.FullMode = true;
         }
         public void PaintMe2(IntPtr hdc, Rectangle invalidateArea)
@@ -76,7 +76,7 @@ namespace LayoutFarm.UI.GdiPlus
 #endif
             if (this.FullMode)
             {
-                quadPages.RenderToOutputWindowFullMode(
+                _quadPages.RenderToOutputWindowFullMode(
                     rootGraphics.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
@@ -84,7 +84,7 @@ namespace LayoutFarm.UI.GdiPlus
             {
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
-                quadPages.RenderToOutputWindowPartialMode2(
+                _quadPages.RenderToOutputWindowPartialMode2(
                    rootGraphics.TopWindowRenderBox, hdc,
                    this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
             }
@@ -126,7 +126,7 @@ namespace LayoutFarm.UI.GdiPlus
 #endif
             if (this.FullMode)
             {
-                quadPages.RenderToOutputWindowFullMode(
+                _quadPages.RenderToOutputWindowFullMode(
                     rootGraphics.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
@@ -134,7 +134,7 @@ namespace LayoutFarm.UI.GdiPlus
             {
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
-                quadPages.RenderToOutputWindowPartialMode(
+                _quadPages.RenderToOutputWindowPartialMode(
                    rootGraphics.TopWindowRenderBox, hdc,
                    this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }

@@ -96,7 +96,6 @@ namespace LayoutFarm
             {
                 return;
             }
-
             this.canvasInvalidateDelegate(accumulateInvalidRect);
             this.paintToOutputWindowHandler();
             hasAccumRect = false;
