@@ -75,11 +75,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public override Image CreateAnother(float scaleW, float scaleH)
-        {
-
-            throw new NotImplementedException();
-        }
+       
         public bool IsBigEndianPixel { get; set; }
 
         public bool IsInvert

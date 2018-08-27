@@ -124,15 +124,14 @@ namespace PixelFarm.CpuBlit
                 this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
                 out bytesPerPixel);
-            //alloc mem 
-            _pixelBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(_pixelBufferInBytes = (width * height * 4));
-            //this.pixelBuffer = new int[width * height];
 
+            //alloc mem ***
+            _pixelBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(_pixelBufferInBytes = (width * height * 4));
         }
         public ActualBitmap(int width, int height, int[] orgBuffer)
             : this(width, height)
         {
-            //TODO: review here 2018-08-26 
+            //copy from managed buffer
             System.Runtime.InteropServices.Marshal.Copy(orgBuffer, 0, _pixelBuffer, _pixelBufferInBytes / 4);
         }
         public ActualBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
@@ -161,11 +160,11 @@ namespace PixelFarm.CpuBlit
                 _pixelBufferInBytes = 0;
             }
         }
-        public override Image CreateAnother(float scaleW, float scaleH)
-        {
-            //TODO: impl
-            throw new NotImplementedException();
-        }
+        //public override Image CreateAnother(float scaleW, float scaleH)
+        //{
+        //    //TODO: impl
+        //    throw new NotImplementedException();
+        //}
         public override int Width
         {
             get { return this.width; }
@@ -204,8 +203,6 @@ namespace PixelFarm.CpuBlit
 
         public static void ReplaceBuffer(ActualBitmap img, int[] pixelBuffer)
         {
-            //TODO: review here 2018-08-26
-            //img.pixelBuffer = pixelBuffer;
             System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, img._pixelBuffer, pixelBuffer.Length);
         }
         public static ActualBitmap CreateFromBuffer(int width, int height, int[] buffer)
