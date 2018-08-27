@@ -44,7 +44,7 @@ namespace LayoutFarm.UI.OpenGL
         void BindGLControl(GpuOpenGLSurfaceView myGLControl)
         {
             this.windowControl = myGLControl;
-            SetBaseCanvasViewport(this.openGLViewport = new OpenGLCanvasViewport(this.RootGfx, this.windowControl.Size.ToSize(), 4));
+            SetBaseCanvasViewport(this.openGLViewport = new OpenGLCanvasViewport(this.RootGfx, this.windowControl.Size.ToSize()));
             RootGfx.SetPaintDelegates(
                 (r) =>
                 {
