@@ -43,7 +43,10 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //------------------------------- 
         LayoutFarm.OpenFontTextService _openFontTextServices;
+
         PixelFarm.CpuBlit.ActualBitmap _actualBmp;
+        CpuBlit.AggPainter _painter;
+        //------------------------------- 
 
 
         public GdiPlusRenderSurface(int left, int top, int width, int height)
@@ -701,6 +704,24 @@ namespace PixelFarm.Drawing.WinGdi
         public void DrawImage(Image image, RectangleF destRect)
         {
 
+            //if (image is PixelFarm.CpuBlit.ActualBitmap)
+            //{
+
+            //    if (image.Width == destRect.Width &&
+            //        image.Height == destRect.Height)
+            //    {
+            //        Painter painter = GetAggPainter();
+            //        //RenderQualtity prev = painter.RenderQuality;
+            //        //painter.RenderQuality = RenderQualtity.Fast;
+            //        //draw image at current position
+
+            //        painter.DrawImage((PixelFarm.CpuBlit.ActualBitmap)image);
+
+            //        //painter.RenderQuality = prev;
+            //        return;
+            //    }
+            //}
+
             //check if we need scale?
             if (image.Width == destRect.Width &&
                 image.Height == destRect.Height)
@@ -820,7 +841,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         }
 
-        CpuBlit.AggPainter _painter;
+
         internal Painter GetAggPainter()
         {
             if (_actualBmp == null)

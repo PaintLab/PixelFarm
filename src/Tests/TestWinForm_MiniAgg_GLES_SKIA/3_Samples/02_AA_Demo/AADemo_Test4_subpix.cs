@@ -266,9 +266,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 p.DrawImage(glyphImg, 0, 50);
                 //--------------- 
             }
-
-
-
+             
         }
         void RunSampleC(PixelFarm.Drawing.Painter p)
         {

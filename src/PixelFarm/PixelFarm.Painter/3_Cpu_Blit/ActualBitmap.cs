@@ -318,12 +318,7 @@ namespace PixelFarm.CpuBlit
         {
             return new RectInt(0, 0, width, height);
         }
-        //int[] IBitmapSrc.GetOrgInt32Buffer()
-        //{
-        //    //TODO: review here 2018-08-26
-        //    return null;
-        //    //return this.pixelBuffer;
-        //}
+
         CpuBlit.Imaging.TempMemPtr IBitmapSrc.GetBufferPtr()
         {
             return new CpuBlit.Imaging.TempMemPtr(_pixelBuffer, _pixelBufferInBytes);

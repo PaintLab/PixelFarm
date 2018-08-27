@@ -76,7 +76,7 @@ namespace PixelFarm.Drawing.WinGdi
                 CpuBlit.ActualBitmap img = destImg as CpuBlit.ActualBitmap;
                 if (img != null)
                 {
-                    var tmpPtr = CpuBlit.ActualBitmap.GetBufferPtr(img);
+                    CpuBlit.Imaging.TempMemPtr tmpPtr = CpuBlit.ActualBitmap.GetBufferPtr(img);
                     byte* head = (byte*)tmpPtr.Ptr;
                     _gdigsx.RenderTo(head);
                     tmpPtr.Dispose();
