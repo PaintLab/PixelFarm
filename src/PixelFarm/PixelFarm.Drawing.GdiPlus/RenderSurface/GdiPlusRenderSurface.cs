@@ -72,7 +72,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
-            win32MemDc = new NativeWin32MemoryDc(width, height, true);
+            win32MemDc = new NativeWin32MemoryDc(width, height, false);
             win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
             win32MemDc.SetBackTransparent(true);
             win32MemDc.SetClipRect(0, 0, width, height);
