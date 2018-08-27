@@ -868,36 +868,6 @@ namespace PixelFarm.Drawing.WinGdi
             }
             return _painter;
         }
-
-
-        //GdiPlusPainter _gdiPlusPainter;
-
-
-        //public void Render(PixelFarm.CpuBlit.VgRenderVx svgVx)
-        //{
-        //    if (svgVx == null) return;
-        //    //------------------------- 
-        //    if (svgVx.DisableBackingImage)
-        //    {
-        //        throw new NotSupportedException();
-        //        ////solid color 
-        //        //if (_gdiPlusPainter == null)
-        //        //{
-        //        //    _gdiPlusPainter = new GdiPlusPainter(this);
-        //        //}
-        //        ////svgVx.Render(_gdiPlusPainter);
-
-        //    }
-        //    else if (!svgVx.HasBitmapSnapshot)
-        //    {
-        //        throw new NotSupportedException();               
-        //    }
-        //    else
-        //    {
-        //        Image img = svgVx.BackingImage;
-        //        this.DrawImage(img, new RectangleF(0, 0, img.Width, img.Height));
-        //    }
-        //}
         public void FillPath(Brush brush, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 
