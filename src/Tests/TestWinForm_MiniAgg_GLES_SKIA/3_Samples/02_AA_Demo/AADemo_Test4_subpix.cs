@@ -204,40 +204,44 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
-            ActualBitmap glyphImg = new ActualBitmap(100, 100);
-            AggPainter painter = AggPainter.Create(glyphImg);
+            using (ActualBitmap glyphImg = new ActualBitmap(100, 100))
+            {
+                AggPainter painter = AggPainter.Create(glyphImg);
 
-            painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            painter.StrokeWidth = 2.0f * 3;
-            int x = 10, y = 10;
-            painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
-            int lineLen = 4;
+                painter.StrokeColor = PixelFarm.Drawing.Color.Black;
+                painter.StrokeWidth = 2.0f * 3;
+                int x = 10, y = 10;
+                painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
+                int lineLen = 4;
 
 
-            //painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
-            //painter.Line(2, 0, 2, 15);
-            //painter.Line(2, 0, 20, 20);
-            //painter.Line(2, 0, 30, 15);
-            //painter.Line(2, 0, 30, 5);
-            //clear surface bg
-            p.Clear(PixelFarm.Drawing.Color.White);
-            //draw img into that bg
-            //--------------- 
-            //convert glyphImg from RGBA to grey Scale buffer
-            //--------------- 
-            //lcd process ...
-            byte[] glyphGreyScale = CreateGreyScaleBuffer(glyphImg);
-            //---------------
+                //painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
+                //painter.Line(2, 0, 2, 15);
+                //painter.Line(2, 0, 20, 20);
+                //painter.Line(2, 0, 30, 15);
+                //painter.Line(2, 0, 30, 5);
+                //clear surface bg
+                p.Clear(PixelFarm.Drawing.Color.White);
+                //draw img into that bg
+                //--------------- 
+                //convert glyphImg from RGBA to grey Scale buffer
+                //--------------- 
+                //lcd process ...
+                byte[] glyphGreyScale = CreateGreyScaleBuffer(glyphImg);
+                //---------------
 
-            //swap gray scale 
-            int newGreyImgStride;
-            byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyImgStride);
+                //swap gray scale 
+                int newGreyImgStride;
+                byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyImgStride);
 
-            //blend lcd 
-            var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
-            Blend(aggPainer.RenderSurface.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
-            //--------------- 
-            p.DrawImage(glyphImg, 0, 50);
+                //blend lcd 
+                var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
+                Blend(aggPainer.RenderSurface.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
+                //--------------- 
+                p.DrawImage(glyphImg, 0, 50);
+            }
+
+
         }
 
         void RunSampleB(PixelFarm.Drawing.Painter p)
@@ -245,21 +249,26 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //version 2:
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
-            ActualBitmap glyphImg = new ActualBitmap(100, 100);
-            AggPainter painter = AggPainter.Create(glyphImg);
-            //
-            painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            painter.StrokeWidth = 2.0f;
-            painter.DrawLine(2, 0, 3, 15);//not need to scale3                        
-            //
-            //clear surface bg
-            p.Clear(PixelFarm.Drawing.Color.White);
-            //--------------------------
-            var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
-            BlendWithLcdTechnique(aggPainer.RenderSurface.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
-            //--------------- 
-            p.DrawImage(glyphImg, 0, 50);
-            //--------------- 
+            using (ActualBitmap glyphImg = new ActualBitmap(100, 100))
+            {
+                AggPainter painter = AggPainter.Create(glyphImg);
+                //
+                painter.StrokeColor = PixelFarm.Drawing.Color.Black;
+                painter.StrokeWidth = 2.0f;
+                painter.DrawLine(2, 0, 3, 15);//not need to scale3                        
+                                              //
+                                              //clear surface bg
+                p.Clear(PixelFarm.Drawing.Color.White);
+                //--------------------------
+                var aggPainer = (PixelFarm.CpuBlit.AggPainter)p;
+                BlendWithLcdTechnique(aggPainer.RenderSurface.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
+                //--------------- 
+                p.DrawImage(glyphImg, 0, 50);
+                //--------------- 
+            }
+
+
+
         }
         void RunSampleC(PixelFarm.Drawing.Painter p)
         {
