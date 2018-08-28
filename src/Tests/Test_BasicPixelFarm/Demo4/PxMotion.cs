@@ -9,40 +9,35 @@ using PixelFarm.VectorMath;
 
 using LayoutFarm.Svg;
 using PaintLab.Svg;
+using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.UI
 {
     public abstract class BasicSprite : UIElement
     {
-        protected double _angle = 0;
-        protected double _spriteScale = 1.0;
-        protected double _skewX = 0;
-        protected double _skewY = 0;
+        public double _angle = 0;
+        public double _spriteScale = 1.0;
+        public double _skewX = 0;
+        public double _skewY = 0;
         public override void Walk(UIVisitor visitor)
         {
 
         }
-
         public int Width { get; set; }
         public int Height { get; set; }
         //***
 
         //***
         //public abstract void Render(PixelFarm.Drawing.Painter p);
-        protected void UpdateTransform(double width, double height, double x, double y)
-        {
-            x -= width / 2;
-            y -= height / 2;
-            _angle = Math.Atan2(y, x);
-            _spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
-        }
-        //public virtual bool Move(int mouseX, int mouseY)
+        //protected void UpdateTransform(double width, double height, double x, double y)
         //{
-
-        //    UpdateTransform((int)Width, (int)Height, mouseX, mouseY);
-        //    return true;
+        //    x -= width / 2;
+        //    y -= height / 2;
+        //    _angle = Math.Atan2(y, x);
+        //    _spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
         //}
     }
+
 
     public class MyTestSprite : BasicSprite
     {
@@ -53,15 +48,16 @@ namespace LayoutFarm.UI
         float _mouseDownX, _mouseDownY;
         Affine _currentTx = null;
         byte alpha;
+        bool _hitTestOnSubPart;
         public MyTestSprite(VgRenderVx vgRenderVx)
         {
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
             _vgRenderVx = vgRenderVx;
-            JustMove = true;
         }
-
+        public float X { get { return _posX; } }
+        public float Y { get { return _posY; } }
         public SpriteShape SpriteShape
         {
             get { return _spriteShape; }
@@ -102,6 +98,18 @@ namespace LayoutFarm.UI
             }
             return _spriteShape;
         }
+        public bool HitTestOnSubPart
+        {
+            get { return _hitTestOnSubPart; }
+            set
+            {
+                _hitTestOnSubPart = value;
+                if (_spriteShape != null)
+                {
+                    _hitTestOnSubPart = value;
+                }
+            }
+        }
         public byte AlphaValue
         {
             get { return this.alpha; }
@@ -123,7 +131,7 @@ namespace LayoutFarm.UI
                 //}
             }
         }
-        public bool JustMove { get; set; }
+
         public Affine CurrentAffineTx { get { return _currentTx; } }
         public void SetLocation(float left, float top)
         {
@@ -135,30 +143,10 @@ namespace LayoutFarm.UI
             }
 
         }
-        //public override bool Move(int mouseX, int mouseY)
-        //{
-
-        //    if (JustMove)
-        //    {
-        //        _posX += mouseX - _mouseDownX;
-        //        _posY += mouseY - _mouseDownY;
-
-        //        _mouseDownX = mouseX;
-        //        _mouseDownY = mouseY;
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        bool result = base.Move(mouseX, mouseY);
-        //        _currentTx = null;// reset
-        //        return result;
-        //    }
-        //}
 
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
             RectD bounds = _spriteShape.Bounds;
-
             if (this._currentTx != null)
             {
                 double left = bounds.Left;
@@ -167,20 +155,26 @@ namespace LayoutFarm.UI
                 double bottom = bounds.Bottom;
             }
 
+            if (_posX > 0)
+            {
 
-            bounds.Offset(_posX, _posY);
+            }
+
+           
+
             if (bounds.Contains(x, y))
             {
                 _mouseDownX = x;
                 _mouseDownY = y;
-                x -= _posX; //offset x to the coordinate of the sprite
-                y -= _posY;
+                //x -= _posX; //offset x to the coordinate of the sprite
+                //y -= _posY;
                 //....
                 if (withSubPathTest)
                 {
                     //fine hit on sup part***
                     VgHitChainPool.GetFreeHitTestChain(out SvgHitChain svgHitChain);
                     svgHitChain.SetHitTestPos(x, y);
+
                     svgHitChain.WithSubPartTest = withSubPathTest;
                     _spriteShape.HitTestOnSubPart(svgHitChain);
 
@@ -191,6 +185,7 @@ namespace LayoutFarm.UI
                         SvgRenderElement svgElem = svgHitChain.GetLastHitInfo().svg;
                         //if yes then change its bg color
                         svgElem.VisualSpec.FillColor = Color.Red;
+                        _spriteShape.InvalidateGraphics();
                     }
 
                     VgHitChainPool.ReleaseHitTestChain(ref svgHitChain);
@@ -266,13 +261,17 @@ namespace LayoutFarm.UI
         Vector2 _center;
         RectD _boundingRect;
         Affine _currentTx;
-
-
         public SpriteShape(VgRenderVx svgRenderVx, RootGraphic root, int w, int h)
                    : base(root, w, h)
         {
             LoadFromSvg(svgRenderVx);
         }
+        public bool EnableHitOnSupParts { get; set; }
+        protected override bool _MayHasOverlapChild()
+        {
+            return EnableHitOnSupParts;
+        }
+
         public RectD Bounds
         {
             get
@@ -405,6 +404,7 @@ namespace LayoutFarm.UI
         }
         public void HitTestOnSubPart(SvgHitChain hitChain)
         {
+
             _svgRenderVx._renderE.HitTest(hitChain);
         }
 
@@ -412,7 +412,10 @@ namespace LayoutFarm.UI
         {
             DirectSetRootGraphics(this, rootgfx);
         }
-
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            base.ChildrenHitTestCore(hitChain);
+        }
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             Painter p = canvas.GetPainter();

@@ -95,6 +95,8 @@ namespace PaintLab.Svg
         public Painter P;
         public Affine _currentTx;
         public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
+        public SvgRenderElement Current;
+
         internal void Reset()
         {
             P = null;
@@ -390,40 +392,57 @@ namespace PaintLab.Svg
         }
         public bool HitTest(SvgHitChain hitChain)
         {
-            if (_vxsPath != null)
+            VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
+            paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
             {
-                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitChain.X, hitChain.Y))
+                if (args.Current != null &&
+                    PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
                 {
-                    //found this
-                    hitChain.AddHit(this, hitChain.X, hitChain.Y);
+                    hitChain.AddHit(args.Current, hitChain.X, hitChain.Y);
                 }
-            }
-            if (hitChain.Count > 0)
-            {
-                //found some 
-                if (!hitChain.WithSubPartTest)
-                {
-                    return true;
-                }
-            }
-            //-----------------------------------
-            if (_childNodes != null)
-            {
-                int childCount = _childNodes.Count;
-                for (int i = 0; i < childCount; ++i)
-                {
-                    SvgRenderElement child = _childNodes[i] as SvgRenderElement;
-                    if (child != null && child.HitTest(hitChain))
-                    {
-                        //svg children may overlaped each other
-                        if (!hitChain.WithSubPartTest)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
+            };
+
+            this.Walk(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
             return hitChain.Count > 0;
+
+
+
+            //if (_vxsPath != null)
+            //{
+            //    if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitChain.X, hitChain.Y))
+            //    {
+            //        //found this
+            //        hitChain.AddHit(this, hitChain.X, hitChain.Y);
+            //    }
+            //}
+            //if (hitChain.Count > 0)
+            //{
+            //    //found some 
+            //    if (!hitChain.WithSubPartTest)
+            //    {
+            //        return true;
+            //    }
+            //}
+            ////-----------------------------------
+            //if (_childNodes != null)
+            //{
+
+            //    //hit test, iter backward
+            //    for (int i = _childNodes.Count - 1; i >= 0; --i)
+            //    {
+            //        SvgRenderElement child = _childNodes[i] as SvgRenderElement;
+            //        if (child != null && child.HitTest(hitChain))
+            //        {
+            //            //svg children may overlaped each other
+            //            if (!hitChain.WithSubPartTest)
+            //            {
+            //                return true;
+            //            }
+            //        }
+            //    }
+            //}
+            //return hitChain.Count > 0;
         }
 
         public override SvgRenderElementBase Clone()
@@ -594,7 +613,9 @@ namespace PaintLab.Svg
 
                         if (currentTx == null)
                         {
+                            vgPainterArgs.Current = this;
                             vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
+                            vgPainterArgs.Current = null;
                         }
                         else
                         {
@@ -602,7 +623,9 @@ namespace PaintLab.Svg
                             using (VxsContext.Temp(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
+                                vgPainterArgs.Current = this;
                                 vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
+                                vgPainterArgs.Current = null;
                             }
                         }
                         //------
@@ -1230,7 +1253,7 @@ namespace PaintLab.Svg
         {
             _renderE = svgRenderE;
             _needBoundUpdate = true;
-            
+
         }
         public VgRenderVx Clone()
         {

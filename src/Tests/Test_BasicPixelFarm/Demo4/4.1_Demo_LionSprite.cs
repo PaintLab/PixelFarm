@@ -17,9 +17,10 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
             _host = host;
+            //_renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\1f0cf.svg");
             _renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
             _mySprite = new MyTestSprite(_renderVx);
-            _mySprite.SetLocation(10, 10);
+            //_mySprite.SetLocation(10, 10);
 
             var evListener = new GeneralEventListener();
             int m_downX = 0;
@@ -28,12 +29,22 @@ namespace LayoutFarm
             {
                 m_downX = e.X;
                 m_downY = e.Y;
+                if (e.Button == UIMouseButtons.Right)
+                {
+
+                }
+                if (e.Button == UIMouseButtons.Right &&
+                    _mySprite.HitTest(e.X, e.Y, true))
+                {
+
+                }
+
             };
             evListener.MouseMove += e =>
             {
-                if (e.IsDragging)
+                if (e.Button == UIMouseButtons.Left && e.IsDragging)
                 {
-                     _mySprite.SetLocation(m_downX = m_downX + e.XDiff, m_downY = m_downY + e.YDiff);
+                    _mySprite.SetLocation(_mySprite.X + e.XDiff, _mySprite.Y + e.YDiff);
                 }
             };
             evListener.MouseUp += e =>
@@ -46,17 +57,17 @@ namespace LayoutFarm
 
 
 
-            //
-            var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
-            var textSpanStyle = new Text.TextSpanStyle();
+            ////
+            //var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
+            //var textSpanStyle = new Text.TextSpanStyle();
 
-            //test with various font style
-            textSpanStyle.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 18);
-            textSpanStyle.FontColor = new PixelFarm.Drawing.Color(255, 0, 0);
-            //set default style
-            textbox.DefaultSpanStyle = textSpanStyle;
+            ////test with various font style
+            //textSpanStyle.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 18);
+            //textSpanStyle.FontColor = new PixelFarm.Drawing.Color(255, 0, 0);
+            ////set default style
+            //textbox.DefaultSpanStyle = textSpanStyle;
 
-            host.AddChild(textbox);
+            //host.AddChild(textbox);
 
 
             //var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
