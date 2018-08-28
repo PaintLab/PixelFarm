@@ -73,10 +73,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             for (i = 0; i < num; i++)
             {
-                VertexCmd flags;
-                while ((flags = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
+                VertexCmd cmd;
+                while ((cmd = vxs.GetVertex(i, out x, out y)) != VertexCmd.NoMore)
                 {
-                    switch (flags)
+                    switch (cmd)
                     {
                         //if is vertext cmd
                         case VertexCmd.LineTo:
@@ -122,17 +122,21 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             x2 = double.MinValue;
             y2 = double.MinValue;
 
-            var vsnapIter = vs.GetVertexSnapIter();
-            VertexCmd PathAndFlags;
-            while (!VertexHelper.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x, out y)))
+            VertexSnapIter vsnapIter = vs.GetVertexSnapIter();
+            while (!VertexHelper.IsEmpty(vsnapIter.GetNextVertex(out x, out y)))
             {
-                if (VertexHelper.IsVertextCommand(PathAndFlags))
-                {
-                    if (x < x1) x1 = x;
-                    if (y < y1) y1 = y;
-                    if (x > x2) x2 = x;
-                    if (y > y2) y2 = y;
-                }
+                //IsEmpty => check cmd != NoMore
+                if (x < x1) x1 = x;
+                if (y < y1) y1 = y;
+                if (x > x2) x2 = x;
+                if (y > y2) y2 = y;
+                //if (VertexHelper.IsVertextCommand(PathAndFlags))
+                //{
+                //    if (x < x1) x1 = x;
+                //    if (y < y1) y1 = y;
+                //    if (x > x2) x2 = x;
+                //    if (y > y2) y2 = y;
+                //}
             }
             return x1 <= x2 && y1 <= y2;
         }
@@ -184,18 +188,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             y2 = int.MinValue;
 
             VertexSnapIter vsnapIter = vs.GetVertexSnapIter();
-            VertexCmd PathAndFlags;
-            while (!VertexHelper.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x_d, out y_d)))
+            while (!VertexHelper.IsEmpty(vsnapIter.GetNextVertex(out x_d, out y_d)))
             {
                 x = (int)x_d;
                 y = (int)y_d;
-                if (VertexHelper.IsVertextCommand(PathAndFlags))
-                { 
-                    if (x < x1) x1 = x;
-                    if (y < y1) y1 = y;
-                    if (x > x2) x2 = x;
-                    if (y > y2) y2 = y; 
-                }
+                //if (VertexHelper.IsVertextCommand(PathAndFlags))
+                //{
+                if (x < x1) x1 = x;
+                if (y < y1) y1 = y;
+                if (x > x2) x2 = x;
+                if (y > y2) y2 = y;
+                //}
             }
             return x1 <= x2 && y1 <= y2;
         }

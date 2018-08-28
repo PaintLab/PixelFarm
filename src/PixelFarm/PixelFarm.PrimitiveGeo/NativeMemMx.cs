@@ -6,7 +6,7 @@ namespace PixelFarm.CpuBlit
 #if !COSMOS
     [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
 #endif
-    static class NativeMemMx
+    public static class NativeMemMx
     {
         //check this ....
         //for cross platform code

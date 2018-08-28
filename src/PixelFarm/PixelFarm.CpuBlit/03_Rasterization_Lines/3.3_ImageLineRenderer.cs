@@ -62,7 +62,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         int m_dilation;
         int m_dilation_hr;
         SubBitmapBlender m_buf;
-        int[] m_data = null;
+        PixelFarm.CpuBlit.Imaging.TempMemPtr m_data;
         int m_DataSizeInBytes = 0;
         int m_width;
         int m_height;
@@ -93,7 +93,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             //TODO: review here, remove finalizer
             if (m_DataSizeInBytes > 0)
             {
-                m_data = null;
+                m_data.Dispose();
             }
         }
 
@@ -144,9 +144,12 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             if (m_DataSizeInBytes < newSizeInBytes)
             {
                 m_DataSizeInBytes = newSizeInBytes;
-                m_data = new int[m_DataSizeInBytes / 4];
-            }
 
+                m_data.Dispose();
+
+                IntPtr nativeBuff = System.Runtime.InteropServices.Marshal.AllocHGlobal(m_DataSizeInBytes);
+                m_data = new Imaging.TempMemPtr(nativeBuff, m_DataSizeInBytes);
+            }
 
             m_buf = new PixelProcessing.SubBitmapBlender(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
 
