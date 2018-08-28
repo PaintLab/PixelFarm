@@ -87,7 +87,7 @@ namespace LayoutFarm
 
 
 
-    class WinFormAppHost : AppHost
+    public class WinFormAppHost : AppHost
     {
 
         LayoutFarm.UI.UISurfaceViewportControl vw;
