@@ -402,48 +402,9 @@ namespace PaintLab.Svg
                 }
             };
 
-            
             this.Walk(paintArgs);
             VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
             return hitChain.Count > 0;
-
-
-
-            //if (_vxsPath != null)
-            //{
-            //    if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitChain.X, hitChain.Y))
-            //    {
-            //        //found this
-            //        hitChain.AddHit(this, hitChain.X, hitChain.Y);
-            //    }
-            //}
-            //if (hitChain.Count > 0)
-            //{
-            //    //found some 
-            //    if (!hitChain.WithSubPartTest)
-            //    {
-            //        return true;
-            //    }
-            //}
-            ////-----------------------------------
-            //if (_childNodes != null)
-            //{
-
-            //    //hit test, iter backward
-            //    for (int i = _childNodes.Count - 1; i >= 0; --i)
-            //    {
-            //        SvgRenderElement child = _childNodes[i] as SvgRenderElement;
-            //        if (child != null && child.HitTest(hitChain))
-            //        {
-            //            //svg children may overlaped each other
-            //            if (!hitChain.WithSubPartTest)
-            //            {
-            //                return true;
-            //            }
-            //        }
-            //    }
-            //}
-            //return hitChain.Count > 0;
         }
 
         public override SvgRenderElementBase Clone()
