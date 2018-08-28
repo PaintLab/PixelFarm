@@ -169,8 +169,6 @@
     <Compile Include="4_CpuBlit_VertexProcessing\VertexStoreBuilder.cs" />
     <Compile Include="2_Canvas\ITextPrinter.cs" />
     <Compile Include="3_Cpu_Blit\ActualBitmap.cs" />
-    <Compile Include="3_Cpu_Blit\MemMx.cs" />
-    <Compile Include="3_Cpu_Blit\NativeMemMx.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\VertexHitTester.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\VertexStoreExtensions.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\VertexStoreTransformExtensions.cs" />

@@ -48,7 +48,8 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
 
-           
+         
+            
         }
         public override void SetClipRgn(VertexStore vxs)
         {

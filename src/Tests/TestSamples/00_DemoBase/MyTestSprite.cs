@@ -25,6 +25,7 @@ namespace PixelFarm.CpuBlit
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
+            JustMove = true;
         }
         public SpriteShape SpriteShape
         {
@@ -79,6 +80,16 @@ namespace PixelFarm.CpuBlit
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
             RectD bounds = _spriteShape.Bounds;
+
+            if (this._currentTx != null)
+            {
+                double left = bounds.Left;
+                double top = bounds.Top;
+                double right = bounds.Right;
+                double bottom = bounds.Bottom;
+            }
+
+
             bounds.Offset(_posX, _posY);
             if (bounds.Contains(x, y))
             {
@@ -94,7 +105,19 @@ namespace PixelFarm.CpuBlit
                     svgHitChain.SetHitTestPos(x, y);
                     svgHitChain.WithSubPartTest = withSubPathTest;
                     _spriteShape.HitTestOnSubPart(svgHitChain);
+
+                    //check if we hit on sup part
+                    int hitCount = svgHitChain.Count;
+                    if (hitCount > 0)
+                    {
+                        SvgRenderElement svgElem = svgHitChain.GetLastHitInfo().svg;
+                        //if yes then change its bg color
+                        svgElem.VisualSpec.FillColor = Drawing.Color.Red;
+                    }
+
                     VgHitChainPool.ReleaseHitTestChain(ref svgHitChain);
+
+                    return hitCount > 0;
                 }
                 return true;
             }
@@ -112,14 +135,28 @@ namespace PixelFarm.CpuBlit
             {
                 _currentTx = Affine.NewMatix(
                       AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-                      AffinePlan.Scale(spriteScale, spriteScale),
-                      AffinePlan.Rotate(angle + Math.PI),
-                      AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                      AffinePlan.Scale(_spriteScale, _spriteScale),
+                      AffinePlan.Rotate(_angle + Math.PI),
+                      AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
                       AffinePlan.Translate(Width / 2, Height / 2)
               );
             }
 
-            _spriteShape.Paint(p, _currentTx);
+            if (JustMove)
+            {
+                float ox = p.OriginX;
+                float oy = p.OriginY;
+
+                p.SetOrigin(ox + _posX, oy + _posY);
+                _spriteShape.Paint(p);
+                p.SetOrigin(ox, oy);
+
+            }
+            else
+            {
+                _spriteShape.Paint(p, _currentTx);
+            }
+
         }
 
         public SpriteShape GetSpriteShape()

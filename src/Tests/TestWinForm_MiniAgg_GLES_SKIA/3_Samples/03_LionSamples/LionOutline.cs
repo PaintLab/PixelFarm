@@ -156,9 +156,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
             Affine affTx = Affine.NewMatix(
                    AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-                   AffinePlan.Scale(spriteScale, spriteScale),
-                   AffinePlan.Rotate(angle + Math.PI),
-                   AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                   AffinePlan.Scale(_spriteScale, _spriteScale),
+                   AffinePlan.Rotate(_angle + Math.PI),
+                   AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
                    AffinePlan.Translate(width / 2, height / 2));
 
             var p1 = p as AggPainter;
@@ -233,10 +233,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                         imageClippingProxy, rasterizer,
                         aggsx.ScanlinePacked8,
                         aggPainter.FillColor); //draw line with external drawing handler
-
                 };
 
-                _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
+                _spriteShape.Paint(paintArgs);
                 VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
                 //---------------------------- 
                 //lionShape.ResetTransform();
@@ -263,7 +262,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                         m_painter.StrokeColor = prevStrokeColor;
                     };
 
-                    _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
+                    _spriteShape.Paint(paintArgs);
                     VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
 
                 }
@@ -299,13 +298,13 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                             painterA.P.FillColor);
                     };
 
-                    _spriteShape.GetRenderVx()._renderE.Paint(paintArgs);
+                    _spriteShape.Paint(paintArgs);
                     VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
                     //----------------------------  
                     //lionShape.ResetTransform();  
                 }
             }
-            base.Render(p);
+          
         }
     }
 }

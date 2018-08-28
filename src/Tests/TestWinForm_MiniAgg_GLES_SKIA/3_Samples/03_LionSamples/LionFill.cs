@@ -48,7 +48,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
             var spriteShape = new SpriteShape(renderVx);
-            spriteShape.UpdateBounds();
+           
             _testSprite = new MyTestSprite(spriteShape);
             //lionFill.AutoFlipY = true;
         }
@@ -121,9 +121,7 @@ namespace PixelFarm.CpuBlit.Samples
             // lion 
 
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
-            var spriteShape = new SpriteShape(renderVx);
-            spriteShape.UpdateBounds();
-
+            var spriteShape = new SpriteShape(renderVx); 
             _spriteList.Add(new MyTestSprite(spriteShape));
             //
             //lionFill.AutoFlipY = true;           
@@ -165,9 +163,9 @@ namespace PixelFarm.CpuBlit.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            foreach (MyTestSprite lion in _spriteList)
+            foreach (MyTestSprite s in _spriteList)
             {
-                lion.Render(p);
+                s.Render(p);
             }
         }
 
@@ -199,7 +197,7 @@ namespace PixelFarm.CpuBlit.Samples
 
                 double testX = x;
                 double testY = y;
-                if (sprite.CurrentAffineTx != null)
+                if (!sprite.JustMove && sprite.CurrentAffineTx != null)
                 {
                     sprite.CurrentAffineTx.Transform(ref testX, ref testY);
                 }
@@ -224,6 +222,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             if (hitOnLion && _hitSprite != null)
             {
+                _hitSprite.JustMove = _moveOption == LionMoveOption.Move;
                 _hitSprite.Move(x, y);
             }
         }
@@ -234,7 +233,7 @@ namespace PixelFarm.CpuBlit.Samples
             set;
         }
 
-        LionMoveOption _moveOption;
+        LionMoveOption _moveOption = LionMoveOption.Move;
         [DemoConfig]
         public LionMoveOption LionMoveOption
         {
@@ -244,23 +243,23 @@ namespace PixelFarm.CpuBlit.Samples
             }
             set
             {
-                switch (_moveOption = value)
-                {
-                    default: break;
-                    case LionMoveOption.Move:
-                        foreach (MyTestSprite lion in _spriteList)
-                        {
-                            lion.JustMove = true;
-                        }
+                //switch (_moveOption = value)
+                //{
+                //    default: break;
+                //    case LionMoveOption.Move:
+                //        foreach (MyTestSprite s in _spriteList)
+                //        {
+                //            s.JustMove = true;
+                //        }
 
-                        break;
-                    case LionMoveOption.ZoomAndRotate:
-                        foreach (MyTestSprite lion in _spriteList)
-                        {
-                            lion.JustMove = false;
-                        }
-                        break;
-                }
+                //        break;
+                //    case LionMoveOption.ZoomAndRotate:
+                //        foreach (MyTestSprite s in _spriteList)
+                //        {
+                //            s.JustMove = false;
+                //        }
+                //        break;
+                //}
             }
         }
 

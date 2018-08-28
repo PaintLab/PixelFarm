@@ -17,9 +17,8 @@ namespace LayoutFarm.UI.Skia
         int internalSizwH = 600;
 
         Win32.NativeWin32MemoryDc memdc;
-        public SkiaCanvasViewport(RootGraphic rootgfx,
-            Size viewportSize, int cachedPageNum)
-            : base(rootgfx, viewportSize, cachedPageNum)
+        public SkiaCanvasViewport(RootGraphic rootgfx, Size viewportSize)
+            : base(rootgfx, viewportSize)
         {
 
             this.CalculateCanvasPages();

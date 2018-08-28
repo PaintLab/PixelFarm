@@ -1425,6 +1425,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
                     while (sclineRas.SweepScanline(scline))
                     {
+
                         //render solid single scanline
                         int y = scline.Y;
                         int num_spans = scline.SpanCount;
@@ -1446,6 +1447,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                                 dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
                             }
                         }
+
                     }
                     break;
                 case ScanlineRenderMode.SubPixelLcdEffect:

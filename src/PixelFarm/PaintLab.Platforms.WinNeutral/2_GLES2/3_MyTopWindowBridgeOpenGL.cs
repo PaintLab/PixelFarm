@@ -49,7 +49,7 @@ namespace LayoutFarm.UI.OpenGL
             this.windowControl = (UISurfaceViewportControl)windowControl;
             SetBaseCanvasViewport(this.openGLViewport = new OpenGLCanvasViewport(
                 this.RootGfx,
-                new Size(windowControl.Width, windowControl.Height), 4));
+                new Size(windowControl.Width, windowControl.Height)));
 
             RootGfx.SetPaintDelegates(
                 (r) =>

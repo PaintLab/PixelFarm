@@ -8,9 +8,8 @@ namespace LayoutFarm.UI.OpenGL
     {
         DrawBoard canvas;
         bool isClosed;
-        public OpenGLCanvasViewport(RootGraphic root,
-            Size viewportSize, int cachedPageNum)
-            : base(root, viewportSize, cachedPageNum)
+        public OpenGLCanvasViewport(RootGraphic root, Size viewportSize)
+            : base(root, viewportSize)
         {
         }
         protected override void OnClosing()
@@ -152,7 +151,7 @@ namespace LayoutFarm.UI.OpenGL
         {
 
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
-            Rectangle rect = mycanvas.Rect; 
+            Rectangle rect = mycanvas.Rect;
             topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG
 

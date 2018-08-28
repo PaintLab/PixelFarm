@@ -45,7 +45,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
 
-            p.Clear(Drawing.Color.White);
+            p.Clear(Drawing.Color.Yellow);
             p.UseSubPixelLcdEffect = false;
 
 
@@ -74,8 +74,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 x_pos += _imgW / 3;
             }
 
-            //----
-            //
+
+
             VectorToolBox.GetFreeVxs(out VertexStore vxs1);
             VectorToolBox.GetFreeVxs(out VertexStore vxs2);
 

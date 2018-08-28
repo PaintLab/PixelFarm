@@ -19,8 +19,7 @@ namespace LayoutFarm.UI
         EventHandler<EventArgs> canvasSizeChangedHandler;
         bool fullMode = true;
         bool isClosed;//is this viewport closed
-        public CanvasViewport(RootGraphic rootgfx,
-            Size viewportSize, int cachedPageNum)
+        public CanvasViewport(RootGraphic rootgfx, Size viewportSize)
         {
             this.rootGraphics = rootgfx;
             this.topWindowBox = rootgfx.TopWindowRenderBox;
