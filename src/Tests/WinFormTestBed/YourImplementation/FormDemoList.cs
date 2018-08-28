@@ -63,7 +63,7 @@ namespace LayoutFarm.Dev
 
             YourImplementation.DemoFormCreatorHelper.CreateReadyForm(out _latestviewport, out _latest_formCanvas);
 
-            selectedDemo.Start(new AppHost(_latestviewport));
+            selectedDemo.Start(new WinFormAppHost(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             //==================================================  
             _latestviewport.PaintMe();

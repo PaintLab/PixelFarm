@@ -47,7 +47,6 @@ namespace LayoutFarm
                     {   //just move
                         _mySprite.SetLocation(_mySprite.X + e.XDiff, _mySprite.Y + e.YDiff);
                     }
-
                 }
             };
 
