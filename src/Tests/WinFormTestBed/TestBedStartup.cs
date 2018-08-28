@@ -52,15 +52,14 @@ namespace YourImplementation
             //1. select view port kind
 
             InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
-            var workingArea = Screen.PrimaryScreen.WorkingArea;
+            System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
 
-            var formCanvas = FormCanvasHelper.CreateNewFormCanvas(
+            Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
                workingArea.Width,
                workingArea.Height,
                innerViewportKind,
                out UISurfaceViewportControl latestviewport);
             formCanvas.Text = "PixelFarm" + innerViewportKind;
-
 
             demo.Start(new LayoutFarm.WinFormAppHost(latestviewport));
             latestviewport.TopDownRecalculateContent();
