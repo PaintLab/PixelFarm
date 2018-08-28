@@ -7,28 +7,17 @@ using LayoutFarm.UI;
 
 namespace LayoutFarm
 {
-    public class AppHost : IAppHost
+
+
+    public abstract class AppHost : IAppHost
     {
-        ImageContentManager imageContentMan;
-        LayoutFarm.UI.UISurfaceViewportControl vw;
-        int primaryScreenWorkingAreaW;
-        int primaryScreenWorkingAreaH;
-        int _formTitleBarHeight;
-        System.Windows.Forms.Form ownerForm;
-        public AppHost(LayoutFarm.UI.UISurfaceViewportControl vw)
+        protected ImageContentManager imageContentMan;
+        protected int _primaryScreenWorkingAreaW;
+        protected int _primaryScreenWorkingAreaH;
+        protected int _formTitleBarHeight;
+
+        public AppHost()
         {
-            //---------------------------------------
-            //this specific for WindowForm viewport
-            //---------------------------------------
-            this.vw = vw;
-            ownerForm = this.vw.FindForm();
-            System.Drawing.Rectangle screenRectangle = ownerForm.RectangleToScreen(ownerForm.ClientRectangle);
-            _formTitleBarHeight = screenRectangle.Top - ownerForm.Top;
-
-
-            var primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-            this.primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
-            this.primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
 
             //--------------
             imageContentMan = new ImageContentManager();
@@ -36,21 +25,10 @@ namespace LayoutFarm
             {
                 e.SetResultImage(LoadImage(e.ImagSource));
             };
-            //-------
-
-
-
+            //------- 
         }
-        public string OwnerFormTitle
-        {
-            get { return ownerForm.Text; }
-            set
-            {
-                ownerForm.Text = value;
-            }
-        }
+        public abstract string OwnerFormTitle { get; set; }
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
-
         public Image LoadImage(string imgName)
         {
             if (File.Exists(imgName)) //resolve to actual img 
@@ -71,14 +49,7 @@ namespace LayoutFarm
         }
 
 
-        public System.IO.Stream GetReadStream(string src)
-        {
-            //load stream from specific file provider
-            //handle IO-permission
-
-            //TODO: impl ...
-            return null;
-        }
+        public abstract System.IO.Stream GetReadStream(string src);
 
         void LazyImageLoad(ImageBinder binder)
         {
@@ -88,25 +59,15 @@ namespace LayoutFarm
 
         public int PrimaryScreenWidth
         {
-            get { return this.primaryScreenWorkingAreaW; }
+            get { return this._primaryScreenWorkingAreaW; }
         }
         public int PrimaryScreenHeight
         {
-            get { return this.primaryScreenWorkingAreaH; }
+            get { return this._primaryScreenWorkingAreaH; }
         }
-        public void AddChild(RenderElement renderElement)
-        {
-            this.vw.AddChild(renderElement);
-        }
+        public abstract void AddChild(RenderElement renderElement);
+        public abstract RootGraphic RootGfx { get; }
 
-        internal LayoutFarm.UI.UISurfaceViewportControl ViewportControl
-        {
-            get { return this.vw; }
-        }
-        public RootGraphic RootGfx
-        {
-            get { return this.vw.RootGfx; }
-        }
         public ImageBinder GetImageBinder(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
@@ -123,4 +84,68 @@ namespace LayoutFarm
             return clientImgBinder;
         }
     }
+
+
+
+    class WinFormAppHost : AppHost
+    {
+
+        LayoutFarm.UI.UISurfaceViewportControl vw;
+        System.Windows.Forms.Form ownerForm;
+        public WinFormAppHost(LayoutFarm.UI.UISurfaceViewportControl vw)
+        {
+            //---------------------------------------
+            //this specific for WindowForm viewport
+            //---------------------------------------
+            this.vw = vw;
+            ownerForm = this.vw.FindForm();
+            System.Drawing.Rectangle screenRectangle = ownerForm.RectangleToScreen(ownerForm.ClientRectangle);
+            _formTitleBarHeight = screenRectangle.Top - ownerForm.Top;
+
+
+            var primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+            this._primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
+            this._primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
+
+            //--------------
+            imageContentMan = new ImageContentManager();
+            imageContentMan.ImageLoadingRequest += (s, e) =>
+            {
+                e.SetResultImage(LoadImage(e.ImagSource));
+            };
+            //------- 
+        }
+        public override string OwnerFormTitle
+        {
+            get { return ownerForm.Text; }
+            set
+            {
+                ownerForm.Text = value;
+            }
+        }
+        internal LayoutFarm.UI.UISurfaceViewportControl ViewportControl
+        {
+            get { return this.vw; }
+        }
+
+        public override RootGraphic RootGfx
+        {
+            get { return this.vw.RootGfx; }
+        }
+        void LazyImageLoad(ImageBinder binder)
+        {
+            //load here as need
+            imageContentMan.AddRequestImage(binder);
+        }
+        public override Stream GetReadStream(string src)
+        {
+            return null;
+        }
+        public override void AddChild(RenderElement renderElement)
+        {
+            this.vw.AddChild(renderElement);
+        }
+    }
+
+
 }

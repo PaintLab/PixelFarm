@@ -5,11 +5,9 @@ namespace LayoutFarm
 {
     public static class AppHostExtensions
     {
-        public static void AddChild(this AppHost viewport, UIElement ui)
+        public static void AddChild(this AppHost appHost, UIElement ui)
         {
-            viewport.ViewportControl.AddChild(
-                ui.GetPrimaryRenderElement(viewport.ViewportControl.RootGfx),
-                ui);
+            appHost.AddChild(ui.GetPrimaryRenderElement(appHost.RootGfx)); 
         }
     }
 }

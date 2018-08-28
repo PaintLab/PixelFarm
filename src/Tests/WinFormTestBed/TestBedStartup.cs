@@ -62,7 +62,7 @@ namespace YourImplementation
             formCanvas.Text = "PixelFarm" + innerViewportKind;
 
 
-            demo.Start(new LayoutFarm.AppHost(latestviewport));
+            demo.Start(new LayoutFarm.WinFormAppHost(latestviewport));
             latestviewport.TopDownRecalculateContent();
             //==================================================  
             latestviewport.PaintMe();
@@ -90,7 +90,7 @@ namespace YourImplementation
         {
             var formLayoutInspector = new LayoutFarm.Dev.FormLayoutInspector();
             formLayoutInspector.Show();
- 
+
             formLayoutInspector.Connect(viewport);
             formLayoutInspector.Show();
         }
