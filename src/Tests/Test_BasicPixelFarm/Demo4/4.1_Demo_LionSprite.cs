@@ -2,7 +2,6 @@
 
 using PixelFarm.Drawing;
 using PaintLab.Svg;
-using PixelFarm.CpuBlit;
 using LayoutFarm.UI;
 
 namespace LayoutFarm
@@ -20,10 +19,7 @@ namespace LayoutFarm
             //_renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\1f0cf.svg");
             _renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
             _mySprite = new MyTestSprite(_renderVx);
-            //_mySprite.SetLocation(10, 10);
-
             var evListener = new GeneralEventListener();
-
             evListener.MouseDown += e =>
             {
                 if (e.Button == UIMouseButtons.Right)
@@ -40,7 +36,18 @@ namespace LayoutFarm
             {
                 if (e.Button == UIMouseButtons.Left && e.IsDragging)
                 {
-                    _mySprite.SetLocation(_mySprite.X + e.XDiff, _mySprite.Y + e.YDiff);
+
+                    if (e.Ctrl)
+                    {
+                        //TODO: 
+                        //classic Agg's move and rotate                         
+
+                    }
+                    else
+                    {   //just move
+                        _mySprite.SetLocation(_mySprite.X + e.XDiff, _mySprite.Y + e.YDiff);
+                    }
+
                 }
             };
 

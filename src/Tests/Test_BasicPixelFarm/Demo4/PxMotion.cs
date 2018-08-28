@@ -25,17 +25,7 @@ namespace LayoutFarm.UI
         }
         public int Width { get; set; }
         public int Height { get; set; }
-        //***
-
-        //***
-        //public abstract void Render(PixelFarm.Drawing.Painter p);
-        //protected void UpdateTransform(double width, double height, double x, double y)
-        //{
-        //    x -= width / 2;
-        //    y -= height / 2;
-        //    _angle = Math.Atan2(y, x);
-        //    _spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
-        //}
+       
     }
 
 
