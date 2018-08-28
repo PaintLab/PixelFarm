@@ -7,7 +7,7 @@ namespace LayoutFarm
     {
         public static void AddChild(this AppHost appHost, UIElement ui)
         {
-            appHost.AddChild(ui.GetPrimaryRenderElement(appHost.RootGfx)); 
+            appHost.AddChild(ui.GetPrimaryRenderElement(appHost.RootGfx), ui);
         }
     }
 }

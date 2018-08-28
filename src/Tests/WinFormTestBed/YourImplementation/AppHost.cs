@@ -66,6 +66,8 @@ namespace LayoutFarm
             get { return this._primaryScreenWorkingAreaH; }
         }
         public abstract void AddChild(RenderElement renderElement);
+        public abstract void AddChild(RenderElement renderElement, object owner);
+
         public abstract RootGraphic RootGfx { get; }
 
         public ImageBinder GetImageBinder(string src)
@@ -144,6 +146,10 @@ namespace LayoutFarm
         public override void AddChild(RenderElement renderElement)
         {
             this.vw.AddChild(renderElement);
+        }
+        public override void AddChild(RenderElement renderElement, object owner)
+        {
+            this.vw.AddChild(renderElement, owner);
         }
     }
 
