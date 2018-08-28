@@ -1230,6 +1230,7 @@ namespace PaintLab.Svg
         {
             _renderE = svgRenderE;
             _needBoundUpdate = true;
+            
         }
         public VgRenderVx Clone()
         {

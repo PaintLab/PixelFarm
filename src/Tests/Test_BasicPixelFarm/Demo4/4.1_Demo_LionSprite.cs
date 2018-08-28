@@ -11,7 +11,7 @@ namespace LayoutFarm
     class Demo_LionSprite : App
     {
         VgRenderVx _renderVx;
-       
+
         MyTestSprite _mySprite;
         AppHost _host;
         protected override void OnStart(AppHost host)
@@ -19,7 +19,32 @@ namespace LayoutFarm
             _host = host;
             _renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
             _mySprite = new MyTestSprite(_renderVx);
+            _mySprite.SetLocation(10, 10);
+
+            var evListener = new GeneralEventListener();
+            int m_downX = 0;
+            int m_downY = 0;
+            evListener.MouseDown += e =>
+            {
+                m_downX = e.X;
+                m_downY = e.Y;
+            };
+            evListener.MouseMove += e =>
+            {
+                if (e.IsDragging)
+                {
+                     _mySprite.SetLocation(m_downX = m_downX + e.XDiff, m_downY = m_downY + e.YDiff);
+                }
+            };
+            evListener.MouseUp += e =>
+            {
+
+            };
+            _mySprite.AttachExternalEventListener(evListener);
+
             host.AddChild(_mySprite);
+
+
 
             //
             var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);

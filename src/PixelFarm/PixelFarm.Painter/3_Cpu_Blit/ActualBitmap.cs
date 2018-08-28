@@ -150,7 +150,6 @@ namespace PixelFarm.CpuBlit
             _pixelBufferFromExternalSrc = true;
             //alloc mem 
             _pixelBuffer = externalNativeInt32Ptr;
-
         }
         public override void Dispose()
         {

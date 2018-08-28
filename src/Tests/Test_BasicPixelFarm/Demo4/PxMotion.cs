@@ -18,34 +18,11 @@ namespace LayoutFarm.UI
         protected double _spriteScale = 1.0;
         protected double _skewX = 0;
         protected double _skewY = 0;
-        //------------------------------
-        //protected override bool HasReadyRenderElement
-        //{
-        //    get
-        //    {
-        //        throw new NotSupportedException();
-        //    }
-        //}
-        //public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //public override RenderElement CurrentPrimaryRenderElement
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
         public override void Walk(UIVisitor visitor)
         {
 
         }
-        //public override void InvalidateGraphics()
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //------------------------------
+
         public int Width { get; set; }
         public int Height { get; set; }
         //***
@@ -59,12 +36,12 @@ namespace LayoutFarm.UI
             _angle = Math.Atan2(y, x);
             _spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
         }
-        public virtual bool Move(int mouseX, int mouseY)
-        {
+        //public virtual bool Move(int mouseX, int mouseY)
+        //{
 
-            UpdateTransform((int)Width, (int)Height, mouseX, mouseY);
-            return true;
-        }
+        //    UpdateTransform((int)Width, (int)Height, mouseX, mouseY);
+        //    return true;
+        //}
     }
 
     public class MyTestSprite : BasicSprite
@@ -82,7 +59,6 @@ namespace LayoutFarm.UI
             this.Height = 500;
             AlphaValue = 255;
             _vgRenderVx = vgRenderVx;
-
             JustMove = true;
         }
 
@@ -118,7 +94,11 @@ namespace LayoutFarm.UI
         {
             if (_spriteShape == null)
             {
-                _spriteShape = new SpriteShape(_vgRenderVx, rootgfx, 100, 100);
+                //TODO: review bounds again
+                RectD bounds = _vgRenderVx.GetBounds();
+                _spriteShape = new SpriteShape(_vgRenderVx, rootgfx, (int)bounds.Width, (int)bounds.Height);
+                _spriteShape.SetController(this);//listen event 
+                _spriteShape.SetLocation((int)_posX, (int)_posY);
             }
             return _spriteShape;
         }
@@ -145,25 +125,35 @@ namespace LayoutFarm.UI
         }
         public bool JustMove { get; set; }
         public Affine CurrentAffineTx { get { return _currentTx; } }
-        public override bool Move(int mouseX, int mouseY)
+        public void SetLocation(float left, float top)
         {
-
-            if (JustMove)
+            _posX = left;
+            _posY = top;
+            if (_spriteShape != null)
             {
-                _posX += mouseX - _mouseDownX;
-                _posY += mouseY - _mouseDownY;
+                _spriteShape.SetLocation((int)_posX, (int)_posY);
+            }
 
-                _mouseDownX = mouseX;
-                _mouseDownY = mouseY;
-                return true;
-            }
-            else
-            {
-                bool result = base.Move(mouseX, mouseY);
-                _currentTx = null;// reset
-                return result;
-            }
         }
+        //public override bool Move(int mouseX, int mouseY)
+        //{
+
+        //    if (JustMove)
+        //    {
+        //        _posX += mouseX - _mouseDownX;
+        //        _posY += mouseY - _mouseDownY;
+
+        //        _mouseDownX = mouseX;
+        //        _mouseDownY = mouseY;
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        bool result = base.Move(mouseX, mouseY);
+        //        _currentTx = null;// reset
+        //        return result;
+        //    }
+        //}
 
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
@@ -277,6 +267,7 @@ namespace LayoutFarm.UI
         RectD _boundingRect;
         Affine _currentTx;
 
+
         public SpriteShape(VgRenderVx svgRenderVx, RootGraphic root, int w, int h)
                    : base(root, w, h)
         {
@@ -341,6 +332,7 @@ namespace LayoutFarm.UI
         {
             _svgRenderVx._renderE.Paint(paintArgs);
         }
+
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
         {
             //TODO: implement this...
@@ -407,6 +399,9 @@ namespace LayoutFarm.UI
         {
             _svgRenderVx.InvalidateBounds();
             this._boundingRect = _svgRenderVx.GetBounds();
+
+            _boundingRect.Offset(this.X, this.Y);
+            SetSize((int)_boundingRect.Width, (int)_boundingRect.Height);
         }
         public void HitTestOnSubPart(SvgHitChain hitChain)
         {
@@ -422,19 +417,19 @@ namespace LayoutFarm.UI
         {
             Painter p = canvas.GetPainter();
 
-            //AggRenderSurface surface= new AggRenderSurface()
-            //AggPainter painter= new AggPainter()
             if (p != null)
             {
+                float ox = p.OriginX;
+                float oy = p.OriginY;
                 //create agg's painter?
+                p.SetOrigin(ox + X, oy + Y);
                 Paint(p);
+                p.SetOrigin(ox, oy);
             }
-
         }
+
+
     }
-
-
-
     public static class VgHitChainPool
     {
         //
