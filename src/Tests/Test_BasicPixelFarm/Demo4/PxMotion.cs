@@ -144,40 +144,38 @@ namespace LayoutFarm.UI
 
         }
 
-        public bool HitTest(float x, float y, bool withSubPathTest)
+
+        public SvgRenderElement HitTest(float x, float y, bool withSupPart)
+        {
+            SvgRenderElement result = null;
+            VgHitChainPool.GetFreeHitTestChain(out SvgHitChain svgHitChain);
+            svgHitChain.WithSubPartTest = withSupPart;
+            if (HitTest(x, y, svgHitChain))
+            {
+                int hitCount = svgHitChain.Count;
+                if (hitCount > 0)
+                {
+                    result = svgHitChain.GetLastHitInfo().svg;
+                }
+            }
+            VgHitChainPool.ReleaseHitTestChain(ref svgHitChain);
+            return result;
+        }
+        public bool HitTest(float x, float y, SvgHitChain svgHitChain)
         {
             RectD bounds = _spriteShape.Bounds;
-            if (this._currentTx != null)
-            {
-                double left = bounds.Left;
-                double top = bounds.Top;
-                double right = bounds.Right;
-                double bottom = bounds.Bottom;
-            }
-
-            if (_posX > 0)
-            {
-
-            }
-
-           
-
             if (bounds.Contains(x, y))
             {
                 _mouseDownX = x;
                 _mouseDownY = y;
-                //x -= _posX; //offset x to the coordinate of the sprite
-                //y -= _posY;
+
                 //....
-                if (withSubPathTest)
+                if (svgHitChain.WithSubPartTest)
                 {
                     //fine hit on sup part***
-                    VgHitChainPool.GetFreeHitTestChain(out SvgHitChain svgHitChain);
+
                     svgHitChain.SetHitTestPos(x, y);
-
-                    svgHitChain.WithSubPartTest = withSubPathTest;
                     _spriteShape.HitTestOnSubPart(svgHitChain);
-
                     //check if we hit on sup part
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
@@ -187,9 +185,6 @@ namespace LayoutFarm.UI
                         svgElem.VisualSpec.FillColor = Color.Red;
                         _spriteShape.InvalidateGraphics();
                     }
-
-                    VgHitChainPool.ReleaseHitTestChain(ref svgHitChain);
-
                     return hitCount > 0;
                 }
                 return true;

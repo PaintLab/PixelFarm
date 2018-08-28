@@ -23,22 +23,18 @@ namespace LayoutFarm
             //_mySprite.SetLocation(10, 10);
 
             var evListener = new GeneralEventListener();
-            int m_downX = 0;
-            int m_downY = 0;
+
             evListener.MouseDown += e =>
             {
-                m_downX = e.X;
-                m_downY = e.Y;
                 if (e.Button == UIMouseButtons.Right)
                 {
-
+                    SvgRenderElement foundE = _mySprite.HitTest(e.X, e.Y, true);
+                    if (foundE != null)
+                    {
+                        foundE.VisualSpec.FillColor = Color.Red;
+                        _mySprite.InvalidateLayout();
+                    }
                 }
-                if (e.Button == UIMouseButtons.Right &&
-                    _mySprite.HitTest(e.X, e.Y, true))
-                {
-
-                }
-
             };
             evListener.MouseMove += e =>
             {
@@ -47,10 +43,7 @@ namespace LayoutFarm
                     _mySprite.SetLocation(_mySprite.X + e.XDiff, _mySprite.Y + e.YDiff);
                 }
             };
-            evListener.MouseUp += e =>
-            {
 
-            };
             _mySprite.AttachExternalEventListener(evListener);
 
             host.AddChild(_mySprite);

@@ -402,6 +402,7 @@ namespace PaintLab.Svg
                 }
             };
 
+            
             this.Walk(paintArgs);
             VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
             return hitChain.Count > 0;
