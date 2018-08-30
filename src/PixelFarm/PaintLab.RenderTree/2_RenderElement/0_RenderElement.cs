@@ -378,16 +378,11 @@ namespace LayoutFarm
                     debug_RecordPostDrawInfo(canvas);
 #endif
                 }
-                else
-                {
-                }
+
                 canvas.PopClipAreaRect();
-
             }
-
             else
             {
-
 #if DEBUG
                 if (dbugVRoot.dbug_RecordDrawingChain)
                 {
