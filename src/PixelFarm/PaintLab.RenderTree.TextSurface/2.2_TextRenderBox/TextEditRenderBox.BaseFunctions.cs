@@ -161,7 +161,7 @@ namespace LayoutFarm.Text
             EnsureCaretVisible();
             if (textSurfaceEventListener != null)
             {
-                TextSurfaceEventListener.NotifyKeyDown(textSurfaceEventListener, e.KeyCode);
+                TextSurfaceEventListener.NotifyKeyDown(textSurfaceEventListener, e); ;
             }
         }
         void InvalidateGraphicOfCurrentLineArea()
@@ -529,66 +529,12 @@ namespace LayoutFarm.Text
                             EnsureCaretVisible();
                         }
                         break;
-                    case UIKeys.B:
-                        {
-                            //
-                            //test add markers
-                            //
-                            //if (internalTextLayerController.SelectionRange != null)
-                            //{
-                            //    //
-                            //    internalTextLayerController.SelectionRange.SwapIfUnOrder();
-                            //    VisualMarkerSelectionRange markerSelRange =
-                            //        VisualMarkerSelectionRange.CreateFromSelectionRange(
-                            //            internalTextLayerController.SelectionRange.GetSelectionRangeSnapshot());
-                            //    //then add to the marker layers
-                            //    markerSelRange.BindToTextLayer(textLayer);
-
-                            //    internalTextLayerController.VisualMarkers.Add(markerSelRange);
-                            //}
-
-                            //
-                            //TextSpanStyle style = internalTextLayerController.GetFirstTextStyleInSelectedRange(); 
-                            //TextSpanStyle textStyle = null;
-
-                            ////test only ***
-                            ////TODO: make this more configurable
-                            //if (style != null)
-                            //{
-                            //    TextSpanStyle defaultBeh = ((TextSpanStyle)style);
-                            //    if (defaultBeh.FontBold)
-                            //    {
-                            //        textStyle = StyleHelper.CreateNewStyle(Color.Black);
-                            //    }
-                            //    else
-                            //    {
-                            //        textStyle = StyleHelper.CreateNewStyle(Color.Blue);
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    textStyle = StyleHelper.CreateNewStyle(Color.Blue); 
-                            //} 
-
-                            //internalTextLayerController.DoFormatSelection(textStyle);
-
-                            //if (internalTextLayerController.updateJustCurrentLine)
-                            //{
-
-                            //    InvalidateGraphicOfCurrentLineArea();
-                            //}
-                            //else
-                            //{
-                            //    InvalidateGraphics(); 
-                            //}
-
-                        }
-                        break;
                 }
             }
+
             if (textSurfaceEventListener != null)
             {
-                TextSurfaceEventListener.NotifyKeyDown(textSurfaceEventListener, e.KeyCode);
+                TextSurfaceEventListener.NotifyKeyDown(textSurfaceEventListener, e);
             }
         }
         public Point CurrentCaretPos
