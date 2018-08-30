@@ -48,6 +48,8 @@ namespace LayoutFarm
         {
             canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
             updateArea.Offset(myviewportX, myviewportY);
+            //TODO: backup prev clip
+            //and restore ?
             canvas.SetClipRect(updateArea);
             this.DrawBoxContent(canvas, updateArea);
 
