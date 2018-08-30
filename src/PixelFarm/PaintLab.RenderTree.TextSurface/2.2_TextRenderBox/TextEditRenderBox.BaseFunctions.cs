@@ -458,9 +458,10 @@ namespace LayoutFarm.Text
                             //....
                             this.CurrentLineNumber = 0;
                             //start select to end
-                            DoEnd(true);//simulate 
+                            DoHome(false);//1st simulate 
+                            DoHome(true); //2nd
                             this.CurrentLineNumber = this.LineCount - 1;
-                            DoEnd(true);
+                            DoEnd(true); //
                         }
                         break;
                     case UIKeys.C:

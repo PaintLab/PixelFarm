@@ -151,20 +151,19 @@ namespace LayoutFarm.Dev
             if (listBox1.Items.Count > dumpWhen)
             {
 
-                int j = listBox1.Items.Count;
+                //int j = listBox1.Items.Count; 
+                //FileStream fs = new FileStream("c:\\WImageTest\\invalidate\\lim_" + Guid.NewGuid().ToString() + ".txt", FileMode.Create);
+                //StreamWriter strmWriter = new StreamWriter(fs);
+                //strmWriter.AutoFlush = true;
 
-                FileStream fs = new FileStream("c:\\WImageTest\\invalidate\\lim_" + Guid.NewGuid().ToString() + ".txt", FileMode.Create);
-                StreamWriter strmWriter = new StreamWriter(fs);
-                strmWriter.AutoFlush = true;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    strmWriter.WriteLine(listBox1.Items[i].ToString());
+                //}
 
-                for (int i = 0; i < j; ++i)
-                {
-                    strmWriter.WriteLine(listBox1.Items[i].ToString());
-                }
-
-                strmWriter.Close();
-                fs.Close();
-                fs.Dispose();
+                //strmWriter.Close();
+                //fs.Close();
+                //fs.Dispose();
             }
         }
 #endif
