@@ -48,6 +48,7 @@ namespace LayoutFarm
         {
             canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
             updateArea.Offset(myviewportX, myviewportY);
+            canvas.SetClipRect(updateArea);
             this.DrawBoxContent(canvas, updateArea);
 
 #if DEBUG
