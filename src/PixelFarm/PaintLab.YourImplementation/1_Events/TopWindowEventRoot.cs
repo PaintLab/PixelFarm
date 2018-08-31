@@ -295,6 +295,8 @@ namespace LayoutFarm
         {
             if (currentKbFocusElem == null)
             {
+                this.lastKeydownWithShift = this.lastKeydownWithAlt = this.lastKeydownWithControl = false;
+
                 return;
             }
 
