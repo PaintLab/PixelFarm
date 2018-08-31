@@ -363,34 +363,23 @@ namespace LayoutFarm.UI
             _form = null;
         }
 
-        static void FindLocationRelativeToDesktop(Control c, ref System.Drawing.Point p)
-        {
-            p.Offset(c.Location);
-            if (c.Parent != null)
-            {
-                FindLocationRelativeToDesktop(c.Parent, ref p);
-            }
-        }
+
         void IPlatformWindowBox.SetLocation(int x, int y)
         {
             if (this.UseRelativeLocationToParent)
             {
-
-
                 //#if DEBUG
                 //                if (!_form.IsHandleCreated)
                 //                {
                 //                }
                 //#endif
-                //1. find parent form/control 
-
-
+                //1. find parent form/control  
                 if (!_evalLocationRelativeToDesktop)
                 {
                     _locationRelToDesktop = new System.Drawing.Point();// _form.LinkedParentForm.Location;
                     if (_form.LinkedParentControl != null)
                     {
-                        FindLocationRelativeToDesktop(_form.LinkedParentControl, ref _locationRelToDesktop);
+                        _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(_form.LinkedParentControl.Location);
                     }
                     _evalLocationRelativeToDesktop = true;
                 }
