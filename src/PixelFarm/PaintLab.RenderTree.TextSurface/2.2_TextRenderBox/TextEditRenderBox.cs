@@ -10,7 +10,7 @@ namespace LayoutFarm.Text
         RenderSurfaceScrollRelation scrollRelation;
         CustomRenderSurface vscrollableSurface;
 
-        public bool HideTextLayer { get; set; }
+
         public Color BackgroundColor { get; set; }
         public CustomRenderSurface ScrollableSurface
         {
@@ -62,11 +62,7 @@ namespace LayoutFarm.Text
             }
             else
             {
-                //draw text layer
-                if (!HideTextLayer)
-                {
-                    this.textLayer.DrawChildContent(canvas, updateArea);
-                }
+                //draw text layer 
 
                 if (this.HasDefaultLayer)
                 {
