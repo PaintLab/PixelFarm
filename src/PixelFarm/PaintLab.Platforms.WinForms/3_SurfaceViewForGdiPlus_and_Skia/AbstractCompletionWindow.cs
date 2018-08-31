@@ -8,22 +8,36 @@ namespace LayoutFarm.UI
 {
     partial class AbstractCompletionWindow : Form
     {
-        Form linkedParentForm;
-        Control linkedParentControl;
-        FormPopupShadow2 formPopupShadow;
+        Form _linkedParentForm;
+        Control _linkedParentControl;
+        FormPopupShadow2 _formPopupShadow;
+
+        FormClosingEventHandler _parentFormClosingEventHandler;
         public AbstractCompletionWindow()
         {
             InitializeComponent();
             this.ShowInTaskbar = false;
             this.TopMost = true;
             this.FormBorderStyle = FormBorderStyle.None;
+
+            _parentFormClosingEventHandler = (s, e) =>
+            {
+                if (_formPopupShadow != null)
+                {
+                    _formPopupShadow.Close();
+                    _formPopupShadow = null;
+                }
+                //
+                this.Close();
+            };
+
         }
         internal FormPopupShadow2 PopupShadow
         {
-            get { return formPopupShadow; }
+            get { return _formPopupShadow; }
             set
             {
-                formPopupShadow = value;
+                _formPopupShadow = value;
             }
         }
         protected override void OnVisibleChanged(EventArgs e)
@@ -34,22 +48,37 @@ namespace LayoutFarm.UI
             }
             else
             {
-                formPopupShadow.Visible = false;
+                _formPopupShadow.Visible = false;
                 _showingPopup = false;
             }
         }
 
         public Form LinkedParentForm
         {
-            get { return this.linkedParentForm; }
-            set { this.linkedParentForm = value; }
-        }
-        public Control LinkedParentControl
-        {
-            get { return this.linkedParentControl; }
+            get { return this._linkedParentForm; }
             set
             {
-                this.linkedParentControl = value;
+                if (_linkedParentForm != null && _linkedParentForm != value)
+                {
+                    //unsubscribe old event
+                    _linkedParentForm.FormClosing -= _parentFormClosingEventHandler;
+                }
+
+                this._linkedParentForm = value;
+                if (value != null)
+                {
+                    //when
+                    _linkedParentForm.FormClosing += _parentFormClosingEventHandler;
+                }
+            }
+        }
+
+        public Control LinkedParentControl
+        {
+            get { return this._linkedParentControl; }
+            set
+            {
+                this._linkedParentControl = value;
             }
         }
         //protected override CreateParams CreateParams
@@ -76,21 +105,21 @@ namespace LayoutFarm.UI
 
             // Show the window without activating it (i.e. do not take focus)
             PI.ShowWindow(this.Handle, (short)PI.SW_SHOWNOACTIVATE);
-            if (this.formPopupShadow != null)
+            if (this._formPopupShadow != null)
             {
                 _showingPopup = true;
-                formPopupShadow.Show2(this);
+                _formPopupShadow.Show2(this);
             }
 
             //this.Show();
-            this.linkedParentControl.Focus();
+            this._linkedParentControl.Focus();
         }
         protected override void OnMove(EventArgs e)
         {
             base.OnMove(e);
             if (_showingPopup)
             {
-                formPopupShadow.MoveRelativeTo(this);
+                _formPopupShadow.MoveRelativeTo(this);
             }
         }
     }
