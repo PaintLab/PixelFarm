@@ -130,6 +130,8 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.NeedClipArea = this.NeedClipArea;
                 renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
+                renderE.SetVisible(this.Visible);
+
                 BuildChildrenRenderElement(renderE);
                 this.primElement = renderE;
             }

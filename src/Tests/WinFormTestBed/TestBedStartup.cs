@@ -59,7 +59,7 @@ namespace YourImplementation
                workingArea.Height,
                innerViewportKind,
                out UISurfaceViewportControl latestviewport);
-            formCanvas.Text = "PixelFarm" + innerViewportKind;
+            formCanvas.Text = innerViewportKind.ToString();
 
             demo.Start(new LayoutFarm.WinFormAppHost(latestviewport));
             latestviewport.TopDownRecalculateContent();
