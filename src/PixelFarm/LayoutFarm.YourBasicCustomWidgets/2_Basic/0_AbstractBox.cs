@@ -164,6 +164,9 @@ namespace LayoutFarm.CustomWidgets
             {
                 this.Focus();
             }
+
+
+
         }
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
@@ -371,7 +374,17 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        public void BringToTopMost()
+        {
 
+            AbstractBox parentBox = this.ParentUI as AbstractBox;
+            if (parentBox != null)
+            {
+                this.RemoveSelf();
+                parentBox.AddChild(this);
+            }
+
+        }
         public void AddChild(UIElement ui)
         {
             if (this.uiList == null)
@@ -426,7 +439,7 @@ namespace LayoutFarm.CustomWidgets
             }
             if (this.HasReadyRenderElement)
             {
-                primElement.ClearAllChildren();                
+                primElement.ClearAllChildren();
                 if (_supportViewport)
                 {
                     this.InvalidateLayout();
