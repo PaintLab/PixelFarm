@@ -62,8 +62,8 @@ namespace LayoutFarm.Text
             }
             else
             {
-                //draw text layer 
-
+                //draw text layer  
+                this.textLayer.DrawChildContent(canvas, updateArea);
                 if (this.HasDefaultLayer)
                 {
                     this.DrawDefaultLayer(canvas, ref updateArea);
