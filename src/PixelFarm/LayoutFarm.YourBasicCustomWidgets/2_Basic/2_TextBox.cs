@@ -11,36 +11,37 @@ namespace LayoutFarm.CustomWidgets
 {
     public class TextBox : AbstractRectUI
     {
-        TextSurfaceEventListener textSurfaceListener;
-        TextEditRenderBox textEditRenderElement;
+        TextSurfaceEventListener _textSurfaceListener;
+        TextEditRenderBox _textEditRenderElement;
         bool _multiline;
         bool _hideTextLayer;
 
-        TextSpanStyle defaultSpanStyle;
-        Color backgroundColor = Color.White;
-        string userTextContent;
+        TextSpanStyle _defaultSpanStyle;
+        Color _backgroundColor = Color.White;
+        string _userTextContent;
+
         public TextBox(int width, int height, bool multiline)
             : base(width, height)
         {
             this._multiline = multiline;
-            
+
         }
         public void ClearText()
         {
-            if (textEditRenderElement != null)
+            if (_textEditRenderElement != null)
             {
-                this.textEditRenderElement.ClearAllChildren();
+                this._textEditRenderElement.ClearAllChildren();
             }
         }
         public Color BackgroundColor
         {
-            get { return this.backgroundColor; }
+            get { return this._backgroundColor; }
             set
             {
-                this.backgroundColor = value;
-                if (textEditRenderElement != null)
+                this._backgroundColor = value;
+                if (_textEditRenderElement != null)
                 {
-                    textEditRenderElement.BackgroundColor = value;
+                    _textEditRenderElement.BackgroundColor = value;
                 }
             }
         }
@@ -50,21 +51,21 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _hideTextLayer = value;
-                if (textEditRenderElement != null)
+                if (_textEditRenderElement != null)
                 {
-                    textEditRenderElement.HideTextLayer = value;
+                    _textEditRenderElement.HideTextLayer = value;
                 }
             }
         }
         public TextSpanStyle DefaultSpanStyle
         {
-            get { return this.defaultSpanStyle; }
+            get { return this._defaultSpanStyle; }
             set
             {
-                this.defaultSpanStyle = value;
-                if (textEditRenderElement != null)
+                this._defaultSpanStyle = value;
+                if (_textEditRenderElement != null)
                 {
-                    textEditRenderElement.CurrentTextSpanStyle = value;
+                    _textEditRenderElement.CurrentTextSpanStyle = value;
 
                 }
             }
@@ -78,46 +79,46 @@ namespace LayoutFarm.CustomWidgets
         {
             get
             {
-                return this.textEditRenderElement.CurrentLineHeight;
+                return this._textEditRenderElement.CurrentLineHeight;
             }
         }
         public Point CaretPosition
         {
-            get { return this.textEditRenderElement.CurrentCaretPos; }
+            get { return this._textEditRenderElement.CurrentCaretPos; }
         }
         public int CurrentLineCharIndex
         {
-            get { return this.textEditRenderElement.CurrentLineCharIndex; }
+            get { return this._textEditRenderElement.CurrentLineCharIndex; }
         }
         public int CurrentRunCharIndex
         {
-            get { return this.textEditRenderElement.CurrentTextRunCharIndex; }
+            get { return this._textEditRenderElement.CurrentTextRunCharIndex; }
         }
         public string Text
         {
             get
             {
-                if (textEditRenderElement != null)
+                if (_textEditRenderElement != null)
                 {
                     StringBuilder stBuilder = new StringBuilder();
-                    textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+                    _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
                     return stBuilder.ToString();
                 }
                 else
                 {
-                    return userTextContent;
+                    return _userTextContent;
                 }
             }
             set
             {
-                if (textEditRenderElement == null)
+                if (_textEditRenderElement == null)
                 {
-                    this.userTextContent = value;
+                    this._userTextContent = value;
                     return;
                 }
                 //---------------                 
 
-                this.textEditRenderElement.ClearAllChildren();
+                this._textEditRenderElement.ClearAllChildren();
                 //convert to runs
                 if (value == null)
                 {
@@ -132,7 +133,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         if (lineCount > 0)
                         {
-                            textEditRenderElement.SplitCurrentLineToNewLine();
+                            _textEditRenderElement.SplitCurrentLineToNewLine();
                         }
 
                         //create textspan
@@ -163,14 +164,14 @@ namespace LayoutFarm.CustomWidgets
                                 //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
                                 //-----------------------------------
                                 //but for general 
-                                EditableRun textspan = textEditRenderElement.CreateEditableTextRun(splitBuffer);
-                                textEditRenderElement.AddTextRun(textspan);
+                                EditableRun textspan = _textEditRenderElement.CreateEditableTextRun(splitBuffer);
+                                _textEditRenderElement.AddTextRun(textspan);
                             }
                         }
                         else
                         {
-                            var textspan = textEditRenderElement.CreateEditableTextRun(line);
-                            textEditRenderElement.AddTextRun(textspan);
+                            var textspan = _textEditRenderElement.CreateEditableTextRun(line);
+                            _textEditRenderElement.AddTextRun(textspan);
                         }
 
 
@@ -185,7 +186,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //request keyboard focus
             base.Focus();
-            textEditRenderElement.Focus();
+            _textEditRenderElement.Focus();
         }
         public override void Blur()
         {
@@ -193,53 +194,53 @@ namespace LayoutFarm.CustomWidgets
         }
         public void DoHome()
         {
-            this.textEditRenderElement.DoHome(false);
+            this._textEditRenderElement.DoHome(false);
         }
         public void DoEnd()
         {
-            this.textEditRenderElement.DoEnd(false);
+            this._textEditRenderElement.DoEnd(false);
         }
         protected override bool HasReadyRenderElement
         {
-            get { return this.textEditRenderElement != null; }
+            get { return this._textEditRenderElement != null; }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
-            get { return this.textEditRenderElement; }
+            get { return this._textEditRenderElement; }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            if (textEditRenderElement == null)
+            if (_textEditRenderElement == null)
             {
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
-                if (this.defaultSpanStyle.IsEmpty())
+                if (this._defaultSpanStyle.IsEmpty())
                 {
-                    this.defaultSpanStyle = new TextSpanStyle();
-                    this.defaultSpanStyle.FontInfo = rootgfx.DefaultTextEditFontInfo;
-                    tbox.CurrentTextSpanStyle = this.defaultSpanStyle;
+                    this._defaultSpanStyle = new TextSpanStyle();
+                    this._defaultSpanStyle.FontInfo = rootgfx.DefaultTextEditFontInfo;
+                    tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
                 }
                 else
                 {
-                    tbox.CurrentTextSpanStyle = this.defaultSpanStyle;
+                    tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
                 }
-                tbox.BackgroundColor = this.backgroundColor;
+                tbox.BackgroundColor = this._backgroundColor;
                 tbox.SetController(this);
                 tbox.HideTextLayer = this.HideTextLayer;
 
-                if (this.textSurfaceListener != null)
+                if (this._textSurfaceListener != null)
                 {
-                    tbox.TextSurfaceListener = textSurfaceListener;
+                    tbox.TextSurfaceListener = _textSurfaceListener;
                 }
-                this.textEditRenderElement = tbox;
-                if (userTextContent != null)
+                this._textEditRenderElement = tbox;
+                if (_userTextContent != null)
                 {
-                    this.Text = userTextContent;
-                    userTextContent = null;//clear
+                    this.Text = _userTextContent;
+                    _userTextContent = null;//clear
                 }
             }
-            return textEditRenderElement;
+            return _textEditRenderElement;
         }
         //----------------------------------------------------------------
         public bool IsMultilineTextBox
@@ -248,17 +249,17 @@ namespace LayoutFarm.CustomWidgets
         }
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
-            textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
+            _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
         }
         public TextSurfaceEventListener TextEventListener
         {
-            get { return this.textSurfaceListener; }
+            get { return this._textSurfaceListener; }
             set
             {
-                this.textSurfaceListener = value;
-                if (this.textEditRenderElement != null)
+                this._textSurfaceListener = value;
+                if (this._textEditRenderElement != null)
                 {
-                    this.textEditRenderElement.TextSurfaceListener = value;
+                    this._textEditRenderElement.TextSurfaceListener = value;
                 }
             }
         }
@@ -266,27 +267,27 @@ namespace LayoutFarm.CustomWidgets
         {
             get
             {
-                return this.textEditRenderElement.CurrentTextRun;
+                return this._textEditRenderElement.CurrentTextRun;
             }
         }
 
         public void ReplaceCurrentTextRunContent(int nBackspaces, string newstr)
         {
-            if (textEditRenderElement != null)
+            if (_textEditRenderElement != null)
             {
-                textEditRenderElement.ReplaceCurrentTextRunContent(nBackspaces, newstr);
+                _textEditRenderElement.ReplaceCurrentTextRunContent(nBackspaces, newstr);
             }
         }
         public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
         {
-            if (textEditRenderElement != null)
+            if (_textEditRenderElement != null)
             {
-                textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
+                _textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
             }
         }
         public void CopyCurrentLine(StringBuilder stbuilder)
         {
-            textEditRenderElement.CopyCurrentLine(stbuilder);
+            _textEditRenderElement.CopyCurrentLine(stbuilder);
         }
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseEventArgs e)
@@ -295,27 +296,27 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
-            textEditRenderElement.HandleDoubleClick(e);
+            _textEditRenderElement.HandleDoubleClick(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyPress(UIKeyEventArgs e)
         {
-            textEditRenderElement.HandleKeyPress(e);
+            _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyDown(UIKeyEventArgs e)
         {
-            textEditRenderElement.HandleKeyDown(e);
+            _textEditRenderElement.HandleKeyDown(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyUp(UIKeyEventArgs e)
         {
-            textEditRenderElement.HandleKeyUp(e);
+            _textEditRenderElement.HandleKeyUp(e);
             e.CancelBubbling = true;
         }
         protected override bool OnProcessDialogKey(UIKeyEventArgs e)
         {
-            if (textEditRenderElement.HandleProcessDialogKey(e))
+            if (_textEditRenderElement.HandleProcessDialogKey(e))
             {
                 e.CancelBubbling = true;
                 return true;
@@ -328,18 +329,18 @@ namespace LayoutFarm.CustomWidgets
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
             e.CurrentContextElement = this;
-            textEditRenderElement.HandleMouseDown(e);
+            _textEditRenderElement.HandleMouseDown(e);
         }
         protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
         {
             base.OnLostKeyboardFocus(e);
-            textEditRenderElement.Blur();
+            _textEditRenderElement.Blur();
         }
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
             if (e.IsDragging)
             {
-                textEditRenderElement.HandleDrag(e);
+                _textEditRenderElement.HandleDrag(e);
                 e.CancelBubbling = true;
                 e.MouseCursorStyle = MouseCursorStyle.IBeam;
             }
@@ -348,11 +349,11 @@ namespace LayoutFarm.CustomWidgets
         {
             if (e.IsDragging)
             {
-                textEditRenderElement.HandleDragEnd(e);
+                _textEditRenderElement.HandleDragEnd(e);
             }
             else
             {
-                textEditRenderElement.HandleMouseUp(e);
+                _textEditRenderElement.HandleMouseUp(e);
             }
             e.MouseCursorStyle = MouseCursorStyle.Default;
             e.CancelBubbling = true;
