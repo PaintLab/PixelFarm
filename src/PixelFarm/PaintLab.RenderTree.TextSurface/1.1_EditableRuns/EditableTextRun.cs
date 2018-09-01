@@ -7,16 +7,12 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
 
-
-
     class EditableTextRun : EditableRun
     {
 
         TextSpanStyle spanStyle;
-
         int[] outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
-
         ILineSegmentList _lineSegs;
 
         public EditableTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
@@ -341,7 +337,7 @@ namespace LayoutFarm.Text
                 {
                     case DIFF_FONT_SAME_TEXT_COLOR:
                         {
-                            RequestFont prevFont = canvas.CurrentFont;
+
                             canvas.DrawText(this.mybuffer,
                                 new Rectangle(0, 0, bWidth, bHeight),
                                 style.ContentHAlign);
