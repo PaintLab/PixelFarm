@@ -26,7 +26,7 @@ namespace LayoutFarm.Text
         {
             RequestFont enterFont = canvas.CurrentFont;
 
-            canvas.CurrentFont = this.CurrentTextSpanStyle.FontInfo;
+            canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
             if (vscrollableSurface != null)
             {
                 vscrollableSurface.DrawToThisPage(canvas, updateArea);

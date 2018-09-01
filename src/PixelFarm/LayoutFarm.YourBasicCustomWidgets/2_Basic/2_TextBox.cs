@@ -199,7 +199,7 @@ namespace LayoutFarm.CustomWidgets
                 if (this._defaultSpanStyle.IsEmpty())
                 {
                     this._defaultSpanStyle = new TextSpanStyle();
-                    this._defaultSpanStyle.FontInfo = rootgfx.DefaultTextEditFontInfo;
+                    this._defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
                     tbox.CurrentTextSpanStyle = this._defaultSpanStyle;
                 }
                 else

@@ -30,7 +30,7 @@ namespace LayoutFarm.Text
             this.MayHasViewport = true;
             this.BackgroundColor = Color.White;// Color.Transparent;
             this.currentSpanStyle = new TextSpanStyle();
-            this.currentSpanStyle.FontInfo = rootgfx.DefaultTextEditFontInfo;
+            this.currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
             //
             _textLayer = new EditableTextFlowLayer(this); //presentation
             _internalTextLayerController = new InternalTextLayerController(this, _textLayer);//controller
@@ -56,7 +56,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        public static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
+        internal static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
         {
             ts.BoxEvaluateScrollBar();
         }

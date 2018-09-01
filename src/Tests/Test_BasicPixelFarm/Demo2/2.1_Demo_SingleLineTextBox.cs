@@ -11,7 +11,7 @@ namespace LayoutFarm
             var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
             var textSpanStyle = new Text.TextSpanStyle()
             {
-                FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 18),
+                ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 18),
                 FontColor = new PixelFarm.Drawing.Color(255, 0, 0)
             };
             //test with various font style             
@@ -26,7 +26,7 @@ namespace LayoutFarm
             var maskTextBox = new LayoutFarm.CustomWidgets.MaskTextBox(100, 30);
             var textSpanStyle2 = new Text.TextSpanStyle()
             {
-                FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 18),
+                ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 18),
                 FontColor = PixelFarm.Drawing.Color.Black
             };
 

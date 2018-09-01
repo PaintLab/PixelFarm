@@ -264,9 +264,9 @@ namespace LayoutFarm.Text
             else
             {
                 TextSpanStyle spanStyle = this.SpanStyle;
-                if (spanStyle.FontInfo != null)
+                if (spanStyle.ReqFont != null)
                 {
-                    return spanStyle.FontInfo;
+                    return spanStyle.ReqFont;
                 }
                 else
                 {
@@ -292,7 +292,7 @@ namespace LayoutFarm.Text
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
         static int EvaluateFontAndTextColor(DrawBoard canvas, TextSpanStyle spanStyle)
         {
-            var font = spanStyle.FontInfo;
+            var font = spanStyle.ReqFont;
             var color = spanStyle.FontColor;
             var currentTextFont = canvas.CurrentFont;
             var currentTextColor = canvas.CurrentTextColor;
@@ -351,7 +351,7 @@ namespace LayoutFarm.Text
                         {
                             RequestFont prevFont = canvas.CurrentFont;
                             Color prevColor = canvas.CurrentTextColor;
-                            canvas.CurrentFont = style.FontInfo;
+                            canvas.CurrentFont = style.ReqFont;
                             canvas.CurrentTextColor = style.FontColor;
                             canvas.DrawText(this.mybuffer,
                                  new Rectangle(0, 0, bWidth, bHeight),
