@@ -99,13 +99,5 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class MaskTextBox : TextBoxContainer
-    {
-        public MaskTextBox(int w, int h)
-            : base(w, h, false)
-        {
-            //only single line
-        }
-
-    }
+    
 }
