@@ -82,6 +82,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._textEditRenderElement.CurrentTextRunCharIndex; }
         }
+        public bool HasSomeText
+        {
+            get
+            {
+                return _textEditRenderElement.HasSomeText;
+            }
+        }
         public string Text
         {
             get
@@ -233,6 +240,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
         }
+
         public TextSurfaceEventListener TextEventListener
         {
             get { return this._textSurfaceListener; }
@@ -431,6 +439,13 @@ namespace LayoutFarm.CustomWidgets
         public int CurrentRunCharIndex
         {
             get { return this._textEditRenderElement.CurrentTextRunCharIndex; }
+        }
+        public bool HasSomeText
+        {
+            get
+            {
+                return _actualUserInputText.Count > 0;
+            }
         }
         public string Text
         {

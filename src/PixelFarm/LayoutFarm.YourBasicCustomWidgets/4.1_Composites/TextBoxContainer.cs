@@ -84,8 +84,10 @@ namespace LayoutFarm.CustomWidgets
             //check if we should show place holder
             if (!string.IsNullOrEmpty(this._placeHolderText))
             {
-                string inputText = _myTextBox.Text;
-                if (!string.IsNullOrEmpty(inputText))
+                bool hasSomeText = _maskTextBox ?
+                                       _myMaskTextBox.HasSomeText :
+                                       _myTextBox.HasSomeText; 
+                if (hasSomeText)
                 {
                     //hide place holder                     
                     if (_placeHolder.Visible)
