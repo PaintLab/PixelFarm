@@ -11,16 +11,19 @@ namespace LayoutFarm.CustomWidgets
     public class TextBoxContainer : AbstractBox
     {
         TextBox _myTextBox;
+        MaskTextBox _myMaskTextBox;
+
         CustomTextRun _placeHolder;
         string _placeHolderText = "";
         bool _multiline;
         Text.TextSurfaceEventListener _textEvListener;
-
-        public TextBoxContainer(int w, int h, bool multiline)
+        bool _maskTextBox;
+        public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
             : base(w, h)
         {
             this.BackColor = Color.White;
             this._multiline = multiline;
+            _maskTextBox = maskTextBox;
         }
         public string PlaceHolderText
         {
@@ -48,13 +51,26 @@ namespace LayoutFarm.CustomWidgets
                 _placeHolder.TextColor = Color.FromArgb(180, Color.LightGray);
                 baseRenderElement.AddChild(_placeHolder);
                 //2. textbox 
-                _myTextBox = new TextBox(this.Width - 4, this.Height - 4, _multiline);
-                _myTextBox.BackgroundColor = Color.Transparent;
-                _myTextBox.SetLocation(2, 2);
-                _textEvListener = new Text.TextSurfaceEventListener();
-                _myTextBox.TextEventListener = _textEvListener;
-                _textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
-                baseRenderElement.AddChild(_myTextBox);
+                if (_maskTextBox)
+                {
+                    _myMaskTextBox = new MaskTextBox(this.Width - 4, this.Height - 4);
+                    _myMaskTextBox.BackgroundColor = Color.Transparent;
+                    _myMaskTextBox.SetLocation(2, 2);
+                    _textEvListener = _myMaskTextBox.TextSurfaceEventListener;
+                    _textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
+                    baseRenderElement.AddChild(_myMaskTextBox);
+                }
+                else
+                {
+                    _myTextBox = new TextBox(this.Width - 4, this.Height - 4, _multiline);
+                    _myTextBox.BackgroundColor = Color.Transparent;
+                    _myTextBox.SetLocation(2, 2);
+                    _textEvListener = new Text.TextSurfaceEventListener();
+                    _myTextBox.TextEventListener = _textEvListener;
+                    _textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
+                    baseRenderElement.AddChild(_myTextBox);
+                }
+
                 return baseRenderElement;
             }
             else
@@ -95,9 +111,9 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
-        public TextBox TextBox { get { return _myTextBox; } }
+
     }
 
 
-    
+
 }
