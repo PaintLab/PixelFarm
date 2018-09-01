@@ -362,6 +362,7 @@ namespace LayoutFarm.CustomWidgets
     {
         TextSurfaceEventListener _textSurfaceListener;
         TextEditRenderBox _textEditRenderElement;
+
         bool _multiline;
         TextSpanStyle _defaultSpanStyle;
         Color _backgroundColor = Color.White;
@@ -446,11 +447,12 @@ namespace LayoutFarm.CustomWidgets
         {
             //request keyboard focus
             base.Focus();
-            _textEditRenderElement.Focus();
+            _textEditRenderElement?.Focus();
         }
         public override void Blur()
         {
             base.Blur();
+            _textEditRenderElement?.Blur();
         }
 
         protected override bool HasReadyRenderElement
@@ -485,7 +487,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     tbox.TextSurfaceListener = _textSurfaceListener;
                 }
-                this._textEditRenderElement = tbox; 
+                this._textEditRenderElement = tbox;
             }
             return _textEditRenderElement;
         }
