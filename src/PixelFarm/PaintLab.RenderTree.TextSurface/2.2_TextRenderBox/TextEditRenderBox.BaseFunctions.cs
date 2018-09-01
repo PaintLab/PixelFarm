@@ -403,7 +403,7 @@ namespace LayoutFarm.Text
                                 _internalTextLayerController.DoBackspace())
                             {
                                 TextSurfaceEventListener.NotifyCharactersRemoved(textSurfaceEventListener,
-                                    new TextDomEventArgs(_internalTextLayerController.updateJustCurrentLine));
+                                    new TextDomEventArgs(_internalTextLayerController._updateJustCurrentLine));
                             }
                         }
 
@@ -428,7 +428,7 @@ namespace LayoutFarm.Text
                         {
                             VisualSelectionRangeSnapShot delpart = _internalTextLayerController.DoDelete();
                             TextSurfaceEventListener.NotifyCharactersRemoved(textSurfaceEventListener,
-                                new TextDomEventArgs(_internalTextLayerController.updateJustCurrentLine));
+                                new TextDomEventArgs(_internalTextLayerController._updateJustCurrentLine));
                         }
 
                         EnsureCaretVisible();
@@ -904,7 +904,7 @@ namespace LayoutFarm.Text
             }
 
 
-            if (_internalTextLayerController.updateJustCurrentLine)
+            if (_internalTextLayerController._updateJustCurrentLine)
             {
                 InvalidateGraphicOfCurrentLineArea();
             }
@@ -920,7 +920,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return _internalTextLayerController.updateJustCurrentLine;
+                return _internalTextLayerController._updateJustCurrentLine;
             }
         }
         public int CurrentLineHeight
