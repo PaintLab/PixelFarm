@@ -23,7 +23,7 @@ namespace LayoutFarm
 
             //--------------
             //mask text box
-            var maskTextBox = new LayoutFarm.CustomWidgets.MaskTextBox(100, 30, false);
+            var maskTextBox = new LayoutFarm.CustomWidgets.MaskTextBox(100, 30);
             var textSpanStyle2 = new Text.TextSpanStyle()
             {
                 ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 18),
