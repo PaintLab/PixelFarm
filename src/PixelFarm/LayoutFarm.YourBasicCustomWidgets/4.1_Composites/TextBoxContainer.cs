@@ -68,7 +68,7 @@ namespace LayoutFarm.CustomWidgets
             //check if we should show place holder
             if (!string.IsNullOrEmpty(this._placeHolderText))
             {
-                var inputText = _myTextBox.Text;
+                string inputText = _myTextBox.Text;
                 if (!string.IsNullOrEmpty(inputText))
                 {
                     //hide place holder                     
@@ -95,5 +95,17 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
+        public TextBox TextBox { get { return _myTextBox; } }
+    }
+
+
+    public class MaskTextBox : TextBoxContainer
+    {
+        public MaskTextBox(int w, int h)
+            : base(w, h, false)
+        {
+            //only single line
+        }
+
     }
 }

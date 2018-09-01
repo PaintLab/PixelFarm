@@ -179,14 +179,8 @@ namespace LayoutFarm.CustomWidgets
         {
             base.Blur();
         }
-        public void DoHome()
-        {
-            this._textEditRenderElement.DoHome(false);
-        }
-        public void DoEnd()
-        {
-            this._textEditRenderElement.DoEnd(false);
-        }
+
+
         protected override bool HasReadyRenderElement
         {
             get { return this._textEditRenderElement != null; }
