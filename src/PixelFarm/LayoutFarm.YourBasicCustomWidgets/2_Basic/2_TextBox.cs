@@ -174,11 +174,12 @@ namespace LayoutFarm.CustomWidgets
         {
             //request keyboard focus
             base.Focus();
-            _textEditRenderElement.Focus();
+            _textEditRenderElement?.Focus();
         }
         public override void Blur()
         {
             base.Blur();
+            _textEditRenderElement?.Blur();
         }
 
 
