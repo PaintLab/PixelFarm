@@ -6,19 +6,19 @@ namespace LayoutFarm.Text
 {
     partial class TextEditRenderBox
     {
-        TextSurfaceEventListener textSurfaceEventListener;
+        TextSurfaceEventListener _textSurfaceEventListener;
         public TextSurfaceEventListener TextSurfaceListener
         {
             get
             {
-                return textSurfaceEventListener;
+                return _textSurfaceEventListener;
             }
             set
             {
-                textSurfaceEventListener = value;
+                _textSurfaceEventListener = value;
                 if (value != null)
                 {
-                    textSurfaceEventListener.SetMonitoringTextSurface(this);
+                    _textSurfaceEventListener.SetMonitoringTextSurface(this);
                 }
             }
         }

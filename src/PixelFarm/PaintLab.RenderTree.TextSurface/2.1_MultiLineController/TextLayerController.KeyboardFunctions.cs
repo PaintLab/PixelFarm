@@ -111,12 +111,11 @@ namespace LayoutFarm.Text
             else
             {
                 _updateJustCurrentLine = true;
-                char deletedChar = _textLineWriter.DoBackspaceOneChar();
+                 
+                char deletedChar = _textLineWriter.DoBackspaceOneChar(); 
                 if (deletedChar == '\0')
                 {
-                    //end of current line
-
-
+                    //end of current line 
                     if (!IsOnFirstLine)
                     {
                         CurrentLineNumber--;

@@ -10,11 +10,6 @@ using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
 
-
-
-
-
-
     public class TextBox : AbstractRectUI
     {
         TextSurfaceEventListener _textSurfaceListener;
@@ -369,6 +364,7 @@ namespace LayoutFarm.CustomWidgets
 
 
         List<char> _actualUserInputText = new List<char>();
+        int _keydownCharIndex = 0;
 
         public MaskTextBox(int width, int height, bool multiline)
             : base(width, height)
@@ -483,11 +479,56 @@ namespace LayoutFarm.CustomWidgets
                 tbox.BackgroundColor = this._backgroundColor;
                 tbox.SetController(this);
 
-                if (this._textSurfaceListener != null)
-                {
-                    tbox.TextSurfaceListener = _textSurfaceListener;
-                }
+                //create 
+                tbox.TextSurfaceListener = _textSurfaceListener = new TextSurfaceEventListener();
                 this._textEditRenderElement = tbox;
+
+                _textSurfaceListener.CharacterAdded += (s, e) =>
+                {
+
+                };
+                _textSurfaceListener.CharacterRemoved += (s, e) =>
+                {
+                    //remove what?
+                    int currentCharIndex = tbox.CurrentLineCharIndex;
+                    if (_keydownCharIndex > currentCharIndex)
+                    {
+                        if (_keydownCharIndex - currentCharIndex == 1)
+                        {
+                            _actualUserInputText.RemoveAt(_keydownCharIndex - 1);
+                        }
+                        else
+                        {
+                            VisualSelectionRangeSnapShot removedRange = e.SelectionSnapShot;
+                            _actualUserInputText.RemoveRange(removedRange.startColumnNum, removedRange.endColumnNum - removedRange.startColumnNum);
+                        }
+                    }
+                    else if (_keydownCharIndex == currentCharIndex)
+                    {
+                        //del
+                        VisualSelectionRangeSnapShot removedRange = e.SelectionSnapShot;
+                        if (removedRange.endColumnNum == removedRange.startColumnNum)
+                        {
+                            _actualUserInputText.RemoveAt(_keydownCharIndex);
+                        }
+                        else
+                        {
+                            _actualUserInputText.RemoveRange(removedRange.startColumnNum, removedRange.endColumnNum - removedRange.startColumnNum);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                };
+                _textSurfaceListener.CharacterReplaced += (s, e) =>
+                {
+
+                };
+                _textSurfaceListener.ReplacedAll += (s, e) =>
+                {
+
+                };
             }
             return _textEditRenderElement;
         }
@@ -500,19 +541,6 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
         }
-        public TextSurfaceEventListener TextEventListener
-        {
-            get { return this._textSurfaceListener; }
-            set
-            {
-                this._textSurfaceListener = value;
-                if (this._textEditRenderElement != null)
-                {
-                    this._textEditRenderElement.TextSurfaceListener = value;
-                }
-            }
-        }
-
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseEventArgs e)
         {
@@ -525,97 +553,32 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnKeyPress(UIKeyEventArgs e)
         {
+            _keydownCharIndex = _textEditRenderElement.CurrentLineCharIndex;
             //eg. mask text
             //we collect actual key and send the mask to to the background 
-            _actualUserInputText.Add(e.KeyChar);
+
+            if (_keydownCharIndex == _actualUserInputText.Count)
+            {
+                _actualUserInputText.Add(e.KeyChar);
+            }
+            else
+            {
+                _actualUserInputText.Insert(_keydownCharIndex, e.KeyChar);
+            }
+
+
+
             e.SetKeyChar('*');
             //
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
+
+
         protected override void OnKeyDown(UIKeyEventArgs e)
         {
-
-            switch (e.KeyCode)
-            {
-                case UIKeys.Home:
-                    {
-                        //this.DoHome(e.Shift);
-                    }
-                    break;
-                case UIKeys.End:
-                    {
-                        //this.DoEnd(e.Shift);
-                    }
-                    break;
-                case UIKeys.Back:
-                    {
-                        //    if (_internalTextLayerController.SelectionRange != null)
-                        //    {
-                        //        InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-                        //    }
-                        //    else
-                        //    {
-                        //        InvalidateGraphicOfCurrentLineArea();
-                        //    }
-                        //    if (textSurfaceEventListener == null)
-                        //    {
-                        //        _internalTextLayerController.DoBackspace();
-                        //    }
-                        //    else
-                        //    {
-                        //        if (!TextSurfaceEventListener.NotifyPreviewBackSpace(textSurfaceEventListener) &&
-                        //            _internalTextLayerController.DoBackspace())
-                        //        {
-                        //            TextSurfaceEventListener.NotifyCharactersRemoved(textSurfaceEventListener,
-                        //                new TextDomEventArgs(_internalTextLayerController._updateJustCurrentLine));
-                        //        }
-                        //    }
-
-                        //    EnsureCaretVisible();
-                    }
-                    break;
-                case UIKeys.Delete:
-                    {
-                        //if (_internalTextLayerController.SelectionRange != null)
-                        //{
-                        //    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-                        //}
-                        //else
-                        //{
-                        //    InvalidateGraphicOfCurrentLineArea();
-                        //}
-                        //if (textSurfaceEventListener == null)
-                        //{
-                        //    _internalTextLayerController.DoDelete();
-                        //}
-                        //else
-                        //{
-                        //    VisualSelectionRangeSnapShot delpart = _internalTextLayerController.DoDelete();
-                        //    TextSurfaceEventListener.NotifyCharactersRemoved(textSurfaceEventListener,
-                        //        new TextDomEventArgs(_internalTextLayerController._updateJustCurrentLine));
-                        //}
-
-                        //EnsureCaretVisible();
-                    }
-                    break;
-                default:
-                    {
-                        //if (textSurfaceEventListener != null)
-                        //{
-                        //    UIKeys keycode = e.KeyCode;
-                        //    if (keycode >= UIKeys.F1 && keycode <= UIKeys.F12)
-                        //    {
-                        //        InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-                        //        TextSurfaceEventListener.NotifyFunctionKeyDown(textSurfaceEventListener, keycode);
-                        //        EnsureCaretVisible();
-                        //    }
-                        //}
-
-                    }
-                    break;
-            }
-
+            _keydownCharIndex = _textEditRenderElement.CurrentLineCharIndex;
+            //
             _textEditRenderElement.HandleKeyDown(e);
             e.CancelBubbling = true;
         }

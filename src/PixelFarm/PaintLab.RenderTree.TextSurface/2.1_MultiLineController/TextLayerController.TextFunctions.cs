@@ -56,15 +56,19 @@ namespace LayoutFarm.Text
         {
             if (newTextRun != null)
             {
-                EnableUndoHistoryRecording = false; for (int i = 0; i < nBackSpace; i++)
+                EnableUndoHistoryRecording = false;
+
+                for (int i = 0; i < nBackSpace; i++)
                 {
                     DoBackspace();
                 }
+
                 EnableUndoHistoryRecording = true;
                 int startLineNum = _textLineWriter.LineNumber;
                 int startCharIndex = _textLineWriter.CharIndex;
                 _textLineWriter.AddTextSpan(newTextRun);
                 _textLineWriter.EnsureCurrentTextRun();
+
                 _commandHistoryList.AddDocAction(
                     new DocActionInsertRuns(
                         new EditableRun[] { newTextRun }, startLineNum, startCharIndex,
