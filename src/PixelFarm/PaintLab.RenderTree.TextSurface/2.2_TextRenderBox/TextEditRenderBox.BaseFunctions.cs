@@ -16,24 +16,29 @@ namespace LayoutFarm.Text
         bool _isFocus = false;
         bool _stateShowCaret = false;
         bool _isDragBegin;
-        TextSpanStyle currentSpanStyle;
+        TextSpanStyle _currentSpanStyle;
         public TextEditRenderBox(RootGraphic rootgfx,
             int width, int height,
             bool isMultiLine)
             : base(rootgfx, width, height)
         {
+            //1. TextEditRenderBox is created
+            //2.  
             GlobalCaretController.RegisterCaretBlink(rootgfx);
             //
             _myCaret = new CaretRenderElement(rootgfx, 2, 17);
             _myCaret.TransparentForAllEvents = true;
+
             //
             this.MayHasViewport = true;
             this.BackgroundColor = Color.White;// Color.Transparent;
-            this.currentSpanStyle = new TextSpanStyle();
-            this.currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+            this._currentSpanStyle = new TextSpanStyle();
+            this._currentSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
             //
             _textLayer = new EditableTextFlowLayer(this); //presentation
             _internalTextLayerController = new InternalTextLayerController(this, _textLayer);//controller
+
             this._isMultiLine = isMultiLine;
             if (isMultiLine)
             {
@@ -49,10 +54,10 @@ namespace LayoutFarm.Text
 
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get { return this.currentSpanStyle; }
+            get { return this._currentSpanStyle; }
             set
             {
-                this.currentSpanStyle = value;
+                this._currentSpanStyle = value;
             }
         }
 
@@ -493,7 +498,7 @@ namespace LayoutFarm.Text
                                 //this may need text-break services
 
                                 _internalTextLayerController.AddUnformattedStringToCurrentLine(
-                                    Clipboard.GetUnicodeText(), this.currentSpanStyle);
+                                    Clipboard.GetUnicodeText(), this._currentSpanStyle);
 
                                 EnsureCaretVisible();
                             }
