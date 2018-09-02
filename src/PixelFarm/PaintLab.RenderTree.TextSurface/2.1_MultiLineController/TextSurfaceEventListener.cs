@@ -10,6 +10,7 @@ namespace LayoutFarm.Text
         public readonly UIKeys key;
         public readonly char c;
         public bool PreventDefault;
+
         public TextDomEventArgs(char c)
         {
             this.c = c;
@@ -22,6 +23,15 @@ namespace LayoutFarm.Text
         {
             this.updateJustCurrentLine = updateJustCurrentLine;
         }
+        public TextDomEventArgs(bool updateJustCurrentLine, VisualSelectionRangeSnapShot changedSnapShot)
+        {
+            this.updateJustCurrentLine = updateJustCurrentLine;
+            this.SelectionSnapShot = changedSnapShot;
+        }
+        public VisualSelectionRangeSnapShot SelectionSnapShot { get; private set; }
+        public bool Shift { get; set; }
+        public bool Control { get; set; }
+        public bool Alt { get; set; }
     }
 
     public sealed class TextSurfaceEventListener
@@ -153,11 +163,11 @@ namespace LayoutFarm.Text
                 listener.CharacterRemoved(listener, e);
             }
         }
-        internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeys key)
+        internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
             if (listener.KeyDown != null)
             {
-                listener.KeyDown(listener, new TextDomEventArgs(key));
+                listener.KeyDown(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
             }
         }
         internal static void NofitySplitNewLine(TextSurfaceEventListener listener, UIKeyEventArgs e)
@@ -173,6 +183,7 @@ namespace LayoutFarm.Text
             {
                 listener.ReplacedAll(listener, e);
             }
+
         }
 
         internal static void NotifyFunctionKeyDown(TextSurfaceEventListener listener, UIKeys key)

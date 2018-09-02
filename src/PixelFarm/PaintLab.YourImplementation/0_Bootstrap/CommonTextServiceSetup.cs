@@ -6,33 +6,10 @@ using Typography.FontManagement;
 
 namespace YourImplementation
 {
-    //class MyIcuDataProvider
-    //{
-    //    public string icuDir;
-
-    //    public Stream GetDataStream(string strmUrl)
-    //    {
-    //        string fullname = icuDir + "/" + strmUrl;
-    //        //temp fix
-    //        if (File.Exists(fullname))
-    //        {
-    //            return new FileStream(fullname, FileMode.Open);
-    //        }
-
-    //        if (PixelFarm.Platforms.StorageService.Provider.DataExists(fullname))
-    //        {
-    //            return PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fullname);
-    //        }
-    //        return null;
-    //    }
-    //}
-
-
 
     public static class CommonTextServiceSetup
     {
         static bool s_isInit;
-        //static MyIcuDataProvider s_icuDataProvider;
         static Typography.FontManagement.InstalledTypefaceCollection s_intalledTypefaces;
 
         static LocalFileStorageProvider s_localFileStorageProvider;

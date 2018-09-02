@@ -313,7 +313,7 @@ namespace LayoutFarm.UI
         {
             get;
             set;
-        } 
+        }
 
         public IUIEventListener PreviousMouseDown
         {

@@ -23,12 +23,12 @@ namespace LayoutFarm.RenderBoxes
         protected const int ARRANGEMENT_VALID = 1 << (23 - 1);
         protected const int HAS_CALCULATE_SIZE = 1 << (24 - 1);
         protected const int FLOWLAYER_HAS_MULTILINE = 1 << (25 - 1);
-        protected RenderElement owner;
+        protected RenderElement _owner;
         int postCalculateContentWidth;
         int postCalculateContentHeight;
         public RenderElementLayer(RenderElement owner)
         {
-            this.owner = owner;
+            this._owner = owner;
 #if DEBUG
             this.dbug_layer_id = dbug_layer_id_count;
             ++dbug_layer_id_count;
@@ -37,7 +37,7 @@ namespace LayoutFarm.RenderBoxes
 
         public RootGraphic Root
         {
-            get { return this.owner.Root; }
+            get { return this._owner.Root; }
         }
         public abstract void Clear();
         public bool Visible
@@ -63,9 +63,9 @@ namespace LayoutFarm.RenderBoxes
         }
         protected void OwnerInvalidateGraphic()
         {
-            if (this.owner != null)
+            if (this._owner != null)
             {
-                this.owner.InvalidateGraphics();
+                this._owner.InvalidateGraphics();
             }
         }
 
@@ -240,7 +240,7 @@ namespace LayoutFarm.RenderBoxes
 #endif
         public RenderElement OwnerRenderElement
         {
-            get { return this.owner; }
+            get { return this._owner; }
         }
     }
 }

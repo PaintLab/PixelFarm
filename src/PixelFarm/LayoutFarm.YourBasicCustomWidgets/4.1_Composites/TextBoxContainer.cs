@@ -10,26 +10,30 @@ namespace LayoutFarm.CustomWidgets
     /// </summary>
     public class TextBoxContainer : AbstractBox
     {
-        TextBox myTextBox;
-        CustomTextRun placeHolder;
-        string placeHolderText = "";
-        bool multiline;
-        Text.TextSurfaceEventListener textEvListener;
-        public TextBoxContainer(int w, int h, bool multiline)
+        TextBox _myTextBox;
+        MaskTextBox _myMaskTextBox;
+
+        CustomTextRun _placeHolder;
+        string _placeHolderText = "";
+        bool _multiline;
+        Text.TextSurfaceEventListener _textEvListener;
+        bool _maskTextBox;
+        public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
             : base(w, h)
         {
             this.BackColor = Color.White;
-            this.multiline = multiline;
+            this._multiline = multiline;
+            _maskTextBox = maskTextBox;
         }
         public string PlaceHolderText
         {
-            get { return this.placeHolderText; }
+            get { return this._placeHolderText; }
             set
             {
-                this.placeHolderText = value;
-                if (this.placeHolder != null)
+                this._placeHolderText = value;
+                if (this._placeHolder != null)
                 {
-                    this.placeHolder.Text = placeHolderText;
+                    this._placeHolder.Text = _placeHolderText;
                     this.InvalidateGraphics();
                 }
             }
@@ -41,19 +45,32 @@ namespace LayoutFarm.CustomWidgets
                 //first time
                 RenderElement baseRenderElement = base.GetPrimaryRenderElement(rootgfx);
                 //1. add place holder first
-                placeHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
-                placeHolder.Text = placeHolderText;
-                placeHolder.SetLocation(1, 1);
-                placeHolder.TextColor = Color.FromArgb(180, Color.LightGray);
-                baseRenderElement.AddChild(placeHolder);
+                _placeHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
+                _placeHolder.Text = _placeHolderText;
+                _placeHolder.SetLocation(1, 1);
+                _placeHolder.TextColor = Color.FromArgb(180, Color.LightGray);
+                baseRenderElement.AddChild(_placeHolder);
                 //2. textbox 
-                myTextBox = new TextBox(this.Width - 4, this.Height - 4, multiline);
-                myTextBox.BackgroundColor = Color.Transparent;
-                myTextBox.SetLocation(2, 2);
-                textEvListener = new Text.TextSurfaceEventListener();
-                myTextBox.TextEventListener = textEvListener;
-                textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
-                baseRenderElement.AddChild(myTextBox);
+                if (_maskTextBox)
+                {
+                    _myMaskTextBox = new MaskTextBox(this.Width - 4, this.Height - 4);
+                    _myMaskTextBox.BackgroundColor = Color.Transparent;
+                    _myMaskTextBox.SetLocation(2, 2);
+                    _textEvListener = _myMaskTextBox.TextSurfaceEventListener;
+                    _textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
+                    baseRenderElement.AddChild(_myMaskTextBox);
+                }
+                else
+                {
+                    _myTextBox = new TextBox(this.Width - 4, this.Height - 4, _multiline);
+                    _myTextBox.BackgroundColor = Color.Transparent;
+                    _myTextBox.SetLocation(2, 2);
+                    _textEvListener = new Text.TextSurfaceEventListener();
+                    _myTextBox.TextEventListener = _textEvListener;
+                    _textEvListener.KeyDown += new EventHandler<Text.TextDomEventArgs>(textEvListener_KeyDown);
+                    baseRenderElement.AddChild(_myTextBox);
+                }
+
                 return baseRenderElement;
             }
             else
@@ -65,25 +82,27 @@ namespace LayoutFarm.CustomWidgets
         {
             //when key up
             //check if we should show place holder
-            if (!string.IsNullOrEmpty(this.placeHolderText))
+            if (!string.IsNullOrEmpty(this._placeHolderText))
             {
-                var inputText = myTextBox.Text;
-                if (!string.IsNullOrEmpty(inputText))
+                bool hasSomeText = _maskTextBox ?
+                                       _myMaskTextBox.HasSomeText :
+                                       _myTextBox.HasSomeText; 
+                if (hasSomeText)
                 {
                     //hide place holder                     
-                    if (placeHolder.Visible)
+                    if (_placeHolder.Visible)
                     {
-                        this.placeHolder.SetVisible(false);
-                        this.placeHolder.InvalidateGraphics();
+                        this._placeHolder.SetVisible(false);
+                        this._placeHolder.InvalidateGraphics();
                     }
                 }
                 else
                 {
                     //show place holder
-                    if (!placeHolder.Visible)
+                    if (!_placeHolder.Visible)
                     {
-                        this.placeHolder.SetVisible(true);
-                        this.placeHolder.InvalidateGraphics();
+                        this._placeHolder.SetVisible(true);
+                        this._placeHolder.InvalidateGraphics();
                     }
                 }
             }
@@ -94,5 +113,9 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
+
     }
+
+
+
 }
