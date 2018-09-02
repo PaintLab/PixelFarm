@@ -6,19 +6,19 @@ namespace LayoutFarm.Text
 {
     partial class TextEditRenderBox
     {
-        TextSurfaceEventListener textSurfaceEventListener;
+        TextSurfaceEventListener _textSurfaceEventListener;
         public TextSurfaceEventListener TextSurfaceListener
         {
             get
             {
-                return textSurfaceEventListener;
+                return _textSurfaceEventListener;
             }
             set
             {
-                textSurfaceEventListener = value;
+                _textSurfaceEventListener = value;
                 if (value != null)
                 {
-                    textSurfaceEventListener.SetMonitoringTextSurface(this);
+                    _textSurfaceEventListener.SetMonitoringTextSurface(this);
                 }
             }
         }
@@ -26,14 +26,14 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return isMultiLine;
+                return _isMultiLine;
             }
         }
 
         public override void ClearAllChildren()
         {
-            internalTextLayerController.Clear();
-            this.textLayer.Clear();
+            _internalTextLayerController.Clear();
+            this._textLayer.Clear();
             base.ClearAllChildren();
         }
 
@@ -62,20 +62,20 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return internalTextLayerController.LineCount;
+                return _internalTextLayerController.LineCount;
             }
         }
         public void ReplaceCurrentTextRunContent(int nBackspace, string t)
         {
-            internalTextLayerController.ReplaceLocalContent(nBackspace, t);
+            _internalTextLayerController.ReplaceLocalContent(nBackspace, t);
         }
         public void LoadTextRun(IEnumerable<EditableRun> textRuns)
         {
-            internalTextLayerController.LoadTextRun(textRuns);
+            _internalTextLayerController.LoadTextRun(textRuns);
         }
         public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
         {
-            internalTextLayerController.ReplaceCurrentLineTextRun(textRuns);
+            _internalTextLayerController.ReplaceCurrentLineTextRun(textRuns);
         }
         /// <summary>
         /// replace specific line number with textruns
@@ -84,45 +84,45 @@ namespace LayoutFarm.Text
         /// <param name="textRuns"></param>
         public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textRuns)
         {
-            internalTextLayerController.ReplaceLine(lineNum, textRuns);
+            _internalTextLayerController.ReplaceLine(lineNum, textRuns);
         }
         public void CopyCurrentLine(StringBuilder output)
         {
-            internalTextLayerController.CopyCurrentLine(output);
+            _internalTextLayerController.CopyCurrentLine(output);
         }
         public void CopyLine(int lineNum, StringBuilder output)
         {
-            internalTextLayerController.CopyLine(lineNum, output);
+            _internalTextLayerController.CopyLine(lineNum, output);
         }
         public void CopyContentToStringBuilder(StringBuilder stBuilder)
         {
-            internalTextLayerController.CopyAllToPlainText(stBuilder);
+            _internalTextLayerController.CopyAllToPlainText(stBuilder);
         }
 
         public void SplitCurrentLineToNewLine()
         {
-            this.internalTextLayerController.SplitCurrentLineIntoNewLine();
+            this._internalTextLayerController.SplitCurrentLineIntoNewLine();
         }
         public void AddTextRun(EditableRun textspan)
         {
-            internalTextLayerController.AddTextRunToCurrentLine(textspan);
+            _internalTextLayerController.AddTextRunToCurrentLine(textspan);
         }
 
         public EditableRun CreateEditableTextRun(string str)
         {
-            var span = new EditableTextRun(this.Root, str, this.currentSpanStyle);
+            var span = new EditableTextRun(this.Root, str, this._currentSpanStyle);
             span.UpdateRunWidth();
             return span;
         }
         public EditableRun CreateEditableTextRun(char[] charBuffer)
         {
-            var span = new EditableTextRun(this.Root, charBuffer, this.currentSpanStyle);
+            var span = new EditableTextRun(this.Root, charBuffer, this._currentSpanStyle);
             span.UpdateRunWidth();
             return span;
         }
         public EditableRun CreateFreezeTextRun(char[] charBuffer)
         {
-            var span = new SolidTextRun(this.Root, charBuffer, this.currentSpanStyle);
+            var span = new SolidTextRun(this.Root, charBuffer, this._currentSpanStyle);
             span.UpdateRunWidth();
             return span;
         }
@@ -131,12 +131,12 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return internalTextLayerController.CurrentTextRun;
+                return _internalTextLayerController.CurrentTextRun;
             }
         }
         public void GetSelectedText(StringBuilder output)
         {
-            internalTextLayerController.CopySelectedTextToPlainText(output);
+            _internalTextLayerController.CopySelectedTextToPlainText(output);
         }
     }
 }

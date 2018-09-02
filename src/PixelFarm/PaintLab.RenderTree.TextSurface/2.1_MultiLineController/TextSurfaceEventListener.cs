@@ -23,6 +23,12 @@ namespace LayoutFarm.Text
         {
             this.updateJustCurrentLine = updateJustCurrentLine;
         }
+        public TextDomEventArgs(bool updateJustCurrentLine, VisualSelectionRangeSnapShot changedSnapShot)
+        {
+            this.updateJustCurrentLine = updateJustCurrentLine;
+            this.SelectionSnapShot = changedSnapShot;
+        }
+        public VisualSelectionRangeSnapShot SelectionSnapShot { get; private set; }
         public bool Shift { get; set; }
         public bool Control { get; set; }
         public bool Alt { get; set; }
@@ -177,6 +183,7 @@ namespace LayoutFarm.Text
             {
                 listener.ReplacedAll(listener, e);
             }
+
         }
 
         internal static void NotifyFunctionKeyDown(TextSurfaceEventListener listener, UIKeys key)

@@ -10,7 +10,7 @@ namespace LayoutFarm.Text
         RenderSurfaceScrollRelation scrollRelation;
         CustomRenderSurface vscrollableSurface;
 
-        public bool HideTextLayer { get; set; }
+
         public Color BackgroundColor { get; set; }
         public CustomRenderSurface ScrollableSurface
         {
@@ -26,7 +26,7 @@ namespace LayoutFarm.Text
         {
             RequestFont enterFont = canvas.CurrentFont;
 
-            canvas.CurrentFont = this.CurrentTextSpanStyle.FontInfo;
+            canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
             if (vscrollableSurface != null)
             {
                 vscrollableSurface.DrawToThisPage(canvas, updateArea);
@@ -40,9 +40,9 @@ namespace LayoutFarm.Text
 
 
             //2.1 markers 
-            if (internalTextLayerController.VisualMarkerCount > 0)
+            if (_internalTextLayerController.VisualMarkerCount > 0)
             {
-                foreach (VisualMarkerSelectionRange marker in internalTextLayerController.VisualMarkers)
+                foreach (VisualMarkerSelectionRange marker in _internalTextLayerController.VisualMarkers)
                 {
                     marker.Draw(canvas, updateArea);
                 }
@@ -50,9 +50,9 @@ namespace LayoutFarm.Text
 
 
             //2.2 selection
-            if (internalTextLayerController.SelectionRange != null)
+            if (_internalTextLayerController.SelectionRange != null)
             {
-                internalTextLayerController.SelectionRange.Draw(canvas, updateArea);
+                _internalTextLayerController.SelectionRange.Draw(canvas, updateArea);
             }
 
             //3. each layer
@@ -62,12 +62,8 @@ namespace LayoutFarm.Text
             }
             else
             {
-                //draw text layer
-                if (!HideTextLayer)
-                {
-                    this.textLayer.DrawChildContent(canvas, updateArea);
-                }
-
+                //draw text layer  
+                this._textLayer.DrawChildContent(canvas, updateArea);
                 if (this.HasDefaultLayer)
                 {
                     this.DrawDefaultLayer(canvas, ref updateArea);
@@ -80,10 +76,10 @@ namespace LayoutFarm.Text
 
 #endif
             //4. caret 
-            if (this.stateShowCaret)
+            if (this._stateShowCaret)
             {
-                Point textManCaretPos = internalTextLayerController.CaretPos;
-                this.myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
+                Point textManCaretPos = _internalTextLayerController.CaretPos;
+                this._myCaret.DrawCaret(canvas, textManCaretPos.X, textManCaretPos.Y);
             }
             else
             {
