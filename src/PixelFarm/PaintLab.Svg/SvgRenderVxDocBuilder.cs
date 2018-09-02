@@ -90,12 +90,12 @@ namespace PaintLab.Svg
         }
     }
 
-
-
     public class VgPaintArgs
     {
         public Painter P;
         public Affine _currentTx;
+        public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
+        public SvgRenderElement Current;
 
         internal void Reset()
         {
@@ -103,23 +103,7 @@ namespace PaintLab.Svg
             _currentTx = null;
             ExternalVxsVisitHandler = null;
         }
-        public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
-
-
-        /// <summary>
-        /// async request for image
-        /// </summary>
-        /// <param name="binder"></param>
-        /// <param name="requestFrom"></param>
-        /// 
-        public void RequestImageAsync(LayoutFarm.ImageBinder binder, SvgRenderElement imgRun, object requestFrom)
-        {
-            VgResourceIO.RequestImageAsync(binder, imgRun, requestFrom);
-        }
     }
-
-
-
 
     public static class VgPainterArgsPool
     {
@@ -143,24 +127,6 @@ namespace PaintLab.Svg
             p.Reset();
             s_vgPaintArgs.Push(p);
             p = null;
-        }
-
-        //-----------------------------------
-    }
-
-    public delegate void RequestImgAsync(LayoutFarm.ImageBinder binder, SvgRenderElement imgRun, object requestFrom);
-    public static class VgResourceIO
-    {
-        //IO 
-        [System.ThreadStatic]
-        public static RequestImgAsync _vgIODelegate;
-
-        internal static void RequestImageAsync(LayoutFarm.ImageBinder binder, SvgRenderElement imgRun, object requestFrom)
-        {
-            if (_vgIODelegate != null)
-            {
-                _vgIODelegate(binder, imgRun, requestFrom);
-            }
         }
     }
 
@@ -297,17 +263,77 @@ namespace PaintLab.Svg
         }
     }
 
+
+
+    public static class VgResourceIO
+    {
+        //IO 
+        [System.ThreadStatic]
+        static Action<LayoutFarm.ImageBinder, SvgRenderElement, object> s_vgIO;
+        public static Action<LayoutFarm.ImageBinder, SvgRenderElement, object> VgImgIOHandler
+        {
+            get
+            {
+                return s_vgIO;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    //clear existing value
+                    s_vgIO = null;
+                }
+                else
+                {
+                    if (s_vgIO == null)
+                    {
+                        //please note that if the system already has one=>
+                        //we do not replace it
+                        s_vgIO = value;
+                    }
+                }
+            }
+        }
+
+    }
+
     public class SvgRenderRootElement
     {
         internal Action<SvgRenderElement> _invalidate;
+        Action<LayoutFarm.ImageBinder, SvgRenderElement, object> _imgReqHandler;
         public SvgRenderRootElement()
         {
+        }
+        public Action<LayoutFarm.ImageBinder, SvgRenderElement, object> ImgRequestHandler
+        {
+            get { return _imgReqHandler; }
+            set
+            {
+                _imgReqHandler = value;
+            }
         }
         internal void Invalidate(SvgRenderElement e)
         {
             if (_invalidate != null)
             {
                 _invalidate(e);
+            }
+        }
+
+        internal void RequestImageAsync(LayoutFarm.ImageBinder binder, SvgRenderElement imgRun, object requestFrom)
+        {
+            if (_imgReqHandler != null)
+            {
+                _imgReqHandler(binder, imgRun, requestFrom);
+            }
+            else
+            {
+                //ask for coment resource IO
+                _imgReqHandler = VgResourceIO.VgImgIOHandler;
+                if (_imgReqHandler != null)
+                {
+                    _imgReqHandler(binder, imgRun, requestFrom);
+                }
             }
         }
     }
@@ -322,11 +348,11 @@ namespace PaintLab.Svg
         object _controller;
         internal SvgVisualSpec _visualSpec;
         internal SvgPathRenderMarkers _pathMarkers;
-
-
         LayoutFarm.ImageBinder _imgBinder;
         SvgRenderRootElement _renderRoot;
-        public SvgRenderElement(WellknownSvgElementName wellknownName, SvgVisualSpec visualSpec, SvgRenderRootElement renderRoot)
+        public SvgRenderElement(WellknownSvgElementName wellknownName,
+            SvgVisualSpec visualSpec,
+            SvgRenderRootElement renderRoot)
         {
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
@@ -366,39 +392,18 @@ namespace PaintLab.Svg
         }
         public bool HitTest(SvgHitChain hitChain)
         {
-            if (_vxsPath != null)
+            VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
+            paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
             {
-                if (PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(_vxsPath, hitChain.X, hitChain.Y))
+                if (args.Current != null &&
+                    PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
                 {
-                    //found this
-                    hitChain.AddHit(this, hitChain.X, hitChain.Y);
+                    hitChain.AddHit(args.Current, hitChain.X, hitChain.Y);
                 }
-            }
-            if (hitChain.Count > 0)
-            {
-                //found some 
-                if (!hitChain.WithSubPartTest)
-                {
-                    return true;
-                }
-            }
-            //-----------------------------------
-            if (_childNodes != null)
-            {
-                int childCount = _childNodes.Count;
-                for (int i = 0; i < childCount; ++i)
-                {
-                    SvgRenderElement child = _childNodes[i] as SvgRenderElement;
-                    if (child != null && child.HitTest(hitChain))
-                    {
-                        //svg children may overlaped each other
-                        if (!hitChain.WithSubPartTest)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
+            };
+
+            this.Walk(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
             return hitChain.Count > 0;
         }
 
@@ -570,7 +575,9 @@ namespace PaintLab.Svg
 
                         if (currentTx == null)
                         {
+                            vgPainterArgs.Current = this;
                             vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
+                            vgPainterArgs.Current = null;
                         }
                         else
                         {
@@ -578,7 +585,9 @@ namespace PaintLab.Svg
                             using (VxsContext.Temp(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
+                                vgPainterArgs.Current = this;
                                 vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
+                                vgPainterArgs.Current = null;
                             }
                         }
                         //------
@@ -646,6 +655,10 @@ namespace PaintLab.Svg
             //***SKIP CLIPPING***
         }
 
+        public SvgVisualSpec VisualSpec
+        {
+            get { return _visualSpec; }
+        }
 
         //---------------------------
         //TODO: review here again
@@ -793,7 +806,8 @@ namespace PaintLab.Svg
                                     if (!tryLoadOnce)
                                     {
                                         tryLoadOnce = true;
-                                        vgPainterArgs.RequestImageAsync(this.ImageBinder, this, this);
+
+                                        _renderRoot.RequestImageAsync(this.ImageBinder, this, this);
                                         goto EVAL_STATE;
                                     }
                                     break;
@@ -1201,6 +1215,7 @@ namespace PaintLab.Svg
         {
             _renderE = svgRenderE;
             _needBoundUpdate = true;
+
         }
         public VgRenderVx Clone()
         {
@@ -1278,23 +1293,22 @@ namespace PaintLab.Svg
         float _containerHeight = 500;//default?
         float _emHeight = 17;//default
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
+        SvgRenderRootElement _renderRoot;
 
         public SvgRenderVxDocBuilder()
         {
 
         }
-        SvgRenderRootElement _renderRoot;
+
         public SvgRenderElement CreateSvgRenderElement(SvgDocument svgdoc, Action<SvgRenderElement> invalidate)
         {
             _svgdoc = svgdoc;
             _activeSheet1 = svgdoc.CssActiveSheet;
 
-
             _renderRoot = new SvgRenderRootElement();
             _renderRoot._invalidate = invalidate;
 
-            //
-
+            // 
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             SvgRenderElement rootSvgElem = new SvgRenderElement(WellknownSvgElementName.RootSvg, null, _renderRoot);

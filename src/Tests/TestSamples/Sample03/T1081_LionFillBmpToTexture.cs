@@ -34,6 +34,7 @@ namespace OpenTkEssTest
         {
             this._glsx = glsx;
             this.painter = painter;
+
         }
         protected override void OnReadyForInitGLShaderProgram()
         {

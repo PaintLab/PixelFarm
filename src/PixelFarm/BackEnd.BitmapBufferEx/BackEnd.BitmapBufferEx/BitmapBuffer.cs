@@ -48,7 +48,7 @@ namespace BitmapBufferEx
             }
         }
 
-       
+
         static RectD FindMaxBounds(PointD p0, PointD p1, PointD p2, PointD p3)
         {
             double left = Math.Min(Math.Min(Math.Min(p0.X, p1.X), p2.X), p3.X);
@@ -344,24 +344,38 @@ namespace BitmapBufferEx
         }
     }
 
-    public struct BitmapBuffer
+    public struct BitmapBuffer : IDisposable
     {
         //from WriteableBitmap*** 
         public static readonly BitmapBuffer Empty = new BitmapBuffer();
-        //in this version , only 32 bits  
-        public BitmapBuffer(int w, int h, int[] orgBuffer)
+        int _lenInBytes;
+
+        //in this version , only 32 bits          
+        public BitmapBuffer(int w, int h, IntPtr _orgBuffer, int lenInBytes, bool isOwner = false)
         {
             this.PixelWidth = w;
             this.PixelHeight = h;
-            this.Pixels = orgBuffer;
+            this.Pixels = _orgBuffer;
+            _lenInBytes = lenInBytes;
+            this.IsBufferOwner = isOwner;
         }
+        public void Dispose()
+        {
+            if (IsBufferOwner && (IntPtr)Pixels != IntPtr.Zero)
+            {
+                System.Runtime.InteropServices.Marshal.FreeHGlobal((IntPtr)Pixels);
+                Pixels = IntPtr.Zero;
+            }
+        }
+        public bool IsBufferOwner { get; private set; }
         public int PixelWidth { get; private set; }
         public int PixelHeight { get; private set; }
+        public int LenInBytes { get { return _lenInBytes; } }
+
         /// <summary>
         /// pre-multiplied alpha color pixels
         /// </summary>
-        public int[] Pixels { get; private set; }
-
+        public IntPtr Pixels { get; private set; }
         public bool IsEmpty { get { return Pixels == null; } }
     }
 }

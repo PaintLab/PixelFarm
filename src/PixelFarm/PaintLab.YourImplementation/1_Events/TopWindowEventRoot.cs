@@ -123,6 +123,7 @@ namespace LayoutFarm
             this.prevLogicalMouseY = y;
             UIMouseEventArgs e = GetFreeMouseEvent();
             SetUIMouseEventArgsInfo(e, x, y, button, 0);
+
             e.SetDiff(xdiff, ydiff);
             //----------------------------------
             e.IsDragging = isDragging;
@@ -294,6 +295,8 @@ namespace LayoutFarm
         {
             if (currentKbFocusElem == null)
             {
+                this.lastKeydownWithShift = this.lastKeydownWithAlt = this.lastKeydownWithControl = false;
+
                 return;
             }
 
@@ -313,14 +316,21 @@ namespace LayoutFarm
         }
         bool ITopWindowEventRoot.RootProcessDialogKey(int keyData)
         {
+            UI.UIKeys k = (UIKeys)keyData;
+
             if (currentKbFocusElem == null)
             {
+                //set 
+                this.lastKeydownWithShift = ((k & UIKeys.Shift) == UIKeys.Shift);
+                this.lastKeydownWithAlt = ((k & UIKeys.Alt) == UIKeys.Alt);
+                this.lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control);
+
                 return false;
             }
 
 
             StopCaretBlink();
-            UI.UIKeys k = (UIKeys)keyData;
+
             UIKeyEventArgs e = GetFreeKeyEvent();
             e.KeyData = (int)keyData;
             e.SetEventInfo(
@@ -338,6 +348,7 @@ namespace LayoutFarm
 
         void SetKeyData(UIKeyEventArgs keyEventArgs, int keydata)
         {
+
             keyEventArgs.SetEventInfo(keydata, lastKeydownWithShift, lastKeydownWithAlt, lastKeydownWithControl);
         }
 
@@ -345,11 +356,13 @@ namespace LayoutFarm
         {
             mouseEventArg.SetEventInfo(
                 x, y,
-               (UIMouseButtons)button,
+                button,
                 0,
                 delta);
 
-
+            mouseEventArg.Alt = lastKeydownWithAlt;
+            mouseEventArg.Shift = lastKeydownWithShift;
+            mouseEventArg.Ctrl = lastKeydownWithControl;
         }
         //--------------------------------------------------------------------
         void OnMouseHover(UITimerTask timerTask)

@@ -42,11 +42,14 @@ namespace PixelFarm.CpuBlit.Samples
       + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : DemoBase
     {
-        MyTestSprite lionFill;
+
+        MyTestSprite _testSprite;
         public override void Init()
         {
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
-            lionFill = new MyTestSprite(new SpriteShape(renderVx));
+            var spriteShape = new SpriteShape(renderVx);
+           
+            _testSprite = new MyTestSprite(spriteShape);
             //lionFill.AutoFlipY = true;
         }
 
@@ -63,11 +66,11 @@ namespace PixelFarm.CpuBlit.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            lionFill.Render(p);
+            _testSprite.Render(p);
         }
         public override void MouseDrag(int x, int y)
         {
-            lionFill.Move(x, y);
+            _testSprite.Move(x, y);
         }
         [DemoConfig]
         public bool UseBitmapExt
@@ -79,17 +82,17 @@ namespace PixelFarm.CpuBlit.Samples
         public int SharpRadius
         {
             //test
-            get { return lionFill.SharpenRadius; }
-            set { lionFill.SharpenRadius = value; }
+            get { return _testSprite.SharpenRadius; }
+            set { _testSprite.SharpenRadius = value; }
 
         }
         [DemoConfig(MaxValue = 255)]
         public int AlphaValue
         {
-            get { return lionFill.AlphaValue; }
+            get { return _testSprite.AlphaValue; }
             set
             {
-                lionFill.AlphaValue = (byte)value;
+                _testSprite.AlphaValue = (byte)value;
             }
         }
     }
@@ -107,16 +110,19 @@ namespace PixelFarm.CpuBlit.Samples
     public class LionFillExample_HitTest : DemoBase
     {
 
-        MyTestSprite _hitLion;
-        bool hitOnLion;
-        List<MyTestSprite> lionList = new List<MyTestSprite>();
 
+        bool hitOnLion;
+
+        List<MyTestSprite> _spriteList = new List<MyTestSprite>();
+        MyTestSprite _hitSprite;
 
         public override void Init()
         {
-            // lion
-            SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
-            lionList.Add(new MyTestSprite(s));
+            // lion 
+
+            VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
+            var spriteShape = new SpriteShape(renderVx); 
+            _spriteList.Add(new MyTestSprite(spriteShape));
             //
             //lionFill.AutoFlipY = true;           
         }
@@ -129,7 +135,7 @@ namespace PixelFarm.CpuBlit.Samples
                 case System.Windows.Forms.Keys.A:
                     {
                         SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
-                        lionList.Add(new MyTestSprite(s) { JustMove = true });
+                        _spriteList.Add(new MyTestSprite(s) { JustMove = true });
                     }
                     break;
                 case System.Windows.Forms.Keys.Q:
@@ -157,9 +163,9 @@ namespace PixelFarm.CpuBlit.Samples
                 p.RenderQuality = Drawing.RenderQualtity.HighQuality;
             }
 
-            foreach (MyTestSprite lion in lionList)
+            foreach (MyTestSprite s in _spriteList)
             {
-                lion.Render(p);
+                s.Render(p);
             }
         }
 
@@ -182,16 +188,24 @@ namespace PixelFarm.CpuBlit.Samples
             }
 
             //-----------------------------------------------------
-            _hitLion = null;
+            _hitSprite = null;
             hitOnLion = false;
 
-            for (int i = lionList.Count - 1; i >= 0; --i)
+            for (int i = _spriteList.Count - 1; i >= 0; --i)
             {
-                MyTestSprite lion = lionList[i];
-                if (lion.HitTest(x, y, isRightButton))
+                MyTestSprite sprite = _spriteList[i];
+
+                double testX = x;
+                double testY = y;
+                if (!sprite.JustMove && sprite.CurrentAffineTx != null)
+                {
+                    sprite.CurrentAffineTx.Transform(ref testX, ref testY);
+                }
+
+                if (sprite.HitTest((float)testX, (float)testY, isRightButton))
                 {
                     hitOnLion = true;
-                    _hitLion = lion;
+                    _hitSprite = sprite;
                     break;
                 }
             }
@@ -206,9 +220,10 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public override void MouseDrag(int x, int y)
         {
-            if (hitOnLion && _hitLion != null)
+            if (hitOnLion && _hitSprite != null)
             {
-                _hitLion.Move(x, y);
+                _hitSprite.JustMove = _moveOption == LionMoveOption.Move;
+                _hitSprite.Move(x, y);
             }
         }
         [DemoConfig]
@@ -218,7 +233,7 @@ namespace PixelFarm.CpuBlit.Samples
             set;
         }
 
-        LionMoveOption _moveOption;
+        LionMoveOption _moveOption = LionMoveOption.Move;
         [DemoConfig]
         public LionMoveOption LionMoveOption
         {
@@ -228,23 +243,23 @@ namespace PixelFarm.CpuBlit.Samples
             }
             set
             {
-                switch (_moveOption = value)
-                {
-                    default: break;
-                    case LionMoveOption.Move:
-                        foreach (var lion in lionList)
-                        {
-                            lion.JustMove = true;
-                        }
+                //switch (_moveOption = value)
+                //{
+                //    default: break;
+                //    case LionMoveOption.Move:
+                //        foreach (MyTestSprite s in _spriteList)
+                //        {
+                //            s.JustMove = true;
+                //        }
 
-                        break;
-                    case LionMoveOption.ZoomAndRotate:
-                        foreach (var lion in lionList)
-                        {
-                            lion.JustMove = false;
-                        }
-                        break;
-                }
+                //        break;
+                //    case LionMoveOption.ZoomAndRotate:
+                //        foreach (MyTestSprite s in _spriteList)
+                //        {
+                //            s.JustMove = false;
+                //        }
+                //        break;
+                //}
             }
         }
 

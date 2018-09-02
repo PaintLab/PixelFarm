@@ -34,7 +34,7 @@ namespace LayoutFarm.RenderBoxes
         public void AddChild(RenderElement re)
         {
             re.internalLinkedNode = myElements.AddLast(re);
-            RenderElement.SetParentLink(re, this.owner);
+            RenderElement.SetParentLink(re, this._owner);
             re.InvalidateGraphics();
         }
         public void RemoveChild(RenderElement re)

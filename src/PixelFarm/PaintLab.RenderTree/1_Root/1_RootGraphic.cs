@@ -17,8 +17,8 @@ namespace LayoutFarm
     public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();
-        protected PaintToOutputWindowDelegate paintToOutputWindowHandler;
-        CanvasInvalidateDelegate canvasInvalidateDelegate;
+        protected PaintToOutputWindowDelegate _paintToOutputWindowHandler;
+        CanvasInvalidateDelegate _canvasInvalidateDelegate;
         Rectangle accumulateInvalidRect;
         bool hasAccumRect;
         public RootGraphic(int width, int heigth)
@@ -96,15 +96,14 @@ namespace LayoutFarm
             {
                 return;
             }
-
-            this.canvasInvalidateDelegate(accumulateInvalidRect);
-            this.paintToOutputWindowHandler();
+            this._canvasInvalidateDelegate(accumulateInvalidRect);
+            this._paintToOutputWindowHandler();
             hasAccumRect = false;
         }
-        public void SetPaintDelegates(CanvasInvalidateDelegate canvasPaintToOutput, PaintToOutputWindowDelegate paintToOutputHandler)
+        public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
-            this.canvasInvalidateDelegate = canvasPaintToOutput;
-            this.paintToOutputWindowHandler = paintToOutputHandler;
+            this._canvasInvalidateDelegate = canvasInvalidateDelegate;
+            this._paintToOutputWindowHandler = paintToOutputHandler;
         }
 
 #if DEBUG
@@ -305,19 +304,6 @@ namespace LayoutFarm
         public abstract RootGraphic CreateNewOne(int w, int h);
         //---------------------------------------------
 
-
-
-        //static TextBreakGenDel s_textBreakGen;
-        //public static PixelFarm.Drawing.Text.TextBreaker GetTextBreaker(string locale)
-        //{
-        //    return s_textBreakGen(locale);
-        //}
-        //public static void SetTextBreakerGenerator(TextBreakGenDel textBreakGen)
-        //{
-        //    s_textBreakGen = textBreakGen;
-        //}
-
-        //public delegate PixelFarm.Drawing.Text.TextBreaker TextBreakGenDel(string locale);
     }
 
 

@@ -192,7 +192,6 @@ namespace PixelFarm.Drawing.GLES2
             {
                 //TODO: review here
                 //we should create 'borrow' method ? => send direct exact ptr to img buffer
-
                 //for now, create a new one -- after we copy we, don't use it
 
                 var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);

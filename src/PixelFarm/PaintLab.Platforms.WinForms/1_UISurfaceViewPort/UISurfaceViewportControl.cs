@@ -318,10 +318,14 @@ namespace LayoutFarm.UI
 
     class PlatformWinBoxForm : IPlatformWindowBox
     {
-        AbstractCompletionWindow form;
+        AbstractCompletionWindow _form;
+        bool _evalLocationRelativeToDesktop;
+        System.Drawing.Point _locationRelToDesktop;
+
+
         public PlatformWinBoxForm(AbstractCompletionWindow form)
         {
-            this.form = form;
+            this._form = form;
         }
         public bool UseRelativeLocationToParent
         {
@@ -332,54 +336,68 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return form.Visible;
+                return _form.Visible;
             }
             set
             {
                 if (value)
                 {
-                    if (!form.Visible)
+                    if (!_form.Visible)
                     {
-                        form.ShowForm();
+                        _form.ShowForm();
                     }
                 }
                 else
                 {
-                    if (form.Visible)
+                    _evalLocationRelativeToDesktop = false;
+                    if (_form.Visible)
                     {
-                        form.Hide();
+                        _form.Hide();
                     }
                 }
             }
         }
         void IPlatformWindowBox.Close()
         {
-            form.Close();
-            form = null;
+            _form.Close();
+            _form = null;
         }
+
 
         void IPlatformWindowBox.SetLocation(int x, int y)
         {
             if (this.UseRelativeLocationToParent)
             {
-                if (!form.IsHandleCreated)
+                //#if DEBUG
+                //                if (!_form.IsHandleCreated)
+                //                {
+                //                }
+                //#endif
+                //1. find parent form/control  
+                if (!_evalLocationRelativeToDesktop)
                 {
-
+                    _locationRelToDesktop = new System.Drawing.Point();// _form.LinkedParentForm.Location;
+                    if (_form.LinkedParentControl != null)
+                    {
+                        _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(_form.LinkedParentControl.Location);
+                    }
+                    _evalLocationRelativeToDesktop = true;
                 }
-                //1. find parent form/control 
-                var parentLoca = form.LinkedParentForm.Location;
-                form.Location = new System.Drawing.Point(parentLoca.X + x, parentLoca.Y + y);
+
+                _form.Location = new System.Drawing.Point(
+                    _locationRelToDesktop.X + x,
+                    _locationRelToDesktop.Y + y);
             }
             else
             {
-                form.Location = new System.Drawing.Point(x, y);
+                _form.Location = new System.Drawing.Point(x, y);
             }
 
         }
 
         void IPlatformWindowBox.SetSize(int w, int h)
         {
-            form.Size = new System.Drawing.Size(w, h);
+            _form.Size = new System.Drawing.Size(w, h);
         }
     }
 }

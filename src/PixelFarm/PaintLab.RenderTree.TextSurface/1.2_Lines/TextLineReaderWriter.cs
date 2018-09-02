@@ -120,6 +120,15 @@ namespace LayoutFarm.Text
         {
             if (CurrentLine.IsBlankLine)
             {
+                //TODO: review here, enable this feature or not
+                //some char can't be a start char on blank line
+
+                if (!InternalTextLayerController.CanCaretStopOnThisChar(c))
+                {
+                    return;
+                }
+                //
+
                 //1. new 
                 EditableRun t = new EditableTextRun(this.Root,
                     c,

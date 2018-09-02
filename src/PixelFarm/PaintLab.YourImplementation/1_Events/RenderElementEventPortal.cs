@@ -197,7 +197,7 @@ namespace LayoutFarm.UI
 #endif
 
             int hitCount = hitPointChain.Count;
-           
+
             if (hitCount > 0)
             {
                 //------------------------------
@@ -219,11 +219,9 @@ namespace LayoutFarm.UI
                 if (!e.CancelBubbling)
                 {
                     e.CurrentContextElement = currentMouseDown = null; //clear 
-                    ForEachEventListenerBubbleUp(e, hitPointChain, (listener) =>
+                    ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
                     {
                         currentMouseDown = listener;
-
-
                         listener.ListenMouseDown(e);
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e.CancelBubbling;

@@ -18,7 +18,7 @@ namespace LayoutFarm
             textbox.SetLocation(20, 20);
 
             var style1 = new Text.TextSpanStyle();
-            style1.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+            style1.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox.DefaultSpanStyle = style1;
 

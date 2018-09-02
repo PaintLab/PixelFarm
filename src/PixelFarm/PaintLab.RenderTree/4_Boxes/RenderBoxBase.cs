@@ -48,7 +48,13 @@ namespace LayoutFarm
         {
             canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
             updateArea.Offset(myviewportX, myviewportY);
-            this.DrawBoxContent(canvas, updateArea);
+         
+
+            if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
+            {
+                this.DrawBoxContent(canvas, updateArea);
+            }
+            canvas.PopClipAreaRect();
 
 #if DEBUG
             //for debug

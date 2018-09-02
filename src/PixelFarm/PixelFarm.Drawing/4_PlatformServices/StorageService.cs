@@ -79,6 +79,7 @@ namespace LayoutFarm
         public string ImageSource
         {
             get { return this._imageSource; }
+            set { _imageSource = value; }
         }
         public BinderState State
         {
@@ -123,10 +124,7 @@ namespace LayoutFarm
             }
         }
 
-        //protected virtual void InternalSetImage(PixelFarm.Drawing.Image image)
-        //{
-        //    this._image = image;
-        //}
+
         public virtual void SetImage(PixelFarm.Drawing.Image image)
         {
             //set image to this binder

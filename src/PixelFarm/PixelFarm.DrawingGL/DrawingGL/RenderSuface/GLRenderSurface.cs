@@ -26,8 +26,7 @@ namespace PixelFarm.DrawingGL
         MultiChannelSubPixelRenderingSdf msdfSubPixelRenderingShader;
         SingleChannelSdf sdfShader;
         //-----------------------------------------------------------
-        ShaderSharedResource _shareRes;
-
+        ShaderSharedResource _shareRes; 
         //tools---------------------------------
 
         int canvasOriginX = 0;

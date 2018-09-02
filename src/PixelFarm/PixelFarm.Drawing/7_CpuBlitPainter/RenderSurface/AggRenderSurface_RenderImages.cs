@@ -569,10 +569,10 @@ namespace PixelFarm.CpuBlit
         {
             return _src.GetBufferPtr();
         }
-        public int[] GetOrgInt32Buffer()
-        {
-            return _src.GetOrgInt32Buffer();
-        }
+        //public int[] GetOrgInt32Buffer()
+        //{
+        //    return _src.GetOrgInt32Buffer();
+        //}
         public Color GetPixel(int x, int y)
         {
             //TODO: not support here

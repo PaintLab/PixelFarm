@@ -43,12 +43,9 @@ namespace LayoutFarm.ContentManagers
         bool working = false;
         public ImageContentManager()
         {
-            //TODO: review here**** 
-
+            //TODO: review here****             
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
-          
         }
-
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)
         {
             lock (inputListSync)
@@ -116,12 +113,13 @@ namespace LayoutFarm.ContentManagers
 
             working = false;
         }
-        public void AddRequestImage(ImageBinder contentReq)
+
+        public virtual bool AddRequestImage(ImageBinder contentReq)
         {
             if (contentReq.ImageSource == null && !contentReq.HasLazyFunc)
             {
                 contentReq.State = BinderState.Blank;
-                return;
+                return true;
             }
             //binder and req box 
             //1. 
@@ -131,6 +129,8 @@ namespace LayoutFarm.ContentManagers
             //another thread will manage this request 
             //and store in outputlist         
             hasSomeInputHint = true;
+
+            return true;
         }
     }
 }

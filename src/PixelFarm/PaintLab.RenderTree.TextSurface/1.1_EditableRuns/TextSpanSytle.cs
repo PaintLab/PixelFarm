@@ -5,12 +5,12 @@ namespace LayoutFarm.Text
     public struct TextSpanStyle
     {
         public Color FontColor;
-        public RequestFont FontInfo;
+        public RequestFont ReqFont;
         public byte ContentHAlign;
         
         public bool IsEmpty()
         {
-            return this.FontInfo == null;
+            return this.ReqFont == null;
         }
 
 

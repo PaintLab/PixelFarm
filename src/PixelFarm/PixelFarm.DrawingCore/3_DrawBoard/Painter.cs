@@ -24,7 +24,7 @@ using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
 
-    
+
     /// <summary>
     /// this class provides drawing method on specific drawboard,
     /// (0,0) is on left-lower corner for every implementaion
@@ -123,14 +123,7 @@ namespace PixelFarm.Drawing
 
         public static class PainterExt
         {
-            //public static void StackPushUserObject(this Painter p, object o)
-            //{
-            //    p._userObjectStack.Push(o);
-            //}
-            //public static object StackPopUserObject(this Painter p)
-            //{
-            //    return p._userObjectStack.Pop();
-            //}
+
             public static void StackClearUserObject(this Painter p)
             {
                 p._userObjectStack.Clear();
