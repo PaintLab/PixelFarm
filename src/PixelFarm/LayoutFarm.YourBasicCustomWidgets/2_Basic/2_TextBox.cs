@@ -82,6 +82,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._textEditRenderElement.CurrentTextRunCharIndex; }
         }
+        public bool HasSomeText
+        {
+            get
+            {
+                return _textEditRenderElement.HasSomeText;
+            }
+        }
         public string Text
         {
             get
@@ -174,11 +181,12 @@ namespace LayoutFarm.CustomWidgets
         {
             //request keyboard focus
             base.Focus();
-            _textEditRenderElement.Focus();
+            _textEditRenderElement?.Focus();
         }
         public override void Blur()
         {
             base.Blur();
+            _textEditRenderElement?.Blur();
         }
 
 
@@ -232,6 +240,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
         }
+
         public TextSurfaceEventListener TextEventListener
         {
             get { return this._textSurfaceListener; }
@@ -366,11 +375,12 @@ namespace LayoutFarm.CustomWidgets
         List<char> _actualUserInputText = new List<char>();
         int _keydownCharIndex = 0;
 
-        public MaskTextBox(int width, int height, bool multiline)
+        public MaskTextBox(int width, int height)
             : base(width, height)
         {
             //
             this._multiline = false;
+            _textSurfaceListener = new TextSurfaceEventListener();
         }
         public void ClearText()
         {
@@ -430,6 +440,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._textEditRenderElement.CurrentTextRunCharIndex; }
         }
+        public bool HasSomeText
+        {
+            get
+            {
+                return _actualUserInputText.Count > 0;
+            }
+        }
         public string Text
         {
             get
@@ -459,6 +476,13 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._textEditRenderElement; }
         }
+        public TextSurfaceEventListener TextSurfaceEventListener
+        {
+            get
+            {
+                return _textSurfaceListener;
+            }
+        }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -480,7 +504,7 @@ namespace LayoutFarm.CustomWidgets
                 tbox.SetController(this);
 
                 //create 
-                tbox.TextSurfaceListener = _textSurfaceListener = new TextSurfaceEventListener();
+                tbox.TextSurfaceListener = _textSurfaceListener;
                 this._textEditRenderElement = tbox;
 
                 _textSurfaceListener.CharacterAdded += (s, e) =>

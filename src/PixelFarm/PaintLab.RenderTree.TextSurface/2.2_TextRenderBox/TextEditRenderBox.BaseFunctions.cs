@@ -65,6 +65,13 @@ namespace LayoutFarm.Text
             }
         }
 
+        public bool HasSomeText
+        {
+            get
+            {
+                return (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
+            }
+        }
         internal static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
         {
             ts.BoxEvaluateScrollBar();
