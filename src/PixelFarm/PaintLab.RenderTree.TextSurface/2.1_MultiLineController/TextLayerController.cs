@@ -6,7 +6,6 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
 
-
     partial class InternalTextLayerController
     {
         VisualSelectionRange _selectionRange;
@@ -14,22 +13,20 @@ namespace LayoutFarm.Text
         bool _enableUndoHistoryRecording = true;
         DocumentCommandCollection _commandHistoryList;
         TextLineWriter _textLineWriter;
-        TextEditRenderBox _visualTextSurface;
-
         List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
+        EditableTextFlowLayer _textLayer;
 
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
 #endif
 
-        public InternalTextLayerController(
-            TextEditRenderBox visualTextSurface,
-            EditableTextFlowLayer textLayer)
+        public InternalTextLayerController(EditableTextFlowLayer textLayer)
         {
-            this._visualTextSurface = visualTextSurface;
+            _textLayer = textLayer;
             _textLineWriter = new TextLineWriter(textLayer);
             _commandHistoryList = new DocumentCommandCollection(this);
+
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -196,7 +193,7 @@ namespace LayoutFarm.Text
                 }
             }
             CancelSelect();
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            NotifyContentSizeChanged();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -204,6 +201,10 @@ namespace LayoutFarm.Text
             }
 #endif
             return selSnapshot;
+        }
+        void NotifyContentSizeChanged()
+        {
+            _textLayer.NotifyContentSizeChanged();
         }
         void SplitSelectedText()
         {
@@ -231,7 +232,8 @@ namespace LayoutFarm.Text
             _textLineWriter.SplitToNewLine();
             CurrentLineNumber++;
             _updateJustCurrentLine = false;
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            //
+            NotifyContentSizeChanged();
         }
         public TextSpanStyle GetFirstTextStyleInSelectedRange()
         {
@@ -548,7 +550,8 @@ namespace LayoutFarm.Text
         void JoinWithNextLine()
         {
             _textLineWriter.JoinWithNextLine();
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            //
+            NotifyContentSizeChanged();
         }
         public void UndoLastAction()
         {

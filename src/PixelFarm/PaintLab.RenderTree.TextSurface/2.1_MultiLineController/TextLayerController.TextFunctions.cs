@@ -85,14 +85,15 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public void AddUnformattedStringToCurrentLine(string str, TextSpanStyle initTextSpanStyle)
+        public void AddUnformattedStringToCurrentLine(RootGraphic root, string str, TextSpanStyle initTextSpanStyle)
         {
             //this should be a text-service work ***
+            //TODO: use specific text model to format this document
             using (System.IO.StringReader reader = new System.IO.StringReader(str))
             {
                 string line = reader.ReadLine();
                 List<EditableTextRun> runs = new List<EditableTextRun>();
-                RootGraphic root = _visualTextSurface.Root;
+                 
                 int lineCount = 0;
                 while (line != null)
                 {
@@ -134,7 +135,8 @@ namespace LayoutFarm.Text
                 new DocActionInsertRuns(textRuns, startLineNum, startCharIndex,
                     _textLineWriter.LineNumber, _textLineWriter.CharIndex));
             _updateJustCurrentLine = false;
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            //
+            NotifyContentSizeChanged();
         }
         public void AddTextRunToCurrentLine(EditableRun t)
         {
@@ -159,7 +161,8 @@ namespace LayoutFarm.Text
                 new DocActionInsertRuns(t, startLineNum, startCharIndex,
                     _textLineWriter.LineNumber, _textLineWriter.CharIndex));
             _updateJustCurrentLine = false;
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            //
+            NotifyContentSizeChanged();
         }
         public void CopyAllToPlainText(StringBuilder output)
         {
@@ -169,7 +172,8 @@ namespace LayoutFarm.Text
         {
             CancelSelect();
             _textLineWriter.Clear();
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            //
+            NotifyContentSizeChanged();
         }
 
 

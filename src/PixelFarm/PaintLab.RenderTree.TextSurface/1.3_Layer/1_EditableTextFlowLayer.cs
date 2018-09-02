@@ -12,14 +12,20 @@ namespace LayoutFarm.Text
         object _lineCollection;
         public event EventHandler Reflow; //TODO: review this field
         int _defaultLineHeight;
+        TextEditRenderBox _textEditRenderBox;
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
+            _textEditRenderBox = owner;
 
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here
             _defaultLineHeight = 24;//temp
+        }
+        internal void NotifyContentSizeChanged()
+        {
+            TextEditRenderBox.NotifyTextContentSizeChanged(_textEditRenderBox);
         }
         public int DefaultLineHeight
         {
@@ -27,7 +33,6 @@ namespace LayoutFarm.Text
             {
                 return _defaultLineHeight;//test
             }
-
         }
         public TextSpanStyle CurrentTextSpanStyle
         {
