@@ -15,7 +15,7 @@ namespace LayoutFarm.Text
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
-            this._owner = owner;
+
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here

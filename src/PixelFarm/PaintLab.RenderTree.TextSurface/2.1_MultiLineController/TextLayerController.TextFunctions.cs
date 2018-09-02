@@ -25,16 +25,6 @@ namespace LayoutFarm.Text
                 _textLineWriter.ReplaceCurrentLine(textruns);
                 _textLineWriter.MoveToLine(cur_line);
             }
-            //if (textLineWriter.LineNumber == backGroundTextLineWriter.LineNumber)
-            //{
-            //    int prevIndex = textLineWriter.CharIndex;
-            //    textLineWriter.ReplaceCurrentLine(textruns);
-            //}
-            //else
-            //{
-            //    backGroundTextLineWriter.MoveToLine(lineNum);
-            //    backGroundTextLineWriter.ReplaceCurrentLine(textruns);
-            //}
         }
         public void LoadTextRun(IEnumerable<EditableRun> runs)
         {
