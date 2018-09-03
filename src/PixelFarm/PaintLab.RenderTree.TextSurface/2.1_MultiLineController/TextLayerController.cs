@@ -269,7 +269,6 @@ namespace LayoutFarm.Text
                 {
                     r.SetStyle(textStyle);
                 }
-
                 this._updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
                 CancelSelect();
                 //?
@@ -277,7 +276,63 @@ namespace LayoutFarm.Text
                 //CharIndex--;
             }
         }
+        public void DoFormatSelection(TextSpanStyle textStyle, FontStyle toggleFontStyle)
+        {
+            //int startLineNum = _textLineWriter.LineNumber;
+            //int startCharIndex = _textLineWriter.CharIndex;
+            SplitSelectedText();
+            VisualSelectionRange selRange = SelectionRange;
+            if (selRange != null)
+            {
+                foreach (EditableRun r in selRange.GetPrintableTextRunIter())
+                {
+                    TextSpanStyle existingStyle = r.SpanStyle;
+                    switch (toggleFontStyle)
+                    {
+                        case FontStyle.Bold:
+                            if ((existingStyle.ReqFont.Style & FontStyle.Bold) != 0)
+                            {
+                                //change to normal
+                                RequestFont existingFont = existingStyle.ReqFont;
+                                RequestFont newReqFont = new RequestFont(
+                                    existingFont.Name, existingFont.SizeInPoints,
+                                    existingStyle.ReqFont.Style & ~FontStyle.Bold); //clear bold
 
+                                TextSpanStyle textStyle2 = new TextSpanStyle();
+                                textStyle2.ReqFont = newReqFont;
+                                textStyle2.ContentHAlign = textStyle.ContentHAlign;
+                                textStyle2.FontColor = textStyle.FontColor;
+                                r.SetStyle(textStyle2);
+                                continue;//go next***
+                            }
+                            break;
+                        case FontStyle.Italic:
+                            if ((existingStyle.ReqFont.Style & FontStyle.Italic) != 0)
+                            {
+                                //change to normal
+                                RequestFont existingFont = existingStyle.ReqFont;
+                                RequestFont newReqFont = new RequestFont(
+                                    existingFont.Name, existingFont.SizeInPoints,
+                                    existingStyle.ReqFont.Style & ~FontStyle.Italic); //clear italic
+
+                                TextSpanStyle textStyle2 = new TextSpanStyle();
+                                textStyle2.ReqFont = newReqFont;
+                                textStyle2.ContentHAlign = textStyle.ContentHAlign;
+                                textStyle2.FontColor = textStyle.FontColor;
+                                r.SetStyle(textStyle2);
+                                continue;//go next***
+                            }
+                            break;
+                    }
+                    r.SetStyle(textStyle);
+                }
+                this._updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
+                CancelSelect();
+                //?
+                //CharIndex++;
+                //CharIndex--;
+            }
+        }
         public void AddMarkerSpan(VisualSelectionRangeSnapShot selectoinRangeSnapshot)
         {
 
