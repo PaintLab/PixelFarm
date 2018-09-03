@@ -23,8 +23,11 @@ namespace LayoutFarm.Text
 
         public InternalTextLayerController(EditableTextFlowLayer textLayer)
         {
+            //this controller control the editaible-textflow-layer
             _textLayer = textLayer;
+            //write to textflow-layer with text-line-writer (handle the writing line)
             _textLineWriter = new TextLineWriter(textLayer);
+            //and record editing hx, support undo-redo
             _commandHistoryList = new DocumentCommandCollection(this);
 
 #if DEBUG
