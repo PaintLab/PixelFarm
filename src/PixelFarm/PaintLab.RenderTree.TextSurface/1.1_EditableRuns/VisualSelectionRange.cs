@@ -27,6 +27,9 @@ namespace LayoutFarm.Text
         public static readonly VisualSelectionRangeSnapShot Empty = new VisualSelectionRangeSnapShot();
     }
 
+
+     
+
     class VisualSelectionRange
     {
         EditableVisualPointInfo startPoint = null;
@@ -355,7 +358,7 @@ namespace LayoutFarm.Text
                 {
                     //this marker should be remove or not
                     return;
-                } 
+                }
                 destPage.FillRectangle(BackgroundColor, _startLocation.x_offset, line.LineTop,
                     _stopLocation.x_offset - _startLocation.x_offset, line.ActualLineHeight);
             }

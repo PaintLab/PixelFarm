@@ -259,8 +259,8 @@ namespace LayoutFarm.Text
         }
         public void DoFormatSelection(TextSpanStyle textStyle)
         {
-            int startLineNum = _textLineWriter.LineNumber;
-            int startCharIndex = _textLineWriter.CharIndex;
+            //int startLineNum = _textLineWriter.LineNumber;
+            //int startCharIndex = _textLineWriter.CharIndex;
             SplitSelectedText();
             VisualSelectionRange selRange = SelectionRange;
             if (selRange != null)

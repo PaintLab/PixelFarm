@@ -56,6 +56,8 @@ namespace LayoutFarm.Text
             this.IsBlockElement = false;
         }
 
+        internal InternalTextLayerController TextLayerController { get { return _internalTextLayerController; } }
+
         public TextSpanStyle CurrentTextSpanStyle
         {
             get { return this._currentSpanStyle; }

@@ -279,6 +279,11 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.CopyCurrentLine(stbuilder);
         }
+        public void FormatCurrentSelection(TextSpanStyle spanStyle)
+        {
+            //TODO: reimplement text-model again
+            _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
+        }
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseEventArgs e)
         {

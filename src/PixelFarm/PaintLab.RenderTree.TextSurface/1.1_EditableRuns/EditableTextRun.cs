@@ -23,6 +23,8 @@ namespace LayoutFarm.Text
             this.spanStyle = style;
             SetNewContent(copyBuffer);
             UpdateRunWidth();
+
+            this.dbugBreak = true;
         }
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
