@@ -6,7 +6,6 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
 
-
     partial class InternalTextLayerController
     {
         VisualSelectionRange _selectionRange;
@@ -14,22 +13,23 @@ namespace LayoutFarm.Text
         bool _enableUndoHistoryRecording = true;
         DocumentCommandCollection _commandHistoryList;
         TextLineWriter _textLineWriter;
-        TextEditRenderBox _visualTextSurface;
-
         List<VisualMarkerSelectionRange> _visualMarkers = new List<VisualMarkerSelectionRange>();
+        EditableTextFlowLayer _textLayer;
 
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
 #endif
 
-        public InternalTextLayerController(
-            TextEditRenderBox visualTextSurface,
-            EditableTextFlowLayer textLayer)
+        public InternalTextLayerController(EditableTextFlowLayer textLayer)
         {
-            this._visualTextSurface = visualTextSurface;
+            //this controller control the editaible-textflow-layer
+            _textLayer = textLayer;
+            //write to textflow-layer with text-line-writer (handle the writing line)
             _textLineWriter = new TextLineWriter(textLayer);
+            //and record editing hx, support undo-redo
             _commandHistoryList = new DocumentCommandCollection(this);
+
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -196,7 +196,7 @@ namespace LayoutFarm.Text
                 }
             }
             CancelSelect();
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            NotifyContentSizeChanged();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -204,6 +204,10 @@ namespace LayoutFarm.Text
             }
 #endif
             return selSnapshot;
+        }
+        void NotifyContentSizeChanged()
+        {
+            _textLayer.NotifyContentSizeChanged();
         }
         void SplitSelectedText()
         {
@@ -231,7 +235,8 @@ namespace LayoutFarm.Text
             _textLineWriter.SplitToNewLine();
             CurrentLineNumber++;
             _updateJustCurrentLine = false;
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            //
+            NotifyContentSizeChanged();
         }
         public TextSpanStyle GetFirstTextStyleInSelectedRange()
         {
@@ -254,8 +259,8 @@ namespace LayoutFarm.Text
         }
         public void DoFormatSelection(TextSpanStyle textStyle)
         {
-            int startLineNum = _textLineWriter.LineNumber;
-            int startCharIndex = _textLineWriter.CharIndex;
+            //int startLineNum = _textLineWriter.LineNumber;
+            //int startCharIndex = _textLineWriter.CharIndex;
             SplitSelectedText();
             VisualSelectionRange selRange = SelectionRange;
             if (selRange != null)
@@ -264,7 +269,6 @@ namespace LayoutFarm.Text
                 {
                     r.SetStyle(textStyle);
                 }
-
                 this._updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
                 CancelSelect();
                 //?
@@ -272,7 +276,63 @@ namespace LayoutFarm.Text
                 //CharIndex--;
             }
         }
+        public void DoFormatSelection(TextSpanStyle textStyle, FontStyle toggleFontStyle)
+        {
+            //int startLineNum = _textLineWriter.LineNumber;
+            //int startCharIndex = _textLineWriter.CharIndex;
+            SplitSelectedText();
+            VisualSelectionRange selRange = SelectionRange;
+            if (selRange != null)
+            {
+                foreach (EditableRun r in selRange.GetPrintableTextRunIter())
+                {
+                    TextSpanStyle existingStyle = r.SpanStyle;
+                    switch (toggleFontStyle)
+                    {
+                        case FontStyle.Bold:
+                            if ((existingStyle.ReqFont.Style & FontStyle.Bold) != 0)
+                            {
+                                //change to normal
+                                RequestFont existingFont = existingStyle.ReqFont;
+                                RequestFont newReqFont = new RequestFont(
+                                    existingFont.Name, existingFont.SizeInPoints,
+                                    existingStyle.ReqFont.Style & ~FontStyle.Bold); //clear bold
 
+                                TextSpanStyle textStyle2 = new TextSpanStyle();
+                                textStyle2.ReqFont = newReqFont;
+                                textStyle2.ContentHAlign = textStyle.ContentHAlign;
+                                textStyle2.FontColor = textStyle.FontColor;
+                                r.SetStyle(textStyle2);
+                                continue;//go next***
+                            }
+                            break;
+                        case FontStyle.Italic:
+                            if ((existingStyle.ReqFont.Style & FontStyle.Italic) != 0)
+                            {
+                                //change to normal
+                                RequestFont existingFont = existingStyle.ReqFont;
+                                RequestFont newReqFont = new RequestFont(
+                                    existingFont.Name, existingFont.SizeInPoints,
+                                    existingStyle.ReqFont.Style & ~FontStyle.Italic); //clear italic
+
+                                TextSpanStyle textStyle2 = new TextSpanStyle();
+                                textStyle2.ReqFont = newReqFont;
+                                textStyle2.ContentHAlign = textStyle.ContentHAlign;
+                                textStyle2.FontColor = textStyle.FontColor;
+                                r.SetStyle(textStyle2);
+                                continue;//go next***
+                            }
+                            break;
+                    }
+                    r.SetStyle(textStyle);
+                }
+                this._updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
+                CancelSelect();
+                //?
+                //CharIndex++;
+                //CharIndex--;
+            }
+        }
         public void AddMarkerSpan(VisualSelectionRangeSnapShot selectoinRangeSnapshot)
         {
 
@@ -548,7 +608,8 @@ namespace LayoutFarm.Text
         void JoinWithNextLine()
         {
             _textLineWriter.JoinWithNextLine();
-            TextEditRenderBox.NotifyTextContentSizeChanged(_visualTextSurface);
+            //
+            NotifyContentSizeChanged();
         }
         public void UndoLastAction()
         {

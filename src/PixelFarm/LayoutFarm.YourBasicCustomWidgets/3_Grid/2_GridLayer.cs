@@ -701,27 +701,26 @@ namespace LayoutFarm.UI
                     GridCell gridItem = currentColumn.GetCell(i);
                     if (gridItem != null && gridItem.HasContent)
                     {
+                        RenderElement renderContent = gridItem.ContentElement as RenderElement;
+
+                        if (renderContent == null) continue;
+                        //---------------------------
+                        //TODO: review here again
                         int x = gridItem.X;
                         int y = gridItem.Y;
-                        canvas.OffsetCanvasOrigin(x, y);
 
-                        updateArea = uArea;//reset
-                        updateArea.Offset(-x, -y);
-                        var renderContent = gridItem.ContentElement as RenderElement;
-                        if (renderContent != null)
+                        updateArea = uArea;//reset (1)
+
+                        if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
                         {
-
-                            if (canvas.PushClipAreaRect(gridItem.Width, gridItem.Height, ref updateArea))
-                            {
-                                renderContent.DrawToThisCanvas(canvas, updateArea);
-                            }
-
-                            canvas.PopClipAreaRect();
+                            canvas.OffsetCanvasOrigin(x, y);
+                            updateArea.Offset(-x, -y);
+                            //TODO: review here again, 
+                            renderContent.DrawToThisCanvas(canvas, updateArea);
+                            canvas.OffsetCanvasOrigin(-x, -y);
                         }
-
-
-                        canvas.OffsetCanvasOrigin(-x, -y);
-                        updateArea.Offset(x, y);
+                        canvas.PopClipAreaRect();
+                        //updateArea.Offset(x, y);//not need to offset back -since we reset (1)
                     }
 #if DEBUG
                     else

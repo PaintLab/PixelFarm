@@ -476,8 +476,8 @@ namespace LayoutFarm.Text
             {
                 EditableRun toBeCutTextRun = startPoint.TextRun;
                 EditableRun preCutTextRun = (EditableRun)toBeCutTextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
-                EditableRun middleCutTextRun = (EditableRun)toBeCutTextRun.Copy(startPoint.RunLocalSelectedIndex + 1, endPoint.LineCharIndex - startPoint.LineCharIndex);
-                EditableRun postCutTextRun = (EditableRun)toBeCutTextRun.Copy(endPoint.RunLocalSelectedIndex + 1);
+                EditableRun middleCutTextRun = (EditableRun)toBeCutTextRun.Copy(startPoint.RunLocalSelectedIndex, endPoint.LineCharIndex - startPoint.LineCharIndex);
+                EditableRun postCutTextRun = (EditableRun)toBeCutTextRun.Copy(endPoint.RunLocalSelectedIndex);
                 EditableVisualPointInfo newStartRangePointInfo = null;
                 EditableVisualPointInfo newEndRangePointInfo = null;
                 EditableTextLine line = this;

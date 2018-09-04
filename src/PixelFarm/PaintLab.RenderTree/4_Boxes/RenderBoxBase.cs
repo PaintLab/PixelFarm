@@ -42,26 +42,23 @@ namespace LayoutFarm
                 return this.myviewportY;
             }
         }
-
-
         public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
-            updateArea.Offset(myviewportX, myviewportY);
-         
-
             if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
             {
+
+                canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
+                updateArea.Offset(myviewportX, myviewportY);
                 this.DrawBoxContent(canvas, updateArea);
+#if DEBUG
+                //for debug
+                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
+                updateArea.Offset(-myviewportX, -myviewportY);
+
             }
             canvas.PopClipAreaRect();
-
-#if DEBUG
-            //for debug
-            // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
-#endif
-            canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
-            updateArea.Offset(-myviewportX, -myviewportY);
         }
 
         public override void ChildrenHitTestCore(HitChain hitChain)

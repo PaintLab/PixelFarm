@@ -28,10 +28,10 @@ namespace LayoutFarm
         public void SetSize(int width, int height)
         {
 #if DEBUG
-            //if (this.dbugBreak)
-            //{
+            if (this.dbugBreak)
+            {
 
-            //}
+            }
 #endif
             if (parentLink == null)
             {

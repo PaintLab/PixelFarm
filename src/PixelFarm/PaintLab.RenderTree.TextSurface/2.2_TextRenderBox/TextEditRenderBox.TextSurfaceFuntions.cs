@@ -38,13 +38,19 @@ namespace LayoutFarm.Text
         }
 
 
+        [System.ThreadStatic]
+        static Stack<StringBuilder> s_stringBuilderPool;
 
-        static Stack<StringBuilder> stringBuilderPool = new Stack<StringBuilder>();
         static StringBuilder GetFreeStringBuilder()
         {
-            if (stringBuilderPool.Count > 0)
+            if (s_stringBuilderPool == null)
             {
-                return stringBuilderPool.Pop();
+                s_stringBuilderPool = new Stack<StringBuilder>();
+            }
+
+            if (s_stringBuilderPool.Count > 0)
+            {
+                return s_stringBuilderPool.Pop();
             }
             else
             {
@@ -54,7 +60,7 @@ namespace LayoutFarm.Text
         static void ReleaseStringBuilder(StringBuilder stBuilder)
         {
             stBuilder.Length = 0;
-            stringBuilderPool.Push(stBuilder);
+            s_stringBuilderPool.Push(stBuilder);
         }
 
 
