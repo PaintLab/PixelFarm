@@ -358,13 +358,17 @@
     <Folder Include="Resources\images\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ImgCodec\src\PixelFarm.ImgCodec\PixelFarm.ImgCodec.csproj">
-      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>PixelFarm.ImgCodec</Name>
+    <ProjectReference Include="..\..\..\src\PixelFarm\BackEnd.SharpZipLib\BackEnd.SharpZipLib.csproj">
+      <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>
+      <Name>BackEnd.SharpZipLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{f7d71e61-9342-4dd7-9afd-69045f2ec98b}</Project>
-      <Name>Typography.OpenFont</Name>
+    <ProjectReference Include="..\..\..\src\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImgCodec.PngCs.csproj">
+      <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
+      <Name>ImgCodec.PngCs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
