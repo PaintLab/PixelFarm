@@ -3,13 +3,9 @@
 using System.IO;
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
-using LayoutFarm.UI;
-
 namespace LayoutFarm
 {
-
-
-    public abstract class AppHost : IAppHost
+    public abstract class AppHost
     {
         protected ImageContentManager imageContentMan;
         protected int _primaryScreenWorkingAreaW;
@@ -49,7 +45,10 @@ namespace LayoutFarm
         }
 
 
-        public abstract System.IO.Stream GetReadStream(string src);
+        public virtual System.IO.Stream GetReadStream(string src)
+        {
+            return App.ReadStreamS(src);
+        }
 
         void LazyImageLoad(ImageBinder binder)
         {
@@ -139,10 +138,7 @@ namespace LayoutFarm
             //load here as need
             imageContentMan.AddRequestImage(binder);
         }
-        public override Stream GetReadStream(string src)
-        {
-            return null;
-        }
+        //
         public override void AddChild(RenderElement renderElement)
         {
             this.vw.AddChild(renderElement);

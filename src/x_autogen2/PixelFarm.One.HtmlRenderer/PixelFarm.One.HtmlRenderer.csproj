@@ -2907,9 +2907,6 @@
     <Compile Include="..\..\Tests\WinFormTestBed\AppHostExtensions.cs">
       <Link>Tests\WinFormTestBed\AppHostExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\Interfaces\Interfaces.cs">
-      <Link>Tests\WinFormTestBed\Interfaces\Interfaces.cs</Link>
-    </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs">
       <Link>Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs</Link>
     </Compile>
