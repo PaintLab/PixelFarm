@@ -9,7 +9,7 @@ using System.Reflection;
 
 using PixelFarm;
 using System.IO;
-using Numeria.IO;
+
 
 namespace InterfaceGen
 {
@@ -80,24 +80,7 @@ namespace InterfaceGen
         private void cmdPrepareIcuData_Click(object sender, EventArgs e)
         {
 
-            //write icu data into filedb database
-
-            string typographyDir = @"../../../../PixelFarm/Typography/Typography.TextBreak/icu60/brkitr_src/dictionaries";
-            string[] files = Directory.GetFiles(typographyDir);
-
-            string dbfilename = "textservicedb";
-            //delete the old file
-            if (File.Exists(dbfilename))
-            {
-                File.Delete(dbfilename);
-            }
-
-            foreach (string file in files)
-            {
-                string onlyFileName = Path.GetFileName(file);
-                byte[] data = File.ReadAllBytes(file);
-                FileDB.Store(dbfilename, "/icu/brkitr_src/dictionaries/" + onlyFileName, data);
-            }
+           
 
         }
     }
