@@ -10,17 +10,6 @@ namespace Mini
     static class Program
     {
 
-
-        static unsafe void LookAsIntArray(IntPtr array)
-        {
-            int* a = (int*)array;
-            int data = *a;
-            byte R = (byte)(data & 0xff);
-            byte G = (byte)((data >> 8) & 0xff);
-            byte B = (byte)((data >> 16) & 0xff);
-            byte A = (byte)((data >> 24) & 0xff);
-        }
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -64,12 +53,14 @@ namespace Mini
             //test Typography's custom text break,
             //check if we have that data?            
             //------------------------------------------- 
-            string typographyDir = @"brkitr_src/dictionaries";
-            if (!System.IO.Directory.Exists(typographyDir))
+            //string typographyDir = @"brkitr_src/dictionaries";
+            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr\dictionaries";
+
+            if (!System.IO.Directory.Exists(icu_datadir))
             {
                 throw new System.NotSupportedException("dic");
             }
-            var dicProvider = new IcuSimpleTextFileDictionaryProvider() { DataDir = typographyDir };
+            var dicProvider = new IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
             Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
 
             //---------------------------------------------------
