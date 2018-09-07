@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 namespace LayoutFarm.Text
 {
-    partial class InternalTextLayerController
+
+    public partial class InternalTextLayerController
     {
         public void ReplaceCurrentLineTextRun(IEnumerable<EditableRun> textruns)
         {
@@ -93,7 +94,7 @@ namespace LayoutFarm.Text
             {
                 string line = reader.ReadLine();
                 List<EditableTextRun> runs = new List<EditableTextRun>();
-                 
+
                 int lineCount = 0;
                 while (line != null)
                 {

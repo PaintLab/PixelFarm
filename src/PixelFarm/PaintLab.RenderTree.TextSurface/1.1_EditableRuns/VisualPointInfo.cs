@@ -74,7 +74,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return lineCharIndex - onTextRunCharOffset ;
+                return lineCharIndex - onTextRunCharOffset;
             }
         }
         public int X
@@ -109,7 +109,7 @@ namespace LayoutFarm.Text
     }
 
 
-    class EditableVisualPointInfo : VisualPointInfo
+    public class EditableVisualPointInfo : VisualPointInfo
     {
         EditableTextLine line;
         internal EditableVisualPointInfo(EditableTextLine line, int index)
@@ -117,14 +117,14 @@ namespace LayoutFarm.Text
         {
             this.line = line;
         }
-        public EditableTextLine Line
+        internal EditableTextLine Line
         {
             get
             {
                 return this.line;
             }
         }
-        public EditableTextLine EditableLine
+        internal EditableTextLine EditableLine
         {
             get
             {

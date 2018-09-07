@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
+
 namespace LayoutFarm.Text
 {
 
@@ -21,7 +22,7 @@ namespace LayoutFarm.Text
         internal bool dbugEnableTextManRecorder = false;
 #endif
 
-        public InternalTextLayerController(EditableTextFlowLayer textLayer)
+        internal InternalTextLayerController(EditableTextFlowLayer textLayer)
         {
             //this controller control the editaible-textflow-layer
             _textLayer = textLayer;
@@ -439,7 +440,6 @@ namespace LayoutFarm.Text
                 _selectionRange.UpdateSelectionRange();
             }
         }
-
         public EditableVisualPointInfo GetCurrentPointInfo()
         {
             return _textLineWriter.GetCurrentPointInfo();
