@@ -7,13 +7,16 @@ using Typography.FontManagement;
 namespace YourImplementation
 {
 
+
     public static class CommonTextServiceSetup
     {
         static bool s_isInit;
         static Typography.FontManagement.InstalledTypefaceCollection s_intalledTypefaces;
 
+#if DEBUG
         static LocalFileStorageProvider s_localFileStorageProvider;
         static FileDBStorageProvider s_filedb;
+#endif
 
         public static IInstalledTypefaceProvider FontLoader
         {
@@ -97,82 +100,22 @@ namespace YourImplementation
             //--------------------
             InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);
 
+
+
+#if DEBUG
             //1. Storage provider
             s_localFileStorageProvider = new LocalFileStorageProvider();
-#if DEBUG
             // choose local file or filedb 
             // if we choose filedb => then this will create/open a 'disk' file for read/write data
             s_filedb = new FileDBStorageProvider("textservicedb");
             // then register to the storage service
-            PixelFarm.Platforms.StorageService.RegisterProvider(s_filedb);
+            PixelFarm.Platforms.StorageService.RegisterProvider(s_filedb); 
 
-            //--------
-            //Typography's TextServices
-            //you can implement   Typography.TextBreak.DictionaryProvider  by your own
-
-            //this set some essentail values for Typography Text Serice
-            // 
-            //2.2 Icu Text Break info
-            //test Typography's custom text break,
-            //check if we have that data?             
-            string typographyDir = @"d:/test/icu60/brkitr_src/dictionaries";
-            if (!System.IO.Directory.Exists(typographyDir))
-            {
-                throw new System.NotSupportedException("dic");
-            }
-
-            var dicProvider = new IcuSimpleTextFileDictionaryProvider() { DataDir = typographyDir };
-            Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
 #endif
         }
 
 
-        class IcuSimpleTextFileDictionaryProvider : Typography.TextBreak.DictionaryProvider
-        {
-            //read from original ICU's dictionary
-            //.. 
-            public string DataDir
-            {
-                get;
-                set;
-            }
-            public override IEnumerable<string> GetSortedUniqueWordList(string dicName)
-            {
-                //user can provide their own data 
-                //....
 
-                switch (dicName)
-                {
-                    default:
-                        return null;
-                    case "thai":
-                        return GetTextListIterFromTextFile(DataDir + "/thaidict.txt");
-                    case "lao":
-                        return GetTextListIterFromTextFile(DataDir + "/laodict.txt");
-                }
-
-            }
-            static IEnumerable<string> GetTextListIterFromTextFile(string filename)
-            {
-                //read from original ICU's dictionary
-                //..
-
-                using (FileStream fs = new FileStream(filename, FileMode.Open))
-                using (StreamReader reader = new StreamReader(fs))
-                {
-                    string line = reader.ReadLine();
-                    while (line != null)
-                    {
-                        line = line.Trim();
-                        if (line.Length > 0 && (line[0] != '#')) //not a comment
-                        {
-                            yield return line.Trim();
-                        }
-                        line = reader.ReadLine();//next line
-                    }
-                }
-            }
-        }
     }
 
 
