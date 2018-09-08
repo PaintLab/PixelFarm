@@ -72,6 +72,12 @@
     </Compile>
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs" />
     <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs" />
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs">
+      <DependentUpon>FormNoBorder.cs</DependentUpon>
+    </Compile>
     <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,6 +166,9 @@
   <ItemGroup>
     <EmbeddedResource Include="1_UISurfaceViewport\UISurfaceViewportControl.resx">
       <DependentUpon>UISurfaceViewportControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.resx">
+      <DependentUpon>FormNoBorder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
