@@ -17,7 +17,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20,NETSTANDARD</DefineConstants>
+    <DefineConstants> TRACE; DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; NETSTANDARD;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -26,7 +26,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20,NETSTANDARD</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; NETSTANDARD;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -95,6 +95,7 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\Clipboard.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\GeneralEventListener.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\Keys.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.PlatformBridge\Common\UIPlatform.cs" />
@@ -258,8 +259,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\2_Canvas\ITextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\4_CpuBlit_VertexProcessing\CurveFlattener.cs" />
@@ -282,6 +281,8 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\AffinePlan.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Color.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\MemMx.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\NativeMemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Rectangle.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\RectangleF.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\RectInt.cs" />

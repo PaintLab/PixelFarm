@@ -42,652 +42,652 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\BufferedStreamReader.cs">
-      <Link>Pngcs\BufferedStreamReader.cs</Link>
+      <Link>0_REF_Pngcs\BufferedStreamReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReader.cs">
-      <Link>Pngcs\ChunkReader.cs</Link>
+      <Link>0_REF_Pngcs\ChunkReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReaderMode.cs">
-      <Link>Pngcs\ChunkReaderMode.cs</Link>
+      <Link>0_REF_Pngcs\ChunkReaderMode.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkCopyBehaviour.cs">
-      <Link>Pngcs\Chunks\ChunkCopyBehaviour.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkCopyBehaviour.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkHelper.cs">
-      <Link>Pngcs\Chunks\ChunkHelper.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkHelper.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkLoadBehaviour.cs">
-      <Link>Pngcs\Chunks\ChunkLoadBehaviour.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkLoadBehaviour.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicate.cs">
-      <Link>Pngcs\Chunks\ChunkPredicate.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkPredicate.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateEquiv.cs">
-      <Link>Pngcs\Chunks\ChunkPredicateEquiv.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkPredicateEquiv.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId.cs">
-      <Link>Pngcs\Chunks\ChunkPredicateId.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkPredicateId.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId2.cs">
-      <Link>Pngcs\Chunks\ChunkPredicateId2.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkPredicateId2.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkRaw.cs">
-      <Link>Pngcs\Chunks\ChunkRaw.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunkRaw.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksList.cs">
-      <Link>Pngcs\Chunks\ChunksList.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunksList.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksListForWrite.cs">
-      <Link>Pngcs\Chunks\ChunksListForWrite.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\ChunksListForWrite.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunk.cs">
-      <Link>Pngcs\Chunks\PngChunk.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunk.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkBKGD.cs">
-      <Link>Pngcs\Chunks\PngChunkBKGD.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkBKGD.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkCHRM.cs">
-      <Link>Pngcs\Chunks\PngChunkCHRM.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkCHRM.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkGAMA.cs">
-      <Link>Pngcs\Chunks\PngChunkGAMA.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkGAMA.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkHIST.cs">
-      <Link>Pngcs\Chunks\PngChunkHIST.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkHIST.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkICCP.cs">
-      <Link>Pngcs\Chunks\PngChunkICCP.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkICCP.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIDAT.cs">
-      <Link>Pngcs\Chunks\PngChunkIDAT.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkIDAT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIEND.cs">
-      <Link>Pngcs\Chunks\PngChunkIEND.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkIEND.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIHDR.cs">
-      <Link>Pngcs\Chunks\PngChunkIHDR.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkIHDR.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkITXT.cs">
-      <Link>Pngcs\Chunks\PngChunkITXT.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkITXT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkMultiple.cs">
-      <Link>Pngcs\Chunks\PngChunkMultiple.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkMultiple.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkOFFS.cs">
-      <Link>Pngcs\Chunks\PngChunkOFFS.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkOFFS.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPHYS.cs">
-      <Link>Pngcs\Chunks\PngChunkPHYS.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkPHYS.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPLTE.cs">
-      <Link>Pngcs\Chunks\PngChunkPLTE.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkPLTE.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSBIT.cs">
-      <Link>Pngcs\Chunks\PngChunkSBIT.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkSBIT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSingle.cs">
-      <Link>Pngcs\Chunks\PngChunkSingle.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkSingle.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSkipped.cs">
-      <Link>Pngcs\Chunks\PngChunkSkipped.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkSkipped.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSPLT.cs">
-      <Link>Pngcs\Chunks\PngChunkSPLT.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkSPLT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSRGB.cs">
-      <Link>Pngcs\Chunks\PngChunkSRGB.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkSRGB.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSTER.cs">
-      <Link>Pngcs\Chunks\PngChunkSTER.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkSTER.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTEXT.cs">
-      <Link>Pngcs\Chunks\PngChunkTEXT.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkTEXT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTextVar.cs">
-      <Link>Pngcs\Chunks\PngChunkTextVar.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkTextVar.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTIME.cs">
-      <Link>Pngcs\Chunks\PngChunkTIME.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkTIME.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTRNS.cs">
-      <Link>Pngcs\Chunks\PngChunkTRNS.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkTRNS.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkUNKNOWN.cs">
-      <Link>Pngcs\Chunks\PngChunkUNKNOWN.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkUNKNOWN.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkZTXT.cs">
-      <Link>Pngcs\Chunks\PngChunkZTXT.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngChunkZTXT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngMetadata.cs">
-      <Link>Pngcs\Chunks\PngMetadata.cs</Link>
+      <Link>0_REF_Pngcs\Chunks\PngMetadata.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\FileHelper.cs">
-      <Link>Pngcs\FileHelper.cs</Link>
+      <Link>0_REF_Pngcs\FileHelper.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\FilterType.cs">
-      <Link>Pngcs\FilterType.cs</Link>
+      <Link>0_REF_Pngcs\FilterType.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\FilterWriteStrategy.cs">
-      <Link>Pngcs\FilterWriteStrategy.cs</Link>
+      <Link>0_REF_Pngcs\FilterWriteStrategy.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\IBytesConsumer.cs">
-      <Link>Pngcs\IBytesConsumer.cs</Link>
+      <Link>0_REF_Pngcs\IBytesConsumer.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\ImageInfo.cs">
-      <Link>Pngcs\ImageInfo.cs</Link>
+      <Link>0_REF_Pngcs\ImageInfo.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\ImageLine.cs">
-      <Link>Pngcs\ImageLine.cs</Link>
+      <Link>0_REF_Pngcs\ImageLine.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\ImageLineHelper.cs">
-      <Link>Pngcs\ImageLineHelper.cs</Link>
+      <Link>0_REF_Pngcs\ImageLineHelper.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\ImageLines.cs">
-      <Link>Pngcs\ImageLines.cs</Link>
+      <Link>0_REF_Pngcs\ImageLines.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngCsUtils.cs">
-      <Link>Pngcs\PngCsUtils.cs</Link>
+      <Link>0_REF_Pngcs\PngCsUtils.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngDeinterlacer.cs">
-      <Link>Pngcs\PngDeinterlacer.cs</Link>
+      <Link>0_REF_Pngcs\PngDeinterlacer.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngHelperInternal.cs">
-      <Link>Pngcs\PngHelperInternal.cs</Link>
+      <Link>0_REF_Pngcs\PngHelperInternal.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkInputStream.cs">
-      <Link>Pngcs\PngIDatChunkInputStream.cs</Link>
+      <Link>0_REF_Pngcs\PngIDatChunkInputStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkOutputStream.cs">
-      <Link>Pngcs\PngIDatChunkOutputStream.cs</Link>
+      <Link>0_REF_Pngcs\PngIDatChunkOutputStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngjBadCrcException.cs">
-      <Link>Pngcs\PngjBadCrcException.cs</Link>
+      <Link>0_REF_Pngcs\PngjBadCrcException.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngjException.cs">
-      <Link>Pngcs\PngjException.cs</Link>
+      <Link>0_REF_Pngcs\PngjException.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngjExceptionInternal.cs">
-      <Link>Pngcs\PngjExceptionInternal.cs</Link>
+      <Link>0_REF_Pngcs\PngjExceptionInternal.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngjInputException.cs">
-      <Link>Pngcs\PngjInputException.cs</Link>
+      <Link>0_REF_Pngcs\PngjInputException.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngjOutputException.cs">
-      <Link>Pngcs\PngjOutputException.cs</Link>
+      <Link>0_REF_Pngcs\PngjOutputException.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngjUnsupportedException.cs">
-      <Link>Pngcs\PngjUnsupportedException.cs</Link>
+      <Link>0_REF_Pngcs\PngjUnsupportedException.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngReader.cs">
-      <Link>Pngcs\PngReader.cs</Link>
+      <Link>0_REF_Pngcs\PngReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\PngWriter.cs">
-      <Link>Pngcs\PngWriter.cs</Link>
+      <Link>0_REF_Pngcs\PngWriter.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\ProgressiveOutputStream.cs">
-      <Link>Pngcs\ProgressiveOutputStream.cs</Link>
+      <Link>0_REF_Pngcs\ProgressiveOutputStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\Adler32.cs">
-      <Link>Pngcs\Zlib\Adler32.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\Adler32.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibInputStream.cs">
-      <Link>Pngcs\Zlib\AZlibInputStream.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\AZlibInputStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibOutputStream.cs">
-      <Link>Pngcs\Zlib\AZlibOutputStream.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\AZlibOutputStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\CRC32.cs">
-      <Link>Pngcs\Zlib\CRC32.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\CRC32.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\DeflateCompressLevel.cs">
-      <Link>Pngcs\Zlib\DeflateCompressLevel.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\DeflateCompressLevel.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\EDeflateCompressStrategy.cs">
-      <Link>Pngcs\Zlib\EDeflateCompressStrategy.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\EDeflateCompressStrategy.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamIs.cs">
-      <Link>Pngcs\Zlib\ZlibInputStreamIs.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\ZlibInputStreamIs.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamMs.cs">
-      <Link>Pngcs\Zlib\ZlibInputStreamMs.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\ZlibInputStreamMs.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamIs.cs">
-      <Link>Pngcs\Zlib\ZlibOutputStreamIs.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\ZlibOutputStreamIs.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamMs.cs">
-      <Link>Pngcs\Zlib\ZlibOutputStreamMs.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\ZlibOutputStreamMs.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibStreamFactory.cs">
-      <Link>Pngcs\Zlib\ZlibStreamFactory.cs</Link>
+      <Link>0_REF_Pngcs\Zlib\ZlibStreamFactory.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\Color.cs">
-      <Link>Core\Color.cs</Link>
+      <Link>0_REF_Core\Color.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\ExtendedImage.cs">
-      <Link>Core\ExtendedImage.cs</Link>
+      <Link>0_REF_Core\ExtendedImage.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\ExtraImageInfo.cs">
-      <Link>Core\ExtraImageInfo.cs</Link>
+      <Link>0_REF_Core\ExtraImageInfo.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\FlippingType.cs">
-      <Link>Core\FlippingType.cs</Link>
+      <Link>0_REF_Core\FlippingType.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\Helpers\ExtensionAttribute.cs">
-      <Link>Core\Helpers\ExtensionAttribute.cs</Link>
+      <Link>0_REF_Core\Helpers\ExtensionAttribute.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\Helpers\ForNet20.cs">
-      <Link>Core\Helpers\ForNet20.cs</Link>
+      <Link>0_REF_Core\Helpers\ForNet20.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\Helpers\Guard.cs">
-      <Link>Core\Helpers\Guard.cs</Link>
+      <Link>0_REF_Core\Helpers\Guard.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\ImageFormatException.cs">
-      <Link>Core\ImageFormatException.cs</Link>
+      <Link>0_REF_Core\ImageFormatException.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\ImageFrameCollection.cs">
-      <Link>Core\ImageFrameCollection.cs</Link>
+      <Link>0_REF_Core\ImageFrameCollection.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\ImageProperty.cs">
-      <Link>Core\ImageProperty.cs</Link>
+      <Link>0_REF_Core\ImageProperty.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\ImagePropertyCollection.cs">
-      <Link>Core\ImagePropertyCollection.cs</Link>
+      <Link>0_REF_Core\ImagePropertyCollection.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\ImgExtensionMethods.cs">
-      <Link>Core\ImgExtensionMethods.cs</Link>
+      <Link>0_REF_Core\ImgExtensionMethods.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\IO\Decoders.cs">
-      <Link>Core\IO\Decoders.cs</Link>
+      <Link>0_REF_Core\IO\Decoders.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\IO\Encoders.cs">
-      <Link>Core\IO\Encoders.cs</Link>
+      <Link>0_REF_Core\IO\Encoders.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\IO\IImageDecoder.cs">
-      <Link>Core\IO\IImageDecoder.cs</Link>
+      <Link>0_REF_Core\IO\IImageDecoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\IO\IImageEncoder.cs">
-      <Link>Core\IO\IImageEncoder.cs</Link>
+      <Link>0_REF_Core\IO\IImageEncoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\IO\UnsupportedImageFormatException.cs">
-      <Link>Core\IO\UnsupportedImageFormatException.cs</Link>
+      <Link>0_REF_Core\IO\UnsupportedImageFormatException.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\Rectangle.cs">
-      <Link>Core\Rectangle.cs</Link>
+      <Link>0_REF_Core\Rectangle.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\RotationType.cs">
-      <Link>Core\RotationType.cs</Link>
+      <Link>0_REF_Core\RotationType.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Core\SimpleImage.cs">
-      <Link>Core\SimpleImage.cs</Link>
+      <Link>0_REF_Core\SimpleImage.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Gif\DisposalMethod.cs">
-      <Link>Gif\DisposalMethod.cs</Link>
+      <Link>0_REF_Gif\DisposalMethod.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Gif\GifDecoder.cs">
-      <Link>Gif\GifDecoder.cs</Link>
+      <Link>0_REF_Gif\GifDecoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Gif\GifGraphicsControlExtension.cs">
-      <Link>Gif\GifGraphicsControlExtension.cs</Link>
+      <Link>0_REF_Gif\GifGraphicsControlExtension.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Gif\GifImageDescriptor.cs">
-      <Link>Gif\GifImageDescriptor.cs</Link>
+      <Link>0_REF_Gif\GifImageDescriptor.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Gif\GifLogicalScreenDescriptor.cs">
-      <Link>Gif\GifLogicalScreenDescriptor.cs</Link>
+      <Link>0_REF_Gif\GifLogicalScreenDescriptor.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Gif\LZWDecoder.cs">
-      <Link>Gif\LZWDecoder.cs</Link>
+      <Link>0_REF_Gif\LZWDecoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs">
-      <Link>Jpeg\FluxJpeg.Core\DCT.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\DCT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\DecodedJpeg.cs">
-      <Link>Jpeg\FluxJpeg.Core\DecodedJpeg.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\DecodedJpeg.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs">
-      <Link>Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs">
-      <Link>Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs">
-      <Link>Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs">
-      <Link>Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs">
-      <Link>Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs">
-      <Link>Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs">
-      <Link>Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs">
-      <Link>Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\FDCT.cs">
-      <Link>Jpeg\FluxJpeg.Core\FDCT.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\FDCT.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\Image.cs">
-      <Link>Jpeg\FluxJpeg.Core\Image.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\Image.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryReader.cs">
-      <Link>Jpeg\FluxJpeg.Core\IO\BinaryReader.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\IO\BinaryReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs">
-      <Link>Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs">
-      <Link>Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\JpegMarker.cs">
-      <Link>Jpeg\FluxJpeg.Core\JpegMarker.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\JpegMarker.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\YCbCr.cs">
-      <Link>Jpeg\FluxJpeg.Core\YCbCr.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\YCbCr.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\FluxJpeg.Core\ZigZag.cs">
-      <Link>Jpeg\FluxJpeg.Core\ZigZag.cs</Link>
+      <Link>0_REF_Jpeg\FluxJpeg.Core\ZigZag.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\JpegDecoder.cs">
-      <Link>Jpeg\JpegDecoder.cs</Link>
+      <Link>0_REF_Jpeg\JpegDecoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Jpeg\JpegEncoder.cs">
-      <Link>Jpeg\JpegEncoder.cs</Link>
+      <Link>0_REF_Jpeg\JpegEncoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\GrayscaleReader.cs">
-      <Link>Png\GrayscaleReader.cs</Link>
+      <Link>0_REF_Png\GrayscaleReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\IColorReader.cs">
-      <Link>Png\IColorReader.cs</Link>
+      <Link>0_REF_Png\IColorReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\CRC32.cs">
-      <Link>Png\Ionic.Zlib\CRC32.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\CRC32.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\Deflate.cs">
-      <Link>Png\Ionic.Zlib\Deflate.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\Deflate.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\DeflateStream.cs">
-      <Link>Png\Ionic.Zlib\DeflateStream.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\DeflateStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\GZipStream.cs">
-      <Link>Png\Ionic.Zlib\GZipStream.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\GZipStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\Inflate.cs">
-      <Link>Png\Ionic.Zlib\Inflate.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\Inflate.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\InfTree.cs">
-      <Link>Png\Ionic.Zlib\InfTree.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\InfTree.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\ParallelDeflateOutputStream.cs">
-      <Link>Png\Ionic.Zlib\ParallelDeflateOutputStream.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\ParallelDeflateOutputStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\Tree.cs">
-      <Link>Png\Ionic.Zlib\Tree.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\Tree.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\Zlib.cs">
-      <Link>Png\Ionic.Zlib\Zlib.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\Zlib.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\ZlibBaseStream.cs">
-      <Link>Png\Ionic.Zlib\ZlibBaseStream.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\ZlibBaseStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\ZlibCodec.cs">
-      <Link>Png\Ionic.Zlib\ZlibCodec.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\ZlibCodec.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\ZlibConstants.cs">
-      <Link>Png\Ionic.Zlib\ZlibConstants.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\ZlibConstants.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\Ionic.Zlib\ZlibStream.cs">
-      <Link>Png\Ionic.Zlib\ZlibStream.cs</Link>
+      <Link>0_REF_Png\Ionic.Zlib\ZlibStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\MyCrc32.cs">
-      <Link>Png\MyCrc32.cs</Link>
+      <Link>0_REF_Png\MyCrc32.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\PaletteIndexReader.cs">
-      <Link>Png\PaletteIndexReader.cs</Link>
+      <Link>0_REF_Png\PaletteIndexReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\PngChunk.cs">
-      <Link>Png\PngChunk.cs</Link>
+      <Link>0_REF_Png\PngChunk.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\PngColorTypeInformation.cs">
-      <Link>Png\PngColorTypeInformation.cs</Link>
+      <Link>0_REF_Png\PngColorTypeInformation.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\PngDecoder.cs">
-      <Link>Png\PngDecoder.cs</Link>
+      <Link>0_REF_Png\PngDecoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\PngEncoder.cs">
-      <Link>Png\PngEncoder.cs</Link>
+      <Link>0_REF_Png\PngEncoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\PngHeader.cs">
-      <Link>Png\PngHeader.cs</Link>
+      <Link>0_REF_Png\PngHeader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.Png\TruecolorReader.cs">
-      <Link>Png\TruecolorReader.cs</Link>
+      <Link>0_REF_Png\TruecolorReader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\BitmapDestination.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\BitmapDestination.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\BitmapDestination.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\BitStream.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\BitStream.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\BitStream.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\DensityUnit.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\DensityUnit.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\DensityUnit.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_decoder.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_decoder.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_decoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_encoder.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_encoder.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_encoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\bitread_perm_state.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\bitread_perm_state.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\bitread_perm_state.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\bitread_working_state.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\bitread_working_state.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\bitread_working_state.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\ComponentBuffer.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\ComponentBuffer.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\ComponentBuffer.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\d_derived_tbl.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\d_derived_tbl.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\d_derived_tbl.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_decoder.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_decoder.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_decoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_encoder.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_encoder.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_encoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\JpegUtils.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\JpegUtils.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\JpegUtils.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_converter.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_converter.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_converter.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_deconverter.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_deconverter.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_deconverter.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_quantizer.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_quantizer.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_quantizer.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_comp_master.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_comp_master.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_comp_master.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_main_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_main_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_main_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_decomp_master.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_decomp_master.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_decomp_master.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_downsampler.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_downsampler.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_downsampler.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_main_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_main_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_main_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_post_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_post_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_post_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_forward_dct.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_forward_dct.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_forward_dct.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_input_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_input_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_input_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_inverse_dct.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_inverse_dct.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_inverse_dct.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_reader.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_reader.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_reader.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_writer.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_writer.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_writer.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_scan_info.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_scan_info.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_scan_info.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\jpeg_upsampler.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_upsampler.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\jpeg_upsampler.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\J_BUF_MODE.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\J_BUF_MODE.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\J_BUF_MODE.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_1pass_cquantizer.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_1pass_cquantizer.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_1pass_cquantizer.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_2pass_cquantizer.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_2pass_cquantizer.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_2pass_cquantizer.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_c_coef_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_c_coef_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_c_coef_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_destination_mgr.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_destination_mgr.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_destination_mgr.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_merged_upsampler.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_merged_upsampler.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_merged_upsampler.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_source_mgr.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_source_mgr.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_source_mgr.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\Internal\my_upsampler.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_upsampler.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\Internal\my_upsampler.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\JBLOCK.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\JBLOCK.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\JBLOCK.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\JHUFF_TBL.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\JHUFF_TBL.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\JHUFF_TBL.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\JpegConstants.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\JpegConstants.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\JpegConstants.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_common_struct.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_common_struct.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_common_struct.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_component_info.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_component_info.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_component_info.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_compress_struct.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_compress_struct.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_compress_struct.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_decompress_struct.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_decompress_struct.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_decompress_struct.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_destination_mgr.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_destination_mgr.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_destination_mgr.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_error_mgr.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_error_mgr.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_error_mgr.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\JPEG_MARKER.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\JPEG_MARKER.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\JPEG_MARKER.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_marker_struct.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_marker_struct.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_marker_struct.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_progress_mgr.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_progress_mgr.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_progress_mgr.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jpeg_source_mgr.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jpeg_source_mgr.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jpeg_source_mgr.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\JQUANT_TBL.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\JQUANT_TBL.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\JQUANT_TBL.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\jvirt_array.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\jvirt_array.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\jvirt_array.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\J_COLOR_SPACE.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\J_COLOR_SPACE.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\J_COLOR_SPACE.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\J_COLOR_TRANSFORM.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\J_COLOR_TRANSFORM.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\J_COLOR_TRANSFORM.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\J_DCT_METHOD.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\J_DCT_METHOD.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\J_DCT_METHOD.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\J_DITHER_MODE.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\J_DITHER_MODE.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\J_DITHER_MODE.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\J_MESSAGE_CODE.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\J_MESSAGE_CODE.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\J_MESSAGE_CODE.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Classic\ReadResult.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Classic\ReadResult.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Classic\ReadResult.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\CompressionParameters.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\CompressionParameters.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\CompressionParameters.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\DecompressionParameters.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\DecompressionParameters.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\DecompressionParameters.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\DecompressorToJpegImage.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\DecompressorToJpegImage.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\DecompressorToJpegImage.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Enumerations.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Enumerations.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Enumerations.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\IDecompressDestination.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\IDecompressDestination.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\IDecompressDestination.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\IRawImage.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\IRawImage.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\IRawImage.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Jpeg.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Jpeg.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Jpeg.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\JpegImage.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\JpegImage.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\JpegImage.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\RawImage.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\RawImage.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\RawImage.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\SampleRow.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\SampleRow.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\SampleRow.cs</Link>
     </Compile>
     <Compile Include="..\ImgCodec.LibJpeg\Utils.cs">
-      <Link>Jpeg\ImgCodec.LibJpeg\Utils.cs</Link>
+      <Link>0_REF_Jpeg\ImgCodec.LibJpeg\Utils.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

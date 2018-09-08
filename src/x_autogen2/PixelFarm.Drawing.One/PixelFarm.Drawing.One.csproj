@@ -17,7 +17,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20,NETSTANDARD</DefineConstants>
+    <DefineConstants> TRACE; DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; NETSTANDARD;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -26,7 +26,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20,NETSTANDARD</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; NETSTANDARD;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -220,6 +220,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs">
+      <Link>PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs</Link>
@@ -710,12 +713,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs">
-      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs">
-      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\NativeMemMx.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs</Link>
     </Compile>
@@ -781,6 +778,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs</Link>
