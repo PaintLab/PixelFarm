@@ -16,4 +16,5 @@ namespace LayoutFarm.Text
 
         public static readonly TextSpanStyle Empty = new TextSpanStyle();
     }
+
 }

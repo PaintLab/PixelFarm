@@ -160,9 +160,10 @@ namespace LayoutFarm.ColorBlenderSample
            int x, int y,
            out ScrollBar scBar,
            out Box sampleBox,
-           SimpleAction<ScrollBar, Box> pairAction
+           Action<ScrollBar, Box> pairAction
            )
         {
+            //Action<>
             //horizontal scrollbar
             scBar = new LayoutFarm.CustomWidgets.ScrollBar(300, 15);
 

@@ -163,7 +163,8 @@
 
                 case ".png":
                     {
-                        HjgPngDecoder pngDecoder = new HjgPngDecoder();
+                        ImageTools.IO.Png.PngDecoder pngDecoder = new PngDecoder();
+                        //HjgPngDecoder pngDecoder = new HjgPngDecoder();
                         //PngDecoder pngDecoder = new PngDecoder();
                         ImageTools.ExtendedImage outputImg = new ImageTools.ExtendedImage();
                         using (System.IO.FileStream fs = new IO.FileStream(filename, IO.FileMode.Open))
@@ -237,5 +238,5 @@
             Format32bppPArgb
         }
     }
-    
+
 }

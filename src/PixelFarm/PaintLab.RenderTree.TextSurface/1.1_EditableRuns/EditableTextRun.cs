@@ -23,6 +23,10 @@ namespace LayoutFarm.Text
             this.spanStyle = style;
             SetNewContent(copyBuffer);
             UpdateRunWidth();
+
+#if DEBUG
+            this.dbugBreak = true;
+#endif
         }
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
@@ -73,7 +77,7 @@ namespace LayoutFarm.Text
 #if DEBUG
             _mybuffer = newbuffer;
 #else
-            mybuffer= newbuffer;
+            mybuffer = newbuffer;
 #endif
             _content_unparsed = true;
         }

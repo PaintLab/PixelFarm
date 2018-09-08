@@ -195,6 +195,13 @@ namespace LayoutFarm
             public int RightIndex { get { return startIndex + length; } }
             public static readonly TextSplitBound Empty = new TextSplitBound();
 
+#if DEBUG
+            public override string ToString()
+            {
+                return startIndex + ":+" + length;
+            }
+#endif
+
         }
         //TODO: review here
         public static class Default

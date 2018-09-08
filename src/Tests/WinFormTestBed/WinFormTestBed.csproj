@@ -40,11 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\Interfaces.cs" />
     <Compile Include="Interfaces_Impl\InterfaceImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AppHostExtensions.cs" />
-    <Compile Include="SimpleDelegates.cs" />
     <Compile Include="YourImplementation\App.cs" />
     <Compile Include="YourImplementation\DemoNote.cs" />
     <Compile Include="YourImplementation\FormCanvasHelper.cs" />
@@ -137,5 +135,6 @@
       <DependentUpon>FormPrint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

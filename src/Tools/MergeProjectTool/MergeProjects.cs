@@ -420,7 +420,7 @@ namespace BuildMergeProject
                     {
                         XmlElement child_elem = (XmlElement)child;
                         //
-                       
+
                         if (xmlElemEvalator(child_elem))
                         {   //recursive
                             XmlElement newsubChild = CreateAndAppendChild(newnode, child_elem.Name);
@@ -597,6 +597,33 @@ namespace BuildMergeProject
             return group;
         }
 
+
+        static Dictionary<string, bool> SplitDefineConst(string defineConst)
+        {
+            Dictionary<string, bool> values = new Dictionary<string, bool>();
+            string[] splitedValues = defineConst.Split(',', ';');
+            foreach (string v in splitedValues)
+            {
+                string trim = v.Trim();
+                if (trim.Length > 0)
+                {
+                    //replace 
+                    values[trim] = true;
+                }
+            }
+            return values;
+        }
+        static string Concat(Dictionary<string, bool> dic, string sep)
+        {
+            System.Text.StringBuilder stbulder = new System.Text.StringBuilder();
+            int j = dic.Count;
+            foreach (string k in dic.Keys)
+            {
+                stbulder.Append(" " + k + sep);
+            }
+
+            return stbulder.ToString();
+        }
         public void MergeAndSave(string csprojFilename, string assemblyName, string targetFrameworkVersion, string additonalDefineConst, string[] references)
         {
             ProjectRootElement root = ProjectRootElement.Create();
@@ -623,14 +650,39 @@ namespace BuildMergeProject
                 one1.AddProperty("TargetFrameworkProfile", "Profile111");
             }
 
+
+            string defineConstForDebug = " DEBUG; TRACE";
+            string defineConstForRelase = " TRACE";
+
+            if (additonalDefineConst != null)
+            {
+                //for debug
+                Dictionary<string, bool> values = SplitDefineConst(additonalDefineConst);
+                if (!values.ContainsKey("DEBUG"))
+                {
+                    values["DEBUG"] = true;
+                }
+                defineConstForDebug = Concat(values, ";");
+
+                values.Remove("DEBUG");
+
+                defineConstForRelase = Concat(values, ";");
+
+            }
+
+
+
             ProjectPropertyGroupElement debugGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
                   true,
-                @"bin\Debug\", false, true, "full", "DEBUG; TRACE" + additonalDefineConst);
+                @"bin\Debug\", false, true, "full", defineConstForDebug);
+
+
             ProjectPropertyGroupElement releaseGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ",
                   true,
-                @"bin\Release\", true, false, "pdbonly", " TRACE" + additonalDefineConst);
+                @"bin\Release\", true, false, "pdbonly", defineConstForRelase);
+
             if (references.Length > 0)
             {
                 AddItems(root, "Reference", references);
@@ -651,7 +703,7 @@ namespace BuildMergeProject
 
                     if (onlyFileName == "PORTING_NOTMERGE.cs")
                     {
-                        //our convention
+                        //our convention***
                         continue;//skip
                     }
                     else if (onlyFileName == "ExtensionAttribute.cs")
@@ -726,6 +778,10 @@ namespace BuildMergeProject
                 switch (item.Name)
                 {
                     case "DefineConstants":
+                        if (DefineConstants != null)
+                        {
+
+                        }
                         DefineConstants = item.EvaluatedValue;
                         break;
                     case "TargetFrameworkVersion":
