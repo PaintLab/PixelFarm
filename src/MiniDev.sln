@@ -187,16 +187,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Typography", "Pix
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Cosmos.One", "x_merge_projects\PixelFarm.Cosmos.One\PixelFarm.Cosmos.One.csproj", "{A04F23A7-C5B6-4BB0-A98A-68432B71EF53}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "WinFormTestBed2", "Tests\WinFormTestBed2\WinFormTestBed2.shproj", "{5CF69768-3249-45D4-8BE3-B686F88C4EA0}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Typography\Typography.Contours\Typography.Contours.projitems*{16af3672-531e-4e0d-8f23-65285fe56298}*SharedItemsImports = 13
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{235a071b-8d06-40ae-a5c5-b1ce59715ee9}*SharedItemsImports = 13
+		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{3e30e0d2-1cd7-42cc-9555-614105ef9c56}*SharedItemsImports = 4
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextServices\Typography.TextServices.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
+		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{5cf69768-3249-45d4-8be3-b686f88c4ea0}*SharedItemsImports = 13
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{6ff96bfb-9e4b-4634-b682-7de60468da38}*SharedItemsImports = 13
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{7a8a63d2-2cb5-41f5-8e83-6f6e54398cf4}*SharedItemsImports = 13
 		..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems*{86a03bfa-0879-4449-8d6c-b1f9fb062e7e}*SharedItemsImports = 13
@@ -8670,6 +8674,7 @@ Global
 		{F6602808-F1D5-4E3B-BB8C-B9CA4AE77437} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{EC1307C6-309F-43EA-BFCC-5219E2F5A103} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{A04F23A7-C5B6-4BB0-A98A-68432B71EF53} = {601D2DDA-967A-4913-A957-76CAC82ADD93}
+		{5CF69768-3249-45D4-8BE3-B686F88C4EA0} = {B106C6A9-1647-4267-824B-896486A6E697}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD5DF903-2497-45EE-B3DC-1FAF5DA8F05C}
