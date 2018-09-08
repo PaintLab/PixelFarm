@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5cf69768-3249-45d4-8be3-b686f88c4ea0</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>WinFormTestBed2</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)TestBedStartup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHost.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHostExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\DemoNote.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormCanvasHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormDemoList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormDemoList.Designer.cs">
+      <DependentUpon>FormDemoList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormLayoutInspector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormLayoutInspector.Designer.cs">
+      <DependentUpon>FormLayoutInspector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormPrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormPrint.Designer.cs">
+      <DependentUpon>FormPrint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\GdiPlusBitmap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\MyTextBreaker.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation\FormDemoList.resx">
+      <DependentUpon>FormDemoList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation\FormLayoutInspector.resx">
+      <DependentUpon>FormLayoutInspector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)YourImplementation\FormPrint.resx">
+      <DependentUpon>FormPrint.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

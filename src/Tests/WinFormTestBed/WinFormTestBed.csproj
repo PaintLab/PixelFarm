@@ -40,47 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces_Impl\InterfaceImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AppHostExtensions.cs" />
-    <Compile Include="YourImplementation\App.cs" />
-    <Compile Include="YourImplementation\DemoNote.cs" />
-    <Compile Include="YourImplementation\FormCanvasHelper.cs" />
-    <Compile Include="YourImplementation\FormDemoList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormDemoList.Designer.cs">
-      <DependentUpon>FormDemoList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\FormLayoutInspector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormLayoutInspector.Designer.cs">
-      <DependentUpon>FormLayoutInspector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\FormNoBorder.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormNoBorder.Designer.cs">
-      <DependentUpon>FormNoBorder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\FormPopShadowHelper.cs" />
-    <Compile Include="YourImplementation\FormPopupShadow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormPopupShadow.Designer.cs">
-      <DependentUpon>FormPopupShadow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\FormPrint.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormPrint.Designer.cs">
-      <DependentUpon>FormPrint.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\GdiPlusBitmap.cs" />
-    <Compile Include="YourImplementation\MyTextBreaker.cs" />
-    <Compile Include="YourImplementation\AppHost.cs" />
-    <Compile Include="TestBedStartup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
@@ -120,21 +80,7 @@
       <Name>Typography.One</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="YourImplementation\FormDemoList.resx">
-      <DependentUpon>FormDemoList.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="YourImplementation\FormLayoutInspector.resx">
-      <DependentUpon>FormLayoutInspector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="YourImplementation\FormNoBorder.resx">
-      <DependentUpon>FormNoBorder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="YourImplementation\FormPrint.resx">
-      <DependentUpon>FormPrint.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
   <ItemGroup />
+  <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

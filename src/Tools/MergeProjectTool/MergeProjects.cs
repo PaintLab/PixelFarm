@@ -652,7 +652,7 @@ namespace BuildMergeProject
 
 
             string defineConstForDebug = " DEBUG; TRACE";
-            string defineConstForRelase = " TRACE";
+            string defineConstForRelease = " TRACE";
 
             if (additonalDefineConst != null)
             {
@@ -666,7 +666,7 @@ namespace BuildMergeProject
 
                 values.Remove("DEBUG");
 
-                defineConstForRelase = Concat(values, ";");
+                defineConstForRelease = Concat(values, ";");
 
             }
 
@@ -681,7 +681,7 @@ namespace BuildMergeProject
             ProjectPropertyGroupElement releaseGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ",
                   true,
-                @"bin\Release\", true, false, "pdbonly", defineConstForRelase);
+                @"bin\Release\", true, false, "pdbonly", defineConstForRelease);
 
             if (references.Length > 0)
             {

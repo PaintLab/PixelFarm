@@ -15,7 +15,6 @@ namespace YourImplementation
 
 #if DEBUG
         static LocalFileStorageProvider s_localFileStorageProvider;
-        static FileDBStorageProvider s_filedb;
 #endif
 
         public static IInstalledTypefaceProvider FontLoader
@@ -105,11 +104,6 @@ namespace YourImplementation
 #if DEBUG
             //1. Storage provider
             s_localFileStorageProvider = new LocalFileStorageProvider();
-            // choose local file or filedb 
-            // if we choose filedb => then this will create/open a 'disk' file for read/write data
-            s_filedb = new FileDBStorageProvider("textservicedb");
-            // then register to the storage service
-            PixelFarm.Platforms.StorageService.RegisterProvider(s_filedb); 
 
 #endif
         }
