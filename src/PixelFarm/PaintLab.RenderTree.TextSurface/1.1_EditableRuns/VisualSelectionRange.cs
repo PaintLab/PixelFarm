@@ -28,13 +28,13 @@ namespace LayoutFarm.Text
     }
 
 
-     
 
-    class VisualSelectionRange
+
+    public class VisualSelectionRange
     {
         EditableVisualPointInfo startPoint = null;
         EditableVisualPointInfo endPoint = null;
-        public VisualSelectionRange(
+        internal VisualSelectionRange(
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
         {
@@ -42,7 +42,7 @@ namespace LayoutFarm.Text
             this.endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;
         }
-        public EditableVisualPointInfo StartPoint
+        internal EditableVisualPointInfo StartPoint
         {
             get
             {
@@ -53,7 +53,7 @@ namespace LayoutFarm.Text
                 startPoint = value;
             }
         }
-        public EditableVisualPointInfo EndPoint
+        internal EditableVisualPointInfo EndPoint
         {
             get
             {
@@ -132,7 +132,7 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public EditableVisualPointInfo TopEnd
+        internal EditableVisualPointInfo TopEnd
         {
             get
             {
@@ -153,7 +153,7 @@ namespace LayoutFarm.Text
                 return endPoint;
             }
         }
-        public EditableVisualPointInfo BottomEnd
+        internal EditableVisualPointInfo BottomEnd
         {
             get
             {

@@ -18,7 +18,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> DEBUG; TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -27,7 +27,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -2907,14 +2907,8 @@
     <Compile Include="..\..\Tests\WinFormTestBed\AppHostExtensions.cs">
       <Link>Tests\WinFormTestBed\AppHostExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\Interfaces\Interfaces.cs">
-      <Link>Tests\WinFormTestBed\Interfaces\Interfaces.cs</Link>
-    </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs">
       <Link>Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\SimpleDelegates.cs">
-      <Link>Tests\WinFormTestBed\SimpleDelegates.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\TestBedStartup.cs">
       <Link>Tests\WinFormTestBed\TestBedStartup.cs</Link>
