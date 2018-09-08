@@ -65,12 +65,6 @@
       <DependentUpon>FormNoBorder.cs</DependentUpon>
     </Compile>
     <Compile Include="YourImplementation\FormPopShadowHelper.cs" />
-    <Compile Include="YourImplementation\FormPopupShadow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormPopupShadow.Designer.cs">
-      <DependentUpon>FormPopupShadow.cs</DependentUpon>
-    </Compile>
     <Compile Include="YourImplementation\FormPrint.cs">
       <SubType>Form</SubType>
     </Compile>

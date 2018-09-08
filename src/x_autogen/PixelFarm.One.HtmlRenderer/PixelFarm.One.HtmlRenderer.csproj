@@ -979,8 +979,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPopShadowHelper.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\Tests\WinFormTestBed\YourImplementation\GdiPlusBitmap.cs" />
