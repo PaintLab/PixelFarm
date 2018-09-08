@@ -28,20 +28,25 @@ _pic 1: MiniDev.sln preview_
 **How projects are arranged?**
  
 
-I separate the main projects into many sub projects =>
+I separate the main projects into many sub _solution folders =>
 
 Because it is easy to do _dependency_analysis_.
 
 
 **1.0 BackEnd_Foundamental_Tech**
 
-please note that these projects reference to mscorlib/ System / or each other
+
+please note that these projects reference to mscorlib/ System / or each other.
+**BUT** not outside this folder. 
+
 
 ![Building_BackEnd_Foundamental_Tech](https://user-images.githubusercontent.com/7447159/45253226-0d9e3480-b38e-11e8-9cfa-a86814704146.gif)
 
 _pic 2: Building BackEnd_Foundamental_Tech folder_
 
 
+
+**2.0 PixelFarm_Foundamental_Tech**
 
 
 
