@@ -58,7 +58,6 @@
     <Compile Include="YourImplementation\FormLayoutInspector.Designer.cs">
       <DependentUpon>FormLayoutInspector.cs</DependentUpon>
     </Compile>
-    <Compile Include="YourImplementation\FormPopShadowHelper.cs" />
     <Compile Include="YourImplementation\FormPrint.cs">
       <SubType>Form</SubType>
     </Compile>
