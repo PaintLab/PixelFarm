@@ -40,6 +40,9 @@
     <Compile Include="..\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
       <Link>PlatformBridge\Common\ExtensionAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\GeneralEventListener.cs">
+      <Link>PlatformBridge\Common\GeneralEventListener.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs">
       <Link>PlatformBridge\Common\IPlatformWindowBox.cs</Link>
     </Compile>

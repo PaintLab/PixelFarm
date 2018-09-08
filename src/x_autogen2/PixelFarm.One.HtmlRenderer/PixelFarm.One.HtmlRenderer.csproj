@@ -1046,6 +1046,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs">
+      <Link>PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs</Link>
     </Compile>
@@ -2836,9 +2839,6 @@
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\AppHostExtensions.cs">
       <Link>Tests\WinFormTestBed\AppHostExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs">
-      <Link>Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs</Link>
     </Compile>
     <Compile Include="..\..\Tests\WinFormTestBed\TestBedStartup.cs">
       <Link>Tests\WinFormTestBed\TestBedStartup.cs</Link>
