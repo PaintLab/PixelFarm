@@ -289,7 +289,12 @@ namespace LayoutFarm.CustomWidgets
                 int topPos = selectedItem.Top;
                 if (this.viewportY + Height < topPos)
                 {
+                    //case viewport is over the selected item
                     SetViewport(this.viewportX, topPos - (Height / 2));
+                }
+                else if (topPos + selectedItem.Height < viewportY)
+                {
+                    SetViewport(this.viewportX, topPos);
                 }
             }
 

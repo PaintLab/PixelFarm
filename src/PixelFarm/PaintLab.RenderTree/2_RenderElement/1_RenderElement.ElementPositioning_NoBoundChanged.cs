@@ -71,6 +71,7 @@ namespace LayoutFarm
         {
             get
             {
+
                 return b_width;
             }
         }

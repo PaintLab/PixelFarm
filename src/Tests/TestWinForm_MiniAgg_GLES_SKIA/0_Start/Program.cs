@@ -1,23 +1,14 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Mini
 {
     static class Program
     {
-
-
-        static unsafe void LookAsIntArray(IntPtr array)
-        {
-            int* a = (int*)array;
-            int data = *a;
-            byte R = (byte)(data & 0xff);
-            byte G = (byte)((data >> 8) & 0xff);
-            byte B = (byte)((data >> 16) & 0xff);
-            byte A = (byte)((data >> 24) & 0xff);
-        }
 
         /// <summary>
         /// The main entry point for the application.
@@ -28,6 +19,9 @@ namespace Mini
             //PaintLab.Svg.SvgParser parser = new PaintLab.Svg.SvgParser();
             //string svgContent = System.IO.File.ReadAllText("Samples/arrow2.svg");
             //parser.ParseDocument(new LayoutFarm.WebLexer.TextSnapshot(svgContent));
+
+
+
 
             RootDemoPath.Path = @"..\Data";
             YourImplementation.TestBedStartup.Setup();
@@ -50,6 +44,24 @@ namespace Mini
             //    }
             //});
 #endif
+
+            //Typography's TextServices
+            //you can implement   Typography.TextBreak.DictionaryProvider  by your own
+            //this set some essentail values for Typography Text Serice
+            // 
+            //2.2 Icu Text Break info
+            //test Typography's custom text break,
+            //check if we have that data?            
+            //------------------------------------------- 
+            //string typographyDir = @"brkitr_src/dictionaries";
+            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr\dictionaries";
+
+            if (!System.IO.Directory.Exists(icu_datadir))
+            {
+                throw new System.NotSupportedException("dic");
+            }
+            var dicProvider = new IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
+            Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
 
             //---------------------------------------------------
             //register image loader
@@ -123,6 +135,56 @@ namespace Mini
             bmp.Dispose();
             return actualImg;
         }
+
+
+
+        class IcuSimpleTextFileDictionaryProvider : Typography.TextBreak.DictionaryProvider
+        {
+            //read from original ICU's dictionary
+            //.. 
+            public string DataDir
+            {
+                get;
+                set;
+            }
+            public override IEnumerable<string> GetSortedUniqueWordList(string dicName)
+            {
+                //user can provide their own data 
+                //....
+
+                switch (dicName)
+                {
+                    default:
+                        return null;
+                    case "thai":
+                        return GetTextListIterFromTextFile(DataDir + "/thaidict.txt");
+                    case "lao":
+                        return GetTextListIterFromTextFile(DataDir + "/laodict.txt");
+                }
+
+            }
+            static IEnumerable<string> GetTextListIterFromTextFile(string filename)
+            {
+                //read from original ICU's dictionary
+                //..
+
+                using (FileStream fs = new FileStream(filename, FileMode.Open))
+                using (StreamReader reader = new StreamReader(fs))
+                {
+                    string line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        line = line.Trim();
+                        if (line.Length > 0 && (line[0] != '#')) //not a comment
+                        {
+                            yield return line.Trim();
+                        }
+                        line = reader.ReadLine();//next line
+                    }
+                }
+            }
+        }
+
 
     }
 }

@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
-    <ProjectGuid>{367AE189-BEDE-436C-8186-362A771F35B2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -18,7 +17,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> DEBUG; TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -27,7 +26,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -269,81 +268,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs">
       <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Engine\Engine.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Engine\Engine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Exceptions\FileDBException.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Exceptions\FileDBException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\ExtensionAttribute.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\ExtensionAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\DataFactory.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\DataFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\FileFactory.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\FileFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\HeaderFactory.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\HeaderFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\IndexFactory.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\IndexFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Factories\PageFactory.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Factories\PageFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\FileDB.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\FileDB.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryReaderExtensions.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryReaderExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryWriterExtensions.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\BinaryWriterExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\CacheIndexPage.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\CacheIndexPage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\DebugFile.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\DebugFile.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\FileDBExtensions.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\FileDBExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\IOExceptionExtensions.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\IOExceptionExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Helper\MimeTypeConverter.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Helper\MimeTypeConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\SomeLinq.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\SomeLinq.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Stream\FileDBStream.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Stream\FileDBStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\BasePage.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\BasePage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\DataPage.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\DataPage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\EntryInfo.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\EntryInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\Header.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\Header.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexLink.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexLink.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexNode.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexNode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexPage.cs">
-      <Link>PixelFarm\BackEnd.FileDB\FileDB\Structure\IndexPage.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs</Link>
@@ -836,7 +760,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\GLControl.Designer.cs</Link>
@@ -849,7 +772,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs">
       <Link>PixelFarm\BackEnd.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs</Link>
@@ -1121,6 +1043,12 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
+      <Link>PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs">
+      <Link>PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs</Link>
     </Compile>
@@ -1363,7 +1291,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs</Link>
@@ -1385,14 +1312,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs</Link>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs</Link>
@@ -1400,9 +1325,17 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\CommonHelper2.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs">
+      <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs">
+      <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormNoBorder.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopShadowHelper.cs">
+      <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopShadowHelper.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.cs</Link>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\FormPopupShadow2.Designer.cs</Link>
@@ -2903,77 +2836,6 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs">
       <Link>Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\AppHostExtensions.cs">
-      <Link>Tests\WinFormTestBed\AppHostExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\Interfaces\Interfaces.cs">
-      <Link>Tests\WinFormTestBed\Interfaces\Interfaces.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs">
-      <Link>Tests\WinFormTestBed\Interfaces_Impl\InterfaceImpl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\SimpleDelegates.cs">
-      <Link>Tests\WinFormTestBed\SimpleDelegates.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\TestBedStartup.cs">
-      <Link>Tests\WinFormTestBed\TestBedStartup.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\App.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\App.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\AppHost.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\AppHost.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\DemoNote.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\DemoNote.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormCanvasHelper.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormCanvasHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormDemoList.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormLayoutInspector.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormNoBorder.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopShadowHelper.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormPopShadowHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormPopupShadow.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\FormPrint.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\GdiPlusBitmap.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\GdiPlusBitmap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Tests\WinFormTestBed\YourImplementation\MyTextBreaker.cs">
-      <Link>Tests\WinFormTestBed\YourImplementation\MyTextBreaker.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\FontAtlas\BinPacker.cs">
       <Link>Typography\FontAtlas\BinPacker.cs</Link>

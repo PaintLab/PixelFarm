@@ -36,28 +36,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\PixelFarm.PrimitiveGeo\AffinePlan.cs">
-      <Link>1_PrimitiveGeo\AffinePlan.cs</Link>
+      <Link>0_REF_PrimitiveGeo\AffinePlan.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
-      <Link>1_PrimitiveGeo\BasicGeometries.cs</Link>
+      <Link>0_REF_PrimitiveGeo\BasicGeometries.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
-      <Link>1_PrimitiveGeo\Color.cs</Link>
+      <Link>0_REF_PrimitiveGeo\Color.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\MemMx.cs">
-      <Link>1_PrimitiveGeo\MemMx.cs</Link>
+      <Link>0_REF_PrimitiveGeo\MemMx.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\NativeMemMx.cs">
-      <Link>1_PrimitiveGeo\NativeMemMx.cs</Link>
+      <Link>0_REF_PrimitiveGeo\NativeMemMx.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
-      <Link>1_PrimitiveGeo\Rectangle.cs</Link>
+      <Link>0_REF_PrimitiveGeo\Rectangle.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\RectangleF.cs">
-      <Link>1_PrimitiveGeo\RectangleF.cs</Link>
+      <Link>0_REF_PrimitiveGeo\RectangleF.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\RectInt.cs">
-      <Link>1_PrimitiveGeo\RectInt.cs</Link>
+      <Link>0_REF_PrimitiveGeo\RectInt.cs</Link>
     </Compile>
     <Compile Include="2_Abstract_DrawingElements\Brushes_Pens.cs" />
     <Compile Include="2_Abstract_DrawingElements\CombineMode.cs" />

@@ -41,7 +41,7 @@ namespace LayoutFarm.Text
 
             //
             _textLayer = new EditableTextFlowLayer(this); //presentation
-            _internalTextLayerController = new InternalTextLayerController(this, _textLayer);//controller
+            _internalTextLayerController = new InternalTextLayerController(_textLayer);//controller
 
             this._isMultiLine = isMultiLine;
             if (isMultiLine)
@@ -55,6 +55,8 @@ namespace LayoutFarm.Text
             this.NeedClipArea = true;
             this.IsBlockElement = false;
         }
+
+        public InternalTextLayerController TextLayerController { get { return _internalTextLayerController; } }
 
         public TextSpanStyle CurrentTextSpanStyle
         {
@@ -509,7 +511,9 @@ namespace LayoutFarm.Text
                                 //this may need text-break services
 
                                 _internalTextLayerController.AddUnformattedStringToCurrentLine(
-                                    Clipboard.GetUnicodeText(), this._currentSpanStyle);
+                                    this.Root,
+                                    Clipboard.GetUnicodeText(),
+                                    this._currentSpanStyle);
 
                                 EnsureCaretVisible();
                             }

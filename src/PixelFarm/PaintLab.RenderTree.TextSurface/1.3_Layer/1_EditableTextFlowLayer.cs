@@ -12,14 +12,20 @@ namespace LayoutFarm.Text
         object _lineCollection;
         public event EventHandler Reflow; //TODO: review this field
         int _defaultLineHeight;
+        TextEditRenderBox _ownerTextEditRenderBox;
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
-            this._owner = owner;
+            _ownerTextEditRenderBox = owner;
+
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here
             _defaultLineHeight = 24;//temp
+        }
+        internal void NotifyContentSizeChanged()
+        {
+            TextEditRenderBox.NotifyTextContentSizeChanged(_ownerTextEditRenderBox);
         }
         public int DefaultLineHeight
         {
@@ -27,7 +33,6 @@ namespace LayoutFarm.Text
             {
                 return _defaultLineHeight;//test
             }
-
         }
         public TextSpanStyle CurrentTextSpanStyle
         {
@@ -66,9 +71,35 @@ namespace LayoutFarm.Text
                 for (int i = 0; i < j; ++i)
                 {
                     LinkedListNode<EditableRun> curNode = lines[i].Last;
+                    bool enableIter = false;
                     while (curNode != null)
                     {
-                        yield return curNode.Value;
+                        EditableRun editableRun = curNode.Value;
+                        if (editableRun == stop)
+                        {
+                            //found stop
+                            enableIter = true;
+                            yield return editableRun;
+
+                            if (stop == start)
+                            {
+                                break;//break here
+                            }
+                            curNode = curNode.Previous;
+                            continue;//get next
+                        }
+                        else if (editableRun == start)
+                        {
+                            //stop
+                            yield return editableRun;
+                            break;
+                        }
+                        //
+                        //
+                        if (enableIter)
+                        {
+                            yield return editableRun;
+                        }
                         curNode = curNode.Previous;
                     }
                 }
@@ -77,9 +108,35 @@ namespace LayoutFarm.Text
             {
                 EditableTextLine onlyLine = (EditableTextLine)_lineCollection;
                 LinkedListNode<EditableRun> curNode = onlyLine.Last;
+                bool enableIter = false;
                 while (curNode != null)
                 {
-                    yield return curNode.Value;
+                    EditableRun editableRun = curNode.Value;
+                    if (editableRun == stop)
+                    {
+                        //found stop
+                        enableIter = true;
+                        yield return editableRun;
+
+                        if (stop == start)
+                        {
+                            break;//break here
+                        }
+                        curNode = curNode.Previous;
+                        continue;//get next
+                    }
+                    else if (editableRun == start)
+                    {
+                        //stop
+                        yield return editableRun;
+                        break;
+                    }
+                    //
+                    //
+                    if (enableIter)
+                    {
+                        yield return editableRun;
+                    }
                     curNode = curNode.Previous;
                 }
             }
@@ -125,7 +182,10 @@ namespace LayoutFarm.Text
                     }
 
                     //  canvas.DrawRectangle(Color.Gray, 0, line.LineTop, line.ActualLineWidth, line.ActualLineHeight);
+                    if (line.RunCount > 1)
+                    {
 
+                    }
 #endif
 
 
@@ -177,6 +237,10 @@ namespace LayoutFarm.Text
                 if (OwnerRenderElement is RenderBoxBase)
                 {
                     debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
+                }
+                if (line.RunCount > 1)
+                {
+
                 }
 #endif
 
