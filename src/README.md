@@ -28,7 +28,7 @@ _pic 1: MiniDev.sln preview_
 **How projects are arranged?**
  
 
-I separate the main projects into many sub _solution folders =>
+I separate the main projects into many sub _solution folders_ =>
 
 Because it is easy to do _dependency_analysis_.
 
