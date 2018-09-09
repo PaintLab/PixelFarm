@@ -236,6 +236,11 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._multiline; }
         }
+
+        public static InternalTextLayerController GetInternalTextLayerController(TextBox txtbox)
+        {
+            return txtbox._textEditRenderElement.TextLayerController;
+        }
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
@@ -283,7 +288,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //TODO: reimplement text-model again
             _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
-            
+
         }
         public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
         {
