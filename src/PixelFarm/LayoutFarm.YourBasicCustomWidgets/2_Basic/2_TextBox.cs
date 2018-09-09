@@ -236,7 +236,10 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._multiline; }
         }
-
+        public static TextEditRenderBox GetTextEditRenderBox(TextBox txtbox)
+        {
+            return txtbox._textEditRenderElement;
+        }
         public static InternalTextLayerController GetInternalTextLayerController(TextBox txtbox)
         {
             return txtbox._textEditRenderElement.TextLayerController;
