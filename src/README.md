@@ -3,7 +3,6 @@ PixelFarm/src
 
 This folder contains a Main project solution file(_MiniDev.sln_)
 
-Data : contains test data
 
 PixelFarm : contains PixelFarm sub projects
 
