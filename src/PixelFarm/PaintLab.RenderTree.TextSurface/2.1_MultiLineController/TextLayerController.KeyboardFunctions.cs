@@ -7,7 +7,12 @@ namespace LayoutFarm.Text
 {
     partial class InternalTextLayerController
     {
+        static Func<char, bool> s_CaretCanStopOnThisChar;
 
+        public static void SetCaretCanStopOnThisChar(Func<char, bool> caretCanStopOnThisCharDel)
+        {
+            s_CaretCanStopOnThisChar = caretCanStopOnThisCharDel;
+        }
         internal static bool CanCaretStopOnThisChar(char c)
         {
             UnicodeCategory unicodeCatg = char.GetUnicodeCategory(c);
@@ -22,8 +27,14 @@ namespace LayoutFarm.Text
                 case UnicodeCategory.LowercaseLetter:
                 case UnicodeCategory.TitlecaseLetter:
                 case UnicodeCategory.ModifierLetter:
-                case UnicodeCategory.OtherLetter:
                 case UnicodeCategory.DecimalDigitNumber:
+                    break;
+                case UnicodeCategory.OtherLetter:
+
+                    if (s_CaretCanStopOnThisChar != null)
+                    {
+                        return s_CaretCanStopOnThisChar(c);
+                    }
                     break;
                 case UnicodeCategory.NonSpacingMark:
                 case UnicodeCategory.SpacingCombiningMark:
@@ -111,8 +122,8 @@ namespace LayoutFarm.Text
             else
             {
                 _updateJustCurrentLine = true;
-                 
-                char deletedChar = _textLineWriter.DoBackspaceOneChar(); 
+
+                char deletedChar = _textLineWriter.DoBackspaceOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of current line 

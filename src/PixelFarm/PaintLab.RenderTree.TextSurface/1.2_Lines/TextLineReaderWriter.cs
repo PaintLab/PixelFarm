@@ -116,13 +116,24 @@ namespace LayoutFarm.Text
             }
         }
 
+        public bool CanAcceptThisChar(char c)
+        {
+            //TODO: review here, enable this feature or not
+            //some char can't be a start char on blank line
+            if (CurrentLine.IsBlankLine &&
+                !InternalTextLayerController.CanCaretStopOnThisChar(c))
+            {
+                return false; 
+            }
+            return true;
+        }
         public void AddCharacter(char c)
         {
             if (CurrentLine.IsBlankLine)
             {
                 //TODO: review here, enable this feature or not
                 //some char can't be a start char on blank line
-
+                
                 if (!InternalTextLayerController.CanCaretStopOnThisChar(c))
                 {
                     return;
