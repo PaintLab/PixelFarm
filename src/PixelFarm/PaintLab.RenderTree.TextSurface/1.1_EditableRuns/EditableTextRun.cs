@@ -330,6 +330,11 @@ namespace LayoutFarm.Text
         {
             int bWidth = this.Width;
             int bHeight = this.Height;
+
+#if DEBUG
+            canvas.dbug_DrawCrossRect(Color.Red, new Rectangle(0, 0, bWidth, bHeight));
+            canvas.DrawRectangle(Color.Red, 0, 0, bWidth, bHeight);
+#endif
             if (!this.HasStyle)
             {
                 canvas.DrawText(this.mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
