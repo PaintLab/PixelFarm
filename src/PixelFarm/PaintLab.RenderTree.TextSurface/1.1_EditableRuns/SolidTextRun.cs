@@ -13,6 +13,9 @@ namespace LayoutFarm.Text
         TextSpanStyle spanStyle;
         char[] mybuffer;
 
+        RenderElement _externalRenderE;
+
+
         public SolidTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
             : base(gfx)
         {   //check line break? 
@@ -55,7 +58,10 @@ namespace LayoutFarm.Text
         {
             _externalCustomDraw = externalCustomDraw;
         }
-
+        public void SetExternalRenderElement(RenderElement externalRenderE)
+        {
+            _externalRenderE = externalRenderE;
+        }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
@@ -253,8 +259,12 @@ namespace LayoutFarm.Text
         {
             if (_externalCustomDraw != null)
             {
-
                 _externalCustomDraw(this, canvas, updateArea);
+                return;
+            }
+            else if (_externalRenderE != null)
+            {
+                _externalRenderE.CustomDrawToThisCanvas(canvas, updateArea);
                 return;
             }
 
