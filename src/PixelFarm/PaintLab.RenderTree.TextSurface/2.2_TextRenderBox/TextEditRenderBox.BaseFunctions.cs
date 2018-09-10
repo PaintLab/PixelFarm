@@ -827,7 +827,7 @@ namespace LayoutFarm.Text
                             _internalTextLayerController.CurrentLineNumber--;
                             if (_verticalExpectedCharIndex > _internalTextLayerController.CurrentLineCharCount - 1)
                             {
-                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount - 1);
+                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount);
                             }
                             else
                             {
