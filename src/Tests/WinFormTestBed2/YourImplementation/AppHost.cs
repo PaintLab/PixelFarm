@@ -49,7 +49,14 @@ namespace LayoutFarm
         {
             return App.ReadStreamS(src);
         }
-
+        public virtual System.IO.Stream GetWriteStream(string dest)
+        {
+            return App.GetWriteStream(dest);
+        }
+        public virtual bool UploadStream(string url, Stream stream)
+        {
+            return App.UploadStream(url, stream);
+        }
         void LazyImageLoad(ImageBinder binder)
         {
             //load here as need
