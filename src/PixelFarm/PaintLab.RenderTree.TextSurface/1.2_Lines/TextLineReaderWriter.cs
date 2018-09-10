@@ -812,7 +812,7 @@ namespace LayoutFarm.Text
                             {
                                 do
                                 {
-                                    if (rCharOffset + currentTextRun.CharacterCount > newCharIndexPointTo)
+                                    if (rCharOffset + currentTextRun.CharacterCount >= newCharIndexPointTo)
                                     {
                                         caret_char_index = newCharIndexPointTo;
                                         caretXPos = rPixelOffset + currentTextRun.GetRunWidth(caret_char_index - rCharOffset);
