@@ -49,7 +49,11 @@ namespace LayoutFarm
         }
         public static System.IO.Stream GetWriteStream(string url)
         {
-            return s_writeStreamDelegate(url);
+            if (s_writeStreamDelegate != null)
+            {
+                return s_writeStreamDelegate(url);
+            }
+            return null;
         }
         public static bool UploadStream(string url, System.IO.Stream uploadstream)
         {
