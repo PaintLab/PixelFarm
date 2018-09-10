@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
 
-    class EditableTextRun : EditableRun
+    public class EditableTextRun : EditableRun
     {
 
         TextSpanStyle spanStyle;
@@ -128,7 +128,7 @@ namespace LayoutFarm.Text
         {
             return new string(mybuffer);
         }
-        internal override void UpdateRunWidth()
+        public override void UpdateRunWidth()
         {
             ITextService txServices = Root.TextServices;
             Size size;
