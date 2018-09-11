@@ -601,7 +601,7 @@ namespace LayoutFarm.WebDom
             //If percentage, use ParseNumber
             if (lenValue.EndsWith("%"))
             {
-                parsedNumber = float.Parse(lenValue.Substring(0, lenValue.Length - 1));
+                parsedNumber = float.Parse(lenValue.Substring(0, lenValue.Length - 1), System.Globalization.CultureInfo.InvariantCulture);
                 return new CssLength(parsedNumber, CssUnitOrNames.Percent);
             }
             //If no units, has error

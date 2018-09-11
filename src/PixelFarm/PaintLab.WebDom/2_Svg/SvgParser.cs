@@ -468,7 +468,7 @@ namespace LayoutFarm.Svg
             float[] elem_values = new float[j];
             for (int i = 0; i < j; ++i)
             {
-                elem_values[i] = float.Parse(elem_string_args[i]);
+                elem_values[i] = float.Parse(elem_string_args[i],System.Globalization.CultureInfo.InvariantCulture);
             }
             return elem_values;
         }
