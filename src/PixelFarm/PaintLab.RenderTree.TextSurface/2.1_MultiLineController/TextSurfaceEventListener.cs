@@ -40,6 +40,8 @@ namespace LayoutFarm.Text
         char[] previewKeyDownRegisterChars;
         public event EventHandler<TextDomEventArgs> PreviewArrowKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewEnterKeyDown;
+        public event EventHandler<TextDomEventArgs> PreviewEscKeyDown;
+
         public event EventHandler<TextDomEventArgs> PreviewBackSpaceKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyDown;
         public event EventHandler<TextDomEventArgs> CharacterAdded;
@@ -75,6 +77,16 @@ namespace LayoutFarm.Text
         public void SetMonitoringTextSurface(TextEditRenderBox textSurfaceElement)
         {
             this.targetTextSurface = textSurfaceElement;
+        }
+        internal static bool NotifyPreviewEsc(TextSurfaceEventListener listener)
+        {
+            if (listener.PreviewEnterKeyDown != null)
+            {
+                TextDomEventArgs e = new TextDomEventArgs(UIKeys.Enter);
+                listener.PreviewEscKeyDown(listener, e);
+                return e.PreventDefault;
+            }
+            return false;
         }
         internal static bool NotifyPreviewEnter(TextSurfaceEventListener listener)
         {

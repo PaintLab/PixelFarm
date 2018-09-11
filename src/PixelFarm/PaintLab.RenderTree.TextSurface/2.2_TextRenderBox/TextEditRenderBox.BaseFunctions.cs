@@ -576,6 +576,12 @@ namespace LayoutFarm.Text
 
             switch (e.KeyCode)
             {
+                case UIKeys.Escape:
+                    if (_textSurfaceEventListener != null)
+                    {
+                        return TextSurfaceEventListener.NotifyPreviewEsc(_textSurfaceEventListener);
+                    }
+                    return false;
                 case UIKeys.Home:
                     {
                         HandleKeyDown(e);
