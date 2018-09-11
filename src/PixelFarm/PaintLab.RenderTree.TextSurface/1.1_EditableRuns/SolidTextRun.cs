@@ -391,7 +391,14 @@ namespace LayoutFarm.Text
         }
         internal override EditableRun Remove(int startIndex, int length, bool withFreeRun)
         {
-            startIndex = 0;
+            if (startIndex == this.mybuffer.Length)
+            {
+                //at the end
+                return null;
+            }
+
+            //
+            startIndex = 0; //***
             length = this.mybuffer.Length;
             EditableRun freeRun = null;
             if (startIndex > -1 && length > 0)
