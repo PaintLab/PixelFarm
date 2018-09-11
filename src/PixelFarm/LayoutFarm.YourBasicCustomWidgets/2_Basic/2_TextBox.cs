@@ -276,13 +276,13 @@ namespace LayoutFarm.CustomWidgets
                 _textEditRenderElement.ReplaceCurrentTextRunContent(nBackspaces, newstr);
             }
         }
-        public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
-        {
-            if (_textEditRenderElement != null)
-            {
-                _textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
-            }
-        }
+        //public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
+        //{
+        //    if (_textEditRenderElement != null)
+        //    {
+        //        _textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
+        //    }
+        //}
         public void CopyCurrentLine(StringBuilder stbuilder)
         {
             _textEditRenderElement.CopyCurrentLine(stbuilder);

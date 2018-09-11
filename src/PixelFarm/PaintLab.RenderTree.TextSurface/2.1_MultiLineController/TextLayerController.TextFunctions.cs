@@ -12,60 +12,60 @@ namespace LayoutFarm.Text
         {
             _textLineWriter.ReplaceCurrentLine(textruns);
         }
-        public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textruns)
-        {
-            if (_textLineWriter.LineNumber == lineNum)
-            {
-                //on the sameline
-                _textLineWriter.ReplaceCurrentLine(textruns);
-            }
-            else
-            {
-                int cur_line = _textLineWriter.LineNumber;
-                _textLineWriter.MoveToLine(lineNum);
-                _textLineWriter.ReplaceCurrentLine(textruns);
-                _textLineWriter.MoveToLine(cur_line);
-            }
-        }
-        public void LoadTextRun(IEnumerable<EditableRun> runs)
-        {
-            this.CancelSelect();
-            _textLineWriter.Clear();
-            _textLineWriter.Reload(runs);
-            _updateJustCurrentLine = false;
-            _textLineWriter.MoveToLine(0);
-        }
+        //public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textruns)
+        //{
+        //    if (_textLineWriter.LineNumber == lineNum)
+        //    {
+        //        //on the sameline
+        //        _textLineWriter.ReplaceCurrentLine(textruns);
+        //    }
+        //    else
+        //    {
+        //        int cur_line = _textLineWriter.LineNumber;
+        //        _textLineWriter.MoveToLine(lineNum);
+        //        _textLineWriter.ReplaceCurrentLine(textruns);
+        //        _textLineWriter.MoveToLine(cur_line);
+        //    }
+        //}
+        //public void LoadTextRun(IEnumerable<EditableRun> runs)
+        //{
+        //    this.CancelSelect();
+        //    _textLineWriter.Clear();
+        //    _textLineWriter.Reload(runs);
+        //    _updateJustCurrentLine = false;
+        //    _textLineWriter.MoveToLine(0);
+        //}
 
-        public void AddRuns(IEnumerable<EditableRun> textSpans)
-        {
-            foreach (var span in textSpans)
-            {
-                _textLineWriter.AddTextSpan(span);
-            }
-        }
-        public void ReplaceCurrentTextRunContent(int nBackSpace, EditableRun newTextRun)
-        {
-            if (newTextRun != null)
-            {
-                EnableUndoHistoryRecording = false;
+        //public void AddRuns(IEnumerable<EditableRun> textSpans)
+        //{
+        //    foreach (var span in textSpans)
+        //    {
+        //        _textLineWriter.AddTextSpan(span);
+        //    }
+        //}
+        //public void ReplaceCurrentTextRunContent(int nBackSpace, EditableRun newTextRun)
+        //{
+        //    if (newTextRun != null)
+        //    {
+        //        EnableUndoHistoryRecording = false;
 
-                for (int i = 0; i < nBackSpace; i++)
-                {
-                    DoBackspace();
-                }
+        //        for (int i = 0; i < nBackSpace; i++)
+        //        {
+        //            DoBackspace();
+        //        }
 
-                EnableUndoHistoryRecording = true;
-                int startLineNum = _textLineWriter.LineNumber;
-                int startCharIndex = _textLineWriter.CharIndex;
-                _textLineWriter.AddTextSpan(newTextRun);
-                _textLineWriter.EnsureCurrentTextRun();
+        //        EnableUndoHistoryRecording = true;
+        //        int startLineNum = _textLineWriter.LineNumber;
+        //        int startCharIndex = _textLineWriter.CharIndex;
+        //        _textLineWriter.AddTextSpan(newTextRun);
+        //        _textLineWriter.EnsureCurrentTextRun();
 
-                _commandHistoryList.AddDocAction(
-                    new DocActionInsertRuns(
-                        new EditableRun[] { newTextRun }, startLineNum, startCharIndex,
-                        _textLineWriter.LineNumber, _textLineWriter.CharIndex));
-            }
-        }
+        //        _commandHistoryList.AddDocAction(
+        //            new DocActionInsertRuns(
+        //                new EditableRun[] { newTextRun }, startLineNum, startCharIndex,
+        //                _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+        //    }
+        //}
 
         public void ReplaceLocalContent(int nBackSpace, string content)
         {
@@ -180,10 +180,7 @@ namespace LayoutFarm.Text
 
         public void CopySelectedTextToPlainText(StringBuilder stBuilder)
         {
-            if (_selectionRange == null)
-            {
-            }
-            else
+            if (_selectionRange != null)
             {
                 _selectionRange.SwapIfUnOrder();
                 if (_selectionRange.IsOnTheSameLine)

@@ -75,23 +75,23 @@ namespace LayoutFarm.Text
         {
             _internalTextLayerController.ReplaceLocalContent(nBackspace, t);
         }
-        public void LoadTextRun(IEnumerable<EditableRun> textRuns)
-        {
-            _internalTextLayerController.LoadTextRun(textRuns);
-        }
+        //public void LoadTextRun(IEnumerable<EditableRun> textRuns)
+        //{
+        //    _internalTextLayerController.LoadTextRun(textRuns);
+        //}
         public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
         {
             _internalTextLayerController.ReplaceCurrentLineTextRun(textRuns);
         }
-        /// <summary>
-        /// replace specific line number with textruns
-        /// </summary>
-        /// <param name="lineNum"></param>
-        /// <param name="textRuns"></param>
-        public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textRuns)
-        {
-            _internalTextLayerController.ReplaceLine(lineNum, textRuns);
-        }
+        ///// <summary>
+        ///// replace specific line number with textruns
+        ///// </summary>
+        ///// <param name="lineNum"></param>
+        ///// <param name="textRuns"></param>
+        //public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textRuns)
+        //{
+        //    _internalTextLayerController.ReplaceLine(lineNum, textRuns);
+        //}
         public void CopyCurrentLine(StringBuilder output)
         {
             _internalTextLayerController.CopyCurrentLine(output);
