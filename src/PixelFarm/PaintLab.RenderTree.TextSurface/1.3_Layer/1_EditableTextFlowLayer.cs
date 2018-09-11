@@ -16,12 +16,13 @@ namespace LayoutFarm.Text
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
+            _defaultLineHeight = 24;//temp
             _ownerTextEditRenderBox = owner;
 
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here
-            _defaultLineHeight = 24;//temp
+            
         }
         internal void NotifyContentSizeChanged()
         {
