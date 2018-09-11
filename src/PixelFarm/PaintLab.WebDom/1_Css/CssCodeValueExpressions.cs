@@ -110,6 +110,7 @@ namespace LayoutFarm.WebDom
     {
         string unit;
         readonly string _propertyValue;
+
         public CssCodePrimitiveExpression(string value, CssValueHint hint)
             : base(hint)
         {
@@ -124,7 +125,7 @@ namespace LayoutFarm.WebDom
                     break;
                 case CssValueHint.Number:
                     {
-                        this.number = float.Parse(value);
+                        this.number = float.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
                     }
                     break;
             }
