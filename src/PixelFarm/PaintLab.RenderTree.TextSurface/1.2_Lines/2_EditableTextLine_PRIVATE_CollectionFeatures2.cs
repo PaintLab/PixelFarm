@@ -162,10 +162,14 @@ namespace LayoutFarm.Text
         {
             this.Clear();
             this.LocalSuspendLineReArrange();
-            foreach (EditableRun r in textRuns)
+            if (textRuns != null)
             {
-                this.AddLast(r);
+                foreach (EditableRun r in textRuns)
+                {
+                    this.AddLast(r);
+                }
             }
+
             this.LocalResumeLineReArrange();
         }
     }

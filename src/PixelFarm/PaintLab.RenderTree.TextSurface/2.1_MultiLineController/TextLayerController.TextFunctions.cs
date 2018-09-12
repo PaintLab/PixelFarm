@@ -103,7 +103,12 @@ namespace LayoutFarm.Text
                         runs.Add(new EditableTextRun(root, '\n', initTextSpanStyle));
                     }
 
-                    runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
+                    if (line.Length > 0)
+                    {
+                        runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
+                    }
+
+                    //
                     line = reader.ReadLine();
                     lineCount++;
                 }
