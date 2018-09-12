@@ -225,25 +225,6 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 #endif
-        //public override bool PushClipAreaForNativeScrollableElement(Rect updateArea)
-        //{
-
-        //    clipRectStack.Push(currentClipRect);
-
-        //    System.Drawing.Rectangle intersectResult = System.Drawing.Rectangle.Intersect(
-        //        currentClipRect,
-        //        updateArea.ToRectangle().ToRect());
-
-        //    if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
-        //    {
-        //        currentClipRect = intersectResult;
-        //        return false;
-        //    }
-
-        //    gx.SetClip(intersectResult);
-        //    currentClipRect = intersectResult;
-        //    return true;
-        //}
 
 #if DEBUG
         public static int dbug_canvasCount = 0;
