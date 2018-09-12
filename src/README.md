@@ -27,7 +27,7 @@ _pic 1: MiniDev.sln preview_
 
 I separate the main projects into many sub _solution folders_ =>
 
-Because it is easy to do _dependency_analysis_.
+Because it is easy to do _dependency analysis_.
 
 ---
 
@@ -55,8 +55,13 @@ _pic 3: Building BackEnd_Foundamental_Tech folder_
 
 **2.0 PixelFarm_Foundamental_Tech**
 
+This folder is about core Vector and Pixel manipulation  supports.
+
+It has 3 projects, they are reference each other or reference to 1.0 BackEnd_Foundamental_Tech above
 
 
+![2018-09-13_05-53-22](https://user-images.githubusercontent.com/7447159/45457415-032ac480-b719-11e8-8030-acee426957cf.gif)
 
+_pic 4: PixelFarm_Foundamental_Tech, projects and building_
 
 
