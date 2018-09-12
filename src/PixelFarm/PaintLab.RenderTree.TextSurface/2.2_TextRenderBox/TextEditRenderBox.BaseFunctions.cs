@@ -576,6 +576,12 @@ namespace LayoutFarm.Text
 
             switch (e.KeyCode)
             {
+                case UIKeys.Escape:
+                    if (_textSurfaceEventListener != null)
+                    {
+                        return TextSurfaceEventListener.NotifyPreviewEsc(_textSurfaceEventListener);
+                    }
+                    return false;
                 case UIKeys.Home:
                     {
                         HandleKeyDown(e);
@@ -827,7 +833,7 @@ namespace LayoutFarm.Text
                             _internalTextLayerController.CurrentLineNumber--;
                             if (_verticalExpectedCharIndex > _internalTextLayerController.CurrentLineCharCount - 1)
                             {
-                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount - 1);
+                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount);
                             }
                             else
                             {

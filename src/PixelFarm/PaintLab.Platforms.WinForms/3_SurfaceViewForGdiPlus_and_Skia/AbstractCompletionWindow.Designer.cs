@@ -29,7 +29,12 @@
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
+#if DEBUG
             this.Text = "AbstractCompletionWindow";
+#else
+            this.Text = "";
+#endif
         }
 
     }

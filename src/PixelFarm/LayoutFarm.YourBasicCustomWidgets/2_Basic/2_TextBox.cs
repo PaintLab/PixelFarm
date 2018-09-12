@@ -159,16 +159,23 @@ namespace LayoutFarm.CustomWidgets
                                 //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
                                 //-----------------------------------
                                 //but for general 
-                                EditableRun textspan = _textEditRenderElement.CreateEditableTextRun(splitBuffer);
-                                _textEditRenderElement.AddTextRun(textspan);
+
+                                EditableRun textRun = new EditableTextRun(_textEditRenderElement.Root,
+                                    splitBuffer,
+                                    _textEditRenderElement.CurrentTextSpanStyle);
+                                textRun.UpdateRunWidth();
+                                _textEditRenderElement.AddTextRun(textRun);
                             }
                         }
                         else
                         {
-                            var textspan = _textEditRenderElement.CreateEditableTextRun(line);
-                            _textEditRenderElement.AddTextRun(textspan);
-                        }
 
+                            var textRun = new EditableTextRun(_textEditRenderElement.Root,
+                                line,
+                                  _textEditRenderElement.CurrentTextSpanStyle);
+                            textRun.UpdateRunWidth();
+                            _textEditRenderElement.AddTextRun(textRun);
+                        } 
 
                         lineCount++;
                         line = reader.ReadLine();
@@ -236,6 +243,14 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this._multiline; }
         }
+        public static TextEditRenderBox GetTextEditRenderBox(TextBox txtbox)
+        {
+            return txtbox._textEditRenderElement;
+        }
+        public static InternalTextLayerController GetInternalTextLayerController(TextBox txtbox)
+        {
+            return txtbox._textEditRenderElement.TextLayerController;
+        }
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
             _textEditRenderElement.FindCurrentUnderlyingWord(out startAt, out len);
@@ -268,13 +283,13 @@ namespace LayoutFarm.CustomWidgets
                 _textEditRenderElement.ReplaceCurrentTextRunContent(nBackspaces, newstr);
             }
         }
-        public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
-        {
-            if (_textEditRenderElement != null)
-            {
-                _textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
-            }
-        }
+        //public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
+        //{
+        //    if (_textEditRenderElement != null)
+        //    {
+        //        _textEditRenderElement.ReplaceCurrentLineTextRuns(textRuns);
+        //    }
+        //}
         public void CopyCurrentLine(StringBuilder stbuilder)
         {
             _textEditRenderElement.CopyCurrentLine(stbuilder);
@@ -283,7 +298,7 @@ namespace LayoutFarm.CustomWidgets
         {
             //TODO: reimplement text-model again
             _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
-            
+
         }
         public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
         {

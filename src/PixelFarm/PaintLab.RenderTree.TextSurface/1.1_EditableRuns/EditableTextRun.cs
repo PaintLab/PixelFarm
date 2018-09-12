@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
 
-    class EditableTextRun : EditableRun
+    public class EditableTextRun : EditableRun
     {
 
         TextSpanStyle spanStyle;
@@ -128,7 +128,7 @@ namespace LayoutFarm.Text
         {
             return new string(mybuffer);
         }
-        internal override void UpdateRunWidth()
+        public override void UpdateRunWidth()
         {
             ITextService txServices = Root.TextServices;
             Size size;
@@ -330,6 +330,11 @@ namespace LayoutFarm.Text
         {
             int bWidth = this.Width;
             int bHeight = this.Height;
+
+#if DEBUG
+            canvas.dbug_DrawCrossRect(Color.Red, new Rectangle(0, 0, bWidth, bHeight));
+            canvas.DrawRectangle(Color.Red, 0, 0, bWidth, bHeight);
+#endif
             if (!this.HasStyle)
             {
                 canvas.DrawText(this.mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);

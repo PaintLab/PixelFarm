@@ -13,6 +13,8 @@ namespace LayoutFarm.UI
         FormPopupShadow2 _formPopupShadow;
 
         FormClosingEventHandler _parentFormClosingEventHandler;
+        EventHandler _parentFormSizeChanged;
+
         public AbstractCompletionWindow()
         {
             InitializeComponent();
@@ -22,6 +24,10 @@ namespace LayoutFarm.UI
 
             _parentFormClosingEventHandler = (s, e) =>
             {
+                //when parent form is closing 
+                //we close the popup shadow window
+                //and close this abstract completion windows
+
                 if (_formPopupShadow != null)
                 {
                     _formPopupShadow.Close();
@@ -31,6 +37,14 @@ namespace LayoutFarm.UI
                 this.Close();
             };
 
+            _parentFormSizeChanged = (s, e) =>
+            {
+#if DEBUG
+                this.Hide();
+#else
+                this.Hide();
+#endif
+            };
         }
         internal FormPopupShadow2 PopupShadow
         {
@@ -62,6 +76,7 @@ namespace LayoutFarm.UI
                 {
                     //unsubscribe old event
                     _linkedParentForm.FormClosing -= _parentFormClosingEventHandler;
+                    _linkedParentForm.Deactivate -= _parentFormSizeChanged;
                 }
 
                 this._linkedParentForm = value;
@@ -69,9 +84,12 @@ namespace LayoutFarm.UI
                 {
                     //when
                     _linkedParentForm.FormClosing += _parentFormClosingEventHandler;
+                    _linkedParentForm.Deactivate += _parentFormSizeChanged;
                 }
             }
         }
+
+
 
         public Control LinkedParentControl
         {
