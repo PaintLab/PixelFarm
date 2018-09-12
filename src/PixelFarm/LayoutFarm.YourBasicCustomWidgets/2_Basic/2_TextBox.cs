@@ -159,16 +159,23 @@ namespace LayoutFarm.CustomWidgets
                                 //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
                                 //-----------------------------------
                                 //but for general 
-                                EditableRun textspan = _textEditRenderElement.CreateEditableTextRun(splitBuffer);
-                                _textEditRenderElement.AddTextRun(textspan);
+
+                                EditableRun textRun = new EditableTextRun(_textEditRenderElement.Root,
+                                    splitBuffer,
+                                    _textEditRenderElement.CurrentTextSpanStyle);
+                                textRun.UpdateRunWidth();
+                                _textEditRenderElement.AddTextRun(textRun);
                             }
                         }
                         else
                         {
-                            var textspan = _textEditRenderElement.CreateEditableTextRun(line);
-                            _textEditRenderElement.AddTextRun(textspan);
-                        }
 
+                            var textRun = new EditableTextRun(_textEditRenderElement.Root,
+                                line,
+                                  _textEditRenderElement.CurrentTextSpanStyle);
+                            textRun.UpdateRunWidth();
+                            _textEditRenderElement.AddTextRun(textRun);
+                        } 
 
                         lineCount++;
                         line = reader.ReadLine();
