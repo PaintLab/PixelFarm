@@ -23,18 +23,18 @@ namespace LayoutFarm.Text
             this.mybuffer = copyBuffer;
             UpdateRunWidth();
         }
-        public SolidTextRun(RootGraphic gfx, char c, TextSpanStyle style)
-            : base(gfx)
-        {
-            this.spanStyle = style;
-            mybuffer = new char[] { c };
-            if (c == '\n')
-            {
-                this.IsLineBreak = true;
-            }
-            //check line break?
-            UpdateRunWidth();
-        }
+        //public SolidTextRun(RootGraphic gfx, char c, TextSpanStyle style)
+        //    : base(gfx)
+        //{
+        //    this.spanStyle = style;
+        //    mybuffer = new char[] { c };
+        //    if (c == '\n')
+        //    {
+        //        this.IsLineBreak = true;
+        //    }
+        //    //check line break?
+        //    UpdateRunWidth();
+        //}
         public SolidTextRun(RootGraphic gfx, string str, TextSpanStyle style)
             : base(gfx)
         {
@@ -62,13 +62,21 @@ namespace LayoutFarm.Text
         {
             _externalRenderE = externalRenderE;
         }
+        public string RawText
+        {
+            get; set;
+        }
+
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
         }
         public override EditableRun Clone()
         {
-            return new SolidTextRun(this.Root, this.GetText(), this.SpanStyle);
+            return new SolidTextRun(this.Root, this.GetText(), this.SpanStyle)
+            {
+                RawText = this.RawText
+            };
         }
         public override EditableRun Copy(int startIndex)
         {
@@ -98,7 +106,9 @@ namespace LayoutFarm.Text
                 EditableRun newTextRun = null;
                 char[] newContent = new char[length];
                 Array.Copy(this.mybuffer, sourceIndex, newContent, 0, length);
-                SolidTextRun solidRun = new SolidTextRun(this.Root, newContent, this.SpanStyle);
+                SolidTextRun solidRun = new SolidTextRun(this.Root, newContent, this.SpanStyle) { RawText = this.RawText };
+
+
                 solidRun.SetCustomExternalDraw(this._externalCustomDraw); //also copy drawing handler?
                 newTextRun = solidRun;
 
@@ -148,7 +158,7 @@ namespace LayoutFarm.Text
             }
             else
             {
-                stBuilder.Append(mybuffer);
+                stBuilder.Append(RawText);
             }
         }
         public override int CharacterCount
@@ -351,6 +361,11 @@ namespace LayoutFarm.Text
         }
         public override EditableRun LeftCopy(int index)
         {
+            if (index == 0)
+            {
+                return null;
+            }
+
             if (index > -1)
             {
                 return MakeTextRun(0, this.mybuffer.Length);
