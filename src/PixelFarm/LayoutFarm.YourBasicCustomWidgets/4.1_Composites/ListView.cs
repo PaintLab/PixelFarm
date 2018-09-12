@@ -280,6 +280,17 @@ namespace LayoutFarm.CustomWidgets
                 SetViewport(this.viewportX, topPos);
             }
         }
+        public void EnsureSelectedItemVisibleToTopItem()
+        {
+            if (selectedIndex > -1)
+            {
+                //check if selected item is visible
+                //if not bring them into view 
+                int newtop = selectedItem.Top;
+                SetViewport(this.viewportX, newtop); 
+            }
+
+        }
         public void EnsureSelectedItemVisible()
         {
             if (selectedIndex > -1)

@@ -13,9 +13,10 @@ namespace LayoutFarm.Text
 #endif
     sealed partial class EditableTextLine
     {
+        //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
 
-        internal EditableTextFlowLayer editableFlowLayer;
+        internal EditableTextFlowLayer editableFlowLayer; //owner
         int currentLineNumber;
         int actualLineHeight;
         int actualLineWidth;

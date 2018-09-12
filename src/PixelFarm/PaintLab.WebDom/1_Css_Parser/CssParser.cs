@@ -448,7 +448,7 @@ namespace LayoutFarm.WebDom.Parser
                                 break;
                             case CssTokenName.Number:
                                 {
-                                    float number = float.Parse(new string(this.textBuffer, start, len));
+                                    float number = float.Parse(new string(this.textBuffer, start, len), System.Globalization.CultureInfo.InvariantCulture);
                                     this._currentProperty.AddValue(this._latestPropertyValue =
                                           new CssCodePrimitiveExpression(number));
                                     parseState = CssParseState.AfterPropertyValue;
@@ -575,7 +575,7 @@ namespace LayoutFarm.WebDom.Parser
                             case CssTokenName.Number:
                                 {
                                     //another property value
-                                    float number = float.Parse(new string(this.textBuffer, start, len));
+                                    float number = float.Parse(new string(this.textBuffer, start, len), System.Globalization.CultureInfo.InvariantCulture);
                                     this._currentProperty.AddValue(this._latestPropertyValue =
                                         new CssCodePrimitiveExpression(number));
                                 }
@@ -701,7 +701,7 @@ namespace LayoutFarm.WebDom.Parser
                                 break;
                             case CssTokenName.Number:
                                 {
-                                    float number = float.Parse(funcArg);
+                                    float number = float.Parse(funcArg, System.Globalization.CultureInfo.InvariantCulture);
                                     ((CssCodeFunctionCallExpression)this._latestPropertyValue).AddFuncArg(
                                           new CssCodePrimitiveExpression(number));
                                     this.parseState = CssParseState.AfterFuncParameter;

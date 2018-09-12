@@ -276,9 +276,16 @@ namespace LayoutFarm.UI
             }
             PrepareRenderAndFlushAccumGraphics();
         }
+
+        //#if DEBUG
+        //        static int dbug_keydown_count = 0;
+        //#endif
         public void HandleKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
+
+
 #if DEBUG
+            //Console.WriteLine("keydown" + (dbug_keydown_count++));
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)e.KeyCode);
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
@@ -308,8 +315,16 @@ namespace LayoutFarm.UI
             this.topWinEventRoot.RootKeyPress(e.KeyChar);
             PrepareRenderAndFlushAccumGraphics();
         }
+
+        //#if DEBUG
+        //        static int dbug_preview_dialogKey_count = 0;
+        //#endif
+
         public bool HandleProcessDialogKey(Keys keyData)
         {
+            //#if DEBUG
+            //            Console.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
+            //#endif
             canvasViewport.FullMode = false;
             bool result = this.topWinEventRoot.RootProcessDialogKey((int)keyData);
             if (result)

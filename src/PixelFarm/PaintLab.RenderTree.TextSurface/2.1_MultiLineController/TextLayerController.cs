@@ -90,11 +90,17 @@ namespace LayoutFarm.Text
                 RemoveSelectedText();
                 passRemoveSelectedText = true;
             }
+
             if (passRemoveSelectedText && c == ' ')
             {
             }
             else
             {
+                if (!_textLineWriter.CanAcceptThisChar(c))
+                {
+                    return;
+                }
+                //
                 _commandHistoryList.AddDocAction(
                   new DocActionCharTyping(c, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
             }

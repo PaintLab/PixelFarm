@@ -12,7 +12,7 @@ namespace LayoutFarm.Text
     {
         //1. owner is a textline
         EditableTextLine ownerTextLine;
-        
+
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
 
         public EditableRun(RootGraphic gfx)
@@ -55,7 +55,7 @@ namespace LayoutFarm.Text
         {
             return tt.GetCharacterFromPixelOffset(pixelOffset);
         }
-        internal abstract void UpdateRunWidth();
+        public abstract void UpdateRunWidth();
         ///////////////////////////////////////////////////////////////  
         public abstract EditableRun Clone();
         public abstract EditableRun LeftCopy(int index);

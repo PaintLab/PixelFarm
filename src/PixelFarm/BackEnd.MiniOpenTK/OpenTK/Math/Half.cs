@@ -72,7 +72,7 @@ namespace OpenTK
     /// predictable results.
     /// </remarks>
     [Serializable, StructLayout(LayoutKind.Sequential)]
-    public struct Half :  IComparable<Half>, IFormattable, IEquatable<Half>
+    public struct Half : IComparable<Half>, IFormattable, IEquatable<Half>
     {
 
         UInt16 bits;
@@ -329,7 +329,7 @@ namespace OpenTK
         /// <returns>The result of the conversion.
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static implicit operator float (Half h)
+        public static implicit operator float(Half h)
         {
             return h.ToSingle();
         }
@@ -343,7 +343,7 @@ namespace OpenTK
         /// <returns>The result of the conversion.
         /// A <see cref="System.Double"/>
         /// </returns>
-        public static implicit operator double (Half h)
+        public static implicit operator double(Half h)
         {
             return (double)h.ToSingle();
         }
@@ -469,7 +469,7 @@ namespace OpenTK
         /// <returns>A new Half instance.</returns>
         public static Half Parse(string s)
         {
-            return (Half)Single.Parse(s);
+            return (Half)Single.Parse(s, System.Globalization.CultureInfo.InvariantCulture);
         }
 
         /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent.</summary>

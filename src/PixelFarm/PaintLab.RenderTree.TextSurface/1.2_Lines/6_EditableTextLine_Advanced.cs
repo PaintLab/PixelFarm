@@ -287,9 +287,10 @@ namespace LayoutFarm.Text
                         else
                         {
                             //this may be the blank line
+                            startLine.Clear();
 #if DEBUG
                             //TODO: review here again
-                            System.Diagnostics.Debug.WriteLine("EditableTextLine_adv1");
+                            //System.Diagnostics.Debug.WriteLine("EditableTextLine_adv1");
 #endif
                         }
                     }
