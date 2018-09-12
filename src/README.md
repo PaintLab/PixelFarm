@@ -41,7 +41,7 @@ please note that these projects reference to mscorlib/ System / or each other.
 
 ![BackEnd_Foundamental_Tech_AsmReference](https://user-images.githubusercontent.com/7447159/45457138-d0340100-b717-11e8-90ed-22c4d190481c.gif)
 
-_pic 2: please note the minimal asm_reference (dependency) in each projects_
+_pic 2: asm_references (dependency) in each projects of BackEnd_Foundamental_Tech_
 
 
 ![Building_BackEnd_Foundamental_Tech](https://user-images.githubusercontent.com/7447159/45457201-14bf9c80-b718-11e8-929f-c7751f06b488.gif)
