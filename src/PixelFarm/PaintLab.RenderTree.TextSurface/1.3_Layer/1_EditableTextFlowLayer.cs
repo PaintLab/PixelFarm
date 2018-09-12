@@ -22,12 +22,18 @@ namespace LayoutFarm.Text
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here
-            
+
         }
         internal void NotifyContentSizeChanged()
         {
             TextEditRenderBox.NotifyTextContentSizeChanged(_ownerTextEditRenderBox);
         }
+
+        internal void NotifyHitOnSolidTextRun(SolidTextRun solidTextRun)
+        {
+            _ownerTextEditRenderBox.NotifyHitOnSolidTextRun(solidTextRun); 
+        }
+
         public int DefaultLineHeight
         {
             get
@@ -274,6 +280,12 @@ namespace LayoutFarm.Text
 
         public override bool HitTestCore(HitChain hitChain)
         {
+#if DEBUG
+            if (hitChain.dbugHitPhase == dbugHitChainPhase.MouseDown)
+            {
+
+            }
+#endif
             if ((layerFlags & IS_LAYER_HIDDEN) == 0)
             {
                 if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)

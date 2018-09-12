@@ -116,6 +116,15 @@ namespace LayoutFarm.Text
         }
 
 
+        SolidTextRun _latestHitSolidTextRun;
+        internal void NotifyHitOnSolidTextRun(SolidTextRun solidTextRun)
+        {
+            _latestHitSolidTextRun = solidTextRun;
+        }
+        public SolidTextRun LastestHitSolidTextRun
+        {
+            get { return _latestHitSolidTextRun; }
+        }
 
         void MyScrollToNotRaiseEvent(int x, int y,
             out UIScrollEventArgs hScrollEventArgs,

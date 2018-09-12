@@ -2,7 +2,6 @@
 
 using System;
 using System.Text;
-using LayoutFarm.RenderBoxes;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.Text
@@ -13,29 +12,16 @@ namespace LayoutFarm.Text
         Action<SolidTextRun, DrawBoard, Rectangle> _externalCustomDraw;
         TextSpanStyle spanStyle;
         char[] mybuffer;
-
         RenderElement _externalRenderE;
-
-
-        public SolidTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
+        internal SolidTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
             : base(gfx)
-        {   //check line break? 
+        {
+            //check line break? 
             this.spanStyle = style;
             this.mybuffer = copyBuffer;
             UpdateRunWidth();
         }
-        //public SolidTextRun(RootGraphic gfx, char c, TextSpanStyle style)
-        //    : base(gfx)
-        //{
-        //    this.spanStyle = style;
-        //    mybuffer = new char[] { c };
-        //    if (c == '\n')
-        //    {
-        //        this.IsLineBreak = true;
-        //    }
-        //    //check line break?
-        //    UpdateRunWidth();
-        //}
+
         public SolidTextRun(RootGraphic gfx, string str, TextSpanStyle style)
             : base(gfx)
         {
@@ -54,19 +40,21 @@ namespace LayoutFarm.Text
                 throw new Exception("string must be null or zero length");
             }
         }
-        //
-        public override void ChildrenHitTestCore(HitChain hitChain)
-        {
-            base.ChildrenHitTestCore(hitChain);
-        }
         public void SetCustomExternalDraw(Action<SolidTextRun, DrawBoard, Rectangle> externalCustomDraw)
         {
             _externalCustomDraw = externalCustomDraw;
         }
-        public void SetExternalRenderElement(RenderElement externalRenderE)
+    
+        public RenderElement ExternRenderElement
         {
-            _externalRenderE = externalRenderE;
+            get { return _externalRenderE; }
+            set
+            {
+                _externalRenderE = value;
+            }
         }
+
+
         public string RawText
         {
             get; set;
@@ -76,6 +64,8 @@ namespace LayoutFarm.Text
         {
             DirectSetRootGraphics(this, rootgfx);
         }
+
+
         public override EditableRun Clone()
         {
             return new SolidTextRun(this.Root, this.GetText(), this.SpanStyle)
