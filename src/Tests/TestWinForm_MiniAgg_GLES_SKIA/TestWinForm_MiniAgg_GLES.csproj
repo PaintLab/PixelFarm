@@ -275,9 +275,9 @@
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
       <Name>BackEnd.TypeMirror</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.ImgCodecs\BackEnd.ImgCodecs.csproj">
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>PixelFarm.ImgCodecs</Name>
+      <Name>BackEnd.ImgCodecs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
