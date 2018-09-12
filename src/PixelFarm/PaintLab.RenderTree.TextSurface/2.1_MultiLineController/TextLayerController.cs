@@ -340,12 +340,24 @@ namespace LayoutFarm.Text
                 //CharIndex--;
             }
         }
-        public void AddMarkerSpan(VisualSelectionRangeSnapShot selectoinRangeSnapshot)
+
+        public void AddMarkerSpan(VisualMarkerSelectionRange markerRange)
         {
-
-
+            markerRange.BindToTextLayer(_textLayer);
+            _visualMarkers.Add(markerRange);
+        }
+        /// <summary>
+        /// clear all marker
+        /// </summary>
+        public void ClearMarkers()
+        {
+            _visualMarkers.Clear();
         }
 
+        public void RemoveMarkers(VisualMarkerSelectionRange marker)
+        {
+            _visualMarkers.Remove(marker);
+        }
 
         public int CurrentLineCharCount
         {

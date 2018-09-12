@@ -19,6 +19,7 @@ namespace LayoutFarm.Text
             _defaultLineHeight = 24;//temp
             _ownerTextEditRenderBox = owner;
 
+            
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here
@@ -31,7 +32,7 @@ namespace LayoutFarm.Text
 
         internal void NotifyHitOnSolidTextRun(SolidTextRun solidTextRun)
         {
-            _ownerTextEditRenderBox.NotifyHitOnSolidTextRun(solidTextRun); 
+            _ownerTextEditRenderBox.NotifyHitOnSolidTextRun(solidTextRun);
         }
 
         public int DefaultLineHeight

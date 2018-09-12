@@ -280,7 +280,7 @@ namespace LayoutFarm.Text
 
 
 
-    class VisualMarkerSelectionRange
+    public class VisualMarkerSelectionRange
     {
 
         struct MarkerLocation
@@ -296,11 +296,12 @@ namespace LayoutFarm.Text
         MarkerLocation _startLocation;
         MarkerLocation _stopLocation;
 
+
         public VisualMarkerSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
         {
             this.selectionRangeSnapshot = selectionRangeSnapshot;
-            BackgroundColor = Color.FromArgb(80, Color.Yellow); //test
-        }
+            BackgroundColor = Color.FromArgb(80, Color.Yellow);//test, default
+        }         
         public Color BackgroundColor { get; set; }
         public bool IsOnTheSameLine
         {
@@ -310,7 +311,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        public void BindToTextLayer(EditableTextFlowLayer textLayer)
+        internal void BindToTextLayer(EditableTextFlowLayer textLayer)
         {
             this.textLayer = textLayer;
             //check is on the sameline,
@@ -400,10 +401,9 @@ namespace LayoutFarm.Text
             }
 
         }
-        public static VisualMarkerSelectionRange CreateFromSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
-        {
-            return new VisualMarkerSelectionRange(selectionRangeSnapshot);
-        }
+
+
+     
     }
 }
 
