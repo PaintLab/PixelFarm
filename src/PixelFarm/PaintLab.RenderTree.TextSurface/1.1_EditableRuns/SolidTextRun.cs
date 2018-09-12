@@ -2,6 +2,7 @@
 
 using System;
 using System.Text;
+using LayoutFarm.RenderBoxes;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.Text
@@ -54,6 +55,10 @@ namespace LayoutFarm.Text
             }
         }
         //
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            base.ChildrenHitTestCore(hitChain);
+        }
         public void SetCustomExternalDraw(Action<SolidTextRun, DrawBoard, Rectangle> externalCustomDraw)
         {
             _externalCustomDraw = externalCustomDraw;

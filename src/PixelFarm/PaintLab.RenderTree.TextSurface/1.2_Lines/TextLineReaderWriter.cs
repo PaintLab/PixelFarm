@@ -61,6 +61,14 @@ namespace LayoutFarm.Text
             EnsureCurrentTextRun(precutIndex);
         }
 
+        public void ClearCurrentLine()
+        {
+            int currentCharIndex = CharIndex;
+            CurrentLine.ReplaceAll(null);
+            CurrentLine.TextLineReCalculateActualLineSize();
+            CurrentLine.RefreshInlineArrange();
+            EnsureCurrentTextRun(currentCharIndex);
+        }
         public void ReplaceCurrentLine(IEnumerable<EditableRun> textRuns)
         {
             int currentCharIndex = CharIndex;
