@@ -39,13 +39,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx.csproj">
-      <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
-      <Name>BackEnd.BitmapBufferEx</Name>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>BackEnd.ImgCodecs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
       <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
       <Name>BackEnd.Tesselate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.Triangulation\BackEnd.Triangulation.csproj">
+      <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
+      <Name>BackEnd.Triangulation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
@@ -62,6 +66,10 @@
     <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
       <Name>PaintLab.YourImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\PixelFarm.BitmapBufferEx.csproj">
+      <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
+      <Name>PixelFarm.BitmapBufferEx</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
@@ -90,14 +98,6 @@
     <ProjectReference Include="..\..\PixelFarm\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>BackEnd.SkiaSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
-      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>PixelFarm.ImgCodecs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
-      <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
-      <Name>PixelFarm.Triangulation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68f1daf6-2b35-476e-b2f8-5eadbc823935}</Project>

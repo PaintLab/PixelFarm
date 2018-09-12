@@ -41,6 +41,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.Triangulation\BackEnd.Triangulation.csproj">
+      <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
+      <Name>BackEnd.Triangulation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>PaintLab.Platforms.WinForms</Name>
@@ -68,10 +72,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
-      <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
-      <Name>PixelFarm.Triangulation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

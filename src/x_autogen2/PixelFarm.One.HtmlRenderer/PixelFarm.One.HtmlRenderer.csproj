@@ -219,56 +219,653 @@
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs">
       <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs">
+      <Link>PixelFarm\ImgCodec.Core\Color.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ExtendedImage.cs">
+      <Link>PixelFarm\ImgCodec.Core\ExtendedImage.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\00_Porting\NativeMethods.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\00_Porting\NativeMethods.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ExtraImageInfo.cs">
+      <Link>PixelFarm\ImgCodec.Core\ExtraImageInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBuffer.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBuffer.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\FlippingType.cs">
+      <Link>PixelFarm\ImgCodec.Core\FlippingType.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Helpers\ExtensionAttribute.cs">
+      <Link>PixelFarm\ImgCodec.Core\Helpers\ExtensionAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Helpers\ForNet20.cs">
+      <Link>PixelFarm\ImgCodec.Core\Helpers\ForNet20.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Helpers\Guard.cs">
+      <Link>PixelFarm\ImgCodec.Core\Helpers\Guard.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImageFormatException.cs">
+      <Link>PixelFarm\ImgCodec.Core\ImageFormatException.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImageFrameCollection.cs">
+      <Link>PixelFarm\ImgCodec.Core\ImageFrameCollection.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImageProperty.cs">
+      <Link>PixelFarm\ImgCodec.Core\ImageProperty.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImagePropertyCollection.cs">
+      <Link>PixelFarm\ImgCodec.Core\ImagePropertyCollection.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImgExtensionMethods.cs">
+      <Link>PixelFarm\ImgCodec.Core\ImgExtensionMethods.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\Decoders.cs">
+      <Link>PixelFarm\ImgCodec.Core\IO\Decoders.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\Encoders.cs">
+      <Link>PixelFarm\ImgCodec.Core\IO\Encoders.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\IImageDecoder.cs">
+      <Link>PixelFarm\ImgCodec.Core\IO\IImageDecoder.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferFactory.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferFactory.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\IImageEncoder.cs">
+      <Link>PixelFarm\ImgCodec.Core\IO\IImageEncoder.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs</Link>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\UnsupportedImageFormatException.cs">
+      <Link>PixelFarm\ImgCodec.Core\IO\UnsupportedImageFormatException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Rectangle.cs">
+      <Link>PixelFarm\ImgCodec.Core\Rectangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\RotationType.cs">
+      <Link>PixelFarm\ImgCodec.Core\RotationType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Core\SimpleImage.cs">
+      <Link>PixelFarm\ImgCodec.Core\SimpleImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\DisposalMethod.cs">
+      <Link>PixelFarm\ImgCodec.Gif\DisposalMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifDecoder.cs">
+      <Link>PixelFarm\ImgCodec.Gif\GifDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifGraphicsControlExtension.cs">
+      <Link>PixelFarm\ImgCodec.Gif\GifGraphicsControlExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifImageDescriptor.cs">
+      <Link>PixelFarm\ImgCodec.Gif\GifImageDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifLogicalScreenDescriptor.cs">
+      <Link>PixelFarm\ImgCodec.Gif\GifLogicalScreenDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\LZWDecoder.cs">
+      <Link>PixelFarm\ImgCodec.Gif\LZWDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DecodedJpeg.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DecodedJpeg.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\FDCT.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\FDCT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Image.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Image.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryReader.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\JpegMarker.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\JpegMarker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\YCbCr.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\YCbCr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\ZigZag.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\ZigZag.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\JpegDecoder.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\JpegDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\JpegEncoder.cs">
+      <Link>PixelFarm\ImgCodec.Jpeg\JpegEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\BitmapDestination.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\BitmapDestination.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\BitStream.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\BitStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\DensityUnit.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\DensityUnit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_decoder.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_encoder.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_perm_state.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_perm_state.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_working_state.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_working_state.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\ComponentBuffer.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\ComponentBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\d_derived_tbl.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\d_derived_tbl.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_decoder.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_encoder.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\JpegUtils.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\JpegUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_converter.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_converter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_deconverter.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_deconverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_quantizer.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_quantizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_comp_master.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_comp_master.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_main_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_main_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_decomp_master.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_decomp_master.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_downsampler.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_downsampler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_main_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_main_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_post_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_post_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_forward_dct.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_forward_dct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_input_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_input_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_inverse_dct.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_inverse_dct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_reader.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_reader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_writer.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_writer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_scan_info.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_scan_info.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_upsampler.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_upsampler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\J_BUF_MODE.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\J_BUF_MODE.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_1pass_cquantizer.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_1pass_cquantizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_2pass_cquantizer.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_2pass_cquantizer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_c_coef_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_c_coef_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_destination_mgr.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_destination_mgr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_merged_upsampler.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_merged_upsampler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_source_mgr.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_source_mgr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_upsampler.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_upsampler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JBLOCK.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JBLOCK.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JHUFF_TBL.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JHUFF_TBL.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JpegConstants.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JpegConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_common_struct.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_common_struct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_component_info.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_component_info.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_compress_struct.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_compress_struct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_decompress_struct.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_decompress_struct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_destination_mgr.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_destination_mgr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_error_mgr.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_error_mgr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JPEG_MARKER.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JPEG_MARKER.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_marker_struct.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_marker_struct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_progress_mgr.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_progress_mgr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_source_mgr.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_source_mgr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JQUANT_TBL.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JQUANT_TBL.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jvirt_array.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jvirt_array.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_SPACE.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_SPACE.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_TRANSFORM.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_TRANSFORM.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_DCT_METHOD.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_DCT_METHOD.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_DITHER_MODE.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_DITHER_MODE.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_MESSAGE_CODE.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_MESSAGE_CODE.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\ReadResult.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\ReadResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\CompressionParameters.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\CompressionParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\DecompressionParameters.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\DecompressionParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\DecompressorToJpegImage.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\DecompressorToJpegImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Enumerations.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Enumerations.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\IDecompressDestination.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\IDecompressDestination.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\IRawImage.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\IRawImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Jpeg.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Jpeg.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\JpegImage.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\JpegImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\RawImage.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\RawImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\SampleRow.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\SampleRow.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Utils.cs">
+      <Link>PixelFarm\ImgCodec.LibJpeg\Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\BufferedStreamReader.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\BufferedStreamReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReader.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReaderMode.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReaderMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkCopyBehaviour.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkCopyBehaviour.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkHelper.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkLoadBehaviour.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkLoadBehaviour.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicate.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateEquiv.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateEquiv.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId2.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkRaw.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkRaw.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksList.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksListForWrite.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksListForWrite.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunk.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunk.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkBKGD.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkBKGD.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkCHRM.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkCHRM.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkGAMA.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkGAMA.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkHIST.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkHIST.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkICCP.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkICCP.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIDAT.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIDAT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIEND.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIEND.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIHDR.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIHDR.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkITXT.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkITXT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkMultiple.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkMultiple.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkOFFS.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkOFFS.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPHYS.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPHYS.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPLTE.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPLTE.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSBIT.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSBIT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSingle.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSingle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSkipped.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSkipped.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSPLT.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSPLT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSRGB.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSRGB.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSTER.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSTER.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTEXT.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTEXT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTextVar.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTextVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTIME.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTIME.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTRNS.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTRNS.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkUNKNOWN.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkUNKNOWN.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkZTXT.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkZTXT.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngMetadata.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FileHelper.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FileHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterType.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterWriteStrategy.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterWriteStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\IBytesConsumer.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\IBytesConsumer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageInfo.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLine.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLineHelper.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLineHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLines.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLines.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngCsUtils.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngCsUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngDeinterlacer.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngDeinterlacer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngHelperInternal.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngHelperInternal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkInputStream.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkInputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkOutputStream.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkOutputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjBadCrcException.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjBadCrcException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjException.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjExceptionInternal.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjExceptionInternal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjInputException.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjInputException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjOutputException.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjOutputException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjUnsupportedException.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjUnsupportedException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngReader.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngWriter.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ProgressiveOutputStream.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ProgressiveOutputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\Adler32.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\Adler32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibInputStream.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibInputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibOutputStream.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibOutputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\CRC32.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\CRC32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\DeflateCompressLevel.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\DeflateCompressLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\EDeflateCompressStrategy.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\EDeflateCompressStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamIs.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamIs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamMs.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamMs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamIs.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamIs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamMs.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamMs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibStreamFactory.cs">
+      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibStreamFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\GrayscaleReader.cs">
+      <Link>PixelFarm\ImgCodec.Png\GrayscaleReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\IColorReader.cs">
+      <Link>PixelFarm\ImgCodec.Png\IColorReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\CRC32.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\CRC32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Deflate.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Deflate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\DeflateStream.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\DeflateStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\GZipStream.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\GZipStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Inflate.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Inflate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\InfTree.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\InfTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ParallelDeflateOutputStream.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ParallelDeflateOutputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Tree.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Tree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Zlib.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Zlib.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibBaseStream.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibBaseStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibCodec.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibCodec.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibConstants.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibStream.cs">
+      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\MyCrc32.cs">
+      <Link>PixelFarm\ImgCodec.Png\MyCrc32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PaletteIndexReader.cs">
+      <Link>PixelFarm\ImgCodec.Png\PaletteIndexReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngChunk.cs">
+      <Link>PixelFarm\ImgCodec.Png\PngChunk.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngColorTypeInformation.cs">
+      <Link>PixelFarm\ImgCodec.Png\PngColorTypeInformation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngDecoder.cs">
+      <Link>PixelFarm\ImgCodec.Png\PngDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngEncoder.cs">
+      <Link>PixelFarm\ImgCodec.Png\PngEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngHeader.cs">
+      <Link>PixelFarm\ImgCodec.Png\PngHeader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.Png\TruecolorReader.cs">
+      <Link>PixelFarm\ImgCodec.Png\TruecolorReader.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs</Link>
@@ -911,6 +1508,93 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs">
       <Link>PixelFarm\BackEnd.Tesselate\Tesselator.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFront.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFront.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFrontNode.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\AdvancingFrontNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DelaunayTriangle.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DelaunayTriangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweep.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweep.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepConstraint.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepDebugContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\DTSweepDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Delaunay\PointOnEdgeException.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Delaunay\PointOnEdgeException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\P2T.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\P2T.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Polygon\Polygon.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Polygon\Polygon.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Sets\ConstrainedPointSet.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Sets\ConstrainedPointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Sets\PointSet.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Sets\PointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\ITriangulatable.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\ITriangulatable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\Orientation.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\Orientation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationAlgorithm.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationDebugContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationMode.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationPoint.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationUtil.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Triangulation\TriangulationUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\x_notused\DTSweepBasin.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepEdgeEvent.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\x_notused\DTSweepEdgeEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\DTSweepPointComparator.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\x_notused\DTSweepPointComparator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\FixedArray3.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\x_notused\FixedArray3.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\FixedBitArray3.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\x_notused\FixedBitArray3.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\PolygonSet.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\x_notused\PolygonSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\x_notused\TriangulationConstraint.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\x_notused\TriangulationConstraint.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs">
       <Link>PixelFarm\BackEnd.Win32Utils\Win32_NotUsed.cs</Link>
     </Compile>
@@ -1045,9 +1729,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\Clipboard.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
-      <Link>PixelFarm\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs">
       <Link>PixelFarm\PaintLab.PlatformBridge\Common\GeneralEventListener.cs</Link>
@@ -1416,6 +2097,57 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.Gdi.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferFactory.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapContext.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapContext.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Win32Utils\MyWin32.cs">
       <Link>PixelFarm\BackEnd.Win32Utils\MyWin32.cs</Link>
@@ -1897,72 +2629,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFront.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFront.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweep.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweep.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\P2T.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\P2T.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\polygon\Polygon.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\polygon\Polygon.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\sets\ConstrainedPointSet.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\sets\ConstrainedPointSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\sets\PointSet.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\sets\PointSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\ITriangulatable.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\ITriangulatable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\Orientation.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\Orientation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationMode.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationPoint.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationPoint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationUtil.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationUtil.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\util\PointGenerator.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\util\PointGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\util\PolygonGenerator.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\util\PolygonGenerator.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs">
       <Link>PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs</Link>
     </Compile>
@@ -2121,672 +2787,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs">
       <Link>PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs">
-      <Link>PixelFarm\ImgCodec.Core\Color.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ExtendedImage.cs">
-      <Link>PixelFarm\ImgCodec.Core\ExtendedImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ExtraImageInfo.cs">
-      <Link>PixelFarm\ImgCodec.Core\ExtraImageInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\FlippingType.cs">
-      <Link>PixelFarm\ImgCodec.Core\FlippingType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Helpers\ForNet20.cs">
-      <Link>PixelFarm\ImgCodec.Core\Helpers\ForNet20.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Helpers\Guard.cs">
-      <Link>PixelFarm\ImgCodec.Core\Helpers\Guard.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImageFormatException.cs">
-      <Link>PixelFarm\ImgCodec.Core\ImageFormatException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImageFrameCollection.cs">
-      <Link>PixelFarm\ImgCodec.Core\ImageFrameCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImageProperty.cs">
-      <Link>PixelFarm\ImgCodec.Core\ImageProperty.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImagePropertyCollection.cs">
-      <Link>PixelFarm\ImgCodec.Core\ImagePropertyCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\ImgExtensionMethods.cs">
-      <Link>PixelFarm\ImgCodec.Core\ImgExtensionMethods.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\Decoders.cs">
-      <Link>PixelFarm\ImgCodec.Core\IO\Decoders.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\Encoders.cs">
-      <Link>PixelFarm\ImgCodec.Core\IO\Encoders.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\IImageDecoder.cs">
-      <Link>PixelFarm\ImgCodec.Core\IO\IImageDecoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\IImageEncoder.cs">
-      <Link>PixelFarm\ImgCodec.Core\IO\IImageEncoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\IO\UnsupportedImageFormatException.cs">
-      <Link>PixelFarm\ImgCodec.Core\IO\UnsupportedImageFormatException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\Rectangle.cs">
-      <Link>PixelFarm\ImgCodec.Core\Rectangle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\RotationType.cs">
-      <Link>PixelFarm\ImgCodec.Core\RotationType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Core\SimpleImage.cs">
-      <Link>PixelFarm\ImgCodec.Core\SimpleImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\DisposalMethod.cs">
-      <Link>PixelFarm\ImgCodec.Gif\DisposalMethod.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifDecoder.cs">
-      <Link>PixelFarm\ImgCodec.Gif\GifDecoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifGraphicsControlExtension.cs">
-      <Link>PixelFarm\ImgCodec.Gif\GifGraphicsControlExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifImageDescriptor.cs">
-      <Link>PixelFarm\ImgCodec.Gif\GifImageDescriptor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\GifLogicalScreenDescriptor.cs">
-      <Link>PixelFarm\ImgCodec.Gif\GifLogicalScreenDescriptor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Gif\LZWDecoder.cs">
-      <Link>PixelFarm\ImgCodec.Gif\LZWDecoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DecodedJpeg.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DecodedJpeg.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\FDCT.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\FDCT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Image.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\Image.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryReader.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\JpegMarker.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\JpegMarker.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\YCbCr.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\YCbCr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\ZigZag.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\ZigZag.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\JpegDecoder.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\JpegDecoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\JpegEncoder.cs">
-      <Link>PixelFarm\ImgCodec.Jpeg\JpegEncoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\BitmapDestination.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\BitmapDestination.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\BitStream.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\BitStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\DensityUnit.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\DensityUnit.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_decoder.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_decoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_encoder.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\arith_entropy_encoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_perm_state.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_perm_state.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_working_state.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\bitread_working_state.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\ComponentBuffer.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\ComponentBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\d_derived_tbl.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\d_derived_tbl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_decoder.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_decoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_encoder.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\huff_entropy_encoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\JpegUtils.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\JpegUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_converter.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_converter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_deconverter.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_deconverter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_quantizer.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_color_quantizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_comp_master.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_comp_master.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_main_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_main_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_decomp_master.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_decomp_master.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_downsampler.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_downsampler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_main_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_main_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_post_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_d_post_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_forward_dct.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_forward_dct.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_input_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_input_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_inverse_dct.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_inverse_dct.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_reader.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_reader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_writer.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_marker_writer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_scan_info.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_scan_info.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_upsampler.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\jpeg_upsampler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\J_BUF_MODE.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\J_BUF_MODE.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_1pass_cquantizer.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_1pass_cquantizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_2pass_cquantizer.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_2pass_cquantizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_c_coef_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_c_coef_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_destination_mgr.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_destination_mgr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_merged_upsampler.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_merged_upsampler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_source_mgr.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_source_mgr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_upsampler.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\Internal\my_upsampler.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JBLOCK.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JBLOCK.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JHUFF_TBL.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JHUFF_TBL.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JpegConstants.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JpegConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_common_struct.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_common_struct.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_component_info.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_component_info.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_compress_struct.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_compress_struct.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_decompress_struct.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_decompress_struct.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_destination_mgr.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_destination_mgr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_error_mgr.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_error_mgr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JPEG_MARKER.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JPEG_MARKER.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_marker_struct.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_marker_struct.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_progress_mgr.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_progress_mgr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_source_mgr.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jpeg_source_mgr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\JQUANT_TBL.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\JQUANT_TBL.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\jvirt_array.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\jvirt_array.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_SPACE.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_SPACE.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_TRANSFORM.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_COLOR_TRANSFORM.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_DCT_METHOD.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_DCT_METHOD.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_DITHER_MODE.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_DITHER_MODE.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\J_MESSAGE_CODE.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\J_MESSAGE_CODE.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Classic\ReadResult.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Classic\ReadResult.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\CompressionParameters.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\CompressionParameters.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\DecompressionParameters.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\DecompressionParameters.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\DecompressorToJpegImage.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\DecompressorToJpegImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Enumerations.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Enumerations.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\IDecompressDestination.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\IDecompressDestination.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\IRawImage.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\IRawImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Jpeg.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Jpeg.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\JpegImage.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\JpegImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\RawImage.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\RawImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\SampleRow.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\SampleRow.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.LibJpeg\Utils.cs">
-      <Link>PixelFarm\ImgCodec.LibJpeg\Utils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\BufferedStreamReader.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\BufferedStreamReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReader.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReaderMode.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ChunkReaderMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkCopyBehaviour.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkCopyBehaviour.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkHelper.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkLoadBehaviour.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkLoadBehaviour.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicate.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicate.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateEquiv.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateEquiv.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId2.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkPredicateId2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkRaw.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunkRaw.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksList.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksList.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksListForWrite.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\ChunksListForWrite.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunk.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunk.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkBKGD.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkBKGD.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkCHRM.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkCHRM.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkGAMA.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkGAMA.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkHIST.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkHIST.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkICCP.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkICCP.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIDAT.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIDAT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIEND.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIEND.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIHDR.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkIHDR.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkITXT.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkITXT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkMultiple.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkMultiple.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkOFFS.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkOFFS.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPHYS.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPHYS.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPLTE.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkPLTE.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSBIT.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSBIT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSingle.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSingle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSkipped.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSkipped.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSPLT.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSPLT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSRGB.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSRGB.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSTER.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkSTER.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTEXT.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTEXT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTextVar.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTextVar.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTIME.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTIME.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTRNS.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkTRNS.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkUNKNOWN.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkUNKNOWN.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkZTXT.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngChunkZTXT.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngMetadata.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Chunks\PngMetadata.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FileHelper.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FileHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterType.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterWriteStrategy.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\FilterWriteStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\IBytesConsumer.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\IBytesConsumer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageInfo.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLine.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLineHelper.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLineHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLines.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ImageLines.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngCsUtils.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngCsUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngDeinterlacer.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngDeinterlacer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngHelperInternal.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngHelperInternal.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkInputStream.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkInputStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkOutputStream.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngIDatChunkOutputStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjBadCrcException.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjBadCrcException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjException.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjExceptionInternal.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjExceptionInternal.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjInputException.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjInputException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjOutputException.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjOutputException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjUnsupportedException.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngjUnsupportedException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngReader.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngWriter.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\PngWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ProgressiveOutputStream.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\ProgressiveOutputStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\Adler32.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\Adler32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibInputStream.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibInputStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibOutputStream.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\AZlibOutputStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\CRC32.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\CRC32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\DeflateCompressLevel.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\DeflateCompressLevel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\EDeflateCompressStrategy.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\EDeflateCompressStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamIs.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamIs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamMs.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibInputStreamMs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamIs.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamIs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamMs.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibOutputStreamMs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibStreamFactory.cs">
-      <Link>PixelFarm\ImgCodec.PngCs\ImgCodec.PngCs\Zlib\ZlibStreamFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\GrayscaleReader.cs">
-      <Link>PixelFarm\ImgCodec.Png\GrayscaleReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\IColorReader.cs">
-      <Link>PixelFarm\ImgCodec.Png\IColorReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\CRC32.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\CRC32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Deflate.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Deflate.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\DeflateStream.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\DeflateStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\GZipStream.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\GZipStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Inflate.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Inflate.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\InfTree.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\InfTree.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ParallelDeflateOutputStream.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ParallelDeflateOutputStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Tree.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Tree.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\Zlib.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\Zlib.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibBaseStream.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibBaseStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibCodec.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibCodec.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibConstants.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibStream.cs">
-      <Link>PixelFarm\ImgCodec.Png\Ionic.Zlib\ZlibStream.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\MyCrc32.cs">
-      <Link>PixelFarm\ImgCodec.Png\MyCrc32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PaletteIndexReader.cs">
-      <Link>PixelFarm\ImgCodec.Png\PaletteIndexReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngChunk.cs">
-      <Link>PixelFarm\ImgCodec.Png\PngChunk.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngColorTypeInformation.cs">
-      <Link>PixelFarm\ImgCodec.Png\PngColorTypeInformation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngDecoder.cs">
-      <Link>PixelFarm\ImgCodec.Png\PngDecoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngEncoder.cs">
-      <Link>PixelFarm\ImgCodec.Png\PngEncoder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\PngHeader.cs">
-      <Link>PixelFarm\ImgCodec.Png\PngHeader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\ImgCodec.Png\TruecolorReader.cs">
-      <Link>PixelFarm\ImgCodec.Png\TruecolorReader.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepBasin.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepBasin.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepEdgeEvent.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepEdgeEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepPointComparator.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\x_notused\DTSweepPointComparator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\FixedArray3.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\x_notused\FixedArray3.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\FixedBitArray3.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\x_notused\FixedBitArray3.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\PolygonSet.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\x_notused\PolygonSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Triangulation\x_notused\TriangulationConstraint.cs">
-      <Link>PixelFarm\PixelFarm.Triangulation\x_notused\TriangulationConstraint.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs">
       <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs</Link>

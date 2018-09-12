@@ -215,48 +215,6 @@
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs">
       <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBuffer.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferFactory.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapBufferFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs">
-      <Link>PixelFarm\BackEnd.BitmapBufferEx\BackEnd.BitmapBufferEx\BitmapContext.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs">
       <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs</Link>
     </Compile>
@@ -304,6 +262,114 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Tesselate\Tesselator.cs">
       <Link>PixelFarm\BackEnd.Tesselate\Tesselator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\AdvancingFront.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\AdvancingFront.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\AdvancingFrontNode.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\AdvancingFrontNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\DelaunayTriangle.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\DelaunayTriangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\DTSweep.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\DTSweep.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\DTSweepConstraint.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\DTSweepConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\DTSweepContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\DTSweepContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\DTSweepDebugContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\DTSweepDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\delaunay\PointOnEdgeException.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\delaunay\PointOnEdgeException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\P2T.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\P2T.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\polygon\Polygon.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\polygon\Polygon.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\sets\ConstrainedPointSet.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\sets\ConstrainedPointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\sets\PointSet.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\sets\PointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\ITriangulatable.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\ITriangulatable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\Orientation.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\Orientation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\TriangulationAlgorithm.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\TriangulationAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\TriangulationContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\TriangulationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\TriangulationDebugContext.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\TriangulationDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\TriangulationMode.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\TriangulationMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\TriangulationPoint.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\TriangulationPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\triangulation\TriangulationUtil.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\triangulation\TriangulationUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\util\PointGenerator.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\util\PointGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\util\PolygonGenerator.cs">
+      <Link>PixelFarm\BackEnd.Triangulation\util\PolygonGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferFactory.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapContext.cs">
+      <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapContext.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\0_ScanlineSpan.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\0_ScanlineSpan.cs</Link>
@@ -574,72 +640,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFront.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFront.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweep.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweep.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\P2T.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\P2T.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\polygon\Polygon.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\polygon\Polygon.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\sets\ConstrainedPointSet.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\sets\ConstrainedPointSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\sets\PointSet.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\sets\PointSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\ITriangulatable.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\ITriangulatable.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\Orientation.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\Orientation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationMode.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationPoint.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationPoint.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\triangulation\TriangulationUtil.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\triangulation\TriangulationUtil.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\util\PointGenerator.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\util\PointGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\pixelfarm.triangulation\util\PolygonGenerator.cs">
-      <Link>PixelFarm\pixelfarm.triangulation\util\PolygonGenerator.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs">
       <Link>PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs</Link>
