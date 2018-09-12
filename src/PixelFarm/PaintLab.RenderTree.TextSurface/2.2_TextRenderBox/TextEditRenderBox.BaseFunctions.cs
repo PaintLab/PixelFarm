@@ -259,6 +259,20 @@ namespace LayoutFarm.Text
                     {
                         InvalidateGraphicOfCurrentLineArea();
                     }
+
+                    if (_latestHitSolidTextRun != null)
+                    {
+                        //we mousedown on the solid text run
+                        RenderElement extRenderElement = _latestHitSolidTextRun.ExternRenderElement;
+                        if (extRenderElement != null)
+                        {
+                            LayoutFarm.UI.IUIEventListener listener = extRenderElement.GetController() as LayoutFarm.UI.IUIEventListener;
+                            if (listener != null)
+                            {
+                                listener.ListenMouseDown(e);
+                            }
+                        }
+                    }
                 }
                 else
                 {

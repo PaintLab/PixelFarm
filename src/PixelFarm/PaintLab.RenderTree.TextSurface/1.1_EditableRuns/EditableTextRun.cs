@@ -81,6 +81,12 @@ namespace LayoutFarm.Text
 #endif
             _content_unparsed = true;
         }
+
+        public void UnsafeSetNewContent(char[] copyContent)
+        {
+            SetNewContent(copyContent);
+        }
+
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             //change root graphics after create

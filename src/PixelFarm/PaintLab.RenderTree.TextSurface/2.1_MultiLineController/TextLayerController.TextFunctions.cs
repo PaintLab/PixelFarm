@@ -12,6 +12,10 @@ namespace LayoutFarm.Text
         {
             _textLineWriter.ReplaceCurrentLine(textruns);
         }
+        public void ClearCurrentLine()
+        {
+            _textLineWriter.ClearCurrentLine();
+        }
         //public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textruns)
         //{
         //    if (_textLineWriter.LineNumber == lineNum)

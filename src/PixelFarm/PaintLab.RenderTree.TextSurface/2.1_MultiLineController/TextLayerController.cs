@@ -340,12 +340,24 @@ namespace LayoutFarm.Text
                 //CharIndex--;
             }
         }
-        public void AddMarkerSpan(VisualSelectionRangeSnapShot selectoinRangeSnapshot)
+
+        public void AddMarkerSpan(VisualMarkerSelectionRange markerRange)
         {
-
-
+            markerRange.BindToTextLayer(_textLayer);
+            _visualMarkers.Add(markerRange);
+        }
+        /// <summary>
+        /// clear all marker
+        /// </summary>
+        public void ClearMarkers()
+        {
+            _visualMarkers.Clear();
         }
 
+        public void RemoveMarkers(VisualMarkerSelectionRange marker)
+        {
+            _visualMarkers.Remove(marker);
+        }
 
         public int CurrentLineCharCount
         {
@@ -561,12 +573,14 @@ namespace LayoutFarm.Text
                 {
                     EditableTextLine line = _textLineWriter.GetTextLineAtPos(value.Y);
                     int calculatedLineId = 0;
+                    int lineTop = 0;
                     if (line != null)
                     {
                         calculatedLineId = line.LineNumber;
+                        lineTop = line.Top;
                     }
                     this.CurrentLineNumber = calculatedLineId;
-                    this._textLineWriter.TrySetCaretXPos(value.X);
+                    this._textLineWriter.TrySetCaretPos(value.X, value.Y - lineTop);
                 }
             }
         }
@@ -576,17 +590,19 @@ namespace LayoutFarm.Text
         }
         public void SetCaretPos(int x, int y)
         {
-            int j = _textLineWriter.LineCount;
-            if (j > 0)
+            if (_textLineWriter.LineCount > 0)
             {
                 EditableTextLine line = _textLineWriter.GetTextLineAtPos(y);
-                int calculatedLineId = 0;
+                int lineNo = 0;
+                int lineTop = 0;
                 if (line != null)
                 {
-                    calculatedLineId = line.LineNumber;
+                    lineNo = line.LineNumber;
+                    lineTop = line.Top;
                 }
-                this.CurrentLineNumber = calculatedLineId;
-                this._textLineWriter.TrySetCaretXPos(x);
+
+                this.CurrentLineNumber = lineNo;
+                this._textLineWriter.TrySetCaretPos(x, y - lineTop);
             }
         }
         public Rectangle CurrentLineArea
