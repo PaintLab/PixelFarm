@@ -154,7 +154,7 @@ namespace LayoutFarm.Text
             }
             bool preventDefault = false;
             if (_textSurfaceEventListener != null &&
-                !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeydown(_textSurfaceEventListener, c)))
+                !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeyPress(_textSurfaceEventListener, c)))
             {
                 _internalTextLayerController.UpdateSelectionRange();
             }
@@ -591,14 +591,24 @@ namespace LayoutFarm.Text
             switch (e.KeyCode)
             {
                 case UIKeys.Escape:
-                    if (_textSurfaceEventListener != null)
-                    {
-                        return TextSurfaceEventListener.NotifyPreviewEsc(_textSurfaceEventListener);
-                    }
-                    return false;
+                case UIKeys.End:
                 case UIKeys.Home:
                     {
-                        HandleKeyDown(e);
+                        if (_textSurfaceEventListener != null)
+                        {
+                            return TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e.KeyCode);
+                        }
+                        return false;
+                    }
+                case UIKeys.Tab:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e.KeyCode))
+                        {
+                            return true;                             
+                        }
+                        //
+                        DoTab(); //default do tab
                         return true;
                     }
                 case UIKeys.Return:
@@ -880,11 +890,7 @@ namespace LayoutFarm.Text
                         }
                         return true;
                     }
-                case UIKeys.Tab:
-                    {
-                        DoTab();
-                        return true;
-                    }
+
                 default:
                     {
                         return false;

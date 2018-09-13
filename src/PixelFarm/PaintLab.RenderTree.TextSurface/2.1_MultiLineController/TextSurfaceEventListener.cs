@@ -40,10 +40,10 @@ namespace LayoutFarm.Text
         char[] previewKeyDownRegisterChars;
         public event EventHandler<TextDomEventArgs> PreviewArrowKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewEnterKeyDown;
-        public event EventHandler<TextDomEventArgs> PreviewEscKeyDown;
+        public event EventHandler<TextDomEventArgs> PreviewDialogKeyDown;
 
         public event EventHandler<TextDomEventArgs> PreviewBackSpaceKeyDown;
-        public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyDown;
+        public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyPress;
         public event EventHandler<TextDomEventArgs> CharacterAdded;
         public event EventHandler<TextDomEventArgs> CharacterRemoved;
         public event EventHandler<TextDomEventArgs> CharacterReplaced;
@@ -78,16 +78,16 @@ namespace LayoutFarm.Text
         {
             this.targetTextSurface = textSurfaceElement;
         }
-        internal static bool NotifyPreviewEsc(TextSurfaceEventListener listener)
+        internal static bool NotifyPreviewDialogKeyDown(TextSurfaceEventListener listener, UIKeys uiKey)
         {
-            if (listener.PreviewEnterKeyDown != null)
+            if (listener.PreviewDialogKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(UIKeys.Enter);
-                listener.PreviewEscKeyDown(listener, e);
+                TextDomEventArgs e = new TextDomEventArgs(uiKey);
+                listener.PreviewDialogKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
-        }
+        } 
         internal static bool NotifyPreviewEnter(TextSurfaceEventListener listener)
         {
             if (listener.PreviewEnterKeyDown != null)
@@ -118,16 +118,18 @@ namespace LayoutFarm.Text
             }
             return false;
         }
-        internal static bool NotifyPreviewKeydown(TextSurfaceEventListener listener, char c)
+
+        internal static bool NotifyPreviewKeyPress(TextSurfaceEventListener listener, char c)
         {
-            if (listener.IsRegisterPreviewKeyDownChar(c))
+            if (listener.IsRegisterPreviewKeyDownPress(c) &&
+                listener.PreviewRegisteredKeyPress != null)
             {
-                if (listener.PreviewRegisteredKeyDown != null)
-                {
-                    TextDomEventArgs e = new TextDomEventArgs(c);
-                    listener.PreviewRegisteredKeyDown(listener, e);
-                    return e.PreventDefault;
-                }
+                //TODO: review here use from pool?
+                TextDomEventArgs e = new TextDomEventArgs(c);
+                //also set other keyboard info ?
+                //eg. alt ctrl shift
+                listener.PreviewRegisteredKeyPress(listener, e);
+                return e.PreventDefault;
             }
             return false;
         }
@@ -138,7 +140,7 @@ namespace LayoutFarm.Text
                 listener.ArrowKeyCaretPosChanged(listener, new TextDomEventArgs(key));
             }
         }
-        bool IsRegisterPreviewKeyDownChar(char c)
+        bool IsRegisterPreviewKeyDownPress(char c)
         {
             if (previewKeyDownRegisterChars != null)
             {
