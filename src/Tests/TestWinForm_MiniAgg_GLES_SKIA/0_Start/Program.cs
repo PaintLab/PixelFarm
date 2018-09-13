@@ -54,7 +54,7 @@ namespace Mini
             //check if we have that data?            
             //------------------------------------------- 
             //string typographyDir = @"brkitr_src/dictionaries";
-            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr\dictionaries";
+            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr";
 
             if (!System.IO.Directory.Exists(icu_datadir))
             {
@@ -157,9 +157,9 @@ namespace Mini
                     default:
                         return null;
                     case "thai":
-                        return GetTextListIterFromTextFile(DataDir + "/thaidict.txt");
+                        return GetTextListIterFromTextFile(DataDir + "/dictionaries/thaidict.txt");
                     case "lao":
-                        return GetTextListIterFromTextFile(DataDir + "/laodict.txt");
+                        return GetTextListIterFromTextFile(DataDir + "/dictionaries/laodict.txt");
                 }
 
             }
