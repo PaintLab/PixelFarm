@@ -175,7 +175,7 @@ namespace LayoutFarm.CustomWidgets
                                   _textEditRenderElement.CurrentTextSpanStyle);
                             textRun.UpdateRunWidth();
                             _textEditRenderElement.AddTextRun(textRun);
-                        } 
+                        }
 
                         lineCount++;
                         line = reader.ReadLine();
@@ -278,10 +278,7 @@ namespace LayoutFarm.CustomWidgets
 
         public void ReplaceCurrentTextRunContent(int nBackspaces, string newstr)
         {
-            if (_textEditRenderElement != null)
-            {
-                _textEditRenderElement.ReplaceCurrentTextRunContent(nBackspaces, newstr);
-            }
+            _textEditRenderElement?.ReplaceCurrentTextRunContent(nBackspaces, newstr);
         }
         //public void ReplaceCurrentLineTextRuns(IEnumerable<EditableRun> textRuns)
         //{
@@ -294,6 +291,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement.CopyCurrentLine(stbuilder);
         }
+
         public void FormatCurrentSelection(TextSpanStyle spanStyle)
         {
             //TODO: reimplement text-model again
