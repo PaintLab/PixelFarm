@@ -88,9 +88,10 @@ namespace LayoutFarm.Text
             }
             else
             {
-                _internalTextLayerController.StartSelectIfNoSelection();
-                _internalTextLayerController.DoHome();
-                _internalTextLayerController.EndSelect();
+
+                _internalTextLayerController.StartSelectIfNoSelection(); //start select before move to home
+                _internalTextLayerController.DoHome(); //move cursor to default home 
+                _internalTextLayerController.EndSelect(); //end selection
             }
 
             EnsureCaretVisible();
@@ -154,7 +155,7 @@ namespace LayoutFarm.Text
             }
             bool preventDefault = false;
             if (_textSurfaceEventListener != null &&
-                !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeyPress(_textSurfaceEventListener, c)))
+                !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeyPress(_textSurfaceEventListener, e)))
             {
                 _internalTextLayerController.UpdateSelectionRange();
             }
@@ -431,7 +432,7 @@ namespace LayoutFarm.Text
                         }
                         else
                         {
-                            if (!TextSurfaceEventListener.NotifyPreviewBackSpace(_textSurfaceEventListener) &&
+                            if (!TextSurfaceEventListener.NotifyPreviewBackSpace(_textSurfaceEventListener, e) &&
                                 _internalTextLayerController.DoBackspace())
                             {
                                 TextSurfaceEventListener.NotifyCharactersRemoved(_textSurfaceEventListener,
@@ -596,16 +597,16 @@ namespace LayoutFarm.Text
                     {
                         if (_textSurfaceEventListener != null)
                         {
-                            return TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e.KeyCode);
+                            return TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e);
                         }
                         return false;
                     }
                 case UIKeys.Tab:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e.KeyCode))
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e))
                         {
-                            return true;                             
+                            return true;
                         }
                         //
                         DoTab(); //default do tab
@@ -614,7 +615,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Return:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewEnter(_textSurfaceEventListener))
+                            TextSurfaceEventListener.NotifyPreviewEnter(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -624,7 +625,9 @@ namespace LayoutFarm.Text
                             {
                                 InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                             }
+
                             _internalTextLayerController.SplitCurrentLineIntoNewLine();
+
                             if (_textSurfaceEventListener != null)
                             {
                                 TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, e);
@@ -648,7 +651,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Left:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -704,7 +707,7 @@ namespace LayoutFarm.Text
                         EnsureCaretVisible();
                         if (_textSurfaceEventListener != null)
                         {
-                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, e.KeyCode);
                         }
 
                         return true;
@@ -712,7 +715,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Right:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -771,7 +774,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Down:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -830,7 +833,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Up:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }

@@ -19,6 +19,7 @@ namespace LayoutFarm.Text
         {
             this.key = key;
         }
+        
         public TextDomEventArgs(bool updateJustCurrentLine)
         {
             this.updateJustCurrentLine = updateJustCurrentLine;
@@ -78,54 +79,80 @@ namespace LayoutFarm.Text
         {
             this.targetTextSurface = textSurfaceElement;
         }
-        internal static bool NotifyPreviewDialogKeyDown(TextSurfaceEventListener listener, UIKeys uiKey)
+        internal static bool NotifyPreviewDialogKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewDialogKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(uiKey);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
+
                 listener.PreviewDialogKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
-        } 
-        internal static bool NotifyPreviewEnter(TextSurfaceEventListener listener)
+        }
+        internal static bool NotifyPreviewEnter(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewEnterKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(UIKeys.Enter);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
                 listener.PreviewEnterKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
         }
-        internal static bool NotifyPreviewBackSpace(TextSurfaceEventListener listener)
+        internal static bool NotifyPreviewBackSpace(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewBackSpaceKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(UIKeys.Back);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
                 listener.PreviewBackSpaceKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
         }
-        internal static bool NotifyPreviewArrow(TextSurfaceEventListener listener, UIKeys key)
+        internal static bool NotifyPreviewArrow(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewArrowKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(key);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
                 listener.PreviewArrowKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
         }
 
-        internal static bool NotifyPreviewKeyPress(TextSurfaceEventListener listener, char c)
+        internal static bool NotifyPreviewKeyPress(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
-            if (listener.IsRegisterPreviewKeyDownPress(c) &&
+            if (listener.IsRegisterPreviewKeyDownPress(keyEventArgs.KeyChar) &&
                 listener.PreviewRegisteredKeyPress != null)
             {
                 //TODO: review here use from pool?
-                TextDomEventArgs e = new TextDomEventArgs(c);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyChar)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
                 //also set other keyboard info ?
                 //eg. alt ctrl shift
                 listener.PreviewRegisteredKeyPress(listener, e);
