@@ -471,9 +471,9 @@ namespace LayoutFarm.Text
             _textLineWriter.FindCurrentHitWord(out startAt, out len);
         }
 
-        public void TryMoveCaretTo(int value, bool backward = false)
+        public void TryMoveCaretTo(int charIndex, bool backward = false)
         {
-            if (_textLineWriter.CharIndex < 1 && value < 0)
+            if (_textLineWriter.CharIndex < 1 && charIndex < 0)
             {
                 if (backward)
                 {
@@ -487,7 +487,7 @@ namespace LayoutFarm.Text
             else
             {
                 int lineLength = _textLineWriter.CharCount;
-                if (_textLineWriter.CharIndex >= lineLength && value > lineLength)
+                if (_textLineWriter.CharIndex >= lineLength && charIndex > lineLength)
                 {
                     if (_textLineWriter.HasNextLine)
                     {
@@ -496,13 +496,13 @@ namespace LayoutFarm.Text
                 }
                 else
                 {
-                    _textLineWriter.SetCurrentCharIndex(value);
+                    _textLineWriter.SetCurrentCharIndex(charIndex);
                     //check if we can stop at this char or not
                     if (backward)
                     {
                         //move caret backward
                         char prevChar = _textLineWriter.PrevChar;
-                        int tmp_index = value;
+                        int tmp_index = charIndex;
                         while ((prevChar != '\0' && !CanCaretStopOnThisChar(prevChar)) && tmp_index > 0)
                         {
                             _textLineWriter.SetCurrentCharStepLeft();
@@ -514,7 +514,7 @@ namespace LayoutFarm.Text
                     {
                         char nextChar = _textLineWriter.NextChar;
                         int lineCharCount = _textLineWriter.CharCount;
-                        int tmp_index = value + 1;
+                        int tmp_index = charIndex + 1;
                         while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
                         {
                             _textLineWriter.SetCurrentCharStepRight();
