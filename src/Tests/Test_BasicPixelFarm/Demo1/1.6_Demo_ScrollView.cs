@@ -77,9 +77,9 @@ namespace LayoutFarm
             //check folder before load
             string[] fileNames = new string[0];
 
-            if (System.IO.Directory.Exists("../../Data/imgs"))
+            if (System.IO.Directory.Exists("../Data/imgs"))
             {
-                fileNames = System.IO.Directory.GetFiles("../../Data/imgs", "0*.jpg");
+                fileNames = System.IO.Directory.GetFiles("../Data/imgs", "0*.jpg");
             }
             //select only
             int lastY = 0;

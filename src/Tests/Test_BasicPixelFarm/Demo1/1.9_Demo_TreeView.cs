@@ -14,7 +14,7 @@ namespace LayoutFarm
             host.AddChild(treeView);
             //prepare node icon
 
-            ImageBinder nodeOpen = host.GetImageBinder2("../../Data/imgs/arrow_open.png");             
+            ImageBinder nodeOpen = host.GetImageBinder2("../Data/imgs/arrow_open.png");             
 
             //add 
             for (int i = 0; i < 10; ++i)
