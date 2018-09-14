@@ -197,14 +197,23 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        protected override bool HasReadyRenderElement
+        //        
+        public override int ViewportX => _textEditRenderElement.ViewportX;
+        //
+        public override int ViewportY => _textEditRenderElement.ViewportY;
+        //
+        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
+        //
+        protected override bool HasReadyRenderElement => this._textEditRenderElement != null;
+        //
+        public override RenderElement CurrentPrimaryRenderElement => this._textEditRenderElement;
+        //
+        public override void SetViewport(int x, int y, object reqBy)
         {
-            get { return this._textEditRenderElement != null; }
+            _textEditRenderElement?.SetViewport(x, y);
+
         }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return this._textEditRenderElement; }
-        }
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_textEditRenderElement == null)
@@ -224,6 +233,12 @@ namespace LayoutFarm.CustomWidgets
                 }
                 tbox.BackgroundColor = this._backgroundColor;
                 tbox.SetController(this);
+                tbox.ViewportChanged += (s, e) => RaiseViewportChanged();
+                tbox.ContentSizeChanged += (s, e) =>
+                {
+                    RaiseLayoutFinished();
+                };
+
 
                 if (this._textSurfaceListener != null)
                 {

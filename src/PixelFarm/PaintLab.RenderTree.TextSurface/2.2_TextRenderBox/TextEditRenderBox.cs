@@ -7,30 +7,15 @@ namespace LayoutFarm.Text
 {
     partial class TextEditRenderBox
     {
-        RenderSurfaceScrollRelation _scrollRelation;
-        CustomRenderSurface _vscrollableSurface;
-
 
         public Color BackgroundColor { get; set; }
-        public CustomRenderSurface ScrollableSurface
-        {
-            get { return this._vscrollableSurface; }
-            set { this._vscrollableSurface = value; }
-        }
-        public RenderSurfaceScrollRelation ScrollRelation
-        {
-            get { return this._scrollRelation; }
-            set { this._scrollRelation = value; }
-        }
+
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             RequestFont enterFont = canvas.CurrentFont;
 
             canvas.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
-            if (_vscrollableSurface != null)
-            {
-                _vscrollableSurface.DrawToThisPage(canvas, updateArea);
-            }
+
             //1. bg 
             if (BackgroundColor.A > 0)
             {
@@ -55,20 +40,14 @@ namespace LayoutFarm.Text
                 _internalTextLayerController.SelectionRange.Draw(canvas, updateArea);
             }
 
-            //3. each layer
-            if (_vscrollableSurface != null)
+
+            //draw text layer  
+            this._textLayer.DrawChildContent(canvas, updateArea);
+            if (this.HasDefaultLayer)
             {
-                _vscrollableSurface.DrawToThisPage(canvas, updateArea);
+                this.DrawDefaultLayer(canvas, ref updateArea);
             }
-            else
-            {
-                //draw text layer  
-                this._textLayer.DrawChildContent(canvas, updateArea);
-                if (this.HasDefaultLayer)
-                {
-                    this.DrawDefaultLayer(canvas, ref updateArea);
-                }
-            }
+
 
 #if DEBUG
             //for debug
@@ -87,12 +66,9 @@ namespace LayoutFarm.Text
             canvas.CurrentFont = enterFont;
         }
 
-        internal void BoxEvaluateScrollBar()
+        internal void OnTextContentSizeChanged()
         {
-            if (_vscrollableSurface != null)
-            {
-                _vscrollableSurface.ConfirmSizeChanged();
-            }
+            ContentSizeChanged?.Invoke(this, EventArgs.Empty);
         }
         public void ScrollToNotRaiseEvent(int x, int y)
         {
@@ -164,29 +140,11 @@ namespace LayoutFarm.Text
                 }
             }
 
-            if (_vscrollableSurface == null)
-            {
-                this.InvalidateGraphics();
-                this.SetViewport(x, y);
-                this.InvalidateGraphics();
-            }
-            else
-            {
-                if (ViewportX != x && _scrollRelation.HasHScrollChanged)
-                {
-                    hScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, this.ViewportX, x, UIScrollOrientation.HorizontalScroll);
-                }
-                if (ViewportY != y && _scrollRelation.HasVScrollChanged)
-                {
-                    vScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, this.ViewportY, y, UIScrollOrientation.VerticalScroll);
-                }
 
-                this.SetViewport(x, y);
-                _vscrollableSurface.QuadPagesCalculateCanvas();
-                _vscrollableSurface.FullModeUpdate = true;
-                this.InvalidateGraphics();
-                _vscrollableSurface.FullModeUpdate = false;
-            }
+            this.InvalidateGraphics();
+            this.SetViewport(x, y);
+            this.InvalidateGraphics();
+
         }
         void MyScrollByNotRaiseEvent(int dx, int dy, out UIScrollEventArgs hScrollEventArgs, out UIScrollEventArgs vScrollEventArgs)
         {
@@ -209,13 +167,6 @@ namespace LayoutFarm.Text
                     this.SetViewport(this.ViewportX, this.ViewportY + dy);
                 }
 
-                if (this._vscrollableSurface != null && _scrollRelation.HasVScrollChanged)
-                {
-                    vScrollEventArgs = new UIScrollEventArgs(
-                        UIScrollEventType.ThumbPosition,
-                        old_y, ViewportY,
-                        UIScrollOrientation.VerticalScroll);
-                }
             }
             else if (dy > 0)
             {
@@ -231,10 +182,6 @@ namespace LayoutFarm.Text
                 else
                 {
                     this.SetViewport(this.ViewportX, old_y + dy);
-                }
-                if (_vscrollableSurface != null && _scrollRelation.HasVScrollChanged)
-                {
-                    vScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_y, this.ViewportY, UIScrollOrientation.VerticalScroll);
                 }
             }
             hScrollEventArgs = null;
@@ -256,10 +203,6 @@ namespace LayoutFarm.Text
                 {
                     this.SetViewport(this.ViewportX + dx, this.ViewportY);
                 }
-                if (_vscrollableSurface != null && _scrollRelation.HasHScrollChanged)
-                {
-                    hScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_x, ViewportX, UIScrollOrientation.HorizontalScroll);
-                }
             }
             else
             {
@@ -273,18 +216,6 @@ namespace LayoutFarm.Text
                 {
                     SetViewport(this.ViewportX + dx, this.ViewportY);
                 }
-                if (_vscrollableSurface != null && _scrollRelation.HasHScrollChanged)
-                {
-                    hScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition,
-                        old_x, this.ViewportX, UIScrollOrientation.HorizontalScroll);
-                }
-            }
-
-
-            if (_vscrollableSurface != null)
-            {
-                _vscrollableSurface.QuadPagesCalculateCanvas();
-                _vscrollableSurface.FullModeUpdate = true;
             }
         }
         void MyScrollBy(int dx, int dy)
@@ -296,17 +227,13 @@ namespace LayoutFarm.Text
             UIScrollEventArgs hScrollEventArgs;
             UIScrollEventArgs vScrollEventArgs;
             MyScrollByNotRaiseEvent(dx, dy, out hScrollEventArgs, out vScrollEventArgs);
-            if (_vscrollableSurface != null)
-            {
-                _scrollRelation.RaiseProperEvents(hScrollEventArgs, vScrollEventArgs);
-                this.InvalidateGraphics();
-                _vscrollableSurface.FullModeUpdate = false;
-            }
-            else
-            {
-                this.InvalidateGraphics();
-            }
+            ViewportChanged?.Invoke(this, EventArgs.Empty);
+            this.InvalidateGraphics();
         }
+
+        public event EventHandler ViewportChanged;
+        public event EventHandler ContentSizeChanged;
+
         void MyScrollTo(int x, int y)
         {
             if (y == this.ViewportY && x == this.ViewportX)
@@ -316,101 +243,9 @@ namespace LayoutFarm.Text
             UIScrollEventArgs hScrollEventArgs;
             UIScrollEventArgs vScrollEventArgs;
             MyScrollToNotRaiseEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
-            if (_vscrollableSurface != null)
-            {
-                _scrollRelation.RaiseProperEvents(hScrollEventArgs, vScrollEventArgs);
-            }
-        }
-        public int HorizontalLargeChange
-        {
-            get
-            {
-                if (_vscrollableSurface != null)
-                {
-                    return _scrollRelation.HorizontalLargeChange;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-        public int HorizontalSmallChange
-        {
-            get
-            {
-                if (_vscrollableSurface != null)
-                {
-                    return _scrollRelation.HorizontalSmallChange;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-        public int VerticalLargeChange
-        {
-            get
-            {
-                if (_vscrollableSurface != null)
-                {
-                    return _scrollRelation.VerticalLargeChange;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-        public int VerticalSmallChange
-        {
-            get
-            {
-                if (_vscrollableSurface != null)
-                {
-                    return _scrollRelation.VerticalSmallChange;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
+            ViewportChanged?.Invoke(this, EventArgs.Empty);
         }
 
-
-        public void AddVScrollHandler(EventHandler<UIScrollEventArgs> vscrollChanged, EventHandler<ScrollSurfaceRequestEventArgs> vscrollSupport)
-        {
-            if (_vscrollableSurface != null)
-            {
-                _scrollRelation.VScrollChanged += vscrollChanged;
-                _scrollRelation.VScrollRequest += vscrollSupport;
-            }
-        }
-        public void RemoveVScrollHandler(EventHandler<UIScrollEventArgs> vscrollChanged, EventHandler<ScrollSurfaceRequestEventArgs> vscrollSupport)
-        {
-            if (_vscrollableSurface != null)
-            {
-                _scrollRelation.VScrollChanged -= vscrollChanged;
-                _scrollRelation.VScrollRequest -= vscrollSupport;
-            }
-        }
-        public void AddHScrollHandler(EventHandler<UIScrollEventArgs> hscrollChanged, EventHandler<ScrollSurfaceRequestEventArgs> hscrollSupport)
-        {
-            if (_vscrollableSurface != null)
-            {
-                _scrollRelation.HScrollChanged += hscrollChanged;
-                _scrollRelation.HScrollRequest += hscrollSupport;
-            }
-        }
-        public void RemoveHScrollHandler(EventHandler<UIScrollEventArgs> hscrollChanged, EventHandler<ScrollSurfaceRequestEventArgs> hscrollSupport)
-        {
-            if (_vscrollableSurface != null)
-            {
-                _scrollRelation.HScrollChanged -= hscrollChanged;
-                _scrollRelation.HScrollRequest -= hscrollSupport;
-            }
-        }
         public void ScrollTo(int x, int y)
         {
             if (!this.MayHasViewport)
@@ -427,13 +262,6 @@ namespace LayoutFarm.Text
                 return;
             }
             MyScrollBy(dx, dy);
-        }
-        public CustomRenderSurface VisualScrollableSurface
-        {
-            get
-            {
-                return _vscrollableSurface;
-            }
         }
     }
 }

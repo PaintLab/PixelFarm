@@ -76,7 +76,7 @@ namespace LayoutFarm.Text
         }
         internal static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
         {
-            ts.BoxEvaluateScrollBar();
+            ts.OnTextContentSizeChanged(); //eg. then to EvaluateScrollBar 
         }
 
         public void DoHome(bool pressShitKey)
@@ -145,6 +145,7 @@ namespace LayoutFarm.Text
                 HandleKeyDown(e);
                 return;
             }
+             
 
             char c = e.KeyChar;
             e.CancelBubbling = true;
@@ -181,10 +182,13 @@ namespace LayoutFarm.Text
             }
 
             EnsureCaretVisible();
+
             if (_textSurfaceEventListener != null)
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
             }
+ 
+
         }
         void InvalidateGraphicOfCurrentLineArea()
         {
@@ -931,6 +935,7 @@ namespace LayoutFarm.Text
                 if (!_isMultiLine)
                 {
                     var r = _internalTextLayerController.CurrentLineArea;
+
                     //Rectangle r = internalTextLayerController.CurrentParentLineArea;
                     if (r.Width >= this.Width)
                     {
@@ -940,7 +945,7 @@ namespace LayoutFarm.Text
 #endif
                         //SetCalculatedSize(this, r.Width, r.Height);
                         //InnerDoTopDownReCalculateContentSize(this);
-                        this.BoxEvaluateScrollBar();
+                        this.OnTextContentSizeChanged();
                         RefreshSnapshotCanvas();
 #if DEBUG
                         dbug_EndLayoutTrace();
