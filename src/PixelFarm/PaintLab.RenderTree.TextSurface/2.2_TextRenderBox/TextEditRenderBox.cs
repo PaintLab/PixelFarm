@@ -154,9 +154,9 @@ namespace LayoutFarm.Text
             }
             else if (y > 0)
             {
-                if (y > innerContentSize.Height - Height)
+                if (y > _textLayer.Bottom - Height)
                 {
-                    y = innerContentSize.Height - Height;
+                    y = _textLayer.Bottom - Height;
                     if (y < 0)
                     {
                         y = 0;
@@ -191,7 +191,11 @@ namespace LayoutFarm.Text
         void MyScrollByNotRaiseEvent(int dx, int dy, out UIScrollEventArgs hScrollEventArgs, out UIScrollEventArgs vScrollEventArgs)
         {
             vScrollEventArgs = null;
-            Size innerContentSize = this.InnerContentSize;
+
+            var contentSize = this.InnerContentSize;
+
+            Size innerContentSize = new Size(this.Width, this._textLayer.Bottom);
+
             if (dy < 0)
             {
                 int old_y = this.ViewportY;
@@ -221,12 +225,12 @@ namespace LayoutFarm.Text
                 {
                     if (viewportButtom < innerContentSize.Height)
                     {
-                        this.SetViewport(this.ViewportX, innerContentSize.Height - Height);
+                        this.SetViewport(this.ViewportX, old_y - Height);
                     }
                 }
                 else
                 {
-                    this.SetViewport(this.ViewportX, innerContentSize.Height + dy);
+                    this.SetViewport(this.ViewportX, old_y + dy);
                 }
                 if (_vscrollableSurface != null && _scrollRelation.HasVScrollChanged)
                 {
