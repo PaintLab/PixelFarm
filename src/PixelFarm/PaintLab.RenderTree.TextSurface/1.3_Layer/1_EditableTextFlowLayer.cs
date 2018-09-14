@@ -19,7 +19,7 @@ namespace LayoutFarm.Text
             _defaultLineHeight = 24;//temp
             _ownerTextEditRenderBox = owner;
 
-            
+
             //start with single line per layer
             //and can be changed to multiline
             _lineCollection = new EditableTextLine(this); //TODO review here
@@ -406,6 +406,15 @@ namespace LayoutFarm.Text
 #endif
         }
 
+        public int Bottom
+        {
+            //get bottom
+            get
+            {
+                EditableTextLine lastLine = GetTextLine(this.LineCount - 1);
+                return (lastLine != null) ? lastLine.Top + lastLine.ActualLineHeight : DefaultLineHeight;
+            }
+        }
 
         internal EditableTextLine GetTextLine(int lineId)
         {
