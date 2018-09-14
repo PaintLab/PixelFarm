@@ -591,7 +591,8 @@ namespace LayoutFarm.Text
 
             switch (e.KeyCode)
             {
-              
+                case UIKeys.PageUp:
+                case UIKeys.PageDown:
                 case UIKeys.Escape:
                 case UIKeys.End:
                 case UIKeys.Home:
