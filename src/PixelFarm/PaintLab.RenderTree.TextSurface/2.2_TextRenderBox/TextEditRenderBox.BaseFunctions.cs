@@ -591,6 +591,7 @@ namespace LayoutFarm.Text
 
             switch (e.KeyCode)
             {
+              
                 case UIKeys.Escape:
                 case UIKeys.End:
                 case UIKeys.Home:
@@ -821,10 +822,12 @@ namespace LayoutFarm.Text
                             }
                             else
                             {
+
                                 InvalidateGraphicOfCurrentLineArea();
                             }
-                        }
 
+                        }
+                        EnsureCaretVisible();
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
@@ -905,6 +908,12 @@ namespace LayoutFarm.Text
         {
             get
             {
+                if (IsMultiLine)
+                {
+                    return new Size(
+                          _internalTextLayerController.CurrentLineArea.Size.Width,//TODO: fix this
+                          _textLayer.Bottom);
+                }
                 return _internalTextLayerController.CurrentLineArea.Size;
             }
         }
@@ -915,6 +924,7 @@ namespace LayoutFarm.Text
             _myCaret.SetHeight(_internalTextLayerController.CurrentCaretHeight);
             textManCaretPos.Offset(-ViewportX, -ViewportY);
             //----------------------  
+            //horizontal
             if (textManCaretPos.X >= this.Width)
             {
                 if (!_isMultiLine)
@@ -952,6 +962,10 @@ namespace LayoutFarm.Text
             {
                 ScrollTo(this.InnerContentSize.Width - ViewportX, 0);
             }
+
+            //----------------------  
+            //vertical ??
+            //----------------------  
 
 
             if (_internalTextLayerController._updateJustCurrentLine)
