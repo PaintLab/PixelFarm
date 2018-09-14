@@ -27,94 +27,8 @@ namespace LayoutFarm
             //------- 
         }
         public abstract string OwnerFormTitle { get; set; }
+        public abstract Image LoadImage(string imgName);
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
-        VgRenderVx ReadSvgFile(string filename)
-        {
-
-            string svgContent = System.IO.File.ReadAllText(filename);
-            SvgDocBuilder docBuidler = new SvgDocBuilder();
-            SvgParser parser = new SvgParser(docBuidler);//***
-            WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
-            parser.ParseDocument(textSnapshot);
-            //TODO: review this step again
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
-            return builder.CreateRenderVx(docBuidler.ResultDocument, svgElem =>
-            {
-                //**
-                //TODO: review here
-
-            });
-        }
-        PixelFarm.CpuBlit.ActualBitmap CreateBitmap(VgRenderVx renderVx)
-        {
-
-            PixelFarm.CpuBlit.RectD bound = renderVx.GetBounds();
-            //create
-            PixelFarm.CpuBlit.ActualBitmap backimg = new PixelFarm.CpuBlit.ActualBitmap((int)bound.Width + 10, (int)bound.Height + 10);
-            PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backimg);
-            ////TODO: review here
-            ////temp fix
-            //if (s_openfontTextService == null)
-            //{
-            //    s_openfontTextService = new OpenFontTextService();
-            //}
-
-
-            ////
-            double prevStrokeW = painter.StrokeWidth;
-            VgPainterArgsPool.GetFreePainterArgs(painter, out VgPaintArgs paintArgs);
-            renderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
-            painter.StrokeWidth = prevStrokeW;//restore
-
-
-            return backimg;
-        }
-        public Image LoadImage(string imgName)
-        {
-            if (File.Exists(imgName)) //resolve to actual img 
-            {
-                //we support svg as src of img
-                //...
-                //THIS version => just check an extension of the request file
-                string ext = System.IO.Path.GetExtension(imgName).ToLower();
-                switch (ext)
-                {
-                    case ".svg":
-
-                        try
-                        {
-                            string svg_str = File.ReadAllText(imgName);
-                            VgRenderVx vgRenderVx = ReadSvgFile(imgName);
-                            return CreateBitmap(vgRenderVx); 
-
-                        }
-                        catch (System.Exception ex)
-                        {
-                            return null;
-                        }
-                        break;
-                    case ".png":
-                    case ".jpg":
-                        {
-                            try
-                            {
-
-                                System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
-                                GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-                                return bmp;
-                            }
-                            catch (System.Exception ex)
-                            {
-                                //return error img
-                                return null;
-                            }
-                        }
-
-                }
-            }
-            return null;
-        }
 
 
         public virtual System.IO.Stream GetReadStream(string src)
@@ -226,6 +140,97 @@ namespace LayoutFarm
         {
             this.vw.AddChild(renderElement, owner);
         }
+        public override Image LoadImage(string imgName)
+        {
+            if (File.Exists(imgName)) //resolve to actual img 
+            {
+                //we support svg as src of img
+                //...
+                //THIS version => just check an extension of the request file
+                string ext = System.IO.Path.GetExtension(imgName).ToLower();
+                switch (ext)
+                {
+                    case ".svg":
+
+                        try
+                        {
+                            string svg_str = File.ReadAllText(imgName);
+                            VgRenderVx vgRenderVx = ReadSvgFile(imgName);
+                            return CreateBitmap(vgRenderVx);
+
+                        }
+                        catch (System.Exception ex)
+                        {
+                            return null;
+                        }
+                        break;
+                    case ".png":
+                    case ".jpg":
+                        {
+                            try
+                            {
+
+                                System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
+                                GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+                                return bmp;
+                            }
+                            catch (System.Exception ex)
+                            {
+                                //return error img
+                                return null;
+                            }
+                        }
+
+                }
+            }
+            return null;
+        }
+
+        VgRenderVx ReadSvgFile(string filename)
+        {
+
+            string svgContent = System.IO.File.ReadAllText(filename);
+            SvgDocBuilder docBuidler = new SvgDocBuilder();
+            SvgParser parser = new SvgParser(docBuidler);//***
+            WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
+            parser.ParseDocument(textSnapshot);
+            //TODO: review this step again
+            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            return builder.CreateRenderVx(docBuidler.ResultDocument, svgElem =>
+            {
+                //**
+                //TODO: review here
+
+            });
+        }
+        PixelFarm.CpuBlit.ActualBitmap CreateBitmap(VgRenderVx renderVx)
+        {
+
+            PixelFarm.CpuBlit.RectD bound = renderVx.GetBounds();
+            //create
+            PixelFarm.CpuBlit.ActualBitmap backimg = new PixelFarm.CpuBlit.ActualBitmap((int)bound.Width + 10, (int)bound.Height + 10);
+            PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backimg);
+            ////TODO: review here
+            ////temp fix
+            //if (s_openfontTextService == null)
+            //{
+            //    s_openfontTextService = new OpenFontTextService();
+            //}
+
+
+            ////
+            double prevStrokeW = painter.StrokeWidth;
+            VgPainterArgsPool.GetFreePainterArgs(painter, out VgPaintArgs paintArgs);
+            renderVx._renderE.Paint(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+            painter.StrokeWidth = prevStrokeW;//restore
+
+
+            return backimg;
+        }
+
+
+
     }
 
 

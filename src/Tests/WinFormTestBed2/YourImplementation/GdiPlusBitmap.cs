@@ -2,10 +2,7 @@
 using System;
 using PixelFarm.Drawing;
 
-
-//
-using LayoutFarm.Svg;
-using PaintLab.Svg;
+ 
 
 namespace LayoutFarm
 {
