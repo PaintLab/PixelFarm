@@ -76,7 +76,7 @@ namespace LayoutFarm.Text
         }
         internal static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
         {
-            ts.BoxEvaluateScrollBar();
+            ts.OnTextContentSizeChanged(); //eg. then to EvaluateScrollBar 
         }
 
         public void DoHome(bool pressShitKey)
@@ -88,9 +88,10 @@ namespace LayoutFarm.Text
             }
             else
             {
-                _internalTextLayerController.StartSelectIfNoSelection();
-                _internalTextLayerController.DoHome();
-                _internalTextLayerController.EndSelect();
+
+                _internalTextLayerController.StartSelectIfNoSelection(); //start select before move to home
+                _internalTextLayerController.DoHome(); //move cursor to default home 
+                _internalTextLayerController.EndSelect(); //end selection
             }
 
             EnsureCaretVisible();
@@ -144,6 +145,7 @@ namespace LayoutFarm.Text
                 HandleKeyDown(e);
                 return;
             }
+             
 
             char c = e.KeyChar;
             e.CancelBubbling = true;
@@ -154,7 +156,7 @@ namespace LayoutFarm.Text
             }
             bool preventDefault = false;
             if (_textSurfaceEventListener != null &&
-                !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeydown(_textSurfaceEventListener, c)))
+                !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeyPress(_textSurfaceEventListener, e)))
             {
                 _internalTextLayerController.UpdateSelectionRange();
             }
@@ -180,10 +182,13 @@ namespace LayoutFarm.Text
             }
 
             EnsureCaretVisible();
+
             if (_textSurfaceEventListener != null)
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
             }
+ 
+
         }
         void InvalidateGraphicOfCurrentLineArea()
         {
@@ -431,7 +436,7 @@ namespace LayoutFarm.Text
                         }
                         else
                         {
-                            if (!TextSurfaceEventListener.NotifyPreviewBackSpace(_textSurfaceEventListener) &&
+                            if (!TextSurfaceEventListener.NotifyPreviewBackSpace(_textSurfaceEventListener, e) &&
                                 _internalTextLayerController.DoBackspace())
                             {
                                 TextSurfaceEventListener.NotifyCharactersRemoved(_textSurfaceEventListener,
@@ -590,31 +595,46 @@ namespace LayoutFarm.Text
 
             switch (e.KeyCode)
             {
+                case UIKeys.PageUp:
+                case UIKeys.PageDown:
                 case UIKeys.Escape:
-                    if (_textSurfaceEventListener != null)
-                    {
-                        return TextSurfaceEventListener.NotifyPreviewEsc(_textSurfaceEventListener);
-                    }
-                    return false;
+                case UIKeys.End:
                 case UIKeys.Home:
                     {
-                        HandleKeyDown(e);
+                        if (_textSurfaceEventListener != null)
+                        {
+                            return TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e);
+                        }
+                        return false;
+                    }
+                case UIKeys.Tab:
+                    {
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+                        //
+                        DoTab(); //default do tab
                         return true;
                     }
                 case UIKeys.Return:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewEnter(_textSurfaceEventListener))
+                            TextSurfaceEventListener.NotifyPreviewEnter(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
+
                         if (_isMultiLine)
                         {
                             if (_internalTextLayerController.SelectionRange != null)
                             {
                                 InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                             }
+
                             _internalTextLayerController.SplitCurrentLineIntoNewLine();
+
                             if (_textSurfaceEventListener != null)
                             {
                                 TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, e);
@@ -638,7 +658,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Left:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -694,7 +714,7 @@ namespace LayoutFarm.Text
                         EnsureCaretVisible();
                         if (_textSurfaceEventListener != null)
                         {
-                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, e.KeyCode);
                         }
 
                         return true;
@@ -702,7 +722,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Right:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -761,7 +781,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Down:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -787,7 +807,7 @@ namespace LayoutFarm.Text
                             _internalTextLayerController.CurrentLineNumber++;
                             if (_verticalExpectedCharIndex > _internalTextLayerController.CurrentLineCharCount - 1)
                             {
-                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount - 1);
+                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount);
                             }
                             else
                             {
@@ -807,10 +827,12 @@ namespace LayoutFarm.Text
                             }
                             else
                             {
+
                                 InvalidateGraphicOfCurrentLineArea();
                             }
-                        }
 
+                        }
+                        EnsureCaretVisible();
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
@@ -820,7 +842,7 @@ namespace LayoutFarm.Text
                 case UIKeys.Up:
                     {
                         if (_textSurfaceEventListener != null &&
-                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, keyData))
+                            TextSurfaceEventListener.NotifyPreviewArrow(_textSurfaceEventListener, e))
                         {
                             return true;
                         }
@@ -880,11 +902,7 @@ namespace LayoutFarm.Text
                         }
                         return true;
                     }
-                case UIKeys.Tab:
-                    {
-                        DoTab();
-                        return true;
-                    }
+
                 default:
                     {
                         return false;
@@ -895,6 +913,12 @@ namespace LayoutFarm.Text
         {
             get
             {
+                if (IsMultiLine)
+                {
+                    return new Size(
+                          _internalTextLayerController.CurrentLineArea.Size.Width,//TODO: fix this
+                          _textLayer.Bottom);
+                }
                 return _internalTextLayerController.CurrentLineArea.Size;
             }
         }
@@ -905,11 +929,13 @@ namespace LayoutFarm.Text
             _myCaret.SetHeight(_internalTextLayerController.CurrentCaretHeight);
             textManCaretPos.Offset(-ViewportX, -ViewportY);
             //----------------------  
+            //horizontal
             if (textManCaretPos.X >= this.Width)
             {
                 if (!_isMultiLine)
                 {
                     var r = _internalTextLayerController.CurrentLineArea;
+
                     //Rectangle r = internalTextLayerController.CurrentParentLineArea;
                     if (r.Width >= this.Width)
                     {
@@ -919,7 +945,7 @@ namespace LayoutFarm.Text
 #endif
                         //SetCalculatedSize(this, r.Width, r.Height);
                         //InnerDoTopDownReCalculateContentSize(this);
-                        this.BoxEvaluateScrollBar();
+                        this.OnTextContentSizeChanged();
                         RefreshSnapshotCanvas();
 #if DEBUG
                         dbug_EndLayoutTrace();
@@ -942,6 +968,10 @@ namespace LayoutFarm.Text
             {
                 ScrollTo(this.InnerContentSize.Width - ViewportX, 0);
             }
+
+            //----------------------  
+            //vertical ??
+            //----------------------  
 
 
             if (_internalTextLayerController._updateJustCurrentLine)

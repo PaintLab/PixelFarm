@@ -346,14 +346,9 @@ namespace LayoutFarm.CustomWidgets
                     if (scrollBoxLength < SCROLL_BOX_SIZE_LIMIT)
                     {
                         scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
-                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                     }
-                    else
-                    {
-                        //float physicalSmallEach = (physicalScrollLength / contentLength) * smallChange;
-                        //this.onePixelFor = contentLength / (physicalScrollLength - physicalSmallEach);
-                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
-                    }
+
+                    this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
             }
             if (this.ScrollBarType == ScrollBarType.Horizontal)
@@ -530,14 +525,8 @@ namespace LayoutFarm.CustomWidgets
                     if (scrollBoxLength < SCROLL_BOX_SIZE_LIMIT)
                     {
                         scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
-                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                     }
-                    else
-                    {
-                        //float physicalSmallEach = (physicalScrollLength / contentLength) * smallChange;
-                        //this.onePixelFor = contentLength / (physicalScrollLength - physicalSmallEach);
-                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
-                    }
+                    this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
                 }
             }
             if (this.ScrollBarType == ScrollBarType.Horizontal)
@@ -708,7 +697,7 @@ namespace LayoutFarm.CustomWidgets
                     //need update 
                     ReEvaluateScrollBar();
                     UpdateScrollButtonPosition();
-                }              
+                }
 
             }
         }
