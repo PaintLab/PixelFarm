@@ -21,7 +21,7 @@ namespace LayoutFarm
             //--------------------
             //image box
             //load bitmap with gdi+           
-            ImageBinder imgBinder = host.GetImageBinder2("../../Data/imgs/favorites32.png");
+            ImageBinder imgBinder = host.GetImageBinder2("../Data/imgs/favorites32.png");
 
             var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
             imgBox.ImageBinder = imgBinder;
@@ -123,8 +123,8 @@ namespace LayoutFarm
             {
                 //set imagelists
                 var imgdic = new Dictionary<CustomWidgets.ImageName, Image>();
-                imgdic[CustomWidgets.ImageName.CheckBoxUnChecked] = host.LoadImage("../../Data/imgs/arrow_close.png");
-                imgdic[CustomWidgets.ImageName.CheckBoxChecked] = host.LoadImage("../../Data/imgs/arrow_open.png");
+                imgdic[CustomWidgets.ImageName.CheckBoxUnChecked] = host.LoadImage("../Data/imgs/arrow_close.png");
+                imgdic[CustomWidgets.ImageName.CheckBoxChecked] = host.LoadImage("../Data/imgs/arrow_open.png");
                 LayoutFarm.CustomWidgets.ResImageList.SetImageList(imgdic);
             }
         }

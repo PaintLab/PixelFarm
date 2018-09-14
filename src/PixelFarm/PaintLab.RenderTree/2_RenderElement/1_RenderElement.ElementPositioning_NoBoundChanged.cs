@@ -103,14 +103,14 @@ namespace LayoutFarm
         {
             get
             {
-                return this.Bottom + this.ViewportY;
+                return this.ViewportY + this.Height;
             }
         }
         public int ViewportRight
         {
             get
             {
-                return this.Right + this.ViewportX;
+                return this.ViewportX + this.Width;
             }
         }
 
