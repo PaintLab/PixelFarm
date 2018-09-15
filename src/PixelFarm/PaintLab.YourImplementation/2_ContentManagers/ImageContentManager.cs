@@ -28,7 +28,8 @@ namespace LayoutFarm.ContentManagers
         }
     }
 
-    public class ImageContentManager
+
+    public class ImageLoadingQueueManager
     {
         /// <summary>
         /// raise when the manager can't get a specific image
@@ -45,17 +46,13 @@ namespace LayoutFarm.ContentManagers
         object _inputListSync = new object();
         bool _working = false;
 
-        public ImageContentManager()
+        public ImageLoadingQueueManager()
         {
             //TODO: review here****             
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
         }
 
-        public string BaseDir
-        {
-            get;
-            set;
-        }
+
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)
         {
             lock (_inputListSync)
@@ -73,8 +70,10 @@ namespace LayoutFarm.ContentManagers
 
             int j = _inputList.Count;
             //load image in this list
-
             //copy data out 
+
+
+
             for (int i = 0; i < j; ++i)
             {
                 ImageBinder binder = _inputList.First.Value;
@@ -82,7 +81,7 @@ namespace LayoutFarm.ContentManagers
                 //wait until finish this  ....   
                 //1. check from cache if not found
                 //then send request to external ...  
-                string imgSrc = binder.ImageSource;
+                
                 //img content manager can cache and optimize image resource usage
                 //we support png, jpg,  svg 
 
@@ -99,10 +98,7 @@ namespace LayoutFarm.ContentManagers
                     //not found in cache => request image loader
                     //image load/waiting should be done on another thread
 
-                    //resolve this image
-                    //
-
-
+                    //resolve this image 
                     this.AskForImage(
                         this,
                         new ImageRequestEventArgs(binder));
@@ -114,7 +110,7 @@ namespace LayoutFarm.ContentManagers
                     {
                         //store to cache 
                         //TODO: implement caching policy  
-                        _imageCacheLevel0.AddCacheImage(binder.ImageSource, binder.Image);
+                        _imageCacheLevel0.Replace(binder.ImageSource, binder.Image);
                     }
                 }
 
@@ -127,7 +123,6 @@ namespace LayoutFarm.ContentManagers
 
             _working = false;
         }
-
         public virtual bool AddRequestImage(ImageBinder contentReq)
         {
             if (contentReq.ImageSource == null && !contentReq.HasLazyFunc)

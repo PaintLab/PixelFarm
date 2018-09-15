@@ -10,7 +10,7 @@ namespace LayoutFarm
 {
     public abstract class AppHost
     {
-        protected ImageContentManager _imageContentMan;
+
         protected int _primaryScreenWorkingAreaW;
         protected int _primaryScreenWorkingAreaH;
         protected int _formTitleBarHeight;
@@ -18,12 +18,7 @@ namespace LayoutFarm
         public AppHost()
         {
 
-            _imageContentMan = new ImageContentManager();
-            _imageContentMan.AskForImage += (s, e) =>
-            {
-                e.SetResultImage(LoadImage(e.ImagSource));
-            };
-            //------- 
+
         }
         public abstract string OwnerFormTitle { get; set; }
         public abstract Image LoadImage(string imgName, int reqW, int reqH);
@@ -46,11 +41,8 @@ namespace LayoutFarm
         {
             return App.UploadStream(url, stream);
         }
-        void LazyImageLoad(ImageBinder binder)
-        {
-            //load here as need
-            _imageContentMan.AddRequestImage(binder);
-        }
+        protected abstract void LazyImageLoad(ImageBinder binder);
+
 
         public int PrimaryScreenWidth
         {
@@ -86,7 +78,7 @@ namespace LayoutFarm
 
     public class WinFormAppHost : AppHost
     {
-
+        ImageLoadingQueueManager _imageLoadingQueue;
         LayoutFarm.UI.UISurfaceViewportControl _vw;
         System.Windows.Forms.Form _ownerForm;
         public WinFormAppHost(LayoutFarm.UI.UISurfaceViewportControl vw)
@@ -105,12 +97,17 @@ namespace LayoutFarm
             this._primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
 
             //--------------
-            _imageContentMan = new ImageContentManager();
-            _imageContentMan.AskForImage += (s, e) =>
+            _imageLoadingQueue = new ImageLoadingQueueManager();
+            _imageLoadingQueue.AskForImage += (s, e) =>
             {
                 e.SetResultImage(LoadImage(e.ImagSource));
             };
             //------- 
+        }
+        protected override void LazyImageLoad(ImageBinder binder)
+        {
+            //load here as need
+            _imageLoadingQueue.AddRequestImage(binder);
         }
         public override string OwnerFormTitle
         {
@@ -129,12 +126,7 @@ namespace LayoutFarm
         {
             get { return this._vw.RootGfx; }
         }
-        void LazyImageLoad(ImageBinder binder)
-        {
-            //load here as need
-            _imageContentMan.AddRequestImage(binder);
-        }
-        //
+        
         public override void AddChild(RenderElement renderElement)
         {
             this._vw.AddChild(renderElement);

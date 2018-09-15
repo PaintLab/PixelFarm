@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.ContentManagers
 {
-    class ImageCacheSystem
+
+    public class ImageCacheSystem
     {
         Dictionary<string, Image> cacheImages = new Dictionary<string, Image>();
         public ImageCacheSystem()
@@ -15,7 +16,7 @@ namespace LayoutFarm.ContentManagers
         {
             return cacheImages.TryGetValue(url, out img);
         }
-        public void AddCacheImage(string url, Image img)
+        public void Replace(string url, Image img)
         {
             this.cacheImages[url] = img;
         }
