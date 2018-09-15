@@ -35,15 +35,16 @@ namespace LayoutFarm.ContentManagers
         /// </summary>
         public event EventHandler<ImageRequestEventArgs> AskForImage;
 
-        LinkedList<ImageBinder> inputList = new LinkedList<ImageBinder>();
-        LinkedList<ImageBinder> outputList = new LinkedList<ImageBinder>();
-        ImageCacheSystem imageCacheLevel0 = new ImageCacheSystem();
+        LinkedList<ImageBinder> _inputList = new LinkedList<ImageBinder>();
+        LinkedList<ImageBinder> _outputList = new LinkedList<ImageBinder>();
+        ImageCacheSystem _imageCacheLevel = new ImageCacheSystem();
 
-        bool hasSomeInputHint;
+        bool _hasSomeInputHint;
 
-        object outputListSync = new object();
-        object inputListSync = new object();
-        bool working = false;
+        object _outputListSync = new object();
+        object _inputListSync = new object();
+        bool _working = false;
+
         public ImageContentManager()
         {
             //TODO: review here****             
@@ -53,27 +54,27 @@ namespace LayoutFarm.ContentManagers
 
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)
         {
-            lock (inputListSync)
+            lock (_inputListSync)
             {
-                if (working)
+                if (_working)
                 {
                     return;
                 }
-                if (!hasSomeInputHint)
+                if (!_hasSomeInputHint)
                 {
                     return;
                 }
-                working = true;
+                _working = true;
             }
 
-            int j = inputList.Count;
+            int j = _inputList.Count;
             //load image in this list
 
             //copy data out 
             for (int i = 0; i < j; ++i)
             {
-                ImageBinder binder = inputList.First.Value;
-                inputList.RemoveFirst();
+                ImageBinder binder = _inputList.First.Value;
+                _inputList.RemoveFirst();
 
                 //wait until finish this  ....  
 
@@ -114,7 +115,7 @@ namespace LayoutFarm.ContentManagers
                     {
                         //store to cache 
                         //TODO: implement caching policy  
-                        imageCacheLevel0.AddCacheImage(binder.ImageSource, binder.Image);
+                        _imageCacheLevel.AddCacheImage(binder.ImageSource, binder.Image);
                     }
                 }
 
@@ -122,10 +123,10 @@ namespace LayoutFarm.ContentManagers
             }
             if (j == 0)
             {
-                hasSomeInputHint = false;
+                _hasSomeInputHint = false;
             }
 
-            working = false;
+            _working = false;
         }
 
         public virtual bool AddRequestImage(ImageBinder contentReq)
@@ -139,10 +140,10 @@ namespace LayoutFarm.ContentManagers
             //1. 
             contentReq.State = BinderState.Loading;
             //2.
-            inputList.AddLast(contentReq);
+            _inputList.AddLast(contentReq);
             //another thread will manage this request 
             //and store in outputlist         
-            hasSomeInputHint = true;
+            _hasSomeInputHint = true;
 
             return true;
         }
