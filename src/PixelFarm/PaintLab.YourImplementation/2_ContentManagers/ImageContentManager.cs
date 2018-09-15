@@ -88,7 +88,7 @@ namespace LayoutFarm.ContentManagers
 
 
 
-                if (this.imageCacheLevel0.TryGetCacheImage(
+                if (this._imageCacheLevel.TryGetCacheImage(
                     binder.ImageSource,
                     out Image foundImage))
                 {
