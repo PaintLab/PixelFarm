@@ -37,7 +37,7 @@ namespace LayoutFarm.ContentManagers
 
         LinkedList<ImageBinder> _inputList = new LinkedList<ImageBinder>();
         LinkedList<ImageBinder> _outputList = new LinkedList<ImageBinder>();
-        ImageCacheSystem _imageCacheLevel = new ImageCacheSystem();
+        ImageCacheSystem _imageCacheLevel0 = new ImageCacheSystem();
 
         bool _hasSomeInputHint;
 
@@ -51,7 +51,11 @@ namespace LayoutFarm.ContentManagers
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
         }
 
-
+        public string BaseDir
+        {
+            get;
+            set;
+        }
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)
         {
             lock (_inputListSync)
@@ -75,20 +79,14 @@ namespace LayoutFarm.ContentManagers
             {
                 ImageBinder binder = _inputList.First.Value;
                 _inputList.RemoveFirst();
-
-                //wait until finish this  ....  
-
+                //wait until finish this  ....   
                 //1. check from cache if not found
                 //then send request to external ...  
                 string imgSrc = binder.ImageSource;
-
-
                 //img content manager can cache and optimize image resource usage
-                //we support png, jpg,  svg
+                //we support png, jpg,  svg 
 
-
-
-                if (this._imageCacheLevel.TryGetCacheImage(
+                if (this._imageCacheLevel0.TryGetCacheImage(
                     binder.ImageSource,
                     out Image foundImage))
                 {
@@ -101,7 +99,8 @@ namespace LayoutFarm.ContentManagers
                     //not found in cache => request image loader
                     //image load/waiting should be done on another thread
 
-
+                    //resolve this image
+                    //
 
 
                     this.AskForImage(
@@ -115,7 +114,7 @@ namespace LayoutFarm.ContentManagers
                     {
                         //store to cache 
                         //TODO: implement caching policy  
-                        _imageCacheLevel.AddCacheImage(binder.ImageSource, binder.Image);
+                        _imageCacheLevel0.AddCacheImage(binder.ImageSource, binder.Image);
                     }
                 }
 
