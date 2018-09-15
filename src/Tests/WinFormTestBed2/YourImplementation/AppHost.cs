@@ -2,7 +2,6 @@
 
 using System.IO;
 using PixelFarm.Drawing;
-using LayoutFarm.ContentManagers;
 using LayoutFarm.Svg;
 using PaintLab.Svg;
 
@@ -41,7 +40,6 @@ namespace LayoutFarm
         {
             return App.UploadStream(url, stream);
         }
-        protected abstract void LazyImageLoad(ImageBinder binder);
 
 
         public int PrimaryScreenWidth
@@ -56,29 +54,13 @@ namespace LayoutFarm
         public abstract void AddChild(RenderElement renderElement, object owner);
 
         public abstract RootGraphic RootGfx { get; }
-
-        public ImageBinder GetImageBinder(string src)
-        {
-            ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetLazyLoaderFunc(LazyImageLoad);
-            //if use lazy img load func
-            //imageContentMan.AddRequestImage(clientImgBinder);
-            return clientImgBinder;
-        }
-        public ImageBinder GetImageBinder2(string src)
-        {
-            ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetImage(LoadImage(src));
-            clientImgBinder.State = BinderState.Loaded;
-            return clientImgBinder;
-        }
     }
 
 
 
     public class WinFormAppHost : AppHost
     {
-        ImageLoadingQueueManager _imageLoadingQueue;
+
         LayoutFarm.UI.UISurfaceViewportControl _vw;
         System.Windows.Forms.Form _ownerForm;
         public WinFormAppHost(LayoutFarm.UI.UISurfaceViewportControl vw)
@@ -96,19 +78,9 @@ namespace LayoutFarm
             this._primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
             this._primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
 
-            //--------------
-            _imageLoadingQueue = new ImageLoadingQueueManager();
-            _imageLoadingQueue.AskForImage += (s, e) =>
-            {
-                e.SetResultImage(LoadImage(e.ImagSource));
-            };
-            //------- 
+
         }
-        protected override void LazyImageLoad(ImageBinder binder)
-        {
-            //load here as need
-            _imageLoadingQueue.AddRequestImage(binder);
-        }
+
         public override string OwnerFormTitle
         {
             get { return _ownerForm.Text; }
@@ -126,7 +98,7 @@ namespace LayoutFarm
         {
             get { return this._vw.RootGfx; }
         }
-        
+
         public override void AddChild(RenderElement renderElement)
         {
             this._vw.AddChild(renderElement);
@@ -151,7 +123,6 @@ namespace LayoutFarm
             {
                 default: return null;
                 case ".svg":
-
                     try
                     {
                         string svg_str = File.ReadAllText(imgName);
