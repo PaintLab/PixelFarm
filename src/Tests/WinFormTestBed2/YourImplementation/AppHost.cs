@@ -54,6 +54,24 @@ namespace LayoutFarm
         public abstract void AddChild(RenderElement renderElement, object owner);
 
         public abstract RootGraphic RootGfx { get; }
+
+        public ImageBinder GetImageBinder2(string src)
+        {
+            ClientImageBinder clientImgBinder = new ClientImageBinder(src);
+            clientImgBinder.SetImage(LoadImage(src)); 
+            return clientImgBinder;
+        }
+        public ImageBinder GetImageBinder(string src)
+        {
+            //ClientImageBinder clientImgBinder = new ClientImageBinder(src);
+            //clientImgBinder.SetImage(LoadImage(src));
+            //return clientImgBinder;
+
+            ClientImageBinder clientImgBinder = new ClientImageBinder(src);
+            clientImgBinder.SetLazyLoaderFunc(LazyImageLoad); 
+            return clientImgBinder;
+        }
+        protected abstract void LazyImageLoad(ImageBinder binder);
     }
 
 
@@ -77,9 +95,14 @@ namespace LayoutFarm
             System.Drawing.Rectangle primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
             this._primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
             this._primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
-
-
         }
+        protected override void LazyImageLoad(ImageBinder binder)
+        {
+            //load here as need
+            Image img = this.LoadImage(binder.ImageSource);
+            binder.SetImage(img);
+        }
+
 
         public override string OwnerFormTitle
         {
