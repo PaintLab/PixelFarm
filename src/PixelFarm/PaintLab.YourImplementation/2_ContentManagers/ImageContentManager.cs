@@ -30,7 +30,10 @@ namespace LayoutFarm.ContentManagers
 
     public class ImageContentManager
     {
-        public event EventHandler<ImageRequestEventArgs> ImageLoadingRequest;
+        /// <summary>
+        /// raise when the manager can't get a specific image
+        /// </summary>
+        public event EventHandler<ImageRequestEventArgs> AskForImage;
 
         LinkedList<ImageBinder> inputList = new LinkedList<ImageBinder>();
         LinkedList<ImageBinder> outputList = new LinkedList<ImageBinder>();
@@ -46,6 +49,8 @@ namespace LayoutFarm.ContentManagers
             //TODO: review here****             
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
         }
+
+
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)
         {
             lock (inputListSync)
@@ -67,18 +72,24 @@ namespace LayoutFarm.ContentManagers
             //copy data out 
             for (int i = 0; i < j; ++i)
             {
-                var firstNode = inputList.First;
+                ImageBinder binder = inputList.First.Value;
                 inputList.RemoveFirst();
-                ImageBinder binder = firstNode.Value;
+
                 //wait until finish this  ....  
 
                 //1. check from cache if not found
-                //then send request to external ... 
+                //then send request to external ...  
+                string imgSrc = binder.ImageSource;
 
-                Image foundImage;
+
+                //img content manager can cache and optimize image resource usage
+                //we support png, jpg,  svg
+
+
+
                 if (this.imageCacheLevel0.TryGetCacheImage(
                     binder.ImageSource,
-                    out foundImage))
+                    out Image foundImage))
                 {
                     //process image infomation
                     //....  
@@ -89,7 +100,10 @@ namespace LayoutFarm.ContentManagers
                     //not found in cache => request image loader
                     //image load/waiting should be done on another thread
 
-                    this.ImageLoadingRequest(
+
+
+
+                    this.AskForImage(
                         this,
                         new ImageRequestEventArgs(binder));
 
