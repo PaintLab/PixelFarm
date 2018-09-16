@@ -101,7 +101,7 @@ namespace LayoutFarm
                     }
                 };
 
-                ImageBinder imgBinder = host.GetImageBinder(fileNames[imgNo]);
+                ImageBinder imgBinder = host.CreateImageBinder(fileNames[imgNo]);
                 imgbox.SetSize(imgBinder.ImageWidth, imgBinder.ImageHeight);
                 imgbox.ImageBinder = imgBinder;
 

@@ -25,6 +25,7 @@ namespace LayoutFarm
         {
             return LoadImage(imgName, 0, 0);
         }
+
         public int OwnerFormTitleBarHeight { get { return _formTitleBarHeight; } }
 
 
@@ -55,23 +56,24 @@ namespace LayoutFarm
 
         public abstract RootGraphic RootGfx { get; }
 
-        public ImageBinder GetImageBinder2(string src)
+        public ImageBinder LoadImageAndBind(string src)
         {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetImage(LoadImage(src)); 
+            clientImgBinder.SetImage(LoadImage(src));
             return clientImgBinder;
         }
-        public ImageBinder GetImageBinder(string src)
-        {
-            //ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            //clientImgBinder.SetImage(LoadImage(src));
-            //return clientImgBinder;
 
+        public ImageBinder CreateImageBinder(string src)
+        {
             ClientImageBinder clientImgBinder = new ClientImageBinder(src);
-            clientImgBinder.SetLazyLoaderFunc(LazyImageLoad); 
+            clientImgBinder.SetLazyLoaderFunc(binder =>
+            {
+                Image img = this.LoadImage(binder.ImageSource);
+                binder.SetImage(img);
+            });
             return clientImgBinder;
         }
-        protected abstract void LazyImageLoad(ImageBinder binder);
+       
     }
 
 
@@ -96,12 +98,7 @@ namespace LayoutFarm
             this._primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
             this._primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
         }
-        protected override void LazyImageLoad(ImageBinder binder)
-        {
-            //load here as need
-            Image img = this.LoadImage(binder.ImageSource);
-            binder.SetImage(img);
-        }
+
 
 
         public override string OwnerFormTitle
