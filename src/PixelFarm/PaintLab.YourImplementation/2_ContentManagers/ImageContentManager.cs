@@ -38,20 +38,22 @@ namespace LayoutFarm.ContentManagers
 
         LinkedList<ImageBinder> _inputList = new LinkedList<ImageBinder>();
         LinkedList<ImageBinder> _outputList = new LinkedList<ImageBinder>();
-        ImageCacheSystem _imageCacheLevel0 = new ImageCacheSystem();
-
         bool _hasSomeInputHint;
-
         object _outputListSync = new object();
         object _inputListSync = new object();
         bool _working = false;
-
+        ImageCacheSystem _imgCache;
         public ImageLoadingQueueManager()
         {
             //TODO: review here****             
             UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
+            _imgCache = new ImageCacheSystem();
         }
-
+        public ImageCacheSystem ImgCache
+        {
+            get => _imgCache;
+            set => _imgCache = value;
+        }
 
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)
         {
@@ -81,11 +83,11 @@ namespace LayoutFarm.ContentManagers
                 //wait until finish this  ....   
                 //1. check from cache if not found
                 //then send request to external ...  
-                
+
                 //img content manager can cache and optimize image resource usage
                 //we support png, jpg,  svg 
 
-                if (this._imageCacheLevel0.TryGetCacheImage(
+                if (_imgCache != null && this._imgCache.TryGetCacheImage(
                     binder.ImageSource,
                     out Image foundImage))
                 {
@@ -99,18 +101,20 @@ namespace LayoutFarm.ContentManagers
                     //image load/waiting should be done on another thread
 
                     //resolve this image 
+
+                    ImageRequestEventArgs imgReq = new ImageRequestEventArgs(binder);
                     this.AskForImage(
                         this,
-                        new ImageRequestEventArgs(binder));
+                        imgReq);
 
                     //....
                     //process image infomation
                     //.... 
-                    if (binder.State == BinderState.Loaded)
+                    if (binder.State == BinderState.Loaded && _imgCache != null)
                     {
                         //store to cache 
                         //TODO: implement caching policy  
-                        _imageCacheLevel0.Replace(binder.ImageSource, binder.Image);
+                        _imgCache.Replace(binder.ImageSource, binder.Image);
                     }
                 }
 
