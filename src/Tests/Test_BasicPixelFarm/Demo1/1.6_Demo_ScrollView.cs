@@ -89,7 +89,7 @@ namespace LayoutFarm
 
             for (int i = 0; i < fileNames.Length * 4; ++i) //5 imgs
             {
-                var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 36); 
+                var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 36);
                 imgbox.BackColor = Color.OrangeRed;
                 imgbox.SetLocation(0, lastY);
                 imgbox.MouseUp += (s, e) =>
@@ -102,7 +102,7 @@ namespace LayoutFarm
                 };
 
                 ImageBinder imgBinder = host.GetImageBinder(fileNames[imgNo]);
-                imgbox.SetSize(imgBinder.ImageWidth, imgBinder.ImageHeight); 
+                imgbox.SetSize(imgBinder.ImageWidth, imgBinder.ImageHeight);
                 imgbox.ImageBinder = imgBinder;
 
 
@@ -119,7 +119,7 @@ namespace LayoutFarm
             //--------------------------
             //panel may need more 
             panel.SetViewport(0, 0);
-           
+
             //-------------------------  
             {
                 //vertical scrollbar
@@ -145,6 +145,7 @@ namespace LayoutFarm
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
+
 
         }
 
