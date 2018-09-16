@@ -38,7 +38,7 @@ namespace LayoutFarm.ContentManagers
 
         LinkedList<ImageBinder> _inputList = new LinkedList<ImageBinder>();
         LinkedList<ImageBinder> _outputList = new LinkedList<ImageBinder>();
-        bool _hasSomeInputHint;
+        bool _hint_HasSomeInput;
         object _outputListSync = new object();
         object _inputListSync = new object();
         bool _working = false;
@@ -63,7 +63,7 @@ namespace LayoutFarm.ContentManagers
                 {
                     return;
                 }
-                if (!_hasSomeInputHint)
+                if (!_hint_HasSomeInput)
                 {
                     return;
                 }
@@ -122,7 +122,7 @@ namespace LayoutFarm.ContentManagers
             }
             if (j == 0)
             {
-                _hasSomeInputHint = false;
+                _hint_HasSomeInput = false;
             }
 
             _working = false;
@@ -141,7 +141,7 @@ namespace LayoutFarm.ContentManagers
             _inputList.AddLast(contentReq);
             //another thread will manage this request 
             //and store in outputlist         
-            _hasSomeInputHint = true;
+            _hint_HasSomeInput = true;
 
             return true;
         }
