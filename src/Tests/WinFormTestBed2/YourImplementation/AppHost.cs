@@ -73,7 +73,7 @@ namespace LayoutFarm
             });
             return clientImgBinder;
         }
-       
+
     }
 
 
@@ -146,8 +146,8 @@ namespace LayoutFarm
                     try
                     {
                         string svg_str = File.ReadAllText(imgName);
-                        VgRenderVx vgRenderVx = ReadSvgFile(imgName);
-                        return CreateBitmap(vgRenderVx);
+                        VgRenderVx vgRenderVx = ReadSvgFile(imgName); 
+                        return CreateBitmap(vgRenderVx, reqW, reqH);
 
                     }
                     catch (System.Exception ex)
@@ -192,7 +192,7 @@ namespace LayoutFarm
 
             });
         }
-        PixelFarm.CpuBlit.ActualBitmap CreateBitmap(VgRenderVx renderVx)
+        PixelFarm.CpuBlit.ActualBitmap CreateBitmap(VgRenderVx renderVx, int reqW, int reqH)
         {
 
             PixelFarm.CpuBlit.RectD bound = renderVx.GetBounds();
