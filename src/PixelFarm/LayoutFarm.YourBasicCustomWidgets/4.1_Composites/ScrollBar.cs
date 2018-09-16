@@ -281,7 +281,7 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------------------------- 
         int CalculateThumbPosition()
         {
-            return (int)(scrollRangeLogic.CurrentValue / this.onePixelFor);
+            return (int)Math.Round(scrollRangeLogic.CurrentValue / this.onePixelFor);
         }
 
 
@@ -1093,24 +1093,26 @@ namespace LayoutFarm.CustomWidgets
         {
             this._slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
-                int physicalScrollLength = sc.PhysicalScrollLength;
+                float physicalScrollLength = sc.PhysicalScrollLength;
                 onePixelFor = 1;
                 scrollBoxLength = 1;
                 //1. 
-                int contentLength = scrollableSurface.InnerHeight;
+
+                float contentLength = scrollableSurface.InnerHeight;
                 if (contentLength == 0)
                 {
                     return;
                 }
-                scrollBoxLength = (int)((physicalScrollLength * scrollableSurface.ViewportHeight) / contentLength);
+                scrollBoxLength = (int)Math.Round((physicalScrollLength * scrollableSurface.ViewportHeight) / contentLength);
                 if (scrollBoxLength < sc.ScrollBoxSizeLimit)
                 {
                     scrollBoxLength = sc.ScrollBoxSizeLimit;
-                    onePixelFor = (double)contentLength / (double)(physicalScrollLength - scrollBoxLength);
+                    //viewport ratio
+                    onePixelFor = (contentLength - scrollableSurface.ViewportHeight) / (physicalScrollLength - scrollBoxLength);
                 }
                 else
                 {
-                    onePixelFor = (double)contentLength / (double)physicalScrollLength;
+                    onePixelFor = contentLength / physicalScrollLength;
                 }
 
                 //temp fix 
@@ -1146,21 +1148,22 @@ namespace LayoutFarm.CustomWidgets
             this._slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
                 //horizontal scroll bar
-                int physicalScrollLength = sc.PhysicalScrollLength;
+                float physicalScrollLength = sc.PhysicalScrollLength;
                 onePixelFor = 1;
                 scrollBoxLength = 1;
                 //1. 
-                int contentLength = scrollableSurface.InnerWidth;
+                float contentLength = scrollableSurface.InnerWidth;
                 if (contentLength == 0) return;
-                scrollBoxLength = (int)((physicalScrollLength * scrollableSurface.ViewportWidth) / contentLength);
+                scrollBoxLength = (int)Math.Round((physicalScrollLength * scrollableSurface.ViewportWidth) / contentLength);
                 if (scrollBoxLength < sc.ScrollBoxSizeLimit)
                 {
                     scrollBoxLength = sc.ScrollBoxSizeLimit;
-                    onePixelFor = (double)contentLength / (double)(physicalScrollLength - scrollBoxLength);
+                    //viewport ratio
+                    onePixelFor = (contentLength - scrollableSurface.ViewportWidth) / (physicalScrollLength - scrollBoxLength);
                 }
                 else
                 {
-                    onePixelFor = (double)contentLength / (double)physicalScrollLength;
+                    onePixelFor = contentLength / physicalScrollLength;
                 }
 
                 sc.MaxValue = (contentLength > scrollableSurface.ViewportWidth) ?
