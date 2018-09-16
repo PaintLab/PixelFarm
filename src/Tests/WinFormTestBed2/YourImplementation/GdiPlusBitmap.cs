@@ -2,36 +2,25 @@
 using System;
 using PixelFarm.Drawing;
 
+ 
+
 namespace LayoutFarm
 {
 
     public sealed class GdiPlusBitmap : Image
     {
-        int width;
-        int height;
+        int _width;
+        int _height;
         System.Drawing.Bitmap _innerBmp;
+
         public GdiPlusBitmap(int w, int h, System.Drawing.Bitmap innerImage)
         {
-            this.width = w;
-            this.height = h;
+            this._width = w;
+            this._height = h;
             this._innerBmp = innerImage;
             SetCacheInnerImage(this, innerImage);
         }
-        //public override Image CreateAnother(float scaleW, float scaleH)
-        //{
-        //    int bmpW = _innerBmp.Width;
-        //    int bmpH = _innerBmp.Height;
-        //    System.Drawing.Bitmap newclone = new System.Drawing.Bitmap(_innerBmp, (int)(bmpW * scaleW), (int)(bmpH * scaleH));
-        //    return new GdiPlusBitmap((int)(width * scaleW), (int)(height * scaleH), newclone);
-        //}
-        public override int Width
-        {
-            get { return this.width; }
-        }
-        public override int Height
-        {
-            get { return this.height; }
-        }
+
         public override void Dispose()
         {
             ClearCache(this);
@@ -43,7 +32,8 @@ namespace LayoutFarm
         }
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
-            var bmpData = _innerBmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height),
+            //COPY***
+            var bmpData = _innerBmp.LockBits(new System.Drawing.Rectangle(0, 0, _width, _height),
              System.Drawing.Imaging.ImageLockMode.ReadOnly,
              System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
@@ -56,19 +46,15 @@ namespace LayoutFarm
             buffRequest.OutputBuffer32 = newBuff;
         }
 
-        public override bool IsReferenceImage
-        {
-            get { return false; }
-        }
-        public override int ReferenceX
-        {
-            get { return 0; }
-        }
-        public override int ReferenceY
-        {
-            get { return 0; }
-        }
+        public override int Width => _width;
 
+        public override int Height => _height;
+
+        public override bool IsReferenceImage => false;
+
+        public override int ReferenceX => 0;
+
+        public override int ReferenceY => 0;
     }
-
+     
 }

@@ -7,7 +7,7 @@ namespace LayoutFarm
     {
         protected override void OnStart(AppHost host)
         {
-            ImageBinder imgBinder = host.GetImageBinder2("../Data/imgs/favorites32.png");
+            ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
             
             for (int i = 0; i < 100; ++i)
             {

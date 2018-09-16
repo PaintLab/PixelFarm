@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
         public Box(int w, int h)
             : base(w, h)
         {
-
+            
         }
         public override void Walk(UIVisitor visitor)
         {
@@ -40,12 +40,12 @@ namespace LayoutFarm.CustomWidgets
         {
             //set propersize
 
-            if (childContent is ImageBox)
-            {
-                ImageBox imgBox = (ImageBox)childContent;
-                this.SetSize(imgBox.Width, imgBox.Height);
+            //if (childContent is ImageBox)
+            //{
+            //    ImageBox imgBox = (ImageBox)childContent;
+            //    this.SetSize(imgBox.Width, imgBox.Height); 
+            //}
 
-            }
             this.InvalidateLayout();
             //this.ParentUI?.NotifyContentUpdate(this);
             this.ParentUI?.InvalidateLayout();

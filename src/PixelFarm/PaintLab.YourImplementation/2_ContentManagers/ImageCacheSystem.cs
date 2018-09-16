@@ -5,17 +5,18 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.ContentManagers
 {
-    class ImageCacheSystem
+
+    public class ImageCacheSystem
     {
-        Dictionary<string, Image> cacheImages = new Dictionary<string, Image>();
+        protected Dictionary<string, Image> cacheImages = new Dictionary<string, Image>();
         public ImageCacheSystem()
         {
         }
-        public bool TryGetCacheImage(string url, out Image img)
+        public virtual bool TryGetCacheImage(string url, out Image img)
         {
             return cacheImages.TryGetValue(url, out img);
         }
-        public void AddCacheImage(string url, Image img)
+        public virtual void Replace(string url, Image img)
         {
             this.cacheImages[url] = img;
         }
