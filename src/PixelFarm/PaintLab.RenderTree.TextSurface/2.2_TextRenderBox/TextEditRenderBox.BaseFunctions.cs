@@ -145,7 +145,7 @@ namespace LayoutFarm.Text
                 HandleKeyDown(e);
                 return;
             }
-             
+
 
             char c = e.KeyChar;
             e.CancelBubbling = true;
@@ -187,7 +187,7 @@ namespace LayoutFarm.Text
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
             }
- 
+
 
         }
         void InvalidateGraphicOfCurrentLineArea()
@@ -595,8 +595,7 @@ namespace LayoutFarm.Text
 
             switch (e.KeyCode)
             {
-                case UIKeys.PageUp:
-                case UIKeys.PageDown:
+
                 case UIKeys.Escape:
                 case UIKeys.End:
                 case UIKeys.Home:
@@ -776,6 +775,162 @@ namespace LayoutFarm.Text
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
                         }
 
+                        return true;
+                    }
+                case UIKeys.PageUp:
+                    {
+                        //similar to arrow  up
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        if (_isMultiLine)
+                        {
+                            if (!_isInVerticalPhase)
+                            {
+                                _isInVerticalPhase = true;
+                                _verticalExpectedCharIndex = _internalTextLayerController.CharIndex;
+                            }
+
+                            //----------------------------                          
+                            if (!e.Shift)
+                            {
+                                _internalTextLayerController.CancelSelect();
+                            }
+                            else
+                            {
+                                _internalTextLayerController.StartSelectIfNoSelection();
+                            }
+                            //----------------------------
+                            //approximate line per viewport
+                            int line_per_viewport = Height / _internalTextLayerController.CurrentLineArea.Height;
+                            if (line_per_viewport > 1)
+                            {
+                                if (_internalTextLayerController.CurrentLineNumber - line_per_viewport < 0)
+                                {
+                                    //move to first line
+                                    _internalTextLayerController.CurrentLineNumber = 0;
+                                }
+                                else
+                                {
+                                    _internalTextLayerController.CurrentLineNumber -= line_per_viewport;
+                                }
+                            }
+
+
+
+                            if (_verticalExpectedCharIndex > _internalTextLayerController.CurrentLineCharCount - 1)
+                            {
+                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount);
+                            }
+                            else
+                            {
+                                _internalTextLayerController.TryMoveCaretTo(_verticalExpectedCharIndex);
+                            }
+
+                            //----------------------------
+                            if (e.Shift)
+                            {
+                                _internalTextLayerController.EndSelectIfNoSelection();
+                            }
+
+                            Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
+                            if (lineArea.Top < ViewportY)
+                            {
+                                ScrollBy(0, lineArea.Top - ViewportY);
+                            }
+                            else
+                            {
+                                EnsureCaretVisible();
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+                        }
+                        else
+                        {
+                        }
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                        }
+                        return true;
+                    }
+
+                case UIKeys.PageDown:
+                    {
+
+                        //similar to arrow  down
+                        if (_textSurfaceEventListener != null &&
+                            TextSurfaceEventListener.NotifyPreviewDialogKeyDown(_textSurfaceEventListener, e))
+                        {
+                            return true;
+                        }
+
+                        if (_isMultiLine)
+                        {
+                            if (!_isInVerticalPhase)
+                            {
+                                _isInVerticalPhase = true;
+                                _verticalExpectedCharIndex = _internalTextLayerController.CharIndex;
+                            }
+
+                            //----------------------------                          
+                            if (!e.Shift)
+                            {
+                                _internalTextLayerController.CancelSelect();
+                            }
+                            else
+                            {
+                                _internalTextLayerController.StartSelectIfNoSelection();
+                            }
+                            //---------------------------- 
+
+                            int line_per_viewport = Height / _internalTextLayerController.CurrentLineArea.Height;
+
+                            if (_internalTextLayerController.CurrentLineNumber + line_per_viewport < _internalTextLayerController.LineCount)
+                            {
+
+                                _internalTextLayerController.CurrentLineNumber += line_per_viewport;
+                            }
+                            else
+                            {
+                                //move to last line
+                                _internalTextLayerController.CurrentLineNumber = _internalTextLayerController.LineCount - 1;
+                            }
+
+                            if (_verticalExpectedCharIndex > _internalTextLayerController.CurrentLineCharCount - 1)
+                            {
+                                _internalTextLayerController.TryMoveCaretTo(_internalTextLayerController.CurrentLineCharCount);
+                            }
+                            else
+                            {
+                                _internalTextLayerController.TryMoveCaretTo(_verticalExpectedCharIndex);
+                            }
+                            //----------------------------
+
+                            if (e.Shift)
+                            {
+                                _internalTextLayerController.EndSelectIfNoSelection();
+                            }
+                            //----------------------------
+                            Rectangle lineArea = _internalTextLayerController.CurrentLineArea;
+                            if (lineArea.Bottom > this.ViewportBottom)
+                            {
+                                ScrollBy(0, lineArea.Bottom - this.ViewportBottom);
+                            }
+                            else
+                            {
+
+                                InvalidateGraphicOfCurrentLineArea();
+                            }
+
+                        }
+                        EnsureCaretVisible();
+                        if (_textSurfaceEventListener != null)
+                        {
+                            TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
+                        }
                         return true;
                     }
                 case UIKeys.Down:
