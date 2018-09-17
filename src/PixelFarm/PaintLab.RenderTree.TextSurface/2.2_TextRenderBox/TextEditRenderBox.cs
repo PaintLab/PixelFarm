@@ -159,14 +159,13 @@ namespace LayoutFarm.Text
                 int old_y = this.ViewportY;
                 if (ViewportY + dy < 0)
                 {
-                    dy = -ViewportY;
+                    //? limit                     
                     this.SetViewport(this.ViewportX, 0);
                 }
                 else
                 {
                     this.SetViewport(this.ViewportX, this.ViewportY + dy);
                 }
-
             }
             else if (dy > 0)
             {
@@ -174,10 +173,9 @@ namespace LayoutFarm.Text
                 int viewportButtom = ViewportY + Height;
                 if (viewportButtom + dy > innerContentSize.Height)
                 {
-                    if (viewportButtom < innerContentSize.Height)
-                    {
-                        this.SetViewport(this.ViewportX, old_y - Height);
-                    }
+                    int vwY = innerContentSize.Height - Height;
+                    //limit                     
+                    this.SetViewport(this.ViewportX, vwY > 0 ? vwY : 0);
                 }
                 else
                 {

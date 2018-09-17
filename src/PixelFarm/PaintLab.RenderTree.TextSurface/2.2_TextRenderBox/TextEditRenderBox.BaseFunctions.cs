@@ -288,6 +288,29 @@ namespace LayoutFarm.Text
                 }
             }
         }
+        public void HandleMouseWheel(UIMouseEventArgs e)
+        {
+            if (_textSurfaceEventListener != null &&
+                TextSurfaceEventListener.NotifyPreviewMouseWheel(_textSurfaceEventListener, e))
+            {
+                //if the event is handled by the listener
+                return;
+            }
+
+            //
+            if (e.Delta < 0)
+            {
+                //scroll down
+                //this.StepSmallToMax();
+                ScrollBy(0, 24);
+            }
+            else
+            {
+                //up
+                //this.StepSmallToMin();
+                ScrollBy(0, -24);
+            }
+        }
         public void HandleDoubleClick(UIMouseEventArgs e)
         {
             _internalTextLayerController.CancelSelect();
