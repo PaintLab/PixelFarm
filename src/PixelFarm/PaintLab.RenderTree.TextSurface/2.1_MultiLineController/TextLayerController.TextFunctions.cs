@@ -180,10 +180,14 @@ namespace LayoutFarm.Text
         }
         public void Clear()
         {
+            //1.
             CancelSelect();
+            _textLayer.Clear();
             _textLineWriter.Clear();
             //
             NotifyContentSizeChanged();
+
+
         }
 
 
