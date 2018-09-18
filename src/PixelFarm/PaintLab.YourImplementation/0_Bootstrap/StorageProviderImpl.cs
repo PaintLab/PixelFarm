@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
- 
+
 using PixelFarm.CpuBlit;
 
 namespace YourImplementation
@@ -25,7 +25,7 @@ namespace YourImplementation
         }
         public override ActualBitmap ReadPngBitmap(string filename)
         {
-            using (FileStream fs = new FileStream(filename, FileMode.Create))
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
             {
                 return PngIOStorage.Read(fs);
             }
@@ -39,7 +39,7 @@ namespace YourImplementation
         }
     }
 
-   
+
 
 
     static class PngIOStorage

@@ -46,6 +46,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_Start\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs">
+      <Link>0_Start\StorageProviderImpl.cs</Link>
+    </Compile>
     <Compile Include="0_Start\GLDemoContextWinForm.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
