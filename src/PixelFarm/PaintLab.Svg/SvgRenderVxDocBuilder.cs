@@ -1241,7 +1241,7 @@ namespace PaintLab.Svg
                 paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
                     evaluated = true;//once 
-                    BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref rectTotal);
+                    BoundingRect.GetBoundingRect(vxs, ref rectTotal);
                 };
 
                 _renderE.Walk(paintArgs);
