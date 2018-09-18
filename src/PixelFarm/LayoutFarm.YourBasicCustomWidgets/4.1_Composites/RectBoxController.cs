@@ -361,8 +361,8 @@ namespace LayoutFarm.CustomWidgets
             int j = vxs.Count;
             for (int i = 0; i < j; ++i)
             {
-                var cmd = vxs.GetVertex(i, out double x, out double y);
-                switch (cmd)
+
+                switch (vxs.GetVertex(i, out double x, out double y))
                 {
                     case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                         {
