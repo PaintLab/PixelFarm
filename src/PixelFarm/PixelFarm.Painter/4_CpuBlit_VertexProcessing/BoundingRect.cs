@@ -28,7 +28,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public static class BoundingRect
     {
-        public static bool GetBoundingRect(VertexStore vxs, ref RectD rect)
+        public static bool GetBoundingRect(this VertexStore vxs, ref RectD rect)
         {
             return GetBoundingRect(new VertexStoreSnap(vxs), ref rect);
         }
