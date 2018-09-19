@@ -436,7 +436,8 @@ namespace LayoutFarm.CustomWidgets
 
                 //PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
 
-                _ui.HandleElementUpdate();
+                //***
+                _ui?.HandleElementUpdate();
 
             };
         }
