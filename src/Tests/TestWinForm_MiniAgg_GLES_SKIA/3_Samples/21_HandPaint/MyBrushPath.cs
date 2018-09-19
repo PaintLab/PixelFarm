@@ -336,7 +336,7 @@ namespace PixelFarm.CpuBlit.Samples
             //check if point in polygon
             if (!validBoundingRect)
             {
-                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref boundingRect);
+                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(vxs, ref boundingRect);
                 validBoundingRect = true;
             }
             if (this.boundingRect.Contains(x, y))

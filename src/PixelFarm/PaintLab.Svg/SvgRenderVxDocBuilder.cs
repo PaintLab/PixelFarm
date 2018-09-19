@@ -405,7 +405,6 @@ namespace PaintLab.Svg
 
                 if (args.Current != null &&
                    PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
-                    //PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, 99, 73))
                 {
                     if (args._currentTx != null)
                     {
