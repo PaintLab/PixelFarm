@@ -28,6 +28,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public static class BoundingRect
     {
+        public static RectD GetBoundingRect(this VertexStore vxs)
+        {
+            RectD bounds = RectD.ZeroIntersection;
+            return GetBoundingRect(new VertexStoreSnap(vxs), ref bounds) ?
+                        bounds :
+                        new RectD();
+        }
         public static bool GetBoundingRect(this VertexStore vxs, ref RectD rect)
         {
             return GetBoundingRect(new VertexStoreSnap(vxs), ref rect);
