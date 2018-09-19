@@ -145,6 +145,7 @@ namespace PixelFarm.CpuBlit
             {
                 //TODO: review here***
                 //NoMore cmd ?
+                //***
                 myvxs.AddVertex(0, 0, VertexCmd.NoMore);
             }
             figureCount++;

@@ -130,10 +130,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         static Curve3Div s_curve3Div = new Curve3Div();
 
         static void CreateBezierVxs4(VertexStore vxs,
-        double x0, double y0,
-        double x1, double y1,
-        double x2, double y2,
-        double x3, double y3)
+            double x0, double y0,
+            double x1, double y1,
+            double x2, double y2,
+            double x3, double y3)
         {
 
             //1. subdiv technique
