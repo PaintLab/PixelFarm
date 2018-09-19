@@ -41,9 +41,10 @@ namespace PaintLab.Svg
             this.Y = y;
         }
         public bool WithSubPartTest { get; set; }
-        public void AddHit(SvgRenderElement svg, float x, float y, float svgRelX, float svgRelY)
+        public bool MakeCopyOfHitVxs { get; set; }
+        public void AddHit(SvgRenderElement svg, float x, float y, VertexStore copyOfVxs)
         {
-            svgList.Add(new SvgHitInfo(svg, x, y, svgRelX, svgRelY));
+            svgList.Add(new SvgHitInfo(svg, x, y, copyOfVxs));
         }
         public int Count
         {
@@ -65,7 +66,7 @@ namespace PaintLab.Svg
             this.X = this.Y = 0;
             this._rootHitX = this._rootHitY = 0;
             this.svgList.Clear();
-            WithSubPartTest = false;
+            MakeCopyOfHitVxs = WithSubPartTest = false;
         }
         public void SetRootGlobalPosition(float x, float y)
         {
@@ -79,15 +80,13 @@ namespace PaintLab.Svg
         public readonly SvgRenderElement svg;
         public readonly float x;
         public readonly float y;
-        public readonly float svgRelX; //relative x to svg root
-        public readonly float svgRelY; //relative x to svg root
-        public SvgHitInfo(SvgRenderElement svg, float x, float y, float svgRelX, float svgRelY)
+        public readonly VertexStore copyOfVxs;
+        public SvgHitInfo(SvgRenderElement svg, float x, float y, VertexStore copyOfVxs)
         {
             this.svg = svg;
             this.x = x;
             this.y = y;
-            this.svgRelX = svgRelX;
-            this.svgRelY = svgRelY;
+            this.copyOfVxs = copyOfVxs;
         }
         public SvgElement GetSvgElement()
         {
@@ -401,16 +400,15 @@ namespace PaintLab.Svg
 
             paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
             {
-                double rel_x = 0, rel_y = 0; //relation to root left, corner
 
                 if (args.Current != null &&
                    PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
                 {
-                    if (args._currentTx != null)
-                    {
-                        args._currentTx.Transform(ref rel_x, ref rel_y);
-                    }
-                    hitChain.AddHit(args.Current, hitChain.X, hitChain.Y, (float)rel_x, (float)rel_y);
+                    //add actual transform vxs ... 
+                    hitChain.AddHit(args.Current,
+                        hitChain.X,
+                        hitChain.Y,
+                        hitChain.MakeCopyOfHitVxs ? vxs.CreateTrim() : null);
                 }
             };
 
