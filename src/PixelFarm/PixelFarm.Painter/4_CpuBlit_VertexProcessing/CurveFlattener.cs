@@ -147,6 +147,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 #endif
                 switch (cmd)
                 {
+                    
                     case VertexCmd.P2c:
                         {
                             switch (latestCurveMode)
@@ -254,13 +255,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     case VertexCmd.CloseAndEndFigure:
                         {
                             latestCurveMode = CurvePointMode.NotCurve;
-                            vxs.AddVertex(x, y, cmd);
+                            vxs.AddVertex(lastMoveX, lastMoveY, cmd);
                             //move to begin 
                             lastX = lastMoveX;
                             lasty = lastMoveY;
                         }
                         break;
-
+                   
                     default:
                         {
                             //move to, and end command
