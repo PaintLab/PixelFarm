@@ -341,7 +341,7 @@ namespace LayoutFarm.CustomWidgets
             _ui = ui;
         }
         PixelFarm.Drawing.VertexStore _svgPath;
-        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore svgPath)
+        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore svgPath, float relOffsetX, float relOffsetY)
         {
             //1. we remove existing point from root
 
@@ -369,7 +369,7 @@ namespace LayoutFarm.CustomWidgets
 
                             var ctrlPoint = new UIControllerBox(8, 8);
                             ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)x, (int)y);
+                            ctrlPoint.SetLocation((int)(x + relOffsetX), (int)(y + relOffsetY));
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
                             _simpleBox.AddChild(ctrlPoint);
@@ -379,7 +379,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             var ctrlPoint = new UIControllerBox(8, 8);
                             ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)x, (int)y);
+                            ctrlPoint.SetLocation((int)(x + relOffsetX), (int)(y + relOffsetY));
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
                             _simpleBox.AddChild(ctrlPoint);

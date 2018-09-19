@@ -26,9 +26,10 @@ namespace PaintLab.Svg
     //----------------------
     public class SvgHitChain
     {
-        float rootGlobalX;
-        float rootGlobalY;
+        float _rootHitX;
+        float _rootHitY;
         List<SvgHitInfo> svgList = new List<SvgHitInfo>();
+
         public SvgHitChain()
         {
         }
@@ -40,9 +41,9 @@ namespace PaintLab.Svg
             this.Y = y;
         }
         public bool WithSubPartTest { get; set; }
-        public void AddHit(SvgRenderElement svg, float x, float y)
+        public void AddHit(SvgRenderElement svg, float x, float y, float svgRelX, float svgRelY)
         {
-            svgList.Add(new SvgHitInfo(svg, x, y));
+            svgList.Add(new SvgHitInfo(svg, x, y, svgRelX, svgRelY));
         }
         public int Count
         {
@@ -62,14 +63,14 @@ namespace PaintLab.Svg
         public void Clear()
         {
             this.X = this.Y = 0;
-            this.rootGlobalX = this.rootGlobalY = 0;
+            this._rootHitX = this._rootHitY = 0;
             this.svgList.Clear();
             WithSubPartTest = false;
         }
         public void SetRootGlobalPosition(float x, float y)
         {
-            this.rootGlobalX = x;
-            this.rootGlobalY = y;
+            this._rootHitX = x;
+            this._rootHitY = y;
         }
     }
 
@@ -78,11 +79,15 @@ namespace PaintLab.Svg
         public readonly SvgRenderElement svg;
         public readonly float x;
         public readonly float y;
-        public SvgHitInfo(SvgRenderElement svg, float x, float y)
+        public readonly float svgRelX; //relative x to svg root
+        public readonly float svgRelY; //relative x to svg root
+        public SvgHitInfo(SvgRenderElement svg, float x, float y, float svgRelX, float svgRelY)
         {
             this.svg = svg;
             this.x = x;
             this.y = y;
+            this.svgRelX = svgRelX;
+            this.svgRelY = svgRelY;
         }
         public SvgElement GetSvgElement()
         {
@@ -393,12 +398,20 @@ namespace PaintLab.Svg
         public bool HitTest(SvgHitChain hitChain)
         {
             VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
+
             paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
             {
+                double rel_x = 0, rel_y = 0; //relation to root left, corner
+
                 if (args.Current != null &&
-                    PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
+                   PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
+                    //PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, 99, 73))
                 {
-                    hitChain.AddHit(args.Current, hitChain.X, hitChain.Y);
+                    if (args._currentTx != null)
+                    {
+                        args._currentTx.Transform(ref rel_x, ref rel_y);
+                    }
+                    hitChain.AddHit(args.Current, hitChain.X, hitChain.Y, (float)rel_x, (float)rel_y);
                 }
             };
 
