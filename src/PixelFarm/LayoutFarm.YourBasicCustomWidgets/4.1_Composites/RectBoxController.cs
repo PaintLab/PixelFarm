@@ -75,6 +75,18 @@ namespace LayoutFarm.CustomWidgets
         }
         //-------------
 
+        public void SetPosition(int x, int y)
+        {
+            //TODO: review here again***
+            //temp fix for invalidate area of overlap children
+            _groundBox.InvalidateOuterGraphics();
+            foreach (var ctrl in _controls)
+            {
+                ctrl.InvalidateOuterGraphics();
+            }
+            _groundBox.SetLocation(x, y);
+        }
+
         public override void Focus()
         {
             _centrolBox.AcceptKeyboardFocus = true;

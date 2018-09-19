@@ -29,10 +29,10 @@ namespace PaintLab.Svg
         float _rootHitX;
         float _rootHitY;
         List<SvgHitInfo> svgList = new List<SvgHitInfo>();
-
         public SvgHitChain()
         {
         }
+
         public float X { get; private set; }
         public float Y { get; private set; }
         public void SetHitTestPos(float x, float y)
@@ -67,6 +67,8 @@ namespace PaintLab.Svg
             this._rootHitX = this._rootHitY = 0;
             this.svgList.Clear();
             MakeCopyOfHitVxs = WithSubPartTest = false;
+
+
         }
         public void SetRootGlobalPosition(float x, float y)
         {
@@ -392,7 +394,22 @@ namespace PaintLab.Svg
         {
             //
             _renderRoot.Invalidate(this);
+        }
 
+        public void HitTest(float x, float y, Action<SvgRenderElement, float, float, VertexStore> onHitSvg)
+        {
+            VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
+            paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+            {
+                if (args.Current != null &&
+                   PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, x, y))
+                {
+                    //add actual transform vxs ... 
+                    onHitSvg(args.Current, x, y, vxs);
+                }
+            };
+            this.Walk(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
         }
         public bool HitTest(SvgHitChain hitChain)
         {
