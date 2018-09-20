@@ -6,10 +6,10 @@ using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.Drawing
 {
 
-    public static class VxsContext
+    public static class VxsTemp
     {
          
-        public static VxsContext1 Temp(out VertexStore vxs)
+        public static VxsContext1 Borrow(out VertexStore vxs)
         {
             var tmp = new VxsContext1(true);
             vxs = tmp.vxs;
@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing
         }
 
         
-        public static VxsContext2 Temp(out VertexStore vxs1, out VertexStore vxs2)
+        public static VxsContext2 Borrow(out VertexStore vxs1, out VertexStore vxs2)
         {
             var tmp = new VxsContext2(true);
             vxs1 = tmp.vxs1;
@@ -26,7 +26,7 @@ namespace PixelFarm.Drawing
         }
 
        
-        public static VxsContext3 Temp(out VertexStore vxs1,
+        public static VxsContext3 Borrow(out VertexStore vxs1,
             out VertexStore vxs2, out VertexStore vxs3)
         {
             var tmp = new VxsContext3(true);

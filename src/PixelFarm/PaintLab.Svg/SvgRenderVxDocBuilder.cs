@@ -509,7 +509,7 @@ namespace PaintLab.Svg
         static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
         {
 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 PixelFarm.CpuBlit.TempStrokeTool.GetFreeStroke(out Stroke stroke);
                 stroke.Width = strokeW;
@@ -609,7 +609,7 @@ namespace PaintLab.Svg
                         else
                         {
                             //have some tx
-                            using (VxsContext.Temp(out var v1))
+                            using (VxsTemp.Borrow(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
                                 vgPainterArgs.Current = this;
@@ -791,7 +791,7 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //have some tx
-                        using (VxsContext.Temp(out var v1))
+                        using (VxsTemp.Borrow(out var v1))
                         {
                             currentTx.TransformToVxs(clipVxs, v1);
                             p.SetClipRgn(v1);
@@ -1085,7 +1085,7 @@ namespace PaintLab.Svg
                         else
                         {
                             //have some tx
-                            using (VxsContext.Temp(out var v1))
+                            using (VxsTemp.Borrow(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
 
@@ -1569,7 +1569,7 @@ namespace PaintLab.Svg
             double ry = ConvertToPx(ellipseSpec.RadiusY, ref a);
 
             ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 ellipseRenderE._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
@@ -1600,7 +1600,7 @@ namespace PaintLab.Svg
 
 
             //
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 img._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
             }
@@ -1617,7 +1617,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsContext.Temp(out VertexStore v1))
+                using (VxsTemp.Borrow(out VertexStore v1))
                 {
                     PointF p = points[0];
                     PointF p0 = p;
@@ -1651,7 +1651,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsContext.Temp(out VertexStore v1))
+                using (VxsTemp.Borrow(out VertexStore v1))
                 {
                     PointF p = points[0];
                     v1.AddMoveTo(p.X, p.Y);
@@ -1779,7 +1779,7 @@ namespace PaintLab.Svg
             double r = ConvertToPx(cirSpec.Radius, ref a);
 
             ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 cir._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
@@ -1884,7 +1884,7 @@ namespace PaintLab.Svg
 
                 roundRect.SetRadius(ConvertToPx(rectSpec.CornerRadiusX, ref a), ConvertToPx(rectSpec.CornerRadiusY, ref a));
 
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
 
                     rect._vxsPath = roundRect.MakeVxs(v1).CreateTrim();
@@ -1901,7 +1901,7 @@ namespace PaintLab.Svg
                     ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
                     ConvertToPx(rectSpec.Y, ref a));
                 //
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     rect._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
                 }
@@ -1945,7 +1945,7 @@ namespace PaintLab.Svg
 
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
-            using (VxsContext.Temp(out var flattenVxs))
+            using (VxsTemp.Borrow(out var flattenVxs))
             {
                 VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
                 _pathDataParser.SetPathWriter(pathWriter);

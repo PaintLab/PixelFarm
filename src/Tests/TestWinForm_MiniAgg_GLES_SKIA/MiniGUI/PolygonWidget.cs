@@ -251,7 +251,7 @@ namespace PixelFarm.CpuBlit.UI
             RectD localBounds = new RectD(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
             this.RewindZero();
 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 this.MakeVxs(v1);
                 int j = v1.Count;
@@ -536,7 +536,7 @@ namespace PixelFarm.CpuBlit.UI
         {
             p.FillColor = LineColor;
 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 p.Draw(this.MakeVxs(v1));
             }

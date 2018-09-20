@@ -412,7 +412,7 @@ namespace PixelFarm.CpuBlit
 #endif
 
 
-                using (VxsContext.Temp(out var imgBoundsPath, out var v1))
+                using (VxsTemp.Borrow(out var imgBoundsPath, out var v1))
                 {
                     BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
                     //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
@@ -467,7 +467,7 @@ namespace PixelFarm.CpuBlit
                 //Affine destRectTransform = BuildImageBoundsPath(
                 //    source.Width, source.Height,
                 //    destX, destY, imgBoundsPath);
-                using (VxsContext.Temp(out var imgBoundsPath, out var v1))
+                using (VxsTemp.Borrow(out var imgBoundsPath, out var v1))
                 {
                     BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
                     //...
