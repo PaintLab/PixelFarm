@@ -161,7 +161,7 @@ namespace PixelFarm.CpuBlit
                                 {
                                     //fixed (void* head = &buffer[0])
                                     {
-                                        uint* head_i32 = (uint*)buffer; 
+                                        uint* head_i32 = (uint*)buffer;
                                         for (int i = n - 1; i >= 0; --i)
                                         {
                                             *head_i32 = 0xff000000; //black (ARGB)
@@ -217,10 +217,11 @@ namespace PixelFarm.CpuBlit
             if (!transform.IsIdentity())
             {
 
-                VectorToolBox.GetFreeVxs(out var v1);
-                transform.TransformToVxs(vxsSnap, v1);
-                _sclineRas.AddPath(v1);
-                VectorToolBox.ReleaseVxs(ref v1);
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    transform.TransformToVxs(vxsSnap, v1);
+                    _sclineRas.AddPath(v1);
+                }
                 //-------------------------
                 //since sclineRas do NOT store vxs
                 //then we can reuse the vxs***

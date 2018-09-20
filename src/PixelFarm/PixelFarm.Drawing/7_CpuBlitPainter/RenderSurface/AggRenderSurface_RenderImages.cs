@@ -166,93 +166,90 @@ namespace PixelFarm.CpuBlit
 
             bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
-            VectorToolBox.GetFreeVxs(out VertexStore imgBoundsPath);
 
-            // this is the fast drawing path
-            if (renderRequriesSourceSampling)
+            using (VxsTemp.Borrow(out var v1, out var imgBoundsPath))
             {
-                // if the scalling is small enough the results can be improved by using mip maps
-                //if(CanUseMipMaps)
-                //{
-                //    CMipMapFrameProperty* pMipMapFrameProperty = CMipMapFrameProperty::GetMipMapFrameProperty(source);
-                //    double OldScaleX = scaleX;
-                //    double OldScaleY = scaleY;
-                //    const CFrameInterface* pMippedFrame = pMipMapFrameProperty.GetMipMapFrame(ref scaleX, ref scaleY);
-                //    if(pMippedFrame != source)
-                //    {
-                //        IsMipped = true;
-                //        source = pMippedFrame;
-                //        sourceOriginOffsetX *= (OldScaleX / scaleX);
-                //        sourceOriginOffsetY *= (OldScaleY / scaleY);
-                //    }
-
-                //    HotspotOffsetX *= (inScaleX / scaleX);
-                //    HotspotOffsetY *= (inScaleY / scaleY);
-                //} 
-                //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
-                //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath); 
-
-                //1. 
-                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
-                //2. 
-                Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
-                //TODO: review reusable span generator an interpolator ***
-                var interpolator = new SpanInterpolatorLinear();
-
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                interpolator.Transformer = destRectTransform.CreateInvert();
-                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
-
-                VectorToolBox.GetFreeVxs(out var v1);
-                destRectTransform.TransformToVxs(imgBoundsPath, v1);
-                Render(v1, imgSpanGen);
-                VectorToolBox.ReleaseVxs(ref v1);
-                // this is some debug you can enable to visualize the dest bounding box
-                //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
-                //LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
-                //LineFloat(BoundingRect.right, BoundingRect.bottom, BoundingRect.left, BoundingRect.bottom, WHITE);
-                //LineFloat(BoundingRect.left, BoundingRect.bottom, BoundingRect.left, BoundingRect.top, WHITE);
-
-            }
-            else // TODO: this can be even faster if we do not use an intermediat buffer
-            {
-                //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, destX, destY, imgBoundsPath);
-
-                BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
-
-                //
-                var destRectTransform = new AffineMat();
-                destRectTransform.Translate(destX, destY);
-                //TODO: review reusable span generator an interpolator ***
-                var interpolator = new SpanInterpolatorLinear();
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004] 
-                _reuseableAffine.SetElements(destRectTransform.CreateInvert());
-                interpolator.Transformer = _reuseableAffine;
-                ImgSpanGen imgSpanGen = null;
-                switch (source.BitDepth)
+                // this is the fast drawing path
+                if (renderRequriesSourceSampling)
                 {
-                    case 32:
-                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
-                        break;
-                    //case 24:
-                    //    imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
-                    //    break;
-                    //case 8:
-                    //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
-                    //    break;
-                    default:
-                        throw new NotImplementedException();
+                    // if the scalling is small enough the results can be improved by using mip maps
+                    //if(CanUseMipMaps)
+                    //{
+                    //    CMipMapFrameProperty* pMipMapFrameProperty = CMipMapFrameProperty::GetMipMapFrameProperty(source);
+                    //    double OldScaleX = scaleX;
+                    //    double OldScaleY = scaleY;
+                    //    const CFrameInterface* pMippedFrame = pMipMapFrameProperty.GetMipMapFrame(ref scaleX, ref scaleY);
+                    //    if(pMippedFrame != source)
+                    //    {
+                    //        IsMipped = true;
+                    //        source = pMippedFrame;
+                    //        sourceOriginOffsetX *= (OldScaleX / scaleX);
+                    //        sourceOriginOffsetY *= (OldScaleY / scaleY);
+                    //    }
+
+                    //    HotspotOffsetX *= (inScaleX / scaleX);
+                    //    HotspotOffsetY *= (inScaleY / scaleY);
+                    //} 
+                    //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
+                    //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath); 
+
+                    //1. 
+                    BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
+                    //2. 
+                    Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                    //TODO: review reusable span generator an interpolator ***
+                    var interpolator = new SpanInterpolatorLinear();
+
+                    // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                    interpolator.Transformer = destRectTransform.CreateInvert();
+                    var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
+
+
+                    destRectTransform.TransformToVxs(imgBoundsPath, v1);
+                    Render(v1, imgSpanGen);
+
+
+                    // this is some debug you can enable to visualize the dest bounding box
+                    //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
+                    //LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
+                    //LineFloat(BoundingRect.right, BoundingRect.bottom, BoundingRect.left, BoundingRect.bottom, WHITE);
+                    //LineFloat(BoundingRect.left, BoundingRect.bottom, BoundingRect.left, BoundingRect.top, WHITE);
+
                 }
+                else // TODO: this can be even faster if we do not use an intermediat buffer
+                {
+                    //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, destX, destY, imgBoundsPath);
 
-                VectorToolBox.GetFreeVxs(out var v1);
-                TransformToVxs(ref destRectTransform, imgBoundsPath, v1);
+                    BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
 
-                Render(v1, imgSpanGen);
-                VectorToolBox.ReleaseVxs(ref v1);
-                //
-                unchecked { destImageChanged++; };
+                    //
+                    var destRectTransform = new AffineMat();
+                    destRectTransform.Translate(destX, destY);
+                    //TODO: review reusable span generator an interpolator ***
+                    var interpolator = new SpanInterpolatorLinear();
+                    // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004] 
+                    _reuseableAffine.SetElements(destRectTransform.CreateInvert());
+                    interpolator.Transformer = _reuseableAffine;
+                    ImgSpanGen imgSpanGen = null;
+                    switch (source.BitDepth)
+                    {
+                        case 32:
+                            imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
+                            break;
+                        //case 24:
+                        //    imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
+                        //    break;
+                        //case 8:
+                        //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
+                        //    break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    TransformToVxs(ref destRectTransform, imgBoundsPath, v1);
+                    Render(v1, imgSpanGen);
+                    unchecked { destImageChanged++; };
+                }
             }
-            VectorToolBox.ReleaseVxs(ref imgBoundsPath);
         }
 
 
@@ -279,35 +276,34 @@ namespace PixelFarm.CpuBlit
         int destImageChanged = 0;
         public void Render(IBitmapSrc source, AffinePlan[] affinePlans)
         {
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            {
+                //BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1); 
+                BuildOrgImgRectVxs(source.Width, source.Height, v1);
 
-            VectorToolBox.GetFreeVxs(out var v1, out var v2);
 
-            //BuildImageBoundsPath(source.Width, source.Height, affinePlans, v1); 
-            BuildOrgImgRectVxs(source.Width, source.Height, v1);
+                //Affine destRectTransform = Affine.NewMatix(affinePlans);
 
+                var destRectTransform = new AffineMat();
+                destRectTransform.BuildFromAffinePlans(affinePlans);
 
-            //Affine destRectTransform = Affine.NewMatix(affinePlans);
+                //TODO: review reusable span generator an interpolator ***
+                var spanInterpolator = new SpanInterpolatorLinear();
+                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
-            var destRectTransform = new AffineMat();
-            destRectTransform.BuildFromAffinePlans(affinePlans);
+                _reuseableAffine.SetElements(destRectTransform.CreateInvert());
+                spanInterpolator.Transformer = _reuseableAffine;//
 
-            //TODO: review reusable span generator an interpolator ***
-            var spanInterpolator = new SpanInterpolatorLinear();
-            // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+                    source,
+                    Drawing.Color.Transparent,
+                    spanInterpolator);
 
-            _reuseableAffine.SetElements(destRectTransform.CreateInvert());
-            spanInterpolator.Transformer = _reuseableAffine;//
+                TransformToVxs(ref destRectTransform, v1, v2);
 
-            var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
-                source,
-                Drawing.Color.Transparent,
-                spanInterpolator);
+                Render(v2, imgSpanGen);
+            }
 
-            TransformToVxs(ref destRectTransform, v1, v2);
-
-            Render(v2, imgSpanGen);
-            // 
-            VectorToolBox.ReleaseVxs(ref v1, ref v2);
         }
 
 

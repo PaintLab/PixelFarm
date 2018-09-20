@@ -163,7 +163,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.RenderQuality = RenderQualtity.HighQuality;
             }
 
-           
+
             int width = 800;
             int height = 600;
             //clear the image to white         
@@ -177,19 +177,21 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                     AffinePlan.Translate(width / 2, 150));
 
 
-                VectorToolBox.GetFreeVxs(out var v1, out var v2, out var v3);
-                mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
+                using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+                {
+                    mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
 
-                p.FillColor = Drawing.Color.Yellow;
-                p.Fill(v2);
-                //------------------------------------
-                //g.Render(sp1, ColorRGBA.Yellow);
-                //Stroke ellipseOutline = new Stroke(sp1, 3);
-                p.FillColor = Drawing.Color.Blue;
-                stroke.Width = 3;
-                p.Fill(stroke.MakeVxs(v2, v3));
-                //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
-                VectorToolBox.ReleaseVxs(ref v1, ref v2, ref v3);
+                    p.FillColor = Drawing.Color.Yellow;
+                    p.Fill(v2);
+                    //------------------------------------
+                    //g.Render(sp1, ColorRGBA.Yellow);
+                    //Stroke ellipseOutline = new Stroke(sp1, 3);
+                    p.FillColor = Drawing.Color.Blue;
+                    stroke.Width = 3;
+                    p.Fill(stroke.MakeVxs(v2, v3));
+                    //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
+                }
+
             }
 
             // and a little polygon

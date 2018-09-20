@@ -75,30 +75,30 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //vxs = curveFlattener.MakeVxs(vxs1);
             }
         }
+
         VertexStore BuildVxsForGlyph(GlyphPathBuilder builder, char character, int size, int resolution)
         {
+            //-----------
             //TODO: review here
             builder.Build(character, size);
             var txToVxs = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs);
 
-            VectorToolBox.GetFreeVxs(out VertexStore v0, out VertexStore v1);
-            txToVxs.WriteOutput(v0);
-            var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                 //translate
-                 new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
-                     PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, 10, 10),
-                 //scale
-                 new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
-                     PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, 1, 1)
-                     );
-
-
             VertexStore v2 = new VertexStore();
-            mat.TransformToVxs(v0, v1);
-            curveFlattener.MakeVxs(v0, v2);
-
-            VectorToolBox.ReleaseVxs(ref v0, ref v1);
+            using (VxsTemp.Borrow(out var v0, out var v1))
+            {
+                txToVxs.WriteOutput(v0);
+                var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                     //translate
+                     new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
+                         PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, 10, 10),
+                     //scale
+                     new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
+                         PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, 1, 1)
+                         );
+                mat.TransformToVxs(v0, v1);
+                curveFlattener.MakeVxs(v0, v2);
+            }
             return v2;
         }
 

@@ -193,24 +193,25 @@ namespace PixelFarm.CpuBlit.UI
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
 
-            VectorToolBox.GetFreeVxs(out var v1, out var v2);
-            this.m_stroke.MakeVxs(this.m_vs.MakeVxs(v1), v2);
-            int j = v2.Count;
-            double x, y;
-            for (int i = 0; i < j; ++i)
+            using (VxsTemp.Borrow(out var v1, out var v2))
             {
-                var cmd = v2.GetVertex(i, out x, out y);
-                if (cmd == VertexCmd.NoMore)
+                this.m_stroke.MakeVxs(this.m_vs.MakeVxs(v1), v2);
+                int j = v2.Count;
+                double x, y;
+                for (int i = 0; i < j; ++i)
                 {
-                    break;
-                }
-                else
-                {
-                    vxs.AddVertex(x, y, cmd);
+                    var cmd = v2.GetVertex(i, out x, out y);
+                    if (cmd == VertexCmd.NoMore)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        vxs.AddVertex(x, y, cmd);
+                    }
                 }
             }
 
-            VectorToolBox.ReleaseVxs(ref v1, ref v2);
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
@@ -218,28 +219,31 @@ namespace PixelFarm.CpuBlit.UI
 
             int n_count = m_polygon.Length / 2;
 
-            VectorToolBox.GetFreeVxs(out var v3);
-            for (int m = 0; m < n_count; ++m)
+            using (VxsTemp.Borrow(out var v3))
             {
-                m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
-
-                var ellipseVxs = m_ellipse.MakeVxs(v3);
-                j = ellipseVxs.Count;
-                for (int i = 0; i < j; ++i)
+                double x, y;
+                for (int m = 0; m < n_count; ++m)
                 {
-                    var cmd = ellipseVxs.GetVertex(i, out x, out y);
-                    if (cmd == VertexCmd.NoMore)
-                    {
-                        break;
-                    }
-                    vxs.AddVertex(x, y, cmd);
-                }
-                m_status++;
+                    m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
 
-                //reuse
-                v3.Clear();
+                    var ellipseVxs = m_ellipse.MakeVxs(v3);
+                    int j = ellipseVxs.Count;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        var cmd = ellipseVxs.GetVertex(i, out x, out y);
+                        if (cmd == VertexCmd.NoMore)
+                        {
+                            break;
+                        }
+                        vxs.AddVertex(x, y, cmd);
+                    }
+                    m_status++;
+
+                    //reuse
+                    v3.Clear();
+                }
             }
-            VectorToolBox.ReleaseVxs(ref v3);
+
             //------------------------------------------------------------
 
             //close with stop

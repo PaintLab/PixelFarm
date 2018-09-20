@@ -23,7 +23,7 @@ namespace PixelFarm.CpuBlit.Samples
     }
     class MyBrushPath
     {
-        
+
         bool validBoundingRect;
         VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();
@@ -142,34 +142,29 @@ namespace PixelFarm.CpuBlit.Samples
             //SimplifyPaths();
             _stroke1.Width = strokeW * 2;
             _stroke1.LineCap = LineCap.Round;
-            _stroke1.LineJoin = LineJoin.Round;
-
-
-            VectorToolBox.GetFreeVxs(out VertexStore tmpVxs);
-            int j = contPoints.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                //TODO: review here
-                //
-                Vector2 v = contPoints[i];
-                if (i == 0)
-                {
-                    tmpVxs.AddMoveTo(v.x, v.y);
-                }
-                else
-                {
-                    tmpVxs.AddLineTo(v.x, v.y);
-                }
-            }
-            ////
+            _stroke1.LineJoin = LineJoin.Round; 
 
             VertexStore v2 = new VertexStore();
-            _stroke1.MakeVxs(tmpVxs, v2);
-
-            VectorToolBox.ReleaseVxs(ref tmpVxs);
-
+            using (VxsTemp.Borrow(out var tmpVxs))
+            {
+                int j = contPoints.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    //TODO: review here
+                    //
+                    Vector2 v = contPoints[i];
+                    if (i == 0)
+                    {
+                        tmpVxs.AddMoveTo(v.x, v.y);
+                    }
+                    else
+                    {
+                        tmpVxs.AddLineTo(v.x, v.y);
+                    }
+                }
+                _stroke1.MakeVxs(tmpVxs, v2);
+            }
             vxs = v2;
-
             //release vxs to pool
         }
 

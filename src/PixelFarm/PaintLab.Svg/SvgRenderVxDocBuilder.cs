@@ -1561,6 +1561,7 @@ namespace PaintLab.Svg
 
             SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, ellipseSpec, _renderRoot);
             VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
+            
             ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
 
             double x = ConvertToPx(ellipseSpec.X, ref a);
