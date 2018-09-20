@@ -538,7 +538,7 @@ namespace PixelFarm.CpuBlit.UI
 
             using (VxsContext.Temp(out var v1))
             {
-                p.Draw(new VertexStoreSnap(this.MakeVxs(v1)));
+                p.Draw(this.MakeVxs(v1));
             }
         }
     }

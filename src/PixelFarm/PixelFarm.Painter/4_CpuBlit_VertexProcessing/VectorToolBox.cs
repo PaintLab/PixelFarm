@@ -8,10 +8,7 @@ namespace PixelFarm.Drawing
 
     public static class VxsContext
     {
-        public static VxsContext1 Temp1()
-        {
-            return new VxsContext1(true);
-        }
+         
         public static VxsContext1 Temp(out VertexStore vxs)
         {
             var tmp = new VxsContext1(true);
@@ -19,11 +16,7 @@ namespace PixelFarm.Drawing
             return tmp;
         }
 
-        //--------------------------------------------------------
-        public static VxsContext2 Temp2()
-        {
-            return new VxsContext2(true);
-        }
+        
         public static VxsContext2 Temp(out VertexStore vxs1, out VertexStore vxs2)
         {
             var tmp = new VxsContext2(true);
@@ -32,11 +25,7 @@ namespace PixelFarm.Drawing
             return tmp;
         }
 
-        //--------------------------------------------------------
-        public static VxsContext3 Temp3()
-        {
-            return new VxsContext3(true);
-        }
+       
         public static VxsContext3 Temp(out VertexStore vxs1,
             out VertexStore vxs2, out VertexStore vxs3)
         {
@@ -51,7 +40,7 @@ namespace PixelFarm.Drawing
 
     public struct VxsContext1 : IDisposable
     {
-        public VertexStore vxs;
+        internal VertexStore vxs;
         internal VxsContext1(bool t)
         {
             VectorToolBox.GetFreeVxs(out vxs);
@@ -63,8 +52,8 @@ namespace PixelFarm.Drawing
     }
     public struct VxsContext2 : IDisposable
     {
-        public VertexStore vxs1;
-        public VertexStore vxs2;
+        internal VertexStore vxs1;
+        internal VertexStore vxs2;
         internal VxsContext2(bool t)
         {
             VectorToolBox.GetFreeVxs(out vxs1);
@@ -80,9 +69,9 @@ namespace PixelFarm.Drawing
 
     public struct VxsContext3 : IDisposable
     {
-        public VertexStore vxs1;
-        public VertexStore vxs2;
-        public VertexStore vxs3;
+        internal VertexStore vxs1;
+        internal VertexStore vxs2;
+        internal VertexStore vxs3;
         internal VxsContext3(bool t)
         {
             VectorToolBox.GetFreeVxs(out vxs1);
