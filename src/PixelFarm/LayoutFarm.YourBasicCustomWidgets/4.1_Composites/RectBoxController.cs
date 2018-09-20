@@ -182,7 +182,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 // bottom
                 UIControllerBox ctrlBox = _midBottom;
-                ctrlBox.SetLocationAndSize(targetBox.Left + (targetBox.Width / 2), targetBox.Bottom + 5, 5, 5);
+                ctrlBox.SetLocationAndSize(targetBox.Left + (targetBox.Width / 2), targetBox.Bottom, 5, 5);
                 ctrlBox.TargetBox = targetBox;
                 ctrlBox.Visible = true;
             }
