@@ -96,8 +96,9 @@ namespace LayoutFarm.CustomWidgets
         {
 
             //move controller here 
-            _centrolBox.SetLocationAndSize(targetBox.Left - 5, targetBox.Top - 5,
-                                     targetBox.Width + 10, targetBox.Height + 10);
+            _centrolBox.SetLocationAndSize(
+                            targetBox.Left - 5, targetBox.Top - 5,
+                            targetBox.Width + 10, targetBox.Height + 10);
             _centrolBox.Visible = true;
             _centrolBox.TargetBox = targetBox;
             {
@@ -353,7 +354,7 @@ namespace LayoutFarm.CustomWidgets
             _ui = ui;
         }
         PixelFarm.Drawing.VertexStore _svgPath;
-        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore svgPath)
+        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore svgPath, float offsetX = 0, float offsetY = 0)
         {
             //1. we remove existing point from root
 
@@ -381,7 +382,7 @@ namespace LayoutFarm.CustomWidgets
 
                             var ctrlPoint = new UIControllerBox(8, 8);
                             ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)x, (int)y);
+                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
                             _simpleBox.AddChild(ctrlPoint);
@@ -391,7 +392,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             var ctrlPoint = new UIControllerBox(8, 8);
                             ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)x, (int)y);
+                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
                             _simpleBox.AddChild(ctrlPoint);
