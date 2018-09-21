@@ -204,15 +204,15 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                     //filled Ellipse
                     //1. create original fill ellipse
                     //RectD lionBound = lionShape.Bounds;
-                    var filledEllipse = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
+               
+                    using (VectorToolBox.Borrow(out Ellipse filledEllipse))
+                    using (VxsTemp.Borrow(out var v2, out var transformedEll))
+                    {
+                        filledEllipse.Set((lionBound.Left + lionBound.Right) * 0.5,
                                       (lionBound.Bottom + lionBound.Top) * 0.5,
                                       (lionBound.Right - lionBound.Left) * 0.5,
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
-
-                    using (VxsTemp.Borrow(out var v2, out var transformedEll))
-                    {
-                        
                         _lionShape.Paint(painter, txPerspective);
 
                         txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);

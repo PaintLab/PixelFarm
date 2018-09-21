@@ -174,9 +174,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 var mat = Affine.NewMatix(
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
-                    AffinePlan.Translate(width / 2, 150));
-
-
+                    AffinePlan.Translate(width / 2, 150)); 
                 using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
                 {
                     mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
