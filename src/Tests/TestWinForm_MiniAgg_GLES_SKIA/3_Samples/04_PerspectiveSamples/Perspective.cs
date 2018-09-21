@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             }
             //-----------------------------------
             painter.Clear(Drawing.Color.White);
-            lionFill.Render(painter);
+            //lionFill.Render(painter);
 
             //IBitmapBlender backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
             //ChildImage image;
@@ -186,10 +186,13 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             {
                 RectD r = lionBound;
 
-                var txPerspective = new Perspective(
-                   r.Left, r.Bottom, r.Right, r.Top,
-                    quadPolygonControl.GetInnerCoords());
+                //var txPerspective = new Perspective(
+                //   r.Left, r.Bottom, r.Right, r.Top,
+                //    quadPolygonControl.GetInnerCoords());
 
+                var txPerspective = new Perspective(
+                   r.Left, r.Top, r.Right, r.Bottom,
+                    quadPolygonControl.GetInnerCoords());
                 if (txPerspective.IsValid)
                 {
 
