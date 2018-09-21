@@ -127,10 +127,12 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
                 ps.LineTo(m_x[2], m_y[2]);
                 ps.LineTo(m_x[0], m_y[0]);
 
-                VectorToolBox.GetFreeVxs(out var v1);
-                rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs, v1));
-                bmpRas.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
-                VectorToolBox.ReleaseVxs(ref v1);
+
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs, v1));
+                    bmpRas.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
+                } 
             }
         }
 

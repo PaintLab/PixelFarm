@@ -48,7 +48,7 @@ namespace PixelFarm.CpuBlit
             {
                 IBitmapBlender backBuffer = asx.DestBitmapBlender;
 
-                
+
 
                 //use different pixel blender 
                 var redImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());
@@ -72,24 +72,26 @@ namespace PixelFarm.CpuBlit
                 DestBitmapRasterizer bmpRas = asx.BitmapRasterizer;
                 VertexProcessing.Ellipse er = new PixelFarm.CpuBlit.VertexProcessing.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 //
-                VectorToolBox.GetFreeVxs(out var v1);
-                sclineRas.AddPath(er.MakeVxs(v1));
-                v1.Clear();
-                bmpRas.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
+                 
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    sclineRas.AddPath(er.MakeVxs(v1));
+                    v1.Clear();
+                    bmpRas.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
 
-                ////
-                VertexProcessing.Ellipse eg = new PixelFarm.CpuBlit.VertexProcessing.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                sclineRas.AddPath(eg.MakeVertexSnap(v1));
-                v1.Clear();
-                bmpRas.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
+                    ////
+                    VertexProcessing.Ellipse eg = new PixelFarm.CpuBlit.VertexProcessing.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+                    sclineRas.AddPath(eg.MakeVertexSnap(v1));
+                    v1.Clear();
+                    bmpRas.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
 
-                //
-                VertexProcessing.Ellipse eb = new PixelFarm.CpuBlit.VertexProcessing.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-                sclineRas.AddPath(eb.MakeVertexSnap(v1));
-                v1.Clear();
-                bmpRas.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
-
-                VectorToolBox.ReleaseVxs(ref v1);
+                    //
+                    VertexProcessing.Ellipse eb = new PixelFarm.CpuBlit.VertexProcessing.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
+                    sclineRas.AddPath(eb.MakeVertexSnap(v1));
+                    v1.Clear();
+                    bmpRas.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
+                } 
+                
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

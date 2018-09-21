@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.VertexProcessing; 
+using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         RenderQualtity _renderQuality;
 
-      
+
         public GLPainter(GLRenderSurface glsx)
         {
             _glsx = glsx;
@@ -48,8 +48,8 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
 
-         
-            
+
+
         }
         public override void SetClipRgn(VertexStore vxs)
         {
@@ -59,7 +59,7 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
-      
+
         Color _fontFillColor;
         public Color FontFillColor
         {
@@ -370,14 +370,16 @@ namespace PixelFarm.DrawingGL
             ellipse.Reset(x, y, rx, ry);
 
 
-            VectorToolBox.GetFreeVxs(out var v1, out var v2);
-            ellipse.MakeVxs(v1);
-            _aggStroke.MakeVxs(v1, v2);
-            //***
-            //we fill the stroke's path
-            _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v2));
 
-            VectorToolBox.ReleaseVxs(ref v1, ref v2);
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            {
+                ellipse.MakeVxs(v1);
+                _aggStroke.MakeVxs(v1, v2);
+                //***
+                //we fill the stroke's path
+                _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v2));
+            }
+
         }
         public override void FillEllipse(double left, double top, double width, double height)
         {
@@ -398,12 +400,15 @@ namespace PixelFarm.DrawingGL
 
             ellipse.Reset(x, y, rx, ry);
 
-            VectorToolBox.GetFreeVxs(out VertexStore vxs);
-            ellipse.MakeVxs(vxs);
-            //***
-            //we fill  
-            _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
-            VectorToolBox.ReleaseVxs(ref vxs);
+
+            using (VxsTemp.Borrow(out var vxs))
+            {
+                ellipse.MakeVxs(vxs);
+                //***
+                //we fill  
+                _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
+            }
+
 
             //-------------------------------------------------------------
             //
@@ -692,101 +697,92 @@ namespace PixelFarm.DrawingGL
                 centerFormArc.radStartAngle,
                 (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
 
-
-            VectorToolBox.GetFreeVxs(out VertexStore v1);
-
-            bool stopLoop = false;
-            foreach (VertexData vertexData in _arcTool.GetVertexIter())
+            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
             {
-                switch (vertexData.command)
+                bool stopLoop = false;
+                foreach (VertexData vertexData in _arcTool.GetVertexIter())
                 {
-                    case VertexCmd.NoMore:
-                        stopLoop = true;
-                        break;
-                    default:
-                        v1.AddVertex(vertexData.x, vertexData.y, vertexData.command);
-                        //yield return vertexData;
-                        break;
+                    switch (vertexData.command)
+                    {
+                        case VertexCmd.NoMore:
+                            stopLoop = true;
+                            break;
+                        default:
+                            v1.AddVertex(vertexData.x, vertexData.y, vertexData.command);
+                            //yield return vertexData;
+                            break;
+                    }
+                    //------------------------------
+                    if (stopLoop) { break; }
                 }
-                //------------------------------
-                if (stopLoop) { break; }
-            }
 
-            double scaleRatio = 1;
-            if (centerFormArc.scaleUp)
-            {
-                int vxs_count = v1.Count;
-                double px0, py0, px_last, py_last;
-                v1.GetVertex(0, out px0, out py0);
-                v1.GetVertex(vxs_count - 1, out px_last, out py_last);
-                double distance1 = Math.Sqrt((px_last - px0) * (px_last - px0) + (py_last - py0) * (py_last - py0));
-                double distance2 = Math.Sqrt((endX - fromX) * (endX - fromX) + (endY - fromY) * (endY - fromY));
-                if (distance1 < distance2)
+                double scaleRatio = 1;
+                if (centerFormArc.scaleUp)
                 {
-                    scaleRatio = distance2 / distance1;
+                    int vxs_count = v1.Count;
+                    double px0, py0, px_last, py_last;
+                    v1.GetVertex(0, out px0, out py0);
+                    v1.GetVertex(vxs_count - 1, out px_last, out py_last);
+                    double distance1 = Math.Sqrt((px_last - px0) * (px_last - px0) + (py_last - py0) * (py_last - py0));
+                    double distance2 = Math.Sqrt((endX - fromX) * (endX - fromX) + (endY - fromY) * (endY - fromY));
+                    if (distance1 < distance2)
+                    {
+                        scaleRatio = distance2 / distance1;
+                    }
+                    else
+                    {
+                    }
+                }
+
+                if (xaxisRotationAngleDec != 0)
+                {
+                    //also  rotate 
+                    if (centerFormArc.scaleUp)
+                    {
+                        var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+
+
+
+                        mat.TransformToVxs(v1, v2);
+                        v1 = v2;
+                    }
+                    else
+                    {
+                        //not scalue
+                        var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+
+                        mat.TransformToVxs(v1, v2);
+                        v1 = v2;
+                    }
                 }
                 else
                 {
+                    //no rotate
+                    if (centerFormArc.scaleUp)
+                    {
+                        var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+
+                        mat.TransformToVxs(v1, v2);
+                        v1 = v2;
+                    }
                 }
+
+                _aggStroke.Width = this.StrokeWidth;
+                _aggStroke.MakeVxs(v1, v3);
+                _glsx.DrawGfxPath(_glsx.StrokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
+
             }
 
-            if (xaxisRotationAngleDec != 0)
-            {
-                //also  rotate 
-                if (centerFormArc.scaleUp)
-                {
-                    var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    VectorToolBox.GetFreeVxs(out VertexStore v2);
-                    mat.TransformToVxs(v1, v2);
-                    VectorToolBox.ReleaseVxs(ref v1);
-                    v1 = v2;
-                }
-                else
-                {
-                    //not scalue
-                    var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    VectorToolBox.GetFreeVxs(out VertexStore v2);
-                    mat.TransformToVxs(v1, v2);
-                    VectorToolBox.ReleaseVxs(ref v1);
-                    v1 = v2;
-                }
-            }
-            else
-            {
-                //no rotate
-                if (centerFormArc.scaleUp)
-                {
-                    var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                            new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-
-                    VectorToolBox.GetFreeVxs(out VertexStore v2);
-                    mat.TransformToVxs(v1, v2);
-                    VectorToolBox.ReleaseVxs(ref v1);
-
-                    v1 = v2;
-                }
-            }
-
-            _aggStroke.Width = this.StrokeWidth;
-
-
-            VectorToolBox.GetFreeVxs(out VertexStore v3);
-            _aggStroke.MakeVxs(v1, v3);
-
-            _glsx.DrawGfxPath(_glsx.StrokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
-
-
-            VectorToolBox.ReleaseVxs(ref v3);
-            VectorToolBox.ReleaseVxs(ref v1);
 
         }
         static double DegToRad(double degree)

@@ -99,7 +99,7 @@ namespace PaintLab.Svg
     public class VgPaintArgs
     {
         public Painter P;
-        public Affine _currentTx;
+        public ITransformMatrix _currentTx;
         public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
         public SvgRenderElement Current;
 
@@ -196,7 +196,7 @@ namespace PaintLab.Svg
         {
             Painter p = vgPainterArgs.P;
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
-            Affine current_tx = vgPainterArgs._currentTx;
+            ITransformMatrix current_tx = vgPainterArgs._currentTx;
 
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
@@ -204,7 +204,7 @@ namespace PaintLab.Svg
 
             if (current_tx != null)
             {
-                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
             {
@@ -250,11 +250,12 @@ namespace PaintLab.Svg
         {
 
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
-            Affine current_tx = vgPainterArgs._currentTx;
+            ITransformMatrix current_tx = vgPainterArgs._currentTx;
 
             if (current_tx != null)
             {
-                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+                //TODO: review here again***
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
             {
@@ -509,7 +510,7 @@ namespace PaintLab.Svg
         static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
         {
 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 PixelFarm.CpuBlit.TempStrokeTool.GetFreeStroke(out Stroke stroke);
                 stroke.Width = strokeW;
@@ -527,8 +528,8 @@ namespace PaintLab.Svg
             }
 
             //----------------------------------------------------
-            Affine prevTx = vgPainterArgs._currentTx; //backup
-            Affine currentTx = vgPainterArgs._currentTx;
+            ITransformMatrix prevTx = vgPainterArgs._currentTx; //backup
+            ITransformMatrix currentTx = vgPainterArgs._currentTx;
 
             if (_visualSpec != null)
             {
@@ -539,7 +540,7 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest * vgPainterArgs._currentTx;
+                        currentTx = latest.MultiplyWith(vgPainterArgs._currentTx);
                     }
                     else
                     {
@@ -609,7 +610,7 @@ namespace PaintLab.Svg
                         else
                         {
                             //have some tx
-                            using (VxsContext.Temp(out var v1))
+                            using (VxsTemp.Borrow(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
                                 vgPainterArgs.Current = this;
@@ -726,8 +727,8 @@ namespace PaintLab.Svg
             Color strokeColor = p.StrokeColor;
             RequestFont currentFont = p.CurrentFont;
 
-            Affine prevTx = vgPainterArgs._currentTx; //backup
-            Affine currentTx = vgPainterArgs._currentTx;
+            ITransformMatrix prevTx = vgPainterArgs._currentTx; //backup
+            ITransformMatrix currentTx = vgPainterArgs._currentTx;
             bool hasClip = false;
             bool newFontReq = false;
 
@@ -741,7 +742,7 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest * vgPainterArgs._currentTx;
+                        currentTx = latest.MultiplyWith(vgPainterArgs._currentTx);
                     }
                     else
                     {
@@ -791,7 +792,7 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //have some tx
-                        using (VxsContext.Temp(out var v1))
+                        using (VxsTemp.Borrow(out var v1))
                         {
                             currentTx.TransformToVxs(clipVxs, v1);
                             p.SetClipRgn(v1);
@@ -1085,7 +1086,7 @@ namespace PaintLab.Svg
                         else
                         {
                             //have some tx
-                            using (VxsContext.Temp(out var v1))
+                            using (VxsTemp.Borrow(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
 
@@ -1561,6 +1562,7 @@ namespace PaintLab.Svg
 
             SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, ellipseSpec, _renderRoot);
             VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
+
             ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
 
             double x = ConvertToPx(ellipseSpec.X, ref a);
@@ -1569,7 +1571,7 @@ namespace PaintLab.Svg
             double ry = ConvertToPx(ellipseSpec.RadiusY, ref a);
 
             ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 ellipseRenderE._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
@@ -1600,7 +1602,7 @@ namespace PaintLab.Svg
 
 
             //
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 img._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
             }
@@ -1617,7 +1619,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsContext.Temp(out VertexStore v1))
+                using (VxsTemp.Borrow(out VertexStore v1))
                 {
                     PointF p = points[0];
                     PointF p0 = p;
@@ -1651,7 +1653,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsContext.Temp(out VertexStore v1))
+                using (VxsTemp.Borrow(out VertexStore v1))
                 {
                     PointF p = points[0];
                     v1.AddMoveTo(p.X, p.Y);
@@ -1779,7 +1781,7 @@ namespace PaintLab.Svg
             double r = ConvertToPx(cirSpec.Radius, ref a);
 
             ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 cir._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
             }
@@ -1884,7 +1886,7 @@ namespace PaintLab.Svg
 
                 roundRect.SetRadius(ConvertToPx(rectSpec.CornerRadiusX, ref a), ConvertToPx(rectSpec.CornerRadiusY, ref a));
 
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
 
                     rect._vxsPath = roundRect.MakeVxs(v1).CreateTrim();
@@ -1901,7 +1903,7 @@ namespace PaintLab.Svg
                     ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
                     ConvertToPx(rectSpec.Y, ref a));
                 //
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     rect._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
                 }
@@ -1945,7 +1947,7 @@ namespace PaintLab.Svg
 
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
-            using (VxsContext.Temp(out var flattenVxs))
+            using (VxsTemp.Borrow(out var flattenVxs))
             {
                 VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
                 _pathDataParser.SetPathWriter(pathWriter);

@@ -15,7 +15,7 @@ namespace PixelFarm.CpuBlit
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
-        CpuBlit.VertexProcessing.Affine _currentTx;
+        CpuBlit.VertexProcessing.ITransformMatrix _currentTx;
 
         public SpriteShape(VgRenderVx svgRenderVx)//, RootGraphic root, int w, int h)
                                                   //: base(root, w, h)
@@ -33,6 +33,8 @@ namespace PixelFarm.CpuBlit
         {
             _currentTx = null;
         }
+
+
         public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {
             //apply transform to all part
@@ -43,7 +45,20 @@ namespace PixelFarm.CpuBlit
             else
             {
                 //ORDER is IMPORTANT
-                _currentTx = _currentTx * tx;
+                _currentTx = _currentTx.MultiplyWith(tx);
+                //if (_currentTx is CpuBlit.VertexProcessing.Affine)
+                //{
+                //    _currentTx = ((CpuBlit.VertexProcessing.Affine)_currentTx) * tx;
+                //}
+                //else if (_currentTx is CpuBlit.VertexProcessing.Perspective)
+                //{
+                //    _currentTx = ((CpuBlit.VertexProcessing.Perspective)_currentTx) * tx;
+                //}
+                //else
+                //{
+
+                //}
+
             }
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Bilinear tx)
@@ -54,6 +69,32 @@ namespace PixelFarm.CpuBlit
             //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             //}
         }
+        //public void ApplyTransform(CpuBlit.VertexProcessing.Perspective tx)
+        //{
+        //    if (_currentTx == null)
+        //    {
+        //        _currentTx = tx;
+        //    }
+        //    else
+        //    {
+        //        //ORDER is IMPORTANT
+        //        _currentTx = _currentTx.MultiplyWith(tx);
+        //        //if (_currentTx is CpuBlit.VertexProcessing.Affine)
+        //        //{
+        //        //    _currentTx = ((CpuBlit.VertexProcessing.Affine)_currentTx) * tx;
+        //        //}
+        //        //else if (_currentTx is CpuBlit.VertexProcessing.Perspective)
+        //        //{
+        //        //    _currentTx = ((CpuBlit.VertexProcessing.Perspective)_currentTx) * tx;
+        //        //}
+        //        //else
+        //        //{
+
+        //        //}
+
+        //    }
+        //}
+
         public Vector2 Center
         {
             get
@@ -81,14 +122,8 @@ namespace PixelFarm.CpuBlit
         {
             _svgRenderVx._renderE.Paint(paintArgs);
         }
-        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
-        {
-            //TODO: implement this...
-            //use prefix command for render vx
-            //p.Render(_svgRenderVx);
-            //_svgRenderVx.Render(p);
-        }
-        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
+      
+        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.ITransformMatrix tx)
         {
             //TODO: implement this...
             //use prefix command for render vx 

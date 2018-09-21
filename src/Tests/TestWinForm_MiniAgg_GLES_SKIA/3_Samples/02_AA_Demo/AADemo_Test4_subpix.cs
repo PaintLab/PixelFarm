@@ -366,7 +366,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
 
-                using (VxsContext.Temp(out var vxs))
+                using (VxsTemp.Borrow(out var vxs))
                 {
                     tovxs.WriteOutput(vxs);
                     p.Fill(vxs);

@@ -71,12 +71,10 @@ namespace PixelFarm.CpuBlit
             stroke.Width = strokeWidth;
             simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
 
-
-            VectorToolBox.GetFreeVxs(out VertexStore v1, out VertexStore v2);
-
-            gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), color);
-
-            VectorToolBox.ReleaseVxs(ref v1, ref v2);
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            {
+                gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), color);
+            }
 
         }
         public static void Rectangle(this AggRenderSurface gx, RectD rect, Color color, double strokeWidth = 1)
@@ -116,16 +114,21 @@ namespace PixelFarm.CpuBlit
 
             simpleRect.SetRect(left, bottom, right, top);
 
-            VectorToolBox.GetFreeVxs(out var v1);
-            gx.Render(simpleRect.MakeVertexSnap(v1), fillColor);
-            VectorToolBox.ReleaseVxs(ref v1);
+
+            using (VxsTemp.Borrow(out var v1))
+            {
+                gx.Render(simpleRect.MakeVertexSnap(v1), fillColor);
+            }
+
         }
         public static void Circle(this AggRenderSurface g, double x, double y, double radius, Color color)
         {
             ellipse.Set(x, y, radius, radius);
-            VectorToolBox.GetFreeVxs(out var v1);
-            g.Render(ellipse.MakeVxs(v1), color);
-            VectorToolBox.ReleaseVxs(ref v1);
+            using (VxsTemp.Borrow(out var v1))
+            {
+                g.Render(ellipse.MakeVxs(v1), color);
+            }
+
         }
         public static void Circle(this AggRenderSurface g, Vector2 origin, double radius, Color color)
         {

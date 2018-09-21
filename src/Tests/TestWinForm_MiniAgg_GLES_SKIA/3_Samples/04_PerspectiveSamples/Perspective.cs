@@ -81,7 +81,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             //-----------------------------------
             painter.Clear(Drawing.Color.White);
             lionFill.Render(painter);
-            
+
             //IBitmapBlender backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
             //ChildImage image;
             //if (backBuffer.BitDepth == 32)
@@ -155,35 +155,31 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                 {
 
 
-                    VectorToolBox.GetFreeVxs(out var v3);
-                    lionShape.ApplyTransform(txBilinear);
-                    //lionShape.Paint(painter);
-                    //lionFill.Draw(p);
-                    //RectD lionBound = lionShape.Bounds;
-                    Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
-                                     (lionBound.Bottom + lionBound.Top) * 0.5,
-                                     (lionBound.Right - lionBound.Left) * 0.5,
-                                     (lionBound.Top - lionBound.Bottom) * 0.5,
-                                     200);
-                    VectorToolBox.ReleaseVxs(ref v3);
+                    using (VxsTemp.Borrow(out var v3, out var v1, out var trans_ell))
+                    {
+                        lionShape.ApplyTransform(txBilinear);
+                        //lionShape.Paint(painter);
+                        //lionFill.Draw(p);
+                        //RectD lionBound = lionShape.Bounds;
+                        Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
+                                         (lionBound.Bottom + lionBound.Top) * 0.5,
+                                         (lionBound.Right - lionBound.Left) * 0.5,
+                                         (lionBound.Top - lionBound.Bottom) * 0.5,
+                                         200);
 
 
+                        txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
+                        painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                        painter.Fill(trans_ell);
+                        //-------------------------------------------------------------
+                        //outline
+                        double prevStrokeWidth = painter.StrokeWidth;
+                        painter.StrokeWidth = 3;
+                        painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                        painter.Draw(trans_ell);
+                        painter.StrokeWidth = prevStrokeWidth;
+                    }
 
-                    VectorToolBox.GetFreeVxs(out var v1, out var trans_ell);
-
-                    txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
-                    painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
-                    painter.Fill(trans_ell);
-                    //-------------------------------------------------------------
-                    //outline
-                    double prevStrokeWidth = painter.StrokeWidth;
-                    painter.StrokeWidth = 3;
-                    painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
-                    painter.Draw(trans_ell);
-                    painter.StrokeWidth = prevStrokeWidth;
-
-
-                    VectorToolBox.ReleaseVxs(ref v1, ref trans_ell);
                 }
             }
             else
@@ -214,20 +210,22 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
 
-                    VectorToolBox.GetFreeVxs(out var v2, out var transformedEll);
+                    using (VxsTemp.Borrow(out var v2, out var transformedEll))
+                    {
+                        //lionShape.ApplyTransform(txPerspective);
 
-                    txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
-                    painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
-                    painter.Fill(transformedEll);
-                    //-------------------------------------------------------- 
-                    var prevStrokeW = painter.StrokeWidth;
-                    painter.StrokeWidth = 3;
-                    painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
-                    painter.Draw(transformedEll);
-                    painter.StrokeWidth = prevStrokeW;
+                        lionShape.Paint(painter, txPerspective);
 
-
-                    VectorToolBox.ReleaseVxs(ref v2, ref transformedEll);
+                        txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
+                        painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                        painter.Fill(transformedEll);
+                        //-------------------------------------------------------- 
+                        double prevStrokeW = painter.StrokeWidth;
+                        painter.StrokeWidth = 3;
+                        painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                        painter.Draw(transformedEll);
+                        painter.StrokeWidth = prevStrokeW;
+                    }
 
                 }
                 //}

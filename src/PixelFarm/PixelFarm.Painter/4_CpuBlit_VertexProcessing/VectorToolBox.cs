@@ -3,28 +3,75 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.CpuBlit.VertexProcessing;
+
+namespace PixelFarm.CpuBlit.VertexProcessing
+{
+    using PixelFarm.Drawing;
+     
+    //-----------------------------------
+    public struct VxsContext1 : IDisposable
+    {
+        internal VertexStore vxs;
+        internal VxsContext1(bool t)
+        {
+            VxsTemp.GetFreeVxs(out vxs);
+        }
+        public void Dispose()
+        {
+            VxsTemp.ReleaseVxs(ref vxs);
+        }
+    }
+    public struct VxsContext2 : IDisposable
+    {
+        internal VertexStore vxs1;
+        internal VertexStore vxs2;
+        internal VxsContext2(bool t)
+        {
+            VxsTemp.GetFreeVxs(out vxs1);
+            VxsTemp.GetFreeVxs(out vxs2);
+        }
+        public void Dispose()
+        {
+            //release
+            VxsTemp.ReleaseVxs(ref vxs1);
+            VxsTemp.ReleaseVxs(ref vxs2);
+        }
+    }
+    public struct VxsContext3 : IDisposable
+    {
+        internal VertexStore vxs1;
+        internal VertexStore vxs2;
+        internal VertexStore vxs3;
+        internal VxsContext3(bool t)
+        {
+            VxsTemp.GetFreeVxs(out vxs1);
+            VxsTemp.GetFreeVxs(out vxs2);
+            VxsTemp.GetFreeVxs(out vxs3);
+        }
+        public void Dispose()
+        {
+            //release
+            VxsTemp.ReleaseVxs(ref vxs1);
+            VxsTemp.ReleaseVxs(ref vxs2);
+        }
+    }
+
+}
 namespace PixelFarm.Drawing
 {
 
-    public static class VxsContext
+    public static class VxsTemp
     {
-        public static VxsContext1 Temp1()
-        {
-            return new VxsContext1(true);
-        }
-        public static VxsContext1 Temp(out VertexStore vxs)
+
+        public static VxsContext1 Borrow(out VertexStore vxs)
         {
             var tmp = new VxsContext1(true);
             vxs = tmp.vxs;
             return tmp;
         }
 
-        //--------------------------------------------------------
-        public static VxsContext2 Temp2()
-        {
-            return new VxsContext2(true);
-        }
-        public static VxsContext2 Temp(out VertexStore vxs1, out VertexStore vxs2)
+
+        public static VxsContext2 Borrow(out VertexStore vxs1, out VertexStore vxs2)
         {
             var tmp = new VxsContext2(true);
             vxs1 = tmp.vxs1;
@@ -32,12 +79,8 @@ namespace PixelFarm.Drawing
             return tmp;
         }
 
-        //--------------------------------------------------------
-        public static VxsContext3 Temp3()
-        {
-            return new VxsContext3(true);
-        }
-        public static VxsContext3 Temp(out VertexStore vxs1,
+
+        public static VxsContext3 Borrow(out VertexStore vxs1,
             out VertexStore vxs2, out VertexStore vxs3)
         {
             var tmp = new VxsContext3(true);
@@ -47,92 +90,19 @@ namespace PixelFarm.Drawing
             return tmp;
         }
 
-    }
 
-    public struct VxsContext1 : IDisposable
-    {
-        public VertexStore vxs;
-        internal VxsContext1(bool t)
-        {
-            VectorToolBox.GetFreeVxs(out vxs);
-        }
-        public void Dispose()
-        {
-            VectorToolBox.ReleaseVxs(ref vxs);
-        }
-    }
-    public struct VxsContext2 : IDisposable
-    {
-        public VertexStore vxs1;
-        public VertexStore vxs2;
-        internal VxsContext2(bool t)
-        {
-            VectorToolBox.GetFreeVxs(out vxs1);
-            VectorToolBox.GetFreeVxs(out vxs2);
-        }
-        public void Dispose()
-        {
-            //release
-            VectorToolBox.ReleaseVxs(ref vxs1);
-            VectorToolBox.ReleaseVxs(ref vxs2);
-        }
-    }
 
-    public struct VxsContext3 : IDisposable
-    {
-        public VertexStore vxs1;
-        public VertexStore vxs2;
-        public VertexStore vxs3;
-        internal VxsContext3(bool t)
-        {
-            VectorToolBox.GetFreeVxs(out vxs1);
-            VectorToolBox.GetFreeVxs(out vxs2);
-            VectorToolBox.GetFreeVxs(out vxs3);
-        }
-        public void Dispose()
-        {
-            //release
-            VectorToolBox.ReleaseVxs(ref vxs1);
-            VectorToolBox.ReleaseVxs(ref vxs2);
-        }
-    }
-
-    public static class VectorToolBox
-    {
         //for net20 -- check this
         //TODO: https://stackoverflow.com/questions/18333885/threadstatic-v-s-threadlocalt-is-generic-better-than-attribute
 
         [System.ThreadStatic]
         static Stack<VertexStore> s_vxsPool = new Stack<VertexStore>();
 
-        public static void GetFreeVxs(out VertexStore vxs1)
+        internal static void GetFreeVxs(out VertexStore vxs1)
         {
             vxs1 = GetFreeVxs();
         }
-        public static void GetFreeVxs(out VertexStore vxs1, out VertexStore vxs2)
-        {
-            vxs1 = GetFreeVxs();
-            vxs2 = GetFreeVxs();
-        }
-        public static void GetFreeVxs(out VertexStore vxs1, out VertexStore vxs2, out VertexStore vxs3)
-        {
-            vxs1 = GetFreeVxs();
-            vxs2 = GetFreeVxs();
-            vxs3 = GetFreeVxs();
-        }
-        public static void ReleaseVxs(ref VertexStore vxs1, ref VertexStore vxs2)
-        {
-            ReleaseVxs(ref vxs1);
-            ReleaseVxs(ref vxs2);
-        }
-
-        public static void ReleaseVxs(ref VertexStore vxs1, ref VertexStore vxs2, ref VertexStore vxs3)
-        {
-            ReleaseVxs(ref vxs1);
-            ReleaseVxs(ref vxs2);
-            ReleaseVxs(ref vxs3);
-        }
-        public static void ReleaseVxs(ref VertexStore vxs1)
+        internal static void ReleaseVxs(ref VertexStore vxs1)
         {
             vxs1.Clear();
             s_vxsPool.Push(vxs1);
@@ -140,6 +110,10 @@ namespace PixelFarm.Drawing
         }
         static VertexStore GetFreeVxs()
         {
+            if (s_vxsPool == null)
+            {
+                s_vxsPool = new Stack<VertexStore>();
+            }
             if (s_vxsPool.Count > 0)
             {
                 return s_vxsPool.Pop();
@@ -149,6 +123,14 @@ namespace PixelFarm.Drawing
                 return new VertexStore();
             }
         }
+    }
+
+
+
+
+    public static class VectorToolBox
+    {
+
 
         //-----------------------------------
         [System.ThreadStatic]
@@ -233,7 +215,7 @@ namespace PixelFarm.Drawing
         }
 
         //-------------
-      
+
         [System.ThreadStatic]
         static Stack<RoundedRect> s_roundRects = new Stack<RoundedRect>();
         public static void GetFreeRoundRectTool(out RoundedRect roundRect)

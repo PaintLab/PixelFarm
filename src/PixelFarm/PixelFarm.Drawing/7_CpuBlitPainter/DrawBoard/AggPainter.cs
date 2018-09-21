@@ -348,7 +348,7 @@ namespace PixelFarm.CpuBlit
         {
             if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
             {
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     _aggsx.Render(vxs, this._strokeColor);
                 }
@@ -405,7 +405,7 @@ namespace PixelFarm.CpuBlit
             //----------------------------------------------------------
             if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
             {
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     _aggsx.Render(_stroke.MakeVxs(_lineGen.Vxs, v1), this._strokeColor);
                 }
@@ -448,7 +448,7 @@ namespace PixelFarm.CpuBlit
 
                 if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
-                    using (VxsContext.Temp(out var v1))
+                    using (VxsTemp.Borrow(out var v1))
                     {
                         _aggsx.Render(_stroke.MakeVxs(vxs, v1), this._strokeColor);
                     }
@@ -463,7 +463,7 @@ namespace PixelFarm.CpuBlit
                 if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
 
-                    using (VxsContext.Temp(out var v1, out var v2))
+                    using (VxsTemp.Borrow(out var v1, out var v2))
                     {
                         _lineDashGen.CreateDash(vxs, v1);
                         _stroke.MakeVxs(v1, v2);
@@ -472,7 +472,7 @@ namespace PixelFarm.CpuBlit
                 }
                 else
                 {
-                    using (VxsContext.Temp(out var v1))
+                    using (VxsTemp.Borrow(out var v1))
                     {
                         _lineDashGen.CreateDash(vxs, v1);
                         _outlineRas.RenderVertexSnap(new VertexStoreSnap(v1), this._strokeColor);
@@ -536,14 +536,14 @@ namespace PixelFarm.CpuBlit
 
             if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
             {
-                using (VxsContext.Temp(out var v1, out var v2))
+                using (VxsTemp.Borrow(out var v1, out var v2))
                 {
                     _aggsx.Render(_stroke.MakeVxs(rectTool.MakeVxs(v1), v2), this._strokeColor);
                 }
             }
             else
             {
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     _outlineRas.RenderVertexSnap(new VertexStoreSnap(rectTool.MakeVxs(v1)), this._strokeColor);
                 }
@@ -588,14 +588,14 @@ namespace PixelFarm.CpuBlit
 
             if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
             {
-                using (VxsContext.Temp(out var v1, out var v2))
+                using (VxsTemp.Borrow(out var v1, out var v2))
                 {
                     _aggsx.Render(_stroke.MakeVxs(ellpseTool.MakeVxs(v1), v2), this._strokeColor);
                 }
             }
             else
             {
-                using (VxsContext.Temp(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     _outlineRas.RenderVertexSnap(new VertexStoreSnap(ellpseTool.MakeVxs(v1)), this._strokeColor);
                 }
@@ -637,7 +637,7 @@ namespace PixelFarm.CpuBlit
                           ellipseGenNSteps);
 
 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 _aggsx.Render(ellipseTool.MakeVxs(v1), this.fillColor);
             }
@@ -699,7 +699,7 @@ namespace PixelFarm.CpuBlit
                 rectTool.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
 
                 if (!_useDefaultBrush)
@@ -1374,7 +1374,7 @@ namespace PixelFarm.CpuBlit
         static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
         {
 
-            using (VxsContext.Temp(out var v1))
+            using (VxsTemp.Borrow(out var v1))
             {
                 TempStrokeTool.GetFreeStroke(out Stroke stroke);
                 stroke.Width = strokeW;
