@@ -25,6 +25,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public sealed class Perspective : ICoordTransformer, ITransformMatrix
     {
         const double EPSILON = 1e-14;
+
+        //this is 3x3 matrix
         internal double
                sx, shy, w0,
                shx, sy, w1,

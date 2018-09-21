@@ -97,6 +97,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     /// </summary>
     public struct AffineMat
     {
+        //3x2 matrix
         public double
             sx, shy,
             shx, sy,
