@@ -626,28 +626,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
             m_ren.Color = c;
             AddPath(s);
-        }
-        //public void RenderAllPaths(IVertexSource vs,
-        //                      ColorRGBA[] colors,
-        //                      int[] path_id,
-        //                      int num_paths)
-        //{
-        //    for (int i = 0; i < num_paths; i++)
-        //    {
-        //        m_ren.color(colors[i]);
-        //        AddPath(vs, path_id[i]);
-        //    }
-        //}
-
-        /* // for debugging only
-        public void render_path_index(IVertexSource vs,
-                              RGBA_Bytes[] colors,
-                              int[] path_id,
-                              int pathIndex)
-        {
-            m_ren.color(colors[pathIndex]);
-            add_path(vs, path_id[pathIndex]);
-        }
-         */
-    };
+        } 
+    }
 }

@@ -51,7 +51,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public static VertexStore MakeVxs(this Ellipse ellipse, ICoordTransformer tx, VertexStore output)
         {
             //1. moveto
-            output.AddMoveTo(ellipse.originX + ellipse.radiusX, ellipse.originY, tx);
+            output.AddMoveTo(ellipse.originX + ellipse.radiusX, ellipse.originY, tx);//**
 
             //2.
             //
@@ -72,7 +72,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     output.AddLineTo(
                         orgX + Math.Cos(MathHelper.Tau - angle) * radX,
                         orgY + Math.Sin(MathHelper.Tau - angle) * radY,
-                        tx);
+                        tx);//**
                 }
             }
             else
@@ -83,7 +83,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     output.AddLineTo(
                      orgX + Math.Cos(angle) * radX,
                      orgY + Math.Sin(angle) * radY,
-                     tx);
+                     tx);//**
                 }
             }
 

@@ -108,17 +108,18 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             RectD lionBound = _lionShape.Bounds;
             if (!_setQuadLion)
             {
-
-                _quadPolygonControl.SetXN(0, _lionShape.Bounds.Left);
-                _quadPolygonControl.SetYN(0, _lionShape.Bounds.Top);
-                _quadPolygonControl.SetXN(1, _lionShape.Bounds.Right);
-                _quadPolygonControl.SetYN(1, _lionShape.Bounds.Top);
-                _quadPolygonControl.SetXN(2, _lionShape.Bounds.Right);
-                _quadPolygonControl.SetYN(2, _lionShape.Bounds.Bottom);
-                _quadPolygonControl.SetXN(3, _lionShape.Bounds.Left);
-                _quadPolygonControl.SetYN(3, _lionShape.Bounds.Bottom);
+                _quadPolygonControl.SetXN(0, lionBound.Left);
+                _quadPolygonControl.SetYN(0, lionBound.Top);
+                _quadPolygonControl.SetXN(1, lionBound.Right);
+                _quadPolygonControl.SetYN(1, lionBound.Top);
+                _quadPolygonControl.SetXN(2, lionBound.Right);
+                _quadPolygonControl.SetYN(2, lionBound.Bottom);
+                _quadPolygonControl.SetXN(3, lionBound.Left);
+                _quadPolygonControl.SetYN(3, lionBound.Bottom);
                 _setQuadLion = true;
             }
+            //
+            //
             //Bilinear txBilinear = Bilinear.RectToQuad(lionBound.Left,
             //        lionBound.Bottom,
             //        lionBound.Right,
@@ -149,6 +150,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
                 RectD bound = lionBound;
+                //transform from original lionBounds to quadPolygon 
                 Bilinear txBilinear = Bilinear.RectToQuad(
                     bound.Left,
                     bound.Top,
@@ -161,10 +163,8 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                     using (VxsTemp.Borrow(out var trans_ell_vxs))
                     using (VectorToolBox.Borrow(out Ellipse ellipse))
                     {
-
                         _lionShape.Paint(painter, txBilinear); //transform before draw
-
-
+                        //
                         ellipse.Set((lionBound.Left + lionBound.Right) * 0.5,
                                     (lionBound.Bottom + lionBound.Top) * 0.5,
                                     (lionBound.Right - lionBound.Left) * 0.5,
