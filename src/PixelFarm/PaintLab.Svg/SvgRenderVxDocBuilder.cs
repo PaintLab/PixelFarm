@@ -1561,55 +1561,46 @@ namespace PaintLab.Svg
         {
 
             SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, ellipseSpec, _renderRoot);
-            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
-
-            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
-
-            double x = ConvertToPx(ellipseSpec.X, ref a);
-            double y = ConvertToPx(ellipseSpec.Y, ref a);
-            double rx = ConvertToPx(ellipseSpec.RadiusX, ref a);
-            double ry = ConvertToPx(ellipseSpec.RadiusY, ref a);
-
-            ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step 
+            using (VectorToolBox.Borrow(out Ellipse ellipse))
             using (VxsTemp.Borrow(out var v1))
             {
+                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix 
+                double x = ConvertToPx(ellipseSpec.X, ref a);
+                double y = ConvertToPx(ellipseSpec.Y, ref a);
+                double rx = ConvertToPx(ellipseSpec.RadiusX, ref a);
+                double ry = ConvertToPx(ellipseSpec.RadiusY, ref a);
+
+                ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step  
                 ellipseRenderE._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
+                AssignAttributes(ellipseSpec);
+                return ellipseRenderE;
             }
 
-            VectorToolBox.ReleaseEllipseTool(ref ellipse);
 
-            AssignAttributes(ellipseSpec);
-
-            return ellipseRenderE;
         }
         SvgRenderElement CreateImage(SvgRenderElement parentNode, SvgImageSpec imgspec)
         {
             SvgRenderElement img = new SvgRenderElement(WellknownSvgElementName.Image, imgspec, _renderRoot);
-            VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
-
-            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
-            img._imgX = ConvertToPx(imgspec.X, ref a);
-            img._imgY = ConvertToPx(imgspec.Y, ref a);
-            img._imgW = ConvertToPx(imgspec.Width, ref a);
-            img._imgH = ConvertToPx(imgspec.Height, ref a);
-
-
-            rectTool.SetRect(
-                img._imgX,
-                img._imgY + img._imgH,
-                img._imgX + img._imgW,
-                img._imgY);
-
-
-            //
+            using (VectorToolBox.Borrow(out SimpleRect rectTool))
             using (VxsTemp.Borrow(out var v1))
             {
+                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
+                img._imgX = ConvertToPx(imgspec.X, ref a);
+                img._imgY = ConvertToPx(imgspec.Y, ref a);
+                img._imgW = ConvertToPx(imgspec.Width, ref a);
+                img._imgH = ConvertToPx(imgspec.Height, ref a);
+                //
+                rectTool.SetRect(
+                    img._imgX,
+                    img._imgY + img._imgH,
+                    img._imgX + img._imgW,
+                    img._imgY);
                 img._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
+                //
+                AssignAttributes(imgspec);
+                //
+                return img;
             }
-            VectorToolBox.ReleaseRectTool(ref rectTool);
-            AssignAttributes(imgspec);
-
-            return img;
         }
         SvgRenderElement CreatePolygon(SvgRenderElement parentNode, SvgPolygonSpec polygonSpec)
         {
@@ -1774,23 +1765,20 @@ namespace PaintLab.Svg
         {
 
             SvgRenderElement cir = new SvgRenderElement(WellknownSvgElementName.Circle, cirSpec, _renderRoot);
-            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
-            ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
-            double x = ConvertToPx(cirSpec.X, ref a);
-            double y = ConvertToPx(cirSpec.Y, ref a);
-            double r = ConvertToPx(cirSpec.Radius, ref a);
 
-            ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step 
+            using (VectorToolBox.Borrow(out Ellipse ellipse))
             using (VxsTemp.Borrow(out var v1))
             {
+                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
+                double x = ConvertToPx(cirSpec.X, ref a);
+                double y = ConvertToPx(cirSpec.Y, ref a);
+                double r = ConvertToPx(cirSpec.Radius, ref a);
+
+                ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step  
                 cir._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
+                AssignAttributes(cirSpec);
+                return cir;
             }
-
-            VectorToolBox.ReleaseEllipseTool(ref ellipse);
-
-            AssignAttributes(cirSpec);
-
-            return cir;
         }
 
 
@@ -1874,40 +1862,44 @@ namespace PaintLab.Svg
 
             SvgRenderElement rect = new SvgRenderElement(WellknownSvgElementName.Rect, rectSpec, _renderRoot);
 
+
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
-                VectorToolBox.GetFreeRoundRectTool(out RoundedRect roundRect);
-                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
-                roundRect.SetRect(
-                    ConvertToPx(rectSpec.X, ref a),
-                    ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
-                    ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
-                    ConvertToPx(rectSpec.Y, ref a));
 
-                roundRect.SetRadius(ConvertToPx(rectSpec.CornerRadiusX, ref a), ConvertToPx(rectSpec.CornerRadiusY, ref a));
-
+                using (VectorToolBox.Borrow(out RoundedRect roundRect))
                 using (VxsTemp.Borrow(out var v1))
                 {
+                    ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
+                    roundRect.SetRect(
+                        ConvertToPx(rectSpec.X, ref a),
+                        ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
+                        ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
+                        ConvertToPx(rectSpec.Y, ref a));
 
+                    roundRect.SetRadius(ConvertToPx(rectSpec.CornerRadiusX, ref a), ConvertToPx(rectSpec.CornerRadiusY, ref a));
                     rect._vxsPath = roundRect.MakeVxs(v1).CreateTrim();
                 }
-                VectorToolBox.ReleaseRoundRect(ref roundRect);
+
+
             }
             else
             {
-                VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
-                ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
-                rectTool.SetRect(
-                    ConvertToPx(rectSpec.X, ref a),
-                    ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
-                    ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
-                    ConvertToPx(rectSpec.Y, ref a));
-                //
+
+                using (VectorToolBox.Borrow(out SimpleRect rectTool))
                 using (VxsTemp.Borrow(out var v1))
                 {
+                    ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
+                    rectTool.SetRect(
+                        ConvertToPx(rectSpec.X, ref a),
+                        ConvertToPx(rectSpec.Y, ref a) + ConvertToPx(rectSpec.Height, ref a),
+                        ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
+                        ConvertToPx(rectSpec.Y, ref a));
+                    // 
                     rect._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
+
                 }
-                VectorToolBox.ReleaseRectTool(ref rectTool);
+
+
             }
 
             AssignAttributes(rectSpec);
@@ -1947,15 +1939,15 @@ namespace PaintLab.Svg
 
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
+            using (VectorToolBox.Borrow(out PathWriter pathWriter))
             using (VxsTemp.Borrow(out var flattenVxs))
             {
-                VectorToolBox.GetFreePathWriter(out PathWriter pathWriter);
+
                 _pathDataParser.SetPathWriter(pathWriter);
                 _pathDataParser.Parse(buffer);
                 _curveFlatter.MakeVxs(pathWriter.Vxs, flattenVxs);
 
-                //create a small copy of the vxs 
-                VectorToolBox.ReleasePathWriter(ref pathWriter);
+                //create a small copy of the vxs                  
                 return flattenVxs.CreateTrim();
             }
         }

@@ -133,18 +133,15 @@ namespace LayoutFarm.ColorBlenderSample
                 {
 
 
-
+                    using (VectorToolBox.Borrow(out PixelFarm.CpuBlit.VertexProcessing.Stroke stroke))
                     using (VxsTemp.Borrow(out var vxs, out var strokeVxs))
                     {
-                        VectorToolBox.GetFreeStroke(out var stroke, 3);
-
+                        stroke.Width = 3;
                         vxs.AddMoveTo(p0.Left, p0.Top);
                         vxs.AddLineTo(p1.Left, p1.Top);
-
                         stroke.MakeVxs(vxs, strokeVxs);
                         //---
-                        //convert data in vxs to GraphicPath 
-                        //---
+                        //convert data in vxs to GraphicPath                         //---
 
                         _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
                         _lineRendeE._stroke = new VxsRenderVx(strokeVxs);

@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             }
             //-----------------------------------
             painter.Clear(Drawing.Color.White);
-            lionFill.Render(painter);
+            //lionFill.Render(painter);
 
             //IBitmapBlender backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
             //ChildImage image;
@@ -146,10 +146,11 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
                 RectD bound = lionBound;
-                Bilinear txBilinear = Bilinear.RectToQuad(bound.Left,
-                    bound.Bottom,
-                    bound.Right,
+                Bilinear txBilinear = Bilinear.RectToQuad(
+                    bound.Left,
                     bound.Top,
+                    bound.Right,
+                    bound.Bottom,
                     quadPolygonControl.GetInnerCoords());
                 if (txBilinear.IsValid)
                 {
@@ -157,10 +158,13 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
 
                     using (VxsTemp.Borrow(out var v3, out var v1, out var trans_ell))
                     {
-                        lionShape.ApplyTransform(txBilinear);
+                        //lionShape.ApplyTransform(txBilinear);
                         //lionShape.Paint(painter);
                         //lionFill.Draw(p);
                         //RectD lionBound = lionShape.Bounds;
+
+                        lionShape.Paint(painter, txBilinear);
+
                         Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
                                          (lionBound.Bottom + lionBound.Top) * 0.5,
                                          (lionBound.Right - lionBound.Left) * 0.5,
@@ -186,10 +190,13 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             {
                 RectD r = lionBound;
 
-                var txPerspective = new Perspective(
-                   r.Left, r.Bottom, r.Right, r.Top,
-                    quadPolygonControl.GetInnerCoords());
+                //var txPerspective = new Perspective(
+                //   r.Left, r.Bottom, r.Right, r.Top,
+                //    quadPolygonControl.GetInnerCoords());
 
+                var txPerspective = new Perspective(
+                   r.Left, r.Top, r.Right, r.Bottom,
+                    quadPolygonControl.GetInnerCoords());
                 if (txPerspective.IsValid)
                 {
 
