@@ -46,9 +46,9 @@ namespace PixelFarm.CpuBlit
             AggRenderSurface asx = p2.RenderSurface;
             if (asx.DestBitmapBlender != null)
             {
-                IBitmapBlender backBuffer = asx.DestBitmapBlender; 
+                IBitmapBlender backBuffer = asx.DestBitmapBlender;
 
-                
+
                 //use different pixel blender 
                 var redImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());
                 var greenImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());
@@ -68,28 +68,28 @@ namespace PixelFarm.CpuBlit
                     new Drawing.Color((byte)(this.AlphaValue), 0, 0, 0);
 
 
-                DestBitmapRasterizer bmpRas = asx.BitmapRasterizer; 
+                DestBitmapRasterizer bmpRas = asx.BitmapRasterizer;
 
-                using (VectorToolBox.Borrow(out Ellipse ellipse)) 
+                using (VectorToolBox.Borrow(out Ellipse ellipse))
                 using (VxsTemp.Borrow(out var v1))
                 {
                     ellipse.Set(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                     sclineRas.AddPath(ellipse.MakeVxs(v1));
-                    v1.Clear();
+                    v1.Clear();//**
                     bmpRas.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
 
                     ////
-                     
+
                     ellipse.Set(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                     sclineRas.AddPath(ellipse.MakeVertexSnap(v1));
-                    v1.Clear();
+                    v1.Clear();//***
                     bmpRas.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
 
                     //
-                  
+
                     ellipse.Set(Width / 2, Height / 2 + 50, 100, 100, 100);
                     sclineRas.AddPath(ellipse.MakeVertexSnap(v1));
-                    v1.Clear();
+                    v1.Clear(); //***
                     bmpRas.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
                 }
 

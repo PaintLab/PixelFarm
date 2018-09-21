@@ -628,7 +628,9 @@ namespace PaintLab.Svg
                                     //set offset   
                                     if (_pathMarkers.StartMarkerAffine != null)
                                     {
-                                        vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.StartMarkerPos.X, _pathMarkers.StartMarkerPos.Y) * _pathMarkers.StartMarkerAffine;
+                                        vgPainterArgs._currentTx = Affine.NewTranslation(
+                                            _pathMarkers.StartMarkerPos.X,
+                                            _pathMarkers.StartMarkerPos.Y) * _pathMarkers.StartMarkerAffine;
                                     }
 
                                     _pathMarkers.StartMarker.GetChildNode(i).Walk(vgPainterArgs);
@@ -645,7 +647,8 @@ namespace PaintLab.Svg
                                     //temp fix 
                                     if (_pathMarkers.EndMarkerAffine != null)
                                     {
-                                        vgPainterArgs._currentTx = Affine.NewTranslation(_pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y) * _pathMarkers.EndMarkerAffine;
+                                        vgPainterArgs._currentTx = Affine.NewTranslation(
+                                            _pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y) * _pathMarkers.EndMarkerAffine;
                                     }
                                     _pathMarkers.EndMarker.GetChildNode(i).Walk(vgPainterArgs);
                                 }
@@ -1265,12 +1268,12 @@ namespace PaintLab.Svg
                     {
                         evaluated = true;//once 
                         BoundingRect.GetBoundingRect(vxs, ref rectTotal);
-                    }; 
-                    _renderE.Walk(paintArgs); 
+                    };
+                    _renderE.Walk(paintArgs);
                     _needBoundUpdate = false;
                     return this._boundRect = evaluated ? rectTotal : new RectD();
                 }
-             
+
             }
 
             return this._boundRect;
@@ -1565,7 +1568,7 @@ namespace PaintLab.Svg
                 double ry = ConvertToPx(ellipseSpec.RadiusY, ref a);
 
                 ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step  
-                ellipseRenderE._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
+                ellipseRenderE._vxsPath = ellipse.MakeVxs(v1).CreateTrim();
                 AssignAttributes(ellipseSpec);
                 return ellipseRenderE;
             }

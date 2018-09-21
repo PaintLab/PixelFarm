@@ -360,8 +360,6 @@ namespace PixelFarm.Drawing
         /// <param name="y"></param>
         public static void AddP2c(this VertexStore vxs, double x, double y)
         {
-
-
             vxs.AddVertex(x, y, VertexCmd.P2c);
         }
         /// <summary>
@@ -372,7 +370,7 @@ namespace PixelFarm.Drawing
         public static void AddP3c(this VertexStore vxs, double x, double y)
         {
             vxs.AddVertex(x, y, VertexCmd.P3c);
-        }
+        } 
         public static void AddMoveTo(this VertexStore vxs, double x0, double y0)
         {
             vxs.AddVertex(x0, y0, VertexCmd.MoveTo);
@@ -395,7 +393,14 @@ namespace PixelFarm.Drawing
         {
             vxs.AddVertex(0, 0, VertexCmd.Close);
         }
-
+        public static void AddCloseFigure(this VertexStore vxs, double x, double y)
+        {
+            vxs.AddVertex(x, y, VertexCmd.Close);
+        }
+        public static void AddNoMore(this VertexStore vxs)
+        {
+            vxs.AddVertex(0, 0, VertexCmd.NoMore);
+        }
         /// <summary>
         /// copy + translate vertext data from src to outputVxs
         /// </summary>

@@ -28,6 +28,7 @@
 //#include "agg_basics.h"
 
 
+using PixelFarm.Drawing; //TODO: review here***
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public interface ICoordTransformer
@@ -38,4 +39,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         ITransformMatrix MultiplyWith(ITransformMatrix another);
     }
+
+   
 }
