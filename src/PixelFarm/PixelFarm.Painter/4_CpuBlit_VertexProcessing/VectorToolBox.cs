@@ -11,7 +11,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     //-----------------------------------
     public struct VxsContext1 : IDisposable
     {
-        internal VertexStore vxs;
+        internal readonly VertexStore vxs;
         internal VxsContext1(out VertexStore outputVxs)
         {
             VxsTemp.GetFreeVxs(out outputVxs);
@@ -20,13 +20,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public void Dispose()
         {
-            VxsTemp.ReleaseVxs(ref vxs);
+            VxsTemp.ReleaseVxs(vxs);
         }
     }
     public struct VxsContext2 : IDisposable
     {
-        internal VertexStore vxs1;
-        internal VertexStore vxs2;
+        internal readonly VertexStore vxs1;
+        internal readonly VertexStore vxs2;
         internal VxsContext2(out VertexStore outputVxs1, out VertexStore outputVxs2)
         {
             VxsTemp.GetFreeVxs(out vxs1);
@@ -37,15 +37,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void Dispose()
         {
             //release
-            VxsTemp.ReleaseVxs(ref vxs1);
-            VxsTemp.ReleaseVxs(ref vxs2);
+            VxsTemp.ReleaseVxs(vxs1);
+            VxsTemp.ReleaseVxs(vxs2);
         }
     }
     public struct VxsContext3 : IDisposable
     {
-        internal VertexStore vxs1;
-        internal VertexStore vxs2;
-        internal VertexStore vxs3;
+        internal readonly VertexStore vxs1;
+        internal readonly VertexStore vxs2;
+        internal readonly VertexStore vxs3;
         internal VxsContext3(out VertexStore outputVxs1, out VertexStore outputVxs2, out VertexStore outputVxs3)
         {
             VxsTemp.GetFreeVxs(out vxs1);
@@ -59,9 +59,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void Dispose()
         {
             //release
-            VxsTemp.ReleaseVxs(ref vxs1);
-            VxsTemp.ReleaseVxs(ref vxs2);
-            VxsTemp.ReleaseVxs(ref vxs3);
+            VxsTemp.ReleaseVxs(vxs1);
+            VxsTemp.ReleaseVxs(vxs2);
+            VxsTemp.ReleaseVxs(vxs3);
         }
     }
 
@@ -70,7 +70,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public struct TempContext<T> : IDisposable
     {
-        internal T vxs;
+        internal readonly T vxs;
         internal TempContext(out T outputvxs)
         {
             Temp<T>.GetFreeOne(out vxs);
@@ -78,7 +78,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public void Dispose()
         {
-            Temp<T>.Release(ref vxs);
+            Temp<T>.Release(vxs);
         }
     }
 
@@ -116,12 +116,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 freeItem = s_newHandler();
             }
         }
-        internal static void Release(ref T item)
+        internal static void Release(T item)
         {
             s_releaseCleanUp?.Invoke(item);
             s_pool.Push(item);
-            //...
-            item = default(T);
+            //... 
         }
         public static bool IsInit()
         {
@@ -162,11 +161,10 @@ namespace PixelFarm.Drawing
         {
             vxs1 = GetFreeVxs();
         }
-        internal static void ReleaseVxs(ref VertexStore vxs1)
+        internal static void ReleaseVxs(VertexStore vxs1)
         {
             vxs1.Clear();
             s_vxsPool.Push(vxs1);
-            vxs1 = null;
         }
         static VertexStore GetFreeVxs()
         {
