@@ -87,6 +87,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         [System.ThreadStatic]
         static Stack<T> s_pool;
         static Func<T> s_newHandler;
+        static Action<T> s_releaseCleanUp;
         //-------
 
         public static TempContext<T> Borrow(out T freeItem)
@@ -94,7 +95,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return new TempContext<T>(out freeItem);
         }
 
-        public static void SetNewHandler(Func<T> newHandler)
+        public static void SetNewHandler(Func<T> newHandler, Action<T> releaseCleanUp = null)
         {
             //set new instance here, must set this first***
             if (s_pool == null)
@@ -102,6 +103,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 s_pool = new Stack<T>();
             }
             s_newHandler = newHandler;
+            s_releaseCleanUp = releaseCleanUp;
         }
         internal static void GetFreeOne(out T freeItem)
         {
@@ -116,7 +118,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         internal static void Release(ref T item)
         {
+            s_releaseCleanUp?.Invoke(item);
             s_pool.Push(item);
+            //...
             item = default(T);
         }
         internal static bool IsInit()
@@ -198,7 +202,9 @@ namespace PixelFarm.Drawing
         {
             if (!Temp<PixelFarm.CpuBlit.PathWriter>.IsInit())
             {
-                Temp<PixelFarm.CpuBlit.PathWriter>.SetNewHandler(() => new PixelFarm.CpuBlit.PathWriter());
+                Temp<PixelFarm.CpuBlit.PathWriter>.SetNewHandler(
+                    () => new PixelFarm.CpuBlit.PathWriter(),
+                    w => w.Clear());
             }
             return Temp<PixelFarm.CpuBlit.PathWriter>.Borrow(out pathWriter);
         }
