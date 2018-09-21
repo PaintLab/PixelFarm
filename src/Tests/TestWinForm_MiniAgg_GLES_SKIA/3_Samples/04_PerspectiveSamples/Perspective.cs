@@ -3,10 +3,8 @@
 
 using System;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.Imaging;
 using Mini;
 using PixelFarm.Drawing;
-using PaintLab.Svg;
 
 namespace PixelFarm.CpuBlit.Sample_Perspective
 {
@@ -20,25 +18,25 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
     public class perspective_application : DemoBase
     {
         UI.PolygonEditWidget quadPolygonControl;
-        private SpriteShape lionShape;
+        private SpriteShape _lionShape;
         MyTestSprite lionFill;
 
         public perspective_application()
         {
 
-            lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
-            lionFill = new MyTestSprite(lionShape);
+            _lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
+            lionFill = new MyTestSprite(_lionShape);
 
 
             quadPolygonControl = new PixelFarm.CpuBlit.UI.PolygonEditWidget(4, 5.0);
-            quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
-            quadPolygonControl.SetYN(0, lionShape.Bounds.Top);
-            quadPolygonControl.SetXN(1, lionShape.Bounds.Right);
-            quadPolygonControl.SetYN(1, lionShape.Bounds.Top);
-            quadPolygonControl.SetXN(2, lionShape.Bounds.Right);
-            quadPolygonControl.SetYN(2, lionShape.Bounds.Bottom);
-            quadPolygonControl.SetXN(3, lionShape.Bounds.Left);
-            quadPolygonControl.SetYN(3, lionShape.Bounds.Bottom);
+            quadPolygonControl.SetXN(0, _lionShape.Bounds.Left);
+            quadPolygonControl.SetYN(0, _lionShape.Bounds.Top);
+            quadPolygonControl.SetXN(1, _lionShape.Bounds.Right);
+            quadPolygonControl.SetYN(1, _lionShape.Bounds.Top);
+            quadPolygonControl.SetXN(2, _lionShape.Bounds.Right);
+            quadPolygonControl.SetYN(2, _lionShape.Bounds.Bottom);
+            quadPolygonControl.SetXN(3, _lionShape.Bounds.Left);
+            quadPolygonControl.SetYN(3, _lionShape.Bounds.Bottom);
         }
 
 
@@ -67,8 +65,8 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             quadPolygonControl.AddXN(3, dx);
             quadPolygonControl.AddYN(3, dy);
         }
-        bool setQuadLion;
 
+        bool setQuadLion;
         bool didInit = false;
         public override void Draw(Painter p)
         {
@@ -106,14 +104,14 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
             if (!setQuadLion)
             {
 
-                quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
-                quadPolygonControl.SetYN(0, lionShape.Bounds.Top);
-                quadPolygonControl.SetXN(1, lionShape.Bounds.Right);
-                quadPolygonControl.SetYN(1, lionShape.Bounds.Top);
-                quadPolygonControl.SetXN(2, lionShape.Bounds.Right);
-                quadPolygonControl.SetYN(2, lionShape.Bounds.Bottom);
-                quadPolygonControl.SetXN(3, lionShape.Bounds.Left);
-                quadPolygonControl.SetYN(3, lionShape.Bounds.Bottom);
+                quadPolygonControl.SetXN(0, _lionShape.Bounds.Left);
+                quadPolygonControl.SetYN(0, _lionShape.Bounds.Top);
+                quadPolygonControl.SetXN(1, _lionShape.Bounds.Right);
+                quadPolygonControl.SetYN(1, _lionShape.Bounds.Top);
+                quadPolygonControl.SetXN(2, _lionShape.Bounds.Right);
+                quadPolygonControl.SetYN(2, _lionShape.Bounds.Bottom);
+                quadPolygonControl.SetXN(3, _lionShape.Bounds.Left);
+                quadPolygonControl.SetYN(3, _lionShape.Bounds.Bottom);
                 setQuadLion = true;
             }
             //Bilinear txBilinear = Bilinear.RectToQuad(lionBound.Left,
@@ -154,25 +152,20 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                     quadPolygonControl.GetInnerCoords());
                 if (txBilinear.IsValid)
                 {
-
-
                     using (VxsTemp.Borrow(out var v3, out var v1, out var trans_ell))
+                    using (VectorToolBox.Borrow(out Ellipse ellipse))
                     {
-                        //lionShape.ApplyTransform(txBilinear);
-                        //lionShape.Paint(painter);
-                        //lionFill.Draw(p);
-                        //RectD lionBound = lionShape.Bounds;
 
-                        lionShape.Paint(painter, txBilinear);
+                        _lionShape.Paint(painter, txBilinear); //transform before draw
 
-                        Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
+                        ellipse.Set((lionBound.Left + lionBound.Right) * 0.5,
                                          (lionBound.Bottom + lionBound.Top) * 0.5,
                                          (lionBound.Right - lionBound.Left) * 0.5,
                                          (lionBound.Top - lionBound.Bottom) * 0.5,
                                          200);
 
 
-                        txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
+                        txBilinear.TransformToVxs(ellipse.MakeVxs(v1), trans_ell);
                         painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
                         painter.Fill(trans_ell);
                         //-------------------------------------------------------------
@@ -219,9 +212,8 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
 
                     using (VxsTemp.Borrow(out var v2, out var transformedEll))
                     {
-                        //lionShape.ApplyTransform(txPerspective);
-
-                        lionShape.Paint(painter, txPerspective);
+                        
+                        _lionShape.Paint(painter, txPerspective);
 
                         txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
                         painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);

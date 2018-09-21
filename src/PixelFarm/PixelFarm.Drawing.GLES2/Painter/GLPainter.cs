@@ -367,7 +367,7 @@ namespace PixelFarm.DrawingGL
                 y = _glsx.ViewportHeight - y; //set new y
             }
 
-            ellipse.Reset(x, y, rx, ry);
+            ellipse.Set(x, y, rx, ry);
 
 
 
@@ -398,7 +398,7 @@ namespace PixelFarm.DrawingGL
                 y = _glsx.ViewportHeight - y; //set new y
             }
 
-            ellipse.Reset(x, y, rx, ry);
+            ellipse.Set(x, y, rx, ry);
 
 
             using (VxsTemp.Borrow(out var vxs))

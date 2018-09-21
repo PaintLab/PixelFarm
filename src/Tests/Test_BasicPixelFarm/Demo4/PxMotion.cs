@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
         }
         public int Width { get; set; }
         public int Height { get; set; }
-       
+
     }
 
 
@@ -307,10 +307,13 @@ namespace LayoutFarm.UI
         }
         public void Paint(Painter p)
         {
-            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
-            paintArgs._currentTx = _currentTx;
-            _svgRenderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
+            using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
+            {
+                paintArgs._currentTx = _currentTx;
+                _svgRenderVx._renderE.Paint(paintArgs);
+            }
+
         }
         public void Paint(VgPaintArgs paintArgs)
         {
@@ -329,20 +332,24 @@ namespace LayoutFarm.UI
             //TODO: implement this...
             //use prefix command for render vx 
             //------
-            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
-            paintArgs._currentTx = tx;
-            paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+            using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
-                //use external painter handler
-                //draw only outline with its fill-color.
-                Painter m_painter = paintArgs.P;
-                Color prevFillColor = m_painter.FillColor;
-                m_painter.FillColor = m_painter.FillColor;
-                m_painter.Fill(vxs);
-                m_painter.FillColor = prevFillColor;
-            };
-            _svgRenderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+                paintArgs._currentTx = tx;
+                paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                {
+                    //use external painter handler
+                    //draw only outline with its fill-color.
+                    Painter m_painter = painterA.P;
+                    Color prevFillColor = m_painter.FillColor;
+                    m_painter.FillColor = m_painter.FillColor;
+                    m_painter.Fill(vxs);
+                    m_painter.FillColor = prevFillColor;
+                };
+                _svgRenderVx._renderE.Paint(paintArgs);
+            }
+            
+            
+            
 
         }
         public void DrawOutline(Painter p)

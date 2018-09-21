@@ -583,7 +583,7 @@ namespace PixelFarm.CpuBlit
 
             using (VectorToolBox.Borrow(out Ellipse ellipseTool))
             {
-                ellipseTool.Reset(ox,
+                ellipseTool.Set(ox,
                        oy,
                        width / 2,
                        height / 2,
@@ -633,7 +633,7 @@ namespace PixelFarm.CpuBlit
             using (VectorToolBox.Borrow(out Ellipse ellipseTool))
             using (VxsTemp.Borrow(out var v1))
             {
-                ellipseTool.Reset(ox,
+                ellipseTool.Set(ox,
                          oy,
                          width / 2,
                          height / 2,

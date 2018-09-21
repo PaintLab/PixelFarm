@@ -114,26 +114,20 @@ namespace PaintLab.Svg
     public static class VgPainterArgsPool
     {
 
-        [System.ThreadStatic]
-        static Stack<VgPaintArgs> s_vgPaintArgs = new Stack<VgPaintArgs>();
-        public static void GetFreePainterArgs(Painter painter, out VgPaintArgs p)
+        public static TempContext<VgPaintArgs> Borrow(Painter painter, out VgPaintArgs paintArgs)
         {
-            if (s_vgPaintArgs.Count > 0)
+            if (!Temp<VgPaintArgs>.IsInit())
             {
-                p = s_vgPaintArgs.Pop();
-                p.P = painter;
+                Temp<VgPaintArgs>.SetNewHandler(
+                    () => new VgPaintArgs(),
+                    p => p.Reset());//when relese back
             }
-            else
-            {
-                p = new VgPaintArgs { P = painter };
-            }
+
+            var context = Temp<VgPaintArgs>.Borrow(out paintArgs);
+            paintArgs.P = painter;
+            return context;
         }
-        public static void ReleasePainterArgs(ref VgPaintArgs p)
-        {
-            p.Reset();
-            s_vgPaintArgs.Push(p);
-            p = null;
-        }
+
     }
 
 
@@ -399,40 +393,40 @@ namespace PaintLab.Svg
 
         public void HitTest(float x, float y, Action<SvgRenderElement, float, float, VertexStore> onHitSvg)
         {
-            VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
-            paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+            using (VgPainterArgsPool.Borrow(null, out VgPaintArgs paintArgs))
             {
-                if (args.Current != null &&
-                   PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, x, y))
+                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
-                    //add actual transform vxs ... 
-                    onHitSvg(args.Current, x, y, vxs);
-                }
-            };
-            this.Walk(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+                    if (args.Current != null &&
+                       PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, x, y))
+                    {
+                        //add actual transform vxs ... 
+                        onHitSvg(args.Current, x, y, vxs);
+                    }
+                };
+                this.Walk(paintArgs);
+            }
         }
         public bool HitTest(SvgHitChain hitChain)
         {
-            VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
-
-            paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+            using (VgPainterArgsPool.Borrow(null, out VgPaintArgs paintArgs))
             {
-
-                if (args.Current != null &&
-                   PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
+                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                 {
-                    //add actual transform vxs ... 
-                    hitChain.AddHit(args.Current,
-                        hitChain.X,
-                        hitChain.Y,
-                        hitChain.MakeCopyOfHitVxs ? vxs.CreateTrim() : null);
-                }
-            };
 
-            this.Walk(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
-            return hitChain.Count > 0;
+                    if (args.Current != null &&
+                       PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, hitChain.X, hitChain.Y))
+                    {
+                        //add actual transform vxs ... 
+                        hitChain.AddHit(args.Current,
+                            hitChain.X,
+                            hitChain.Y,
+                            hitChain.MakeCopyOfHitVxs ? vxs.CreateTrim() : null);
+                    }
+                };
+                this.Walk(paintArgs);
+                return hitChain.Count > 0;
+            }
         }
 
         public override SvgRenderElementBase Clone()
@@ -1262,21 +1256,21 @@ namespace PaintLab.Svg
             //***
             if (_needBoundUpdate)
             {
-                VgPainterArgsPool.GetFreePainterArgs(null, out VgPaintArgs paintArgs);
-                RectD rectTotal = RectD.ZeroIntersection;
-                bool evaluated = false;
-
-                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                using (VgPainterArgsPool.Borrow(null, out VgPaintArgs paintArgs))
                 {
-                    evaluated = true;//once 
-                    BoundingRect.GetBoundingRect(vxs, ref rectTotal);
-                };
+                    RectD rectTotal = RectD.ZeroIntersection;
+                    bool evaluated = false;
 
-                _renderE.Walk(paintArgs);
-                VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
-
-                _needBoundUpdate = false;
-                return this._boundRect = evaluated ? rectTotal : new RectD();
+                    paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                    {
+                        evaluated = true;//once 
+                        BoundingRect.GetBoundingRect(vxs, ref rectTotal);
+                    }; 
+                    _renderE.Walk(paintArgs); 
+                    _needBoundUpdate = false;
+                    return this._boundRect = evaluated ? rectTotal : new RectD();
+                }
+             
             }
 
             return this._boundRect;

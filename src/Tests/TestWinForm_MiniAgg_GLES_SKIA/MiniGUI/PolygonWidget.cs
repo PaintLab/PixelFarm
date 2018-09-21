@@ -224,7 +224,7 @@ namespace PixelFarm.CpuBlit.UI
                 double x, y;
                 for (int m = 0; m < n_count; ++m)
                 {
-                    m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
+                    m_ellipse.Set(GetXN(m), GetYN(m), r, r, 32);
 
                     var ellipseVxs = m_ellipse.MakeVxs(v3);
                     int j = ellipseVxs.Count;

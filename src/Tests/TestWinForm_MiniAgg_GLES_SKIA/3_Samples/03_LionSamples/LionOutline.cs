@@ -221,22 +221,25 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                 //lionShape.ApplyTransform(affTx); 
                 //---------------------
-                VgPainterArgsPool.GetFreePainterArgs(aggPainter, out VgPaintArgs paintArgs);
-                paintArgs._currentTx = affTx;
-                paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
-                {
-                    //use external painter handler
-                    //draw only outline with its fill-color. 
-                    rasterizer.Reset();
-                    rasterizer.AddPath(vxs);
-                    aggsx.BitmapRasterizer.RenderWithColor(
-                        imageClippingProxy, rasterizer,
-                        aggsx.ScanlinePacked8,
-                        aggPainter.FillColor); //draw line with external drawing handler
-                };
 
-                _spriteShape.Paint(paintArgs);
-                VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+                using (VgPainterArgsPool.Borrow(aggPainter, out VgPaintArgs paintArgs))
+                {
+                    paintArgs._currentTx = affTx;
+                    paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                    {
+                        //use external painter handler
+                        //draw only outline with its fill-color. 
+                        rasterizer.Reset();
+                        rasterizer.AddPath(vxs);
+                        aggsx.BitmapRasterizer.RenderWithColor(
+                            imageClippingProxy, rasterizer,
+                            aggsx.ScanlinePacked8,
+                            aggPainter.FillColor); //draw line with external drawing handler
+                    };
+
+                    _spriteShape.Paint(paintArgs);
+                }
+
                 //---------------------------- 
                 //lionShape.ResetTransform();
             }
@@ -249,22 +252,21 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     aggPainter.LineRenderingTech = LineRenderingTechnique.OutlineAARenderer;
 
                     //------
-                    VgPainterArgsPool.GetFreePainterArgs(aggPainter, out VgPaintArgs paintArgs);
-                    paintArgs._currentTx = affTx;
-                    paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                    using (VgPainterArgsPool.Borrow(aggPainter, out VgPaintArgs paintArgs))
                     {
-                        //use external painter handler
-                        //draw only outline with its fill-color.
-                        Drawing.Painter m_painter = paintArgs.P;
-                        Drawing.Color prevStrokeColor = m_painter.StrokeColor;
-                        m_painter.StrokeColor = m_painter.FillColor;
-                        m_painter.Draw(vxs);
-                        m_painter.StrokeColor = prevStrokeColor;
-                    };
-
-                    _spriteShape.Paint(paintArgs);
-                    VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
-
+                        paintArgs._currentTx = affTx;
+                        paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                        {
+                            //use external painter handler
+                            //draw only outline with its fill-color.
+                            Drawing.Painter m_painter = paintArgs.P;
+                            Drawing.Color prevStrokeColor = m_painter.StrokeColor;
+                            m_painter.StrokeColor = m_painter.FillColor;
+                            m_painter.Draw(vxs);
+                            m_painter.StrokeColor = prevStrokeColor;
+                        };
+                        _spriteShape.Paint(paintArgs);
+                    }
                 }
                 else
                 {
@@ -287,24 +289,26 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                     //lionShape.ApplyTransform(affTx);
                     //----------------------------
-                    VgPainterArgsPool.GetFreePainterArgs(aggPainter, out VgPaintArgs paintArgs);
-                    paintArgs._currentTx = affTx;
-                    paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                    using (VgPainterArgsPool.Borrow(aggPainter, out VgPaintArgs paintArgs))
                     {
-                        //use external painter handler
-                        //draw only outline with its fill-color.
-                        rasterizer.RenderVertexSnap(
-                            new PixelFarm.Drawing.VertexStoreSnap(vxs),
-                            painterA.P.FillColor);
-                    };
+                        paintArgs._currentTx = affTx;
+                        paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                        {
+                            //use external painter handler
+                            //draw only outline with its fill-color.
+                            rasterizer.RenderVertexSnap(
+                                new PixelFarm.Drawing.VertexStoreSnap(vxs),
+                                painterA.P.FillColor);
+                        };
 
-                    _spriteShape.Paint(paintArgs);
-                    VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+                        _spriteShape.Paint(paintArgs);
+                    }
+                  
                     //----------------------------  
                     //lionShape.ResetTransform();  
                 }
             }
-          
+
         }
     }
 }

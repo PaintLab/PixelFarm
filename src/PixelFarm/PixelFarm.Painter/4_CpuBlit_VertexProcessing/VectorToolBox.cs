@@ -123,7 +123,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //...
             item = default(T);
         }
-        internal static bool IsInit()
+        public static bool IsInit()
         {
             return s_pool != null;
         }

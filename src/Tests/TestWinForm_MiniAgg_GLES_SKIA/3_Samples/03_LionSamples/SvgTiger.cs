@@ -49,9 +49,14 @@ namespace PixelFarm.CpuBlit.Samples
             //#endif 
 
 
-            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
-            (_renderVx._renderE).Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
+            using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
+            {
+                _renderVx._renderE.Paint(paintArgs);
+            }
+
+
+
             // p.Render(_renderVx);
 
             //#if DEBUG
@@ -120,9 +125,11 @@ namespace PixelFarm.CpuBlit.Samples
                     //            _dbugSW.Start();
                     //#endif 
 
-                    VgPainterArgsPool.GetFreePainterArgs(painter, out VgPaintArgs paintArgs);
-                    (((VgRenderVx)vx)._renderE).Paint(paintArgs);
-                    VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
+                    using (VgPainterArgsPool.Borrow(painter, out var paintArgs))
+                    {
+                        ((VgRenderVx)vx)._renderE.Paint(paintArgs);
+                    }
 
 #if DEBUG
                     //test

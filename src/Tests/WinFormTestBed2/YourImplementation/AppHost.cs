@@ -146,7 +146,7 @@ namespace LayoutFarm
                     try
                     {
                         string svg_str = File.ReadAllText(imgName);
-                        VgRenderVx vgRenderVx = ReadSvgFile(imgName); 
+                        VgRenderVx vgRenderVx = ReadSvgFile(imgName);
                         return CreateBitmap(vgRenderVx, reqW, reqH);
 
                     }
@@ -209,12 +209,11 @@ namespace LayoutFarm
 
             ////
             double prevStrokeW = painter.StrokeWidth;
-            VgPainterArgsPool.GetFreePainterArgs(painter, out VgPaintArgs paintArgs);
-            renderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
-            painter.StrokeWidth = prevStrokeW;//restore
-
-
+            using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
+            {
+                renderVx._renderE.Paint(paintArgs);
+            }
+            painter.StrokeWidth = prevStrokeW;//restore 
             return backimg;
         }
 
