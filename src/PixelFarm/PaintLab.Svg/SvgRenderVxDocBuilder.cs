@@ -99,7 +99,7 @@ namespace PaintLab.Svg
     public class VgPaintArgs
     {
         public Painter P;
-        public Affine _currentTx;
+        public ITransformMatrix _currentTx;
         public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
         public SvgRenderElement Current;
 
@@ -196,7 +196,7 @@ namespace PaintLab.Svg
         {
             Painter p = vgPainterArgs.P;
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
-            Affine current_tx = vgPainterArgs._currentTx;
+            ITransformMatrix current_tx = vgPainterArgs._currentTx;
 
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
@@ -204,7 +204,7 @@ namespace PaintLab.Svg
 
             if (current_tx != null)
             {
-                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
             {
@@ -250,11 +250,12 @@ namespace PaintLab.Svg
         {
 
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
-            Affine current_tx = vgPainterArgs._currentTx;
+            ITransformMatrix current_tx = vgPainterArgs._currentTx;
 
             if (current_tx != null)
             {
-                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number) * current_tx;
+                //TODO: review here again***
+                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
             {
@@ -527,8 +528,8 @@ namespace PaintLab.Svg
             }
 
             //----------------------------------------------------
-            Affine prevTx = vgPainterArgs._currentTx; //backup
-            Affine currentTx = vgPainterArgs._currentTx;
+            ITransformMatrix prevTx = vgPainterArgs._currentTx; //backup
+            ITransformMatrix currentTx = vgPainterArgs._currentTx;
 
             if (_visualSpec != null)
             {
@@ -539,7 +540,7 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest * vgPainterArgs._currentTx;
+                        currentTx = latest.MultiplyWith(vgPainterArgs._currentTx);
                     }
                     else
                     {
@@ -726,8 +727,8 @@ namespace PaintLab.Svg
             Color strokeColor = p.StrokeColor;
             RequestFont currentFont = p.CurrentFont;
 
-            Affine prevTx = vgPainterArgs._currentTx; //backup
-            Affine currentTx = vgPainterArgs._currentTx;
+            ITransformMatrix prevTx = vgPainterArgs._currentTx; //backup
+            ITransformMatrix currentTx = vgPainterArgs._currentTx;
             bool hasClip = false;
             bool newFontReq = false;
 
@@ -741,7 +742,7 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest * vgPainterArgs._currentTx;
+                        currentTx = latest.MultiplyWith(vgPainterArgs._currentTx);
                     }
                     else
                     {
@@ -1561,7 +1562,7 @@ namespace PaintLab.Svg
 
             SvgRenderElement ellipseRenderE = new SvgRenderElement(WellknownSvgElementName.Ellipse, ellipseSpec, _renderRoot);
             VectorToolBox.GetFreeEllipseTool(out Ellipse ellipse);
-            
+
             ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
 
             double x = ConvertToPx(ellipseSpec.X, ref a);

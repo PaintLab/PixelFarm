@@ -34,4 +34,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         void Transform(ref double x, ref double y);
     }
+    public interface ITransformMatrix : ICoordTransformer
+    {
+        ITransformMatrix MultiplyWith(ITransformMatrix another);
+    }
 }

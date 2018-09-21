@@ -178,7 +178,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                         painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
                         painter.Draw(trans_ell);
                         painter.StrokeWidth = prevStrokeWidth;
-                    } 
+                    }
 
                 }
             }
@@ -212,11 +212,15 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
 
                     using (VxsTemp.Borrow(out var v2, out var transformedEll))
                     {
+                        //lionShape.ApplyTransform(txPerspective);
+
+                        lionShape.Paint(painter, txPerspective);
+
                         txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
                         painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
                         painter.Fill(transformedEll);
                         //-------------------------------------------------------- 
-                        var prevStrokeW = painter.StrokeWidth;
+                        double prevStrokeW = painter.StrokeWidth;
                         painter.StrokeWidth = 3;
                         painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
                         painter.Draw(transformedEll);

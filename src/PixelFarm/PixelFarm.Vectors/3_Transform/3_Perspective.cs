@@ -22,10 +22,13 @@ using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //=======================================================trans_perspective
-    public sealed class Perspective : ICoordTransformer
+    public sealed class Perspective : ICoordTransformer, ITransformMatrix
     {
         const double EPSILON = 1e-14;
-        double sx, shy, w0, shx, sy, w1, tx, ty, w2;
+        internal double
+               sx, shy, w0,
+               shx, sy, w1,
+               tx, ty, w2;
         //------------------------------------------------------- 
         // Identity matrix
         public Perspective()
@@ -49,9 +52,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         // From affine
         public Perspective(Affine a)
         {
-            sx = a.sx; shy = a.shy; w0 = 0;
-            shx = a.shx; sy = a.sy; w1 = 0;
-            tx = a.tx; ty = a.ty; w2 = 1;
+            sx = a.sx;      /**/shy = a.shy;     /**/w0 = 0;
+            shx = a.shx;    /**/sy = a.sy;      /**/w1 = 0;
+            tx = a.tx;      /**/ty = a.ty;      /**/w2 = 1;
         }
 
         // From trans_perspective
@@ -102,6 +105,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             quad_to_quad(src, dst);
         }
 
+        public ITransformMatrix MultiplyWith(ITransformMatrix another)
+        {
+            if (another is Affine)
+            {
+                return this * (Affine)another;
+            }
+            else if (another is Perspective)
+            {
+                Perspective p = new Perspective(this);
+                return p * (Perspective)another;
+            }
+            else
+            {
+
+                return null;
+            }
+        }
         void Set(Perspective Other)
         {
             sx = Other.sx;
@@ -131,6 +151,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         unsafe bool InternalGenerateQuadToQuad(double* qs_h, double* qdHead)
         {
+            //TODO: review here***
             Perspective p = new Perspective();
             if (!square_to_quad(qs_h))
             {
@@ -547,16 +568,21 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         bool is_identity()
         {
-            return AggMath.is_equal_eps(sx, 1.0, EPSILON) &&
-                   AggMath.is_equal_eps(shy, 0.0, EPSILON) &&
-                   AggMath.is_equal_eps(w0, 0.0, EPSILON) &&
-                   AggMath.is_equal_eps(shx, 0.0, EPSILON) &&
-                   AggMath.is_equal_eps(sy, 1.0, EPSILON) &&
-                   AggMath.is_equal_eps(w1, 0.0, EPSILON) &&
-                   AggMath.is_equal_eps(tx, 0.0, EPSILON) &&
-                   AggMath.is_equal_eps(ty, 0.0, EPSILON) &&
-                   AggMath.is_equal_eps(w2, 1.0, EPSILON);
+            return is_equal_eps(sx, 1.0, EPSILON) &&
+                    is_equal_eps(shy, 0.0, EPSILON) &&
+                    is_equal_eps(w0, 0.0, EPSILON) &&
+                    is_equal_eps(shx, 0.0, EPSILON) &&
+                    is_equal_eps(sy, 1.0, EPSILON) &&
+                    is_equal_eps(w1, 0.0, EPSILON) &&
+                    is_equal_eps(tx, 0.0, EPSILON) &&
+                    is_equal_eps(ty, 0.0, EPSILON) &&
+                    is_equal_eps(w2, 1.0, EPSILON);
         }
+        static bool is_equal_eps(double v1, double v2, double epsilon)
+        {
+            return Math.Abs(v1 - v2) <= (epsilon);
+        }
+
 
         //public bool is_equal(Perspective m)
         //{
@@ -618,6 +644,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             y = Math.Sqrt(shy * shy + sy * sy);
         }
 
-        
+
     }
 }

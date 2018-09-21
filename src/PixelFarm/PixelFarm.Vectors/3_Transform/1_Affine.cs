@@ -97,7 +97,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     /// </summary>
     public struct AffineMat
     {
-        public double sx, shy, shx, sy, tx, ty;
+        public double
+            sx, shy,
+            shx, sy,
+            tx, ty;
 
         public void SetValues(double v0_sx, double v1_shy,
                               double v2_shx, double v3_sy,
@@ -331,7 +334,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-    public class Affine : ICoordTransformer
+    public class Affine : ICoordTransformer, ITransformMatrix
     {
         const double EPSILON = 1e-14;
         AffineMat _elems;
@@ -365,6 +368,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 v4_tx, v5_ty);
 
             isIdenHint = false;
+        }
+        public ITransformMatrix MultiplyWith(ITransformMatrix another)
+        {
+            if (another is Affine)
+            {
+                return this * (Affine)another;
+            }
+            else if (another is Perspective)
+            {
+                Perspective p = new Perspective(this);
+                return p * (Perspective)another;
+            }
+            else
+            {
+
+                return null;
+            }
         }
         public double m11 { get { return _elems.sx; } }
         public double m12 { get { return _elems.shy; } }
@@ -799,6 +819,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             shx = t2;
             tx = t4;
         }
+
         /*
 
         // Multiply "m" to "this" and assign the result to "this"
@@ -1102,5 +1123,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //    x = Math.Sqrt(sx * sx + shx * shx);
         //    y = Math.Sqrt(shy * shy + sy * sy);
         //}
+
     }
 }
