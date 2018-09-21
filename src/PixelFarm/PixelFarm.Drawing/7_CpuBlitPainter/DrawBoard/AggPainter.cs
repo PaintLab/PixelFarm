@@ -518,38 +518,40 @@ namespace PixelFarm.CpuBlit
 
             //----------------------------------------------------------
             //Agg
-            VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
-            if (this._orientation == DrawBoardOrientation.LeftBottom)
-            {
-                double right = left + width;
-                double bottom = top + height;
-                rectTool.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
-            }
-            else
-            {
-                double right = left + width;
-                double bottom = top - height;
-                int canvasH = this.Height;
-                //_simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5), right - 0.5, canvasH - (top - 0.5));
-                rectTool.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
-            }
 
-            if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+
+            using (VectorToolBox.Borrow(out SimpleRect rectTool))
             {
-                using (VxsTemp.Borrow(out var v1, out var v2))
+                if (this._orientation == DrawBoardOrientation.LeftBottom)
                 {
-                    _aggsx.Render(_stroke.MakeVxs(rectTool.MakeVxs(v1), v2), this._strokeColor);
+                    double right = left + width;
+                    double bottom = top + height;
+                    rectTool.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
+                }
+                else
+                {
+                    double right = left + width;
+                    double bottom = top - height;
+                    int canvasH = this.Height;
+                    //_simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5), right - 0.5, canvasH - (top - 0.5));
+                    rectTool.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
+                }
+
+                if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+                {
+                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    {
+                        _aggsx.Render(_stroke.MakeVxs(rectTool.MakeVxs(v1), v2), this._strokeColor);
+                    }
+                }
+                else
+                {
+                    using (VxsTemp.Borrow(out var v1))
+                    {
+                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(rectTool.MakeVxs(v1)), this._strokeColor);
+                    }
                 }
             }
-            else
-            {
-                using (VxsTemp.Borrow(out var v1))
-                {
-                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(rectTool.MakeVxs(v1)), this._strokeColor);
-                }
-            }
-
-            VectorToolBox.ReleaseRectTool(ref rectTool);
         }
 
         public override void DrawEllipse(double left, double top, double width, double height)
@@ -578,29 +580,29 @@ namespace PixelFarm.CpuBlit
             }
 
 
-            //---------------------------------------------------------- 
-            VectorToolBox.GetFreeEllipseTool(out Ellipse ellpseTool);
-            ellpseTool.Reset(ox,
-                         oy,
-                         width / 2,
-                         height / 2,
-                         ellipseGenNSteps);
 
-            if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
+            using (VectorToolBox.Borrow(out Ellipse ellipseTool))
             {
-                using (VxsTemp.Borrow(out var v1, out var v2))
+                ellipseTool.Reset(ox,
+                       oy,
+                       width / 2,
+                       height / 2,
+                       ellipseGenNSteps);
+                if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
-                    _aggsx.Render(_stroke.MakeVxs(ellpseTool.MakeVxs(v1), v2), this._strokeColor);
+                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    {
+                        _aggsx.Render(_stroke.MakeVxs(ellipseTool.MakeVxs(v1), v2), this._strokeColor);
+                    }
+                }
+                else
+                {
+                    using (VxsTemp.Borrow(out var v1))
+                    {
+                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(ellipseTool.MakeVxs(v1)), this._strokeColor);
+                    }
                 }
             }
-            else
-            {
-                using (VxsTemp.Borrow(out var v1))
-                {
-                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(ellpseTool.MakeVxs(v1)), this._strokeColor);
-                }
-            }
-            VectorToolBox.ReleaseEllipseTool(ref ellpseTool);
 
         }
         public override void FillEllipse(double left, double top, double width, double height)
@@ -628,21 +630,16 @@ namespace PixelFarm.CpuBlit
             //Agg
             //---------------------------------------------------------- 
 
-
-            VectorToolBox.GetFreeEllipseTool(out Ellipse ellipseTool);
-            ellipseTool.Reset(ox,
-                          oy,
-                          width / 2,
-                          height / 2,
-                          ellipseGenNSteps);
-
-
+            using (VectorToolBox.Borrow(out Ellipse ellipseTool))
             using (VxsTemp.Borrow(out var v1))
             {
+                ellipseTool.Reset(ox,
+                         oy,
+                         width / 2,
+                         height / 2,
+                         ellipseGenNSteps);
                 _aggsx.Render(ellipseTool.MakeVxs(v1), this.fillColor);
             }
-
-            VectorToolBox.ReleaseEllipseTool(ref ellipseTool);
         }
         public override void FillRect(double left, double top, double width, double height)
         {
@@ -664,44 +661,41 @@ namespace PixelFarm.CpuBlit
             //Agg 
             //---------------------------------------------------------- 
 
-            VectorToolBox.GetFreeRectTool(out SimpleRect rectTool);
-
-            if (this._orientation == DrawBoardOrientation.LeftBottom)
-            {
-                double right = left + width;
-                double bottom = top - height;
-                if (right < left || top < bottom)
-                {
-#if DEBUG
-                    throw new ArgumentException();
-#else
-                return;
-#endif
-                }
-
-                rectTool.SetRect(left + 0.5, (bottom + 0.5) + height, right - 0.5, (top - 0.5) + height);
-            }
-            else
-            {
-
-                double right = left + width;
-                double bottom = top - height;
-                if (right < left || top < bottom)
-                {
-#if DEBUG
-                    throw new ArgumentException();
-#else
-                return;
-#endif
-                }
-
-                int canvasH = this.Height;
-                rectTool.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
-            }
-
+            using (VectorToolBox.Borrow(out SimpleRect rectTool))
             using (VxsTemp.Borrow(out var v1))
             {
+                if (this._orientation == DrawBoardOrientation.LeftBottom)
+                {
+                    double right = left + width;
+                    double bottom = top - height;
+                    if (right < left || top < bottom)
+                    {
+#if DEBUG
+                        throw new ArgumentException();
+#else
+                return;
+#endif
+                    }
 
+                    rectTool.SetRect(left + 0.5, (bottom + 0.5) + height, right - 0.5, (top - 0.5) + height);
+                }
+                else
+                {
+
+                    double right = left + width;
+                    double bottom = top - height;
+                    if (right < left || top < bottom)
+                    {
+#if DEBUG
+                        throw new ArgumentException();
+#else
+                return;
+#endif
+                    }
+
+                    int canvasH = this.Height;
+                    rectTool.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
+                }
                 if (!_useDefaultBrush)
                 {
                     Brush br = _curBrush;
@@ -740,9 +734,8 @@ namespace PixelFarm.CpuBlit
                 {
                     _aggsx.Render(rectTool.MakeVertexSnap(v1), this.fillColor);
                 }
-            }
 
-            VectorToolBox.ReleaseRectTool(ref rectTool);
+            }
         }
 
 

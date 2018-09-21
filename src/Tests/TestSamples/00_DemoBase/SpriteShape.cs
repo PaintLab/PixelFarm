@@ -4,8 +4,9 @@
 
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PaintLab.Svg;
-using LayoutFarm;
+
 namespace PixelFarm.CpuBlit
 {
 
@@ -122,7 +123,32 @@ namespace PixelFarm.CpuBlit
         {
             _svgRenderVx._renderE.Paint(paintArgs);
         }
-      
+        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Bilinear tx)
+        {
+            //in this version, I can't apply bilinear tx to current tx matrix
+
+            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
+            paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+            {
+                //use external painter handler
+                //draw only outline with its fill-color.
+                Drawing.Painter m_painter = paintArgs.P;
+                Drawing.Color prevFillColor = m_painter.FillColor;
+                m_painter.FillColor = m_painter.FillColor;
+
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    tx.TransformToVxs(vxs, v1);
+                    m_painter.Fill(v1);
+                }
+
+
+                m_painter.FillColor = prevFillColor;
+            };
+            _svgRenderVx._renderE.Paint(paintArgs);
+            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
+        }
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.ITransformMatrix tx)
         {
             //TODO: implement this...

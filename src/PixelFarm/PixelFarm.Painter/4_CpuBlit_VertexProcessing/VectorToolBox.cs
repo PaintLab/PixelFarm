@@ -7,14 +7,16 @@ using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     using PixelFarm.Drawing;
-     
+
     //-----------------------------------
     public struct VxsContext1 : IDisposable
     {
         internal VertexStore vxs;
-        internal VxsContext1(bool t)
+        internal VxsContext1(out VertexStore outputVxs)
         {
-            VxsTemp.GetFreeVxs(out vxs);
+            VxsTemp.GetFreeVxs(out outputVxs);
+            vxs = outputVxs;
+
         }
         public void Dispose()
         {
@@ -25,10 +27,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         internal VertexStore vxs1;
         internal VertexStore vxs2;
-        internal VxsContext2(bool t)
+        internal VxsContext2(out VertexStore outputVxs1, out VertexStore outputVxs2)
         {
             VxsTemp.GetFreeVxs(out vxs1);
             VxsTemp.GetFreeVxs(out vxs2);
+            outputVxs1 = vxs1;
+            outputVxs2 = vxs2;
         }
         public void Dispose()
         {
@@ -42,19 +46,85 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         internal VertexStore vxs1;
         internal VertexStore vxs2;
         internal VertexStore vxs3;
-        internal VxsContext3(bool t)
+        internal VxsContext3(out VertexStore outputVxs1, out VertexStore outputVxs2, out VertexStore outputVxs3)
         {
             VxsTemp.GetFreeVxs(out vxs1);
             VxsTemp.GetFreeVxs(out vxs2);
             VxsTemp.GetFreeVxs(out vxs3);
+            outputVxs1 = vxs1;
+            outputVxs2 = vxs2;
+            outputVxs3 = vxs3;
+
         }
         public void Dispose()
         {
             //release
             VxsTemp.ReleaseVxs(ref vxs1);
             VxsTemp.ReleaseVxs(ref vxs2);
+            VxsTemp.ReleaseVxs(ref vxs3);
         }
     }
+
+
+    //--------------------------------------------------
+
+    public struct TempContext<T> : IDisposable
+    {
+        internal T vxs;
+        internal TempContext(out T outputvxs)
+        {
+            Temp<T>.GetFreeOne(out vxs);
+            outputvxs = this.vxs;
+        }
+        public void Dispose()
+        {
+            Temp<T>.Release(ref vxs);
+        }
+    }
+
+    public static class Temp<T>
+    {
+        [System.ThreadStatic]
+        static Stack<T> s_pool;
+        static Func<T> s_newHandler;
+        //-------
+
+        public static TempContext<T> Borrow(out T freeItem)
+        {
+            return new TempContext<T>(out freeItem);
+        }
+
+        public static void SetNewHandler(Func<T> newHandler)
+        {
+            //set new instance here, must set this first***
+            if (s_pool == null)
+            {
+                s_pool = new Stack<T>();
+            }
+            s_newHandler = newHandler;
+        }
+        internal static void GetFreeOne(out T freeItem)
+        {
+            if (s_pool.Count > 0)
+            {
+                freeItem = s_pool.Pop();
+            }
+            else
+            {
+                freeItem = s_newHandler();
+            }
+        }
+        internal static void Release(ref T item)
+        {
+            s_pool.Push(item);
+            item = default(T);
+        }
+        internal static bool IsInit()
+        {
+            return s_pool != null;
+        }
+    }
+
 
 }
 namespace PixelFarm.Drawing
@@ -65,31 +135,17 @@ namespace PixelFarm.Drawing
 
         public static VxsContext1 Borrow(out VertexStore vxs)
         {
-            var tmp = new VxsContext1(true);
-            vxs = tmp.vxs;
-            return tmp;
+            return new VxsContext1(out vxs);
         }
-
-
         public static VxsContext2 Borrow(out VertexStore vxs1, out VertexStore vxs2)
         {
-            var tmp = new VxsContext2(true);
-            vxs1 = tmp.vxs1;
-            vxs2 = tmp.vxs2;
-            return tmp;
+            return new VxsContext2(out vxs1, out vxs2);
         }
-
-
         public static VxsContext3 Borrow(out VertexStore vxs1,
             out VertexStore vxs2, out VertexStore vxs3)
         {
-            var tmp = new VxsContext3(true);
-            vxs1 = tmp.vxs1;
-            vxs2 = tmp.vxs2;
-            vxs3 = tmp.vxs3;
-            return tmp;
+            return new VxsContext3(out vxs1, out vxs2, out vxs3);
         }
-
 
 
         //for net20 -- check this
@@ -127,112 +183,48 @@ namespace PixelFarm.Drawing
 
 
 
-
     public static class VectorToolBox
     {
 
-
-        //-----------------------------------
-        [System.ThreadStatic]
-        static Stack<Stroke> s_strokePool = new Stack<Stroke>();
-        public static void GetFreeStroke(out Stroke stroke, int w)
+        public static TempContext<Stroke> Borrow(out Stroke stroke)
         {
-            if (s_strokePool.Count > 0)
+            if (!Temp<Stroke>.IsInit())
             {
-                stroke = s_strokePool.Pop();
-                stroke.Width = w;
+                Temp<Stroke>.SetNewHandler(() => new Stroke(1));
             }
-            else
-            {
-                stroke = new Stroke(w);
-            }
+            return Temp<Stroke>.Borrow(out stroke);
         }
-        public static void ReleaseStroke(ref Stroke stroke)
+        public static TempContext<PixelFarm.CpuBlit.PathWriter> Borrow(out PixelFarm.CpuBlit.PathWriter pathWriter)
         {
-            s_strokePool.Push(stroke);
-            stroke = null;
-        }
-        //-----------------------------------
-
-
-        [System.ThreadStatic]
-        static Stack<PixelFarm.CpuBlit.PathWriter> s_pathWriters = new Stack<PixelFarm.CpuBlit.PathWriter>();
-        public static void GetFreePathWriter(out PixelFarm.CpuBlit.PathWriter p)
-        {
-            if (s_pathWriters.Count > 0)
+            if (!Temp<PixelFarm.CpuBlit.PathWriter>.IsInit())
             {
-                p = s_pathWriters.Pop();
+                Temp<PixelFarm.CpuBlit.PathWriter>.SetNewHandler(() => new PixelFarm.CpuBlit.PathWriter());
             }
-            else
-            {
-                p = new CpuBlit.PathWriter();
-            }
+            return Temp<PixelFarm.CpuBlit.PathWriter>.Borrow(out pathWriter);
         }
-        public static void ReleasePathWriter(ref PixelFarm.CpuBlit.PathWriter p)
+        public static TempContext<Ellipse> Borrow(out Ellipse pathWriter)
         {
-            p.Clear();
-            s_pathWriters.Push(p);
-            p = null;
-        }
-        //-----------------------------------
-        [System.ThreadStatic]
-        static Stack<SimpleRect> s_simpleRects = new Stack<SimpleRect>();
-        public static void GetFreeRectTool(out SimpleRect rectTool)
-        {
-            if (s_simpleRects.Count > 0)
+            if (!Temp<Ellipse>.IsInit())
             {
-                rectTool = s_simpleRects.Pop();
+                Temp<Ellipse>.SetNewHandler(() => new Ellipse());
             }
-            else
-            {
-                rectTool = new SimpleRect();
-            }
+            return Temp<Ellipse>.Borrow(out pathWriter);
         }
-        public static void ReleaseRectTool(ref SimpleRect rectTool)
+        public static TempContext<SimpleRect> Borrow(out SimpleRect simpleRect)
         {
-            s_simpleRects.Push(rectTool);
-            rectTool = null;
-        }
-
-        //-----------------------------------
-        [System.ThreadStatic]
-        static Stack<Ellipse> s_ellipses = new Stack<Ellipse>();
-        public static void GetFreeEllipseTool(out Ellipse ellipseTool)
-        {
-            if (s_ellipses.Count > 0)
+            if (!Temp<SimpleRect>.IsInit())
             {
-                ellipseTool = s_ellipses.Pop();
+                Temp<SimpleRect>.SetNewHandler(() => new SimpleRect());
             }
-            else
-            {
-                ellipseTool = new Ellipse();
-            }
+            return Temp<SimpleRect>.Borrow(out simpleRect);
         }
-        public static void ReleaseEllipseTool(ref Ellipse ellipseTool)
+        public static TempContext<RoundedRect> Borrow(out RoundedRect roundRect)
         {
-            s_ellipses.Push(ellipseTool);
-            ellipseTool = null;
-        }
-
-        //-------------
-
-        [System.ThreadStatic]
-        static Stack<RoundedRect> s_roundRects = new Stack<RoundedRect>();
-        public static void GetFreeRoundRectTool(out RoundedRect roundRect)
-        {
-            if (s_roundRects.Count > 0)
+            if (!Temp<RoundedRect>.IsInit())
             {
-                roundRect = s_roundRects.Pop();
+                Temp<RoundedRect>.SetNewHandler(() => new RoundedRect());
             }
-            else
-            {
-                roundRect = new RoundedRect();
-            }
-        }
-        public static void ReleaseRoundRect(ref RoundedRect roundRect)
-        {
-            s_roundRects.Push(roundRect);
-            roundRect = null;
+            return Temp<RoundedRect>.Borrow(out roundRect);
         }
     }
 }
