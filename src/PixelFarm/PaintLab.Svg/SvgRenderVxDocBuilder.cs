@@ -100,14 +100,14 @@ namespace PaintLab.Svg
     {
         public Painter P;
         public ICoordTransformer _currentTx;
- 
+
         public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
         public SvgRenderElement Current;
 
         internal void Reset()
         {
             P = null;
-            _currentTx = null; 
+            _currentTx = null;
             ExternalVxsVisitHandler = null;
             Current = null;
         }
@@ -507,14 +507,12 @@ namespace PaintLab.Svg
         static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
         {
 
+            using (VectorToolBox.Borrow(out Stroke stroke))
             using (VxsTemp.Borrow(out var v1))
             {
-                PixelFarm.CpuBlit.TempStrokeTool.GetFreeStroke(out Stroke stroke);
                 stroke.Width = strokeW;
                 stroke.MakeVxs(vxs, v1);
-                VertexStore vx = v1.CreateTrim();
-                PixelFarm.CpuBlit.TempStrokeTool.ReleaseStroke(ref stroke);
-                return vx;
+                return v1.CreateTrim();
             }
         }
         public override void Walk(VgPaintArgs vgPainterArgs)
@@ -970,7 +968,7 @@ namespace PaintLab.Svg
                                     //}
                                     //else
                                     //{
-                                        
+
                                     //}
 
                                 }
@@ -1123,7 +1121,7 @@ namespace PaintLab.Svg
 
                                         VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
                                         p.Fill(strokeVxs, p.StrokeColor);
-                                        //}
+
                                     }
                                 }
                                 else

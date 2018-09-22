@@ -1366,14 +1366,13 @@ namespace PixelFarm.CpuBlit
 
         static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
         {
-
+            using (VectorToolBox.Borrow(out Stroke stroke))
             using (VxsTemp.Borrow(out var v1))
             {
-                TempStrokeTool.GetFreeStroke(out Stroke stroke);
+
                 stroke.Width = strokeW;
                 stroke.MakeVxs(vxs, v1);
                 VertexStore vx = v1.CreateTrim();
-                TempStrokeTool.ReleaseStroke(ref stroke);
                 return vx;
             }
         }

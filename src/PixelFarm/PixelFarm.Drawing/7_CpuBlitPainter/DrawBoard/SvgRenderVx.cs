@@ -163,32 +163,7 @@ namespace PixelFarm.CpuBlit
     }
 
 
-
-    public static class TempStrokeTool
-    {
-
-        [System.ThreadStatic]
-        static Stack<Stroke> s_tempStrokes = new Stack<Stroke>();
-        public static void GetFreeStroke(out Stroke tmpStroke)
-        {
-            if (s_tempStrokes.Count > 0)
-            {
-                tmpStroke = s_tempStrokes.Pop();
-            }
-            else
-            {
-                tmpStroke = new Stroke(1);
-            }
-        }
-        public static void ReleaseStroke(ref Stroke s)
-        {
-            s.Width = 1;//reset
-            s_tempStrokes.Push(s);
-            s = null;
-        }
-    }
-
-
+     
 
 
 

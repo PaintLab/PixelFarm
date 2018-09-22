@@ -347,9 +347,9 @@ namespace LayoutFarm.UI
                 };
                 _svgRenderVx._renderE.Paint(paintArgs);
             }
-            
-            
-            
+
+
+
 
         }
         public void DrawOutline(Painter p)
@@ -427,7 +427,7 @@ namespace LayoutFarm.UI
     }
     public static class VgHitChainPool
     {
-        //
+        //TODO: implement with Temp<T>
         //
         [System.ThreadStatic]
         static System.Collections.Generic.Stack<SvgHitChain> s_hitChains = new System.Collections.Generic.Stack<SvgHitChain>();
