@@ -95,10 +95,7 @@ namespace PixelFarm.CpuBlit.UI
             }
             return vxs;
         }
-        //public VertexStoreSnap MakeVertexSnap(VertexStore vxs)
-        //{
-        //    return new VertexStoreSnap(this.MakeVxs(vxs));
-        //}
+         
     }
 
     public class PolygonControl : SimpleVertexSourceWidget

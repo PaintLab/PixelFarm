@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         const double EPSILON = 1e-14;
 
-        //this is 3x3 matrix
+        //this is 3x3 matrix  , (rows x cols)
         internal double
                sx, shy, w0,
                shx, sy, w1,
