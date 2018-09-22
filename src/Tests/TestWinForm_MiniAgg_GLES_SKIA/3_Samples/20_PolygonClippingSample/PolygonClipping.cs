@@ -112,10 +112,10 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.CloseFigure();
                         p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                        p.Fill(ps1.MakeVertexSnap());
+                        p.Fill(ps1.Vxs);
                         p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                        p.Fill(ps2.MakeVertexSnap());
-                        CreateAndRenderCombined(p, ps1.MakeVertexSnap(), ps2.MakeVertexSnap());
+                        p.Fill(ps2.Vxs);
+                        CreateAndRenderCombined(p, ps1.Vxs, ps2.Vxs);
                     }
                     break;
                 case PolygonExampleSet.CloseStroke:
@@ -149,7 +149,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.CloseFigure();
                         p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                        p.Fill(ps1.MakeVertexSnap());
+                        p.Fill(ps1.Vxs);
                         //graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
                         var vxs = ps2.Vxs;
                         //graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
@@ -161,7 +161,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             p.Fill(stroke.MakeVxs(vxs, v1));
                         }
 
-                        CreateAndRenderCombined(p, ps1.MakeVertexSnap(), new VertexStoreSnap(vxs));
+                        CreateAndRenderCombined(p, ps1.Vxs, vxs);
                     }
                     break;
                 case PolygonExampleSet.GBAndArrow:
@@ -212,7 +212,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
                         p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);
                         p.Fill(trans_arrows);
-                        CreateAndRenderCombined(p, new VertexStoreSnap(trans_gb_poly), new VertexStoreSnap(trans_arrows));
+                        CreateAndRenderCombined(p, trans_gb_poly, trans_arrows);
                     }
                     break;
                 case PolygonExampleSet.GBAndSpiral:
@@ -246,7 +246,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             p.FillColor = ColorEx.Make(0.0f, 0.5f, 0.5f, 0.1f);// XUolorRXBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f);
                             p.Fill(stroke_vxs);
                             //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
-                            CreateAndRenderCombined(p, new VertexStoreSnap(s1), new VertexStoreSnap(stroke_vxs));
+                            CreateAndRenderCombined(p, s1, stroke_vxs);
 
                         }
 
@@ -321,7 +321,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             var curveVxs = new VertexStore();
                             curveFlattener.MakeVxs(t_glyph, curveVxs);
 
-                            CreateAndRenderCombined(p, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
+                            CreateAndRenderCombined(p, sp1, curveVxs);
                             p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
                             p.Fill(stroke.MakeVxs(sp1, v3));
                             //graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
@@ -330,14 +330,14 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             p.Fill(curveVxs);
                             //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
 
-                        } 
+                        }
                     }
                     break;
             }
         }
 
 
-        void CreateAndRenderCombined(Painter p, VertexStoreSnap vxsSnap1, VertexStoreSnap vxsSnap2)
+        void CreateAndRenderCombined(Painter p, VertexStore vxsSnap1, VertexStore vxsSnap2)
         {
             //TODO: review here again. 
 
@@ -368,7 +368,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             {
                 p.FillColor = ColorEx.Make(0.5f, 0.0f, 0f, 0.5f);
                 //TODO=?
-                p.Fill(new VertexStoreSnap(combined[0]));
+                p.Fill(combined[0]);
             }
         }
         public override void MouseDrag(int x, int y)

@@ -423,10 +423,7 @@ namespace PixelFarm.CpuBlit
         {
             get { return this.myvxs; }
         }
-        public VertexStoreSnap MakeVertexSnap()
-        {
-            return new VertexStoreSnap(this.myvxs);
-        }
+        
 
         VertexCmd GetLastVertex(out double x, out double y)
         {

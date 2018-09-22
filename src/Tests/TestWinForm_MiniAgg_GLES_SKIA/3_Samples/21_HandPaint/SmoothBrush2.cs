@@ -8,7 +8,7 @@ using Mini;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.Samples
 {
-   
+
 
     [Info(OrderCode = "22")]
     [Info("SmoothBrush2")]
@@ -125,8 +125,8 @@ namespace PixelFarm.CpuBlit.Samples
                                         //do path clip***
                                         List<VertexStore> paths = new List<VertexStore>();
                                         PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
-                                               new VertexStoreSnap(lastPath.Vxs),
-                                               new VertexStoreSnap(currentBrushPath.Vxs), VertexProcessing.VxsClipperType.Difference,
+                                               lastPath.Vxs,
+                                               currentBrushPath.Vxs, VertexProcessing.VxsClipperType.Difference,
                                                true,
                                                paths);
 
