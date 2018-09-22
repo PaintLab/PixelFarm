@@ -195,7 +195,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs" Link="PixelFarm\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" Link="PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" />

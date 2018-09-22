@@ -27,8 +27,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
         public static void CombinePaths(
-            VertexStoreSnap a,
-            VertexStoreSnap b,
+            VertexStore a,
+            VertexStore b,
             VxsClipperType vxsClipType,
             bool separateIntoSmallSubPaths,
             List<VertexStore> results)
@@ -77,8 +77,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         //
         void CombinePathsInternal(
-           VertexStoreSnap a,
-           VertexStoreSnap b,
+           VertexStore a,
+           VertexStore b,
            VxsClipperType vxsClipType,
            bool separateIntoSmallSubPaths,
            List<VertexStore> resultList)
@@ -154,17 +154,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
 
-        static void CreatePolygons(VertexStoreSnap a, List<IntPolygon> allPolys)
+        static void CreatePolygons(VertexStore a, List<IntPolygon> allPolys)
         {
 
             IntPolygon currentPoly = null;
             VertexData last = new VertexData();
             VertexData first = new VertexData();
             bool addedFirst = false;
-            var snapIter = a.GetVertexSnapIter();
             double x, y;
-            VertexCmd cmd = snapIter.GetNextVertex(out x, out y);
-            do
+
+            int index = 0;
+            VertexCmd cmd;
+            while ((cmd = a.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
                 if (cmd == VertexCmd.LineTo)
                 {
@@ -197,8 +198,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         last = first;
                     }
                 }
-                cmd = snapIter.GetNextVertex(out x, out y);
-            } while (cmd != VertexCmd.NoMore);
+            }
 
 
         }

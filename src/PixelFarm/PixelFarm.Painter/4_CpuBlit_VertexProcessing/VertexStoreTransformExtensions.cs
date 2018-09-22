@@ -70,28 +70,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 tx.Transform(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
             }
-
-            //outputVxs.HasMoreThanOnePart = src.HasMoreThanOnePart;
+             
             return outputVxs;
         }
-        /// <summary>
-        /// we do NOT store vxs, return original outputVxs
-        /// </summary>
-        /// <param name="src"></param>
-        /// <param name="outputVxs"></param>
-        /// <returns></returns>
-        public static VertexStore TransformToVxs(this Affine aff, VertexStoreSnap src, VertexStore outputVxs)
-        {
-            var snapIter = src.GetVertexSnapIter();
-            VertexCmd cmd;
-            double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-            {
-                aff.Transform(ref x, ref y);
-                outputVxs.AddVertex(x, y, cmd);
-            }
-            return outputVxs;
-        }
+        
         public static VertexStore TransformToVxs(this Bilinear bilinearTx, VertexStore src, VertexStore vxs)
         {
             int count = src.Count;
@@ -105,19 +87,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return vxs;
         }
-        public static VertexStore TransformToVxs(this Perspective perspecitveTx, VertexStoreSnap snap, VertexStore vxs)
-        {
-            var vsnapIter = snap.GetVertexSnapIter();
-            double x, y;
-            VertexCmd cmd;
-            do
-            {
-                cmd = vsnapIter.GetNextVertex(out x, out y);
-                perspecitveTx.Transform(ref x, ref y);
-                vxs.AddVertex(x, y, cmd);
-            } while (!VertexHelper.IsEmpty(cmd));
-            return vxs;
-        }
+      
         public static VertexStore TransformToVxs(this Perspective perspecitveTx, VertexStore src, VertexStore vxs)
         {
             VertexCmd cmd;

@@ -113,11 +113,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             P3
         }
 
-        public void MakeVxs(VertexStoreSnap vsnap, VertexStore vxs)
+        public VertexStore MakeVxs(VertexStore vxs, VertexStore output)
         {
             m_curve3.Reset();
             m_curve4.Reset();
-            var snapIter = vsnap.GetVertexSnapIter();
+
             CurvePointMode latestCurveMode = CurvePointMode.NotCurve;
             double x, y;
             VertexCmd cmd;
@@ -130,14 +130,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double lastMoveY = 0;
 
 
-            do
+            int index = 0;
+            while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
-                //this vertex
-                cmd = snapIter.GetNextVertex(out x, out y);
 #if DEBUG
                 if (VertexStore.dbugCheckNANs(x, y))
                 {
-                    int dbugIter = snapIter.dbugIterIndex;
+
                 }
 
                 //if (VertexStore.dbugCheckIfNAN(x, y))
@@ -147,7 +146,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 #endif
                 switch (cmd)
                 {
-                    
+
                     case VertexCmd.P2c:
                         {
                             switch (latestCurveMode)
@@ -207,7 +206,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             {
                                 case CurvePointMode.P2:
                                     {
-                                        m_curve3.MakeLines(vxs,
+                                        m_curve3.MakeLines(output,
                                             lastX,
                                             lasty,
                                             c3p2.X,
@@ -219,7 +218,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                 case CurvePointMode.P3:
                                     {
 
-                                        m_curve4.MakeLines(vxs,
+                                        m_curve4.MakeLines(output,
                                             lastX, lasty,
                                             c4p2.x, c4p2.y,
                                             c4p3.x, c4p3.y,
@@ -228,7 +227,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                     break;
                                 default:
                                     {
-                                        vxs.AddVertex(x, y, cmd);
+                                        output.AddVertex(x, y, cmd);
                                     }
                                     break;
                             }
@@ -242,7 +241,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     case VertexCmd.MoveTo:
                         {
                             //move to, and end command
-                            vxs.AddVertex(x, y, cmd);
+                            output.AddVertex(x, y, cmd);
                             //-----------
                             latestCurveMode = CurvePointMode.NotCurve;
                             lastMoveX = lastX = x;
@@ -255,17 +254,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     case VertexCmd.CloseAndEndFigure:
                         {
                             latestCurveMode = CurvePointMode.NotCurve;
-                            vxs.AddVertex(lastMoveX, lastMoveY, cmd);
+                            output.AddVertex(lastMoveX, lastMoveY, cmd);
                             //move to begin 
                             lastX = lastMoveX;
                             lasty = lastMoveY;
                         }
                         break;
-                   
+
                     default:
                         {
                             //move to, and end command
-                            vxs.AddVertex(x, y, cmd);
+                            output.AddVertex(x, y, cmd);
                             //-----------
                             latestCurveMode = CurvePointMode.NotCurve;
                             lastX = x;
@@ -274,13 +273,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         }
                         break;
                 }
-            } while (cmd != VertexCmd.NoMore);
+            }
 
+            return output;
         }
-        public VertexStore MakeVxs(VertexStore srcVxs, VertexStore outputVxs)
-        {
-            MakeVxs(new VertexStoreSnap(srcVxs), outputVxs);
-            return outputVxs;
-        }
+
     }
 }

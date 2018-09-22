@@ -97,8 +97,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     /// </summary>
     public struct AffineMat
     {
-        //3x2 matrix
-        public double
+        //3x2 matrix (rows x cols)
+        internal double
             sx, shy,
             shx, sy,
             tx, ty;
@@ -335,7 +335,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-    public class Affine : ICoordTransformer, ITransformMatrix
+    public class Affine : ICoordTransformer 
     {
         const double EPSILON = 1e-14;
         AffineMat _elems;
@@ -370,7 +370,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             isIdenHint = false;
         }
-        public ITransformMatrix MultiplyWith(ITransformMatrix another)
+        public ICoordTransformer MultiplyWith(ICoordTransformer another)
         {
             if (another is Affine)
             {

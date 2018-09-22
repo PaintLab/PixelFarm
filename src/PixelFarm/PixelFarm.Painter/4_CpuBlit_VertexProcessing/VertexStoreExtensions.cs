@@ -43,10 +43,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             vxs.AddLineTo(x, y);
         }
 
-        public static VertexStoreSnap MakeVertexSnap(this Ellipse ellipse, VertexStore output)
-        {
-            return new VertexStoreSnap(MakeVxs(ellipse, output));
-        }
+         
 
         public static VertexStore MakeVxs(this Ellipse ellipse, ICoordTransformer tx, VertexStore output)
         {

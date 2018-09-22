@@ -139,7 +139,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     {
 
         Stroke stroke = new Stroke(1);
-        VertexStoreSnap vxsSnap;
+      
 
         public override void Init()
         {
@@ -174,7 +174,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 var mat = Affine.NewMatix(
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
-                    AffinePlan.Translate(width / 2, 150)); 
+                    AffinePlan.Translate(width / 2, 150));
                 using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
                 {
                     mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
@@ -200,7 +200,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             littlePoly.LineTo(50, 150);
             littlePoly.LineTo(50, 50);
             p.FillColor = Drawing.Color.Blue;
-            p.Fill(littlePoly.MakeVertexSnap());
+            p.Fill(littlePoly.Vxs);
 
 
             //----

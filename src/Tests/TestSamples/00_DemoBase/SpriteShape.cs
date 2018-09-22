@@ -16,7 +16,7 @@ namespace PixelFarm.CpuBlit
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
-        CpuBlit.VertexProcessing.ITransformMatrix _currentTx;
+        CpuBlit.VertexProcessing.ICoordTransformer _currentTx;
 
         public SpriteShape(VgRenderVx svgRenderVx)//, RootGraphic root, int w, int h)
                                                   //: base(root, w, h)
@@ -151,7 +151,7 @@ namespace PixelFarm.CpuBlit
 
 
         }
-        public void Paint(Painter p, ITransformMatrix tx)
+        public void Paint(Painter p, ICoordTransformer tx)
         {
             //TODO: implement this...
             //use prefix command for render vx 

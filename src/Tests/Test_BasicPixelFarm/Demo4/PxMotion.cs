@@ -138,17 +138,18 @@ namespace LayoutFarm.UI
         public SvgRenderElement HitTest(float x, float y, bool withSupPart)
         {
             SvgRenderElement result = null;
-            VgHitChainPool.GetFreeHitTestChain(out SvgHitChain svgHitChain);
-            svgHitChain.WithSubPartTest = withSupPart;
-            if (HitTest(x, y, svgHitChain))
+            using (VgHitChainPool.Borrow(out SvgHitChain svgHitChain))
             {
-                int hitCount = svgHitChain.Count;
-                if (hitCount > 0)
+                svgHitChain.WithSubPartTest = withSupPart;
+                if (HitTest(x, y, svgHitChain))
                 {
-                    result = svgHitChain.GetLastHitInfo().svg;
+                    int hitCount = svgHitChain.Count;
+                    if (hitCount > 0)
+                    {
+                        result = svgHitChain.GetLastHitInfo().svg;
+                    }
                 }
             }
-            VgHitChainPool.ReleaseHitTestChain(ref svgHitChain);
             return result;
         }
         public bool HitTest(float x, float y, SvgHitChain svgHitChain)
@@ -347,9 +348,9 @@ namespace LayoutFarm.UI
                 };
                 _svgRenderVx._renderE.Paint(paintArgs);
             }
-            
-            
-            
+
+
+
 
         }
         public void DrawOutline(Painter p)
@@ -427,27 +428,18 @@ namespace LayoutFarm.UI
     }
     public static class VgHitChainPool
     {
-        //
-        //
-        [System.ThreadStatic]
-        static System.Collections.Generic.Stack<SvgHitChain> s_hitChains = new System.Collections.Generic.Stack<SvgHitChain>();
 
-        public static void GetFreeHitTestChain(out SvgHitChain hitTestArgs)
+        public static TempContext<SvgHitChain> Borrow(out SvgHitChain hitTestArgs)
         {
-            if (s_hitChains.Count > 0)
+            if (!Temp<SvgHitChain>.IsInit())
             {
-                hitTestArgs = s_hitChains.Pop();
+                Temp<SvgHitChain>.SetNewHandler(
+                    () => new SvgHitChain(),
+                    ch => ch.Clear()
+                    );
             }
-            else
-            {
-                hitTestArgs = new SvgHitChain();
-            }
+            return Temp<SvgHitChain>.Borrow(out hitTestArgs);
         }
-        public static void ReleaseHitTestChain(ref SvgHitChain hitTestArgs)
-        {
-            hitTestArgs.Clear();
-            s_hitChains.Push(hitTestArgs);
-            hitTestArgs = null;
-        }
+
     }
 }

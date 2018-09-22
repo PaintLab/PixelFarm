@@ -203,38 +203,6 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        /// <summary>
-        /// we do NOT store vxs/vxsSnap
-        /// </summary>
-        /// <param name="vxsSnap"></param>
-        /// <param name="color"></param>
-        public void Render(VertexStoreSnap vxsSnap, Drawing.Color color)
-        {
-            //reset rasterizer before render each vertextSnap 
-            //-----------------------------
-            _sclineRas.Reset();
-            Affine transform = this.CurrentTransformMatrix;
-            if (!transform.IsIdentity())
-            {
-
-                using (VxsTemp.Borrow(out var v1))
-                {
-                    transform.TransformToVxs(vxsSnap, v1);
-                    _sclineRas.AddPath(v1);
-                }
-                //-------------------------
-                //since sclineRas do NOT store vxs
-                //then we can reuse the vxs***
-                //-------------------------
-            }
-            else
-            {
-                _sclineRas.AddPath(vxsSnap);
-            }
-            _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, sclinePack8, color);
-            unchecked { destImageChanged++; };
-            //-----------------------------
-        }
 
 
 
@@ -245,7 +213,29 @@ namespace PixelFarm.CpuBlit
         /// <param name="c"></param>
         public void Render(VertexStore vxs, Drawing.Color c)
         {
-            Render(new VertexStoreSnap(vxs), c);
+            //reset rasterizer before render each vertextSnap 
+            //-----------------------------
+            _sclineRas.Reset();
+            Affine transform = this.CurrentTransformMatrix;
+            if (!transform.IsIdentity())
+            {
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    transform.TransformToVxs(vxs, v1);
+                    _sclineRas.AddPath(v1);
+                }
+                //-------------------------
+                //since sclineRas do NOT store vxs
+                //then we can reuse the vxs***
+                //-------------------------
+            }
+            else
+            {
+                _sclineRas.AddPath(vxs);
+            }
+            _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, sclinePack8, c);
+            unchecked { destImageChanged++; };
+            //-----------------------------
         }
         ActualBitmap destActualImage;
         ScanlineRasterizer _sclineRas;
