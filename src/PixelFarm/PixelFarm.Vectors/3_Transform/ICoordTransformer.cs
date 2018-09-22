@@ -27,15 +27,13 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
- 
+
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public interface ICoordTransformer
     {
         void Transform(ref double x, ref double y);
+        ICoordTransformer MultiplyWith(ICoordTransformer another);
     }
-    public interface ITransformMatrix : ICoordTransformer
-    {
-        ITransformMatrix MultiplyWith(ITransformMatrix another);
-    }
+
 }

@@ -1417,10 +1417,17 @@ namespace PixelFarm.CpuBlit
                 _angle = value;
             }
         }
+
         public void Transform(ref double x, ref double y)
         {
             affine.Transform(ref x, ref y);
         }
+
+        ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
+        {
+            return this.affine.MultiplyWith(another);
+        }
+
     }
 
 

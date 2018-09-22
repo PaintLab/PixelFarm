@@ -99,15 +99,17 @@ namespace PaintLab.Svg
     public class VgPaintArgs
     {
         public Painter P;
-        public ITransformMatrix _currentTx;
+        public ICoordTransformer _currentTx;
+ 
         public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
         public SvgRenderElement Current;
 
         internal void Reset()
         {
             P = null;
-            _currentTx = null;
+            _currentTx = null; 
             ExternalVxsVisitHandler = null;
+            Current = null;
         }
     }
 
@@ -190,7 +192,7 @@ namespace PaintLab.Svg
         {
             Painter p = vgPainterArgs.P;
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
-            ITransformMatrix current_tx = vgPainterArgs._currentTx;
+            ICoordTransformer current_tx = vgPainterArgs._currentTx;
 
             Color color = p.FillColor;
             double strokeW = p.StrokeWidth;
@@ -198,6 +200,7 @@ namespace PaintLab.Svg
 
             if (current_tx != null)
             {
+                //*** IMPORTANT : matrix transform order !***           
                 vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
@@ -244,11 +247,11 @@ namespace PaintLab.Svg
         {
 
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
-            ITransformMatrix current_tx = vgPainterArgs._currentTx;
+            ICoordTransformer current_tx = vgPainterArgs._currentTx;
 
             if (current_tx != null)
             {
-                //TODO: review here again***
+                //*** IMPORTANT : matrix transform order !***           
                 vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
@@ -522,8 +525,8 @@ namespace PaintLab.Svg
             }
 
             //----------------------------------------------------
-            ITransformMatrix prevTx = vgPainterArgs._currentTx; //backup
-            ITransformMatrix currentTx = vgPainterArgs._currentTx;
+            ICoordTransformer prevTx = vgPainterArgs._currentTx; //backup
+            ICoordTransformer currentTx = vgPainterArgs._currentTx;
 
             if (_visualSpec != null)
             {
@@ -724,8 +727,9 @@ namespace PaintLab.Svg
             Color strokeColor = p.StrokeColor;
             RequestFont currentFont = p.CurrentFont;
 
-            ITransformMatrix prevTx = vgPainterArgs._currentTx; //backup
-            ITransformMatrix currentTx = vgPainterArgs._currentTx;
+            ICoordTransformer prevTx = vgPainterArgs._currentTx; //backup
+            ICoordTransformer currentTx = vgPainterArgs._currentTx;
+
             bool hasClip = false;
             bool newFontReq = false;
 
@@ -946,13 +950,29 @@ namespace PaintLab.Svg
                     {
                         //render with rect spec 
 
+
                         if (currentTx == null)
                         {
+                            //no transform
+
                             if (vgPainterArgs.ExternalVxsVisitHandler == null)
                             {
                                 if (p.FillColor.A > 0)
                                 {
                                     p.Fill(_vxsPath);
+                                    //if (vgPainterArgs._bilinearTx != null)
+                                    //{
+                                    //    using (VxsTemp.Borrow(out var v1))
+                                    //    {
+                                    //        vgPainterArgs._bilinearTx.TransformToVxs(_vxsPath, v1);
+                                    //        p.Fill(v1);
+                                    //    }
+                                    //}
+                                    //else
+                                    //{
+                                        
+                                    //}
+
                                 }
                                 //to draw stroke
                                 //stroke width must > 0 and stroke-color must not be transparent color
@@ -1099,14 +1119,7 @@ namespace PaintLab.Svg
                                     if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
                                     {
                                         //has specific stroke color  
-
-                                        //if (this.LineRenderingTech == LineRenderingTechnique.OutlineAARenderer)
-                                        //{
-                                        //    p.Draw(new VertexStoreSnap(v1), p.StrokeColor);
-                                        //}
-                                        //else
-                                        //{
-                                        //TODO: review this again***
+                                        //TODO: review here, Transfom the stroke too?
 
                                         VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
                                         p.Fill(strokeVxs, p.StrokeColor);
@@ -1235,6 +1248,7 @@ namespace PaintLab.Svg
         RectD _boundRect;
         bool _needBoundUpdate;
         public SvgRenderElement _renderE;
+        public ICoordTransformer _coordTx;
 
         public VgRenderVx(SvgRenderElement svgRenderE)
         {
