@@ -231,5 +231,17 @@ namespace PixelFarm.Drawing
             }
             return Temp<RoundedRect>.Borrow(out roundRect);
         }
+        public static TempContext<VxsClipper> Borrow(out VxsClipper clipper)
+        {
+            if (!Temp<VxsClipper>.IsInit())
+            {
+                Temp<VxsClipper>.SetNewHandler(
+                    () => new VxsClipper(),
+                    c => c.Reset());
+            }
+            return Temp<VxsClipper>.Borrow(out clipper);
+        }
+         
+
     }
 }

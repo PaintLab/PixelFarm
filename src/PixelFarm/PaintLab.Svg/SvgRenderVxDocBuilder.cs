@@ -950,18 +950,6 @@ namespace PaintLab.Svg
                                 if (p.FillColor.A > 0)
                                 {
                                     p.Fill(_vxsPath);
-                                    //if (vgPainterArgs._bilinearTx != null)
-                                    //{
-                                    //    using (VxsTemp.Borrow(out var v1))
-                                    //    {
-                                    //        vgPainterArgs._bilinearTx.TransformToVxs(_vxsPath, v1);
-                                    //        p.Fill(v1);
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-
-                                    //}
 
                                 }
                                 //to draw stroke
