@@ -423,7 +423,7 @@ namespace PixelFarm.CpuBlit
         {
             get { return this.myvxs; }
         }
-        
+
 
         VertexCmd GetLastVertex(out double x, out double y)
         {
@@ -452,15 +452,16 @@ namespace PixelFarm.CpuBlit
             }
         }
         //// Concatenate path. The path is added as is.
-        public void ConcatPath(VertexStoreSnap s)
+        public void ConcatPath(VertexStore s)
         {
             double x, y;
-            VertexCmd cmd_flags;
-            VertexSnapIter snapIter = s.GetVertexSnapIter();
-            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+            VertexCmd cmd;
+            int index = 0;
+            while ((cmd = s.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
-                myvxs.AddVertex(x, y, cmd_flags);
+                myvxs.AddVertex(x, y, cmd);
             }
+            myvxs.ConfirmNoMore(); //TODO: review here, we need to confirm end of myvxs
         }
 
         //--------------------------------------------------------------------

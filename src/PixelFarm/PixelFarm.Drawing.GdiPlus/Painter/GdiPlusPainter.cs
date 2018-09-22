@@ -467,7 +467,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override void Fill(VertexStore vxs)
         {
 
-            VxsHelper.FillVxsSnap(_renderSurface.gx, new VertexStoreSnap(vxs), _fillColor);
+            VxsHelper.FillVxs(_renderSurface.gx, vxs, _fillColor);
 
         }
 

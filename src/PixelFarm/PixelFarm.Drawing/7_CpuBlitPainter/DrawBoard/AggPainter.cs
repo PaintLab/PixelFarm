@@ -813,7 +813,7 @@ namespace PixelFarm.CpuBlit
         /// <summary>
         /// fill with BitmapBufferExtension lib
         /// </summary>
-        void FillWithBxt(VertexStoreSnap snap)
+        void FillWithBxt(VertexStore vxs)
         {
             //transate the vxs/snap to command
             double x = 0;
@@ -821,9 +821,9 @@ namespace PixelFarm.CpuBlit
             double offsetOrgX = this.OriginX;
             double offsetOrgY = this.OriginY;
 
-            VertexSnapIter snapIter = snap.GetVertexSnapIter();
-            VertexCmd cmd;
 
+            VertexCmd cmd;
+            int index = 0;
             int latestMoveToX = 0, latestMoveToY = 0;
             int latestX = 0, latestY = 0;
 
@@ -832,7 +832,7 @@ namespace PixelFarm.CpuBlit
 
             _reusablePolygonList.Clear();
 
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+            while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
                 x += offsetOrgX;
                 y += offsetOrgY;
@@ -907,7 +907,7 @@ namespace PixelFarm.CpuBlit
             //
             if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
-                FillWithBxt(new VertexStoreSnap(vxs));
+                FillWithBxt(vxs);
                 return;
             }
             if (!_useDefaultBrush)

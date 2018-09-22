@@ -101,6 +101,11 @@ namespace PixelFarm.Drawing
             System.Array.Clear(m_cmds, 0, m_num_vertices); //only latest 
             m_num_vertices = 0;
         }
+        public void ConfirmNoMore()
+        {
+            AddVertex(0, 0, VertexCmd.NoMore);
+            m_num_vertices--;//not count
+        }
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
 #if DEBUG
@@ -370,7 +375,7 @@ namespace PixelFarm.Drawing
         public static void AddP3c(this VertexStore vxs, double x, double y)
         {
             vxs.AddVertex(x, y, VertexCmd.P3c);
-        } 
+        }
         public static void AddMoveTo(this VertexStore vxs, double x0, double y0)
         {
             vxs.AddVertex(x0, y0, VertexCmd.MoveTo);
