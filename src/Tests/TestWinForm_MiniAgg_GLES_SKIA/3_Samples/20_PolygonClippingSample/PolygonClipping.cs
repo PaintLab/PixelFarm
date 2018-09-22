@@ -490,10 +490,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             }
             return vxs;
         }
-        public VertexStoreSnap MakeVertexSnap(VertexStore vxs)
-        {
-            return new VertexStoreSnap(this.MakeVxs(vxs));
-        }
+
 
 
         public VertexCmd GetNextVertex(out double x, out double y)
@@ -522,16 +519,17 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
     {
         int m_contours;
         int m_points;
-        conv_poly_counter(VertexStoreSnap src)
+
+        conv_poly_counter(VertexStore src)
         {
             m_contours = 0;
             m_points = 0;
-            var snapIter = src.GetVertexSnapIter();
+
             VertexCmd cmd;
             double x, y;
-            do
+            int index = 0;
+            while ((cmd = src.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
-                cmd = snapIter.GetNextVertex(out x, out y);
                 if (VertexHelper.IsVertextCommand(cmd))
                 {
                     ++m_points;
@@ -541,7 +539,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 {
                     ++m_contours;
                 }
-            } while (cmd != VertexCmd.NoMore);
+            } while (cmd != VertexCmd.NoMore) ;
         }
     }
 }

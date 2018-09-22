@@ -139,7 +139,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     {
 
         Stroke stroke = new Stroke(1);
-        VertexStoreSnap vxsSnap;
+      
 
         public override void Init()
         {
