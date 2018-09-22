@@ -216,7 +216,6 @@ namespace PixelFarm.CpuBlit
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-
                 using (VxsTemp.Borrow(out var v1))
                 {
                     transform.TransformToVxs(vxsSnap, v1);

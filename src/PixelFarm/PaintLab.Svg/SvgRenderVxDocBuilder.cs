@@ -192,6 +192,7 @@ namespace PaintLab.Svg
         {
             Painter p = vgPainterArgs.P;
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
+            //
             ICoordTransformer current_tx = vgPainterArgs._currentTx;
 
             Color color = p.FillColor;
@@ -504,17 +505,8 @@ namespace PaintLab.Svg
                     return PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
             }
         }
-        static VertexStore GetStrokeVxsOrCreateNew(VertexStore vxs, float strokeW)
-        {
 
-            using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VxsTemp.Borrow(out var v1))
-            {
-                stroke.Width = strokeW;
-                stroke.MakeVxs(vxs, v1);
-                return v1.CreateTrim();
-            }
-        }
+
         public override void Walk(VgPaintArgs vgPainterArgs)
         {
             if (vgPainterArgs.ExternalVxsVisitHandler == null)
@@ -990,11 +982,18 @@ namespace PaintLab.Svg
                                     {
                                         //TODO: review here again***
                                         //vxs caching 
-
                                         _latestStrokeW = (float)p.StrokeWidth;
-                                        _strokeVxs = GetStrokeVxsOrCreateNew(_vxsPath, (float)p.StrokeWidth);
-                                        p.Fill(_strokeVxs, p.StrokeColor);
+
+                                        using (VxsTemp.Borrow(out var v1))
+                                        using (VectorToolBox.Borrow(out Stroke stroke))
+                                        {
+                                            stroke.Width = _latestStrokeW;
+                                            stroke.MakeVxs(_vxsPath, v1);
+                                            _strokeVxs = v1.CreateTrim();
+                                        }
                                     }
+                                    p.Fill(_strokeVxs, p.StrokeColor);
+
                                     //}
                                 }
                             }
@@ -1068,7 +1067,6 @@ namespace PaintLab.Svg
                                             }
                                         }
                                     }
-
                                     //p.FillColor = prevFillColor;
                                     vgPainterArgs._currentTx = currentTx;
                                 }
@@ -1117,10 +1115,14 @@ namespace PaintLab.Svg
                                     if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
                                     {
                                         //has specific stroke color  
-                                        //TODO: review here, Transfom the stroke too?
-
-                                        VertexStore strokeVxs = GetStrokeVxsOrCreateNew(v1, (float)p.StrokeWidth);
-                                        p.Fill(strokeVxs, p.StrokeColor);
+                                        //TODO: review here, Transfom the stroke too? 
+                                        using (VxsTemp.Borrow(out var v3))
+                                        using (VectorToolBox.Borrow(out Stroke stroke))
+                                        {
+                                            stroke.Width = (float)p.StrokeWidth;
+                                            stroke.MakeVxs(v1, v3);
+                                            p.Fill(v3, p.StrokeColor);
+                                        }
 
                                     }
                                 }

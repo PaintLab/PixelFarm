@@ -53,31 +53,5 @@ namespace PixelFarm.Drawing
         {
             return snap.vxs;
         }
-    }
-
-    /// <summary>
-    /// for vertex store pool mx
-    /// </summary>
-    class VertexStorePool
-    {
-        Stack<VertexStore> _stack = new Stack<VertexStore>();
-        public VertexStore GetFreeVxs()
-        {
-            if (_stack.Count > 0)
-            {
-                return _stack.Pop();
-            }
-            else
-            {
-                return new VertexStore();
-            }
-        }
-        public void Release(ref VertexStore vxs)
-        {
-            vxs.Clear();
-            _stack.Push(vxs);
-            vxs = null;
-        }
-    }
-
+    } 
 }
