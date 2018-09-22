@@ -81,14 +81,14 @@ namespace PixelFarm.CpuBlit
                     ////
 
                     ellipse.Set(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                    sclineRas.AddPath(ellipse.MakeVertexSnap(v1));
+                    sclineRas.AddPath(ellipse.MakeVxs(v1));
                     v1.Clear();//***
                     bmpRas.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
 
                     //
 
                     ellipse.Set(Width / 2, Height / 2 + 50, 100, 100, 100);
-                    sclineRas.AddPath(ellipse.MakeVertexSnap(v1));
+                    sclineRas.AddPath(ellipse.MakeVxs(v1));
                     v1.Clear(); //***
                     bmpRas.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
                 }

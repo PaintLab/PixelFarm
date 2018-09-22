@@ -271,9 +271,46 @@ namespace PixelFarm.CpuBlit.Rasterization
             //-----------------------------------------------------
             //*** we extract vertext command and coord(x,y) from
             //the snap but not store the snap inside rasterizer
-            //-----------------------------------------------------
+            //----------------------------------------------------- 
+            double x = 0;
+            double y = 0;
+            VertexCmd cmd;
+            int index = 0;
 
-            this.AddPath(new VertexStoreSnap(vxs));
+            if (m_cellAARas.Sorted) { Reset(); }
+            float offsetOrgX = OffsetOriginX;
+            float offsetOrgY = OffsetOriginY;
+
+#if DEBUG
+            int dbugVertexCount = 0;
+#endif
+
+            if (ExtendWidthX3ForSubPixelLcdEffect)
+            {
+                while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
+                {
+#if DEBUG
+                    dbugVertexCount++;
+#endif
+                    //---------------------------------------------
+                    //NOTE: we scale horizontal 3 times.
+                    //subpixel renderer will shrink it to 1 
+                    //---------------------------------------------
+
+                    AddVertex(cmd, (x + offsetOrgX) * 3, (y + offsetOrgY));
+                }
+            }
+            else
+            {
+                while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
+                {
+#if DEBUG
+                    dbugVertexCount++;
+#endif
+
+                    AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+                }
+            }
         }
 
 
@@ -295,62 +332,19 @@ namespace PixelFarm.CpuBlit.Rasterization
                 }
             }
         }
-        /// <summary>
-        /// we do NOT store snap ***
-        /// </summary>
-        /// <param name="snap"></param>
-        public void AddPath(VertexStoreSnap snap)
-        {
-            //-----------------------------------------------------
-            //*** we extract vertext command and coord(x,y) from
-            //the snap but not store the snap inside rasterizer
-            //-----------------------------------------------------
+        ///// <summary>
+        ///// we do NOT store snap ***
+        ///// </summary>
+        ///// <param name="snap"></param>
+        //public void AddPath(VertexStoreSnap snap)
+        //{
+        //    //-----------------------------------------------------
+        //    //*** we extract vertext command and coord(x,y) from
+        //    //the snap but not store the snap inside rasterizer
+        //    //-----------------------------------------------------
+        //    AddPath(VertexStoreSnap.GetInternalVxs(snap));
 
-
-            double x = 0;
-            double y = 0;
-            if (m_cellAARas.Sorted) { Reset(); }
-            float offsetOrgX = OffsetOriginX;
-            float offsetOrgY = OffsetOriginY;
-
-
-            VertexSnapIter snapIter = snap.GetVertexSnapIter();
-            VertexCmd cmd;
-#if DEBUG
-            int dbugVertexCount = 0;
-#endif
-
-            if (ExtendWidthX3ForSubPixelLcdEffect)
-            {
-
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-                {
-#if DEBUG
-                    dbugVertexCount++;
-#endif
-                    //---------------------------------------------
-                    //NOTE: we scale horizontal 3 times.
-                    //subpixel renderer will shrink it to 1 
-                    //---------------------------------------------
-
-                    AddVertex(cmd, (x + offsetOrgX) * 3, (y + offsetOrgY));
-                }
-
-
-            }
-            else
-            {
-
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
-                {
-#if DEBUG
-                    dbugVertexCount++;
-#endif
-
-                    AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
-                }
-            }
-        }
+        //}
 
         public int MinX { get { return m_cellAARas.MinX; } }
         public int MinY { get { return m_cellAARas.MinY; } }

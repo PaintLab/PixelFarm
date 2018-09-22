@@ -350,7 +350,7 @@ namespace PixelFarm.CpuBlit
             {
                 using (VxsTemp.Borrow(out var v1))
                 {
-                    _aggsx.Render(vxs, this._strokeColor);
+                    _aggsx.Render(VertexStoreSnap.GetInternalVxs(vxs), this._strokeColor);
                 }
             }
             else
@@ -725,14 +725,14 @@ namespace PixelFarm.CpuBlit
                             break;
                         default:
                             {
-                                _aggsx.Render(rectTool.MakeVertexSnap(v1), this.fillColor);
+                                _aggsx.Render(rectTool.MakeVxs(v1), this.fillColor);
                             }
                             break;
                     }
                 }
                 else
                 {
-                    _aggsx.Render(rectTool.MakeVertexSnap(v1), this.fillColor);
+                    _aggsx.Render(rectTool.MakeVxs(v1), this.fillColor);
                 }
 
             }
@@ -927,7 +927,7 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-            _aggsx.Render(snap, fillColor);
+            _aggsx.Render(VertexStoreSnap.GetInternalVxs(snap), fillColor);
 
             //_sclineRas.Reset();
             //_sclineRas.AddPath(snap);

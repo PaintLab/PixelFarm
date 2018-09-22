@@ -34,11 +34,7 @@ namespace PixelFarm.Drawing
             this.vxs = vxs;
             this.startAt = 0;
         }
-        public VertexStoreSnap(VertexStore vxs, int startAt)
-        {
-            this.vxs = vxs;
-            this.startAt = startAt;
-        }
+       
 
         public int StartAt
         {
