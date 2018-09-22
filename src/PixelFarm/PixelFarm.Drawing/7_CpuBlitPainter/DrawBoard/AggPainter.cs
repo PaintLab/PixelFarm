@@ -397,7 +397,7 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                _outlineRas.RenderVertexSnap(new VertexStoreSnap(_lineGen.Vxs), this._strokeColor);
+                _outlineRas.RenderVertexSnap(_lineGen.Vxs, this._strokeColor);
             }
         }
 
@@ -440,7 +440,7 @@ namespace PixelFarm.CpuBlit
                 }
                 else
                 {
-                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(vxs), this._strokeColor);
+                    _outlineRas.RenderVertexSnap(vxs, this._strokeColor);
                 }
             }
             else
@@ -460,7 +460,7 @@ namespace PixelFarm.CpuBlit
                     using (VxsTemp.Borrow(out var v1))
                     {
                         _lineDashGen.CreateDash(vxs, v1);
-                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(v1), this._strokeColor);
+                        _outlineRas.RenderVertexSnap(v1, this._strokeColor);
                     }
                 }
 
@@ -533,7 +533,7 @@ namespace PixelFarm.CpuBlit
                 {
                     using (VxsTemp.Borrow(out var v1))
                     {
-                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(rectTool.MakeVxs(v1)), this._strokeColor);
+                        _outlineRas.RenderVertexSnap(rectTool.MakeVxs(v1), this._strokeColor);
                     }
                 }
             }
@@ -584,7 +584,7 @@ namespace PixelFarm.CpuBlit
                 {
                     using (VxsTemp.Borrow(out var v1))
                     {
-                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(ellipseTool.MakeVxs(v1)), this._strokeColor);
+                        _outlineRas.RenderVertexSnap(ellipseTool.MakeVxs(v1), this._strokeColor);
                     }
                 }
             }
