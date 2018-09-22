@@ -593,39 +593,22 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 #if DEBUG
         static int dbugAddPathCount = 0;
 #endif
-        void AddPath(VertexStoreSnap s)
+        void AddPath(VertexStore vxs)
         {
             double x;
             double y;
             VertexCmd cmd;
-            var snapIter = s.GetVertexSnapIter();
-            //try
-            //{
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+            int index = 0;
+            while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
-                //#if DEBUG
-                //                dbugAddPathCount++;
-                //                if (dbugAddPathCount >= 2163)
-                //                {
-
-                //                }
-                //#endif
                 AddVertex(x, y, cmd);
             }
-            //}
-            //catch (Exception ex)
-            //{
-
-
-            //}
-
-
             Render(false);
         }
-        public void RenderVertexSnap(VertexStoreSnap s, Drawing.Color c)
+        public void RenderVertexSnap(VertexStore s, Drawing.Color c)
         {
             m_ren.Color = c;
             AddPath(s);
-        } 
+        }
     }
 }

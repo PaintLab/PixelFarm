@@ -117,7 +117,7 @@ namespace PixelFarm.CpuBlit
 
             using (VxsTemp.Borrow(out var v1))
             {
-                gx.Render(simpleRect.MakeVertexSnap(v1), fillColor);
+                gx.Render(simpleRect.MakeVxs(v1), fillColor);
             }
 
         }

@@ -148,9 +148,6 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs">
       <Link>0_REF_DrawingCore\3_Canvas\1_VertexStore.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs">
-      <Link>0_REF_DrawingCore\3_Canvas\2_VertexStoreSnap.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs">
       <Link>0_REF_DrawingCore\3_Canvas\DrawBoard.cs</Link>
     </Compile>

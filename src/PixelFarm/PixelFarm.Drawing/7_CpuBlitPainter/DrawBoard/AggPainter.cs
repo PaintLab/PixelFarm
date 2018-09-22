@@ -344,21 +344,6 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        public override void Draw(VertexStoreSnap vxs)
-        {
-            if (_lineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
-            {
-                using (VxsTemp.Borrow(out var v1))
-                {
-                    _aggsx.Render(vxs, this._strokeColor);
-                }
-            }
-            else
-            {
-                _outlineRas.RenderVertexSnap(vxs, this._strokeColor);
-            }
-        }
-
 
         /// <summary>
         /// draw line
@@ -412,7 +397,7 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                _outlineRas.RenderVertexSnap(new VertexStoreSnap(_lineGen.Vxs), this._strokeColor);
+                _outlineRas.RenderVertexSnap(_lineGen.Vxs, this._strokeColor);
             }
         }
 
@@ -455,7 +440,7 @@ namespace PixelFarm.CpuBlit
                 }
                 else
                 {
-                    _outlineRas.RenderVertexSnap(new VertexStoreSnap(vxs), this._strokeColor);
+                    _outlineRas.RenderVertexSnap(vxs, this._strokeColor);
                 }
             }
             else
@@ -475,7 +460,7 @@ namespace PixelFarm.CpuBlit
                     using (VxsTemp.Borrow(out var v1))
                     {
                         _lineDashGen.CreateDash(vxs, v1);
-                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(v1), this._strokeColor);
+                        _outlineRas.RenderVertexSnap(v1, this._strokeColor);
                     }
                 }
 
@@ -548,7 +533,7 @@ namespace PixelFarm.CpuBlit
                 {
                     using (VxsTemp.Borrow(out var v1))
                     {
-                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(rectTool.MakeVxs(v1)), this._strokeColor);
+                        _outlineRas.RenderVertexSnap(rectTool.MakeVxs(v1), this._strokeColor);
                     }
                 }
             }
@@ -599,7 +584,7 @@ namespace PixelFarm.CpuBlit
                 {
                     using (VxsTemp.Borrow(out var v1))
                     {
-                        _outlineRas.RenderVertexSnap(new VertexStoreSnap(ellipseTool.MakeVxs(v1)), this._strokeColor);
+                        _outlineRas.RenderVertexSnap(ellipseTool.MakeVxs(v1), this._strokeColor);
                     }
                 }
             }
@@ -725,14 +710,14 @@ namespace PixelFarm.CpuBlit
                             break;
                         default:
                             {
-                                _aggsx.Render(rectTool.MakeVertexSnap(v1), this.fillColor);
+                                _aggsx.Render(rectTool.MakeVxs(v1), this.fillColor);
                             }
                             break;
                     }
                 }
                 else
                 {
-                    _aggsx.Render(rectTool.MakeVertexSnap(v1), this.fillColor);
+                    _aggsx.Render(rectTool.MakeVxs(v1), this.fillColor);
                 }
 
             }
@@ -828,7 +813,7 @@ namespace PixelFarm.CpuBlit
         /// <summary>
         /// fill with BitmapBufferExtension lib
         /// </summary>
-        void FillWithBxt(VertexStoreSnap snap)
+        void FillWithBxt(VertexStore vxs)
         {
             //transate the vxs/snap to command
             double x = 0;
@@ -836,9 +821,9 @@ namespace PixelFarm.CpuBlit
             double offsetOrgX = this.OriginX;
             double offsetOrgY = this.OriginY;
 
-            VertexSnapIter snapIter = snap.GetVertexSnapIter();
-            VertexCmd cmd;
 
+            VertexCmd cmd;
+            int index = 0;
             int latestMoveToX = 0, latestMoveToY = 0;
             int latestX = 0, latestY = 0;
 
@@ -847,7 +832,7 @@ namespace PixelFarm.CpuBlit
 
             _reusablePolygonList.Clear();
 
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+            while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
                 x += offsetOrgX;
                 y += offsetOrgY;
@@ -912,27 +897,7 @@ namespace PixelFarm.CpuBlit
                     this.fillColor.ToARGB());
             }
         }
-        /// <summary>
-        /// fill vertex store, we do NOT store snap
-        /// </summary>
-        /// <param name="vxs"></param>
-        /// <param name="c"></param>
-        public override void Fill(VertexStoreSnap snap)
-        {
 
-            //BitmapExt
-            if (this._renderQuality == RenderQualtity.Fast)
-            {
-                FillWithBxt(snap);
-                return;
-            }
-
-            _aggsx.Render(snap, fillColor);
-
-            //_sclineRas.Reset();
-            //_sclineRas.AddPath(snap);
-            //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
-        }
         /// <summary>
         /// fill vxs, we do NOT store vxs
         /// </summary>
@@ -942,7 +907,7 @@ namespace PixelFarm.CpuBlit
             //
             if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
             {
-                FillWithBxt(new VertexStoreSnap(vxs));
+                FillWithBxt(vxs);
                 return;
             }
             if (!_useDefaultBrush)
@@ -1227,14 +1192,14 @@ namespace PixelFarm.CpuBlit
             //{ 
             //} 
         }
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
-            return new AggRenderVx(snap);
+            return new AggRenderVx(vxs);
         }
         public override void DrawRenderVx(RenderVx renderVx)
         {
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
-            Draw(aggRenderVx.snap);
+            Draw(aggRenderVx.vxs);
         }
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {
@@ -1243,20 +1208,20 @@ namespace PixelFarm.CpuBlit
             if (brush is SolidBrush)
             {
                 SolidBrush solidBrush = (SolidBrush)brush;
-                var prevColor = this.fillColor;
+                Color prevColor = this.fillColor;
                 this.fillColor = solidBrush.Color;
-                Fill(aggRenderVx.snap);
+                Fill(aggRenderVx.vxs);
                 this.fillColor = prevColor;
             }
             else
             {
-                Fill(aggRenderVx.snap);
+                Fill(aggRenderVx.vxs);
             }
         }
         public override void FillRenderVx(RenderVx renderVx)
         {
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
-            Fill(aggRenderVx.snap);
+            Fill(aggRenderVx.vxs);
         }
         public LineJoin LineJoin
         {

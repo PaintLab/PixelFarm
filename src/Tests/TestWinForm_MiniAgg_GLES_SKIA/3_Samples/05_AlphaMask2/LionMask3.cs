@@ -81,13 +81,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                     {
                         ////for the last one 
                         ellipseForMask.Set(Width / 2, (Height / 2) - 90, 110, 110, elliseFlattenStep);
-                        ellipseForMask.MakeVertexSnap(v1);
+                        ellipseForMask.MakeVxs(v1);
                         alphaPainter.FillColor = new Color(255, 255, 255, 0);
                         alphaPainter.Fill(v1);
                         v1.Clear();
                         //
                         ellipseForMask.Set(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, elliseFlattenStep);
-                        ellipseForMask.MakeVertexSnap(v1);
+                        ellipseForMask.MakeVxs(v1);
                         alphaPainter.FillColor = new Color(255, 255, 0, 0);
                         alphaPainter.Fill(v1);
                         v1.Clear();
@@ -100,7 +100,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                                  randGenerator.Next() % 100 + 20,
                                  randGenerator.Next() % 100 + 20,
                                  elliseFlattenStep);
-                        ellipseForMask.MakeVertexSnap(v1);
+                        ellipseForMask.MakeVxs(v1);
                         alphaPainter.FillColor = new Color(100, 255, 0, 0);
                         alphaPainter.Fill(v1);
                         v1.Clear();
