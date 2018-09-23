@@ -94,10 +94,10 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
             gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
 
 
-            using (VxsTemp.Borrow(out var tmpVxs))
+            using (VxsTemp.Borrow(out var v1))
             {
-                painter.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
-                tmpVxs.Clear();
+                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                v1.Clear();
 
                 //
                 gouraudSpanGen.SetColor(
@@ -105,37 +105,37 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
                                  ColorEx.Make(0, 0, 1, alpha),
                                  ColorEx.Make(brc, brc, brc, alpha));
                 gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
-                tmpVxs.Clear();
+                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                v1.Clear();
                 //
                 gouraudSpanGen.SetColor(ColorEx.Make(0, 0, 1, alpha),
                                 ColorEx.Make(1, 0, 0, alpha),
                                 ColorEx.Make(brc, brc, brc, alpha));
                 gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
-                tmpVxs.Clear();
+                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                v1.Clear();
                 //
                 brc = 1 - brc;
                 gouraudSpanGen.SetColor(ColorEx.Make(1, 0, 0, alpha),
                                   ColorEx.Make(0, 1, 0, alpha),
                                  ColorEx.Make(brc, brc, brc, alpha));
                 gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
-                tmpVxs.Clear();
+                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                v1.Clear();
 
                 gouraudSpanGen.SetColor(ColorEx.Make(0, 1, 0, alpha),
                               ColorEx.Make(0, 0, 1, alpha),
                               ColorEx.Make(brc, brc, brc, alpha));
                 gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
-                tmpVxs.Clear();
+                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                v1.Clear();
                 //
                 gouraudSpanGen.SetColor(ColorEx.Make(0, 0, 1, alpha),
                                 ColorEx.Make(1, 0, 0, alpha),
                                ColorEx.Make(brc, brc, brc, alpha));
                 gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
-                painter.Fill(gouraudSpanGen.MakeVxs(tmpVxs), gouraudSpanGen);
-                tmpVxs.Clear();
+                painter.Fill(gouraudSpanGen.MakeVxs(v1), gouraudSpanGen);
+                v1.Clear();
             } 
 
         }

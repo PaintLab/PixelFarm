@@ -142,10 +142,10 @@ namespace PixelFarm.CpuBlit.Samples
             //SimplifyPaths();
             _stroke1.Width = strokeW * 2;
             _stroke1.LineCap = LineCap.Round;
-            _stroke1.LineJoin = LineJoin.Round; 
+            _stroke1.LineJoin = LineJoin.Round;
 
-            VertexStore v2 = new VertexStore();
-            using (VxsTemp.Borrow(out var tmpVxs))
+
+            using (VxsTemp.Borrow(out var v1, out var v2))
             {
                 int j = contPoints.Count;
                 for (int i = 0; i < j; ++i)
@@ -155,16 +155,17 @@ namespace PixelFarm.CpuBlit.Samples
                     Vector2 v = contPoints[i];
                     if (i == 0)
                     {
-                        tmpVxs.AddMoveTo(v.x, v.y);
+                        v1.AddMoveTo(v.x, v.y);
                     }
                     else
                     {
-                        tmpVxs.AddLineTo(v.x, v.y);
+                        v1.AddLineTo(v.x, v.y);
                     }
                 }
-                _stroke1.MakeVxs(tmpVxs, v2);
+
+                _stroke1.MakeVxs(v1, v2);
+                vxs = v2.CreateTrim();
             }
-            vxs = v2;
             //release vxs to pool
         }
 

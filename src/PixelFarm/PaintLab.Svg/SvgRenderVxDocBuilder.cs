@@ -1641,7 +1641,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsTemp.Borrow(out VertexStore v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     PointF p = points[0];
                     v1.AddMoveTo(p.X, p.Y);
