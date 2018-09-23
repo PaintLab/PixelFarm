@@ -4,8 +4,9 @@
 
 using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PaintLab.Svg;
-using LayoutFarm;
+
 namespace PixelFarm.CpuBlit
 {
 
@@ -15,7 +16,7 @@ namespace PixelFarm.CpuBlit
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
-        CpuBlit.VertexProcessing.Affine _currentTx;
+        CpuBlit.VertexProcessing.ICoordTransformer _currentTx;
 
         public SpriteShape(VgRenderVx svgRenderVx)//, RootGraphic root, int w, int h)
                                                   //: base(root, w, h)
@@ -33,6 +34,8 @@ namespace PixelFarm.CpuBlit
         {
             _currentTx = null;
         }
+
+
         public void ApplyTransform(CpuBlit.VertexProcessing.Affine tx)
         {
             //apply transform to all part
@@ -43,7 +46,20 @@ namespace PixelFarm.CpuBlit
             else
             {
                 //ORDER is IMPORTANT
-                _currentTx = _currentTx * tx;
+                _currentTx = _currentTx.MultiplyWith(tx);
+                //if (_currentTx is CpuBlit.VertexProcessing.Affine)
+                //{
+                //    _currentTx = ((CpuBlit.VertexProcessing.Affine)_currentTx) * tx;
+                //}
+                //else if (_currentTx is CpuBlit.VertexProcessing.Perspective)
+                //{
+                //    _currentTx = ((CpuBlit.VertexProcessing.Perspective)_currentTx) * tx;
+                //}
+                //else
+                //{
+
+                //}
+
             }
         }
         public void ApplyTransform(CpuBlit.VertexProcessing.Bilinear tx)
@@ -54,6 +70,32 @@ namespace PixelFarm.CpuBlit
             //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             //}
         }
+        //public void ApplyTransform(CpuBlit.VertexProcessing.Perspective tx)
+        //{
+        //    if (_currentTx == null)
+        //    {
+        //        _currentTx = tx;
+        //    }
+        //    else
+        //    {
+        //        //ORDER is IMPORTANT
+        //        _currentTx = _currentTx.MultiplyWith(tx);
+        //        //if (_currentTx is CpuBlit.VertexProcessing.Affine)
+        //        //{
+        //        //    _currentTx = ((CpuBlit.VertexProcessing.Affine)_currentTx) * tx;
+        //        //}
+        //        //else if (_currentTx is CpuBlit.VertexProcessing.Perspective)
+        //        //{
+        //        //    _currentTx = ((CpuBlit.VertexProcessing.Perspective)_currentTx) * tx;
+        //        //}
+        //        //else
+        //        //{
+
+        //        //}
+
+        //    }
+        //}
+
         public Vector2 Center
         {
             get
@@ -72,41 +114,64 @@ namespace PixelFarm.CpuBlit
         }
         public void Paint(Painter p)
         {
-            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
-            paintArgs._currentTx = _currentTx;
-            _svgRenderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
+            {
+                paintArgs._currentTx = _currentTx;
+                _svgRenderVx._renderE.Paint(paintArgs);
+            }
         }
         public void Paint(VgPaintArgs paintArgs)
         {
             _svgRenderVx._renderE.Paint(paintArgs);
         }
-        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
+        public void Paint(Painter p, Bilinear tx)
         {
-            //TODO: implement this...
-            //use prefix command for render vx
-            //p.Render(_svgRenderVx);
-            //_svgRenderVx.Render(p);
+            //in this version, I can't apply bilinear tx to current tx matrix
+
+            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
+            {
+                paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                {
+                    //use external painter handler
+                    //draw only outline with its fill-color.
+                    Drawing.Painter m_painter = painterA.P;
+                    Drawing.Color prevFillColor = m_painter.FillColor;
+
+                    m_painter.FillColor = m_painter.FillColor;
+
+                    using (VxsTemp.Borrow(out var v1))
+                    {
+                        tx.TransformToVxs(vxs, v1);
+                        m_painter.Fill(v1);
+                    }
+                    m_painter.FillColor = prevFillColor;
+                };
+                _svgRenderVx._renderE.Paint(paintArgs);
+            }
+
+
         }
-        public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Affine tx)
+        public void Paint(Painter p, ICoordTransformer tx)
         {
             //TODO: implement this...
             //use prefix command for render vx 
             //------
-            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
-            paintArgs._currentTx = tx;
-            paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+            using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
-                //use external painter handler
-                //draw only outline with its fill-color.
-                Drawing.Painter m_painter = paintArgs.P;
-                Drawing.Color prevFillColor = m_painter.FillColor;
-                m_painter.FillColor = m_painter.FillColor;
-                m_painter.Fill(vxs);
-                m_painter.FillColor = prevFillColor;
-            };
-            _svgRenderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+                paintArgs._currentTx = tx;
+                paintArgs.ExternalVxsVisitHandler = (vxs, arg) =>
+                {
+                    //use external painter handler
+                    //draw only outline with its fill-color.
+                    Drawing.Painter m_painter = arg.P;
+                    Drawing.Color prevFillColor = m_painter.FillColor;
+                    m_painter.FillColor = m_painter.FillColor;
+                    m_painter.Fill(vxs);
+                    m_painter.FillColor = prevFillColor;
+                };
+                _svgRenderVx._renderE.Paint(paintArgs);
+            }
+
 
         }
         public void DrawOutline(Painter p)

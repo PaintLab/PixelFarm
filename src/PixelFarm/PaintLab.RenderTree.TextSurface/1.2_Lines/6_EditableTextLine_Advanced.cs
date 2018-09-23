@@ -397,6 +397,8 @@ namespace LayoutFarm.Text
                     }
                     if (newStartPoint.LineCharIndex == -1)
                     {
+                        //TODO: review here again
+                        //at this point newStartPoint.TextRun should always null
                         if (newStartPoint.TextRun != null)
                         {
                             startLine.RemoveRight((EditableRun)newStartPoint.TextRun);
@@ -404,12 +406,17 @@ namespace LayoutFarm.Text
                     }
                     else
                     {
+                        //at this point newStartPoint.TextRun should always null
                         //TODO newStartPoint.TextRun == null???
-                        EditableRun nextRun = newStartPoint.TextRun.NextTextRun;
-                        if (nextRun != null && !nextRun.IsLineBreak)
+                        if (newStartPoint.TextRun != null)
                         {
-                            startLine.RemoveRight(nextRun);
+                            EditableRun nextRun = newStartPoint.TextRun.NextTextRun;
+                            if (nextRun != null && !nextRun.IsLineBreak)
+                            {
+                                startLine.RemoveRight(nextRun);
+                            }
                         }
+
                     }
                     startLine.JoinWithNextLine();
                 }

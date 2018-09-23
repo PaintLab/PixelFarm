@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-namespace LayoutFarm.Svg.Pathing
+namespace PaintLab.Svg
 {
     public class SvgPathDataParser
     {

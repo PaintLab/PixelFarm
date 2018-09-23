@@ -1,15 +1,15 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.CpuBlit;
+ 
 namespace PixelFarm.Drawing.Skia
 {
     class WinGdiRenderVx : RenderVx
     {
-        internal VertexStoreSnap snap;
+        internal VertexStore vxs;
         internal SkiaSharp.SKPath path;
-        public WinGdiRenderVx(VertexStoreSnap snap)
+        public WinGdiRenderVx(VertexStore vxs)
         {
-            this.snap = snap;
+            this.vxs = vxs;
         }
     }
     class SkiaRenerVxFormattedString : RenderVxFormattedString

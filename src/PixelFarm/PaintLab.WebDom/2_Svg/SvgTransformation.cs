@@ -3,7 +3,7 @@
 //license : Microsoft Public License (MS-PL) 
 // 
 
-namespace LayoutFarm.Svg
+namespace PaintLab.Svg
 {
 
     public enum SvgTransformKind
@@ -18,6 +18,10 @@ namespace LayoutFarm.Svg
     public abstract class SvgTransform
     {
         public abstract SvgTransformKind TransformKind { get; }
+
+        public PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer ResolvedICoordTransformer { get; set; }
+        //
+
     }
 
     /// <summary>

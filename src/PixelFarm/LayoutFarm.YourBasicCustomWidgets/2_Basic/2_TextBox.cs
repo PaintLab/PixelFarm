@@ -328,6 +328,12 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.HandleDoubleClick(e);
             e.CancelBubbling = true;
         }
+        protected override void OnMouseWheel(UIMouseEventArgs e)
+        {
+            //mouse wheel on 
+            _textEditRenderElement.HandleMouseWheel(e);
+            e.CancelBubbling = true;
+        }
         protected override void OnKeyPress(UIKeyEventArgs e)
         {
             //eg. mask text

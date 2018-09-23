@@ -214,8 +214,8 @@ namespace Mini.WinForms
                     //do path clip*** 
                     List<VertexStore> resultList = new List<VertexStore>();
                     PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
-                         new VertexStoreSnap(prevPixTool.GetVxs()),
-                         new VertexStoreSnap(this.GetVxs()),
+                         prevPixTool.GetVxs(),
+                         this.GetVxs(),
                          PixelFarm.CpuBlit.VertexProcessing.VxsClipperType.Difference,
                          true,
                          resultList

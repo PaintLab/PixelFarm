@@ -10,7 +10,7 @@ namespace LayoutFarm.Text
         public readonly UIKeys key;
         public readonly char c;
         public bool PreventDefault;
-
+        public int delta;
         public TextDomEventArgs(char c)
         {
             this.c = c;
@@ -19,7 +19,11 @@ namespace LayoutFarm.Text
         {
             this.key = key;
         }
-        
+        public TextDomEventArgs(int delta)
+        {
+            this.delta = delta;
+        }
+
         public TextDomEventArgs(bool updateJustCurrentLine)
         {
             this.updateJustCurrentLine = updateJustCurrentLine;
@@ -42,6 +46,7 @@ namespace LayoutFarm.Text
         public event EventHandler<TextDomEventArgs> PreviewArrowKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewEnterKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewDialogKeyDown;
+        public event EventHandler<TextDomEventArgs> PreviewMouseWheel;
 
         public event EventHandler<TextDomEventArgs> PreviewBackSpaceKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyPress;
@@ -79,6 +84,19 @@ namespace LayoutFarm.Text
         {
             this.targetTextSurface = textSurfaceElement;
         }
+
+        internal static bool NotifyPreviewMouseWheel(TextSurfaceEventListener listener, UIMouseEventArgs e)
+        {
+            if (listener.PreviewMouseWheel != null)
+            {
+                TextDomEventArgs e2 = new TextDomEventArgs(e.Delta);
+                //TODO: add alt, control,shift
+                listener.PreviewMouseWheel(listener, e2);
+                return e2.PreventDefault;
+            }
+            return false;
+        }
+
         internal static bool NotifyPreviewDialogKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewDialogKeyDown != null)
@@ -110,6 +128,7 @@ namespace LayoutFarm.Text
             }
             return false;
         }
+
         internal static bool NotifyPreviewBackSpace(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewBackSpaceKeyDown != null)

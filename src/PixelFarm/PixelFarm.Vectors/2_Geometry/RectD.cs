@@ -18,12 +18,20 @@ namespace PixelFarm.CpuBlit
             this.Top = top;
         }
 
+
+
         public RectD(RectInt intRect)
         {
             Left = intRect.Left;
             Bottom = intRect.Bottom;
             Right = intRect.Right;
             Top = intRect.Top;
+        }
+
+
+        public static RectD CreateFromLTWH(double left, double top, double width, double height)
+        {
+            return new RectD(left, top + height, left + width, top);
         }
 
         public void SetRect(double left, double bottom, double right, double top)

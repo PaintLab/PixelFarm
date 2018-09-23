@@ -261,6 +261,7 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
+        
         public override void SetViewport(int x, int y, object reqBy)
         {
             this.viewportX = x;
@@ -270,6 +271,19 @@ namespace LayoutFarm.CustomWidgets
                 this.panel.SetViewport(x, y, reqBy);
             }
         }
+        public override int InnerHeight
+        {
+            get
+            {
+                if (items.Count > 0)
+                {
+                    ListItem lastOne = items[items.Count - 1];
+                    return lastOne.Bottom;
+                }
+                return this.Height;
+            }
+        }
+
         public void ScrollToSelectedItem()
         {
             //EnsureSelectedItemVisible();
@@ -287,7 +301,7 @@ namespace LayoutFarm.CustomWidgets
                 //check if selected item is visible
                 //if not bring them into view 
                 int newtop = selectedItem.Top;
-                SetViewport(this.viewportX, newtop); 
+                SetViewport(this.viewportX, newtop);
             }
 
         }

@@ -128,6 +128,7 @@ namespace PixelFarm.CpuBlit
 
             //alloc mem ***
             _pixelBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(_pixelBufferInBytes = (width * height * 4));
+            MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes);
         }
         public ActualBitmap(int width, int height, int[] orgBuffer)
             : this(width, height)

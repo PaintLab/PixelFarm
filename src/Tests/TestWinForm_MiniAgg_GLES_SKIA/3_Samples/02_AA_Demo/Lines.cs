@@ -129,30 +129,24 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             get;
             set;
         }
-
-
-
         VertexStore _vxs;
         public override void Init()
         {
             base.Init();
 
-            //
-            VertexStore myvxs = new VertexStore();
-            PathWriter writer = new PathWriter(myvxs);
+            using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(out CurveFlattener f))
+            using (VectorToolBox.Borrow(out PathWriter writer))
+            {
+                int y_offset = 20;
+                writer.MoveTo(100, y_offset + 0);
+                writer.Curve4(
+                    300, y_offset + 0,
+                    300, y_offset + 200,
+                    100, y_offset + 200);
 
-            int y_offset = 20;
-            writer.MoveTo(100, y_offset + 0);
-            writer.Curve4(
-                300, y_offset + 0,
-                300, y_offset + 200,
-                100, y_offset + 200);
-
-            CurveFlattener flattener = new CurveFlattener();
-            VertexStore output = new VertexStore();
-            flattener.MakeVxs(myvxs, output);
-            this._vxs = output;
-
+                this._vxs = f.MakeVxs(writer.Vxs, v1).CreateTrim();
+            }
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
         {

@@ -25,10 +25,7 @@ namespace LayoutFarm.Text
                 && endLineNum == 0 && endColumnNum == 0;
         }
         public static readonly VisualSelectionRangeSnapShot Empty = new VisualSelectionRangeSnapShot();
-    }
-
-
-
+    } 
 
     public class VisualSelectionRange
     {
