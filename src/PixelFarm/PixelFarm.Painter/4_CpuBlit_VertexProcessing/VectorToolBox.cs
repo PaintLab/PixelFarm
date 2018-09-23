@@ -73,7 +73,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         internal readonly T vxs;
         internal TempContext(out T outputvxs)
         {
-            Temp<T>.GetFreeOne(out vxs);
+            Temp<T>.GetFreeItem(out vxs);
             outputvxs = this.vxs;
         }
         public void Dispose()
@@ -86,10 +86,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         [System.ThreadStatic]
         static Stack<T> s_pool;
+        [System.ThreadStatic]
         static Func<T> s_newHandler;
+        [System.ThreadStatic]
         static Action<T> s_releaseCleanUp;
-        //-------
-
+         
         public static TempContext<T> Borrow(out T freeItem)
         {
             return new TempContext<T>(out freeItem);
@@ -105,7 +106,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             s_newHandler = newHandler;
             s_releaseCleanUp = releaseCleanUp;
         }
-        internal static void GetFreeOne(out T freeItem)
+        internal static void GetFreeItem(out T freeItem)
         {
             if (s_pool.Count > 0)
             {
@@ -231,5 +232,26 @@ namespace PixelFarm.Drawing
             }
             return Temp<RoundedRect>.Borrow(out roundRect);
         }
+        public static TempContext<VxsClipper> Borrow(out VxsClipper clipper)
+        {
+            if (!Temp<VxsClipper>.IsInit())
+            {
+                Temp<VxsClipper>.SetNewHandler(
+                    () => new VxsClipper(),
+                    c => c.Reset());
+            }
+            return Temp<VxsClipper>.Borrow(out clipper);
+        }
+        public static TempContext<CurveFlattener> Borrow(out CurveFlattener flattener)
+        {
+            if (!Temp<CurveFlattener>.IsInit())
+            {
+                Temp<CurveFlattener>.SetNewHandler(
+                    () => new CurveFlattener(),
+                    f => f.Reset());
+            }
+            return Temp<CurveFlattener>.Borrow(out flattener);
+        }
+
     }
 }

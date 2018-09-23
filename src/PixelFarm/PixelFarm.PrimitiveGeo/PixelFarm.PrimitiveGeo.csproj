@@ -35,6 +35,7 @@
     <Compile Include="AffinePlan.cs" />
     <Compile Include="BasicGeometries.cs" />
     <Compile Include="Color.cs" />
+    <Compile Include="ICoordTransformer.cs" />
     <Compile Include="MemMx.cs" />
     <Compile Include="NativeMemMx.cs" />
     <Compile Include="Rectangle.cs" />

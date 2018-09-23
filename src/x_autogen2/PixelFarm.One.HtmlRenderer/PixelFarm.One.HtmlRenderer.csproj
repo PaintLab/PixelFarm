@@ -2107,9 +2107,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\4_SimulEqGeneral.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_Transform\4_SimulEqGeneral.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs">
       <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs</Link>
     </Compile>
@@ -2616,6 +2613,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs</Link>

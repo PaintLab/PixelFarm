@@ -111,11 +111,16 @@ namespace PixelFarm.CpuBlit
 
         ClipingTechnique _currentClipTech;
 
+        /// <summary>
+        /// we DO NOT store vxs
+        /// </summary>
+        /// <param name="vxs"></param>
         public override void SetClipRgn(VertexStore vxs)
         {
             //clip rgn implementation
             //this version replace only
             //TODO: add append clip rgn
+
             if (vxs != null)
             {
                 if (SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
@@ -136,7 +141,7 @@ namespace PixelFarm.CpuBlit
                     this.FillColor = Color.White;
                     //aggPainter.StrokeColor = Color.Black; //for debug
                     //aggPainter.StrokeWidth = 1; //for debug  
-                    //p.Draw(v1); //for debug
+                    
                     this.Fill(vxs);
                     this.FillColor = prevColor;
                     this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
@@ -145,7 +150,7 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                //remove clip rgn if exists
+                //remove clip rgn if exists**
                 switch (_currentClipTech)
                 {
                     case ClipingTechnique.ClipMask:

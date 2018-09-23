@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using LayoutFarm.Svg;
-using LayoutFarm.Svg.Pathing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using LayoutFarm.WebDom;
@@ -461,8 +459,13 @@ namespace PaintLab.Svg
         internal float _imgX;
         internal float _imgY;
 
-        static PixelFarm.CpuBlit.VertexProcessing.Affine CreateAffine(SvgTransform transformation)
+        static ICoordTransformer ResolveTransformation(SvgTransform transformation)
         {
+            if (transformation.ResolvedICoordTransformer != null)
+            {
+                return transformation.ResolvedICoordTransformer;
+            }
+            //
             switch (transformation.TransformKind)
             {
                 default: throw new NotSupportedException();
@@ -471,7 +474,7 @@ namespace PaintLab.Svg
 
                     SvgTransformMatrix matrixTx = (SvgTransformMatrix)transformation;
                     float[] elems = matrixTx.Elements;
-                    return new Affine(
+                    return transformation.ResolvedICoordTransformer = new Affine(
                          elems[0], elems[1],
                          elems[2], elems[3],
                          elems[4], elems[5]);
@@ -484,7 +487,7 @@ namespace PaintLab.Svg
 
                         //translate to center 
                         //rotate and the translate back
-                        return Affine.NewMatix(
+                        return transformation.ResolvedICoordTransformer = Affine.NewMatix(
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(AggMath.deg2rad(rotateTx.Angle)),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
@@ -496,13 +499,13 @@ namespace PaintLab.Svg
                     }
                 case SvgTransformKind.Scale:
                     SvgScale scaleTx = (SvgScale)transformation;
-                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(scaleTx.X, scaleTx.Y);
+                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(scaleTx.X, scaleTx.Y);
                 case SvgTransformKind.Shear:
                     SvgShear shearTx = (SvgShear)transformation;
-                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewSkewing(shearTx.X, shearTx.Y);
+                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewSkewing(shearTx.X, shearTx.Y);
                 case SvgTransformKind.Translation:
                     SvgTranslate translateTx = (SvgTranslate)transformation;
-                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
+                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
             }
         }
 
@@ -520,10 +523,10 @@ namespace PaintLab.Svg
 
             if (_visualSpec != null)
             {
-
+                //has visual spec
                 if (_visualSpec.Transform != null)
                 {
-                    Affine latest = CreateAffine(_visualSpec.Transform);
+                    ICoordTransformer latest = ResolveTransformation(_visualSpec.Transform);
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
@@ -533,6 +536,7 @@ namespace PaintLab.Svg
                     {
                         currentTx = latest;
                     }
+
                     vgPainterArgs._currentTx = currentTx;
                 }
 
@@ -723,13 +727,11 @@ namespace PaintLab.Svg
             bool hasClip = false;
             bool newFontReq = false;
 
-
             if (_visualSpec != null)
             {
-
                 if (_visualSpec.Transform != null)
                 {
-                    Affine latest = CreateAffine(_visualSpec.Transform);
+                    ICoordTransformer latest = ResolveTransformation(_visualSpec.Transform);
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
@@ -950,18 +952,6 @@ namespace PaintLab.Svg
                                 if (p.FillColor.A > 0)
                                 {
                                     p.Fill(_vxsPath);
-                                    //if (vgPainterArgs._bilinearTx != null)
-                                    //{
-                                    //    using (VxsTemp.Borrow(out var v1))
-                                    //    {
-                                    //        vgPainterArgs._bilinearTx.TransformToVxs(_vxsPath, v1);
-                                    //        p.Fill(v1);
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-
-                                    //}
 
                                 }
                                 //to draw stroke
@@ -1319,7 +1309,6 @@ namespace PaintLab.Svg
 
 
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
-        CurveFlattener _curveFlatter = new CurveFlattener();
 
 
         List<SvgRenderElement> _waitingList = new List<SvgRenderElement>();
@@ -1621,7 +1610,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsTemp.Borrow(out VertexStore v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     PointF p = points[0];
                     PointF p0 = p;
@@ -1655,7 +1644,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsTemp.Borrow(out VertexStore v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     PointF p = points[0];
                     v1.AddMoveTo(p.X, p.Y);
@@ -1786,7 +1775,7 @@ namespace PaintLab.Svg
                 double r = ConvertToPx(cirSpec.Radius, ref a);
 
                 ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step  
-                cir._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
+                cir._vxsPath = ellipse.MakeVxs(v1).CreateTrim();
                 AssignAttributes(cirSpec);
                 return cir;
             }
@@ -1950,16 +1939,16 @@ namespace PaintLab.Svg
 
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
+            using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
             using (VectorToolBox.Borrow(out PathWriter pathWriter))
-            using (VxsTemp.Borrow(out var flattenVxs))
+            using (VxsTemp.Borrow(out var v1))
             {
-
                 _pathDataParser.SetPathWriter(pathWriter);
                 _pathDataParser.Parse(buffer);
-                _curveFlatter.MakeVxs(pathWriter.Vxs, flattenVxs);
+                curveFlattener.MakeVxs(pathWriter.Vxs, v1);
 
                 //create a small copy of the vxs                  
-                return flattenVxs.CreateTrim();
+                return v1.CreateTrim();
             }
         }
         SvgRenderElement CreateGroup(SvgRenderElement parentNode, SvgVisualSpec visSpec)

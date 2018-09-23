@@ -9,8 +9,7 @@ namespace BitmapBufferEx
     public abstract class GeneralTransform
     {
         public abstract RectD TransformBounds(RectD r1);
-        public abstract PointD Transform(PointD p);
-
+        public abstract PointD Transform(PointD p); 
         public abstract MatrixTransform Inverse
         {
             get;

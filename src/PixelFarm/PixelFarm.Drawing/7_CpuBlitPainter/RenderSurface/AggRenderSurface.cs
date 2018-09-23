@@ -219,11 +219,9 @@ namespace PixelFarm.CpuBlit
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-                using (VxsTemp.Borrow(out var v1))
-                {
-                    transform.TransformToVxs(vxs, v1);
-                    _sclineRas.AddPath(v1);
-                }
+
+                _sclineRas.AddPath(vxs, transform);
+
                 //-------------------------
                 //since sclineRas do NOT store vxs
                 //then we can reuse the vxs***

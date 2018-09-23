@@ -376,6 +376,9 @@
     <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveGeo\Color.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
+      <Link>0_REF_DrawingCore\1_PrimitiveGeo\ICoordTransformer.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\MemMx.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveGeo\MemMx.cs</Link>
     </Compile>
@@ -531,9 +534,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs">
       <Link>0_REF_Painter\1_Vectors\3_Transform\4_SimulEqGeneral.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.Vectors\3_transform\ICoordTransformer.cs">
-      <Link>0_REF_Painter\1_Vectors\3_Transform\ICoordTransformer.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>0_REF_Painter\1_Vectors\3_Transform\Viewport.cs</Link>

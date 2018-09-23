@@ -399,8 +399,6 @@ namespace PixelFarm.DrawingGL
             }
 
             ellipse.Set(x, y, rx, ry);
-
-
             using (VxsTemp.Borrow(out var vxs))
             {
                 ellipse.MakeVxs(vxs);

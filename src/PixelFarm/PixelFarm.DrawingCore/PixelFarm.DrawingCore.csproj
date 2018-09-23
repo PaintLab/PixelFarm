@@ -44,6 +44,9 @@
     <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
       <Link>0_REF_PrimitiveGeo\Color.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
+      <Link>0_REF_PrimitiveGeo\ICoordTransformer.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\MemMx.cs">
       <Link>0_REF_PrimitiveGeo\MemMx.cs</Link>
     </Compile>

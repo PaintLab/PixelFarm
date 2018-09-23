@@ -48,6 +48,10 @@ namespace PixelFarm.Drawing
         public abstract int Height { get; }
         public abstract RectInt ClipBox { get; set; }
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
+        /// <summary>
+        /// we DO NOT store vxs
+        /// </summary>
+        /// <param name="vxs"></param>
         public abstract void SetClipRgn(VertexStore vxs);
         //
         public abstract double StrokeWidth { get; set; }

@@ -424,8 +424,8 @@ namespace PixelFarm.CpuBlit
                         source,
                         Drawing.Color.Black,
                         spanInterpolator);
-
                     destRectTransform.TransformToVxs(imgBoundsPath, v1);
+
                     Render(v1, imgSpanGen);
                 }
 

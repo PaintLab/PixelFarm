@@ -25,6 +25,7 @@ namespace PixelFarm.Drawing
 {
     public sealed class VertexStore
     {
+        public readonly bool _isTrimed;
         int m_num_vertices;
         int m_allocated_vertices;
         double[] m_coord_xy;
@@ -77,11 +78,12 @@ namespace PixelFarm.Drawing
 
         public VertexCmd GetVertex(int index, out double x, out double y)
         {
-
             x = m_coord_xy[index << 1];
             y = m_coord_xy[(index << 1) + 1];
             return (VertexCmd)m_cmds[index];
         }
+
+
         public void GetVertexXY(int index, out double x, out double y)
         {
 
@@ -142,9 +144,9 @@ namespace PixelFarm.Drawing
             m_coord_xy[index << 1] = x;
             m_coord_xy[(index << 1) + 1] = y;
         }
-        internal void ReplaceCommand(int index, VertexCmd CommandAndFlags)
+        internal void ReplaceCommand(int index, VertexCmd cmd)
         {
-            m_cmds[index] = (byte)CommandAndFlags;
+            m_cmds[index] = (byte)cmd;
         }
         internal void SwapVertices(int v1, int v2)
         {
@@ -272,7 +274,7 @@ namespace PixelFarm.Drawing
             m_CommandAndFlags = vstore.m_cmds;
         }
 
-        public bool _isTrimed;
+
 
         private VertexStore(VertexStore src, bool trim)
         {
