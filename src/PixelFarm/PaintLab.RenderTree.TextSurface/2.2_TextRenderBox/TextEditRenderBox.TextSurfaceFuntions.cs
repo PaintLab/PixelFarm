@@ -33,7 +33,7 @@ namespace LayoutFarm.Text
         public override void ClearAllChildren()
         {
             _internalTextLayerController.Clear();
-            this._textLayer.Clear();
+           
             base.ClearAllChildren();
         }
 

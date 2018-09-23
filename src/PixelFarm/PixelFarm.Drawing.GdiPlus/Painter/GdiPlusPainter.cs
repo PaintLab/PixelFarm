@@ -14,14 +14,14 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _currentFillBrush;
 
         GdiPlusRenderSurface _renderSurface;
-    
+
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
             this._renderSurface = renderSurface;
 
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-            
+
         }
         public override void SetClipRgn(VertexStore vxs)
         {
@@ -188,10 +188,10 @@ namespace PixelFarm.Drawing.WinGdi
             _renderSurface.Clear(color);
         }
 
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
-            var renderVx = new WinGdiRenderVx(snap);
-            renderVx.path = VxsHelper.CreateGraphicsPath(snap);
+            var renderVx = new WinGdiRenderVx(vxs);
+            renderVx.path = VxsHelper.CreateGraphicsPath(vxs);
             return renderVx;
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
@@ -275,18 +275,10 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void Draw(VertexStore vxs)
         {
-
-            //        for (int i = 0; i < numPath; ++i)
-            //        {
-            //            VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
-            //        }
-            // throw new NotImplementedException();
-        }
-
-        public override void Draw(VertexStoreSnap vxs)
-        {
             this.Fill(vxs);
         }
+
+
 
         public override void DrawEllipse(double left, double top, double width, double height)
         {
@@ -472,15 +464,10 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
-        public override void Fill(VertexStoreSnap snap)
-        {
-            VxsHelper.FillVxsSnap(_renderSurface.gx, snap, _fillColor);
-        }
-
         public override void Fill(VertexStore vxs)
         {
 
-            VxsHelper.FillVxsSnap(_renderSurface.gx, new VertexStoreSnap(vxs), _fillColor);
+            VxsHelper.FillVxs(_renderSurface.gx, vxs, _fillColor);
 
         }
 

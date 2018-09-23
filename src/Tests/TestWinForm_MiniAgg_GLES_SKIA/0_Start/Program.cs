@@ -25,7 +25,12 @@ namespace Mini
 
             RootDemoPath.Path = @"..\Data";
             YourImplementation.TestBedStartup.Setup();
+            YourImplementation.LocalFileStorageProvider file_storageProvider = new YourImplementation.LocalFileStorageProvider();
 
+            //---------------------------------------------------
+            //register image loader
+            Mini.DemoHelper.RegisterImageLoader(LoadImage);
+            PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
 #if GL_ENABLE
             YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
 #endif

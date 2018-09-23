@@ -65,13 +65,7 @@ namespace PixelFarm.CpuBlit
             p.FillColor = prevColor;
         }
 
-        public static void Fill(this Painter p, VertexStoreSnap snap, Color color)
-        {
-            Color prevColor = p.FillColor;
-            p.FillColor = color;
-            p.Fill(snap);
-            p.FillColor = prevColor;
-        }
+       
         public static void Fill(this Painter p, VertexStore vxs, Color color)
         {
             Color prevColor = p.FillColor;
@@ -89,26 +83,7 @@ namespace PixelFarm.CpuBlit
 #if DEBUG
         static int dbugId = 0;
 #endif
-        public static void Draw(this Painter p, VertexStoreSnap vxs, Color color)
-        {
-            //try
-            //{
-            //    dbugId++;
-            //    if (dbugId == 12)
-            //    {
-
-            //    }
-            Color prevColor = p.StrokeColor;
-            p.StrokeColor = color;
-            p.Draw(vxs);
-            p.StrokeColor = prevColor;
-            //}
-            //catch (System.Exception ex)
-            //{
-
-            //}
-
-        }
+         
 
     }
 

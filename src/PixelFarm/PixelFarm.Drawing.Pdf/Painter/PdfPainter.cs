@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.Pdf
         //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
 
-        
+
         CpuBlit.VertexProcessing.RoundedRect roundRect;
 
 
@@ -33,7 +33,7 @@ namespace PixelFarm.Drawing.Pdf
 
         public PdfPainter()
         {
-            
+
         }
         public override void Render(RenderVx renderVx)
         {
@@ -125,10 +125,7 @@ namespace PixelFarm.Drawing.Pdf
         //    get { return _gfx.CompositingMode; }
         //    set { _gfx.CompositingMode = value; }
         //}
-        public override void Draw(VertexStoreSnap vxs)
-        {
-            this.Fill(vxs);
-        }
+
         public override RectInt ClipBox
         {
             get
@@ -421,14 +418,7 @@ namespace PixelFarm.Drawing.Pdf
         {
             // VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs), _fillColor);
         }
-        /// <summary>
-        /// we do NOT store snap/vxs
-        /// </summary>
-        /// <param name="snap"></param>
-        public override void Fill(VertexStoreSnap snap)
-        {
-            // VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
-        }
+        
         //public override void FillCircle(double x, double y, double radius)
         //{
         //    //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
@@ -510,7 +500,7 @@ namespace PixelFarm.Drawing.Pdf
             //_gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
 
-     
+
         public override void DrawRect(double left, double bottom, double right, double top)
         {
             //_gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
@@ -520,7 +510,7 @@ namespace PixelFarm.Drawing.Pdf
         {
             //_gfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
         }
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
             throw new NotSupportedException();
             //var renderVx = new WinGdiRenderVx(snap);

@@ -44,6 +44,9 @@
     <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
       <Link>0_REF_PrimitiveGeo\Color.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
+      <Link>0_REF_PrimitiveGeo\ICoordTransformer.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\MemMx.cs">
       <Link>0_REF_PrimitiveGeo\MemMx.cs</Link>
     </Compile>
@@ -67,7 +70,6 @@
     <Compile Include="2_Abstract_DrawingElements\Region.cs" />
     <Compile Include="3_DrawBoard\0_VertexCommandAndOrientation.cs" />
     <Compile Include="3_DrawBoard\1_VertexStore.cs" />
-    <Compile Include="3_DrawBoard\2_VertexStoreSnap.cs" />
     <Compile Include="3_DrawBoard\DrawBoard.cs" />
     <Compile Include="3_DrawBoard\Painter.cs" />
     <Compile Include="3_DrawBoard\RenderVx.cs" />

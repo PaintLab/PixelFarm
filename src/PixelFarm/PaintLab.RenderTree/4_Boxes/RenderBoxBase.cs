@@ -44,9 +44,26 @@ namespace LayoutFarm
         }
         public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
+            if (this.NeedClipArea)
             {
+                if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
+                {
 
+                    canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
+                    updateArea.Offset(myviewportX, myviewportY);
+                    this.DrawBoxContent(canvas, updateArea);
+#if DEBUG
+                    //for debug
+                    // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                    canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
+                    updateArea.Offset(-myviewportX, -myviewportY);
+
+                }
+                canvas.PopClipAreaRect();
+            }
+            else
+            {
                 canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
                 updateArea.Offset(myviewportX, myviewportY);
                 this.DrawBoxContent(canvas, updateArea);
@@ -56,9 +73,8 @@ namespace LayoutFarm
 #endif
                 canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
                 updateArea.Offset(-myviewportX, -myviewportY);
-
             }
-            canvas.PopClipAreaRect();
+
         }
 
         public override void ChildrenHitTestCore(HitChain hitChain)

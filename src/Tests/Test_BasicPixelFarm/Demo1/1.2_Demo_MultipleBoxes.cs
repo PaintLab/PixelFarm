@@ -21,7 +21,7 @@ namespace LayoutFarm
             //--------------------
             //image box
             //load bitmap with gdi+           
-            ImageBinder imgBinder = host.GetImageBinder2("../Data/imgs/favorites32.png");
+            ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
 
             var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
             imgBox.ImageBinder = imgBinder;

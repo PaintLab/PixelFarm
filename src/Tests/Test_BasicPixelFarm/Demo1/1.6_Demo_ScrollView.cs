@@ -62,7 +62,7 @@ namespace LayoutFarm
             //panel.PerformContentLayout();
 
         }
-        void AddScrollView2(AppHost viewport, int x, int y)
+        void AddScrollView2(AppHost host, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.Box(800, 600);
             panel.HasSpecificWidthAndHeight = true;
@@ -70,7 +70,7 @@ namespace LayoutFarm
             panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
             panel.ContentLayoutKind = CustomWidgets.BoxContentLayoutKind.VerticalStack;
-            viewport.AddChild(panel);
+            host.AddChild(panel);
             //-------------------------  
             //load images...
 
@@ -90,7 +90,6 @@ namespace LayoutFarm
             for (int i = 0; i < fileNames.Length * 4; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 36);
-                imgbox.ImageBinder = viewport.GetImageBinder(fileNames[imgNo]);
                 imgbox.BackColor = Color.OrangeRed;
                 imgbox.SetLocation(0, lastY);
                 imgbox.MouseUp += (s, e) =>
@@ -101,7 +100,11 @@ namespace LayoutFarm
                         panel.RemoveChild(imgbox);
                     }
                 };
-                imgbox.SetSize(imgbox.ImageBinder.ImageWidth, imgbox.ImageBinder.ImageHeight);
+
+                ImageBinder imgBinder = host.CreateImageBinder(fileNames[imgNo]);
+                imgbox.SetSize(imgBinder.ImageWidth, imgBinder.ImageHeight);
+                imgbox.ImageBinder = imgBinder;
+
 
                 lastY += imgbox.Height;
                 panel.AddChild(imgbox);
@@ -116,7 +119,7 @@ namespace LayoutFarm
             //--------------------------
             //panel may need more 
             panel.SetViewport(0, 0);
-           
+
             //-------------------------  
             {
                 //vertical scrollbar
@@ -125,7 +128,7 @@ namespace LayoutFarm
                 vscbar.MinValue = 0;
                 vscbar.MaxValue = lastY;
                 vscbar.SmallChange = 20;
-                viewport.AddChild(vscbar);
+                host.AddChild(vscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
@@ -138,10 +141,11 @@ namespace LayoutFarm
                 hscbar.MinValue = 0;
                 hscbar.MaxValue = panel.Width;//just init
                 hscbar.SmallChange = 20;
-                viewport.AddChild(hscbar);
+                host.AddChild(hscbar);
                 //add relation between viewpanel and scroll bar 
                 var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
+
 
         }
 

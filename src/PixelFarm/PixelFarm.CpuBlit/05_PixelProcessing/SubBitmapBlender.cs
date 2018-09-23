@@ -145,8 +145,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 throw new Exception("Your buffer does not have enough room it it for your height and strideInBytes.");
             }
 
-            //SetBuffer(int32Buffer);
-            _raw_buffer32 = src.Ptr;
+            SetBuffer(src);
             int32ArrayStartPixelAt = arrayElemOffset;
 
             if (this.Stride < 0) //stride in bytes

@@ -26,8 +26,10 @@ namespace LayoutFarm.Text
         }
         public void Clear()
         {
+            //clear all
             this.MoveToLine(0);
-            CurrentLine.Clear();
+            ClearCurrentLine();
+            //CurrentLine.Clear();
             EnsureCurrentTextRun();
         }
         public void EnsureCurrentTextRun(int index)
@@ -995,11 +997,4 @@ namespace LayoutFarm.Text
             }
         }
     }
-    //class BackGroundTextLineWriter : TextLineWriter
-    //{
-    //    public BackGroundTextLineWriter(EditableTextFlowLayer visualElementLayer)
-    //        : base(visualElementLayer)
-    //    {
-    //    }
-    //}
 }

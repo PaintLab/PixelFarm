@@ -107,11 +107,7 @@ namespace LayoutFarm.RenderBoxes
             hitList.Clear();
         }
 
-        public bool IsFree
-        {
-            get;
-            set;
-        }
+        
 #if DEBUG
         dbugHitChainPhase _dbugHitChainPhase;
         public dbugHitChainPhase dbugHitPhase
