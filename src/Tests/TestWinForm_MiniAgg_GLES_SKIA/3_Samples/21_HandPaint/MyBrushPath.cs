@@ -179,6 +179,7 @@ namespace PixelFarm.CpuBlit.Samples
             //var data2 = CurvePreprocess.RdpReduce(contPoints, 2);
             List<Vector2> data2 = contPoints;
             CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
+
             vxs = new VertexStore();
             int j = cubicBzs.Length;
             //1. 
@@ -250,6 +251,7 @@ namespace PixelFarm.CpuBlit.Samples
             }
 
             //TODO: review here
+
             VertexStore v2 = new VertexStore();
             cflat.MakeVxs(vxs, v2);
             vxs = v2;

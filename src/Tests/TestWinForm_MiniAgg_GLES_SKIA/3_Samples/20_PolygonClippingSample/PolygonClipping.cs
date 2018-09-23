@@ -316,7 +316,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                         using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
                         {
-                            var sp1 = stroke.MakeVxs(sp.MakeVxs(v1), v2);
+                            VertexStore sp1 = stroke.MakeVxs(sp.MakeVxs(v1), v2);
 
                             var curveVxs = new VertexStore();
                             curveFlattener.MakeVxs(t_glyph, curveVxs);

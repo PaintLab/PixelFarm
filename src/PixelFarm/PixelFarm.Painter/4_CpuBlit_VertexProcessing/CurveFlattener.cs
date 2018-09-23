@@ -127,8 +127,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             CuspLimit = 0;
         }
 
-
         public VertexStore MakeVxs(VertexStore vxs, VertexStore output)
+        {
+            return MakeVxs(vxs, null, output);
+        }
+
+
+        public VertexStore MakeVxs(VertexStore vxs, ICoordTransformer tx, VertexStore output)
         {
             _curve3.Reset();
             _curve4.Reset();
@@ -146,6 +151,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
             int index = 0;
+            bool hasTx = tx != null;
+
             while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
 #if DEBUG
@@ -153,12 +160,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 {
 
                 }
-
-                //if (VertexStore.dbugCheckIfNAN(x, y))
-                //{
-                //    
-                //}
 #endif
+
+                //-----------------
+                if (hasTx)
+                {
+                    tx.Transform(ref x, ref y);
+                }
+
+                //-----------------
                 switch (cmd)
                 {
 
