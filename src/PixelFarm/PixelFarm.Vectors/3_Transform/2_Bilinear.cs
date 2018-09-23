@@ -143,7 +143,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
         {
-            throw new NotSupportedException();
+            return new CoordTransformationChain(this, another);
         }
         //-------------------------------------------------------------------------
 
