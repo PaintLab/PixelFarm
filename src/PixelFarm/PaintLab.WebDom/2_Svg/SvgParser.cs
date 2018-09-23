@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using LayoutFarm.WebDom.Parser;
 using LayoutFarm.WebLexer;
 
-namespace LayoutFarm.Svg
+namespace PaintLab.Svg
 {
 
     public abstract class XmlParserBase

@@ -4,7 +4,7 @@
 using LayoutFarm.Css;
 using PixelFarm.Drawing;
 
-namespace LayoutFarm.Svg
+namespace PaintLab.Svg
 {
 
     public abstract class SvgElemSpec

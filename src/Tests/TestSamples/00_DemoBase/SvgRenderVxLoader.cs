@@ -3,7 +3,7 @@
 //AGG 2.4
 
 
-using LayoutFarm.Svg;
+ 
 using PaintLab.Svg;
 namespace PixelFarm.CpuBlit
 {
