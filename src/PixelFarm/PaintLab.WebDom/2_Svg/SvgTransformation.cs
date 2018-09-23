@@ -18,6 +18,9 @@ namespace LayoutFarm.Svg
     public abstract class SvgTransform
     {
         public abstract SvgTransformKind TransformKind { get; }
+
+        //
+        
     }
 
     /// <summary>

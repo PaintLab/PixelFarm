@@ -227,6 +227,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\AffinePlan.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\AffinePlan.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Color.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" />
@@ -257,7 +258,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\2_Bilinear.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\2_Bilinear.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\ICoordTransformer.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\ICoordTransformer.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs" Link="PixelFarm\PixelFarm.Vectors\5_clipper\cliper.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" Link="PixelFarm\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" />

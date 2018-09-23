@@ -21,6 +21,7 @@ namespace LayoutFarm.Svg
         CssLength cssLen;
 
 
+
         public bool HasFillColor { get; set; }
         public bool HasStrokeColor { get; set; }
         public bool HasStrokeWidth { get; set; }

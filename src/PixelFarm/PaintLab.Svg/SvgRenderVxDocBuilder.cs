@@ -461,7 +461,7 @@ namespace PaintLab.Svg
         internal float _imgX;
         internal float _imgY;
 
-        static PixelFarm.CpuBlit.VertexProcessing.Affine CreateAffine(SvgTransform transformation)
+        static Affine CreateAffine(SvgTransform transformation)
         {
             switch (transformation.TransformKind)
             {
@@ -520,7 +520,7 @@ namespace PaintLab.Svg
 
             if (_visualSpec != null)
             {
-
+                //has visual spec
                 if (_visualSpec.Transform != null)
                 {
                     Affine latest = CreateAffine(_visualSpec.Transform);
