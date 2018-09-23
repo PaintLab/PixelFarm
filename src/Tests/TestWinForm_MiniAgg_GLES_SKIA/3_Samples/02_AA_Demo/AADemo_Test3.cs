@@ -289,9 +289,11 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 //stroke.Width = 2;
                 //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
 
-                VectorToolBox.GetFreeVxs(out var v1);
-                rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
-                VectorToolBox.ReleaseVxs(ref v1);
+
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
+                }
                 //----------------------------------------
 
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));

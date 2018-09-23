@@ -10,6 +10,12 @@ namespace PixelFarm.Drawing.WinGdi
     {
         static System.Drawing.Pen _pen = new System.Drawing.Pen(System.Drawing.Color.Black);
         static System.Drawing.SolidBrush _br = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+
+        /// <summary>
+        ///  we do NOT store vxsSnap
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <returns></returns>
         public static System.Drawing.Drawing2D.GraphicsPath CreateGraphicsPath(VertexStore vxs)
         {
             //render vertice in store
@@ -44,55 +50,9 @@ namespace PixelFarm.Drawing.WinGdi
                         break;
 
                     case VertexCmd.NoMore:
+
                         i = vcount + 1;//exit from loop
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-            return brush_path;
-        }
-        /// <summary>
-        /// we do NOT store vxsSnap
-        /// </summary>
-        /// <param name="vxsSnap"></param>
-        /// <returns></returns>
-        public static System.Drawing.Drawing2D.GraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
-        {
-            VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
-            double prevX = 0;
-            double prevY = 0;
-            double prevMoveToX = 0;
-            double prevMoveToY = 0;
-            var brush_path = new System.Drawing.Drawing2D.GraphicsPath(FillMode.Winding);//*** winding for overlapped path  
-
-            for (; ; )
-            {
-                double x, y;
-                VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
-                switch (cmd)
-                {
-                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-                        prevMoveToX = prevX = x;
-                        prevMoveToY = prevY = y;
-                        brush_path.StartFigure();
-                        break;
-                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                        brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
-                        prevX = x;
-                        prevY = y;
-                        break;
-                    case PixelFarm.CpuBlit.VertexCmd.Close:
-                    case VertexCmd.CloseAndEndFigure:
-                        //from current point                         
-                        brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
-                        prevX = prevMoveToX;
-                        prevY = prevMoveToY;
-                        brush_path.CloseFigure();
-                        break;
-
-                    case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                        goto EXIT_LOOP;
+                        goto EXIT_LOOP; 
                     default:
                         throw new NotSupportedException();
                 }
@@ -101,17 +61,17 @@ namespace PixelFarm.Drawing.WinGdi
             return brush_path;
         }
 
-        public static void FillVxsSnap(Graphics g, VertexStoreSnap vxsSnap, Color c)
+        public static void FillVxs(Graphics g, VertexStore vxs, Color c)
         {
-            using (System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap))
+            using (System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxs))
             {
                 _br.Color = ToDrawingColor(c);
                 g.FillPath(_br, p);
             }
         }
-        public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, Color c)
+        public static void DrawVxsSnap(Graphics g, VertexStore vxs, Color c)
         {
-            using (System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap))
+            using (System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxs))
             {
                 _pen.Color = ToDrawingColor(c);
                 g.DrawPath(_pen, p);

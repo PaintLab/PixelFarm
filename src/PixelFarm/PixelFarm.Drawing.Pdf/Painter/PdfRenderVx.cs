@@ -1,15 +1,14 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.Pdf
 {
     class PdfRenderVx : RenderVx
     {
-        internal VertexStoreSnap snap;
+        internal VertexStore vxs;
         //internal System.Drawing.Drawing2D.GraphicsPath path;
-        public PdfRenderVx(VertexStoreSnap snap)
+        public PdfRenderVx(VertexStore vxs)
         {
-            this.snap = snap;
+            this.vxs = vxs;
         }
     }
     class PdfRenderVxFormattedString : RenderVxFormattedString

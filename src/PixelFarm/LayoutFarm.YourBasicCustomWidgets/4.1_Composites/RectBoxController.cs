@@ -26,18 +26,39 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
         public int Index { get; set; }
+        public MoveDirection MoveDirection { get; set; }
     }
+    enum MoveDirection
+    {
+        Both,
+        XAxis,
+        YAxis,
 
+    }
 
 
     public class RectBoxController : UIElement
     {
+
+        //TODO: review how to configure the controller box ...
+
+        //-------------
+        //corners
         UIControllerBox _boxLeftTop = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
         UIControllerBox _boxLeftBottom = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
         UIControllerBox _boxRightTop = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
         UIControllerBox _boxRightBottom = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
+        //-------------
 
-        UIControllerBox _centrolBox = new UIControllerBox(40, 40);
+        //mid 
+        UIControllerBox _midLeftSide = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
+        UIControllerBox _midRightSide = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
+        UIControllerBox _midTop = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
+        UIControllerBox _midBottom = new UIControllerBox(20, 20) { BackColor = Color.Yellow };
+
+        //-------------
+
+        UIControllerBox _centralBox = new UIControllerBox(40, 40);
         List<UIControllerBox> _controls = new List<UIControllerBox>();
 
         Box _groundBox;
@@ -89,17 +110,21 @@ namespace LayoutFarm.CustomWidgets
 
         public override void Focus()
         {
-            _centrolBox.AcceptKeyboardFocus = true;
-            _centrolBox.Focus();
+            _centralBox.AcceptKeyboardFocus = true;
+            _centralBox.Focus();
         }
         public void UpdateControllerBoxes(LayoutFarm.UI.AbstractRectUI targetBox)
         {
 
             //move controller here 
-            _centrolBox.SetLocationAndSize(targetBox.Left - 5, targetBox.Top - 5,
-                                     targetBox.Width + 10, targetBox.Height + 10);
-            _centrolBox.Visible = true;
-            _centrolBox.TargetBox = targetBox;
+            _centralBox.SetLocationAndSize(
+                            targetBox.Left - 5, targetBox.Top - 5,
+                            targetBox.Width + 10, targetBox.Height + 10);
+            _centralBox.Visible = true;
+            _centralBox.TargetBox = targetBox;
+            //------------
+            //corners 
+            //------------
             {
                 //left-top
                 UIControllerBox ctrlBox = _boxLeftTop;
@@ -128,27 +153,47 @@ namespace LayoutFarm.CustomWidgets
                 ctrlBox.TargetBox = targetBox;
                 ctrlBox.Visible = true;
             }
-        }
 
-        public void Init()
-        {
+
             //------------
-            _centrolBox = new UIControllerBox(40, 40);
+            //mid-edges
+            //------------
             {
-                Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
-                _centrolBox.BackColor = new Color(100, c.R, c.G, c.B);
-                _centrolBox.SetLocation(200, 200);
-                //controllerBox1.dbugTag = 3;
-                _centrolBox.Visible = false;
-                SetupControllerBoxProperties(_centrolBox);
-                //viewport.AddChild(controllerBox1);
-                _controls.Add(_centrolBox);
+                //left 
+                UIControllerBox ctrlBox = _midLeftSide;
+                ctrlBox.SetLocationAndSize(targetBox.Left - 5, (targetBox.Top - 5) + (targetBox.Height / 2), 5, 5);
+                ctrlBox.TargetBox = targetBox;
+                ctrlBox.Visible = true;
             }
-            _groundBox.AddChild(_centrolBox);
-            //------------
+            {
+                //right 
+                UIControllerBox ctrlBox = _midRightSide;
+                ctrlBox.SetLocationAndSize(targetBox.Left + targetBox.Width, targetBox.Top - 5 + (targetBox.Height / 2), 5, 5);
+                ctrlBox.TargetBox = targetBox;
+                ctrlBox.Visible = true;
+            }
+            {
+                //top
+                UIControllerBox ctrlBox = _midTop;
+                ctrlBox.SetLocationAndSize(targetBox.Left - 5 + (targetBox.Width / 2), targetBox.Top - 5, 5, 5);
+                ctrlBox.TargetBox = targetBox;
+                ctrlBox.Visible = true;
+            }
+            {
+                // bottom
+                UIControllerBox ctrlBox = _midBottom;
+                ctrlBox.SetLocationAndSize(targetBox.Left + (targetBox.Width / 2), targetBox.Bottom, 5, 5);
+                ctrlBox.TargetBox = targetBox;
+                ctrlBox.Visible = true;
+            }
+
+
+        }
+        void InitCornerControlBoxes()
+        {
 
             _boxLeftTop = new UIControllerBox(20, 20) { BackColor = Color.Yellow, Visible = false };
-            SetupCornerBoxController(_boxLeftTop);
+            SetupCorner_Controller(_boxLeftTop);
             _boxLeftTop.MouseDrag += (s1, e1) =>
             {
                 //move other boxes ...
@@ -156,8 +201,9 @@ namespace LayoutFarm.CustomWidgets
                 //update target
                 if (target1 != null)
                 {
-                    target1.SetLocationAndSize(_boxLeftTop.Right,
-                                          _boxLeftTop.Bottom,
+                    target1.SetLocationAndSize(
+                                        _boxLeftTop.Right,
+                                       _boxLeftTop.Bottom,
                                           _boxRightTop.Left - _boxLeftTop.Right,
                                           _boxRightBottom.Top - _boxLeftTop.Bottom);
                     //update other controller
@@ -168,7 +214,7 @@ namespace LayoutFarm.CustomWidgets
             _groundBox.AddChild(_boxLeftTop);
             //------------
             _boxLeftBottom = new UIControllerBox(20, 20) { BackColor = Color.Yellow, Visible = false };
-            SetupCornerBoxController(_boxLeftBottom);
+            SetupCorner_Controller(_boxLeftBottom);
             _boxLeftBottom.MouseDrag += (s1, e1) =>
             {
                 AbstractRectUI target1 = _boxLeftBottom.TargetBox;
@@ -188,14 +234,15 @@ namespace LayoutFarm.CustomWidgets
             //------------ 
 
             _boxRightTop = new UIControllerBox(20, 20) { BackColor = Color.Yellow, Visible = false };
-            SetupCornerBoxController(_boxRightTop);
+            SetupCorner_Controller(_boxRightTop);
             _boxRightTop.MouseDrag += (s1, e1) =>
             {
                 AbstractRectUI target1 = _boxRightTop.TargetBox;
                 //update target
                 if (target1 != null)
                 {
-                    target1.SetLocationAndSize(_boxLeftTop.Right,
+                    target1.SetLocationAndSize(
+                                          _boxLeftTop.Right,
                                           _boxRightTop.Bottom,
                                           _boxRightTop.Left - _boxLeftTop.Right,
                                           _boxRightBottom.Top - _boxRightTop.Bottom);
@@ -207,7 +254,7 @@ namespace LayoutFarm.CustomWidgets
 
             //------------ 
             _boxRightBottom = new UIControllerBox(20, 20) { BackColor = Color.Yellow, Visible = false };
-            SetupCornerBoxController(_boxRightBottom);
+            SetupCorner_Controller(_boxRightBottom);
             _boxRightBottom.MouseDrag += (s1, e1) =>
             {
                 AbstractRectUI target1 = _boxRightBottom.TargetBox;
@@ -224,11 +271,158 @@ namespace LayoutFarm.CustomWidgets
 
             };
             _groundBox.AddChild(_boxRightBottom);
+            //------------ 
+
+        }
+        void SetupEdge_Controller(UIControllerBox box)
+        {
+            Color c = KnownColors.FromKnownColor(KnownColor.Blue);
+            box.BackColor = c;// new Color(200, c.R, c.G, c.B);
+            box.SetLocation(200, 200);
+            box.Visible = true;
+            switch (box.MoveDirection)
+            {
+                case MoveDirection.XAxis:
+                    {
+                        box.MouseDrag += (s, e) =>
+                        {
+                            Point pos = box.Position;
+                            box.SetLocation(pos.X + e.XDiff, pos.Y);
+                            //var targetBox = cornerBox.TargetBox;
+                            //if (targetBox != null)
+                            //{
+                            //    //move target box too
+                            //    targetBox.SetLocation(newX + 5, newY + 5);
+                            //}
+
+                            e.CancelBubbling = true;
+                        };
+                    }
+                    break;
+                case MoveDirection.YAxis:
+                    {
+                        box.MouseDrag += (s, e) =>
+                        {
+                            Point pos = box.Position;
+                            box.SetLocation(pos.X, pos.Y + e.YDiff);
+                            //var targetBox = cornerBox.TargetBox;
+                            //if (targetBox != null)
+                            //{
+                            //    //move target box too
+                            //    targetBox.SetLocation(newX + 5, newY + 5);
+                            //}
+
+                            e.CancelBubbling = true;
+                        };
+                    }
+                    break;
+            }
+
+            _controls.Add(box);
+        }
+        void InitEdgeControlBoxes()
+        {
+            _midLeftSide = new UIControllerBox(20, 20) { MoveDirection = MoveDirection.XAxis, BackColor = Color.Blue, Visible = false };
+            SetupEdge_Controller(_midLeftSide);
+            _midLeftSide.MouseDrag += (s1, e1) =>
+            {
+                //move other boxes ...
+                AbstractRectUI target1 = _boxLeftTop.TargetBox;
+                //update target
+                if (target1 != null)
+                {
+                    //change left side x and width
+                    int xdiff = _midLeftSide.Right - target1.Left;
+                    target1.SetLocationAndSize(
+                                          target1.Left + xdiff,
+                                          target1.Top,
+                                          target1.Width - xdiff,
+                                          target1.Height);
+                    //update other controller
+                    UpdateControllerBoxes(target1);
+                }
+
+            };
+            _groundBox.AddChild(_midLeftSide);
+            //------------
+            _midRightSide = new UIControllerBox(20, 20) { MoveDirection = MoveDirection.XAxis, BackColor = Color.Blue, Visible = false };
+            SetupEdge_Controller(_midRightSide);
+            _midRightSide.MouseDrag += (s1, e1) =>
+            {
+                AbstractRectUI target1 = _boxLeftTop.TargetBox;
+                //change left side x and width
+                int xdiff = _midRightSide.Left - target1.Right;
+                target1.SetLocationAndSize(
+                                        target1.Left,
+                                        target1.Top,
+                                        target1.Width + xdiff,
+                                        target1.Height);
+                //update other controller
+                UpdateControllerBoxes(target1);
+
+            };
+            _groundBox.AddChild(_midRightSide);
+            //------------ 
+
+            _midTop = new UIControllerBox(20, 20) { MoveDirection = MoveDirection.YAxis, BackColor = Color.Blue, Visible = false };
+            SetupEdge_Controller(_midTop);
+            _midTop.MouseDrag += (s1, e1) =>
+            {
+                AbstractRectUI target1 = _boxLeftTop.TargetBox;
+                int ydiff = target1.Top - _midTop.Bottom;
+                target1.SetLocationAndSize(
+                                        target1.Left,
+                                        target1.Top - ydiff,
+                                        target1.Width,
+                                        target1.Height + ydiff);
+                //update other controller
+                UpdateControllerBoxes(target1);
+            };
+            _groundBox.AddChild(_midTop);
+
+            //------------ 
+            _midBottom = new UIControllerBox(20, 20) { MoveDirection = MoveDirection.YAxis, BackColor = Color.Blue, Visible = false };
+            SetupEdge_Controller(_midBottom);
+            _midBottom.MouseDrag += (s1, e1) =>
+            {
+                AbstractRectUI target1 = _boxLeftTop.TargetBox;
+                int ydiff = _midBottom.Top - target1.Bottom;
+
+                target1.SetLocationAndSize(
+                                        target1.Left,
+                                        target1.Top,
+                                        target1.Width,
+                                        target1.Height + ydiff);
+                //update other controller
+                UpdateControllerBoxes(target1);
+            };
+            _groundBox.AddChild(_midBottom);
+            //------------ 
+        }
+        public void Init()
+        {
+            //------------
+            _centralBox = new UIControllerBox(40, 40);
+            {
+                Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
+                _centralBox.BackColor = new Color(100, c.R, c.G, c.B);
+                _centralBox.SetLocation(200, 200);
+                //controllerBox1.dbugTag = 3;
+                _centralBox.Visible = false;
+                SetupControllerBoxProperties(_centralBox);
+                //viewport.AddChild(controllerBox1);
+                _controls.Add(_centralBox);
+            }
+            _groundBox.AddChild(_centralBox);
+            //------------
+            InitCornerControlBoxes();
+            InitEdgeControlBoxes();
+            //------------
         }
 
         public AbstractBox ControllerBoxMain
         {
-            get { return _centrolBox; }
+            get { return _centralBox; }
         }
         void SetupControllerBoxProperties(UIControllerBox controllerBox)
         {
@@ -259,34 +453,28 @@ namespace LayoutFarm.CustomWidgets
                 e.CancelBubbling = true;
             };
         }
-        static void SetupControllerBoxProperties2(UIControllerBox cornerBox)
+
+        void SetupCorner_Controller(UIControllerBox box)
         {
-            //for controller box  
-            cornerBox.MouseDrag += (s, e) =>
+            Color c = KnownColors.FromKnownColor(KnownColor.Orange);
+            box.BackColor = c;// new Color(200, c.R, c.G, c.B);
+            box.SetLocation(200, 200);
+            box.Visible = true;
+            box.MouseDrag += (s, e) =>
             {
-                Point pos = cornerBox.Position;
+                Point pos = box.Position;
                 int newX = pos.X + e.XDiff;
                 int newY = pos.Y + e.YDiff;
-                cornerBox.SetLocation(newX, newY);
+                box.SetLocation(newX, newY);
                 //var targetBox = cornerBox.TargetBox;
                 //if (targetBox != null)
                 //{
                 //    //move target box too
                 //    targetBox.SetLocation(newX + 5, newY + 5);
                 //}
+
                 e.CancelBubbling = true;
             };
-        }
-        void SetupCornerBoxController(UIControllerBox box)
-        {
-            Color c = KnownColors.FromKnownColor(KnownColor.Orange);
-            box.BackColor = c;// new Color(200, c.R, c.G, c.B);
-            box.SetLocation(200, 200);
-            //controllerBox1.dbugTag = 3;
-            box.Visible = true;
-            SetupControllerBoxProperties2(box);
-            //viewport.AddChild(box);
-            //
             _controls.Add(box);
         }
     }
@@ -352,13 +540,14 @@ namespace LayoutFarm.CustomWidgets
         {
             _ui = ui;
         }
-        PixelFarm.Drawing.VertexStore _svgPath;
-        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore svgPath)
+        PixelFarm.Drawing.VertexStore _vxs; 
+
+        public virtual void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs, float offsetX = 0, float offsetY = 0)
         {
             //1. we remove existing point from root
 
-            _svgPath = svgPath;
-            VertexStore vxs = svgPath;
+            _vxs = vxs;
+
 
             int m = _controls.Count;
             for (int n = 0; n < m; ++n)
@@ -381,7 +570,7 @@ namespace LayoutFarm.CustomWidgets
 
                             var ctrlPoint = new UIControllerBox(8, 8);
                             ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)x, (int)y);
+                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
                             _simpleBox.AddChild(ctrlPoint);
@@ -391,7 +580,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             var ctrlPoint = new UIControllerBox(8, 8);
                             ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)x, (int)y);
+                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
                             SetupCornerBoxController(ctrlPoint);
                             _controls.Add(ctrlPoint);
                             _simpleBox.AddChild(ctrlPoint);
@@ -444,7 +633,7 @@ namespace LayoutFarm.CustomWidgets
 
                 //then update the vxs shape
 
-                _svgPath.ReplaceVertex(cornerBox.Index, newX, newY);
+                _vxs.ReplaceVertex(cornerBox.Index, newX, newY);
 
                 //PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
 
@@ -454,5 +643,10 @@ namespace LayoutFarm.CustomWidgets
             };
         }
     }
+
+
+
+
+
 
 }

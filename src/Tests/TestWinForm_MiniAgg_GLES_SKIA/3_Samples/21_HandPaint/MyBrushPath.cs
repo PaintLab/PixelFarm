@@ -23,7 +23,7 @@ namespace PixelFarm.CpuBlit.Samples
     }
     class MyBrushPath
     {
-        
+
         bool validBoundingRect;
         VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();
@@ -145,31 +145,27 @@ namespace PixelFarm.CpuBlit.Samples
             _stroke1.LineJoin = LineJoin.Round;
 
 
-            VectorToolBox.GetFreeVxs(out VertexStore tmpVxs);
-            int j = contPoints.Count;
-            for (int i = 0; i < j; ++i)
+            using (VxsTemp.Borrow(out var v1, out var v2))
             {
-                //TODO: review here
-                //
-                Vector2 v = contPoints[i];
-                if (i == 0)
+                int j = contPoints.Count;
+                for (int i = 0; i < j; ++i)
                 {
-                    tmpVxs.AddMoveTo(v.x, v.y);
+                    //TODO: review here
+                    //
+                    Vector2 v = contPoints[i];
+                    if (i == 0)
+                    {
+                        v1.AddMoveTo(v.x, v.y);
+                    }
+                    else
+                    {
+                        v1.AddLineTo(v.x, v.y);
+                    }
                 }
-                else
-                {
-                    tmpVxs.AddLineTo(v.x, v.y);
-                }
+
+                _stroke1.MakeVxs(v1, v2);
+                vxs = v2.CreateTrim();
             }
-            ////
-
-            VertexStore v2 = new VertexStore();
-            _stroke1.MakeVxs(tmpVxs, v2);
-
-            VectorToolBox.ReleaseVxs(ref tmpVxs);
-
-            vxs = v2;
-
             //release vxs to pool
         }
 
@@ -184,6 +180,7 @@ namespace PixelFarm.CpuBlit.Samples
             //var data2 = CurvePreprocess.RdpReduce(contPoints, 2);
             List<Vector2> data2 = contPoints;
             CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
+
             vxs = new VertexStore();
             int j = cubicBzs.Length;
             //1. 
@@ -255,6 +252,7 @@ namespace PixelFarm.CpuBlit.Samples
             }
 
             //TODO: review here
+
             VertexStore v2 = new VertexStore();
             cflat.MakeVxs(vxs, v2);
             vxs = v2;

@@ -1,15 +1,15 @@
 ﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.CpuBlit;
+
 namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiRenderVx : RenderVx
     {
-        internal VertexStoreSnap snap;
+        internal VertexStore vxs;
         internal System.Drawing.Drawing2D.GraphicsPath path;
-        public WinGdiRenderVx(VertexStoreSnap snap)
+        public WinGdiRenderVx(VertexStore vxs)
         {
-            this.snap = snap;
+            this.vxs = vxs;
         }
     }
     class WinGdiRenderVxFormattedString : RenderVxFormattedString

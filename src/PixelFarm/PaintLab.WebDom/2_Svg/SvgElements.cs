@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using LayoutFarm.HtmlBoxes;
 using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
-namespace LayoutFarm.Svg
+namespace PaintLab.Svg
 {
 
     //------------------------------------------------------------------------------

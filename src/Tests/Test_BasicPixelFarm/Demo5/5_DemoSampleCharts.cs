@@ -97,7 +97,7 @@ namespace LayoutFarm.ColorBlenderSample
             public float X1;
             public float Y1;
         }
-         
+
 
         class PlotLine : UIElement
         {
@@ -132,30 +132,26 @@ namespace LayoutFarm.ColorBlenderSample
                 if (_lineRendeE == null)
                 {
 
-                    VertexStore strokeVxs = new VertexStore();
-                    VectorToolBox.GetFreeVxs(out var vxs);
-                    VectorToolBox.GetFreeStroke(out var stroke, 3);
 
-                    vxs.AddMoveTo(p0.Left, p0.Top);
-                    vxs.AddLineTo(p1.Left, p1.Top);
+                    using (VectorToolBox.Borrow(out PixelFarm.CpuBlit.VertexProcessing.Stroke stroke))
+                    using (VxsTemp.Borrow(out var vxs, out var strokeVxs))
+                    {
+                        stroke.Width = 3;
+                        vxs.AddMoveTo(p0.Left, p0.Top);
+                        vxs.AddLineTo(p1.Left, p1.Top);
+                        stroke.MakeVxs(vxs, strokeVxs);
+                        //---
+                        //convert data in vxs to GraphicPath                         //---
 
-                    stroke.MakeVxs(vxs, strokeVxs);
-                    //---
-                    //convert data in vxs to GraphicPath 
-                    //---
+                        _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
+                        _lineRendeE._stroke = new VxsRenderVx(strokeVxs);
 
-                    _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
-                    _lineRendeE._stroke = new VxsRenderVx(strokeVxs);
+                        _lineRendeE.X0 = p0.Left;
+                        _lineRendeE.Y0 = p0.Top;
+                        _lineRendeE.X1 = p1.Left;
+                        _lineRendeE.Y1 = p1.Top;
+                    }
 
-                    _lineRendeE.X0 = p0.Left;
-                    _lineRendeE.Y0 = p0.Top;
-                    _lineRendeE.X1 = p1.Left;
-                    _lineRendeE.Y1 = p1.Top;
-
-
-                    VectorToolBox.ReleaseVxs(ref vxs);
-
-                    VectorToolBox.ReleaseStroke(ref stroke);
                 }
                 return _lineRendeE;
             }

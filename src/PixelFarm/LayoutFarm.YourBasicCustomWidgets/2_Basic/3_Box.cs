@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
         public Box(int w, int h)
             : base(w, h)
         {
-            
+
         }
         public override void Walk(UIVisitor visitor)
         {
@@ -32,10 +32,7 @@ namespace LayoutFarm.CustomWidgets
             //descrube child 
             visitor.EndElement();
         }
-        public void BoxSetInnerContentSize(int innerW, int innerH)
-        {
-            SetInnerContentSize(innerW, innerH);
-        }
+
         public override void NotifyContentUpdate(UIElement childContent)
         {
             //set propersize
@@ -51,4 +48,6 @@ namespace LayoutFarm.CustomWidgets
             this.ParentUI?.InvalidateLayout();
         }
     }
+
+    
 }
