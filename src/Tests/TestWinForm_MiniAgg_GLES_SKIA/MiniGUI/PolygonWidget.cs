@@ -51,8 +51,8 @@ namespace PixelFarm.CpuBlit.UI
             m_close = (close);
         }
 
-        public void Close(bool f) { m_close = f; }
-        public bool Close() { return m_close; }
+        //public void Close(bool f) { m_close = f; }
+        //public bool Close() { return m_close; }
 
 
         VertexCmd GetNextVertex(out double x, out double y)
@@ -95,10 +95,7 @@ namespace PixelFarm.CpuBlit.UI
             }
             return vxs;
         }
-        public VertexStoreSnap MakeVertexSnap(VertexStore vxs)
-        {
-            return new VertexStoreSnap(this.MakeVxs(vxs));
-        }
+         
     }
 
     public class PolygonControl : SimpleVertexSourceWidget
@@ -224,7 +221,7 @@ namespace PixelFarm.CpuBlit.UI
                 double x, y;
                 for (int m = 0; m < n_count; ++m)
                 {
-                    m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
+                    m_ellipse.Set(GetXN(m), GetYN(m), r, r, 32);
 
                     var ellipseVxs = m_ellipse.MakeVxs(v3);
                     int j = ellipseVxs.Count;

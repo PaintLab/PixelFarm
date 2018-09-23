@@ -2098,8 +2098,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_Transform\1_Affine.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\ICoordTransformer.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\2_Bilinear.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\2_Bilinear.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\3_Perspective.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\3_Perspective.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\4_SimulEqGeneral.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\3_Transform\4_SimulEqGeneral.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs">
       <Link>PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs</Link>
@@ -2515,9 +2521,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs</Link>
     </Compile>
@@ -2611,6 +2614,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\Color.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs</Link>
     </Compile>
@@ -2688,15 +2694,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs">
       <Link>PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\2_Bilinear.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\3_transform\2_Bilinear.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\Viewport.cs</Link>

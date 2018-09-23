@@ -194,20 +194,22 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-        public void AddVertexSnap(PixelFarm.Drawing.VertexStoreSnap vxsSnap)
+        public void AddVertexSnap(PixelFarm.Drawing.VertexStore vxs)
         {
             //begin new snap vxs
             _tempCoords.Clear();
             _tempEndPoints.Clear();
 
-            var iter = vxsSnap.GetVertexSnapIter();
+
             double x, y;
             PixelFarm.CpuBlit.VertexCmd cmd;
             int totalXYCount = 0;
             int index = 0;
             float latestMoveToX = 0, latestMoveToY = 0;
             float latestX = 0, latestY = 0;
-            while ((cmd = iter.GetNextVertex(out x, out y)) != CpuBlit.VertexCmd.NoMore)
+            int vxs_i = 0;
+
+            while ((cmd = vxs.GetVertex(vxs_i++, out x, out y)) != CpuBlit.VertexCmd.NoMore)
             {
                 if (cmd == CpuBlit.VertexCmd.Close || cmd == CpuBlit.VertexCmd.CloseAndEndFigure)
                 {

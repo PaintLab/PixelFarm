@@ -17,7 +17,7 @@ namespace OpenTkEssTest
         GLPainter painter;
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
-        VertexStoreSnap tempSnap1;
+        VertexStore tempSnap1;
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
@@ -36,7 +36,7 @@ namespace OpenTkEssTest
             FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');
 
 
-            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Drawing.VertexStoreSnap(glyph.flattenVxs));
+            glyph_vx = painter.CreateRenderVx(tempSnap1 = glyph.flattenVxs);
 
             linearGrBrush2 = new LinearGradientBrush(
                new PointF(0, 0), Color.Red,

@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing.Skia
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
-         
+
         public SkiaPainter(int w, int h)
         {
 
@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing.Skia
             _stroke = new SKPaint();
             _stroke.IsStroke = true;
             _width = w;
-            _height = h; 
+            _height = h;
         }
         public override void SetClipRgn(VertexStore vxs)
         {
@@ -42,7 +42,7 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotImplementedException();
         }
-       
+
         Brush _currentBrush;
         public override Brush CurrentBrush
         {
@@ -125,10 +125,6 @@ namespace PixelFarm.Drawing.Skia
             }
         }
 
-        public override void Draw(VertexStoreSnap vxs)
-        {
-            this.Fill(vxs);
-        }
         public override RectInt ClipBox
         {
             get
@@ -299,7 +295,7 @@ namespace PixelFarm.Drawing.Skia
 
         public override void Draw(VertexStore vxs)
         {
-            VxsHelper.DrawVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _stroke);
+            VxsHelper.DrawVxsSnap(_skCanvas, vxs, _stroke);
         }
         //public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         //{
@@ -447,22 +443,8 @@ namespace PixelFarm.Drawing.Skia
         /// <param name="vxs"></param>
         public override void Fill(VertexStore vxs)
         {
-            VxsHelper.FillVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _fill);
+            VxsHelper.FillVxsSnap(_skCanvas, vxs, _fill);
         }
-        /// <summary>
-        /// we do NOT store snap/vxs
-        /// </summary>
-        /// <param name="snap"></param>
-        public override void Fill(VertexStoreSnap snap)
-        {
-            VxsHelper.FillVxsSnap(_skCanvas, snap, _fill);
-        }
-        //public override void FillCircle(double x, double y, double radius)
-        //{
-        //    _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
-        //}
-
-
 
         public override void FillEllipse(double left, double top, double width, double height)
         {
@@ -553,10 +535,10 @@ namespace PixelFarm.Drawing.Skia
         {
             _skCanvas.ClipRect(new SKRect(x1, y1, x2, y2));
         }
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
-            var renderVx = new WinGdiRenderVx(snap);
-            renderVx.path = VxsHelper.CreateGraphicsPath(snap);
+            var renderVx = new WinGdiRenderVx(vxs);
+            renderVx.path = VxsHelper.CreateGraphicsPath(vxs);
             return renderVx;
         }
 

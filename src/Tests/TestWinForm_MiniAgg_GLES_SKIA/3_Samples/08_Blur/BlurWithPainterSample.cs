@@ -31,7 +31,6 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
         PolygonEditWidget m_shadow_ctrl;
         VertexStore m_pathVxs;
         VertexStore m_pathVxs2;
-        VertexStoreSnap m_path_2;
         RectD m_shape_bounds;
         Stopwatch stopwatch = new Stopwatch();
 

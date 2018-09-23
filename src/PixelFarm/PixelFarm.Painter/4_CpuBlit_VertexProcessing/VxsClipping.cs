@@ -15,9 +15,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public class VxsClipper
     {
-        [System.ThreadStatic]
-        static Stack<VxsClipper> s_vxsClipperTools;
-
 
         List<IntPolygon> aPolys = new List<IntPolygon>();
         List<IntPolygon> bPolys = new List<IntPolygon>();
@@ -27,47 +24,25 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
         public static void CombinePaths(
-            VertexStoreSnap a,
-            VertexStoreSnap b,
+            VertexStore a,
+            VertexStore b,
             VxsClipperType vxsClipType,
             bool separateIntoSmallSubPaths,
             List<VertexStore> results)
         {
 
-            VxsClipper clipper = GetFreeVxsClipper();
-            clipper.CombinePathsInternal(a, b, vxsClipType, separateIntoSmallSubPaths, results);
-            ReleaseVxsClipper(ref clipper);
+            using (VectorToolBox.Borrow(out VxsClipper clipper))
+            {
+                clipper.CombinePathsInternal(a, b, vxsClipType, separateIntoSmallSubPaths, results);
+            }
         }
 
 
-        static VxsClipper GetFreeVxsClipper()
-        {
-
-            if (s_vxsClipperTools == null)
-            {
-                s_vxsClipperTools = new Stack<VxsClipper>();
-            }
-            //
-            if (s_vxsClipperTools.Count == 0)
-            {
-                return new VxsClipper();
-            }
-            else
-            {
-                return s_vxsClipperTools.Pop();
-            }
-
-        }
-        static void ReleaseVxsClipper(ref VxsClipper clipper)
-        {
-            clipper.Reset();
-            s_vxsClipperTools.Push(clipper);
-            clipper = null;
-        }
 
 
-        private VxsClipper() { }
-        void Reset()
+
+        internal VxsClipper() { }
+        internal void Reset()
         {
             aPolys.Clear();
             bPolys.Clear();
@@ -77,8 +52,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         //
         void CombinePathsInternal(
-           VertexStoreSnap a,
-           VertexStoreSnap b,
+           VertexStore a,
+           VertexStore b,
            VxsClipperType vxsClipType,
            bool separateIntoSmallSubPaths,
            List<VertexStore> resultList)
@@ -154,17 +129,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
 
-        static void CreatePolygons(VertexStoreSnap a, List<IntPolygon> allPolys)
+        static void CreatePolygons(VertexStore a, List<IntPolygon> allPolys)
         {
 
             IntPolygon currentPoly = null;
             VertexData last = new VertexData();
             VertexData first = new VertexData();
             bool addedFirst = false;
-            var snapIter = a.GetVertexSnapIter();
             double x, y;
-            VertexCmd cmd = snapIter.GetNextVertex(out x, out y);
-            do
+
+            int index = 0;
+            VertexCmd cmd;
+            while ((cmd = a.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
                 if (cmd == VertexCmd.LineTo)
                 {
@@ -197,8 +173,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         last = first;
                     }
                 }
-                cmd = snapIter.GetNextVertex(out x, out y);
-            } while (cmd != VertexCmd.NoMore);
+            }
 
 
         }

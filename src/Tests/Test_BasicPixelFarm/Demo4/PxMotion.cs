@@ -7,7 +7,7 @@ using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 
-using LayoutFarm.Svg;
+ 
 using PaintLab.Svg;
 using LayoutFarm.RenderBoxes;
 
@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
         }
         public int Width { get; set; }
         public int Height { get; set; }
-       
+
     }
 
 
@@ -138,17 +138,18 @@ namespace LayoutFarm.UI
         public SvgRenderElement HitTest(float x, float y, bool withSupPart)
         {
             SvgRenderElement result = null;
-            VgHitChainPool.GetFreeHitTestChain(out SvgHitChain svgHitChain);
-            svgHitChain.WithSubPartTest = withSupPart;
-            if (HitTest(x, y, svgHitChain))
+            using (VgHitChainPool.Borrow(out SvgHitChain svgHitChain))
             {
-                int hitCount = svgHitChain.Count;
-                if (hitCount > 0)
+                svgHitChain.WithSubPartTest = withSupPart;
+                if (HitTest(x, y, svgHitChain))
                 {
-                    result = svgHitChain.GetLastHitInfo().svg;
+                    int hitCount = svgHitChain.Count;
+                    if (hitCount > 0)
+                    {
+                        result = svgHitChain.GetLastHitInfo().svg;
+                    }
                 }
             }
-            VgHitChainPool.ReleaseHitTestChain(ref svgHitChain);
             return result;
         }
         public bool HitTest(float x, float y, SvgHitChain svgHitChain)
@@ -307,10 +308,13 @@ namespace LayoutFarm.UI
         }
         public void Paint(Painter p)
         {
-            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
-            paintArgs._currentTx = _currentTx;
-            _svgRenderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+
+            using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
+            {
+                paintArgs._currentTx = _currentTx;
+                _svgRenderVx._renderE.Paint(paintArgs);
+            }
+
         }
         public void Paint(VgPaintArgs paintArgs)
         {
@@ -329,20 +333,24 @@ namespace LayoutFarm.UI
             //TODO: implement this...
             //use prefix command for render vx 
             //------
-            VgPainterArgsPool.GetFreePainterArgs(p, out VgPaintArgs paintArgs);
-            paintArgs._currentTx = tx;
-            paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+            using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
-                //use external painter handler
-                //draw only outline with its fill-color.
-                Painter m_painter = paintArgs.P;
-                Color prevFillColor = m_painter.FillColor;
-                m_painter.FillColor = m_painter.FillColor;
-                m_painter.Fill(vxs);
-                m_painter.FillColor = prevFillColor;
-            };
-            _svgRenderVx._renderE.Paint(paintArgs);
-            VgPainterArgsPool.ReleasePainterArgs(ref paintArgs);
+                paintArgs._currentTx = tx;
+                paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                {
+                    //use external painter handler
+                    //draw only outline with its fill-color.
+                    Painter m_painter = painterA.P;
+                    Color prevFillColor = m_painter.FillColor;
+                    m_painter.FillColor = m_painter.FillColor;
+                    m_painter.Fill(vxs);
+                    m_painter.FillColor = prevFillColor;
+                };
+                _svgRenderVx._renderE.Paint(paintArgs);
+            }
+
+
+
 
         }
         public void DrawOutline(Painter p)
@@ -420,27 +428,18 @@ namespace LayoutFarm.UI
     }
     public static class VgHitChainPool
     {
-        //
-        //
-        [System.ThreadStatic]
-        static System.Collections.Generic.Stack<SvgHitChain> s_hitChains = new System.Collections.Generic.Stack<SvgHitChain>();
 
-        public static void GetFreeHitTestChain(out SvgHitChain hitTestArgs)
+        public static TempContext<SvgHitChain> Borrow(out SvgHitChain hitTestArgs)
         {
-            if (s_hitChains.Count > 0)
+            if (!Temp<SvgHitChain>.IsInit())
             {
-                hitTestArgs = s_hitChains.Pop();
+                Temp<SvgHitChain>.SetNewHandler(
+                    () => new SvgHitChain(),
+                    ch => ch.Clear()
+                    );
             }
-            else
-            {
-                hitTestArgs = new SvgHitChain();
-            }
+            return Temp<SvgHitChain>.Borrow(out hitTestArgs);
         }
-        public static void ReleaseHitTestChain(ref SvgHitChain hitTestArgs)
-        {
-            hitTestArgs.Clear();
-            s_hitChains.Push(hitTestArgs);
-            hitTestArgs = null;
-        }
+
     }
 }

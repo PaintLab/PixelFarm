@@ -4,7 +4,7 @@
 using LayoutFarm.Css;
 using PixelFarm.Drawing;
 
-namespace LayoutFarm.Svg
+namespace PaintLab.Svg
 {
 
     public abstract class SvgElemSpec
@@ -19,6 +19,7 @@ namespace LayoutFarm.Svg
         Color fillColor = Color.Black;
         Color strokeColor = Color.Transparent;
         CssLength cssLen;
+
 
 
         public bool HasFillColor { get; set; }

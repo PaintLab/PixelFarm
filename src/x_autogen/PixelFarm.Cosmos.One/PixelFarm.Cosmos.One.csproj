@@ -197,7 +197,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs" />
@@ -230,6 +229,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\AffinePlan.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Color.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\MemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\NativeMemMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Rectangle.cs" />
@@ -260,7 +260,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\2_Bilinear.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\4_SimulEqGeneral.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\ICoordTransformer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\3_transform\Viewport.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_clipper\cliper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.Cosmos.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs" />

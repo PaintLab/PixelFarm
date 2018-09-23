@@ -72,22 +72,22 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             int elliseFlattenStep = 64;
             using (VxsTemp.Borrow(out var v1))
+            using (VectorToolBox.Borrow(out Ellipse ellipseForMask))
             {
-                Ellipse ellipseForMask = new Ellipse();
                 for (i = 0; i < num; i++)
                 {
 
                     if (i == num - 1)
                     {
                         ////for the last one 
-                        ellipseForMask.Reset(Width / 2, (Height / 2) - 90, 110, 110, elliseFlattenStep);
-                        ellipseForMask.MakeVertexSnap(v1);
+                        ellipseForMask.Set(Width / 2, (Height / 2) - 90, 110, 110, elliseFlattenStep);
+                        ellipseForMask.MakeVxs(v1);
                         alphaPainter.FillColor = new Color(255, 255, 255, 0);
                         alphaPainter.Fill(v1);
                         v1.Clear();
                         //
-                        ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, elliseFlattenStep);
-                        ellipseForMask.MakeVertexSnap(v1);
+                        ellipseForMask.Set(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, elliseFlattenStep);
+                        ellipseForMask.MakeVxs(v1);
                         alphaPainter.FillColor = new Color(255, 255, 0, 0);
                         alphaPainter.Fill(v1);
                         v1.Clear();
@@ -95,12 +95,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                     }
                     else
                     {
-                        ellipseForMask.Reset(randGenerator.Next() % width,
+                        ellipseForMask.Set(randGenerator.Next() % width,
                                  randGenerator.Next() % height,
                                  randGenerator.Next() % 100 + 20,
                                  randGenerator.Next() % 100 + 20,
                                  elliseFlattenStep);
-                        ellipseForMask.MakeVertexSnap(v1);
+                        ellipseForMask.MakeVxs(v1);
                         alphaPainter.FillColor = new Color(100, 255, 0, 0);
                         alphaPainter.Fill(v1);
                         v1.Clear();
