@@ -495,7 +495,7 @@ namespace PaintLab.Svg
                     }
                     else
                     {
-                        return PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(AggMath.deg2rad(rotateTx.Angle));
+                        return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewRotation(AggMath.deg2rad(rotateTx.Angle));
                     }
                 case SvgTransformKind.Scale:
                     SvgScale scaleTx = (SvgScale)transformation;
