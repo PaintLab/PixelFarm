@@ -85,7 +85,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             builder.ReadShapes(txToVxs);
 
             VertexStore v2 = new VertexStore();
-            using (VxsTemp.Borrow(out var v0, out var v1))
+            using (VxsTemp.Borrow(out var v0))
             {
                 txToVxs.WriteOutput(v0);
                 var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
@@ -96,8 +96,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                      new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
                          PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, 1, 1)
                          );
-                mat.TransformToVxs(v0, v1);
-                curveFlattener.MakeVxs(v0, v2);
+                //mat.TransformToVxs(v0, v1);
+                curveFlattener.MakeVxs(v0, mat, v2);
             }
             return v2;
         }

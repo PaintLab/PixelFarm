@@ -25,6 +25,7 @@ namespace PixelFarm.Drawing
 {
     public sealed class VertexStore
     {
+        public readonly bool _isTrimed;
         int m_num_vertices;
         int m_allocated_vertices;
         double[] m_coord_xy;
@@ -77,11 +78,12 @@ namespace PixelFarm.Drawing
 
         public VertexCmd GetVertex(int index, out double x, out double y)
         {
-
             x = m_coord_xy[index << 1];
             y = m_coord_xy[(index << 1) + 1];
             return (VertexCmd)m_cmds[index];
         }
+
+
         public void GetVertexXY(int index, out double x, out double y)
         {
 
@@ -100,6 +102,11 @@ namespace PixelFarm.Drawing
             //System.Array.Clear(m_cmds, 0, m_cmds.Length);
             System.Array.Clear(m_cmds, 0, m_num_vertices); //only latest 
             m_num_vertices = 0;
+        }
+        public void ConfirmNoMore()
+        {
+            AddVertex(0, 0, VertexCmd.NoMore);
+            m_num_vertices--;//not count
         }
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
@@ -137,9 +144,9 @@ namespace PixelFarm.Drawing
             m_coord_xy[index << 1] = x;
             m_coord_xy[(index << 1) + 1] = y;
         }
-        internal void ReplaceCommand(int index, VertexCmd CommandAndFlags)
+        internal void ReplaceCommand(int index, VertexCmd cmd)
         {
-            m_cmds[index] = (byte)CommandAndFlags;
+            m_cmds[index] = (byte)cmd;
         }
         internal void SwapVertices(int v1, int v2)
         {
@@ -267,7 +274,7 @@ namespace PixelFarm.Drawing
             m_CommandAndFlags = vstore.m_cmds;
         }
 
-        public bool _isTrimed;
+
 
         private VertexStore(VertexStore src, bool trim)
         {
@@ -360,8 +367,6 @@ namespace PixelFarm.Drawing
         /// <param name="y"></param>
         public static void AddP2c(this VertexStore vxs, double x, double y)
         {
-
-
             vxs.AddVertex(x, y, VertexCmd.P2c);
         }
         /// <summary>
@@ -395,7 +400,14 @@ namespace PixelFarm.Drawing
         {
             vxs.AddVertex(0, 0, VertexCmd.Close);
         }
-
+        public static void AddCloseFigure(this VertexStore vxs, double x, double y)
+        {
+            vxs.AddVertex(x, y, VertexCmd.Close);
+        }
+        public static void AddNoMore(this VertexStore vxs)
+        {
+            vxs.AddVertex(0, 0, VertexCmd.NoMore);
+        }
         /// <summary>
         /// copy + translate vertext data from src to outputVxs
         /// </summary>

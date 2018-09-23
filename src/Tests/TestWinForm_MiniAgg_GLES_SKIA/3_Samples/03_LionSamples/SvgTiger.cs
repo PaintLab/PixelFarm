@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using Mini;
 using PaintLab.Svg;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
-using LayoutFarm.Svg;
 
 namespace PixelFarm.CpuBlit.Samples
 {

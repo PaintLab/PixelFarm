@@ -399,8 +399,6 @@ namespace PixelFarm.DrawingGL
             }
 
             ellipse.Set(x, y, rx, ry);
-
-
             using (VxsTemp.Borrow(out var vxs))
             {
                 ellipse.MakeVxs(vxs);
@@ -553,19 +551,6 @@ namespace PixelFarm.DrawingGL
                 );
         }
 
-        public override void Fill(VertexStoreSnap snap)
-        {
-            _glsx.FillGfxPath(
-                _fillColor,
-              _igfxPathBuilder.CreateGraphicsPath(snap));
-        }
-        public override void Draw(VertexStoreSnap snap)
-        {
-            _glsx.DrawGfxPath(
-             this._strokeColor,
-             _igfxPathBuilder.CreateGraphicsPath(snap)
-             );
-        }
 
 
 
@@ -639,12 +624,12 @@ namespace PixelFarm.DrawingGL
             FillEllipse(x - radius, y - radius, x + radius, y + radius);
         }
         //-----------------------------------------------------------------------------------------------------------------
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
             //store internal gfx path inside render vx 
 
             //1.
-            InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap);
+            InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(vxs);
             return new GLRenderVx(p);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
@@ -1001,23 +986,20 @@ namespace PixelFarm.DrawingGL
                 builder.xylist = new List<float>();
                 return builder;
             }
-            public InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
-            {
-                return CreateGraphicsPath(vxsSnap, false);
-            }
+
             public InternalGraphicsPath CreateGraphicsPath(VertexStore vxs)
             {
-                return CreateGraphicsPath(new VertexStoreSnap(vxs), false);
+                return CreateGraphicsPath(vxs, false);
             }
-            public InternalGraphicsPath CreateGraphicsPathForRenderVx(VertexStoreSnap vxsSnap)
+            public InternalGraphicsPath CreateGraphicsPathForRenderVx(VertexStore vxs)
             {
-                return CreateGraphicsPath(vxsSnap, true);
+                return CreateGraphicsPath(vxs, true);
             }
 
 
-            InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap, bool buildForRenderVx)
+            InternalGraphicsPath CreateGraphicsPath(VertexStore vxs, bool buildForRenderVx)
             {
-                VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
+
                 double prevX = 0;
                 double prevY = 0;
                 double prevMoveToX = 0;
@@ -1031,10 +1013,13 @@ namespace PixelFarm.DrawingGL
                 //result...
                 List<Figure> figures = new List<Figure>();
 
-                for (; ; )
+                int index = 0;
+                VertexCmd cmd;
+
+                double x, y;
+                while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
                 {
-                    double x, y;
-                    switch (vxsIter.GetNextVertex(out x, out y))
+                    switch (cmd)
                     {
                         case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                             if (!isAddToList)

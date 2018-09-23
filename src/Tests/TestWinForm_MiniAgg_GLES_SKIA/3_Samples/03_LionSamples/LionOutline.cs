@@ -297,7 +297,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                             //use external painter handler
                             //draw only outline with its fill-color.
                             rasterizer.RenderVertexSnap(
-                                new PixelFarm.Drawing.VertexStoreSnap(vxs),
+                                vxs,
                                 painterA.P.FillColor);
                         };
 

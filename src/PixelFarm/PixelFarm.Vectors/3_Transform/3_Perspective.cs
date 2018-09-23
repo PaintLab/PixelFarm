@@ -22,9 +22,31 @@ using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //=======================================================trans_perspective
-    public sealed class Perspective : ICoordTransformer, ITransformMatrix
+
+    class CoordTransformationChain : ICoordTransformer
+    {
+        ICoordTransformer _left, _right;
+        public CoordTransformationChain(ICoordTransformer left, ICoordTransformer right)
+        {
+            this._left = left;
+            this._right = right;
+        }
+        ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
+        {
+            return new CoordTransformationChain(_left, _right.MultiplyWith(another));
+        }
+        void ICoordTransformer.Transform(ref double x, ref double y)
+        {
+            _left.Transform(ref x, ref y);
+            _right.Transform(ref x, ref y);
+        }
+    }
+
+    public sealed class Perspective : ICoordTransformer
     {
         const double EPSILON = 1e-14;
+
+        //this is 3x3 matrix  , (rows x cols)
         internal double
                sx, shy, w0,
                shx, sy, w1,
@@ -105,7 +127,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             quad_to_quad(src, dst);
         }
 
-        public ITransformMatrix MultiplyWith(ITransformMatrix another)
+        ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
         {
             if (another is Affine)
             {

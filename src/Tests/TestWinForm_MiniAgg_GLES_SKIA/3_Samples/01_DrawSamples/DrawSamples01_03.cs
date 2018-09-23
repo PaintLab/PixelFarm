@@ -138,8 +138,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     public class DrawSample03 : DemoBase
     {
 
-        Stroke stroke = new Stroke(1);
-        VertexStoreSnap vxsSnap;
+
+
 
         public override void Init()
         {
@@ -163,44 +163,53 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.RenderQuality = RenderQualtity.HighQuality;
             }
 
-
             int width = 800;
             int height = 600;
             //clear the image to white         
             // draw a circle
             p.Clear(Drawing.Color.White);
-            Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
-            for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
+
+            //Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
+            using (VectorToolBox.Borrow(out Ellipse ellipseVxsGen))
+            using (VectorToolBox.Borrow(out Stroke stroke))
             {
-                var mat = Affine.NewMatix(
-                    AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
-                    AffinePlan.Translate(width / 2, 150)); 
-                using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+                ellipseVxsGen.Set(0, 0, 100, 50);
+                stroke.Width = 3;
+
+                for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
                 {
-                    mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
+                    var mat = Affine.NewMatix(
+                        AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
+                        AffinePlan.Translate(width / 2, 150));
 
-                    p.FillColor = Drawing.Color.Yellow;
-                    p.Fill(v2);
-                    //------------------------------------
-                    //g.Render(sp1, ColorRGBA.Yellow);
-                    //Stroke ellipseOutline = new Stroke(sp1, 3);
-                    p.FillColor = Drawing.Color.Blue;
-                    stroke.Width = 3;
-                    p.Fill(stroke.MakeVxs(v2, v3));
-                    //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
+                    using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+                    {
+                        
+                        ellipseVxsGen.MakeVxs(mat, v2);
+                        p.FillColor = Drawing.Color.Yellow;
+                        p.Fill(v2);
+                        //------------------------------------                
+                        p.FillColor = Drawing.Color.Blue;
+                        p.Fill(stroke.MakeVxs(v2, v3));
+                    }
+
                 }
-
             }
 
+
             // and a little polygon
-            PathWriter littlePoly = new PathWriter();
-            littlePoly.MoveTo(50, 50);
-            littlePoly.LineTo(150, 50);
-            littlePoly.LineTo(200, 200);
-            littlePoly.LineTo(50, 150);
-            littlePoly.LineTo(50, 50);
-            p.FillColor = Drawing.Color.Blue;
-            p.Fill(littlePoly.MakeVertexSnap());
+            using (VectorToolBox.Borrow(out PathWriter littlePoly))
+            {
+                littlePoly.MoveTo(50, 50);
+                littlePoly.LineTo(150, 50);
+                littlePoly.LineTo(200, 200);
+                littlePoly.LineTo(50, 150);
+                littlePoly.LineTo(50, 50);
+                p.FillColor = Drawing.Color.Blue;
+                p.Fill(littlePoly.Vxs);
+            }
+
+
 
 
             //----

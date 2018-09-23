@@ -16,7 +16,7 @@ namespace PixelFarm.CpuBlit
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
-        CpuBlit.VertexProcessing.ITransformMatrix _currentTx;
+        CpuBlit.VertexProcessing.ICoordTransformer _currentTx;
 
         public SpriteShape(VgRenderVx svgRenderVx)//, RootGraphic root, int w, int h)
                                                   //: base(root, w, h)
@@ -119,9 +119,6 @@ namespace PixelFarm.CpuBlit
                 paintArgs._currentTx = _currentTx;
                 _svgRenderVx._renderE.Paint(paintArgs);
             }
-
-
-
         }
         public void Paint(VgPaintArgs paintArgs)
         {
@@ -137,8 +134,9 @@ namespace PixelFarm.CpuBlit
                 {
                     //use external painter handler
                     //draw only outline with its fill-color.
-                    Drawing.Painter m_painter = paintArgs.P;
+                    Drawing.Painter m_painter = painterA.P;
                     Drawing.Color prevFillColor = m_painter.FillColor;
+
                     m_painter.FillColor = m_painter.FillColor;
 
                     using (VxsTemp.Borrow(out var v1))
@@ -153,7 +151,7 @@ namespace PixelFarm.CpuBlit
 
 
         }
-        public void Paint(Painter p, ITransformMatrix tx)
+        public void Paint(Painter p, ICoordTransformer tx)
         {
             //TODO: implement this...
             //use prefix command for render vx 
@@ -173,7 +171,7 @@ namespace PixelFarm.CpuBlit
                 };
                 _svgRenderVx._renderE.Paint(paintArgs);
             }
-            
+
 
         }
         public void DrawOutline(Painter p)
