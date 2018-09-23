@@ -285,12 +285,7 @@ namespace PixelFarm.Drawing
 
             if (trim)
             {
-#if DEBUG
-                if (this.dbugId == 30)
-                {
 
-                }
-#endif
                 _isTrimed = true;
                 int coord_len = m_num_vertices; //+1 for no more cmd
                 int cmds_len = m_num_vertices; //+1 for no more cmd
@@ -336,7 +331,43 @@ namespace PixelFarm.Drawing
             }
 
         }
+        private VertexStore(VertexStore src, PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer tx)
+        {
+            //for copy from src to this instance
 
+            this.m_allocated_vertices = src.m_allocated_vertices;
+            this.m_num_vertices = src.m_num_vertices;
+
+            _isTrimed = true;
+            int coord_len = m_num_vertices; //+1 for no more cmd
+            int cmds_len = m_num_vertices; //+1 for no more cmd
+
+            this.m_coord_xy = new double[(coord_len + 1) << 1];//*2
+            this.m_cmds = new byte[(cmds_len + 1)];
+
+
+            System.Array.Copy(
+                 src.m_coord_xy,
+                 0,
+                 this.m_coord_xy,
+                 0,
+                 coord_len << 1); //*2
+
+            System.Array.Copy(
+                 src.m_cmds,
+                 0,
+                 this.m_cmds,
+                 0,
+                 cmds_len);
+
+            //-------------------------
+            int coord_count = coord_len;
+            int a = 0;
+            for (int n = 0; n < coord_count; ++n)
+            {
+                tx.Transform(ref m_coord_xy[a++], ref m_coord_xy[a++]);
+            }
+        }
         /// <summary>
         /// copy from src to the new one
         /// </summary>
@@ -354,6 +385,10 @@ namespace PixelFarm.Drawing
         public VertexStore CreateTrim()
         {
             return new VertexStore(this, true);
+        }
+        public VertexStore CreateTrim(PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer tx)
+        {
+            return new VertexStore(this, tx);
         }
     }
 

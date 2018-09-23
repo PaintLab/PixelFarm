@@ -34,6 +34,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public static class VertexStoreTransformExtensions
     {
+        /// <summary>
+        /// we do NOT store vxs, return original outputVxs
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="outputVxs"></param>
         public static void TransformToVertexSnap(this Affine affine, VertexStore src, VertexStore output)
         {
             affine.TransformToVxs(src, output);
@@ -58,7 +63,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //outputVxs.HasMoreThanOnePart = src.HasMoreThanOnePart;
             return outputVxs;
         }
-
+        /// <summary>
+        /// we do NOT store vxs, return original outputVxs
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="outputVxs"></param>
         public static VertexStore TransformToVxs(this ICoordTransformer tx, VertexStore src, VertexStore outputVxs)
         {
             int count = src.Count;
@@ -70,10 +79,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 tx.Transform(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
             }
-             
             return outputVxs;
         }
-        
+        /// <summary>
+        /// we do NOT store vxs, return original outputVxs
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="outputVxs"></param>
         public static VertexStore TransformToVxs(this Bilinear bilinearTx, VertexStore src, VertexStore vxs)
         {
             int count = src.Count;
@@ -87,7 +99,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return vxs;
         }
-      
+        /// <summary>
+        /// we do NOT store vxs, return original outputVxs
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="outputVxs"></param>
         public static VertexStore TransformToVxs(this Perspective perspecitveTx, VertexStore src, VertexStore vxs)
         {
             VertexCmd cmd;
