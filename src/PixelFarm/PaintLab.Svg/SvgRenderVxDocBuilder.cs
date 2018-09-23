@@ -1307,7 +1307,6 @@ namespace PaintLab.Svg
 
 
         MySvgPathDataParser _pathDataParser = new MySvgPathDataParser();
-        CurveFlattener _curveFlatter = new CurveFlattener();
 
 
         List<SvgRenderElement> _waitingList = new List<SvgRenderElement>();
@@ -1938,16 +1937,16 @@ namespace PaintLab.Svg
 
         VertexStore ParseSvgPathDefinitionToVxs(char[] buffer)
         {
+            using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
             using (VectorToolBox.Borrow(out PathWriter pathWriter))
-            using (VxsTemp.Borrow(out var flattenVxs))
+            using (VxsTemp.Borrow(out var v1))
             {
-
                 _pathDataParser.SetPathWriter(pathWriter);
                 _pathDataParser.Parse(buffer);
-                _curveFlatter.MakeVxs(pathWriter.Vxs, flattenVxs);
+                curveFlattener.MakeVxs(pathWriter.Vxs, v1);
 
                 //create a small copy of the vxs                  
-                return flattenVxs.CreateTrim();
+                return v1.CreateTrim();
             }
         }
         SvgRenderElement CreateGroup(SvgRenderElement parentNode, SvgVisualSpec visSpec)
