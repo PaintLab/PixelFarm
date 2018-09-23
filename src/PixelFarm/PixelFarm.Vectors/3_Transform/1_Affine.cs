@@ -335,7 +335,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-    public class Affine : ICoordTransformer 
+    public class Affine : ICoordTransformer
     {
         const double EPSILON = 1e-14;
         AffineMat _elems;
@@ -417,22 +417,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             return new Affine(this);
         }
-        //public double m11 { get { return sx; } }
-        //public double m12 { get { return shy; } }
-        //public double m21 { get { return shx; } }
-        //public double m22 { get { return sy; } }
-        //public double dx { get { return tx; } }
-        //public double dy { get { return ty; } }
-        // Custom matrix from m[6]
-        //private Affine(double[] m)
-        //{
-        //    sx = m[0];
-        //    shy = m[1];
-        //    shx = m[2];
-        //    sy = m[3];
-        //    tx = m[4];
-        //    ty = m[5];
-        //}
+     
         //-----------------------------------------
         private Affine(Affine a, Affine b)
         {
