@@ -95,7 +95,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     /// <summary>
     /// struct version of Affine (Matrix)
     /// </summary>
-    public struct AffineMat
+    struct AffineMat
     {
         //3x2 matrix (rows x cols)
         internal double
@@ -360,9 +360,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                       double v2_shx, double v3_sy,
                       double v4_tx, double v5_ty)
         {
-            //sx = v0_sx; shy = v1_shy;
-            //shx = v2_shx; sy = v3_sy;
-            //tx = v4_tx; ty = v5_ty;
             _elems.SetValues(
                 v0_sx, v1_shy,
                 v2_shx, v3_sy,
@@ -407,7 +404,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// set elements by copy values from input elems
         /// </summary>
         /// <param name="elems"></param>
-        public void SetElements(AffineMat elems)
+        internal void SetElements(AffineMat elems)
         {
             _elems = elems;
             isIdenHint = false;
@@ -417,7 +414,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             return new Affine(this);
         }
-     
+
         //-----------------------------------------
         private Affine(Affine a, Affine b)
         {

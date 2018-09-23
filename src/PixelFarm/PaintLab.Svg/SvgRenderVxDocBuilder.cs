@@ -723,7 +723,6 @@ namespace PaintLab.Svg
             bool hasClip = false;
             bool newFontReq = false;
 
-
             if (_visualSpec != null)
             {
 
