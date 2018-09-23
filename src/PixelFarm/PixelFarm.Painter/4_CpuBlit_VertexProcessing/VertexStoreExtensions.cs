@@ -268,28 +268,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
-        public static IEnumerable<VertexData> GetVertexIter(this Curve3Div curve)
-        {
-            throw new NotImplementedException();
-        }
-        public static IEnumerable<VertexData> GetVertexIter(this Curve4Div curve)
-        {
-            ArrayList<Vector2> m_points = curve.GetInternalPoints();
-            VertexData vertexData = new VertexData();
-            vertexData.command = VertexCmd.MoveTo;
-            vertexData.position = m_points[0];
-            yield return vertexData;
-            vertexData.command = VertexCmd.LineTo;
-            for (int i = 1; i < m_points.Count; i++)
-            {
-                vertexData.position = m_points[i];
-                yield return vertexData;
-            }
-
-            vertexData.command = VertexCmd.NoMore;
-            vertexData.position = new Vector2();
-            yield return vertexData;
-        }
+        
         public static IEnumerable<VertexData> GetVertexIter(this Arc arc)
         {
             // go to the start

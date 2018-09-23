@@ -142,9 +142,9 @@ namespace PixelFarm.Drawing
             m_coord_xy[index << 1] = x;
             m_coord_xy[(index << 1) + 1] = y;
         }
-        internal void ReplaceCommand(int index, VertexCmd CommandAndFlags)
+        internal void ReplaceCommand(int index, VertexCmd cmd)
         {
-            m_cmds[index] = (byte)CommandAndFlags;
+            m_cmds[index] = (byte)cmd;
         }
         internal void SwapVertices(int v1, int v2)
         {

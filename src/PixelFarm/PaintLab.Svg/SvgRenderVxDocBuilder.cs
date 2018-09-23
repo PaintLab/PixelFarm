@@ -1609,7 +1609,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsTemp.Borrow(out VertexStore v1))
+                using (VxsTemp.Borrow(out var v1))
                 {
                     PointF p = points[0];
                     PointF p0 = p;
@@ -1774,7 +1774,7 @@ namespace PaintLab.Svg
                 double r = ConvertToPx(cirSpec.Radius, ref a);
 
                 ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step  
-                cir._vxsPath = VertexSourceExtensions.MakeVxs(ellipse, v1).CreateTrim();
+                cir._vxsPath = ellipse.MakeVxs(v1).CreateTrim();
                 AssignAttributes(cirSpec);
                 return cir;
             }

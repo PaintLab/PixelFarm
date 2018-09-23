@@ -129,9 +129,6 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             get;
             set;
         }
-
-
-
         VertexStore _vxs;
         public override void Init()
         {
