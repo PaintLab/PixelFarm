@@ -241,7 +241,16 @@ namespace PixelFarm.Drawing
             }
             return Temp<VxsClipper>.Borrow(out clipper);
         }
-         
+        public static TempContext<CurveFlattener> Borrow(out CurveFlattener flattener)
+        {
+            if (!Temp<CurveFlattener>.IsInit())
+            {
+                Temp<CurveFlattener>.SetNewHandler(
+                    () => new CurveFlattener(),
+                    f => f.Reset());
+            }
+            return Temp<CurveFlattener>.Borrow(out flattener);
+        }
 
     }
 }

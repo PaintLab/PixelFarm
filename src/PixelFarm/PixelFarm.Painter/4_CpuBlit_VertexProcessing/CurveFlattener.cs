@@ -52,57 +52,61 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public class CurveFlattener
     {
         //tools , curve producer
-        readonly Curve3 m_curve3 = new Curve3();
-        readonly Curve4 m_curve4 = new Curve4();
+        readonly Curve3 _curve3 = new Curve3();
+        readonly Curve4 _curve4 = new Curve4();
         public CurveFlattener()
         {
         }
         public double ApproximationScale
         {
+            //default 1
             get
             {
-                return m_curve4.ApproximationScale;
+                return _curve4.ApproximationScale;
             }
             set
             {
-                m_curve3.ApproximationScale = value;
-                m_curve4.ApproximationScale = value;
+                _curve3.ApproximationScale = value;
+                _curve4.ApproximationScale = value;
             }
         }
         public Curves.CurveApproximationMethod ApproximationMethod
         {
+            //default div
             get
             {
-                return m_curve4.ApproximationMethod;
+                return _curve4.ApproximationMethod;
             }
             set
             {
-                m_curve3.ApproximationMethod = value;
-                m_curve4.ApproximationMethod = value;
+                _curve3.ApproximationMethod = value;
+                _curve4.ApproximationMethod = value;
             }
         }
         public double AngleTolerance
         {
+            //default 0
             get
             {
-                return m_curve4.AngleTolerance;
+                return _curve4.AngleTolerance;
             }
             set
             {
-                m_curve3.AngleTolerance = value;
-                m_curve4.AngleTolerance = value;
+                _curve3.AngleTolerance = value;
+                _curve4.AngleTolerance = value;
             }
         }
         public double CuspLimit
         {
+            //default 0
             get
             {
-                return m_curve4.CuspLimit;
+                return _curve4.CuspLimit;
             }
             set
             {
-                m_curve3.CuspLimit = value;
-                m_curve4.CuspLimit = value;
+                _curve3.CuspLimit = value;
+                _curve4.CuspLimit = value;
             }
         }
 
@@ -113,10 +117,21 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             P3
         }
 
+
+
+        public void Reset()
+        {
+            ApproximationScale = 1;
+            ApproximationMethod = Curves.CurveApproximationMethod.Div;
+            AngleTolerance = 0;
+            CuspLimit = 0;
+        }
+
+
         public VertexStore MakeVxs(VertexStore vxs, VertexStore output)
         {
-            m_curve3.Reset();
-            m_curve4.Reset();
+            _curve3.Reset();
+            _curve4.Reset();
 
             CurvePointMode latestCurveMode = CurvePointMode.NotCurve;
             double x, y;
@@ -206,7 +221,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                             {
                                 case CurvePointMode.P2:
                                     {
-                                        m_curve3.MakeLines(output,
+                                        _curve3.MakeLines(output,
                                             lastX,
                                             lasty,
                                             c3p2.X,
@@ -218,7 +233,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                                 case CurvePointMode.P3:
                                     {
 
-                                        m_curve4.MakeLines(output,
+                                        _curve4.MakeLines(output,
                                             lastX, lasty,
                                             c4p2.x, c4p2.y,
                                             c4p3.x, c4p3.y,
