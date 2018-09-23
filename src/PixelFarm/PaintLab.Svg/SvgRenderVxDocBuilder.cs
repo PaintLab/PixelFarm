@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using LayoutFarm.Svg;
-using LayoutFarm.Svg.Pathing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using LayoutFarm.WebDom;
@@ -461,8 +459,13 @@ namespace PaintLab.Svg
         internal float _imgX;
         internal float _imgY;
 
-        static Affine CreateAffine(SvgTransform transformation)
+        static ICoordTransformer ResolveTransformation(SvgTransform transformation)
         {
+            if (transformation.ResolvedICoordTransformer != null)
+            {
+                return transformation.ResolvedICoordTransformer;
+            }
+            //
             switch (transformation.TransformKind)
             {
                 default: throw new NotSupportedException();
@@ -471,7 +474,7 @@ namespace PaintLab.Svg
 
                     SvgTransformMatrix matrixTx = (SvgTransformMatrix)transformation;
                     float[] elems = matrixTx.Elements;
-                    return new Affine(
+                    return transformation.ResolvedICoordTransformer = new Affine(
                          elems[0], elems[1],
                          elems[2], elems[3],
                          elems[4], elems[5]);
@@ -484,7 +487,7 @@ namespace PaintLab.Svg
 
                         //translate to center 
                         //rotate and the translate back
-                        return Affine.NewMatix(
+                        return transformation.ResolvedICoordTransformer = Affine.NewMatix(
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-rotateTx.CenterX, -rotateTx.CenterY),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(AggMath.deg2rad(rotateTx.Angle)),
                                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(rotateTx.CenterX, rotateTx.CenterY)
@@ -496,13 +499,13 @@ namespace PaintLab.Svg
                     }
                 case SvgTransformKind.Scale:
                     SvgScale scaleTx = (SvgScale)transformation;
-                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(scaleTx.X, scaleTx.Y);
+                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewScaling(scaleTx.X, scaleTx.Y);
                 case SvgTransformKind.Shear:
                     SvgShear shearTx = (SvgShear)transformation;
-                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewSkewing(shearTx.X, shearTx.Y);
+                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewSkewing(shearTx.X, shearTx.Y);
                 case SvgTransformKind.Translation:
                     SvgTranslate translateTx = (SvgTranslate)transformation;
-                    return PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
+                    return transformation.ResolvedICoordTransformer = PixelFarm.CpuBlit.VertexProcessing.Affine.NewTranslation(translateTx.X, translateTx.Y);
             }
         }
 
@@ -523,7 +526,7 @@ namespace PaintLab.Svg
                 //has visual spec
                 if (_visualSpec.Transform != null)
                 {
-                    Affine latest = CreateAffine(_visualSpec.Transform);
+                    ICoordTransformer latest = ResolveTransformation(_visualSpec.Transform);
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
@@ -533,6 +536,7 @@ namespace PaintLab.Svg
                     {
                         currentTx = latest;
                     }
+
                     vgPainterArgs._currentTx = currentTx;
                 }
 
@@ -725,10 +729,9 @@ namespace PaintLab.Svg
 
             if (_visualSpec != null)
             {
-
                 if (_visualSpec.Transform != null)
                 {
-                    Affine latest = CreateAffine(_visualSpec.Transform);
+                    ICoordTransformer latest = ResolveTransformation(_visualSpec.Transform);
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
