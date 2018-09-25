@@ -54,12 +54,12 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------------
             //translate vertex around x1,y1
 
-            PixelFarm.CpuBlit.VertexProcessing.AffinePlan[] affPlans =
-                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan[]{
-                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1,-y1),
-                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
-                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1,y1)};
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(affPlans);
+
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1, -y1),
+                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
+                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1, y1)
+                );
             int j = vrx.Count;
             for (int i = j - 1; i >= 0; --i)
             {
@@ -136,12 +136,12 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------------
             //translate vertex around x1,y1
 
-            PixelFarm.CpuBlit.VertexProcessing.AffinePlan[] affPlans =
-                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan[]{
-                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1,-y1),
-                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
-                   PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1,y1)};
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(affPlans);
+
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1, -y1),
+                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
+                PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1, y1)
+                );
             int j = vrx.Count;
             List<float> v2fList = new List<float>();
             List<float> colorList = new List<float>();

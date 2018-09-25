@@ -79,7 +79,7 @@ namespace PixelFarm.CpuBlit
                 plans[i] = AffinePlan.Translate(destX, destY);
                 i++;
             }
-            return Affine.NewMatix(plans);
+            return Affine.NewMatix2(plans);
         }
         static Affine CreateAffine(double destX, double destY)
         {
