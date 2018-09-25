@@ -8,7 +8,7 @@ using LayoutFarm.UI;
 
 namespace LayoutFarm.CustomWidgets
 {
-    class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
+    public class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
     {
         public UIControllerBox(int w, int h)
             : base(w, h)
@@ -28,12 +28,11 @@ namespace LayoutFarm.CustomWidgets
         public int Index { get; set; }
         public MoveDirection MoveDirection { get; set; }
     }
-    enum MoveDirection
+    public enum MoveDirection
     {
         Both,
         XAxis,
         YAxis,
-
     }
 
 
@@ -484,7 +483,7 @@ namespace LayoutFarm.CustomWidgets
     {
         Box _simpleBox;
         bool _hasPrimRenderE;
-        List<PointF> _points = new List<PointF>();
+
         List<UIControllerBox> _controls = new List<UIControllerBox>();
         public PolygonController()
         {
@@ -535,27 +534,66 @@ namespace LayoutFarm.CustomWidgets
             _simpleBox.SetLocation(x, y);
         }
 
-        IUIEventListener _ui;
-        public void SetTargetUISprite(IUIEventListener ui)
+        IUIEventListener _uiListener;
+        PixelFarm.Drawing.VertexStore _vxs;
+        public void SetTargetListener(IUIEventListener uiListener)
         {
-            _ui = ui;
+            _uiListener = uiListener;
         }
-        PixelFarm.Drawing.VertexStore _vxs; 
 
-        public virtual void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs, float offsetX = 0, float offsetY = 0)
+        public List<UIControllerBox> ControlBoxes => _controls;
+
+
+        float _offsetX;
+        float _offsetY;
+        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs)
+        {
+            UpdateControlPoints(vxs, _offsetX, _offsetY);
+        }
+        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs, float offsetX, float offsetY)
         {
             //1. we remove existing point from root
 
             _vxs = vxs;
-
+            _offsetX = offsetX;
+            _offsetY = offsetY;
 
             int m = _controls.Count;
+            if (m > 0)
+            {
+
+                int j2 = vxs.Count;
+                for (int i = 0; i < j2; ++i)
+                {
+
+                    switch (vxs.GetVertex(i, out double x, out double y))
+                    {
+                        case PixelFarm.CpuBlit.VertexCmd.NoMore:
+                            return;
+                        case PixelFarm.CpuBlit.VertexCmd.MoveTo:
+                            {
+                                _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
+                            }
+                            break;
+                        case PixelFarm.CpuBlit.VertexCmd.LineTo:
+                            {
+                                _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
+                            }
+                            break;
+                        case PixelFarm.CpuBlit.VertexCmd.Close:
+                            break;
+                    }
+                }
+                //****
+                return;
+            }
+            //-----------------------------
             for (int n = 0; n < m; ++n)
             {
                 _controls[n].RemoveSelf();
             }
             _controls.Clear(); //***
-            _points.Clear();
+            _simpleBox.ClearChildren();
 
             //2. create new control points...
 
@@ -565,6 +603,8 @@ namespace LayoutFarm.CustomWidgets
 
                 switch (vxs.GetVertex(i, out double x, out double y))
                 {
+                    case PixelFarm.CpuBlit.VertexCmd.NoMore:
+                        return;
                     case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                         {
 
@@ -599,23 +639,13 @@ namespace LayoutFarm.CustomWidgets
 
             //controllerBox1.dbugTag = 3;
             box.Visible = true;
-            SetupCornerProperties(box);
-            //viewport.AddChild(box);
-            //
-            _controls.Add(box);
-        }
-
-        void SetupCornerProperties(UIControllerBox cornerBox)
-        {
             //for controller box  
-            cornerBox.MouseDrag += (s, e) =>
+            box.MouseDrag += (s, e) =>
             {
-
-
-                Point pos = cornerBox.Position;
+                Point pos = box.Position;
                 int newX = pos.X + e.XDiff;
                 int newY = pos.Y + e.YDiff;
-                cornerBox.SetLocation(newX, newY);
+                box.SetLocation(newX, newY);
                 //var targetBox = cornerBox.TargetBox;
                 //if (targetBox != null)
                 //{
@@ -623,25 +653,20 @@ namespace LayoutFarm.CustomWidgets
                 //    targetBox.SetLocation(newX + 5, newY + 5);
                 //}
                 e.CancelBubbling = true;
-
                 //---------------------------------
                 _simpleBox.InvalidateOuterGraphics();
                 foreach (var ctrl in _controls)
                 {
                     ctrl.InvalidateOuterGraphics();
                 }
-
-                //then update the vxs shape
-
-                _vxs.ReplaceVertex(cornerBox.Index, newX, newY);
-
-                //PixelFarm.CpuBlit.SvgPart.SetResolvedObject(_svgPath, null);//clear
-
-                //***
-                _ui?.HandleElementUpdate();
-
+                //then update the vxs shape 
+                //_vxs.ReplaceVertex(box.Index, newX, newY);
+                _uiListener?.HandleElementUpdate();
             };
+
         }
+
+
     }
 
 

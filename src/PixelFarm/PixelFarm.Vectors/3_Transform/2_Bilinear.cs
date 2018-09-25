@@ -112,10 +112,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             double[,] left = new double[4, 4];
             double[,] right = new double[4, 2];
+
             for (int i = 0; i < 4; i++)
             {
-                int ix = i << 1;
-                int iy = ix + 1;
+                int ix = i << 1; //*2
+                int iy = ix + 1; //+1
                 left[i, 0] = 1.0;
                 left[i, 1] = src[ix] * src[iy];
                 left[i, 2] = src[ix];

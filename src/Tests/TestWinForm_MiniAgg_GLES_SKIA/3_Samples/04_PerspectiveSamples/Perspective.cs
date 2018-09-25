@@ -163,7 +163,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                     using (VxsTemp.Borrow(out var trans_ell_vxs))
                     using (VectorToolBox.Borrow(out Ellipse ellipse))
                     {
-                        _lionShape.Paint(painter, txBilinear); //transform before draw
+                        //_lionShape.Paint(painter, txBilinear); //transform before draw
                         //
                         ellipse.Set((lionBound.Left + lionBound.Right) * 0.5,
                                     (lionBound.Bottom + lionBound.Top) * 0.5,
