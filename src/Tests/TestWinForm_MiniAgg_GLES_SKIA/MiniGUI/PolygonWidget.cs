@@ -298,28 +298,28 @@ namespace PixelFarm.CpuBlit.UI
             //check if on edge 
             if (!ret)
             {
-                //for (int i = 0; i < m_num_points; i++)
-                //{
-                //    if (CheckEdge(i, x, y))
-                //    {
-                //        m_dx = x;
-                //        m_dy = y;
-                //        m_edge = (int)(i);
-                //        ret = true;
-                //        break;
-                //    }
-                //}
+                for (int i = 0; i < m_num_points; i++)
+                {
+                    if (CheckEdge(i, x, y))
+                    {
+                        m_dx = x;
+                        m_dy = y;
+                        m_edge = (int)(i);
+                        ret = true;
+                        break;
+                    }
+                }
             }
 
             if (!ret)
             {
-                //if (IsPointInPolygon(x, y))
-                //{
-                //    m_dx = x;
-                //    m_dy = y;
-                //    m_node = (int)(m_num_points);
-                //    ret = true;
-                //}
+                if (IsPointInPolygon(x, y))
+                {
+                    m_dx = x;
+                    m_dy = y;
+                    m_node = (int)(m_num_points);
+                    ret = true;
+                }
             }
 
             Invalidate();
