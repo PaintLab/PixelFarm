@@ -27,6 +27,11 @@ namespace LayoutFarm.CustomWidgets
         }
         public int Index { get; set; }
         public MoveDirection MoveDirection { get; set; }
+
+#if DEBUG
+        public override string ToString() => Left + "," + Top;
+#endif
+
     }
     public enum MoveDirection
     {
@@ -76,6 +81,10 @@ namespace LayoutFarm.CustomWidgets
                 this.CurrentPrimaryRenderElement.InvalidateGraphics();
             }
         }
+
+        public UIControllerBox CentralBox => _centralBox;
+        public List<UIControllerBox> ControlBoxes => _controls;
+
         protected override bool HasReadyRenderElement
         {
             get { return _hasPrimRenderE; }
@@ -185,7 +194,10 @@ namespace LayoutFarm.CustomWidgets
                 ctrlBox.TargetBox = targetBox;
                 ctrlBox.Visible = true;
             }
-
+            OnUpdateShape();
+        }
+        protected virtual void OnUpdateShape()
+        {
 
         }
         void InitCornerControlBoxes()
@@ -356,6 +368,7 @@ namespace LayoutFarm.CustomWidgets
                                         target1.Top,
                                         target1.Width + xdiff,
                                         target1.Height);
+
                 //update other controller
                 UpdateControllerBoxes(target1);
 
@@ -588,7 +601,7 @@ namespace LayoutFarm.CustomWidgets
             UpdateControlPoints(vxs, _offsetX, _offsetY);
         }
 
-        bool _clearAllPointsWhenUpdate = true;
+        bool _clearAllPointsWhenUpdate = false;
 
         public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs, float offsetX, float offsetY)
         {
