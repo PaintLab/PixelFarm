@@ -536,11 +536,48 @@ namespace LayoutFarm.CustomWidgets
 
         IUIEventListener _uiListener;
         PixelFarm.Drawing.VertexStore _vxs;
+
         public void SetTargetListener(IUIEventListener uiListener)
         {
             _uiListener = uiListener;
         }
+        //--------------------
+        public void BringToTopMost()
+        {
+            AbstractBox parentBox = this.ParentUI as AbstractBox;
+            if (parentBox != null)
+            {
+                this.RemoveSelf();
+                parentBox.AddChild(this);
+            }
+            else
+            {
+                //may be at top level
+                var parentBox2 = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
+                if (parentBox2 != null)
+                {
+                    parentBox2.RemoveChild(this.CurrentPrimaryRenderElement);
+                }
+                parentBox2.AddChild(CurrentPrimaryRenderElement);
+                InvalidateOuterGraphics();
+            }
+        }
+        public void RemoveSelf()
+        {
+            if (CurrentPrimaryRenderElement == null) { return; }
 
+            var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
+            if (parentBox != null)
+            {
+                parentBox.RemoveChild(this.CurrentPrimaryRenderElement);
+            }
+            this.InvalidateOuterGraphics();
+        }
+        public void InvalidateOuterGraphics()
+        {
+            CurrentPrimaryRenderElement?.InvalidateParentGraphics();
+        }
+        //--------------------
         public List<UIControllerBox> ControlBoxes => _controls;
 
 
@@ -550,6 +587,9 @@ namespace LayoutFarm.CustomWidgets
         {
             UpdateControlPoints(vxs, _offsetX, _offsetY);
         }
+
+        bool _clearAllPointsWhenUpdate = true;
+
         public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs, float offsetX, float offsetY)
         {
             //1. we remove existing point from root
@@ -559,33 +599,37 @@ namespace LayoutFarm.CustomWidgets
             _offsetY = offsetY;
 
             int m = _controls.Count;
+
             if (m > 0)
             {
-
-                int j2 = vxs.Count;
-                for (int i = 0; i < j2; ++i)
+                if (!_clearAllPointsWhenUpdate)
                 {
-
-                    switch (vxs.GetVertex(i, out double x, out double y))
+                    int j2 = vxs.Count;
+                    for (int i = 0; i < j2; ++i)
                     {
-                        case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                            return;
-                        case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-                            {
-                                _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            }
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                            {
-                                _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            }
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.Close:
-                            break;
+
+                        switch (vxs.GetVertex(i, out double x, out double y))
+                        {
+                            case PixelFarm.CpuBlit.VertexCmd.NoMore:
+                                return;
+                            case PixelFarm.CpuBlit.VertexCmd.MoveTo:
+                                {
+                                    _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
+                                }
+                                break;
+                            case PixelFarm.CpuBlit.VertexCmd.LineTo:
+                                {
+                                    _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
+                                }
+                                break;
+                            case PixelFarm.CpuBlit.VertexCmd.Close:
+                                break;
+                        }
                     }
+                    //****
+                    return;
                 }
-                //****
-                return;
+
             }
             //-----------------------------
             for (int n = 0; n < m; ++n)
