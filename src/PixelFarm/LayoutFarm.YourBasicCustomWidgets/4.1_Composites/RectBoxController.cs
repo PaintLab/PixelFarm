@@ -268,7 +268,13 @@ namespace LayoutFarm.CustomWidgets
             SetupCorner_Controller(_boxRightBottom);
             _boxRightBottom.MouseDrag += (s1, e1) =>
             {
-                AbstractRectUI target1 = _boxRightBottom.TargetBox;
+
+                OnUpdateShape();
+                //rotate all other control points
+                //AbstractRectUI target1 = _boxRightBottom.TargetBox;
+
+
+
                 ////update target
                 //if (target1 != null)
                 //{
