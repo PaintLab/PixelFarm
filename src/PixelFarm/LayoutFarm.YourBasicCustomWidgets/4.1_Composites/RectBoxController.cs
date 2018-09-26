@@ -257,7 +257,7 @@ namespace LayoutFarm.CustomWidgets
                                           _boxRightTop.Bottom,
                                           _boxRightTop.Left - _boxLeftTop.Right,
                                           _boxRightBottom.Top - _boxRightTop.Bottom);
-                    //update other controller
+                    //update other controllers
                     UpdateControllerBoxes(target1);
                 }
             };
@@ -269,16 +269,16 @@ namespace LayoutFarm.CustomWidgets
             _boxRightBottom.MouseDrag += (s1, e1) =>
             {
                 AbstractRectUI target1 = _boxRightBottom.TargetBox;
-                //update target
-                if (target1 != null)
-                {
-                    target1.SetLocationAndSize(_boxLeftTop.Right,
-                                      _boxLeftTop.Bottom,
-                                      _boxRightBottom.Left - _boxLeftTop.Right,
-                                      _boxRightBottom.Top - _boxLeftTop.Bottom);
-                    //update other controller
-                    UpdateControllerBoxes(target1);
-                }
+                ////update target
+                //if (target1 != null)
+                //{
+                //    target1.SetLocationAndSize(_boxLeftTop.Right,
+                //                      _boxLeftTop.Bottom,
+                //                      _boxRightBottom.Left - _boxLeftTop.Right,
+                //                      _boxRightBottom.Top - _boxLeftTop.Bottom);
+                //    //update other controllers
+                //    UpdateControllerBoxes(target1);
+                //}
 
             };
             _groundBox.AddChild(_boxRightBottom);
@@ -466,6 +466,18 @@ namespace LayoutFarm.CustomWidgets
             };
         }
 
+
+
+        double _mouseDownX;
+        double _mouseDownY;
+        double _actualX;
+        double _actualY;
+        bool firstTime = true;
+        double _firstTimeRad;
+
+        //***
+        public double _rotateAngleDiff;
+        //
         void SetupCorner_Controller(UIControllerBox box)
         {
             Color c = KnownColors.FromKnownColor(KnownColor.Orange);
@@ -475,10 +487,92 @@ namespace LayoutFarm.CustomWidgets
             box.MouseDrag += (s, e) =>
             {
                 Point pos = box.Position;
-                int newX = pos.X + e.XDiff;
-                int newY = pos.Y + e.YDiff;
-                box.SetLocation(newX, newY);
-                //var targetBox = cornerBox.TargetBox;
+                double x1 = pos.x;
+                double y1 = pos.y;
+
+                if (firstTime)
+                {
+                    _mouseDownX = x1;
+                    _mouseDownY = y1;
+                    firstTime = false;
+                    //find rad of firsttime
+                    _firstTimeRad = Math.Atan2(y1, x1);
+                    _rotateAngleDiff = 0;
+                }
+                else
+                {
+                    double newX = _actualX + e.XDiff;
+                    double newY = _actualY + e.YDiff;
+
+                    //find new angle
+                    double thisTimeRad = Math.Atan2(newY, newX);
+                    _rotateAngleDiff = thisTimeRad - _firstTimeRad;
+
+                    x1 = _mouseDownX; //prevent rounding error
+                    y1 = _mouseDownY; //prevent rounding error
+                }
+                //if (firstTime)
+                //{
+                //    _snapX1 = x1;
+                //    _snapY1 = y1;
+                //    firstTime = false;
+                //}
+                //else
+                //{
+                //    x1 = _snapX1;
+                //    y1 = _snapY1;
+                //}
+                //double current_distance = Math.Sqrt(x1 * x1 + y1 * y1);
+
+                //
+                //double newX = pos.X + e.XDiff;
+                //double newY = pos.Y + e.YDiff;
+
+                //float diff = 1;
+
+                //if (e.XDiff > 0)
+                //{
+                //    diff = -1;
+                //}
+
+                //box.SetLocation((int)newX, (int)newY); 
+                PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                    //PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1, -y1),
+                    PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(_rotateAngleDiff));
+
+                //PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1, y1));
+
+                aff.Transform(ref x1, ref y1);
+                _actualX = x1;
+                _actualY = y1;
+
+                box.SetLocation((int)Math.Round(x1), (int)Math.Round(y1)); //essential to use double, prevent rounding err ***
+
+
+
+                //var targetBox = box.TargetBox;
+
+                ////test rotation around some axis
+                ////find box center
+                //if (targetBox != null)
+                //{
+                //    //find box center
+                //    float centerX = (float)((targetBox.Width + targetBox.Left) / 2f);
+                //    float centerY = (float)((targetBox.Height + targetBox.Top) / 2f);
+                //    //
+                //    Double angle = Math.Atan2(newY - centerY, newX - centerX);
+                //    //rotate
+                //    PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                //       PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-targetBox.Width / 2, -targetBox.Height / 2),
+                //       PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angle),
+                //       PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(targetBox.Width / 2, targetBox.Height / 2)
+                //    );
+                //    //transform 
+                //    aff.Transform(ref x1, ref y1);
+                //    box.SetLocation((int)x1, (int)y1);
+
+                //}
+
                 //if (targetBox != null)
                 //{
                 //    //move target box too
