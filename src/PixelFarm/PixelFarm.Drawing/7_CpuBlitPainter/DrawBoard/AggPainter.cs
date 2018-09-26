@@ -141,7 +141,7 @@ namespace PixelFarm.CpuBlit
                     this.FillColor = Color.White;
                     //aggPainter.StrokeColor = Color.Black; //for debug
                     //aggPainter.StrokeWidth = 1; //for debug  
-                    
+
                     this.Fill(vxs);
                     this.FillColor = prevColor;
                     this.TargetBufferName = TargetBufferName.Default;//swicth to default buffer
@@ -430,8 +430,48 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
+
         public override void Draw(VertexStore vxs)
         {
+            if (RenderQuality == RenderQualtity.Fast)
+            {
+
+                VertexCmd cmd;
+                int index = 0;
+                double lastMoveX = 0, lastMoveY = 0;
+                double lastX = 0, lastY = 0;
+                int stroke_color = this._strokeColor.ToARGB();
+                while ((cmd = vxs.GetVertex(index++, out double x, out double y)) != VertexCmd.NoMore)
+                {
+                    switch (cmd)
+                    {
+                        case VertexCmd.MoveTo:
+                            lastX = lastMoveX = x;
+                            lastY = lastMoveY = y;
+
+                            break;
+                        case VertexCmd.LineTo:
+
+                            //need rounding
+                            _bxt.DrawLine((int)Math.Round(lastX), (int)Math.Round(lastY), (int)Math.Round(x), (int)Math.Round(y), stroke_color);
+
+                            lastX = x;
+                            lastY = y;
+
+                            break;
+                        case VertexCmd.Close:
+
+                            _bxt.DrawLine((int)Math.Round(lastX), (int)Math.Round(lastY), (int)Math.Round(lastMoveX), (int)Math.Round(lastMoveY), stroke_color);
+
+                            lastX = x;
+                            lastY = y;
+
+                            break;
+                    }
+                }
+
+                return;
+            }
             if (_lineDashGen == null)
             {
                 //no line dash
@@ -455,7 +495,9 @@ namespace PixelFarm.CpuBlit
 
                     using (VxsTemp.Borrow(out var v1, out var v2))
                     {
-                        _lineDashGen.CreateDash(vxs, v1);
+                        //TODO: check lineDash
+
+                        //_lineDashGen.CreateDash(vxs, v1);
                         _stroke.MakeVxs(v1, v2);
                         _aggsx.Render(v2, this._strokeColor);
                     }
@@ -464,7 +506,10 @@ namespace PixelFarm.CpuBlit
                 {
                     using (VxsTemp.Borrow(out var v1))
                     {
-                        _lineDashGen.CreateDash(vxs, v1);
+
+                        //TODO: check lineDash
+
+                        //_lineDashGen.CreateDash(vxs, v1);
                         _outlineRas.RenderVertexSnap(v1, this._strokeColor);
                     }
                 }
