@@ -25,9 +25,14 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
+
         public int Index { get; set; }
         public MoveDirection MoveDirection { get; set; }
 
+        public double SrcX { get; set; }
+        public double SrcY { get; set; }
+        public double TargetX { get; set; }
+        public double TargetY { get; set; }
 #if DEBUG
         public override string ToString() => Left + "," + Top;
 #endif
@@ -490,11 +495,12 @@ namespace LayoutFarm.CustomWidgets
             box.BackColor = c;// new Color(200, c.R, c.G, c.B);
             box.SetLocation(200, 200);
             box.Visible = true;
+
             box.MouseDrag += (s, e) =>
             {
                 Point pos = box.Position;
-                double x1 = pos.x;
-                double y1 = pos.y;
+                double x1 = pos.X;
+                double y1 = pos.Y;
 
                 if (firstTime)
                 {
@@ -590,244 +596,6 @@ namespace LayoutFarm.CustomWidgets
             _controls.Add(box);
         }
     }
-
-
-    public class PolygonController : UIElement
-    {
-        Box _simpleBox;
-        bool _hasPrimRenderE;
-
-        List<UIControllerBox> _controls = new List<UIControllerBox>();
-        public PolygonController()
-        {
-
-            _simpleBox = new Box(10, 10);
-            _simpleBox.TransparentAllMouseEvents = true;
-            _simpleBox.NeedClipArea = false;
-            //_simpleBox.BackColor = Color.Transparent;//*** 
-#if DEBUG
-            _simpleBox.BackColor = Color.Blue;//***  
-#endif
-        }
-        //-------------
-        public override void InvalidateGraphics()
-        {
-            if (this.HasReadyRenderElement)
-            {
-                this.CurrentPrimaryRenderElement.InvalidateGraphics();
-            }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get { return _hasPrimRenderE; }
-        }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            _hasPrimRenderE = true;
-            return _simpleBox.GetPrimaryRenderElement(rootgfx);
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return _simpleBox.CurrentPrimaryRenderElement; }
-        }
-
-        public void SetPosition(int x, int y)
-        {
-            //TODO: review here again***
-            //temp fix for invalidate area of overlap children
-            _simpleBox.InvalidateOuterGraphics();
-            foreach (var ctrl in _controls)
-            {
-                ctrl.InvalidateOuterGraphics();
-            }
-            _simpleBox.SetLocation(x, y);
-        }
-
-        IUIEventListener _uiListener;
-        PixelFarm.Drawing.VertexStore _vxs;
-
-        public void SetTargetListener(IUIEventListener uiListener)
-        {
-            _uiListener = uiListener;
-        }
-        //--------------------
-        public void BringToTopMost()
-        {
-            AbstractBox parentBox = this.ParentUI as AbstractBox;
-            if (parentBox != null)
-            {
-                this.RemoveSelf();
-                parentBox.AddChild(this);
-            }
-            else
-            {
-                //may be at top level
-                var parentBox2 = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
-                if (parentBox2 != null)
-                {
-                    parentBox2.RemoveChild(this.CurrentPrimaryRenderElement);
-                }
-                parentBox2.AddChild(CurrentPrimaryRenderElement);
-                InvalidateOuterGraphics();
-            }
-        }
-        public void RemoveSelf()
-        {
-            if (CurrentPrimaryRenderElement == null) { return; }
-
-            var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
-            if (parentBox != null)
-            {
-                parentBox.RemoveChild(this.CurrentPrimaryRenderElement);
-            }
-            this.InvalidateOuterGraphics();
-        }
-        public void InvalidateOuterGraphics()
-        {
-            CurrentPrimaryRenderElement?.InvalidateParentGraphics();
-        }
-        //--------------------
-        public List<UIControllerBox> ControlBoxes => _controls;
-
-
-        float _offsetX;
-        float _offsetY;
-        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs)
-        {
-            UpdateControlPoints(vxs, _offsetX, _offsetY);
-        }
-
-        bool _clearAllPointsWhenUpdate = false;
-
-        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs, float offsetX, float offsetY)
-        {
-            //1. we remove existing point from root
-
-            _vxs = vxs;
-            _offsetX = offsetX;
-            _offsetY = offsetY;
-
-            int m = _controls.Count;
-
-            if (m > 0)
-            {
-                if (!_clearAllPointsWhenUpdate)
-                {
-                    int j2 = vxs.Count;
-                    for (int i = 0; i < j2; ++i)
-                    {
-
-                        switch (vxs.GetVertex(i, out double x, out double y))
-                        {
-                            case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                                return;
-                            case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-                                {
-                                    _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                                }
-                                break;
-                            case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                                {
-                                    _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                                }
-                                break;
-                            case PixelFarm.CpuBlit.VertexCmd.Close:
-                                break;
-                        }
-                    }
-                    //****
-                    return;
-                }
-
-            }
-            //-----------------------------
-            for (int n = 0; n < m; ++n)
-            {
-                _controls[n].RemoveSelf();
-            }
-            _controls.Clear(); //***
-            _simpleBox.ClearChildren();
-
-            //2. create new control points...
-
-            int j = vxs.Count;
-            for (int i = 0; i < j; ++i)
-            {
-
-                switch (vxs.GetVertex(i, out double x, out double y))
-                {
-                    case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                        return;
-                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-                        {
-
-                            var ctrlPoint = new UIControllerBox(8, 8);
-                            ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            SetupCornerBoxController(ctrlPoint);
-                            _controls.Add(ctrlPoint);
-                            _simpleBox.AddChild(ctrlPoint);
-                        }
-                        break;
-                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                        {
-                            var ctrlPoint = new UIControllerBox(8, 8);
-                            ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            SetupCornerBoxController(ctrlPoint);
-                            _controls.Add(ctrlPoint);
-                            _simpleBox.AddChild(ctrlPoint);
-                        }
-                        break;
-                    case PixelFarm.CpuBlit.VertexCmd.Close:
-                        break;
-                }
-            }
-
-        }
-        void SetupCornerBoxController(UIControllerBox box)
-        {
-            Color c = KnownColors.FromKnownColor(KnownColor.Orange);
-            box.BackColor = new Color(100, c.R, c.G, c.B);
-
-            //controllerBox1.dbugTag = 3;
-            box.Visible = true;
-            //for controller box  
-            box.MouseDrag += (s, e) =>
-            {
-                Point pos = box.Position;
-                int newX = pos.X + e.XDiff;
-                int newY = pos.Y + e.YDiff;
-                box.SetLocation(newX, newY);
-                //var targetBox = cornerBox.TargetBox;
-                //if (targetBox != null)
-                //{
-                //    //move target box too
-                //    targetBox.SetLocation(newX + 5, newY + 5);
-                //}
-                e.CancelBubbling = true;
-                //---------------------------------
-                _simpleBox.InvalidateOuterGraphics();
-                foreach (var ctrl in _controls)
-                {
-                    ctrl.InvalidateOuterGraphics();
-                }
-                //then update the vxs shape 
-                //_vxs.ReplaceVertex(box.Index, newX, newY);
-                _uiListener?.HandleElementUpdate();
-            };
-
-        }
-
-
-    }
-
-
-
 
 
 
