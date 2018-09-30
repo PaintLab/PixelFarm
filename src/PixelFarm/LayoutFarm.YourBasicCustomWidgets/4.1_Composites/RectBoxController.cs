@@ -29,10 +29,11 @@ namespace LayoutFarm.CustomWidgets
         public int Index { get; set; }
         public MoveDirection MoveDirection { get; set; }
 
-        public double SrcX { get; set; }
-        public double SrcY { get; set; }
-        public double TargetX { get; set; }
-        public double TargetY { get; set; }
+        //public double SrcX { get; set; }
+        //public double SrcY { get; set; }
+        //public double TargetX { get; set; }
+        //public double TargetY { get; set; }
+
 #if DEBUG
         public override string ToString() => Left + "," + Top;
 #endif
