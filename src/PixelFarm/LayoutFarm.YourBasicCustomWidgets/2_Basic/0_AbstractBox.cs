@@ -357,7 +357,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected virtual void SetInnerContentSize(int w, int h)
+        public virtual void SetInnerContentSize(int w, int h)
         {
             this._innerWidth = w;
             this._innerHeight = h;
