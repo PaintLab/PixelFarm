@@ -610,7 +610,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             return new Affine(IdentityMatrix, creationPlan);
         }
-        public static Affine NewMatix2(AffinePlan[] creationPlans)
+        public static Affine NewMatix2(params AffinePlan[] creationPlans)
         {
             return new Affine(creationPlans);
         }

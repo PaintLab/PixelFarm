@@ -28,6 +28,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public static class BoundingRect
     {
+        
         public static RectD GetBoundingRect(this VertexStore vxs)
         {
             RectD bounds = RectD.ZeroIntersection;
