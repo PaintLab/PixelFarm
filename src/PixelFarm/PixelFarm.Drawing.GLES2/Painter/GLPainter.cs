@@ -724,24 +724,22 @@ namespace PixelFarm.DrawingGL
                     //also  rotate 
                     if (centerFormArc.scaleUp)
                     {
-                        var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-
-
+                        var mat = Affine.NewMatix(
+                                new AffinePlan(AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                                new AffinePlan(AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                                new AffinePlan(AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                                new AffinePlan(AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
 
                         mat.TransformToVxs(v1, v2);
                         v1 = v2;
                     }
                     else
                     {
-                        //not scalue
-                        var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                        //not scale
+                        var mat = Affine.NewMatix(
+                                AffinePlan.Translate(-centerFormArc.cx, -centerFormArc.cy),
+                                AffinePlan.RotateDeg(xaxisRotationAngleDec),
+                                AffinePlan.Translate(centerFormArc.cx, centerFormArc.cy));
 
                         mat.TransformToVxs(v1, v2);
                         v1 = v2;
@@ -752,10 +750,10 @@ namespace PixelFarm.DrawingGL
                     //no rotate
                     if (centerFormArc.scaleUp)
                     {
-                        var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                                new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                        var mat = Affine.NewMatix(
+                                new AffinePlan(AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                                new AffinePlan(AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                                new AffinePlan(AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
 
                         mat.TransformToVxs(v1, v2);
                         v1 = v2;

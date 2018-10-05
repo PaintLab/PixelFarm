@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.UI
@@ -26,6 +25,8 @@ namespace LayoutFarm.UI
 
         HitChain GetFreeHitChain()
         {
+            //TODO: review here again
+
             return new HitChain();
             //            if (hitChainStack.Count > 0)
             //            {                    
@@ -186,15 +187,13 @@ namespace LayoutFarm.UI
             }
             dbugMsgChainVersion = 1;
             int local_msgVersion = 1;
-#endif
-
-
+#endif 
             HitChain hitPointChain = GetFreeHitChain();
-
-            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
 #if DEBUG
             hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseDown;
 #endif
+            HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
+
 
             int hitCount = hitPointChain.Count;
 

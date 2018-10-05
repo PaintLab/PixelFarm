@@ -1240,6 +1240,10 @@ namespace PaintLab.Svg
         public SvgRenderElement _renderE;
         public ICoordTransformer _coordTx;
 
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+#endif
         public VgRenderVx(SvgRenderElement svgRenderE)
         {
             _renderE = svgRenderE;

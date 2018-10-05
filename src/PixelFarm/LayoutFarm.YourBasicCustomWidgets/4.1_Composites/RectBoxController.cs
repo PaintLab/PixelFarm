@@ -25,8 +25,19 @@ namespace LayoutFarm.CustomWidgets
             this.Describe(visitor);
             visitor.EndElement();
         }
+
         public int Index { get; set; }
         public MoveDirection MoveDirection { get; set; }
+
+        //public double SrcX { get; set; }
+        //public double SrcY { get; set; }
+        //public double TargetX { get; set; }
+        //public double TargetY { get; set; }
+
+#if DEBUG
+        public override string ToString() => Left + "," + Top;
+#endif
+
     }
     public enum MoveDirection
     {
@@ -76,6 +87,10 @@ namespace LayoutFarm.CustomWidgets
                 this.CurrentPrimaryRenderElement.InvalidateGraphics();
             }
         }
+
+        public UIControllerBox CentralBox => _centralBox;
+        public List<UIControllerBox> ControlBoxes => _controls;
+
         protected override bool HasReadyRenderElement
         {
             get { return _hasPrimRenderE; }
@@ -185,7 +200,10 @@ namespace LayoutFarm.CustomWidgets
                 ctrlBox.TargetBox = targetBox;
                 ctrlBox.Visible = true;
             }
-
+            OnUpdateShape();
+        }
+        protected virtual void OnUpdateShape()
+        {
 
         }
         void InitCornerControlBoxes()
@@ -245,7 +263,7 @@ namespace LayoutFarm.CustomWidgets
                                           _boxRightTop.Bottom,
                                           _boxRightTop.Left - _boxLeftTop.Right,
                                           _boxRightBottom.Top - _boxRightTop.Bottom);
-                    //update other controller
+                    //update other controllers
                     UpdateControllerBoxes(target1);
                 }
             };
@@ -256,17 +274,23 @@ namespace LayoutFarm.CustomWidgets
             SetupCorner_Controller(_boxRightBottom);
             _boxRightBottom.MouseDrag += (s1, e1) =>
             {
-                AbstractRectUI target1 = _boxRightBottom.TargetBox;
-                //update target
-                if (target1 != null)
-                {
-                    target1.SetLocationAndSize(_boxLeftTop.Right,
-                                      _boxLeftTop.Bottom,
-                                      _boxRightBottom.Left - _boxLeftTop.Right,
-                                      _boxRightBottom.Top - _boxLeftTop.Bottom);
-                    //update other controller
-                    UpdateControllerBoxes(target1);
-                }
+
+                OnUpdateShape();
+                //rotate all other control points
+                //AbstractRectUI target1 = _boxRightBottom.TargetBox;
+
+
+
+                ////update target
+                //if (target1 != null)
+                //{
+                //    target1.SetLocationAndSize(_boxLeftTop.Right,
+                //                      _boxLeftTop.Bottom,
+                //                      _boxRightBottom.Left - _boxLeftTop.Right,
+                //                      _boxRightBottom.Top - _boxLeftTop.Bottom);
+                //    //update other controllers
+                //    UpdateControllerBoxes(target1);
+                //}
 
             };
             _groundBox.AddChild(_boxRightBottom);
@@ -356,6 +380,7 @@ namespace LayoutFarm.CustomWidgets
                                         target1.Top,
                                         target1.Width + xdiff,
                                         target1.Height);
+
                 //update other controller
                 UpdateControllerBoxes(target1);
 
@@ -453,19 +478,114 @@ namespace LayoutFarm.CustomWidgets
             };
         }
 
+
+
+        double _mouseDownX;
+        double _mouseDownY;
+        double _actualX;
+        double _actualY;
+        bool firstTime = true;
+        double _firstTimeRad;
+
+        //***
+        public double _rotateAngleDiff;
+        //
         void SetupCorner_Controller(UIControllerBox box)
         {
             Color c = KnownColors.FromKnownColor(KnownColor.Orange);
             box.BackColor = c;// new Color(200, c.R, c.G, c.B);
             box.SetLocation(200, 200);
             box.Visible = true;
+
             box.MouseDrag += (s, e) =>
             {
                 Point pos = box.Position;
-                int newX = pos.X + e.XDiff;
-                int newY = pos.Y + e.YDiff;
-                box.SetLocation(newX, newY);
-                //var targetBox = cornerBox.TargetBox;
+                double x1 = pos.X;
+                double y1 = pos.Y;
+
+                if (firstTime)
+                {
+                    _mouseDownX = x1;
+                    _mouseDownY = y1;
+                    firstTime = false;
+                    //find rad of firsttime
+                    _firstTimeRad = Math.Atan2(y1, x1);
+                    _rotateAngleDiff = 0;
+                }
+                else
+                {
+                    double newX = _actualX + e.XDiff;
+                    double newY = _actualY + e.YDiff;
+
+                    //find new angle
+                    double thisTimeRad = Math.Atan2(newY, newX);
+                    _rotateAngleDiff = thisTimeRad - _firstTimeRad;
+
+                    x1 = _mouseDownX; //prevent rounding error
+                    y1 = _mouseDownY; //prevent rounding error
+                }
+                //if (firstTime)
+                //{
+                //    _snapX1 = x1;
+                //    _snapY1 = y1;
+                //    firstTime = false;
+                //}
+                //else
+                //{
+                //    x1 = _snapX1;
+                //    y1 = _snapY1;
+                //}
+                //double current_distance = Math.Sqrt(x1 * x1 + y1 * y1);
+
+                //
+                //double newX = pos.X + e.XDiff;
+                //double newY = pos.Y + e.YDiff;
+
+                //float diff = 1;
+
+                //if (e.XDiff > 0)
+                //{
+                //    diff = -1;
+                //}
+
+                //box.SetLocation((int)newX, (int)newY); 
+                PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                    //PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x1, -y1),
+                    PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(_rotateAngleDiff));
+
+                //PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x1, y1));
+
+                aff.Transform(ref x1, ref y1);
+                _actualX = x1;
+                _actualY = y1;
+
+                box.SetLocation((int)Math.Round(x1), (int)Math.Round(y1)); //essential to use double, prevent rounding err ***
+
+
+
+                //var targetBox = box.TargetBox;
+
+                ////test rotation around some axis
+                ////find box center
+                //if (targetBox != null)
+                //{
+                //    //find box center
+                //    float centerX = (float)((targetBox.Width + targetBox.Left) / 2f);
+                //    float centerY = (float)((targetBox.Height + targetBox.Top) / 2f);
+                //    //
+                //    Double angle = Math.Atan2(newY - centerY, newX - centerX);
+                //    //rotate
+                //    PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                //       PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-targetBox.Width / 2, -targetBox.Height / 2),
+                //       PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angle),
+                //       PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(targetBox.Width / 2, targetBox.Height / 2)
+                //    );
+                //    //transform 
+                //    aff.Transform(ref x1, ref y1);
+                //    box.SetLocation((int)x1, (int)y1);
+
+                //}
+
                 //if (targetBox != null)
                 //{
                 //    //move target box too
@@ -477,200 +597,6 @@ namespace LayoutFarm.CustomWidgets
             _controls.Add(box);
         }
     }
-
-
-    public class PolygonController : UIElement
-    {
-        Box _simpleBox;
-        bool _hasPrimRenderE;
-
-        List<UIControllerBox> _controls = new List<UIControllerBox>();
-        public PolygonController()
-        {
-
-            _simpleBox = new Box(10, 10);
-            _simpleBox.TransparentAllMouseEvents = true;
-            _simpleBox.NeedClipArea = false;
-            //_simpleBox.BackColor = Color.Transparent;//*** 
-#if DEBUG
-            _simpleBox.BackColor = Color.Blue;//***  
-#endif
-        }
-        //-------------
-        public override void InvalidateGraphics()
-        {
-            if (this.HasReadyRenderElement)
-            {
-                this.CurrentPrimaryRenderElement.InvalidateGraphics();
-            }
-        }
-        protected override bool HasReadyRenderElement
-        {
-            get { return _hasPrimRenderE; }
-        }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            _hasPrimRenderE = true;
-            return _simpleBox.GetPrimaryRenderElement(rootgfx);
-        }
-        public override void Walk(UIVisitor visitor)
-        {
-
-        }
-        public override RenderElement CurrentPrimaryRenderElement
-        {
-            get { return _simpleBox.CurrentPrimaryRenderElement; }
-        }
-
-        public void SetPosition(int x, int y)
-        {
-            //TODO: review here again***
-            //temp fix for invalidate area of overlap children
-            _simpleBox.InvalidateOuterGraphics();
-            foreach (var ctrl in _controls)
-            {
-                ctrl.InvalidateOuterGraphics();
-            }
-            _simpleBox.SetLocation(x, y);
-        }
-
-        IUIEventListener _uiListener;
-        PixelFarm.Drawing.VertexStore _vxs;
-        public void SetTargetListener(IUIEventListener uiListener)
-        {
-            _uiListener = uiListener;
-        }
-
-        public List<UIControllerBox> ControlBoxes => _controls;
-
-
-        float _offsetX;
-        float _offsetY;
-        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs)
-        {
-            UpdateControlPoints(vxs, _offsetX, _offsetY);
-        }
-        public void UpdateControlPoints(PixelFarm.Drawing.VertexStore vxs, float offsetX, float offsetY)
-        {
-            //1. we remove existing point from root
-
-            _vxs = vxs;
-            _offsetX = offsetX;
-            _offsetY = offsetY;
-
-            int m = _controls.Count;
-            if (m > 0)
-            {
-
-                int j2 = vxs.Count;
-                for (int i = 0; i < j2; ++i)
-                {
-
-                    switch (vxs.GetVertex(i, out double x, out double y))
-                    {
-                        case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                            return;
-                        case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-                            {
-                                _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            }
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                            {
-                                _controls[i].SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            }
-                            break;
-                        case PixelFarm.CpuBlit.VertexCmd.Close:
-                            break;
-                    }
-                }
-                //****
-                return;
-            }
-            //-----------------------------
-            for (int n = 0; n < m; ++n)
-            {
-                _controls[n].RemoveSelf();
-            }
-            _controls.Clear(); //***
-            _simpleBox.ClearChildren();
-
-            //2. create new control points...
-
-            int j = vxs.Count;
-            for (int i = 0; i < j; ++i)
-            {
-
-                switch (vxs.GetVertex(i, out double x, out double y))
-                {
-                    case PixelFarm.CpuBlit.VertexCmd.NoMore:
-                        return;
-                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
-                        {
-
-                            var ctrlPoint = new UIControllerBox(8, 8);
-                            ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            SetupCornerBoxController(ctrlPoint);
-                            _controls.Add(ctrlPoint);
-                            _simpleBox.AddChild(ctrlPoint);
-                        }
-                        break;
-                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
-                        {
-                            var ctrlPoint = new UIControllerBox(8, 8);
-                            ctrlPoint.Index = i;
-                            ctrlPoint.SetLocation((int)(x + offsetX), (int)(y + offsetY));
-                            SetupCornerBoxController(ctrlPoint);
-                            _controls.Add(ctrlPoint);
-                            _simpleBox.AddChild(ctrlPoint);
-                        }
-                        break;
-                    case PixelFarm.CpuBlit.VertexCmd.Close:
-                        break;
-                }
-            }
-
-        }
-        void SetupCornerBoxController(UIControllerBox box)
-        {
-            Color c = KnownColors.FromKnownColor(KnownColor.Orange);
-            box.BackColor = new Color(100, c.R, c.G, c.B);
-
-            //controllerBox1.dbugTag = 3;
-            box.Visible = true;
-            //for controller box  
-            box.MouseDrag += (s, e) =>
-            {
-                Point pos = box.Position;
-                int newX = pos.X + e.XDiff;
-                int newY = pos.Y + e.YDiff;
-                box.SetLocation(newX, newY);
-                //var targetBox = cornerBox.TargetBox;
-                //if (targetBox != null)
-                //{
-                //    //move target box too
-                //    targetBox.SetLocation(newX + 5, newY + 5);
-                //}
-                e.CancelBubbling = true;
-                //---------------------------------
-                _simpleBox.InvalidateOuterGraphics();
-                foreach (var ctrl in _controls)
-                {
-                    ctrl.InvalidateOuterGraphics();
-                }
-                //then update the vxs shape 
-                //_vxs.ReplaceVertex(box.Index, newX, newY);
-                _uiListener?.HandleElementUpdate();
-            };
-
-        }
-
-
-    }
-
-
-
 
 
 
