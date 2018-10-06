@@ -26,10 +26,14 @@ namespace PixelFarm.CpuBlit.Samples
 
         bool _validBoundingRect;
         VertexStore _vxs;
+
+        List<VertexStore> _subVxsList;
         List<Vector2> _contPoints = new List<Vector2>();
         RectD _boundingRect = new RectD();
-
         bool _cachedValid = false;
+        const int SUBPATH_POINT_LIMIT = 100;
+
+
         public MyBrushPath()
         {
             this.StrokeColor = Drawing.Color.Transparent;
@@ -46,17 +50,19 @@ namespace PixelFarm.CpuBlit.Samples
             _contPoints.Insert(0, new Vector2(x, y));
             _cachedValid = false;
         }
-        public VertexStore Vxs
+        public void FillPath(Painter p, float stokeW)
         {
-            get
+            if (_subVxsList != null)
             {
-                return _cachedValid ? _vxs : null;
+                int j = _subVxsList.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    p.Fill(_subVxsList[i]);
+                }
             }
-        }
-        public void SetVxs(VertexStore vxs)
-        {
-            this._vxs = vxs;
-            _validBoundingRect = false;
+
+            MakeRegularPath(stokeW);
+            p.Fill(_vxs);
         }
         public Vector2 GetStartPoint()
         {
@@ -143,6 +149,35 @@ namespace PixelFarm.CpuBlit.Samples
             {
                 stroke.Width = strokeW;
                 int j = _contPoints.Count;
+
+                while (j > SUBPATH_POINT_LIMIT)
+                {
+                    //split the old one
+
+                    Vector2 v = new Vector2();
+                    for (int i = 0; i < SUBPATH_POINT_LIMIT; ++i)
+                    {
+                        v = _contPoints[i];
+                        if (i == 0)
+                        {
+                            v1.AddMoveTo(v.x, v.y);
+                        }
+                        else
+                        {
+                            v1.AddLineTo(v.x, v.y);
+                        }
+                    }
+                    _contPoints.RemoveRange(0, SUBPATH_POINT_LIMIT);
+                    stroke.MakeVxs(v1, v2);
+                    _vxs = v2.CreateTrim();
+                    //
+                    if (_subVxsList == null) { _subVxsList = new List<VertexStore>(); }
+                    _subVxsList.Add(_vxs);
+                    //
+                    _contPoints.Add(v);
+                    j = _contPoints.Count; //**
+                }
+
                 for (int i = 0; i < j; ++i)
                 {
                     Vector2 v = _contPoints[i];
