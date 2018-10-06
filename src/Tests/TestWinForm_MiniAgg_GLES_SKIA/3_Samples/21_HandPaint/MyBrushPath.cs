@@ -29,7 +29,7 @@ namespace PixelFarm.CpuBlit.Samples
         List<Vector2> _contPoints = new List<Vector2>();
         RectD _boundingRect = new RectD();
 
-        bool cachedValid = false;
+        bool _cachedValid = false;
         public MyBrushPath()
         {
             this.StrokeColor = Drawing.Color.Transparent;
@@ -37,20 +37,20 @@ namespace PixelFarm.CpuBlit.Samples
         public void AddPointAtLast(int x, int y)
         {
             _contPoints.Add(new Vector2(x, y));
-            cachedValid = false;
+            _cachedValid = false;
 
             //System.Diagnostics.Debug.WriteLine(_contPoints.Count.ToString());
         }
         public void AddPointAtFirst(int x, int y)
         {
             _contPoints.Insert(0, new Vector2(x, y));
-            cachedValid = false;
+            _cachedValid = false;
         }
         public VertexStore Vxs
         {
             get
             {
-                return _vxs;
+                return _cachedValid ? _vxs : null;
             }
         }
         public void SetVxs(VertexStore vxs)
@@ -126,40 +126,25 @@ namespace PixelFarm.CpuBlit.Samples
         public void MakeRegularPath(float strokeW)
         {
 
-            if (this.cachedValid)
+            if (_cachedValid)
             {
                 return;
             }
-            this.cachedValid = true;
-
+            _cachedValid = true;
             if (_contPoints.Count == 0)
             {
                 _vxs = null;
                 return;
             }
-            if (_contPoints.Count > 2)
-            {
 
-            }
-            //SimplifyPaths();
-            //_stroke1.Width = strokeW * 2;
-            //_stroke1.LineCap = LineCap.Round;
-            //_stroke1.LineJoin = LineJoin.Round;
 
             using (VectorToolBox.Borrow(out Stroke stroke))
             using (VxsTemp.Borrow(out var v1, out var v2))
             {
-                stroke.Width = strokeW * 2;
-                //st.LineCap = LineCap.Butt;
-                //st.LineJoin = LineJoin.Miter;
-
+                stroke.Width = strokeW;
                 int j = _contPoints.Count;
-                System.Diagnostics.Debug.WriteLine("b" + j.ToString());
-
                 for (int i = 0; i < j; ++i)
                 {
-                    //TODO: review here
-                    //
                     Vector2 v = _contPoints[i];
                     if (i == 0)
                     {
@@ -170,9 +155,6 @@ namespace PixelFarm.CpuBlit.Samples
                         v1.AddLineTo(v.x, v.y);
                     }
                 }
-
-                v1.AddCloseFigure();
-
                 stroke.MakeVxs(v1, v2);
                 _vxs = v2.CreateTrim();
             }
@@ -271,11 +253,11 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public void MakeSmoothPath()
         {
-            if (this.cachedValid)
+            if (this._cachedValid)
             {
                 return;
             }
-            this.cachedValid = true;
+            this._cachedValid = true;
             //--------
             if (_contPoints.Count == 0)
             {
