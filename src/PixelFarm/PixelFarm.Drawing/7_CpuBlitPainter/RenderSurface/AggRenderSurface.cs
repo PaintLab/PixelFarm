@@ -30,7 +30,7 @@ namespace PixelFarm.CpuBlit
     public sealed partial class AggRenderSurface
     {
         MyBitmapBlender _destBitmapBlender;
-        ScanlinePacked8 sclinePack8;
+        ScanlinePacked8 _sclinePack8;
 
         DestBitmapRasterizer _bmpRasterizer;
 
@@ -58,7 +58,7 @@ namespace PixelFarm.CpuBlit
             //
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this._sclineRas.SetClipBox(this.clipBox);
-            this.sclinePack8 = new ScanlinePacked8();
+            this._sclinePack8 = new ScanlinePacked8();
         }
 
 
@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit
 
         public ScanlinePacked8 ScanlinePacked8
         {
-            get { return this.sclinePack8; }
+            get { return this._sclinePack8; }
         }
         public PixelProcessing.PixelBlender32 PixelBlender
         {
@@ -219,20 +219,14 @@ namespace PixelFarm.CpuBlit
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-
                 _sclineRas.AddPath(vxs, transform);
-
-                //-------------------------
-                //since sclineRas do NOT store vxs
-                //then we can reuse the vxs***
-                //-------------------------
             }
             else
             {
                 _sclineRas.AddPath(vxs);
             }
-            _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, sclinePack8, c);
-            unchecked { destImageChanged++; };
+            _bmpRasterizer.RenderWithColor(_destBitmapBlender, _sclineRas, _sclinePack8, c);
+            unchecked { _destImageChanged++; };
             //-----------------------------
         }
         ActualBitmap destActualImage;

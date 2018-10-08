@@ -27,6 +27,7 @@ namespace PixelFarm.CpuBlit.Samples
         bool _validBoundingRect;
         VertexStore _vxs;
 
+        List<ActualBitmap> _subBmpCacheList;
         List<VertexStore> _subVxsList;
         List<Vector2> _contPoints = new List<Vector2>();
         RectD _boundingRect = new RectD();
@@ -52,17 +53,35 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public void FillPath(Painter p, float stokeW)
         {
-            if (_subVxsList != null)
-            {
-                int j = _subVxsList.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    p.Fill(_subVxsList[i]);
-                }
-            }
+            //RenderQualtity prevRenderQ = p.RenderQuality;
+            //p.RenderQuality = RenderQualtity.Fast;
+            //if (_subVxsList != null)
+            //{
+            //    int j = _subVxsList.Count;
+            //    for (int i = 0; i < j; ++i)
+            //    {
+            //        p.Fill(_subVxsList[i]);
+            //    }
+            //}
 
             MakeRegularPath(stokeW);
+
+            if (_subBmpCacheList != null)
+            {
+                int j = _subBmpCacheList.Count;
+
+                RenderQuality q = p.RenderQuality;
+                p.RenderQuality = RenderQuality.Fast;
+                for (int i = 0; i < j; ++i)
+                {
+                    ActualBitmap bmp = _subBmpCacheList[i];
+                    p.DrawImage(bmp);
+                }
+                p.RenderQuality = q;
+            }
             p.Fill(_vxs);
+
+            //p.RenderQuality = prevRenderQ;
         }
         public Vector2 GetStartPoint()
         {
@@ -129,6 +148,26 @@ namespace PixelFarm.CpuBlit.Samples
         }
 
 
+        ActualBitmap CreateBmpCache(VertexStore vxs)
+        {
+            //----------------
+            //create img cache 
+            RectD bounds = PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(_vxs);
+            //----------------
+            PixelFarm.CpuBlit.ActualBitmap backimg = new PixelFarm.CpuBlit.ActualBitmap((int)bounds.Width, (int)bounds.Height);
+            PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backimg);
+
+            double prevStrokeW = painter.StrokeWidth;
+            Color prevFill = painter.FillColor;
+            Color prevStrokeColor = painter.StrokeColor;
+
+            painter.StrokeWidth = 1;
+            painter.FillColor = Color.Black;
+            painter.Fill(vxs);
+
+            painter.StrokeWidth = prevStrokeW;
+            return backimg;
+        }
         public void MakeRegularPath(float strokeW)
         {
 
@@ -152,8 +191,7 @@ namespace PixelFarm.CpuBlit.Samples
 
                 while (j > SUBPATH_POINT_LIMIT)
                 {
-                    //split the old one
-
+                    //split the old one 
                     Vector2 v = new Vector2();
                     for (int i = 0; i < SUBPATH_POINT_LIMIT; ++i)
                     {
@@ -167,15 +205,26 @@ namespace PixelFarm.CpuBlit.Samples
                             v1.AddLineTo(v.x, v.y);
                         }
                     }
+
                     _contPoints.RemoveRange(0, SUBPATH_POINT_LIMIT);
+
                     stroke.MakeVxs(v1, v2);
-                    _vxs = v2.CreateTrim();
+                    //1.
+                    // _vxs = v2.CreateTrim(); 
+                    ActualBitmap cacheBmp = CreateBmpCache(v2);
                     //
                     if (_subVxsList == null) { _subVxsList = new List<VertexStore>(); }
+                    if (_subBmpCacheList == null) { _subBmpCacheList = new List<ActualBitmap>(); }
+
+
                     _subVxsList.Add(_vxs);
+                    _subBmpCacheList.Add(cacheBmp);
+                    //
                     //
                     _contPoints.Add(v);
                     j = _contPoints.Count; //**
+
+                    //Console.WriteLine(_subBmpCacheList.Count);
                 }
 
                 for (int i = 0; i < j; ++i)

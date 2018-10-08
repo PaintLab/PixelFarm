@@ -842,23 +842,23 @@ namespace PaintLab.Svg
                                         if (this._imgW == 0 || this._imgH == 0)
                                         {
                                             //only X,and Y
-                                            RenderQualtity prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQualtity.Fast;
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQuality.Fast;
                                             p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
                                             p.RenderQuality = prevQ;
                                         }
                                         else if (_imgW == img.Width && _imgH == img.Height)
                                         {
-                                            RenderQualtity prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQualtity.Fast;
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQuality.Fast;
                                             p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
                                             p.RenderQuality = prevQ;
                                         }
                                         else
                                         {
                                             //TODO:  impl img scale here
-                                            RenderQualtity prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQualtity.Fast;
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQuality.Fast;
                                             p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
                                             p.RenderQuality = prevQ;
                                         }

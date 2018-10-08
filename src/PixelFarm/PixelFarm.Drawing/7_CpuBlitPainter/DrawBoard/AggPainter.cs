@@ -306,8 +306,8 @@ namespace PixelFarm.CpuBlit
             _aggsx.SetScanlineRasOrigin(x, y);
 
         }
-        RenderQualtity _renderQuality;
-        public override RenderQualtity RenderQuality
+        RenderQuality _renderQuality;
+        public override RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -327,12 +327,12 @@ namespace PixelFarm.CpuBlit
                     case Drawing.SmoothingMode.AntiAlias:
                         //TODO: review here
                         //anti alias != lcd technique 
-                        this.RenderQuality = RenderQualtity.HighQuality;
+                        this.RenderQuality = RenderQuality.HighQuality;
                         _aggsx.UseSubPixelLcdEffect = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
                     default:
-                        this.RenderQuality = RenderQualtity.Fast;
+                        this.RenderQuality = RenderQuality.Fast;
                         _aggsx.UseSubPixelLcdEffect = false;
                         break;
                 }
@@ -361,7 +361,7 @@ namespace PixelFarm.CpuBlit
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             //BitmapExt
-            if (this.RenderQuality == RenderQualtity.Fast)
+            if (this.RenderQuality == RenderQuality.Fast)
             {
                 this._bxt.DrawLine(
                     (int)Math.Round(x1),
@@ -433,7 +433,7 @@ namespace PixelFarm.CpuBlit
 
         public override void Draw(VertexStore vxs)
         {
-            if (RenderQuality == RenderQualtity.Fast)
+            if (RenderQuality == RenderQuality.Fast)
             {
 
                 VertexCmd cmd;
@@ -521,7 +521,7 @@ namespace PixelFarm.CpuBlit
         {
 
             //BitmapExt
-            if (this.RenderQuality == RenderQualtity.Fast)
+            if (this.RenderQuality == RenderQuality.Fast)
             {
 
                 if (this._orientation == DrawBoardOrientation.LeftBottom)
@@ -602,7 +602,7 @@ namespace PixelFarm.CpuBlit
 
             //---------------------------------------------------------- 
             //BitmapExt
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (this._renderQuality == RenderQuality.Fast)
             {
 
                 this._bxt.DrawEllipseCentered(
@@ -651,7 +651,7 @@ namespace PixelFarm.CpuBlit
             }
             //---------------------------------------------------------- 
             //BitmapExt
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (this._renderQuality == RenderQuality.Fast)
             {
                 this._bxt.FillEllipseCentered(
                    (int)Math.Round(ox), (int)Math.Round(oy),
@@ -682,7 +682,7 @@ namespace PixelFarm.CpuBlit
 
             //---------------------------------------------------------- 
             //BitmapExt
-            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQuality.Fast)
             {
                 this._bxt.FillRectangle(
                       (int)Math.Round(left),
@@ -955,7 +955,7 @@ namespace PixelFarm.CpuBlit
         public override void Fill(VertexStore vxs)
         {
             //
-            if (_useDefaultBrush && this._renderQuality == RenderQualtity.Fast)
+            if (_useDefaultBrush && this._renderQuality == RenderQuality.Fast)
             {
                 FillWithBxt(vxs);
                 return;
@@ -1058,7 +1058,7 @@ namespace PixelFarm.CpuBlit
         void DrawBitmap(ActualBitmap actualBmp, double left, double top)
         {
             //check image caching system 
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (this._renderQuality == RenderQuality.Fast)
             {
                 TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualBmp);
                 unsafe
@@ -1101,7 +1101,7 @@ namespace PixelFarm.CpuBlit
         void DrawBitmap(ActualBitmap actualBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
             //check image caching system 
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (this._renderQuality == RenderQuality.Fast)
             {
                 TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualBmp);
                 unsafe
@@ -1172,6 +1172,37 @@ namespace PixelFarm.CpuBlit
                 DrawBitmap(actualBmp, left, top);
             }
         }
+        public override void DrawImage(Image img)
+        {
+            ActualBitmap actualImg = img as ActualBitmap;
+            if (actualImg == null)
+            {
+                //? TODO
+                return;
+            }
+
+            if (this._renderQuality == RenderQuality.Fast)
+            {
+                //todo, review here again
+                TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, tmp.Ptr, tmp.LengthInBytes);
+
+                //this._bxt.BlitRender(srcBmp, false, 1, null);
+                //this._bxt.Blit(0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight,
+                //    ColorInt.FromArgb(255, 255, 255, 255),
+                //    BitmapBufferExtensions.BlendMode.Alpha);
+                this._bxt.FastAlphaBlit(0, 0, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight);
+                return;
+            }
+            //-------------------------------
+            bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
+                                                   //before render an image we turn off vxs subpixel rendering
+            this.UseSubPixelLcdEffect = false;
+
+            this._aggsx.Render(actualImg, null);
+            //restore...
+            this.UseSubPixelLcdEffect = useSubPix;
+        }
         public override void DrawImage(Image img, params AffinePlan[] affinePlans)
         {
             ActualBitmap actualImg = img as ActualBitmap;
@@ -1181,24 +1212,24 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-            if (this._renderQuality == RenderQualtity.Fast)
+            if (this._renderQuality == RenderQuality.Fast)
             {
                 //todo, review here again
                 TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
-                unsafe
-                {
-                    BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, tmp.Ptr, tmp.LengthInBytes);
-                    if (affinePlans != null)
-                    {
-                        this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
-                    }
-                    else
-                    {
-                        this._bxt.BlitRender(srcBmp, false, 1, null);
-                    }
-                    return;
-                }
 
+                BitmapBuffer srcBmp = new BitmapBuffer(img.Width, img.Height, tmp.Ptr, tmp.LengthInBytes);
+                if (affinePlans != null && affinePlans.Length > 0)
+                {
+                    this._bxt.BlitRender(srcBmp, false, 1, new BitmapBufferEx.MatrixTransform(affinePlans));
+                }
+                else
+                {
+                    //this._bxt.BlitRender(srcBmp, false, 1, null);
+                    this._bxt.Blit(0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight, srcBmp, 0, 0, srcBmp.PixelWidth, srcBmp.PixelHeight,
+                        ColorInt.FromArgb(255, 255, 255, 255),
+                        BitmapBufferExtensions.BlendMode.Alpha);
+                }
+                return;
             }
 
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 

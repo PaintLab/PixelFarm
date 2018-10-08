@@ -32,7 +32,7 @@ namespace PixelFarm.DrawingGL
         //fonts
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
-        RenderQualtity _renderQuality;
+        RenderQuality _renderQuality;
 
 
         public GLPainter(GLRenderSurface glsx)
@@ -85,7 +85,7 @@ namespace PixelFarm.DrawingGL
             _glsx.SetCanvasOrigin((int)ox, (int)oy);
         }
         public GLRenderSurface Canvas { get { return this._glsx; } }
-        public override RenderQualtity RenderQuality
+        public override RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -289,12 +289,20 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
+            //TODO: affinePlans
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+            if (glBmp != null)
+            {
+                _glsx.DrawImage(glBmp, 0, 0);
+            } 
+        }
+        public override void DrawImage(Image actualImage)
+        {
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
             }
-
         }
         public override void DrawImage(Image actualImage, double left, double top)
         {

@@ -42,7 +42,7 @@ namespace PixelFarm.Drawing
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
         public abstract void SetOrigin(float ox, float oy);
-        public abstract RenderQualtity RenderQuality { get; set; }
+        public abstract RenderQuality RenderQuality { get; set; }
 
         public abstract int Width { get; }
         public abstract int Height { get; }
@@ -84,6 +84,7 @@ namespace PixelFarm.Drawing
         /// <param name="top"></param>
         public abstract void DrawImage(Image actualImage, double left, double top);
         public abstract void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH);
+        public abstract void DrawImage(Image actualImage);
         public abstract void DrawImage(Image actualImage, params CpuBlit.VertexProcessing.AffinePlan[] affinePlans);
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
