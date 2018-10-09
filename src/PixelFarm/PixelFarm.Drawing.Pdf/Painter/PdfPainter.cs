@@ -76,8 +76,8 @@ namespace PixelFarm.Drawing.Pdf
                 throw new NotImplementedException();
             }
         }
-        RenderQualtity _renderQuality;
-        public override RenderQualtity RenderQuality
+        PixelFarm.Drawing.RenderQuality _renderQuality;
+        public override PixelFarm.Drawing.RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -218,6 +218,7 @@ namespace PixelFarm.Drawing.Pdf
             }
         }
 
+         
         public override void Clear(Color color)
         {
             //_gfx.Clear(VxsHelper.ToDrawingColor(color));
@@ -418,7 +419,7 @@ namespace PixelFarm.Drawing.Pdf
         {
             // VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs), _fillColor);
         }
-        
+
         //public override void FillCircle(double x, double y, double radius)
         //{
         //    //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
@@ -534,5 +535,9 @@ namespace PixelFarm.Drawing.Pdf
             //VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
         }
 
+        public override void DrawImage(Image actualImage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -25,9 +25,11 @@ namespace PixelFarm.CpuBlit.Samples
     {
 
         bool _validBoundingRect;
-        VertexStore _vxs;
-        List<VertexStore> _subVxsList;
+
+        VertexStore _latestVxs;
+        List<VertexStore> _subVxsPathList;
         List<Vector2> _contPoints = new List<Vector2>();
+        //
         RectD _boundingRect = new RectD();
         bool _cachedValid = false;
         const int SUBPATH_POINT_LIMIT = 100;
@@ -36,8 +38,7 @@ namespace PixelFarm.CpuBlit.Samples
         public MyBrushPath()
         {
             this.StrokeColor = Drawing.Color.Transparent;
-            _vxs = new VertexStore();
-
+            _latestVxs = new VertexStore();
         }
         public void AddPointAtLast(int x, int y)
         {
@@ -49,14 +50,7 @@ namespace PixelFarm.CpuBlit.Samples
             _contPoints.Insert(0, new Vector2(x, y));
             _cachedValid = false;
         }
-        public void UpdateCachePainter(Painter cachePainter, float strokeW)
-        {
-            MakeRegularPath(strokeW, cachePainter);
-        }
-        public void FillPath(Painter p, float strokeW)
-        {
-            p.Fill(_vxs);
-        }
+
         public Vector2 GetStartPoint()
         {
             if (_contPoints != null)
@@ -107,7 +101,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             //apply translation  
             //TODO: review here again, not to use new VertexStore()
-            this._vxs = _vxs.TranslateToNewVxs(xdiff, ydiff, new VertexStore());
+            this._latestVxs = _latestVxs.TranslateToNewVxs(xdiff, ydiff, new VertexStore());
             _boundingRect.Offset(xdiff, ydiff);
         }
         public Drawing.Color StrokeColor
@@ -122,7 +116,54 @@ namespace PixelFarm.CpuBlit.Samples
         }
 
 
-        public void PaintLatest(Painter cachePainter)
+        public void SetVxs(VertexStore newVxs)
+        {
+            //clear existing vxs
+            _contPoints.Clear();
+            if (_subVxsPathList != null)
+            {
+                _subVxsPathList.Clear();
+                _subVxsPathList = null;
+            }
+            //replace
+            _latestVxs = newVxs;
+        }
+        public VertexStore GetMergedVxs()
+        {
+            //merge all vxs into a large one
+            if (_subVxsPathList != null)
+            {
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    int j = _subVxsPathList.Count;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        v1.AppendVertexStore(_subVxsPathList[i]);
+                    }
+                    v1.AppendVertexStore(_latestVxs);
+                    return v1.CreateTrim();//
+                }
+            }
+            else
+            {
+                return _latestVxs;
+            }
+        }
+
+        public int CacheCount => _subVxsPathList != null ? _subVxsPathList.Count : 0;
+
+        public void PaintCache(Painter p)
+        {
+            if (_subVxsPathList != null)
+            {
+                int j = _subVxsPathList.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    p.Fill(_subVxsPathList[i]);
+                }
+            }
+        }
+        public void PaintLatest(Painter p)
         {
             int j = _contPoints.Count;
             using (VectorToolBox.Borrow(out Stroke stroke))
@@ -142,12 +183,12 @@ namespace PixelFarm.CpuBlit.Samples
                 }
 
                 stroke.MakeVxs(v1, v2);
-                cachePainter.Fill(v2);
+                p.Fill(v2);
             }
         }
-        public void MakeRegularPath(float strokeW, Painter cachePainter)
+        public void MakeRegularPath(float strokeW)
         {
-
+            //convert points to vxs
             if (_cachedValid)
             {
                 return;
@@ -155,7 +196,7 @@ namespace PixelFarm.CpuBlit.Samples
             _cachedValid = true;
             if (_contPoints.Count == 0)
             {
-                _vxs = null;
+                _latestVxs = null;
                 return;
             }
 
@@ -182,26 +223,18 @@ namespace PixelFarm.CpuBlit.Samples
                     }
 
                     _contPoints.RemoveRange(0, SUBPATH_POINT_LIMIT);
-
                     stroke.MakeVxs(v1, v2);
-                    //1.
-                    // _vxs = v2.CreateTrim(); 
-                    cachePainter.Fill(v2);
 
-                    //ActualBitmap cacheBmp = CreateBmpCache(v2);
-                    //
-                    if (_subVxsList == null) { _subVxsList = new List<VertexStore>(); }
-                    //if (_subBmpCacheList == null) { _subBmpCacheList = new List<ActualBitmap>(); } 
-                    _subVxsList.Add(_vxs);
-                    //_subBmpCacheList.Add(cacheBmp);
-                    //
-                    //
+                    if (_subVxsPathList == null) { _subVxsPathList = new List<VertexStore>(); }
+
+                    _subVxsPathList.Add(v2.CreateTrim());
+
                     _contPoints.Add(v);
-                    j = _contPoints.Count; //**
+                    j = _contPoints.Count; //** 
 
-                    //Console.WriteLine(_subBmpCacheList.Count);
+                    v1.Clear();//reuse
                 }
-
+                //
                 for (int i = 0; i < j; ++i)
                 {
                     Vector2 v = _contPoints[i];
@@ -214,11 +247,11 @@ namespace PixelFarm.CpuBlit.Samples
                         v1.AddLineTo(v.x, v.y);
                     }
                 }
-                _vxs.Clear();
-                stroke.MakeVxs(v1, _vxs);
+                _latestVxs.Clear();
+                stroke.MakeVxs(v1, _latestVxs);
             }
-            //release vxs to pool
         }
+
 
         void SimplifyPaths()
         {
@@ -232,25 +265,25 @@ namespace PixelFarm.CpuBlit.Samples
             List<Vector2> data2 = _contPoints;
             CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
 
-            _vxs = new VertexStore();
+            _latestVxs = new VertexStore();
             int j = cubicBzs.Length;
             //1. 
             if (j > 1)
             {
                 //1st
                 CubicBezier bz0 = cubicBzs[0];
-                _vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
-                _vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                _latestVxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
+                _latestVxs.AddLineTo(bz0.p0.x, bz0.p0.y);
                 if (!bz0.HasSomeNanComponent)
                 {
-                    _vxs.AddCurve4To(
+                    _latestVxs.AddCurve4To(
                         bz0.p1.x, bz0.p1.y,
                         bz0.p2.x, bz0.p2.y,
                         bz0.p3.x, bz0.p3.y);
                 }
                 else
                 {
-                    _vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                    _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
                 }
 
 
@@ -260,38 +293,38 @@ namespace PixelFarm.CpuBlit.Samples
                     CubicBezier bz = cubicBzs[i];
                     if (!bz.HasSomeNanComponent)
                     {
-                        _vxs.AddCurve4To(
+                        _latestVxs.AddCurve4To(
                             bz.p1.x, bz.p1.y,
                             bz.p2.x, bz.p2.y,
                             bz.p3.x, bz.p3.y);
                     }
                     else
                     {
-                        _vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                        _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
                     }
 
                 }
                 //-------------------------------
                 //close
                 //TODO: we not need this AddLineTo()
-                _vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
-                _vxs.AddCloseFigure();
+                _latestVxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                _latestVxs.AddCloseFigure();
             }
             else if (j == 1)
             {
                 CubicBezier bz0 = cubicBzs[0];
-                _vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
+                _latestVxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
 
                 if (!bz0.HasSomeNanComponent)
                 {
-                    _vxs.AddCurve4To(
+                    _latestVxs.AddCurve4To(
                         bz0.p1.x, bz0.p1.y,
                         bz0.p2.x, bz0.p2.y,
                         bz0.p3.x, bz0.p3.y);
                 }
                 else
                 {
-                    _vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                    _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
                 }
 
 
@@ -306,8 +339,8 @@ namespace PixelFarm.CpuBlit.Samples
             using (VectorToolBox.Borrow(out CurveFlattener cflat))
             using (VxsTemp.Borrow(out var v1))
             {
-                cflat.MakeVxs(_vxs, v1);
-                _vxs = v1.CreateTrim();
+                cflat.MakeVxs(_latestVxs, v1);
+                _latestVxs = v1.CreateTrim();
             }
         }
         public void MakeSmoothPath()
@@ -328,18 +361,18 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public void Close()
         {
-            this._vxs = new VertexStore();
+            this._latestVxs = new VertexStore();
             int j = _contPoints.Count;
             if (j > 0)
             {
                 Vector2 p = _contPoints[0];
-                _vxs.AddMoveTo(p.x, p.y);
+                _latestVxs.AddMoveTo(p.x, p.y);
                 for (int i = 1; i < j; ++i)
                 {
                     p = _contPoints[i];
-                    _vxs.AddLineTo(p.x, p.y);
+                    _latestVxs.AddLineTo(p.x, p.y);
                 }
-                _vxs.AddCloseFigure();
+                _latestVxs.AddCloseFigure();
             }
         }
 #if DEBUG
@@ -387,14 +420,14 @@ namespace PixelFarm.CpuBlit.Samples
             //check if point in polygon
             if (!_validBoundingRect)
             {
-                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(_vxs, ref _boundingRect);
+                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(_latestVxs, ref _boundingRect);
                 _validBoundingRect = true;
             }
             if (this._boundingRect.Contains(x, y))
             {
                 //fine tune
                 //hit test ***
-                return VertexHitTester.IsPointInVxs(this._vxs, x, y);
+                return VertexHitTester.IsPointInVxs(this._latestVxs, x, y);
             }
             return false;
         }

@@ -52,44 +52,46 @@ namespace PixelFarm.CpuBlit.Samples
             int j = myBrushPathList.Count;
             for (int n = 0; n < j; ++n)
             {
-                var brushPath = myBrushPathList[n];
-                if (brushPath.Vxs != null)
-                {
-                    switch (brushPath.BrushMode)
-                    {
-                        case SmoothBrushMode.CutBrush:
-                            {
-                            }
-                            break;
-                        default:
-                            {
-                                //TODO: review PixelCache here
-                                p.FillColor = brushPath.FillColor;
-                                p.Fill(brushPath.Vxs);
+                myBrushPathList[n].PaintLatest(p);
 
-#if DEBUG
-                                //if (brushPath.StrokeColor.alpha > 0)
-                                //{
-                                //    p.StrokeColor = Drawing.Color.Red;
-                                //    p.Draw(brushPath.Vxs);
-                                //}
-#endif
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    //current drawing brush
-                    var contPoints = brushPath.contPoints;
-                    int pcount = contPoints.Count;
-                    for (int i = 1; i < pcount; ++i)
-                    {
-                        var p0 = contPoints[i - 1];
-                        var p1 = contPoints[i];
-                        p.DrawLine(p0.x, p0.y, p1.x, p1.y);
-                    }
-                }
+                //                MyBrushPath brushPath = myBrushPathList[n];
+                //                if (brushPath.Vxs != null)
+                //                {
+                //                    switch (brushPath.BrushMode)
+                //                    {
+                //                        case SmoothBrushMode.CutBrush:
+                //                            {
+                //                            }
+                //                            break;
+                //                        default:
+                //                            {
+                //                                //TODO: review PixelCache here
+                //                                p.FillColor = brushPath.FillColor;
+                //                                p.Fill(brushPath.Vxs);
+
+                //#if DEBUG
+                //                                //if (brushPath.StrokeColor.alpha > 0)
+                //                                //{
+                //                                //    p.StrokeColor = Drawing.Color.Red;
+                //                                //    p.Draw(brushPath.Vxs);
+                //                                //}
+                //#endif
+                //                            }
+                //                            break;
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    //current drawing brush
+                //                    var contPoints = brushPath.contPoints;
+                //                    int pcount = contPoints.Count;
+                //                    for (int i = 1; i < pcount; ++i)
+                //                    {
+                //                        var p0 = contPoints[i - 1];
+                //                        var p1 = contPoints[i];
+                //                        p.DrawLine(p0.x, p0.y, p1.x, p1.y);
+                //                    }
+                //                }
             }
         }
 
@@ -131,8 +133,9 @@ namespace PixelFarm.CpuBlit.Samples
                                         //do path clip***
                                         List<VertexStore> paths = new List<VertexStore>();
                                         PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
-                                                lastPath.Vxs,
-                                                currentBrushPath.Vxs, VertexProcessing.VxsClipperType.Difference,
+                                                lastPath.GetMergedVxs(),
+                                                currentBrushPath.GetMergedVxs(),
+                                                VertexProcessing.VxsClipperType.Difference,
                                                 true,
                                                 paths);
 
