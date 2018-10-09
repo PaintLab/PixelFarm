@@ -342,7 +342,7 @@ namespace PixelFarm.Drawing
                        _cmds,
                         0,
                       another._vertices_count);
-            } 
+            }
         }
         private VertexStore(VertexStore src, bool trim)
         {
@@ -380,8 +380,8 @@ namespace PixelFarm.Drawing
                 int coord_len = src._coord_xy.Length;
                 int cmds_len = src._cmds.Length;
 
-                this._coord_xy = new double[coord_len];
-                this._cmds = new byte[cmds_len];
+                this._coord_xy = new double[(coord_len + 1) << 1];
+                this._cmds = new byte[(cmds_len + 1) << 1];
 
                 System.Array.Copy(
                      src._coord_xy,
