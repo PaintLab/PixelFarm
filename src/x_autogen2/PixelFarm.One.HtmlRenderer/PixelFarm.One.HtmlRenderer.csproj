@@ -951,24 +951,6 @@
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\IGraphicsMode.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\IGraphicsMode.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\ErrorHelper.cs">
-      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\ErrorHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GL.cs">
-      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GL.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLCore.cs">
-      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLCore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLDelegates.cs">
-      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLDelegates.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLEnums.cs">
-      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLEnums.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLHelper.cs">
-      <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\OpenGL\GLHelper.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\Rectangle_Point_Size.cs">
       <Link>PixelFarm\BackEnd.MiniOpenTK\OpenTK\Graphics\Rectangle_Point_Size.cs</Link>
     </Compile>

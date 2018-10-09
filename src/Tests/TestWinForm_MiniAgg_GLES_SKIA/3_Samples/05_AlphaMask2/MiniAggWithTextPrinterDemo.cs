@@ -113,7 +113,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 SetupFontAtlasPrinter(p);
             }
 
-            p.RenderQuality = RenderQualtity.HighQuality;
+            p.RenderQuality = RenderQuality.HighQuality;
             p.Orientation = DrawBoardOrientation.LeftBottom;
 
             //clear the image to white         

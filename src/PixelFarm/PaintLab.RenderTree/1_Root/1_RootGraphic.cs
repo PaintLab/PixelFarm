@@ -96,6 +96,9 @@ namespace LayoutFarm
             {
                 return;
             }
+#if DEBUG
+            //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
+#endif
             this._canvasInvalidateDelegate(accumulateInvalidRect);
             this._paintToOutputWindowHandler();
             hasAccumRect = false;

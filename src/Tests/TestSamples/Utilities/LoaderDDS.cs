@@ -11,6 +11,7 @@
 
 using System;
 using OpenTK.Graphics.OpenGL;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.TextureLoaders
 {
     /// <summary> 
@@ -662,3 +663,4 @@ namespace Examples.TextureLoaders
         }
     }
 }
+#endif

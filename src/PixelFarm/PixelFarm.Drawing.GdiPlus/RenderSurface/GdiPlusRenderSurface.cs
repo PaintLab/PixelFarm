@@ -692,8 +692,8 @@ namespace PixelFarm.Drawing.WinGdi
             //        image.Height == destRect.Height)
             //    {
             //        Painter painter = GetAggPainter();
-            //        //RenderQualtity prev = painter.RenderQuality;
-            //        //painter.RenderQuality = RenderQualtity.Fast;
+            //        //RenderQuality prev = painter.RenderQuality;
+            //        //painter.RenderQuality = RenderQuality.Fast;
             //        //draw image at current position
 
             //        painter.DrawImage((PixelFarm.CpuBlit.ActualBitmap)image);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenTK;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.Shapes
 {
     public sealed class SlicedSphere : DrawableShape
@@ -175,3 +176,4 @@ namespace Examples.Shapes
         }
     }
 }
+#endif

@@ -153,7 +153,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 //g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
 
-                //p.RenderQuality = RenderQualtity.Fast;
+                //p.RenderQuality = RenderQuality.Fast;
 
                 //*** the atlas is inverted so...
                 //p.DrawImage(_fontBmp, g_x, g_y, srcX, _fontBmp.Height - (srcY), srcW, srcH);
@@ -232,11 +232,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             if (UseBitmapExt)
             {
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = RenderQualtity.HighQuality;
+                p.RenderQuality = RenderQuality.HighQuality;
             }
 
             p.Orientation = DrawBoardOrientation.LeftBottom;

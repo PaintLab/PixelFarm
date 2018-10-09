@@ -51,7 +51,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             {
                 //solid color
                 var p2 = (AggPainter)p;
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
 
                 ////solid color + alpha
                 p.FillColor = Color.FromArgb(80, Drawing.Color.Red);

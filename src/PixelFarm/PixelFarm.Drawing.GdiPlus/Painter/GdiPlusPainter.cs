@@ -35,8 +35,8 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        RenderQualtity _renderQuality;
-        public override RenderQualtity RenderQuality
+        RenderQuality _renderQuality;
+        public override RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -382,6 +382,10 @@ namespace PixelFarm.Drawing.WinGdi
         //            //return glBmp;
         //        }
         //    }
+        public override void DrawImage(Image actualImage)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             throw new NotImplementedException();

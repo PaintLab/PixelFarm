@@ -64,12 +64,6 @@
     <Compile Include="OpenTK\Graphics\GraphicsModeException.cs" />
     <Compile Include="OpenTK\Graphics\IGraphicsContext.cs" />
     <Compile Include="OpenTK\Graphics\IGraphicsMode.cs" />
-    <Compile Include="OpenTK\Graphics\OpenGL\ErrorHelper.cs" />
-    <Compile Include="OpenTK\Graphics\OpenGL\GL.cs" />
-    <Compile Include="OpenTK\Graphics\OpenGL\GLCore.cs" />
-    <Compile Include="OpenTK\Graphics\OpenGL\GLDelegates.cs" />
-    <Compile Include="OpenTK\Graphics\OpenGL\GLEnums.cs" />
-    <Compile Include="OpenTK\Graphics\OpenGL\GLHelper.cs" />
     <Compile Include="OpenTK\Graphics\Rectangle_Point_Size.cs" />
     <Compile Include="OpenTK\IWindowInfo.cs" />
     <Compile Include="OpenTK\Math\BezierCurve.cs" />

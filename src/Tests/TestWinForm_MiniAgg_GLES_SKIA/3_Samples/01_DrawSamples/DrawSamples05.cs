@@ -36,11 +36,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             if (UseBitmapExt)
             {
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = RenderQualtity.HighQuality;
+                p.RenderQuality = RenderQuality.HighQuality;
             }
 
 
@@ -148,11 +148,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             if (UseBitmapExt)
             {
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = RenderQualtity.HighQuality;
+                p.RenderQuality = RenderQuality.HighQuality;
             }
 
             p.Clear(Drawing.Color.White);

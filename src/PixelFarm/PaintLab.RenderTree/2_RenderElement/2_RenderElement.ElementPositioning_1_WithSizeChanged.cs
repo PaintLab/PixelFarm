@@ -77,7 +77,6 @@ namespace LayoutFarm
 
         public void SetBounds(int left, int top, int width, int height)
         {
-
             if (parentLink == null)
             {
                 this.b_left = left;
@@ -93,8 +92,9 @@ namespace LayoutFarm
                 this.b_width = width;
                 this.b_height = height;
                 this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
-
             }
         }
+
+       
     }
 }

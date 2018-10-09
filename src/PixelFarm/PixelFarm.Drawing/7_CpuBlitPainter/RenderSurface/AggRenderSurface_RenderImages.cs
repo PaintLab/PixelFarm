@@ -79,7 +79,7 @@ namespace PixelFarm.CpuBlit
                 plans[i] = AffinePlan.Translate(destX, destY);
                 i++;
             }
-            return Affine.NewMatix(plans);
+            return Affine.NewMatix2(plans);
         }
         static Affine CreateAffine(double destX, double destY)
         {
@@ -102,7 +102,7 @@ namespace PixelFarm.CpuBlit
             _bmpRasterizer.RenderWithSpan(
                 _destBitmapBlender,
                 _sclineRas,
-                sclinePack8,
+                _sclinePack8,
                 spanGen);
         }
 
@@ -247,7 +247,7 @@ namespace PixelFarm.CpuBlit
                     }
                     TransformToVxs(ref destRectTransform, imgBoundsPath, v1);
                     Render(v1, imgSpanGen);
-                    unchecked { destImageChanged++; };
+                    unchecked { _destImageChanged++; };
                 }
             }
         }
@@ -273,7 +273,7 @@ namespace PixelFarm.CpuBlit
         }
 
 
-        int destImageChanged = 0;
+        int _destImageChanged = 0;
         public void Render(IBitmapSrc source, AffinePlan[] affinePlans)
         {
             using (VxsTemp.Borrow(out var v1, out var v2))
@@ -498,7 +498,7 @@ namespace PixelFarm.CpuBlit
 
 
                 //
-                unchecked { destImageChanged++; };
+                unchecked { _destImageChanged++; };
             }
 
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using OpenTK;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.Shapes
 {
     public sealed partial class SierpinskiTetrahedron : DrawableShape
@@ -156,3 +157,4 @@ namespace Examples.Shapes
         }
     }
 }
+#endif
