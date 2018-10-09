@@ -59,11 +59,11 @@ namespace PixelFarm.CpuBlit.Samples
 
             if (UseBitmapExt)
             {
-                p.RenderQuality = Drawing.RenderQualtity.Fast;
+                p.RenderQuality = Drawing.RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = Drawing.RenderQualtity.HighQuality;
+                p.RenderQuality = Drawing.RenderQuality.HighQuality;
             }
 
             _testSprite.Render(p);
@@ -156,11 +156,11 @@ namespace PixelFarm.CpuBlit.Samples
 
             if (UseBitmapExt)
             {
-                p.RenderQuality = Drawing.RenderQualtity.Fast;
+                p.RenderQuality = Drawing.RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = Drawing.RenderQualtity.HighQuality;
+                p.RenderQuality = Drawing.RenderQuality.HighQuality;
             }
 
             foreach (MyTestSprite s in _spriteList)
