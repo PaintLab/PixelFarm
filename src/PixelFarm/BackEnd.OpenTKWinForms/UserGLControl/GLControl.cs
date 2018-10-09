@@ -32,7 +32,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenTK.Platform;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+
 namespace OpenTK
 {
     /// <summary>
