@@ -6,6 +6,12 @@
 
 using System;
 using OpenTK.Graphics.OpenGL;
+namespace OpenTK.Graphics.OpenGL
+{
+    class dummy1 { }
+
+}
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.TextureLoaders
 {
     /// <summary>The parameters in this class have only effect on the following Texture loads.</summary>
@@ -33,3 +39,4 @@ namespace Examples.TextureLoaders
         public static TextureEnvMode EnvMode = TextureEnvMode.Modulate;
     }
 }
+#endif

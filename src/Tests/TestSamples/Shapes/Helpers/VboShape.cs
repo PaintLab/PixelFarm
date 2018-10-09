@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.Shapes
 {
     public sealed class VboShape : DrawableShape
@@ -23,3 +24,4 @@ namespace Examples.Shapes
         }
     }
 }
+#endif

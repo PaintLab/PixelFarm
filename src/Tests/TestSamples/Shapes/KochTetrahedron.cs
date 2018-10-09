@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.Shapes
 {
     public sealed class KochTetrahedron : DrawableShape
@@ -63,3 +64,4 @@ namespace Examples.Shapes
         }
     }
 }
+#endif
