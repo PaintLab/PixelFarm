@@ -22,7 +22,7 @@ namespace OpenTK
              2, // n buffer, 2=> double buffer
              false);//sterio
         public MyGLControl()
-            : base(gfxmode, 2, 0, OpenTK.Graphics.GraphicsContextFlags.Embedded)
+            : base(gfxmode, 3, 0, OpenTK.Graphics.GraphicsContextFlags.Embedded)
         {
             this.InitializeComponent();
         }

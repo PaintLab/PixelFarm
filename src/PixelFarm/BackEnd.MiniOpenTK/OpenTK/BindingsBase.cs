@@ -140,7 +140,7 @@ namespace OpenTK
             foreach (FieldInfo f in delegates)
             {
                 //-------------------------------
-                //field name myst be preserved
+                //field name must be preserved
                 //-------------------------------
                 Delegate d = LoadDelegate(f.Name, f.FieldType);
                 if (d != null)
