@@ -41,7 +41,8 @@ namespace OpenTkEssTest
         bool isGLInit;
         protected override void OnReadyForInitGLShaderProgram()
         {
-            IntPtr eglPostSubBufferNVFuncPtr = OpenTK.Platform.Egl.EglFuncs.GetProcAddress("eglPostSubBufferNV");
+            IntPtr eglPostSubBufferNVFuncPtr = OpenTK.Platform.Egl.Egl.GetProcAddress("eglPostSubBufferNV");
+            
             if (eglPostSubBufferNVFuncPtr == IntPtr.Zero)
             {
                 throw new NotSupportedException();

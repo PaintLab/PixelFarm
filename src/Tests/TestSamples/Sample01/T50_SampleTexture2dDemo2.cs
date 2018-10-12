@@ -151,7 +151,7 @@ namespace OpenTkEssTest
             var lazyImgProvider = new PixelFarm.DrawingGL.LazyAggBitmapBufferProvider(bmp);
             IntPtr ptr = lazyImgProvider.GetRawBufferHead();
 
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
             //bmp.UnlockBits(bmpdata);
             //glGenerateMipmap(GL_TEXTURE_2D);
             GL.GenerateMipmap(TextureTarget.Texture2D);
