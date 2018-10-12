@@ -26,8 +26,7 @@ namespace Pencil.Gaming
         bool vsync;
         Thread current_thread;
 
-        public GLFWContextForOpenTK(ContextHandle handle)
-            : base(DesktopBackend.ES20)
+        public GLFWContextForOpenTK(ContextHandle handle) 
         {
             Handle = handle;
             current_thread = Thread.CurrentThread;

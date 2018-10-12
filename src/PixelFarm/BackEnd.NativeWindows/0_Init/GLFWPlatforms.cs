@@ -62,6 +62,10 @@ namespace PixelFarm
         {
             get { return glfwWindowPtr; }
         }
+        public IntPtr Handle
+        {
+            get { return glfwWindowPtr.inner_ptr; }
+        }
     }
 
 

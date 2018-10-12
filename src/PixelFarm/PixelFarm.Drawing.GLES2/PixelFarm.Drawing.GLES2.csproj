@@ -126,9 +126,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
-      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>BackEnd.MiniOpenTK</Name>
+    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
+      <Name>MiniOpenTKLevel1</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>

@@ -54,7 +54,7 @@ namespace PixelFarm.DrawingGL
                         GL.BufferData(BufferTarget.ArrayBuffer,
                             new IntPtr(_vertextBuffer.Length * 4), //size in byte
                             new IntPtr(vertDataPtr),
-                            BufferUsage.StaticDraw);   //this version we use static draw
+                            (BufferUsageHint)BufferUsage.StaticDraw);   //this version we use static draw
                     }
                     // IMPORTANT: Unbind from the buffer when we're done with it.
                     GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -70,7 +70,7 @@ namespace PixelFarm.DrawingGL
                         GL.BufferData(BufferTarget.ElementArrayBuffer,
                             new IntPtr(_indexBuffer.Length * sizeof(ushort)), //size of ushort = 2
                             new IntPtr(indexDataPtr),
-                            BufferUsage.StaticDraw);   //this version we use static draw
+                            (BufferUsageHint)BufferUsage.StaticDraw);   //this version we use static draw
                     }
                     // IMPORTANT: Unbind from the buffer when we're done with it.
                     GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
@@ -173,7 +173,7 @@ namespace PixelFarm.DrawingGL
                         GL.BufferData(BufferTarget.ArrayBuffer,
                             new IntPtr(_vertextBuffer.Length * 4), //size in byte
                             new IntPtr(vertDataPtr),
-                            BufferUsage.StaticDraw);   //this version we use static draw
+                            (BufferUsageHint)BufferUsage.StaticDraw);   //this version we use static draw
                     }
                     // IMPORTANT: Unbind from the buffer when we're done with it.
                     GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -189,7 +189,7 @@ namespace PixelFarm.DrawingGL
                         GL.BufferData(BufferTarget.ElementArrayBuffer,
                             new IntPtr(_indexBuffer.Length * 2),
                             new IntPtr(indexDataPtr),
-                            BufferUsage.StaticDraw);   //this version we use static draw
+                            (BufferUsageHint)BufferUsage.StaticDraw);   //this version we use static draw
                     }
                     // IMPORTANT: Unbind from the buffer when we're done with it.
                     GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
