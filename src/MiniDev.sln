@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGLES_GLFW_Basic", "Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSamples", "Tests\TestSamples\TestSamples.csproj", "{18EC3701-C6A5-429D-8C65-19ED4A2C2FED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.GLES2", "PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj", "{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.GLES", "PixelFarm\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj", "{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.TypeMirror", "PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj", "{68F1DAF6-2B35-476E-B2F8-5EADBC823935}"
 EndProject
