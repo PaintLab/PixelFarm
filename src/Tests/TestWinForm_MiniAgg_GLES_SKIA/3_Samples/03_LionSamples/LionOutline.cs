@@ -187,7 +187,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
             if (UseBitmapExt)
             {
-                p.RenderQuality = Drawing.RenderQualtity.Fast;
+                p.RenderQuality = Drawing.RenderQuality.Fast;
                 p.Clear(Drawing.Color.White);
                 p.StrokeWidth = 1;
 
@@ -196,7 +196,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             }
             else
             {
-                p.RenderQuality = Drawing.RenderQualtity.HighQuality;
+                p.RenderQuality = Drawing.RenderQuality.HighQuality;
             }
 
 

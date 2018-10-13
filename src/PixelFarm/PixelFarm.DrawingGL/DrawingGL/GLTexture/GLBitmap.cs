@@ -69,13 +69,13 @@ namespace PixelFarm.DrawingGL
             unsafe
             {
                 PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(srcBmp);
-                System.Runtime.InteropServices.Marshal.Copy(tmp.Ptr, buffer, 0, srcBmp.Width * srcBmp.Height); 
+                System.Runtime.InteropServices.Marshal.Copy(tmp.Ptr, buffer, 0, srcBmp.Width * srcBmp.Height);
             }
             rawIntBuffer = buffer;
 
         }
 
-       
+
         public bool IsBigEndianPixel { get; set; }
 
         public bool IsInvert
@@ -119,8 +119,8 @@ namespace PixelFarm.DrawingGL
                 GL.BindTexture(TextureTarget.Texture2D, this.textureId);
                 if (nativeImgMem != IntPtr.Zero)
                 {
-                    GL.TexImage2D(TextureTarget.Texture2D, 0,
-                          PixelInternalFormat.Rgba, this.width, this.height, 0,
+                    GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                          (TextureComponentCount)PixelInternalFormat.Rgba, this.width, this.height, 0,
                           PixelFormat.Rgba, // 
                           PixelType.UnsignedByte, nativeImgMem);
                 }
@@ -146,8 +146,8 @@ namespace PixelFarm.DrawingGL
                         fixed (int* head = &rawIntBuffer[0])
                         {
 
-                            GL.TexImage2D(TextureTarget.Texture2D, 0,
-                            PixelInternalFormat.Rgba, this.width, this.height, 0,
+                            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                            (TextureComponentCount)PixelInternalFormat.Rgba, this.width, this.height, 0,
                             PixelFormat.Rgba, // 
                             PixelType.UnsignedByte, new IntPtr((void*)head));
                         }
@@ -165,8 +165,8 @@ namespace PixelFarm.DrawingGL
                 {
                     //use lazy provider
                     IntPtr bmpScan0 = this.lazyProvider.GetRawBufferHead();
-                    GL.TexImage2D(TextureTarget.Texture2D, 0,
-                           PixelInternalFormat.Rgba, this.width, this.height, 0,
+                    GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                           (TextureComponentCount)PixelInternalFormat.Rgba, this.width, this.height, 0,
                            PixelFormat.Rgba,
                            PixelType.UnsignedByte, (IntPtr)bmpScan0);
                     this.lazyProvider.ReleaseBufferHead();
@@ -191,7 +191,7 @@ namespace PixelFarm.DrawingGL
             if (rawIntBuffer != null)
             {
                 int[] newBuff = new int[rawIntBuffer.Length];
-                Buffer.BlockCopy(rawIntBuffer, 0, rawIntBuffer, 0, newBuff.Length);
+                System.Buffer.BlockCopy(rawIntBuffer, 0, rawIntBuffer, 0, newBuff.Length);
                 buffRequest.OutputBuffer32 = newBuff;
             }
             //else if (rawBuffer != null)

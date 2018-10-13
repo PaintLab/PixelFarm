@@ -39,11 +39,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             if (UseBitmapExt)
             {
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = RenderQualtity.HighQuality;
+                p.RenderQuality = RenderQuality.HighQuality;
             }
 
 
@@ -56,7 +56,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //p.CurrentFont = new RequestFont("tahoma", 10);
             //p.StrokeColor = Color.Red;
 
-            p.RenderQuality = RenderQualtity.Fast;
+            p.RenderQuality = RenderQuality.Fast;
             //
             //---red reference line--
             p.DrawLine(0, 400, 800, 400);
@@ -83,14 +83,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //---red reference line--
 
 
-            p.RenderQuality = RenderQualtity.Fast;
+            p.RenderQuality = RenderQuality.Fast;
             //p.DrawImage(lionImg, 0, 0); //reference at 0,0 
             p.DrawImage(lionImg, 300, 0);
 
             int _imgW = lionImg.Width;
             int _imgH = lionImg.Height;
 
-            //p.RenderQuality = RenderQualtity.Fast;
+            //p.RenderQuality = RenderQuality.Fast;
             p.DrawImage(lionImg,
              //move to center of the image (hotspot x,y)
              AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
@@ -156,11 +156,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             if (UseBitmapExt)
             {
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = RenderQualtity.HighQuality;
+                p.RenderQuality = RenderQuality.HighQuality;
             }
 
             int width = 800;

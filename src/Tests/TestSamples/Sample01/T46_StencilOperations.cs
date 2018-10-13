@@ -46,7 +46,7 @@ namespace OpenTkEssTest
                         gl_FragColor = u_color;
                  }
             ";
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 throw new NotSupportedException();
@@ -202,7 +202,7 @@ namespace OpenTkEssTest
             //      glStencilOp(GL_REPLACE, GL_DECR, GL_DECR);
             GL.StencilOp(StencilOp.Replace, StencilOp.Decr, StencilOp.Decr);
             //      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices[0]);
-            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[0]);
+            GL.DrawElements((PrimitiveType)BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[0]);
             //      // Test 1:
             //      //
             //      // Initialize the upper-right region. Here, we'll decrement the stencil-buffer
@@ -220,7 +220,7 @@ namespace OpenTkEssTest
 
             GL.StencilFunc(StencilFunction.Greater, 0x3, 0x3);
             GL.StencilOp(StencilOp.Keep, StencilOp.Decr, StencilOp.Keep);
-            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[1]);
+            GL.DrawElements((PrimitiveType)BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[1]);
             //      // Test 2:
             //      //
             //      // Initialize the lower-left region.  Here we'll increment (with saturation) the
@@ -236,7 +236,7 @@ namespace OpenTkEssTest
             //      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices[2]);
             GL.StencilFunc(StencilFunction.Equal, 0x1, 0x3);
             GL.StencilOp(StencilOp.Keep, StencilOp.Incr, StencilOp.Incr);
-            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[2]);
+            GL.DrawElements((PrimitiveType)BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[2]);
             //      // Test 3:
             //      //
             //      // Finally, initialize the lower-right region.  We'll invert the stencil value
@@ -253,7 +253,7 @@ namespace OpenTkEssTest
             //      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices[3]);
             GL.StencilFunc(StencilFunction.Equal, 0x2, 0x1);
             GL.StencilOp(StencilOp.Invert, StencilOp.Keep, StencilOp.Keep);
-            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[3]);
+            GL.DrawElements((PrimitiveType)BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[3]);
             //      // Since we don't know at compile time how many stencil bits are present, we'll
             //      // query, and update the value correct value in the  stencilValues arrays for the
             //      // fourth tests. We'll use this value later in rendering.
@@ -278,7 +278,7 @@ namespace OpenTkEssTest
             {
                 GL.StencilFunc(StencilFunction.Equal, stencilValues[i], 0xff);
                 GL.Uniform4(mColorLoc, 1, colors[i]);
-                GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[4]);
+                GL.DrawElements((PrimitiveType)BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, indices[4]);
                 GL.StencilFunc(StencilFunction.Equal, stencilValues[i], 0xff);
             }
             //      // Reset the stencil mask

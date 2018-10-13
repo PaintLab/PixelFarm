@@ -72,8 +72,8 @@ namespace PixelFarm.Drawing.Skia
             get { return _skCanvas; }
             set { _skCanvas = value; }
         }
-        RenderQualtity _renderQuality;
-        public override RenderQualtity RenderQuality
+        RenderQuality _renderQuality;
+        public override RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -308,7 +308,10 @@ namespace PixelFarm.Drawing.Skia
         //        _skCanvas.DrawPath(p, _stroke);
         //    }
         //}
-
+        public override void DrawImage(Image actualImage)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 

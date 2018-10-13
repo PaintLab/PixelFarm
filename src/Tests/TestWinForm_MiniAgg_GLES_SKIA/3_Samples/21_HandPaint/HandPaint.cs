@@ -56,8 +56,8 @@ namespace PixelFarm.CpuBlit.Samples
                 int pcount = contPoints.Count;
                 for (int i = 1; i < pcount; ++i)
                 {
-                    var p0 = contPoints[i - 1];
-                    var p1 = contPoints[i];
+                    Point p0 = contPoints[i - 1];
+                    Point p1 = contPoints[i];
                     p.DrawLine(p0.x, p0.y, p1.x, p1.y);
                 }
             }

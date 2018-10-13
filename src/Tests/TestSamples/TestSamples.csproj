@@ -104,6 +104,10 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
+      <Name>MiniOpenTKLevel1</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
       <Name>LayoutFarm.YourBasicCustomWidgets</Name>
@@ -116,17 +120,13 @@
       <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
       <Name>PaintLab.Svg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES2</Name>
+      <Name>PixelFarm.Drawing.GLES</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
-      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
       <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>

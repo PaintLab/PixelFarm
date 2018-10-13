@@ -120,10 +120,7 @@ namespace LayoutFarm.UI
         {
             get;
             set;
-        }
-
-
-
+        } 
         public void SetLocation(int x, int y)
         {
             this.x = x;

@@ -10,7 +10,8 @@ namespace TestGlfw
         [STAThread]
         static void Main()
         {
-           
+
+        
             Mini.RootDemoPath.Path = @"..\Data";
             GLFWProgram2.Start();
             //GLFWProgram3.Start();

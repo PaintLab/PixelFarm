@@ -27,6 +27,8 @@ using System.Security;
 using System.Runtime.InteropServices;
 namespace Pencil.Gaming
 {
+    public class SuppressUnmanagedCodeSecurityAttribute : Attribute { }
+
     internal static unsafe class Glfw64
     {
         const string NATIVE64_GLFW3 = "natives64/glfw3.dll";
@@ -172,7 +174,7 @@ namespace Pencil.Gaming
         internal static extern GlfwFramebufferSizeFun glfwSetFramebufferSizeCallback(GlfwWindowPtr window, GlfwFramebufferSizeFun cbfun);
         //--------------------------------------------------------------
         [DllImport(NATIVE64_GLFW3), SuppressUnmanagedCodeSecurity]
-        internal static extern IntPtr glfwGetWin32Window(GlfwWindowPtr window); 
+        internal static extern IntPtr glfwGetWin32Window(GlfwWindowPtr window);
     }
 }
 

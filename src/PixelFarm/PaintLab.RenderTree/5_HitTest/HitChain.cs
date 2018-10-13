@@ -107,7 +107,7 @@ namespace LayoutFarm.RenderBoxes
             hitList.Clear();
         }
 
-        
+
 #if DEBUG
         dbugHitChainPhase _dbugHitChainPhase;
         public dbugHitChainPhase dbugHitPhase

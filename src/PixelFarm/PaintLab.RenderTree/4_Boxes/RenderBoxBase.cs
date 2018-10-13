@@ -247,7 +247,7 @@ namespace LayoutFarm
             this.dbug_BeginArr++;
             debug_PushTopDownElement(this);
             this.MarkValidContentArrangement();
-            IsInTopDownReArrangePhase = true;
+            //IsInTopDownReArrangePhase = true;
             if (this.defaultLayer != null)
             {
                 this.defaultLayer.TopDownReArrangeContent();

@@ -1,5 +1,6 @@
 using System;
 using OpenTK;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.Shapes
 {
     /// <summary>winding always assumed CCW (Counter-ClockWise)</summary>
@@ -175,3 +176,4 @@ namespace Examples.Shapes
         }
     }
 }
+#endif

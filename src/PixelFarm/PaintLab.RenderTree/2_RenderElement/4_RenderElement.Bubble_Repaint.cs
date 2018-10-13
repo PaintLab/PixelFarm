@@ -67,17 +67,17 @@ namespace LayoutFarm
             set { }
         }
 
-        public static bool IsInTopDownReArrangePhase
-        {
-            //TODO: review this again !
-            get
-            {
-                return true;
-            }
-            set
-            {
-            }
-        }
+        //public static bool IsInTopDownReArrangePhase
+        //{
+        //    //TODO: review this again !
+        //    get
+        //    {
+        //        return true;
+        //    }
+        //    set
+        //    {
+        //    }
+        //}
 
 
         internal bool BlockGraphicUpdateBubble

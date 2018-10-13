@@ -52,7 +52,7 @@ namespace OpenTkEssTest
                          gl_FragColor = texture2D(s_texture, v_texCoord);
                  }
             ";
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 //error
@@ -164,9 +164,9 @@ namespace OpenTkEssTest
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
             //// Draw quad with mirrored repeat
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.MirroredRepeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.MirroredRepeat);// (int)TextureWrapMode.MirroredRepeat);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.MirroredRepeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.MirroredRepeat);
             //glUniform1f(mOffsetLoc, 0.7f);
             GL.Uniform1(mOffsetLoc, 0.7f);
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
@@ -222,7 +222,7 @@ namespace OpenTkEssTest
                          gl_FragColor = texture2D(s_texture, v_texCoord);
                  }
             ";
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 //error
@@ -328,7 +328,7 @@ namespace OpenTkEssTest
             GL.EnableVertexAttribArray(mPositionLoc);
             //// Load the texture coordinate
             //glVertexAttribPointer(mTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), vertices + 4); 
-           
+
             GL.VertexAttribPointer(mTexCoordLoc, 2, VertexAttribPointerType.Float, false, 6 * sizeof(float), 4 * 4);
             //glEnableVertexAttribArray(mTexCoordLoc);
             GL.EnableVertexAttribArray(mTexCoordLoc);
@@ -345,7 +345,7 @@ namespace OpenTkEssTest
             GL.Uniform1(mOffsetLoc, -0.7f);
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, 0);
-           
+
 
 
             //
@@ -362,9 +362,9 @@ namespace OpenTkEssTest
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, 0);
             //// Draw quad with mirrored repeat
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.MirroredRepeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.MirroredRepeat);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.MirroredRepeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.MirroredRepeat);
             //glUniform1f(mOffsetLoc, 0.7f);
             GL.Uniform1(mOffsetLoc, 0.7f);
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using OpenTK;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.Shapes
 {
     public sealed class ChamferCube : DrawableShape
@@ -245,3 +246,4 @@ namespace Examples.Shapes
         }
     }
 }
+#endif

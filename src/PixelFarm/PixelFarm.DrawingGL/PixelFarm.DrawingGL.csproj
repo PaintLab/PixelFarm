@@ -36,6 +36,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawingGL\EsUtils\ES2Utils.cs" />
+    <Compile Include="DrawingGL\EsUtils\ES3Utils.cs" />
+    <Compile Include="DrawingGL\EsUtils\GeometryUtils.cs" />
+    <Compile Include="DrawingGL\EsUtils\MiniShaderProgram.cs" />
     <Compile Include="DrawingGL\RenderSuface\GLRenderSurface.cs" />
     <Compile Include="DrawingGL\RenderSuface\SmoothMode.cs" />
     <Compile Include="DrawingGL\RenderSuface\ShaderSharedResource.cs" />
@@ -59,19 +63,16 @@
     <Compile Include="DrawingGL\GLTexture\GLBitmapReference.cs" />
     <Compile Include="DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="DrawingGL\GLTexture\TextureAtlas.cs" />
-    <Compile Include="DrawingGL\Es2Utils\ES2Utils.cs" />
-    <Compile Include="DrawingGL\Es2Utils\GeometryUtils.cs" />
-    <Compile Include="DrawingGL\Es2Utils\MiniShaderProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
+      <Name>MiniOpenTKLevel1</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
-      <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
-      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

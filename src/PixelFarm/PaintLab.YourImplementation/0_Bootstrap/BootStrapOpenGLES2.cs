@@ -17,7 +17,13 @@ namespace YourImplementation
             s_initInit = true;
             //
             // 
-            OpenTK.Toolkit.Init();
+            //OpenTK.Toolkit.Init();
+            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
+            {
+                Backend = OpenTK.PlatformBackend.PreferNative,
+            });
+            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
             //use common font loader
             //user can create and use other font-loader
             CommonTextServiceSetup.SetupDefaultValues();

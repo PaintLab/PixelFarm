@@ -213,7 +213,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         public override void Draw(Painter p)
         {
 
-            p.RenderQuality = RenderQualtity.HighQuality;
+            p.RenderQuality = RenderQuality.HighQuality;
             p.Orientation = DrawBoardOrientation.LeftBottom;
 
 

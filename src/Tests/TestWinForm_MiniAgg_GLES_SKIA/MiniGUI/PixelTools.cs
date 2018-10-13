@@ -70,27 +70,27 @@ namespace Mini.WinForms
                 return;
             }
 
-            if (_myBrushPath.Vxs != null)
-            {
-                //create new path  
-                _latestBrushPathCache = PixelFarm.Drawing.WinGdi.VxsHelper.CreateGraphicsPath(_myBrushPath.Vxs);
-                PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
-                using (var br = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
-                {
-                    g.FillPath(br, _latestBrushPathCache);
-                }
-            }
-            else
-            {
-                var contPoints = _myBrushPath.contPoints;
-                int pcount = contPoints.Count;
-                for (int i = 1; i < pcount; ++i)
-                {
-                    var p0 = contPoints[i - 1];
-                    var p1 = contPoints[i];
-                    g.DrawLine(Pens.Red, (float)p0.x, (float)p0.y, (float)p1.x, (float)p1.y);
-                }
-            }
+            //if (_myBrushPath.Vxs != null)
+            //{
+            //    //create new path  
+            //    _latestBrushPathCache = PixelFarm.Drawing.WinGdi.VxsHelper.CreateGraphicsPath(_myBrushPath.Vxs);
+            //    PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
+            //    using (var br = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+            //    {
+            //        g.FillPath(br, _latestBrushPathCache);
+            //    }
+            //}
+            //else
+            //{
+            //    var contPoints = _myBrushPath.contPoints;
+            //    int pcount = contPoints.Count;
+            //    for (int i = 1; i < pcount; ++i)
+            //    {
+            //        var p0 = contPoints[i - 1];
+            //        var p1 = contPoints[i];
+            //        g.DrawLine(Pens.Red, (float)p0.x, (float)p0.y, (float)p1.x, (float)p1.y);
+            //    }
+            //}
         }
         public override bool HitTest(int x, int y)
         {
@@ -138,7 +138,7 @@ namespace Mini.WinForms
         {
             if (_myBrushPath != null)
             {
-                return _myBrushPath.Vxs;
+                return _myBrushPath.GetMergedVxs();
             }
             else
             {
