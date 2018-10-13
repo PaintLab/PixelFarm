@@ -16,13 +16,9 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using OpenTK;
-using OpenTK.Graphics;
 
-
-namespace OpenTK.Graphics.ES20
+namespace PixelFarm.DrawingGL
 {
     public class CubeGeometry
     {

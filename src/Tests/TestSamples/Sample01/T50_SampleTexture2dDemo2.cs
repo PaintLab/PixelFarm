@@ -17,6 +17,8 @@
 
 using System;
 using OpenTK.Graphics.ES20;
+using PixelFarm.DrawingGL;
+
 using Mini;
 namespace OpenTkEssTest
 {
