@@ -1,0 +1,433 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bind</name>
+    </assembly>
+    <members>
+        <member name="F:Bind.GL2.Generator.Profile">
+            <summary>
+            The Profile field corresponds to the "profile" attribute
+            in the OpenGL registry. We use this to distinguish between
+            different profiles (e.g. "gl", "glcore", "gles1", "gles2").
+            </summary>
+        </member>
+        <member name="F:Bind.GL2.Generator.Version">
+            <summary>
+            The Version field corresponds to the "number" attribute
+            in the OpenGL registry. We use this to distinguish between
+            OpenGL ES 2.0 and 3.0, which share the same profile "gles2".
+            If empty, then all elements of a profile will be parsed, and
+            their version number will be ignored.
+            </summary>
+        </member>
+        <member name="F:Bind.Settings.CompleteEnumName">
+            <summary>
+            The name of the C# enum which holds every single OpenGL enum (for compatibility purposes).
+            </summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.None">
+            <summary>Default value.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.ConstIntEnums">
+            <summary>Leave enums as plain const ints.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoAdvancedEnumProcessing">
+            <summary>Leave enums in the default STRANGE_capitalization.ALL_CAPS form.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoPublicUnsafeFunctions">
+            <summary>Don't allow unsafe wrappers in the interface.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoTrimFunctionEnding">
+            <summary>Don't trim the [fdisub]v? endings from functions.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoTrimFunctionPrefix">
+            <summary>Don't trim the [gl|wgl|glx|glu] prefixes from functions.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoSeparateFunctionNamespaces">
+            <summary>
+            Don't spearate functions in different namespaces, according to their extension category
+            (e.g. GL.Arb, GL.Ext etc).
+            </summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.TurnVoidPointersToIntPtr">
+            <summary>
+            No public void* parameters (should always be enabled. Disable at your own risk. Disabling
+            means that BitmapData.Scan0 and other .Net properties/functions must be cast to (void*)
+            explicitly, to avoid the 'object' overload from being called.)
+            </summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.GenerateAllPermutations">
+            <summary>Generate all possible permutations for ref/array/pointer parameters.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NestedEnums">
+            <summary>Nest enums inside the GL class.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoBoolParameters">
+            <summary>Turn GLboolean to int (Boolean enum), not bool.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoDropMultipleTokens">
+            <summary>Keep all enum tokens, even if same value (e.g. FooARB, FooEXT and FooSGI).</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoDocumentation">
+            <summary>Do not emit inline documentation.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.NoDebugHelpers">
+            <summary>Disables ErrorHelper generation.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.KeepUntypedEnums">
+            <summary>Generate both typed and untyped ("All") signatures for enum parameters.</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.AddDeprecationWarnings">
+            <summary>Marks deprecated functions as [Obsolete]</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.UseDllImports">
+            <summary>Use DllImport declaration for core functions (do not generate entry point slots)</summary>
+        </member>
+        <member name="F:Bind.Settings.Legacy.UseWindowsCompatibleGL">
+            <summary>
+            Use in conjuction with UseDllImports, to create
+            bindings that are compatible with opengl32.dll on Windows.
+            This uses DllImports up to GL 1.1 and function pointers
+            for higher versions.
+            </summary>
+        </member>
+        <member name="P:Bind.Settings.DropMultipleTokens">
+            <summary>True if multiple tokens should be dropped (e.g. FooARB, FooEXT and FooSGI).</summary>
+        </member>
+        <member name="T:Bind.WrapperTypes">
+            <summary>
+            Defines different types of parameter wrapper identifiers, which are used for hinting at how the method
+            signatures should be generated.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.None">
+            <summary>
+            No wrapper needed.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.BoolParameter">
+            <summary>
+            Function takes bool parameter - C uses Int for bools, so we have to marshal.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.GenericParameter">
+            <summary>
+            Function takes generic parameters - add ref/out generic and generic overloads.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.ArrayParameter">
+            <summary>
+            Function takes arrays as parameters - add ref/out and ([Out]) array overloads.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.UncheckedParameter">
+            <summary>
+            Function with bitmask parameters. Bitmask parameters map to UInt, but since we can only use signed
+            types (for CLS compliance), we must add the unchecked keyword.
+            Usually found in bitmasks
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.PointerParameter">
+            <summary>
+            Function that takes (in/ref/out) a naked pointer as a parameter - we pass an IntPtr.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.ReferenceParameter">
+            <summary>
+            Function that takes a reference to a struct.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.StringReturnType">
+            <summary>
+            Function returns string - needs manual marshalling through IntPtr to prevent the managed GC
+            from freeing memory allocated on the unmanaged side (e.g. glGetString).
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.GenericReturnType">
+            <summary>
+            Function returns a void pointer - maps to IntPtr, and the user has to manually marshal the type.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.ArrayReturnType">
+            <summary>
+            Function returns a typed pointer - we have to copy the data to an array to protect it from the GC.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.ConvenienceReturnType">
+            <summary>
+            Function normally returns a value via an out parameter.
+            This overload returns a single item directly.
+            e.g. void GetIntegerv(enum pname, out int value) => int GetInteger(enum pname)
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.ConvenienceArrayReturnType">
+            <summary>
+            Function normally returns an array via an out parameter.
+            This overload returns a single item directly.
+            e.g. void GenBuffers(int count, int[] ids) => int GenBuffer()
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.ConvenienceArrayType">
+            <summary>
+            Function normally takes an array in parameter.
+            This overload takes a single item directly.
+            e.g. void DeleteBuffers(int count, int[] ids) => DeleteBuffer(int id)
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.StringParameter">
+            <summary>
+            Function takes a String or StringBuilder parameter
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.StringArrayParameter">
+            <summary>
+            Function takes a String[] parameter
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.SizeParameter">
+            <summary>
+            Functions takes an IntPtr that corresponds to a size_t.
+            Add an int32 overload for convenience.
+            </summary>
+        </member>
+        <member name="F:Bind.WrapperTypes.LegacyArrayParameter">
+            <summary>
+            Function takes a ref but we emit a legacy array overload to maintain backwards compatability.
+            </summary>
+        </member>
+        <member name="M:Bind.Utilities.Merge(Bind.Structures.EnumCollection,Bind.Structures.Enum)">
+            <summary>
+            Merges the given enum into the enum list. If an enum of the same name exists,
+            it merges their respective constants.
+            </summary>
+            <param name="enums"></param>
+            <param name="t"></param>
+        </member>
+        <member name="M:Bind.Utilities.Merge(Bind.Structures.Enum,Bind.Structures.Constant)">
+            <summary>
+            Places a new constant in the specified enum, if it doesn't already exist.
+            The existing constant is replaced iff the new has a numeric value and the old
+            has a reference value (eg 0x5 is preferred over AttribMask.Foo)
+            </summary>
+            <param name="s"></param>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Bind.Structures.Type.CurrentType">
+            <summary>
+            Gets the type of the parameter.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.Function.CallString(System.String,Bind.Structures.Delegate)">
+            <summary>
+            Returns a string that represents an invocation of this delegate.
+            </summary>
+        </member>
+        <member name="T:Bind.Structures.FunctionBody">
+            <summary>
+            The <see cref="T:Bind.Structures.FunctionBody"/> class acts as a wrapper around a block of source code that makes up the body
+            of a function.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.FunctionBody.#ctor">
+            <summary>
+            Initializes an empty <see cref="T:Bind.Structures.FunctionBody"/>.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.FunctionBody.#ctor(Bind.Structures.FunctionBody)">
+            <summary>
+            Initializes a <see cref="T:Bind.Structures.FunctionBody"/> from an existing FunctionBody.
+            </summary>
+            <param name="fb">The body to copy from.</param>
+        </member>
+        <member name="M:Bind.Structures.FunctionBody.Indent">
+            <summary>
+            Indents this <see cref="T:Bind.Structures.FunctionBody"/> another level.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.FunctionBody.Unindent">
+            <summary>
+            Removes a level of indentation from this <see cref="T:Bind.Structures.FunctionBody"/>.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.FunctionBody.Add(System.String)">
+            <summary>
+            Adds a line of source code to the body at the current indentation level.
+            </summary>
+            <param name="s">The line to add.</param>
+        </member>
+        <member name="M:Bind.Structures.FunctionBody.AddRange(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Adds a range of source code lines to the body at the current indentation level.
+            </summary>
+            <param name="collection"></param>
+        </member>
+        <member name="M:Bind.Structures.FunctionBody.ToString">
+            <summary>
+            Builds the contents of the function body into a string and encloses it with braces.
+            </summary>
+            <returns>The body, enclosed in braces.</returns>
+        </member>
+        <member name="M:Bind.Structures.FunctionCollection.AddChecked(Bind.Structures.Function)">
+            <summary>
+            Adds the function to the collection, if a function with the same name and parameters doesn't already exist.
+            </summary>
+            <param name="f">The Function to add.</param>
+        </member>
+        <member name="T:Bind.Structures.Constant">
+            <summary>
+            Represents an opengl constant in C# format. Both the constant name and value
+            can be retrieved or set. The value can be either a number, another constant
+            or an alias to a constant
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Constant.Name">
+            <summary>
+            Gets or sets the name of the opengl constant (eg. GL_LINES).
+            Undergoes processing unless the Settings.Legacy.NoAdvancedEnumProcessing flag is set.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Constant.Value">
+            <summary>
+            Gets or sets the value of the opengl constant (eg. 0x00000001).
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Constant.Reference">
+            <summary>
+            Gets or sets a string indicating the OpenGL enum reference by this constant.
+            Can be null.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.Constant.#ctor">
+            <summary>
+            Creates an empty Constant.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.Constant.#ctor(System.String,System.String)">
+            <summary>
+            Creates a Constant with the given name and value.
+            </summary>
+            <param name="name">The Name of the Constant.</param>
+            <param name="value">The Type of the Constant.</param>
+        </member>
+        <member name="M:Bind.Structures.Constant.TranslateConstantWithReference(Bind.Structures.Constant,Bind.Structures.EnumCollection)">
+            <summary>
+            Replces the Value of the given constant with the value referenced by the [c.Reference, c.Value] pair.
+            </summary>
+            <param name="c">The Constant to translate</param>
+            <param name="enums">The list of enums to check.</param>
+            <returns>True if the reference was found; false otherwise.</returns>
+        </member>
+        <member name="T:Bind.Structures.Delegate">
+            <summary>
+            Represents an opengl function.
+            The return value, function name, function parameters and opengl version can be retrieved or set.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Delegate.CLSCompliant">
+            <summary>
+             Gets the CLSCompliant property. True if the delegate is not CLSCompliant.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Delegate.NeedsWrapper">
+            <summary>
+            Gets a value that indicates whether this function needs to be wrapped with a Marshaling function.
+            This flag is set if a function contains an Array parameter, or returns
+            an Array or string.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Delegate.Unsafe">
+            <summary>
+            True if the delegate must be declared as 'unsafe'.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Delegate.ReturnType">
+            <summary>
+            Gets or sets the return value of the opengl function.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Delegate.Name">
+            <summary>
+            Gets or sets the name of the opengl function.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Delegate.Version">
+            <summary>
+            Defines the opengl version that introduced this function.
+            </summary>
+        </member>
+        <member name="T:Bind.Structures.Parameter">
+            <summary>
+            Represents a single parameter of an opengl function.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.Parameter.#ctor">
+            <summary>
+            Creates a new Parameter without type and name.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.Parameter.#ctor(Bind.Structures.Parameter)">
+            <summary>
+            Creates a new parameter from the parameters passed (deep copy).
+            </summary>
+            <param name="p">The parameter to copy from.</param>
+        </member>
+        <member name="P:Bind.Structures.Parameter.RawName">
+            <summary>
+            Gets or sets the raw name of the parameter.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Parameter.Name">
+            <summary>
+            Gets the name of the parameter. If the name matches a keyword of the current language,
+            then it is escaped with <see cref="P:Bind.Settings.KeywordEscapeCharacter"/>.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Parameter.UnmanagedType">
+            <summary>
+            Gets or sets the name of the parameter.
+            </summary>
+        </member>
+        <member name="P:Bind.Structures.Parameter.Flow">
+            <summary>
+            Gets or sets the flow of the parameter.
+            </summary>
+        </member>
+        <member name="T:Bind.Structures.ParameterCollection">
+            <summary>
+            Holds the parameter list of an opengl function.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.ParameterCollection.BuildCallStringCache2(Bind.Structures.Delegate)">
+            <summary>
+            Builds a call string instance and caches it.
+            </summary>
+        </member>
+        <member name="M:Bind.Structures.ParameterCollection.BuildCallStringCache">
+            <summary>
+            Builds a call string instance and caches it.
+            </summary>
+        </member>
+        <member name="T:Bind.Structures.FlowDirection">
+            <summary>
+            Enumarates the possible flows of a parameter (ie. is this parameter
+            used as input or as output?)
+            </summary>
+        </member>
+        <member name="F:Bind.Structures.FlowDirection.Undefined">
+            <summary>
+            No defined flow.
+            </summary>
+        </member>
+        <member name="F:Bind.Structures.FlowDirection.In">
+            <summary>
+            Input parameter.
+            </summary>
+        </member>
+        <member name="F:Bind.Structures.FlowDirection.Out">
+            <summary>
+            Output parameter, typically decorated with the out keyword.
+            </summary>
+        </member>
+    </members>
+</doc>
