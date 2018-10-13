@@ -26,7 +26,7 @@ namespace Mini
         {
             PureAgg,
             GdiPlus,
-            OpenGLES2,
+            OpenGLES,
             SkiaMemoryBackend,
             SkiaGLBackend,
         }
@@ -36,7 +36,7 @@ namespace Mini
             lstBackEndRenderer.Items.Clear();
             lstBackEndRenderer.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
             lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES2);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
             lstBackEndRenderer.SelectedIndex = 0;//set default 
@@ -75,7 +75,7 @@ namespace Mini
                         testBed.LoadExample(exAndDesc);
                     }
                     break;
-                case RenderBackendChoice.OpenGLES2:
+                case RenderBackendChoice.OpenGLES: //gles 2 and 3
                     {
                         //create demo
                         DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
