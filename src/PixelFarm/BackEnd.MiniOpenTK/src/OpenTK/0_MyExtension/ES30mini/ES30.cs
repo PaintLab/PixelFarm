@@ -1,4 +1,4 @@
-//autogen 2018-10-13 18:27:48Z
+//autogen 2018-10-14 01:30:04Z
 namespace OpenTK.Graphics.ES30 {
  using System;
  using System.Text;
@@ -1320,7 +1320,7 @@ public static partial class Angle
     /// Draw multiple instances of a range of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
     /// </param>
     /// <param name="first">
     /// Specifies the starting index in the enabled arrays.
@@ -1336,7 +1336,7 @@ public static partial class Angle
     /// Draw multiple instances of a range of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
     /// </param>
     /// <param name="first">
     /// Specifies the starting index in the enabled arrays.
@@ -1365,7 +1365,7 @@ public static partial class Angle
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -1384,7 +1384,7 @@ public static partial class Angle
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -1403,7 +1403,7 @@ public static partial class Angle
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -1435,7 +1435,7 @@ public static partial class Angle
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -2193,7 +2193,7 @@ public static partial class Apple
     /// Specifies the sync object whose status to wait on.
     /// </param>
     /// <param name="flags">
-    /// A bitfield controlling the command flushing behavior. flags must be zero.
+    /// A bitfield controlling the command flushing behavior. flags may be zero.
     /// </param>
     /// <param name="timeout">
     /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -2206,7 +2206,7 @@ public static partial class Apple
     /// Specifies the sync object whose status to wait on.
     /// </param>
     /// <param name="flags">
-    /// A bitfield controlling the command flushing behavior. flags must be zero.
+    /// A bitfield controlling the command flushing behavior. flags may be zero.
     /// </param>
     /// <param name="timeout">
     /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -2219,7 +2219,7 @@ public static partial class Apple
     /// Specifies the sync object whose status to wait on.
     /// </param>
     /// <param name="flags">
-    /// A bitfield controlling the command flushing behavior. flags must be zero.
+    /// A bitfield controlling the command flushing behavior. flags may be zero.
     /// </param>
     /// <param name="timeout">
     /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -2245,7 +2245,7 @@ public static partial class Apple
     /// Specifies the sync object whose status to wait on.
     /// </param>
     /// <param name="flags">
-    /// A bitfield controlling the command flushing behavior. flags must be zero.
+    /// A bitfield controlling the command flushing behavior. flags may be zero.
     /// </param>
     /// <param name="timeout">
     /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -2289,14 +2289,14 @@ public static partial class Cmaaintel
 /// Select active texture unit
 /// </summary>
 /// <param name="texture">
-/// Specifies which texture unit to make active. The number of texture units is implementation-dependent, but must be at least 32. texture must be one of Texturei, where i ranges from zero to the value of MaxCombinedTextureImageUnits minus one. The initial value is Texture0.
+/// Specifies which texture unit to make active. The number of texture units is implementation dependent, but must be at least 80. texture must be one of Texturei, where i ranges from zero to the value of MaxCombinedTextureImageUnits minus one. The initial value is Texture0.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Select active texture unit
 /// </summary>
 /// <param name="texture">
-/// Specifies which texture unit to make active. The number of texture units is implementation-dependent, but must be at least 32. texture must be one of Texturei, where i ranges from zero to the value of MaxCombinedTextureImageUnits minus one. The initial value is Texture0.
+/// Specifies which texture unit to make active. The number of texture units is implementation dependent, but must be at least 80. texture must be one of Texturei, where i ranges from zero to the value of MaxCombinedTextureImageUnits minus one. The initial value is Texture0.
 /// </param>
 //x* 82
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glActiveTexture")]
@@ -2362,7 +2362,7 @@ public static void AttachShader(UInt32 program, UInt32 shader)
 /// Delimit the boundaries of a query object
 /// </summary>
 /// <param name="target">
-/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
 /// </param>
 /// <param name="id">
 /// Specifies the name of a query object.
@@ -2372,7 +2372,7 @@ public static void AttachShader(UInt32 program, UInt32 shader)
 /// Delimit the boundaries of a query object
 /// </summary>
 /// <param name="target">
-/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
 /// </param>
 /// <param name="id">
 /// Specifies the name of a query object.
@@ -2382,7 +2382,7 @@ public static void AttachShader(UInt32 program, UInt32 shader)
 /// Delimit the boundaries of a query object
 /// </summary>
 /// <param name="target">
-/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
 /// </param>
 /// <param name="id">
 /// Specifies the name of a query object.
@@ -2405,7 +2405,7 @@ public static void BeginQuery(OpenTK.Graphics.ES30.QueryTarget target, Int32 id)
 /// Delimit the boundaries of a query object
 /// </summary>
 /// <param name="target">
-/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
 /// </param>
 /// <param name="id">
 /// Specifies the name of a query object.
@@ -2507,7 +2507,7 @@ public static void BindAttribLocation(UInt32 program, UInt32 index, string name)
 /// Bind a named buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="buffer">
 /// Specifies the name of a buffer object.
@@ -2517,7 +2517,7 @@ public static void BindAttribLocation(UInt32 program, UInt32 index, string name)
 /// Bind a named buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="buffer">
 /// Specifies the name of a buffer object.
@@ -2527,7 +2527,7 @@ public static void BindAttribLocation(UInt32 program, UInt32 index, string name)
 /// Bind a named buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="buffer">
 /// Specifies the name of a buffer object.
@@ -2550,7 +2550,7 @@ public static void BindBuffer(OpenTK.Graphics.ES30.BufferTarget target, Int32 bu
 /// Bind a named buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target to which the buffer object is bound. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="buffer">
 /// Specifies the name of a buffer object.
@@ -2573,7 +2573,7 @@ public static void BindBuffer(OpenTK.Graphics.ES30.BufferTarget target, UInt32 b
 /// Bind a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2586,7 +2586,7 @@ public static void BindBuffer(OpenTK.Graphics.ES30.BufferTarget target, UInt32 b
 /// Bind a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2599,7 +2599,7 @@ public static void BindBuffer(OpenTK.Graphics.ES30.BufferTarget target, UInt32 b
 /// Bind a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2625,7 +2625,7 @@ public static void BindBufferBase(OpenTK.Graphics.ES30.BufferRangeTarget target,
 /// Bind a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2651,7 +2651,7 @@ public static void BindBufferBase(OpenTK.Graphics.ES30.BufferRangeTarget target,
 /// Bind a range within a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer, or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2670,7 +2670,7 @@ public static void BindBufferBase(OpenTK.Graphics.ES30.BufferRangeTarget target,
 /// Bind a range within a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer, or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2689,7 +2689,7 @@ public static void BindBufferBase(OpenTK.Graphics.ES30.BufferRangeTarget target,
 /// Bind a range within a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer, or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2721,7 +2721,7 @@ public static void BindBufferRange(OpenTK.Graphics.ES30.BufferRangeTarget target
 /// Bind a range within a buffer object to an indexed buffer target
 /// </summary>
 /// <param name="target">
-/// Specify the target of the bind operation. target must be either TransformFeedbackBuffer or UniformBuffer.
+/// Specify the target of the bind operation. target must be one of AtomicCounterBuffer, TransformFeedbackBuffer, UniformBuffer, or ShaderStorageBuffer.
 /// </param>
 /// <param name="index">
 /// Specify the index of the binding point within the array specified by target.
@@ -2931,7 +2931,7 @@ public static void BindSampler(UInt32 unit, UInt32 sampler)
 /// Bind a named texture to a texturing target
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the texture is bound. Must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap,
+/// Specifies the target to which the texture is bound. Must be one of Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, TextureCubeMap, TextureCubeMapArray, TextureBuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="texture">
 /// Specifies the name of a texture.
@@ -2941,7 +2941,7 @@ public static void BindSampler(UInt32 unit, UInt32 sampler)
 /// Bind a named texture to a texturing target
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the texture is bound. Must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap,
+/// Specifies the target to which the texture is bound. Must be one of Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, TextureCubeMap, TextureCubeMapArray, TextureBuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="texture">
 /// Specifies the name of a texture.
@@ -2951,7 +2951,7 @@ public static void BindSampler(UInt32 unit, UInt32 sampler)
 /// Bind a named texture to a texturing target
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the texture is bound. Must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap,
+/// Specifies the target to which the texture is bound. Must be one of Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, TextureCubeMap, TextureCubeMapArray, TextureBuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="texture">
 /// Specifies the name of a texture.
@@ -2974,7 +2974,7 @@ public static void BindTexture(OpenTK.Graphics.ES30.TextureTarget target, Int32 
 /// Bind a named texture to a texturing target
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the texture is bound. Must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap,
+/// Specifies the target to which the texture is bound. Must be one of Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, TextureCubeMap, TextureCubeMapArray, TextureBuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="texture">
 /// Specifies the name of a texture.
@@ -3225,32 +3225,32 @@ public static void BlendFunc(OpenTK.Graphics.ES30.BlendingFactorSrc sfactor, Ope
 /// Specify pixel arithmetic for RGB and alpha components separately
 /// </summary>
 /// <param name="sfactorRGB">
-/// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+/// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
 /// </param>
 /// <param name="dfactorRGB">
-/// Specifies how the red, green, and blue destination blending factors are computed. The initial value is Zero.
+/// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
 /// </param>
 /// <param name="sfactorAlpha">
-/// Specified how the alpha source blending factor is computed. The initial value is One.
+/// Specifies how the red, green, and blue destination blending factors are computed. The initial value is Zero.
 /// </param>
 /// <param name="dfactorAlpha">
-/// Specified how the alpha destination blending factor is computed. The initial value is Zero.
+/// Specified how the alpha source blending factor is computed. The initial value is One.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Specify pixel arithmetic for RGB and alpha components separately
 /// </summary>
 /// <param name="sfactorRGB">
-/// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+/// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
 /// </param>
 /// <param name="dfactorRGB">
-/// Specifies how the red, green, and blue destination blending factors are computed. The initial value is Zero.
+/// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
 /// </param>
 /// <param name="sfactorAlpha">
-/// Specified how the alpha source blending factor is computed. The initial value is One.
+/// Specifies how the red, green, and blue destination blending factors are computed. The initial value is Zero.
 /// </param>
 /// <param name="dfactorAlpha">
-/// Specified how the alpha destination blending factor is computed. The initial value is Zero.
+/// Specified how the alpha source blending factor is computed. The initial value is One.
 /// </param>
 //x* 112
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glBlendFuncSeparate")]
@@ -3351,7 +3351,7 @@ public static void BlitFramebuffer(Int32 srcX0, Int32 srcY0, Int32 srcX1, Int32 
 /// Creates and initializes a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="size">
 /// Specifies the size in bytes of the buffer object's new data store.
@@ -3367,7 +3367,7 @@ public static void BlitFramebuffer(Int32 srcX0, Int32 srcY0, Int32 srcX1, Int32 
 /// Creates and initializes a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="size">
 /// Specifies the size in bytes of the buffer object's new data store.
@@ -3383,7 +3383,7 @@ public static void BlitFramebuffer(Int32 srcX0, Int32 srcY0, Int32 srcX1, Int32 
 /// Creates and initializes a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="size">
 /// Specifies the size in bytes of the buffer object's new data store.
@@ -3412,7 +3412,7 @@ public static void BufferData(OpenTK.Graphics.ES30.BufferTarget target, IntPtr s
 /// Creates and initializes a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="size">
 /// Specifies the size in bytes of the buffer object's new data store.
@@ -3447,7 +3447,7 @@ public static void BufferData(OpenTK.Graphics.ES30.BufferTarget target, IntPtr s
 /// Updates a subset of a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="offset">
 /// Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
@@ -3463,7 +3463,7 @@ public static void BufferData(OpenTK.Graphics.ES30.BufferTarget target, IntPtr s
 /// Updates a subset of a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="offset">
 /// Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
@@ -3479,7 +3479,7 @@ public static void BufferData(OpenTK.Graphics.ES30.BufferTarget target, IntPtr s
 /// Updates a subset of a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="offset">
 /// Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
@@ -3508,7 +3508,7 @@ public static void BufferSubData(OpenTK.Graphics.ES30.BufferTarget target, IntPt
 /// Updates a subset of a buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="offset">
 /// Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
@@ -4245,7 +4245,7 @@ public static void CompileShader(UInt32 shader)
 /// Specify a two-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4254,10 +4254,10 @@ public static void CompileShader(UInt32 shader)
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4273,7 +4273,7 @@ public static void CompileShader(UInt32 shader)
 /// Specify a two-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4282,10 +4282,10 @@ public static void CompileShader(UInt32 shader)
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4301,7 +4301,7 @@ public static void CompileShader(UInt32 shader)
 /// Specify a two-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4310,10 +4310,10 @@ public static void CompileShader(UInt32 shader)
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4342,7 +4342,7 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specify a two-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4351,10 +4351,10 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support 2D and cube-mapped texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4389,7 +4389,7 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specify a three-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4398,13 +4398,13 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image.
+/// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
 /// </param>
 /// <param name="depth">
-/// Specifies the depth of the texture image.
+/// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4420,7 +4420,7 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specify a three-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4429,13 +4429,13 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image.
+/// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
 /// </param>
 /// <param name="depth">
-/// Specifies the depth of the texture image.
+/// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4451,7 +4451,7 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specify a three-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4460,13 +4460,13 @@ public static void CompressedTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d tar
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image.
+/// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
 /// </param>
 /// <param name="depth">
-/// Specifies the depth of the texture image.
+/// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4495,7 +4495,7 @@ public static void CompressedTexImage3D(OpenTK.Graphics.ES30.TextureTarget3d tar
 /// Specify a three-dimensional texture image in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4504,13 +4504,13 @@ public static void CompressedTexImage3D(OpenTK.Graphics.ES30.TextureTarget3d tar
 /// Specifies the format of the compressed image data stored at address data.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image.
+/// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
 /// </param>
 /// <param name="depth">
-/// Specifies the depth of the texture image.
+/// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
@@ -4701,7 +4701,7 @@ public static void CompressedTexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d 
 /// Specify a three-dimensional texture subimage in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4713,7 +4713,7 @@ public static void CompressedTexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d 
 /// Specifies a texel offset in the y direction within the texture array.
 /// </param>
 /// <param name="zoffset">
-/// Specifies a texel offset in the z direction within the texture array.
+/// Specifies the width of the texture subimage.
 /// </param>
 /// <param name="width">
 /// Specifies the width of the texture subimage.
@@ -4738,7 +4738,7 @@ public static void CompressedTexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d 
 /// Specify a three-dimensional texture subimage in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4750,7 +4750,7 @@ public static void CompressedTexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d 
 /// Specifies a texel offset in the y direction within the texture array.
 /// </param>
 /// <param name="zoffset">
-/// Specifies a texel offset in the z direction within the texture array.
+/// Specifies the width of the texture subimage.
 /// </param>
 /// <param name="width">
 /// Specifies the width of the texture subimage.
@@ -4775,7 +4775,7 @@ public static void CompressedTexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d 
 /// Specify a three-dimensional texture subimage in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4787,7 +4787,7 @@ public static void CompressedTexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d 
 /// Specifies a texel offset in the y direction within the texture array.
 /// </param>
 /// <param name="zoffset">
-/// Specifies a texel offset in the z direction within the texture array.
+/// Specifies the width of the texture subimage.
 /// </param>
 /// <param name="width">
 /// Specifies the width of the texture subimage.
@@ -4825,7 +4825,7 @@ public static void CompressedTexSubImage3D(OpenTK.Graphics.ES30.TextureTarget3d 
 /// Specify a three-dimensional texture subimage in a compressed format
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be Texture3D.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -4837,7 +4837,7 @@ public static void CompressedTexSubImage3D(OpenTK.Graphics.ES30.TextureTarget3d 
 /// Specifies a texel offset in the y direction within the texture array.
 /// </param>
 /// <param name="zoffset">
-/// Specifies a texel offset in the z direction within the texture array.
+/// Specifies the width of the texture subimage.
 /// </param>
 /// <param name="width">
 /// Specifies the width of the texture subimage.
@@ -4938,7 +4938,7 @@ public static void CopyBufferSubData(OpenTK.Graphics.ES30.BufferTarget readTarge
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the internal format of the texture. Must be one of the following symbolic constants: Alpha, Luminance, LuminanceAlpha, Rgb, Rgba, R8, Rg8, Rgb565, Rgb8, Rgba4, Rgb5A1, Rgba8, Rgb10A2, Srgb8, Srgb8Alpha8, R8i, R8ui, R16i, R16ui, R32i, R32ui, Rg8i, Rg8ui, Rg16i, Rg16ui, Rg32i, Rg32ui, Rgba8i, Rgba8ui, Rgb10A2ui, Rgba16i, Rgba16ui, Rgba32i, Rgba32ui.
+/// Specifies the internal format of the texture. Must be one of the following symbolic constants: CompressedRed, CompressedRg, CompressedRgb, CompressedRgba. CompressedSrgb, CompressedSrgbAlpha. DepthComponent, DepthComponent16, DepthComponent24, DepthComponent32, StencilIndex8, Red, Rg, Rgb, R3G3B2, Rgb4, Rgb5, Rgb8, Rgb10, Rgb12, Rgb16, Rgba, Rgba2, Rgba4, Rgb5A1, Rgba8, Rgb10A2, Rgba12, Rgba16, Srgb, Srgb8, SrgbAlpha, or Srgb8Alpha8.
 /// </param>
 /// <param name="x">
 /// Specify the window coordinates of the lower left corner of the rectangular region of pixels to be copied.
@@ -4953,7 +4953,7 @@ public static void CopyBufferSubData(OpenTK.Graphics.ES30.BufferTarget readTarge
 /// Specifies the height of the texture image.
 /// </param>
 /// <param name="border">
-/// Specifies the width of the border. Must be 0.
+/// Must be 0.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
@@ -4966,7 +4966,7 @@ public static void CopyBufferSubData(OpenTK.Graphics.ES30.BufferTarget readTarge
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the internal format of the texture. Must be one of the following symbolic constants: Alpha, Luminance, LuminanceAlpha, Rgb, Rgba, R8, Rg8, Rgb565, Rgb8, Rgba4, Rgb5A1, Rgba8, Rgb10A2, Srgb8, Srgb8Alpha8, R8i, R8ui, R16i, R16ui, R32i, R32ui, Rg8i, Rg8ui, Rg16i, Rg16ui, Rg32i, Rg32ui, Rgba8i, Rgba8ui, Rgb10A2ui, Rgba16i, Rgba16ui, Rgba32i, Rgba32ui.
+/// Specifies the internal format of the texture. Must be one of the following symbolic constants: CompressedRed, CompressedRg, CompressedRgb, CompressedRgba. CompressedSrgb, CompressedSrgbAlpha. DepthComponent, DepthComponent16, DepthComponent24, DepthComponent32, StencilIndex8, Red, Rg, Rgb, R3G3B2, Rgb4, Rgb5, Rgb8, Rgb10, Rgb12, Rgb16, Rgba, Rgba2, Rgba4, Rgb5A1, Rgba8, Rgb10A2, Rgba12, Rgba16, Srgb, Srgb8, SrgbAlpha, or Srgb8Alpha8.
 /// </param>
 /// <param name="x">
 /// Specify the window coordinates of the lower left corner of the rectangular region of pixels to be copied.
@@ -4981,7 +4981,7 @@ public static void CopyBufferSubData(OpenTK.Graphics.ES30.BufferTarget readTarge
 /// Specifies the height of the texture image.
 /// </param>
 /// <param name="border">
-/// Specifies the width of the border. Must be 0.
+/// Must be 0.
 /// </param>
 //x* 147
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glCopyTexImage2D")]
@@ -5001,7 +5001,7 @@ public static void CopyTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, I
 /// Copy a two-dimensional texture subimage
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or Texture1DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -5029,7 +5029,7 @@ public static void CopyTexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, I
 /// Copy a two-dimensional texture subimage
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or Texture1DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -5162,14 +5162,14 @@ public static Int32 CreateProgram()
 /// Creates a shader object
 /// </summary>
 /// <param name="type">
-/// Specifies the type of shader to be created. Must be one of VertexShader or FragmentShader.
+/// Specifies the type of shader to be created. Must be one of ComputeShader, VertexShader, TessControlShader, TessEvaluationShader, GeometryShader, or FragmentShader.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Creates a shader object
 /// </summary>
 /// <param name="type">
-/// Specifies the type of shader to be created. Must be one of VertexShader or FragmentShader.
+/// Specifies the type of shader to be created. Must be one of ComputeShader, VertexShader, TessControlShader, TessEvaluationShader, GeometryShader, or FragmentShader.
 /// </param>
 //x* 151
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glCreateShader")]
@@ -5186,17 +5186,17 @@ public static Int32 CreateShader(OpenTK.Graphics.ES30.ShaderType type)
 }
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
-/// Specify whether front- or back-facing polygons can be culled
+/// Specify whether front- or back-facing facets can be culled
 /// </summary>
 /// <param name="mode">
-/// Specifies whether front- or back-facing polygons are candidates for culling. Symbolic constants Front, Back, and FrontAndBack are accepted. The initial value is Back.
+/// Specifies whether front- or back-facing facets are candidates for culling. Symbolic constants Front, Back, and FrontAndBack are accepted. The initial value is Back.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
-/// Specify whether front- or back-facing polygons can be culled
+/// Specify whether front- or back-facing facets can be culled
 /// </summary>
 /// <param name="mode">
-/// Specifies whether front- or back-facing polygons are candidates for culling. Symbolic constants Front, Back, and FrontAndBack are accepted. The initial value is Back.
+/// Specifies whether front- or back-facing facets are candidates for culling. Symbolic constants Front, Back, and FrontAndBack are accepted. The initial value is Back.
 /// </param>
 //x* 152
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glCullFace")]
@@ -7311,7 +7311,7 @@ public static void DisableVertexAttribArray(UInt32 index)
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="first">
 /// Specifies the starting index in the enabled arrays.
@@ -7324,7 +7324,7 @@ public static void DisableVertexAttribArray(UInt32 index)
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="first">
 /// Specifies the starting index in the enabled arrays.
@@ -7350,7 +7350,7 @@ public static void DrawArrays(OpenTK.Graphics.ES30.PrimitiveType mode, Int32 fir
 /// Draw multiple instances of a range of elements
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
 /// </param>
 /// <param name="first">
 /// Specifies the starting index in the enabled arrays.
@@ -7366,7 +7366,7 @@ public static void DrawArrays(OpenTK.Graphics.ES30.PrimitiveType mode, Int32 fir
 /// Draw multiple instances of a range of elements
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
 /// </param>
 /// <param name="first">
 /// Specifies the starting index in the enabled arrays.
@@ -7506,7 +7506,7 @@ public static unsafe void DrawBuffers(Int32 n, [CountAttribute(Parameter = "n")]
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7522,7 +7522,7 @@ public static unsafe void DrawBuffers(Int32 n, [CountAttribute(Parameter = "n")]
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7538,7 +7538,7 @@ public static unsafe void DrawBuffers(Int32 n, [CountAttribute(Parameter = "n")]
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7567,7 +7567,7 @@ public static void DrawElements(OpenTK.Graphics.ES30.PrimitiveType mode, Int32 c
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7602,7 +7602,7 @@ public static void DrawElements(OpenTK.Graphics.ES30.PrimitiveType mode, Int32 c
 /// Draw multiple instances of a set of elements
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7621,7 +7621,7 @@ public static void DrawElements(OpenTK.Graphics.ES30.PrimitiveType mode, Int32 c
 /// Draw multiple instances of a set of elements
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7640,7 +7640,7 @@ public static void DrawElements(OpenTK.Graphics.ES30.PrimitiveType mode, Int32 c
 /// Draw multiple instances of a set of elements
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7672,7 +7672,7 @@ public static void DrawElementsInstanced(OpenTK.Graphics.ES30.PrimitiveType mode
 /// Draw multiple instances of a set of elements
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="count">
 /// Specifies the number of elements to be rendered.
@@ -7710,7 +7710,7 @@ public static void DrawElementsInstanced(OpenTK.Graphics.ES30.PrimitiveType mode
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -7732,7 +7732,7 @@ public static void DrawElementsInstanced(OpenTK.Graphics.ES30.PrimitiveType mode
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -7754,7 +7754,7 @@ public static void DrawElementsInstanced(OpenTK.Graphics.ES30.PrimitiveType mode
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -7776,7 +7776,7 @@ public static void DrawElementsInstanced(OpenTK.Graphics.ES30.PrimitiveType mode
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -7798,7 +7798,7 @@ public static void DrawElementsInstanced(OpenTK.Graphics.ES30.PrimitiveType mode
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -7833,7 +7833,7 @@ public static void DrawRangeElements(OpenTK.Graphics.ES30.PrimitiveType mode, In
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -7874,7 +7874,7 @@ public static void DrawRangeElements(OpenTK.Graphics.ES30.PrimitiveType mode, In
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -7909,7 +7909,7 @@ public static void DrawRangeElements(OpenTK.Graphics.ES30.PrimitiveType mode, UI
 /// Render primitives from array data
 /// </summary>
 /// <param name="mode">
-/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+/// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
 /// </param>
 /// <param name="start">
 /// Specifies the minimum array index contained in indices.
@@ -8118,7 +8118,7 @@ public static void Flush()
 /// Indicate modifications to a range of a mapped buffer
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, DispatchIndirectBuffer, DrawIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="offset">
 /// Specifies the start of the buffer subrange, in basic machine units.
@@ -8131,7 +8131,7 @@ public static void Flush()
 /// Indicate modifications to a range of a mapped buffer
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, DispatchIndirectBuffer, DrawIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="offset">
 /// Specifies the start of the buffer subrange, in basic machine units.
@@ -8243,62 +8243,26 @@ public static void FramebufferRenderbuffer(OpenTK.Graphics.ES30.FramebufferTarge
     #endif
 }
 
-/// <summary>[requires: v2.0 or ES_VERSION_2_0]
-/// Attach a level of a texture object as a logical buffer to the currently bound framebuffer object
-/// </summary>
-/// <param name="target">
-/// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
-/// </param>
-/// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
-/// </param>
-/// <param name="textarget">
-/// Specifies a 2D texture target, or for cube map textures, which face is to be attached.
-/// </param>
-/// <param name="texture">
-/// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
-/// </param>
-/// <param name="level">
-/// Specifies the mipmap level of texture to attach.
-/// </param>
+/// <summary>[requires: v2.0 or ES_VERSION_2_0]</summary>
+/// <param name="target"></param>
+/// <param name="attachment"></param>
+/// <param name="textarget"></param>
+/// <param name="texture"></param>
+/// <param name="level"></param>
 
-/// <summary>[requires: v2.0 or ES_VERSION_2_0]
-/// Attach a level of a texture object as a logical buffer to the currently bound framebuffer object
-/// </summary>
-/// <param name="target">
-/// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
-/// </param>
-/// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
-/// </param>
-/// <param name="textarget">
-/// Specifies a 2D texture target, or for cube map textures, which face is to be attached.
-/// </param>
-/// <param name="texture">
-/// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
-/// </param>
-/// <param name="level">
-/// Specifies the mipmap level of texture to attach.
-/// </param>
+/// <summary>[requires: v2.0 or ES_VERSION_2_0]</summary>
+/// <param name="target"></param>
+/// <param name="attachment"></param>
+/// <param name="textarget"></param>
+/// <param name="texture"></param>
+/// <param name="level"></param>
 
-/// <summary>[requires: v2.0 or ES_VERSION_2_0]
-/// Attach a level of a texture object as a logical buffer to the currently bound framebuffer object
-/// </summary>
-/// <param name="target">
-/// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
-/// </param>
-/// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
-/// </param>
-/// <param name="textarget">
-/// Specifies a 2D texture target, or for cube map textures, which face is to be attached.
-/// </param>
-/// <param name="texture">
-/// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
-/// </param>
-/// <param name="level">
-/// Specifies the mipmap level of texture to attach.
-/// </param>
+/// <summary>[requires: v2.0 or ES_VERSION_2_0]</summary>
+/// <param name="target"></param>
+/// <param name="attachment"></param>
+/// <param name="textarget"></param>
+/// <param name="texture"></param>
+/// <param name="level"></param>
 //x* 248
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glFramebufferTexture2D")]
 public static void FramebufferTexture2D(OpenTK.Graphics.ES30.FramebufferTarget target, OpenTK.Graphics.ES30.FramebufferAttachment attachment, OpenTK.Graphics.ES30.TextureTarget2d textarget, Int32 texture, Int32 level)
@@ -8313,24 +8277,12 @@ public static void FramebufferTexture2D(OpenTK.Graphics.ES30.FramebufferTarget t
     #endif
 }
 
-/// <summary>[requires: v2.0 or ES_VERSION_2_0]
-/// Attach a level of a texture object as a logical buffer to the currently bound framebuffer object
-/// </summary>
-/// <param name="target">
-/// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
-/// </param>
-/// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
-/// </param>
-/// <param name="textarget">
-/// Specifies a 2D texture target, or for cube map textures, which face is to be attached.
-/// </param>
-/// <param name="texture">
-/// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
-/// </param>
-/// <param name="level">
-/// Specifies the mipmap level of texture to attach.
-/// </param>
+/// <summary>[requires: v2.0 or ES_VERSION_2_0]</summary>
+/// <param name="target"></param>
+/// <param name="attachment"></param>
+/// <param name="textarget"></param>
+/// <param name="texture"></param>
+/// <param name="level"></param>
 //x* 249
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glFramebufferTexture2D")]
 public static void FramebufferTexture2D(OpenTK.Graphics.ES30.FramebufferTarget target, OpenTK.Graphics.ES30.FramebufferAttachment attachment, OpenTK.Graphics.ES30.TextureTarget2d textarget, UInt32 texture, Int32 level)
@@ -8352,7 +8304,7 @@ public static void FramebufferTexture2D(OpenTK.Graphics.ES30.FramebufferTarget t
 /// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
 /// </param>
 /// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachmment.
+/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
 /// </param>
 /// <param name="texture">
 /// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
@@ -8371,7 +8323,7 @@ public static void FramebufferTexture2D(OpenTK.Graphics.ES30.FramebufferTarget t
 /// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
 /// </param>
 /// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachmment.
+/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
 /// </param>
 /// <param name="texture">
 /// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
@@ -8390,7 +8342,7 @@ public static void FramebufferTexture2D(OpenTK.Graphics.ES30.FramebufferTarget t
 /// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
 /// </param>
 /// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachmment.
+/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
 /// </param>
 /// <param name="texture">
 /// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
@@ -8422,7 +8374,7 @@ public static void FramebufferTextureLayer(OpenTK.Graphics.ES30.FramebufferTarge
 /// Specifies the framebuffer target. target must be DrawFramebuffer, ReadFramebuffer, or Framebuffer. Framebuffer is equivalent to DrawFramebuffer.
 /// </param>
 /// <param name="attachment">
-/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachmment.
+/// Specifies the attachment point of the framebuffer. attachment must be ColorAttachmenti, DepthAttachment, StencilAttachment or DepthStencilAttachment.
 /// </param>
 /// <param name="texture">
 /// Specifies the texture object to attach to the framebuffer attachment point named by attachment.
@@ -8642,14 +8594,14 @@ public static unsafe void GenBuffers(Int32 n, [OutAttribute, CountAttribute(Para
 /// Generate mipmaps for a specified texture target
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the texture whose mimaps to generate is bound. target must be Texture2D, Texture3D, Texture2DArray or TextureCubeMap.
+/// Specifies the target to which the texture whose mimaps to generate is bound. target must be Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray or TextureCubeMap.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Generate mipmaps for a specified texture target
 /// </summary>
 /// <param name="target">
-/// Specifies the target to which the texture whose mimaps to generate is bound. target must be Texture2D, Texture3D, Texture2DArray or TextureCubeMap.
+/// Specifies the target to which the texture whose mimaps to generate is bound. target must be Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray or TextureCubeMap.
 /// </param>
 //x* 259
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glGenerateMipmap")]
@@ -11511,10 +11463,10 @@ public static unsafe void GetBoolean(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Return parameters of a buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccessFlags, BufferMapped, BufferMapLength, BufferMapOffset, BufferSize, or BufferUsage.
+/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccess, BufferMapped, BufferSize, or BufferUsage.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested parameter.
@@ -11524,10 +11476,10 @@ public static unsafe void GetBoolean(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Return parameters of a buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccessFlags, BufferMapped, BufferMapLength, BufferMapOffset, BufferSize, or BufferUsage.
+/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccess, BufferMapped, BufferSize, or BufferUsage.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested parameter.
@@ -11537,10 +11489,10 @@ public static unsafe void GetBoolean(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Return parameters of a buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccessFlags, BufferMapped, BufferMapLength, BufferMapOffset, BufferSize, or BufferUsage.
+/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccess, BufferMapped, BufferSize, or BufferUsage.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested parameter.
@@ -11550,10 +11502,10 @@ public static unsafe void GetBoolean(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Return parameters of a buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccessFlags, BufferMapped, BufferMapLength, BufferMapOffset, BufferSize, or BufferUsage.
+/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccess, BufferMapped, BufferSize, or BufferUsage.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested parameter.
@@ -11582,10 +11534,10 @@ public static void GetBufferParameter(OpenTK.Graphics.ES30.BufferTarget target, 
 /// Return parameters of a buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccessFlags, BufferMapped, BufferMapLength, BufferMapOffset, BufferSize, or BufferUsage.
+/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccess, BufferMapped, BufferSize, or BufferUsage.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested parameter.
@@ -11615,10 +11567,10 @@ public static void GetBufferParameter(OpenTK.Graphics.ES30.BufferTarget target, 
 /// Return parameters of a buffer object
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccessFlags, BufferMapped, BufferMapLength, BufferMapOffset, BufferSize, or BufferUsage.
+/// Specifies the symbolic name of a buffer object parameter. Accepted values are BufferAccess, BufferMapped, BufferSize, or BufferUsage.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested parameter.
@@ -11771,7 +11723,7 @@ public static unsafe void GetBufferParameter(OpenTK.Graphics.ES30.BufferTarget t
 /// Return the pointer to a mapped buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
 /// Specifies the pointer to be returned.  The symbolic constant must be BufferMapPointer.
@@ -11784,7 +11736,7 @@ public static unsafe void GetBufferParameter(OpenTK.Graphics.ES30.BufferTarget t
 /// Return the pointer to a mapped buffer object's data store
 /// </summary>
 /// <param name="target">
-/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+/// Specifies the target buffer object. The symbolic constant must be ArrayBuffer, AtomicCounterBuffer, CopyReadBuffer, CopyWriteBuffer, DrawIndirectBuffer, DispatchIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
 /// </param>
 /// <param name="pname">
 /// Specifies the pointer to be returned.  The symbolic constant must be BufferMapPointer.
@@ -13073,7 +13025,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Retrieve information about implementation-dependent support for internal formats
 /// </summary>
 /// <param name="target">
-/// Indicates the usage of the internal format. target must be Renderbuffer.
+/// Indicates the usage of the internal format. target must be Texture1D, Texture1DArray, Texture2D, Texture2DArray, Texture3D, TextureCubeMap, TextureCubeMapArray, TextureRectangle, TextureBuffer, Renderbuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="internalformat">
 /// Specifies the internal format about which to retrieve information.
@@ -13082,7 +13034,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Specifies the type of information to query.
 /// </param>
 /// <param name="bufSize">
-/// Specifies the maximum number of integers that may be written to params by the function.
+/// Specifies the maximum number of basic machine units that may be written to params by the function.
 /// </param>
 /// <param name="@params">[length: bufSize]
 /// Specifies the address of a variable into which to write the retrieved information.
@@ -13092,7 +13044,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Retrieve information about implementation-dependent support for internal formats
 /// </summary>
 /// <param name="target">
-/// Indicates the usage of the internal format. target must be Renderbuffer.
+/// Indicates the usage of the internal format. target must be Texture1D, Texture1DArray, Texture2D, Texture2DArray, Texture3D, TextureCubeMap, TextureCubeMapArray, TextureRectangle, TextureBuffer, Renderbuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="internalformat">
 /// Specifies the internal format about which to retrieve information.
@@ -13101,7 +13053,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Specifies the type of information to query.
 /// </param>
 /// <param name="bufSize">
-/// Specifies the maximum number of integers that may be written to params by the function.
+/// Specifies the maximum number of basic machine units that may be written to params by the function.
 /// </param>
 /// <param name="@params">[length: bufSize]
 /// Specifies the address of a variable into which to write the retrieved information.
@@ -13111,7 +13063,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Retrieve information about implementation-dependent support for internal formats
 /// </summary>
 /// <param name="target">
-/// Indicates the usage of the internal format. target must be Renderbuffer.
+/// Indicates the usage of the internal format. target must be Texture1D, Texture1DArray, Texture2D, Texture2DArray, Texture3D, TextureCubeMap, TextureCubeMapArray, TextureRectangle, TextureBuffer, Renderbuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="internalformat">
 /// Specifies the internal format about which to retrieve information.
@@ -13120,7 +13072,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Specifies the type of information to query.
 /// </param>
 /// <param name="bufSize">
-/// Specifies the maximum number of integers that may be written to params by the function.
+/// Specifies the maximum number of basic machine units that may be written to params by the function.
 /// </param>
 /// <param name="@params">[length: bufSize]
 /// Specifies the address of a variable into which to write the retrieved information.
@@ -13130,7 +13082,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Retrieve information about implementation-dependent support for internal formats
 /// </summary>
 /// <param name="target">
-/// Indicates the usage of the internal format. target must be Renderbuffer.
+/// Indicates the usage of the internal format. target must be Texture1D, Texture1DArray, Texture2D, Texture2DArray, Texture3D, TextureCubeMap, TextureCubeMapArray, TextureRectangle, TextureBuffer, Renderbuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="internalformat">
 /// Specifies the internal format about which to retrieve information.
@@ -13139,7 +13091,7 @@ public static unsafe void GetInteger(OpenTK.Graphics.ES30.GetPName pname, [OutAt
 /// Specifies the type of information to query.
 /// </param>
 /// <param name="bufSize">
-/// Specifies the maximum number of integers that may be written to params by the function.
+/// Specifies the maximum number of basic machine units that may be written to params by the function.
 /// </param>
 /// <param name="@params">[length: bufSize]
 /// Specifies the address of a variable into which to write the retrieved information.
@@ -13168,7 +13120,7 @@ public static void GetInternalformat(OpenTK.Graphics.ES30.ImageTarget target, Op
 /// Retrieve information about implementation-dependent support for internal formats
 /// </summary>
 /// <param name="target">
-/// Indicates the usage of the internal format. target must be Renderbuffer.
+/// Indicates the usage of the internal format. target must be Texture1D, Texture1DArray, Texture2D, Texture2DArray, Texture3D, TextureCubeMap, TextureCubeMapArray, TextureRectangle, TextureBuffer, Renderbuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="internalformat">
 /// Specifies the internal format about which to retrieve information.
@@ -13177,7 +13129,7 @@ public static void GetInternalformat(OpenTK.Graphics.ES30.ImageTarget target, Op
 /// Specifies the type of information to query.
 /// </param>
 /// <param name="bufSize">
-/// Specifies the maximum number of integers that may be written to params by the function.
+/// Specifies the maximum number of basic machine units that may be written to params by the function.
 /// </param>
 /// <param name="@params">[length: bufSize]
 /// Specifies the address of a variable into which to write the retrieved information.
@@ -13207,7 +13159,7 @@ public static void GetInternalformat(OpenTK.Graphics.ES30.ImageTarget target, Op
 /// Retrieve information about implementation-dependent support for internal formats
 /// </summary>
 /// <param name="target">
-/// Indicates the usage of the internal format. target must be Renderbuffer.
+/// Indicates the usage of the internal format. target must be Texture1D, Texture1DArray, Texture2D, Texture2DArray, Texture3D, TextureCubeMap, TextureCubeMapArray, TextureRectangle, TextureBuffer, Renderbuffer, Texture2DMultisample or Texture2DMultisampleArray.
 /// </param>
 /// <param name="internalformat">
 /// Specifies the internal format about which to retrieve information.
@@ -13216,7 +13168,7 @@ public static void GetInternalformat(OpenTK.Graphics.ES30.ImageTarget target, Op
 /// Specifies the type of information to query.
 /// </param>
 /// <param name="bufSize">
-/// Specifies the maximum number of integers that may be written to params by the function.
+/// Specifies the maximum number of basic machine units that may be written to params by the function.
 /// </param>
 /// <param name="@params">[length: bufSize]
 /// Specifies the address of a variable into which to write the retrieved information.
@@ -14275,7 +14227,7 @@ public static unsafe void GetProgramInfoLog(UInt32 program, Int32 bufSize, [OutA
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14288,7 +14240,7 @@ public static unsafe void GetProgramInfoLog(UInt32 program, Int32 bufSize, [OutA
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14301,7 +14253,7 @@ public static unsafe void GetProgramInfoLog(UInt32 program, Int32 bufSize, [OutA
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14314,7 +14266,7 @@ public static unsafe void GetProgramInfoLog(UInt32 program, Int32 bufSize, [OutA
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14346,7 +14298,7 @@ public static void GetProgram(Int32 program, OpenTK.Graphics.ES30.GetProgramPara
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14379,7 +14331,7 @@ public static void GetProgram(Int32 program, OpenTK.Graphics.ES30.GetProgramPara
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14405,7 +14357,7 @@ public static unsafe void GetProgram(Int32 program, OpenTK.Graphics.ES30.GetProg
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14418,7 +14370,7 @@ public static unsafe void GetProgram(Int32 program, OpenTK.Graphics.ES30.GetProg
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14431,7 +14383,7 @@ public static unsafe void GetProgram(Int32 program, OpenTK.Graphics.ES30.GetProg
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14444,7 +14396,7 @@ public static unsafe void GetProgram(Int32 program, OpenTK.Graphics.ES30.GetProg
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14476,7 +14428,7 @@ public static void GetProgram(UInt32 program, OpenTK.Graphics.ES30.GetProgramPar
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14509,7 +14461,7 @@ public static void GetProgram(UInt32 program, OpenTK.Graphics.ES30.GetProgramPar
 /// Specifies the program object to be queried.
 /// </param>
 /// <param name="pname">
-/// Specifies the object parameter. Accepted symbolic names are ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, AttachedShaders, DeleteStatus, InfoLogLength, LinkStatus, ProgramBinaryRetrievableHint, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength and ValidateStatus.
+/// Specifies the object parameter. Accepted symbolic names are DeleteStatus, LinkStatus, ValidateStatus, InfoLogLength, AttachedShaders, ActiveAtomicCounterBuffers, ActiveAttributes, ActiveAttributeMaxLength, ActiveUniforms, ActiveUniformBlocks, ActiveUniformBlockMaxNameLength, ActiveUniformMaxLength, ComputeWorkGroupSizeProgramBinaryLength, TransformFeedbackBufferMode, TransformFeedbackVaryings, TransformFeedbackVaryingMaxLength, GeometryVerticesOut, GeometryInputType, and GeometryOutputType.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested object parameter.
@@ -14532,10 +14484,10 @@ public static unsafe void GetProgram(UInt32 program, OpenTK.Graphics.ES30.GetPro
 /// Return parameters of a query object target
 /// </summary>
 /// <param name="target">
-/// Specifies a query object target. Must be AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies a query object target. Must be SamplesPassed, AnySamplesPassed, AnySamplesPassedConservativePrimitivesGenerated, TransformFeedbackPrimitivesWritten, TimeElapsed, or Timestamp.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a query object target parameter. Must be CurrentQuery.
+/// Specifies the symbolic name of a query object target parameter. Accepted values are CurrentQuery or QueryCounterBits.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested data.
@@ -14545,10 +14497,10 @@ public static unsafe void GetProgram(UInt32 program, OpenTK.Graphics.ES30.GetPro
 /// Return parameters of a query object target
 /// </summary>
 /// <param name="target">
-/// Specifies a query object target. Must be AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies a query object target. Must be SamplesPassed, AnySamplesPassed, AnySamplesPassedConservativePrimitivesGenerated, TransformFeedbackPrimitivesWritten, TimeElapsed, or Timestamp.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a query object target parameter. Must be CurrentQuery.
+/// Specifies the symbolic name of a query object target parameter. Accepted values are CurrentQuery or QueryCounterBits.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested data.
@@ -14558,10 +14510,10 @@ public static unsafe void GetProgram(UInt32 program, OpenTK.Graphics.ES30.GetPro
 /// Return parameters of a query object target
 /// </summary>
 /// <param name="target">
-/// Specifies a query object target. Must be AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies a query object target. Must be SamplesPassed, AnySamplesPassed, AnySamplesPassedConservativePrimitivesGenerated, TransformFeedbackPrimitivesWritten, TimeElapsed, or Timestamp.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a query object target parameter. Must be CurrentQuery.
+/// Specifies the symbolic name of a query object target parameter. Accepted values are CurrentQuery or QueryCounterBits.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested data.
@@ -14571,10 +14523,10 @@ public static unsafe void GetProgram(UInt32 program, OpenTK.Graphics.ES30.GetPro
 /// Return parameters of a query object target
 /// </summary>
 /// <param name="target">
-/// Specifies a query object target. Must be AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies a query object target. Must be SamplesPassed, AnySamplesPassed, AnySamplesPassedConservativePrimitivesGenerated, TransformFeedbackPrimitivesWritten, TimeElapsed, or Timestamp.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a query object target parameter. Must be CurrentQuery.
+/// Specifies the symbolic name of a query object target parameter. Accepted values are CurrentQuery or QueryCounterBits.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested data.
@@ -14603,10 +14555,10 @@ public static void GetQuery(OpenTK.Graphics.ES30.QueryTarget target, OpenTK.Grap
 /// Return parameters of a query object target
 /// </summary>
 /// <param name="target">
-/// Specifies a query object target. Must be AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies a query object target. Must be SamplesPassed, AnySamplesPassed, AnySamplesPassedConservativePrimitivesGenerated, TransformFeedbackPrimitivesWritten, TimeElapsed, or Timestamp.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a query object target parameter. Must be CurrentQuery.
+/// Specifies the symbolic name of a query object target parameter. Accepted values are CurrentQuery or QueryCounterBits.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested data.
@@ -14636,10 +14588,10 @@ public static void GetQuery(OpenTK.Graphics.ES30.QueryTarget target, OpenTK.Grap
 /// Return parameters of a query object target
 /// </summary>
 /// <param name="target">
-/// Specifies a query object target. Must be AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+/// Specifies a query object target. Must be SamplesPassed, AnySamplesPassed, AnySamplesPassedConservativePrimitivesGenerated, TransformFeedbackPrimitivesWritten, TimeElapsed, or Timestamp.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a query object target parameter. Must be CurrentQuery.
+/// Specifies the symbolic name of a query object target parameter. Accepted values are CurrentQuery or QueryCounterBits.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the requested data.
@@ -14668,7 +14620,7 @@ public static unsafe void GetQuery(OpenTK.Graphics.ES30.QueryTarget target, Open
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
@@ -14681,7 +14633,7 @@ public static unsafe void GetQuery(OpenTK.Graphics.ES30.QueryTarget target, Open
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
@@ -14694,7 +14646,7 @@ public static unsafe void GetQuery(OpenTK.Graphics.ES30.QueryTarget target, Open
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
@@ -14707,7 +14659,7 @@ public static unsafe void GetQuery(OpenTK.Graphics.ES30.QueryTarget target, Open
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 //x* 419
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetQueryObjectuiv")]
@@ -14739,7 +14691,7 @@ public static void GetQueryObject(Int32 id, OpenTK.Graphics.ES30.GetQueryObjectP
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 //x* 420
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetQueryObjectuiv")]
@@ -14772,7 +14724,7 @@ public static void GetQueryObject(Int32 id, OpenTK.Graphics.ES30.GetQueryObjectP
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 //x* 421
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetQueryObjectuiv")]
@@ -14798,7 +14750,7 @@ public static unsafe void GetQueryObject(Int32 id, OpenTK.Graphics.ES30.GetQuery
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
@@ -14811,7 +14763,7 @@ public static unsafe void GetQueryObject(Int32 id, OpenTK.Graphics.ES30.GetQuery
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
@@ -14824,7 +14776,7 @@ public static unsafe void GetQueryObject(Int32 id, OpenTK.Graphics.ES30.GetQuery
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
@@ -14837,7 +14789,7 @@ public static unsafe void GetQueryObject(Int32 id, OpenTK.Graphics.ES30.GetQuery
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 //x* 422
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetQueryObjectuiv")]
@@ -14869,7 +14821,7 @@ public static void GetQueryObject(UInt32 id, OpenTK.Graphics.ES30.GetQueryObject
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 //x* 423
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetQueryObjectuiv")]
@@ -14902,7 +14854,7 @@ public static void GetQueryObject(UInt32 id, OpenTK.Graphics.ES30.GetQueryObject
 /// Specifies the symbolic name of a query object parameter. Accepted values are QueryResult or QueryResultAvailable.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Returns the requested data.
+/// If a buffer is bound to the QueryResultBuffer target, then params is treated as an offset to a location within that buffer's data store to receive the result of the query. If no buffer is bound to QueryResultBuffer, then params is treated as an address in client memory of a variable to receive the resulting data.
 /// </param>
 //x* 424
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetQueryObjectuiv")]
@@ -15055,7 +15007,7 @@ public static unsafe void GetRenderbufferParameter(OpenTK.Graphics.ES30.Renderbu
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15068,7 +15020,7 @@ public static unsafe void GetRenderbufferParameter(OpenTK.Graphics.ES30.Renderbu
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15081,7 +15033,7 @@ public static unsafe void GetRenderbufferParameter(OpenTK.Graphics.ES30.Renderbu
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15094,7 +15046,7 @@ public static unsafe void GetRenderbufferParameter(OpenTK.Graphics.ES30.Renderbu
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15126,7 +15078,7 @@ public static void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.Sampl
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15159,7 +15111,7 @@ public static void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.Sampl
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15185,7 +15137,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15198,7 +15150,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15211,7 +15163,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15224,7 +15176,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15256,7 +15208,7 @@ public static void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Samp
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15289,7 +15241,7 @@ public static void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Samp
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15315,7 +15267,7 @@ public static unsafe void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15328,7 +15280,7 @@ public static unsafe void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15341,7 +15293,7 @@ public static unsafe void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15354,7 +15306,7 @@ public static unsafe void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15386,7 +15338,7 @@ public static void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.Sampl
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15419,7 +15371,7 @@ public static void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.Sampl
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15445,7 +15397,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15458,7 +15410,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15471,7 +15423,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15484,7 +15436,7 @@ public static unsafe void GetSamplerParameter(Int32 sampler, OpenTK.Graphics.ES3
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15516,7 +15468,7 @@ public static void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Samp
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -15549,7 +15501,7 @@ public static void GetSamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Samp
 /// Specifies name of the sampler object from which to retrieve parameters.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureWrapS, TextureWrapT, TextureWrapR, TextureCompareMode, and TextureCompareFunc are accepted.
+/// Specifies the symbolic name of a sampler parameter. TextureMagFilter, TextureMinFilter, TextureMinLod, TextureMaxLod, TextureLodBias, TextureWrapS, TextureWrapT, TextureWrapR, TextureBorderColor, TextureCompareMode, and TextureCompareFunc are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the sampler parameters.
@@ -16272,14 +16224,14 @@ public static unsafe void GetShaderSource(UInt32 shader, Int32 bufSize, [OutAttr
 /// Return a string describing the current GL connection
 /// </summary>
 /// <param name="name">
-/// Specifies a symbolic constant, one of Extensions, Renderer, ShadingLanguageVersion, Vendor, or Version. glGetStringi accepts only the Extensions token.
+/// Specifies a symbolic constant, one of Vendor, Renderer, Version, or ShadingLanguageVersion. Additionally, glGetStringi accepts the Extensions token.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Return a string describing the current GL connection
 /// </summary>
 /// <param name="name">
-/// Specifies a symbolic constant, one of Extensions, Renderer, ShadingLanguageVersion, Vendor, or Version. glGetStringi accepts only the Extensions token.
+/// Specifies a symbolic constant, one of Vendor, Renderer, Version, or ShadingLanguageVersion. Additionally, glGetStringi accepts the Extensions token.
 /// </param>
 //x* 457
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glGetString")]
@@ -16299,7 +16251,7 @@ public static String GetString(OpenTK.Graphics.ES30.StringName name)
 /// Return a string describing the current GL connection
 /// </summary>
 /// <param name="name">
-/// Specifies a symbolic constant, one of Extensions, Renderer, ShadingLanguageVersion, Vendor, or Version. glGetStringi accepts only the Extensions token.
+/// Specifies a symbolic constant, one of Vendor, Renderer, Version, or ShadingLanguageVersion. Additionally, glGetStringi accepts the Extensions token.
 /// </param>
 /// <param name="index">
 /// For glGetStringi, specifies the index of the string to return.
@@ -16309,7 +16261,7 @@ public static String GetString(OpenTK.Graphics.ES30.StringName name)
 /// Return a string describing the current GL connection
 /// </summary>
 /// <param name="name">
-/// Specifies a symbolic constant, one of Extensions, Renderer, ShadingLanguageVersion, Vendor, or Version. glGetStringi accepts only the Extensions token.
+/// Specifies a symbolic constant, one of Vendor, Renderer, Version, or ShadingLanguageVersion. Additionally, glGetStringi accepts the Extensions token.
 /// </param>
 /// <param name="index">
 /// For glGetStringi, specifies the index of the string to return.
@@ -16319,7 +16271,7 @@ public static String GetString(OpenTK.Graphics.ES30.StringName name)
 /// Return a string describing the current GL connection
 /// </summary>
 /// <param name="name">
-/// Specifies a symbolic constant, one of Extensions, Renderer, ShadingLanguageVersion, Vendor, or Version. glGetStringi accepts only the Extensions token.
+/// Specifies a symbolic constant, one of Vendor, Renderer, Version, or ShadingLanguageVersion. Additionally, glGetStringi accepts the Extensions token.
 /// </param>
 /// <param name="index">
 /// For glGetStringi, specifies the index of the string to return.
@@ -16342,7 +16294,7 @@ public static String GetString(OpenTK.Graphics.ES30.StringNameIndexed name, Int3
 /// Return a string describing the current GL connection
 /// </summary>
 /// <param name="name">
-/// Specifies a symbolic constant, one of Extensions, Renderer, ShadingLanguageVersion, Vendor, or Version. glGetStringi accepts only the Extensions token.
+/// Specifies a symbolic constant, one of Vendor, Renderer, Version, or ShadingLanguageVersion. Additionally, glGetStringi accepts the Extensions token.
 /// </param>
 /// <param name="index">
 /// For glGetStringi, specifies the index of the string to return.
@@ -16535,10 +16487,10 @@ public static unsafe void GetSync(IntPtr sync, OpenTK.Graphics.ES30.SyncParamete
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16548,10 +16500,10 @@ public static unsafe void GetSync(IntPtr sync, OpenTK.Graphics.ES30.SyncParamete
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16561,10 +16513,10 @@ public static unsafe void GetSync(IntPtr sync, OpenTK.Graphics.ES30.SyncParamete
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16574,10 +16526,10 @@ public static unsafe void GetSync(IntPtr sync, OpenTK.Graphics.ES30.SyncParamete
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16606,10 +16558,10 @@ public static void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget target, Op
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16639,10 +16591,10 @@ public static void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget target, Op
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16665,10 +16617,10 @@ public static unsafe void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget tar
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16678,10 +16630,10 @@ public static unsafe void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget tar
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16691,10 +16643,10 @@ public static unsafe void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget tar
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16704,10 +16656,10 @@ public static unsafe void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget tar
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16736,10 +16688,10 @@ public static void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget target, Op
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -16769,10 +16721,10 @@ public static void GetTexParameter(OpenTK.Graphics.ES30.TextureTarget target, Op
 /// Return texture parameter values
 /// </summary>
 /// <param name="target">
-/// Specifies the symbolic name of the target texture. Texture2D, Texture2DArray, Texture3D, and TextureCubeMap are accepted.
+/// Specifies the symbolic name of the target texture. Texture1D, Texture2D, Texture1DArray, Texture2DArray, Texture3D, TextureRectangle, TextureCubeMap, and TextureCubeMapArray are accepted.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a texture parameter. TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureImmutableFormat, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
+/// Specifies the symbolic name of a texture parameter. DepthStencilTextureMode, TextureBaseLevel, TextureBorderColor, TextureCompareMode, TextureCompareFunc, TextureImmutableFormat, TextureImmutableLevels, TextureLodBias, TextureMagFilter, TextureMaxLevel, TextureMaxLod, TextureMinFilter, TextureMinLod, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureSwizzleRgba, TextureViewMinLayer, TextureViewMinLevel, TextureViewNumLayers, TextureViewNumLevels, TextureWrapS, TextureWrapT, and TextureWrapR are accepted.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
 /// Returns the texture parameters.
@@ -17086,7 +17038,7 @@ public static unsafe void GetTransformFeedbackVarying(UInt32 program, UInt32 ind
 /// Specifies the name of a program containing the uniform block.
 /// </param>
 /// <param name="uniformBlockName">[length: COMPSIZE()]
-/// Specifies the address an array of characters containing the name of the uniform block whose index to retrieve.
+/// Specifies the address an array of characters to containing the name of the uniform block whose index to retrieve.
 /// </param>
 //x* 473
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetUniformBlockIndex")]
@@ -17109,7 +17061,7 @@ public static Int32 GetUniformBlockIndex(Int32 program, [CountAttribute(Computed
 /// Specifies the name of a program containing the uniform block.
 /// </param>
 /// <param name="uniformBlockName">[length: COMPSIZE()]
-/// Specifies the address an array of characters containing the name of the uniform block whose index to retrieve.
+/// Specifies the address an array of characters to containing the name of the uniform block whose index to retrieve.
 /// </param>
 //x* 474
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glGetUniformBlockIndex")]
@@ -18587,7 +18539,7 @@ public static void GetVertexAttribPointer(UInt32 index, OpenTK.Graphics.ES30.Ver
 /// Specify implementation-specific hints
 /// </summary>
 /// <param name="target">
-/// Specifies a symbolic constant indicating the behavior to be controlled. FragmentShaderDerivativeHint, and GenerateMipmapHint are accepted.
+/// Specifies a symbolic constant indicating the behavior to be controlled. LineSmoothHint, PolygonSmoothHint, TextureCompressionHint, and FragmentShaderDerivativeHint are accepted.
 /// </param>
 /// <param name="mode">
 /// Specifies a symbolic constant indicating the desired behavior. Fastest, Nicest, and DontCare are accepted.
@@ -18597,7 +18549,7 @@ public static void GetVertexAttribPointer(UInt32 index, OpenTK.Graphics.ES30.Ver
 /// Specify implementation-specific hints
 /// </summary>
 /// <param name="target">
-/// Specifies a symbolic constant indicating the behavior to be controlled. FragmentShaderDerivativeHint, and GenerateMipmapHint are accepted.
+/// Specifies a symbolic constant indicating the behavior to be controlled. LineSmoothHint, PolygonSmoothHint, TextureCompressionHint, and FragmentShaderDerivativeHint are accepted.
 /// </param>
 /// <param name="mode">
 /// Specifies a symbolic constant indicating the desired behavior. Fastest, Nicest, and DontCare are accepted.
@@ -18617,55 +18569,55 @@ public static void Hint(OpenTK.Graphics.ES30.HintTarget target, OpenTK.Graphics.
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate the contents of attachments within a framebuffer
+/// Invalidate the content some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate the contents of attachments within a framebuffer
+/// Invalidate the content some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate the contents of attachments within a framebuffer
+/// Invalidate the content some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate the contents of attachments within a framebuffer
+/// Invalidate the content some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 //x* 519
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glInvalidateFramebuffer")]
@@ -18688,16 +18640,16 @@ public static void InvalidateFramebuffer(OpenTK.Graphics.ES30.FramebufferTarget 
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate the contents of attachments within a framebuffer
+/// Invalidate the content some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 //x* 520
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glInvalidateFramebuffer")]
@@ -18720,16 +18672,16 @@ public static void InvalidateFramebuffer(OpenTK.Graphics.ES30.FramebufferTarget 
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate the contents of attachments within a framebuffer
+/// Invalidate the content some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 //x* 521
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glInvalidateFramebuffer")]
@@ -18746,103 +18698,103 @@ public static unsafe void InvalidateFramebuffer(OpenTK.Graphics.ES30.Framebuffer
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate portions of the contents of attachments within a framebuffer
+/// Invalidate the content of a region of some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 /// <param name="x">
-/// Specifies the left origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The X offset of the region to be invalidated.
 /// </param>
 /// <param name="y">
-/// Specifies the bottom origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The Y offset of the region to be invalidated.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the pixel rectangle to invalidate.
+/// The width of the region to be invalidated.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the pixel rectangle to invalidate.
+/// The height of the region to be invalidated.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate portions of the contents of attachments within a framebuffer
+/// Invalidate the content of a region of some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 /// <param name="x">
-/// Specifies the left origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The X offset of the region to be invalidated.
 /// </param>
 /// <param name="y">
-/// Specifies the bottom origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The Y offset of the region to be invalidated.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the pixel rectangle to invalidate.
+/// The width of the region to be invalidated.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the pixel rectangle to invalidate.
+/// The height of the region to be invalidated.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate portions of the contents of attachments within a framebuffer
+/// Invalidate the content of a region of some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 /// <param name="x">
-/// Specifies the left origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The X offset of the region to be invalidated.
 /// </param>
 /// <param name="y">
-/// Specifies the bottom origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The Y offset of the region to be invalidated.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the pixel rectangle to invalidate.
+/// The width of the region to be invalidated.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the pixel rectangle to invalidate.
+/// The height of the region to be invalidated.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate portions of the contents of attachments within a framebuffer
+/// Invalidate the content of a region of some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 /// <param name="x">
-/// Specifies the left origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The X offset of the region to be invalidated.
 /// </param>
 /// <param name="y">
-/// Specifies the bottom origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The Y offset of the region to be invalidated.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the pixel rectangle to invalidate.
+/// The width of the region to be invalidated.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the pixel rectangle to invalidate.
+/// The height of the region to be invalidated.
 /// </param>
 //x* 522
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glInvalidateSubFramebuffer")]
@@ -18865,28 +18817,28 @@ public static void InvalidateSubFramebuffer(OpenTK.Graphics.ES30.FramebufferTarg
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate portions of the contents of attachments within a framebuffer
+/// Invalidate the content of a region of some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 /// <param name="x">
-/// Specifies the left origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The X offset of the region to be invalidated.
 /// </param>
 /// <param name="y">
-/// Specifies the bottom origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The Y offset of the region to be invalidated.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the pixel rectangle to invalidate.
+/// The width of the region to be invalidated.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the pixel rectangle to invalidate.
+/// The height of the region to be invalidated.
 /// </param>
 //x* 523
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glInvalidateSubFramebuffer")]
@@ -18909,28 +18861,28 @@ public static void InvalidateSubFramebuffer(OpenTK.Graphics.ES30.FramebufferTarg
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Invalidate portions of the contents of attachments within a framebuffer
+/// Invalidate the content of a region of some or all of a framebuffer object's attachments
 /// </summary>
 /// <param name="target">
-/// Specifies the target of the invalidate operation. Must be Framebuffer.
+/// The target to which the framebuffer is attached. target must be Framebuffer, DrawFramebuffer, or ReadFramebuffer.
 /// </param>
 /// <param name="numAttachments">
-/// Specifies how many attachments are supplied in the attachments list.
+/// The number of entries in the attachments array.
 /// </param>
 /// <param name="attachments">[length: numAttachments]
-/// A list of numAttachments attachments to invalidate.
+/// The address of an array identifying the attachments to be invalidated.
 /// </param>
 /// <param name="x">
-/// Specifies the left origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The X offset of the region to be invalidated.
 /// </param>
 /// <param name="y">
-/// Specifies the bottom origin of the pixel rectangle to invalidate, with lower left hand corner at (0,0).
+/// The Y offset of the region to be invalidated.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the pixel rectangle to invalidate.
+/// The width of the region to be invalidated.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the pixel rectangle to invalidate.
+/// The height of the region to be invalidated.
 /// </param>
 //x* 524
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glInvalidateSubFramebuffer")]
@@ -19460,10 +19412,10 @@ public static void LinkProgram(UInt32 program)
 /// Specifies a binding to which the target buffer is bound.
 /// </param>
 /// <param name="offset">
-/// Specifies the starting offset within the buffer of the range to be mapped.
+/// Specifies a the starting offset within the buffer of the range to be mapped.
 /// </param>
 /// <param name="length">
-/// Specifies the length of the range to be mapped.
+/// Specifies a length of the range to be mapped.
 /// </param>
 /// <param name="access">
 /// Specifies a combination of access flags indicating the desired access to the range.
@@ -19476,10 +19428,10 @@ public static void LinkProgram(UInt32 program)
 /// Specifies a binding to which the target buffer is bound.
 /// </param>
 /// <param name="offset">
-/// Specifies the starting offset within the buffer of the range to be mapped.
+/// Specifies a the starting offset within the buffer of the range to be mapped.
 /// </param>
 /// <param name="length">
-/// Specifies the length of the range to be mapped.
+/// Specifies a length of the range to be mapped.
 /// </param>
 /// <param name="access">
 /// Specifies a combination of access flags indicating the desired access to the range.
@@ -19667,7 +19619,7 @@ public static void PauseTransformFeedback()
 /// Set pixel storage modes
 /// </summary>
 /// <param name="pname">
-/// Specifies the symbolic name of the parameter to be set. Six values affect the packing of pixel data into memory: PackRowLength, PackImageHeight, PackSkipPixels, PackSkipRows, PackSkipImages, and PackAlignment. Six more affect the unpacking of pixel data from memory: UnpackRowLength, UnpackImageHeight, UnpackSkipPixels, UnpackSkipRows, UnpackSkipImages, and UnpackAlignment.
+/// Specifies the symbolic name of the parameter to be set. Six values affect the packing of pixel data into memory: PackSwapBytes, PackLsbFirst, PackRowLength, PackImageHeight, PackSkipPixels, PackSkipRows, PackSkipImages, and PackAlignment. Six more affect the unpacking of pixel data from memory: UnpackSwapBytes, UnpackLsbFirst, UnpackRowLength, UnpackImageHeight, UnpackSkipPixels, UnpackSkipRows, UnpackSkipImages, and UnpackAlignment.
 /// </param>
 /// <param name="param">
 /// Specifies the value that pname is set to.
@@ -19677,7 +19629,7 @@ public static void PauseTransformFeedback()
 /// Set pixel storage modes
 /// </summary>
 /// <param name="pname">
-/// Specifies the symbolic name of the parameter to be set. Six values affect the packing of pixel data into memory: PackRowLength, PackImageHeight, PackSkipPixels, PackSkipRows, PackSkipImages, and PackAlignment. Six more affect the unpacking of pixel data from memory: UnpackRowLength, UnpackImageHeight, UnpackSkipPixels, UnpackSkipRows, UnpackSkipImages, and UnpackAlignment.
+/// Specifies the symbolic name of the parameter to be set. Six values affect the packing of pixel data into memory: PackSwapBytes, PackLsbFirst, PackRowLength, PackImageHeight, PackSkipPixels, PackSkipRows, PackSkipImages, and PackAlignment. Six more affect the unpacking of pixel data from memory: UnpackSwapBytes, UnpackLsbFirst, UnpackRowLength, UnpackImageHeight, UnpackSkipPixels, UnpackSkipRows, UnpackSkipImages, and UnpackAlignment.
 /// </param>
 /// <param name="param">
 /// Specifies the value that pname is set to.
@@ -19746,7 +19698,7 @@ public static void PopDebugGroup()
 /// Specifies the format of the binary data in binary.
 /// </param>
 /// <param name="binary">[length: length]
-/// Specifies the address of an array containing the binary to be loaded into program.
+/// Specifies the address an array containing the binary to be loaded into program.
 /// </param>
 /// <param name="length">
 /// Specifies the number of bytes contained in binary.
@@ -19775,7 +19727,7 @@ public static void ProgramBinary(Int32 program, OpenTK.Graphics.ES30.All binaryF
 /// Specifies the format of the binary data in binary.
 /// </param>
 /// <param name="binary">[length: length]
-/// Specifies the address of an array containing the binary to be loaded into program.
+/// Specifies the address an array containing the binary to be loaded into program.
 /// </param>
 /// <param name="length">
 /// Specifies the number of bytes contained in binary.
@@ -19810,7 +19762,7 @@ public static void ProgramBinary(Int32 program, OpenTK.Graphics.ES30.All binaryF
 /// Specifies the format of the binary data in binary.
 /// </param>
 /// <param name="binary">[length: length]
-/// Specifies the address of an array containing the binary to be loaded into program.
+/// Specifies the address an array containing the binary to be loaded into program.
 /// </param>
 /// <param name="length">
 /// Specifies the number of bytes contained in binary.
@@ -19839,7 +19791,7 @@ public static void ProgramBinary(UInt32 program, OpenTK.Graphics.ES30.All binary
 /// Specifies the format of the binary data in binary.
 /// </param>
 /// <param name="binary">[length: length]
-/// Specifies the address of an array containing the binary to be loaded into program.
+/// Specifies the address an array containing the binary to be loaded into program.
 /// </param>
 /// <param name="length">
 /// Specifies the number of bytes contained in binary.
@@ -20036,14 +19988,14 @@ public static void PushDebugGroup(OpenTK.Graphics.ES30.DebugSource source, UInt3
 /// Select a color buffer source for pixels
 /// </summary>
 /// <param name="src">
-/// Specifies a color buffer. Accepted values are Back, None, and ColorAttachmenti.
+/// Specifies a color buffer. Accepted values are FrontLeft, FrontRight, BackLeft, BackRight, Front, Back, Left, Right, and the constants ColorAttachmenti.
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
 /// Select a color buffer source for pixels
 /// </summary>
 /// <param name="src">
-/// Specifies a color buffer. Accepted values are Back, None, and ColorAttachmenti.
+/// Specifies a color buffer. Accepted values are FrontLeft, FrontRight, BackLeft, BackRight, Front, Back, Left, Right, and the constants ColorAttachmenti.
 /// </param>
 //x* 567
 //[AutoGenerated(Category = "ES_VERSION_3_0", Version = "3.0", EntryPoint = "glReadBuffer")]
@@ -20147,10 +20099,10 @@ public static void ReadnPixels(Int32 x, Int32 y, Int32 width, Int32 height, Open
 /// Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Rgba, and RgbaInteger. An implementation-chosen format will also be accepted. This can be queried with glGet and ImplementationColorReadFormat.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: StencilIndex, DepthComponent, DepthStencil, Red, Green, Blue, Rgb, Bgr, Rgba, and Bgra.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. Must be one of UnsignedByte, UnsignedInt, Int, or Float. An implementation-chosen type will also be accepted. This can be queried with glGet and ImplementationColorReadType.
+/// Specifies the data type of the pixel data. Must be one of UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, UnsignedInt2101010Rev, UnsignedInt248, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, or Float32UnsignedInt248Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Returns the pixel data.
@@ -20172,10 +20124,10 @@ public static void ReadnPixels(Int32 x, Int32 y, Int32 width, Int32 height, Open
 /// Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Rgba, and RgbaInteger. An implementation-chosen format will also be accepted. This can be queried with glGet and ImplementationColorReadFormat.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: StencilIndex, DepthComponent, DepthStencil, Red, Green, Blue, Rgb, Bgr, Rgba, and Bgra.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. Must be one of UnsignedByte, UnsignedInt, Int, or Float. An implementation-chosen type will also be accepted. This can be queried with glGet and ImplementationColorReadType.
+/// Specifies the data type of the pixel data. Must be one of UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, UnsignedInt2101010Rev, UnsignedInt248, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, or Float32UnsignedInt248Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Returns the pixel data.
@@ -20197,10 +20149,10 @@ public static void ReadnPixels(Int32 x, Int32 y, Int32 width, Int32 height, Open
 /// Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Rgba, and RgbaInteger. An implementation-chosen format will also be accepted. This can be queried with glGet and ImplementationColorReadFormat.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: StencilIndex, DepthComponent, DepthStencil, Red, Green, Blue, Rgb, Bgr, Rgba, and Bgra.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. Must be one of UnsignedByte, UnsignedInt, Int, or Float. An implementation-chosen type will also be accepted. This can be queried with glGet and ImplementationColorReadType.
+/// Specifies the data type of the pixel data. Must be one of UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, UnsignedInt2101010Rev, UnsignedInt248, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, or Float32UnsignedInt248Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Returns the pixel data.
@@ -20235,10 +20187,10 @@ public static void ReadPixels(Int32 x, Int32 y, Int32 width, Int32 height, OpenT
 /// Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Rgba, and RgbaInteger. An implementation-chosen format will also be accepted. This can be queried with glGet and ImplementationColorReadFormat.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: StencilIndex, DepthComponent, DepthStencil, Red, Green, Blue, Rgb, Bgr, Rgba, and Bgra.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. Must be one of UnsignedByte, UnsignedInt, Int, or Float. An implementation-chosen type will also be accepted. This can be queried with glGet and ImplementationColorReadType.
+/// Specifies the data type of the pixel data. Must be one of UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, UnsignedInt2101010Rev, UnsignedInt248, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, or Float32UnsignedInt248Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Returns the pixel data.
@@ -20423,7 +20375,7 @@ public static void SampleCoverage(Single value, bool invert)
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20436,7 +20388,7 @@ public static void SampleCoverage(Single value, bool invert)
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20462,7 +20414,7 @@ public static void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.SamplerP
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20475,7 +20427,7 @@ public static void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.SamplerP
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20501,7 +20453,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20514,7 +20466,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20527,7 +20479,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20559,7 +20511,7 @@ public static void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.SamplerP
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20585,7 +20537,7 @@ public static unsafe void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.S
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20598,7 +20550,7 @@ public static unsafe void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.S
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20611,7 +20563,7 @@ public static unsafe void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.S
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20643,7 +20595,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20669,7 +20621,7 @@ public static unsafe void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20682,7 +20634,7 @@ public static unsafe void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20708,7 +20660,7 @@ public static void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.SamplerP
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20721,7 +20673,7 @@ public static void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.SamplerP
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">
 /// For the scalar commands, specifies the value of pname.
@@ -20747,7 +20699,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20760,7 +20712,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20773,7 +20725,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20805,7 +20757,7 @@ public static void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.SamplerP
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20831,7 +20783,7 @@ public static unsafe void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.S
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20844,7 +20796,7 @@ public static unsafe void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.S
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20857,7 +20809,7 @@ public static unsafe void SamplerParameter(Int32 sampler, OpenTK.Graphics.ES30.S
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -20889,7 +20841,7 @@ public static void SamplerParameter(UInt32 sampler, OpenTK.Graphics.ES30.Sampler
 /// Specifies the sampler object whose parameter to modify.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureCompareMode, or TextureCompareFunc.
+/// Specifies the symbolic name of a sampler parameter. pname can be one of the following: TextureWrapS, TextureWrapT, TextureWrapR, TextureMinFilter, TextureMagFilter, TextureBorderColor, TextureMinLod, TextureMaxLod, TextureLodBiasTextureCompareMode, or TextureCompareFunc.
 /// </param>
 /// <param name="param">[length: COMPSIZE(pname)]
 /// For the scalar commands, specifies the value of pname.
@@ -21360,7 +21312,7 @@ public static unsafe void ShaderSource(UInt32 shader, Int32 count, [CountAttribu
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21373,7 +21325,7 @@ public static unsafe void ShaderSource(UInt32 shader, Int32 count, [CountAttribu
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21386,7 +21338,7 @@ public static unsafe void ShaderSource(UInt32 shader, Int32 count, [CountAttribu
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21412,7 +21364,7 @@ public static void StencilFunc(OpenTK.Graphics.ES30.StencilFunction func, Int32 
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21441,7 +21393,7 @@ public static void StencilFunc(OpenTK.Graphics.ES30.StencilFunction func, Int32 
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21457,7 +21409,7 @@ public static void StencilFunc(OpenTK.Graphics.ES30.StencilFunction func, Int32 
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21473,7 +21425,7 @@ public static void StencilFunc(OpenTK.Graphics.ES30.StencilFunction func, Int32 
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21502,7 +21454,7 @@ public static void StencilFuncSeparate(OpenTK.Graphics.ES30.StencilFace face, Op
 /// Specifies the test function. Eight symbolic constants are valid: Never, Less, Lequal, Greater, Gequal, Equal, Notequal, and Always. The initial value is Always.
 /// </param>
 /// <param name="@ref">
-/// Specifies the reference value for the stencil test. Stencil comparison operations and queries of ref clamp its value to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
+/// Specifies the reference value for the stencil test. ref is clamped to the range [0, 2 sup n - 1], where  is the number of bitplanes in the stencil buffer. The initial value is 0.
 /// </param>
 /// <param name="mask">
 /// Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.
@@ -21715,28 +21667,28 @@ public static void StencilOpSeparate(OpenTK.Graphics.ES30.StencilFace face, Open
 /// Specify a two-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
-/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. If target is TextureRectangle or ProxyTextureRectangle, level must be 0.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image, or the number of layers in a texture array, in the case of the Texture1DArray and ProxyTexture1DArray targets. All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -21746,28 +21698,28 @@ public static void StencilOpSeparate(OpenTK.Graphics.ES30.StencilFace face, Open
 /// Specify a two-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
-/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. If target is TextureRectangle or ProxyTextureRectangle, level must be 0.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image, or the number of layers in a texture array, in the case of the Texture1DArray and ProxyTexture1DArray targets. All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -21777,28 +21729,28 @@ public static void StencilOpSeparate(OpenTK.Graphics.ES30.StencilFace face, Open
 /// Specify a two-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
-/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. If target is TextureRectangle or ProxyTextureRectangle, level must be 0.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image, or the number of layers in a texture array, in the case of the Texture1DArray and ProxyTexture1DArray targets. All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -21821,28 +21773,28 @@ public static void TexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int32
 /// Specify a two-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="level">
-/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+/// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. If target is TextureRectangle or ProxyTextureRectangle, level must be 0.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support texture images that are at least 2048 texels wide.
+/// Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.
 /// </param>
 /// <param name="height">
-/// Specifies the height of the texture image. All implementations support texture images that are at least 2048 texels high.
+/// Specifies the height of the texture image, or the number of layers in a texture array, in the case of the Texture1DArray and ProxyTexture1DArray targets. All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.
 /// </param>
 /// <param name="border">
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -21871,16 +21823,16 @@ public static void TexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int32
 /// Specify a three-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
 /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -21892,10 +21844,10 @@ public static void TexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int32
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -21905,16 +21857,16 @@ public static void TexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int32
 /// Specify a three-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
 /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -21926,10 +21878,10 @@ public static void TexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int32
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -21939,16 +21891,16 @@ public static void TexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int32
 /// Specify a three-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
 /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -21960,10 +21912,10 @@ public static void TexImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int32
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -21986,16 +21938,16 @@ public static void TexImage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int32
 /// Specify a three-dimensional texture image
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+/// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
 /// </param>
 /// <param name="internalformat">
-/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+/// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
 /// </param>
 /// <param name="width">
-/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+/// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
 /// </param>
 /// <param name="height">
 /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -22007,10 +21959,10 @@ public static void TexImage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int32
 /// This value must be 0.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -22039,26 +21991,26 @@ public static void TexImage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int32
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="param">
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="param">
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 //x* 614
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glTexParameterf")]
@@ -22078,39 +22030,39 @@ public static void TexParameter(OpenTK.Graphics.ES30.TextureTarget target, OpenT
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 //x* 615
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glTexParameterfv")]
@@ -22136,13 +22088,13 @@ public static void TexParameter(OpenTK.Graphics.ES30.TextureTarget target, OpenT
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 //x* 616
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glTexParameterfv")]
@@ -22162,26 +22114,26 @@ public static unsafe void TexParameter(OpenTK.Graphics.ES30.TextureTarget target
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="param">
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="param">
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 //x* 617
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glTexParameteri")]
@@ -22201,39 +22153,39 @@ public static void TexParameter(OpenTK.Graphics.ES30.TextureTarget target, OpenT
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 //x* 618
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glTexParameteriv")]
@@ -22259,13 +22211,13 @@ public static void TexParameter(OpenTK.Graphics.ES30.TextureTarget target, OpenT
 /// Set texture parameters
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture, which must be either Texture2D, Texture3D, Texture2DArray, or TextureCubeMap.
+/// Specifies the target texture, which must be either Texture1D, Texture2D, Texture3D, Texture1DArray, Texture2DArray, TextureRectangle, or TextureCubeMap.
 /// </param>
 /// <param name="pname">
-/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.
+/// Specifies the symbolic name of a single-valued texture parameter. pname can be one of the following: DepthStencilTextureMode, TextureBaseLevel, TextureCompareFunc, TextureCompareMode, TextureLodBias, TextureMinFilter, TextureMagFilter, TextureMinLod, TextureMaxLod, TextureMaxLevel, TextureSwizzleR, TextureSwizzleG, TextureSwizzleB, TextureSwizzleA, TextureWrapS, TextureWrapT, or TextureWrapR.  For the vector commands (glTexParameter*v), pname can also be one of TextureBorderColor or TextureSwizzleRgba.
 /// </param>
 /// <param name="@params">[length: COMPSIZE(pname)]
-/// Specifies the value of pname.
+/// For the scalar commands, specifies the value of pname.
 /// </param>
 //x* 619
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glTexParameteriv")]
@@ -22282,10 +22234,10 @@ public static unsafe void TexParameter(OpenTK.Graphics.ES30.TextureTarget target
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Simultaneously specify storage for all levels of a two-dimensional texture
+/// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture
 /// </summary>
 /// <param name="target">
-/// Specify the target of the operation. target must be one of Texture2D, or TextureCubeMap.
+/// Specify the target of the operation. target must be one of Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="levels">
 /// Specify the number of texture levels.
@@ -22301,10 +22253,10 @@ public static unsafe void TexParameter(OpenTK.Graphics.ES30.TextureTarget target
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Simultaneously specify storage for all levels of a two-dimensional texture
+/// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture
 /// </summary>
 /// <param name="target">
-/// Specify the target of the operation. target must be one of Texture2D, or TextureCubeMap.
+/// Specify the target of the operation. target must be one of Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, or ProxyTextureCubeMap.
 /// </param>
 /// <param name="levels">
 /// Specify the number of texture levels.
@@ -22333,10 +22285,10 @@ public static void TexStorage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int
 }
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Simultaneously specify storage for all levels of a three-dimensional or two-dimensional array texture
+/// Simultaneously specify storage for all levels of a three-dimensional, two-dimensional array or cube-map array texture
 /// </summary>
 /// <param name="target">
-/// Specify the target of the operation. target must be one of Texture3D, or Texture2DArray.
+/// Specify the target of the operation. target must be one of Texture3D, ProxyTexture3D, Texture2DArray, ProxyTexture2DArray, TextureCubeArray, or ProxyTextureCubeArray.
 /// </param>
 /// <param name="levels">
 /// Specify the number of texture levels.
@@ -22355,10 +22307,10 @@ public static void TexStorage2D(OpenTK.Graphics.ES30.TextureTarget2d target, Int
 /// </param>
 
 /// <summary>[requires: v3.0 or ES_VERSION_3_0]
-/// Simultaneously specify storage for all levels of a three-dimensional or two-dimensional array texture
+/// Simultaneously specify storage for all levels of a three-dimensional, two-dimensional array or cube-map array texture
 /// </summary>
 /// <param name="target">
-/// Specify the target of the operation. target must be one of Texture3D, or Texture2DArray.
+/// Specify the target of the operation. target must be one of Texture3D, ProxyTexture3D, Texture2DArray, ProxyTexture2DArray, TextureCubeArray, or ProxyTextureCubeArray.
 /// </param>
 /// <param name="levels">
 /// Specify the number of texture levels.
@@ -22393,7 +22345,7 @@ public static void TexStorage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int
 /// Specify a two-dimensional texture subimage
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or Texture1DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -22411,10 +22363,10 @@ public static void TexStorage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int
 /// Specifies the height of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -22424,7 +22376,7 @@ public static void TexStorage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int
 /// Specify a two-dimensional texture subimage
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or Texture1DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -22442,10 +22394,10 @@ public static void TexStorage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int
 /// Specifies the height of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -22455,7 +22407,7 @@ public static void TexStorage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int
 /// Specify a two-dimensional texture subimage
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or Texture1DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -22473,10 +22425,10 @@ public static void TexStorage3D(OpenTK.Graphics.ES30.TextureTarget3d target, Int
 /// Specifies the height of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -22499,7 +22451,7 @@ public static void TexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, In
 /// Specify a two-dimensional texture subimage
 /// </summary>
 /// <param name="target">
-/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, or TextureCubeMapNegativeZ.
+/// Specifies the target texture. Must be Texture2D, TextureCubeMapPositiveX, TextureCubeMapNegativeX, TextureCubeMapPositiveY, TextureCubeMapNegativeY, TextureCubeMapPositiveZ, TextureCubeMapNegativeZ, or Texture1DArray.
 /// </param>
 /// <param name="level">
 /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -22517,10 +22469,10 @@ public static void TexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, In
 /// Specifies the height of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height)]
 /// Specifies a pointer to the image data in memory.
@@ -22573,10 +22525,10 @@ public static void TexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, In
 /// Specifies the depth of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -22610,10 +22562,10 @@ public static void TexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, In
 /// Specifies the depth of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -22647,10 +22599,10 @@ public static void TexSubImage2D(OpenTK.Graphics.ES30.TextureTarget2d target, In
 /// Specifies the depth of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -22697,10 +22649,10 @@ public static void TexSubImage3D(OpenTK.Graphics.ES30.TextureTarget3d target, In
 /// Specifies the depth of the texture subimage.
 /// </param>
 /// <param name="format">
-/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+/// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+/// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
 /// </param>
 /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
 /// Specifies a pointer to the image data in memory.
@@ -26139,19 +26091,19 @@ public static void VertexAttribIPointer(UInt32 index, Int32 size, OpenTK.Graphic
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
@@ -26161,19 +26113,19 @@ public static void VertexAttribIPointer(UInt32 index, Int32 size, OpenTK.Graphic
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
@@ -26183,19 +26135,19 @@ public static void VertexAttribIPointer(UInt32 index, Int32 size, OpenTK.Graphic
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 //x* 755
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glVertexAttribPointer")]
@@ -26218,19 +26170,19 @@ public static void VertexAttribPointer(Int32 index, Int32 size, OpenTK.Graphics.
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 //x* 756
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glVertexAttribPointer")]
@@ -26259,19 +26211,19 @@ public static void VertexAttribPointer(Int32 index, Int32 size, OpenTK.Graphics.
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
@@ -26281,19 +26233,19 @@ public static void VertexAttribPointer(Int32 index, Int32 size, OpenTK.Graphics.
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 
 /// <summary>[requires: v2.0 or ES_VERSION_2_0]
@@ -26303,19 +26255,19 @@ public static void VertexAttribPointer(Int32 index, Int32 size, OpenTK.Graphics.
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 //x* 757
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glVertexAttribPointer")]
@@ -26338,19 +26290,19 @@ public static void VertexAttribPointer(UInt32 index, Int32 size, OpenTK.Graphics
 /// Specifies the index of the generic vertex attribute to be modified.
 /// </param>
 /// <param name="size">
-/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. The initial value is 4.
+/// Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, 4. Additionally, the symbolic constant Bgra is accepted by glVertexAttribPointer. The initial value is 4.
 /// </param>
 /// <param name="type">
-/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by both functions. Additionally HalfFloat, Float, Fixed, Int2101010Rev, and UnsignedInt2101010Rev are accepted by glVertexAttribPointer. The initial value is Float.
+/// Specifies the data type of each component in the array. The symbolic constants Byte, UnsignedByte, Short, UnsignedShort, Int, and UnsignedInt are accepted by glVertexAttribPointer and glVertexAttribIPointer. Additionally HalfFloat, Float, Double, Fixed, Int2101010Rev, UnsignedInt2101010Rev and UnsignedInt10F11F11FRev are accepted by glVertexAttribPointer. Double is also accepted by glVertexAttribLPointer and is the only token accepted by the type parameter for that function. The initial value is Float.
 /// </param>
 /// <param name="normalized">
-/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed. This parameter is ignored if type is Fixed.
+/// For glVertexAttribPointer, specifies whether fixed-point data values should be normalized (True) or converted directly as fixed-point values (False) when they are accessed.
 /// </param>
 /// <param name="stride">
 /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.
 /// </param>
 /// <param name="pointer">[length: COMPSIZE(size,type,stride)]
-/// Specifies a pointer to the first generic vertex attribute in the array. If a non-zero buffer is currently bound to the ArrayBuffer target, pointer specifies an offset of into the array in the data store of that buffer. The initial value is 0.
+/// Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the ArrayBuffer target. The initial value is 0.
 /// </param>
 //x* 758
 //[AutoGenerated(Category = "ES_VERSION_2_0", Version = "2.0", EntryPoint = "glVertexAttribPointer")]
@@ -26408,7 +26360,7 @@ public static void Viewport(Int32 x, Int32 y, Int32 width, Int32 height)
 /// Specifies the sync object whose status to wait on.
 /// </param>
 /// <param name="flags">
-/// A bitfield controlling the command flushing behavior. flags must be zero.
+/// A bitfield controlling the command flushing behavior. flags may be zero.
 /// </param>
 /// <param name="timeout">
 /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -26421,7 +26373,7 @@ public static void Viewport(Int32 x, Int32 y, Int32 width, Int32 height)
 /// Specifies the sync object whose status to wait on.
 /// </param>
 /// <param name="flags">
-/// A bitfield controlling the command flushing behavior. flags must be zero.
+/// A bitfield controlling the command flushing behavior. flags may be zero.
 /// </param>
 /// <param name="timeout">
 /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -26434,7 +26386,7 @@ public static void Viewport(Int32 x, Int32 y, Int32 width, Int32 height)
 /// Specifies the sync object whose status to wait on.
 /// </param>
 /// <param name="flags">
-/// A bitfield controlling the command flushing behavior. flags must be zero.
+/// A bitfield controlling the command flushing behavior. flags may be zero.
 /// </param>
 /// <param name="timeout">
 /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -26460,7 +26412,7 @@ public static void WaitSync(IntPtr sync, OpenTK.Graphics.ES30.WaitSyncFlags flag
 /// Specifies the sync object whose status to wait on.
 /// </param>
 /// <param name="flags">
-/// A bitfield controlling the command flushing behavior. flags must be zero.
+/// A bitfield controlling the command flushing behavior. flags may be zero.
 /// </param>
 /// <param name="timeout">
 /// Specifies the timeout that the server should wait before continuing. timeout must be TimeoutIgnored.
@@ -26599,7 +26551,7 @@ public static partial class Ext
     /// Delimit the boundaries of a query object
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
     /// </param>
     /// <param name="id">
     /// Specifies the name of a query object.
@@ -26609,7 +26561,7 @@ public static partial class Ext
     /// Delimit the boundaries of a query object
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
     /// </param>
     /// <param name="id">
     /// Specifies the name of a query object.
@@ -26619,7 +26571,7 @@ public static partial class Ext
     /// Delimit the boundaries of a query object
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
     /// </param>
     /// <param name="id">
     /// Specifies the name of a query object.
@@ -26642,7 +26594,7 @@ public static partial class Ext
     /// Delimit the boundaries of a query object
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of AnySamplesPassed, AnySamplesPassedConservative, or TransformFeedbackPrimitivesWritten.
+    /// Specifies the target type of query object established between glBeginQuery and the subsequent glEndQuery. The symbolic constant must be one of SamplesPassed, AnySamplesPassed, AnySamplesPassedConservative, PrimitivesGenerated, TransformFeedbackPrimitivesWritten, or TimeElapsed.
     /// </param>
     /// <param name="id">
     /// Specifies the name of a query object.
@@ -26842,7 +26794,7 @@ public static partial class Ext
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26852,7 +26804,7 @@ public static partial class Ext
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26875,7 +26827,7 @@ public static partial class Ext
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26885,7 +26837,7 @@ public static partial class Ext
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26908,7 +26860,7 @@ public static partial class Ext
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26921,7 +26873,7 @@ public static partial class Ext
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26947,7 +26899,7 @@ public static partial class Ext
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26960,7 +26912,7 @@ public static partial class Ext
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -26986,23 +26938,27 @@ public static partial class Ext
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
 
     /// <summary>[requires: EXT_draw_buffers_indexed]
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
     //x* 781
     //[AutoGenerated(Category = "EXT_draw_buffers_indexed", Version = "", EntryPoint = "glBlendFunciEXT")]
     public static void BlendFunc(Int32 buf, OpenTK.Graphics.ES30.BlendingFactor src, OpenTK.Graphics.ES30.BlendingFactor dst)
@@ -27021,23 +26977,27 @@ public static partial class Ext
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
 
     /// <summary>[requires: EXT_draw_buffers_indexed]
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
     //x* 782
     //[AutoGenerated(Category = "EXT_draw_buffers_indexed", Version = "", EntryPoint = "glBlendFunciEXT")]
     public static void BlendFunc(UInt32 buf, OpenTK.Graphics.ES30.BlendingFactor src, OpenTK.Graphics.ES30.BlendingFactor dst)
@@ -27056,7 +27016,7 @@ public static partial class Ext
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -27075,7 +27035,7 @@ public static partial class Ext
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -27107,7 +27067,7 @@ public static partial class Ext
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -27126,7 +27086,7 @@ public static partial class Ext
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -28056,7 +28016,7 @@ public static partial class Ext
     /// Enable and disable writing of frame buffer color components
     /// </summary>
     /// <param name="index">
-    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// For glColorMaski, specifies the index of the draw buffer whose color mask to set.
     /// </param>
     /// <param name="r">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
@@ -28067,7 +28027,9 @@ public static partial class Ext
     /// <param name="b">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
     /// </param>
-    /// <param name="a"></param>
+    /// <param name="a">
+    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// </param>
     //x* 805
     //[AutoGenerated(Category = "EXT_draw_buffers_indexed", Version = "", EntryPoint = "glColorMaskiEXT")]
     public static void ColorMask(Int32 index, bool r, bool g, bool b, bool a)
@@ -28086,7 +28048,7 @@ public static partial class Ext
     /// Enable and disable writing of frame buffer color components
     /// </summary>
     /// <param name="index">
-    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// For glColorMaski, specifies the index of the draw buffer whose color mask to set.
     /// </param>
     /// <param name="r">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
@@ -28097,7 +28059,9 @@ public static partial class Ext
     /// <param name="b">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
     /// </param>
-    /// <param name="a"></param>
+    /// <param name="a">
+    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// </param>
     //x* 806
     //[AutoGenerated(Category = "EXT_draw_buffers_indexed", Version = "", EntryPoint = "glColorMaskiEXT")]
     public static void ColorMask(UInt32 index, bool r, bool g, bool b, bool a)
@@ -29324,7 +29288,7 @@ public static partial class Ext
     /// Draw multiple instances of a range of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
     /// </param>
     /// <param name="start">
     /// Specifies the starting index in the enabled arrays.
@@ -29340,7 +29304,7 @@ public static partial class Ext
     /// Draw multiple instances of a range of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
     /// </param>
     /// <param name="start">
     /// Specifies the starting index in the enabled arrays.
@@ -30280,7 +30244,7 @@ public static partial class Ext
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -30299,7 +30263,7 @@ public static partial class Ext
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -30318,7 +30282,7 @@ public static partial class Ext
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -30350,7 +30314,7 @@ public static partial class Ext
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -30798,7 +30762,9 @@ public static partial class Ext
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
 
     /// <summary>[requires: EXT_draw_buffers_indexed]
     /// Enable or disable server-side GL capabilities
@@ -30806,7 +30772,9 @@ public static partial class Ext
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
 
     /// <summary>[requires: EXT_draw_buffers_indexed]
     /// Enable or disable server-side GL capabilities
@@ -30814,7 +30782,9 @@ public static partial class Ext
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
     //x* 877
     //[AutoGenerated(Category = "EXT_draw_buffers_indexed", Version = "", EntryPoint = "glEnableiEXT")]
     public static void Enable(OpenTK.Graphics.ES30.EnableCap target, Int32 index)
@@ -30835,7 +30805,9 @@ public static partial class Ext
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
     //x* 878
     //[AutoGenerated(Category = "EXT_draw_buffers_indexed", Version = "", EntryPoint = "glEnableiEXT")]
     public static void Enable(OpenTK.Graphics.ES30.EnableCap target, UInt32 index)
@@ -30873,7 +30845,7 @@ public static partial class Ext
     /// Indicate modifications to a range of a mapped buffer
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+    /// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, DispatchIndirectBuffer, DrawIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
     /// </param>
     /// <param name="offset">
     /// Specifies the start of the buffer subrange, in basic machine units.
@@ -30886,7 +30858,7 @@ public static partial class Ext
     /// Indicate modifications to a range of a mapped buffer
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, TransformFeedbackBuffer, or UniformBuffer.
+    /// Specifies the target of the flush operation. target must be ArrayBuffer, CopyReadBuffer, CopyWriteBuffer, DispatchIndirectBuffer, DrawIndirectBuffer, ElementArrayBuffer, PixelPackBuffer, PixelUnpackBuffer, QueryBuffer, ShaderStorageBuffer, TextureBuffer, TransformFeedbackBuffer, or UniformBuffer.
     /// </param>
     /// <param name="offset">
     /// Specifies the start of the buffer subrange, in basic machine units.
@@ -35388,10 +35360,10 @@ public static partial class Ext
     /// Specifies a binding to which the target buffer is bound.
     /// </param>
     /// <param name="offset">
-    /// Specifies the starting offset within the buffer of the range to be mapped.
+    /// Specifies a the starting offset within the buffer of the range to be mapped.
     /// </param>
     /// <param name="length">
-    /// Specifies the length of the range to be mapped.
+    /// Specifies a length of the range to be mapped.
     /// </param>
     /// <param name="access">
     /// Specifies a combination of access flags indicating the desired access to the range.
@@ -35404,10 +35376,10 @@ public static partial class Ext
     /// Specifies a binding to which the target buffer is bound.
     /// </param>
     /// <param name="offset">
-    /// Specifies the starting offset within the buffer of the range to be mapped.
+    /// Specifies a the starting offset within the buffer of the range to be mapped.
     /// </param>
     /// <param name="length">
-    /// Specifies the length of the range to be mapped.
+    /// Specifies a length of the range to be mapped.
     /// </param>
     /// <param name="access">
     /// Specifies a combination of access flags indicating the desired access to the range.
@@ -42438,10 +42410,10 @@ public static partial class Ext
     }
 
     /// <summary>[requires: EXT_texture_storage]
-    /// Simultaneously specify storage for all levels of a two-dimensional texture
+    /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture
     /// </summary>
     /// <param name="target">
-    /// Specify the target of the operation. target must be one of Texture2D, or TextureCubeMap.
+    /// Specify the target of the operation. target must be one of Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, or ProxyTextureCubeMap.
     /// </param>
     /// <param name="levels">
     /// Specify the number of texture levels.
@@ -42457,10 +42429,10 @@ public static partial class Ext
     /// </param>
 
     /// <summary>[requires: EXT_texture_storage]
-    /// Simultaneously specify storage for all levels of a two-dimensional texture
+    /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture
     /// </summary>
     /// <param name="target">
-    /// Specify the target of the operation. target must be one of Texture2D, or TextureCubeMap.
+    /// Specify the target of the operation. target must be one of Texture2D, ProxyTexture2D, Texture1DArray, ProxyTexture1DArray, TextureRectangle, ProxyTextureRectangle, or ProxyTextureCubeMap.
     /// </param>
     /// <param name="levels">
     /// Specify the number of texture levels.
@@ -42489,10 +42461,10 @@ public static partial class Ext
     }
 
     /// <summary>[requires: EXT_texture_storage]
-    /// Simultaneously specify storage for all levels of a three-dimensional or two-dimensional array texture
+    /// Simultaneously specify storage for all levels of a three-dimensional, two-dimensional array or cube-map array texture
     /// </summary>
     /// <param name="target">
-    /// Specify the target of the operation. target must be one of Texture3D, or Texture2DArray.
+    /// Specify the target of the operation. target must be one of Texture3D, ProxyTexture3D, Texture2DArray, ProxyTexture2DArray, TextureCubeArray, or ProxyTextureCubeArray.
     /// </param>
     /// <param name="levels">
     /// Specify the number of texture levels.
@@ -42511,10 +42483,10 @@ public static partial class Ext
     /// </param>
 
     /// <summary>[requires: EXT_texture_storage]
-    /// Simultaneously specify storage for all levels of a three-dimensional or two-dimensional array texture
+    /// Simultaneously specify storage for all levels of a three-dimensional, two-dimensional array or cube-map array texture
     /// </summary>
     /// <param name="target">
-    /// Specify the target of the operation. target must be one of Texture3D, or Texture2DArray.
+    /// Specify the target of the operation. target must be one of Texture3D, ProxyTexture3D, Texture2DArray, ProxyTexture2DArray, TextureCubeArray, or ProxyTextureCubeArray.
     /// </param>
     /// <param name="levels">
     /// Specify the number of texture levels.
@@ -49003,7 +48975,7 @@ public static partial class NV
     /// Draw multiple instances of a range of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
     /// </param>
     /// <param name="first">
     /// Specifies the starting index in the enabled arrays.
@@ -49019,7 +48991,7 @@ public static partial class NV
     /// Draw multiple instances of a range of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan, TrianglesLinesAdjacency, LineStripAdjacency, TrianglesAdjacency, TriangleStripAdjacency and Patches are accepted.
     /// </param>
     /// <param name="first">
     /// Specifies the starting index in the enabled arrays.
@@ -49159,7 +49131,7 @@ public static partial class NV
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -49178,7 +49150,7 @@ public static partial class NV
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -49197,7 +49169,7 @@ public static partial class NV
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -49229,7 +49201,7 @@ public static partial class NV
     /// Draw multiple instances of a set of elements
     /// </summary>
     /// <param name="mode">
-    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, TriangleStrip, TriangleFan and Triangles are accepted.
+    /// Specifies what kind of primitives to render. Symbolic constants Points, LineStrip, LineLoop, Lines, LineStripAdjacency, LinesAdjacency, TriangleStrip, TriangleFan, Triangles, TriangleStripAdjacency, TrianglesAdjacency and Patches are accepted.
     /// </param>
     /// <param name="count">
     /// Specifies the number of elements to be rendered.
@@ -49321,7 +49293,9 @@ public static partial class NV
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
 
     /// <summary>[requires: NV_viewport_array]
     /// Enable or disable server-side GL capabilities
@@ -49329,7 +49303,9 @@ public static partial class NV
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
 
     /// <summary>[requires: NV_viewport_array]
     /// Enable or disable server-side GL capabilities
@@ -49337,7 +49313,9 @@ public static partial class NV
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
     //x* 1496
     //[AutoGenerated(Category = "NV_viewport_array", Version = "", EntryPoint = "glEnableiNV")]
     public static void Enable(OpenTK.Graphics.ES30.EnableCap target, Int32 index)
@@ -49358,7 +49336,9 @@ public static partial class NV
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
     //x* 1497
     //[AutoGenerated(Category = "NV_viewport_array", Version = "", EntryPoint = "glEnableiNV")]
     public static void Enable(OpenTK.Graphics.ES30.EnableCap target, UInt32 index)
@@ -57290,7 +57270,7 @@ public static partial class NV
     /// Select a color buffer source for pixels
     /// </summary>
     /// <param name="mode">
-    /// Specifies a color buffer. Accepted values are Back, None, and ColorAttachmenti.
+    /// Specifies a color buffer. Accepted values are FrontLeft, FrontRight, BackLeft, BackRight, Front, Back, Left, Right, and the constants ColorAttachmenti.
     /// </param>
     //x* 1795
     //[AutoGenerated(Category = "NV_read_buffer", Version = "", EntryPoint = "glReadBufferNV")]
@@ -61056,7 +61036,7 @@ public static partial class Oes
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61066,7 +61046,7 @@ public static partial class Oes
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61089,7 +61069,7 @@ public static partial class Oes
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61099,7 +61079,7 @@ public static partial class Oes
     /// Specify the equation used for both the RGB blend equation and the Alpha blend equation
     /// </summary>
     /// <param name="buf">
-    /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationi, specifies the index of the draw buffer for which to set the blend equation.
     /// </param>
     /// <param name="mode">
     /// specifies how source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61122,7 +61102,7 @@ public static partial class Oes
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61135,7 +61115,7 @@ public static partial class Oes
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61161,7 +61141,7 @@ public static partial class Oes
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61174,7 +61154,7 @@ public static partial class Oes
     /// Set the RGB blend equation and the alpha blend equation separately
     /// </summary>
     /// <param name="buf">
-    /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
+    /// for glBlendEquationSeparatei, specifies the index of the draw buffer for which to set the blend equations.
     /// </param>
     /// <param name="modeRGB">
     /// specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined. It must be FuncAdd, FuncSubtract, FuncReverseSubtract, Min, Max.
@@ -61200,23 +61180,27 @@ public static partial class Oes
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
 
     /// <summary>[requires: OES_draw_buffers_indexed]
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
     //x* 1944
     //[AutoGenerated(Category = "OES_draw_buffers_indexed", Version = "", EntryPoint = "glBlendFunciOES")]
     public static void BlendFunc(Int32 buf, OpenTK.Graphics.ES30.BlendingFactor src, OpenTK.Graphics.ES30.BlendingFactor dst)
@@ -61235,23 +61219,27 @@ public static partial class Oes
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
 
     /// <summary>[requires: OES_draw_buffers_indexed]
     /// Specify pixel arithmetic
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// For glBlendFunci, specifies the index of the draw buffer for which to set the blend function.
     /// </param>
     /// <param name="src">
+    /// Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is One.
+    /// </param>
+    /// <param name="dst">
     /// Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: Zero, One, SrcColor, OneMinusSrcColor, DstColor, OneMinusDstColor, SrcAlpha, OneMinusSrcAlpha, DstAlpha, OneMinusDstAlpha. ConstantColor, OneMinusConstantColor, ConstantAlpha, and OneMinusConstantAlpha. The initial value is Zero.
     /// </param>
-    /// <param name="dst"></param>
     //x* 1945
     //[AutoGenerated(Category = "OES_draw_buffers_indexed", Version = "", EntryPoint = "glBlendFunciOES")]
     public static void BlendFunc(UInt32 buf, OpenTK.Graphics.ES30.BlendingFactor src, OpenTK.Graphics.ES30.BlendingFactor dst)
@@ -61270,7 +61258,7 @@ public static partial class Oes
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -61289,7 +61277,7 @@ public static partial class Oes
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -61321,7 +61309,7 @@ public static partial class Oes
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -61340,7 +61328,7 @@ public static partial class Oes
     /// Specify pixel arithmetic for RGB and alpha components separately
     /// </summary>
     /// <param name="buf">
-    /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
+    /// For glBlendFuncSeparatei, specifies the index of the draw buffer for which to set the blend functions.
     /// </param>
     /// <param name="srcRGB">
     /// Specifies how the red, green, and blue blending factors are computed. The initial value is One.
@@ -61372,7 +61360,7 @@ public static partial class Oes
     /// Enable and disable writing of frame buffer color components
     /// </summary>
     /// <param name="index">
-    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// For glColorMaski, specifies the index of the draw buffer whose color mask to set.
     /// </param>
     /// <param name="r">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
@@ -61383,7 +61371,9 @@ public static partial class Oes
     /// <param name="b">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
     /// </param>
-    /// <param name="a"></param>
+    /// <param name="a">
+    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// </param>
     //x* 1948
     //[AutoGenerated(Category = "OES_draw_buffers_indexed", Version = "", EntryPoint = "glColorMaskiOES")]
     public static void ColorMask(Int32 index, bool r, bool g, bool b, bool a)
@@ -61402,7 +61392,7 @@ public static partial class Oes
     /// Enable and disable writing of frame buffer color components
     /// </summary>
     /// <param name="index">
-    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// For glColorMaski, specifies the index of the draw buffer whose color mask to set.
     /// </param>
     /// <param name="r">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
@@ -61413,7 +61403,9 @@ public static partial class Oes
     /// <param name="b">
     /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
     /// </param>
-    /// <param name="a"></param>
+    /// <param name="a">
+    /// Specify whether red, green, blue, and alpha are to be written into the frame buffer. The initial values are all True, indicating that the color components are written.
+    /// </param>
     //x* 1949
     //[AutoGenerated(Category = "OES_draw_buffers_indexed", Version = "", EntryPoint = "glColorMaskiOES")]
     public static void ColorMask(UInt32 index, bool r, bool g, bool b, bool a)
@@ -61432,7 +61424,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61441,13 +61433,13 @@ public static partial class Oes
     /// Specifies the format of the compressed image data stored at address data.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
-    /// Specifies the height of the texture image.
+    /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
     /// </param>
     /// <param name="depth">
-    /// Specifies the depth of the texture image.
+    /// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
     /// </param>
     /// <param name="border">
     /// This value must be 0.
@@ -61463,7 +61455,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61472,13 +61464,13 @@ public static partial class Oes
     /// Specifies the format of the compressed image data stored at address data.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
-    /// Specifies the height of the texture image.
+    /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
     /// </param>
     /// <param name="depth">
-    /// Specifies the depth of the texture image.
+    /// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
     /// </param>
     /// <param name="border">
     /// This value must be 0.
@@ -61494,7 +61486,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61503,13 +61495,13 @@ public static partial class Oes
     /// Specifies the format of the compressed image data stored at address data.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
-    /// Specifies the height of the texture image.
+    /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
     /// </param>
     /// <param name="depth">
-    /// Specifies the depth of the texture image.
+    /// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
     /// </param>
     /// <param name="border">
     /// This value must be 0.
@@ -61538,7 +61530,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture image in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D, or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61547,13 +61539,13 @@ public static partial class Oes
     /// Specifies the format of the compressed image data stored at address data.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
-    /// Specifies the height of the texture image.
+    /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.
     /// </param>
     /// <param name="depth">
-    /// Specifies the depth of the texture image.
+    /// Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.
     /// </param>
     /// <param name="border">
     /// This value must be 0.
@@ -61588,7 +61580,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61600,7 +61592,7 @@ public static partial class Oes
     /// Specifies a texel offset in the y direction within the texture array.
     /// </param>
     /// <param name="zoffset">
-    /// Specifies a texel offset in the z direction within the texture array.
+    /// Specifies the width of the texture subimage.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture subimage.
@@ -61625,7 +61617,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61637,7 +61629,7 @@ public static partial class Oes
     /// Specifies a texel offset in the y direction within the texture array.
     /// </param>
     /// <param name="zoffset">
-    /// Specifies a texel offset in the z direction within the texture array.
+    /// Specifies the width of the texture subimage.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture subimage.
@@ -61662,7 +61654,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61674,7 +61666,7 @@ public static partial class Oes
     /// Specifies a texel offset in the y direction within the texture array.
     /// </param>
     /// <param name="zoffset">
-    /// Specifies a texel offset in the z direction within the texture array.
+    /// Specifies the width of the texture subimage.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture subimage.
@@ -61712,7 +61704,7 @@ public static partial class Oes
     /// Specify a three-dimensional texture subimage in a compressed format
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be Texture3D.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
@@ -61724,7 +61716,7 @@ public static partial class Oes
     /// Specifies a texel offset in the y direction within the texture array.
     /// </param>
     /// <param name="zoffset">
-    /// Specifies a texel offset in the z direction within the texture array.
+    /// Specifies the width of the texture subimage.
     /// </param>
     /// <param name="width">
     /// Specifies the width of the texture subimage.
@@ -63029,7 +63021,9 @@ public static partial class Oes
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
 
     /// <summary>[requires: OES_draw_buffers_indexed|OES_viewport_array]
     /// Enable or disable server-side GL capabilities
@@ -63037,7 +63031,9 @@ public static partial class Oes
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
 
     /// <summary>[requires: OES_draw_buffers_indexed|OES_viewport_array]
     /// Enable or disable server-side GL capabilities
@@ -63045,7 +63041,9 @@ public static partial class Oes
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
     //x* 1983
     //[AutoGenerated(Category = "OES_draw_buffers_indexed|OES_viewport_array", Version = "", EntryPoint = "glEnableiOES")]
     public static void Enable(OpenTK.Graphics.ES30.EnableCap target, Int32 index)
@@ -63066,7 +63064,9 @@ public static partial class Oes
     /// <param name="target">
     /// Specifies a symbolic constant indicating a GL capability.
     /// </param>
-    /// <param name="index"></param>
+    /// <param name="index">
+    /// Specifies the index of the switch to disable (for glEnablei and glDisablei only).
+    /// </param>
     //x* 1984
     //[AutoGenerated(Category = "OES_draw_buffers_indexed|OES_viewport_array", Version = "", EntryPoint = "glEnableiOES")]
     public static void Enable(OpenTK.Graphics.ES30.EnableCap target, UInt32 index)
@@ -64346,7 +64346,7 @@ public static partial class Oes
     /// Specifies the format of the binary data in binary.
     /// </param>
     /// <param name="binary">[length: length]
-    /// Specifies the address of an array containing the binary to be loaded into program.
+    /// Specifies the address an array containing the binary to be loaded into program.
     /// </param>
     /// <param name="length">
     /// Specifies the number of bytes contained in binary.
@@ -64375,7 +64375,7 @@ public static partial class Oes
     /// Specifies the format of the binary data in binary.
     /// </param>
     /// <param name="binary">[length: length]
-    /// Specifies the address of an array containing the binary to be loaded into program.
+    /// Specifies the address an array containing the binary to be loaded into program.
     /// </param>
     /// <param name="length">
     /// Specifies the number of bytes contained in binary.
@@ -64410,7 +64410,7 @@ public static partial class Oes
     /// Specifies the format of the binary data in binary.
     /// </param>
     /// <param name="binary">[length: length]
-    /// Specifies the address of an array containing the binary to be loaded into program.
+    /// Specifies the address an array containing the binary to be loaded into program.
     /// </param>
     /// <param name="length">
     /// Specifies the number of bytes contained in binary.
@@ -64439,7 +64439,7 @@ public static partial class Oes
     /// Specifies the format of the binary data in binary.
     /// </param>
     /// <param name="binary">[length: length]
-    /// Specifies the address of an array containing the binary to be loaded into program.
+    /// Specifies the address an array containing the binary to be loaded into program.
     /// </param>
     /// <param name="length">
     /// Specifies the number of bytes contained in binary.
@@ -65297,16 +65297,16 @@ public static partial class Oes
     /// Specify a three-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
     /// </param>
     /// <param name="internalformat">
-    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
     /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -65318,10 +65318,10 @@ public static partial class Oes
     /// This value must be 0.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.
@@ -65331,16 +65331,16 @@ public static partial class Oes
     /// Specify a three-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
     /// </param>
     /// <param name="internalformat">
-    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
     /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -65352,10 +65352,10 @@ public static partial class Oes
     /// This value must be 0.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.
@@ -65365,16 +65365,16 @@ public static partial class Oes
     /// Specify a three-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
     /// </param>
     /// <param name="internalformat">
-    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
     /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -65386,10 +65386,10 @@ public static partial class Oes
     /// This value must be 0.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.
@@ -65412,16 +65412,16 @@ public static partial class Oes
     /// Specify a three-dimensional texture image
     /// </summary>
     /// <param name="target">
-    /// Specifies the target texture. Must be one of Texture3D or Texture2DArray.
+    /// Specifies the target texture. Must be one of Texture3D, ProxyTexture3D, Texture2DArray or ProxyTexture2DArray.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level  is the n sup th mipmap reduction image.
     /// </param>
     /// <param name="internalformat">
-    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, or one of the sized internal formats given in Table 2, below.
+    /// Specifies the number of color components in the texture. Must be one of base internal formats given in Table 1, one of the sized internal formats given in Table 2, or one of the compressed internal formats given in Table 3, below.
     /// </param>
     /// <param name="width">
-    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 256 texels wide.
+    /// Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.
     /// </param>
     /// <param name="height">
     /// Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.
@@ -65433,10 +65433,10 @@ public static partial class Oes
     /// This value must be 0.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha,
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, Bgra, RedInteger, RgInteger, RgbInteger, BgrInteger, RgbaInteger, BgraInteger, StencilIndex, DepthComponent, DepthStencil.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.
@@ -65714,10 +65714,10 @@ public static partial class Oes
     /// Specifies the depth of the texture subimage.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.
@@ -65751,10 +65751,10 @@ public static partial class Oes
     /// Specifies the depth of the texture subimage.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.
@@ -65788,10 +65788,10 @@ public static partial class Oes
     /// Specifies the depth of the texture subimage.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.
@@ -65838,10 +65838,10 @@ public static partial class Oes
     /// Specifies the depth of the texture subimage.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, RedInteger, Rg, RgInteger, Rgb, RgbInteger, Rgba, RgbaInteger, DepthComponent, DepthStencil, LuminanceAlpha, Luminance, and Alpha.
+    /// Specifies the format of the pixel data. The following symbolic values are accepted: Red, Rg, Rgb, Bgr, Rgba, DepthComponent, and StencilIndex.
     /// </param>
     /// <param name="type">
-    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, HalfFloat, Float, UnsignedShort565, UnsignedShort4444, UnsignedShort5551, UnsignedInt2101010Rev, UnsignedInt10F11F11FRev, UnsignedInt5999Rev, UnsignedInt248, and Float32UnsignedInt248Rev.
+    /// Specifies the data type of the pixel data. The following symbolic values are accepted: UnsignedByte, Byte, UnsignedShort, Short, UnsignedInt, Int, Float, UnsignedByte332, UnsignedByte233Rev, UnsignedShort565, UnsignedShort565Rev, UnsignedShort4444, UnsignedShort4444Rev, UnsignedShort5551, UnsignedShort1555Rev, UnsignedInt8888, UnsignedInt8888Rev, UnsignedInt1010102, and UnsignedInt2101010Rev.
     /// </param>
     /// <param name="pixels">[length: COMPSIZE(format,type,width,height,depth)]
     /// Specifies a pointer to the image data in memory.

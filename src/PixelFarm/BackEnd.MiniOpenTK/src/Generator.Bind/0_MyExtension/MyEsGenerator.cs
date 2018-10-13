@@ -86,7 +86,7 @@ namespace Bind
                 _originalGenerator = originalGenerator;
                 if (originalGenerator is ES.ES2Generator)
                 {
-                    _targetOutputDir = @"src\OpenTK\0_MyExtension\ES20mini";
+                    _targetOutputDir = @"..\..\..\OpenTK\0_MyExtension\ES20mini";
                     //generated files (3 files)
                     _esGlFile = _targetOutputDir + "\\ES20.cs";
                     _esEnumFile = _targetOutputDir + "\\ES20Enum.cs";
@@ -96,7 +96,7 @@ namespace Bind
                 }
                 else if (originalGenerator is ES.ES3Generator)
                 {
-                    _targetOutputDir = @"src\OpenTK\0_MyExtension\ES30mini";
+                    _targetOutputDir = @"..\..\..\OpenTK\0_MyExtension\ES30mini";
                     //generated files (3 files)
                     _esGlFile = _targetOutputDir + "\\ES30.cs";
                     _esEnumFile = _targetOutputDir + "\\ES30Enum.cs";
