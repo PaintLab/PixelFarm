@@ -68,7 +68,56 @@ namespace OpenTK
             Row2 = row2;
             Row3 = row3;
         }
+        public static Matrix4d RotationYawPitchRoll(double yaw, double pitch, double roll)
+        {
+            Matrix4d result;
+            RotationYawPitchRoll(yaw, pitch, roll, out result);
+            return result;
+        }
+        public static void RotationYawPitchRoll(double yaw, double pitch, double roll, out Matrix4d result)
+        {
+            Quaterniond quaternion = new Quaterniond();
+            Quaterniond.RotationYawPitchRoll(yaw, pitch, roll, out quaternion);
+            RotationQuaternion(ref quaternion, out result);
+        }
+        ///// <summary>
+        ///// Matrix multiplication
+        ///// </summary>
+        ///// <param name="left">left-hand operand</param>
+        ///// <param name="right">right-hand operand</param>
+        ///// <returns>A new Matrix44 which holds the result of the multiplication</returns>
+        //public static Matrix4d operator *(Matrix4d left, Matrix4d right)
+        //{
+        //    return Matrix4d.Mult(left, right);
+        //}
+        /// <summary>
+        /// Creates a rotation matrix from a quaternion.
+        /// </summary>
+        /// <param name="rotation">The quaternion to use to build the matrix.</param>
+        /// <param name="result">The created rotation matrix.</param>
+        public static void RotationQuaternion(ref Quaterniond rotation, out Matrix4d result)
+        {
+            double xx = rotation.X * rotation.X;
+            double yy = rotation.Y * rotation.Y;
+            double zz = rotation.Z * rotation.Z;
+            double xy = rotation.X * rotation.Y;
+            double zw = rotation.Z * rotation.W;
+            double zx = rotation.Z * rotation.X;
+            double yw = rotation.Y * rotation.W;
+            double yz = rotation.Y * rotation.Z;
+            double xw = rotation.X * rotation.W;
 
+            result = Matrix4d.Identity;
+            result.M11 = 1.0f - (2.0f * (yy + zz));
+            result.M12 = 2.0f * (xy + zw);
+            result.M13 = 2.0f * (zx - yw);
+            result.M21 = 2.0f * (xy - zw);
+            result.M22 = 1.0f - (2.0f * (zz + xx));
+            result.M23 = 2.0f * (yz + xw);
+            result.M31 = 2.0f * (zx + yw);
+            result.M32 = 2.0f * (yz - xw);
+            result.M33 = 1.0f - (2.0f * (yy + xx));
+        }
         /// <summary>
         /// Constructs a new instance.
         /// </summary>

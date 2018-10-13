@@ -60,7 +60,7 @@ namespace OpenTkEssTest
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;
                 }
-                _glsx.DrawFrameBuffer(frameBuffer, 15, 300);
+                _glsx.DrawFrameBuffer(frameBuffer, 15, 400);
             }
             else
             {

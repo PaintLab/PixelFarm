@@ -619,6 +619,38 @@ namespace OpenTK
             return Xyz.GetHashCode() ^ W.GetHashCode();
         }
 
+        //----------------------
+        //from SharpDx
+        //----------------------
+
+        /// <summary>
+        /// Creates a quaternion given a yaw, pitch, and roll value.
+        /// </summary>
+        /// <param name="yaw">The yaw of rotation.</param>
+        /// <param name="pitch">The pitch of rotation.</param>
+        /// <param name="roll">The roll of rotation.</param>
+        /// <param name="result">When the method completes, contains the newly created quaternion.</param>
+        public static void RotationYawPitchRoll(double yaw, double pitch, double roll, out Quaterniond result)
+        {
+            double halfRoll = roll * 0.5f;
+            double halfPitch = pitch * 0.5f;
+            double halfYaw = yaw * 0.5f;
+
+            double sinRoll = (double)Math.Sin(halfRoll);
+            double cosRoll = (double)Math.Cos(halfRoll);
+            double sinPitch = (double)Math.Sin(halfPitch);
+            double cosPitch = (double)Math.Cos(halfPitch);
+            double sinYaw = (double)Math.Sin(halfYaw);
+            double cosYaw = (double)Math.Cos(halfYaw);
+
+
+            result = new Quaterniond();
+            result.X = (cosYaw * sinPitch * cosRoll) + (sinYaw * cosPitch * sinRoll);
+            result.Y = (sinYaw * cosPitch * cosRoll) - (cosYaw * sinPitch * sinRoll);
+            result.Z = (cosYaw * cosPitch * sinRoll) - (sinYaw * sinPitch * cosRoll);
+            result.W = (cosYaw * cosPitch * cosRoll) + (sinYaw * sinPitch * sinRoll);
+        }
+
 
 
 

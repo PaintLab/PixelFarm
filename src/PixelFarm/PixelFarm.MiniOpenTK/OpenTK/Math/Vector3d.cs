@@ -60,6 +60,12 @@ namespace OpenTK
             Y = y;
             Z = z;
         }
+        public Vector3d(Vector4 v)
+        {
+            X = v.X;
+            Y = v.Y;
+            Z = v.Z;
+        }
 
         /// <summary>
         /// Constructs a new instance from the given Vector2d.
@@ -71,7 +77,25 @@ namespace OpenTK
             Y = v.Y;
             Z = 0.0f;
         }
+        public static void TransformCoordinate(ref Vector3d vec, ref Matrix4d mat, out Vector3d result)
+        {
+            //Vector4 vector = new Vector4();
+            //vector.X = (coordinate.X * transform.M11) + (coordinate.Y * transform.M21) + (coordinate.Z * transform.M31) + transform.M41;
+            //vector.Y = (coordinate.X * transform.M12) + (coordinate.Y * transform.M22) + (coordinate.Z * transform.M32) + transform.M42;
+            //vector.Z = (coordinate.X * transform.M13) + (coordinate.Y * transform.M23) + (coordinate.Z * transform.M33) + transform.M43;
+            //vector.W = 1f / ((coordinate.X * transform.M14) + (coordinate.Y * transform.M24) + (coordinate.Z * transform.M34) + transform.M44);
 
+            //result = new Vector3(vector.X * vector.W, vector.Y * vector.W, vector.Z * vector.W);
+
+
+
+            double x = vec.X * mat.Row0.X + vec.Y * mat.Row1.X + vec.Z * mat.Row2.X + mat.Row3.X;
+            double y = vec.X * mat.Row0.Y + vec.Y * mat.Row1.Y + vec.Z * mat.Row2.Y + mat.Row3.Y;
+            double z = vec.X * mat.Row0.Z + vec.Y * mat.Row1.Z + vec.Z * mat.Row2.Z + mat.Row3.Z;
+            double w = vec.X * mat.Row0.W + vec.Y * mat.Row1.W + vec.Z * mat.Row2.W + mat.Row3.W;
+
+            result = new Vector3d(x / w, y / w, z / w);
+        }
         /// <summary>
         /// Constructs a new instance from the given Vector3d.
         /// </summary>

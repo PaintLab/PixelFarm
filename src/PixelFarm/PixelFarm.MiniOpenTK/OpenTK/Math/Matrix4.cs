@@ -385,7 +385,7 @@ namespace OpenTK
             result = Identity;
             result.Row3 = new Vector4(x, y, z, 1);
         }
-
+        
         /// <summary>
         /// Creates a translation matrix.
         /// </summary>
@@ -1129,6 +1129,60 @@ namespace OpenTK
                 Row2 == other.Row2 &&
                 Row3 == other.Row3;
         }
+        /// <summary>
+        /// Creates a rotation matrix with a specified yaw, pitch, and roll.
+        /// </summary>
+        /// <param name="yaw">Yaw around the y-axis, in radians.</param>
+        /// <param name="pitch">Pitch around the x-axis, in radians.</param>
+        /// <param name="roll">Roll around the z-axis, in radians.</param>
+        /// <param name="result">When the method completes, contains the created rotation matrix.</param>
+        public static void RotationYawPitchRoll(float yaw, float pitch, float roll, out Matrix4 result)
+        {
+            Quaternion quaternion = new Quaternion();
+            Quaternion.RotationYawPitchRoll(yaw, pitch, roll, out quaternion);
+            RotationQuaternion(ref quaternion, out result);
+        }
 
+        /// <summary>
+        /// Creates a rotation matrix with a specified yaw, pitch, and roll.
+        /// </summary>
+        /// <param name="yaw">Yaw around the y-axis, in radians.</param>
+        /// <param name="pitch">Pitch around the x-axis, in radians.</param>
+        /// <param name="roll">Roll around the z-axis, in radians.</param>
+        /// <returns>The created rotation matrix.</returns>
+        public static Matrix4 RotationYawPitchRoll(float yaw, float pitch, float roll)
+        {
+            Matrix4 result;
+            RotationYawPitchRoll(yaw, pitch, roll, out result);
+            return result;
+        }
+        /// <summary>
+        /// Creates a rotation matrix from a quaternion.
+        /// </summary>
+        /// <param name="rotation">The quaternion to use to build the matrix.</param>
+        /// <param name="result">The created rotation matrix.</param>
+        public static void RotationQuaternion(ref Quaternion rotation, out Matrix4 result)
+        {
+            float xx = rotation.X * rotation.X;
+            float yy = rotation.Y * rotation.Y;
+            float zz = rotation.Z * rotation.Z;
+            float xy = rotation.X * rotation.Y;
+            float zw = rotation.Z * rotation.W;
+            float zx = rotation.Z * rotation.X;
+            float yw = rotation.Y * rotation.W;
+            float yz = rotation.Y * rotation.Z;
+            float xw = rotation.X * rotation.W;
+
+            result = Matrix4.Identity;
+            result.M11 = 1.0f - (2.0f * (yy + zz));
+            result.M12 = 2.0f * (xy + zw);
+            result.M13 = 2.0f * (zx - yw);
+            result.M21 = 2.0f * (xy - zw);
+            result.M22 = 1.0f - (2.0f * (zz + xx));
+            result.M23 = 2.0f * (yz + xw);
+            result.M31 = 2.0f * (zx + yw);
+            result.M32 = 2.0f * (yz - xw);
+            result.M33 = 1.0f - (2.0f * (yy + xx));
+        }
     }
 }

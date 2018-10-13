@@ -18,7 +18,8 @@ namespace Mini
         public DemoBase()
         {
             this.Width = 800;
-            this.Height = 600;
+            this.Height = 140;
+
         }
 
         //when we use with opengl
@@ -26,7 +27,7 @@ namespace Mini
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
         GLPainter _painter;
-        
+
         public virtual void Draw(Painter p) { }
         public void CloseDemo()
         {

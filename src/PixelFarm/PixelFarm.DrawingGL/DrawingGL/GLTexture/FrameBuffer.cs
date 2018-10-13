@@ -6,6 +6,20 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
+
+    public class FrameBufferCreationParameters
+    {
+        public bool depthBuffer;
+        public bool stencilBuffer;
+        public bool generateMipMaps;
+
+        public PixelInternalFormat pixelInternalFormat = PixelInternalFormat.Rgba;
+        public PixelFormat pixelFormat = PixelFormat.Rgba;
+        public TextureMagFilter magFilter = TextureMagFilter.Linear;
+        public TextureMinFilter minFilter = TextureMinFilter.LinearMipmapNearest;
+
+
+    }
     public class FrameBuffer : IDisposable
     {
         int frameBufferId;
@@ -14,10 +28,14 @@ namespace PixelFarm.DrawingGL
         int w;
         int h;
         public FrameBuffer(int w, int h)
+            : this(w, h, new FrameBufferCreationParameters())
+        {
+        }
+        public FrameBuffer(int w, int h, FrameBufferCreationParameters creationParams)
         {
             this.w = w;
             this.h = h;
-            InitFrameBuffer();
+            InitFrameBuffer(creationParams);
         }
         public void Dispose()
         {
@@ -42,9 +60,9 @@ namespace PixelFarm.DrawingGL
         public int FrameBufferId { get { return frameBufferId; } }
         public int Width { get { return w; } }
         public int Height { get { return h; } }
-        void InitFrameBuffer()
+        void InitFrameBuffer(FrameBufferCreationParameters creationParams)
         {
-            
+
             GL.GenFramebuffers(1, out frameBufferId);
             //switch to this (custom) framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferId);
@@ -52,10 +70,12 @@ namespace PixelFarm.DrawingGL
             textureId = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, textureId);
             //set texture parameter
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapNearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)creationParams.magFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)creationParams.minFilter);
             //GL.GenerateMipmap(TextureTarget.Texture2D);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0,creationParams.pixelInternalFormat, w, h, 0, creationParams.pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
+
             //render buffer
             GL.GenRenderbuffers(1, out renderBufferId);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderBufferId);
@@ -74,7 +94,7 @@ namespace PixelFarm.DrawingGL
         internal void UpdateTexture()
         {
             GL.BindTexture(TextureTarget.Texture2D, textureId);
-            GL.GenerateMipmap(TextureTarget.Texture2D);
+            GL.GenerateMipmap(TextureTarget.Texture2D);            
         }
         internal void ReleaseCurrent()
         {
