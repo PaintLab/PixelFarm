@@ -19,6 +19,8 @@
 using System;
 using OpenTK;
 using OpenTK.Graphics.ES20;
+using PixelFarm.DrawingGL;
+
 using Mini;
  
 namespace OpenTkEssTest
@@ -79,7 +81,7 @@ namespace OpenTkEssTest
             //{
             //    return false;
             //}
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 throw new NotSupportedException();

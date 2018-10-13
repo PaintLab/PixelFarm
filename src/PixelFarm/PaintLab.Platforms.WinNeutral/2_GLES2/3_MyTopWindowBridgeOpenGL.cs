@@ -116,7 +116,7 @@ namespace LayoutFarm.UI.OpenGL
                 windowControl.InitSetup2d(new Rectangle(0, 0, 800, 600));// Screen.PrimaryScreen.Bounds);
                 isInitGLControl = true;
                 //2.
-                windowControl.ClearColor = new OpenTK.Graphics.Color4(1f, 1f, 1f, 1f);
+                //windowControl.ClearColor = new OpenTK.Graphics.Color4(1f, 1f, 1f, 1f);
                 //3.
 
             }

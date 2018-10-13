@@ -17,6 +17,8 @@
 
 using System;
 using OpenTK.Graphics.ES20;
+using PixelFarm.DrawingGL;
+
 using Mini;
 namespace OpenTkEssTest
 {
@@ -53,7 +55,7 @@ namespace OpenTkEssTest
                          gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);
                       }
                 ";
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 //return false

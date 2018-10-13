@@ -35,14 +35,17 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\ES2Utils.cs">
-      <Link>0_REF_DrawingGL\Es2Utils\ES2Utils.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES2Utils.cs">
+      <Link>0_REF_DrawingGL\EsUtils\ES2Utils.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\GeometryUtils.cs">
-      <Link>0_REF_DrawingGL\Es2Utils\GeometryUtils.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES3Utils.cs">
+      <Link>0_REF_DrawingGL\EsUtils\ES3Utils.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
-      <Link>0_REF_DrawingGL\Es2Utils\MiniShaderProgram.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\GeometryUtils.cs">
+      <Link>0_REF_DrawingGL\EsUtils\GeometryUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\MiniShaderProgram.cs">
+      <Link>0_REF_DrawingGL\EsUtils\MiniShaderProgram.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\BasicFillShader.cs">
       <Link>0_REF_DrawingGL\GLShader\BasicFillShader.cs</Link>

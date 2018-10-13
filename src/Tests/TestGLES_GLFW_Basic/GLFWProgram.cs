@@ -2,6 +2,7 @@
 using System;
 using OpenTK.Graphics.ES20;
 using Pencil.Gaming;
+using PixelFarm.DrawingGL;
 
 namespace TestGlfw
 {

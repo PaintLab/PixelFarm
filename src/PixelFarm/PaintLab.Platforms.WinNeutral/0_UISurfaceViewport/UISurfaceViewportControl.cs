@@ -57,11 +57,11 @@ namespace LayoutFarm.UI.WinNeutral
         {
 
         }
-        public OpenTK.Graphics.Color4 ClearColor
-        {
-            get;
-            set;
-        }
+        //public OpenTK.Graphics.Color4 ClearColor
+        //{
+        //    get;
+        //    set;
+        //}
         public void SetupCanvas(PixelFarm.Drawing.DrawBoard canvas)
         {
             bridge.SetupCanvas(canvas);

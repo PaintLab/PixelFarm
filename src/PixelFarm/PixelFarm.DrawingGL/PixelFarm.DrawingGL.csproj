@@ -36,6 +36,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawingGL\EsUtils\ES2Utils.cs" />
+    <Compile Include="DrawingGL\EsUtils\ES3Utils.cs" />
+    <Compile Include="DrawingGL\EsUtils\GeometryUtils.cs" />
+    <Compile Include="DrawingGL\EsUtils\MiniShaderProgram.cs" />
     <Compile Include="DrawingGL\RenderSuface\GLRenderSurface.cs" />
     <Compile Include="DrawingGL\RenderSuface\SmoothMode.cs" />
     <Compile Include="DrawingGL\RenderSuface\ShaderSharedResource.cs" />
@@ -59,9 +63,6 @@
     <Compile Include="DrawingGL\GLTexture\GLBitmapReference.cs" />
     <Compile Include="DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="DrawingGL\GLTexture\TextureAtlas.cs" />
-    <Compile Include="DrawingGL\Es2Utils\ES2Utils.cs" />
-    <Compile Include="DrawingGL\Es2Utils\GeometryUtils.cs" />
-    <Compile Include="DrawingGL\Es2Utils\MiniShaderProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
