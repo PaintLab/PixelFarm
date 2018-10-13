@@ -46,7 +46,7 @@ namespace OpenTkEssTest
                         gl_FragColor = u_color;
                  }
             ";
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 throw new NotSupportedException();

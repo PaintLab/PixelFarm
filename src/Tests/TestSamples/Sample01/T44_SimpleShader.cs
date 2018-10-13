@@ -52,7 +52,7 @@ namespace OpenTkEssTest
                        gl_FragColor = vec4(v_texcoord.x, v_texcoord.y, 1.0, 1.0);
                   }
             ";
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 //return false

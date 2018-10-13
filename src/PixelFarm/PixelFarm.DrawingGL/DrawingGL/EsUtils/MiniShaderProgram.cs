@@ -1,7 +1,8 @@
 ﻿//MIT, 2014-present, WinterDev
 
-using System;
+//ES30 and ES20
 
+using System;
 namespace OpenTK.Graphics.ES30
 {
 
@@ -314,7 +315,7 @@ namespace OpenTK.Graphics.ES30
         }
         public bool Build()
         {
-            mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
+            mProgram = OpenTK.Graphics.ES20.EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 return false;
@@ -327,7 +328,7 @@ namespace OpenTK.Graphics.ES30
             LoadFragmentShaderSource(fs);
             try
             {
-                mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
+                mProgram = OpenTK.Graphics.ES20.EsUtils.CompileProgram(vs, fs);
             }
             catch (Exception ex)
             {
@@ -384,17 +385,6 @@ namespace OpenTK.Graphics.ES30
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /// ////////////////////////////////////////// 
 //TODO: plan remove ES20
@@ -711,7 +701,7 @@ namespace OpenTK.Graphics.ES20
         }
         public bool Build()
         {
-            mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
+            mProgram = OpenTK.Graphics.ES20.EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 return false;
@@ -724,7 +714,7 @@ namespace OpenTK.Graphics.ES20
             LoadFragmentShaderSource(fs);
             try
             {
-                mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
+                mProgram = OpenTK.Graphics.ES20.EsUtils.CompileProgram(vs, fs);
             }
             catch (Exception ex)
             {

@@ -37,14 +37,17 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\Es2Utils\ES2Utils.cs">
-      <Link>Es2Utils\ES2Utils.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES2Utils.cs">
+      <Link>EsUtils\ES2Utils.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\Es2Utils\GeometryUtils.cs">
-      <Link>Es2Utils\GeometryUtils.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES3Utils.cs">
+      <Link>EsUtils\ES3Utils.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
-      <Link>Es2Utils\MiniShaderProgram.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\GeometryUtils.cs">
+      <Link>EsUtils\GeometryUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\MiniShaderProgram.cs">
+      <Link>EsUtils\MiniShaderProgram.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

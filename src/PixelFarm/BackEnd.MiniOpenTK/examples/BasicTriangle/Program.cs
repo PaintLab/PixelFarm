@@ -20,53 +20,6 @@ namespace BasicTriangle
             OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
         }
 
-        //A simple vertex shader possible.Just passes through the position vector.
-        //const string VertexShaderSource = @"
-        //    #version 330
-
-        //    layout(location = 0) in vec4 position;
-
-        //    void main(void)
-        //    {
-        //        gl_Position = position;
-        //    }
-        //";
-
-        //// A simple fragment shader. Just a constant red color.
-        //const string FragmentShaderSource = @"
-        //    #version 330
-
-        //    out vec4 outputColor;
-
-        //    void main(void)
-        //    {
-        //        outputColor = vec4(1.0, 0.0, 0.0, 1.0);
-        //    }
-        //";
-
-        //string VertexShaderSource = @"      
-
-        //    attribute vec2 a_position;
-        //    attribute vec4 a_color;
-
-        //    varying vec4 v_color;
-
-        //    void main()
-        //    {   
-
-        //        gl_Position = vec4(a_position[0],a_position[1],0,1);  
-        //        v_color = a_color;
-        //    }
-        //    ";
-        ////fragment source
-        //string FragmentShaderSource = @"
-        //        precision mediump float;
-        //        varying vec4 v_color;                 
-        //        void main()
-        //        { 
-        //            gl_FragColor = v_color;
-        //        }
-        //    ";
 
         string VertexShaderSource =
             "#version 300 es\n" +
