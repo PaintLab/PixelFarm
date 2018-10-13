@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <DefineConstants>MINIMAL</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -36,8 +37,6 @@
     <Folder Include="Windows\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BackEnd.MiniOpenTK.NetCore\BackEnd.MiniOpenTK.NetCore.csproj" />
-  </ItemGroup>
+  <Import Project="..\..\..\..\opentk\src\OpenTK\MiniOpenTK_Core1.projitems" Label="Shared" />
 
 </Project>

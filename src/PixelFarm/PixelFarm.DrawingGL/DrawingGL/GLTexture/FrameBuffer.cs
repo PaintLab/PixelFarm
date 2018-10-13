@@ -44,7 +44,7 @@ namespace PixelFarm.DrawingGL
         public int Height { get { return h; } }
         void InitFrameBuffer()
         {
-            
+
             GL.GenFramebuffers(1, out frameBufferId);
             //switch to this (custom) framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferId);
@@ -55,13 +55,13 @@ namespace PixelFarm.DrawingGL
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapNearest);
             //GL.GenerateMipmap(TextureTarget.Texture2D);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             //render buffer
             GL.GenRenderbuffers(1, out renderBufferId);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderBufferId);
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferInternalFormat.DepthComponent16, w, h);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, TextureTarget.Texture2D, textureId, 0);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, renderBufferId);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.ColorAttachment0, (TextureTarget2d)TextureTarget.Texture2D, textureId, 0);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, renderBufferId);
             //switch back to default framebuffer (system provider framebuffer) 
             GL.BindTexture(TextureTarget.Texture2D, 0);//unbind
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind

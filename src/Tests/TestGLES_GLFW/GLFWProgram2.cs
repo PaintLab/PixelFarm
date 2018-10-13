@@ -29,8 +29,22 @@ namespace TestGlfw
             GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
 
+        
+            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
+            {
+                Backend = OpenTK.PlatformBackend.PreferNative,
+            });
+            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
+
             var glfwContext = new GLFWContextForOpenTK(contextHandler);
             var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
+           
+
+
+            //
+            //
+
             bool isCurrent = context.IsCurrent;
             PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(glWindow);
             context.MakeCurrent(winInfo);

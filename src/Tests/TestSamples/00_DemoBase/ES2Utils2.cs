@@ -38,7 +38,13 @@ namespace OpenTK.Graphics.ES20
                   0,   0, 255, // Blue
                   255, 255,   0, // Yellow
             };
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, width, height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, pixels);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0,
+                        PixelInternalFormat.Rgb,
+                        width, height, 0, PixelFormat.Rgb, PixelType.UnsignedByte,
+                        pixels);
+
+
             //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
             // Set the filtering mode

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlankWindow", "BlankWindow\BlankWindow.csproj", "{BA4DE207-3329-4074-8606-D46803F03CC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicTriangle", "BasicTriangle\BasicTriangle.csproj", "{82E18ED0-E9A4-4EF4-830C-AA497B8A70EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA4DE207-3329-4074-8606-D46803F03CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4DE207-3329-4074-8606-D46803F03CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA4DE207-3329-4074-8606-D46803F03CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA4DE207-3329-4074-8606-D46803F03CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82E18ED0-E9A4-4EF4-830C-AA497B8A70EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E18ED0-E9A4-4EF4-830C-AA497B8A70EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E18ED0-E9A4-4EF4-830C-AA497B8A70EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E18ED0-E9A4-4EF4-830C-AA497B8A70EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C160FEA5-A5B8-4909-81E7-7850E00AB3E1}
+	EndGlobalSection
+EndGlobal

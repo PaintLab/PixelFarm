@@ -2,6 +2,7 @@
 using System;
 using OpenTK.Graphics.ES20;
 using Pencil.Gaming;
+using PixelFarm.DrawingGL;
 
 namespace TestGlfw
 {
@@ -23,7 +24,7 @@ namespace TestGlfw
             //here => OpenGLES  2.0
             Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 3);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
             //---------------------------------------------------
             GlfwMonitorPtr monitor = new GlfwMonitorPtr();//default monitor

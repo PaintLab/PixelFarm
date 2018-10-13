@@ -19,6 +19,8 @@
 using System;
 using OpenTK;
 using OpenTK.Graphics.ES20;
+using PixelFarm.DrawingGL;
+
 using Mini;
  
 namespace OpenTkEssTest
@@ -41,7 +43,8 @@ namespace OpenTkEssTest
         bool isGLInit;
         protected override void OnReadyForInitGLShaderProgram()
         {
-            IntPtr eglPostSubBufferNVFuncPtr = OpenTK.Platform.Egl.EglFuncs.GetProcAddress("eglPostSubBufferNV");
+            IntPtr eglPostSubBufferNVFuncPtr = OpenTK.Platform.Egl.Egl.GetProcAddress("eglPostSubBufferNV");
+            
             if (eglPostSubBufferNVFuncPtr == IntPtr.Zero)
             {
                 throw new NotSupportedException();
@@ -78,7 +81,7 @@ namespace OpenTkEssTest
             //{
             //    return false;
             //}
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 throw new NotSupportedException();

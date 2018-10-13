@@ -23,11 +23,10 @@ namespace Pencil.Gaming
 
         //TODO: review here
         //-------------------------- 
-        bool vsync;
+        //bool vsync;
         Thread current_thread;
-
+        int _swapInterval;
         public GLFWContextForOpenTK(ContextHandle handle)
-            : base(DesktopBackend.ES20)
         {
             Handle = handle;
             current_thread = Thread.CurrentThread;
@@ -35,6 +34,17 @@ namespace Pencil.Gaming
         public override GraphicsContext.GetCurrentContextDelegate CreateCurrentContextDel()
         {
             return () => Handle;
+        }
+       
+        public override IntPtr GetAddress(IntPtr function)
+        {
+            //get address
+            throw new NotImplementedException();
+        }
+        public override int SwapInterval
+        {
+            get => _swapInterval;
+            set => _swapInterval = value;
         }
         public override void SwapBuffers()
         {
@@ -71,27 +81,27 @@ namespace Pencil.Gaming
             }
         }
 
-        public override IntPtr GetAddress(string function)
-        {
+        //public override IntPtr GetAddress(string function)
+        //{
 
-            return IntPtr.Zero;
-        }
+        //    return IntPtr.Zero;
+        //}
 
-        public override bool VSync
-        {
-            get { return vsync; }
-            set { vsync = value; }
-        }
+        //public override bool VSync
+        //{
+        //    get { return vsync; }
+        //    set { vsync = value; }
+        //}
 
         public override void Update(IWindowInfo window)
         {
 
         }
-
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
             IsDisposed = true;
         }
+         
 
 
     }

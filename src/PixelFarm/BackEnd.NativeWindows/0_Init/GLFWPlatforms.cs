@@ -15,11 +15,12 @@ namespace PixelFarm
                 return false;
             }
 
+
             //---------------------------------------------------
             //specific OpenGLES ***
             Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 3);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
             //---------------------------------------------------
 
@@ -61,6 +62,10 @@ namespace PixelFarm
         internal GlfwWindowPtr GlfwWindowPtr
         {
             get { return glfwWindowPtr; }
+        }
+        public IntPtr Handle
+        {
+            get { return glfwWindowPtr.inner_ptr; }
         }
     }
 

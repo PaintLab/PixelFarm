@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;GL_ENABLE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;GL_ENABLE, MINIMAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -56,6 +56,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
+      <Name>MiniOpenTKLevel1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel2\MiniOpenTKLevel2.csproj">
+      <Project>{07b1aa01-3869-4af3-9439-329b96d8d3c1}</Project>
+      <Name>MiniOpenTKLevel2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
       <Name>BackEnd.ImgCodecs</Name>
@@ -72,21 +80,13 @@
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
+    <ProjectReference Include="..\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES2</Name>
+      <Name>PixelFarm.Drawing.GLES</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
-      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>BackEnd.MiniOpenTK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BackEnd.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
-      <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
-      <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
