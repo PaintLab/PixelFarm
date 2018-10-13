@@ -144,8 +144,11 @@ namespace Bind
             }
 
 
-            //-------------------------------------
-            //
+            //------------------------------------- 
+            Settings.InputPath = "..\\..\\Specifications"; 
+            Settings.DocPath = Settings.InputPath + "\\Docs";
+            Settings.FallbackDocPath = Settings.InputPath + "\\Docs\\GL";
+            
             mode = GeneratorMode.ES30; //my extension
             //
             //-------------------------------------
