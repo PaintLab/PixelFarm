@@ -8,15 +8,15 @@ but if you use some part of the code please check each source file's header for 
 
 **Geometry**
 
-BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
+BSD, 2002-2005, Maxim Shemanarev, http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
 
-BSD, 2007-2014, Lars Brubaker, agg-sharp, from  https://github.com/MatterHackers/agg-sharp
+BSD, 2007-2014, Lars Brubaker, agg-sharp, https://github.com/MatterHackers/agg-sharp
 
-ZLIB, 2015, burningmine, CurveUtils.
+ZLIB, 2015, burningmine, CurveUtils.  https://github.com/burningmime/curves
 
 Boost, 2010-2014, Angus Johnson, Clipper.
 
-BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri-cs
+BSD, 2009-2010, Poly2Tri Contributors, https://github.com/PaintLab/poly2tri-cs
 
 SGI, 2000, Eric Veach, Tesselate.
 
@@ -25,7 +25,7 @@ MS-PL, 2018, SVG.NET https://github.com/vvvv/SVG
 
 **Image Processing**
 
-BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
+BSD, 2002-2005, Maxim Shemanarev, http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
 
 MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 
