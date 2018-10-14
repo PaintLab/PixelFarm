@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -287,9 +287,10 @@ namespace LayoutFarm.Text
                         else
                         {
                             //this may be the blank line
+                            startLine.Clear();
 #if DEBUG
                             //TODO: review here again
-                            System.Diagnostics.Debug.WriteLine("EditableTextLine_adv1");
+                            //System.Diagnostics.Debug.WriteLine("EditableTextLine_adv1");
 #endif
                         }
                     }
@@ -396,6 +397,8 @@ namespace LayoutFarm.Text
                     }
                     if (newStartPoint.LineCharIndex == -1)
                     {
+                        //TODO: review here again
+                        //at this point newStartPoint.TextRun should always null
                         if (newStartPoint.TextRun != null)
                         {
                             startLine.RemoveRight((EditableRun)newStartPoint.TextRun);
@@ -403,11 +406,17 @@ namespace LayoutFarm.Text
                     }
                     else
                     {
-                        EditableRun nextRun = newStartPoint.TextRun.NextTextRun;
-                        if (nextRun != null && !nextRun.IsLineBreak)
+                        //at this point newStartPoint.TextRun should always null
+                        //TODO newStartPoint.TextRun == null???
+                        if (newStartPoint.TextRun != null)
                         {
-                            startLine.RemoveRight(nextRun);
+                            EditableRun nextRun = newStartPoint.TextRun.NextTextRun;
+                            if (nextRun != null && !nextRun.IsLineBreak)
+                            {
+                                startLine.RemoveRight(nextRun);
+                            }
                         }
+
                     }
                     startLine.JoinWithNextLine();
                 }
@@ -475,8 +484,8 @@ namespace LayoutFarm.Text
             {
                 EditableRun toBeCutTextRun = startPoint.TextRun;
                 EditableRun preCutTextRun = (EditableRun)toBeCutTextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
-                EditableRun middleCutTextRun = (EditableRun)toBeCutTextRun.Copy(startPoint.RunLocalSelectedIndex + 1, endPoint.LineCharIndex - startPoint.LineCharIndex);
-                EditableRun postCutTextRun = (EditableRun)toBeCutTextRun.Copy(endPoint.RunLocalSelectedIndex + 1);
+                EditableRun middleCutTextRun = (EditableRun)toBeCutTextRun.Copy(startPoint.RunLocalSelectedIndex, endPoint.LineCharIndex - startPoint.LineCharIndex);
+                EditableRun postCutTextRun = (EditableRun)toBeCutTextRun.Copy(endPoint.RunLocalSelectedIndex);
                 EditableVisualPointInfo newStartRangePointInfo = null;
                 EditableVisualPointInfo newEndRangePointInfo = null;
                 EditableTextLine line = this;

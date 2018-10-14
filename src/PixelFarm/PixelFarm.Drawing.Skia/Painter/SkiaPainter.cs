@@ -1,7 +1,7 @@
-﻿//MIT, 2016-2018, WinterDev 
+﻿//MIT, 2016-present, WinterDev 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
@@ -17,13 +17,14 @@ namespace PixelFarm.Drawing.Skia
 
         int _height;
         int _width;
-        Agg.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
         //-----------------------
         SKCanvas _skCanvas;
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
+
         public SkiaPainter(int w, int h)
         {
 
@@ -33,13 +34,46 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
         }
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Render(RenderVx renderVx)
+        {
+            throw new NotImplementedException();
+        }
+
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
+
+        Pen _curPen;
+        public override Pen CurrentPen
+        {
+            get
+            {
+                throw new NotSupportedException();
+                return _curPen;
+            }
+            set
+            {
+                throw new NotSupportedException();
+                _curPen = value;
+            }
+        }
         public SKCanvas Canvas
         {
             get { return _skCanvas; }
             set { _skCanvas = value; }
         }
-        RenderQualtity _renderQuality;
-        public override RenderQualtity RenderQuality
+        RenderQuality _renderQuality;
+        public override RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -91,10 +125,6 @@ namespace PixelFarm.Drawing.Skia
             }
         }
 
-        public override void Draw(VertexStoreSnap vxs)
-        {
-            this.Fill(vxs);
-        }
         public override RectInt ClipBox
         {
             get
@@ -265,7 +295,7 @@ namespace PixelFarm.Drawing.Skia
 
         public override void Draw(VertexStore vxs)
         {
-            VxsHelper.DrawVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _stroke);
+            VxsHelper.DrawVxsSnap(_skCanvas, vxs, _stroke);
         }
         //public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         //{
@@ -278,7 +308,10 @@ namespace PixelFarm.Drawing.Skia
         //        _skCanvas.DrawPath(p, _stroke);
         //    }
         //}
-
+        public override void DrawImage(Image actualImage)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
@@ -308,35 +341,39 @@ namespace PixelFarm.Drawing.Skia
             //    _bmpStore.RelaseBmp(bmp);
             //}
         }
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image img, double left, double top)
         {
-            if (img is ActualImage)
+            if (img is ActualBitmap)
             {
-                ActualImage actualImage = (ActualImage)img;
+                ActualBitmap actualImage = (ActualBitmap)img;
                 //create Gdi bitmap from actual image
                 int w = actualImage.Width;
                 int h = actualImage.Height;
                 switch (actualImage.PixelFormat)
                 {
-                    case Agg.PixelFormat.ARGB32:
+                    case CpuBlit.Imaging.PixelFormat.ARGB32:
                         {
 
                             using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
                             {
                                 newBmp.LockPixels();
                                 //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-                                TempMemPtr bufferPtr = ActualImage.GetBufferPtr(actualImage);
+                                CpuBlit.Imaging.TempMemPtr bufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                                 unsafe
                                 {
                                     byte* actualImgH = (byte*)bufferPtr.Ptr;
-                                    AggMemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
+                                    MemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
                                     //System.Runtime.InteropServices.Marshal.Copy(
                                     //    actualImgBuffer,
                                     //    0,
                                     //    newBmp.GetPixels(),
                                     //    actualImgBuffer.Length); 
                                 }
-                                bufferPtr.Release();
+                                bufferPtr.Dispose();
                                 newBmp.UnlockPixels();
                             }
                             //newBmp.internalBmp.LockPixels();
@@ -358,11 +395,11 @@ namespace PixelFarm.Drawing.Skia
                             //}
                         }
                         break;
-                    case Agg.PixelFormat.RGB24:
+                    case CpuBlit.Imaging.PixelFormat.RGB24:
                         {
                         }
                         break;
-                    case Agg.PixelFormat.GrayScale8:
+                    case CpuBlit.Imaging.PixelFormat.GrayScale8:
                         {
                         }
                         break;
@@ -409,22 +446,8 @@ namespace PixelFarm.Drawing.Skia
         /// <param name="vxs"></param>
         public override void Fill(VertexStore vxs)
         {
-            VxsHelper.FillVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _fill);
+            VxsHelper.FillVxsSnap(_skCanvas, vxs, _fill);
         }
-        /// <summary>
-        /// we do NOT store snap/vxs
-        /// </summary>
-        /// <param name="snap"></param>
-        public override void Fill(VertexStoreSnap snap)
-        {
-            VxsHelper.FillVxsSnap(_skCanvas, snap, _fill);
-        }
-        //public override void FillCircle(double x, double y, double radius)
-        //{
-        //    _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
-        //}
-
-
 
         public override void FillEllipse(double left, double top, double width, double height)
         {
@@ -454,16 +477,16 @@ namespace PixelFarm.Drawing.Skia
         //        _fill);
         //}
 
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
-        {
+        //VertexStorePool _vxsPool = new VertexStorePool();
+        //VertexStore GetFreeVxs()
+        //{
 
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+        //    return _vxsPool.GetFreeVxs();
+        //}
+        //void ReleaseVxs(ref VertexStore vxs)
+        //{
+        //    _vxsPool.Release(ref vxs);
+        //}
         //public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         //{
         //    if (roundRect == null)
@@ -504,16 +527,7 @@ namespace PixelFarm.Drawing.Skia
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
 
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            var prevColor = FillColor;
-            for (int i = 0; i < numPath; ++i)
-            {
-                _fill.Color = ConvToSkColor(colors[i]);
-                VxsHelper.FillVxsSnap(_skCanvas, new VertexStoreSnap(vxs, pathIndexs[i]), _fill);
-            }
-            FillColor = prevColor;
-        }
+
 
         public override void DrawRect(double left, double bottom, double right, double top)
         {
@@ -524,10 +538,10 @@ namespace PixelFarm.Drawing.Skia
         {
             _skCanvas.ClipRect(new SKRect(x1, y1, x2, y2));
         }
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
-            var renderVx = new WinGdiRenderVx(snap);
-            renderVx.path = VxsHelper.CreateGraphicsPath(snap);
+            var renderVx = new WinGdiRenderVx(vxs);
+            renderVx.path = VxsHelper.CreateGraphicsPath(vxs);
             return renderVx;
         }
 

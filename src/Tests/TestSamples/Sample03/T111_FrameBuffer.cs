@@ -40,12 +40,12 @@ namespace OpenTkEssTest
             {
                 isInit = true;
             }
-            if (frameBuffer.FrameBufferId > 0)//valid buffer
+            if (frameBuffer.FrameBufferId > 0)
             {
                 //------------------------------------------------------------------------------------
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer.FrameBufferId);
                 //--------
-                //draw to frame buffer here
+                //do draw to frame buffer here
                 GL.ClearColor(OpenTK.Graphics.Color4.Red);
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 //------------------------------------------------------------------------------------

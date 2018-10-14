@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FD3B0D50-46B3-4A83-9A6D-C641569142CF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ar.Com.Hjg.Pngcs</RootNamespace>
+    <AssemblyName>Pngcs</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Pngcs.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;SHARPZIPLIB</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Pngcs.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug45|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug45\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
+    <DocumentationFile>Pngcs.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release45|AnyCPU'">
+    <OutputPath>bin\Release45\</OutputPath>
+    <DefineConstants>TRACE;NET45</DefineConstants>
+    <DocumentationFile>Pngcs.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChunkReader.cs" />
+    <Compile Include="ChunkReaderMode.cs" />
+    <Compile Include="Chunks\ChunkHelper.cs" />
+    <Compile Include="Chunks\ChunksList.cs" />
+    <Compile Include="Chunks\ChunkLoadBehaviour.cs" />
+    <Compile Include="Chunks\ChunkRaw.cs" />
+    <Compile Include="Chunks\ChunksListForWrite.cs" />
+    <Compile Include="Chunks\ChunkCopyBehaviour.cs" />
+    <Compile Include="Chunks\ChunkPredicate.cs" />
+    <Compile Include="Chunks\ChunkPredicateId.cs" />
+    <Compile Include="Chunks\ChunkPredicateId2.cs" />
+    <Compile Include="Chunks\ChunkPredicateEquiv.cs" />
+    <Compile Include="Chunks\PngChunkMultiple.cs" />
+    <Compile Include="Chunks\PngChunkSingle.cs" />
+    <Compile Include="Chunks\PngChunkSkipped.cs" />
+    <Compile Include="Chunks\PngMetadata.cs" />
+    <Compile Include="Chunks\PngChunkSTER.cs" />
+    <Compile Include="Chunks\PngChunkOFFS.cs" />
+    <Compile Include="Chunks\PngChunkSPLT.cs" />
+    <Compile Include="Chunks\PngChunkHIST.cs" />
+    <Compile Include="Chunks\PngChunkCHRM.cs" />
+    <Compile Include="Chunks\PngChunkSBIT.cs" />
+    <Compile Include="Chunks\PngChunkSRGB.cs" />
+    <Compile Include="BufferedStreamReader.cs" />
+    <Compile Include="IBytesConsumer.cs" />
+    <Compile Include="ImageLines.cs" />
+    <Compile Include="PngDeinterlacer.cs" />
+    <Compile Include="PngjExceptionInternal.cs" />
+    <Compile Include="FilterWriteStrategy.cs" />
+    <Compile Include="FileHelper.cs" />
+    <Compile Include="PngCsUtils.cs" />
+    <Compile Include="ImageInfo.cs" />
+    <Compile Include="ImageLine.cs" />
+    <Compile Include="ImageLineHelper.cs" />
+    <Compile Include="Chunks\PngChunk.cs" />
+    <Compile Include="Chunks\PngChunkBKGD.cs" />
+    <Compile Include="Chunks\PngChunkGAMA.cs" />
+    <Compile Include="Chunks\PngChunkICCP.cs" />
+    <Compile Include="Chunks\PngChunkIDAT.cs" />
+    <Compile Include="Chunks\PngChunkIEND.cs" />
+    <Compile Include="Chunks\PngChunkIHDR.cs" />
+    <Compile Include="Chunks\PngChunkITXT.cs" />
+    <Compile Include="Chunks\PngChunkUNKNOWN.cs" />
+    <Compile Include="Chunks\PngChunkPHYS.cs" />
+    <Compile Include="Chunks\PngChunkPLTE.cs" />
+    <Compile Include="Chunks\PngChunkTEXT.cs" />
+    <Compile Include="Chunks\PngChunkTextVar.cs" />
+    <Compile Include="Chunks\PngChunkTIME.cs" />
+    <Compile Include="Chunks\PngChunkTRNS.cs" />
+    <Compile Include="Chunks\PngChunkZTXT.cs" />
+    <Compile Include="FilterType.cs" />
+    <Compile Include="PngHelperInternal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PngIDatChunkInputStream.cs" />
+    <Compile Include="PngIDatChunkOutputStream.cs" />
+    <Compile Include="PngjBadCrcException.cs" />
+    <Compile Include="PngjException.cs" />
+    <Compile Include="PngjInputException.cs" />
+    <Compile Include="PngjOutputException.cs" />
+    <Compile Include="PngjUnsupportedException.cs" />
+    <Compile Include="PngReader.cs" />
+    <Compile Include="PngWriter.cs" />
+    <Compile Include="ProgressiveOutputStream.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zlib\Adler32.cs" />
+    <Compile Include="Zlib\ZlibOutputStreamIs.cs" />
+    <Compile Include="Zlib\ZlibInputStreamIs.cs" />
+    <Compile Include="Zlib\ZlibInputStreamMs.cs" />
+    <Compile Include="Zlib\DeflateCompressLevel.cs" />
+    <Compile Include="Zlib\EDeflateCompressStrategy.cs" />
+    <Compile Include="Zlib\AZlibInputStream.cs" />
+    <Compile Include="Zlib\CRC32.cs" />
+    <Compile Include="Zlib\AZlibOutputStream.cs" />
+    <Compile Include="Zlib\ZlibOutputStreamMs.cs" />
+    <Compile Include="Zlib\ZlibStreamFactory.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

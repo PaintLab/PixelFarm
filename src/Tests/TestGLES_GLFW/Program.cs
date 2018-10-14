@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 using System; 
 namespace TestGlfw
 {
@@ -10,7 +10,8 @@ namespace TestGlfw
         [STAThread]
         static void Main()
         {
-           
+
+        
             Mini.RootDemoPath.Path = @"..\Data";
             GLFWProgram2.Start();
             //GLFWProgram3.Start();

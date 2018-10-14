@@ -1,41 +1,39 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class UIFloatWindow : EaseBox, ITopWindowBox
+    public class UIFloatWindow : AbstractBox, ITopWindowBox
     {
-        IPlatformWindowBox platformWindowBox;
+        IPlatformWindowBox _platformWindowBox;
         public UIFloatWindow(int w, int h)
             : base(w, h)
         {
+
         }
         IPlatformWindowBox ITopWindowBox.PlatformWinBox
         {
-            get { return this.platformWindowBox; }
+            get { return this._platformWindowBox; }
             set
             {
-                bool isFirstTime = this.platformWindowBox == null;
-                this.platformWindowBox = value;
+                bool isFirstTime = this._platformWindowBox == null;
+                this._platformWindowBox = value;
                 if (isFirstTime)
                 {
-                    platformWindowBox.Visible = this.Visible;
-                    platformWindowBox.SetLocation(this.Left, this.Top);
-                    platformWindowBox.SetSize(this.Width, this.Height);
+
+                    _platformWindowBox.SetLocation(this.Left, this.Top);
+                    _platformWindowBox.SetSize(this.Width, this.Height);
+                    _platformWindowBox.Visible = this.Visible;
+
                 }
             }
         }
-
-        public override void Walk(UIVisitor visitor)
-        {
-            //TODO: implement this 
-        }
         public override void SetLocation(int left, int top)
         {
-            if (platformWindowBox != null)
+            if (_platformWindowBox != null)
             {
                 //use location relative to top parent/control
-                platformWindowBox.SetLocation(left, top);
+                _platformWindowBox.SetLocation(left, top);
             }
             else
             {
@@ -44,9 +42,9 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void SetSize(int width, int height)
         {
-            if (platformWindowBox != null)
+            if (_platformWindowBox != null)
             {
-                platformWindowBox.SetSize(width, height);
+                _platformWindowBox.SetSize(width, height);
             }
         }
         public override bool Visible
@@ -57,9 +55,9 @@ namespace LayoutFarm.CustomWidgets
             }
             set
             {
-                if (platformWindowBox != null)
+                if (_platformWindowBox != null)
                 {
-                    platformWindowBox.Visible = value;
+                    _platformWindowBox.Visible = value;
                 }
                 base.Visible = value;
             }

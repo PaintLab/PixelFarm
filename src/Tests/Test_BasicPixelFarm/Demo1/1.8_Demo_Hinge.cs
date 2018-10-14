@@ -1,26 +1,26 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.8 Hinge")]
-    class Demo_Hinge : DemoBase
+    class Demo_Hinge : App
     {
         ImageBinder arrowBmp;
-        SampleViewport viewport;
+        AppHost viewport;
 
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
-            this.viewport = viewport;
+            this.viewport = host;
             var comboBox1 = CreateComboBox(20, 20);
-            viewport.AddContent(comboBox1);
+            host.AddChild(comboBox1);
             var comboBox2 = CreateComboBox(50, 50);
-            viewport.AddContent(comboBox2);
+            host.AddChild(comboBox2);
             //------------
             var menuItem = CreateMenuItem(50, 100);
             var menuItem2 = CreateMenuItem(5, 5);
             menuItem.AddSubMenuItem(menuItem2);
-            viewport.AddContent(menuItem);
+            host.AddChild(menuItem);
         }
 
         LayoutFarm.CustomWidgets.ComboBox CreateComboBox(int x, int y)
@@ -29,7 +29,7 @@ namespace LayoutFarm
             comboBox.SetLocation(x, y);
             //--------------------
             //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.SimpleBox(400, 20);
+            var landPart = new LayoutFarm.CustomWidgets.Box(400, 20);
             landPart.BackColor = Color.Green;
             comboBox.LandPart = landPart;
             //--------------------------------------
@@ -38,13 +38,13 @@ namespace LayoutFarm
             //load bitmap with gdi+                
             if (arrowBmp == null)
             {
-                arrowBmp = viewport.GetImageBinder2("../../Data/imgs/arrow_open.png");
+                arrowBmp = viewport.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Image.Width, arrowBmp.Image.Height);
             imgBox.ImageBinder = arrowBmp;
             //--------------------------------------
             //2. float part
-            var floatPart = new LayoutFarm.CustomWidgets.SimpleBox(400, 100);
+            var floatPart = new LayoutFarm.CustomWidgets.Box(400, 100);
             floatPart.BackColor = Color.Blue;
             comboBox.FloatPart = floatPart;
             //--------------------------------------
@@ -78,7 +78,7 @@ namespace LayoutFarm
             mnuItem.SetLocation(x, y);
             //--------------------
             //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.SimpleBox(150, 20);
+            var landPart = new LayoutFarm.CustomWidgets.Box(150, 20);
             landPart.BackColor = Color.OrangeRed;
             mnuItem.LandPart = landPart;
             //--------------------------------------
@@ -88,7 +88,7 @@ namespace LayoutFarm
 
             if (arrowBmp == null)
             {
-                arrowBmp = this.viewport.GetImageBinder2("../../Data/imgs/arrow_open.png");
+                arrowBmp = this.viewport.LoadImageAndBind("../Data/imgs/arrow_open.png");
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.ImageWidth, arrowBmp.ImageHeight);
             imgBox.ImageBinder = arrowBmp;

@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev 
+﻿//MIT, 2014-present, WinterDev 
 //
 // System.Drawing.FontStyle.cs
 //
@@ -154,7 +154,7 @@ namespace PixelFarm.Drawing
         internal int _platform_id;//resolve by system id
         internal WeakReference _latestResolved; //result of the actual font, we store it as weak reference
         internal int _whitespace_width;
-        internal int _general_lineHeight;
+        internal int _generalLineSpacingInPx;
 
         //------------------ 
 
@@ -182,7 +182,10 @@ namespace PixelFarm.Drawing
         {
             get { return _lineGapInPx; }
         }
-
+        public float LineSpacingInPx
+        {
+            get { return _generalLineSpacingInPx; }
+        }
 
     }
 
@@ -199,7 +202,7 @@ namespace PixelFarm.Drawing
             {
                 reqFont._platform_id = 0;
                 reqFont._latestResolved = null;
-                reqFont._whitespace_width = reqFont._general_lineHeight = 0;
+                reqFont._whitespace_width = reqFont._generalLineSpacingInPx = 0;
             }
             public static void SetActualFont(RequestFont reqFont,
                 int platform_id,
@@ -219,7 +222,7 @@ namespace PixelFarm.Drawing
                 reqFont._ascentInPx = ascentInPx;
                 reqFont._descentInPx = descentInPx;
                 reqFont._lineGapInPx = lineGapInPx;
-                reqFont._general_lineHeight = (int)Math.Round(lineHeight);
+                reqFont._generalLineSpacingInPx = (int)Math.Round(lineHeight);
             }
 
             public static T GetActualFont<T>(RequestFont reqFont, int platform_id)
@@ -253,7 +256,7 @@ namespace PixelFarm.Drawing
                 if (reqFont._platform_id == platform_id &&
                     reqFont._latestResolved.IsAlive)
                 {
-                    return reqFont._general_lineHeight;
+                    return reqFont._generalLineSpacingInPx;
                 }
                 return 0;
             }
@@ -262,7 +265,7 @@ namespace PixelFarm.Drawing
                int height)
             {
                 reqFont._platform_id = platform_id;
-                reqFont._general_lineHeight = height;
+                reqFont._generalLineSpacingInPx = height;
             }
         }
     }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="arrow2.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-87.142857"
+     inkscape:cy="560"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1138"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid16" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#060606;stroke-width:0.79375011"
+       d="m 76.675672,118.20001 c -1.74624,-1.30962 -3.47472,-2.68014 -3.84105,-3.0456 -0.36633,-0.36543 2.56812,-4.18662 6.52098,-8.49153 l 7.18698,-7.827058 -18.62562,-0.2127 -18.62565,-0.2127 v -5.54187 -5.541891 h 18.83025 18.83028 l -5.1507,-5.35782 c -2.83293,-2.94678 -6.37719,-6.698491 -7.87617,-8.337121 l -2.72544,-2.97933 3.10677,-3.18165 c 1.70871,-1.74987 3.35625,-3.08808 3.6612,-2.97378 0.30492,0.1143 6.32067,6.39648 13.3683,13.96041 l 12.813898,13.752592 -3.79107,4.50366 c -6.885478,8.179768 -17.972338,21.149398 -19.250878,22.520068 -1.17615,1.26093 -1.46148,1.19439 -4.43208,-1.03347 z"
+       id="path155" />
+  </g>
+</svg>

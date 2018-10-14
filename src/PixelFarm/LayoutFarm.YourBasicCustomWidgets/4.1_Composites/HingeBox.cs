@@ -1,19 +1,19 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class HingeBox : UIBox
+    public class HingeBox : AbstractRectUI
     {
         CustomRenderBox primElement;//background 
         Color backColor = Color.LightGray;
         bool isOpen;
         //1. land part
-        UIBox landPart;
+        AbstractRectUI landPart;
         //2. float part   
-        UIBox floatPart;
+        AbstractRectUI floatPart;
         RenderElement floatPartRenderElement;
         HingeFloatPartStyle floatPartStyle;
         public HingeBox(int width, int height)
@@ -49,7 +49,7 @@ namespace LayoutFarm.CustomWidgets
                 this.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
                 renderE.SetController(this);
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer                 
 
@@ -90,7 +90,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
         //----------------------------------------------------  
-        public UIBox LandPart
+        public AbstractRectUI LandPart
         {
             get { return this.landPart; }
             set
@@ -122,7 +122,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public UIBox FloatPart
+        public AbstractRectUI FloatPart
         {
             get { return this.floatPart; }
             set

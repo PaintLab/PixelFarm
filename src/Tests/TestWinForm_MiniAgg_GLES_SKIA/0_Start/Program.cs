@@ -1,6 +1,8 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Mini
@@ -8,26 +10,27 @@ namespace Mini
     static class Program
     {
 
-
-        static unsafe void LookAsIntArray(IntPtr array)
-        {
-            int* a = (int*)array;
-            int data = *a;
-            byte R = (byte)(data & 0xff);
-            byte G = (byte)((data >> 8) & 0xff);
-            byte B = (byte)((data >> 16) & 0xff);
-            byte A = (byte)((data >> 24) & 0xff);
-        }
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-           
+            //PaintLab.Svg.SvgParser parser = new PaintLab.Svg.SvgParser();
+            //string svgContent = System.IO.File.ReadAllText("Samples/arrow2.svg");
+            //parser.ParseDocument(new LayoutFarm.WebLexer.TextSnapshot(svgContent));
+
+
+
 
             RootDemoPath.Path = @"..\Data";
+            YourImplementation.TestBedStartup.Setup();
+            YourImplementation.LocalFileStorageProvider file_storageProvider = new YourImplementation.LocalFileStorageProvider();
+
+            //---------------------------------------------------
+            //register image loader
+            Mini.DemoHelper.RegisterImageLoader(LoadImage);
+            PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
 #if GL_ENABLE
             YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
 #endif
@@ -47,6 +50,24 @@ namespace Mini
             //});
 #endif
 
+            //Typography's TextServices
+            //you can implement   Typography.TextBreak.DictionaryProvider  by your own
+            //this set some essentail values for Typography Text Serice
+            // 
+            //2.2 Icu Text Break info
+            //test Typography's custom text break,
+            //check if we have that data?            
+            //------------------------------------------- 
+            //string typographyDir = @"brkitr_src/dictionaries";
+            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr";
+
+            if (!System.IO.Directory.Exists(icu_datadir))
+            {
+                throw new System.NotSupportedException("dic");
+            }
+            var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
+            Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
+
             //---------------------------------------------------
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
@@ -56,7 +77,7 @@ namespace Mini
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());
         }
-        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
         {
 
 
@@ -109,10 +130,9 @@ namespace Mini
             //        throw new NotSupportedException();
             //}
 
-            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromBuffer(
                 bmp.Width,
                 bmp.Height,
-                 PixelFarm.Agg.PixelFormat.ARGB32,
                 imgBuffer
                 );
             //gdi+ load as little endian             
@@ -120,6 +140,9 @@ namespace Mini
             bmp.Dispose();
             return actualImg;
         }
+
+
+
 
     }
 }

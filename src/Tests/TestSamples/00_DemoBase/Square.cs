@@ -1,11 +1,13 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //MattersHackers
 //AGG 2.4
 
 
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg
+using PixelFarm.CpuBlit.Rasterization;
+namespace PixelFarm.CpuBlit
 {
+
     public class Square
     {
         double m_size;
@@ -15,18 +17,19 @@ namespace PixelFarm.Agg
         }
 
         public void Draw(
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp,
+            DestBitmapRasterizer bmpRast,
             ScanlineRasterizer ras,
             Scanline sl,
-            IImageReaderWriter destImage, Color color,
+            PixelProcessing.IBitmapBlender destImage, Color color,
             double x, double y)
         {
+
             ras.Reset();
             ras.MoveTo(x * m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
-            sclineRasToBmp.RenderWithColor(destImage, ras, sl, color);
+            bmpRast.RenderWithColor(destImage, ras, sl, color);
         }
     }
 }

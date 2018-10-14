@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 namespace PixelFarm.DrawingGL
 {
@@ -14,11 +14,11 @@ namespace PixelFarm.DrawingGL
         /// </summary>
         internal float _strokeWidth = 1;
         Drawing.Color _strokeColor;
-        OpenTK.Graphics.ES20.MyMat4 _orthoView;
+        MyMat4 _orthoView;
         internal ShaderBase _currentShader;
         int _orthoViewVersion = 0;
 
-        internal OpenTK.Graphics.ES20.MyMat4 OrthoView
+        internal MyMat4 OrthoView
         {
             get { return _orthoView; }
             set

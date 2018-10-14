@@ -1,4 +1,4 @@
-﻿////MIT, 2016-2018, WinterDev
+﻿////MIT, 2016-present, WinterDev
 
 //using System;
 //using System.Collections.Generic;
@@ -191,7 +191,7 @@
 //                for (int i = 0; i < n; ++i)
 //                {
 //                    GlyphPlan glyph = glyphPlans[i];
-//                    Typography.Rendering.TextureFontGlyphData glyphData;
+//                    Typography.Rendering.TextureGlyphMapData glyphData;
 //                    if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
 //                    {
 //                        continue;
@@ -276,7 +276,7 @@
 //            //    //    codepoint = 1168;
 //            //    //}
 //            //    //--------------------------------
-//            //    TextureFontGlyphData glyphData;
+//            //    TextureGlyphMapData glyphData;
 //            //    if (!fontAtlas.GetRectByCodePoint((int)codepoint, out glyphData))
 //            //    {
 //            //        //Rectangle r = glyphData.Rect;
@@ -362,7 +362,7 @@
 //            //            //check prev code point 
 //            //            codepoint = 1168;
 //            //        }
-//            //        TextureFontGlyphData glyphData;
+//            //        TextureGlyphMapData glyphData;
 //            //        if (!fontAtlas.GetRect((int)codepoint, out glyphData))
 //            //        {
 //            //            //Rectangle r = glyphData.Rect;

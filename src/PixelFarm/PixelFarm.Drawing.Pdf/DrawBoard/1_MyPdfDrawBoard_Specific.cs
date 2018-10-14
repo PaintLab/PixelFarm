@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev 
+﻿//BSD, 2014-present, WinterDev 
 using System;
 namespace PixelFarm.Drawing.Pdf
 {
@@ -25,6 +25,11 @@ namespace PixelFarm.Drawing.Pdf
         public MyPdfDrawBoard(int left, int top, int width, int height)
             : this(0, 0, left, top, width, height)
         {
+        }
+
+        public override Painter GetPainter()
+        {
+            throw new NotImplementedException();
         }
         internal MyPdfDrawBoard(
             int horizontalPageNum,
@@ -71,6 +76,10 @@ namespace PixelFarm.Drawing.Pdf
             this.CurrentTextColor = Color.Black;
             //--------------
 
+        }
+        public override void Dispose()
+        {
+             
         }
 #if DEBUG
         public override string ToString()

@@ -56,6 +56,9 @@
     <Compile Include="Demo1.2\ColorBlender\IAlgorithm.cs" />
     <Compile Include="Demo1.2\ColorBlender\MathHelpers.cs" />
     <Compile Include="Demo1.2\ColorBlender\RGB.cs" />
+    <Compile Include="Demo4\4.1_Demo_LionSprite.cs" />
+    <Compile Include="Demo4\PxMotion.cs" />
+    <Compile Include="Demo5\5_DemoSampleCharts.cs" />
     <Compile Include="Demo3\3.1_Demo_Visible.cs" />
     <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
     <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />
@@ -117,6 +120,10 @@
       <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
       <Name>PaintLab.Svg</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
+      <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
+      <Name>PaintLab.YourImplementation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
@@ -126,6 +133,17 @@
       <Name>WinFormTestBed</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Data\lion.svg">
+      <Link>lion.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\tiger.svg">
+      <Link>tiger.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

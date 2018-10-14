@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using PixelFarm.Drawing;
@@ -174,7 +174,7 @@ namespace LayoutFarm
                     propFlags | RenderElementConst.HIDDEN;
                 if (parentLink != null)
                 {
-                    this.InvalidateGraphicBounds(this.RectBounds);
+                    this.InvalidateParentGraphics(this.RectBounds);
                 }
             }
         }
@@ -245,10 +245,13 @@ namespace LayoutFarm
 
         public bool HitTestCore(HitChain hitChain)
         {
+
+
             if ((propFlags & RenderElementConst.HIDDEN) != 0)
             {
                 return false;
             }
+
 
             int testX;
             int testY;
@@ -375,16 +378,11 @@ namespace LayoutFarm
                     debug_RecordPostDrawInfo(canvas);
 #endif
                 }
-                else
-                {
-                }
+
                 canvas.PopClipAreaRect();
-
             }
-
             else
             {
-
 #if DEBUG
                 if (dbugVRoot.dbug_RecordDrawingChain)
                 {

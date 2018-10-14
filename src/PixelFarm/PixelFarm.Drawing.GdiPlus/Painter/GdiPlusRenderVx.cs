@@ -1,22 +1,32 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.Agg;
+
 namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiRenderVx : RenderVx
     {
-        internal VertexStoreSnap snap;
+        internal VertexStore vxs;
         internal System.Drawing.Drawing2D.GraphicsPath path;
-        public WinGdiRenderVx(VertexStoreSnap snap)
+        public WinGdiRenderVx(VertexStore vxs)
         {
-            this.snap = snap;
+            this.vxs = vxs;
         }
     }
     class WinGdiRenderVxFormattedString : RenderVxFormattedString
     {
-        public WinGdiRenderVxFormattedString(string str)
+        char[] _buffer;
+        public WinGdiRenderVxFormattedString(char[] _buffer)
         {
-            this.OriginalString = str;
+            this._buffer = _buffer;
         }
+        public override string OriginalString
+        {
+            get { return new string(_buffer); }
+        }
+        public char[] InternalBuffer
+        {
+            get { return _buffer; }
+        }
+
     }
 }

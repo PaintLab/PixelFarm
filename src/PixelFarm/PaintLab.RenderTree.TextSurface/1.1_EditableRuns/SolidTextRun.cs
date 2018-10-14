@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Text;
@@ -6,31 +6,26 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.Text
 {
-    class SolidTextRun : EditableRun
+    public class SolidTextRun : EditableRun
     {
+        //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
+        Action<SolidTextRun, DrawBoard, Rectangle> _externalCustomDraw;
         TextSpanStyle spanStyle;
         char[] mybuffer;
-        public SolidTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
+        RenderElement _externalRenderE;
+        internal SolidTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
             : base(gfx)
-        {   //check line break? 
+        {
+            //check line break? 
             this.spanStyle = style;
             this.mybuffer = copyBuffer;
             UpdateRunWidth();
         }
-        public SolidTextRun(RootGraphic gfx, char c, TextSpanStyle style)
-            : base(gfx)
-        {
-            mybuffer = new char[] { c };
-            if (c == '\n')
-            {
-                this.IsLineBreak = true;
-            }
-            //check line break?
-            UpdateRunWidth();
-        }
+
         public SolidTextRun(RootGraphic gfx, string str, TextSpanStyle style)
             : base(gfx)
         {
+            this.spanStyle = style;
             if (str != null && str.Length > 0)
             {
                 mybuffer = str.ToCharArray();
@@ -45,13 +40,38 @@ namespace LayoutFarm.Text
                 throw new Exception("string must be null or zero length");
             }
         }
+        public void SetCustomExternalDraw(Action<SolidTextRun, DrawBoard, Rectangle> externalCustomDraw)
+        {
+            _externalCustomDraw = externalCustomDraw;
+        }
+    
+        public RenderElement ExternRenderElement
+        {
+            get { return _externalRenderE; }
+            set
+            {
+                _externalRenderE = value;
+            }
+        }
+
+
+        public string RawText
+        {
+            get; set;
+        }
+
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
         }
+
+
         public override EditableRun Clone()
         {
-            return new SolidTextRun(this.Root, this.GetText(), this.SpanStyle);
+            return new SolidTextRun(this.Root, this.GetText(), this.SpanStyle)
+            {
+                RawText = this.RawText
+            };
         }
         public override EditableRun Copy(int startIndex)
         {
@@ -81,7 +101,12 @@ namespace LayoutFarm.Text
                 EditableRun newTextRun = null;
                 char[] newContent = new char[length];
                 Array.Copy(this.mybuffer, sourceIndex, newContent, 0, length);
-                newTextRun = new SolidTextRun(this.Root, newContent, this.SpanStyle);
+                SolidTextRun solidRun = new SolidTextRun(this.Root, newContent, this.SpanStyle) { RawText = this.RawText };
+
+
+                solidRun.SetCustomExternalDraw(this._externalCustomDraw); //also copy drawing handler?
+                newTextRun = solidRun;
+
                 newTextRun.IsLineBreak = this.IsLineBreak;
                 newTextRun.UpdateRunWidth();
                 return newTextRun;
@@ -102,7 +127,7 @@ namespace LayoutFarm.Text
 
 
 
-        internal override void UpdateRunWidth()
+        public override void UpdateRunWidth()
         {
             Size size;
             if (IsLineBreak)
@@ -128,7 +153,7 @@ namespace LayoutFarm.Text
             }
             else
             {
-                stBuilder.Append(mybuffer);
+                stBuilder.Append(RawText);
             }
         }
         public override int CharacterCount
@@ -171,9 +196,9 @@ namespace LayoutFarm.Text
             else
             {
                 TextSpanStyle spanStyle = this.SpanStyle;
-                if (spanStyle.FontInfo != null)
+                if (spanStyle.ReqFont != null)
                 {
-                    return spanStyle.FontInfo;
+                    return spanStyle.ReqFont;
                 }
                 else
                 {
@@ -182,26 +207,7 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        //protected ActualFont GetActualFont()
-        //{
-        //    if (!HasStyle)
-        //    {
-        //        this.Root.
-        //        return this.Root.DefaultTextEditFontInfo;
-        //    }
-        //    else
-        //    {
-        //        TextSpanStyle spanStyle = this.SpanStyle;
-        //        if (spanStyle.FontInfo != null)
-        //        {
-        //            return spanStyle.FontInfo;
-        //        }
-        //        else
-        //        {
-        //            return this.Root.DefaultTextEditFontInfo;
-        //        }
-        //    }
-        //}
+
         public override EditableRun Copy(int startIndex, int length)
         {
             if (startIndex > -1 && length > 0)
@@ -219,7 +225,7 @@ namespace LayoutFarm.Text
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
         static int EvaluateFontAndTextColor(DrawBoard canvas, TextSpanStyle spanStyle)
         {
-            var font = spanStyle.FontInfo;
+            var font = spanStyle.ReqFont;
             var color = spanStyle.FontColor;
             var currentTextFont = canvas.CurrentFont;
             var currentTextColor = canvas.CurrentTextColor;
@@ -253,24 +259,41 @@ namespace LayoutFarm.Text
                 return !this.SpanStyle.IsEmpty();
             }
         }
+
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
+            if (_externalCustomDraw != null)
+            {
+                _externalCustomDraw(this, canvas, updateArea);
+                return;
+            }
+            else if (_externalRenderE != null)
+            {
+                _externalRenderE.CustomDrawToThisCanvas(canvas, updateArea);
+                return;
+            }
+
             int bWidth = this.Width;
             int bHeight = this.Height;
-            canvas.FillRectangle(Color.Yellow, updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height);
+
+            //1. bg
+            canvas.FillRectangle(Color.Yellow, 0, 0, bWidth, bHeight);
+
             if (!this.HasStyle)
             {
                 canvas.DrawText(this.mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
             }
             else
             {
+                //TODO: review here, we don't need to do this
+
                 TextSpanStyle style = this.SpanStyle;
                 switch (EvaluateFontAndTextColor(canvas, style))
                 {
                     case DIFF_FONT_SAME_TEXT_COLOR:
                         {
                             var prevFont = canvas.CurrentFont;
-                            canvas.CurrentFont = style.FontInfo;
+                            canvas.CurrentFont = style.ReqFont;
                             canvas.DrawText(this.mybuffer,
                                new Rectangle(0, 0, bWidth, bHeight),
                                style.ContentHAlign);
@@ -281,7 +304,7 @@ namespace LayoutFarm.Text
                         {
                             var prevFont = canvas.CurrentFont;
                             var prevColor = canvas.CurrentTextColor;
-                            canvas.CurrentFont = style.FontInfo;
+                            canvas.CurrentFont = style.ReqFont;
                             canvas.CurrentTextColor = style.FontColor;
                             canvas.DrawText(this.mybuffer,
                                new Rectangle(0, 0, bWidth, bHeight),
@@ -294,8 +317,8 @@ namespace LayoutFarm.Text
                         {
                             var prevColor = canvas.CurrentTextColor;
                             canvas.DrawText(this.mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
+                                new Rectangle(0, 0, bWidth, bHeight),
+                                style.ContentHAlign);
                             canvas.CurrentTextColor = prevColor;
                         }
                         break;
@@ -333,6 +356,11 @@ namespace LayoutFarm.Text
         }
         public override EditableRun LeftCopy(int index)
         {
+            if (index == 0)
+            {
+                return null;
+            }
+
             if (index > -1)
             {
                 return MakeTextRun(0, this.mybuffer.Length);
@@ -373,7 +401,14 @@ namespace LayoutFarm.Text
         }
         internal override EditableRun Remove(int startIndex, int length, bool withFreeRun)
         {
-            startIndex = 0;
+            if (startIndex == this.mybuffer.Length)
+            {
+                //at the end
+                return null;
+            }
+
+            //
+            startIndex = 0; //***
             length = this.mybuffer.Length;
             EditableRun freeRun = null;
             if (startIndex > -1 && length > 0)

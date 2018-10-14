@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using OpenTK.Graphics.ES20;
@@ -26,13 +26,8 @@ namespace PixelFarm.DrawingGL
         MultiChannelSubPixelRenderingSdf msdfSubPixelRenderingShader;
         SingleChannelSdf sdfShader;
         //-----------------------------------------------------------
-        ShaderSharedResource _shareRes;
+        ShaderSharedResource _shareRes; 
         //tools---------------------------------
-
-        SMAAColorEdgeDetectionShader _smaaEdgeDetectShader;
-        SMAABlendingWeightCalculationShader _smaaBlendingWeightShader;
-        SMAANeighborhoodBlendingShader _smaaNbBlendingShader;
-
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
@@ -195,10 +190,6 @@ namespace PixelFarm.DrawingGL
             }
             _currentFrameBuffer = null;
         }
-        /// <summary>
-        /// clear color buffer , stencil buffer, depth buffer
-        /// </summary>
-        /// <param name="c"></param>
         public void Clear(PixelFarm.Drawing.Color c)
         {
             GL.ClearColor(
@@ -266,24 +257,6 @@ namespace PixelFarm.DrawingGL
         {
             //draw frame buffer into specific position
             glesTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
-        }
-        public void DrawImageWithSMAA_Step1(FrameBuffer bmp, float x, float y)
-        {
-            DrawImageWithSMAA_Step1(bmp,
-                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                   x, y, bmp.Width, bmp.Height);
-        }
-        public void DrawImageWithSMAA_Step2(FrameBuffer bmp, float x, float y)
-        {
-            DrawImageWithSMAA_Step2(bmp,
-                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                   x, y, bmp.Width, bmp.Height);
-        }
-        public void DrawImageWithSMAA_Step3(FrameBuffer bmp, FrameBuffer colorFrameBuffer, float x, float y)
-        {
-            DrawImageWithSMAA_Step3(bmp, colorFrameBuffer,
-                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                   x, y, bmp.Width, bmp.Height);
         }
         public void DrawImage(GLBitmap bmp, float x, float y)
         {
@@ -363,161 +336,6 @@ namespace PixelFarm.DrawingGL
                 msdfShader.RenderSubImages(bmp, coords, scale);
             }
         }
-        public void DrawImageWithSMAA_Step1(FrameBuffer bmp,
-           Drawing.RectangleF srcRect,
-           float x, float y, float w, float h)
-        {
-
-
-            //step 1
-            if (_smaaEdgeDetectShader == null)
-            {
-                _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
-                _smaaEdgeDetectShader.SetResolution(800, 800);
-            }
-
-            _smaaEdgeDetectShader.Render(bmp, x, y, w, h);
-
-            ////2.  
-            //if (_smaaBlendingWeightShader == null)
-            //{
-            //    _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
-            //}
-            //////for debug
-            ////if (bmp.IsBigEndianPixel)
-            ////{
-            ////    glesTextureShader.Render(bmp, x, y, w, h);
-            ////}
-            ////else
-            ////{
-            ////    gdiImgTextureShader.Render(bmp, x, y, w, h);
-            ////}
-        }
-
-
-
-
-
-        //--------------
-
-
-#if DEBUG
-        public void dbugDrawSMAATextArea()
-        {
-            // Drawing.RectangleF srcRect,
-            //float x, float y, float w, float h
-
-            //if (_smaaAreaTex == null)
-            //{
-            //    _smaaAreaTex = new InternalGLBitmapTexture(
-            //        SMAAAreaTex.AREATEX_WIDTH,
-            //        SMAAAreaTex.AREATEX_HEIGHT,
-            //        SMAAAreaTex.areaTexBytes,
-            //        PixelFormat.Rgb, //for compat  with WebGL version, we use RGB
-            //        PixelInternalFormat.Rgb, //for compat  with WebGL version, we use RGB
-            //        TextureMinFilter.Linear,
-            //        TextureMagFilter.Linear);
-            //}
-            //if (_smaaSearchTex == null)
-            //{
-            //    _smaaSearchTex = new InternalGLBitmapTexture(
-            //        SMAASearchTex.SEARCHTEX_WIDTH,
-            //        SMAASearchTex.SEARCHTEX_HEIGHT,
-            //        SMAASearchTex.searchTexBytes,
-            //        PixelFormat.Luminance,
-            //        PixelInternalFormat.Luminance,
-            //        TextureMinFilter.Nearest,
-            //        TextureMagFilter.Nearest);
-            //}
-
-        }
-#endif
-        //--------------
-        InternalGLBitmapTexture _smaaAreaTex;
-        InternalGLBitmapTexture _smaaSearchTex;
-        public void DrawImageWithSMAA_Step2(FrameBuffer frmBuffer,
-           Drawing.RectangleF srcRect,
-           float x, float y, float w, float h)
-        {
-
-
-            if (_smaaAreaTex == null)
-            {
-                _smaaAreaTex = new InternalGLBitmapTexture(
-                    SMAAAreaTex.AREATEX_WIDTH,
-                    SMAAAreaTex.AREATEX_HEIGHT,
-                    SMAAAreaTex.areaTexBytes,
-                    PixelFormat.Rgb, //for compat  with WebGL version, we use RGB
-                    PixelInternalFormat.Rgb, //for compat  with WebGL version, we use RGB
-                    TextureMinFilter.Linear,
-                    TextureMagFilter.Linear);
-            }
-            if (_smaaSearchTex == null)
-            {
-                _smaaSearchTex = new InternalGLBitmapTexture(
-                    SMAASearchTex.SEARCHTEX_WIDTH,
-                    SMAASearchTex.SEARCHTEX_HEIGHT,
-                    SMAASearchTex.searchTexBytes8,
-                    PixelFormat.Luminance,
-                    PixelInternalFormat.Luminance,
-                    TextureMinFilter.Nearest,
-                    TextureMagFilter.Nearest);
-            }
-
-            //2.  
-            if (_smaaBlendingWeightShader == null)
-            {
-                _smaaBlendingWeightShader = new SMAABlendingWeightCalculationShader(this._shareRes);
-                _smaaBlendingWeightShader.SetResolution(frmBuffer.Width, frmBuffer.Height);
-            }
-            _smaaBlendingWeightShader.LoadAreaTexture(_smaaAreaTex);
-            _smaaBlendingWeightShader.LoadSearchTexture(_smaaSearchTex);
-            _smaaBlendingWeightShader.Render(frmBuffer, x, y, w, h);
-            ////for debug
-            //if (bmp.IsBigEndianPixel)
-            //{
-            //    glesTextureShader.Render(bmp, x, y, w, h);
-            //}
-            //else
-            //{
-            //    gdiImgTextureShader.Render(bmp, x, y, w, h);
-            //}
-        }
-
-        public void DrawImageWithSMAA_Step3(FrameBuffer frmBuffer, FrameBuffer colorFrameBuffer,
-           Drawing.RectangleF srcRect,
-           float x, float y, float w, float h)
-        {
-
-
-            ////step 1
-            //if (_smaaEdgeDetectShader == null)
-            //{
-            //    _smaaEdgeDetectShader = new SMAAColorEdgeDetectionShader(this._shareRes);
-            //}
-            //_smaaEdgeDetectShader.Render(bmp, x, y, w, h);
-
-            if (_smaaNbBlendingShader == null)
-            {
-                _smaaNbBlendingShader = new SMAANeighborhoodBlendingShader(this._shareRes);
-                _smaaNbBlendingShader.SetResolution(frmBuffer.Width, frmBuffer.Height);
-            }
-            _smaaNbBlendingShader.LoadColorTexure(colorFrameBuffer);
-            _smaaNbBlendingShader.Render(frmBuffer, x, y, w, h);
-            ////for debug
-            //if (bmp.IsBigEndianPixel)
-            //{
-            //    glesTextureShader.Render(bmp, x, y, w, h);
-            //}
-            //else
-            //{
-            //    gdiImgTextureShader.Render(bmp, x, y, w, h);
-            //}
-        }
-
-
-
-
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
@@ -570,9 +388,119 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        public void LoadTexture1(GLBitmap bmp)
+        {
+            textureSubPixRendering.LoadGLBitmap(bmp);
+            textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
+            textureSubPixRendering.SetColor(this.FontFillColor);
+            textureSubPixRendering.SetIntensity(1f);
+        }
+        public void SetAssociatedTextureInfo(GLBitmap bmp)
+        {
+            textureSubPixRendering.SetAssociatedTextureInfo(bmp);
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique(
+           ref PixelFarm.Drawing.Rectangle srcRect,
+           float targetLeft,
+           float targetTop,
+           float scale)
+        {
+            //TODO: review performance here *** 
+            //1. B , cyan result
+            GL.ColorMask(false, false, true, false);
+            textureSubPixRendering.SetCompo(0);
+            textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //float subpixel_shift = 1 / 9f;
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
+            //---------------------------------------------------
+            //2. G , magenta result
+            GL.ColorMask(false, true, false, false);
+            textureSubPixRendering.SetCompo(1);
+            textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
+            //1. R , yellow result 
+            textureSubPixRendering.SetCompo(2);
+            GL.ColorMask(true, false, false, false);//             
+            textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
+            //enable all color component
+            GL.ColorMask(true, true, true, true);
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique2(
+          ref PixelFarm.Drawing.Rectangle srcRect,
+          float targetLeft,
+          float targetTop,
+          float scale)
+        {
+            textureSubPixRendering.NewDrawSubImage(srcRect.Left,
+                srcRect.Top,
+                srcRect.Width,
+                srcRect.Height, targetLeft, targetTop);
+
+        }
+        public void WriteVboToList(
+           System.Collections.Generic.List<float> buffer,
+           System.Collections.Generic.List<ushort> indexList,
+           ref PixelFarm.Drawing.Rectangle srcRect,
+           float targetLeft,
+           float targetTop,
+           float scale)
+        {
+            // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+            ushort indexCount = (ushort)indexList.Count;
+
+            if (indexCount > 0)
+            {
+
+                //add degenerative triangle
+                float prev_5 = buffer[buffer.Count - 5];
+                float prev_4 = buffer[buffer.Count - 4];
+                float prev_3 = buffer[buffer.Count - 3];
+                float prev_2 = buffer[buffer.Count - 2];
+                float prev_1 = buffer[buffer.Count - 1];
+
+                buffer.Add(prev_5); buffer.Add(prev_4); buffer.Add(prev_3);
+                buffer.Add(prev_2); buffer.Add(prev_1);
+
+
+                indexList.Add((ushort)(indexCount));
+                indexList.Add((ushort)(indexCount + 1));
+
+                indexCount += 2;
+            }
+
+            //version 3            
+            textureSubPixRendering.WriteVboStream(buffer, indexCount > 0, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+
+            indexList.Add(indexCount);
+            indexList.Add((ushort)(indexCount + 1));
+            indexList.Add((ushort)(indexCount + 2));
+            indexList.Add((ushort)(indexCount + 3));
+            //---
+            //add degenerate rect
+
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique3(
+             float[] buffer,
+             ushort[] indexList)
+        {
+
+            //version 3            
+            textureSubPixRendering.NewDrawSubImage3(buffer, indexList);
+            //textureSubPixRendering.WriteVboStream(buffer, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
+        {
+            //x = 100;
+            //y = 400;
+            //this.SetCanvasOrigin((int)x, (int)y);
+
+            textureSubPixRendering.NewDrawSubImage4FromCurrentLoadedVBO(count, x, y);
+        }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
-            ref PixelFarm.Drawing.Rectangle r,
+            ref PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
             float scale)
@@ -597,19 +525,19 @@ namespace PixelFarm.DrawingGL
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
                 textureSubPixRendering.SetCompo(0);
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
                 textureSubPixRendering.SetCompo(1);
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
                 //1. R , yellow result 
                 textureSubPixRendering.SetCompo(2);
                 GL.ColorMask(true, false, false, false);//             
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
@@ -990,14 +918,15 @@ namespace PixelFarm.DrawingGL
                                     case Drawing.BrushKind.LinearGradient:
                                         {
                                             var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
-                                            var colors = linearGradientBrush.GetColors();
-                                            var points = linearGradientBrush.GetStopPoints();
+                                            Drawing.LinearGradientPair firstPair = linearGradientBrush.GetFirstPair();
+
                                             float[] v2f, color4f;
                                             GLGradientColorProvider.CalculateLinearGradientVxs2(
-                                                 points[0].X, points[0].Y,
-                                                 points[1].X, points[1].Y,
-                                                 colors[0],
-                                                 colors[1], out v2f, out color4f);
+                                                firstPair.x1, firstPair.y1,
+                                                firstPair.x2, firstPair.y2,
+                                                firstPair.c1,
+                                                firstPair.c2,
+                                                out v2f, out color4f);
                                             rectFillShader.Render(v2f, color4f);
                                         }
                                         break;

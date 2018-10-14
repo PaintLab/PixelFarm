@@ -1,7 +1,7 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     /// <summary>
     /// bezire curve generator

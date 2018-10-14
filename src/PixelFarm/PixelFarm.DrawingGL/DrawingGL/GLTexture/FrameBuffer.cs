@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 //credit : https://www.opengl.org/wiki/Framebuffer_Object_Examples
 //credit : http://learningwebgl.com/lessons/lesson16/index.html
 
@@ -6,20 +6,6 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-
-    public class FrameBufferCreationParameters
-    {
-        public bool depthBuffer;
-        public bool stencilBuffer;
-        public bool generateMipMaps;
-
-        public PixelInternalFormat pixelInternalFormat = PixelInternalFormat.Rgba;
-        public PixelFormat pixelFormat = PixelFormat.Rgba;
-        public TextureMagFilter magFilter = TextureMagFilter.Linear;
-        public TextureMinFilter minFilter = TextureMinFilter.LinearMipmapNearest;
-
-
-    }
     public class FrameBuffer : IDisposable
     {
         int frameBufferId;
@@ -28,14 +14,10 @@ namespace PixelFarm.DrawingGL
         int w;
         int h;
         public FrameBuffer(int w, int h)
-            : this(w, h, new FrameBufferCreationParameters())
-        {
-        }
-        public FrameBuffer(int w, int h, FrameBufferCreationParameters creationParams)
         {
             this.w = w;
             this.h = h;
-            InitFrameBuffer(creationParams);
+            InitFrameBuffer();
         }
         public void Dispose()
         {
@@ -60,7 +42,7 @@ namespace PixelFarm.DrawingGL
         public int FrameBufferId { get { return frameBufferId; } }
         public int Width { get { return w; } }
         public int Height { get { return h; } }
-        void InitFrameBuffer(FrameBufferCreationParameters creationParams)
+        void InitFrameBuffer()
         {
 
             GL.GenFramebuffers(1, out frameBufferId);
@@ -70,18 +52,16 @@ namespace PixelFarm.DrawingGL
             textureId = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, textureId);
             //set texture parameter
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)creationParams.magFilter);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)creationParams.minFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapNearest);
             //GL.GenerateMipmap(TextureTarget.Texture2D);
-
-            GL.TexImage2D(TextureTarget.Texture2D, 0,creationParams.pixelInternalFormat, w, h, 0, creationParams.pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
-
+            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             //render buffer
             GL.GenRenderbuffers(1, out renderBufferId);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderBufferId);
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferInternalFormat.DepthComponent16, w, h);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, TextureTarget.Texture2D, textureId, 0);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, renderBufferId);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.ColorAttachment0, (TextureTarget2d)TextureTarget.Texture2D, textureId, 0);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, renderBufferId);
             //switch back to default framebuffer (system provider framebuffer) 
             GL.BindTexture(TextureTarget.Texture2D, 0);//unbind
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind
@@ -94,7 +74,7 @@ namespace PixelFarm.DrawingGL
         internal void UpdateTexture()
         {
             GL.BindTexture(TextureTarget.Texture2D, textureId);
-            GL.GenerateMipmap(TextureTarget.Texture2D);            
+            GL.GenerateMipmap(TextureTarget.Texture2D);
         }
         internal void ReleaseCurrent()
         {

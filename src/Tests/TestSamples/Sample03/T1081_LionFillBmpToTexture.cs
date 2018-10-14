@@ -4,7 +4,7 @@ using System;
 using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "108.1")]
@@ -21,10 +21,9 @@ namespace OpenTkEssTest
 
         //---------------------------
 
-        ActualImage aggImage;
-        AggRenderSurface _aggsx;
-        AggPainter aggPainter;
+        ActualBitmap aggImage;
 
+        AggPainter aggPainter;
         //---------------------------
         GLRenderSurface _glsx;
         SpriteShape lionShape;
@@ -35,19 +34,22 @@ namespace OpenTkEssTest
         {
             this._glsx = glsx;
             this.painter = painter;
+
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
+
+
+            var _svgRenderVx = PixelFarm.CpuBlit.SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/lion.svg");
+            lionShape = new SpriteShape(_svgRenderVx);
+
             RectD lionBounds = lionShape.Bounds;
             //-------------
-            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
-            _aggsx = new AggRenderSurface(aggImage);
-            aggPainter = new AggPainter(_aggsx);
+            aggImage = new ActualBitmap((int)lionBounds.Width, (int)lionBounds.Height);
+            aggPainter = AggPainter.Create(aggImage);
 
 
-            DrawLion(aggPainter, lionShape, lionShape.Vxs);
+            DrawLion(aggPainter, lionShape);
             //convert affImage to texture 
             glBmp = DemoHelper.LoadTexture(aggImage);
         }
@@ -55,7 +57,7 @@ namespace OpenTkEssTest
         {
             _glsx.Dispose();
         }
-        static void DrawLion(Painter p, SpriteShape shape, VertexStore myvxs)
+        static void DrawLion(Painter p, SpriteShape shape)
         {
             shape.Paint(p);
 

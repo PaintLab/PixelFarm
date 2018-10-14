@@ -1,21 +1,21 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //MatterHackers 
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing.Fonts;
 using Mini;
 
-namespace PixelFarm.Agg.Sample_FloodFill
+namespace PixelFarm.CpuBlit.Sample_FloodFill
 {
     [Info(OrderCode = "09")]
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
     {
-        ActualImage imageToFillOn;
+        ActualBitmap imageToFillOn;
 
         int imgOffsetX = 20;
         int imgOffsetY = 60;
@@ -24,9 +24,8 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             //
             BackgroundColor = Color.White;
-            imageToFillOn = new ActualImage(400, 300, PixelFormat.ARGB32);
-            AggRenderSurface aggsx = new AggRenderSurface(imageToFillOn);
-            AggPainter p = new AggPainter(aggsx);
+            imageToFillOn = new ActualBitmap(400, 300);
+            AggPainter p = AggPainter.Create(imageToFillOn);
 
             p.Clear(Color.White);
 

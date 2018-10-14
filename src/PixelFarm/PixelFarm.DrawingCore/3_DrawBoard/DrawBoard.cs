@@ -1,10 +1,10 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 
 namespace PixelFarm.Drawing
 {
 
-    public abstract class DrawBoard
+    public abstract class DrawBoard : System.IDisposable
     {
 
         //------------------------------
@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
-        
+
 
         ////////////////////////////////////////////////////////////////////////////
         //states
@@ -75,6 +75,7 @@ namespace PixelFarm.Drawing
         //buffer
         public abstract void Clear(Color c);
         public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
+        public virtual void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH) { }
         //------------------------------------------------------- 
 
         //lines         
@@ -97,6 +98,7 @@ namespace PixelFarm.Drawing
         public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);
         public abstract void DrawImage(Image image, RectangleF dest);
         public abstract void DrawImages(Image image, RectangleF[] destAndSrcPairs);
+        public abstract void DrawImage(Image image, int x, int y);//draw image unscaled at specific pos
         //---------------------------------------------------------------------------
         //text ,font, strings 
         //TODO: review these funcs
@@ -106,13 +108,25 @@ namespace PixelFarm.Drawing
         public abstract void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment);
         public abstract void DrawText(char[] buffer, int startAt, int len, Rectangle logicalTextBox, int textAlignment);
         //-------------------------------------------------------
+        /// <summary>
+        /// create formatted string base on current font,font-size, font style
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len);
+        public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
+        public abstract void Dispose();
+
+        //--
+        public abstract Painter GetPainter();
+
     }
 
 
-    public enum RenderQualtity
+    public enum RenderQuality
     {
         HighQuality,
-        Fast, 
+        Fast,
     }
 
     /// <summary>
@@ -166,6 +180,66 @@ namespace PixelFarm.Drawing
         {
             //TODO: review offset function
             drawBoard.OffsetCanvasOrigin(0, dy);
+        }
+
+
+        //--------------------------------------------------
+
+        public static SmoothingModeState SaveSmoothMode(this DrawBoard drawBoard)
+        {
+            //TODO: review offset function
+            return new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+        }
+        public static SmoothingModeState SetSmoothMode(this DrawBoard drawBoard, SmoothingMode value)
+        {
+            //TODO: review offset function
+            var saveState = new SmoothingModeState(drawBoard, drawBoard.SmoothingMode);
+            drawBoard.SmoothingMode = value;
+            return saveState;
+        }
+
+
+
+
+
+        public struct SmoothingModeState
+        {
+            readonly DrawBoard drawBoard;
+            readonly SmoothingMode _latestSmoothMode;
+            internal SmoothingModeState(DrawBoard drawBoard, SmoothingMode state)
+            {
+                _latestSmoothMode = state;
+                this.drawBoard = drawBoard;
+            }
+            public void Restore()
+            {
+                drawBoard.SmoothingMode = _latestSmoothMode;
+            }
+        }
+
+
+    }
+
+
+    public static class DrawBoardCreator
+    {
+        public delegate DrawBoard CreateNewDrawBoardDelegate(int w, int h);
+        static System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate> _s_creators = new System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate>();
+        public static void RegisterCreator(int creatorName, CreateNewDrawBoardDelegate del)
+        {
+            _s_creators.Add(creatorName, del);
+        }
+        public static DrawBoard CreateNewDrawBoard(int name, int w, int h)
+        {
+            if (_s_creators.TryGetValue(name, out CreateNewDrawBoardDelegate foundCreator))
+            {
+                return foundCreator(w, h);
+            }
+            else
+            {
+                //not found this creator
+                return null;
+            }
         }
     }
 }

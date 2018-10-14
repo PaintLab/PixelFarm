@@ -1,10 +1,10 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 namespace LayoutFarm.UI
 {
     public interface ITopWindowEventRoot
     {
-        IEventListener CurrentKeyboardFocusedElement { get; set; }
+        IUIEventListener CurrentKeyboardFocusedElement { get; set; }
         MouseCursorStyle MouseCursorStyle { get; }
 
 

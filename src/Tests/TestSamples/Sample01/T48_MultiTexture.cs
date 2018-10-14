@@ -55,7 +55,7 @@ namespace OpenTkEssTest
                         gl_FragColor = baseColor * (lightColor + 0.25);
                  }
             ";
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = EsUtils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 throw new NotSupportedException();
@@ -85,7 +85,7 @@ namespace OpenTkEssTest
 
 
             //Bitmap bmp = new Bitmap(imgFileName);
-            PixelFarm.Agg.ActualImage bmp = DemoHelper.LoadImage(imgFileName);
+            PixelFarm.CpuBlit.ActualBitmap bmp = DemoHelper.LoadImage(imgFileName);
             int texture;
             GL.GenTextures(1, out texture);
             GL.BindTexture(TextureTarget.Texture2D, texture);
@@ -105,7 +105,7 @@ namespace OpenTkEssTest
             var lazyImgProvider = new PixelFarm.DrawingGL.LazyAggBitmapBufferProvider(bmp);
             IntPtr ptr = lazyImgProvider.GetRawBufferHead();
             //var bmpdata = bmp.LockBits();
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
             // bmp.UnlockBits(bmpdata);
             lazyImgProvider.ReleaseBufferHead();
 

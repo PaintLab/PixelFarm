@@ -1,4 +1,4 @@
-﻿////MIT, 2014-2018, WinterDev
+﻿////MIT, 2014-present, WinterDev
 ////-----------------------------------
 ////use FreeType and HarfBuzz wrapper
 ////native dll lib

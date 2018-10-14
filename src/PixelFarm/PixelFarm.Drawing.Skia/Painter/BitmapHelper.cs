@@ -1,7 +1,7 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.Skia
 {
     static class BitmapHelper
@@ -12,19 +12,24 @@ namespace PixelFarm.Drawing.Skia
         /// <param name="actualImage"></param>
         /// <param name="hBmpScan0"></param>
         public static void CopyToWindowsBitmapSameSize(
-           ActualImage actualImage,
+           ActualBitmap actualImage,
            IntPtr hBmpScan0)
         {
             //1st, fast
-            int[] rawBuffer = ActualImage.GetBuffer(actualImage);
-            System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
-               hBmpScan0, rawBuffer.Length);
+            CpuBlit.Imaging.TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImage);
+            //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
+            //   hBmpScan0, rawBuffer.Length);
+            unsafe
+            {
+                NativeMemMx.memcpy((byte*)hBmpScan0, (byte*)tmp.Ptr, tmp.LengthInBytes);
+            }
+
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
 
         public static void CopyToGdiPlusBitmapSameSize(
-            ActualImage actualImage,
+            ActualBitmap actualImage,
             SkiaSharp.SKBitmap skBmp)
         {
             //agg store image buffer head-down
@@ -52,7 +57,7 @@ namespace PixelFarm.Drawing.Skia
                 //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
                 unsafe
                 {
-                    TempMemPtr srcBufferPtr = ActualImage.GetBufferPtr(actualImage);
+                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                     //fixed (byte* bufferH = &srcBuffer[0])
                     byte* bufferH = (byte*)srcBufferPtr.Ptr;
                     {
@@ -66,12 +71,12 @@ namespace PixelFarm.Drawing.Skia
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, bufferH + startRowAt, stride);
+                            PixelFarm.CpuBlit.MemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }
                     }
-                    srcBufferPtr.Release();
+                    srcBufferPtr.Dispose();
                 }
                 skBmp.UnlockPixels();
                 //}

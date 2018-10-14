@@ -1,18 +1,18 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.7 ListView")]
-    class Demo_ListView : DemoBase
+    class Demo_ListView : App
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             var listview = new LayoutFarm.CustomWidgets.ListView(300, 400);
             listview.SetLocation(10, 10);
             listview.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
             //add list view to viewport
-            viewport.AddContent(listview);
+            host.AddChild(listview);
             //add 
             RequestFont listItemFont = new RequestFont("tahoma", 18);
             for (int i = 0; i < 10; ++i)

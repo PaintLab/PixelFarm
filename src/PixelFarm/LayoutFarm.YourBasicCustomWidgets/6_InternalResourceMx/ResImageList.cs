@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
             images.TryGetValue(imageName, out found);
             ImageBinder binder = new MyClientImageBinder(null);
             binder.SetImage(found);
-            binder.State = ImageBinderState.Loaded;
+            binder.State = BinderState.Loaded;
             return binder;
         }
     }

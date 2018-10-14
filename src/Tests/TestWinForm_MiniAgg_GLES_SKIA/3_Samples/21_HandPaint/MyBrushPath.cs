@@ -1,49 +1,63 @@
-﻿//BSD, 2014-2018, WinterDev 
+﻿//BSD, 2014-present, WinterDev 
 //adapt from Paper.js
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 using burningmime.curves; //for curve fit
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Samples
+
+namespace PixelFarm.CpuBlit.Samples
 {
+    public enum SmoothBrushMode
+    {
+        SolidBrush,
+        EraseBrush,
+        CutBrush
+    }
+    public enum EditMode
+    {
+        Draw,
+        Select
+    }
     class MyBrushPath
     {
-        bool validBoundingRect;
-        VertexStore vxs;
-        internal List<Vector2> contPoints = new List<Vector2>();
-        RectD boundingRect = new RectD();
-        VertexSource.CurveFlattener cflat = new VertexSource.CurveFlattener();
-        bool isValidSmooth = false;
+
+        bool _validBoundingRect;
+
+        VertexStore _latestVxs;
+        List<VertexStore> _subVxsPathList;
+        List<Vector2> _contPoints = new List<Vector2>();
+        //
+        RectD _boundingRect = new RectD();
+        bool _cachedValid = false;
+        const int SUBPATH_POINT_LIMIT = 100;
+
+
         public MyBrushPath()
         {
             this.StrokeColor = Drawing.Color.Transparent;
+            _latestVxs = new VertexStore();
         }
         public void AddPointAtLast(int x, int y)
         {
-            contPoints.Add(new Vector2(x, y));
-            isValidSmooth = false;
+            _contPoints.Add(new Vector2(x, y));
+            _cachedValid = false;
         }
         public void AddPointAtFirst(int x, int y)
         {
-            contPoints.Insert(0, new Vector2(x, y));
-            isValidSmooth = false;
+            _contPoints.Insert(0, new Vector2(x, y));
+            _cachedValid = false;
         }
-        public VertexStore Vxs { get { return vxs; } }
-        public void SetVxs(VertexStore vxs)
-        {
-            this.vxs = vxs;
-            validBoundingRect = false;
-        }
+
         public Vector2 GetStartPoint()
         {
-            if (contPoints != null)
+            if (_contPoints != null)
             {
-                if (contPoints.Count > 0)
+                if (_contPoints.Count > 0)
                 {
-                    return contPoints[0];
+                    return _contPoints[0];
                 }
                 else
                 {
@@ -57,11 +71,11 @@ namespace PixelFarm.Agg.Samples
         }
         public Vector2 GetEndPoint()
         {
-            if (contPoints != null)
+            if (_contPoints != null)
             {
-                if (contPoints.Count > 0)
+                if (_contPoints.Count > 0)
                 {
-                    return contPoints[contPoints.Count - 1];
+                    return _contPoints[_contPoints.Count - 1];
                 }
                 else
                 {
@@ -80,15 +94,15 @@ namespace PixelFarm.Agg.Samples
         }
         public RectD BoundingRect
         {
-            get { return this.boundingRect; }
+            get { return this._boundingRect; }
         }
 
         public void MoveBy(int xdiff, int ydiff)
         {
             //apply translation  
             //TODO: review here again, not to use new VertexStore()
-            this.vxs = vxs.TranslateToNewVxs(xdiff, ydiff, new VertexStore());
-            boundingRect.Offset(xdiff, ydiff);
+            this._latestVxs = _latestVxs.TranslateToNewVxs(xdiff, ydiff, new VertexStore());
+            _boundingRect.Offset(xdiff, ydiff);
         }
         public Drawing.Color StrokeColor
         {
@@ -100,73 +114,265 @@ namespace PixelFarm.Agg.Samples
             get;
             set;
         }
-        public void MakeSmoothPath()
+
+
+        public void SetVxs(VertexStore newVxs)
         {
-            if (this.isValidSmooth)
+            //clear existing vxs
+            _contPoints.Clear();
+            if (_subVxsPathList != null)
+            {
+                _subVxsPathList.Clear();
+                _subVxsPathList = null;
+            }
+            //replace
+            _latestVxs = newVxs;
+        }
+        public VertexStore GetMergedVxs()
+        {
+            //merge all vxs into a large one
+            if (_subVxsPathList != null)
+            {
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    int j = _subVxsPathList.Count;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        v1.AppendVertexStore(_subVxsPathList[i]);
+                    }
+                    v1.AppendVertexStore(_latestVxs);
+                    return v1.CreateTrim();//
+                }
+            }
+            else
+            {
+                return _latestVxs;
+            }
+        }
+
+        public int CacheCount => _subVxsPathList != null ? _subVxsPathList.Count : 0;
+
+        public void PaintCache(Painter p)
+        {
+            if (_subVxsPathList != null)
+            {
+                int j = _subVxsPathList.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    p.Fill(_subVxsPathList[i]);
+                }
+            }
+        }
+        public void PaintLatest(Painter p)
+        {
+            int j = _contPoints.Count;
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            {
+                for (int i = 0; i < j; ++i)
+                {
+                    Vector2 v = _contPoints[i];
+                    if (i == 0)
+                    {
+                        v1.AddMoveTo(v.x, v.y);
+                    }
+                    else
+                    {
+                        v1.AddLineTo(v.x, v.y);
+                    }
+                }
+
+                stroke.MakeVxs(v1, v2);
+                p.Fill(v2);
+            }
+        }
+        public void MakeRegularPath(float strokeW)
+        {
+            //convert points to vxs
+            if (_cachedValid)
             {
                 return;
             }
-            this.isValidSmooth = true;
-            //--------
-            if (contPoints.Count == 0)
+            _cachedValid = true;
+            if (_contPoints.Count == 0)
             {
+                _latestVxs = null;
                 return;
             }
+
+            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (VxsTemp.Borrow(out var v1, out var v2))
+            {
+                stroke.Width = strokeW;
+                int j = _contPoints.Count;
+                while (j > SUBPATH_POINT_LIMIT)
+                {
+                    //split the old one 
+                    Vector2 v = new Vector2();
+                    for (int i = 0; i < SUBPATH_POINT_LIMIT; ++i)
+                    {
+                        v = _contPoints[i];
+                        if (i == 0)
+                        {
+                            v1.AddMoveTo(v.x, v.y);
+                        }
+                        else
+                        {
+                            v1.AddLineTo(v.x, v.y);
+                        }
+                    }
+
+                    _contPoints.RemoveRange(0, SUBPATH_POINT_LIMIT);
+                    stroke.MakeVxs(v1, v2);
+
+                    if (_subVxsPathList == null) { _subVxsPathList = new List<VertexStore>(); }
+
+                    _subVxsPathList.Add(v2.CreateTrim());
+
+                    _contPoints.Add(v);
+                    j = _contPoints.Count; //** 
+
+                    v1.Clear();//reuse
+                }
+                //
+                for (int i = 0; i < j; ++i)
+                {
+                    Vector2 v = _contPoints[i];
+                    if (i == 0)
+                    {
+                        v1.AddMoveTo(v.x, v.y);
+                    }
+                    else
+                    {
+                        v1.AddLineTo(v.x, v.y);
+                    }
+                }
+                _latestVxs.Clear();
+                stroke.MakeVxs(v1, _latestVxs);
+            }
+        }
+
+
+        void SimplifyPaths()
+        {
+
             //return;
             //--------
             //lets smooth it 
             //string str1 = dbugDumpPointsToString(contPoints);
             //string str2 = dbugDumpPointsToString2(contPoints); 
             //var data2 = CurvePreprocess.RdpReduce(contPoints, 2);
-            var data2 = contPoints;
+            List<Vector2> data2 = _contPoints;
             CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
-            vxs = new VertexStore();
+
+            _latestVxs = new VertexStore();
             int j = cubicBzs.Length;
             //1. 
-            if (j > 0)
+            if (j > 1)
             {
                 //1st
                 CubicBezier bz0 = cubicBzs[0];
-                vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
-                vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
-                vxs.AddCurve4To(
-                    bz0.p1.x, bz0.p1.y,
-                    bz0.p2.x, bz0.p2.y,
-                    bz0.p3.x, bz0.p3.y);
+                _latestVxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
+                _latestVxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                if (!bz0.HasSomeNanComponent)
+                {
+                    _latestVxs.AddCurve4To(
+                        bz0.p1.x, bz0.p1.y,
+                        bz0.p2.x, bz0.p2.y,
+                        bz0.p3.x, bz0.p3.y);
+                }
+                else
+                {
+                    _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                }
+
 
                 //-------------------------------
                 for (int i = 1; i < j; ++i) //start at 1
                 {
                     CubicBezier bz = cubicBzs[i];
-                    vxs.AddCurve4To(
-                        bz.p1.x, bz.p1.y,
-                        bz.p2.x, bz.p2.y,
-                        bz.p3.x, bz.p3.y);
+                    if (!bz.HasSomeNanComponent)
+                    {
+                        _latestVxs.AddCurve4To(
+                            bz.p1.x, bz.p1.y,
+                            bz.p2.x, bz.p2.y,
+                            bz.p3.x, bz.p3.y);
+                    }
+                    else
+                    {
+                        _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                    }
+
                 }
                 //-------------------------------
                 //close
                 //TODO: we not need this AddLineTo()
-                vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                _latestVxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+                _latestVxs.AddCloseFigure();
             }
-            vxs.AddCloseFigure();
-            VertexStore v2 = new VertexStore();
-            cflat.MakeVxs(vxs, v2);
-            vxs = v2;
+            else if (j == 1)
+            {
+                CubicBezier bz0 = cubicBzs[0];
+                _latestVxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
+
+                if (!bz0.HasSomeNanComponent)
+                {
+                    _latestVxs.AddCurve4To(
+                        bz0.p1.x, bz0.p1.y,
+                        bz0.p2.x, bz0.p2.y,
+                        bz0.p3.x, bz0.p3.y);
+                }
+                else
+                {
+                    _latestVxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                }
+
+
+
+            }
+            else
+            {
+                // = 0
+            }
+
+            //TODO: review here
+            using (VectorToolBox.Borrow(out CurveFlattener cflat))
+            using (VxsTemp.Borrow(out var v1))
+            {
+                cflat.MakeVxs(_latestVxs, v1);
+                _latestVxs = v1.CreateTrim();
+            }
+        }
+        public void MakeSmoothPath()
+        {
+            if (this._cachedValid)
+            {
+                return;
+            }
+            this._cachedValid = true;
+            //--------
+            if (_contPoints.Count == 0)
+            {
+                return;
+            }
+            SimplifyPaths();
+
+
         }
         public void Close()
         {
-            this.vxs = new VertexStore();
-            int j = contPoints.Count;
+            this._latestVxs = new VertexStore();
+            int j = _contPoints.Count;
             if (j > 0)
             {
-                var p = contPoints[0];
-                vxs.AddMoveTo(p.x, p.y);
+                Vector2 p = _contPoints[0];
+                _latestVxs.AddMoveTo(p.x, p.y);
                 for (int i = 1; i < j; ++i)
                 {
-                    p = contPoints[i];
-                    vxs.AddLineTo(p.x, p.y);
+                    p = _contPoints[i];
+                    _latestVxs.AddLineTo(p.x, p.y);
                 }
-                vxs.AddCloseFigure();
+                _latestVxs.AddCloseFigure();
             }
         }
 #if DEBUG
@@ -207,21 +413,21 @@ namespace PixelFarm.Agg.Samples
 #endif
         public void InvalidateBoundingRect()
         {
-            validBoundingRect = false;
+            _validBoundingRect = false;
         }
         public bool HitTest(int x, int y)
         {
             //check if point in polygon
-            if (!validBoundingRect)
+            if (!_validBoundingRect)
             {
-                PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref boundingRect);
-                validBoundingRect = true;
+                PixelFarm.CpuBlit.VertexProcessing.BoundingRect.GetBoundingRect(_latestVxs, ref _boundingRect);
+                _validBoundingRect = true;
             }
-            if (this.boundingRect.Contains(x, y))
+            if (this._boundingRect.Contains(x, y))
             {
                 //fine tune
                 //hit test ***
-                return VertexHitTester.IsPointInVxs(this.vxs, x, y);
+                return VertexHitTester.IsPointInVxs(this._latestVxs, x, y);
             }
             return false;
         }

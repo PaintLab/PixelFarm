@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -25,13 +25,13 @@ namespace LayoutFarm.Text
                 && endLineNum == 0 && endColumnNum == 0;
         }
         public static readonly VisualSelectionRangeSnapShot Empty = new VisualSelectionRangeSnapShot();
-    }
+    } 
 
-    class VisualSelectionRange
+    public class VisualSelectionRange
     {
         EditableVisualPointInfo startPoint = null;
         EditableVisualPointInfo endPoint = null;
-        public VisualSelectionRange(
+        internal VisualSelectionRange(
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
         {
@@ -39,7 +39,7 @@ namespace LayoutFarm.Text
             this.endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;
         }
-        public EditableVisualPointInfo StartPoint
+        internal EditableVisualPointInfo StartPoint
         {
             get
             {
@@ -50,7 +50,7 @@ namespace LayoutFarm.Text
                 startPoint = value;
             }
         }
-        public EditableVisualPointInfo EndPoint
+        internal EditableVisualPointInfo EndPoint
         {
             get
             {
@@ -129,7 +129,7 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public EditableVisualPointInfo TopEnd
+        internal EditableVisualPointInfo TopEnd
         {
             get
             {
@@ -150,7 +150,7 @@ namespace LayoutFarm.Text
                 return endPoint;
             }
         }
-        public EditableVisualPointInfo BottomEnd
+        internal EditableVisualPointInfo BottomEnd
         {
             get
             {
@@ -277,7 +277,7 @@ namespace LayoutFarm.Text
 
 
 
-    class VisualMarkerSelectionRange
+    public class VisualMarkerSelectionRange
     {
 
         struct MarkerLocation
@@ -293,11 +293,12 @@ namespace LayoutFarm.Text
         MarkerLocation _startLocation;
         MarkerLocation _stopLocation;
 
+
         public VisualMarkerSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
         {
             this.selectionRangeSnapshot = selectionRangeSnapshot;
-            BackgroundColor = Color.FromArgb(80, Color.Yellow); //test
-        }
+            BackgroundColor = Color.FromArgb(80, Color.Yellow);//test, default
+        }         
         public Color BackgroundColor { get; set; }
         public bool IsOnTheSameLine
         {
@@ -307,7 +308,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        public void BindToTextLayer(EditableTextFlowLayer textLayer)
+        internal void BindToTextLayer(EditableTextFlowLayer textLayer)
         {
             this.textLayer = textLayer;
             //check is on the sameline,
@@ -355,7 +356,7 @@ namespace LayoutFarm.Text
                 {
                     //this marker should be remove or not
                     return;
-                } 
+                }
                 destPage.FillRectangle(BackgroundColor, _startLocation.x_offset, line.LineTop,
                     _stopLocation.x_offset - _startLocation.x_offset, line.ActualLineHeight);
             }
@@ -397,10 +398,9 @@ namespace LayoutFarm.Text
             }
 
         }
-        public static VisualMarkerSelectionRange CreateFromSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
-        {
-            return new VisualMarkerSelectionRange(selectionRangeSnapshot);
-        }
+
+
+     
     }
 }
 

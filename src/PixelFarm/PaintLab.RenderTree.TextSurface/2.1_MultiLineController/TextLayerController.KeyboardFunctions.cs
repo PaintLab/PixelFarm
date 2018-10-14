@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Globalization;
@@ -7,10 +7,15 @@ namespace LayoutFarm.Text
 {
     partial class InternalTextLayerController
     {
+        static Func<char, bool> s_CaretCanStopOnThisChar;
 
-        static bool CanCaretStopOnThisChar(char c)
+        public static void SetCaretCanStopOnThisChar(Func<char, bool> caretCanStopOnThisCharDel)
         {
-            var unicodeCatg = char.GetUnicodeCategory(c);
+            s_CaretCanStopOnThisChar = caretCanStopOnThisCharDel;
+        }
+        internal static bool CanCaretStopOnThisChar(char c)
+        {
+            UnicodeCategory unicodeCatg = char.GetUnicodeCategory(c);
             switch (unicodeCatg)
             {
                 case UnicodeCategory.SpaceSeparator:
@@ -22,8 +27,14 @@ namespace LayoutFarm.Text
                 case UnicodeCategory.LowercaseLetter:
                 case UnicodeCategory.TitlecaseLetter:
                 case UnicodeCategory.ModifierLetter:
-                case UnicodeCategory.OtherLetter:
                 case UnicodeCategory.DecimalDigitNumber:
+                    break;
+                case UnicodeCategory.OtherLetter:
+
+                    if (s_CaretCanStopOnThisChar != null)
+                    {
+                        return s_CaretCanStopOnThisChar(c);
+                    }
                     break;
                 case UnicodeCategory.NonSpacingMark:
                 case UnicodeCategory.SpacingCombiningMark:
@@ -49,24 +60,24 @@ namespace LayoutFarm.Text
             VisualSelectionRangeSnapShot removedRange = this.RemoveSelectedText();
             if (removedRange.IsEmpty())
             {
-                updateJustCurrentLine = true;
-                char deletedChar = textLineWriter.DoDeleteOneChar();
+                _updateJustCurrentLine = true;
+                char deletedChar = _textLineWriter.DoDeleteOneChar();
 
                 if (deletedChar == '\0')
                 {
                     //end of this line
-                    commandHistory.AddDocAction(
+                    _commandHistoryList.AddDocAction(
                         new DocActionJoinWithNextLine(
-                            textLineWriter.LineNumber, textLineWriter.CharIndex));
+                            _textLineWriter.LineNumber, _textLineWriter.CharIndex));
                     JoinWithNextLine();
-                    updateJustCurrentLine = false;
+                    _updateJustCurrentLine = false;
                 }
                 else
                 {
-                    commandHistory.AddDocAction(
+                    _commandHistoryList.AddDocAction(
                         new DocActionDeleteChar(
-                            deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
-                    char nextChar = textLineWriter.NextChar;
+                            deletedChar, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
+                    char nextChar = _textLineWriter.NextChar;
 
                     if (nextChar != '\0')
                     {
@@ -110,20 +121,19 @@ namespace LayoutFarm.Text
             }
             else
             {
-                updateJustCurrentLine = true;
-                char deletedChar = textLineWriter.DoBackspaceOneChar();
+                _updateJustCurrentLine = true;
+
+                char deletedChar = _textLineWriter.DoBackspaceOneChar();
                 if (deletedChar == '\0')
                 {
-                    //end of current line
-
-
+                    //end of current line 
                     if (!IsOnFirstLine)
                     {
                         CurrentLineNumber--;
                         DoEnd();
-                        commandHistory.AddDocAction(
+                        _commandHistoryList.AddDocAction(
                             new DocActionJoinWithNextLine(
-                                textLineWriter.LineNumber, textLineWriter.CharIndex));
+                                _textLineWriter.LineNumber, _textLineWriter.CharIndex));
                         JoinWithNextLine();
                     }
 #if DEBUG
@@ -133,9 +143,9 @@ namespace LayoutFarm.Text
                 }
                 else
                 {
-                    commandHistory.AddDocAction(
+                    _commandHistoryList.AddDocAction(
                             new DocActionDeleteChar(
-                                deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
+                                deletedChar, _textLineWriter.LineNumber, _textLineWriter.CharIndex));
 #if DEBUG
                     if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
@@ -152,7 +162,7 @@ namespace LayoutFarm.Text
                 _dbugActivityRecorder.BeginContext();
             }
 #endif
-            textLineWriter.SetCurrentCharIndexToEnd();
+            _textLineWriter.SetCurrentCharIndexToEnd();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -170,7 +180,7 @@ namespace LayoutFarm.Text
             }
 #endif
 
-            textLineWriter.SetCurrentCharIndexToBegin();
+            _textLineWriter.SetCurrentCharIndexToBegin();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {

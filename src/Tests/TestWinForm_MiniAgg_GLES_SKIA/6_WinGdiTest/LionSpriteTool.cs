@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing.WinGdi;
+using PaintLab.Svg;
+
 namespace Mini.WinForms
 {
     class MyLionSpriteTool : PixelToolController
     {
-        PixelFarm.Agg.LionFillSprite lionFill;
+        PixelFarm.CpuBlit.MyTestSprite lionFill;
         List<PixelToolController> prevPixTools;
         int _latest_mouseX, _latest_mouseY;
         bool validBoundingRect;
@@ -15,7 +17,7 @@ namespace Mini.WinForms
         int offsetX, offSetY;
         public MyLionSpriteTool()
         {
-            lionFill = new LionFillSprite();
+            lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg")));
         }
         public override bool IsDrawingTool { get { return true; } }
         public override void Draw(Graphics g)
@@ -25,22 +27,22 @@ namespace Mini.WinForms
             //---------------------------------------------------------------------------------------------
             {
                 g.TranslateTransform(offsetX, offSetY);
+                throw new NotImplementedException();
 
-                SvgRenderVx renderVx = null;
+                //SvgRenderVx renderVx = null;
+                //int j = spriteShape.NumPaths;
+                //var myvxs = spriteShape.Vxs;
+
+                //int[] pathList = spriteShape.PathIndexList;
+
+                //PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    VxsHelper.FillVxsSnap(g,
+                //        new PixelFarm.Drawing.VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                //}
 
 
-
-                int j = spriteShape.NumPaths;
-                var myvxs = spriteShape.Vxs;
-
-                int[] pathList = spriteShape.PathIndexList;
-                
-                PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
-                for (int i = 0; i < j; ++i)
-                {
-                    VxsHelper.FillVxsSnap(g, 
-                        new PixelFarm.Drawing.VertexStoreSnap(myvxs, pathList[i]), colors[i]);
-                }
                 g.TranslateTransform(-offsetX, -offSetY);
             }
         }
@@ -82,19 +84,19 @@ namespace Mini.WinForms
         }
         public override bool HitTest(int x, int y)
         {
-            if (!validBoundingRect)
-            {
-                var spriteShape = lionFill.GetSpriteShape();
-                PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(spriteShape.Vxs), ref boundingRect);
-                validBoundingRect = true;
-            }
-            if (this.boundingRect.Contains(x, y))
-            {
-                //fine tune
-                //hit test ***
-                var spriteShape = lionFill.GetSpriteShape();
-                return VertexHitTester.IsPointInVxs(spriteShape.Vxs, x, y);
-            }
+            //if (!validBoundingRect)
+            //{
+            //    var spriteShape = lionFill.GetSpriteShape();
+            //    PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(spriteShape.Vxs), ref boundingRect);
+            //    validBoundingRect = true;
+            //}
+            //if (this.boundingRect.Contains(x, y))
+            //{
+            //    //fine tune
+            //    //hit test ***
+            //    var spriteShape = lionFill.GetSpriteShape();
+            //    return VertexHitTester.IsPointInVxs(spriteShape.Vxs, x, y);
+            //}
             return false;
         }
     }

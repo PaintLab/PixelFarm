@@ -113,7 +113,6 @@ namespace PixelFarm.VectorMath
 
 
 
-
         /// <summary>
         /// Gets the length (magnitude) of the vector.
         /// </summary>
@@ -147,13 +146,13 @@ namespace PixelFarm.VectorMath
 
         public Vector2 RotateInDegree(double deg)
         {
-           
+
             double rad = deg * (System.Math.PI / 180.0f); //convert from degree to rad 
             double sin = System.Math.Sin(rad);
             double cos = System.Math.Cos(rad);
 
             return new Vector2(
-                x * cos - y * sin, 
+                x * cos - y * sin,
                 x * sin + y * cos);
         }
 

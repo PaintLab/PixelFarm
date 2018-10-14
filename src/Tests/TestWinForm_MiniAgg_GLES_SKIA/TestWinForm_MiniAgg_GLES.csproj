@@ -43,7 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
+      <Link>0_Start\IcuSimpleTextFileDictionaryProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs">
+      <Link>0_Start\StorageProviderImpl.cs</Link>
+    </Compile>
     <Compile Include="0_Start\GLDemoContextWinForm.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />
     <Compile Include="3_Samples\02_AA_Demo\Lines.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
@@ -53,8 +61,11 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
-    <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
@@ -64,10 +75,11 @@
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\21_HandPaint\MyBrushPath.cs" />
     <Compile Include="3_Samples\21_HandPaint\SmoothBrush2.cs" />
+    <Compile Include="3_Samples\21_HandPaint\SmoothBrush3.cs" />
     <Compile Include="3_Samples\21_HandPaint\SmoothDippingBrush.cs" />
     <Compile Include="3_Samples\21_HandPaint\DrippingBrush.cs" />
     <Compile Include="3_Samples\21_HandPaint\HandPaint.cs" />
@@ -118,11 +130,6 @@
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageHelper2.cs" />
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageSpan.cs" />
     <Compile Include="Experiment\x_notused_fromMiniAgg\x_PixelBlenderFloat.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
-    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontStore.cs" />
-    <Compile Include="Experiment_AggFonts\Font\MyTypeFacePrinter.cs" />
     <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -169,11 +176,11 @@
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
     <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoftAggControl.cs">
+    <Compile Include="TestCanvasUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SoftAggControl.Designer.cs">
-      <DependentUpon>SoftAggControl.cs</DependentUpon>
+    <Compile Include="TestCanvasUserControl.Designer.cs">
+      <DependentUpon>TestCanvasUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Experiment\xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
@@ -210,8 +217,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SoftAggControl.resx">
-      <DependentUpon>SoftAggControl.cs</DependentUpon>
+    <EmbeddedResource Include="TestCanvasUserControl.resx">
+      <DependentUpon>TestCanvasUserControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
@@ -226,72 +233,93 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\PaintLab.YourImplementation.csproj">
-      <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
-      <Name>PaintLab.YourImplementation</Name>
+    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+      <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
+      <Name>MiniOpenTKLevel1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\opentk\src\MiniOpenTKWinForms\MiniOpenTKWinForms.csproj">
+      <Project>{43ebd500-b9a1-4671-92d6-35fb835cca0f}</Project>
+      <Name>MiniOpenTKWinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
+      <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
+      <Name>LayoutFarm.YourBasicCustomWidgets</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
       <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
       <Name>PaintLab.Svg</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
+      <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
+      <Name>PaintLab.YourImplementation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES2</Name>
+      <Name>PixelFarm.Drawing.GLES</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
-      <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
-      <Name>BackEnd.MiniOpenTK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\BackEnd.NativeWindows.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
       <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
       <Name>BackEnd.NativeWindows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
-      <Project>{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}</Project>
-      <Name>BackEnd.OpenTKWinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
-      <Name>Tesselate</Name>
+      <Name>BackEnd.Tesselate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\TypeMirror\BackEnd.TypeMirror.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
       <Name>BackEnd.TypeMirror</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
-      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
-      <Name>Typography.GlyphLayout</Name>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>BackEnd.ImgCodecs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
-      <Name>Typography.OpenFont</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{ec1307c6-309f-43ea-bfcc-5219e2f5a103}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.TextServices\Typography.TextServices.csproj">
-      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
-      <Name>Typography.TextServices</Name>
+    <ProjectReference Include="..\..\PixelFarm\Typography.One\Typography.One.csproj">
+      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
+      <Name>Typography.One</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
       <Name>TestSamples</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WinFormTestBed\WinFormTestBed.csproj">
+      <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>
+      <Name>WinFormTestBed</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="..\Data\lion1.png">
+      <Link>Data\lion1.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\arrow2.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\lion.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\lion1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\tiger002.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

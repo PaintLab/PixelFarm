@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //============================================================matrix_pivot
     //template<uint Rows, uint Cols> 

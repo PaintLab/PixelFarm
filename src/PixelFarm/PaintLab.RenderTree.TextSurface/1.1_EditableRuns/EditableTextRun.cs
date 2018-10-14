@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Text;
@@ -7,16 +7,12 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
 
-
-
-    class EditableTextRun : EditableRun
+    public class EditableTextRun : EditableRun
     {
 
         TextSpanStyle spanStyle;
-
         int[] outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
-
         ILineSegmentList _lineSegs;
 
         public EditableTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
@@ -27,6 +23,10 @@ namespace LayoutFarm.Text
             this.spanStyle = style;
             SetNewContent(copyBuffer);
             UpdateRunWidth();
+
+#if DEBUG
+            this.dbugBreak = true;
+#endif
         }
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
@@ -57,12 +57,11 @@ namespace LayoutFarm.Text
             }
             else
             {
+                //TODO: review here
                 throw new Exception("string must be null or zero length");
             }
         }
         //each editable run has it own (dynamic) char buffer 
-
-
 #if DEBUG
         char[] _mybuffer;
         char[] mybuffer
@@ -78,10 +77,16 @@ namespace LayoutFarm.Text
 #if DEBUG
             _mybuffer = newbuffer;
 #else
-            mybuffer= newbuffer;
+            mybuffer = newbuffer;
 #endif
             _content_unparsed = true;
         }
+
+        public void UnsafeSetNewContent(char[] copyContent)
+        {
+            SetNewContent(copyContent);
+        }
+
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             //change root graphics after create
@@ -129,7 +134,7 @@ namespace LayoutFarm.Text
         {
             return new string(mybuffer);
         }
-        internal override void UpdateRunWidth()
+        public override void UpdateRunWidth()
         {
             ITextService txServices = Root.TextServices;
             Size size;
@@ -265,9 +270,9 @@ namespace LayoutFarm.Text
             else
             {
                 TextSpanStyle spanStyle = this.SpanStyle;
-                if (spanStyle.FontInfo != null)
+                if (spanStyle.ReqFont != null)
                 {
-                    return spanStyle.FontInfo;
+                    return spanStyle.ReqFont;
                 }
                 else
                 {
@@ -293,7 +298,7 @@ namespace LayoutFarm.Text
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
         static int EvaluateFontAndTextColor(DrawBoard canvas, TextSpanStyle spanStyle)
         {
-            var font = spanStyle.FontInfo;
+            var font = spanStyle.ReqFont;
             var color = spanStyle.FontColor;
             var currentTextFont = canvas.CurrentFont;
             var currentTextColor = canvas.CurrentTextColor;
@@ -331,6 +336,11 @@ namespace LayoutFarm.Text
         {
             int bWidth = this.Width;
             int bHeight = this.Height;
+
+#if DEBUG
+            canvas.dbug_DrawCrossRect(Color.Red, new Rectangle(0, 0, bWidth, bHeight));
+            canvas.DrawRectangle(Color.Red, 0, 0, bWidth, bHeight);
+#endif
             if (!this.HasStyle)
             {
                 canvas.DrawText(this.mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
@@ -342,7 +352,7 @@ namespace LayoutFarm.Text
                 {
                     case DIFF_FONT_SAME_TEXT_COLOR:
                         {
-                            RequestFont prevFont = canvas.CurrentFont;
+
                             canvas.DrawText(this.mybuffer,
                                 new Rectangle(0, 0, bWidth, bHeight),
                                 style.ContentHAlign);
@@ -352,7 +362,7 @@ namespace LayoutFarm.Text
                         {
                             RequestFont prevFont = canvas.CurrentFont;
                             Color prevColor = canvas.CurrentTextColor;
-                            canvas.CurrentFont = style.FontInfo;
+                            canvas.CurrentFont = style.ReqFont;
                             canvas.CurrentTextColor = style.FontColor;
                             canvas.DrawText(this.mybuffer,
                                  new Rectangle(0, 0, bWidth, bHeight),

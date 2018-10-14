@@ -1,4 +1,4 @@
-//BSD, 2014-2018, WinterDev
+//BSD, 2014-present, WinterDev
 
 /*
 Copyright (c) 2013, Lars Brubaker
@@ -30,8 +30,10 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
+using System.Collections.Generic;
+using PaintLab.Svg;
 using Mini;
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
@@ -40,11 +42,15 @@ namespace PixelFarm.Agg.Samples
       + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : DemoBase
     {
-        LionFillSprite lionFill;
+
+        MyTestSprite _testSprite;
         public override void Init()
         {
-            lionFill = new LionFillSprite();
-            //lionFill.AutoFlipY = true;           
+            VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
+            var spriteShape = new SpriteShape(renderVx);
+           
+            _testSprite = new MyTestSprite(spriteShape);
+            //lionFill.AutoFlipY = true;
         }
 
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -53,18 +59,18 @@ namespace PixelFarm.Agg.Samples
 
             if (UseBitmapExt)
             {
-                p.RenderQuality = Drawing.RenderQualtity.Fast;
+                p.RenderQuality = Drawing.RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = Drawing.RenderQualtity.HighQuality;
+                p.RenderQuality = Drawing.RenderQuality.HighQuality;
             }
 
-            lionFill.Draw(p);
+            _testSprite.Render(p);
         }
         public override void MouseDrag(int x, int y)
         {
-            lionFill.Move(x, y);
+            _testSprite.Move(x, y);
         }
         [DemoConfig]
         public bool UseBitmapExt
@@ -76,21 +82,188 @@ namespace PixelFarm.Agg.Samples
         public int SharpRadius
         {
             //test
-            get { return lionFill.SharpenRadius; }
-            set { lionFill.SharpenRadius = value; }
+            get { return _testSprite.SharpenRadius; }
+            set { _testSprite.SharpenRadius = value; }
 
         }
         [DemoConfig(MaxValue = 255)]
         public int AlphaValue
         {
-            get { return lionFill.AlphaValue; }
+            get { return _testSprite.AlphaValue; }
             set
             {
-                lionFill.AlphaValue = (byte)value;
+                _testSprite.AlphaValue = (byte)value;
             }
         }
     }
 
-    //--------------------------------------------------
+
+
+    public enum LionMoveOption
+    {
+        ZoomAndRotate,
+        Move,
+    }
+    //----------
+    [Info(OrderCode = "03.1")]
+    [Info("HitTest and Selection")]
+    public class LionFillExample_HitTest : DemoBase
+    {
+
+
+        bool hitOnLion;
+
+        List<MyTestSprite> _spriteList = new List<MyTestSprite>();
+        MyTestSprite _hitSprite;
+
+        public override void Init()
+        {
+            // lion 
+
+            VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
+            var spriteShape = new SpriteShape(renderVx); 
+            _spriteList.Add(new MyTestSprite(spriteShape));
+            //
+            //lionFill.AutoFlipY = true;           
+        }
+        public override void KeyDown(int keycode)
+        {
+            //temp 
+            System.Windows.Forms.Keys k = (System.Windows.Forms.Keys)keycode;
+            switch (k)
+            {
+                case System.Windows.Forms.Keys.A:
+                    {
+                        SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
+                        _spriteList.Add(new MyTestSprite(s) { JustMove = true });
+                    }
+                    break;
+                case System.Windows.Forms.Keys.Q:
+                    {
+                        //test add box control ...
+
+
+                    }
+                    break;
+            }
+
+
+            base.KeyDown(keycode);
+        }
+        public override void Draw(PixelFarm.Drawing.Painter p)
+        {
+            p.Clear(Drawing.Color.White);
+
+            if (UseBitmapExt)
+            {
+                p.RenderQuality = Drawing.RenderQuality.Fast;
+            }
+            else
+            {
+                p.RenderQuality = Drawing.RenderQuality.HighQuality;
+            }
+
+            foreach (MyTestSprite s in _spriteList)
+            {
+                s.Render(p);
+            }
+        }
+
+        public override void MouseDown(int x, int y, bool isRightButton)
+        {
+
+            //check if we hit a lion or not 
+            //this is example => if right button=>test with path
+
+            if (isRightButton)
+            {
+                if (LionMoveOption == LionMoveOption.Move)
+                {
+                    LionMoveOption = LionMoveOption.ZoomAndRotate;
+                }
+                else
+                {
+                    LionMoveOption = LionMoveOption.Move;
+                }
+            }
+
+            //-----------------------------------------------------
+            _hitSprite = null;
+            hitOnLion = false;
+
+            for (int i = _spriteList.Count - 1; i >= 0; --i)
+            {
+                MyTestSprite sprite = _spriteList[i];
+
+                double testX = x;
+                double testY = y;
+                if (!sprite.JustMove && sprite.CurrentAffineTx != null)
+                {
+                    sprite.CurrentAffineTx.Transform(ref testX, ref testY);
+                }
+
+                if (sprite.HitTest((float)testX, (float)testY, isRightButton))
+                {
+                    hitOnLion = true;
+                    _hitSprite = sprite;
+                    break;
+                }
+            }
+
+
+            base.MouseDown(x, y, isRightButton);
+        }
+        public override void MouseUp(int x, int y)
+        {
+            hitOnLion = false;
+            base.MouseUp(x, y);
+        }
+        public override void MouseDrag(int x, int y)
+        {
+            if (hitOnLion && _hitSprite != null)
+            {
+                _hitSprite.JustMove = _moveOption == LionMoveOption.Move;
+                _hitSprite.Move(x, y);
+            }
+        }
+        [DemoConfig]
+        public bool UseBitmapExt
+        {
+            get;
+            set;
+        }
+
+        LionMoveOption _moveOption = LionMoveOption.Move;
+        [DemoConfig]
+        public LionMoveOption LionMoveOption
+        {
+            get
+            {
+                return _moveOption;
+            }
+            set
+            {
+                //switch (_moveOption = value)
+                //{
+                //    default: break;
+                //    case LionMoveOption.Move:
+                //        foreach (MyTestSprite s in _spriteList)
+                //        {
+                //            s.JustMove = true;
+                //        }
+
+                //        break;
+                //    case LionMoveOption.ZoomAndRotate:
+                //        foreach (MyTestSprite s in _spriteList)
+                //        {
+                //            s.JustMove = false;
+                //        }
+                //        break;
+                //}
+            }
+        }
+
+    }
+
 }
 

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
@@ -23,6 +23,7 @@ namespace LayoutFarm
         public bool UseAsFloatWindow { get; set; }
         public override void SetViewport(int viewportX, int viewportY)
         {
+
             this.myviewportX = viewportX;
             this.myviewportY = viewportY;
             this.InvalidateGraphics();
@@ -41,20 +42,39 @@ namespace LayoutFarm
                 return this.myviewportY;
             }
         }
-
-
         public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
-            updateArea.Offset(myviewportX, myviewportY);
-            this.DrawBoxContent(canvas, updateArea);
+            if (this.NeedClipArea)
+            {
+                if (canvas.PushClipAreaRect(this.Width, this.Height, ref updateArea))
+                {
 
+                    canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
+                    updateArea.Offset(myviewportX, myviewportY);
+                    this.DrawBoxContent(canvas, updateArea);
 #if DEBUG
-            //for debug
-            // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+                    //for debug
+                    // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
-            canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
-            updateArea.Offset(-myviewportX, -myviewportY);
+                    canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
+                    updateArea.Offset(-myviewportX, -myviewportY);
+
+                }
+                canvas.PopClipAreaRect();
+            }
+            else
+            {
+                canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
+                updateArea.Offset(myviewportX, myviewportY);
+                this.DrawBoxContent(canvas, updateArea);
+#if DEBUG
+                //for debug
+                // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
+                canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
+                updateArea.Offset(-myviewportX, -myviewportY);
+            }
+
         }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
@@ -227,7 +247,7 @@ namespace LayoutFarm
             this.dbug_BeginArr++;
             debug_PushTopDownElement(this);
             this.MarkValidContentArrangement();
-            IsInTopDownReArrangePhase = true;
+            //IsInTopDownReArrangePhase = true;
             if (this.defaultLayer != null)
             {
                 this.defaultLayer.TopDownReArrangeContent();

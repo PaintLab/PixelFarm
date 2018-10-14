@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System.Collections.Generic;
 using PixelFarm.Drawing;
@@ -7,21 +7,29 @@ namespace LayoutFarm.RenderBoxes
     public struct HitInfo
     {
         public readonly Point point;
-        public readonly RenderElement hitElement;
+
+        object _hitObject;
         public static readonly HitInfo Empty = new HitInfo();
-        public HitInfo(RenderElement hitObject, Point point)
+        public HitInfo(object hitObject, Point point)
         {
             this.point = point;
-            this.hitElement = hitObject;
+            this._hitObject = hitObject;
         }
-
+        public RenderElement HitElemAsRenderElement
+        {
+            get { return _hitObject as RenderElement; }
+        }
+        public object HitElem
+        {
+            get { return _hitObject; }
+        }
         public static bool operator ==(HitInfo pair1, HitInfo pair2)
         {
-            return ((pair1.hitElement == pair2.hitElement) && (pair1.point == pair2.point));
+            return ((pair1._hitObject == pair2._hitObject) && (pair1.point == pair2.point));
         }
         public static bool operator !=(HitInfo pair1, HitInfo pair2)
         {
-            return ((pair1.hitElement == pair2.hitElement) && (pair1.point == pair2.point));
+            return ((pair1._hitObject == pair2._hitObject) && (pair1.point == pair2.point));
         }
 
         public override int GetHashCode()
@@ -36,12 +44,20 @@ namespace LayoutFarm.RenderBoxes
 #if DEBUG
         public override string ToString()
         {
-            return hitElement.ToString();
+            return point + " :" + _hitObject.ToString();
         }
 #endif
     }
 
-
+#if DEBUG
+    public enum dbugHitChainPhase
+    {
+        Unknown,
+        MouseDown,
+        MouseMove,
+        MouseUp
+    }
+#endif
 
     public class HitChain
     {
@@ -61,6 +77,8 @@ namespace LayoutFarm.RenderBoxes
                 return new Point(testPointX, testPointY);
             }
         }
+        public int TextPointX { get { return testPointX; } }
+        public int TextPointY { get { return testPointY; } }
         public void GetTestPoint(out int x, out int y)
         {
             x = this.testPointX;
@@ -81,17 +99,27 @@ namespace LayoutFarm.RenderBoxes
         }
         public void ClearAll()
         {
+#if DEBUG
+            dbugHitPhase = dbugHitChainPhase.Unknown;
+#endif
             testPointX = 0;
             testPointY = 0;
             hitList.Clear();
         }
 
-        public bool IsFree
-        {
-            get;
-            set;
-        }
+
 #if DEBUG
+        dbugHitChainPhase _dbugHitChainPhase;
+        public dbugHitChainPhase dbugHitPhase
+        {
+            get { return _dbugHitChainPhase; }
+            set
+            {
+
+                _dbugHitChainPhase = value;
+
+            }
+        }
         public dbugHitTestTracker dbugHitTracker;
 #endif
         public int Count { get { return this.hitList.Count; } }
@@ -102,7 +130,7 @@ namespace LayoutFarm.RenderBoxes
             {
                 if (hitList.Count > 0)
                 {
-                    return hitList[hitList.Count - 1].hitElement;
+                    return hitList[hitList.Count - 1].HitElemAsRenderElement;
                 }
                 else
                 {
@@ -114,6 +142,15 @@ namespace LayoutFarm.RenderBoxes
         {
             hitList.Add(new HitInfo(hitObject, new Point(testPointX, testPointY)));
 #if DEBUG
+            //if (hitObject.dbug_ObjectNote == "AAA")
+            //{
+
+            //}
+            //if (this.dbugHitPhase == dbugHitChainPhase.MouseDown)
+            //{
+
+            //}
+
             if (dbugHitTracker != null)
             {
                 dbugHitTracker.WriteTrackNode(hitList.Count,

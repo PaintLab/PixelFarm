@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -7,22 +7,22 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("2.6 Demo_MultiLineText_WithSuggestionPopupWin")]
-    class Demo_MultiLineText_WithSuggestionPopupWin : DemoBase
+    class Demo_MultiLineText_WithSuggestionPopupWin : App
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
         SuggestionWindowMx sgBox;
         Point textBoxGlobalOffset;
         bool alreadyHasTextBoxGlobalOffset;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             textbox.SetLocation(20, 20);
             var style1 = new Text.TextSpanStyle();
-            style1.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+            style1.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox.DefaultSpanStyle = style1;
-            
+
             var textSplitter = new CustomWidgets.ContentTextSplitter();
             textbox.TextSplitter = textSplitter;
             sgBox = new SuggestionWindowMx(300, 200);
@@ -39,8 +39,8 @@ namespace LayoutFarm
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
-            viewport.AddContent(textbox);
-            viewport.AddContent(sgBox.GetPrimaryUI());
+            host.AddChild(textbox);
+            host.AddChild(sgBox.GetPrimaryUI());
             //------------------------------------ 
             BuildSampleCountryList();
         }
@@ -170,7 +170,7 @@ namespace LayoutFarm
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
-                    if (choice.StartsWith(currentLocalText))
+                    if (StringStartsWithChars(choice, currentLocalText))
                     {
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = Color.LightGray;
@@ -181,7 +181,7 @@ namespace LayoutFarm
             }
             if (sgBox.ItemCount > 0)
             {
-                sgBox.Show();
+
                 //TODO: implement selectedIndex suggestion hint here
                 sgBox.SelectedIndex = 0;
 
@@ -196,6 +196,7 @@ namespace LayoutFarm
                 }
 
                 sgBox.SetLocation(textBoxGlobalOffset.X + caretPos.X, caretPos.Y + 70);
+                sgBox.Show();
                 sgBox.EnsureSelectedItemVisible();
             }
             else
@@ -203,7 +204,36 @@ namespace LayoutFarm
                 sgBox.Hide();
             }
         }
-
+        static bool StringStartsWithChars(string srcString, string value)
+        {
+            int findingLen = value.Length;
+            if (findingLen > srcString.Length)
+            {
+                return false;
+            }
+            //
+            unsafe
+            {
+                fixed (char* srcStringBuff = srcString)
+                fixed (char* findingChar = value)
+                {
+                    char* srcBuff1 = srcStringBuff;
+                    char* findChar1 = findingChar;
+                    for (int i = 0; i < findingLen; ++i)
+                    {
+                        //compare by values
+                        if (*srcBuff1 != *findChar1)
+                        {
+                            return false;
+                        }
+                        srcBuff1++;
+                        findChar1++;
+                    }
+                    //MATCH all
+                    return true;
+                }
+            }
+        }
         void BuildSampleCountryList()
         {
             AddKeywordList(@"

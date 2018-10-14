@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 /*
 Copyright (c) 2014, Lars Brubaker
@@ -30,13 +30,13 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-namespace PixelFarm.Agg.Imaging
+namespace PixelFarm.CpuBlit.Imaging
 {
 
 
     public class GdiBitmapBackBuffer : IDisposable
     {
-        ActualImage actualImage;
+        ActualBitmap actualImage;
         int width;
         int height;
         //------------------------------------
@@ -72,15 +72,14 @@ namespace PixelFarm.Agg.Imaging
                  height,
                  nativeWin32Dc.DC, 0, 0, SRCCOPY);
         }
-        public void Initialize(int width, int height, int bitDepth, ActualImage actualImage)
+        public void Initialize(int width, int height, int bitDepth, ActualBitmap actualImage)
         {
             if (width > 0 && height > 0)
             {
                 this.width = width;
-                this.height = height;
-
-                this.actualImage = actualImage;
+                this.height = height; 
                 nativeWin32Dc = new Win32.NativeWin32MemoryDc(width, height, false);
+                this.actualImage = actualImage;
 
                 return;
             }

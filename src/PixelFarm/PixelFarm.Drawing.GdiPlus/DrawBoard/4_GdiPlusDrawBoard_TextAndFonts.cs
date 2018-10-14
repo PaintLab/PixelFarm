@@ -1,5 +1,5 @@
-﻿//BSD, 2014-2018, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
+﻿//BSD, 2014-present, WinterDev
+//ArthurHub, Jose Manuel Menendez Poo
 
 // "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
@@ -14,11 +14,52 @@
 // "The Art of War"
 
 
-using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
+
+
     partial class GdiPlusDrawBoard
     {
+
+
+        public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
+        {
+            //TODO: review here
+            //copy
+            char[] copy1 = new char[len];
+            System.Array.Copy(buffer, startAt, copy1, 0, len);
+            return new WinGdiRenderVxFormattedString(copy1);
+        }
+        public override void DrawRenderVx(RenderVx renderVx, float x, float y)
+        {
+            //TODO: review here
+            //temp here          
+            var vxFormattedString = renderVx as WinGdiRenderVxFormattedString;
+            if (vxFormattedString != null)
+            {
+                _gdigsx.DrawText(vxFormattedString.InternalBuffer, (int)x, (int)y);
+            }
+            else
+            {
+                var svxRenderVx = renderVx as PixelFarm.CpuBlit.VxsRenderVx;
+                if (svxRenderVx != null)
+                {
+                    //TODO: review fill color here
+                    _gdigsx.FillPath(svxRenderVx);
+                }
+                else
+                {
+                    //var vgRenderVx = renderVx as CpuBlit.VgRenderVx;
+                    //if (vgRenderVx != null)
+                    //{
+                    //    _gdigsx.Render(vgRenderVx);
+                    //}
+
+                }
+
+            }
+
+        }
 
         public override void DrawText(char[] buffer, int x, int y)
         {
@@ -31,7 +72,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
-            _gdigsx.DrawText(str, startAt, len, logicalTextBox, textAlignment); 
+            _gdigsx.DrawText(str, startAt, len, logicalTextBox, textAlignment);
         }
         //====================================================
         public override RequestFont CurrentFont

@@ -1,14 +1,16 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //MatterHackers
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.Rasterization;
+using PixelFarm.CpuBlit.FragmentProcessing;
 using Mini;
-namespace PixelFarm.Agg.Sample_AADemoTest3
+namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 {
-    class CustomScanlineRasToBmp_EnlargedSubPixelRendering : CustomScanlineRasToDestBitmapRenderer
+    class CustomScanlineRasToBmp_EnlargedSubPixelRendering : CustomDestBitmapRasterizer
     {
         //old idea not corrrect
 
@@ -18,9 +20,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         AggRenderSurface gfx;
         AggLcdDistributionLookupTable lcdLut;
         double primary = 1;
-        public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualImage destImage)
+        public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualBitmap destImage)
         {
-            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
+            this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = new AggRenderSurface(destImage);
@@ -35,18 +37,18 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
         const float cover_1_3 = 255f / 3f;
         const float cover_2_3 = cover_1_3 * 2f;
-        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
+        protected override void CustomRenderSingleScanLine(PixelProcessing.IBitmapBlender destImage, Scanline scanline, Color color)
         {
             SubPixRender(destImage, scanline, color);
         }
 
-        void SubPixRender(IImageReaderWriter destImage, Scanline scanline, Color color)
+        void SubPixRender(PixelProcessing.IBitmapBlender destImage, Scanline scanline, Color color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
             byte[] covers = scanline.GetCovers();
             ScanlineRasterizer ras = gfx.ScanlineRasterizer;
-            var rasToBmp = gfx.ScanlineRasToDestBitmap;
+            var rasToBmp = gfx.BitmapRasterizer;
             //------------------------------------------
             Color bgColor = Color.White;
             float cb_R = bgColor.R / 255f;
@@ -241,22 +243,22 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         {
             //specific for agg
 
-            if (p is PixelFarm.Agg.AggPainter)
+            if (p is PixelFarm.CpuBlit.AggPainter)
             {
 
 
-                var p2 = (PixelFarm.Agg.AggPainter)p;
+                var p2 = (PixelFarm.CpuBlit.AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
 
 
-                var widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
-                aggsx.UseSubPixelRendering = false;
-                PixelBlenderBGRA normalBlender = new PixelBlenderBGRA();
-                PixelBlenderBGRA gammaBlender = new PixelBlenderBGRA(); //TODO: revisit, and fix this again
+                var widgetsSubImage = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestBitmapBlender, aggsx.GetClippingRect());
+                aggsx.UseSubPixelLcdEffect = false;
+                PixelProcessing.PixelBlenderBGRA normalBlender = new PixelProcessing.PixelBlenderBGRA();
+                PixelProcessing.PixelBlenderBGRA gammaBlender = new PixelProcessing.PixelBlenderBGRA(); //TODO: revisit, and fix this again
                 gammaBlender.GammaValue = this.GammaValue;
                 gammaBlender.EnableGamma = true;
-                var rasterGamma = new SubImageRW(widgetsSubImage, gammaBlender);
+                var rasterGamma = new PixelProcessing.SubBitmapBlender(widgetsSubImage, gammaBlender);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);
@@ -270,11 +272,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
                 ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //----------------------------------------
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
-                aggsx.UseSubPixelRendering = false;
+                DestBitmapRasterizer sclineRasToBmp = aggsx.BitmapRasterizer;
+                aggsx.UseSubPixelLcdEffect = false;
                 sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 rasterizer.ResetGamma(new GammaNone());
-                aggsx.UseSubPixelRendering = false;
+                aggsx.UseSubPixelLcdEffect = false;
                 //----------------------------------------
                 PathWriter ps = new PathWriter();
                 ps.Clear();
@@ -286,9 +288,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 //Stroke stroke = new Stroke(ps);
                 //stroke.Width = 2;
                 //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
-                var v1 = GetFreeVxs();
-                rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
-                ReleaseVxs(ref v1);
+
+
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
+                }
                 //----------------------------------------
 
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));

@@ -1,4 +1,4 @@
-﻿//MIT, 2017-2018, WinterDev
+﻿//MIT, 2017-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -27,6 +27,15 @@ namespace BuildMergeProject
             slnMx = new SolutionMx();
             slnMx.ReadSolution(slnFilename);
 
+            cmbNetStd.Items.AddRange(new object[]
+            {
+                "netstandard1.3",
+                "netstandard1.6",
+                "netstandard2.0",
+                "netstandard2.1"
+            });
+            cmbNetStd.SelectedIndex = 0;
+
             _slnListViewController = new SolutionListViewController();
             _slnListViewController.SetSolutionListView(this.listView1);
             _slnListViewController.SetMergePlanListView(this.listView2);
@@ -36,6 +45,13 @@ namespace BuildMergeProject
 
         private void cmdBuildSelectedMergePro_Click(object sender, EventArgs e)
         {
+            _slnListViewController.NetStdVersion = null;//'classic' .net framework
+            _slnListViewController.BuildMergeProjectFromSelectedItem();
+        }
+
+        private void cmdBuildMergeNetStd_Click(object sender, EventArgs e)
+        {
+            _slnListViewController.NetStdVersion = (string)cmbNetStd.SelectedItem;
             _slnListViewController.BuildMergeProjectFromSelectedItem();
         }
     }

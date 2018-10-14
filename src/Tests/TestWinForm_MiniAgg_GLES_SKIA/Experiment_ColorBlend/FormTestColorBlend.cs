@@ -1,11 +1,11 @@
-﻿//MIT, 2017-2018, WinterDev
+﻿//MIT, 2017-present, WinterDev
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
 using System.Windows.Forms;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.Imaging;
 
 namespace Mini
 {

@@ -1,17 +1,17 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //MatterHackers
 
 
 using System.Diagnostics;
-using PixelFarm.Agg.UI;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.UI;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 using Mini;
 using System;
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Sample_Blur2
+namespace PixelFarm.CpuBlit.Sample_Blur2
 {
 
 
@@ -31,7 +31,6 @@ namespace PixelFarm.Agg.Sample_Blur2
         PolygonEditWidget m_shadow_ctrl;
         VertexStore m_pathVxs;
         VertexStore m_pathVxs2;
-        VertexStoreSnap m_path_2;
         RectD m_shape_bounds;
         Stopwatch stopwatch = new Stopwatch();
 
@@ -41,7 +40,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             m_shape_bounds = new RectD();
             m_shadow_ctrl = new PolygonEditWidget(4);
             this.FlattenCurveChecked = true;
-            this.BlurMethod = BlurMethod.RecursiveBlur;
+            this.BlurMethod = Imaging.BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
             //ActualFont svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
@@ -88,7 +87,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             set;
         }
         [DemoConfig]
-        public BlurMethod BlurMethod
+        public Imaging.BlurMethod BlurMethod
         {
             get;
             set;
@@ -140,8 +139,8 @@ namespace PixelFarm.Agg.Sample_Blur2
                    1));
         }
 
-        Drawing.Effects.ImgFilterStackBlur imgFilterBlurStack = new Drawing.Effects.ImgFilterStackBlur();
-        Drawing.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new Drawing.Effects.ImgFilterRecursiveBlur();
+        PaintFx.Effects.ImgFilterStackBlur imgFilterBlurStack = new PaintFx.Effects.ImgFilterStackBlur();
+        PaintFx.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new PaintFx.Effects.ImgFilterRecursiveBlur();
 
         public override void Draw(Painter p)
         {
@@ -178,7 +177,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             boundRect.Bottom -= m_radius;
             boundRect.Right += m_radius;
             boundRect.Top += m_radius;
-            if (BlurMethod == BlurMethod.RecursiveBlur)
+            if (BlurMethod == Imaging.BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
                 // with theoretically infinite kernel. The restricted window size
@@ -194,7 +193,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             stopwatch.Reset();
             stopwatch.Start();
 
-            if (BlurMethod != BlurMethod.ChannelBlur)
+            if (BlurMethod != Imaging.BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
@@ -217,14 +216,14 @@ namespace PixelFarm.Agg.Sample_Blur2
                     // Blur it
                     switch (BlurMethod)
                     {
-                        case BlurMethod.StackBlur:
+                        case Imaging.BlurMethod.StackBlur:
                             {
                                 //------------------  
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
                                 //p.DoFilterBlurStack(boundRect, m_radius); 
-                                p.ApplyFilter(imgFilterBlurStack); 
+                                p.ApplyFilter(imgFilterBlurStack);
                             }
                             break;
                         default:

@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -19,7 +19,8 @@
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
 
-using PixelFarm.Agg;
+using System.Collections.Generic;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
 
@@ -41,18 +42,28 @@ namespace PixelFarm.Drawing
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
         public abstract void SetOrigin(float ox, float oy);
-        public abstract RenderQualtity RenderQuality { get; set; }
+        public abstract RenderQuality RenderQuality { get; set; }
 
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract RectInt ClipBox { get; set; }
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
+        /// <summary>
+        /// we DO NOT store vxs
+        /// </summary>
+        /// <param name="vxs"></param>
+        public abstract void SetClipRgn(VertexStore vxs);
         //
         public abstract double StrokeWidth { get; set; }
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract bool UseSubPixelLcdEffect { get; set; }
         public abstract Color FillColor { get; set; }
         public abstract Color StrokeColor { get; set; }
+
+        //
+        public abstract Brush CurrentBrush { get; set; }
+        public abstract Pen CurrentPen { get; set; }
+
         //
         public abstract void Clear(Color color);
         public abstract DrawBoardOrientation Orientation { get; set; }
@@ -64,7 +75,7 @@ namespace PixelFarm.Drawing
         public abstract void FillEllipse(double left, double top, double width, double height);
         public abstract void DrawEllipse(double left, double top, double width, double height);
         //
- 
+
         /// <summary>
         /// draw image, not scale
         /// </summary>
@@ -72,25 +83,26 @@ namespace PixelFarm.Drawing
         /// <param name="left"></param>
         /// <param name="top"></param>
         public abstract void DrawImage(Image actualImage, double left, double top);
-        public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
+        public abstract void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH);
+        public abstract void DrawImage(Image actualImage);
+        public abstract void DrawImage(Image actualImage, params CpuBlit.VertexProcessing.AffinePlan[] affinePlans);
 
         public abstract void ApplyFilter(ImageFilter imgFilter);
 
-      
+
         ////////////////////////////////////////////////////////////////////////////
         //vertext store/snap/rendervx
-        public abstract void Fill(VertexStoreSnap snap);
-        public abstract void Fill(VertexStore vxs);
 
-        //TODO: remove paint series, 
-        public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
+        public abstract void Fill(VertexStore vxs);
         public abstract void Draw(VertexStore vxs);
-        public abstract void Draw(VertexStoreSnap vxs);
-        public abstract RenderVx CreateRenderVx(VertexStoreSnap snap);
+
+        public abstract RenderVx CreateRenderVx(VertexStore vxs);
         public abstract RenderVxFormattedString CreateRenderVx(string textspan);
         public abstract void FillRenderVx(Brush brush, RenderVx renderVx);
         public abstract void FillRenderVx(RenderVx renderVx);
         public abstract void DrawRenderVx(RenderVx renderVx);
+        public abstract void Render(RenderVx renderVx);
+
         //////////////////////////////////////////////////////////////////////////////
         //text,string
         //TODO: review text drawing funcs 
@@ -101,9 +113,21 @@ namespace PixelFarm.Drawing
            double x,
            double y);
         public abstract void DrawString(RenderVxFormattedString renderVx, double x, double y);
+        //////////////////////////////////////////////////////////////////////////////
+        //user's object 
+        internal Stack<object> _userObjectStack = new Stack<object>();
+
     }
 
-
-
+    namespace PainterExtensions
+    {
+        public static class PainterExt
+        {
+            public static void StackClearUserObject(this Painter p)
+            {
+                p._userObjectStack.Clear();
+            }
+        }
+    }
 
 }

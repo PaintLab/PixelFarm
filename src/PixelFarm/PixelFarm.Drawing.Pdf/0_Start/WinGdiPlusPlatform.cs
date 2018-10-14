@@ -1,6 +1,6 @@
-﻿//BSD, 2014-2018, WinterDev 
- 
-using Typography.TextServices;
+﻿//BSD, 2014-present, WinterDev 
+
+using Typography.FontManagement;
 namespace PixelFarm.Drawing.Pdf
 {
     public static class PdfPlaform
@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.Pdf
         {
             //WinGdiTextService.SetDefaultEncoding(encoding);
         }
-        public static void SetFontLoader(IFontLoader fontLoader)
+        public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {
             // WinGdiFontFace.SetFontLoader(fontLoader);
         }

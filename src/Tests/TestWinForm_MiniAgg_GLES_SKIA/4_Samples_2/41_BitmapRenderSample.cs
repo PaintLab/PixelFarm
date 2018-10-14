@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 /*
 Copyright (c) 2013, Lars Brubaker
@@ -29,16 +29,16 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.Imaging;
 using Mini;
-namespace PixelFarm.Agg.Sample_Images
+namespace PixelFarm.CpuBlit.Sample_Images
 {
     [Info(OrderCode = "41")]
     [Info("Basic Bitmap Rendering")]
     public class BasicBitmapRendering : DemoBase
     {
-        ActualImage actualImage;
+        ActualBitmap actualImage;
         AffinePlan[] affinePlans;
         public override void Init()
         {
@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Sample_Images
             actualImage = LoadImage(RootDemoPath.Path + "\\02.jpg");
             affinePlans = new AffinePlan[] { AffinePlan.Translate(50, 50) };
         }
-        static ActualImage LoadImage(string filename)
+        static ActualBitmap LoadImage(string filename)
         {
             //read sample image
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
@@ -54,7 +54,7 @@ namespace PixelFarm.Agg.Sample_Images
                 //read to image buffer 
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
-                ActualImage img = new ActualImage(bmpW, bmpH, PixelFormat.ARGB32);
+                ActualBitmap img = new ActualBitmap(bmpW, bmpH);
                 BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
                 return img;
             }

@@ -39,7 +39,7 @@ namespace Mini.WinForms
     class MyDrawingBrushController : PixelToolController
     {
         PixelFarm.VectorMath.Point _latestMousePoint;
-        PixelFarm.Agg.Samples.MyBrushPath _myBrushPath;
+        PixelFarm.CpuBlit.Samples.MyBrushPath _myBrushPath;
         System.Drawing.Drawing2D.GraphicsPath _latestBrushPathCache = null;
         List<System.Drawing.Point> _points = new List<System.Drawing.Point>();
         public MyDrawingBrushController()
@@ -70,27 +70,27 @@ namespace Mini.WinForms
                 return;
             }
 
-            if (_myBrushPath.Vxs != null)
-            {
-                //create new path  
-                _latestBrushPathCache = PixelFarm.Drawing.WinGdi.VxsHelper.CreateGraphicsPath(_myBrushPath.Vxs);
-                PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
-                using (var br = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
-                {
-                    g.FillPath(br, _latestBrushPathCache);
-                }
-            }
-            else
-            {
-                var contPoints = _myBrushPath.contPoints;
-                int pcount = contPoints.Count;
-                for (int i = 1; i < pcount; ++i)
-                {
-                    var p0 = contPoints[i - 1];
-                    var p1 = contPoints[i];
-                    g.DrawLine(Pens.Red, (float)p0.x, (float)p0.y, (float)p1.x, (float)p1.y);
-                }
-            }
+            //if (_myBrushPath.Vxs != null)
+            //{
+            //    //create new path  
+            //    _latestBrushPathCache = PixelFarm.Drawing.WinGdi.VxsHelper.CreateGraphicsPath(_myBrushPath.Vxs);
+            //    PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
+            //    using (var br = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+            //    {
+            //        g.FillPath(br, _latestBrushPathCache);
+            //    }
+            //}
+            //else
+            //{
+            //    var contPoints = _myBrushPath.contPoints;
+            //    int pcount = contPoints.Count;
+            //    for (int i = 1; i < pcount; ++i)
+            //    {
+            //        var p0 = contPoints[i - 1];
+            //        var p1 = contPoints[i];
+            //        g.DrawLine(Pens.Red, (float)p0.x, (float)p0.y, (float)p1.x, (float)p1.y);
+            //    }
+            //}
         }
         public override bool HitTest(int x, int y)
         {
@@ -101,7 +101,7 @@ namespace Mini.WinForms
             _latestBrushPathCache = null;
             _latestMousePoint = new PixelFarm.VectorMath.Point(x, y);
             _points.Clear();
-            _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
+            _myBrushPath = new PixelFarm.CpuBlit.Samples.MyBrushPath();
             _myBrushPath.FillColor = PixelFarm.Drawing.Color.Red;
             _points.Add(new System.Drawing.Point(x, y));
             _myBrushPath.AddPointAtFirst(x, y);
@@ -138,7 +138,7 @@ namespace Mini.WinForms
         {
             if (_myBrushPath != null)
             {
-                return _myBrushPath.Vxs;
+                return _myBrushPath.GetMergedVxs();
             }
             else
             {
@@ -154,7 +154,7 @@ namespace Mini.WinForms
             }
             else
             {
-                _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
+                _myBrushPath = new PixelFarm.CpuBlit.Samples.MyBrushPath();
                 _myBrushPath.SetVxs(vxs);
             }
             _latestBrushPathCache = null;
@@ -212,11 +212,14 @@ namespace Mini.WinForms
                 {
                     PixelToolController prevPixTool = prevPixTools[n];
                     //do path clip*** 
-                    List<VertexStore> resultList = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(
-                         new VertexStoreSnap(prevPixTool.GetVxs()),
-                         new VertexStoreSnap(this.GetVxs()),
-                         PixelFarm.Agg.VertexSource.VxsClipperType.Difference,
-                         true);
+                    List<VertexStore> resultList = new List<VertexStore>();
+                    PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
+                         prevPixTool.GetVxs(),
+                         this.GetVxs(),
+                         PixelFarm.CpuBlit.VertexProcessing.VxsClipperType.Difference,
+                         true,
+                         resultList
+                         );
                     int count;
                     switch (count = resultList.Count)
                     {

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using LayoutFarm.UI;
@@ -10,6 +10,7 @@ namespace LayoutFarm.Text
         public readonly UIKeys key;
         public readonly char c;
         public bool PreventDefault;
+        public int delta;
         public TextDomEventArgs(char c)
         {
             this.c = c;
@@ -18,10 +19,24 @@ namespace LayoutFarm.Text
         {
             this.key = key;
         }
+        public TextDomEventArgs(int delta)
+        {
+            this.delta = delta;
+        }
+
         public TextDomEventArgs(bool updateJustCurrentLine)
         {
             this.updateJustCurrentLine = updateJustCurrentLine;
         }
+        public TextDomEventArgs(bool updateJustCurrentLine, VisualSelectionRangeSnapShot changedSnapShot)
+        {
+            this.updateJustCurrentLine = updateJustCurrentLine;
+            this.SelectionSnapShot = changedSnapShot;
+        }
+        public VisualSelectionRangeSnapShot SelectionSnapShot { get; private set; }
+        public bool Shift { get; set; }
+        public bool Control { get; set; }
+        public bool Alt { get; set; }
     }
 
     public sealed class TextSurfaceEventListener
@@ -30,8 +45,11 @@ namespace LayoutFarm.Text
         char[] previewKeyDownRegisterChars;
         public event EventHandler<TextDomEventArgs> PreviewArrowKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewEnterKeyDown;
+        public event EventHandler<TextDomEventArgs> PreviewDialogKeyDown;
+        public event EventHandler<TextDomEventArgs> PreviewMouseWheel;
+
         public event EventHandler<TextDomEventArgs> PreviewBackSpaceKeyDown;
-        public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyDown;
+        public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyPress;
         public event EventHandler<TextDomEventArgs> CharacterAdded;
         public event EventHandler<TextDomEventArgs> CharacterRemoved;
         public event EventHandler<TextDomEventArgs> CharacterReplaced;
@@ -66,46 +84,98 @@ namespace LayoutFarm.Text
         {
             this.targetTextSurface = textSurfaceElement;
         }
-        internal static bool NotifyPreviewEnter(TextSurfaceEventListener listener)
+
+        internal static bool NotifyPreviewMouseWheel(TextSurfaceEventListener listener, UIMouseEventArgs e)
+        {
+            if (listener.PreviewMouseWheel != null)
+            {
+                TextDomEventArgs e2 = new TextDomEventArgs(e.Delta);
+                //TODO: add alt, control,shift
+                listener.PreviewMouseWheel(listener, e2);
+                return e2.PreventDefault;
+            }
+            return false;
+        }
+
+        internal static bool NotifyPreviewDialogKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
+        {
+            if (listener.PreviewDialogKeyDown != null)
+            {
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
+
+                listener.PreviewDialogKeyDown(listener, e);
+                return e.PreventDefault;
+            }
+            return false;
+        }
+        internal static bool NotifyPreviewEnter(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewEnterKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(UIKeys.Enter);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
                 listener.PreviewEnterKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
         }
-        internal static bool NotifyPreviewBackSpace(TextSurfaceEventListener listener)
+
+        internal static bool NotifyPreviewBackSpace(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewBackSpaceKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(UIKeys.Back);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
                 listener.PreviewBackSpaceKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
         }
-        internal static bool NotifyPreviewArrow(TextSurfaceEventListener listener, UIKeys key)
+        internal static bool NotifyPreviewArrow(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
             if (listener.PreviewArrowKeyDown != null)
             {
-                TextDomEventArgs e = new TextDomEventArgs(key);
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyCode)
+                {
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
                 listener.PreviewArrowKeyDown(listener, e);
                 return e.PreventDefault;
             }
             return false;
         }
-        internal static bool NotifyPreviewKeydown(TextSurfaceEventListener listener, char c)
+
+        internal static bool NotifyPreviewKeyPress(TextSurfaceEventListener listener, UIKeyEventArgs keyEventArgs)
         {
-            if (listener.IsRegisterPreviewKeyDownChar(c))
+            if (listener.IsRegisterPreviewKeyDownPress(keyEventArgs.KeyChar) &&
+                listener.PreviewRegisteredKeyPress != null)
             {
-                if (listener.PreviewRegisteredKeyDown != null)
+                //TODO: review here use from pool?
+                TextDomEventArgs e = new TextDomEventArgs(keyEventArgs.KeyChar)
                 {
-                    TextDomEventArgs e = new TextDomEventArgs(c);
-                    listener.PreviewRegisteredKeyDown(listener, e);
-                    return e.PreventDefault;
-                }
+                    Alt = keyEventArgs.Alt,
+                    Control = keyEventArgs.Ctrl,
+                    Shift = keyEventArgs.Shift
+                };
+                //also set other keyboard info ?
+                //eg. alt ctrl shift
+                listener.PreviewRegisteredKeyPress(listener, e);
+                return e.PreventDefault;
             }
             return false;
         }
@@ -116,7 +186,7 @@ namespace LayoutFarm.Text
                 listener.ArrowKeyCaretPosChanged(listener, new TextDomEventArgs(key));
             }
         }
-        bool IsRegisterPreviewKeyDownChar(char c)
+        bool IsRegisterPreviewKeyDownPress(char c)
         {
             if (previewKeyDownRegisterChars != null)
             {
@@ -153,11 +223,11 @@ namespace LayoutFarm.Text
                 listener.CharacterRemoved(listener, e);
             }
         }
-        internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeys key)
+        internal static void NotifyKeyDown(TextSurfaceEventListener listener, UIKeyEventArgs e)
         {
             if (listener.KeyDown != null)
             {
-                listener.KeyDown(listener, new TextDomEventArgs(key));
+                listener.KeyDown(listener, new TextDomEventArgs(e.KeyCode) { Shift = e.Shift, Control = e.Ctrl, Alt = e.Alt });
             }
         }
         internal static void NofitySplitNewLine(TextSurfaceEventListener listener, UIKeyEventArgs e)
@@ -173,6 +243,7 @@ namespace LayoutFarm.Text
             {
                 listener.ReplacedAll(listener, e);
             }
+
         }
 
         internal static void NotifyFunctionKeyDown(TextSurfaceEventListener listener, UIKeys key)

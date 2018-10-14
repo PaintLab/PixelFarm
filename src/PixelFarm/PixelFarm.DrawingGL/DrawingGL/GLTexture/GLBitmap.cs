@@ -1,7 +1,8 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using OpenTK.Graphics.ES20;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -14,72 +15,6 @@ namespace PixelFarm.DrawingGL
         public abstract bool IsInvert { get; }
     }
 
-
-
-
-    class InternalGLBitmapTexture : IDisposable
-    {
-        int textureId;
-        int width;
-        int height;
-        PixelFormat pixelFormat;
-        PixelInternalFormat internalFormat;
-        byte[] pixelData;
-        TextureMinFilter minFilter;
-        TextureMagFilter maxFilter;
-        public InternalGLBitmapTexture(int w, int h,
-            byte[] pixelData,
-            PixelFormat pixelFormat,
-            PixelInternalFormat internalFormat,
-            TextureMinFilter minFilter,
-            TextureMagFilter maxFilter
-            )
-        {
-            this.width = w;
-            this.height = h;
-            this.pixelFormat = pixelFormat;
-            this.internalFormat = internalFormat;
-            this.pixelData = pixelData;
-            this.minFilter = minFilter;
-            this.maxFilter = maxFilter;
-        }
-        //---------------------------------
-        //only after gl context is created
-        internal int GetServerTextureId()
-        {
-            if (this.textureId == 0)
-            {
-                //server part
-                //gen texture 
-                GL.GenTextures(1, out this.textureId);
-                //bind
-                GL.BindTexture(TextureTarget.Texture2D, this.textureId);
-                unsafe
-                {
-                    fixed (byte* head = &pixelData[0])
-                    {
-                        GL.TexImage2D(TextureTarget.Texture2D, 0,
-                            internalFormat, this.width, this.height, 0,
-                            pixelFormat, // 
-                        PixelType.UnsignedByte, new IntPtr((void*)head));
-                    }
-                }
-
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)maxFilter);
-            }
-            return this.textureId;
-        }
-        public void Dispose()
-        {
-            //after delete the textureId will set to 0 ?
-            if (textureId > 0)
-            {
-                GL.DeleteTextures(1, ref textureId);
-            }
-        }
-    }
-
     public class GLBitmap : PixelFarm.Drawing.Image
     {
         int textureId;
@@ -87,7 +22,7 @@ namespace PixelFarm.DrawingGL
         int height;
 
         int[] rawIntBuffer;
-        //PixelFarm.Drawing.Imaging.NativeImage bmp;
+
         IntPtr nativeImgMem;
         LazyBitmapBufferProvider lazyProvider;
         bool isInvertImage = false;
@@ -125,14 +60,20 @@ namespace PixelFarm.DrawingGL
             this.height = h;
         }
 
-        public GLBitmap(PixelFarm.Agg.ActualImage actualImg)
+        public GLBitmap(PixelFarm.CpuBlit.ActualBitmap srcBmp)
         {
-            this.width = actualImg.Width;
-            this.height = actualImg.Height;
-            this.rawIntBuffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg);
+            this.width = srcBmp.Width;
+            this.height = srcBmp.Height;
+
+            int[] buffer = new int[srcBmp.Width * srcBmp.Height];
+            unsafe
+            {
+                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(srcBmp);
+                System.Runtime.InteropServices.Marshal.Copy(tmp.Ptr, buffer, 0, srcBmp.Width * srcBmp.Height);
+            }
+            rawIntBuffer = buffer;
+
         }
-
-
 
 
         public bool IsBigEndianPixel { get; set; }
@@ -178,8 +119,8 @@ namespace PixelFarm.DrawingGL
                 GL.BindTexture(TextureTarget.Texture2D, this.textureId);
                 if (nativeImgMem != IntPtr.Zero)
                 {
-                    GL.TexImage2D(TextureTarget.Texture2D, 0,
-                          PixelInternalFormat.Rgba, this.width, this.height, 0,
+                    GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                          (TextureComponentCount)PixelInternalFormat.Rgba, this.width, this.height, 0,
                           PixelFormat.Rgba, // 
                           PixelType.UnsignedByte, nativeImgMem);
                 }
@@ -205,8 +146,8 @@ namespace PixelFarm.DrawingGL
                         fixed (int* head = &rawIntBuffer[0])
                         {
 
-                            GL.TexImage2D(TextureTarget.Texture2D, 0,
-                            PixelInternalFormat.Rgba, this.width, this.height, 0,
+                            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                            (TextureComponentCount)PixelInternalFormat.Rgba, this.width, this.height, 0,
                             PixelFormat.Rgba, // 
                             PixelType.UnsignedByte, new IntPtr((void*)head));
                         }
@@ -224,8 +165,8 @@ namespace PixelFarm.DrawingGL
                 {
                     //use lazy provider
                     IntPtr bmpScan0 = this.lazyProvider.GetRawBufferHead();
-                    GL.TexImage2D(TextureTarget.Texture2D, 0,
-                           PixelInternalFormat.Rgba, this.width, this.height, 0,
+                    GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                           (TextureComponentCount)PixelInternalFormat.Rgba, this.width, this.height, 0,
                            PixelFormat.Rgba,
                            PixelType.UnsignedByte, (IntPtr)bmpScan0);
                     this.lazyProvider.ReleaseBufferHead();
@@ -243,7 +184,6 @@ namespace PixelFarm.DrawingGL
             if (textureId > 0)
             {
                 GL.DeleteTextures(1, ref textureId);
-
             }
         }
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
@@ -251,7 +191,7 @@ namespace PixelFarm.DrawingGL
             if (rawIntBuffer != null)
             {
                 int[] newBuff = new int[rawIntBuffer.Length];
-                Buffer.BlockCopy(rawIntBuffer, 0, rawIntBuffer, 0, newBuff.Length);
+                System.Buffer.BlockCopy(rawIntBuffer, 0, rawIntBuffer, 0, newBuff.Length);
                 buffRequest.OutputBuffer32 = newBuff;
             }
             //else if (rawBuffer != null)

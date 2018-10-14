@@ -1,11 +1,11 @@
-﻿//BSD, 2014-2018, WinterDev 
+﻿//BSD, 2014-present, WinterDev 
 //adapt from Paper.js
 
 using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
 using Mini;
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "22")]
     [Info("DrippingBrush")]
@@ -26,21 +26,23 @@ namespace PixelFarm.Agg.Samples
 
             foreach (var brushPath in this.myBrushPathList)
             {
-                if (brushPath.Vxs != null)
-                {
-                    p.Fill(brushPath.Vxs);
-                }
-                else
-                {
-                    var contPoints = brushPath.contPoints;
-                    int pcount = contPoints.Count;
-                    for (int i = 1; i < pcount; ++i)
-                    {
-                        var p0 = contPoints[i - 1];
-                        var p1 = contPoints[i];
-                        p.DrawLine(p0.x, p0.y, p1.x, p1.y);
-                    }
-                }
+                brushPath.PaintLatest(p);
+
+                //if (brushPath.Vxs != null)
+                //{
+                //    p.Fill(brushPath.Vxs);
+                //}
+                //else
+                //{
+                //    var contPoints = brushPath.contPoints;
+                //    int pcount = contPoints.Count;
+                //    for (int i = 1; i < pcount; ++i)
+                //    {
+                //        var p0 = contPoints[i - 1];
+                //        var p1 = contPoints[i];
+                //        p.DrawLine(p0.x, p0.y, p1.x, p1.y);
+                //    }
+                //}
             }
         }
 

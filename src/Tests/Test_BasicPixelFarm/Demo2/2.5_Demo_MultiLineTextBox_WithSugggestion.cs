@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -7,18 +7,18 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("2.5 MultiLineText_WithSuggestion")]
-    class Demo_MultiLineText_WithSuggestion : DemoBase
+    class Demo_MultiLineText_WithSuggestion : App
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             textbox.SetLocation(20, 20);
 
             var style1 = new Text.TextSpanStyle();
-            style1.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+            style1.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox.DefaultSpanStyle = style1;
 
@@ -36,8 +36,8 @@ namespace LayoutFarm
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
-            viewport.AddContent(textbox);
-            viewport.AddContent(listView);
+            host.AddChild(textbox);
+            host.AddChild(listView);
             //------------------------------------ 
             BuildSampleCountryList();
         }

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace LayoutFarm.CustomWidgets
 {
 
 
-    public class ListView : UIBox
+    public class ListView : AbstractRectUI
     {
 
 
@@ -23,7 +23,7 @@ namespace LayoutFarm.CustomWidgets
         List<ListItem> items = new List<ListItem>();
         int selectedIndex = -1;//default = no selection
         ListItem selectedItem = null;
-        SimpleBox panel;
+        Box panel;
 
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
@@ -33,13 +33,14 @@ namespace LayoutFarm.CustomWidgets
         {
             uiList = new UICollection(this);
 
-            var simpleBox = new SimpleBox(width, height);
+            var simpleBox = new Box(width, height);
             simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             simpleBox.BackColor = Color.LightGray;
             simpleBox.MouseDown += panel_MouseDown;
             simpleBox.MouseDoubleClick += panel_MouseDoubleClick;
             simpleBox.AcceptKeyboardFocus = true;
             simpleBox.KeyDown += simpleBox_KeyDown;
+            simpleBox.NeedClipArea = true;
 
             this.panel = simpleBox;
             uiList.AddUI(panel);
@@ -124,7 +125,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
                 renderE.SetController(this);
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
                 //create visual layer
 
@@ -260,15 +261,29 @@ namespace LayoutFarm.CustomWidgets
         {
             get { return this.viewportY; }
         }
-        public override void SetViewport(int x, int y)
+        
+        public override void SetViewport(int x, int y, object reqBy)
         {
             this.viewportX = x;
             this.viewportY = y;
             if (this.HasReadyRenderElement)
             {
-                this.panel.SetViewport(x, y);
+                this.panel.SetViewport(x, y, reqBy);
             }
         }
+        public override int InnerHeight
+        {
+            get
+            {
+                if (items.Count > 0)
+                {
+                    ListItem lastOne = items[items.Count - 1];
+                    return lastOne.Bottom;
+                }
+                return this.Height;
+            }
+        }
+
         public void ScrollToSelectedItem()
         {
             //EnsureSelectedItemVisible();
@@ -279,16 +294,41 @@ namespace LayoutFarm.CustomWidgets
                 SetViewport(this.viewportX, topPos);
             }
         }
+        public void EnsureSelectedItemVisibleToTopItem()
+        {
+            if (selectedIndex > -1)
+            {
+                //check if selected item is visible
+                //if not bring them into view 
+                int newtop = selectedItem.Top;
+                SetViewport(this.viewportX, newtop);
+            }
+
+        }
         public void EnsureSelectedItemVisible()
         {
             if (selectedIndex > -1)
             {
                 //check if selected item is visible
-                //if not bring them into view
-                int topPos = selectedItem.Top;
-                if (this.viewportY + ViewportHeight < topPos)
+                //if not bring them into view 
+                if (selectedItem.Top < viewportY)
                 {
-                    SetViewport(this.viewportX, topPos - (ViewportHeight / 2));
+                    //must see entire item
+                    int newtop = selectedItem.Top - (Height / 3);
+                    if (newtop < 0)
+                    {
+                        newtop = 0;
+                    }
+                    SetViewport(this.viewportX, newtop);
+                }
+                else if (selectedItem.Bottom > viewportY + Height)
+                {
+                    int newtop = selectedItem.Top - (Height * 2 / 3);
+                    if (newtop < 0)
+                    {
+                        newtop = 0;
+                    }
+                    SetViewport(this.viewportX, newtop);
                 }
             }
 
@@ -307,7 +347,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class ListItem : UIBox
+    public class ListItem : AbstractRectUI
     {
         CustomContainerRenderBox primElement;
         CustomTextRun listItemText;
@@ -320,6 +360,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             this.TransparentAllMouseEvents = true;
+
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
@@ -354,9 +395,11 @@ namespace LayoutFarm.CustomWidgets
                 listItemText.TransparentForAllEvents = true;
                 if (this.itemText != null)
                 {
+                    listItemText.NeedClipArea = true;
                     listItemText.Text = this.itemText;
                 }
 
+                element.NeedClipArea = true;
                 this.primElement = element;
             }
             return primElement;

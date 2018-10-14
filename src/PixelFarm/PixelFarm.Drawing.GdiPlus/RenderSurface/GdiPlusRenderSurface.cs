@@ -1,5 +1,5 @@
-﻿//BSD, 2014-2018, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
+﻿//BSD, 2014-present, WinterDev
+//ArthurHub, Jose Manuel Menendez Poo
 
 // "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
@@ -16,6 +16,8 @@
 using System;
 using System.Collections.Generic;
 using Win32;
+using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Drawing.WinGdi
 {
 
@@ -39,7 +41,13 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Pen internalPen;
         System.Drawing.SolidBrush internalSolidBrush;
         System.Drawing.Rectangle currentClipRect;
-        //-------------------------------
+        //------------------------------- 
+        LayoutFarm.OpenFontTextService _openFontTextServices;
+
+        PixelFarm.CpuBlit.ActualBitmap _actualBmp;
+        CpuBlit.AggPainter _painter;
+        //------------------------------- 
+
 
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
@@ -63,10 +71,11 @@ namespace PixelFarm.Drawing.WinGdi
             internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
+
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
-            win32MemDc = new NativeWin32MemoryDc(width, height, true);
+            win32MemDc = new NativeWin32MemoryDc(width, height, false);
             win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
             win32MemDc.SetBackTransparent(true);
             win32MemDc.SetClipRect(0, 0, width, height);
@@ -84,11 +93,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return "visible_clip" + this.gx.VisibleClipBounds.ToString();
         }
-#endif
-
-
-
-
+#endif 
         public void CloseCanvas()
         {
             if (isDisposed)
@@ -220,25 +225,6 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 #endif
-        //public override bool PushClipAreaForNativeScrollableElement(Rect updateArea)
-        //{
-
-        //    clipRectStack.Push(currentClipRect);
-
-        //    System.Drawing.Rectangle intersectResult = System.Drawing.Rectangle.Intersect(
-        //        currentClipRect,
-        //        updateArea.ToRectangle().ToRect());
-
-        //    if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
-        //    {
-        //        currentClipRect = intersectResult;
-        //        return false;
-        //    }
-
-        //    gx.SetClip(intersectResult);
-        //    currentClipRect = intersectResult;
-        //    return true;
-        //}
 
 #if DEBUG
         public static int dbug_canvasCount = 0;
@@ -338,9 +324,6 @@ namespace PixelFarm.Drawing.WinGdi
                 gx.SetClip(currentClipRect);
             }
         }
-
-
-
         public Rectangle CurrentClipRect
         {
             get
@@ -348,9 +331,6 @@ namespace PixelFarm.Drawing.WinGdi
                 return currentClipRect.ToRect();
             }
         }
-
-
-
         public int Top
         {
             get
@@ -471,7 +451,12 @@ namespace PixelFarm.Drawing.WinGdi
                 destHdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, //dest
                 win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
             MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
-
+        }
+        public unsafe void RenderTo(byte* outputBuffer)
+        {
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, canvasOriginX, canvasOriginY, IntPtr.Zero);
+            win32MemDc.CopyPixelBitsToOutput(outputBuffer);
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {
@@ -505,13 +490,12 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                         //draw with gradient
                         LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
-                        var colors = linearBrush.GetColors();
-                        var points = linearBrush.GetStopPoints();
+                        Drawing.LinearGradientPair firstPair = linearBrush.GetFirstPair();
                         using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                             points[0].ToPointF(),
-                             points[1].ToPointF(),
-                             ConvColor(colors[0]),
-                             ConvColor(colors[1])))
+                            new System.Drawing.PointF(firstPair.x1, firstPair.y1),
+                            new System.Drawing.PointF(firstPair.x2, firstPair.y2),
+                            ConvColor(firstPair.c1),
+                            ConvColor(firstPair.c2)))
                         {
                             gx.FillRectangle(linearGradBrush, left, top, width, height);
                         }
@@ -602,7 +586,7 @@ namespace PixelFarm.Drawing.WinGdi
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
 
-            if (image is PixelFarm.Agg.ActualImage)
+            if (image is PixelFarm.CpuBlit.ActualBitmap)
             {
                 //this is known image
                 var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
@@ -613,7 +597,8 @@ namespace PixelFarm.Drawing.WinGdi
                         image.Height,
                         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     //
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
+                    //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
+                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.ActualBitmap)image, bmp);
                     //
                     Image.SetCacheInnerImage(image, bmp);
                     return bmp;
@@ -646,6 +631,30 @@ namespace PixelFarm.Drawing.WinGdi
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
         }
+        public void DrawImage(Image image, int x, int y)
+        {
+            PixelFarm.CpuBlit.ActualBitmap actualBmp = image as PixelFarm.CpuBlit.ActualBitmap;
+            if (actualBmp != null)
+            {
+                System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
+                gx.DrawImageUnscaled(resolvedImg, x, y);
+
+                //int[] srcBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualBmp);
+                //unsafe
+                //{
+                //    int srcStride = actualBmp.Stride;
+                //    fixed (int* srcBufferPtr = &srcBuffer[0])
+                //    {
+                //        win32MemDc.BlendBltBitFrom((byte*)srcBufferPtr, srcStride, 0, 0, actualBmp.Width, actualBmp.Height, x, y);
+                //    }
+                //}
+            }
+            else
+            {
+                System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
+                gx.DrawImageUnscaled(resolvedImg, x, y);
+            }
+        }
         public void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
 
@@ -676,6 +685,36 @@ namespace PixelFarm.Drawing.WinGdi
         public void DrawImage(Image image, RectangleF destRect)
         {
 
+            //if (image is PixelFarm.CpuBlit.ActualBitmap)
+            //{
+
+            //    if (image.Width == destRect.Width &&
+            //        image.Height == destRect.Height)
+            //    {
+            //        Painter painter = GetAggPainter();
+            //        //RenderQuality prev = painter.RenderQuality;
+            //        //painter.RenderQuality = RenderQuality.Fast;
+            //        //draw image at current position
+
+            //        painter.DrawImage((PixelFarm.CpuBlit.ActualBitmap)image);
+
+            //        //painter.RenderQuality = prev;
+            //        return;
+            //    }
+            //}
+
+            //check if we need scale?
+            if (image.Width == destRect.Width &&
+                image.Height == destRect.Height)
+            {
+                System.Drawing.Bitmap inner2 = ResolveInnerBmp(image);
+                if (inner2.HorizontalResolution == gx.DpiX)
+                {
+                    DrawImage(image, (int)destRect.X, (int)destRect.Y);
+                    return;
+                }
+            }
+
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
             if (image.IsReferenceImage)
             {
@@ -700,6 +739,150 @@ namespace PixelFarm.Drawing.WinGdi
             System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(gfxPath);
             gx.FillPath(internalSolidBrush, innerPath);
             internalSolidBrush.Color = prevColor;
+        }
+        //static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VgCmd vxsRenderVx)
+        //{
+        //    return null;
+        //    //var gpath = PixelFarm.CpuBlit.SvgCmd.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
+        //    //if (gpath != null) return gpath;
+
+        //    //gpath = CreateGraphicsPath(vxsRenderVx.GetVxs());
+        //    //PixelFarm.CpuBlit.SvgCmd.SetResolvedObject(vxsRenderVx, gpath);
+        //    //return gpath;
+        //}
+        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
+        {
+
+            var gpath = PixelFarm.CpuBlit.VxsRenderVx.GetResolvedObject(vxsRenderVx) as System.Drawing.Drawing2D.GraphicsPath;
+            if (gpath != null) return gpath;
+
+            gpath = CreateGraphicsPath(vxsRenderVx._vxs);
+            PixelFarm.CpuBlit.VxsRenderVx.SetResolvedObject(vxsRenderVx, gpath);
+            return gpath;
+        }
+        static System.Drawing.Drawing2D.GraphicsPath CreateGraphicsPath(VertexStore vxs)
+        {
+            //
+            //elsse create a new one 
+            var gpath = new System.Drawing.Drawing2D.GraphicsPath();
+
+            int j = vxs.Count;
+            float latestMoveX = 0, latestMoveY = 0, latestX = 0, latestY = 0;
+            bool isOpen = false;
+            for (int i = 0; i < j; ++i)
+            {
+                var cmd = vxs.GetVertex(i, out double x, out double y);
+                switch (cmd)
+                {
+                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
+                        {
+                            latestMoveX = latestX = (float)x;
+                            latestMoveY = latestY = (float)y;
+                        }
+                        break;
+                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
+                        {
+                            isOpen = true;
+                            gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
+                        }
+                        break;
+                    case PixelFarm.CpuBlit.VertexCmd.Close:
+                        {
+                            latestX = latestMoveX;
+                            latestY = latestMoveY;
+
+                            gpath.CloseFigure();
+                            isOpen = false;
+                        }
+                        break;
+                    case CpuBlit.VertexCmd.NoMore: break;
+                    default:
+                        throw new System.NotSupportedException();
+                }
+            }
+
+            return gpath;
+        }
+        public void FillPath(Color color, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
+        {
+
+            //solid color
+            var prevColor = internalSolidBrush.Color;
+            internalSolidBrush.Color = ConvColor(color);
+            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+            gx.FillPath(internalSolidBrush, innerPath);
+            internalSolidBrush.Color = prevColor;
+        }
+        public void FillPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
+        {
+
+            //solid color 
+            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+            gx.FillPath(internalSolidBrush, innerPath);
+
+        }
+
+
+        internal Painter GetAggPainter()
+        {
+            if (_actualBmp == null)
+            {
+                _actualBmp = new CpuBlit.ActualBitmap(this.Width, this.Height, win32MemDc.PPVBits);
+            }
+
+            if (_painter == null)
+            {
+
+
+                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
+                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+                if (_openFontTextServices == null)
+                {
+                    _openFontTextServices = new LayoutFarm.OpenFontTextService();
+                }
+
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices);
+                aggPainter.TextPrinter = textPrinter;
+                aggPainter.CurrentFont = new RequestFont("tahoma", 14);
+                //
+                _painter = aggPainter;
+            }
+            return _painter;
+        }
+        public void FillPath(Brush brush, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
+        {
+
+            switch (brush.BrushKind)
+            {
+                case BrushKind.Solid:
+                    {
+                        SolidBrush solidBrush = (SolidBrush)brush;
+                        var prevColor = internalSolidBrush.Color;
+                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        //
+                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+                        gx.FillPath(internalSolidBrush, innerPath);
+                        //
+                        internalSolidBrush.Color = prevColor;
+                    }
+                    break;
+                case BrushKind.LinearGradient:
+                    {
+                        LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
+                        var prevColor = internalSolidBrush.Color;
+                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        //
+                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
+                        gx.FillPath(internalSolidBrush, innerPath);
+                        //
+                        internalSolidBrush.Color = prevColor;
+                    }
+                    break;
+                default:
+                    {
+                    }
+                    break;
+            }
         }
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.

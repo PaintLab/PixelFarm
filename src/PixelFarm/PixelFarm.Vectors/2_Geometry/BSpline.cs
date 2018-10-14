@@ -1,4 +1,4 @@
-//BSD, 2014-2018, WinterDev
+//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //----------------------------------------------------------------bspline
     // A very simple class of Bi-cubic Spline interpolation.

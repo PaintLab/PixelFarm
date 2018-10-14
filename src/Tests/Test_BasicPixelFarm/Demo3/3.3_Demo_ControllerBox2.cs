@@ -1,37 +1,37 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.3 Demo_ControllerBoxs2")]
-    class Demo_ControllerBoxs2 : DemoBase
+    class Demo_ControllerBoxs2 : App
     {
         UIControllerBox controllerBox1;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
 
-            var bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+            var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
             bgbox.BackColor = Color.White;
             bgbox.SetLocation(0, 0);
             SetupBackgroundProperties(bgbox);
-            viewport.AddContent(bgbox);
+            host.AddChild(bgbox);
             //--------------------------------
 
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(150, 150);
+            var box1 = new LayoutFarm.CustomWidgets.Box(150, 150);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
-            viewport.AddContent(box1);
+            host.AddChild(box1);
             //--------------------------------
 
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(60, 60);
+            var box2 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
-            viewport.AddContent(box2);
+            host.AddChild(box2);
             controllerBox1 = new UIControllerBox(40, 40);
             Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
             controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
@@ -39,9 +39,9 @@ namespace LayoutFarm
             //controllerBox1.dbugTag = 3;
             controllerBox1.Visible = false;
             SetupControllerBoxProperties(controllerBox1);
-            viewport.AddContent(controllerBox1);
+            host.AddChild(controllerBox1);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
             //if click on background
             backgroundBox.MouseDown += (s, e) =>
@@ -50,7 +50,7 @@ namespace LayoutFarm
                 controllerBox1.Visible = false;
             };
         }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>
@@ -109,14 +109,14 @@ namespace LayoutFarm
         }
 
         //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
-            LayoutFarm.CustomWidgets.GridBox gridBox;
+            LayoutFarm.CustomWidgets.GridView gridBox;
             public UIControllerBox(int w, int h)
                 : base(w, h)
             {
             }
-            public LayoutFarm.UI.UIBox TargetBox
+            public LayoutFarm.UI.AbstractRectUI TargetBox
             {
                 get;
                 set;
@@ -126,7 +126,7 @@ namespace LayoutFarm
             {
                 if (!this.HasReadyRenderElement)
                 {
-                    gridBox = new LayoutFarm.CustomWidgets.GridBox(30, 30);
+                    gridBox = new LayoutFarm.CustomWidgets.GridView(30, 30);
                     gridBox.SetLocation(5, 5);
                     gridBox.BuildGrid(3, 3, CellSizeStyle.UniformCell);
                     var myRenderElement = base.GetPrimaryRenderElement(rootgfx) as LayoutFarm.CustomWidgets.CustomRenderBox;

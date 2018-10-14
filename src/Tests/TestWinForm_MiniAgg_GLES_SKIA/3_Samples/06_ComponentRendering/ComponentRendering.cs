@@ -1,14 +1,18 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //MatterHackers
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.Rasterization;
+
 using Mini;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     [Info(OrderCode = "06")]
-    [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
+    //[Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
     public class ComponentRendering : DemoBase
     {
         public ComponentRendering()
@@ -38,49 +42,57 @@ namespace PixelFarm.Agg
             }
 
 
-            throw new NotSupportedException();
-
             AggPainter p2 = (AggPainter)p;
-            AggRenderSurface aggRdsf = p2.RenderSurface;
-            if (aggRdsf.DestImage != null)
+            AggRenderSurface asx = p2.RenderSurface;
+            if (asx.DestBitmapBlender != null)
             {
-                IImageReaderWriter backBuffer = aggRdsf.DestImage;
-                IPixelBlender currentPixelBlender = aggRdsf.PixelBlender;
-                int distBetween = backBuffer.BytesBetweenPixelsInclusive;
+                IBitmapBlender backBuffer = asx.DestBitmapBlender;
+
+
                 //use different pixel blender 
-                var redImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
-                var greenImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.G, 8);
-                var blueImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.B, 8);
+                var redImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());
+                var greenImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());
+                var blueImageBuffer = new SubBitmapBlender(backBuffer, new PixelBlenderGrey());
+
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
                 ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
                 ClipProxyImage clippingProxyBlue = new ClipProxyImage(blueImageBuffer);
-                ScanlineRasterizer sclineRas = aggRdsf.ScanlineRasterizer;
-                ScanlinePacked8 scline = aggRdsf.ScanlinePacked8;
+                //
+                ScanlineRasterizer sclineRas = asx.ScanlineRasterizer;
+                ScanlinePacked8 scline = asx.ScanlinePacked8;
                 Drawing.Color clearColor = this.UseBlackBlackground ? Drawing.Color.FromArgb(0, 0, 0) : Drawing.Color.FromArgb(255, 255, 255);
                 clippingProxy.Clear(clearColor);
                 Drawing.Color fillColor = this.UseBlackBlackground ?
                     new Drawing.Color((byte)(this.AlphaValue), 255, 255, 255) :
                     new Drawing.Color((byte)(this.AlphaValue), 0, 0, 0);
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
-                VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                //
-                var v1 = GetFreeVxs();
-                sclineRas.AddPath(er.MakeVxs(v1));
-                v1.Clear();
-                sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
-                VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                sclineRas.AddPath(eg.MakeVertexSnap(v1));
-                v1.Clear();
 
-                sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
-                VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
 
-                sclineRas.AddPath(eb.MakeVertexSnap(v1));
-                v1.Clear();
-                sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
+                DestBitmapRasterizer bmpRas = asx.BitmapRasterizer;
 
-                ReleaseVxs(ref v1);
+                using (VectorToolBox.Borrow(out Ellipse ellipse))
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    ellipse.Set(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+                    sclineRas.AddPath(ellipse.MakeVxs(v1));
+                    v1.Clear();//**
+                    bmpRas.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
+
+                    ////
+
+                    ellipse.Set(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+                    sclineRas.AddPath(ellipse.MakeVxs(v1));
+                    v1.Clear();//***
+                    bmpRas.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
+
+                    //
+
+                    ellipse.Set(Width / 2, Height / 2 + 50, 100, 100, 100);
+                    sclineRas.AddPath(ellipse.MakeVxs(v1));
+                    v1.Clear(); //***
+                    bmpRas.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
+                }
+
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System.Collections.Generic;
 using PixelFarm.Drawing;
@@ -6,7 +6,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.6 Demo_DragSelectionBox")]
-    class Demo_DragSelectionBox : DemoBase
+    class Demo_DragSelectionBox : App
     {
         enum ControllerBoxMode
         {
@@ -21,31 +21,31 @@ namespace LayoutFarm
         List<UIControllerBox> workingControllerBoxes = new List<UIControllerBox>();
         ControllerBoxMode controllerBoxMode;
         UIControllerBox singleControllerBox;
-        SampleViewport viewport;
-        LayoutFarm.CustomWidgets.SimpleBox bgbox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        AppHost _host;
+        LayoutFarm.CustomWidgets.Box bgbox;
+        protected override void OnStart(AppHost host)
         {
-            this.viewport = viewport;
-            this.rootgfx = viewport.Root;
+            this._host = host;
+            this.rootgfx = host.RootGfx;
             //--------------------------------
 
-            bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+            bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
             bgbox.BackColor = Color.White;
             bgbox.SetLocation(0, 0);
             SetupBackgroundProperties(bgbox);
-            viewport.AddContent(bgbox);
+            host.AddChild(bgbox);
             //user box1
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(150, 150);
+            var box1 = new LayoutFarm.CustomWidgets.Box(150, 150);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             SetupActiveBoxProperties(box1);
             bgbox.AddChild(box1);
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(60, 60);
+            var box2 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box2.BackColor = Color.Yellow;
             box2.SetLocation(50, 50);
             SetupActiveBoxProperties(box2);
             bgbox.AddChild(box2);
-            var box3 = new LayoutFarm.CustomWidgets.SimpleBox(60, 60);
+            var box3 = new LayoutFarm.CustomWidgets.Box(60, 60);
             box3.BackColor = Color.OrangeRed;
             box3.SetLocation(200, 80);
             SetupActiveBoxProperties(box3);
@@ -53,7 +53,7 @@ namespace LayoutFarm
             selectionBox = new UISelectionBox(1, 1);
             selectionBox.Visible = false;
             selectionBox.BackColor = Color.FromArgb(80, Color.Green);
-            viewport.AddContent(selectionBox);
+            host.AddChild(selectionBox);
             SetupSelectionBoxProperties(selectionBox);
         }
 
@@ -106,7 +106,7 @@ namespace LayoutFarm
             }
             this.workingControllerBoxes.Clear();
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
             //if click on background
             backgroundBox.MouseDown += (s, e) =>
@@ -142,7 +142,7 @@ namespace LayoutFarm
                         y -= h;
                     }
                     //set width and height
-                    selectionBox.SetBounds(x, y, w, h);
+                    selectionBox.SetLocationAndSize(x, y, w, h);
                 }
             };
             backgroundBox.MouseUp += (s, e) =>
@@ -167,10 +167,10 @@ namespace LayoutFarm
             var primSelectionBox = selectionBox.GetPrimaryRenderElement(rootgfx);
             var primGlobalPoint = primSelectionBox.GetGlobalLocation();
             var selectedRectArea = new Rectangle(primGlobalPoint, primSelectionBox.Size);
-            List<UIBox> selectedList = new List<UIBox>();
+            List<AbstractRectUI> selectedList = new List<AbstractRectUI>();
             for (int i = 0; i < j; ++i)
             {
-                var box = bgbox.GetChild(i) as UIBox;
+                var box = bgbox.GetChild(i) as AbstractRectUI;
                 if (box == null)
                 {
                     continue;
@@ -195,11 +195,11 @@ namespace LayoutFarm
                     userControllerBox.SetLocation(globalTargetPos.X - 5, globalTargetPos.Y - 5);
                     userControllerBox.SetSize(box.Width + 10, box.Height + 10);
                     userControllerBox.Visible = true;
-                    viewport.AddContent(userControllerBox);
+                    _host.AddChild(userControllerBox);
                 }
             }
         }
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>
@@ -224,7 +224,7 @@ namespace LayoutFarm
                 }
                 //request user controller for this box
                 userControllerBox.TargetBox = box;
-                viewport.AddContent(userControllerBox);
+                _host.AddChild(userControllerBox);
                 //location relative to global position of target box
                 var globalTargetPos = box.GetGlobalLocation();
                 userControllerBox.SetLocation(globalTargetPos.X - 5, globalTargetPos.Y - 5);
@@ -261,11 +261,11 @@ namespace LayoutFarm
                         {
                             //drop
                             var sender = e.Sender as UIControllerBox;
-                            var droppingBox = sender.TargetBox as UIBox;
+                            var droppingBox = sender.TargetBox as AbstractRectUI;
                             if (droppingBox != null)
                             {
                                 //move from original 
-                                var parentBox = droppingBox.ParentUI as LayoutFarm.CustomWidgets.SimpleBox;
+                                var parentBox = droppingBox.ParentUI as LayoutFarm.CustomWidgets.Box;
                                 if (parentBox != null)
                                 {
                                     var newParentGlobalLoca = box.GetGlobalLocation();
@@ -323,7 +323,7 @@ namespace LayoutFarm
                         y -= h;
                     }
                     //set width and height
-                    selectionBox.SetBounds(x, y, w, h);
+                    selectionBox.SetLocationAndSize(x, y, w, h);
                     e.StopPropagation();
                 }
             };
@@ -339,7 +339,7 @@ namespace LayoutFarm
             int nearestX = (int)((newX + halfGrid) / gridSize) * gridSize;
             int nearestY = (int)((newY + halfGrid) / gridSize) * gridSize;
             controllerBox.SetLocation(nearestX, nearestY);
-            UIBox targetBox = controllerBox.TargetBox;
+            AbstractRectUI targetBox = controllerBox.TargetBox;
             if (targetBox != null)
             {
                 int xdiff = nearestX - pos.X;
@@ -347,14 +347,14 @@ namespace LayoutFarm
                 targetBox.SetLocation(targetBox.Left + xdiff, targetBox.Top + ydiff);
             }
         }
-        List<LayoutFarm.UI.UIBox> FindUnderlyingElements(UIControllerBox controllerBox)
+        List<LayoutFarm.UI.AbstractRectUI> FindUnderlyingElements(UIControllerBox controllerBox)
         {
-            var dragOverElements = new List<LayoutFarm.UI.UIBox>();
+            var dragOverElements = new List<LayoutFarm.UI.AbstractRectUI>();
             Rectangle controllerBoxArea = controllerBox.Bounds;
             int j = bgbox.ChildCount;
             for (int i = 0; i < j; ++i)
             {
-                var box = bgbox.GetChild(i) as LayoutFarm.UI.UIBox;
+                var box = bgbox.GetChild(i) as LayoutFarm.UI.AbstractRectUI;
                 if (box == null || controllerBox.TargetBox == box)
                 {
                     continue;
@@ -384,7 +384,7 @@ namespace LayoutFarm
                         //TODO: review here
                         //this version we select the first one
 
-                        var listener = dragOverElements[0] as IEventListener;
+                        var listener = dragOverElements[0] as IUIEventListener;
                         if (listener != null)
                         {
                             var talkMsg = new UIGuestTalkEventArgs();
@@ -411,7 +411,7 @@ namespace LayoutFarm
                     {
                         foreach (var leavingElement in prevDragOverElements.Keys)
                         {
-                            var listener = leavingElement as IEventListener;
+                            var listener = leavingElement as IUIEventListener;
                             if (listener != null)
                             {
                                 var talkMsg = new UIGuestTalkEventArgs();
@@ -450,7 +450,7 @@ namespace LayoutFarm
                         //remaining elements
                         foreach (var leavingElement in prevDragOverElements.Keys)
                         {
-                            var listener = leavingElement as IEventListener;
+                            var listener = leavingElement as IUIEventListener;
                             if (listener != null)
                             {
                                 var talkMsg = new UIGuestTalkEventArgs();
@@ -471,7 +471,7 @@ namespace LayoutFarm
                     controllerBox.LastestDragOverElements = latestDragOverElements;
                     foreach (var drgElement in latestDragOverElements.Keys)
                     {
-                        var listener = drgElement as IEventListener;
+                        var listener = drgElement as IUIEventListener;
                         if (listener != null)
                         {
                             var talkMsg = new UIGuestTalkEventArgs();
@@ -485,23 +485,23 @@ namespace LayoutFarm
         }
 
         //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
-            LayoutFarm.CustomWidgets.GridBox gridBox;
+            LayoutFarm.CustomWidgets.GridView gridBox;
             //small controller box
-            LayoutFarm.CustomWidgets.EaseBox boxLeftTop;
-            LayoutFarm.CustomWidgets.EaseBox boxRightTop;
-            LayoutFarm.CustomWidgets.EaseBox boxLeftBottom;
-            LayoutFarm.CustomWidgets.EaseBox boxRightBottom;
+            LayoutFarm.CustomWidgets.Box boxLeftTop;
+            LayoutFarm.CustomWidgets.Box boxRightTop;
+            LayoutFarm.CustomWidgets.Box boxLeftBottom;
+            LayoutFarm.CustomWidgets.Box boxRightBottom;
             DockSpacesController dockspaceController;
             Dictionary<UIElement, int> latestDragOverElements;
-            LayoutFarm.UI.UIBox targetBox;
+            LayoutFarm.UI.AbstractRectUI targetBox;
             public UIControllerBox(int w, int h)
                 : base(w, h)
             {
                 SetupDockSpaces();
             }
-            public LayoutFarm.UI.UIBox TargetBox
+            public LayoutFarm.UI.AbstractRectUI TargetBox
             {
                 get { return this.targetBox; }
                 set
@@ -538,7 +538,7 @@ namespace LayoutFarm
                         gridH = 3;
                     }
 
-                    gridBox = new LayoutFarm.CustomWidgets.GridBox(gridW, gridH);
+                    gridBox = new LayoutFarm.CustomWidgets.GridView(gridW, gridH);
                     gridBox.SetLocation(5, 5);
                     gridBox.BuildGrid(3, 3, CellSizeStyle.UniformCell);
                     var renderE = base.GetPrimaryRenderElement(rootgfx);
@@ -562,7 +562,7 @@ namespace LayoutFarm
                     //adjust grid size
                     gridBox.SetSize(width - 10, height - 10);
                 }
-                //---------------------------------
+                //--------------------------------- 
                 this.dockspaceController.SetSize(width, height);
             }
 
@@ -577,10 +577,10 @@ namespace LayoutFarm
                 this.dockspaceController.RightBottomSpace.Content = boxRightBottom = CreateTinyControlBox(SpaceName.RightBottom);
             }
 
-            CustomWidgets.EaseBox CreateTinyControlBox(SpaceName name)
+            CustomWidgets.Box CreateTinyControlBox(SpaceName name)
             {
                 int controllerBoxWH = 10;
-                var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                var tinyBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 tinyBox.BackColor = PixelFarm.Drawing.Color.Red;
                 tinyBox.Tag = name;
                 //add handler for each tiny box
@@ -620,13 +620,13 @@ namespace LayoutFarm
                         {
                             if (xdiff != 0 || ydiff != 0)
                             {
-                                controllerBox.SetBounds(controllerBox.Left + xdiff, controllerBox.Top + ydiff,
+                                controllerBox.SetLocationAndSize(controllerBox.Left + xdiff, controllerBox.Top + ydiff,
                                     controllerBox.Width - xdiff, controllerBox.Height - ydiff);
                                 var targetBox = controllerBox.TargetBox;
                                 if (targetBox != null)
                                 {
                                     //move target box too                                     
-                                    targetBox.SetBounds(targetBox.Left + xdiff, targetBox.Top + ydiff,
+                                    targetBox.SetLocationAndSize(targetBox.Left + xdiff, targetBox.Top + ydiff,
                                         targetBox.Width - xdiff, targetBox.Height - ydiff);
                                 }
                             }
@@ -636,12 +636,12 @@ namespace LayoutFarm
                         {
                             if (xdiff != 0 || ydiff != 0)
                             {
-                                controllerBox.SetBounds(controllerBox.Left, controllerBox.Top + ydiff,
+                                controllerBox.SetLocationAndSize(controllerBox.Left, controllerBox.Top + ydiff,
                                     controllerBox.Width + xdiff, controllerBox.Height - ydiff);
                                 var targetBox = controllerBox.TargetBox;
                                 if (targetBox != null)
                                 {
-                                    targetBox.SetBounds(targetBox.Left, targetBox.Top + ydiff,
+                                    targetBox.SetLocationAndSize(targetBox.Left, targetBox.Top + ydiff,
                                         targetBox.Width + xdiff, targetBox.Height - ydiff);
                                 }
                             }
@@ -665,13 +665,13 @@ namespace LayoutFarm
                         {
                             if (xdiff != 0 || ydiff != 0)
                             {
-                                controllerBox.SetBounds(controllerBox.Left + xdiff, controllerBox.Top,
+                                controllerBox.SetLocationAndSize(controllerBox.Left + xdiff, controllerBox.Top,
                                     controllerBox.Width - xdiff, controllerBox.Height + ydiff);
                                 var targetBox = controllerBox.TargetBox;
                                 if (targetBox != null)
                                 {
                                     //move target box too 
-                                    targetBox.SetBounds(targetBox.Left + xdiff, targetBox.Top,
+                                    targetBox.SetLocationAndSize(targetBox.Left + xdiff, targetBox.Top,
                                         targetBox.Width - xdiff, targetBox.Height + ydiff);
                                 }
                             }
@@ -688,7 +688,7 @@ namespace LayoutFarm
             }
         }
 
-        class UISelectionBox : LayoutFarm.CustomWidgets.EaseBox
+        class UISelectionBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             public UISelectionBox(int w, int h)
                 : base(w, h)

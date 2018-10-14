@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 using System.Collections.Generic;
 
 namespace PixelFarm.Drawing
@@ -105,4 +105,7 @@ namespace PixelFarm.Drawing
             cmds = p.cmds;
         }
     }
+
+
+
 }

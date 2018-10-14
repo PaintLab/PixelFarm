@@ -1,7 +1,6 @@
-﻿//Apache2, 2014-2018, WinterDev
-using System.Collections.Generic;
+﻿//Apache2, 2014-present, WinterDev 
 using LayoutFarm.UI;
-namespace LayoutFarm 
+namespace LayoutFarm
 {
     public abstract class UIPlatform
     {

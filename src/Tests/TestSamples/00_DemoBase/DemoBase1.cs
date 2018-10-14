@@ -1,8 +1,8 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 using System;
 using System.Collections.Generic;
 
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.DrawingGL;
 
@@ -17,9 +17,9 @@ namespace Mini
     {
         public DemoBase()
         {
-            this.Width = 800;
-            this.Height = 140;
-
+            this.Width = 900;
+            this.Height = 700;
+            NeedRedraw = true;
         }
 
         //when we use with opengl
@@ -33,24 +33,16 @@ namespace Mini
         {
             DemoClosing();
         }
+        public bool NeedRedraw { get; set; }
 
         public virtual void Init() { }
-
+        public virtual void KeyDown(int keycode) { }
         public virtual void MouseDrag(int x, int y) { }
         public virtual void MouseDown(int x, int y, bool isRightButton) { }
         public virtual void MouseUp(int x, int y) { }
         public virtual int Width { get; set; }
         public virtual int Height { get; set; }
-        VertexStorePool _vxsPool = new VertexStorePool();
-        public VertexStore GetFreeVxs()
-        {
-            return _vxsPool.GetFreeVxs();
-        }
-        public void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
-
+        
 
 
         protected virtual void DemoClosing()
@@ -111,7 +103,8 @@ namespace Mini
                 _swapBufferDelegate();
             }
         }
-        public void SetEssentialGLHandlers(GLSwapBufferDelegate swapBufferDelegate,
+        public void SetEssentialGLHandlers(
+            GLSwapBufferDelegate swapBufferDelegate,
             GetGLControlDisplay getGLControlDisplay,
             GetGLSurface getGLSurface)
         {

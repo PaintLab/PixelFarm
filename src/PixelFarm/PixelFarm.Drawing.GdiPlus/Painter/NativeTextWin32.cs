@@ -1,10 +1,11 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 using Typography.TextServices;
+using Typography.FontManagement;
 
 using PixelFarm.Drawing.Fonts;
 
@@ -83,7 +84,7 @@ namespace PixelFarm.Drawing.WinGdi
         public static int MeasureBlankLineHeight(RequestFont font)
         {
             WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(font);
-            return (int)winFont.RecommendedLineSpacingInPixels;
+            return (int)System.Math.Ceiling(winFont.RecommendedLineSpacingInPixels);
         }
         public static PixelFarm.Drawing.Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
         {
@@ -188,7 +189,7 @@ namespace PixelFarm.Drawing.WinGdi
                     }
                     totalW += outputGlyphAdvances[i] = abcWidths[enc_index].Sum;
                 }
-
+                outputTotalW = totalW;
             }
             //unsafe
             //{
@@ -233,6 +234,8 @@ namespace PixelFarm.Drawing.WinGdi
         float ascendInPixels;
         float descentInPixels;
         float linegapInPixels;
+        float recommenedLineHeight;
+
         WinGdiFontFace fontFace;
         int[] charWidths;
         NativeTextWin32.FontABC[] charAbcWidths;
@@ -257,7 +260,7 @@ namespace PixelFarm.Drawing.WinGdi
             ascendInPixels = fontFace.AscentInDzUnit * scale;
             descentInPixels = fontFace.DescentInDzUnit * scale;
             linegapInPixels = fontFace.LineGapInDzUnit * scale;
-
+            recommenedLineHeight = fontFace.RecommendedLineHeight * scale;
             //------------------------------------------------------------------
 
 
@@ -331,7 +334,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return this.charAbcWidths;
         }
-        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        public override FontGlyph GetGlyphByIndex(ushort glyphIndex)
         {
             throw new NotImplementedException();
         }
@@ -361,7 +364,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override float RecommendedLineSpacingInPixels
         {
-            get { return AscentInPixels - DescentInPixels + LineGapInPixels; }
+            get { return recommenedLineHeight; }
         }
         public override float DescentInPixels
         {
@@ -415,13 +418,14 @@ namespace PixelFarm.Drawing.WinGdi
 
         public ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
         {
+            return null;
             throw new NotImplementedException();
         }
-        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
-            ILineSegmentList lineSegs, 
-            RequestFont font, 
-            int[] glyphXAdvances, 
-            out int outputTotalW, 
+        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+            ILineSegmentList lineSegs,
+            RequestFont font,
+            int[] glyphXAdvances,
+            out int outputTotalW,
             out int outputLineHeight)
         {
             throw new NotImplementedException();
@@ -498,29 +502,41 @@ namespace PixelFarm.Drawing.WinGdi
     {
         FontFace nopenTypeFontFace;
         FontStyle style;
-        static IFontLoader s_fontLoader;
+        static IInstalledTypefaceProvider s_installedTypefaceProvider;
 
         public WinGdiFontFace(RequestFont f)
         {
             this.style = f.Style;
             //resolve
-            InstalledFont foundInstalledFont = s_fontLoader.GetFont(f.Name, style.ConvToInstalledFontStyle());
+            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, style.ConvToInstalledFontStyle());
             //TODO: review 
-            this.nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
-        }
-
-        public static void SetFontLoader(IFontLoader fontLoader)
-        {
-            //warning if duplicate
-            if (s_fontLoader != null)
+            if (foundInstalledFont == null)
             {
+                //not found
 
             }
-            s_fontLoader = fontLoader;
+            this.nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
+        }
+        public override int RecommendedLineHeight
+        {
+            get
+            {
+                return nopenTypeFontFace.RecommendedLineHeight;
+            }
+        }
+        public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
+        {
+            //warning if duplicate
+            if (s_installedTypefaceProvider != null)
+            {
+                //TODO: review here again
+                return;
+            }
+            s_installedTypefaceProvider = provider;
         }
         protected override void OnDispose()
         {
-            s_fontLoader = null;
+            s_installedTypefaceProvider = null;
         }
         public override string FontPath
         {

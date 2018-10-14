@@ -1,14 +1,14 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //MatterHackers
 
 using System;
 using PixelFarm.Drawing;
 using System.Collections.Generic;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.VertexProcessing;
 using Mini;
 using ClipperLib;
-namespace PixelFarm.Agg.Sample_PolygonClipping
+namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 {
     public enum OperationOption
     {
@@ -112,10 +112,10 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.CloseFigure();
                         p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                        p.Fill(ps1.MakeVertexSnap());
+                        p.Fill(ps1.Vxs);
                         p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                        p.Fill(ps2.MakeVertexSnap());
-                        CreateAndRenderCombined(p, ps1.MakeVertexSnap(), ps2.MakeVertexSnap());
+                        p.Fill(ps2.Vxs);
+                        CreateAndRenderCombined(p, ps1.Vxs, ps2.Vxs);
                     }
                     break;
                 case PolygonExampleSet.CloseStroke:
@@ -149,15 +149,19 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.CloseFigure();
                         p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                        p.Fill(ps1.MakeVertexSnap());
+                        p.Fill(ps1.Vxs);
                         //graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
                         var vxs = ps2.Vxs;
                         //graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
                         p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                        var v1 = GetFreeVxs();
-                        p.Fill(stroke.MakeVxs(vxs, v1));
-                        ReleaseVxs(ref v1);
-                        CreateAndRenderCombined(p, ps1.MakeVertexSnap(), new VertexStoreSnap(vxs));
+
+
+                        using (VxsTemp.Borrow(out var v1))
+                        {
+                            p.Fill(stroke.MakeVxs(vxs, v1));
+                        }
+
+                        CreateAndRenderCombined(p, ps1.Vxs, vxs);
                     }
                     break;
                 case PolygonExampleSet.GBAndArrow:
@@ -167,7 +171,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //
                         PathWriter gb_poly = new PathWriter();
                         PathWriter arrows = new PathWriter();
-                        PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                        PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
                         make_arrows(arrows);
                         //Affine mtx1 = Affine.NewIdentity();                        
                         //mtx1 *= Affine.NewTranslation(-1150, -1150);
@@ -195,14 +199,20 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
                         //stroke_gb_poly.Width = 0.1;
                         p.FillColor = ColorEx.Make(0, 0, 0);
-                        var v1 = GetFreeVxs();
-                        p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v1));
-                        ReleaseVxs(ref v1);
+
+
+
+                        using (VxsTemp.Borrow(out var v1))
+                        {
+                            p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v1));
+                        }
+
+
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
                         //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
                         p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);
                         p.Fill(trans_arrows);
-                        CreateAndRenderCombined(p, new VertexStoreSnap(trans_gb_poly), new VertexStoreSnap(trans_arrows));
+                        CreateAndRenderCombined(p, trans_gb_poly, trans_arrows);
                     }
                     break;
                 case PolygonExampleSet.GBAndSpiral:
@@ -212,35 +222,34 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
                         PathWriter gb_poly = new PathWriter();
-                        PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                        PixelFarm.CpuBlit.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
                         Affine mtx = Affine.NewMatix(
                                 AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2));
                         //
-                        VertexStore s1 = GetFreeVxs();
-                        mtx.TransformToVxs(gb_poly.Vxs, s1);
-                        p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
-                        p.Fill(s1);
-                        //graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
 
-                        //graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
-                        p.FillColor = Color.Black;
 
-                        var v1 = GetFreeVxs();
-                        var v2 = GetFreeVxs();
-                        var v3 = GetFreeVxs();
+                        using (VxsTemp.Borrow(out var s1, out var v1))
+                        using (VxsTemp.Borrow(out var v2, out var v3))
+                        {
+                            mtx.TransformToVxs(gb_poly.Vxs, s1);
+                            p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
+                            p.Fill(s1);
+                            //graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
 
-                        p.Fill(new Stroke(0.1).MakeVxs(s1, v1));
-                        var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs(v2), v3);
-                        p.FillColor = ColorEx.Make(0.0f, 0.5f, 0.5f, 0.1f);// XUolorRXBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f);
-                        p.Fill(stroke_vxs);
-                        //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
-                        CreateAndRenderCombined(p, new VertexStoreSnap(s1), new VertexStoreSnap(stroke_vxs));
+                            //graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
+                            p.FillColor = Color.Black;
 
-                        ReleaseVxs(ref s1);
-                        ReleaseVxs(ref v1);
-                        ReleaseVxs(ref v3);
-                        ReleaseVxs(ref v2);
+
+                            p.Fill(new Stroke(0.1).MakeVxs(s1, v1));
+                            var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs(v2), v3);
+                            p.FillColor = ColorEx.Make(0.0f, 0.5f, 0.5f, 0.1f);// XUolorRXBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f);
+                            p.Fill(stroke_vxs);
+                            //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
+                            CreateAndRenderCombined(p, s1, stroke_vxs);
+
+                        }
+
                     }
                     break;
                 case PolygonExampleSet.SprialAndGlyph:
@@ -304,61 +313,62 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         mtx.TransformToVertexSnap(glyph.Vxs, t_glyph);
 
-                        var v1 = GetFreeVxs();
-                        var v2 = GetFreeVxs();
-                        var v3 = GetFreeVxs();
-                        var sp1 = stroke.MakeVxs(sp.MakeVxs(v1), v2);
 
-                        var curveVxs = new VertexStore();
-                        curveFlattener.MakeVxs(t_glyph, curveVxs);
-                        CreateAndRenderCombined(p, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
-                        p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
-                        p.Fill(stroke.MakeVxs(sp1, v3));
-                        //graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
+                        using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+                        {
+                            VertexStore sp1 = stroke.MakeVxs(sp.MakeVxs(v1), v2);
 
-                        p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
-                        p.Fill(curveVxs);
-                        //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
+                            var curveVxs = new VertexStore();
+                            curveFlattener.MakeVxs(t_glyph, curveVxs);
 
-                        ReleaseVxs(ref v1);
-                        ReleaseVxs(ref v2);
-                        ReleaseVxs(ref v3);
+                            CreateAndRenderCombined(p, sp1, curveVxs);
+                            p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
+                            p.Fill(stroke.MakeVxs(sp1, v3));
+                            //graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
+
+                            p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
+                            p.Fill(curveVxs);
+                            //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
+
+                        }
                     }
                     break;
             }
         }
 
 
-        void CreateAndRenderCombined(Painter p, VertexStoreSnap ps1, VertexStoreSnap ps2)
+        void CreateAndRenderCombined(Painter p, VertexStore vxsSnap1, VertexStore vxsSnap2)
         {
-            List<VertexStore> combined = null;
+            //TODO: review here again. 
+
+            List<VertexStore> combined = new List<VertexStore>();
             switch (this.OpOption)
             {
                 default: throw new NotSupportedException();
                 case OperationOption.None:
                     return;
                 case OperationOption.OR:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Union, false);
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Union, false, combined);
                     break;
                 case OperationOption.AND:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.InterSect, false);
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.InterSect, false, combined);
                     break;
                 case OperationOption.XOR:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Xor, false);
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Xor, false, combined);
                     break;
                 case OperationOption.A_B:
-                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Difference, false);
+                    VxsClipper.CombinePaths(vxsSnap1, vxsSnap2, VxsClipperType.Difference, false, combined);
                     break;
                 case OperationOption.B_A:
-                    combined = VxsClipper.CombinePaths(ps2, ps1, VxsClipperType.Difference, false);
+                    VxsClipper.CombinePaths(vxsSnap2, vxsSnap1, VxsClipperType.Difference, false, combined);
                     break;
             }
 
             if (combined != null)
             {
                 p.FillColor = ColorEx.Make(0.5f, 0.0f, 0f, 0.5f);
-                p.Fill(new VertexStoreSnap(combined[0]));
-                //graphics2D.Render(new VertexStoreSnap(combined[0]), ColorRGBAf.MakeColorRGBA(0.5f, 0.0f, 0f, 0.5f));
+                //TODO=?
+                p.Fill(combined[0]);
             }
         }
         public override void MouseDrag(int x, int y)
@@ -480,10 +490,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             }
             return vxs;
         }
-        public VertexStoreSnap MakeVertexSnap(VertexStore vxs)
-        {
-            return new VertexStoreSnap(this.MakeVxs(vxs));
-        }
+
 
 
         public VertexCmd GetNextVertex(out double x, out double y)
@@ -512,16 +519,17 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
     {
         int m_contours;
         int m_points;
-        conv_poly_counter(VertexStoreSnap src)
+
+        conv_poly_counter(VertexStore src)
         {
             m_contours = 0;
             m_points = 0;
-            var snapIter = src.GetVertexSnapIter();
+
             VertexCmd cmd;
             double x, y;
-            do
+            int index = 0;
+            while ((cmd = src.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
             {
-                cmd = snapIter.GetNextVertex(out x, out y);
                 if (VertexHelper.IsVertextCommand(cmd))
                 {
                     ++m_points;
@@ -531,7 +539,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 {
                     ++m_contours;
                 }
-            } while (cmd != VertexCmd.NoMore);
+            } while (cmd != VertexCmd.NoMore) ;
         }
     }
 }

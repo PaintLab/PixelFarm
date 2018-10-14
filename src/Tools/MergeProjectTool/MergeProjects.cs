@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 //credit: http://stackoverflow.com/questions/24557807/programmatically-create-a-csproj-on-the-fly-without-visual-studio-installed
 
 using System;
@@ -53,6 +53,7 @@ namespace BuildMergeProject
             if (!s_loadedProjects.TryGetValue(projectFilename, out found))
             {
                 found = new Project(projectFilename);
+
                 return s_loadedProjects[projectFilename] = found;
             }
             return found;
@@ -146,6 +147,8 @@ namespace BuildMergeProject
             rightPart = sub;
             return beginAt;
         }
+
+
         static int FindFirstDiff(string[] s0_splits, string[] s1_splits)
         {
             int j = 0;
@@ -173,36 +176,80 @@ namespace BuildMergeProject
                 throw new NotSupportedException();
             }
         }
-        public string BuildPathRelativeToOther(string mainPath, string subpath, out string rightPart)
+        public string BuildPathRelativeToOther(string mainPath, string subpath, out string leftPart, out string rightPart)
         {
             //s1.Length must >= s0.Length
+            string[] a_splits = mainPath.Split('\\');
+            string[] b_splits = subpath.Split('\\');
 
-            string[] s0_splits = mainPath.Split('\\');
-            string[] s1_splits = subpath.Split('\\');
+            string[] s0_splits;
+            string[] s1_splits;
 
-            int diffPos = FindFirstDiff(s0_splits, s1_splits);
-            //same at diffPos-1
+            //string leftPart, rightPart;
 
-            int nsteps = diffPos - 1;
-            string beginAt = "";
-            for (int i = 0; i < nsteps; ++i)
+            if (a_splits.Length > b_splits.Length)
             {
-                beginAt += "..\\";
-            }
-            rightPart = "";
-            int j = s1_splits.Length;
-            int m = 0;
-            for (int n = diffPos; n < j; ++n)
-            {
-                if (m > 0 && m < j - 1)
+                //swap...
+                s0_splits = b_splits;
+                s1_splits = a_splits;
+
+                int diffPos = FindFirstDiff(s0_splits, s1_splits);
+                //same at diffPos-1
+
+                int nsteps = a_splits.Length - diffPos;
+                string beginAt = "";
+                for (int i = 0; i < nsteps; ++i)
                 {
-                    rightPart += '\\';
+                    beginAt += "..\\";
                 }
-                rightPart += s1_splits[n];
-                m++;
+                rightPart = "";
+                int j = s0_splits.Length;
+                int m = 0;
+                for (int n = diffPos; n < j; ++n)
+                {
+                    if (m > 0 && m < j - 1)
+                    {
+                        rightPart += '\\';
+                    }
+                    rightPart += s0_splits[n];
+                    m++;
 
+                }
+                leftPart = beginAt;
+
+                return leftPart + rightPart;
             }
-            return beginAt;
+            else
+            {
+                s0_splits = a_splits;
+                s1_splits = b_splits;
+                int diffPos = FindFirstDiff(s0_splits, s1_splits);
+                //same at diffPos-1
+
+                //int nsteps = diffPos - 1;
+                int nsteps = a_splits.Length - diffPos;
+                string beginAt = "";
+                for (int i = 0; i < nsteps; ++i)
+                {
+                    beginAt += "..\\";
+                }
+                rightPart = "";
+                int j = s1_splits.Length;
+                int m = 0;
+                for (int n = diffPos; n < j; ++n)
+                {
+                    if (m > 0 && m < j - 1)
+                    {
+                        rightPart += '\\';
+                    }
+                    rightPart += s1_splits[n];
+                    m++;
+
+                }
+                leftPart = beginAt;
+
+                return leftPart + rightPart;
+            }
         }
         public string GetFullProjectPath(string projectRelativePath)
         {
@@ -231,14 +278,6 @@ namespace BuildMergeProject
                     case "Compile":
                         //skip
                         break;
-                    //    {
-                    //        string onlyFileName = Path.GetFileName(item.EvaluatedInclude);
-                    //        if (onlyFileName != "AssemblyInfo.cs") //special case ***no include this file
-                    //        {
-                    //            allItems.Add(item);
-                    //        }
-                    //    }
-                    //    break;
                     case "ProjectReference":
                         asmReferenceList.Add(new ProjectAsmReference(item, ProjectAsmReferenceKind.ProjectReference));
                         break;
@@ -253,31 +292,22 @@ namespace BuildMergeProject
 
     public static class LinkProjectConverter
     {
-        public static void ConvertToLinkProject2(SolutionMx slnMx, string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
+        public static void ConvertToLinkProject(SolutionMx slnMx, string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
         {
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
-            var compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+            List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
             string onlyFileName = Path.GetFileName(srcProject);
             string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
             string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
-            string rightPart;
 
-            string beginAt = slnMx.BuildPathRelativeToSolution(targetSaveFolder, out rightPart);
             foreach (XmlElement elem in compileNodes)
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
-                string includeValue = includeAttr.Value;
-                string combinedPath = SolutionMx.CombineRelativePath(includeValue);
 
-
-                string b2 = slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath, out rightPart);
-                //this version:
-                //auto gen project is lower than original 1 level
-                //so change the original src location
-                //and create linked child node
-                includeAttr.Value = "..\\" + beginAt + rightPart;
-
+                includeAttr.Value = slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                    SolutionMx.CombineRelativePath(includeAttr.Value),
+                    out string leftPart, out string rightPart);
 
                 XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
                 linkNode.InnerText = rightPart;
@@ -296,35 +326,179 @@ namespace BuildMergeProject
                 File.Delete(srcProject);
             }
         }
-        public static void ConvertToLinkProject(string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
+
+        class SimpleNetStdProj
         {
+            class SimpleCompileNode
+            {
+                public string Link { get; set; }
+                public string Include { get; set; }
+            }
+            delegate bool XmlElemEval(XmlElement testnode);
+
+            List<SimpleCompileNode> _compileNodes = new List<SimpleCompileNode>();
+            Dictionary<string, string> _linkFolders = new Dictionary<string, string>();
+            List<XmlElement> _xmlElementFromOthers;
+            public string SdkVersion { get; set; }
+            public string TargetFramework { get; set; }
+            public void AddCompileNode(string include, string link)
+            {
+                _compileNodes.Add(new SimpleCompileNode() { Include = include, Link = link });
+                if (link != null && !link.StartsWith("."))
+                {
+                    string onlyDir = Path.GetDirectoryName(link);
+
+                    if (!_linkFolders.ContainsKey(onlyDir.ToUpper()))
+                    {
+                        _linkFolders.Add(onlyDir.ToUpper(), onlyDir);
+                    }
+                }
+            }
+            public void AddPropertyGroups(List<XmlElement> xmlElementFromOthers)
+            {
+                _xmlElementFromOthers = xmlElementFromOthers;
+            }
+            public void Save(string filename)
+            {
+                XmlDocument outputDoc = new XmlDocument();
+                XmlElement root = outputDoc.CreateElement("Project");
+                outputDoc.AppendChild(root);
+                //
+                AppendAttribute(root, "Sdk", this.SdkVersion);
+                //target framework
+                CreateAndAppendChild(CreateAndAppendChild(root, "PropertyGroup"),
+                            "TargetFramework").InnerText = this.TargetFramework;
+                //other property groups
+                if (_xmlElementFromOthers != null)
+                {
+                    foreach (XmlElement other in _xmlElementFromOthers)
+                    {
+                        XmlElement newnode = CreateAndAppendChild(root, other.Name);
+                        CloneXmlElem(other, newnode, (other_child_node) =>
+                        {
+                            //check if we will include this node or not
+                            if (other_child_node.Name == "TargetFrameworkVersion")
+                            {
+                                //exclude TargetFramework node
+                                return false;
+                            }
+
+                            return true;
+                        });
+                    }
+                }
+                //ItemGroup compile
+                XmlElement itemGroupCompiles = CreateAndAppendChild(root, "ItemGroup");
+                foreach (SimpleCompileNode simpleCompileNode in this._compileNodes)
+                {
+                    XmlElement compileNode = CreateAndAppendChild(itemGroupCompiles, "Compile");
+                    AppendAttribute(compileNode, "Include", simpleCompileNode.Include);
+                    AppendAttribute(compileNode, "Link", simpleCompileNode.Link);
+                }
+
+                //ItemGroup folders
+                XmlElement itemGroupFolders = CreateAndAppendChild(root, "ItemGroup");
+                foreach (string folderNode in _linkFolders.Values)
+                {
+                    XmlElement compileNode = CreateAndAppendChild(itemGroupFolders, "Folder");
+                    AppendAttribute(compileNode, "Include", folderNode);
+                }
+                outputDoc.Save(filename);
+            }
+
+            static void CloneXmlElem(XmlElement other, XmlElement newnode, XmlElemEval xmlElemEvalator)
+            {
+                //recursive
+                foreach (XmlAttribute attr in other.Attributes)
+                {
+                    AppendAttribute(newnode, attr.Name, attr.Value);
+                }
+                //
+                foreach (XmlNode child in other.ChildNodes)
+                {
+                    if (child is XmlElement)
+                    {
+                        XmlElement child_elem = (XmlElement)child;
+                        //
+
+                        if (xmlElemEvalator(child_elem))
+                        {   //recursive
+                            XmlElement newsubChild = CreateAndAppendChild(newnode, child_elem.Name);
+                            CloneXmlElem(child_elem, newsubChild, xmlElemEvalator);
+                        }
+                    }
+                    else if (child is XmlText)
+                    {
+                        //create textnode
+                        XmlText newTextNode = newnode.OwnerDocument.CreateTextNode(((XmlText)child).Value);
+                        newnode.AppendChild(newTextNode);
+                    }
+                }
+            }
+            static XmlElement CreateAndAppendChild(XmlElement parent, string nodeName)
+            {
+                XmlElement newChild = parent.OwnerDocument.CreateElement(nodeName);
+                parent.AppendChild(newChild);
+                return newChild;
+            }
+            static void AppendAttribute(XmlElement xmlElem, string attrName, string attrValue)
+            {
+                XmlAttribute attr = xmlElem.OwnerDocument.CreateAttribute(attrName);
+                attr.Value = attrValue;
+                xmlElem.Attributes.Append(attr);
+            }
+        }
+
+        public static void ConvertToLinkProjectNetStd(SolutionMx slnMx,
+            string srcProject,
+            string autoGenFolder,
+            string targetFramework,
+            bool removeOriginalSrcProject)
+        {
+            SimpleNetStdProj netstdProj = new SimpleNetStdProj();
+            netstdProj.SdkVersion = "Microsoft.NET.Sdk";
+            netstdProj.TargetFramework = targetFramework;
+            //copy 'condition' nodes 
+            //------------------------------------
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(srcProject);
-            var compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+
+
+            netstdProj.AddPropertyGroups(SelectPropertyGroups(xmldoc.DocumentElement));
+
+            List<XmlElement> compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+
+            string onlyFileName = Path.GetFileName(srcProject);
+            string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
+            string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+
+            //------------------------------------
             foreach (XmlElement elem in compileNodes)
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
-                string includeValue = includeAttr.Value;
-                //this version:
-                //auto gen project is lower than original 1 level
-                //so change the original src location
-                //and create linked child node
-                includeAttr.Value = "..\\" + includeAttr.Value;
-                XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
-                linkNode.InnerText = includeValue;
-                elem.AppendChild(linkNode);
+
+                netstdProj.AddCompileNode(
+                    slnMx.BuildPathRelativeToOther(targetSaveFolder,
+                    SolutionMx.CombineRelativePath(includeAttr.Value),
+                    out string leftPart, out string rightPart),
+                    //
+                    rightPart
+                    );
             }
 
-            string onlyFileName = Path.GetFileName(srcProject);
-            if (!Directory.Exists(autoGenFolder))
+            string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
+            if (!Directory.Exists(targetSaveDir))
             {
-                Directory.CreateDirectory(autoGenFolder);
+                Directory.CreateDirectory(targetSaveDir);
             }
-            xmldoc.Save(autoGenFolder + "\\" + onlyFileName);
+
+            //xmldoc.Save(saveFileName);
+            netstdProj.Save(saveFileName);
             if (removeOriginalSrcProject)
             {
                 File.Delete(srcProject);
             }
+            //------------------------------------
         }
         static List<XmlElement> SelectCompileNodes(XmlElement projectNode)
         {
@@ -345,6 +519,20 @@ namespace BuildMergeProject
                 }
             }
             return compileNodes;
+        }
+        static List<XmlElement> SelectPropertyGroups(XmlElement projectNode)
+        {
+            //TODO: use xpath ...
+
+            List<XmlElement> nodes = new List<XmlElement>();
+            foreach (XmlElement item in projectNode)
+            {
+                if (item.Name == "PropertyGroup")
+                {
+                    nodes.Add(item);
+                }
+            }
+            return nodes;
         }
     }
     public class MergeProject
@@ -409,6 +597,33 @@ namespace BuildMergeProject
             return group;
         }
 
+
+        static Dictionary<string, bool> SplitDefineConst(string defineConst)
+        {
+            Dictionary<string, bool> values = new Dictionary<string, bool>();
+            string[] splitedValues = defineConst.Split(',', ';');
+            foreach (string v in splitedValues)
+            {
+                string trim = v.Trim();
+                if (trim.Length > 0)
+                {
+                    //replace 
+                    values[trim] = true;
+                }
+            }
+            return values;
+        }
+        static string Concat(Dictionary<string, bool> dic, string sep)
+        {
+            System.Text.StringBuilder stbulder = new System.Text.StringBuilder();
+            int j = dic.Count;
+            foreach (string k in dic.Keys)
+            {
+                stbulder.Append(" " + k + sep);
+            }
+
+            return stbulder.ToString();
+        }
         public void MergeAndSave(string csprojFilename, string assemblyName, string targetFrameworkVersion, string additonalDefineConst, string[] references)
         {
             ProjectRootElement root = ProjectRootElement.Create();
@@ -435,14 +650,39 @@ namespace BuildMergeProject
                 one1.AddProperty("TargetFrameworkProfile", "Profile111");
             }
 
+
+            string defineConstForDebug = " DEBUG; TRACE";
+            string defineConstForRelease = " TRACE";
+
+            if (additonalDefineConst != null)
+            {
+                //for debug
+                Dictionary<string, bool> values = SplitDefineConst(additonalDefineConst);
+                if (!values.ContainsKey("DEBUG"))
+                {
+                    values["DEBUG"] = true;
+                }
+                defineConstForDebug = Concat(values, ";");
+
+                values.Remove("DEBUG");
+
+                defineConstForRelease = Concat(values, ";");
+
+            }
+
+
+
             ProjectPropertyGroupElement debugGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
                   true,
-                @"bin\Debug\", false, true, "full", "DEBUG; TRACE" + additonalDefineConst);
+                @"bin\Debug\", false, true, "full", defineConstForDebug);
+
+
             ProjectPropertyGroupElement releaseGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ",
                   true,
-                @"bin\Release\", true, false, "pdbonly", " TRACE" + additonalDefineConst);
+                @"bin\Release\", true, false, "pdbonly", defineConstForRelease);
+
             if (references.Length > 0)
             {
                 AddItems(root, "Reference", references);
@@ -463,9 +703,9 @@ namespace BuildMergeProject
 
                     if (onlyFileName == "PORTING_NOTMERGE.cs")
                     {
-                        //our convention
+                        //our convention***
                         continue;//skip
-                    } 
+                    }
                     else if (onlyFileName == "ExtensionAttribute.cs")
                     {    //this is our convention
                          //... if we have ExtensionAttribute.cs
@@ -538,6 +778,10 @@ namespace BuildMergeProject
                 switch (item.Name)
                 {
                     case "DefineConstants":
+                        if (DefineConstants != null)
+                        {
+
+                        }
                         DefineConstants = item.EvaluatedValue;
                         break;
                     case "TargetFrameworkVersion":
@@ -563,6 +807,38 @@ namespace BuildMergeProject
                         break;
                 }
             }
+
+            foreach (ResolvedImport imp1 in pro.Imports)
+            {
+                if (imp1.ImportedProject.FullPath != null &&
+                    imp1.ImportedProject.FullPath.EndsWith(".projitems"))
+                {
+                    //this is shared project 
+                    //...the we 
+                    //read this shared project too..
+                    Project sharedProj = GlobalLoadedProject.LoadProject(imp1.ImportedProject.FullPath);
+
+                    foreach (ProjectItem item in sharedProj.AllEvaluatedItems)
+                    {
+                        switch (item.ItemType)
+                        {
+                            case "Compile":
+                                {
+                                    string onlyFileName = Path.GetFileName(item.EvaluatedInclude);
+                                    if (onlyFileName != "AssemblyInfo.cs") //special case ***no include this file
+                                    {
+                                        allItems.Add(item);
+                                    }
+                                }
+                                break;
+                            case "Reference":
+                                break;
+                        }
+                    }
+                }
+
+            }
+
         }
         public List<string> GetAllAbsoluteFilenames()
         {

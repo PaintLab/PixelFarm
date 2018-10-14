@@ -1,24 +1,14 @@
-﻿//BSD, 2014-2018, WinterDev 
+﻿//BSD, 2014-present, WinterDev 
 //adapt from Paper.js
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.VectorMath; 
+using PixelFarm.VectorMath;
 using Mini;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
-    public enum SmoothBrushMode
-    {
-        SolidBrush,
-        EraseBrush,
-        CutBrush
-    }
-    public enum EditMode
-    {
-        Draw,
-        Select
-    }
+
 
     [Info(OrderCode = "22")]
     [Info("SmoothBrush2")]
@@ -54,41 +44,46 @@ namespace PixelFarm.Agg.Samples
             int j = myBrushPathList.Count;
             for (int n = 0; n < j; ++n)
             {
-                var brushPath = myBrushPathList[n];
-                if (brushPath.Vxs != null)
-                {
-                    switch (brushPath.BrushMode)
-                    {
-                        case SmoothBrushMode.CutBrush:
-                            {
-                            }
-                            break;
-                        default:
-                            {
-                                //TODO: review PixelCache here
-                                p.FillColor = brushPath.FillColor;
-                                p.Fill(brushPath.Vxs);
-                                if (brushPath.StrokeColor.alpha > 0)
-                                {
-                                    p.StrokeColor = Drawing.Color.Red;
-                                    p.Draw(brushPath.Vxs);
-                                }
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    //current drawing brush
-                    var contPoints = brushPath.contPoints;
-                    int pcount = contPoints.Count;
-                    for (int i = 1; i < pcount; ++i)
-                    {
-                        var p0 = contPoints[i - 1];
-                        var p1 = contPoints[i];
-                        p.DrawLine(p0.x, p0.y, p1.x, p1.y);
-                    }
-                }
+                myBrushPathList[n].PaintLatest(p);
+
+                //                MyBrushPath brushPath = myBrushPathList[n];
+                //                if (brushPath.Vxs != null)
+                //                {
+                //                    switch (brushPath.BrushMode)
+                //                    {
+                //                        case SmoothBrushMode.CutBrush:
+                //                            {
+                //                            }
+                //                            break;
+                //                        default:
+                //                            {
+                //                                //TODO: review PixelCache here
+                //                                p.FillColor = brushPath.FillColor;
+                //                                p.Fill(brushPath.Vxs);
+
+                //#if DEBUG
+                //                                //if (brushPath.StrokeColor.alpha > 0)
+                //                                //{
+                //                                //    p.StrokeColor = Drawing.Color.Red;
+                //                                //    p.Draw(brushPath.Vxs);
+                //                                //}
+                //#endif
+                //                            }
+                //                            break;
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    //current drawing brush
+                //                    var contPoints = brushPath.contPoints;
+                //                    int pcount = contPoints.Count;
+                //                    for (int i = 1; i < pcount; ++i)
+                //                    {
+                //                        var p0 = contPoints[i - 1];
+                //                        var p1 = contPoints[i];
+                //                        p.DrawLine(p0.x, p0.y, p1.x, p1.y);
+                //                    }
+                //                }
             }
         }
 
@@ -128,12 +123,15 @@ namespace PixelFarm.Agg.Samples
                                     for (int i = j; i >= 0; --i)
                                     {
                                         //cut each path
-                                        var lastPath = myBrushPathList[i];
+                                        MyBrushPath lastPath = myBrushPathList[i];
                                         //do path clip***
-                                        List<VertexStore> paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(
-                                                new VertexStoreSnap(lastPath.Vxs),
-                                                new VertexStoreSnap(currentBrushPath.Vxs), VertexSource.VxsClipperType.Difference,
-                                                true);
+                                        List<VertexStore> paths = new List<VertexStore>();
+                                        PixelFarm.CpuBlit.VertexProcessing.VxsClipper.CombinePaths(
+                                               lastPath.GetMergedVxs(),
+                                               currentBrushPath.GetMergedVxs(),
+                                               VertexProcessing.VxsClipperType.Difference,
+                                               true,
+                                               paths);
 
                                         myBrushPathList.RemoveAt(i);
 
@@ -219,10 +217,16 @@ namespace PixelFarm.Agg.Samples
                         currentBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
                         currentBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
                         latestMousePoint = new PixelFarm.Drawing.Point(x, y);
+
+
+                        //
+                        // currentBrushPath.MakeSmoothPath();
                     }
                     break;
             }
         }
+
+
         public override void MouseDown(int x, int y, bool isRightButton)
         {
             this.lastMousePosX = x;
@@ -300,5 +304,9 @@ namespace PixelFarm.Agg.Samples
             }
         }
     }
+
+
+
+
 }
 

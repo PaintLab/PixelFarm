@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 using System;
 using SkiaSharp;
 
@@ -8,7 +8,7 @@ using PixelFarm.Forms;
 using OpenTK.Graphics.ES20;
 using OpenTkEssTest;
 
-using Typography.TextServices;
+using Typography.FontManagement;
 
 namespace TestGlfw
 {
@@ -81,7 +81,7 @@ namespace TestGlfw
             }
         }
 
-        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
@@ -112,10 +112,9 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromBuffer(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
-                PixelFarm.Agg.PixelFormat.ARGB32,
                 extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian
@@ -128,11 +127,11 @@ namespace TestGlfw
     {
 
         static Mini.GLDemoContext demoContext2 = null;
-        static OpenFontStore s_fontstore;
+        static InstalledTypefaceCollection s_typefaceStore;
         static LayoutFarm.OpenFontTextService s_textServices;
         public GlfwGLES2()
         {
-            s_fontstore = new OpenFontStore();
+            s_typefaceStore = new InstalledTypefaceCollection();
             s_textServices = new LayoutFarm.OpenFontTextService();
 
         }
@@ -150,7 +149,7 @@ namespace TestGlfw
                 //var demo = new T42_ES2HelloTriangleDemo();
                 demoContext2 = new Mini.GLDemoContext(w, h);
                 demoContext2.SetTextPrinter(painter =>
-                { 
+                {
 
                     var printer = new PixelFarm.DrawingGL.GLBitmapGlyphTextPrinter(painter, s_textServices);
                     painter.TextPrinter = printer;
@@ -188,7 +187,7 @@ namespace TestGlfw
 
     class GLFWProgram
     {
-        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
@@ -219,21 +218,51 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromBuffer(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
-                PixelFarm.Agg.PixelFormat.ARGB32,
                 extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian
             actualImg.IsBigEndian = true;
             return actualImg;
         }
+
+
+        class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
+        {
+            public override bool DataExists(string dataName)
+            {
+                //implement with file
+                return System.IO.File.Exists(dataName);
+            }
+            public override byte[] ReadData(string dataName)
+            {
+                return System.IO.File.ReadAllBytes(dataName);
+            }
+            public override void SaveData(string dataName, byte[] content)
+            {
+                System.IO.File.WriteAllBytes(dataName, content);
+            }
+
+            public override PixelFarm.CpuBlit.ActualBitmap ReadPngBitmap(string filename)
+            {
+                throw new System.NotImplementedException();
+            }
+            public override void SavePngBitmap(PixelFarm.CpuBlit.ActualBitmap bmp, string filename)
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+
+        static LocalFileStorageProvider file_storageProvider = new LocalFileStorageProvider();
         public static void Start()
         {
             //---------------------------------------------------
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
+            PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
             //---------------------------------------------------
             if (!Glfw.Init())
             {

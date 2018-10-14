@@ -1,4 +1,4 @@
-//BSD, 2014-2018, WinterDev
+//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 using System; 
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public class Ellipse
     {
@@ -42,10 +42,7 @@ namespace PixelFarm.Agg.VertexSource
         {
             Set(originX, originY, radiusX, radiusY, num_steps, cw);
         }
-        public void Reset(double originX, double originY, double radiusX, double radiusY, int num_steps = 0)
-        {
-            Set(originX, originY, radiusX, radiusY, num_steps, false);
-        }
+        
         public void Set(double ox, double oy,
                  double rx, double ry,
                  int num_steps = 0, bool cw = false)
@@ -55,6 +52,7 @@ namespace PixelFarm.Agg.VertexSource
             radiusX = rx;
             radiusY = ry;
             m_cw = cw;
+            m_scale = 1;
             numSteps = num_steps;
             if (numSteps == 0)
             {

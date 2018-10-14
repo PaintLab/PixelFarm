@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using PixelFarm.Drawing;
@@ -17,8 +17,8 @@ namespace LayoutFarm
     public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();
-        protected PaintToOutputWindowDelegate paintToOutputWindowHandler;
-        CanvasInvalidateDelegate canvasInvalidateDelegate;
+        protected PaintToOutputWindowDelegate _paintToOutputWindowHandler;
+        CanvasInvalidateDelegate _canvasInvalidateDelegate;
         Rectangle accumulateInvalidRect;
         bool hasAccumRect;
         public RootGraphic(int width, int heigth)
@@ -96,15 +96,17 @@ namespace LayoutFarm
             {
                 return;
             }
-
-            this.canvasInvalidateDelegate(accumulateInvalidRect);
-            this.paintToOutputWindowHandler();
+#if DEBUG
+            //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
+#endif
+            this._canvasInvalidateDelegate(accumulateInvalidRect);
+            this._paintToOutputWindowHandler();
             hasAccumRect = false;
         }
-        public void SetPaintDelegates(CanvasInvalidateDelegate canvasPaintToOutput, PaintToOutputWindowDelegate paintToOutputHandler)
+        public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
-            this.canvasInvalidateDelegate = canvasPaintToOutput;
-            this.paintToOutputWindowHandler = paintToOutputHandler;
+            this._canvasInvalidateDelegate = canvasInvalidateDelegate;
+            this._paintToOutputWindowHandler = paintToOutputHandler;
         }
 
 #if DEBUG
@@ -128,7 +130,7 @@ namespace LayoutFarm
 #endif
 
 
-        public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect)
+        public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
 
@@ -139,7 +141,6 @@ namespace LayoutFarm
             //int globalX = 0;
             //int globalY = 0;
             Point globalPoint = new Point();
-            bool isBubbleUp = false;
 #if DEBUG
             //if (fromElement.dbug_ObjectNote == "panel")
             //{
@@ -171,7 +172,7 @@ namespace LayoutFarm
 
                 globalPoint.Offset(fromElement.X, fromElement.Y);
 
-                if (fromElement.MayHasViewport && isBubbleUp)
+                if (fromElement.MayHasViewport && passSourceElem)
                 {
 
                     elemClientRect.Offset(globalPoint);
@@ -190,8 +191,9 @@ namespace LayoutFarm
                     {
                         elemClientRect.Intersect(elementRect);
                     }
-                    globalPoint.X = -fromElement.ViewportX;
-                    globalPoint.Y = -fromElement.ViewportY;
+
+                    globalPoint.X = -fromElement.ViewportX; //reset ?
+                    globalPoint.Y = -fromElement.ViewportY; //reset ?
                 }
 
                 if (fromElement.IsTopWindow)
@@ -209,7 +211,7 @@ namespace LayoutFarm
 #endif
 
 
-                    var parentLink = fromElement.MyParentLink;
+                    IParentLink parentLink = fromElement.MyParentLink;
                     if (parentLink == null)
                     {
                         return;
@@ -223,7 +225,7 @@ namespace LayoutFarm
                     }
                 }
 
-                isBubbleUp = true;
+                passSourceElem = true;
             } while (true);
 #if DEBUG
             var dbugMyroot = this;
@@ -305,20 +307,10 @@ namespace LayoutFarm
         public abstract RootGraphic CreateNewOne(int w, int h);
         //---------------------------------------------
 
-
-
-        //static TextBreakGenDel s_textBreakGen;
-        //public static PixelFarm.Drawing.Text.TextBreaker GetTextBreaker(string locale)
-        //{
-        //    return s_textBreakGen(locale);
-        //}
-        //public static void SetTextBreakerGenerator(TextBreakGenDel textBreakGen)
-        //{
-        //    s_textBreakGen = textBreakGen;
-        //}
-
-        //public delegate PixelFarm.Drawing.Text.TextBreaker TextBreakGenDel(string locale);
     }
+
+
+
 
 
 

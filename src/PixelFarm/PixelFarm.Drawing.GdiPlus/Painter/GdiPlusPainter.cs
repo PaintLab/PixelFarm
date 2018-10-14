@@ -1,8 +1,8 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -15,7 +15,6 @@ namespace PixelFarm.Drawing.WinGdi
 
         GdiPlusRenderSurface _renderSurface;
 
-   
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
             this._renderSurface = renderSurface;
@@ -24,6 +23,11 @@ namespace PixelFarm.Drawing.WinGdi
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
         }
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
+
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
             get { return _renderSurface.gx.CompositingMode; }
@@ -31,8 +35,8 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        RenderQualtity _renderQuality;
-        public override RenderQualtity RenderQuality
+        RenderQuality _renderQuality;
+        public override RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -142,6 +146,26 @@ namespace PixelFarm.Drawing.WinGdi
                 _currentPen.Color = GdiPlusRenderSurface.ConvColor(value);
             }
         }
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
+
+        //-----------------
+        Pen _curPen;
+        public override Pen CurrentPen
+        {
+            get { return _curPen; }
+            set
+            {
+                _curPen = value;
+            }
+        }
         public override DrawBoardOrientation Orientation
         {
             get { return DrawBoardOrientation.LeftTop; }
@@ -158,22 +182,21 @@ namespace PixelFarm.Drawing.WinGdi
                 _renderSurface.CurrentFont = value;
             }
         }
-
+        //-----------------
         public override void Clear(Color color)
         {
             _renderSurface.Clear(color);
         }
 
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
-            var renderVx = new WinGdiRenderVx(snap);
-            renderVx.path = VxsHelper.CreateGraphicsPath(snap);
+            var renderVx = new WinGdiRenderVx(vxs);
+            renderVx.path = VxsHelper.CreateGraphicsPath(vxs);
             return renderVx;
         }
-
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
-            return new WinGdiRenderVxFormattedString(textspan);
+            return new WinGdiRenderVxFormattedString(textspan.ToCharArray());
         }
 
         //public override void DoFilterBlurRecursive(RectInt area, int r)
@@ -252,18 +275,10 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void Draw(VertexStore vxs)
         {
-
-            //        for (int i = 0; i < numPath; ++i)
-            //        {
-            //            VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
-            //        }
-           // throw new NotImplementedException();
-        }
-
-        public override void Draw(VertexStoreSnap vxs)
-        {
             this.Fill(vxs);
         }
+
+
 
         public override void DrawEllipse(double left, double top, double width, double height)
         {
@@ -367,6 +382,10 @@ namespace PixelFarm.Drawing.WinGdi
         //            //return glBmp;
         //        }
         //    }
+        public override void DrawImage(Image actualImage)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             throw new NotImplementedException();
@@ -449,15 +468,10 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
-        public override void Fill(VertexStoreSnap snap)
-        {
-            VxsHelper.FillVxsSnap(_renderSurface.gx, snap, _fillColor);
-        }
-
         public override void Fill(VertexStore vxs)
         {
 
-            VxsHelper.DrawVxsSnap(_renderSurface.gx, new VertexStoreSnap(vxs), _strokeColor);
+            VxsHelper.FillVxs(_renderSurface.gx, vxs, _fillColor);
 
         }
 
@@ -487,11 +501,6 @@ namespace PixelFarm.Drawing.WinGdi
             VxsHelper.FillPath(_renderSurface.gx, wRenderVx.path, this.FillColor);
         }
 
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
 
@@ -509,18 +518,25 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
         }
-
-
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
+            throw new NotImplementedException();
+        }
 
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
+        public override void Render(RenderVx renderVx)
         {
-            _vxsPool.Release(ref vxs);
+            throw new NotImplementedException();
         }
+        //VertexStorePool _vxsPool = new VertexStorePool();
+        //VertexStore GetFreeVxs()
+        //{
+
+        //    return _vxsPool.GetFreeVxs();
+        //}
+        //void ReleaseVxs(ref VertexStore vxs)
+        //{
+        //    _vxsPool.Release(ref vxs);
+        //}
 
     }
 

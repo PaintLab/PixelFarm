@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 namespace LayoutFarm
@@ -15,6 +15,9 @@ namespace LayoutFarm
         int uiLayoutFlags;
         //------------------------ 
 
+        /// <summary>
+        /// rectangle bounds relative to its parent element
+        /// </summary>
         public Rectangle RectBounds
         {
             get
@@ -68,6 +71,7 @@ namespace LayoutFarm
         {
             get
             {
+
                 return b_width;
             }
         }
@@ -99,14 +103,14 @@ namespace LayoutFarm
         {
             get
             {
-                return this.Bottom + this.ViewportY;
+                return this.ViewportY + this.Height;
             }
         }
         public int ViewportRight
         {
             get
             {
-                return this.Right + this.ViewportX;
+                return this.ViewportX + this.Width;
             }
         }
 
@@ -173,7 +177,8 @@ namespace LayoutFarm
                     uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_HEIGHT;
             }
         }
-        public bool HasSpecificSize
+
+        public bool HasSpecificWidthAndHeight
         {
             get
             {

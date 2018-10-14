@@ -1,18 +1,20 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class Label : UIBox
+    public class Label : AbstractRectUI
     {
         string text;
         Color textColor;
         CustomTextRun myTextRun;
+        RequestFont _font;
         public Label(int w, int h)
             : base(w, h)
         {
         }
+        
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (this.myTextRun == null)
@@ -21,10 +23,28 @@ namespace LayoutFarm.CustomWidgets
                 trun.SetLocation(this.Left, this.Top);
                 trun.TextColor = this.textColor;
                 trun.Text = this.Text;
+                //
+                trun.SetController(this);
+                //
+                if (_font != null)
+                {
+                    trun.RequestFont = _font;
+                }
                 this.myTextRun = trun;
             }
             //-----------
             return myTextRun;
+        }
+        public override void SetFont(RequestFont font)
+        {
+            if (myTextRun != null)
+            {
+                myTextRun.RequestFont = font;
+            }
+            else
+            {
+                _font = font;
+            }
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
@@ -58,14 +78,14 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public override int DesiredHeight
+        public override int InnerHeight
         {
             get
             {
                 return this.Height;
             }
         }
-        public override int DesiredWidth
+        public override int InnerWidth
         {
             get
             {

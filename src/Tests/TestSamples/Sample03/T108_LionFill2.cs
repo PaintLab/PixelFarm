@@ -1,11 +1,10 @@
 ﻿//MIT, 2014-2016,WinterDev
 
 using System;
-using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Agg;
-
+using PixelFarm.CpuBlit;
+using PaintLab.Svg;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "108")]
@@ -14,7 +13,7 @@ namespace OpenTkEssTest
     {
         GLRenderSurface _glsx;
         SpriteShape lionShape;
-        VertexStore lionVxs;
+
         GLPainter painter;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
@@ -23,18 +22,14 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-           
-            lionShape = new SpriteShape();
-            lionShape.ParseLion();
 
+            VgRenderVx svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/lion.svg"); 
+            lionShape = new SpriteShape(svgRenderVx); 
             //flip this lion vertically before use with openGL
-            PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
-                 PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
-                 PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
-            lionVxs = new VertexStore();
-            aff.TransformToVxs(lionShape.Vxs, lionVxs);
-
-
+            PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1),
+                 PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(0, 600));
+            lionShape.ApplyTransform(aff);
         }
         protected override void DemoClosing()
         {

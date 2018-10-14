@@ -1,4 +1,4 @@
-//BSD, 2014-2018, WinterDev
+//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -19,10 +19,11 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg.Transform
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //==========================================================trans_bilinear
-    public sealed partial class Bilinear : ICoordTransformer
+
+    public sealed class Bilinear : ICoordTransformer
     {
         //readonly double[,] m_mtx = new double[4, 2];//row x column
         //4 row, 2 columns
@@ -111,10 +112,11 @@ namespace PixelFarm.Agg.Transform
         {
             double[,] left = new double[4, 4];
             double[,] right = new double[4, 2];
+
             for (int i = 0; i < 4; i++)
             {
-                int ix = i << 1;
-                int iy = ix + 1;
+                int ix = i << 1; //*2
+                int iy = ix + 1; //+1
                 left[i, 0] = 1.0;
                 left[i, 1] = src[ix] * src[iy];
                 left[i, 2] = src[ix];
@@ -140,9 +142,13 @@ namespace PixelFarm.Agg.Transform
             x = rc00 + rc10 * xy + rc20 * tx + rc30 * ty;
             y = rc01 + rc11 * xy + rc21 * tx + rc31 * ty;
         }
+        ICoordTransformer ICoordTransformer.MultiplyWith(ICoordTransformer another)
+        {
+            return new CoordTransformationChain(this, another);
+        }
         //-------------------------------------------------------------------------
 
 
-     
+
     }
 }

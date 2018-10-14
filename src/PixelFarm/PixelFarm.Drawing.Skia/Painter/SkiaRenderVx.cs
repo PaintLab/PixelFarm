@@ -1,22 +1,27 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.Agg;
+ 
 namespace PixelFarm.Drawing.Skia
 {
     class WinGdiRenderVx : RenderVx
     {
-        internal VertexStoreSnap snap;
+        internal VertexStore vxs;
         internal SkiaSharp.SKPath path;
-        public WinGdiRenderVx(VertexStoreSnap snap)
+        public WinGdiRenderVx(VertexStore vxs)
         {
-            this.snap = snap;
+            this.vxs = vxs;
         }
     }
     class SkiaRenerVxFormattedString : RenderVxFormattedString
     {
+        string str;
         public SkiaRenerVxFormattedString(string str)
         {
-            this.OriginalString = str;
+            this.str = str;
+        }
+        public override string OriginalString
+        {
+            get { return str; }
         }
     }
 }

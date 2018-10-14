@@ -1,4 +1,4 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
 using System.Collections.Generic;
 
@@ -161,7 +161,7 @@ namespace PixelFarm.DrawingGL
             expandCoords.Clear();
             //
             return result;
-        } 
+        }
         static void CreateSmoothLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create with no line join
@@ -194,22 +194,24 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-        public void AddVertexSnap(PixelFarm.Drawing.VertexStoreSnap vxsSnap)
+        public void AddVertexSnap(PixelFarm.Drawing.VertexStore vxs)
         {
             //begin new snap vxs
             _tempCoords.Clear();
             _tempEndPoints.Clear();
 
-            var iter = vxsSnap.GetVertexSnapIter();
+
             double x, y;
-            PixelFarm.Agg.VertexCmd cmd;
+            PixelFarm.CpuBlit.VertexCmd cmd;
             int totalXYCount = 0;
             int index = 0;
             float latestMoveToX = 0, latestMoveToY = 0;
             float latestX = 0, latestY = 0;
-            while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
+            int vxs_i = 0;
+
+            while ((cmd = vxs.GetVertex(vxs_i++, out x, out y)) != CpuBlit.VertexCmd.NoMore)
             {
-                if (cmd == Agg.VertexCmd.Close || cmd == Agg.VertexCmd.CloseAndEndFigure)
+                if (cmd == CpuBlit.VertexCmd.Close || cmd == CpuBlit.VertexCmd.CloseAndEndFigure)
                 {
                     index = 0; //reset
                     //temp fix1
@@ -468,11 +470,38 @@ namespace PixelFarm.DrawingGL
             this.multipartTessResult = multipartTessResult;
         }
     }
-    class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
+    public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        public GLRenderVxFormattedString(string str)
+        char[] _charBuffer;
+        DrawingGL.VertexBufferObject2 _vbo2;
+
+        internal GLRenderVxFormattedString(char[] charBuffer)
         {
-            this.OriginalString = str;
+            this._charBuffer = charBuffer;
+        }
+        public override string OriginalString
+        {
+            get { return new string(_charBuffer); }
+        }
+        public float[] VertexCoords { get; set; }
+        public ushort[] IndexArray { get; set; }
+        public int VertexCount { get; set; }
+
+        public DrawingGL.VertexBufferObject2 GetVbo()
+        {
+            if (_vbo2 != null)
+            {
+                return _vbo2;
+            }
+
+            _vbo2 = new VertexBufferObject2();
+            _vbo2.CreateBuffers(this.VertexCoords, this.IndexArray);
+            return _vbo2;
+        }
+        public override void Dispose()
+        {
+            //
+            base.Dispose();
         }
     }
 }

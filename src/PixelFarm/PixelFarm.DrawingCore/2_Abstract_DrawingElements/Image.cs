@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 namespace PixelFarm.Drawing
@@ -40,11 +40,7 @@ namespace PixelFarm.Drawing
         {
             img.innerImage = new WeakReference(o);
         }
-
-
-
-
-        //----------------------------
+         
         public enum RequestType
         {
             Rent,
@@ -55,13 +51,13 @@ namespace PixelFarm.Drawing
             public ImgBufferRequestArgs(int requestPixelFormat, RequestType reqType)
             {
                 this.RequestType = reqType;
-                this.RequestPixelFormat = requestPixelFormat; 
+                this.RequestPixelFormat = requestPixelFormat;
                 this.IsInvertedImage = true;
                 this.OutputBuffer32 = null;
             }
             public bool IsInvertedImage { get; set; }
             public int RequestPixelFormat { get; private set; }
-            public RequestType RequestType { get; private set; } 
+            public RequestType RequestType { get; private set; }
             public int[] OutputBuffer32 { get; set; }
         }
     }

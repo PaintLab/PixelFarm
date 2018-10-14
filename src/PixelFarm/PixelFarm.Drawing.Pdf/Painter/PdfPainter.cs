@@ -1,8 +1,9 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing.PainterExtensions;
 
 namespace PixelFarm.Drawing.Pdf
 {
@@ -25,21 +26,48 @@ namespace PixelFarm.Drawing.Pdf
         RequestFont _currentFont;
 
 
-        Agg.VertexSource.RoundedRect roundRect;
+        CpuBlit.VertexProcessing.RoundedRect roundRect;
 
 
         SmoothingMode _smoothingMode;
 
         public PdfPainter()
         {
-        }
 
+        }
+        public override void Render(RenderVx renderVx)
+        {
+            throw new NotImplementedException();
+        }
+        public override void SetClipRgn(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {
             get { return _orientation; }
             set
             { _orientation = value; }
+        }
+        Brush _currentBrush;
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
+        }
+
+        Pen _currentPen;
+        public override Pen CurrentPen
+        {
+            get { return _currentPen; }
+            set
+            {
+                _currentPen = value;
+            }
         }
         public override float OriginX
         {
@@ -48,8 +76,8 @@ namespace PixelFarm.Drawing.Pdf
                 throw new NotImplementedException();
             }
         }
-        RenderQualtity _renderQuality;
-        public override RenderQualtity RenderQuality
+        PixelFarm.Drawing.RenderQuality _renderQuality;
+        public override PixelFarm.Drawing.RenderQuality RenderQuality
         {
             get { return _renderQuality; }
             set { _renderQuality = value; }
@@ -97,10 +125,7 @@ namespace PixelFarm.Drawing.Pdf
         //    get { return _gfx.CompositingMode; }
         //    set { _gfx.CompositingMode = value; }
         //}
-        public override void Draw(VertexStoreSnap vxs)
-        {
-            this.Fill(vxs);
-        }
+
         public override RectInt ClipBox
         {
             get
@@ -193,6 +218,7 @@ namespace PixelFarm.Drawing.Pdf
             }
         }
 
+         
         public override void Clear(Color color)
         {
             //_gfx.Clear(VxsHelper.ToDrawingColor(color));
@@ -279,7 +305,10 @@ namespace PixelFarm.Drawing.Pdf
         //    //     controlX2, controlY2,
         //    //     endX, endY);
         //}
-
+        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
@@ -390,14 +419,7 @@ namespace PixelFarm.Drawing.Pdf
         {
             // VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs), _fillColor);
         }
-        /// <summary>
-        /// we do NOT store snap/vxs
-        /// </summary>
-        /// <param name="snap"></param>
-        public override void Fill(VertexStoreSnap snap)
-        {
-            // VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
-        }
+
         //public override void FillCircle(double x, double y, double radius)
         //{
         //    //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
@@ -426,16 +448,16 @@ namespace PixelFarm.Drawing.Pdf
         }
 
 
-        VertexStorePool _vxsPool = new VertexStorePool();
-        VertexStore GetFreeVxs()
-        {
+        //VertexStorePool _vxsPool = new VertexStorePool();
+        //VertexStore GetFreeVxs()
+        //{
 
-            return _vxsPool.GetFreeVxs();
-        }
-        void ReleaseVxs(ref VertexStore vxs)
-        {
-            _vxsPool.Release(ref vxs);
-        }
+        //    return _vxsPool.GetFreeVxs();
+        //}
+        //void ReleaseVxs(ref VertexStore vxs)
+        //{
+        //    _vxsPool.Release(ref vxs);
+        //}
         //public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         //{
         //    if (roundRect == null)
@@ -479,13 +501,6 @@ namespace PixelFarm.Drawing.Pdf
             //_gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
 
-        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
-        {
-            //for (int i = 0; i < numPath; ++i)
-            //{
-            //    VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
-            //}
-        }
 
         public override void DrawRect(double left, double bottom, double right, double top)
         {
@@ -496,7 +511,7 @@ namespace PixelFarm.Drawing.Pdf
         {
             //_gfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
         }
-        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStore vxs)
         {
             throw new NotSupportedException();
             //var renderVx = new WinGdiRenderVx(snap);
@@ -520,5 +535,9 @@ namespace PixelFarm.Drawing.Pdf
             //VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
         }
 
+        public override void DrawImage(Image actualImage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

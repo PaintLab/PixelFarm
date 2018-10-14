@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 using System;
 namespace PixelFarm.Drawing.Pdf
@@ -259,6 +259,10 @@ namespace PixelFarm.Drawing.Pdf
             //{
             //    gx.DrawImage(inner, destRect.ToRectF());
             //}
+        }
+        public override void DrawImage(Image image, int x, int y)
+        {
+            
         }
         public override void FillPath(Color color, GraphicsPath gfxPath)
         {

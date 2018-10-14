@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -26,8 +26,10 @@ namespace LayoutFarm.Text
         }
         public void Clear()
         {
+            //clear all
             this.MoveToLine(0);
-            CurrentLine.Clear();
+            ClearCurrentLine();
+            //CurrentLine.Clear();
             EnsureCurrentTextRun();
         }
         public void EnsureCurrentTextRun(int index)
@@ -61,6 +63,14 @@ namespace LayoutFarm.Text
             EnsureCurrentTextRun(precutIndex);
         }
 
+        public void ClearCurrentLine()
+        {
+            int currentCharIndex = CharIndex;
+            CurrentLine.ReplaceAll(null);
+            CurrentLine.TextLineReCalculateActualLineSize();
+            CurrentLine.RefreshInlineArrange();
+            EnsureCurrentTextRun(currentCharIndex);
+        }
         public void ReplaceCurrentLine(IEnumerable<EditableRun> textRuns)
         {
             int currentCharIndex = CharIndex;
@@ -116,10 +126,30 @@ namespace LayoutFarm.Text
             }
         }
 
+        public bool CanAcceptThisChar(char c)
+        {
+            //TODO: review here, enable this feature or not
+            //some char can't be a start char on blank line
+            if (CurrentLine.IsBlankLine &&
+                !InternalTextLayerController.CanCaretStopOnThisChar(c))
+            {
+                return false;
+            }
+            return true;
+        }
         public void AddCharacter(char c)
         {
             if (CurrentLine.IsBlankLine)
             {
+                //TODO: review here, enable this feature or not
+                //some char can't be a start char on blank line
+
+                if (!InternalTextLayerController.CanCaretStopOnThisChar(c))
+                {
+                    return;
+                }
+                //
+
                 //1. new 
                 EditableRun t = new EditableTextRun(this.Root,
                     c,
@@ -272,7 +302,7 @@ namespace LayoutFarm.Text
         public debugActivityRecorder dbugTextManRecorder;
 #endif
 
-        EditableTextFlowLayer visualFlowLayer;
+        EditableTextFlowLayer _textFlowLayer;
         EditableTextLine currentLine;
         int currentLineY = 0;
         EditableRun currentTextRun;
@@ -294,7 +324,7 @@ namespace LayoutFarm.Text
             dbugTotalId++;
 #endif
 
-            this.visualFlowLayer = flowlayer;
+            this._textFlowLayer = flowlayer;
             flowlayer.Reflow += new EventHandler(flowlayer_Reflow);
             currentLine = flowlayer.GetTextLine(0);
             if (currentLine.FirstRun != null)
@@ -319,13 +349,13 @@ namespace LayoutFarm.Text
 
         protected RootGraphic Root
         {
-            get { return this.visualFlowLayer.Root; }
+            get { return this._textFlowLayer.Root; }
         }
         public EditableTextFlowLayer FlowLayer
         {
             get
             {
-                return this.visualFlowLayer;
+                return this._textFlowLayer;
             }
         }
         void flowlayer_Reflow(object sender, EventArgs e)
@@ -372,17 +402,25 @@ namespace LayoutFarm.Text
 
             TextBufferSpan textBufferSpan = new TextBufferSpan(lineContent.ToCharArray());
             ILineSegmentList segmentList = this.Root.TextServices.BreakToLineSegments(ref textBufferSpan);
-            int segcount = segmentList.Count;
-            for (int i = 0; i < segcount; ++i)
+            if (segmentList != null)
             {
-                ILineSegment seg = segmentList[i];
-                if (seg.StartAt + seg.Length >= caret_char_index)
+                int segcount = segmentList.Count;
+                for (int i = 0; i < segcount; ++i)
                 {
-                    //stop at this segment
-                    startAt = seg.StartAt;
-                    len = seg.Length;
-                    return;
+                    ILineSegment seg = segmentList[i];
+                    if (seg.StartAt + seg.Length >= caret_char_index)
+                    {
+                        //stop at this segment
+                        startAt = seg.StartAt;
+                        len = seg.Length;
+                        return;
+                    }
                 }
+            }
+            else
+            {
+                //TODO: review here
+                //this is a bug!!!
             }
             //?
             startAt = 0;
@@ -434,9 +472,13 @@ namespace LayoutFarm.Text
 
         public void MoveToLine(int lineNumber)
         {
-            currentLine = visualFlowLayer.GetTextLine(lineNumber);
+            currentLine = _textFlowLayer.GetTextLine(lineNumber);
             currentLineY = currentLine.Top;
+
+            //if current line is a blank line
+            //not first run => currentTextRun= null 
             currentTextRun = (EditableRun)currentLine.FirstRun;
+
             rCharOffset = 0;
             rPixelOffset = 0;
 
@@ -445,7 +487,7 @@ namespace LayoutFarm.Text
         }
         public void CopyContentToStrignBuilder(StringBuilder stBuilder)
         {
-            visualFlowLayer.CopyContentToStringBuilder(stBuilder);
+            _textFlowLayer.CopyContentToStringBuilder(stBuilder);
         }
         public char PrevChar
         {
@@ -629,9 +671,13 @@ namespace LayoutFarm.Text
         /// <summary>
         /// try set caret x pos to nearest request value
         /// </summary>
-        /// <param name="value"></param>
-        public void TrySetCaretXPos(int value)
+        /// <param name="xpos"></param>
+        public void TrySetCaretPos(int xpos, int ypos)
         {
+
+            //--------
+            _textFlowLayer.NotifyHitOnSolidTextRun(null);
+            //--------
             if (currentTextRun == null)
             {
                 caret_char_index = 0;
@@ -640,17 +686,25 @@ namespace LayoutFarm.Text
                 rPixelOffset = 0;
                 return;
             }
-            int pixDiff = value - caretXPos;
+            int pixDiff = xpos - caretXPos;
             if (pixDiff > 0)
             {
                 do
                 {
                     int thisTextRunPixelLength = currentTextRun.Width;
-                    if (rPixelOffset + thisTextRunPixelLength > value)
+                    if (rPixelOffset + thisTextRunPixelLength > xpos)
                     {
-                        EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
+                        EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, xpos - rPixelOffset);
                         caretXPos = rPixelOffset + foundLocation.pixelOffset;
                         caret_char_index = rCharOffset + foundLocation.RunCharIndex;
+
+                        //for solid text run
+                        //we can send some event to it
+                        SolidTextRun solidTextRun = currentTextRun as SolidTextRun;
+                        if (solidTextRun != null)
+                        {
+                            _textFlowLayer.NotifyHitOnSolidTextRun(solidTextRun);
+                        }
 
                         //if (foundLocation.charIndex == -1)
                         //{
@@ -677,11 +731,21 @@ namespace LayoutFarm.Text
             {
                 do
                 {
-                    if (value >= rPixelOffset)
+                    if (xpos >= rPixelOffset)
                     {
-                        EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
+                        EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, xpos - rPixelOffset);
                         caretXPos = rPixelOffset + foundLocation.pixelOffset;
                         caret_char_index = rCharOffset + foundLocation.RunCharIndex;
+
+
+                        //for solid text run
+                        //we can send some event to it
+                        SolidTextRun solidTextRun = currentTextRun as SolidTextRun;
+                        if (solidTextRun != null)
+                        {
+                            _textFlowLayer.NotifyHitOnSolidTextRun(solidTextRun);
+                        }
+
 
                         //if (foundLocation.charIndex == -1)
                         //{
@@ -780,7 +844,7 @@ namespace LayoutFarm.Text
                             {
                                 do
                                 {
-                                    if (rCharOffset + currentTextRun.CharacterCount > newCharIndexPointTo)
+                                    if (rCharOffset + currentTextRun.CharacterCount >= newCharIndexPointTo)
                                     {
                                         caret_char_index = newCharIndexPointTo;
                                         caretXPos = rPixelOffset + currentTextRun.GetRunWidth(caret_char_index - rCharOffset);
@@ -933,11 +997,4 @@ namespace LayoutFarm.Text
             }
         }
     }
-    //class BackGroundTextLineWriter : TextLineWriter
-    //{
-    //    public BackGroundTextLineWriter(EditableTextFlowLayer visualElementLayer)
-    //        : base(visualElementLayer)
-    //    {
-    //    }
-    //}
 }

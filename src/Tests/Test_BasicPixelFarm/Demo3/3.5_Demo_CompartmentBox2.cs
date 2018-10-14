@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
@@ -6,27 +6,27 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("3.5 Demo_CompartmentBox2")]
-    class Demo_CompartmentBox2 : DemoBase
+    class Demo_CompartmentBox2 : App
     {
         UINinespaceBox ninespaceBox;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             //--------------------------------
             {
                 //background element
-                var bgbox = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+                var bgbox = new LayoutFarm.CustomWidgets.Box(800, 600);
                 bgbox.BackColor = Color.White;
                 bgbox.SetLocation(0, 0);
                 SetupBackgroundProperties(bgbox);
-                viewport.AddContent(bgbox);
+                host.AddChild(bgbox);
             }
             //--------------------------------
             //ninespace compartment
             ninespaceBox = new UINinespaceBox(800, 600);
-            viewport.AddContent(ninespaceBox);
+            host.AddChild(ninespaceBox);
             ninespaceBox.SetSize(800, 600);
         }
-        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.EaseBox backgroundBox)
+        void SetupBackgroundProperties(LayoutFarm.CustomWidgets.Box backgroundBox)
         {
             ////if click on background
             //backgroundBox.MouseDown += (s, e) =>
@@ -41,22 +41,22 @@ namespace LayoutFarm
 
 
 
-        class UINinespaceBox : LayoutFarm.CustomWidgets.EaseBox
+        class UINinespaceBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             //-------------------------------------
-            EaseBox boxLeftTop;
-            EaseBox boxRightTop;
-            EaseBox boxLeftBottom;
-            EaseBox boxRightBottom;
+            Box boxLeftTop;
+            Box boxRightTop;
+            Box boxLeftBottom;
+            Box boxRightBottom;
             //-------------------------------------
-            EaseBox boxLeft;
-            EaseBox boxTop;
-            EaseBox boxRight;
-            EaseBox boxBottom;
+            Box boxLeft;
+            Box boxTop;
+            Box boxRight;
+            Box boxBottom;
             //-------------------------------------
 
             //-------------------------------------
-            EaseBox centerBox;
+            Box centerBox;
             DockSpacesController dockspaceController;
             public UINinespaceBox(int w, int h)
                 : base(w, h)
@@ -86,10 +86,10 @@ namespace LayoutFarm
             }
 
 
-            static CustomWidgets.EaseBox CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
+            static CustomWidgets.Box CreateSpaceBox(SpaceName name, PixelFarm.Drawing.Color bgcolor)
             {
                 int controllerBoxWH = 10;
-                var tinyBox = new CustomWidgets.SimpleBox(controllerBoxWH, controllerBoxWH);
+                var tinyBox = new CustomWidgets.Box(controllerBoxWH, controllerBoxWH);
                 tinyBox.BackColor = bgcolor;
                 tinyBox.Tag = name;
                 return tinyBox;

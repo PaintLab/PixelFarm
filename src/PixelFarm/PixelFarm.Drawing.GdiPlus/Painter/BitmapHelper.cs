@@ -1,9 +1,11 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-namespace PixelFarm.Agg.Imaging
+using PixelFarm.CpuBlit.Rasterization;
+
+namespace PixelFarm.CpuBlit.Imaging
 {
     public static class BitmapHelper
     {
@@ -13,29 +15,150 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="actualImage"></param>
         /// <param name="hBmpScan0"></param>
         public static void CopyToWindowsBitmapSameSize(
-           ActualImage actualImage,
+           ActualBitmap actualImage,
            IntPtr hBmpScan0)
         {
             //1st, fast
             //byte[] rawBuffer = ActualImage.GetBuffer(actualImage);
 
-            TempMemPtr memPtr = ActualImage.GetBufferPtr(actualImage);
+            TempMemPtr memPtr = ActualBitmap.GetBufferPtr(actualImage);
             unsafe
             {
-                AggMemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
+                MemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
             }
             //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
             //   hBmpScan0, rawBuffer.Length);
 
-            memPtr.Release();
+            memPtr.Dispose();
         }
 
 
 
         /////////////////////////////////////////////////////////////////////////////////////
+        public static void CopyToGdiPlusBitmapSameSizeNotFlip(
+          ActualBitmap actualImage,
+          Bitmap bitmap)
+        {
+            //agg store image buffer head-down
+            //when copy to window bmp we here to flip 
+            //style1: copy row by row *** (fastest)***
+            {
+                //System.GC.Collect();
+                //System.Diagnostics.Stopwatch sss = new System.Diagnostics.Stopwatch();
+                //sss.Start();
+                //for (int i = 0; i < 1000; ++i)
+                //{
+                int h = bitmap.Height;
+                int w = bitmap.Width;
+                BitmapData bitmapData1 = bitmap.LockBits(
+                          new Rectangle(0, 0,
+                              w,
+                              h),
+                              System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                              bitmap.PixelFormat);
+                IntPtr scan0 = bitmapData1.Scan0;
+                int stride = bitmapData1.Stride;
+                //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
+                TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
+                unsafe
+                {
+                    //fixed (byte* bufferH = &srcBuffer[0])
+                    byte* srcBufferH = (byte*)srcBufferPtr.Ptr;
+                    {
+                        byte* target = (byte*)scan0;
+                        int startRowAt = 0;
+                        for (int y = 0; y < h; ++y)
+                        {
+                            //byte* src = bufferH + ((y - 1) * stride);
+                            byte* src = srcBufferH + startRowAt;
+                            //System.Runtime.InteropServices.Marshal.Copy(
+                            //   srcBuffer,//src
+                            //   startRowAt,
+                            //   (IntPtr)target,
+                            //   stride);
+                            MemMx.memcpy(target, src, stride);
 
+                            startRowAt += stride;
+                            target += stride;
+                        }
+                    }
+                }
+                srcBufferPtr.Dispose();
+                bitmap.UnlockBits(bitmapData1);
+                //}
+                //sss.Stop();
+                //long ms = sss.ElapsedMilliseconds;
+            }
+            //-----------------------------------
+            //style2: copy all, then flip again
+            //{
+            //    System.GC.Collect();
+            //    System.Diagnostics.Stopwatch sss = new System.Diagnostics.Stopwatch();
+            //    sss.Start();
+            //    for (int i = 0; i < 1000; ++i)
+            //    {
+            //        byte[] rawBuffer = ActualImage.GetBuffer(actualImage);
+            //        var bmpdata = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+            //          System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            //         bitmap.PixelFormat);
+
+
+            //        System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
+            //            bmpdata.Scan0, rawBuffer.Length);
+
+            //        bitmap.UnlockBits(bmpdata);
+            //        bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            //    }
+
+            //    sss.Stop();
+            //    long ms = sss.ElapsedMilliseconds; 
+            //}
+            //-----------------------------------
+
+            //-----------------------------------
+            //style3: copy row by row + 
+            //{
+            //    System.GC.Collect();
+            //    System.Diagnostics.Stopwatch sss = new System.Diagnostics.Stopwatch();
+            //    sss.Start();
+            //    for (int i = 0; i < 1000; ++i)
+            //    {
+            //        int h = bitmap.Height;
+            //        int w = bitmap.Width;
+            //        BitmapData bitmapData1 = bitmap.LockBits(
+            //                  new Rectangle(0, 0,
+            //                      w,
+            //                      h),
+            //                      System.Drawing.Imaging.ImageLockMode.ReadWrite,
+            //                      bitmap.PixelFormat);
+            //        IntPtr scan0 = bitmapData1.Scan0;
+            //        int stride = bitmapData1.Stride;
+            //        byte[] buffer = ActualImage.GetBuffer(actualImage);
+            //        unsafe
+            //        {
+            //            fixed (byte* bufferH = &buffer[0])
+            //            {
+            //                byte* target = (byte*)scan0;
+            //                for (int y = h; y > 0; --y)
+            //                {
+            //                    byte* src = bufferH + ((y - 1) * stride);
+            //                    for (int n = stride - 1; n >= 0; --n)
+            //                    {
+            //                        *target = *src;
+            //                        target++;
+            //                        src++;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        bitmap.UnlockBits(bitmapData1);
+            //    }
+            //    sss.Stop();
+            //    long ms = sss.ElapsedMilliseconds;
+            //} 
+        }
         public static void CopyToGdiPlusBitmapSameSize(
-            ActualImage actualImage,
+            ActualBitmap actualImage,
             Bitmap bitmap)
         {
             //agg store image buffer head-down
@@ -58,7 +181,7 @@ namespace PixelFarm.Agg.Imaging
                 IntPtr scan0 = bitmapData1.Scan0;
                 int stride = bitmapData1.Stride;
                 //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
-                TempMemPtr srcBufferPtr = ActualImage.GetBufferPtr(actualImage);
+                TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
                 unsafe
                 {
                     //fixed (byte* bufferH = &srcBuffer[0])
@@ -75,14 +198,14 @@ namespace PixelFarm.Agg.Imaging
                             //   startRowAt,
                             //   (IntPtr)target,
                             //   stride);
-                            AggMemMx.memcpy(target, src, stride);
+                            MemMx.memcpy(target, src, stride);
 
                             startRowAt -= stride;
                             target += stride;
                         }
                     }
                 }
-                srcBufferPtr.Release();
+                srcBufferPtr.Dispose();
                 bitmap.UnlockBits(bitmapData1);
                 //}
                 //sss.Stop();
@@ -189,7 +312,7 @@ namespace PixelFarm.Agg.Imaging
                     for (int y = h; y > 0; --y)
                     {
                         byte* src = bufferH + ((y - 1) * stride);
-                        AggMemMx.memcpy(target, src, stride);
+                        MemMx.memcpy(target, src, stride);
                         startRowAt -= stride;
                         target += stride;
                     }
@@ -270,13 +393,13 @@ namespace PixelFarm.Agg.Imaging
         }
         public static void CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(
            Bitmap windowsBitmap,
-           ActualImage actualImage)
+           ActualBitmap actualImage)
         {
 
             int h = windowsBitmap.Height;
             int w = windowsBitmap.Width;
             //byte[] targetBuffer = ActualImage.GetBuffer(actualImage);
-            TempMemPtr targetBufferPtr = ActualImage.GetBufferPtr(actualImage);
+            TempMemPtr targetBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
             BitmapData bitmapData1 = windowsBitmap.LockBits(
                       new Rectangle(0, 0,
                           w,
@@ -304,7 +427,7 @@ namespace PixelFarm.Agg.Imaging
                     //System.Runtime.InteropServices.Marshal.Copy(
                     //      (IntPtr)src,//src
                     //      targetBuffer, startRowAt, stride);
-                    AggMemMx.memcpy(targetH + startRowAt, src, stride);
+                    MemMx.memcpy(targetH + startRowAt, src, stride);
                     startRowAt -= stride;
                     src += stride;
                 }
@@ -377,7 +500,7 @@ namespace PixelFarm.Agg.Imaging
                 //    }
                 //}
             }
-            targetBufferPtr.Release();
+            targetBufferPtr.Dispose();
             windowsBitmap.UnlockBits(bitmapData1);
         }
 

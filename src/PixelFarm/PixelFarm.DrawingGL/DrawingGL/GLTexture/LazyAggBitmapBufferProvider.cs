@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2018, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using System.Runtime.InteropServices;
@@ -6,9 +6,9 @@ namespace PixelFarm.DrawingGL
 {
     public class LazyAggBitmapBufferProvider : LazyBitmapBufferProvider
     {
-        PixelFarm.Agg.ActualImage image;
-        GCHandle handle;
-        public LazyAggBitmapBufferProvider(PixelFarm.Agg.ActualImage image)
+        PixelFarm.CpuBlit.ActualBitmap image;
+        //GCHandle handle;
+        public LazyAggBitmapBufferProvider(PixelFarm.CpuBlit.ActualBitmap image)
         {
             this.image = image;
         }
@@ -18,13 +18,16 @@ namespace PixelFarm.DrawingGL
         }
         public override IntPtr GetRawBufferHead()
         {
-            int[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(image);
-            this.handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            return this.handle.AddrOfPinnedObject();
+            return PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(image).Ptr;
+
+
+            //int[] buffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(image);
+            //this.handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            //return this.handle.AddrOfPinnedObject();
         }
         public override void ReleaseBufferHead()
         {
-            this.handle.Free();
+            //this.handle.Free();
         }
         public override int Width
         {

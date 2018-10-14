@@ -1,4 +1,4 @@
-//BSD, 2014-2018, WinterDev
+//BSD, 2014-present, WinterDev
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-namespace PixelFarm.Agg
+namespace PixelFarm.CpuBlit
 {
     public static partial class AggMath
     {

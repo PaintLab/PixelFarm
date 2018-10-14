@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -7,13 +7,13 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MenuItem : UIBox
+    public class MenuItem : AbstractRectUI
     {
         CustomRenderBox primElement;//background 
         Color backColor = Color.LightGray;
         bool thisMenuOpened;
         //1. land part
-        UIBox landPart;
+        AbstractRectUI landPart;
         //2. float part   
         MenuBox floatPart;
         CustomRenderBox floatPartRenderElement;
@@ -51,7 +51,7 @@ namespace LayoutFarm.CustomWidgets
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.BackColor = backColor;
-                renderE.HasSpecificSize = true;
+                renderE.HasSpecificWidthAndHeight = true;
                 renderE.SetController(this);
                 //------------------------------------------------
                 //create visual layer                 
@@ -91,7 +91,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
         //----------------------------------------------------  
-        public UIBox LandPart
+        public AbstractRectUI LandPart
         {
             get { return this.landPart; }
             set
@@ -263,7 +263,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class MenuBox : EaseBox
+    public class MenuBox : AbstractBox
     {
         bool showing;
         RenderBoxBase topWindow;

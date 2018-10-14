@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 //MatterHackers: BSD
 // Much of the ui to the drawing functions still needs to be C#'ed and cleaned up.  A lot of
@@ -6,24 +6,22 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Transform;
-
 using Mini;
 
-namespace PixelFarm.Agg.Sample_Draw
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
     [Info(OrderCode = "01")]
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : DemoBase
     {
-        ActualImage lionImg;
+        ActualBitmap lionImg;
         public override void Init()
         {
             UseBitmapExt = false;
 
-            string imgFileName = "d:\\WImageTest\\lion1.png";
+            string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
                 lionImg = DemoHelper.LoadImage(imgFileName);
@@ -41,11 +39,11 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             if (UseBitmapExt)
             {
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = RenderQualtity.HighQuality;
+                p.RenderQuality = RenderQuality.HighQuality;
             }
 
 
@@ -58,7 +56,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.CurrentFont = new RequestFont("tahoma", 10);
             //p.StrokeColor = Color.Red;
 
-            p.RenderQuality = RenderQualtity.Fast;
+            p.RenderQuality = RenderQuality.Fast;
             //
             //---red reference line--
             p.DrawLine(0, 400, 800, 400);
@@ -85,20 +83,32 @@ namespace PixelFarm.Agg.Sample_Draw
             //---red reference line--
 
 
+            p.RenderQuality = RenderQuality.Fast;
             //p.DrawImage(lionImg, 0, 0); //reference at 0,0 
             p.DrawImage(lionImg, 300, 0);
 
             int _imgW = lionImg.Width;
             int _imgH = lionImg.Height;
 
-            p.RenderQuality = RenderQualtity.Fast;
+            //p.RenderQuality = RenderQuality.Fast;
             p.DrawImage(lionImg,
-              //move to center of the image (hotspot x,y)
-              AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
-              AffinePlan.Rotate(AggMath.deg2rad(45)),
-              AffinePlan.Scale(0.75, 0.75),
-              //move to target
-              AffinePlan.Translate(400, 200));
+             //move to center of the image (hotspot x,y)
+             AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
+             //AffinePlan.Scale(0.50, 0.50),//
+             AffinePlan.Rotate(AggMath.deg2rad(30)),
+             AffinePlan.Translate(_imgW / 2, _imgH / 2)
+             );
+
+            //AffinePlan.Scale(0.75, 0.75),
+            //move to target 
+
+            //p.DrawImage(lionImg,
+            //   //move to center of the image (hotspot x,y)
+            //   AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
+            //   AffinePlan.Rotate(AggMath.deg2rad(45)),
+            //   AffinePlan.Scale(0.75, 0.75),
+            //   //move to target
+            //   AffinePlan.Translate(400, 200));
         }
     }
 
@@ -128,7 +138,8 @@ namespace PixelFarm.Agg.Sample_Draw
     public class DrawSample03 : DemoBase
     {
 
-        Stroke stroke = new Stroke(1);
+
+
 
         public override void Init()
         {
@@ -145,55 +156,60 @@ namespace PixelFarm.Agg.Sample_Draw
 
             if (UseBitmapExt)
             {
-                p.RenderQuality = RenderQualtity.Fast;
+                p.RenderQuality = RenderQuality.Fast;
             }
             else
             {
-                p.RenderQuality = RenderQualtity.HighQuality;
+                p.RenderQuality = RenderQuality.HighQuality;
             }
-
-
 
             int width = 800;
             int height = 600;
             //clear the image to white         
             // draw a circle
             p.Clear(Drawing.Color.White);
-            Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
-            for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
+
+            //Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
+            using (VectorToolBox.Borrow(out Ellipse ellipseVxsGen))
+            using (VectorToolBox.Borrow(out Stroke stroke))
             {
-                var mat = Affine.NewMatix(
-                    AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
-                    AffinePlan.Translate(width / 2, 150));
-
-                var v1 = GetFreeVxs();
-                var v2 = GetFreeVxs();
-                var v3 = GetFreeVxs();
-                mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
-
-                p.FillColor = Drawing.Color.Yellow;
-                p.Fill(v2);
-                //------------------------------------
-                //g.Render(sp1, ColorRGBA.Yellow);
-                //Stroke ellipseOutline = new Stroke(sp1, 3);
-                p.FillColor = Drawing.Color.Blue;
+                ellipseVxsGen.Set(0, 0, 100, 50);
                 stroke.Width = 3;
-                p.Fill(stroke.MakeVxs(v2, v3));
-                //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
-                ReleaseVxs(ref v1);
-                ReleaseVxs(ref v2);
-                ReleaseVxs(ref v3);
+
+                for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
+                {
+                    var mat = Affine.NewMatix(
+                        AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
+                        AffinePlan.Translate(width / 2, 150));
+
+                    using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+                    {
+                        
+                        ellipseVxsGen.MakeVxs(mat, v2);
+                        p.FillColor = Drawing.Color.Yellow;
+                        p.Fill(v2);
+                        //------------------------------------                
+                        p.FillColor = Drawing.Color.Blue;
+                        p.Fill(stroke.MakeVxs(v2, v3));
+                    }
+
+                }
             }
 
+
             // and a little polygon
-            PathWriter littlePoly = new PathWriter();
-            littlePoly.MoveTo(50, 50);
-            littlePoly.LineTo(150, 50);
-            littlePoly.LineTo(200, 200);
-            littlePoly.LineTo(50, 150);
-            littlePoly.LineTo(50, 50);
-            p.FillColor = Drawing.Color.Blue;
-            p.Fill(littlePoly.MakeVertexSnap());
+            using (VectorToolBox.Borrow(out PathWriter littlePoly))
+            {
+                littlePoly.MoveTo(50, 50);
+                littlePoly.LineTo(150, 50);
+                littlePoly.LineTo(200, 200);
+                littlePoly.LineTo(50, 150);
+                littlePoly.LineTo(50, 50);
+                p.FillColor = Drawing.Color.Blue;
+                p.Fill(littlePoly.Vxs);
+            }
+
+
 
 
             //----
@@ -227,5 +243,6 @@ namespace PixelFarm.Agg.Sample_Draw
             ////g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
         }
     }
+
 
 }

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 namespace LayoutFarm.UI
 {
@@ -6,7 +6,7 @@ namespace LayoutFarm.UI
     {
         NamedSpaceContainerOverlapMode overlapMode;
         SpaceName spaceName;
-        UIBox spaceContent;
+        AbstractRectUI spaceContent;
         NinespaceController ownerDockspaceController;
         int spaceWidth;
         int spaceHeight;
@@ -28,7 +28,7 @@ namespace LayoutFarm.UI
                 return this.ownerDockspaceController;
             }
         }
-        public UIBox Content
+        public AbstractRectUI Content
         {
             get
             {
@@ -136,7 +136,7 @@ namespace LayoutFarm.UI
             var uiContent = this.Content;
             if (uiContent != null)
             {
-                uiContent.SetBounds(x, y, w, h);
+                uiContent.SetLocationAndSize(x, y, w, h);
             }
         }
         public void ArrangeContent()
@@ -155,10 +155,6 @@ namespace LayoutFarm.UI
         {
             get { return this.hasCalculatedSize; }
         }
-        //public void InvalidateArrangeStatus()
-        //{
-        //}
-
 #if DEBUG
         public override string ToString()
         {

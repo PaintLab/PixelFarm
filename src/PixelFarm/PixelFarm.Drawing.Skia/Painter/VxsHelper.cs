@@ -1,12 +1,17 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
 using System;
 using SkiaSharp;
-using PixelFarm.Agg;
+using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing.Skia
 {
     static class VxsHelper
     {
+        /// <summary>
+        /// we do NOT VXS
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <returns></returns>
         public static SKPath CreateGraphicsPath(VertexStore vxs)
         {
             //render vertice in store
@@ -21,79 +26,32 @@ namespace PixelFarm.Drawing.Skia
             for (int i = 0; i < vcount; ++i)
             {
                 double x, y;
-                PixelFarm.Agg.VertexCmd cmd = vxs.GetVertex(i, out x, out y);
+                PixelFarm.CpuBlit.VertexCmd cmd = vxs.GetVertex(i, out x, out y);
                 switch (cmd)
                 {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
                         prevMoveToX = prevX = x;
                         prevMoveToY = prevY = y;
                         //brush_path.StartFigure();
                         brushPath.MoveTo((float)x, (float)y);
                         break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
+                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
                         //brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
                         brushPath.LineTo((float)x, (float)y);
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.Close:
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.CpuBlit.VertexCmd.Close:
+                    case PixelFarm.CpuBlit.VertexCmd.CloseAndEndFigure:
                         brushPath.LineTo((float)prevMoveToX, (float)prevMoveToY);
                         prevMoveToX = prevX = x;
                         prevMoveToY = prevY = y;
                         brushPath.Close();
                         break;
-                    case PixelFarm.Agg.VertexCmd.NoMore:
+                    case PixelFarm.CpuBlit.VertexCmd.NoMore:
                         i = vcount + 1;//exit from loop
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-            return brushPath;
-        }
-        /// <summary>
-        /// we do NOT store vxsSnap
-        /// </summary>
-        /// <param name="vxsSnap"></param>
-        /// <returns></returns>
-        public static SKPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
-        {
-            VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
-            double prevX = 0;
-            double prevY = 0;
-            double prevMoveToX = 0;
-            double prevMoveToY = 0;
-            //var brush_path = new System.Drawing.Drawing2D.GraphicsPath(FillMode.Winding);//*** winding for overlapped path  
-            var brushPath = new SKPath();
-            for (;;)
-            {
-                double x, y;
-                VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
-                switch (cmd)
-                {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
-                        prevMoveToX = prevX = x;
-                        prevMoveToY = prevY = y;
-                        brushPath.MoveTo((float)x, (float)y);
-                        break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
-
-                        brushPath.LineTo((float)x, (float)y);
-                        prevX = x;
-                        prevY = y;
-                        break;
-                    case VertexCmd.Close:
-                    case VertexCmd.CloseAndEndFigure:
-                        //from current point                         
-
-                        brushPath.LineTo((float)prevMoveToX, (float)prevMoveToY);
-                        prevX = prevMoveToX;
-                        prevY = prevMoveToY;
-                        brushPath.Close();
-                        break;
-                    case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
+                        break;
                     default:
                         throw new NotSupportedException();
                 }
@@ -102,16 +60,17 @@ namespace PixelFarm.Drawing.Skia
             return brushPath;
         }
 
-        public static void FillVxsSnap(SKCanvas g, VertexStoreSnap vxsSnap, SKPaint fill)
+
+        public static void FillVxsSnap(SKCanvas g, VertexStore vxs, SKPaint fill)
         {
-            using (var p = CreateGraphicsPath(vxsSnap))
+            using (var p = CreateGraphicsPath(vxs))
             {
                 g.DrawPath(p, fill);
             }
         }
-        public static void DrawVxsSnap(SKCanvas g, VertexStoreSnap vxsSnap, SKPaint stroke)
+        public static void DrawVxsSnap(SKCanvas g, VertexStore vxs, SKPaint stroke)
         {
-            using (var p = CreateGraphicsPath(vxsSnap))
+            using (var p = CreateGraphicsPath(vxs))
             {
                 g.DrawPath(p, stroke);
             }

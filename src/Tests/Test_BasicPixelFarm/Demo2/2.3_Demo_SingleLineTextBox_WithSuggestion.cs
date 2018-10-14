@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -7,17 +7,17 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("2.3 SingleLineText_WithSuggestion")]
-    class Demo_SingleLineText_WithSuggestion : DemoBase
+    class Demo_SingleLineText_WithSuggestion : App
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
         LayoutFarm.CustomWidgets.ListView listView;
         Dictionary<char, List<string>> words = new Dictionary<char, List<string>>();
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
             textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
             textbox.SetLocation(20, 20);
             var style2 = new Text.TextSpanStyle();
-            style2.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+            style2.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             style2.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox.DefaultSpanStyle = style2;
 
@@ -35,8 +35,8 @@ namespace LayoutFarm
             textSurfaceListener.PreviewEnterKeyDown += new EventHandler<Text.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
             textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
-            viewport.AddContent(textbox);
-            viewport.AddContent(listView);
+            host.AddChild(textbox);
+            host.AddChild(listView);
             //------------------------------------ 
             BuildSampleCountryList();
         }

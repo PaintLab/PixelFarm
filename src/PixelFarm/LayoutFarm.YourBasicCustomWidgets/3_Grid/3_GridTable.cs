@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -176,7 +176,11 @@ namespace LayoutFarm.UI
         }
         public GridCell GetCell(int rowIndex)
         {
-            return cells[rowIndex];
+            if (rowIndex < cells.Count)
+            {
+                return cells[rowIndex];
+            }
+            return null;
         }
         public int CellCount
         {
@@ -468,6 +472,16 @@ namespace LayoutFarm.UI
             }
         }
 
+
+        public int RowIndex
+        {
+            get { return row.RowIndex; }
+        }
+        public int ColumnIndex
+        {
+            get { return column.ColumnIndex; }
+        }
+
 #if DEBUG
         public string dbugGetLinkInfo()
         {
@@ -635,7 +649,7 @@ namespace LayoutFarm.UI
 #if DEBUG
         public override string ToString()
         {
-            return column.ColumnIndex.ToString() + "," + row.RowIndex.ToString() + " " + base.ToString();
+            return row.RowIndex.ToString() + "," + column.ColumnIndex.ToString() + " " + base.ToString();
         }
 #endif
 
@@ -707,7 +721,10 @@ namespace LayoutFarm.UI
             {
                 cols.Clear();
             }
-
+            public GridColumn GetColumn(int index)
+            {
+                return cols[index];
+            }
             public void Add(GridColumn newColumnDef)
             {
                 int j = cols.Count;
@@ -893,6 +910,10 @@ namespace LayoutFarm.UI
             internal GridRowCollection(GridTable table)
             {
                 this.table = table;
+            }
+            public GridRow GetRow(int index)
+            {
+                return rows[index];
             }
             public void MoveRowAfter(GridRow fromRow, GridRow toRow)
             {

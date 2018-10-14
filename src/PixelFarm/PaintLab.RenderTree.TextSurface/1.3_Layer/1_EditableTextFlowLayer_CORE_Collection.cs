@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -8,11 +8,11 @@ namespace LayoutFarm.Text
     {
         public override IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
-            if (lineCollection != null)
+            if (_lineCollection != null)
             {
                 if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
                 {
-                    List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
+                    List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                     int j = lines.Count;
                     for (int i = lines.Count; i > -1; --i)
                     {
@@ -27,7 +27,7 @@ namespace LayoutFarm.Text
                 }
                 else
                 {
-                    EditableTextLine ln = (EditableTextLine)lineCollection;
+                    EditableTextLine ln = (EditableTextLine)_lineCollection;
                     LinkedListNode<EditableRun> veNode = ln.Last;
                     while (veNode != null)
                     {
@@ -39,11 +39,11 @@ namespace LayoutFarm.Text
         }
         public override IEnumerable<RenderElement> GetRenderElementIter()
         {
-            if (lineCollection != null)
+            if (_lineCollection != null)
             {
                 if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
                 {
-                    List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
+                    List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                     int j = lines.Count;
                     for (int i = 0; i < j; ++i)
                     {
@@ -58,7 +58,7 @@ namespace LayoutFarm.Text
                 }
                 else
                 {
-                    EditableTextLine ln = (EditableTextLine)lineCollection;
+                    EditableTextLine ln = (EditableTextLine)_lineCollection;
                     LinkedListNode<EditableRun> veNode = ln.First;
                     while (veNode != null)
                     {
@@ -72,12 +72,12 @@ namespace LayoutFarm.Text
         {
             if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
-                List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
+                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 lines[lines.Count - 1].AddLast(visualElement);
             }
             else
             {
-                ((EditableTextLine)lineCollection).AddLast(visualElement);
+                ((EditableTextLine)_lineCollection).AddLast(visualElement);
             }
         }
         public void AddBefore(EditableRun beforeVisualElement, EditableRun visualElement)
@@ -110,7 +110,7 @@ namespace LayoutFarm.Text
         {
             if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
-                List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
+                List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 for (int i = lines.Count - 1; i > -1; --i)
                 {
                     EditableTextLine line = lines[i];
@@ -118,12 +118,12 @@ namespace LayoutFarm.Text
                     line.Clear();
                 }
                 lines.Clear();
-                lineCollection = new EditableTextLine(this);
+                _lineCollection = new EditableTextLine(this);
                 FlowLayerHasMultiLines = false;
             }
             else
             {
-                ((EditableTextLine)lineCollection).Clear();
+                ((EditableTextLine)_lineCollection).Clear();
             }
         }
 
@@ -139,7 +139,7 @@ namespace LayoutFarm.Text
             {
                 return;
             }
-            List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
+            List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
             if (lines.Count < 2)
             {
                 return;
@@ -164,7 +164,7 @@ namespace LayoutFarm.Text
 
             if (lines.Count == 1)
             {
-                lineCollection = lines[0];
+                _lineCollection = lines[0];
                 FlowLayerHasMultiLines = false;
             }
         }

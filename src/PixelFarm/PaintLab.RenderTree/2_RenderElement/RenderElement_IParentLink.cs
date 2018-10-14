@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System.Collections.Generic;
 using PixelFarm.Drawing;
@@ -7,6 +7,10 @@ namespace LayoutFarm
 {
     partial class RenderElement : IParentLink
     {
+
+#if DEBUG
+        public bool dbugBreak;
+#endif
         internal LinkedListNode<RenderElement> internalLinkedNode;
         protected virtual bool _MayHasOverlapChild()
         {

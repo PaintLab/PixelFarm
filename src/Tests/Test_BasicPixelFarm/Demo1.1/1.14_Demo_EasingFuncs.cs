@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System.Collections.Generic;
 using LayoutFarm.CustomWidgets;
@@ -6,17 +6,17 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("1.14 EasingFuncs")]
-    class Demo_EasingFuncs : DemoBase
+    class Demo_EasingFuncs : App
     {
-        SimpleBox animationBoard;
-        SampleViewport viewport;
-        protected override void OnStartDemo(SampleViewport viewport)
+        Box animationBoard;
+        AppHost _host;
+        protected override void OnStart(AppHost host)
         {
-            this.viewport = viewport;
+            this._host = host;
             {
-                animationBoard = new SimpleBox(800, 800);
+                animationBoard = new Box(800, 800);
                 animationBoard.BackColor = PixelFarm.Drawing.Color.White;
-                viewport.AddContent(animationBoard);
+                host.AddChild(animationBoard);
             }
             //
             {
@@ -24,7 +24,7 @@ namespace LayoutFarm
                 List<PennerAnimationInfo> pennerAnimationList = LoadAllPennerAnimationList();
                 ListView easingFuncs_List = new ListView(200, 850);
                 easingFuncs_List.SetLocation(600, 20);
-                viewport.AddContent(easingFuncs_List);
+                host.AddChild(easingFuncs_List);
                 easingFuncs_List.ListItemMouseEvent += (s, e) =>
                 {
 
@@ -69,7 +69,7 @@ namespace LayoutFarm
             int j = calculatedValues.Count;
             for (int i = 0; i < j; ++i)
             {
-                SimpleBox box = new SimpleBox(5, 5);
+                Box box = new Box(5, 5);
                 box.SetLocation(5 * i, (int)calculatedValues[i]);
                 animationBoard.AddChild(box);
             }
@@ -77,7 +77,7 @@ namespace LayoutFarm
             //-----
             //show animation
 
-            SimpleBox sampleBox1 = new SimpleBox(600, 20);
+            Box sampleBox1 = new Box(600, 20);
             animationBoard.AddChild(sampleBox1);
             sampleBox1.BackColor = PixelFarm.Drawing.Color.Red;
             int step = 0;

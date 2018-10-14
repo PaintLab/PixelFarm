@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Diagnostics;
@@ -13,9 +13,10 @@ namespace LayoutFarm.Text
 #endif
     sealed partial class EditableTextLine
     {
+        //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
 
-        internal EditableTextFlowLayer editableFlowLayer;
+        internal EditableTextFlowLayer editableFlowLayer; //owner
         int currentLineNumber;
         int actualLineHeight;
         int actualLineWidth;
@@ -25,7 +26,7 @@ namespace LayoutFarm.Text
         const int LINE_SIZE_VALID = 1 << (2 - 1);
         const int LOCAL_SUSPEND_LINE_REARRANGE = 1 << (3 - 1);
         const int END_WITH_LINE_BREAK = 1 << (4 - 1);
-        public const int DEFAULT_LINE_HEIGHT = 17;
+
 #if DEBUG
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
@@ -34,7 +35,7 @@ namespace LayoutFarm.Text
         {
 
             this.editableFlowLayer = ownerFlowLayer;
-            this.actualLineHeight = DEFAULT_LINE_HEIGHT; //we start with default line height
+            this.actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
@@ -120,7 +121,7 @@ namespace LayoutFarm.Text
             if (this.RunCount == 0)
             {
                 //no span
-                this.actualLineHeight = EditableTextLine.DEFAULT_LINE_HEIGHT;
+                this.actualLineHeight = OwnerFlowLayer.DefaultLineHeight;
             }
         }
         internal bool HitTestCore(HitChain hitChain)

@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -28,8 +28,9 @@
 //#include "agg_basics.h"
 
 using System;
-using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.Transform
+
+
+namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //============================================================trans_affine
     //
@@ -91,159 +92,206 @@ namespace PixelFarm.Agg.Transform
     //----------------------------------------------------------------------
 
 
-
-    public sealed class Affine : ICoordTransformer
+    /// <summary>
+    /// struct version of Affine (Matrix)
+    /// </summary>
+    struct AffineMat
     {
-        const double EPSILON = 1e-14;
-        public readonly double sx, shy, shx, sy, tx, ty;
-        bool isIdenHint;
-        public static readonly Affine IdentityMatrix = Affine.NewIdentity();
-        //------------------------------------------ Construction
-        private Affine(Affine copyFrom)
-        {
-            sx = copyFrom.sx;
-            shy = copyFrom.shy;
-            shx = copyFrom.shx;
-            sy = copyFrom.sy;
-            tx = copyFrom.tx;
-            ty = copyFrom.ty;
-        }
+        //3x2 matrix (rows x cols)
+        internal double
+            sx, shy,
+            shx, sy,
+            tx, ty;
 
-        // Custom matrix. Usually used in derived classes
-        private Affine(double v0_sx, double v1_shy,
-                       double v2_shx, double v3_sy,
-                       double v4_tx, double v5_ty)
+        public void SetValues(double v0_sx, double v1_shy,
+                              double v2_shx, double v3_sy,
+                              double v4_tx, double v5_ty)
         {
             sx = v0_sx; shy = v1_shy;
             shx = v2_shx; sy = v3_sy;
             tx = v4_tx; ty = v5_ty;
         }
-        public double m11 { get { return sx; } }
-        public double m12 { get { return shy; } }
-        public double m21 { get { return shx; } }
-        public double m22 { get { return sy; } }
-        public double dx { get { return tx; } }
-        public double dy { get { return ty; } }
-        // Custom matrix from m[6]
-        private Affine(double[] m)
-        {
-            sx = m[0];
-            shy = m[1];
-            shx = m[2];
-            sy = m[3];
-            tx = m[4];
-            ty = m[5];
-        }
-        private Affine(Affine a, Affine b)
-        {
-            //copy from a
-            //multiply with b
-            sx = a.sx;
-            shy = a.shy;
-            shx = a.shx;
-            sy = a.sy;
-            tx = a.tx;
-            ty = a.ty;
-            MultiplyMatrix(ref sx, ref sy, ref shx, ref shy, ref tx, ref ty, b);
-        }
-        private Affine(Affine copyFrom, AffinePlan creationPlan)
-        {
-            //-----------------------
-            sx = copyFrom.sx;
-            shy = copyFrom.shy;
-            shx = copyFrom.shx;
-            sy = copyFrom.sy;
-            tx = copyFrom.tx;
-            ty = copyFrom.ty;
-            //-----------------------
-            switch (creationPlan.cmd)
-            {
-                default:
-                    {
-                        throw new NotSupportedException();
-                    }
-                case AffineMatrixCommand.None:
-                    break;
-                case AffineMatrixCommand.Rotate:
-                    {
-                        double angleRad = creationPlan.x;
-                        double ca = Math.Cos(angleRad);
-                        double sa = Math.Sin(angleRad);
-                        double t0 = sx * ca - shy * sa;
-                        double t2 = shx * ca - sy * sa;
-                        double t4 = tx * ca - ty * sa;
-                        shy = sx * sa + shy * ca;
-                        sy = shx * sa + sy * ca;
-                        ty = tx * sa + ty * ca;
-                        sx = t0;
-                        shx = t2;
-                        tx = t4;
-                    }
-                    break;
-                case AffineMatrixCommand.Scale:
-                    {
-                        double mm0 = creationPlan.x;
-                        double mm3 = creationPlan.y;
-                        sx *= mm0;
-                        shx *= mm0;
-                        tx *= mm0;
-                        shy *= mm3;
-                        sy *= mm3;
-                        ty *= mm3;
-                    }
-                    break;
-                case AffineMatrixCommand.Skew:
-                    {
-                        double m_sx = 1;
-                        double m_sy = 1;
-                        double m_shx = Math.Tan(creationPlan.x);
-                        double m_shy = Math.Tan(creationPlan.y);
-                        double t0 = sx * m_sx + shy * m_shx;
-                        double t2 = shx * m_sx + sy * m_shx;
-                        double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
-                        shy = sx * m_shy + shy * m_sy;
-                        sy = shx * m_shy + sy * m_sy;
-                        ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
-                        sx = t0;
-                        shx = t2;
-                        tx = t4;
-                        //return new Affine(1.0, Math.Tan(y), Math.Tan(x), 1.0, 0.0, 0.0);
 
-                    }
-                    break;
-                case AffineMatrixCommand.Translate:
-                    {
-                        tx += creationPlan.x;
-                        ty += creationPlan.y;
-                    }
-                    break;
-                case AffineMatrixCommand.Invert:
-                    {
-                        double d = CalculateDeterminantReciprocal();
-                        double t0 = sy * d;
-                        sy = sx * d;
-                        shy = -shy * d;
-                        shx = -shx * d;
-                        double t4 = -tx * t0 - ty * shx;
-                        ty = -tx * shy - ty * sy;
-                        sx = t0;
-                        tx = t4;
-                    }
-                    break;
+        /// <summary>
+        /// inside-values will be CHANGED after call this
+        /// </summary>
+        /// <param name="m"></param>
+        public void Multiply(ref AffineMat m)
+        {
+            double t0 = sx * m.sx + shy * m.shx;
+            double t2 = shx * m.sx + sy * m.shx;
+            double t4 = tx * m.sx + ty * m.shx + m.tx;
+
+            shy = sx * m.shy + shy * m.sy;
+            sy = shx * m.shy + sy * m.sy;
+            ty = tx * m.shy + ty * m.sy + m.ty;
+            sx = t0;
+            shx = t2;
+            tx = t4;
+        }
+
+        /// <summary>
+        /// inside-values will be CHANGED after call this
+        /// </summary>
+        /// <param name="m"></param>
+        public void Rotate(double angleRad)
+        {
+            double ca = Math.Cos(angleRad);
+            double sa = Math.Sin(angleRad);
+            double t0 = sx * ca - shy * sa;
+            double t2 = shx * ca - sy * sa;
+            double t4 = tx * ca - ty * sa;
+            shy = sx * sa + shy * ca;
+            sy = shx * sa + sy * ca;
+            ty = tx * sa + ty * ca;
+            sx = t0;
+            shx = t2;
+            tx = t4;
+        }
+
+        /// <summary>
+        /// inside-values will be CHANGED after call this
+        /// </summary>
+        /// <param name="m"></param>
+        public void Scale(double mm0, double mm3)
+        {
+
+            sx *= mm0;
+            shx *= mm0;
+            tx *= mm0;
+            shy *= mm3;
+            sy *= mm3;
+            ty *= mm3;
+        }
+
+        /// <summary>
+        /// inside-values will be CHANGED after call this
+        /// </summary>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        public void Translate(double dx, double dy)
+        {
+            tx += dx;
+            ty += dy;
+        }
+
+        const double m_sx = 1;
+        const double m_sy = 1;
+        /// <summary>
+        /// inside-values will be CHANGED after call this
+        /// </summary>
+        /// <param name="shx"></param>
+        /// <param name="shy"></param>
+        public void Skew(double dx, double dy)
+        {
+
+            double m_shx = Math.Tan(dx);
+            double m_shy = Math.Tan(dy);
+
+            double t0 = sx * m_sx + shy * m_shx;
+            double t2 = shx * m_sx + sy * m_shx;
+            double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
+            shy = sx * m_shy + shy * m_sy;
+            sy = shx * m_shy + sy * m_sy;
+            ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
+            sx = t0;
+            shx = t2;
+            tx = t4;
+        }
+        /// <summary>
+        /// inside-values will be CHANGED after call this
+        /// </summary>
+        public void Invert()
+        {
+            double d = CalculateDeterminantReciprocal();
+            double t0 = sy * d;
+            sy = sx * d;
+            shy = -shy * d;
+            shx = -shx * d;
+            double t4 = -tx * t0 - ty * shx;
+            ty = -tx * shy - ty * sy;
+            sx = t0;
+            tx = t4;
+        }
+
+        /// <summary>
+        /// create new invert matrix
+        /// </summary>
+        /// <returns></returns>
+        public AffineMat CreateInvert()
+        {
+            AffineMat clone = this; //*** COPY by value
+            clone.Invert();
+            return clone;
+        }
+
+
+        double CalculateDeterminantReciprocal()
+        {
+            return 1.0 / (sx * sy - shy * shx);
+        }
+
+
+
+        public static readonly AffineMat Iden = new AffineMat()
+        {
+            sx = 1,
+            shy = 0,
+            shx = 0,
+            sy = 1,
+            tx = 0,
+            ty = 0
+        };
+
+        /// <summary>
+        /// transform input x and y with this matrix
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void Transform(ref double x, ref double y)
+        {
+            double tmp = x;
+            x = tmp * sx + y * shx + tx;
+            y = tmp * shy + y * sy + ty;
+        }
+
+        public void ScaleRotateTranslate(
+             double hotspotOffsetX, double hotSpotOffsetY,
+             //
+             double scaleX, double scaleY,
+             double angleRad,
+             double destX, double destY)
+        {
+            //steps are essential.
+            if (hotspotOffsetX != 0.0f || hotSpotOffsetY != 0.0f)
+            {
+                this.Translate(-hotspotOffsetX, -hotSpotOffsetY);
+            }
+
+            if (scaleX != 1 || scaleY != 1)
+            {
+                this.Scale(scaleX, scaleY);
+            }
+
+            if (angleRad != 0)
+            {
+                this.Rotate(angleRad);
+            }
+
+            if (destX != 0 || destY != 0)
+            {
+                this.Translate(destX, destY);
             }
         }
 
-        private Affine(AffinePlan[] creationPlans)
+        public void BuildFromAffinePlans(AffinePlan[] creationPlans)
         {
             //-----------------------
             //start with identity matrix
+            this = AffineMat.Iden;//copy from iden
+            bool isIdenHint = true;
 
-            sx = 1;
-            shy = 0;
-            shx = 0;
-            sy = 1;
-            tx = 0;
-            ty = 0;
+            if (creationPlans == null) return;
             //-----------------------
             int j = creationPlans.Length;
             for (int i = 0; i < j; ++i)
@@ -254,78 +302,271 @@ namespace PixelFarm.Agg.Transform
                     case AffineMatrixCommand.None:
                         break;
                     case AffineMatrixCommand.Rotate:
-                        {
-                            double angleRad = plan.x;
-                            double ca = Math.Cos(angleRad);
-                            double sa = Math.Sin(angleRad);
-                            double t0 = sx * ca - shy * sa;
-                            double t2 = shx * ca - sy * sa;
-                            double t4 = tx * ca - ty * sa;
-                            shy = sx * sa + shy * ca;
-                            sy = shx * sa + sy * ca;
-                            ty = tx * sa + ty * ca;
-                            sx = t0;
-                            shx = t2;
-                            tx = t4;
-                        }
+
+                        isIdenHint = false;
+                        this.Rotate(plan.x);
+
                         break;
                     case AffineMatrixCommand.Scale:
-                        {
-                            double mm0 = plan.x;
-                            double mm3 = plan.y;
-                            sx *= mm0;
-                            shx *= mm0;
-                            tx *= mm0;
-                            shy *= mm3;
-                            sy *= mm3;
-                            ty *= mm3;
-                        }
+
+                        isIdenHint = false;
+                        this.Scale(plan.x, plan.y);
+
                         break;
                     case AffineMatrixCommand.Translate:
-                        {
-                            tx += plan.x;
-                            ty += plan.y;
-                        }
+
+                        isIdenHint = false;
+                        this.Translate(plan.x, plan.y);
+
                         break;
                     case AffineMatrixCommand.Skew:
-                        {
-                            double m_sx = 1;
-                            double m_sy = 1;
-                            double m_shx = Math.Tan(plan.x);
-                            double m_shy = Math.Tan(plan.y);
-                            double t0 = sx * m_sx + shy * m_shx;
-                            double t2 = shx * m_sx + sy * m_shx;
-                            double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
-                            shy = sx * m_shy + shy * m_sy;
-                            sy = shx * m_shy + sy * m_sy;
-                            ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
-                            sx = t0;
-                            shx = t2;
-                            tx = t4;
-                        }
+                        isIdenHint = false;
+                        this.Skew(plan.x, plan.y);
                         break;
                     case AffineMatrixCommand.Invert:
-                        {
-                            double d = CalculateDeterminantReciprocal();
-                            double t0 = sy * d;
-                            sy = sx * d;
-                            shy = -shy * d;
-                            shx = -shx * d;
-                            double t4 = -tx * t0 - ty * shx;
-                            ty = -tx * shy - ty * sy;
-                            sx = t0;
-                            tx = t4;
-                        }
+                        isIdenHint = false;
+                        this.Invert();
                         break;
                     default:
-                        {
-                            throw new NotSupportedException();
-                        }
+                        throw new NotSupportedException();
+
                 }
             }
         }
+    }
+
+    public class Affine : ICoordTransformer
+    {
+        const double EPSILON = 1e-14;
+        AffineMat _elems;
+        bool isIdenHint;
+
+        public static readonly Affine IdentityMatrix = Affine.NewIdentity();
+        //------------------------------------------ Construction
+        private Affine(Affine copyFrom)
+        {
+            //sx = copyFrom.sx;
+            //shy = copyFrom.shy;
+            //shx = copyFrom.shx;
+            //sy = copyFrom.sy;
+            //tx = copyFrom.tx;
+            //ty = copyFrom.ty;
+            _elems = copyFrom._elems;
+            isIdenHint = copyFrom.isIdenHint;
+        }
+
+        // Custom matrix. Usually used in derived classes
+        public Affine(double v0_sx, double v1_shy,
+                      double v2_shx, double v3_sy,
+                      double v4_tx, double v5_ty)
+        {
+            _elems.SetValues(
+                v0_sx, v1_shy,
+                v2_shx, v3_sy,
+                v4_tx, v5_ty);
+
+            isIdenHint = false;
+        }
+        public ICoordTransformer MultiplyWith(ICoordTransformer another)
+        {
+            if (another is Affine)
+            {
+                return this * (Affine)another;
+            }
+            else if (another is Perspective)
+            {
+                Perspective p = new Perspective(this);
+                return p * (Perspective)another;
+            }
+            else
+            {
+                return new CoordTransformationChain(this, another);
+
+            }
+        }
+        public double m11 { get { return _elems.sx; } }
+        public double m12 { get { return _elems.shy; } }
+        public double m21 { get { return _elems.shx; } }
+        public double m22 { get { return _elems.sy; } }
+        public double dx { get { return _elems.tx; } }
+        public double dy { get { return _elems.ty; } }
+
+        //-----------------------------------------
+        public double sx { get { return _elems.sx; } }
+        public double shy { get { return _elems.shy; } }
+        public double shx { get { return _elems.shx; } }
+        public double sy { get { return _elems.sy; } }
+        public double tx { get { return _elems.tx; } }
+        public double ty { get { return _elems.ty; } }
 
 
+        /// <summary>
+        /// set elements by copy values from input elems
+        /// </summary>
+        /// <param name="elems"></param>
+        internal void SetElements(AffineMat elems)
+        {
+            _elems = elems;
+            isIdenHint = false;
+        }
+
+        public Affine Clone()
+        {
+            return new Affine(this);
+        }
+
+        //-----------------------------------------
+        private Affine(Affine a, Affine b)
+        {
+            //copy from a
+            //multiply with b
+
+            isIdenHint = a.isIdenHint;
+            this._elems = a._elems; //copy
+            this._elems.Multiply(ref b._elems);
+
+        }
+        private Affine(Affine copyFrom, AffinePlan creationPlan)
+        {
+            this._elems = copyFrom._elems;
+            //-----------------------             
+            switch (creationPlan.cmd)
+            {
+                default:
+                    {
+                        throw new NotSupportedException();
+                    }
+                case AffineMatrixCommand.None:
+                    isIdenHint = copyFrom.isIdenHint;
+                    break;
+                case AffineMatrixCommand.Rotate:
+                    isIdenHint = false;
+                    _elems.Rotate(creationPlan.x);
+
+                    break;
+                case AffineMatrixCommand.Scale:
+                    isIdenHint = false;
+                    _elems.Scale(creationPlan.x, creationPlan.y);
+
+                    break;
+                case AffineMatrixCommand.Skew:
+                    isIdenHint = false;
+                    _elems.Skew(creationPlan.x, creationPlan.y);
+
+                    break;
+                case AffineMatrixCommand.Translate:
+                    isIdenHint = false;
+                    _elems.Translate(creationPlan.x, creationPlan.y);
+
+                    break;
+                case AffineMatrixCommand.Invert:
+                    isIdenHint = false;
+                    _elems.Invert();
+                    break;
+            }
+        }
+
+        void BuildAff(ref AffinePlan plan)
+        {
+            switch (plan.cmd)
+            {
+                case AffineMatrixCommand.None:
+                    break;
+                case AffineMatrixCommand.Rotate:
+
+                    isIdenHint = false;
+                    _elems.Rotate(plan.x);
+                    break;
+                case AffineMatrixCommand.Scale:
+                    isIdenHint = false;
+                    _elems.Scale(plan.x, plan.y);
+                    break;
+                case AffineMatrixCommand.Translate:
+                    isIdenHint = false;
+                    _elems.Translate(plan.x, plan.y);
+                    break;
+                case AffineMatrixCommand.Skew:
+                    isIdenHint = false;
+                    _elems.Skew(plan.x, plan.y);
+                    break;
+                case AffineMatrixCommand.Invert:
+                    isIdenHint = false;
+                    _elems.Invert();
+                    break;
+                default:
+                    throw new NotSupportedException();
+
+            }
+        }
+        private Affine(AffinePlan[] creationPlans)
+        {
+            _elems = AffineMat.Iden;//copy
+            isIdenHint = true;
+            if (creationPlans == null) return;
+            //-----------------------
+            for (int i = 0; i < creationPlans.Length; ++i)
+            {
+                BuildAff(ref creationPlans[i]);
+            }
+        }
+        private Affine(int pcount, ref AffinePlan p0, ref AffinePlan p1, ref AffinePlan p2, ref AffinePlan p3, ref AffinePlan p4, params AffinePlan[] creationPlans)
+        {
+
+            //-----------------------
+            //start with identity matrix
+            _elems = AffineMat.Iden;//copy
+            isIdenHint = true;
+            //-----------------------
+            switch (pcount)
+            {
+                case 0:
+                    return;
+                case 1:
+                    BuildAff(ref p0);
+                    break;
+                case 2:
+                    BuildAff(ref p0);
+                    BuildAff(ref p1);
+                    break;
+                case 3:
+                    BuildAff(ref p0);
+                    BuildAff(ref p1);
+                    BuildAff(ref p2);
+                    break;
+                case 4:
+                    BuildAff(ref p0);
+                    BuildAff(ref p1);
+                    BuildAff(ref p2);
+                    BuildAff(ref p3);
+                    break;
+                case 5:
+                    BuildAff(ref p0);
+                    BuildAff(ref p1);
+                    BuildAff(ref p2);
+                    BuildAff(ref p3);
+                    BuildAff(ref p4);
+                    break;
+                default:
+                    BuildAff(ref p0);
+                    BuildAff(ref p1);
+                    BuildAff(ref p2);
+                    BuildAff(ref p3);
+                    BuildAff(ref p4);
+                    if (creationPlans != null)
+                    {
+                        for (int i = 0; i < creationPlans.Length; ++i)
+                        {
+                            BuildAff(ref creationPlans[i]);
+                        }
+                    }
+                    break;
+
+            }
+
+
+
+
+        }
         //----------------------------------------------------------
         public static Affine operator *(Affine a, Affine b)
         {
@@ -335,7 +576,7 @@ namespace PixelFarm.Agg.Transform
         //----------------------------------------------------------
 
         // Identity matrix
-        static Affine NewIdentity()
+        internal static Affine NewIdentity()
         {
             var newIden = new Affine(
                 1, 0,
@@ -344,21 +585,36 @@ namespace PixelFarm.Agg.Transform
             newIden.isIdenHint = true;
             return newIden;
         }
-        public static Affine NewMatix(params AffinePlan[] creationPlans)
+
+        public static Affine NewMatix(AffinePlan p0, AffinePlan p1)
         {
-            return new Affine(creationPlans);
+            AffinePlan p_empty = new AffinePlan();
+            return new Affine(2, ref p0, ref p1, ref p_empty, ref p_empty, ref p_empty, null);
         }
+        public static Affine NewMatix(AffinePlan p0, AffinePlan p1, AffinePlan p2)
+        {
+            AffinePlan p_empty = new AffinePlan();
+            return new Affine(3, ref p0, ref p1, ref p2, ref p_empty, ref p_empty, null);
+        }
+        public static Affine NewMatix(AffinePlan p0, AffinePlan p1, AffinePlan p2, AffinePlan p3)
+        {
+            AffinePlan p_empty = new AffinePlan();
+            return new Affine(4, ref p0, ref p1, ref p2, ref p3, ref p_empty, null);
+        }
+        public static Affine NewMatix(AffinePlan p0, AffinePlan p1, AffinePlan p2, AffinePlan p3, AffinePlan p4)
+        {
+            return new Affine(5, ref p0, ref p1, ref p2, ref p3, ref p4, null);
+        }
+
         public static Affine NewMatix(AffinePlan creationPlan)
         {
             return new Affine(IdentityMatrix, creationPlan);
         }
-        public static Affine NewCustomMatrix(double sx, double shx, double sy, double shy, double tx, double ty)
+        public static Affine NewMatix2(params AffinePlan[] creationPlans)
         {
-            return new Affine(
-                sx, shx,
-                sy, shy,
-                tx, ty);
+            return new Affine(creationPlans);
         }
+
         //====================================================trans_affine_rotation
         // Rotation matrix. sin() and cos() are calculated twice for the same angle.
         // There's no harm because the performance of sin()/cos() is very good on all
@@ -397,14 +653,6 @@ namespace PixelFarm.Agg.Transform
                 1.0, 0.0,
                 0.0, 1.0,
                 x, y);
-        }
-
-        public static Affine NewTranslation(Vector2 offset)
-        {
-            return new Affine(
-                1.0, 0.0,
-                0.0, 1.0,
-                offset.x, offset.y);
         }
 
         public static Affine NewSkewing(double x, double y)
@@ -615,16 +863,17 @@ namespace PixelFarm.Agg.Transform
             ref double tx, ref double ty,
             Affine m)
         {
-            double t0 = sx * m.sx + shy * m.shx;
-            double t2 = shx * m.sx + sy * m.shx;
-            double t4 = tx * m.sx + ty * m.shx + m.tx;
-            shy = sx * m.shy + shy * m.sy;
-            sy = shx * m.shy + sy * m.sy;
-            ty = tx * m.shy + ty * m.sy + m.ty;
+            double t0 = sx * m._elems.sx + shy * m._elems.shx;
+            double t2 = shx * m._elems.sx + sy * m._elems.shx;
+            double t4 = tx * m._elems.sx + ty * m._elems.shx + m._elems.tx;
+            shy = sx * m._elems.shy + shy * m._elems.sy;
+            sy = shx * m._elems.shy + sy * m._elems.sy;
+            ty = tx * m._elems.shy + ty * m._elems.sy + m._elems.ty;
             sx = t0;
             shx = t2;
             tx = t4;
         }
+
         /*
 
         // Multiply "m" to "this" and assign the result to "this"
@@ -717,7 +966,7 @@ namespace PixelFarm.Agg.Transform
         }
 
         //------------------------------------------- Operators
-        
+
          */
         // Multiply the matrix by another one and return
         // the result in a separete matrix.
@@ -765,8 +1014,8 @@ namespace PixelFarm.Agg.Transform
         public void Transform(ref double x, ref double y)
         {
             double tmp = x;
-            x = tmp * sx + y * shx + tx;
-            y = tmp * shy + y * sy + ty;
+            x = tmp * _elems.sx + y * _elems.shx + _elems.tx;
+            y = tmp * _elems.shy + y * _elems.sy + _elems.ty;
         }
 
         //public void transform(ref Vector2 pointToTransform)
@@ -796,10 +1045,10 @@ namespace PixelFarm.Agg.Transform
         public void InverseTransform(ref double x, ref double y)
         {
             double d = CalculateDeterminantReciprocal();
-            double a = (x - tx) * d;
-            double b = (y - ty) * d;
-            x = a * sy - b * shx;
-            y = b * sx - a * shy;
+            double a = (x - _elems.tx) * d;
+            double b = (y - _elems.ty) * d;
+            x = a * _elems.sy - b * _elems.shx;
+            y = b * _elems.sx - a * _elems.shy;
         }
 
         //public void inverse_transform(ref Vector2 pointToTransform)
@@ -819,7 +1068,7 @@ namespace PixelFarm.Agg.Transform
         // Calculate the reciprocal of the determinant
         double CalculateDeterminantReciprocal()
         {
-            return 1.0 / (sx * sy - shy * shx);
+            return 1.0 / (_elems.sx * _elems.sy - _elems.shy * _elems.shx);
         }
 
         // Get the average scale (by X and Y). 
@@ -827,15 +1076,15 @@ namespace PixelFarm.Agg.Transform
         // decomposinting curves into line segments.
         public double GetScale()
         {
-            double x = 0.707106781 * sx + 0.707106781 * shx;
-            double y = 0.707106781 * shy + 0.707106781 * sy;
+            double x = 0.707106781 * _elems.sx + 0.707106781 * _elems.shx;
+            double y = 0.707106781 * _elems.shy + 0.707106781 * _elems.sy;
             return Math.Sqrt(x * x + y * y);
         }
 
         // Check to see if the matrix is not degenerate
         public bool IsNotDegenerated(double epsilon)
         {
-            return Math.Abs(sx) > epsilon && Math.Abs(sy) > epsilon;
+            return Math.Abs(_elems.sx) > epsilon && Math.Abs(_elems.sy) > epsilon;
         }
 
         // Check to see if it's an identity matrix
@@ -843,9 +1092,9 @@ namespace PixelFarm.Agg.Transform
         {
             if (!isIdenHint)
             {
-                return is_equal_eps(sx, 1.0) && is_equal_eps(shy, 0.0) &&
-                   is_equal_eps(shx, 0.0) && is_equal_eps(sy, 1.0) &&
-                   is_equal_eps(tx, 0.0) && is_equal_eps(ty, 0.0);
+                return is_equal_eps(_elems.sx, 1.0) && is_equal_eps(_elems.shy, 0.0) &&
+                   is_equal_eps(_elems.shx, 0.0) && is_equal_eps(_elems.sy, 1.0) &&
+                   is_equal_eps(_elems.tx, 0.0) && is_equal_eps(_elems.ty, 0.0);
             }
             else
             {
@@ -857,10 +1106,6 @@ namespace PixelFarm.Agg.Transform
         {
             return Math.Abs(v1 - v2) <= (EPSILON);
         }
-
-
-
-
 
 
         //public static VertexStore TranslateTransformToVxs(VertexStoreSnap src, double dx, double dy, VertexStore vxs)
@@ -932,6 +1177,6 @@ namespace PixelFarm.Agg.Transform
         //    x = Math.Sqrt(sx * sx + shx * shx);
         //    y = Math.Sqrt(shy * shy + sy * sy);
         //}
-    }
 
+    }
 }

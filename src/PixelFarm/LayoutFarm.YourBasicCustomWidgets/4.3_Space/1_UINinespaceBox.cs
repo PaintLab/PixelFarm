@@ -1,26 +1,26 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class NinespaceBox : EaseBox
+    public class NinespaceBox : AbstractBox
     {
-        SimpleBox boxLeftTop;
-        SimpleBox boxRightTop;
-        SimpleBox boxLeftBottom;
-        SimpleBox boxRightBottom;
+        Box boxLeftTop;
+        Box boxRightTop;
+        Box boxLeftBottom;
+        Box boxRightBottom;
         //-------------------------------------
-        SimpleBox boxLeft;
-        SimpleBox boxTop;
-        SimpleBox boxRight;
-        SimpleBox boxBottom;
+        Box boxLeft;
+        Box boxTop;
+        Box boxRight;
+        Box boxBottom;
         //-------------------------------------
-        SimpleBox boxCentral;
-        EaseBox gripperLeft;
-        EaseBox gripperRight;
-        EaseBox gripperTop;
-        EaseBox gripperBottom;
+        Box boxCentral;
+        AbstractBox gripperLeft;
+        AbstractBox gripperRight;
+        AbstractBox gripperTop;
+        AbstractBox gripperBottom;
         DockSpacesController dockspaceController;
         NinespaceGrippers ninespaceGrippers;
         public NinespaceBox(int w, int h)
@@ -38,10 +38,10 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
-        static SimpleBox CreateSpaceBox(SpaceName name, Color bgcolor)
+        static Box CreateSpaceBox(SpaceName name, Color bgcolor)
         {
             int controllerBoxWH = 10;
-            SimpleBox spaceBox = new SimpleBox(controllerBoxWH, controllerBoxWH);
+            Box spaceBox = new Box(controllerBoxWH, controllerBoxWH);
             spaceBox.BackColor = bgcolor;
             spaceBox.Tag = name;
             return spaceBox;
@@ -89,10 +89,10 @@ namespace LayoutFarm.CustomWidgets
         public void SetDockSpaceConcept(LayoutFarm.UI.SpaceConcept concept)
         {
         }
-        EaseBox CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
+        AbstractBox CreateGripper(PixelFarm.Drawing.Color bgcolor, bool isVertical)
         {
             int controllerBoxWH = 10;
-            var gripperBox = new SimpleBox(controllerBoxWH, controllerBoxWH);
+            var gripperBox = new Box(controllerBoxWH, controllerBoxWH);
             gripperBox.BackColor = bgcolor;
             //---------------------------------------------------------------------
 
@@ -160,11 +160,11 @@ namespace LayoutFarm.CustomWidgets
             dockspaceController.ArrangeAllSpaces();
         }
 
-        public SimpleBox LeftSpace { get { return this.boxLeft; } }
-        public SimpleBox RightSpace { get { return this.boxRight; } }
-        public SimpleBox TopSpace { get { return this.boxTop; } }
-        public SimpleBox BottomSpace { get { return this.boxBottom; } }
-        public SimpleBox CentralSpace { get { return this.boxCentral; } }
+        public Box LeftSpace { get { return this.boxLeft; } }
+        public Box RightSpace { get { return this.boxRight; } }
+        public Box TopSpace { get { return this.boxTop; } }
+        public Box BottomSpace { get { return this.boxBottom; } }
+        public Box CentralSpace { get { return this.boxCentral; } }
 
         public void SetLeftSpaceWidth(int w)
         {

@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 /*
 Copyright (c) 2013, Lars Brubaker
@@ -33,7 +33,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
 using Mini;
-namespace PixelFarm.Agg.Samples
+namespace PixelFarm.CpuBlit.Samples
 {
     [Info(OrderCode = "21")]
     [Info("hand paint!")]
@@ -56,8 +56,8 @@ namespace PixelFarm.Agg.Samples
                 int pcount = contPoints.Count;
                 for (int i = 1; i < pcount; ++i)
                 {
-                    var p0 = contPoints[i - 1];
-                    var p1 = contPoints[i];
+                    Point p0 = contPoints[i - 1];
+                    Point p1 = contPoints[i];
                     p.DrawLine(p0.x, p0.y, p1.x, p1.y);
                 }
             }

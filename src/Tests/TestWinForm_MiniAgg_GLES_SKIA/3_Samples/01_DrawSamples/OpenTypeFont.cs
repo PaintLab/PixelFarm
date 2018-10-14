@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2018, WinterDev
+﻿//BSD, 2014-present, WinterDev
 
 //MatterHackers: BSD
 // Much of the ui to the drawing functions still needs to be C#'ed and cleaned up.  A lot of
@@ -10,13 +10,13 @@
 using System.IO;
 //
 using Mini;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Contours;
-using Typography.TextServices;
+using Typography.FontManagement;
 using PixelFarm.Drawing;
-namespace PixelFarm.Agg.Sample_Draw
+namespace PixelFarm.CpuBlit.Sample_Draw
 {
     [Info(OrderCode = "01")]
     [Info("OpenTypeReaderFromPureCs")]
@@ -30,7 +30,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
 
 
-            string fontfile = YourImplementation.BootStrapWinGdi.GetFontLoader().GetFont("tahoma", InstalledFontStyle.Normal).FontPath;
+            string fontfile = YourImplementation.BootStrapWinGdi.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Regular).FontPath;
 
             this.FillBG = true;
             int size = 72;
@@ -75,34 +75,33 @@ namespace PixelFarm.Agg.Sample_Draw
                 //vxs = curveFlattener.MakeVxs(vxs1);
             }
         }
+
         VertexStore BuildVxsForGlyph(GlyphPathBuilder builder, char character, int size, int resolution)
         {
+            //-----------
             //TODO: review here
             builder.Build(character, size);
             var txToVxs = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs);
-            VertexStore v0 = _vxsPool.GetFreeVxs();
-            txToVxs.WriteOutput(v0 );
-            var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                 //translate
-                 new PixelFarm.Agg.Transform.AffinePlan(
-                     PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 10, 10),
-                 //scale
-                 new PixelFarm.Agg.Transform.AffinePlan(
-                     PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
-                     );
 
-            VertexStore v1 = _vxsPool.GetFreeVxs();
             VertexStore v2 = new VertexStore();
-            mat.TransformToVxs(v0, v1);
-            curveFlattener.MakeVxs(v0, v2);
-
-            _vxsPool.Release(ref v0);
-            _vxsPool.Release(ref v1);
-
+            using (VxsTemp.Borrow(out var v0))
+            {
+                txToVxs.WriteOutput(v0);
+                var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
+                     //translate
+                     new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
+                         PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, 10, 10),
+                     //scale
+                     new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
+                         PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, 1, 1)
+                         );
+                //mat.TransformToVxs(v0, v1);
+                curveFlattener.MakeVxs(v0, mat, v2);
+            }
             return v2;
         }
-        VertexStorePool _vxsPool = new VertexStorePool();
+
         [DemoConfig]
         public bool FillBG
         {

@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,8 @@ namespace LayoutFarm.Text
         {
             if (afterTextRun == null)
             {
+                //add line break on the last end
+
                 this.EndWithLineBreak = true;
                 EditableTextLine newline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
                 //
@@ -17,9 +19,8 @@ namespace LayoutFarm.Text
                 {
                     newline.EndWithLineBreak = true;
                 }
-                return;
             }
-            if (afterTextRun.NextTextRun == null)
+            else if (afterTextRun.NextTextRun == null)
             {
                 this.EndWithLineBreak = true;
                 EditableTextLine newline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
@@ -55,7 +56,8 @@ namespace LayoutFarm.Text
                     cx += t.Width;
                 }
 
-                newTextline.LocalResumeLineReArrange(); this.LocalResumeLineReArrange();
+                newTextline.LocalResumeLineReArrange();
+                this.LocalResumeLineReArrange();
             }
         }
         void AddLineBreakBefore(EditableRun beforeTextRun)
@@ -160,10 +162,14 @@ namespace LayoutFarm.Text
         {
             this.Clear();
             this.LocalSuspendLineReArrange();
-            foreach (EditableRun r in textRuns)
+            if (textRuns != null)
             {
-                this.AddLast(r);
+                foreach (EditableRun r in textRuns)
+                {
+                    this.AddLast(r);
+                }
             }
+
             this.LocalResumeLineReArrange();
         }
     }

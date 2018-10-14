@@ -5,6 +5,7 @@
 using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+#if ENABLE_DESKTOP_OPENGL
 namespace Examples.Shapes
 {
     // Abstract base class for procedurally generated geometry
@@ -166,3 +167,4 @@ namespace Examples.Shapes
 
     }
 }
+#endif

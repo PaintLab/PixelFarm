@@ -1,22 +1,27 @@
-﻿//MIT, 2016-2018, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
-using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Pdf
 {
     class PdfRenderVx : RenderVx
     {
-        internal VertexStoreSnap snap;
+        internal VertexStore vxs;
         //internal System.Drawing.Drawing2D.GraphicsPath path;
-        public PdfRenderVx(VertexStoreSnap snap)
+        public PdfRenderVx(VertexStore vxs)
         {
-            this.snap = snap;
+            this.vxs = vxs;
         }
     }
     class PdfRenderVxFormattedString : RenderVxFormattedString
     {
+        string _userString;
         public PdfRenderVxFormattedString(string str)
         {
-            this.OriginalString = str;
+            this._userString = str;
         }
+        public override string OriginalString
+        {
+            get { return _userString; }
+        }
+
     }
 }

@@ -17,10 +17,7 @@ namespace ImageTools.IO.Png
     public class PngEncoder : IImageEncoder
     {
 
-        private const int MaxBlockSize = 0xFFFF;
-
-
-
+        private const int MaxBlockSize = 0xFFFF; 
         private Stream _stream;
         private ExtendedImage _image;
 
@@ -129,6 +126,8 @@ namespace ImageTools.IO.Png
             header.FilterMethod = 0;
             header.CompressionMethod = 0;
             header.InterlaceMethod = 0;
+            
+
 
             WriteHeaderChunk(header);
 

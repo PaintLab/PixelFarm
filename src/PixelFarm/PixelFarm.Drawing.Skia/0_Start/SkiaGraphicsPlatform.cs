@@ -1,23 +1,23 @@
-﻿//BSD, 2014-2018, WinterDev 
+﻿//BSD, 2014-present, WinterDev 
 
 using System.Collections.Generic;
-using Typography.TextServices;
+using Typography.FontManagement;
 namespace PixelFarm.Drawing.Skia
 {
     public static class SkiaGraphicsPlatform
     {
-        static IFontLoader s_fontLoader;
-        static Dictionary<InstalledFont, SkiaSharp.SKTypeface> skTypeFaces = new Dictionary<InstalledFont, SkiaSharp.SKTypeface>();
+        static IInstalledTypefaceProvider s_installedTypefaceProvider;
+        static Dictionary<InstalledTypeface, SkiaSharp.SKTypeface> skTypeFaces = new Dictionary<InstalledTypeface, SkiaSharp.SKTypeface>();
 
 
-        public static void SetFontLoader(IFontLoader fontLoader)
+        public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {
-            s_fontLoader = fontLoader;
+            s_installedTypefaceProvider = provider;
         }
         internal static SkiaSharp.SKTypeface GetInstalledFont(string typefaceName)
         {
 
-            InstalledFont installedFont = s_fontLoader.GetFont(typefaceName, InstalledFontStyle.Normal);
+            InstalledTypeface installedFont = s_installedTypefaceProvider.GetInstalledTypeface(typefaceName, Typography.FontManagement.TypefaceStyle.Regular);
             if (installedFont == null)
             {
                 return null;

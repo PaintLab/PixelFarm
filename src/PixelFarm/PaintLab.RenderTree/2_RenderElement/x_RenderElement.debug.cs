@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using PixelFarm.Drawing;
 namespace LayoutFarm
@@ -128,9 +128,9 @@ namespace LayoutFarm
         public string dbug_GetBoundInfo()
         {
             Rectangle r = this.RectBounds;
-            string output = "{" + r.X + "," + r.Y + "," + r.Width + "," + r.Height +
-                ";dw=" + this.Width +
-                ";dh=" + this.Height;
+            string output = "{" + r.X + "," + r.Y + "," + r.Width + "," + r.Height + ";";
+                //";dw=" + this.Width +
+                //";dh=" + this.Height;
             return output;
         }
         public string dbug_GetLayoutInfo()

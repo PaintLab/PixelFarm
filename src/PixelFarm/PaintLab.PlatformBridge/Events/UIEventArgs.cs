@@ -1,4 +1,4 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 using System;
 namespace LayoutFarm.UI
@@ -66,7 +66,7 @@ namespace LayoutFarm.UI
                 return (UIKeys)this.KeyData & UIKeys.KeyCode;
             }
         }
-       
+
     }
     public abstract class UIEventArgs : EventArgs
     {
@@ -93,13 +93,13 @@ namespace LayoutFarm.UI
         /// <summary>
         /// first hit IEventListener
         /// </summary>
-        public IEventListener SourceHitElement
+        public IUIEventListener SourceHitElement
         {
             //TODO: review here, ensure set this value 
             get;
             set;
         }
-        public IEventListener CurrentContextElement
+        public IUIEventListener CurrentContextElement
         {
             //TODO: review here, ensure set this value 
             get;
@@ -120,10 +120,7 @@ namespace LayoutFarm.UI
         {
             get;
             set;
-        }
-
-
-
+        } 
         public void SetLocation(int x, int y)
         {
             this.x = x;
@@ -144,7 +141,7 @@ namespace LayoutFarm.UI
                 return y;
             }
         }
- 
+
         public bool IsCanceled
         {
             get;
@@ -298,27 +295,29 @@ namespace LayoutFarm.UI
         }
 
         //-------------------------------------------------------------------
-        public IEventListener DraggingElement
+        public IUIEventListener DraggingElement
         {
             get;
             private set;
         }
-        public void SetMouseCapture(IEventListener listener)
+        public void SetMouseCapture(IUIEventListener listener)
         {
             this.DraggingElement = listener;
         }
         //-------------------------------------------------------------------
 
-        public IEventListener CurrentMouseActive
+        public IUIEventListener CurrentMouseActive
         {
             get;
             set;
         }
-        public IEventListener PreviousMouseDown
+
+        public IUIEventListener PreviousMouseDown
         {
             get;
             set;
         }
+
         public bool IsAlsoDoubleClick { get; set; }
 
         public int CapturedMouseX { get; set; }
@@ -332,8 +331,6 @@ namespace LayoutFarm.UI
             get { return this.Y - this.CapturedMouseY; }
         }
     }
-
-
 
     public enum MouseCursorStyle
     {
@@ -365,9 +362,9 @@ namespace LayoutFarm.UI
             get;
             set;
         }
-        public IEventListener SenderAsIEventListener
+        public IUIEventListener SenderAsIEventListener
         {
-            get { return this.Sender as IEventListener; }
+            get { return this.Sender as IUIEventListener; }
         }
         public object UserMsgContent
         {

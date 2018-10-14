@@ -1,13 +1,13 @@
-﻿//Apache2, 2014-2018, WinterDev
+﻿//Apache2, 2014-present, WinterDev
 
 namespace LayoutFarm
 {
     [DemoNote("1.12 MultipleImages")]
-    class Demo_SmallAnimation : DemoBase
+    class Demo_SmallAnimation : App
     {
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
-            ImageBinder imgBinder = viewport.GetImageBinder2("../../Data/imgs/favorites32.png");
+            ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
             
             for (int i = 0; i < 100; ++i)
             {
@@ -32,7 +32,7 @@ namespace LayoutFarm
                         }
                     });
                 };
-                viewport.AddContent(imgBox);
+                host.AddChild(imgBox);
             }
 
         }

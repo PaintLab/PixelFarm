@@ -1,26 +1,26 @@
-﻿//Apache2, 2014-2018, WinterDev
-
+﻿//Apache2, 2014-present, WinterDev
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.2 DemoControllerBox")]
-    class Demo_ControllerBoxs : DemoBase
+    class Demo_ControllerBoxs : App
     {
         UIControllerBox controllerBox1;
-        protected override void OnStartDemo(SampleViewport viewport)
+        protected override void OnStart(AppHost host)
         {
-            var box1 = new LayoutFarm.CustomWidgets.SimpleBox(50, 50);
+            var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
             box1.BackColor = Color.Red;
             box1.SetLocation(10, 10);
             //box1.dbugTag = 1;
             SetupActiveBoxProperties(box1);
-            viewport.AddContent(box1);
-            var box2 = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
+            host.AddChild(box1);
+            var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
             box2.SetLocation(50, 50);
             //box2.dbugTag = 2;
             SetupActiveBoxProperties(box2);
-            viewport.AddContent(box2);
+            host.AddChild(box2);
             controllerBox1 = new UIControllerBox(40, 40);
             Color c = KnownColors.FromKnownColor(KnownColor.Yellow);
             controllerBox1.BackColor = new Color(100, c.R, c.G, c.B);
@@ -28,10 +28,10 @@ namespace LayoutFarm
             //controllerBox1.dbugTag = 3;
             controllerBox1.Visible = false;
             SetupControllerBoxProperties(controllerBox1);
-            viewport.AddContent(controllerBox1);
+            host.AddChild(controllerBox1);
         }
 
-        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.EaseBox box)
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
         {
             //1. mouse down         
             box.MouseDown += (s, e) =>
@@ -40,8 +40,9 @@ namespace LayoutFarm
                 e.MouseCursorStyle = MouseCursorStyle.Pointer;
                 //--------------------------------------------
                 //move controller here 
-                controllerBox1.SetBounds(box.Left - 5, box.Top - 5,
-                                         box.Width + 10, box.Height + 10);
+                controllerBox1.SetLocationAndSize(
+                    box.Left - 5, box.Top - 5,
+                    box.Width + 10, box.Height + 10);
                 controllerBox1.Visible = true;
                 controllerBox1.TargetBox = box;
                 e.SetMouseCapture(controllerBox1);
@@ -76,14 +77,13 @@ namespace LayoutFarm
             };
         }
 
-        //-----------------------------------------------------------------
-        class UIControllerBox : LayoutFarm.CustomWidgets.EaseBox
+        class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
             public UIControllerBox(int w, int h)
                 : base(w, h)
             {
             }
-            public LayoutFarm.UI.UIBox TargetBox
+            public LayoutFarm.UI.AbstractRectUI TargetBox
             {
                 get;
                 set;
@@ -96,4 +96,63 @@ namespace LayoutFarm
             }
         }
     }
+
+
+    [DemoNote("3.2.1 DemoControllerBox")]
+    class Demo_ControllerBoxs3_1 : App
+    {
+        LayoutFarm.CustomWidgets.RectBoxController rectBoxController = new CustomWidgets.RectBoxController();
+
+        protected override void OnStart(AppHost host)
+        {
+            var box1 = new LayoutFarm.CustomWidgets.Box(50, 50);
+            box1.BackColor = Color.Red;
+            box1.SetLocation(10, 10);
+            //box1.dbugTag = 1;
+            SetupActiveBoxProperties(box1);
+            host.AddChild(box1);
+            var box2 = new LayoutFarm.CustomWidgets.Box(30, 30);
+            box2.SetLocation(50, 50);
+            //box2.dbugTag = 2;
+            SetupActiveBoxProperties(box2);
+            host.AddChild(box2);
+            rectBoxController.Init();
+            //------------
+
+            host.AddChild(rectBoxController);
+
+            //foreach (var ui in rectBoxController.GetControllerIter())
+            //{
+            //    viewport.AddContent(ui);
+            //}
+
+        }
+
+        void SetupActiveBoxProperties(LayoutFarm.CustomWidgets.Box box)
+        {
+            //1. mouse down         
+            box.MouseDown += (s, e) =>
+            {
+                box.BackColor = KnownColors.FromKnownColor(KnownColor.DeepSkyBlue);
+                e.MouseCursorStyle = MouseCursorStyle.Pointer;
+                //--------------------------------------------
+                e.SetMouseCapture(rectBoxController.ControllerBoxMain);
+                rectBoxController.UpdateControllerBoxes(box);
+
+            };
+            //2. mouse up
+            box.MouseUp += (s, e) =>
+            {
+                e.MouseCursorStyle = MouseCursorStyle.Default;
+                box.BackColor = Color.LightGray;
+                //controllerBox1.Visible = false;
+                //controllerBox1.TargetBox = null;
+            };
+        }
+
+
+    }
 }
+
+
+
