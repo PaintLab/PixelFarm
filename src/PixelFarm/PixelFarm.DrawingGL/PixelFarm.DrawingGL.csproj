@@ -40,6 +40,9 @@
     <Compile Include="DrawingGL\EsUtils\ES3Utils.cs" />
     <Compile Include="DrawingGL\EsUtils\GeometryUtils.cs" />
     <Compile Include="DrawingGL\EsUtils\MiniShaderProgram.cs" />
+    <Compile Include="DrawingGL\GLShader_SMAA\SMAAShader.cs" />
+    <Compile Include="DrawingGL\GLShader_SMAA\SMAA_AreaTex.cs" />
+    <Compile Include="DrawingGL\GLShader_SMAA\SMAA_SearchTex.cs" />
     <Compile Include="DrawingGL\RenderSuface\GLRenderSurface.cs" />
     <Compile Include="DrawingGL\RenderSuface\SmoothMode.cs" />
     <Compile Include="DrawingGL\RenderSuface\ShaderSharedResource.cs" />
@@ -74,6 +77,10 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DrawingGL\GLShader_SMAA\SMAAPass.js" />
+    <Content Include="DrawingGL\GLShader_SMAA\SMAAShader.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

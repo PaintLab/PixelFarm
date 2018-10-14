@@ -198,7 +198,7 @@ namespace OpenTkEssTest
             //      //
             //      // The value in the stencil buffer for these pixels will be 0x7.
             //      glStencilFunc(GL_LESS, 0x7, 0x3);
-            GL.StencilFunc(StencilFunction.Lequal, 0x7, 0x3);
+            GL.StencilFunc(StencilFunction.Less, 0x7, 0x3);
             //      glStencilOp(GL_REPLACE, GL_DECR, GL_DECR);
             GL.StencilOp(StencilOp.Replace, StencilOp.Decr, StencilOp.Decr);
             //      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices[0]);

@@ -45,7 +45,7 @@ namespace OpenTkEssTest
                 //------------------------------------------------------------------------------------
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer.FrameBufferId);
                 //--------
-                //do draw to frame buffer here
+                //draw to frame buffer here
                 GL.ClearColor(OpenTK.Graphics.Color4.Red);
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 //------------------------------------------------------------------------------------

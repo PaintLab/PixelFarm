@@ -71,6 +71,15 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs">
       <Link>0_REF_DrawingGL\GLShader\SmoothLineShader.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader_SMAA\SMAAShader.cs">
+      <Link>0_REF_DrawingGL\GLShader_SMAA\SMAAShader.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader_SMAA\SMAA_AreaTex.cs">
+      <Link>0_REF_DrawingGL\GLShader_SMAA\SMAA_AreaTex.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader_SMAA\SMAA_SearchTex.cs">
+      <Link>0_REF_DrawingGL\GLShader_SMAA\SMAA_SearchTex.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\FrameBuffer.cs">
       <Link>0_REF_DrawingGL\GLTexture\FrameBuffer.cs</Link>
     </Compile>
@@ -146,7 +155,6 @@
       <Name>Typography.One</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
