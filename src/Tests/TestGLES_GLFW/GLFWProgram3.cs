@@ -1,6 +1,6 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using Pencil.Gaming;
 using PixelFarm;
 using PixelFarm.Forms;
@@ -22,7 +22,7 @@ namespace TestGlfw
             GlFwForm form1 = GlfwApp.CreateGlfwForm(
                 800,
                 600,
-                "PixelFarm on GLfw and OpenGLES2");
+                "PixelFarm on GLfw and OpenGLES3");
 
             form1.MakeCurrent();
             //------------------------------------

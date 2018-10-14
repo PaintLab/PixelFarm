@@ -3,7 +3,7 @@ using System.Windows.Forms;
 #if ENABLE_DESKTOP_OPENGL
 using OpenTK.Graphics.OpenGL;
 #else
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 #endif
 namespace OpenTK
 {
