@@ -2,7 +2,6 @@
 
 using System;
 using OpenTK.Graphics.ES20;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -15,6 +14,67 @@ namespace PixelFarm.DrawingGL
         public abstract bool IsInvert { get; }
     }
 
+    class InternalGLBitmapTexture : IDisposable
+    {
+        int textureId;
+        int width;
+        int height;
+        PixelFormat pixelFormat;
+        PixelInternalFormat internalFormat;
+        byte[] pixelData;
+        TextureMinFilter minFilter;
+        TextureMagFilter maxFilter;
+        public InternalGLBitmapTexture(int w, int h,
+            byte[] pixelData,
+            PixelFormat pixelFormat,
+            PixelInternalFormat internalFormat,
+            TextureMinFilter minFilter,
+            TextureMagFilter maxFilter
+            )
+        {
+            this.width = w;
+            this.height = h;
+            this.pixelFormat = pixelFormat;
+            this.internalFormat = internalFormat;
+            this.pixelData = pixelData;
+            this.minFilter = minFilter;
+            this.maxFilter = maxFilter;
+        }
+        //---------------------------------
+        //only after gl context is created
+        internal int GetServerTextureId()
+        {
+            if (this.textureId == 0)
+            {
+                //server part
+                //gen texture 
+                GL.GenTextures(1, out this.textureId);
+                //bind
+                GL.BindTexture(TextureTarget.Texture2D, this.textureId);
+                unsafe
+                {
+                    fixed (byte* head = &pixelData[0])
+                    {
+                        GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                            (TextureComponentCount)internalFormat, this.width, this.height, 0,
+                            pixelFormat, // 
+                            PixelType.UnsignedByte, new IntPtr((void*)head));
+                    }
+                }
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)maxFilter);
+            }
+            return this.textureId;
+        }
+        public void Dispose()
+        {
+            //after delete the textureId will set to 0 ?
+            if (textureId > 0)
+            {
+                GL.DeleteTextures(1, ref textureId);
+            }
+        }
+    }
     public class GLBitmap : PixelFarm.Drawing.Image
     {
         int textureId;
