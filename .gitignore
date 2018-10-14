@@ -3,6 +3,8 @@
 [Oo]bj/
 .vs/
 
+*src/PixelFarm/BackEnd.MiniOpenTK/src/Generator.Bind/Specifications/Docs/
+
 # mstest test results
 TestResults
 
