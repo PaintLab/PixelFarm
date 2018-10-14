@@ -1,4 +1,5 @@
 ﻿//MIT, 2014-present, WinterDev
+using OpenTK.Graphics.ES30;
 
 namespace PixelFarm.DrawingGL
 {
@@ -50,7 +51,7 @@ namespace PixelFarm.DrawingGL
         float _stroke_g;
         float _stroke_b;
         float _stroke_a;
-        internal void AssignStrokeColorToVar(OpenTK.Graphics.ES20.ShaderUniformVar4 color)
+        internal void AssignStrokeColorToVar(ShaderUniformVar4 color)
         {
             color.SetValue(_stroke_r, _stroke_g, _stroke_b, _stroke_a);
         }

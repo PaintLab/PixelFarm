@@ -1,10 +1,10 @@
-﻿//MIT, 2014-2016,WinterDev
+﻿//MIT, 2014-present, WinterDev
 //creadit : http://learningwebgl.com/lessons/lesson16/index.html
 
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 
 namespace OpenTkEssTest
 {

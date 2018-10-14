@@ -1,6 +1,6 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using Pencil.Gaming;
 using PixelFarm;
 
@@ -18,7 +18,7 @@ namespace TestGlfw
             }
 
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600,
-                "PixelFarm on GLfw and OpenGLES2",
+                "PixelFarm on GLfw and OpenGLES3",
                 new GlfwMonitorPtr(),//default monitor
                 new GlfwWindowPtr()); //default top window
 
