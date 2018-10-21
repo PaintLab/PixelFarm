@@ -90,6 +90,14 @@ namespace LayoutFarm
         //--------------------------------------------------------------------------
 
         public abstract void PrepareRender();
+
+        public void InvalidateRectArea(Rectangle invalidateRect)
+        {
+            //this._paintToOutputWindowHandler();
+            accumulateInvalidRect = Rectangle.Union(accumulateInvalidRect, invalidateRect);
+            hasAccumRect = true;
+
+        }
         public void FlushAccumGraphics()
         {
             if (!this.hasAccumRect)
@@ -99,6 +107,7 @@ namespace LayoutFarm
 #if DEBUG
             //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
 #endif
+            if (this.IsInRenderPhase) { return; }
             this._canvasInvalidateDelegate(accumulateInvalidRect);
             this._paintToOutputWindowHandler();
             hasAccumRect = false;
@@ -174,9 +183,7 @@ namespace LayoutFarm
 
                 if (fromElement.MayHasViewport && passSourceElem)
                 {
-
                     elemClientRect.Offset(globalPoint);
-
                     //****
 #if DEBUG
                     //TODO: review here
@@ -207,10 +214,7 @@ namespace LayoutFarm
                     {
                         dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED3: ");
                     }
-
 #endif
-
-
                     IParentLink parentLink = fromElement.MyParentLink;
                     if (parentLink == null)
                     {
