@@ -18,18 +18,49 @@ namespace LayoutFarm.UI
         RootGraphic rootgfx;
         ITopWindowEventRoot topWinEventRoot;
         InnerViewportKind innerViewportKind;
-        private Panel panel1;
+        //private Panel panel1;
         List<Form> subForms = new List<Form>();
-
-
-
-
         public UISurfaceViewportControl()
         {
             InitializeComponent();
-            this.panel1.Visible = false;
 
+            //this.panel1.Visible = false; 
+        }
+#if DEBUG
+        static int s_dbugCount;
+#endif
+        //protected override void OnGotFocus(EventArgs e)
+        //{
+        //    s_dbugCount++;
+        //    Console.WriteLine("focus" + s_dbugCount.ToString());
+        //    base.OnGotFocus(e);
+        //}
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            //s_dbugCount++;
+            //Console.WriteLine("focus" + s_dbugCount.ToString());
+            rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, rootgfx.Width, rootgfx.Height));
+            rootgfx.FlushAccumGraphics();
 
+            base.OnVisibleChanged(e);
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            //on Windows request paint at specific area
+            if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
+            {
+                //entire window
+                rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, rootgfx.Width, rootgfx.Height));
+            }
+            else
+            {
+                rootgfx.InvalidateRectArea(
+                    new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
+            }
+            rootgfx.FlushAccumGraphics();
+            //s_dbugCount++;
+            //Console.WriteLine(s_dbugCount.ToString() + e.ClipRectangle);
+            base.OnPaint(e);
         }
         public UIPlatform Platform
         {
@@ -89,9 +120,9 @@ namespace LayoutFarm.UI
                         view.Height = 1200;
                         openGLSurfaceView = view;
                         //view.Dock = DockStyle.Fill;
-                        //this.Controls.Add(view);
-                        this.panel1.Visible = true;
-                        this.panel1.Controls.Add(view);
+                        this.Controls.Add(view);
+                        //this.panel1.Visible = true;
+                        //this.panel1.Controls.Add(view);
 
                         //--------------------------------------- 
                         view.Bind(bridge);
@@ -166,23 +197,23 @@ namespace LayoutFarm.UI
         }
         void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.SuspendLayout();
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.Gray;
-            this.panel1.Location = new System.Drawing.Point(4, 4);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(851, 753);
-            this.panel1.TabIndex = 0;
+            //this.panel1 = new System.Windows.Forms.Panel();
+            //this.SuspendLayout();
+            //// 
+            //// panel1
+            //// 
+            //this.panel1.BackColor = System.Drawing.Color.Gray;
+            //this.panel1.Location = new System.Drawing.Point(4, 4);
+            //this.panel1.Name = "panel1";
+            //this.panel1.Size = new System.Drawing.Size(851, 753);
+            //this.panel1.TabIndex = 0;
             // 
             // UISurfaceViewportControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.panel1);
+            //this.Controls.Add(this.panel1);
             this.Name = "UISurfaceViewportControl";
             this.Size = new System.Drawing.Size(863, 760);
             this.ResumeLayout(false);
