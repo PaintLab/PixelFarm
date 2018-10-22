@@ -18,9 +18,7 @@ namespace PaintLab.Svg
     {
         Color fillColor = Color.Black;
         Color strokeColor = Color.Transparent;
-        CssLength cssLen;
-
-
+        CssLength _strokeWidth;
 
         public bool HasFillColor { get; set; }
         public bool HasStrokeColor { get; set; }
@@ -28,7 +26,7 @@ namespace PaintLab.Svg
 
         public SvgTransform Transform { get; set; }
 
-        public PixelFarm.Drawing.Color FillColor
+        public Color FillColor
         {
             get { return this.fillColor; }
             set
@@ -48,11 +46,10 @@ namespace PaintLab.Svg
         }
         public CssLength StrokeWidth
         {
-            get { return cssLen; }
+            get { return _strokeWidth; }
             set
             {
-
-                cssLen = value;
+                _strokeWidth = value;
                 this.HasStrokeWidth = true;
             }
         }
@@ -61,11 +58,18 @@ namespace PaintLab.Svg
         public SvgAttributeLink ClipPathLink { get; set; }
         public object ResolvedClipPath { get; set; } //TODO: review here
 
+
+    }
+
+    public class SvgBoxSpec : SvgVisualSpec
+    {
         public float ViewBoxX { get; set; }
         public float ViewBoxY { get; set; }
         public float ViewBoxW { get; set; }
         public float ViewBoxH { get; set; }
     }
+
+
 
     public class SvgStyleSpec : SvgElemSpec
     {
@@ -110,6 +114,7 @@ namespace PaintLab.Svg
     }
     public class SvgRectSpec : SvgVisualSpec
     {
+        public SvgRectSpec() { }
         public CssLength X
         {
             get;

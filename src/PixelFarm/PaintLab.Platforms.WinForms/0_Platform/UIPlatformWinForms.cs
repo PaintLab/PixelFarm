@@ -1,8 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using Typography.FontManagement;
 
 namespace LayoutFarm.UI
 {
