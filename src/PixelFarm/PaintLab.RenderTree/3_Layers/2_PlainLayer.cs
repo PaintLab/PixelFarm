@@ -51,6 +51,10 @@ namespace LayoutFarm.RenderBoxes
             this.myElements.Clear();
             this.OwnerRenderElement.InvalidateGraphics();
         }
+
+#if DEBUG
+        public int dbugChildCount => myElements.Count;
+#endif
         IEnumerable<RenderElement> GetDrawingIter()
         {
             LinkedListNode<RenderElement> curNode = this.myElements.First;
@@ -88,6 +92,7 @@ namespace LayoutFarm.RenderBoxes
                     //its children (if exist) may intersect 
                     int x = child.X;
                     int y = child.Y;
+
                     canvasPage.OffsetCanvasOrigin(x, y);
                     updateArea.Offset(-x, -y);
                     child.DrawToThisCanvas(canvasPage, updateArea);
