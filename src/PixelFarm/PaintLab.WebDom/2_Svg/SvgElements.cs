@@ -218,7 +218,7 @@ namespace PaintLab.Svg
 #endif
                     return new SvgElement(WellknownSvgElementName.Unknown, elemName);
                 case "svg":
-                    return new SvgElement(WellknownSvgElementName.Svg, new SvgVisualSpec());
+                    return new SvgElement(WellknownSvgElementName.Svg, new SvgBoxSpec());
 
                 case "defs":
                     return new SvgElement(WellknownSvgElementName.Defs, null as string);
@@ -516,10 +516,11 @@ namespace PaintLab.Svg
             return output.ToArray();
         }
 
+        static readonly char[] strSeps = new char[] { ' ', ',' };
         static void ParsePointList(string str, List<PixelFarm.Drawing.PointF> output)
         {
             //easy parse 01
-            string[] allPoints = str.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] allPoints = str.Split(strSeps, StringSplitOptions.RemoveEmptyEntries);
             //should be even number
             int j = allPoints.Length - 1;
             if (j > 1)
@@ -689,7 +690,26 @@ namespace PaintLab.Svg
                     break;
             }
         }
-
+        static void AssignSvgBoxSpec(SvgBoxSpec spec, string attrName, string attrValue)
+        {
+            switch (attrName)
+            {
+                case "viewBox":
+                    {
+                        string[] allPoints = attrValue.Split(strSeps, StringSplitOptions.RemoveEmptyEntries);
+                        if (allPoints.Length == 4)
+                        {
+                            //x,y,w,h 
+                            float num;
+                            spec.ViewBoxX = float.TryParse(allPoints[0], out num) ? num : 0;
+                            spec.ViewBoxY = float.TryParse(allPoints[1], out num) ? num : 0;
+                            spec.ViewBoxW = float.TryParse(allPoints[2], out num) ? num : 0;
+                            spec.ViewBoxH = float.TryParse(allPoints[3], out num) ? num : 0;
+                        }
+                    }
+                    break;
+            }
+        }
 
         ////------------------------------------------------------------
         //int j = elem.ChildrenCount;
@@ -779,6 +799,9 @@ namespace PaintLab.Svg
                                 break;
                             case WellknownSvgElementName.Circle:
                                 AssignCircleSpec((SvgCircleSpec)spec, attrName, value);
+                                break;
+                            case WellknownSvgElementName.Svg:
+                                AssignSvgBoxSpec((SvgBoxSpec)spec, attrName, value);
                                 break;
                         }
                     }
