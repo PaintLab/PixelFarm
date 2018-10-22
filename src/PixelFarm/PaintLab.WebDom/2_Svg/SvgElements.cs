@@ -218,7 +218,7 @@ namespace PaintLab.Svg
 #endif
                     return new SvgElement(WellknownSvgElementName.Unknown, elemName);
                 case "svg":
-                    return new SvgElement(WellknownSvgElementName.Svg, new SvgVisualSpec());
+                    return new SvgElement(WellknownSvgElementName.Svg, new SvgBoxSpec());
 
                 case "defs":
                     return new SvgElement(WellknownSvgElementName.Defs, null as string);
@@ -690,13 +690,12 @@ namespace PaintLab.Svg
                     break;
             }
         }
-        static void AssignSvgBoxSpec(SvgVisualSpec spec, string attrName, string attrValue)
+        static void AssignSvgBoxSpec(SvgBoxSpec spec, string attrName, string attrValue)
         {
             switch (attrName)
             {
                 case "viewBox":
                     {
-
                         string[] allPoints = attrValue.Split(strSeps, StringSplitOptions.RemoveEmptyEntries);
                         if (allPoints.Length == 4)
                         {
@@ -802,7 +801,7 @@ namespace PaintLab.Svg
                                 AssignCircleSpec((SvgCircleSpec)spec, attrName, value);
                                 break;
                             case WellknownSvgElementName.Svg:
-                                AssignSvgBoxSpec((SvgVisualSpec)spec, attrName, value);
+                                AssignSvgBoxSpec((SvgBoxSpec)spec, attrName, value);
                                 break;
                         }
                     }
