@@ -846,6 +846,8 @@ namespace PixelFarm.Drawing.WinGdi
                 aggPainter.CurrentFont = new RequestFont("tahoma", 14);
                 //
                 _painter = aggPainter;
+
+                _painter.SetOrigin(this.OriginX, this.OriginY);
             }
             return _painter;
         }
