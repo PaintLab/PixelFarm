@@ -502,7 +502,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-   
+
     public class GridView : AbstractBox
     {
         GridViewRenderBox _gridViewRenderE;
@@ -636,17 +636,72 @@ namespace LayoutFarm.CustomWidgets
                 return new GridCellInfo(-1, -1);
             }
         }
+
+        public event System.EventHandler ViewportChanged;
+
+        protected override void OnMouseWheel(UIMouseEventArgs e)
+        {
+            int cur_vwX = this.ViewportX;
+            int cur_vwY = this.ViewportY;
+            int newVwY = (int)(cur_vwY - (e.Delta * 10f / 120f));
+            if (newVwY > -1 && newVwY < (this.InnerHeight - this.Height + 17))
+            {
+                this.SetViewport(cur_vwX, newVwY);
+
+            }
+            else if (newVwY < 0)
+            {
+                this.SetViewport(cur_vwX, 0);
+            }
+            base.OnMouseWheel(e);
+            ViewportChanged?.Invoke(this, e);
+        }
         protected override void OnMouseMove(UIMouseEventArgs e)
         {
             //System.Console.WriteLine(e.X + "," + e.Y);
             if (e.IsDragging)
             {
-
-                GridLayer layer = _gridViewRenderE.GridLayer;
-                GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
-                if (_gridSelectionSession != null)
+                if (this.EnableGridCellSelection)
                 {
-                    _gridSelectionSession.SetLatestHit(hitCell);
+                    GridLayer layer = _gridViewRenderE.GridLayer;
+                    GridCell hitCell = layer.GetGridItemByPosition(e.X, e.Y);
+                    if (_gridSelectionSession != null)
+                    {
+                        _gridSelectionSession.SetLatestHit(hitCell);
+                    }
+                }
+                else
+                {
+                    int cur_vwX = this.ViewportX;
+                    int cur_vwY = this.ViewportY;
+
+                    int newVwX = (int)(cur_vwX - e.XDiff);
+                    int newVwY = (int)(cur_vwY + e.YDiff);
+
+                    if (newVwX < 0)
+                    {
+                        newVwX = 0;
+                        //clamp!
+                        this.SetViewport(newVwX, cur_vwY);
+                        //gridHeader.SetViewport(newVwX, 0);
+                        ViewportChanged?.Invoke(this, e);
+                    }
+                    else if (newVwX > -1 && newVwX < (this.InnerWidth - this.Width))
+                    {
+
+                        //clamp!
+                        this.SetViewport(newVwX, cur_vwY);
+                        ViewportChanged?.Invoke(this, e);
+
+                        //gridHeader.SetViewport(newVwX, 0);
+                    }
+                    else
+                    {
+                        newVwX = this.InnerWidth - this.Width;
+                        this.SetViewport(newVwX, cur_vwY);
+                        ViewportChanged?.Invoke(this, e);
+                        //gridHeader.SetViewport(newVwX, 0);
+                    }
                 }
             }
             else
