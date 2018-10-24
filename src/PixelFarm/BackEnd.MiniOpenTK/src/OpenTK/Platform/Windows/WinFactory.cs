@@ -82,6 +82,7 @@ namespace OpenTK.Platform.Windows
 
         public override INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
         {
+            
             return new WinGLNative(x, y, width, height, title, options, device);
         }
 

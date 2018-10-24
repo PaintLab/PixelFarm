@@ -6,7 +6,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;MINIMAL,WIN32</DefineConstants>
+    <DefineConstants>TRACE;MINIMAL; WIN32,OPENGLES</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -14,6 +14,10 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
-  <Import Project="..\..\..\OpenTK\MiniOpenTK_Core1.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\..\OpenTK\MiniOpenTK_Core2.projitems" Label="Shared" /> 
 
 </Project>
