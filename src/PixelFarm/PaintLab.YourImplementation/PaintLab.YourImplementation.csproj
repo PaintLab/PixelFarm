@@ -56,11 +56,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
       <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
       <Name>MiniOpenTKLevel1</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel2\MiniOpenTKLevel2.csproj">
+    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel2\MiniOpenTKLevel2.csproj">
       <Project>{07b1aa01-3869-4af3-9439-329b96d8d3c1}</Project>
       <Name>MiniOpenTKLevel2</Name>
     </ProjectReference>
