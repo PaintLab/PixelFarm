@@ -24,7 +24,9 @@ namespace OpenTkEssTest
         {
 
             //string sampleFile = "Samples/lion.svg";
-            string sampleFile = "Samples/tiger_whiskers.svg";
+            //string sampleFile = "Samples/tiger_whiskers.svg";
+            //string sampleFile = "Samples/tiger002.svg";
+            string sampleFile = "Samples/tiger_wrinkles.svg";
 
             VgRenderVx svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(sampleFile);
             lionShape = new SpriteShape(svgRenderVx);
