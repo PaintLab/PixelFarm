@@ -23,8 +23,11 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            VgRenderVx svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile("Samples/lion.svg"); 
-            lionShape = new SpriteShape(svgRenderVx); 
+            //string sampleFile = "Samples/lion.svg";
+            string sampleFile = "Samples/tiger_whiskers.svg";
+
+            VgRenderVx svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(sampleFile);
+            lionShape = new SpriteShape(svgRenderVx);
             //flip this lion vertically before use with openGL
             PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
                  PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1),
