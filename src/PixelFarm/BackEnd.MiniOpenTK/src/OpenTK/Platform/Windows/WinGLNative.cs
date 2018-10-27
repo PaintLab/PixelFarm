@@ -45,7 +45,8 @@ namespace OpenTK.Platform.Windows
         private const ExtendedWindowStyle ParentStyleEx = ExtendedWindowStyle.WindowEdge | ExtendedWindowStyle.ApplicationWindow;
         private const ExtendedWindowStyle ChildStyleEx = 0;
 
-        private readonly IntPtr Instance = Marshal.GetHINSTANCE(typeof(WinGLNative).Module);
+        //private readonly IntPtr Instance = Marshal.GetHINSTANCE(typeof(WinGLNative).Module);
+        private readonly IntPtr Instance = System.Diagnostics.Process.GetCurrentProcess().Handle;
         private readonly IntPtr ClassName = Marshal.StringToHGlobalAuto(Guid.NewGuid().ToString());
         private readonly WindowProcedure WindowProcedureDelegate;
 
@@ -93,7 +94,11 @@ namespace OpenTK.Platform.Windows
 
         private static readonly object SyncRoot = new object();
 
-        public WinGLNative(int x, int y, int width, int height, string title, GameWindowFlags options, DisplayDevice device)
+        public WinGLNative(
+            int x, int y, int width,
+            int height, string title,
+            GameWindowFlags options,
+            DisplayDevice device)
         {
             lock (SyncRoot)
             {

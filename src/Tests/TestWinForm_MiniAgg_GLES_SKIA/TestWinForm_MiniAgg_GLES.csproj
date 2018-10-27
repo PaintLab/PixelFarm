@@ -233,11 +233,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
       <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
       <Name>MiniOpenTKLevel1</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\opentk\src\MiniOpenTKWinForms\MiniOpenTKWinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\MiniOpenTKWinForms.csproj">
       <Project>{43ebd500-b9a1-4671-92d6-35fb835cca0f}</Project>
       <Name>MiniOpenTKWinForms</Name>
     </ProjectReference>

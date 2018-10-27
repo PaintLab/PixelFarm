@@ -69,7 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\opentk\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
+    <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTKLevel1\MiniOpenTKLevel1.csproj">
       <Project>{d49440c2-785f-4bac-9f2e-fc93603fa647}</Project>
       <Name>MiniOpenTKLevel1</Name>
     </ProjectReference>

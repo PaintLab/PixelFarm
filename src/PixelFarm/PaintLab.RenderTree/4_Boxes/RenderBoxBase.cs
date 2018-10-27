@@ -238,6 +238,14 @@ namespace LayoutFarm
         }
 
 #if DEBUG
+        public bool debugDefaultLayerHasChild
+        {
+            get
+            {
+                return defaultLayer != null && defaultLayer.dbugChildCount > 0;
+            }
+        }
+
         public static bool debugBreaK1;
         //-----------------------------------------------------------------
         public void dbugForceTopDownReArrangeContent()
