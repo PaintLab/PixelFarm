@@ -1026,6 +1026,7 @@ namespace PixelFarm.DrawingGL
                         CreatePolyLineRectCoords(x, y, w, h, _rectCoords);
                         float[] triangles = smoothBorderBuilder.BuildSmoothBorders(
                             _rectCoords,
+                            true,
                             out borderTriAngleCount);
 
                         smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
