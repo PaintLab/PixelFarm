@@ -10,11 +10,7 @@ Hardware and Software 2D Rendering Library
     ![gles2_aa_shader](https://cloud.githubusercontent.com/assets/7447159/20637925/221cc87a-b3c9-11e6-94a5-47c3b1026fd9.png)
     ---
     
-    1.2  SkiaSharp GLES Backend
-    
-    ![skia_gles2](https://cloud.githubusercontent.com/assets/7447159/20637926/23d76080-b3c9-11e6-98b3-1e7ac8d1f04a.png)
-	 
-    ---
+ 
 	 
 	
 2. Software Rendering Technology: 
@@ -30,13 +26,7 @@ Hardware and Software 2D Rendering Library
     ![agg_software](https://cloud.githubusercontent.com/assets/7447159/20637922/0b017956-b3c9-11e6-8c3b-41baad33af67.png)
 	
     ---
-	
-    2.2 SkiaSharp
-    
-      
-    ![skia_mem](https://cloud.githubusercontent.com/assets/7447159/20637927/26678d70-b3c9-11e6-999a-28c2e08942ac.png)
-	
-    ---
+
     
     2.3  GDI+ , System.Drawing: as usual :)	
     
