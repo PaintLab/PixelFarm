@@ -1104,15 +1104,7 @@ namespace PaintLab.Svg
                                     //stroke width must > 0 and stroke-color must not be transparent color 
                                     if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
                                     {
-                                        //has specific stroke color  
-                                        //TODO: review here, Transfom the stroke too? 
-                                        using (VxsTemp.Borrow(out var v3))
-                                        using (VectorToolBox.Borrow(out Stroke stroke))
-                                        {
-                                            stroke.Width = (float)p.StrokeWidth;
-                                            stroke.MakeVxs(v1, v3);
-                                            p.Fill(v3, p.StrokeColor);
-                                        }
+                                        p.Draw(v1); 
 
                                     }
                                 }

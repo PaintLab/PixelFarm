@@ -251,8 +251,33 @@ namespace PixelFarm.DrawingGL
         /// <param name="vxs"></param>
         public override void Draw(VertexStore vxs)
         {
-            _glsx.DrawGfxPath(this._strokeColor,
+            if (StrokeWidth > 1)
+            {
+                using (VxsTemp.Borrow(out VertexStore v1))
+                using (VectorToolBox.Borrow(out Stroke st))
+                {
+                    //convert large stroke to vxs
+                    st.Width = StrokeWidth;
+                    st.MakeVxs(vxs, v1);
+
+                    Color prevColor = this.FillColor;
+                    FillColor = this.StrokeColor;
+                    Fill(v1); 
+                    ////-----------------------------------------------
+                    //InternalGraphicsPath pp = _igfxPathBuilder.CreateGraphicsPath(v1);
+                    //_glsx.FillGfxPath(
+                    //    _fillColor, pp
+                    //);
+                    //-----------------------------------------------
+                    FillColor = prevColor;
+                }
+            }
+            else
+            {
+                _glsx.DrawGfxPath(this._strokeColor,
                 _igfxPathBuilder.CreateGraphicsPath(vxs));
+            }
+
         }
 
 
@@ -294,7 +319,7 @@ namespace PixelFarm.DrawingGL
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
-            } 
+            }
         }
         public override void DrawImage(Image actualImage)
         {
@@ -1052,6 +1077,7 @@ namespace PixelFarm.DrawingGL
                                 prevY = prevMoveToY;
                                 //-----------
                                 Figure newfig = new Figure(xylist.ToArray());
+                                newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
                                 //-----------
@@ -1068,6 +1094,7 @@ namespace PixelFarm.DrawingGL
                                 prevY = prevMoveToY;
                                 // 
                                 Figure newfig = new Figure(xylist.ToArray());
+                                newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
                                 //-----------
@@ -1086,6 +1113,7 @@ namespace PixelFarm.DrawingGL
                 if (figures.Count == 0)
                 {
                     Figure newfig = new Figure(xylist.ToArray());
+                    newfig.IsClosedFigure = false;
                     newfig.SupportVertexBuffer = buildForRenderVx;
                     figures.Add(newfig);
                 }

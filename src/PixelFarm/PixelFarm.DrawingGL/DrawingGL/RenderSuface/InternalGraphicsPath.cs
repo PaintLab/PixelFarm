@@ -24,6 +24,7 @@ namespace PixelFarm.DrawingGL
         {
             this.coordXYs = coordXYs;
         }
+        public bool IsClosedFigure { get; set; }
         public int BorderTriangleStripCount { get { return _borderTriangleStripCount; } }
         public int TessAreaVertexCount { get { return _tessAreaVertexCount; } }
 
@@ -37,7 +38,7 @@ namespace PixelFarm.DrawingGL
             if (smoothBorderTess == null)
             {
                 return smoothBorderTess =
-                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, out _borderTriangleStripCount);
+                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, IsClosedFigure, out _borderTriangleStripCount);
             }
             return smoothBorderTess;
         }
@@ -113,7 +114,7 @@ namespace PixelFarm.DrawingGL
     {
         List<float> expandCoords = new List<float>();
 
-        public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
+        public float[] BuildSmoothBorders(float[] coordXYs, bool isClosedFigure, out int borderTriangleStripCount)
         {
             expandCoords.Clear();
             float[] coords = coordXYs;
@@ -121,16 +122,37 @@ namespace PixelFarm.DrawingGL
             //from user input coords
             //expand it
             //TODO: review this again***
-            int lim = coordCount - 2;
-            for (int i = 0; i < lim;)
-            {
-                CreateSmoothLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
-                i += 2;
-            }
-            //close coord
-            CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
 
-            borderTriangleStripCount = coordCount * 2;
+
+            if (isClosedFigure)
+            {
+                int lim = coordCount - 2;
+                for (int i = 0; i < lim;)
+                {
+                    CreateSmoothLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                    i += 2;
+                }
+                //close coord
+                CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
+                borderTriangleStripCount = coordCount * 2;
+
+            }
+            else
+            {
+
+                int lim = coordCount - 2;
+                for (int i = 0; i < lim;)
+                {
+                    CreateSmoothLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                    i += 2;
+                }
+                //TODO: review here
+                //close coord-- TEMP fix***
+                CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[coordCount - 2] + 0.01f, coords[coordCount - 1] + 0.01f);
+                borderTriangleStripCount = coordCount * 2;
+            }
+
+
             //
             float[] result = expandCoords.ToArray();
             expandCoords.Clear();
