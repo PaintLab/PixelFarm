@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
     /// <summary>
-    /// abstract box ui element
+    /// abstract box ui element, viewport
     /// </summary>
     public abstract class AbstractBox : AbstractRectUI
     {
@@ -118,8 +118,7 @@ namespace LayoutFarm.CustomWidgets
                 parent.AddChild(this.GetChild(m));
             }
             //set primary render element
-            //---------------------------------
-
+            //--------------------------------- 
         }
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
