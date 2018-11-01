@@ -18,6 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
+#define ABGR
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
     /// <summary>
@@ -26,8 +27,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
     public static class CO
     {
 
-#if  !RGBA
-        //eg OpenGL, 
+#if ARGB  //  eg. Win32
+        //eg. windows
         /// <summary>
         /// order b
         /// </summary>
@@ -43,10 +44,10 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <summary>
         /// order a
         /// </summary>
-        public const int A = 3;
-#else
-        //RGBA (Windows GDI+)
+        public const int A = 3; 
+#endif
 
+#if ABGR //   eg. Skia on iOS
         /// <summary>
         /// order b
         /// </summary>
@@ -62,8 +63,21 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <summary>
         /// order a
         /// </summary>
-        public const int A = 3;
+        public const int A = 3; 
 #endif
 
+        public const int B_SHIFT = B * 8;
+        /// <summary>
+        /// order g
+        /// </summary>
+        public const int G_SHIFT = G * 8;
+        /// <summary>
+        /// order r
+        /// </summary>
+        public const int R_SHIFT = R * 8;
+        /// <summary>
+        /// order a
+        /// </summary>
+        public const int A_SHIFT = A * 8;
     }
 }
