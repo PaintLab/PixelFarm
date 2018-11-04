@@ -18,7 +18,8 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-#define ABGR
+//#define ABGR
+#define ARGB
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
     /// <summary>
