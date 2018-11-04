@@ -1,7 +1,11 @@
 ﻿//BSD, 2014-present, WinterDev 
+#define WIN32
+
 using System.Runtime.InteropServices;
 namespace PixelFarm.CpuBlit
 {
+
+
 
 #if !COSMOS && WIN32
     [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
@@ -18,8 +22,8 @@ namespace PixelFarm.CpuBlit
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern void memset(byte* dest, byte c, int byteCount);
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
-        public static unsafe extern void memcpy(byte* dest, byte* src, int byteCount); 
-#else 
+        public static unsafe extern void memcpy(byte* dest, byte* src, int byteCount);
+#else
         //this need System.Runtime.CompilerServices.Unsafe
         public static unsafe void memset(byte* dest, byte c, int byteCount)
         {
@@ -29,7 +33,7 @@ namespace PixelFarm.CpuBlit
         {
             System.Runtime.CompilerServices.Unsafe.CopyBlock((void*)(System.IntPtr)dest, (void*)(System.IntPtr)src, (uint)byteCount);
         }
-#endif 
+#endif
         public static void MemSet(byte[] dest, int startAt, byte value, int count)
         {
             unsafe
