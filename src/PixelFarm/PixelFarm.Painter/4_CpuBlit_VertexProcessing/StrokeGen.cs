@@ -305,27 +305,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                 AppendVertices(output, m_out_vertices);
             }
+             
 
+            if (!m_closed)
             {
 
-                 
-                if (!m_closed)
-                {
-                    
-                    output.GetVertex(0, out latest_moveX, out latest_moveY);
-                    output.AddLineTo(latest_moveX, latest_moveY); 
-                }
-               
+                output.GetVertex(0, out latest_moveX, out latest_moveY);
+                output.AddLineTo(latest_moveX, latest_moveY);
+            } 
 
-                //if (!m_closed)
-                //{
-                //    output.GetVertex(0, out latest_moveX, out latest_moveY);
-
-                //}
-                ////output.AddLineTo(latest_moveX, latest_moveY);
-                //output.AddCloseFigure();
-
-            }
         }
 
         bool _isClosedShape = true;
