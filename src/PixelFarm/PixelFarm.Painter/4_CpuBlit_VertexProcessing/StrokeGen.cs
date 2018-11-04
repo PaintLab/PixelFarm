@@ -315,9 +315,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             } 
 
         }
-
-        bool _isClosedShape = true;
-
+ 
 
 
         class Vertex2dList
