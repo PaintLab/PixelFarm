@@ -47,6 +47,8 @@ namespace PixelFarm.CpuBlit.Samples
         public override void Init()
         {
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
+            //VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\tiger_wrinkles.svg");
+         
             var spriteShape = new SpriteShape(renderVx);
            
             _testSprite = new MyTestSprite(spriteShape);

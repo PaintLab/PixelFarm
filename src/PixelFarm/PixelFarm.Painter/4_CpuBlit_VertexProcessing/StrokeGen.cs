@@ -308,14 +308,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             {
 
-                //TODO: review this...
-                if (m_closed)
-                {
-                    output.GetVertex(0, out latest_moveX, out latest_moveY);
-                    output.AddLineTo(latest_moveX, latest_moveY);
-                    output.AddCloseFigure();
-                }
                  
+                if (!m_closed)
+                {
+                    
+                    output.GetVertex(0, out latest_moveX, out latest_moveY);
+                    output.AddLineTo(latest_moveX, latest_moveY); 
+                }
+               
 
                 //if (!m_closed)
                 //{
@@ -327,6 +327,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             }
         }
+
+        bool _isClosedShape = true;
 
 
 
