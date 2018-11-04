@@ -251,8 +251,33 @@ namespace PixelFarm.DrawingGL
         /// <param name="vxs"></param>
         public override void Draw(VertexStore vxs)
         {
-            _glsx.DrawGfxPath(this._strokeColor,
+            if (StrokeWidth > 1)
+            {
+                using (VxsTemp.Borrow(out VertexStore v1))
+                using (VectorToolBox.Borrow(out Stroke st))
+                {
+                    //convert large stroke to vxs
+                    st.Width = StrokeWidth;
+                    st.MakeVxs(vxs, v1);
+
+                    Color prevColor = this.FillColor;
+                    FillColor = this.StrokeColor;
+                    Fill(v1);
+                    ////-----------------------------------------------
+                    //InternalGraphicsPath pp = _igfxPathBuilder.CreateGraphicsPath(v1);
+                    //_glsx.FillGfxPath(
+                    //    _fillColor, pp
+                    //);
+                    //-----------------------------------------------
+                    FillColor = prevColor;
+                }
+            }
+            else
+            {
+                _glsx.DrawGfxPath(this._strokeColor,
                 _igfxPathBuilder.CreateGraphicsPath(vxs));
+            }
+
         }
 
 
@@ -294,7 +319,7 @@ namespace PixelFarm.DrawingGL
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
-            } 
+            }
         }
         public override void DrawImage(Image actualImage)
         {
@@ -553,14 +578,12 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(VertexStore vxs)
         {
+            //at GL-layer 
             _glsx.FillGfxPath(
                 _fillColor,
                 _igfxPathBuilder.CreateGraphicsPath(vxs)
                 );
         }
-
-
-
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {
@@ -732,24 +755,38 @@ namespace PixelFarm.DrawingGL
                     //also  rotate 
                     if (centerFormArc.scaleUp)
                     {
-                        var mat = Affine.NewMatix(
-                                new AffinePlan(AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                                new AffinePlan(AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                                new AffinePlan(AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                                new AffinePlan(AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
 
-                        mat.TransformToVxs(v1, v2);
+                        //var mat = Affine.NewMatix(
+                        //        new AffinePlan(AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                        //        new AffinePlan(AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                        //        new AffinePlan(AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                        //        new AffinePlan(AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                        //mat1.TransformToVxs(v1, v2);
+                        //v1 = v2;
+
+                        AffineMat mat = AffineMat.Iden;
+                        mat.Translate(-centerFormArc.cx, -centerFormArc.cy);
+                        mat.Scale(scaleRatio);
+                        mat.RotateDeg(xaxisRotationAngleDec);
+                        mat.Translate(centerFormArc.cx, centerFormArc.cy);
+                        VertexStoreTransformExtensions.TransformToVxs(ref mat, v1, v2);
                         v1 = v2;
                     }
                     else
                     {
                         //not scale
-                        var mat = Affine.NewMatix(
-                                AffinePlan.Translate(-centerFormArc.cx, -centerFormArc.cy),
-                                AffinePlan.RotateDeg(xaxisRotationAngleDec),
-                                AffinePlan.Translate(centerFormArc.cx, centerFormArc.cy));
+                        //var mat = Affine.NewMatix(
+                        //        AffinePlan.Translate(-centerFormArc.cx, -centerFormArc.cy),
+                        //        AffinePlan.RotateDeg(xaxisRotationAngleDec),
+                        //        AffinePlan.Translate(centerFormArc.cx, centerFormArc.cy)); 
+                        //mat.TransformToVxs(v1, v2);
+                        //v1 = v2;
 
-                        mat.TransformToVxs(v1, v2);
+                        AffineMat mat = AffineMat.Iden;
+                        mat.Translate(-centerFormArc.cx, -centerFormArc.cy);
+                        mat.RotateDeg(xaxisRotationAngleDec);
+                        mat.Translate(centerFormArc.cx, centerFormArc.cy);
+                        VertexStoreTransformExtensions.TransformToVxs(ref mat, v1, v2);
                         v1 = v2;
                     }
                 }
@@ -758,13 +795,21 @@ namespace PixelFarm.DrawingGL
                     //no rotate
                     if (centerFormArc.scaleUp)
                     {
-                        var mat = Affine.NewMatix(
-                                new AffinePlan(AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                                new AffinePlan(AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
-                                new AffinePlan(AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                        //var mat = Affine.NewMatix(
+                        //        new AffinePlan(AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                        //        new AffinePlan(AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                        //        new AffinePlan(AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
 
-                        mat.TransformToVxs(v1, v2);
+                        //mat.TransformToVxs(v1, v2);
+                        //v1 = v2; 
+                        AffineMat mat = AffineMat.Iden;
+                        mat.Translate(-centerFormArc.cx, -centerFormArc.cy);
+                        mat.RotateDeg(scaleRatio);
+                        mat.Translate(centerFormArc.cx, centerFormArc.cy);
+                        //
+                        VertexStoreTransformExtensions.TransformToVxs(ref mat, v1, v2);
                         v1 = v2;
+
                     }
                 }
 
@@ -1052,6 +1097,7 @@ namespace PixelFarm.DrawingGL
                                 prevY = prevMoveToY;
                                 //-----------
                                 Figure newfig = new Figure(xylist.ToArray());
+                                newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
                                 //-----------
@@ -1068,6 +1114,7 @@ namespace PixelFarm.DrawingGL
                                 prevY = prevMoveToY;
                                 // 
                                 Figure newfig = new Figure(xylist.ToArray());
+                                newfig.IsClosedFigure = true;
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
                                 //-----------
@@ -1086,6 +1133,7 @@ namespace PixelFarm.DrawingGL
                 if (figures.Count == 0)
                 {
                     Figure newfig = new Figure(xylist.ToArray());
+                    newfig.IsClosedFigure = false;
                     newfig.SupportVertexBuffer = buildForRenderVx;
                     figures.Add(newfig);
                 }

@@ -92,10 +92,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     //----------------------------------------------------------------------
 
 
+
     /// <summary>
     /// struct version of Affine (Matrix)
     /// </summary>
-    struct AffineMat
+    public struct AffineMat
     {
         //3x2 matrix (rows x cols)
         internal double
@@ -149,6 +150,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             tx = t4;
         }
 
+        public void RotateDeg(double degree)
+        {
+            Rotate(DegToRad(degree));
+        }
         /// <summary>
         /// inside-values will be CHANGED after call this
         /// </summary>
@@ -163,7 +168,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             sy *= mm3;
             ty *= mm3;
         }
-
+        public void Scale(double mm)
+        {
+            sx *= mm;
+            shx *= mm;
+            tx *= mm;
+            shy *= mm;
+            sy *= mm;
+            ty *= mm;
+        }
         /// <summary>
         /// inside-values will be CHANGED after call this
         /// </summary>
@@ -333,6 +346,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
             }
         }
+        static double DegToRad(double degree)
+        {
+            return degree * (Math.PI / 180d);
+        }
+        static double RadToDeg(double degree)
+        {
+            return degree * (180d / Math.PI);
+        }
+        
+       
     }
 
     public class Affine : ICoordTransformer
@@ -351,6 +374,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //sy = copyFrom.sy;
             //tx = copyFrom.tx;
             //ty = copyFrom.ty;
+            
             _elems = copyFrom._elems;
             isIdenHint = copyFrom.isIdenHint;
         }

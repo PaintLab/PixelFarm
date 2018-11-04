@@ -26,7 +26,7 @@ namespace PixelFarm.DrawingGL
         MultiChannelSubPixelRenderingSdf msdfSubPixelRenderingShader;
         SingleChannelSdf sdfShader;
         //-----------------------------------------------------------
-        ShaderSharedResource _shareRes; 
+        ShaderSharedResource _shareRes;
         //tools---------------------------------
 
         int canvasOriginX = 0;
@@ -982,15 +982,26 @@ namespace PixelFarm.DrawingGL
                     {
 
                         StrokeColor = color;
-                        StrokeWidth = 1f;
+
+                        float prevStrokeW = StrokeWidth;
+                        //Drawing.Color prevColor = color;
+
+                        if (prevStrokeW < 1.5f)
+                        {
+                            StrokeWidth = 1.5f;
+                            //StrokeColor = Drawing.Color.FromArgb(200, color);
+                        }
 
                         int subPathCount = igpth.FigCount;
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = igpth.GetFig(i);
-                            smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(smoothBorderBuilder), f.BorderTriangleStripCount);
+                            smoothLineShader.DrawTriangleStrips(
+                                f.GetSmoothBorders(smoothBorderBuilder),
+                                f.BorderTriangleStripCount);
                         }
-
+                        StrokeWidth = prevStrokeW;
+                        //StrokeColor = prevColor;
                         //restore back 
                     }
                     break;
@@ -1019,6 +1030,7 @@ namespace PixelFarm.DrawingGL
                         CreatePolyLineRectCoords(x, y, w, h, _rectCoords);
                         float[] triangles = smoothBorderBuilder.BuildSmoothBorders(
                             _rectCoords,
+                            true,
                             out borderTriAngleCount);
 
                         smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
