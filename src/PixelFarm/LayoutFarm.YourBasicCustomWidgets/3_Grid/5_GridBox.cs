@@ -974,7 +974,11 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
 
-
+                int allChildCount = this.ChildCount;
+                for (int i = 0; i < allChildCount; ++i)
+                {
+                    _gridViewRenderE.AddChild(this.GetChild(i));
+                }
 
 
             }

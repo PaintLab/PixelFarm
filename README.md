@@ -102,6 +102,12 @@ _pic 2: Agg's result, bitmap zoom-in to see fine details_
  
  
 ---
+**HOW TO BUILD**
+
+see https://github.com/PaintLab/PixelFarm/issues/37
+
+---
+
 
  
 **License:**
