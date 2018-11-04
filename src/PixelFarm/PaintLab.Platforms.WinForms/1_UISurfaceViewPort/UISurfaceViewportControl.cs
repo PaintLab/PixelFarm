@@ -18,7 +18,6 @@ namespace LayoutFarm.UI
         RootGraphic rootgfx;
         ITopWindowEventRoot topWinEventRoot;
         InnerViewportKind innerViewportKind;
-        //private Panel panel1;
         List<Form> subForms = new List<Form>();
         public UISurfaceViewportControl()
         {
@@ -58,8 +57,8 @@ namespace LayoutFarm.UI
                     new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
             }
             rootgfx.FlushAccumGraphics();
-            //s_dbugCount++;
-            //Console.WriteLine(s_dbugCount.ToString() + e.ClipRectangle);
+            s_dbugCount++;
+            Console.WriteLine(s_dbugCount.ToString() + e.ClipRectangle);
             base.OnPaint(e);
         }
         public UIPlatform Platform

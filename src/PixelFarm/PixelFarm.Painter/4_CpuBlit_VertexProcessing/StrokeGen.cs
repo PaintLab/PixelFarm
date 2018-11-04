@@ -306,25 +306,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 AppendVertices(output, m_out_vertices);
             }
 
+            if (!m_closed)
             {
 
-                //TODO: review this...
-                if (m_closed)
-                {
-                    output.GetVertex(0, out latest_moveX, out latest_moveY);
-                    output.AddLineTo(latest_moveX, latest_moveY);
-                    output.AddCloseFigure();
-                }
-                 
-
-                //if (!m_closed)
-                //{
-                //    output.GetVertex(0, out latest_moveX, out latest_moveY);
-
-                //}
-                ////output.AddLineTo(latest_moveX, latest_moveY);
-                //output.AddCloseFigure();
-
+                output.GetVertex(0, out latest_moveX, out latest_moveY);
+                output.AddLineTo(latest_moveX, latest_moveY);
             }
         }
 
