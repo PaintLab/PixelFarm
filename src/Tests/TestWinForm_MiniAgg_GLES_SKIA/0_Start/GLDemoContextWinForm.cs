@@ -146,9 +146,11 @@ namespace Mini
 
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
-            var printer = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _aggPainter.TextPrinter = printer;
+            var aggTextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
+            _aggPainter.TextPrinter = aggTextPrinter;
             //
+
+
         }
         void HandleAggOnGLESPaint(object sender, System.EventArgs e)
         {
@@ -177,6 +179,12 @@ namespace Mini
                 _glBmp.IsInvert = true;
             }
             _glsx.DrawImage(_glBmp, 0, _aggBmp.Height);
+
+            //test print text from our GLTextPrinter
+
+            canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            canvasPainter.DrawString("Hello2", 0, 400);
+
             //------------------------------------------------------------------------- 
             glControl.SwapBuffers();
         }
