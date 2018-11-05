@@ -69,7 +69,7 @@ namespace OpenTkEssTest
             mSamplerLoc = GL.GetUniformLocation(mProgram, "s_texture");
             //// Load the texture
 
-            PixelFarm.CpuBlit.ActualBitmap bmp = DemoHelper.LoadImage(RootDemoPath.Path + @"\test001.png");
+            PixelFarm.CpuBlit.ActualBitmap bmp = DemoHelper.LoadImage(RootDemoPath.Path + @"\lion1.png");
             int bmpW = bmp.Width;
             int bmpH = bmp.Height;
             mTexture = LoadTexture(bmp);
@@ -154,6 +154,9 @@ namespace OpenTkEssTest
             IntPtr ptr = lazyImgProvider.GetRawBufferHead();
 
             GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+            
+
+
             //bmp.UnlockBits(bmpdata);
             //glGenerateMipmap(GL_TEXTURE_2D);
             GL.GenerateMipmap(TextureTarget.Texture2D);
