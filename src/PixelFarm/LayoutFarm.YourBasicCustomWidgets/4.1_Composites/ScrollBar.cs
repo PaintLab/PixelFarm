@@ -126,6 +126,13 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
+        public override void SetSize(int width, int height)
+        {
+            base.SetSize(width, height);
+            ReEvaluateScrollBar();
+
+            //evaluate scrollButton position and size again
+        }
         public override RenderElement CurrentPrimaryRenderElement
         {
             get { return this.mainBox; }
@@ -744,7 +751,7 @@ namespace LayoutFarm.CustomWidgets
         SliderBox slideBox;
         CustomRenderBox mainBox;
 
-        protected int minmax_boxHeight = 15;
+        int minmax_boxHeight = 15;
 
         public ScrollBar(int width, int height)
             : base(width, height)
@@ -822,7 +829,27 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        public override void SetSize(int width, int height)
+        {
+            base.SetSize(width, height);
+            //layout scrollbar component too.
 
+            if (minButton == null) return;
+            //
+            //
+            mainBox.SetSize(width, height);
+            if (this.ScrollBarType == ScrollBarType.Horizontal)
+            {
+                //horizontal
+                maxButton.SetLocation(this.Width - minmax_boxHeight, 0);
+                slideBox.SetSize(this.Width - minmax_boxHeight * 2, this.Height);
+            }
+            else
+            {
+                maxButton.SetLocation(0, this.Height - minmax_boxHeight);
+                slideBox.SetSize(this.Width, this.Height - minmax_boxHeight * 2);
+            }
+        }
 
         public void StepSmallToMax()
         {
@@ -932,12 +959,6 @@ namespace LayoutFarm.CustomWidgets
         {
         }
 
-        //---------------------------------------------------------------------------
-        //horizontal scrollbar
-        void EvaluateHorizontalScrollBarProperties()
-        {
-
-        }
         void SetupHorizontalScrollButtonProperties(RenderElement container)
         {
 
