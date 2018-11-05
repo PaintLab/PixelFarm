@@ -11,18 +11,20 @@ namespace OpenTK
     {
 
 
-        OpenTK.Graphics.Color4 clearColor;
-        EventHandler glPaintHandler;
+        const int GLES_MAJOR = 3;
+        const int GLES_MINOR = 0;
+        
+        EventHandler glPaintHandler; 
         static OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
              DisplayDevice.Default.BitsPerPixel,//default 32 bits color
              16,//depth buffer => 16
-             8,  //stencil buffer => 8 (  //if want to use stencil buffer then set stencil buffer too! )
-             0,//number of sample of FSAA
-             0,  //accum buffer
+             8, //stencil buffer => 8 (  //if want to use stencil buffer then set stencil buffer too! )
+             0, //number of sample of FSAA
+             0, //accum buffer
              2, // n buffer, 2=> double buffer
              false);//sterio
         public MyGLControl()
-            : base(gfxmode, 3, 0, OpenTK.Graphics.GraphicsContextFlags.Embedded)
+            : base(gfxmode, GLES_MAJOR, GLES_MINOR, OpenTK.Graphics.GraphicsContextFlags.Embedded)
         {
             this.InitializeComponent();
         }
@@ -34,20 +36,11 @@ namespace OpenTK
         {
             this.glPaintHandler = glPaintHandler;
         }
-        public OpenTK.Graphics.Color4 ClearColor
+        public void ClearSurface(OpenTK.Graphics.Color4 color)
         {
-            get { return clearColor; }
-            set
-            {
-                clearColor = value;
-                if (!this.DesignMode)
-                {
-                    MakeCurrent();
-                    GL.ClearColor(clearColor);
-                }
-            }
-        }
-
+            MakeCurrent();
+            GL.ClearColor(color);
+        } 
         protected override void OnPaint(PaintEventArgs e)
         {
 
@@ -60,7 +53,7 @@ namespace OpenTK
                     glPaintHandler(this, e);
                 }
                 SwapBuffers();
-            } 
+            }
         }
 
     }
