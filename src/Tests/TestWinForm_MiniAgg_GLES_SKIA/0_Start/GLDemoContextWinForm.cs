@@ -144,6 +144,11 @@ namespace Mini
             _aggBmp = new ActualBitmap(800, 600);
             _aggPainter = AggPainter.Create(_aggBmp);
 
+            //optional if we want to print text on agg surface
+            _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
+            var printer = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
+            _aggPainter.TextPrinter = printer;
+            //
         }
         void HandleAggOnGLESPaint(object sender, System.EventArgs e)
         {
@@ -159,6 +164,10 @@ namespace Mini
             {
                 _aggPainter.Clear(PixelFarm.Drawing.Color.White);
                 demobase.Draw(_aggPainter);
+
+                //test print some text
+                _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
+                _aggPainter.DrawString("Hello! 12345", 0, 500);
             }
             //------------------------------------------------------------------------- 
             //copy from 
