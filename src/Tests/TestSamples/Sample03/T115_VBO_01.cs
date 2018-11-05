@@ -4,7 +4,6 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-using OpenTK.Graphics.ES20;
 
 namespace OpenTkEssTest
 {

@@ -35,8 +35,10 @@ namespace Mini
 
             lstBackEndRenderer.Items.Clear();
             lstBackEndRenderer.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES);
+
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// 
+
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
             lstBackEndRenderer.SelectedIndex = 0;//set default 
@@ -209,7 +211,7 @@ namespace Mini
                 bmp.Save("d:\\WImageTest\\test002_2.png");
             }
         }
-        
+
 
         private void button5_Click(object sender, EventArgs e)
         {
