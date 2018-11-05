@@ -57,8 +57,10 @@ namespace LayoutFarm.UI
                     new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
             }
             rootgfx.FlushAccumGraphics();
-            s_dbugCount++;
-            Console.WriteLine(s_dbugCount.ToString() + e.ClipRectangle);
+#if DEBUG
+            //s_dbugCount++;
+            //Console.WriteLine(s_dbugCount.ToString() + e.ClipRectangle);
+#endif
             base.OnPaint(e);
         }
         public UIPlatform Platform
