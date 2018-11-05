@@ -40,7 +40,10 @@ namespace LayoutFarm.UI
             //Console.WriteLine("focus" + s_dbugCount.ToString());
             rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, rootgfx.Width, rootgfx.Height));
             rootgfx.FlushAccumGraphics();
-
+            //#if DEBUG
+            //            s_dbugCount++;
+            //            Console.WriteLine("vis" + s_dbugCount.ToString());
+            //#endif
             base.OnVisibleChanged(e);
         }
         protected override void OnPaint(PaintEventArgs e)
@@ -57,10 +60,10 @@ namespace LayoutFarm.UI
                     new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
             }
             rootgfx.FlushAccumGraphics();
-#if DEBUG
-            //s_dbugCount++;
-            //Console.WriteLine(s_dbugCount.ToString() + e.ClipRectangle);
-#endif
+            //#if DEBUG
+            //            s_dbugCount++;
+            //            Console.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
+            //#endif
             base.OnPaint(e);
         }
         public UIPlatform Platform
@@ -215,7 +218,9 @@ namespace LayoutFarm.UI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             //this.Controls.Add(this.panel1);
+#if DEBUG
             this.Name = "UISurfaceViewportControl";
+#endif
             this.Size = new System.Drawing.Size(863, 760);
             this.ResumeLayout(false);
 
@@ -267,8 +272,9 @@ namespace LayoutFarm.UI
                     if (topWinBox.PlatformWinBox == null)
                     {
 
-                        FormPopupShadow2 popupShadow1 = new FormPopupShadow2();
-                        IntPtr handle1 = popupShadow1.Handle;
+                        FormPopupShadow popupShadow1 = new FormPopupShadow();
+                        popupShadow1.Visible = false;
+                        IntPtr handle1 = popupShadow1.Handle; //***
 
 
                         //create platform winbox 
@@ -276,7 +282,6 @@ namespace LayoutFarm.UI
                         newForm.LinkedParentForm = this.FindForm();
                         newForm.LinkedParentControl = this;
                         newForm.PopupShadow = popupShadow1;
-
 
                         //TODO: review here=> 300,200
 
@@ -294,6 +299,10 @@ namespace LayoutFarm.UI
                         var platformWinBox = new PlatformWinBoxForm(newForm);
                         topWinBox.PlatformWinBox = platformWinBox;
                         platformWinBox.UseRelativeLocationToParent = true;
+                        platformWinBox.PreviewVisibilityChanged += PlatformWinBox_PreviewVisibilityChanged;
+                        platformWinBox.PreviewBoundChanged += PlatformWinBox_PreviewBoundChanged;
+                        platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
+                        platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
                         subForms.Add(newForm);
                         s_tmpHandle = IntPtr.Zero;
 
@@ -308,6 +317,51 @@ namespace LayoutFarm.UI
             {
                 this.rootgfx.TopWindowRenderBox.AddChild(vi);
             }
+        }
+
+        PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
+        bool _hasInvalidateAreaAccum;
+
+        void UpdateInvalidateAccumArea(PlatformWinBoxForm winform)
+        {
+            winform.GetLocalBoundsIncludeShadow(out int x, out int y, out int w, out int h);
+            if (_hasInvalidateAreaAccum)
+            {
+                _winBoxAccumInvalidateArea = PixelFarm.Drawing.Rectangle.Union(
+                    new PixelFarm.Drawing.Rectangle(x, y, w, h),
+                    _winBoxAccumInvalidateArea);
+            }
+            else
+            {
+                _winBoxAccumInvalidateArea =
+                    new PixelFarm.Drawing.Rectangle(x, y, w, h);
+
+                _hasInvalidateAreaAccum = true;
+            }
+        }
+        private void PlatformWinBox_PreviewBoundChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
+        }
+        private void PlatformWinBox_PreviewVisibilityChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
+        }
+
+        private void PlatformWinBox_VisibityChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
+
+           
+            rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
+            _hasInvalidateAreaAccum = false;
+        }
+
+        private void PlatformWinBox_BoundsChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);            
+            rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
+            _hasInvalidateAreaAccum = false;
         }
 
         public RootGraphic RootGfx
@@ -353,7 +407,13 @@ namespace LayoutFarm.UI
         AbstractCompletionWindow _form;
         bool _evalLocationRelativeToDesktop;
         System.Drawing.Point _locationRelToDesktop;
+        int _formLocalX;
+        int _formLocalY;
 
+        public event EventHandler VisibityChanged;
+        public event EventHandler BoundsChanged;
+        public event EventHandler PreviewBoundChanged;
+        public event EventHandler PreviewVisibilityChanged;
 
         public PlatformWinBoxForm(AbstractCompletionWindow form)
         {
@@ -364,7 +424,7 @@ namespace LayoutFarm.UI
             get;
             set;
         }
-        bool IPlatformWindowBox.Visible
+        public bool Visible
         {
             get
             {
@@ -376,15 +436,18 @@ namespace LayoutFarm.UI
                 {
                     if (!_form.Visible)
                     {
+                        PreviewVisibilityChanged?.Invoke(this, EventArgs.Empty);
                         _form.ShowForm();
+                        VisibityChanged?.Invoke(this, EventArgs.Empty);
                     }
                 }
                 else
                 {
-                    _evalLocationRelativeToDesktop = false;
                     if (_form.Visible)
                     {
+                        PreviewVisibilityChanged?.Invoke(this, EventArgs.Empty);
                         _form.Hide();
+                        VisibityChanged?.Invoke(this, EventArgs.Empty);
                     }
                 }
             }
@@ -394,28 +457,28 @@ namespace LayoutFarm.UI
             _form.Close();
             _form = null;
         }
-
-
         void IPlatformWindowBox.SetLocation(int x, int y)
         {
+            //invoke Before accept new location
+            PreviewBoundChanged?.Invoke(this, EventArgs.Empty);
+            //------------------ 
+            _formLocalX = x;
+            _formLocalY = y;
+            //Console.WriteLine("set location " + x + "," + y);
+            //
             if (this.UseRelativeLocationToParent)
             {
-                //#if DEBUG
-                //                if (!_form.IsHandleCreated)
-                //                {
-                //                }
-                //#endif
-                //1. find parent form/control  
+
                 if (!_evalLocationRelativeToDesktop)
                 {
-                    _locationRelToDesktop = new System.Drawing.Point();// _form.LinkedParentForm.Location;
+                    _locationRelToDesktop = new System.Drawing.Point();
                     if (_form.LinkedParentControl != null)
                     {
+                        //get location of this control relative to desktop
                         _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(_form.LinkedParentControl.Location);
                     }
                     _evalLocationRelativeToDesktop = true;
                 }
-
                 _form.Location = new System.Drawing.Point(
                     _locationRelToDesktop.X + x,
                     _locationRelToDesktop.Y + y);
@@ -423,13 +486,32 @@ namespace LayoutFarm.UI
             else
             {
                 _form.Location = new System.Drawing.Point(x, y);
-            }
 
+            }
+            BoundsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         void IPlatformWindowBox.SetSize(int w, int h)
         {
+            PreviewBoundChanged?.Invoke(this, EventArgs.Empty);
             _form.Size = new System.Drawing.Size(w, h);
+            BoundsChanged?.Invoke(this, EventArgs.Empty);
+        }
+        public void GetLocalBounds(out int x, out int y, out int w, out int h)
+        {
+            System.Drawing.Size size = _form.Size;
+            x = _formLocalX;
+            y = _formLocalY;
+            w = size.Width;
+            h = size.Height;
+        }
+        public void GetLocalBoundsIncludeShadow(out int x, out int y, out int w, out int h)
+        {
+            System.Drawing.Size size = _form.Size;
+            x = _formLocalX;
+            y = _formLocalY;
+            w = size.Width + FormPopupShadow.SHADOW_SIZE+5;
+            h = size.Height + FormPopupShadow.SHADOW_SIZE+5;
         }
     }
 }

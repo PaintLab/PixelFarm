@@ -10,7 +10,7 @@ namespace LayoutFarm.UI
     {
         Form _linkedParentForm;
         Control _linkedParentControl;
-        FormPopupShadow2 _formPopupShadow;
+        FormPopupShadow _formPopupShadow;
 
         FormClosingEventHandler _parentFormClosingEventHandler;
         EventHandler _parentFormSizeChanged;
@@ -46,7 +46,7 @@ namespace LayoutFarm.UI
 #endif
             };
         }
-        internal FormPopupShadow2 PopupShadow
+        internal FormPopupShadow PopupShadow
         {
             get { return _formPopupShadow; }
             set
@@ -62,8 +62,11 @@ namespace LayoutFarm.UI
             }
             else
             {
-                _formPopupShadow.Visible = false;
+                //hide popup window
                 _showingPopup = false;
+
+                //hide popup shadow too
+                _formPopupShadow.Visible = false;
             }
         }
 
@@ -99,15 +102,7 @@ namespace LayoutFarm.UI
                 this._linkedParentControl = value;
             }
         }
-        //protected override CreateParams CreateParams
-        //{
-        //    get
-        //    {
-        //        var createParams = base.CreateParams;
-        //        //createParams.ClassStyle |= 0x00020000;//add window shadow
-        //        return createParams;
-        //    }
-        //}
+
         protected override bool ShowWithoutActivation
         {
             get
@@ -140,5 +135,7 @@ namespace LayoutFarm.UI
                 _formPopupShadow.MoveRelativeTo(this);
             }
         }
+        public bool HasPopupShadow => _formPopupShadow != null;
+         
     }
 }

@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
             uiTimerTask = new UITimerTask(graphicTimer1_Tick);
             uiTimerTask.IntervalInMillisec = fastPlanInterval; //fast task plan
             UIPlatform.RegisterTimerTask(uiTimerTask);
-            uiTimerTask.Enabled = true;
+            //uiTimerTask.Enabled = true;
         }
         public bool Enabled
         {

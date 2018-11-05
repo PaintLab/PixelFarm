@@ -9,9 +9,14 @@ namespace LayoutFarm.UI.GdiPlus
     {
         Control windowControl;
         GdiPlusCanvasViewport gdiPlusViewport;
+#if DEBUG
+        static int s_totalDebugId;
+        public readonly int dbugId = s_totalDebugId++;
+#endif
         public MyTopWindowBridgeGdiPlus(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
+
         }
 
         public override void BindWindowControl(Control windowControl)
@@ -39,17 +44,28 @@ namespace LayoutFarm.UI.GdiPlus
                     RootGfx.TopWindowRenderBox,
                     ref rect);
         }
+#if DEBUG
+        int dbugPaintToOutputWin;
+#endif
         public override void PaintToOutputWindow()
         {
-            IntPtr hdc = GetDC(this.windowControl.Handle);
+            IntPtr winHandle = this.windowControl.Handle;
+            IntPtr hdc = GetDC(winHandle);
             this.gdiPlusViewport.PaintMe(hdc);
-            ReleaseDC(this.windowControl.Handle, hdc);
+            ReleaseDC(winHandle, hdc);
+#if DEBUG
+            //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
+#endif
         }
         public override void PaintToOutputWindow2(Rectangle invalidateArea)
         {
-            IntPtr hdc = GetDC(this.windowControl.Handle);
+            IntPtr winHandle = this.windowControl.Handle;
+            IntPtr hdc = GetDC(winHandle);
             this.gdiPlusViewport.PaintMe2(hdc, invalidateArea);
-            ReleaseDC(this.windowControl.Handle, hdc);
+            ReleaseDC(winHandle, hdc);
+#if DEBUG
+            //Console.WriteLine("p->w2 " + dbugId + " " + dbugPaintToOutputWin++ + " " + invalidateArea.ToString());
+#endif
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
         {
