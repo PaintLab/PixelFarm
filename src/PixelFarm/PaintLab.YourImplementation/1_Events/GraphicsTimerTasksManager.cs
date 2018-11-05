@@ -13,7 +13,7 @@ namespace LayoutFarm.UI
         RootGraphic rootgfx;
 
         int fastPlanInterval = 20;//ms 
-        int caretBlinkInterval = 400;//ms (2 fps)
+        int caretBlinkInterval = 400;//ms 
         int tickAccum = 0;
         bool enableCaretBlink = true;
         UITimerTask uiTimerTask;
@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
             uiTimerTask = new UITimerTask(graphicTimer1_Tick);
             uiTimerTask.IntervalInMillisec = fastPlanInterval; //fast task plan
             UIPlatform.RegisterTimerTask(uiTimerTask);
-            //uiTimerTask.Enabled = true;
+            uiTimerTask.Enabled = true;
         }
         public bool Enabled
         {

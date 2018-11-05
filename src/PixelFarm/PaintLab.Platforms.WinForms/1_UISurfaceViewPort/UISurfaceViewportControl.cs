@@ -352,14 +352,14 @@ namespace LayoutFarm.UI
         {
             UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
 
-           
+
             rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
             _hasInvalidateAreaAccum = false;
         }
 
         private void PlatformWinBox_BoundsChanged(object sender, EventArgs e)
         {
-            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);            
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
             rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
             _hasInvalidateAreaAccum = false;
         }
@@ -417,7 +417,10 @@ namespace LayoutFarm.UI
 
         public PlatformWinBoxForm(AbstractCompletionWindow form)
         {
+
             this._form = form;
+            _form.Move += (s, e) => _evalLocationRelativeToDesktop = false;
+
         }
         public bool UseRelativeLocationToParent
         {
@@ -510,8 +513,8 @@ namespace LayoutFarm.UI
             System.Drawing.Size size = _form.Size;
             x = _formLocalX;
             y = _formLocalY;
-            w = size.Width + FormPopupShadow.SHADOW_SIZE+5;
-            h = size.Height + FormPopupShadow.SHADOW_SIZE+5;
+            w = size.Width + FormPopupShadow.SHADOW_SIZE + 5;
+            h = size.Height + FormPopupShadow.SHADOW_SIZE + 5;
         }
     }
 }
