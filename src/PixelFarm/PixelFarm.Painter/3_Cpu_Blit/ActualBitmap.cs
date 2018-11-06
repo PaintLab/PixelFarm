@@ -117,10 +117,10 @@ namespace PixelFarm.CpuBlit
 
         public ActualBitmap(int width, int height)
             : this(width, height, System.Runtime.InteropServices.Marshal.AllocHGlobal(width * height * 4))
-        {   
+        {
             _pixelBufferFromExternalSrc = false;//**
             MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set
-        } 
+        }
         public ActualBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
         {
             //width and height must >0 
@@ -189,10 +189,16 @@ namespace PixelFarm.CpuBlit
             var img = new ActualBitmap(width, height);
             unsafe
             {
-                int* header = (int*)img._pixelBuffer;
-                {
-                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
-                }
+                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, img._pixelBuffer, buffer.Length);
+            }
+            return img;
+        }
+        public static ActualBitmap CreateFromCopy(int width, int height, int len, IntPtr anotherNativePixelBuffer)
+        {
+            var img = new ActualBitmap(width, height);
+            unsafe
+            {
+                MemMx.memcpy((byte*)img._pixelBuffer, (byte*)anotherNativePixelBuffer, len);
             }
             return img;
         }
