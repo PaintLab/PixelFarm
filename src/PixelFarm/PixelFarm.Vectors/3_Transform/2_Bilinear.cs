@@ -146,6 +146,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             return new CoordTransformationChain(this, another);
         }
+        ICoordTransformer ICoordTransformer.CreateInvert()
+        {
+            //TODO: impl
+            //create invert from Rect to Quad or Quad to Rect
+            //or Quad to Quad
+            throw new NotSupportedException();
+            //return CreateInvert();
+        }
         //-------------------------------------------------------------------------
 
 

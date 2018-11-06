@@ -345,6 +345,10 @@ namespace PixelFarm.Drawing.Skia
         {
             throw new NotImplementedException();
         }
+        public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image img, double left, double top)
         {
             if (img is ActualBitmap)

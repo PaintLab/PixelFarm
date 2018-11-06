@@ -858,29 +858,62 @@ namespace PaintLab.Svg
                                         //check if we need scale or not
 
                                         Image img = this.ImageBinder.Image;
-                                        if (this._imgW == 0 || this._imgH == 0)
+
+                                        if (currentTx != null)
                                         {
-                                            //only X,and Y
-                                            RenderQuality prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                            p.RenderQuality = prevQ;
-                                        }
-                                        else if (_imgW == img.Width && _imgH == img.Height)
-                                        {
-                                            RenderQuality prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                            p.RenderQuality = prevQ;
+                                            Affine aff = currentTx as Affine;
+                                            if (this._imgW == 0 || this._imgH == 0)
+                                            {
+                                                //only X,and Y
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                //p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else if (_imgW == img.Width && _imgH == img.Height)
+                                            {
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                //p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else
+                                            {
+
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                //p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                                p.RenderQuality = prevQ;
+                                            }
                                         }
                                         else
                                         {
-                                            //TODO:  impl img scale here
-                                            RenderQuality prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                            p.RenderQuality = prevQ;
+                                            if (this._imgW == 0 || this._imgH == 0)
+                                            {
+                                                //only X,and Y
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else if (_imgW == img.Width && _imgH == img.Height)
+                                            {
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else
+                                            {
+
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+
+                                                p.RenderQuality = prevQ;
+                                            }
                                         }
+
                                     }
                                     break;
 
