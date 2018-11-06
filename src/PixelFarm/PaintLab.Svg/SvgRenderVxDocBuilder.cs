@@ -17,7 +17,10 @@ namespace PaintLab.Svg
 
         public SvgImageBinder(string imgsrc) : base(imgsrc)
         {
-
+        }
+        public SvgImageBinder(PixelFarm.CpuBlit.ActualBitmap actualImg) : base(null)
+        {
+            this.SetImage(actualImg);
         }
     }
 
@@ -370,7 +373,7 @@ namespace PaintLab.Svg
             _controller = o;
         }
         public object GetController() { return _controller; }
-        internal LayoutFarm.ImageBinder ImageBinder
+        public LayoutFarm.ImageBinder ImageBinder
         {
             get
             {
@@ -582,6 +585,22 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Svg:
                     break;
                 case WellknownSvgElementName.Image:
+                    {
+                        if (_vxsPath == null)
+                        {
+                            //create rect path around img
+
+                            using (VectorToolBox.Borrow(out SimpleRect ss))
+                            {
+                                SvgImageSpec imgSpec = (SvgImageSpec)_visualSpec;
+                                ss.SetRect(0, imgSpec.Height.Number, imgSpec.Width.Number, 0);
+                                _vxsPath = new VertexStore();
+                                ss.MakeVxs(_vxsPath);
+                            }
+
+                        }
+                        goto case WellknownSvgElementName.Rect;
+                    }
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Ellipse:
@@ -1104,7 +1123,7 @@ namespace PaintLab.Svg
                                     //stroke width must > 0 and stroke-color must not be transparent color 
                                     if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
                                     {
-                                        p.Draw(v1); 
+                                        p.Draw(v1);
 
                                     }
                                 }
