@@ -19,7 +19,7 @@ namespace Mini
         int myWidth = 800;
         int myHeight = 600;
         GdiBitmapBackBuffer bitmapBackBuffer;
-        PixelFarm.Drawing.Painter painter;
+        PixelFarm.Drawing.Painter _painter;
 
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
@@ -60,56 +60,51 @@ namespace Mini
                 // dimensions the same size as the drawing surface of Form1. 
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
-                //bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-
-
+                //bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height); 
                 sx = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(0, 0, bufferBmpRect.Width, bufferBmpRect.Height);
                 var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusPainter(sx);
 
                 gdiPlusCanvasPainter.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
-                painter = gdiPlusCanvasPainter;
-                painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+                _painter = gdiPlusCanvasPainter;
+                _painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             }
             else
             {
-                AggRenderSurface aggsx = CreateAggRenderSurface(myWidth, myHeight, 32);
+
+
+
+                //1. create bitmap that store pixel data
+                var actualImage = new ActualBitmap(myWidth, myHeight);
+
+                //2. create gdi bitmap that share data with the actualImage
+                bitmapBackBuffer.Initialize(myWidth, myHeight, 32, actualImage);
+                //----------------------------------------------------------------
+
+                //3. create render surface from bitmap => provide basic bitmap fill operations
+                AggRenderSurface aggsx = new AggRenderSurface(actualImage);
+                //4. painter wraps the render surface  => provide advance operations
                 AggPainter aggPainter = new AggPainter(aggsx);
-                //set text printer for agg canvas painter
+
+                //---------------------------------------------------------------
+                //Text functions
+                //5. set text printer for agg canvas painter
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
-                //TODO: review text printer here again***
-                //
+                //TODO: review text printer here again***                 
                 FontAtlasTextPrinter textPrinter = new FontAtlasTextPrinter(aggPainter);
                 //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
                 aggPainter.TextPrinter = textPrinter;
-                painter = aggPainter;
+                _painter = aggPainter;
             }
-            painter.Clear(PixelFarm.Drawing.Color.White);
+            _painter.Clear(PixelFarm.Drawing.Color.White);
         }
-        AggRenderSurface CreateAggRenderSurface(int width, int height, int bitDepth)
-        {
-            if (width > 0 && height > 0)
-            {
 
-                if (bitDepth != 32)
-                {
-                    throw new NotImplementedException("Don't support this bit depth yet.");
-                }
-                else
-                {
-                    var actualImage = new ActualBitmap(width, height);
-                    bitmapBackBuffer.Initialize(width, height, bitDepth, actualImage);
-                    return new AggRenderSurface(actualImage);
-                }
-            }
-            throw new NotSupportedException();
-        }
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
-            if (painter != null)
+            if (_painter != null)
             {
-                DemoBase.InvokePainterReady(exBase, painter);
+                DemoBase.InvokePainterReady(exBase, _painter);
             }
             //exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
         }
@@ -184,7 +179,7 @@ namespace Mini
                 //or not, if not then use img cache
                 if (exampleBase.NeedRedraw)
                 {
-                    exampleBase.Draw(painter);
+                    exampleBase.Draw(_painter);
                     exampleBase.NeedRedraw = false;
                 }
                 Graphics g = e.Graphics;
@@ -194,7 +189,7 @@ namespace Mini
             }
             else
             {
-                exampleBase.Draw(painter);
+                exampleBase.Draw(_painter);
                 Graphics g = e.Graphics;
                 IntPtr displayDC = g.GetHdc();
 
@@ -205,7 +200,7 @@ namespace Mini
         }
         void UpdateOutput()
         {
-            exampleBase.Draw(painter);
+            exampleBase.Draw(_painter);
             if (_useGdiPlusOutput)
             {
                 IntPtr destHdc = thisGfx.GetHdc();

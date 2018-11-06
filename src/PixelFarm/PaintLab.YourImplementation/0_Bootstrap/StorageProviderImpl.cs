@@ -85,7 +85,7 @@ namespace YourImplementation
                     }
                     startWriteAt -= imgW;
                 }
-                return new ActualBitmap(imgW, imgH, buffer);
+                return ActualBitmap.CreateFromCopy(imgW, imgH, buffer);
             }
             else
             {
@@ -114,7 +114,7 @@ namespace YourImplementation
                     }
                     startWriteAt += imgW;
                 }
-                return new ActualBitmap(imgW, imgH, buffer);
+                return ActualBitmap.CreateFromCopy(imgW, imgH, buffer);
             }
 
 

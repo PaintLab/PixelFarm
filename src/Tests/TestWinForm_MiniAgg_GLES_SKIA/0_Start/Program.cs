@@ -130,7 +130,7 @@ namespace Mini
             //        throw new NotSupportedException();
             //}
 
-            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromBuffer(
+            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromCopy(
                 bmp.Width,
                 bmp.Height,
                 imgBuffer

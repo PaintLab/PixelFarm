@@ -2,7 +2,7 @@
 
 using System;
 using PixelFarm.DrawingGL;
-
+using PixelFarm.CpuBlit;
 namespace Mini
 {
     class GLDemoContextWinForm
@@ -15,14 +15,30 @@ namespace Mini
         GLRenderSurface _glsx;
         GLPainter canvasPainter;
 
+        /// <summary>
+        /// agg on gles surface
+        /// </summary>
+        public bool AggOnGLES { get; set; }
+
         public void LoadGLControl(OpenTK.MyGLControl glControl)
         {
             //----------------------
             this.glControl = glControl;
-            glControl.SetGLPaintHandler(HandleGLPaint);
+            if (AggOnGLES)
+            {
+
+                SetupAggPainter();
+                glControl.SetGLPaintHandler(HandleAggOnGLESPaint);
+            }
+            else
+            {
+                glControl.SetGLPaintHandler(HandleGLPaint);
+            }
+
             hh1 = glControl.Handle; //ensure that contrl handler is created
             glControl.MakeCurrent();
         }
+
         public void LoadSample(DemoBase demobase)
         {
             this.demobase = demobase;
@@ -81,10 +97,18 @@ namespace Mini
                 () => this.glControl.GetEglSurface()
             );
             //-----------------------------------------------
-            this.glControl.SetGLPaintHandler((s, e) =>
+            if (AggOnGLES)
             {
-                demobase.InvokeGLPaint();
-            });
+
+            }
+            else
+            {
+                this.glControl.SetGLPaintHandler((s, e) =>
+                {
+                    demobase.InvokeGLPaint();
+                });
+            }
+
             DemoBase.InvokeGLContextReady(demobase, this._glsx, this.canvasPainter);
             DemoBase.InvokePainterReady(demobase, this.canvasPainter);
         }
@@ -104,11 +128,66 @@ namespace Mini
             }
             glControl.SwapBuffers();
         }
+
         public void CloseDemo()
         {
             demobase.CloseDemo();
         }
 
+
+
+        ActualBitmap _aggBmp;
+        AggPainter _aggPainter;
+        GLBitmap _glBmp;
+        void SetupAggPainter()
+        {
+            _aggBmp = new ActualBitmap(800, 600);
+            _aggPainter = AggPainter.Create(_aggBmp);
+
+            //optional if we want to print text on agg surface
+            _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
+            var aggTextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
+            _aggPainter.TextPrinter = aggTextPrinter;
+            //
+
+
+        }
+        void HandleAggOnGLESPaint(object sender, System.EventArgs e)
+        {
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Black;
+            _glsx.ClearColorBuffer();
+            //example
+            //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            //canvasPainter.FillRect(20, 20, 150, 150);
+            //load bmp image 
+            //------------------------------------------------------------------------- 
+            if (demobase != null)
+            {
+                _aggPainter.Clear(PixelFarm.Drawing.Color.White);
+                demobase.Draw(_aggPainter);
+
+                //test print some text
+                _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
+                _aggPainter.DrawString("Hello! 12345", 0, 500);
+            }
+            //------------------------------------------------------------------------- 
+            //copy from 
+            if (_glBmp == null)
+            {
+                _glBmp = new GLBitmap(_aggBmp);
+                _glBmp.IsInvert = true;
+            }
+            _glsx.DrawImage(_glBmp, 0, _aggBmp.Height);
+
+            //test print text from our GLTextPrinter
+
+            canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            canvasPainter.DrawString("Hello2", 0, 400);
+
+            //------------------------------------------------------------------------- 
+            glControl.SwapBuffers();
+        }
     }
 
 }

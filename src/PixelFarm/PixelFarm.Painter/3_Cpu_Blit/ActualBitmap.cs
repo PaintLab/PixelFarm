@@ -116,40 +116,23 @@ namespace PixelFarm.CpuBlit
         bool _pixelBufferFromExternalSrc;
 
         public ActualBitmap(int width, int height)
-        {
-            //width and height must >0 
-            this.width = width;
-            this.height = height;
-            int bytesPerPixel;
-            this._strideBytes = CalculateStride(width,
-                this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
-                out bitDepth,
-                out bytesPerPixel);
-
-            //alloc mem ***
-            _pixelBuffer = System.Runtime.InteropServices.Marshal.AllocHGlobal(_pixelBufferInBytes = (width * height * 4));
-            MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes);
-        }
-        public ActualBitmap(int width, int height, int[] orgBuffer)
-            : this(width, height)
-        {
-            //copy from managed buffer
-            System.Runtime.InteropServices.Marshal.Copy(orgBuffer, 0, _pixelBuffer, _pixelBufferInBytes / 4);
-        }
+            : this(width, height, System.Runtime.InteropServices.Marshal.AllocHGlobal(width * height * 4))
+        {   
+            _pixelBufferFromExternalSrc = false;//**
+            MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set
+        } 
         public ActualBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
-            : this(width, height)
         {
             //width and height must >0 
             this.width = width;
             this.height = height;
-            int bytesPerPixel;
             this._strideBytes = CalculateStride(width,
                 this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out bitDepth,
-                out bytesPerPixel);
+                out int bytesPerPixel);
 
-            _pixelBufferFromExternalSrc = true;
-            //alloc mem 
+            _pixelBufferInBytes = width * height * 4;
+            _pixelBufferFromExternalSrc = true; //*** 
             _pixelBuffer = externalNativeInt32Ptr;
         }
         public override void Dispose()
@@ -201,7 +184,7 @@ namespace PixelFarm.CpuBlit
         {
             System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, img._pixelBuffer, pixelBuffer.Length);
         }
-        public static ActualBitmap CreateFromBuffer(int width, int height, int[] buffer)
+        public static ActualBitmap CreateFromCopy(int width, int height, int[] buffer)
         {
             var img = new ActualBitmap(width, height);
             unsafe

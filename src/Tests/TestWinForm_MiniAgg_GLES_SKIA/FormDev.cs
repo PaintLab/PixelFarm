@@ -25,6 +25,7 @@ namespace Mini
         enum RenderBackendChoice
         {
             PureAgg,
+            AggOnGLES,
             GdiPlus,
             OpenGLES,
             SkiaMemoryBackend,
@@ -35,8 +36,11 @@ namespace Mini
 
             lstBackEndRenderer.Items.Clear();
             lstBackEndRenderer.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.AggOnGLES);
+            //
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// 
+
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
             lstBackEndRenderer.SelectedIndex = 0;//set default 
@@ -65,6 +69,7 @@ namespace Mini
                         testBed.LoadExample(exAndDesc);
                     }
                     break;
+
                 case RenderBackendChoice.GdiPlus:
                     {
                         FormTestBed testBed = new FormTestBed();
@@ -73,6 +78,36 @@ namespace Mini
                         testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
                         testBed.Show();
                         testBed.LoadExample(exAndDesc);
+                    }
+                    break;
+                case RenderBackendChoice.AggOnGLES:
+                    {
+                        DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                        if (exBase == null)
+                        {
+                            return;
+                        }
+
+                        //create form
+                        FormGLTest formGLTest = new FormGLTest();
+                        formGLTest.Text = exAndDesc.ToString();
+                        formGLTest.Show();
+                        //---------------------- 
+                        //get target control that used to present the example
+                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                        {
+                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                            glbaseDemo.AggOnGLES = true;
+                            glbaseDemo.LoadGLControl(control);
+                            glbaseDemo.LoadSample(exBase);
+                            //----------------------
+                            formGLTest.FormClosing += (s2, e2) =>
+                            {
+                                glbaseDemo.CloseDemo();
+                            };
+                        }
+
+                        formGLTest.WindowState = FormWindowState.Maximized;
                     }
                     break;
                 case RenderBackendChoice.OpenGLES: //gles 2 and 3
@@ -91,7 +126,6 @@ namespace Mini
                         //---------------------- 
                         //get target control that used to present the example
                         OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-
                         {
                             GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
                             glbaseDemo.LoadGLControl(control);
@@ -102,20 +136,6 @@ namespace Mini
                                 glbaseDemo.CloseDemo();
                             };
                         }
-                        //{
-                        //    //test another example 
-                        //    DemoBase exBase2 = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-                        //    OpenTK.MyGLControl control2 = formGLTest.InitMiniGLControl2(400, 300);
-                        //    GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                        //    glbaseDemo.LoadGLControl(control2);
-                        //    glbaseDemo.LoadSample(exBase2);
-                        //    //----------------------
-                        //    formGLTest.FormClosing += (s2, e2) =>
-                        //    {
-                        //        glbaseDemo.CloseDemo();
-                        //    };
-                        //}
-
 
                         formGLTest.WindowState = FormWindowState.Maximized;
                     }
@@ -209,7 +229,7 @@ namespace Mini
                 bmp.Save("d:\\WImageTest\\test002_2.png");
             }
         }
-        
+
 
         private void button5_Click(object sender, EventArgs e)
         {
