@@ -205,15 +205,16 @@ namespace PixelFarm.CpuBlit
                     //2. 
                     Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
                     //TODO: review reusable span generator an interpolator ***
-                    var interpolator = new SpanInterpolatorLinear();
+
 
                     // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                    interpolator.Transformer = destRectTransform.CreateInvert();
-                    var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
-
+                    _spanInterpolator.Transformer = destRectTransform.CreateInvert();
+                    _imgSpanGenBilinearClip.BackgroundColor = Drawing.Color.Black;
+                    _imgSpanGenBilinearClip.SetInterpolator(_spanInterpolator);
+                    _imgSpanGenBilinearClip.SetSrcBitmap(source);
 
                     destRectTransform.TransformToVxs(imgBoundsPath, v1);
-                    Render(v1, imgSpanGen);
+                    Render(v1, _imgSpanGenBilinearClip);
 
 
                     // this is some debug you can enable to visualize the dest bounding box
@@ -233,15 +234,22 @@ namespace PixelFarm.CpuBlit
                     var destRectTransform = new AffineMat();
                     destRectTransform.Translate(destX, destY);
                     //TODO: review reusable span generator an interpolator ***
-                    var interpolator = new SpanInterpolatorLinear();
+
                     // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004] 
                     _reuseableAffine.SetElements(destRectTransform.CreateInvert());
-                    interpolator.Transformer = _reuseableAffine;
+                    _spanInterpolator.Transformer = _reuseableAffine;
+
                     ImgSpanGen imgSpanGen = null;
                     switch (source.BitDepth)
                     {
                         case 32:
-                            imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
+
+
+
+                            _img_NN_StepX.SetInterpolator(_spanInterpolator);
+                            _img_NN_StepX.SetSrcBitmap(source);
+                            imgSpanGen = _img_NN_StepX;
+
                             break;
                         //case 24:
                         //    imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
@@ -300,22 +308,18 @@ namespace PixelFarm.CpuBlit
                 var destRectTransform = new AffineMat();
                 destRectTransform.BuildFromAffinePlans(affinePlans);
 
-                //TODO: review reusable span generator an interpolator ***
-                var spanInterpolator = new SpanInterpolatorLinear();
-
+                //TODO: review reusable span generator an interpolator *** 
                 //We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
                 _reuseableAffine.SetElements(destRectTransform.CreateInvert());
-                spanInterpolator.Transformer = _reuseableAffine;//
+                _spanInterpolator.Transformer = _reuseableAffine;
 
-                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
-                    source,
-                    Drawing.Color.Transparent,
-                    spanInterpolator);
 
+                _imgSpanGenBilinearClip.BackgroundColor = Drawing.Color.Transparent;
+                _imgSpanGenBilinearClip.SetInterpolator(_spanInterpolator);
+                _imgSpanGenBilinearClip.SetSrcBitmap(source);
                 TransformToVxs(ref destRectTransform, v1, v2);
-
-                Render(v2, imgSpanGen);
+                Render(v2, _imgSpanGenBilinearClip);
             }
         }
         public void Render(IBitmapSrc source, ICoordTransformer coordtx)
@@ -328,25 +332,23 @@ namespace PixelFarm.CpuBlit
                     source.Height, v1);
                 //**
 
-                //TODO: review reusable span generator an interpolator ***
-                var spanInterpolator = new SpanInterpolatorLinear();
+                //TODO: review reusable span generator an interpolator *** 
 
-                //We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]  
-                spanInterpolator.Transformer = coordtx.CreateInvert();//
-
-                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
-                    source,
-                    Drawing.Color.Transparent,
-                    spanInterpolator);
-
+                //We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]         
+                _spanInterpolator.Transformer = coordtx.CreateInvert();
+                _imgSpanGenBilinearClip.BackgroundColor = Color.Transparent;
+                _imgSpanGenBilinearClip.SetInterpolator(_spanInterpolator);
+                _imgSpanGenBilinearClip.SetSrcBitmap(source);
                 TransformToVxs(coordtx, v1, v2);
-
-                Render(v2, imgSpanGen);
+                Render(v2, _imgSpanGenBilinearClip);
             }
 
         }
 
         SubBitmap subBitmap = new SubBitmap();
+        SpanInterpolatorLinear _spanInterpolator = new SpanInterpolatorLinear();//reusable
+        ImgSpanGenRGBA_BilinearClip _imgSpanGenBilinearClip = new ImgSpanGenRGBA_BilinearClip(Drawing.Color.Black); //reusable
+        ImgSpanGenRGBA_NN_StepXBy1 _img_NN_StepX = new ImgSpanGenRGBA_NN_StepXBy1();
         public void Render(IBitmapSrc source, double destX, double destY, double srcX, double srcY, double srcW, double srcH)
         {
             //copy some part of src img to destination
@@ -450,22 +452,23 @@ namespace PixelFarm.CpuBlit
                 using (VxsTemp.Borrow(out var imgBoundsPath, out var v1))
                 {
                     BuildOrgImgRectVxs(source.Width, source.Height, imgBoundsPath);
-                    //Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height,
-                    //    destX, destY, ox, oy, scaleX, scaleY, angleRadians, imgBoundsPath);
-
                     Affine destRectTransform = CreateAffine(destX, destY, ox, oy, scaleX, scaleY, angleRadians);
-                    //TODO: review reusable span generator an interpolator ***
-                    var spanInterpolator = new SpanInterpolatorLinear();
-                    // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                    spanInterpolator.Transformer = destRectTransform.CreateInvert();
 
-                    var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
-                        source,
-                        Drawing.Color.Black,
-                        spanInterpolator);
+                    //TODO: review reusable span generator an interpolator ***
+
+                    // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                    //spanInterpolator.Transformer = destRectTransform.CreateInvert();
+
+                    //var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+                    //    Drawing.Color.Black,
+                    //    spanInterpolator);
+                    _spanInterpolator.Transformer = destRectTransform.CreateInvert();
+                    _imgSpanGenBilinearClip.SetInterpolator(_spanInterpolator);
+                    _imgSpanGenBilinearClip.SetSrcBitmap(source);
+
                     destRectTransform.TransformToVxs(imgBoundsPath, v1);
 
-                    Render(v1, imgSpanGen);
+                    Render(v1, _imgSpanGenBilinearClip);
                 }
 
 
@@ -509,18 +512,21 @@ namespace PixelFarm.CpuBlit
                     Affine destRectTransform = CreateAffine(destX, destY);
 
                     //TODO: review reusable span generator an interpolator ***
-                    var interpolator = new SpanInterpolatorLinear();
+
 
                     // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                    interpolator.Transformer = destRectTransform.CreateInvert();
 
+                    _spanInterpolator.Transformer = destRectTransform.CreateInvert();
                     //we generate image by this imagespan generator
 
                     ImgSpanGen imgSpanGen = null;
                     switch (source.BitDepth)
                     {
                         case 32:
-                            imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
+                             
+                            _img_NN_StepX.SetInterpolator(_spanInterpolator);
+                            _img_NN_StepX.SetSrcBitmap(source);
+                            imgSpanGen = _img_NN_StepX;
                             break;
                         //case 8:
                         //    imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);

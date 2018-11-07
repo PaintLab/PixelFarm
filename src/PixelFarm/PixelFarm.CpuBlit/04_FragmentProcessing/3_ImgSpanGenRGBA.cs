@@ -42,16 +42,18 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
         IBitmapSrc _bmpSrc;
-        public ImgSpanGenRGBA_NN_StepXBy1(IBitmapSrc src, ISpanInterpolator spanInterpolator)
-            : base(spanInterpolator)
+        public ImgSpanGenRGBA_NN_StepXBy1()
         {
-            _bmpSrc = src;
-            if (_bmpSrc.BitDepth != 32)
+           
+        }
+        public void SetSrcBitmap(IBitmapSrc src)
+        {
+            if (src.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
+            _bmpSrc = src;
         }
-
         public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = Interpolator;
@@ -129,16 +131,16 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         bool _mode0 = false;
 
 
-        public ImgSpanGenRGBA_BilinearClip(IBitmapSrc src,
-            Drawing.Color back_color,
-            ISpanInterpolator inter)
-            : base(inter)
+        public ImgSpanGenRGBA_BilinearClip(Drawing.Color back_color)
         {
-            m_bgcolor = back_color;
+            m_bgcolor = back_color; 
+        }
+
+        public void SetSrcBitmap(IBitmapSrc src)
+        {
             _imgsrc = src;
             bytesBetweenPixelInclusive = _imgsrc.BytesBetweenPixelsInclusive;
         }
-
         public override void Prepare()
         {
             base.Prepare();
