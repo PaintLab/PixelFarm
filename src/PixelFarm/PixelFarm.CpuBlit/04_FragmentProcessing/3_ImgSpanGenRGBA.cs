@@ -33,7 +33,7 @@ using img_subpix_const = PixelFarm.CpuBlit.Imaging.ImageFilterLookUpTable.ImgSub
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    public class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
+    class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
     {
 
         //a span generator generates output color spans => 
@@ -44,8 +44,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         IBitmapSrc _bmpSrc;
         public ImgSpanGenRGBA_NN_StepXBy1()
         {
-           
-        }
+
+        } 
         public void SetSrcBitmap(IBitmapSrc src)
         {
             if (src.BitDepth != 32)
@@ -53,6 +53,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
             _bmpSrc = src;
+        }
+        public void ReleaseSrcBitmap()
+        {
+            _bmpSrc = null;
         }
         public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
@@ -120,7 +124,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
 
 
-    public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
+    class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
@@ -128,18 +132,21 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         IBitmapSrc _imgsrc;
         Drawing.Color m_bgcolor;
         int bytesBetweenPixelInclusive;
-        bool _mode0 = false;
-
+        bool _mode0 = false; 
 
         public ImgSpanGenRGBA_BilinearClip(Drawing.Color back_color)
         {
-            m_bgcolor = back_color; 
+            m_bgcolor = back_color;
         }
 
         public void SetSrcBitmap(IBitmapSrc src)
         {
             _imgsrc = src;
             bytesBetweenPixelInclusive = _imgsrc.BytesBetweenPixelsInclusive;
+        }
+        public void ReleaseSrcBitmap()
+        {
+            _imgsrc = null;
         }
         public override void Prepare()
         {
