@@ -106,6 +106,21 @@ namespace LayoutFarm.UI
             }
         }
 
+        public virtual void RemoveSelf()
+        {
+            if (CurrentPrimaryRenderElement == null) { return; }
+
+            var parentBox = this.CurrentPrimaryRenderElement.ParentRenderElement as LayoutFarm.RenderElement;
+            if (parentBox != null)
+            {
+                parentBox.RemoveChild(this.CurrentPrimaryRenderElement);
+            }
+            this.InvalidateOuterGraphics();
+        }
+        public virtual void InvalidateOuterGraphics()
+        {
+            
+        }
 
         public virtual bool Visible
         {
