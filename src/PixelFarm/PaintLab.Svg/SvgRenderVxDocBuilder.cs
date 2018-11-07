@@ -141,6 +141,7 @@ namespace PaintLab.Svg
         {
             //paint with painter interface
         }
+        public abstract WellknownSvgElementName ElemName { get; }
         public virtual void Walk(VgPaintArgs p) { }
 
         /// <summary>
@@ -162,6 +163,7 @@ namespace PaintLab.Svg
         {
             return new VgTextNodeRenderElement { TextContent = this.TextContent };
         }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.Text;
     }
 
 
@@ -364,10 +366,8 @@ namespace PaintLab.Svg
             _visualSpec = visualSpec;
             _renderRoot = renderRoot;
         }
-        public WellknownSvgElementName ElemName
-        {
-            get { return _wellknownName; }
-        }
+
+        public override WellknownSvgElementName ElemName => _wellknownName;
         public void SetController(object o)
         {
             _controller = o;
@@ -1270,6 +1270,7 @@ namespace PaintLab.Svg
         {
             return new SvgForeignNode { _foriegnNode = this._foriegnNode };
         }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
 
     }
 

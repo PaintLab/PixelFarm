@@ -96,6 +96,11 @@ namespace PaintLab.Svg
         /// use
         /// </summary>
         Use,
+
+        /// <summary>
+        /// my extension
+        /// </summary>
+        ForeignNode
     }
 
 
