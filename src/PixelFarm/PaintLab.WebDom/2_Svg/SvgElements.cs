@@ -270,6 +270,11 @@ namespace PaintLab.Svg
             get { return _rootElement; }
         }
         public CssActiveSheet CssActiveSheet { get; set; }
+
+
+        //hint
+        public string OriginalContent { get; set; }
+        public string OriginalFilename { get; set; }
     }
 
     public class SvgDocBuilder : ISvgDocBuilder

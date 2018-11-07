@@ -1285,6 +1285,7 @@ namespace PaintLab.Svg
         public SvgRenderElement _renderE;
         public ICoordTransformer _coordTx;
 
+
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -1306,6 +1307,7 @@ namespace PaintLab.Svg
             _boundRect = new RectD(this.X, this.Y, 2, 2);
         }
 
+        
         public RectD GetBounds()
         {
 
@@ -1332,7 +1334,6 @@ namespace PaintLab.Svg
             return this._boundRect;
 
         }
-
         public bool HasBitmapSnapshot { get; internal set; }
 
         public Image BackingImage { get { return _backimg; } }
@@ -1347,6 +1348,8 @@ namespace PaintLab.Svg
 
         public float X { get; set; }
         public float Y { get; set; }
+
+        public SvgDocument OwnerDocument { get; set; } //optional
     }
 
 
