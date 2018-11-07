@@ -133,6 +133,9 @@ namespace LayoutFarm.UI
             //test on previous chain first , find common element 
             hitPointChain.ClearAll();
             hitPointChain.SetStartTestPoint(x, y);
+#if DEBUG
+            hitPointChain.dbugHitPhase = _dbugHitChainPhase;
+#endif
             //if (this.dbugId > 0 && isDragging && previousChain.Count > 1)
             //{
 
@@ -176,6 +179,11 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseWheel(UIMouseEventArgs e)
         {
         }
+
+#if DEBUG
+
+        dbugHitChainPhase _dbugHitChainPhase;
+#endif
         void IEventPortal.PortalMouseDown(UIMouseEventArgs e)
         {
 #if DEBUG
@@ -189,8 +197,8 @@ namespace LayoutFarm.UI
             int local_msgVersion = 1;
 #endif 
             HitChain hitPointChain = GetFreeHitChain();
-#if DEBUG
-            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseDown;
+#if DEBUG 
+            _dbugHitChainPhase = dbugHitChainPhase.MouseDown;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
 
@@ -284,7 +292,8 @@ namespace LayoutFarm.UI
         {
             HitChain hitPointChain = GetFreeHitChain();
 #if DEBUG
-            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseMove;
+
+            _dbugHitChainPhase = dbugHitChainPhase.MouseMove;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             this._previousChain.ClearAll();
@@ -352,7 +361,8 @@ namespace LayoutFarm.UI
 
             HitChain hitPointChain = GetFreeHitChain();
 #if DEBUG
-            hitPointChain.dbugHitPhase = dbugHitChainPhase.MouseUp;
+
+            _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
             int hitCount = hitPointChain.Count;
