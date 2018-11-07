@@ -259,12 +259,11 @@ namespace LayoutFarm.UI
         {
             this.rootgfx.TopWindowRenderBox.AddChild(vi);
         }
-
-
         static IntPtr s_tmpHandle;
-        public void AddChild(RenderElement vi, object owner)
+
+        public void AddChild(RenderElement renderElem, object owner)
         {
-            if (vi is RenderBoxBase)
+            if (renderElem is RenderBoxBase)
             {
                 if (owner is ITopWindowBox)
                 {
@@ -288,9 +287,9 @@ namespace LayoutFarm.UI
                         UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
-                        vi.ResetRootGraphics(newSurfaceViewport.RootGfx);
-                        vi.SetLocation(0, 0);
-                        newSurfaceViewport.AddChild(vi);
+                        renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
+                        renderElem.SetLocation(0, 0);
+                        newSurfaceViewport.AddChild(renderElem);
                         //-----------------------------------------------------                        
                         s_tmpHandle = newForm.Handle;//force newform to create window handle
 
@@ -310,14 +309,15 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    this.rootgfx.TopWindowRenderBox.AddChild(vi);
+                    this.rootgfx.TopWindowRenderBox.AddChild(renderElem);
                 }
             }
             else
             {
-                this.rootgfx.TopWindowRenderBox.AddChild(vi);
+                this.rootgfx.TopWindowRenderBox.AddChild(renderElem);
             }
         }
+ 
 
         PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
         bool _hasInvalidateAreaAccum;
