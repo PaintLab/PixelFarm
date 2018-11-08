@@ -107,16 +107,10 @@ namespace PixelFarm.CpuBlit.Rasterization
             Closed
         }
 
+         
 
-        int _renderSurfaceW;
-        int _renderSurfaceH;
-        //bool _filpY;
-
-        public ScanlineRasterizer(int w, int h)
-        {
-            this._renderSurfaceW = w;
-            this._renderSurfaceH = h;
-            //_filpY = true;
+        public ScanlineRasterizer()
+        { 
 
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);

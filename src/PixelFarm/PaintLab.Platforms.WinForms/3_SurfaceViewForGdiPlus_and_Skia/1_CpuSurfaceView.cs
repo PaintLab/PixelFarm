@@ -8,7 +8,7 @@ namespace LayoutFarm.UI
     {
         //this ui support gdi+ and skia on WinForms
 
-        TopWindowBridgeWinForm winBridge;
+        TopWindowBridgeWinForm _winBridge;
         public CpuSurfaceView()
         {
             InitializeComponent();
@@ -17,90 +17,90 @@ namespace LayoutFarm.UI
         public void Bind(TopWindowBridgeWinForm winBridge)
         {
             //1. 
-            this.winBridge = winBridge;
-            this.winBridge.BindWindowControl(this);
+            this._winBridge = winBridge;
+            this._winBridge.BindWindowControl(this);
         }
 #if DEBUG
         public IdbugOutputWindow IdebugOutputWin
         {
-            get { return this.winBridge; }
+            get { return this._winBridge; }
         }
 #endif
         protected override void OnSizeChanged(EventArgs e)
         {
-            if (this.winBridge != null)
+            if (this._winBridge != null)
             {
-                this.winBridge.UpdateCanvasViewportSize(this.Width, this.Height);
+                this._winBridge.UpdateCanvasViewportSize(this.Width, this.Height);
             }
             base.OnSizeChanged(e);
         }
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            this.winBridge.HandleMouseEnterToViewport();
+            this._winBridge.HandleMouseEnterToViewport();
             base.OnMouseEnter(e);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
-            this.winBridge.HandleMouseLeaveFromViewport();
+            this._winBridge.HandleMouseLeaveFromViewport();
             base.OnMouseLeave(e);
         }
         //-----------------------------------------------------------------------------
         protected override void OnGotFocus(EventArgs e)
         {
-            this.winBridge.HandleGotFocus(e);
+            this._winBridge.HandleGotFocus(e);
             base.OnGotFocus(e);
         }
         protected override void OnLostFocus(EventArgs e)
         {
-            this.winBridge.HandleGotFocus(e);
+            this._winBridge.HandleGotFocus(e);
             base.OnLostFocus(e);
         }
 
         protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs e)
         {
-            this.winBridge.HandleMouseDown(e);
+            this._winBridge.HandleMouseDown(e);
             base.OnMouseDown(e);
         }
         protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
-            this.winBridge.HandleMouseMove(e);
+            this._winBridge.HandleMouseMove(e);
             base.OnMouseMove(e);
         }
         protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
-            this.winBridge.HandleMouseUp(e);
+            this._winBridge.HandleMouseUp(e);
             base.OnMouseUp(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            this.winBridge.PaintToOutputWindow2(e.ClipRectangle.ToRect());
+            this._winBridge.PaintToOutputWindow2(e.ClipRectangle.ToRect());
             base.OnPaint(e);
         }
 
         protected override void OnMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
-            this.winBridge.HandleMouseWheel(e);
+            this._winBridge.HandleMouseWheel(e);
             //not call to base class
         }
         protected override void OnKeyDown(System.Windows.Forms.KeyEventArgs e)
         {
-            this.winBridge.HandleKeyDown(e);
+            this._winBridge.HandleKeyDown(e);
             base.OnKeyDown(e);
         }
         protected override void OnKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
-            this.winBridge.HandleKeyUp(e);
+            this._winBridge.HandleKeyUp(e);
             base.OnKeyUp(e);
         }
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
-            this.winBridge.HandleKeyPress(e);
+            this._winBridge.HandleKeyPress(e);
         }
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            if (this.winBridge.HandleProcessDialogKey(keyData))
+            if (this._winBridge.HandleProcessDialogKey(keyData))
             {
                 return true;
             }
@@ -109,7 +109,7 @@ namespace LayoutFarm.UI
 
         void CpuGdiPlusSurfaceView_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            this.winBridge.HandleMouseWheel(e);
+            this._winBridge.HandleMouseWheel(e);
         }
     }
 }

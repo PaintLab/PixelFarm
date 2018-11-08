@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.Drawing.Fonts;
 
 
@@ -15,7 +14,7 @@ namespace Mini
 
     partial class TestCanvasUserControl : UserControl
     {
-         
+
         //this user control is for test only.
         //in HtmlRenderer we use UISurfaceViewportControl
 
