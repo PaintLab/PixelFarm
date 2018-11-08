@@ -28,6 +28,8 @@ namespace Mini
             AggOnGLES,
             GdiPlus,
             OpenGLES,
+
+            OpenGLES_OnFormTestBed,
             SkiaMemoryBackend,
             SkiaGLBackend,
         }
@@ -39,10 +41,12 @@ namespace Mini
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.AggOnGLES);
             //
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// 
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// legacy ***
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES_OnFormTestBed); //legacy , for test only
 
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
+
             lstBackEndRenderer.SelectedIndex = 0;//set default 
             lstBackEndRenderer.DoubleClick += (s, e) => listBox1_DoubleClick(null, EventArgs.Empty);
         }
@@ -124,12 +128,10 @@ namespace Mini
                         testBed.LoadSurfaceControl(ctrl);
                         testBed.Show();
                         testBed.LoadExample(exAndDesc, demo);
-                      
 
                         OpenTK.MyGLControl myGLControl1 = new OpenTK.MyGLControl();
                         myGLControl1.SetBounds(0, 0, 800, 600);
                         testBed.LoadSurfaceControl(myGLControl1);
-
 
                         GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
                         glbaseDemo.AggOnGLES = true;
@@ -139,7 +141,64 @@ namespace Mini
                         {
                             glbaseDemo.CloseDemo();
                         };
-                     
+
+                    }
+                    break;
+                case RenderBackendChoice.OpenGLES: //gles 2 and 3
+                    {
+                        DemoBase demo = InitDemo(exAndDesc);
+                        if (demo == null) { return; }
+
+                        FormTestBed testBed = new FormTestBed();
+                        testBed.WindowState = FormWindowState.Maximized;
+                        TestCanvasUserControl ctrl = CreateCpuBlitSurfaceViewport(true, chkGdiAntiAlias.Checked);
+                        testBed.LoadSurfaceControl(ctrl);
+                        testBed.Show();
+                        testBed.LoadExample(exAndDesc, demo);
+
+                        OpenTK.MyGLControl myGLControl1 = new OpenTK.MyGLControl();
+                        myGLControl1.SetBounds(0, 0, 800, 600);
+                        testBed.LoadSurfaceControl(myGLControl1);
+
+                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        glbaseDemo.AggOnGLES = false;
+                        glbaseDemo.LoadGLControl(myGLControl1);
+                        glbaseDemo.LoadSample(demo);
+                        testBed.FormClosing += (s2, e2) =>
+                        {
+                            glbaseDemo.CloseDemo();
+                        };
+                    }
+                    break;
+                case RenderBackendChoice.OpenGLES_OnFormTestBed:
+                    {
+                        //create demo
+                        DemoBase demo = InitDemo(exAndDesc);
+                        if (demo == null) { return; }
+
+
+                        //create form
+                        FormGLTest formGLTest = new FormGLTest();
+                        formGLTest.Text = exAndDesc.ToString();
+                        formGLTest.Show();
+                        //---------------------- 
+                        //get target control that used to present the example
+                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                        {
+                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                            glbaseDemo.LoadGLControl(control);
+                            glbaseDemo.LoadSample(demo);
+                            //----------------------
+                            formGLTest.FormClosing += (s2, e2) =>
+                            {
+                                glbaseDemo.CloseDemo();
+                            };
+                        }
+
+                        formGLTest.WindowState = FormWindowState.Maximized;
+
+
+
 
                         //////create form
                         //FormGLTest formGLTest = new FormGLTest();
@@ -162,36 +221,7 @@ namespace Mini
                         //formGLTest.WindowState = FormWindowState.Maximized;
                     }
                     break;
-                case RenderBackendChoice.OpenGLES: //gles 2 and 3
-                    {
-                        //create demo
-                        DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-                        if (exBase == null)
-                        {
-                            return;
-                        }
 
-                        //create form
-                        FormGLTest formGLTest = new FormGLTest();
-                        formGLTest.Text = exAndDesc.ToString();
-                        formGLTest.Show();
-                        //---------------------- 
-                        //get target control that used to present the example
-                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                        {
-                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                            glbaseDemo.LoadGLControl(control);
-                            glbaseDemo.LoadSample(exBase);
-                            //----------------------
-                            formGLTest.FormClosing += (s2, e2) =>
-                            {
-                                glbaseDemo.CloseDemo();
-                            };
-                        }
-
-                        formGLTest.WindowState = FormWindowState.Maximized;
-                    }
-                    break;
 #if SKIA_ENABLE
                 case RenderBackendChoice.SkiaMemoryBackend:
                     {
@@ -213,11 +243,7 @@ namespace Mini
                 default:
                     throw new NotSupportedException();
             }
-
-
         }
-
-
         static void LoadSamplesFromAssembly(Type srcType, List<ExampleAndDesc> outputList)
         {
             //load examples
