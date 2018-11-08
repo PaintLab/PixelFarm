@@ -75,10 +75,11 @@ namespace LayoutFarm.UI
         }
 #if GL_ENABLE
         IntPtr hh1;
-        OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
+        OpenGL.GpuOpenGLSurfaceView _openGLSurfaceView;
         GLRenderSurface _glsx;
         GLPainter canvasPainter;
 #endif
+
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
@@ -96,6 +97,10 @@ namespace LayoutFarm.UI
             ////draw data 
 
             //openGLSurfaceView.SwapBuffers();
+        }
+        public OpenTK.MyGLControl GetOpenTKControl()
+        {
+            return _openGLSurfaceView;
         }
         public void InitRootGraphics(
             RootGraphic rootgfx,
@@ -122,7 +127,7 @@ namespace LayoutFarm.UI
 
                         view.Width = 1200;
                         view.Height = 1200;
-                        openGLSurfaceView = view;
+                        _openGLSurfaceView = view;
                         //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
                         //this.panel1.Visible = true;
@@ -232,7 +237,7 @@ namespace LayoutFarm.UI
         public void PaintMe()
         {
             this.winBridge.PaintToOutputWindow();
-        } 
+        }
         public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
         {
             winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
@@ -314,7 +319,7 @@ namespace LayoutFarm.UI
                 this.rootgfx.TopWindowRenderBox.AddChild(renderElem);
             }
         }
- 
+
 
         PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
         bool _hasInvalidateAreaAccum;

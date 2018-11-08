@@ -49,6 +49,7 @@
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs">
       <Link>0_Start\StorageProviderImpl.cs</Link>
     </Compile>
+    <Compile Include="0_Start\CpuBlitContextWinForm.cs" />
     <Compile Include="0_Start\GLDemoContextWinForm.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
@@ -176,12 +177,6 @@
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
     <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCanvasUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TestCanvasUserControl.Designer.cs">
-      <DependentUpon>TestCanvasUserControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Experiment\xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
@@ -217,10 +212,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TestCanvasUserControl.resx">
-      <DependentUpon>TestCanvasUserControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -244,6 +235,14 @@
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
       <Name>LayoutFarm.YourBasicCustomWidgets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
+      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
+      <Name>PaintLab.AbstractPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
+      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
+      <Name>PaintLab.Platforms.WinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg\PaintLab.Svg.csproj">
       <Project>{466dd2ae-eadc-4e20-82b3-da6d018006c5}</Project>
