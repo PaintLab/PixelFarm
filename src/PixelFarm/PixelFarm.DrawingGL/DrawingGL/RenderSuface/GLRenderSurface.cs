@@ -43,7 +43,7 @@ namespace PixelFarm.DrawingGL
         SmoothBorderBuilder smoothBorderBuilder = new SmoothBorderBuilder();
 
 
-        internal GLRenderSurface(int width, int height)
+        internal GLRenderSurface(int width, int height, int viewportW, int viewportH)
         {
             //-------------
             //y axis points upward (like other OpenGL)
@@ -53,12 +53,16 @@ namespace PixelFarm.DrawingGL
 
             this._width = width;
             this._height = height;
+            _vwWidth = viewportW;
+            _vwHeight = viewportH;
+
+
             //setup viewport size,
             //we need W:H ratio= 1:1 , square viewport
             int max = Math.Max(width, height);
             orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
 
-            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -height, 0));
+            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0));
             orthoAndFlip = orthoView * flipVerticalView;
             //-----------------------------------------------------------------------
             _shareRes = new ShaderSharedResource();
@@ -101,6 +105,7 @@ namespace PixelFarm.DrawingGL
             GL.ClearColor(1, 1, 1, 1);
             //-------------------------------------------------------------------------------
             GL.Viewport(0, 0, width, height);
+            FlipY = true;
         }
 
 

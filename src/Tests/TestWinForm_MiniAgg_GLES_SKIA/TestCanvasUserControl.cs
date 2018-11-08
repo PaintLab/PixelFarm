@@ -12,8 +12,13 @@ using PixelFarm.Drawing.Fonts;
 namespace Mini
 {
 
-    public partial class TestCanvasUserControl : UserControl
+
+    partial class TestCanvasUserControl : UserControl
     {
+
+        //this user control is for test only.
+        //in HtmlRenderer we use UISurfaceViewportControl
+
         bool _isMouseDown;
         DemoBase _exampleBase;
         int _myWidth = 800;

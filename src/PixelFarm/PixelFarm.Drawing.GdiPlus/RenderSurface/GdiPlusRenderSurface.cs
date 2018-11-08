@@ -832,7 +832,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             if (_painter == null)
             {
-
+                
 
                 CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);

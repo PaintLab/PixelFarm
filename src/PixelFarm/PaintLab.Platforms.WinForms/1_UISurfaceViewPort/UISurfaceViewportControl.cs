@@ -232,6 +232,10 @@ namespace LayoutFarm.UI
         public void PaintMe()
         {
             this.winBridge.PaintToOutputWindow();
+        } 
+        public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
+        {
+            winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
         }
 
 #if DEBUG
@@ -239,13 +243,6 @@ namespace LayoutFarm.UI
         {
             this.winBridge.dbugPaintToOutputWindowFullMode();
         }
-#endif
-        public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
-        {
-            winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
-        }
-
-#if DEBUG
         public IdbugOutputWindow IdebugOutputWin
         {
             get { return this.winBridge; }
