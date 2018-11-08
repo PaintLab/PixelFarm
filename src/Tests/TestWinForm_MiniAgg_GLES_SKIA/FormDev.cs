@@ -6,7 +6,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PixelFarm.CpuBlit;
-using PixelFarm.Drawing;
+
+
 namespace Mini
 {
     partial class FormDev : Form
@@ -53,12 +54,12 @@ namespace Mini
 
         TestCanvasUserControl CreateCpuBlitSurfaceViewport(bool useGdiAntialias, bool useGdiPlusOutput)
         {
-            var softAggControl2 = new TestCanvasUserControl();
-            softAggControl2.Width = 800;
-            softAggControl2.Height = 600;
-            softAggControl2.UseGdiAntiAlias = useGdiAntialias;
-            softAggControl2.UseGdiPlusOutput = useGdiPlusOutput;
-            return softAggControl2;
+            var testCanvasUserControl = new TestCanvasUserControl();
+            testCanvasUserControl.Width = 800;
+            testCanvasUserControl.Height = 600;
+            testCanvasUserControl.UseGdiAntiAlias = useGdiAntialias;
+            testCanvasUserControl.UseGdiPlusOutput = useGdiPlusOutput;
+            return testCanvasUserControl;
         }
 
         static DemoBase InitDemo(ExampleAndDesc exampleAndDesc)
