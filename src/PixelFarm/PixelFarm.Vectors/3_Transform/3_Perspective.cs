@@ -40,8 +40,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _left.Transform(ref x, ref y);
             _right.Transform(ref x, ref y);
         }
+        ICoordTransformer ICoordTransformer.CreateInvert()
+        {
+            //TODO: impl 
+            throw new System.NotSupportedException();
+        }
     }
-
     public sealed class Perspective : ICoordTransformer
     {
         const double EPSILON = 1e-14;
@@ -190,6 +194,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return true;
         }
 
+        ICoordTransformer ICoordTransformer.CreateInvert()
+        {
+            Perspective newOne = new Perspective(this);
+            if (newOne.invert())
+            {
+                return newOne;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 
         // Map square (0,0,1,1) to the quadrilateral and vice versa

@@ -47,9 +47,6 @@ namespace PixelFarm.DrawingGL
             UseVertexBufferObjectForRenderVx = true;
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
-
-
-
         }
         public override void SetClipRgn(VertexStore vxs)
         {
@@ -314,16 +311,26 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
-            //TODO: affinePlans
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+            //TODO: affinePlans***
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
             }
         }
+        public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
+        {
+            //TODO: implement transformation matrix
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
+            if (glBmp != null)
+            {
+                _glsx.DrawImage(glBmp, 0, 0);
+            }
+        }
+
         public override void DrawImage(Image actualImage)
         {
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);

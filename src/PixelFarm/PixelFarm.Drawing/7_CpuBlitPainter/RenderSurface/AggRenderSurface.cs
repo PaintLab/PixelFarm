@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit
 
             this._destBitmapBlender = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
-            this._sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
+            this._sclineRas = new ScanlineRasterizer();
             this._bmpRasterizer = new DestBitmapRasterizer();
             //
             this.destWidth = destImage.Width;

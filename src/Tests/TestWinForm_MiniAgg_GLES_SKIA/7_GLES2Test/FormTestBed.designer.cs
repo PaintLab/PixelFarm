@@ -30,7 +30,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.softAggControl2 = new Mini.TestCanvasUserControl();
+           
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -49,7 +49,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.softAggControl2);
+            
             this.splitContainer1.Size = new System.Drawing.Size(928, 507);
             this.splitContainer1.SplitterDistance = 214;
             this.splitContainer1.TabIndex = 3;
@@ -73,15 +73,7 @@
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(214, 507);
             this.flowLayoutPanel1.TabIndex = 0;
-            // 
-            // softAggControl2
-            // 
-            this.softAggControl2.BackColor = System.Drawing.Color.White;
-            this.softAggControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.softAggControl2.Location = new System.Drawing.Point(0, 0);
-            this.softAggControl2.Name = "softAggControl2";
-            this.softAggControl2.Size = new System.Drawing.Size(710, 507);
-            this.softAggControl2.TabIndex = 3;
+ 
             // 
             // FormTestBed1
             // 
@@ -102,8 +94,7 @@
 
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Panel panel1;
-        private TestCanvasUserControl softAggControl2;
+        private System.Windows.Forms.Panel panel1; 
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

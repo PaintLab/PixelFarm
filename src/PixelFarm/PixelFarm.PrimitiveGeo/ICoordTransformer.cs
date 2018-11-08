@@ -34,6 +34,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         void Transform(ref double x, ref double y);
         ICoordTransformer MultiplyWith(ICoordTransformer another);
+        ICoordTransformer CreateInvert();
     }
 
 }

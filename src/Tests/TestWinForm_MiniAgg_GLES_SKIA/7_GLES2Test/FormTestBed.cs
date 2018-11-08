@@ -8,37 +8,30 @@ namespace Mini
 {
     partial class FormTestBed : Form
     {
-        DemoBase exampleBase;
+
         List<ExampleConfigDesc> configList;
         public FormTestBed()
         {
             InitializeComponent();
+
         }
+        TestCanvasUserControl _cpuBlitControl;
         void InvalidateSampleViewPort()
         {
-            this.softAggControl2.Invalidate();
+            _cpuBlitControl?.Invalidate();
         }
-        public bool UseGdiPlusOutput
+        public void LoadSurfaceControl(Control ctrl)
         {
-            get { return softAggControl2.UseGdiPlusOutput; }
-            set { softAggControl2.UseGdiPlusOutput = value; }
+            this.splitContainer1.Panel2.Controls.Clear();
+            this.splitContainer1.Panel2.Controls.Add(ctrl);
+            _cpuBlitControl = ctrl as TestCanvasUserControl;
         }
-        public bool UseGdiAntiAlias
-        {
-            get { return softAggControl2.UseGdiAntiAlias; }
-            set { softAggControl2.UseGdiAntiAlias = value; }
-        }
-        public void LoadExample(ExampleAndDesc exAndDesc)
-        {
-            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-            if (exBase == null)
-            {
-                return;
-            }
 
-            this.exampleBase = exBase;
-            exampleBase.Init();
-            this.softAggControl2.LoadExample(exampleBase);
+        DemoBase _exampleBase;
+        public void LoadExample(ExampleAndDesc exAndDesc, DemoBase exBase)
+        {
+
+            _exampleBase = exBase;
             this.Text = exAndDesc.ToString();
             //-------------------------------------------
             //description:
@@ -69,11 +62,11 @@ namespace Mini
                                 CheckBox checkBox = new CheckBox();
                                 checkBox.Text = config.Name;
                                 checkBox.Width = 400;
-                                bool currentValue = (bool)config.InvokeGet(exampleBase);
+                                bool currentValue = (bool)config.InvokeGet(_exampleBase);
                                 checkBox.Checked = currentValue;
                                 checkBox.CheckedChanged += (s, e) =>
                                 {
-                                    config.InvokeSet(exBase, checkBox.Checked);
+                                    config.InvokeSet(_exampleBase, checkBox.Checked);
                                     InvalidateSampleViewPort();
                                 };
                                 this.flowLayoutPanel1.Controls.Add(checkBox);
@@ -91,13 +84,13 @@ namespace Mini
                                 hscrollBar.Maximum = originalConfig.MaxValue + 10;
                                 hscrollBar.SmallChange = 1;
                                 //current value
-                                int value = (int)config.InvokeGet(exampleBase);
+                                int value = (int)config.InvokeGet(_exampleBase);
                                 hscrollBar.Value = value;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + hscrollBar.Value;
                                 hscrollBar.ValueChanged += (s, e) =>
                                 {
-                                    config.InvokeSet(exampleBase, hscrollBar.Value);
+                                    config.InvokeSet(_exampleBase, hscrollBar.Value);
                                     descLabel.Text = config.Name + ":" + hscrollBar.Value;
                                     InvalidateSampleViewPort();
                                 };
@@ -119,14 +112,14 @@ namespace Mini
                                 hscrollBar.SmallChange = 1;
                                 //current value
 
-                                float doubleValue = ((float)config.InvokeGet(exampleBase) * 100);
+                                float doubleValue = ((float)config.InvokeGet(_exampleBase) * 100);
                                 hscrollBar.Value = (int)doubleValue;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + ((float)hscrollBar.Value / 100d).ToString();
                                 hscrollBar.ValueChanged += (s, e) =>
                                 {
                                     float value = (float)(hscrollBar.Value / 100f);
-                                    config.InvokeSet(exampleBase, value);
+                                    config.InvokeSet(_exampleBase, value);
                                     descLabel.Text = config.Name + ":" + value.ToString();
                                     InvalidateSampleViewPort();
                                 };
@@ -148,14 +141,14 @@ namespace Mini
                                 hscrollBar.SmallChange = 1;
                                 //current value
 
-                                double doubleValue = ((double)config.InvokeGet(exampleBase) * 100);
+                                double doubleValue = ((double)config.InvokeGet(_exampleBase) * 100);
                                 hscrollBar.Value = (int)doubleValue;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
                                 hscrollBar.ValueChanged += (s, e) =>
                                 {
                                     double value = (double)hscrollBar.Value / 100d;
-                                    config.InvokeSet(exampleBase, value);
+                                    config.InvokeSet(_exampleBase, value);
                                     descLabel.Text = config.Name + ":" + value.ToString();
                                     InvalidateSampleViewPort();
                                 };
@@ -169,7 +162,7 @@ namespace Mini
                                 int totalHeight = 0;
                                 int m = optionFields.Count;
                                 //current value 
-                                int currentValue = (int)config.InvokeGet(exampleBase);
+                                int currentValue = (int)config.InvokeGet(_exampleBase);
                                 for (int n = 0; n < m; ++n)
                                 {
                                     ExampleConfigValue ofield = optionFields[n];
@@ -182,7 +175,7 @@ namespace Mini
                                     {
                                         if (radio.Checked)
                                         {
-                                            ofield.InvokeSet(this.exampleBase);
+                                            ofield.InvokeSet(this._exampleBase);
                                             InvalidateSampleViewPort();
                                         }
                                     };

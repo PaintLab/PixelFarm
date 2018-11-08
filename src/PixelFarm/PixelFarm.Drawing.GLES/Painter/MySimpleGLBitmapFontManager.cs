@@ -1,5 +1,5 @@
 ﻿////MIT, 2016-present, WinterDev 
-#if GL_ENABLE
+  
 
 
 using PixelFarm.Drawing.Fonts;
@@ -25,4 +25,4 @@ namespace PixelFarm.DrawingGL
     }
 }
 
-#endif
+ 

@@ -832,6 +832,8 @@ namespace PixelFarm.Drawing.WinGdi
 
             if (_painter == null)
             {
+                
+
 
 
                 CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);

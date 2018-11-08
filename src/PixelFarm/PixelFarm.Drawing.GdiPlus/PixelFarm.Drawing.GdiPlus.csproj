@@ -51,7 +51,6 @@
     <Compile Include="DrawBoard\Conv.cs" />
     <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
     <Compile Include="Painter\NativeTextWin32.cs" />
-    <Compile Include="Painter\GdiPlusBitmapBackBuffer.cs" />
     <Compile Include="Painter\BitmapHelper.cs" />
     <Compile Include="Painter\Region.cs" />
     <Compile Include="Painter\BufferBitmapStore.cs" />

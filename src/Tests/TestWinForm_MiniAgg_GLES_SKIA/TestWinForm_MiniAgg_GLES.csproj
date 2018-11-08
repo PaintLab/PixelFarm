@@ -165,10 +165,10 @@
     <Compile Include="6_WinGdiTest\FormGdiTest.Designer.cs">
       <DependentUpon>FormGdiTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormTestBed.cs">
+    <Compile Include="7_GLES2Test\FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormTestBed.designer.cs">
+    <Compile Include="7_GLES2Test\FormTestBed.designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
     <Compile Include="MiniGUI\IncompleteWidget.cs" />
@@ -201,7 +201,7 @@
     <EmbeddedResource Include="6_WinGdiTest\FormGdiTest.resx">
       <DependentUpon>FormGdiTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormTestBed.resx">
+    <EmbeddedResource Include="7_GLES2Test\FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Experiment_ColorBlend\FormTestColorBlend.resx">
