@@ -15,7 +15,7 @@ namespace Mini
 
     partial class TestCanvasUserControl : UserControl
     {
-
+         
         //this user control is for test only.
         //in HtmlRenderer we use UISurfaceViewportControl
 
@@ -23,7 +23,7 @@ namespace Mini
         DemoBase _exampleBase;
         int _myWidth = 800;
         int _myHeight = 600;
-        GdiBitmapBackBuffer _bitmapBackBuffer;
+        Win32.NativeWin32MemoryDc _nativeWin32Dc; //use this as gdi back buffer
         PixelFarm.Drawing.Painter _painter;
 
         bool _useGdiPlusOutput;
@@ -34,10 +34,10 @@ namespace Mini
 
         public TestCanvasUserControl()
         {
-            _bitmapBackBuffer = new GdiBitmapBackBuffer();
+
             _useGdiPlusOutput = false;
             InitializeComponent();
-            this.Load += new EventHandler(TestCanvasUserControl_Load);
+            this.Load += TestCanvasUserControl_Load;
         }
 
         public bool UseGdiPlusOutput
@@ -67,13 +67,13 @@ namespace Mini
             else
             {
 
-                //1. create bitmap that store pixel data
-                var actualImage = new ActualBitmap(_myWidth, _myHeight);
+                //1. gdi+ create backbuffer
+                _nativeWin32Dc = new Win32.NativeWin32MemoryDc(_myWidth, _myHeight);
 
-                //2. create gdi bitmap that share data with the actualImage
-                _bitmapBackBuffer.Initialize(_myWidth, _myHeight, 32, actualImage);
+                //2. create actual bitmap that share bitmap data from native _nativeWin32Dc
+                var actualImage = new ActualBitmap(_myWidth, _myHeight, _nativeWin32Dc.PPVBits);
+
                 //----------------------------------------------------------------
-
                 //3. create render surface from bitmap => provide basic bitmap fill operations
                 AggRenderSurface aggsx = new AggRenderSurface(actualImage);
                 //4. painter wraps the render surface  => provide advance operations
@@ -178,7 +178,14 @@ namespace Mini
                 }
                 Graphics g = e.Graphics;
                 IntPtr displayDC = g.GetHdc();
-                _bitmapBackBuffer.UpdateToHardwareSurface(displayDC);
+
+                _nativeWin32Dc.BitBltTo(displayDC);
+                //bool result = Win32.MyWin32.BitBlt(displayHdc, 0, 0,
+                //     width,
+                //     height,
+                //     nativeWin32Dc.DC, 0, 0, SRCCOPY);
+
+                //_bitmapBackBuffer.UpdateToHardwareSurface(displayDC);
                 g.ReleaseHdc(displayDC);
             }
             else
