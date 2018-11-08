@@ -141,6 +141,7 @@ namespace PaintLab.Svg
         {
             //paint with painter interface
         }
+        public abstract WellknownSvgElementName ElemName { get; }
         public virtual void Walk(VgPaintArgs p) { }
 
         /// <summary>
@@ -162,6 +163,7 @@ namespace PaintLab.Svg
         {
             return new VgTextNodeRenderElement { TextContent = this.TextContent };
         }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.Text;
     }
 
 
@@ -364,10 +366,8 @@ namespace PaintLab.Svg
             _visualSpec = visualSpec;
             _renderRoot = renderRoot;
         }
-        public WellknownSvgElementName ElemName
-        {
-            get { return _wellknownName; }
-        }
+
+        public override WellknownSvgElementName ElemName => _wellknownName;
         public void SetController(object o)
         {
             _controller = o;
@@ -1270,6 +1270,7 @@ namespace PaintLab.Svg
         {
             return new SvgForeignNode { _foriegnNode = this._foriegnNode };
         }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
 
     }
 
@@ -1283,6 +1284,7 @@ namespace PaintLab.Svg
         bool _needBoundUpdate;
         public SvgRenderElement _renderE;
         public ICoordTransformer _coordTx;
+
 
 #if DEBUG
         static int dbugTotalId;
@@ -1305,6 +1307,7 @@ namespace PaintLab.Svg
             _boundRect = new RectD(this.X, this.Y, 2, 2);
         }
 
+        
         public RectD GetBounds()
         {
 
@@ -1331,7 +1334,6 @@ namespace PaintLab.Svg
             return this._boundRect;
 
         }
-
         public bool HasBitmapSnapshot { get; internal set; }
 
         public Image BackingImage { get { return _backimg; } }
@@ -1346,6 +1348,8 @@ namespace PaintLab.Svg
 
         public float X { get; set; }
         public float Y { get; set; }
+
+        public SvgDocument OwnerDocument { get; set; } //optional
     }
 
 

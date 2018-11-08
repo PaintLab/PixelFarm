@@ -215,7 +215,7 @@ namespace PixelFarm.CpuBlit
 
                     destRectTransform.TransformToVxs(imgBoundsPath, v1);
                     Render(v1, _imgSpanGenBilinearClip);
-
+                    _imgSpanGenBilinearClip.ReleaseSrcBitmap();
 
                     // this is some debug you can enable to visualize the dest bounding box
                     //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
@@ -320,6 +320,7 @@ namespace PixelFarm.CpuBlit
                 _imgSpanGenBilinearClip.SetSrcBitmap(source);
                 TransformToVxs(ref destRectTransform, v1, v2);
                 Render(v2, _imgSpanGenBilinearClip);
+                _imgSpanGenBilinearClip.ReleaseSrcBitmap();
             }
         }
         public void Render(IBitmapSrc source, ICoordTransformer coordtx)
@@ -341,11 +342,12 @@ namespace PixelFarm.CpuBlit
                 _imgSpanGenBilinearClip.SetSrcBitmap(source);
                 TransformToVxs(coordtx, v1, v2);
                 Render(v2, _imgSpanGenBilinearClip);
+                _imgSpanGenBilinearClip.ReleaseSrcBitmap();
             }
 
         }
 
-        SubBitmap subBitmap = new SubBitmap();
+        SubBitmap _subBitmap = new SubBitmap();
         SpanInterpolatorLinear _spanInterpolator = new SpanInterpolatorLinear();//reusable
         ImgSpanGenRGBA_BilinearClip _imgSpanGenBilinearClip = new ImgSpanGenRGBA_BilinearClip(Drawing.Color.Black); //reusable
         ImgSpanGenRGBA_NN_StepXBy1 _img_NN_StepX = new ImgSpanGenRGBA_NN_StepXBy1();
@@ -353,8 +355,8 @@ namespace PixelFarm.CpuBlit
         {
             //copy some part of src img to destination
 
-            subBitmap.SetSrcBitmap(source, (int)srcX, (int)srcY, (int)srcW, (int)srcH);
-            Render(subBitmap, destX, destY);
+            _subBitmap.SetSrcBitmap(source, (int)srcX, (int)srcY, (int)srcW, (int)srcH);
+            Render(_subBitmap, destX, destY);
         }
         public void Render(IBitmapSrc source, double destX, double destY)
         {
@@ -465,10 +467,9 @@ namespace PixelFarm.CpuBlit
                     _spanInterpolator.Transformer = destRectTransform.CreateInvert();
                     _imgSpanGenBilinearClip.SetInterpolator(_spanInterpolator);
                     _imgSpanGenBilinearClip.SetSrcBitmap(source);
-
                     destRectTransform.TransformToVxs(imgBoundsPath, v1);
-
                     Render(v1, _imgSpanGenBilinearClip);
+                    _imgSpanGenBilinearClip.ReleaseSrcBitmap();
                 }
 
 
@@ -523,7 +524,7 @@ namespace PixelFarm.CpuBlit
                     switch (source.BitDepth)
                     {
                         case 32:
-                             
+
                             _img_NN_StepX.SetInterpolator(_spanInterpolator);
                             _img_NN_StepX.SetSrcBitmap(source);
                             imgSpanGen = _img_NN_StepX;
