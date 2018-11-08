@@ -47,6 +47,26 @@ namespace Mini
             lstBackEndRenderer.DoubleClick += (s, e) => listBox1_DoubleClick(null, EventArgs.Empty);
         }
 
+        TestCanvasUserControl CreateCpuBlitSurfaceViewport(bool useGdiAntialias, bool useGdiPlusOutput)
+        {
+            var softAggControl2 = new TestCanvasUserControl();
+            softAggControl2.Width = 800;
+            softAggControl2.Height = 600;
+            softAggControl2.UseGdiAntiAlias = useGdiAntialias;
+            softAggControl2.UseGdiPlusOutput = useGdiPlusOutput;
+            return softAggControl2;
+        }
+
+        static DemoBase InitDemo(ExampleAndDesc exampleAndDesc)
+        {
+            DemoBase exBase = Activator.CreateInstance(exampleAndDesc.Type) as DemoBase;
+            if (exBase == null)
+            {
+                return null;
+            }
+            exBase.Init();
+            return exBase;
+        }
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
@@ -61,53 +81,85 @@ namespace Mini
             {
                 case RenderBackendChoice.PureAgg:
                     {
+                        DemoBase demo = InitDemo(exAndDesc);
+                        if (demo == null) { return; }
+
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
-                        testBed.UseGdiPlusOutput = false;
-                        testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                        TestCanvasUserControl ctrl = CreateCpuBlitSurfaceViewport(false, chkGdiAntiAlias.Checked);
+                        testBed.LoadSurfaceControl(ctrl);
                         testBed.Show();
-                        testBed.LoadExample(exAndDesc);
+
+                        ctrl.LoadExample(demo);
+                        testBed.LoadExample(exAndDesc, demo);
+
                     }
                     break;
 
                 case RenderBackendChoice.GdiPlus:
                     {
+                        DemoBase demo = InitDemo(exAndDesc);
+                        if (demo == null) { return; }
+
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
-                        testBed.UseGdiPlusOutput = true;
-                        testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                        TestCanvasUserControl ctrl = CreateCpuBlitSurfaceViewport(true, chkGdiAntiAlias.Checked);
+                        testBed.LoadSurfaceControl(ctrl);
                         testBed.Show();
-                        testBed.LoadExample(exAndDesc);
+
+
+                        ctrl.LoadExample(demo);
+                        testBed.LoadExample(exAndDesc, demo);
+
                     }
                     break;
                 case RenderBackendChoice.AggOnGLES:
                     {
-                        DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-                        if (exBase == null)
-                        {
-                            return;
-                        }
+                        DemoBase demo = InitDemo(exAndDesc);
+                        if (demo == null) { return; }
 
-                        //create form
-                        FormGLTest formGLTest = new FormGLTest();
-                        formGLTest.Text = exAndDesc.ToString();
-                        formGLTest.Show();
-                        //---------------------- 
-                        //get target control that used to present the example
-                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                        {
-                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                            glbaseDemo.AggOnGLES = true;
-                            glbaseDemo.LoadGLControl(control);
-                            glbaseDemo.LoadSample(exBase);
-                            //----------------------
-                            formGLTest.FormClosing += (s2, e2) =>
-                            {
-                                glbaseDemo.CloseDemo();
-                            };
-                        }
+                        FormTestBed testBed = new FormTestBed();
+                        testBed.WindowState = FormWindowState.Maximized;
+                        TestCanvasUserControl ctrl = CreateCpuBlitSurfaceViewport(true, chkGdiAntiAlias.Checked);
+                        testBed.LoadSurfaceControl(ctrl);
+                        testBed.Show();
+                        testBed.LoadExample(exAndDesc, demo);
+                      
 
-                        formGLTest.WindowState = FormWindowState.Maximized;
+                        OpenTK.MyGLControl myGLControl1 = new OpenTK.MyGLControl();
+                        myGLControl1.SetBounds(0, 0, 800, 600);
+                        testBed.LoadSurfaceControl(myGLControl1);
+
+
+                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        glbaseDemo.AggOnGLES = true;
+                        glbaseDemo.LoadGLControl(myGLControl1);
+                        glbaseDemo.LoadSample(demo);
+                        testBed.FormClosing += (s2, e2) =>
+                        {
+                            glbaseDemo.CloseDemo();
+                        };
+                     
+
+                        //////create form
+                        //FormGLTest formGLTest = new FormGLTest();
+                        //formGLTest.Text = exAndDesc.ToString();
+                        //formGLTest.Show();
+                        ////---------------------- 
+                        ////get target control that used to present the example
+                        //OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                        //{
+                        //    GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        //    glbaseDemo.AggOnGLES = true;
+                        //    glbaseDemo.LoadGLControl(control);
+                        //    glbaseDemo.LoadSample(exBase);
+                        //    //----------------------
+                        //    formGLTest.FormClosing += (s2, e2) =>
+                        //    {
+                        //        glbaseDemo.CloseDemo();
+                        //    };
+                        //}
+                        //formGLTest.WindowState = FormWindowState.Maximized;
                     }
                     break;
                 case RenderBackendChoice.OpenGLES: //gles 2 and 3

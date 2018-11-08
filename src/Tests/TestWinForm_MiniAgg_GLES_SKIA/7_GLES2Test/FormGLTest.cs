@@ -10,6 +10,7 @@ namespace Mini
         MyGLControl miniGLControl;
         MyGLControl miniGLControl2;
 
+        //test is a simple form with GLControl
         public FormGLTest()
         {
             InitializeComponent();
