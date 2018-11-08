@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 
 
-#if GL_ENABLE
+ 
 using System;
 using System.Collections.Generic;
 //
@@ -669,4 +669,4 @@ namespace PixelFarm.DrawingGL
 }
 
 
-#endif
+ 
