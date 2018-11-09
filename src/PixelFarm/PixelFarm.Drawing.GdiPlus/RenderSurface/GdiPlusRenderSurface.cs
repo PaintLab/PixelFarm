@@ -27,7 +27,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         bool isDisposed;
         //-------------------------------
-        NativeWin32MemoryDc win32MemDc;
+        NativeWin32MemoryDC win32MemDc;
         //-------------------------------
 
         IntPtr originalHdc = IntPtr.Zero;
@@ -75,8 +75,8 @@ namespace PixelFarm.Drawing.WinGdi
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
-            win32MemDc = new NativeWin32MemoryDc(width, height, false);
-            win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
+            win32MemDc = new NativeWin32MemoryDC(width, height, false);
+            win32MemDc.PatBlt(NativeWin32MemoryDC.PatBltColor.White);
             win32MemDc.SetBackTransparent(true);
             win32MemDc.SetClipRect(0, 0, width, height);
 
@@ -152,7 +152,7 @@ namespace PixelFarm.Drawing.WinGdi
             int h = this.Height;
             this.ClearPreviousStoredValues();
             currentClipRect = new System.Drawing.Rectangle(0, 0, w, h);
-            win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
+            win32MemDc.PatBlt(NativeWin32MemoryDC.PatBltColor.White);
             win32MemDc.SetClipRect(0, 0, w, h);
             left = hPageNum * w;
             top = vPageNum * h;
@@ -583,6 +583,19 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
+        static Win32.NativeWin32MemoryDC ResolveForWin32Dc(Image image)
+        {
+            if (image is PixelFarm.CpuBlit.ActualBitmap)
+            {
+                //this is known image
+                var win32Dc = Image.GetCacheInnerImage(image) as Win32.NativeWin32MemoryDC;
+                if (win32Dc != null)
+                {
+                    return win32Dc;
+                }
+            }
+            return null;
+        }
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
 
@@ -636,7 +649,13 @@ namespace PixelFarm.Drawing.WinGdi
             PixelFarm.CpuBlit.ActualBitmap actualBmp = image as PixelFarm.CpuBlit.ActualBitmap;
             if (actualBmp != null)
             {
-                 
+                Win32.NativeWin32MemoryDC win32DC = ResolveForWin32Dc(image);
+                if (win32DC != null)
+                {
+                    win32DC.BlendWin32From(win32DC.DC, 0, 0, image.Width, image.Height, x, y);
+                    return;
+                }
+
                 System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
                 gx.DrawImageUnscaled(resolvedImg, x, y);
 

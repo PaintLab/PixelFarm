@@ -16,14 +16,14 @@ namespace LayoutFarm.UI.Skia
         int internalSizeW = 800;
         int internalSizwH = 600;
 
-        Win32.NativeWin32MemoryDc memdc;
+        Win32.NativeWin32MemoryDC memdc;
         public SkiaCanvasViewport(RootGraphic rootgfx, Size viewportSize)
             : base(rootgfx, viewportSize)
         {
 
             this.CalculateCanvasPages();
             mySkCanvas = new PixelFarm.Drawing.Skia.MySkiaDrawBoard(0, 0, 0, 0, internalSizeW, internalSizwH);
-            memdc = new Win32.NativeWin32MemoryDc(internalSizeW, internalSizwH);
+            memdc = new Win32.NativeWin32MemoryDC(internalSizeW, internalSizwH);
 
         }
         protected override void OnClosing()

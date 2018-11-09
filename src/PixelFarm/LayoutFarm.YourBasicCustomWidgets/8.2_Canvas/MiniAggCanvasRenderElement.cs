@@ -32,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-            // canvas.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
+            
             if (needUpdate)
             {
                 //default bg => transparent !, 

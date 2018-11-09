@@ -78,8 +78,8 @@ namespace LayoutFarm.UI.GdiPlus
             unsafe
             {
                 //create new memdc
-                Win32.NativeWin32MemoryDc memDc = new Win32.NativeWin32MemoryDc(w, h);
-                memDc.PatBlt(Win32.NativeWin32MemoryDc.PatBltColor.White);
+                Win32.NativeWin32MemoryDC memDc = new Win32.NativeWin32MemoryDC(w, h);
+                memDc.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
                 //TODO: check if we need to set init font/brush/pen for the new DC or not
                 gdiPlusViewport.FullMode = true;
                 //pain to the destination dc
