@@ -98,10 +98,12 @@ namespace LayoutFarm.UI
 
             //openGLSurfaceView.SwapBuffers();
         }
+#if GL_ENABLE
         public OpenTK.MyGLControl GetOpenTKControl()
         {
             return _openGLSurfaceView;
         }
+#endif
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
@@ -115,7 +117,7 @@ namespace LayoutFarm.UI
             this.innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
-                case InnerViewportKind.GL:
+                case InnerViewportKind.GLES:
                     {
 #if GL_ENABLE
                         //temp not suppport  
@@ -190,6 +192,17 @@ namespace LayoutFarm.UI
                     }
                     break;
 #endif
+                case InnerViewportKind.PureAgg:
+                    {
+                        var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot);
+                        var view = new CpuSurfaceView();
+                        view.Dock = DockStyle.Fill;
+                        this.Controls.Add(view);
+                        //--------------------------------------- 
+                        view.Bind(bridge);
+                        this.winBridge = bridge;
+                    }
+                    break;
                 case InnerViewportKind.GdiPlus:
                 default:
                     {

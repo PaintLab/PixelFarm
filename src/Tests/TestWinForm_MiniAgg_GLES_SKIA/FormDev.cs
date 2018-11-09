@@ -42,7 +42,7 @@ namespace Mini
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.AggOnGLES);
             //
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// legacy ***
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// legacy ***, for printing
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES_OnFormTestBed); //legacy , for test only
 
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
@@ -88,18 +88,17 @@ namespace Mini
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
 
-
-
+                        LayoutFarm.UI.InnerViewportKind innerViewportKind = LayoutFarm.UI.InnerViewportKind.PureAgg;
                         LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
-                            LayoutFarm.UI.InnerViewportKind.GdiPlus,
+                            innerViewportKind,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
-
                         testBed.Show();
 
                         _cpuBlitContextWinForm = new CpuBlitContextWinForm();
+                        _cpuBlitContextWinForm.BindSurface(surfaceViewport, innerViewportKind);
                         _cpuBlitContextWinForm.LoadExample(demo);
 
                         testBed.LoadExample(exAndDesc, demo);
@@ -115,16 +114,18 @@ namespace Mini
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
 
+                        LayoutFarm.UI.InnerViewportKind innerViewportKind = LayoutFarm.UI.InnerViewportKind.GdiPlus;
                         LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
-                            LayoutFarm.UI.InnerViewportKind.GdiPlus,
+                            innerViewportKind,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
 
                         testBed.Show();
 
                         _cpuBlitContextWinForm = new CpuBlitContextWinForm();
+                        _cpuBlitContextWinForm.BindSurface(surfaceViewport, innerViewportKind);
                         _cpuBlitContextWinForm.LoadExample(demo);
 
                         testBed.LoadExample(exAndDesc, demo);
@@ -139,11 +140,11 @@ namespace Mini
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
 
-                         
+
                         LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
-                            LayoutFarm.UI.InnerViewportKind.GL,
+                            LayoutFarm.UI.InnerViewportKind.AggOnGLES,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
 
@@ -174,7 +175,7 @@ namespace Mini
                         LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
                           testBed.GetLandingControl(),
                           0, 0, 800, 600,
-                          LayoutFarm.UI.InnerViewportKind.GL,
+                          LayoutFarm.UI.InnerViewportKind.GLES,
                           out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                           );
 
@@ -202,7 +203,7 @@ namespace Mini
                         formGLTest.Show();
                         //---------------------- 
                         //get target control that used to present the example
-                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600); 
+                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
                         GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
                         glbaseDemo.LoadGLControl(control);
                         glbaseDemo.LoadSample(demo);

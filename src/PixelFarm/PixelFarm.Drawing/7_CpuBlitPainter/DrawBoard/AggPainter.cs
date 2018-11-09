@@ -87,18 +87,12 @@ namespace PixelFarm.CpuBlit
         public AggPainter(AggRenderSurface aggsx)
         {
             //painter paint to target surface
-
             _orientation = DrawBoardOrientation.LeftBottom;
-
             //----------------------------------------------------
             _aggsx_0 = aggsx; //set this as default ***            
             TargetBufferName = TargetBufferName.Default;
-
-
             this._stroke = new Stroke(1);//default
-
             _useDefaultBrush = true;
-
             _defaultPixelBlender = this.DestBitmapBlender.OutputPixelBlender;
         }
 
@@ -121,7 +115,7 @@ namespace PixelFarm.CpuBlit
             //this version replace only
             //TODO: add append clip rgn
 
-            
+
             if (vxs != null)
             {
                 if (SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
@@ -1285,7 +1279,7 @@ namespace PixelFarm.CpuBlit
                     coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
                 }
             }
-             
+
             //_aggsx.SetScanlineRasOrigin(OriginX, OriginY);
 
             this._aggsx.Render(actualImg, coordTx);
