@@ -10,7 +10,7 @@ namespace Mini
 {
 
     //This is a helper class
-    class CpuBlitContextWinForm
+    class CpuBlitAppModule
     {
 
         int _myWidth;
@@ -19,7 +19,7 @@ namespace Mini
         RootGraphic _rootGfx;
         DemoUI _demoUI;
         InnerViewportKind _innerViewportKind;
-        public CpuBlitContextWinForm()
+        public CpuBlitAppModule()
         {
 
         }

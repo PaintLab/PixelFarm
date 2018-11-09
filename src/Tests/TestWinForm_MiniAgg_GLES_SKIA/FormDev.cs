@@ -66,7 +66,7 @@ namespace Mini
         }
 
 
-        CpuBlitContextWinForm _cpuBlitContextWinForm;
+        CpuBlitAppModule _cpuBlitContextWinForm;
 
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -97,7 +97,7 @@ namespace Mini
                             );
                         testBed.Show();
 
-                        _cpuBlitContextWinForm = new CpuBlitContextWinForm();
+                        _cpuBlitContextWinForm = new CpuBlitAppModule();
                         _cpuBlitContextWinForm.BindSurface(surfaceViewport, innerViewportKind);
                         _cpuBlitContextWinForm.LoadExample(demo);
 
@@ -124,7 +124,7 @@ namespace Mini
 
                         testBed.Show();
 
-                        _cpuBlitContextWinForm = new CpuBlitContextWinForm();
+                        _cpuBlitContextWinForm = new CpuBlitAppModule();
                         _cpuBlitContextWinForm.BindSurface(surfaceViewport, innerViewportKind);
                         _cpuBlitContextWinForm.LoadExample(demo);
 
@@ -152,7 +152,7 @@ namespace Mini
                         testBed.Show();
                         testBed.LoadExample(exAndDesc, demo);
 
-                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        GLAppModule glbaseDemo = new GLAppModule();
                         glbaseDemo.AggOnGLES = true;
                         glbaseDemo.LoadGLControl(surfaceViewport.GetOpenTKControl());
                         glbaseDemo.LoadSample(demo);
@@ -180,7 +180,7 @@ namespace Mini
                           );
 
 
-                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        GLAppModule glbaseDemo = new GLAppModule();
                         glbaseDemo.AggOnGLES = false;
                         glbaseDemo.LoadGLControl(surfaceViewport.GetOpenTKControl());
                         glbaseDemo.LoadSample(demo);
@@ -204,7 +204,7 @@ namespace Mini
                         //---------------------- 
                         //get target control that used to present the example
                         OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        GLAppModule glbaseDemo = new GLAppModule();
                         glbaseDemo.LoadGLControl(control);
                         glbaseDemo.LoadSample(demo);
                         //----------------------

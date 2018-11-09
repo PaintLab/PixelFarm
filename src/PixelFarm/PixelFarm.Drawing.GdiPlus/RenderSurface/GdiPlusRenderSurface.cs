@@ -676,8 +676,8 @@ namespace PixelFarm.Drawing.WinGdi
                     //make it even number
                     j -= 1;
                 }
-                //loop draw
-                var inner = ResolveInnerBmp(image);
+                //loop  
+                System.Drawing.Bitmap inner = ResolveInnerBmp(image);
                 for (int i = 0; i < j;)
                 {
                     gx.DrawImage(inner,

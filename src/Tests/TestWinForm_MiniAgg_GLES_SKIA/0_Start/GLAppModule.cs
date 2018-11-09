@@ -5,7 +5,7 @@ using PixelFarm.DrawingGL;
 using PixelFarm.CpuBlit;
 namespace Mini
 {
-    class GLDemoContextWinForm
+    class GLAppModule
     {
         //this context is for WinForm
 
