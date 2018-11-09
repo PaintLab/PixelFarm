@@ -139,12 +139,13 @@ namespace Mini
             {
                 DemoBase.InvokePainterReady(_demo, _painter);
             }
-        }
+        } 
         public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
+             
+            ActualBitmap.ClearCache(_actualImage); 
             _demo.Draw(_painter);
-
-            //copy from actual image and paint to canvas
+            //copy from actual image and paint to canvas 
             canvas.DrawImage(_actualImage, 0, 0);
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
