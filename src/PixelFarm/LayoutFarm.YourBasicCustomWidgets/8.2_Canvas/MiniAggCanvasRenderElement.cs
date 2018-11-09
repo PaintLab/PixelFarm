@@ -7,7 +7,7 @@ namespace LayoutFarm.CustomWidgets
 {
     public class MiniAggCanvasRenderElement : RenderBoxBase, IDisposable
     {
-   
+
         Painter painter;
         bool needUpdate;
         ActualBitmap actualImage;
@@ -17,7 +17,7 @@ namespace LayoutFarm.CustomWidgets
             : base(rootgfx, width, height)
         {
 
-            this.actualImage = new ActualBitmap(width, height);             
+            this.actualImage = new ActualBitmap(width, height);
             this.painter = AggPainter.Create(actualImage);
             needUpdate = true;
             this.BackColor = Color.White;
@@ -45,7 +45,8 @@ namespace LayoutFarm.CustomWidgets
 
                 this.bmp = this.actualImage;// new Bitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
                 // canvas.Platform.CreatePlatformBitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
-                Image.SetCacheInnerImage(bmp, null);
+                Image.ClearCache(bmp);
+
                 needUpdate = false;
             }
             //canvas.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
