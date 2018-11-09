@@ -3,11 +3,23 @@
 using System;
 using PixelFarm.DrawingGL;
 using PixelFarm.CpuBlit;
+
+using LayoutFarm;
+using LayoutFarm.UI;
+
+
 namespace Mini
 {
     class GLAppModule
     {
         //this context is for WinForm
+
+        int _myWidth;
+        int _myHeight;
+        UISurfaceViewportControl _surfaceViewport;
+        InnerViewportKind _innerViewportKind;
+        RootGraphic _rootGfx;
+
 
         DemoBase _demobase;
         OpenTK.MyGLControl _glControl;
@@ -20,26 +32,53 @@ namespace Mini
         /// </summary>
         public bool AggOnGLES { get; set; }
 
-        public void LoadGLControl(OpenTK.MyGLControl glControl)
+        //public void LoadGLControl(OpenTK.MyGLControl glControl)
+        //{
+        //    //----------------------
+        //    this._glControl = glControl;
+        //    if (AggOnGLES)
+        //    {
+
+        //        SetupAggPainter();
+        //        glControl.SetGLPaintHandler(HandleAggOnGLESPaint);
+        //    }
+        //    else
+        //    {
+        //        glControl.SetGLPaintHandler(HandleGLPaint);
+        //    }
+
+        //    _hh1 = glControl.Handle; //ensure that contrl handler is created
+        //    glControl.MakeCurrent();
+        //}
+        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
         {
+            _myWidth = 800;
+            _myHeight = 600;
+
+            _innerViewportKind = surfaceViewport.InnerViewportKind;
+            _surfaceViewport = surfaceViewport;
+            _rootGfx = surfaceViewport.RootGfx;
+
+
             //----------------------
-            this._glControl = glControl;
+            this._glControl = surfaceViewport.GetOpenTKControl();
             if (AggOnGLES)
             {
 
                 SetupAggPainter();
-                glControl.SetGLPaintHandler(HandleAggOnGLESPaint);
+                _glControl.SetGLPaintHandler(HandleAggOnGLESPaint);
             }
             else
             {
-                glControl.SetGLPaintHandler(HandleGLPaint);
+                _glControl.SetGLPaintHandler(HandleGLPaint);
             }
 
-            _hh1 = glControl.Handle; //ensure that contrl handler is created
-            glControl.MakeCurrent();
+            _hh1 = _glControl.Handle; //ensure that contrl handler is created
+            _glControl.MakeCurrent();
         }
 
-        public void LoadSample(DemoBase demobase)
+
+        public void LoadExample(DemoBase demobase)
         {
             this._demobase = demobase;
             //1.

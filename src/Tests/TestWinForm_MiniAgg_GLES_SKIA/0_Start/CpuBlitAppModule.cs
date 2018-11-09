@@ -16,20 +16,21 @@ namespace Mini
         int _myWidth;
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;
-        RootGraphic _rootGfx;
-        DemoUI _demoUI;
         InnerViewportKind _innerViewportKind;
+        RootGraphic _rootGfx;        
+        //
+        DemoUI _demoUI;
+
         public CpuBlitAppModule()
         {
 
         }
-        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport,
-            InnerViewportKind innerViewportKind)
+        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
         {
             _myWidth = 800;
             _myHeight = 600;
 
-            _innerViewportKind = innerViewportKind;
+            _innerViewportKind = surfaceViewport.InnerViewportKind;
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
         }

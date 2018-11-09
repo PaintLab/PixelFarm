@@ -25,6 +25,9 @@ namespace LayoutFarm.UI
 
             //this.panel1.Visible = false; 
         }
+        public InnerViewportKind InnerViewportKind => innerViewportKind;
+
+
 #if DEBUG
         static int s_dbugCount;
 #endif
