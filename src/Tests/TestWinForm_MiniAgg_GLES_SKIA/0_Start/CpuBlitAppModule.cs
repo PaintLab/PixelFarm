@@ -40,6 +40,7 @@ namespace Mini
         }
     }
 
+    //This is a simple UIElement for testing only
     class DemoUI : UIElement
     {
         DemoBase _exampleBase;
@@ -107,7 +108,10 @@ namespace Mini
             base.OnMouseUp(e);
         }
     }
-    //implement simple render element***
+
+
+    //For testing only
+    //Implement simple render element***
     class CpuBlitAggCanvasRenderElement : LayoutFarm.RenderElement, IDisposable
     {
         Win32.NativeWin32MemoryDC _nativeWin32DC; //use this as gdi back buffer

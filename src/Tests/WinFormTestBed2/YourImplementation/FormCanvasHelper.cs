@@ -175,7 +175,6 @@ namespace LayoutFarm.UI
                 {
                     innerViewport.Close();
                 };
-
             }
 
         }

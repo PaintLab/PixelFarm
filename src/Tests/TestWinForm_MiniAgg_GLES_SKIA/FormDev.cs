@@ -121,15 +121,14 @@ namespace Mini
                             innerViewportKind,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
-
-                        testBed.Show();
+                      
 
                         _cpuBlitContextWinForm = new CpuBlitAppModule();
                         _cpuBlitContextWinForm.BindSurface(surfaceViewport, innerViewportKind);
                         _cpuBlitContextWinForm.LoadExample(demo);
 
                         testBed.LoadExample(exAndDesc, demo);
-
+                        testBed.Show();
                     }
                     break;
                 case RenderBackendChoice.AggOnGLES:
@@ -146,12 +145,8 @@ namespace Mini
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.AggOnGLES,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
-                            );
-
-
-                      
-                        testBed.LoadExample(exAndDesc, demo);
-
+                            );                      
+                       
                         GLAppModule glbaseDemo = new GLAppModule();
                         glbaseDemo.AggOnGLES = true;
                         glbaseDemo.LoadGLControl(surfaceViewport.GetOpenTKControl());
@@ -160,6 +155,7 @@ namespace Mini
                         {
                             glbaseDemo.CloseDemo();
                         };
+                        testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
                     }
                     break;
@@ -189,6 +185,7 @@ namespace Mini
                             glbaseDemo.CloseDemo();
                         };
 
+                        testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
                     }
                     break;
