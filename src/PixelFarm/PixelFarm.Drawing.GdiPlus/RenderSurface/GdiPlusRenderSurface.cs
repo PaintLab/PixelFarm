@@ -652,22 +652,12 @@ namespace PixelFarm.Drawing.WinGdi
                 Win32.NativeWin32MemoryDC win32DC = ResolveForWin32Dc(image);
                 if (win32DC != null)
                 {
-                    win32DC.BlendWin32From(win32DC.DC, 0, 0, image.Width, image.Height, x, y);
+                    this.win32MemDc.BlendWin32From(win32DC.DC, 0, 0, image.Width, image.Height, x, y);
                     return;
                 }
 
                 System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
                 gx.DrawImageUnscaled(resolvedImg, x, y);
-
-                //int[] srcBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(actualBmp);
-                //unsafe
-                //{
-                //    int srcStride = actualBmp.Stride;
-                //    fixed (int* srcBufferPtr = &srcBuffer[0])
-                //    {
-                //        win32MemDc.BlendBltBitFrom((byte*)srcBufferPtr, srcStride, 0, 0, actualBmp.Width, actualBmp.Height, x, y);
-                //    }
-                //}
             }
             else
             {
