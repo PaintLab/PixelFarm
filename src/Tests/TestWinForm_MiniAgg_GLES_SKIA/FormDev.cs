@@ -89,9 +89,9 @@ namespace Mini
                         testBed.WindowState = FormWindowState.Maximized;
 
 
-                        Control landingControl = testBed.GetLandingControl();
+
                         LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
-                            landingControl,
+                            testBed.GetLandingControl(),
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.GdiPlus,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
@@ -115,9 +115,8 @@ namespace Mini
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
 
-                        Control landingControl = testBed.GetLandingControl();
                         LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
-                            landingControl,
+                            testBed.GetLandingControl(),
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.GdiPlus,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
@@ -139,14 +138,10 @@ namespace Mini
 
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
-                         
-                        //OpenTK.MyGLControl myGLControl1 = new OpenTK.MyGLControl();
-                        //myGLControl1.SetBounds(0, 0, 800, 600);
-                        //testBed.LoadSurfaceControl(myGLControl1);
 
-                        Control landingControl = testBed.GetLandingControl();
+                         
                         LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
-                            landingControl,
+                            testBed.GetLandingControl(),
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.GL,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
@@ -176,15 +171,17 @@ namespace Mini
                         testBed.WindowState = FormWindowState.Maximized;
 
                         //--------------------------------------------
-                        OpenTK.MyGLControl myGLControl1 = new OpenTK.MyGLControl();
-                        myGLControl1.SetBounds(0, 0, 800, 600);
-                        testBed.LoadSurfaceControl(myGLControl1);
-                        testBed.Show();
+                        LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
+                          testBed.GetLandingControl(),
+                          0, 0, 800, 600,
+                          LayoutFarm.UI.InnerViewportKind.GL,
+                          out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                          );
 
 
                         GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
                         glbaseDemo.AggOnGLES = false;
-                        glbaseDemo.LoadGLControl(myGLControl1);
+                        glbaseDemo.LoadGLControl(surfaceViewport.GetOpenTKControl());
                         glbaseDemo.LoadSample(demo);
                         testBed.FormClosing += (s2, e2) =>
                         {
@@ -205,17 +202,16 @@ namespace Mini
                         formGLTest.Show();
                         //---------------------- 
                         //get target control that used to present the example
-                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600); 
+                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        glbaseDemo.LoadGLControl(control);
+                        glbaseDemo.LoadSample(demo);
+                        //----------------------
+                        formGLTest.FormClosing += (s2, e2) =>
                         {
-                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                            glbaseDemo.LoadGLControl(control);
-                            glbaseDemo.LoadSample(demo);
-                            //----------------------
-                            formGLTest.FormClosing += (s2, e2) =>
-                            {
-                                glbaseDemo.CloseDemo();
-                            };
-                        }
+                            glbaseDemo.CloseDemo();
+                        };
+
 
                         formGLTest.WindowState = FormWindowState.Maximized;
 
