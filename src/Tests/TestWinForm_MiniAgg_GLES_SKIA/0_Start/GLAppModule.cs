@@ -176,7 +176,7 @@ namespace Mini
             if (_glBmp == null)
             {
                 _glBmp = new GLBitmap(_aggBmp);
-                _glBmp.IsInvert = true;
+                _glBmp.IsInvert = false;
             }
             _glsx.DrawImage(_glBmp, 0, _aggBmp.Height);
 
