@@ -8,7 +8,7 @@ namespace LayoutFarm.UI
     /// <summary>
     /// this class is specific bridge for WinForms***
     /// </summary>
-    abstract partial class TopWindowBridgeWinForm
+    public abstract partial class TopWindowBridgeWinForm
     {
         RootGraphic rootGraphic;
         ITopWindowEventRoot topWinEventRoot;
@@ -51,7 +51,7 @@ namespace LayoutFarm.UI
             get { return this.rootGraphic; }
         }
         protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
-        protected void SetBaseCanvasViewport(CanvasViewport canvasViewport)
+        internal void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
             this.canvasViewport = canvasViewport;
         }

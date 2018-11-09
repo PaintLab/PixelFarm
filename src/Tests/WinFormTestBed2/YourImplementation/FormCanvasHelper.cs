@@ -50,7 +50,7 @@ namespace LayoutFarm.UI
                     ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
-                case InnerViewportKind.GL:
+                case InnerViewportKind.GLES:
                     ifont = new OpenFontTextService();
                     break;
 
@@ -145,16 +145,13 @@ namespace LayoutFarm.UI
                     ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
-                case InnerViewportKind.GL:
+                case InnerViewportKind.GLES:
                     ifont = new OpenFontTextService();
                     break;
 
             }
 
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
-
-            //
-
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader); 
             //---------------------------------------------------------------------------
 
             MyRootGraphic myRootGfx = new MyRootGraphic(

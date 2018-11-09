@@ -636,6 +636,7 @@ namespace PixelFarm.Drawing.WinGdi
             PixelFarm.CpuBlit.ActualBitmap actualBmp = image as PixelFarm.CpuBlit.ActualBitmap;
             if (actualBmp != null)
             {
+                 
                 System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
                 gx.DrawImageUnscaled(resolvedImg, x, y);
 
@@ -832,7 +833,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             if (_painter == null)
             {
-                
+
 
 
 

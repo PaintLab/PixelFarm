@@ -75,10 +75,11 @@ namespace LayoutFarm.UI
         }
 #if GL_ENABLE
         IntPtr hh1;
-        OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
+        OpenGL.GpuOpenGLSurfaceView _openGLSurfaceView;
         GLRenderSurface _glsx;
         GLPainter canvasPainter;
 #endif
+
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
@@ -97,6 +98,12 @@ namespace LayoutFarm.UI
 
             //openGLSurfaceView.SwapBuffers();
         }
+#if GL_ENABLE
+        public OpenTK.MyGLControl GetOpenTKControl()
+        {
+            return _openGLSurfaceView;
+        }
+#endif
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
@@ -110,7 +117,7 @@ namespace LayoutFarm.UI
             this.innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
-                case InnerViewportKind.GL:
+                case InnerViewportKind.GLES:
                     {
 #if GL_ENABLE
                         //temp not suppport  
@@ -122,7 +129,7 @@ namespace LayoutFarm.UI
 
                         view.Width = 1200;
                         view.Height = 1200;
-                        openGLSurfaceView = view;
+                        _openGLSurfaceView = view;
                         //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
                         //this.panel1.Visible = true;
@@ -185,6 +192,17 @@ namespace LayoutFarm.UI
                     }
                     break;
 #endif
+                case InnerViewportKind.PureAgg:
+                    {
+                        var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot);
+                        var view = new CpuSurfaceView();
+                        view.Dock = DockStyle.Fill;
+                        this.Controls.Add(view);
+                        //--------------------------------------- 
+                        view.Bind(bridge);
+                        this.winBridge = bridge;
+                    }
+                    break;
                 case InnerViewportKind.GdiPlus:
                 default:
                     {
@@ -232,7 +250,7 @@ namespace LayoutFarm.UI
         public void PaintMe()
         {
             this.winBridge.PaintToOutputWindow();
-        } 
+        }
         public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
         {
             winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
@@ -314,7 +332,7 @@ namespace LayoutFarm.UI
                 this.rootgfx.TopWindowRenderBox.AddChild(renderElem);
             }
         }
- 
+
 
         PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
         bool _hasInvalidateAreaAccum;

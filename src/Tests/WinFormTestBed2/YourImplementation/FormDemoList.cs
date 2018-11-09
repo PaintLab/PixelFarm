@@ -15,7 +15,7 @@ namespace LayoutFarm.Dev
             //------
 
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlus);
-            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GL);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GLES);
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.Skia);
             this.lstPlatformSelectors.SelectedIndex = 0;//set default
 

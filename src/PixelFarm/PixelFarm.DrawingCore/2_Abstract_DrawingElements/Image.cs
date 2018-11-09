@@ -31,16 +31,21 @@ namespace PixelFarm.Drawing
         }
         public static void ClearCache(Image img)
         {
-            if (img != null)
+            if (img != null && img.innerImage != null)
             {
+                IDisposable innerObj = img.innerImage.Target as IDisposable;
+                if (innerObj != null)
+                {
+                    innerObj.Dispose();
+                }
                 img.innerImage = null;
             }
         }
-        public static void SetCacheInnerImage(Image img, object o)
+        public static void SetCacheInnerImage(Image img, IDisposable o)
         {
             img.innerImage = new WeakReference(o);
         }
-         
+
         public enum RequestType
         {
             Rent,
