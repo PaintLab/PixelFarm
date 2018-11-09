@@ -1,7 +1,6 @@
-﻿//BSD, 2018-present, WinterDev
+﻿//MIT, 2016-present, WinterDev
 
 using System;
-using System.Windows.Forms;
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using LayoutFarm;
@@ -9,274 +8,156 @@ using LayoutFarm.UI;
 
 namespace Mini
 {
-    class TopWinBridge : TopWindowBridgeWinForm
-    {
-        public TopWinBridge(MyRootGraphic rootgfx, ITopWindowEventRoot topWinEventRoot)
-            : base(rootgfx, topWinEventRoot)
-        {
 
-        }
-        public override void BindWindowControl(Control windowControl)
-        {
-
-        }
-
-        public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
-        {
-
-        }
-
-        public override void InvalidateRootArea(Rectangle r)
-        {
-
-        }
-
-        public override void PaintToOutputWindow()
-        {
-
-        }
-
-        public override void PaintToOutputWindow2(Rectangle invalidateArea)
-        {
-
-        }
-
-        protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
-        {
-
-        }
-    }
     //This is a helper class
     class CpuBlitContextWinForm
     {
 
-        int _myWidth = 800;
-        int _myHeight = 600;
-        Win32.NativeWin32MemoryDc _nativeWin32Dc; //use this as gdi back buffer
-        PixelFarm.Drawing.Painter _painter;
-        bool _useGdiPlusOutput;
-        bool _gdiAntiAlias;
-        DemoBase _exampleBase;
-
-        LayoutFarm.UI.UISurfaceViewportControl _surfaceViewport = new LayoutFarm.UI.UISurfaceViewportControl();
-      
-        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
+        int _myWidth;
+        int _myHeight;
+        UISurfaceViewportControl _surfaceViewport;
+        RootGraphic _rootGfx;
+        DemoUI _demoUI;
+        InnerViewportKind _innerViewportKind;
+        public CpuBlitContextWinForm()
         {
+
+        }
+        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport,
+            InnerViewportKind innerViewportKind)
+        {
+            _myWidth = 800;
+            _myHeight = 600;
+
+            _innerViewportKind = innerViewportKind;
             _surfaceViewport = surfaceViewport;
+            _rootGfx = surfaceViewport.RootGfx;
         }
         public void LoadExample(DemoBase exBase)
         {
-            this._exampleBase = exBase;
+            _demoUI = new DemoUI(exBase, _myWidth, _myHeight);
+            _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
+        }
+    }
+
+    class DemoUI : UIElement
+    {
+        DemoBase _exampleBase;
+        CpuBlitAggCanvasRenderElement _canvasRenderE;
+        int _width;
+        int _height;
+        public DemoUI(DemoBase exBase, int width, int height)
+        {
+            _width = width;
+            _height = height;
+
+            _exampleBase = exBase;
+        }
+        public override RenderElement CurrentPrimaryRenderElement
+        {
+            get
+            {
+                return _canvasRenderE;
+            }
+        }
+
+        protected override bool HasReadyRenderElement => _canvasRenderE != null;
+
+
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (_canvasRenderE == null)
+            {
+                _canvasRenderE = new CpuBlitAggCanvasRenderElement(rootgfx, _width, _height);
+                _canvasRenderE.SetController(this); //connect to event system
+                _canvasRenderE.LoadDemo(_exampleBase);
+            }
+            return _canvasRenderE;
+        }
+
+        public override void InvalidateGraphics()
+        {
+
+        }
+
+        public override void Walk(UIVisitor visitor)
+        {
+
+        }
+
+        //handle event
+        protected override void OnMouseDown(UIMouseEventArgs e)
+        {
+            _exampleBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+            base.OnMouseDown(e);
+        }
+        protected override void OnMouseMove(UIMouseEventArgs e)
+        {
+            if (e.IsDragging)
+            {
+                _canvasRenderE.InvalidateGraphics();
+                _exampleBase.MouseDrag(e.X, e.Y);
+                _canvasRenderE.InvalidateGraphics();
+            }
+            base.OnMouseMove(e);
+        }
+        protected override void OnMouseUp(UIMouseEventArgs e)
+        {
+            _exampleBase.MouseUp(e.X, e.Y);
+            base.OnMouseUp(e);
+        }
+    }
+    //implement simple render element***
+    class CpuBlitAggCanvasRenderElement : LayoutFarm.RenderElement, IDisposable
+    {
+        Win32.NativeWin32MemoryDc _nativeWin32Dc; //use this as gdi back buffer
+        DemoBase _demo;
+        ActualBitmap _actualImage;
+        Painter _painter;
+        public CpuBlitAggCanvasRenderElement(RootGraphic rootgfx, int w, int h)
+            : base(rootgfx, w, h)
+        {
+
+            //TODO: check if we can access raw rootGraphics buffer or not
+            //1. gdi+ create backbuffer
+            _nativeWin32Dc = new Win32.NativeWin32MemoryDc(w, h);
+            //2. create actual bitmap that share bitmap data from native _nativeWin32Dc
+            _actualImage = new ActualBitmap(w, h, _nativeWin32Dc.PPVBits);
+            //----------------------------------------------------------------
+            //3. create render surface from bitmap => provide basic bitmap fill operations
+            AggRenderSurface aggsx = new AggRenderSurface(_actualImage);
+            //4. painter wraps the render surface  => provide advance operations
+            AggPainter aggPainter = new AggPainter(aggsx);
+            aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+            _painter = aggPainter;
+            //----------------------------------------------------------------             
+        }
+        public void LoadDemo(DemoBase demo)
+        {
+            _demo = demo;
             if (_painter != null)
             {
-                DemoBase.InvokePainterReady(exBase, _painter);
+                DemoBase.InvokePainterReady(_demo, _painter);
             }
-            //exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
+        }
+        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        {
+            _demo.Draw(_painter);
+
+            //copy from actual image and paint to canvas
+            canvas.DrawImage(_actualImage, 0, 0);
+        }
+        public override void ResetRootGraphics(RootGraphic rootgfx)
+        {
+
+        }
+        public void Dispose()
+        {
+            if (_nativeWin32Dc != null)
+            {
+                _nativeWin32Dc.Dispose();
+                _nativeWin32Dc = null;
+            }
         }
     }
 }
-
-////MIT, 2016-present, WinterDev
-
-//using System;
-//using System.Drawing;
-//using System.Windows.Forms;
-
-//using PixelFarm.CpuBlit;
-//using PixelFarm.Drawing.Fonts;
-
-
-//namespace Mini
-//{
-
-
-//    partial class TestCanvasUserControl : UserControl
-//    {
-
-//        //this user control is for test only.
-//        //in HtmlRenderer we use UISurfaceViewportControl
-
-//        bool _isMouseDown;
-//        DemoBase _exampleBase;
-//        int _myWidth = 800;
-//        int _myHeight = 600;
-//        Win32.NativeWin32MemoryDc _nativeWin32Dc; //use this as gdi back buffer
-//        PixelFarm.Drawing.Painter _painter;
-
-//        bool _useGdiPlusOutput;
-//        bool _gdiAntiAlias;
-//        Graphics _thisGfx;//for output
-//        PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface _sx;
-//        System.Drawing.Rectangle _bufferBmpRect;
-
-//        public TestCanvasUserControl()
-//        {
-
-//            _useGdiPlusOutput = false;
-//            InitializeComponent();
-//            this.Load += TestCanvasUserControl_Load;
-//        }
-
-//        public bool UseGdiPlusOutput
-//        {
-//            get { return _useGdiPlusOutput; }
-//            set { _useGdiPlusOutput = value; }
-//        }
-//        public bool UseGdiAntiAlias
-//        {
-//            get { return _gdiAntiAlias; }
-//            set { _gdiAntiAlias = value; }
-//        }
-//        void TestCanvasUserControl_Load(object sender, EventArgs e)
-//        {
-//            if (_useGdiPlusOutput)
-//            {
-
-//                _thisGfx = this.CreateGraphics();  //for render to output
-//                _bufferBmpRect = this.DisplayRectangle;
-//                _sx = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(0, 0, _bufferBmpRect.Width, _bufferBmpRect.Height);
-//                var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusPainter(_sx);
-
-//                gdiPlusCanvasPainter.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
-//                _painter = gdiPlusCanvasPainter;
-//                _painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-//            }
-//            else
-//            {
-
-//                //1. gdi+ create backbuffer
-//                _nativeWin32Dc = new Win32.NativeWin32MemoryDc(_myWidth, _myHeight);
-
-//                //2. create actual bitmap that share bitmap data from native _nativeWin32Dc
-//                var actualImage = new ActualBitmap(_myWidth, _myHeight, _nativeWin32Dc.PPVBits);
-
-//                //----------------------------------------------------------------
-//                //3. create render surface from bitmap => provide basic bitmap fill operations
-//                AggRenderSurface aggsx = new AggRenderSurface(actualImage);
-//                //4. painter wraps the render surface  => provide advance operations
-//                AggPainter aggPainter = new AggPainter(aggsx);
-
-//                //---------------------------------------------------------------
-//                //Text functions
-//                //5. set text printer for agg canvas painter
-//                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-
-//                //TODO: review text printer here again***                 
-//                FontAtlasTextPrinter textPrinter = new FontAtlasTextPrinter(aggPainter);
-//                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
-//                aggPainter.TextPrinter = textPrinter;
-//                _painter = aggPainter;
-//            }
-//            _painter.Clear(PixelFarm.Drawing.Color.White);
-//        }
-
-//        public void LoadExample(DemoBase exBase)
-//        {
-//            this._exampleBase = exBase;
-//            if (_painter != null)
-//            {
-//                DemoBase.InvokePainterReady(exBase, _painter);
-//            }
-//            //exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
-//        }
-//        protected override void OnKeyDown(KeyEventArgs e)
-//        {
-//            _exampleBase.KeyDown((int)e.KeyCode);
-//            base.OnKeyDown(e);
-//        }
-//        protected override void OnMouseDown(MouseEventArgs e)
-//        {
-//            this._isMouseDown = true;
-//            //exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
-//            _exampleBase.MouseDown(e.X, e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
-//            _exampleBase.NeedRedraw = true;
-//            base.OnMouseDown(e);
-//            if (!_useGdiPlusOutput)
-//            {
-//                Invalidate();
-//            }
-//            else
-//            {
-//                UpdateOutput();
-//            }
-//        }
-//        protected override void OnMouseUp(MouseEventArgs e)
-//        {
-//            this._isMouseDown = false;
-//            //exampleBase.MouseUp(e.X, myHeight - e.Y);
-//            _exampleBase.MouseUp(e.X, e.Y);
-//            //force redraw when mouse up
-//            _exampleBase.NeedRedraw = true;
-//            base.OnMouseUp(e);
-//            if (!_useGdiPlusOutput)
-//            {
-//                Invalidate();
-//            }
-//            else
-//            {
-//                UpdateOutput();
-//            }
-//        }
-//        protected override void OnMouseMove(MouseEventArgs e)
-//        {
-//            if (this._isMouseDown)
-//            {
-//                _exampleBase.MouseDrag(e.X, e.Y);
-
-//                //force redraw when drag 
-//                _exampleBase.NeedRedraw = true;
-
-//                if (!_useGdiPlusOutput)
-//                {
-//                    Invalidate();
-//                }
-//                else
-//                {
-//                    UpdateOutput();
-//                }
-//            }
-//            base.OnMouseMove(e);
-//        }
-//        protected override void OnPaint(PaintEventArgs e)
-//        {
-//            if (this._exampleBase == null)
-//            {
-//                base.OnPaint(e);
-//                return;
-//            }
-//            if (!_useGdiPlusOutput)
-//            {
-//                //check if the example output need to be redraw 
-//                //or not, if not then use img cache
-//                if (_exampleBase.NeedRedraw)
-//                {
-//                    _exampleBase.Draw(_painter);
-//                    _exampleBase.NeedRedraw = false;
-//                }
-//                Graphics g = e.Graphics;
-//                IntPtr displayDC = g.GetHdc(); 
-//                _nativeWin32Dc.BitBltTo(displayDC); 
-//                g.ReleaseHdc(displayDC);
-//            }
-//            else
-//            {
-//                _exampleBase.Draw(_painter);
-//                Graphics g = e.Graphics;
-//                IntPtr displayDC = g.GetHdc();
-//                _sx.RenderTo(displayDC, 0, 0, new PixelFarm.Drawing.Rectangle(0, 0, _bufferBmpRect.Width, _bufferBmpRect.Height));
-//                g.ReleaseHdc(displayDC);
-//            }
-//            base.OnPaint(e);
-//        }
-//        void UpdateOutput()
-//        {
-//            _exampleBase.Draw(_painter);
-//            if (_useGdiPlusOutput)
-//            {
-//                IntPtr destHdc = _thisGfx.GetHdc();
-//                _sx.RenderTo(destHdc, 0, 0, new PixelFarm.Drawing.Rectangle(0, 0, _bufferBmpRect.Width, _bufferBmpRect.Height));
-//                _thisGfx.ReleaseHdc(destHdc);
-//            }
-//        }
-//    }
-//}
