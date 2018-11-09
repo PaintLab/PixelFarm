@@ -5,7 +5,7 @@ using System;
 namespace Win32
 {
 
-    public class NativeWin32MemoryDc : IDisposable
+    public class NativeWin32MemoryDC : IDisposable
     {
         int _width;
         int _height;
@@ -18,7 +18,7 @@ namespace Win32
         bool isDisposed;
         bool _invertedImage;
 
-        public NativeWin32MemoryDc(int w, int h, bool invertImage = false)
+        public NativeWin32MemoryDC(int w, int h, bool invertImage = false)
         {
             this._width = w;
             this._height = h;
@@ -134,14 +134,44 @@ namespace Win32
         {
             Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)this.PPVBits, copyLen);
         }
+        public unsafe void BlendWin32From(
+           IntPtr srcDC, 
+           int srcX,
+           int srcY,
+           int srcWidth,
+           int srcHeight,
+           int destX, int destY)
+        {
+            Rectangle rect = Rectangle.Intersect(
+                        new Rectangle(destX, destY, srcWidth, srcHeight), //src rect
+                        new Rectangle(0, 0, this._width, this._height));//dest rectt
 
+            if (rect.W <= 0 || rect.H <= 0)
+            {
+                return;
+            }
+
+
+            Win32.MyWin32.BLENDFUNCTION blendFunc = new MyWin32.BLENDFUNCTION();
+            blendFunc.BlendOp = Win32.MyWin32.AC_SRC_OVER;
+            blendFunc.BlendFlags = 0;
+            blendFunc.SourceConstantAlpha = 255;
+            blendFunc.AlphaFormat = Win32.MyWin32.AC_SRC_ALPHA;
+
+            Win32.MyWin32.AlphaBlend(memHdc,
+                destX, destY,
+                srcWidth, srcHeight, srcDC,
+                srcX, srcY, srcWidth, srcHeight,
+                blendFunc);
+
+        }
         public unsafe void BlendBltBitFrom(
-            byte* srcH, int srcStrideInBytes,
-            int srcX,
-            int srcY,
-            int srcWidth,
-            int srcHeight,
-            int destX, int destY)
+        byte* srcHeader, int srcStrideInBytes,
+        int srcX,
+        int srcY,
+        int srcWidth,
+        int srcHeight,
+        int destX, int destY)
         {
             //no alpha
 
@@ -172,9 +202,9 @@ namespace Win32
                 for (int h = srcY; h < src_intersect_height; ++h)
                 {
                     //
-                    Win32.MyWin32.memcpy(destHead + destXOffset, srcH + srcXOffset, srcRowLenInBytes);
+                    Win32.MyWin32.memcpy(destHead + destXOffset, srcHeader + srcXOffset, srcRowLenInBytes);
 
-                    srcH += srcStrideInBytes;
+                    srcHeader += srcStrideInBytes;
                     destHead -= destStrideInBytes; //***
                 }
             }
@@ -182,8 +212,8 @@ namespace Win32
             {
                 for (int h = srcY; h < src_intersect_height; ++h)
                 {
-                    Win32.MyWin32.memcpy(destHead + destXOffset, srcH + srcXOffset, srcRowLenInBytes);
-                    srcH += srcStrideInBytes;
+                    Win32.MyWin32.memcpy(destHead + destXOffset, srcHeader + srcXOffset, srcRowLenInBytes);
+                    srcHeader += srcStrideInBytes;
                     destHead += destStrideInBytes;
                 }
             }

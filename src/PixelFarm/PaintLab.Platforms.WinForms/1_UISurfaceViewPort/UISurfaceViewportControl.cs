@@ -117,6 +117,7 @@ namespace LayoutFarm.UI
             this.innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
+                case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
                     {
 #if GL_ENABLE
@@ -126,10 +127,10 @@ namespace LayoutFarm.UI
 
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
                         var view = new OpenGL.GpuOpenGLSurfaceView();
-
                         view.Width = 1200;
                         view.Height = 1200;
                         _openGLSurfaceView = view;
+
                         //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
                         //this.panel1.Visible = true;

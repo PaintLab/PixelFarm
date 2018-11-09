@@ -15,7 +15,7 @@ namespace PixelFarm.DrawingGL
 
         int _width;
         int _height;
-        Win32.NativeWin32MemoryDc memdc;
+        Win32.NativeWin32MemoryDC memdc;
         IntPtr hfont;
         int bmpWidth = 200;
         int bmpHeight = 50;
@@ -28,7 +28,7 @@ namespace PixelFarm.DrawingGL
             bmpWidth = w;
             bmpHeight = h;
 
-            memdc = new Win32.NativeWin32MemoryDc(bmpWidth, bmpHeight);
+            memdc = new Win32.NativeWin32MemoryDC(bmpWidth, bmpHeight);
             //TODO: review here
             //use default font from current platform
             InitFont("tahoma", 14);
@@ -69,7 +69,7 @@ namespace PixelFarm.DrawingGL
         public void DrawString(char[] textBuffer, int startAt, int len, double x, double y)
         {
             //TODO: review performance              
-            memdc.PatBlt(Win32.NativeWin32MemoryDc.PatBltColor.White, 0, 0, bmpWidth, bmpHeight);
+            memdc.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White, 0, 0, bmpWidth, bmpHeight);
             memdc.TextOut(textBuffer);
             //memdc.BitBltTo(destHdc);
             // Win32.Win32Utils.BitBlt(hdc, 0, 0, bmpWidth, 50, memHdc, 0, 0, Win32.MyWin32.SRCCOPY);
