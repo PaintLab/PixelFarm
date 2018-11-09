@@ -89,7 +89,7 @@ namespace Mini
                         testBed.WindowState = FormWindowState.Maximized;
 
                         LayoutFarm.UI.InnerViewportKind innerViewportKind = LayoutFarm.UI.InnerViewportKind.PureAgg;
-                        LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
                             innerViewportKind,
@@ -115,7 +115,7 @@ namespace Mini
                         testBed.WindowState = FormWindowState.Maximized;
 
                         LayoutFarm.UI.InnerViewportKind innerViewportKind = LayoutFarm.UI.InnerViewportKind.GdiPlus;
-                        LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
                             innerViewportKind,
@@ -141,7 +141,7 @@ namespace Mini
                         testBed.WindowState = FormWindowState.Maximized;
 
 
-                        LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.AggOnGLES,
@@ -149,7 +149,7 @@ namespace Mini
                             );
 
 
-                        testBed.Show();
+                      
                         testBed.LoadExample(exAndDesc, demo);
 
                         GLAppModule glbaseDemo = new GLAppModule();
@@ -160,7 +160,7 @@ namespace Mini
                         {
                             glbaseDemo.CloseDemo();
                         };
-
+                        testBed.Show();
                     }
                     break;
                 case RenderBackendChoice.OpenGLES: //gles 2 and 3
@@ -172,7 +172,7 @@ namespace Mini
                         testBed.WindowState = FormWindowState.Maximized;
 
                         //--------------------------------------------
-                        LayoutFarm.UI.FormCanvasHelper.CreateConvasControlOnExistingControl(
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                           testBed.GetLandingControl(),
                           0, 0, 800, 600,
                           LayoutFarm.UI.InnerViewportKind.GLES,
@@ -188,6 +188,8 @@ namespace Mini
                         {
                             glbaseDemo.CloseDemo();
                         };
+
+                        testBed.Show();
                     }
                     break;
                 case RenderBackendChoice.OpenGLES_OnFormTestBed:
