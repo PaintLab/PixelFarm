@@ -120,12 +120,8 @@ namespace LayoutFarm.UI
                         //TODO: review here
                         //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
-                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
-                        if (innerViewportKind == InnerViewportKind.AggOnGLES)
-                        {
-                            bridge.DisablePaintToOutputWindow = true;
-                        }
-                        //
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot); 
+
                         var view = new OpenGL.GpuOpenGLSurfaceView();
                         view.Width = 1200;
                         view.Height = 1200;

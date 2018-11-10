@@ -82,19 +82,19 @@ namespace LayoutFarm.UI.OpenGL
             }
         }
 
-        bool _disablePaintToOutputWindow;
-        public bool DisablePaintToOutputWindow
-        {
-            get => _disablePaintToOutputWindow;
-            set => _disablePaintToOutputWindow = value;
-        }
+        //bool _disablePaintToOutputWindow;
+        //public bool DisablePaintToOutputWindow
+        //{
+        //    get => _disablePaintToOutputWindow;
+        //    set => _disablePaintToOutputWindow = value;
+        //}
 
 #if DEBUG
         System.Diagnostics.Stopwatch dbugStopWatch = new System.Diagnostics.Stopwatch();
 #endif
         public override void PaintToOutputWindow()
         {
-            if (!isInitGLControl || _disablePaintToOutputWindow)
+            if (!isInitGLControl)// || _disablePaintToOutputWindow)
             {
                 return;
             }
