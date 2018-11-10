@@ -168,7 +168,6 @@ namespace Mini
                 base.OnMouseUp(e);
             }
         }
-
         class GLCanvasRenderElement : RenderElement, IDisposable
         {
             ActualBitmap _aggBmp;
@@ -180,6 +179,7 @@ namespace Mini
             GLPainter _glPainter;
             GLBitmap _glBmp;
 
+            LazyAggBitmapBufferProvider _lzBmpProvider;
 
             public GLCanvasRenderElement(RootGraphic rootgfx, int w, int h)
                 : base(rootgfx, w, h)
@@ -191,7 +191,9 @@ namespace Mini
                 _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
                 var aggTextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
                 _aggPainter.TextPrinter = aggTextPrinter;
-                // 
+                //  
+                _lzBmpProvider = new LazyAggBitmapBufferProvider(_aggBmp);
+
             }
             public void SetOwnerDemoUI(DemoUI demoUI)
             {
@@ -249,7 +251,7 @@ namespace Mini
                 //copy from 
                 if (_glBmp == null)
                 {
-                    _glBmp = new GLBitmap(_aggBmp);
+                    _glBmp = new GLBitmap(_lzBmpProvider);
                     _glBmp.IsInvert = false;
                 }
 

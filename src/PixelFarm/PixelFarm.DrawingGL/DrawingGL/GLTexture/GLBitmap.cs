@@ -72,7 +72,6 @@ namespace PixelFarm.DrawingGL
                 System.Runtime.InteropServices.Marshal.Copy(tmp.Ptr, buffer, 0, srcBmp.Width * srcBmp.Height);
             }
             rawIntBuffer = buffer;
-
         }
 
 
@@ -124,21 +123,6 @@ namespace PixelFarm.DrawingGL
                           PixelFormat.Rgba, // 
                           PixelType.UnsignedByte, nativeImgMem);
                 }
-                //else if (this.rawBuffer != null)
-                //{
-                //    unsafe
-                //    {
-                //        //ES20 dose not have BGRA 
-                //        //so in little-endian machine we need to convert 
-                //        fixed (byte* bmpScan0 = &this.rawBuffer[0])
-                //        {
-                //            GL.TexImage2D(TextureTarget.Texture2D, 0,
-                //            PixelInternalFormat.Rgba, this.width, this.height, 0,
-                //            PixelFormat.Rgba, // 
-                //            PixelType.UnsignedByte, (IntPtr)bmpScan0);
-                //        }
-                //    }
-                //}
                 else if (this.rawIntBuffer != null)
                 {
                     unsafe
@@ -152,15 +136,7 @@ namespace PixelFarm.DrawingGL
                             PixelType.UnsignedByte, new IntPtr((void*)head));
                         }
                     }
-
                 }
-                //else if (this.bmp != null)
-                //{
-                //    GL.TexImage2D(TextureTarget.Texture2D, 0,
-                //           PixelInternalFormat.Rgba, this.width, this.height, 0,
-                //           PixelFormat.Rgba, // 
-                //           PixelType.UnsignedByte, bmp.GetNativeImageHandle());
-                //}
                 else
                 {
                     //use lazy provider
