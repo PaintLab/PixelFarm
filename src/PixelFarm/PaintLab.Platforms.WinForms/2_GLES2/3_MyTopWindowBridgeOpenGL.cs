@@ -19,6 +19,7 @@ namespace LayoutFarm.UI.OpenGL
             : base(root, topWinEventRoot)
         {
         }
+
         public override void PaintToOutputWindow2(Rectangle invalidateArea)
         {
             throw new NotImplementedException();
@@ -78,23 +79,20 @@ namespace LayoutFarm.UI.OpenGL
                 //2.                 
                 windowControl.ClearSurface(OpenTK.Graphics.Color4.White);
                 //3.
-
             }
         }
-        //public override void PaintToCanvas(Canvas canvas)
-        //{
-        //    throw new NotImplementedException();
-        //}
+         
 
 #if DEBUG
         System.Diagnostics.Stopwatch dbugStopWatch = new System.Diagnostics.Stopwatch();
 #endif
         public override void PaintToOutputWindow()
         {
-            if (!isInitGLControl)
+            if (!isInitGLControl) 
             {
                 return;
             }
+
             //var innumber = dbugCount;
             //dbugCount++;
             //Console.WriteLine(">" + innumber);
