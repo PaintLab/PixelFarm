@@ -145,7 +145,7 @@ namespace Mini
                             );
 
                         CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
-                        glbaseDemo.AggOnGLES = true;
+               
                         glbaseDemo.BindSurface(surfaceViewport);
                         glbaseDemo.LoadExample(demo);
                         testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();

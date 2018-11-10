@@ -57,13 +57,13 @@ namespace Mini
             set { }
         }
 
-        //----------------------------------------------------
-        //for GL
-        public virtual void BuildCustomDemoGLContext(out GLRenderSurface glsx, out GLPainter painter)
-        {
-            glsx = null;
-            painter = null;
-        }
+        ////----------------------------------------------------
+        ////for GL
+        //public virtual void BuildCustomDemoGLContext(out GLRenderSurface glsx, out GLPainter painter)
+        //{
+        //    glsx = null;
+        //    painter = null;
+        //}
         public static void InvokeGLContextReady(DemoBase demo, GLRenderSurface glsx, GLPainter painter)
         {
             demo._painter = painter;
