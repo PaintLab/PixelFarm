@@ -60,22 +60,21 @@ namespace Mini
         public void LoadExample(DemoBase demoBase)
         {
 
-            _demoUI = new DemoUI(demoBase, _myWidth, _myHeight);
-            _glCanvasRenderElement = new GLCanvasRenderElement(_rootGfx, _myWidth, _myHeight);
 
+            _hh1 = _glControl.Handle; //ensure that contrl handler is created
+            _glControl.MakeCurrent(); 
 
-            this._demoBase = demoBase;
-            //1.
-            //note:when we init,
-            //no glcanvas/ painter are created
+            //
+            this._demoBase = demoBase; 
             demoBase.Init();
+
+            _demoUI = new DemoUI(demoBase, _myWidth, _myHeight);
+           
             //-----------------------------------------------
             //2. check if demo will create canvas/painter context
             //or let this GLDemoContext create for it
 
-            _hh1 = _glControl.Handle; //ensure that contrl handler is created
-            _glControl.MakeCurrent();
-
+         
 
             //if demo not create canvas and painter
             //the we create for it
@@ -121,7 +120,12 @@ namespace Mini
             DemoBase.InvokeGLContextReady(demoBase, this._glsx, this._canvasPainter);
             DemoBase.InvokePainterReady(demoBase, this._canvasPainter);
 
-            _glCanvasRenderElement.LoadDemo(demoBase);
+             
+            _glCanvasRenderElement = (GLCanvasRenderElement)_demoUI.GetPrimaryRenderElement(_rootGfx);
+            //Add to RenderTree
+            //_rootGfx.TopWindowRenderBox.AddChild(_glCanvasRenderElement);
+             
+
         }
 
 
@@ -291,7 +295,7 @@ namespace Mini
             }
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
-                _demo.Draw(_painter);
+                //_demo.Draw(_painter);
             }
             public override void ResetRootGraphics(RootGraphic rootgfx)
             {
