@@ -30,7 +30,7 @@ namespace Mini
             GdiPlus,
             OpenGLES,
 
-            OpenGLES_OnFormTestBed,
+
             SkiaMemoryBackend,
             SkiaGLBackend,
         }
@@ -43,7 +43,6 @@ namespace Mini
             lstBackEndRenderer.Items.Add(RenderBackendChoice.AggOnGLES);
             //
             lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// legacy ***, for printing
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES_OnFormTestBed); //legacy , for test only
 
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
@@ -88,17 +87,17 @@ namespace Mini
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
 
-                        LayoutFarm.UI.InnerViewportKind innerViewportKind = LayoutFarm.UI.InnerViewportKind.PureAgg;
+
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
-                            innerViewportKind,
+                            LayoutFarm.UI.InnerViewportKind.PureAgg,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
                         testBed.Show();
 
                         _cpuBlitContextWinForm = new CpuBlitAppModule();
-                        _cpuBlitContextWinForm.BindSurface(surfaceViewport, innerViewportKind);
+                        _cpuBlitContextWinForm.BindSurface(surfaceViewport);
                         _cpuBlitContextWinForm.LoadExample(demo);
 
                         testBed.LoadExample(exAndDesc, demo);
@@ -114,17 +113,15 @@ namespace Mini
                         FormTestBed testBed = new FormTestBed();
                         testBed.WindowState = FormWindowState.Maximized;
 
-                        LayoutFarm.UI.InnerViewportKind innerViewportKind = LayoutFarm.UI.InnerViewportKind.GdiPlus;
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
-                            testBed.GetLandingControl(),
-                            0, 0, 800, 600,
-                            innerViewportKind,
-                            out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
-                            );
-                      
+                             testBed.GetLandingControl(),
+                             0, 0, 800, 600,
+                             LayoutFarm.UI.InnerViewportKind.GdiPlus,
+                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                             );
 
                         _cpuBlitContextWinForm = new CpuBlitAppModule();
-                        _cpuBlitContextWinForm.BindSurface(surfaceViewport, innerViewportKind);
+                        _cpuBlitContextWinForm.BindSurface(surfaceViewport);
                         _cpuBlitContextWinForm.LoadExample(demo);
 
                         testBed.LoadExample(exAndDesc, demo);
@@ -145,16 +142,14 @@ namespace Mini
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.AggOnGLES,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
-                            );                      
-                       
-                        GLAppModule glbaseDemo = new GLAppModule();
-                        glbaseDemo.AggOnGLES = true;
-                        glbaseDemo.LoadGLControl(surfaceViewport.GetOpenTKControl());
-                        glbaseDemo.LoadSample(demo);
-                        testBed.FormClosing += (s2, e2) =>
-                        {
-                            glbaseDemo.CloseDemo();
-                        };
+                            );
+
+                        CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
+               
+                        glbaseDemo.BindSurface(surfaceViewport);
+                        glbaseDemo.LoadExample(demo);
+                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
+
                         testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
                     }
@@ -176,69 +171,57 @@ namespace Mini
                           );
 
 
-                        GLAppModule glbaseDemo = new GLAppModule();
-                        glbaseDemo.AggOnGLES = false;
-                        glbaseDemo.LoadGLControl(surfaceViewport.GetOpenTKControl());
-                        glbaseDemo.LoadSample(demo);
-                        testBed.FormClosing += (s2, e2) =>
-                        {
-                            glbaseDemo.CloseDemo();
-                        };
+                        GLESAppModule glbaseDemo = new GLESAppModule(); 
+                        glbaseDemo.BindSurface(surfaceViewport);
+                        glbaseDemo.LoadExample(demo);
+                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
 
                         testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
                     }
                     break;
-                case RenderBackendChoice.OpenGLES_OnFormTestBed:
-                    {
-                        //create demo
-                        DemoBase demo = InitDemo(exAndDesc);
-                        if (demo == null) { return; }
-
-
-                        //create form
-                        FormGLTest formGLTest = new FormGLTest();
-                        formGLTest.Text = exAndDesc.ToString();
-                        formGLTest.Show();
-                        //---------------------- 
-                        //get target control that used to present the example
-                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                        GLAppModule glbaseDemo = new GLAppModule();
-                        glbaseDemo.LoadGLControl(control);
-                        glbaseDemo.LoadSample(demo);
-                        //----------------------
-                        formGLTest.FormClosing += (s2, e2) =>
-                        {
-                            glbaseDemo.CloseDemo();
-                        };
-
-
-                        formGLTest.WindowState = FormWindowState.Maximized;
-
-
-
-
-                        //////create form
-                        //FormGLTest formGLTest = new FormGLTest();
-                        //formGLTest.Text = exAndDesc.ToString();
-                        //formGLTest.Show();
-                        ////---------------------- 
-                        ////get target control that used to present the example
-                        //OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                        //{
-                        //    GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                        //    glbaseDemo.AggOnGLES = true;
-                        //    glbaseDemo.LoadGLControl(control);
-                        //    glbaseDemo.LoadSample(exBase);
-                        //    //----------------------
-                        //    formGLTest.FormClosing += (s2, e2) =>
-                        //    {
-                        //        glbaseDemo.CloseDemo();
-                        //    };
-                        //}
-                        //formGLTest.WindowState = FormWindowState.Maximized;
-                    }
-                    break;
+                //case RenderBackendChoice.OpenGLES_OnFormTestBed:
+                //    {
+                //        //create demo
+                //        DemoBase demo = InitDemo(exAndDesc);
+                //        if (demo == null) { return; } 
+                //        //create form
+                //        FormGLTest formGLTest = new FormGLTest();
+                //        formGLTest.Text = exAndDesc.ToString();
+                //        formGLTest.Show();
+                //        //---------------------- 
+                //        //get target control that used to present the example
+                //        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                //        GLAppModule glbaseDemo = new GLAppModule();
+                //        glbaseDemo.LoadGLControl(control);
+                //        glbaseDemo.LoadSample(demo);
+                //        //----------------------
+                //        formGLTest.FormClosing += (s2, e2) =>
+                //        {
+                //            glbaseDemo.CloseDemo();
+                //        }; 
+                //        formGLTest.WindowState = FormWindowState.Maximized; 
+                //        //////create form
+                //        //FormGLTest formGLTest = new FormGLTest();
+                //        //formGLTest.Text = exAndDesc.ToString();
+                //        //formGLTest.Show();
+                //        ////---------------------- 
+                //        ////get target control that used to present the example
+                //        //OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                //        //{
+                //        //    GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                //        //    glbaseDemo.AggOnGLES = true;
+                //        //    glbaseDemo.LoadGLControl(control);
+                //        //    glbaseDemo.LoadSample(exBase);
+                //        //    //----------------------
+                //        //    formGLTest.FormClosing += (s2, e2) =>
+                //        //    {
+                //        //        glbaseDemo.CloseDemo();
+                //        //    };
+                //        //}
+                //        //formGLTest.WindowState = FormWindowState.Maximized;
+                //    }
+                //    break;
 
 #if SKIA_ENABLE
                 case RenderBackendChoice.SkiaMemoryBackend:

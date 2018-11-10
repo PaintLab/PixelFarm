@@ -14,7 +14,8 @@ namespace OpenTK
         const int GLES_MAJOR = 3;
         const int GLES_MINOR = 0;
 
-        EventHandler glPaintHandler;
+        EventHandler _glPaintHandler;
+
         static OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
              DisplayDevice.Default.BitsPerPixel,//default 32 bits color
              16,//depth buffer => 16
@@ -35,7 +36,7 @@ namespace OpenTK
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)
         {
-            this.glPaintHandler = glPaintHandler;
+            this._glPaintHandler = glPaintHandler;
         }
         public void ClearSurface(OpenTK.Graphics.Color4 color)
         {
@@ -60,10 +61,10 @@ namespace OpenTK
             base.OnPaint(e);
             if (!this.DesignMode)
             {
-                if (glPaintHandler != null)
+                if (_glPaintHandler != null)
                 {
                     MakeCurrent();
-                    glPaintHandler(this, e);
+                    _glPaintHandler(this, e);
                     SwapBuffers();
                 }
             }

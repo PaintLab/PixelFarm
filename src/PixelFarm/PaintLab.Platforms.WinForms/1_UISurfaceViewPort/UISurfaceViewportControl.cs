@@ -25,6 +25,9 @@ namespace LayoutFarm.UI
 
             //this.panel1.Visible = false; 
         }
+        public InnerViewportKind InnerViewportKind => innerViewportKind;
+
+
 #if DEBUG
         static int s_dbugCount;
 #endif
@@ -73,37 +76,29 @@ namespace LayoutFarm.UI
                 return UIPlatformWinForm.GetDefault();
             }
         }
+
 #if GL_ENABLE
+
         IntPtr hh1;
-        OpenGL.GpuOpenGLSurfaceView _openGLSurfaceView;
+        OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
         GLRenderSurface _glsx;
-        GLPainter canvasPainter;
-#endif
+        GLPainter _glPainter;
 
-        void HandleGLPaint(object sender, System.EventArgs e)
-        {
-            //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            //canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
-            //canvas2d.ClearColorBuffer();
-            ////example
-            //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            //canvasPainter.FillRectLBWH(20, 20, 150, 150);
-            ////load bmp image 
-            //////------------------------------------------------------------------------- 
-            ////if (exampleBase != null)
-            ////{
-            ////    exampleBase.Draw(canvasPainter);
-            ////}
-            ////draw data 
-
-            //openGLSurfaceView.SwapBuffers();
-        }
-#if GL_ENABLE
         public OpenTK.MyGLControl GetOpenTKControl()
         {
-            return _openGLSurfaceView;
+            return _gpuSurfaceViewUserControl;
+        }
+        public GLPainter GetGLPainter()
+        {
+            return _glPainter;
+        }
+        public GLRenderSurface GetGLRenderSurface()
+        {
+            return _glsx;
         }
 #endif
+
+
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
@@ -125,11 +120,12 @@ namespace LayoutFarm.UI
                         //TODO: review here
                         //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
-                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot); 
+
                         var view = new OpenGL.GpuOpenGLSurfaceView();
                         view.Width = 1200;
                         view.Height = 1200;
-                        _openGLSurfaceView = view;
+                        _gpuSurfaceViewUserControl = view;
 
                         //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
@@ -150,7 +146,7 @@ namespace LayoutFarm.UI
                         //---------------
                         //canvas2d.FlipY = true;//
                         //---------------
-                        canvasPainter = new GLPainter(_glsx);
+                        _glPainter = new GLPainter(_glsx);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -168,11 +164,11 @@ namespace LayoutFarm.UI
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer; 
                         //3 
-                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-                        canvasPainter.TextPrinter = printer;
+                        var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        _glPainter.TextPrinter = printer;
 
                         //
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(canvasPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
                     }
