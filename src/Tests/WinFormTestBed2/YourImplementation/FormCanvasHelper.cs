@@ -50,7 +50,7 @@ namespace LayoutFarm.UI
                     ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
-                case InnerViewportKind.GL:
+                case InnerViewportKind.GLES:
                     ifont = new OpenFontTextService();
                     break;
 
@@ -127,12 +127,12 @@ namespace LayoutFarm.UI
             return Screen.PrimaryScreen;
         }
 
-        public static void CreateConvasControlOnExistingControl(
-          Control landingControl,
-          int xpos, int ypos,
-          int w, int h,
-          InnerViewportKind internalViewportKind,
-          out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+        public static void CreateCanvasControlOnExistingControl(
+              Control landingControl,
+              int xpos, int ypos,
+              int w, int h,
+              InnerViewportKind internalViewportKind,
+              out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
         {
             //1. init
             InitWinform();
@@ -145,23 +145,16 @@ namespace LayoutFarm.UI
                     ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
-                case InnerViewportKind.GL:
+                case InnerViewportKind.GLES:
                     ifont = new OpenFontTextService();
                     break;
 
             }
 
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
-
-            //
-
             //---------------------------------------------------------------------------
 
-            MyRootGraphic myRootGfx = new MyRootGraphic(
-               w, h,
-               ifont
-               );
-
+            MyRootGraphic myRootGfx = new MyRootGraphic(w, h, ifont);
             //---------------------------------------------------------------------------
 
             var innerViewport = canvasViewport = new LayoutFarm.UI.UISurfaceViewportControl();
@@ -182,7 +175,6 @@ namespace LayoutFarm.UI
                 {
                     innerViewport.Close();
                 };
-
             }
 
         }

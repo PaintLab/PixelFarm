@@ -25,6 +25,9 @@ namespace LayoutFarm.UI
 
             //this.panel1.Visible = false; 
         }
+        public InnerViewportKind InnerViewportKind => innerViewportKind;
+
+
 #if DEBUG
         static int s_dbugCount;
 #endif
@@ -73,30 +76,29 @@ namespace LayoutFarm.UI
                 return UIPlatformWinForm.GetDefault();
             }
         }
-#if GL_ENABLE
-        IntPtr hh1;
-        OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
-        GLRenderSurface _glsx;
-        GLPainter canvasPainter;
-#endif
-        void HandleGLPaint(object sender, System.EventArgs e)
-        {
-            //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            //canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
-            //canvas2d.ClearColorBuffer();
-            ////example
-            //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            //canvasPainter.FillRectLBWH(20, 20, 150, 150);
-            ////load bmp image 
-            //////------------------------------------------------------------------------- 
-            ////if (exampleBase != null)
-            ////{
-            ////    exampleBase.Draw(canvasPainter);
-            ////}
-            ////draw data 
 
-            //openGLSurfaceView.SwapBuffers();
+#if GL_ENABLE
+
+        IntPtr hh1;
+        OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
+        GLRenderSurface _glsx;
+        GLPainter _glPainter;
+
+        public OpenTK.MyGLControl GetOpenTKControl()
+        {
+            return _gpuSurfaceViewUserControl;
         }
+        public GLPainter GetGLPainter()
+        {
+            return _glPainter;
+        }
+        public GLRenderSurface GetGLRenderSurface()
+        {
+            return _glsx;
+        }
+#endif
+
+
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
@@ -110,19 +112,21 @@ namespace LayoutFarm.UI
             this.innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
-                case InnerViewportKind.GL:
+                case InnerViewportKind.AggOnGLES:
+                case InnerViewportKind.GLES:
                     {
 #if GL_ENABLE
                         //temp not suppport  
                         //TODO: review here
                         //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
-                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
-                        var view = new OpenGL.GpuOpenGLSurfaceView();
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot); 
 
+                        var view = new OpenGL.GpuOpenGLSurfaceView();
                         view.Width = 1200;
                         view.Height = 1200;
-                        openGLSurfaceView = view;
+                        _gpuSurfaceViewUserControl = view;
+
                         //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
                         //this.panel1.Visible = true;
@@ -142,7 +146,7 @@ namespace LayoutFarm.UI
                         //---------------
                         //canvas2d.FlipY = true;//
                         //---------------
-                        canvasPainter = new GLPainter(_glsx);
+                        _glPainter = new GLPainter(_glsx);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -160,11 +164,11 @@ namespace LayoutFarm.UI
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer; 
                         //3 
-                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-                        canvasPainter.TextPrinter = printer;
+                        var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        _glPainter.TextPrinter = printer;
 
                         //
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(canvasPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
                     }
@@ -185,6 +189,17 @@ namespace LayoutFarm.UI
                     }
                     break;
 #endif
+                case InnerViewportKind.PureAgg:
+                    {
+                        var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot);
+                        var view = new CpuSurfaceView();
+                        view.Dock = DockStyle.Fill;
+                        this.Controls.Add(view);
+                        //--------------------------------------- 
+                        view.Bind(bridge);
+                        this.winBridge = bridge;
+                    }
+                    break;
                 case InnerViewportKind.GdiPlus:
                 default:
                     {
@@ -232,7 +247,7 @@ namespace LayoutFarm.UI
         public void PaintMe()
         {
             this.winBridge.PaintToOutputWindow();
-        } 
+        }
         public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
         {
             winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
@@ -314,7 +329,7 @@ namespace LayoutFarm.UI
                 this.rootgfx.TopWindowRenderBox.AddChild(renderElem);
             }
         }
- 
+
 
         PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
         bool _hasInvalidateAreaAccum;

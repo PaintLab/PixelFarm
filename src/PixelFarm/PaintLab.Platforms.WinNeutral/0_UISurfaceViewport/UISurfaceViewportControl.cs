@@ -79,7 +79,7 @@ namespace LayoutFarm.UI.WinNeutral
             this.innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
-                case InnerViewportKind.GL:
+                case InnerViewportKind.GLES:
                     {
 
                         ////temp not suppport
