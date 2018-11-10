@@ -47,9 +47,6 @@ namespace Mini
 
             //----------------------
             this._glControl = surfaceViewport.GetOpenTKControl();
-
-
-
             _glControl.SetGLPaintHandler(HandleAggOnGLESPaint);
 
             _hh1 = _glControl.Handle; //ensure that contrl handler is created
@@ -62,52 +59,20 @@ namespace Mini
 
 
             _hh1 = _glControl.Handle; //ensure that contrl handler is created
-            _glControl.MakeCurrent(); 
+            _glControl.MakeCurrent();
 
             //
-            this._demoBase = demoBase; 
+            this._demoBase = demoBase;
             demoBase.Init();
 
             _demoUI = new DemoUI(demoBase, _myWidth, _myHeight);
-           
-            //-----------------------------------------------
-            //2. check if demo will create canvas/painter context
-            //or let this GLDemoContext create for it
 
-         
 
-            //if demo not create canvas and painter
-            //the we create for it
-            int max = Math.Max(_glControl.Width, _glControl.Height);
-            _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, _glControl.Width, _glControl.Height);
-            _glsx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
-            _canvasPainter = new GLPainter(_glsx);
-            //create text printer for opengl 
-            //----------------------
-            //1. win gdi based
-            //var printer = new WinGdiFontPrinter(_glsx, glControl.Width, glControl.Height);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //2. raw vxs
-            //var openFontStore = new Typography.TextServices.OpenFontStore();
-            //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter,openFontStore);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //3. agg texture based font texture
+            //use existing GLRenderSurface and GLPainter
+            //see=>UISurfaceViewportControl.InitRootGraphics()
 
-            //var printer = new AggTextSpanPrinter(canvasPainter, glControl.Width, 30);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //4. texture atlas based font texture 
-            //------------
-            //resolve request font 
-            var printer = new GLBitmapGlyphTextPrinter(_canvasPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-            _canvasPainter.TextPrinter = printer;
-
-            //var openFontStore = new Typography.TextServices.OpenFontStore();
-            //var printer = new GLBmpGlyphTextPrinter(canvasPainter, openFontStore);
-            //canvasPainter.TextPrinter = printer;
-
+            _glsx = _surfaceViewport.GetGLRenderSurface();
+            _canvasPainter = _surfaceViewport.GetGLPainter();
 
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
@@ -120,11 +85,11 @@ namespace Mini
             DemoBase.InvokeGLContextReady(demoBase, this._glsx, this._canvasPainter);
             DemoBase.InvokePainterReady(demoBase, this._canvasPainter);
 
-             
+
             _canvasRenderElement = (GLCanvasRenderElement)_demoUI.GetPrimaryRenderElement(_rootGfx);
             //Add to RenderTree
             _rootGfx.TopWindowRenderBox.AddChild(_canvasRenderElement);
-             
+
 
         }
 
@@ -137,6 +102,8 @@ namespace Mini
 
         void HandleAggOnGLESPaint(object sender, System.EventArgs e)
         {
+
+
             _glsx.SmoothMode = SmoothMode.Smooth;
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Black;
             _glsx.ClearColorBuffer();
@@ -148,6 +115,11 @@ namespace Mini
 
             _canvasRenderElement.UpdateCpuBlitSurface();
 
+            if (_glBmp != null)
+            {
+                _glBmp.Dispose();
+                _glBmp = null;
+            }
             //------------------------------------------------------------------------- 
             //copy from 
             if (_glBmp == null)
@@ -163,7 +135,7 @@ namespace Mini
             _canvasPainter.DrawString("Hello2", 0, 400);
 
             //------------------------------------------------------------------------- 
-            _glControl.SwapBuffers();
+            //_glControl.SwapBuffers();
         }
 
 
