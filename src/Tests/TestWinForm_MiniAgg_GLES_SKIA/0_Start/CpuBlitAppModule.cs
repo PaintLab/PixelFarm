@@ -1,4 +1,5 @@
 ﻿//MIT, 2016-present, WinterDev
+//MIT, 2018-present, WinterDev
 
 using System;
 using PixelFarm.CpuBlit;
@@ -16,8 +17,7 @@ namespace Mini
         int _myWidth;
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;
-        InnerViewportKind _innerViewportKind;
-        RootGraphic _rootGfx;        
+        RootGraphic _rootGfx;
         //
         DemoUI _demoUI;
 
@@ -30,7 +30,7 @@ namespace Mini
             _myWidth = 800;
             _myHeight = 600;
 
-            _innerViewportKind = surfaceViewport.InnerViewportKind;
+
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
         }
@@ -174,5 +174,5 @@ namespace Mini
         }
     }
 
-  
+
 }
