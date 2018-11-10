@@ -82,7 +82,7 @@ namespace Mini
         class DemoUI : UIElement
         {
             DemoBase _demoBase;
-            RenderElement _canvasRenderE;
+            GLCanvasRenderElement _canvasRenderE;
             int _width;
             int _height;
             GLRenderSurface _glsx;
@@ -93,8 +93,11 @@ namespace Mini
                 _width = width;
                 _height = height;
                 _demoBase = demobase;
+
+                ContentMayChanged = true;
             }
 
+            public DemoBase InnerDemo => _demoBase;
             public void SetCanvasPainter(GLRenderSurface glsx, GLPainter painter)
             {
                 _glsx = glsx;
@@ -119,7 +122,8 @@ namespace Mini
                     var glRenderElem = new GLCanvasRenderElement(rootgfx, _width, _height);
                     glRenderElem.SetPainter(_glsx, _painter);
                     glRenderElem.SetController(this); //connect to event system
-                    glRenderElem.LoadDemo(_demoBase);
+                    glRenderElem.SetOwnerDemoUI(this);
+
                     _canvasRenderE = glRenderElem;
 
                 }
@@ -137,15 +141,20 @@ namespace Mini
             }
 
             //handle event
+            public bool ContentMayChanged { get; set; }
+
             protected override void OnMouseDown(UIMouseEventArgs e)
             {
+                ContentMayChanged = true;
                 _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
                 base.OnMouseDown(e);
             }
             protected override void OnMouseMove(UIMouseEventArgs e)
             {
+
                 if (e.IsDragging)
                 {
+                    ContentMayChanged = true;
                     _canvasRenderE.InvalidateGraphics();
                     _demoBase.MouseDrag(e.X, e.Y);
                     _canvasRenderE.InvalidateGraphics();
@@ -154,6 +163,7 @@ namespace Mini
             }
             protected override void OnMouseUp(UIMouseEventArgs e)
             {
+                ContentMayChanged = true;
                 _demoBase.MouseUp(e.X, e.Y);
                 base.OnMouseUp(e);
             }
@@ -164,10 +174,13 @@ namespace Mini
             ActualBitmap _aggBmp;
             AggPainter _aggPainter;
             DemoBase _demo;
+            DemoUI _demoUI;
 
             GLRenderSurface _glsx;
             GLPainter _glPainter;
             GLBitmap _glBmp;
+
+
             public GLCanvasRenderElement(RootGraphic rootgfx, int w, int h)
                 : base(rootgfx, w, h)
             {
@@ -180,31 +193,29 @@ namespace Mini
                 _aggPainter.TextPrinter = aggTextPrinter;
                 // 
             }
-
-
-            public void SetPainter(GLRenderSurface glsx, GLPainter canvasPainter)
+            public void SetOwnerDemoUI(DemoUI demoUI)
             {
-                _glsx = glsx;
-                _glPainter = canvasPainter;
-            }
-            public void LoadDemo(DemoBase demo)
-            {
-                _demo = demo;
+                _demoUI = demoUI;
+                _demo = demoUI.InnerDemo;
                 if (_aggPainter != null)
                 {
                     DemoBase.InvokePainterReady(_demo, _aggPainter);
                 }
             }
+            public void SetPainter(GLRenderSurface glsx, GLPainter canvasPainter)
+            {
+                _glsx = glsx;
+                _glPainter = canvasPainter;
+            }
+
 
             void UpdateCpuBlitSurface()
             {
 
                 _aggPainter.Clear(PixelFarm.Drawing.Color.White);
-
                 //TODO:
                 //if the content of _aggBmp is not changed
-                //we should not draw again
-
+                //we should not draw again 
                 _demo.Draw(_aggPainter);
                 //test print some text
                 _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
@@ -213,16 +224,6 @@ namespace Mini
 
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
-                _glsx.SmoothMode = SmoothMode.Smooth;
-                _glsx.StrokeColor = PixelFarm.Drawing.Color.Black;
-                _glsx.ClearColorBuffer();
-                //example
-                //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
-                //canvasPainter.FillRect(20, 20, 150, 150);
-                //load bmp image 
-                //-------------------------------------------------------------------------  
-                UpdateCpuBlitSurface();
-
 
                 //TODO: 
                 //1. if the content of glBmp is not changed
@@ -230,11 +231,20 @@ namespace Mini
                 //2. if we only update some part of texture
                 //may can transfer only that part to the glBmp
 
-                if (_glBmp != null)
+                //-------------------------------------------------------------------------  
+                if (_demoUI.ContentMayChanged)
                 {
-                    _glBmp.Dispose();
-                    _glBmp = null;
+                    UpdateCpuBlitSurface();
+                    _demoUI.ContentMayChanged = false;
+
+                    //load new glBmp 
+                    if (_glBmp != null)
+                    {
+                        _glBmp.Dispose();
+                        _glBmp = null;
+                    }
                 }
+
                 //------------------------------------------------------------------------- 
                 //copy from 
                 if (_glBmp == null)
@@ -242,6 +252,7 @@ namespace Mini
                     _glBmp = new GLBitmap(_aggBmp);
                     _glBmp.IsInvert = false;
                 }
+
                 _glsx.DrawImage(_glBmp, 0, _aggBmp.Height);
 
                 //test print text from our GLTextPrinter 
