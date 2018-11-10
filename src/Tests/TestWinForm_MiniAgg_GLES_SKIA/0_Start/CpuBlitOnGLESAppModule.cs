@@ -1,4 +1,5 @@
-﻿//BSD, 2014-present, WinterDev
+﻿//MIT, 2014-present, WinterDev
+//MIT, 2018-present, WinterDev
 
 using System;
 using PixelFarm.DrawingGL;
@@ -18,20 +19,13 @@ namespace Mini
         int _myWidth;
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;
-        InnerViewportKind _innerViewportKind;
         RootGraphic _rootGfx;
-
+        //
         DemoUI _demoUI;
-        GLCanvasRenderElement _canvasRenderElement;
+
 
         DemoBase _demoBase;
         OpenTK.MyGLControl _glControl;
-        IntPtr _hh1;
-        GLRenderSurface _glsx;
-        GLPainter _canvasPainter;
-
-
-
         public CpuBlitOnGLESAppModule() { }
 
 
@@ -40,26 +34,20 @@ namespace Mini
             _myWidth = 800;
             _myHeight = 600;
 
-            _innerViewportKind = surfaceViewport.InnerViewportKind;
+
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
             //----------------------
             this._glControl = surfaceViewport.GetOpenTKControl();
             _glControl.SetGLPaintHandler(null);
 
-            _hh1 = _glControl.Handle; //ensure that contrl handler is created
+            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();
         }
-
-
         public void LoadExample(DemoBase demoBase)
         {
-
-
-            _hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();
 
-            //
             this._demoBase = demoBase;
             demoBase.Init();
 
@@ -67,9 +55,9 @@ namespace Mini
             //use existing GLRenderSurface and GLPainter
             //see=>UISurfaceViewportControl.InitRootGraphics()
 
-            _glsx = _surfaceViewport.GetGLRenderSurface();
-            _canvasPainter = _surfaceViewport.GetGLPainter();
-            _demoUI.SetCanvasPainter(_glsx, _canvasPainter);
+            GLRenderSurface glsx = _surfaceViewport.GetGLRenderSurface();
+            GLPainter glPainter = _surfaceViewport.GetGLPainter();
+            _demoUI.SetCanvasPainter(glsx, glPainter);
 
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
@@ -79,18 +67,16 @@ namespace Mini
             );
             //-----------------------------------------------
 
-            DemoBase.InvokeGLContextReady(demoBase, this._glsx, this._canvasPainter);
-            DemoBase.InvokePainterReady(demoBase, this._canvasPainter);
+            DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
+            DemoBase.InvokePainterReady(demoBase, glPainter);
 
-
-            _canvasRenderElement = (GLCanvasRenderElement)_demoUI.GetPrimaryRenderElement(_rootGfx);
             //Add to RenderTree
-            _rootGfx.TopWindowRenderBox.AddChild(_canvasRenderElement); 
-        } 
+            _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_rootGfx));
+        }
         public void CloseDemo()
         {
             _demoBase.CloseDemo();
-        } 
+        }
 
         //This is a simple UIElement for testing only
         class DemoUI : UIElement
