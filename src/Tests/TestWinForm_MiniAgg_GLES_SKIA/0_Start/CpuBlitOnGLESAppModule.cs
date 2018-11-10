@@ -29,7 +29,7 @@ namespace Mini
         IntPtr _hh1;
         GLRenderSurface _glsx;
         GLPainter _canvasPainter;
-        GLBitmap _glBmp;
+
 
 
         public CpuBlitOnGLESAppModule() { }
@@ -43,11 +43,9 @@ namespace Mini
             _innerViewportKind = surfaceViewport.InnerViewportKind;
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
-
-
             //----------------------
             this._glControl = surfaceViewport.GetOpenTKControl();
-            _glControl.SetGLPaintHandler(HandleAggOnGLESPaint);
+            _glControl.SetGLPaintHandler(null);
 
             _hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();
@@ -66,13 +64,12 @@ namespace Mini
             demoBase.Init();
 
             _demoUI = new DemoUI(demoBase, _myWidth, _myHeight);
-
-
             //use existing GLRenderSurface and GLPainter
             //see=>UISurfaceViewportControl.InitRootGraphics()
 
             _glsx = _surfaceViewport.GetGLRenderSurface();
             _canvasPainter = _surfaceViewport.GetGLPainter();
+            _demoUI.SetCanvasPainter(_glsx, _canvasPainter);
 
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
@@ -88,57 +85,12 @@ namespace Mini
 
             _canvasRenderElement = (GLCanvasRenderElement)_demoUI.GetPrimaryRenderElement(_rootGfx);
             //Add to RenderTree
-            _rootGfx.TopWindowRenderBox.AddChild(_canvasRenderElement);
-
-
-        }
-
-
+            _rootGfx.TopWindowRenderBox.AddChild(_canvasRenderElement); 
+        } 
         public void CloseDemo()
         {
             _demoBase.CloseDemo();
-        }
-
-
-        void HandleAggOnGLESPaint(object sender, System.EventArgs e)
-        {
-
-
-            _glsx.SmoothMode = SmoothMode.Smooth;
-            _glsx.StrokeColor = PixelFarm.Drawing.Color.Black;
-            _glsx.ClearColorBuffer();
-            //example
-            //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            //canvasPainter.FillRect(20, 20, 150, 150);
-            //load bmp image 
-            //------------------------------------------------------------------------- 
-
-            _canvasRenderElement.UpdateCpuBlitSurface();
-
-            if (_glBmp != null)
-            {
-                _glBmp.Dispose();
-                _glBmp = null;
-            }
-            //------------------------------------------------------------------------- 
-            //copy from 
-            if (_glBmp == null)
-            {
-                _glBmp = new GLBitmap(_canvasRenderElement.ActualBmp);
-                _glBmp.IsInvert = false;
-            }
-            _glsx.DrawImage(_glBmp, 0, _canvasRenderElement.ActualBmp.Height);
-
-            //test print text from our GLTextPrinter
-
-            _canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            _canvasPainter.DrawString("Hello2", 0, 400);
-
-            //------------------------------------------------------------------------- 
-            //_glControl.SwapBuffers();
-        }
-
-
+        } 
 
         //This is a simple UIElement for testing only
         class DemoUI : UIElement
@@ -179,11 +131,10 @@ namespace Mini
                 {
 
                     var glRenderElem = new GLCanvasRenderElement(rootgfx, _width, _height);
-                    glRenderElem.SetPainter(_painter);
+                    glRenderElem.SetPainter(_glsx, _painter);
                     glRenderElem.SetController(this); //connect to event system
                     glRenderElem.LoadDemo(_demoBase);
                     _canvasRenderE = glRenderElem;
-
 
                 }
                 return _canvasRenderE;
@@ -227,10 +178,10 @@ namespace Mini
             ActualBitmap _aggBmp;
             AggPainter _aggPainter;
             DemoBase _demo;
-            Painter _painter;
 
-
+            GLRenderSurface _glsx;
             GLPainter _glPainter;
+            GLBitmap _glBmp;
             public GLCanvasRenderElement(RootGraphic rootgfx, int w, int h)
                 : base(rootgfx, w, h)
             {
@@ -243,31 +194,74 @@ namespace Mini
                 _aggPainter.TextPrinter = aggTextPrinter;
                 // 
             }
-            public ActualBitmap ActualBmp => _aggBmp;
-            public void UpdateCpuBlitSurface()
-            {
-                _aggPainter.Clear(PixelFarm.Drawing.Color.White);
-                _demo.Draw(_aggPainter);
 
-                //test print some text
-                _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
-                _aggPainter.DrawString("Hello! 12345", 0, 500);
-            }
-            public void SetPainter(GLPainter canvasPainter)
+
+            public void SetPainter(GLRenderSurface glsx, GLPainter canvasPainter)
             {
+                _glsx = glsx;
                 _glPainter = canvasPainter;
             }
             public void LoadDemo(DemoBase demo)
             {
                 _demo = demo;
-                if (_painter != null)
+                if (_aggPainter != null)
                 {
-                    DemoBase.InvokePainterReady(_demo, _painter);
+                    DemoBase.InvokePainterReady(_demo, _aggPainter);
                 }
             }
+
+            void UpdateCpuBlitSurface()
+            {
+
+                _aggPainter.Clear(PixelFarm.Drawing.Color.White);
+
+                //TODO:
+                //if the content of _aggBmp is not changed
+                //we should not draw again
+
+                _demo.Draw(_aggPainter);
+                //test print some text
+                _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
+                _aggPainter.DrawString("Hello! 12345", 0, 500);
+            }
+
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
-                //_demo.Draw(_painter);
+                _glsx.SmoothMode = SmoothMode.Smooth;
+                _glsx.StrokeColor = PixelFarm.Drawing.Color.Black;
+                _glsx.ClearColorBuffer();
+                //example
+                //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
+                //canvasPainter.FillRect(20, 20, 150, 150);
+                //load bmp image 
+                //-------------------------------------------------------------------------  
+                UpdateCpuBlitSurface();
+
+
+                //TODO: 
+                //1. if the content of glBmp is not changed
+                //we should not render again 
+                //2. if we only update some part of texture
+                //may can transfer only that part to the glBmp
+
+                if (_glBmp != null)
+                {
+                    _glBmp.Dispose();
+                    _glBmp = null;
+                }
+                //------------------------------------------------------------------------- 
+                //copy from 
+                if (_glBmp == null)
+                {
+                    _glBmp = new GLBitmap(_aggBmp);
+                    _glBmp.IsInvert = false;
+                }
+                _glsx.DrawImage(_glBmp, 0, _aggBmp.Height);
+
+                //test print text from our GLTextPrinter 
+                _glPainter.FillColor = PixelFarm.Drawing.Color.Black;
+                _glPainter.DrawString("Hello2", 0, 400);
+
             }
             public override void ResetRootGraphics(RootGraphic rootgfx)
             {
