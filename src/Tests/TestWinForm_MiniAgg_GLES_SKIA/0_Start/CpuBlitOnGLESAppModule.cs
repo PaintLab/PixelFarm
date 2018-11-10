@@ -22,7 +22,7 @@ namespace Mini
         RootGraphic _rootGfx;
 
         DemoUI _demoUI;
-        GLCanvasRenderElement _glCanvasRenderElement;
+        GLCanvasRenderElement _canvasRenderElement;
 
         DemoBase _demoBase;
         OpenTK.MyGLControl _glControl;
@@ -121,9 +121,9 @@ namespace Mini
             DemoBase.InvokePainterReady(demoBase, this._canvasPainter);
 
              
-            _glCanvasRenderElement = (GLCanvasRenderElement)_demoUI.GetPrimaryRenderElement(_rootGfx);
+            _canvasRenderElement = (GLCanvasRenderElement)_demoUI.GetPrimaryRenderElement(_rootGfx);
             //Add to RenderTree
-            //_rootGfx.TopWindowRenderBox.AddChild(_glCanvasRenderElement);
+            _rootGfx.TopWindowRenderBox.AddChild(_canvasRenderElement);
              
 
         }
@@ -146,16 +146,16 @@ namespace Mini
             //load bmp image 
             //------------------------------------------------------------------------- 
 
-            _glCanvasRenderElement.UpdateCpuBlitSurface();
+            _canvasRenderElement.UpdateCpuBlitSurface();
 
             //------------------------------------------------------------------------- 
             //copy from 
             if (_glBmp == null)
             {
-                _glBmp = new GLBitmap(_glCanvasRenderElement.ActualBmp);
+                _glBmp = new GLBitmap(_canvasRenderElement.ActualBmp);
                 _glBmp.IsInvert = false;
             }
-            _glsx.DrawImage(_glBmp, 0, _glCanvasRenderElement.ActualBmp.Height);
+            _glsx.DrawImage(_glBmp, 0, _canvasRenderElement.ActualBmp.Height);
 
             //test print text from our GLTextPrinter
 
