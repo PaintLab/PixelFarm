@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\GLAppModule.cs" />
+    <Compile Include="0_Start\GLESAppModule.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />

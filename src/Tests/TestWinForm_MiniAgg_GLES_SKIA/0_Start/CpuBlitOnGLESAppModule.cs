@@ -11,7 +11,7 @@ using LayoutFarm.UI;
 
 namespace Mini
 {
-    class GLAppModule
+    class CpuBlitOnGLESAppModule
     {
         //this context is for WinForm
 
@@ -28,7 +28,7 @@ namespace Mini
         GLRenderSurface _glsx;
         GLPainter _canvasPainter;
 
-        public GLAppModule() { }
+        public CpuBlitOnGLESAppModule() { }
         /// <summary>
         /// agg on gles surface
         /// </summary>

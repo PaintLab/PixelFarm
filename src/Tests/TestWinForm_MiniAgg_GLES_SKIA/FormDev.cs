@@ -144,7 +144,7 @@ namespace Mini
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
 
-                        GLAppModule glbaseDemo = new GLAppModule();
+                        CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
                         glbaseDemo.AggOnGLES = true;
                         glbaseDemo.BindSurface(surfaceViewport);
                         glbaseDemo.LoadExample(demo);
@@ -171,8 +171,7 @@ namespace Mini
                           );
 
 
-                        GLAppModule glbaseDemo = new GLAppModule();
-                        glbaseDemo.AggOnGLES = false;
+                        GLESAppModule glbaseDemo = new GLESAppModule(); 
                         glbaseDemo.BindSurface(surfaceViewport);
                         glbaseDemo.LoadExample(demo);
                         testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
