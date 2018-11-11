@@ -120,7 +120,7 @@ namespace LayoutFarm.UI
                         //TODO: review here
                         //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
-                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot); 
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
 
                         var view = new OpenGL.GpuOpenGLSurfaceView();
                         view.Width = 1200;
@@ -191,7 +191,7 @@ namespace LayoutFarm.UI
 #endif
                 case InnerViewportKind.PureAgg:
                     {
-                        var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot);
+                        var bridge = new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWinEventRoot);
                         var view = new CpuSurfaceView();
                         view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);

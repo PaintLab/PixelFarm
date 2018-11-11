@@ -4645,13 +4645,16 @@ namespace OpenTK.Graphics.ES20
     }
     static class GLDelInit
     {
+        
+
         static void AssignDelegate<T>(out T del, string funcName)
         {
             IntPtr funcPtr = PlatformAddressPortal.GetAddressDelegate(funcName);
             del = (funcPtr == IntPtr.Zero) ? default(T) : (T)(object)(Marshal.GetDelegateForFunctionPointer(funcPtr, typeof(T)));
         }
         public static void LoadAll()
-        {
+        {   
+            
             AssignDelegate(out Delegates.glBeginPerfMonitorAMD, "glBeginPerfMonitorAMD");
             AssignDelegate(out Delegates.glDeletePerfMonitorsAMD, "glDeletePerfMonitorsAMD");
             AssignDelegate(out Delegates.glEndPerfMonitorAMD, "glEndPerfMonitorAMD");

@@ -30,10 +30,39 @@ using OpenTK.Graphics;
 
 namespace OpenTK.Platform.Egl
 {
+    static class ESLib
+    {
+        static IntPtr s_ES1;
+        static IntPtr s_ES2;
+        static bool s_isLoaded;
+        static void LoadLib()
+        {
+            if (s_isLoaded) return;
+            //
+            //if not
+            s_ES1 = OpenTK.Platform.Windows.Functions.LoadLibrary("libGLESv1_CM");
+            s_ES2 = OpenTK.Platform.Windows.Functions.LoadLibrary("libGLESv2"); ;
+
+            s_isLoaded = true;
+        }
+        public static IntPtr GetGLESv1_CM()
+        {
+            LoadLib();
+            return s_ES1;
+        }
+        public static IntPtr GetGLESv2()
+        {
+            LoadLib();
+            return s_ES2;
+        }
+    }
+
+
     internal class EglWinContext : EglContext
     {
-        private IntPtr ES1 = OpenTK.Platform.Windows.Functions.LoadLibrary("libGLESv1_CM");
-        private IntPtr ES2 = OpenTK.Platform.Windows.Functions.LoadLibrary("libGLESv2");
+        private IntPtr ES1 = ESLib.GetGLESv1_CM();
+        private IntPtr ES2 = ESLib.GetGLESv2();
+
 
         public EglWinContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
             int major, int minor, GraphicsContextFlags flags)
@@ -62,14 +91,14 @@ namespace OpenTK.Platform.Egl
 
         protected override void Dispose(bool manual)
         {
-            if (ES1 != IntPtr.Zero)
-            {
-                Windows.Functions.FreeLibrary(ES1);
-            }
-            if (ES2 != IntPtr.Zero)
-            {
-                Windows.Functions.FreeLibrary(ES2);
-            }
+            //if (ES1 != IntPtr.Zero)
+            //{
+            //    Windows.Functions.FreeLibrary(ES1);
+            //}
+            //if (ES2 != IntPtr.Zero)
+            //{
+            //    Windows.Functions.FreeLibrary(ES2);
+            //}
 
             ES1 = ES2 = IntPtr.Zero;
 

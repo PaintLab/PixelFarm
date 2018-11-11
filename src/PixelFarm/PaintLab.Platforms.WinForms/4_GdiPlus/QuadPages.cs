@@ -4,10 +4,10 @@ using System;
 using LayoutFarm;
 namespace PixelFarm.Drawing.WinGdi
 {
-    class QuadPages : IDisposable
+    class GdiPlusPaintToOutput : IDisposable
     {
         GdiPlusDrawBoard _pageA;
-        public QuadPages(
+        public GdiPlusPaintToOutput(
             int eachCachedPageWidth,
             int eachCachedPageHeight)
         {
@@ -175,7 +175,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 if (_pageA.Height < newHeight || _pageA.Width < newWidth)
                 {
-                    _pageA.IsUnused = true;
+                   
                     _pageA.Dispose();
                     _pageA = null;
                 }

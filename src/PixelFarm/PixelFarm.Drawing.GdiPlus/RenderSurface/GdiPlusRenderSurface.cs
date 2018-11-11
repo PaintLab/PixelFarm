@@ -63,23 +63,11 @@ namespace PixelFarm.Drawing.WinGdi
             this.bottom = top + height;
             currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
 
-            CreateGraphicsFromNativeHdc(width, height);
-            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
-            //-------------------------------------------------------     
-            //managed object
-            internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
-            internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-
-            this.StrokeWidth = 1;
-
-        }
-        void CreateGraphicsFromNativeHdc(int width, int height)
-        {
+            //--------------
             win32MemDc = new NativeWin32MemoryDC(width, height, false);
             win32MemDc.PatBlt(NativeWin32MemoryDC.PatBltColor.White);
             win32MemDc.SetBackTransparent(true);
-            win32MemDc.SetClipRect(0, 0, width, height);
-
+            win32MemDc.SetClipRect(0, 0, width, height); 
             this.originalHdc = win32MemDc.DC;
             //--------------
             //set default font and default text color
@@ -87,7 +75,15 @@ namespace PixelFarm.Drawing.WinGdi
             this.CurrentTextColor = Color.Black;
             //--------------
 
+
+            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
+            //-------------------------------------------------------     
+            //managed object
+            internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
+            internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black); 
+            this.StrokeWidth = 1; 
         }
+
 #if DEBUG
         public override string ToString()
         {
@@ -145,39 +141,6 @@ namespace PixelFarm.Drawing.WinGdi
 #endif
         }
 
-        public void Reuse(int hPageNum, int vPageNum)
-        {
-
-            int w = this.Width;
-            int h = this.Height;
-            this.ClearPreviousStoredValues();
-            currentClipRect = new System.Drawing.Rectangle(0, 0, w, h);
-            win32MemDc.PatBlt(NativeWin32MemoryDC.PatBltColor.White);
-            win32MemDc.SetClipRect(0, 0, w, h);
-            left = hPageNum * w;
-            top = vPageNum * h;
-            right = left + w;
-            bottom = top + h;
-        }
-        public void Reset(int hPageNum, int vPageNum, int newWidth, int newHeight)
-        {
-
-            this.ReleaseUnManagedResource();
-            this.ClearPreviousStoredValues();
-
-            currentClipRect = new System.Drawing.Rectangle(0, 0, newWidth, newHeight);
-            CreateGraphicsFromNativeHdc(newWidth, newHeight);
-            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
-
-
-            left = hPageNum * newWidth;
-            top = vPageNum * newHeight;
-            right = left + newWidth;
-            bottom = top + newHeight;
-#if DEBUG
-            debug_resetCount++;
-#endif
-        }
 
 
         const int CANVAS_UNUSED = 1 << (1 - 1);
@@ -290,10 +253,10 @@ namespace PixelFarm.Drawing.WinGdi
                     rect.Width, rect.Height),
                     (System.Drawing.Drawing2D.CombineMode)combineMode);
         }
-        public bool IntersectsWith(Rectangle clientRect)
-        {
-            return clientRect.IntersectsWith(left, top, right, bottom);
-        }
+        //public bool IntersectsWith(Rectangle clientRect)
+        //{
+        //    return clientRect.IntersectsWith(left, top, right, bottom);
+        //}
 
         public bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
@@ -389,11 +352,11 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public void ResetInvalidateArea()
-        {
-            this.invalidateArea = Rectangle.Empty;
-            this.isEmptyInvalidateArea = true;//set
-        }
+        //public void ResetInvalidateArea()
+        //{
+        //    this.invalidateArea = Rectangle.Empty;
+        //    this.isEmptyInvalidateArea = true;//set
+        //}
         public void Invalidate(Rectangle rect)
         {
             if (isEmptyInvalidateArea)
@@ -825,27 +788,20 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void FillPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
-
             //solid color 
             System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
             gx.FillPath(internalSolidBrush, innerPath);
-
         }
-
-
         internal Painter GetAggPainter()
         {
             if (_actualBmp == null)
             {
+                //the actual bmp share the same bitmap buffer with the agg
                 _actualBmp = new CpuBlit.ActualBitmap(this.Width, this.Height, win32MemDc.PPVBits);
             }
 
             if (_painter == null)
             {
-
-
-
-
                 CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
                 if (_openFontTextServices == null)
@@ -855,10 +811,8 @@ namespace PixelFarm.Drawing.WinGdi
 
                 VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices);
                 aggPainter.TextPrinter = textPrinter;
-                aggPainter.CurrentFont = new RequestFont("tahoma", 14);
                 //
                 _painter = aggPainter;
-
                 _painter.SetOrigin(this.OriginX, this.OriginY);
             }
             return _painter;

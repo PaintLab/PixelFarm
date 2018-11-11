@@ -6,24 +6,23 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.WinGdi;
 namespace LayoutFarm.UI.GdiPlus
 {
-    class GdiPlusCanvasViewport : CanvasViewport
+    class GdiPlusCanvasViewport : CanvasViewport, System.IDisposable
     {
-        QuadPages _quadPages = null;
-        public GdiPlusCanvasViewport(RootGraphic rootgfx,
-            Size viewportSize)
-            : base(rootgfx, viewportSize)
+        GdiPlusPaintToOutput _quadPages = null;
+        public GdiPlusCanvasViewport(RootGraphic rootgfx, Size viewportSize) :
+            base(rootgfx, viewportSize)
         {
-            _quadPages = new QuadPages(viewportSize.Width, viewportSize.Height);
+            _quadPages = new GdiPlusPaintToOutput(viewportSize.Width, viewportSize.Height);
             this.CalculateCanvasPages();
         }
-
-        ~GdiPlusCanvasViewport()
+        public void Dispose()
         {
             if (_quadPages != null)
             {
                 _quadPages.Dispose();
             }
         }
+
 
         //static int dbugCount = 0;
         protected override void OnClosing()
