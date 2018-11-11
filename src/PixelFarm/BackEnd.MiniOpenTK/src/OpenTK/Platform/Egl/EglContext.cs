@@ -123,7 +123,7 @@ namespace OpenTK.Platform.Egl
 
 
             //TODO: review here,
-            //temp fix 
+            //temp fix => so We can open multiple GL windows
             shareContext = IntPtr.Zero;
 
             HandleAsEGLContext = Egl.CreateContext(window.Display, config, shareContext, attribList);
