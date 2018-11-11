@@ -31,16 +31,22 @@ namespace OpenTK.Platform
     // Provides the foundation for all desktop IGraphicsContext implementations.
     internal abstract class EmbeddedGraphicsContext : GraphicsContextBase
     {
+        static bool s_isLoaded;
         public override void LoadAll()
         {
             Stopwatch time = Stopwatch.StartNew();
 
 #if GLES
             //new OpenTK.Graphics.ES11.GL().LoadEntryPoints();
+            
+#endif
+            if (s_isLoaded) return;
+
             new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
             new OpenTK.Graphics.ES30.GL().LoadEntryPoints();
-#endif
 
+            s_isLoaded = true;
+            //
             Debug.Print("Bindings loaded in {0} ms.", time.Elapsed.TotalMilliseconds);
         }
     }

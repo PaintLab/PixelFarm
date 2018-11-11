@@ -56,6 +56,7 @@ namespace OpenTK.Platform.Egl
             }
 
             //Egl.BindAPI(0x30A0); //bind EGL_OPENGL_ES_API
+            Egl.BindAPI(RenderApi.ES); //bind EGL_OPENGL_ES_API
             EglContext shared = GetSharedEglContext(sharedContext);
 
             WindowInfo = window;
