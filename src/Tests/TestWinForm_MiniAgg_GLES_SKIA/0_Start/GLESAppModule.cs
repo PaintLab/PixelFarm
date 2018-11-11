@@ -25,10 +25,12 @@ namespace Mini
         DemoBase _demoBase;
         OpenTK.MyGLControl _glControl;
         IntPtr _hh1;
-        GLRenderSurface _glsx;
-        GLPainter _canvasPainter;
+        //GLRenderSurface _glsx;
+        //GLPainter _canvasPainter;
 
-        public GLESAppModule() { }
+        public GLESAppModule()
+        {
+        }
 
 
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
@@ -44,15 +46,6 @@ namespace Mini
             _myWidth = _glControl.Width;
             _myHeight = _glControl.Height;
 
-            //if (AggOnGLES)
-            //{
-            //    //SetupAggPainter();
-            //    //_glControl.SetGLPaintHandler(HandleAggOnGLESPaint);
-            //}
-            //else
-            //{
-            //    //_glControl.SetGLPaintHandler(HandleGLPaint);
-            //}
 
             _hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();
@@ -61,53 +54,28 @@ namespace Mini
 
         public void LoadExample(DemoBase demoBase)
         {
-            int max = Math.Max(_myWidth, _myHeight);
-            _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, _myWidth, _myHeight);
-            _glsx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
-            _canvasPainter = new GLPainter(_glsx);
+            _glControl.MakeCurrent();
+
+            GLRenderSurface glsx = _surfaceViewport.GetGLRenderSurface();
+            GLPainter glPainter = _surfaceViewport.GetGLPainter();
+
+            glsx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
+
             //create text printer for opengl  
             demoBase.Init();
             _demoBase = demoBase;
-            // 
-            //----------------------
-            //1. win gdi based
-            //var printer = new WinGdiFontPrinter(_glsx, glControl.Width, glControl.Height);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //2. raw vxs
-            //var openFontStore = new Typography.TextServices.OpenFontStore();
-            //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter,openFontStore);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //3. agg texture based font texture
 
-            //var printer = new AggTextSpanPrinter(canvasPainter, glControl.Width, 30);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //4. texture atlas based font texture 
-            //------------
-            //resolve request font 
-            var printer = new GLBitmapGlyphTextPrinter(_canvasPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-            _canvasPainter.TextPrinter = printer;
-
-            //var openFontStore = new Typography.TextServices.OpenFontStore();
-            //var printer = new GLBmpGlyphTextPrinter(canvasPainter, openFontStore);
-            //canvasPainter.TextPrinter = printer; 
-
-            _demoUI = new DemoUI(demoBase, _myWidth, _myHeight); 
-            _demoUI.SetCanvasPainter(_glsx, _canvasPainter);
+            _demoUI = new DemoUI(demoBase, _myWidth, _myHeight);
+            _demoUI.SetCanvasPainter(glsx, glPainter);
             //-----------------------------------------------
-            demoBase.SetEssentialGLHandlers(
-                () => this._glControl.SwapBuffers(),
-                () => this._glControl.GetEglDisplay(),
-                () => this._glControl.GetEglSurface()
-            );
+            //demoBase.SetEssentialGLHandlers(
+            //    () => this._glControl.SwapBuffers(),
+            //    () => this._glControl.GetEglDisplay(),
+            //    () => this._glControl.GetEglSurface()
+            //);
             //----------------------------------------------- 
 
-            DemoBase.InvokeGLContextReady(demoBase, this._glsx, this._canvasPainter);
-            DemoBase.InvokePainterReady(demoBase, this._canvasPainter);
-
-
+            DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
             //Add to RenderTree
             _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
 
@@ -117,7 +85,7 @@ namespace Mini
         public void CloseDemo()
         {
             _demoBase.CloseDemo();
-        } 
+        }
         //This is a simple UIElement for testing only
         class DemoUI : UIElement
         {
@@ -198,15 +166,15 @@ namespace Mini
                 _demoBase.MouseUp(e.X, e.Y);
                 base.OnMouseUp(e);
             }
-        } 
-       
+        }
+
         class GLCanvasRenderElement : RenderElement, IDisposable
         {
             DemoBase _demo;
-            Painter _painter;
+            GLPainter _painter;
             public GLCanvasRenderElement(RootGraphic rootgfx, int w, int h)
                 : base(rootgfx, w, h)
-            { 
+            {
             }
             public void SetPainter(GLPainter canvasPainter)
             {
@@ -222,6 +190,11 @@ namespace Mini
             }
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
             {
+                //****
+                //because our demo may run the 'manual GL code', 
+                //(out of state-control of the shader share resource/ current program/ render tree/ 
+                //***
+                _painter.DetachCurrentShader();
                 _demo.Draw(_painter);
             }
             public override void ResetRootGraphics(RootGraphic rootgfx)

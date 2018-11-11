@@ -158,7 +158,10 @@ namespace PixelFarm.DrawingGL
         public void Dispose()
         {
         }
-
+        public void DetachCurrentShader()
+        {
+            _shareRes._currentShader = null;
+        }
         public SmoothMode SmoothMode
         {
             get;
