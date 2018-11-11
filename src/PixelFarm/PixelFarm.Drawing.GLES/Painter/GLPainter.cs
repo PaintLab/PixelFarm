@@ -56,7 +56,10 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
-
+        public void DetachCurrentShader()
+        {
+            _glsx.DetachCurrentShader();
+        }
         Color _fontFillColor;
         public Color FontFillColor
         {

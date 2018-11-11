@@ -28,7 +28,10 @@ namespace Mini
         GetGLSurface _getGLSurface;
         GLPainter _painter;
 
-        public virtual void Draw(Painter p) { }
+        public virtual void Draw(Painter p)
+        {
+            OnGLRender(this, EventArgs.Empty);
+        }
         public void CloseDemo()
         {
             DemoClosing();
@@ -42,7 +45,7 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public virtual int Width { get; set; }
         public virtual int Height { get; set; }
-        
+
 
 
         protected virtual void DemoClosing()
@@ -88,7 +91,7 @@ namespace Mini
         }
         protected virtual void OnGLRender(object sender, EventArgs args)
         {
-            this.Draw(_painter);
+            
         }
         public void InvokeGLPaint()
         {
