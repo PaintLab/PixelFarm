@@ -21,29 +21,13 @@ namespace PixelFarm.Drawing.WinGdi
 
     public partial class GdiPlusDrawBoard : DrawBoard, IDisposable
     {
-        int pageNumFlags;
-        int pageFlags;
         bool isDisposed;
-
         GdiPlusRenderSurface _gdigsx;
         static GdiPlusDrawBoard()
         {
             DrawBoardCreator.RegisterCreator(1, (w, h) => new GdiPlusDrawBoard(0, 0, w, h));
         }
-
         public GdiPlusDrawBoard(int left, int top, int width, int height)
-            : this(0, 0, left, top, width, height)
-        {
-
-        }
-
-        internal GdiPlusDrawBoard(
-            int horizontalPageNum,
-            int verticalPageNum,
-            int left, int top,
-            int width,
-            int height)
-
         {
             this.left = left;
             this.top = top;
@@ -127,84 +111,6 @@ namespace PixelFarm.Drawing.WinGdi
             debug_releaseCount++;
 #endif
         }
-
-        public void Reuse(int hPageNum, int vPageNum)
-        {
-            this.pageNumFlags = (hPageNum << 8) | vPageNum;
-            int w = this.Width;
-            int h = this.Height;
-            this.ClearPreviousStoredValues();
-
-            //TODO: review here
-            _gdigsx.Reuse(hPageNum, vPageNum);
-
-            left = hPageNum * w;
-            top = vPageNum * h;
-            right = left + w;
-            bottom = top + h;
-        }
-        public void Reset(int hPageNum, int vPageNum, int newWidth, int newHeight)
-        {
-            this.pageNumFlags = (hPageNum << 8) | vPageNum;
-            this.ReleaseUnManagedResource();
-            this.ClearPreviousStoredValues();
-
-            _gdigsx.Reset(hPageNum, vPageNum, newWidth, newHeight);
-
-
-            left = hPageNum * newWidth;
-            top = vPageNum * newHeight;
-            right = left + newWidth;
-            bottom = top + newHeight;
-#if DEBUG
-            debug_resetCount++;
-#endif
-        }
-        public bool IsPageNumber(int hPageNum, int vPageNum)
-        {
-            return pageNumFlags == ((hPageNum << 8) | vPageNum);
-        }
-        public bool IsUnused
-        {
-            get
-            {
-                return (pageFlags & CANVAS_UNUSED) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    pageFlags |= CANVAS_UNUSED;
-                }
-                else
-                {
-                    pageFlags &= ~CANVAS_UNUSED;
-                }
-            }
-        }
-
-        public bool DimensionInvalid
-        {
-            get
-            {
-                return (pageFlags & CANVAS_DIMEN_CHANGED) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    pageFlags |= CANVAS_DIMEN_CHANGED;
-                }
-                else
-                {
-                    pageFlags &= ~CANVAS_DIMEN_CHANGED;
-                }
-            }
-        }
-
-        const int CANVAS_UNUSED = 1 << (1 - 1);
-        const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
-
 
 #if DEBUG
         public override void dbug_DrawRuler(int x)

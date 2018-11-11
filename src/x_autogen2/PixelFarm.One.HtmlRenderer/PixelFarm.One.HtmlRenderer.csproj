@@ -2375,9 +2375,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs">
-      <Link>PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs</Link>
     </Compile>
