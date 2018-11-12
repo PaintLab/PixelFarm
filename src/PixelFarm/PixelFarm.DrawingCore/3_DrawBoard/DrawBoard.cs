@@ -114,11 +114,9 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len);
         public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
-        public abstract void Dispose();
-
+        public abstract void Dispose(); 
         //--
-        public abstract Painter GetPainter();
-
+        public abstract Painter GetPainter(); 
     }
 
 

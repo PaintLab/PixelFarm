@@ -6,6 +6,7 @@ namespace LayoutFarm.UI
         PureAgg,
         AggOnGLES,
         GdiPlus,
+        GdiPlusOnGLES, //temporary! 
         Skia,
         GLES
     }

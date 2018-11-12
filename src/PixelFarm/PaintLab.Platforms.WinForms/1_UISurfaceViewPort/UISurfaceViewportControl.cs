@@ -112,26 +112,71 @@ namespace LayoutFarm.UI
             this.innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
-                case InnerViewportKind.AggOnGLES:
-                case InnerViewportKind.GLES:
-                    {
 #if GL_ENABLE
-                        //temp not suppport  
-                        //TODO: review here
-                        //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-
+                case InnerViewportKind.GdiPlusOnGLES:
+                    {
+                        //similar to agg on GLES
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
-
                         var view = new OpenGL.GpuOpenGLSurfaceView();
                         view.Width = 1200;
                         view.Height = 1200;
                         _gpuSurfaceViewUserControl = view;
-
-                        //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
-                        //this.panel1.Visible = true;
-                        //this.panel1.Controls.Add(view);
+                        //--------------------------------------- 
+                        view.Bind(bridge);
+                        this.winBridge = bridge;
+                        //--------------------------------------- 
+                        view.SetGLPaintHandler(null);
+                        hh1 = view.Handle; //force real window handle creation
+                        view.MakeCurrent();
 
+
+                        int max = Math.Max(view.Width, view.Height);
+                        _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, view.Width, view.Height);
+                        //---------------
+                        //canvas2d.FlipY = true;//
+                        //---------------
+                        _glPainter = new GLPainter(_glsx);
+
+                        //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
+                        //----------------------
+                        //1. win gdi based
+                        //var printer = new WinGdiFontPrinter(canvas2d, view.Width, view.Height);
+                        //canvasPainter.TextPrinter = printer;
+                        //----------------------
+                        //2. raw vxs
+                        //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+                        //canvasPainter.TextPrinter = printer;
+                        //----------------------
+                        //3. agg texture based font texture
+                        //var printer = new AggTextSpanPrinter(canvasPainter, 400, 50);
+                        //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
+                        //printer.UseSubPixelRendering = true;
+                        //canvasPainter.TextPrinter = printer; 
+                        //3 
+                        var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        _glPainter.TextPrinter = printer;
+
+                        //
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
+                        bridge.SetCanvas(myGLCanvas1);
+
+
+                    }
+                    break;
+                case InnerViewportKind.AggOnGLES:
+                case InnerViewportKind.GLES:
+                    {
+
+                        //temp not suppport  
+
+
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
+                        var view = new OpenGL.GpuOpenGLSurfaceView();
+                        view.Width = 1200;
+                        view.Height = 1200;
+                        _gpuSurfaceViewUserControl = view;
+                        this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
                         this.winBridge = bridge;
@@ -200,6 +245,7 @@ namespace LayoutFarm.UI
                         this.winBridge = bridge;
                     }
                     break;
+
                 case InnerViewportKind.GdiPlus:
                 default:
                     {

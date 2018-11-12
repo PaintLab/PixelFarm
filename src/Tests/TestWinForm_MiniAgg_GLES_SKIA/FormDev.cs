@@ -28,6 +28,7 @@ namespace Mini
             PureAgg,
             AggOnGLES,
             GdiPlus,
+            GdiPlusOnGLES, //temporary
             OpenGLES,
 
 
@@ -41,6 +42,7 @@ namespace Mini
             lstBackEndRenderer.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.AggOnGLES);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlusOnGLES); //temporary ***
             //
             lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// legacy ***, for printing
 
@@ -76,16 +78,19 @@ namespace Mini
                 return; //early exit
             }
             //
-            //
+            DemoBase demo = InitDemo(exAndDesc);
+            if (demo == null) { return; }
+
+
+            FormTestBed testBed = new FormTestBed();
+            testBed.WindowState = FormWindowState.Maximized;
+
             switch ((RenderBackendChoice)lstBackEndRenderer.SelectedItem)
             {
+
                 case RenderBackendChoice.PureAgg:
                     {
-                        DemoBase demo = InitDemo(exAndDesc);
-                        if (demo == null) { return; }
 
-                        FormTestBed testBed = new FormTestBed();
-                        testBed.WindowState = FormWindowState.Maximized;
 
 
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
@@ -107,11 +112,6 @@ namespace Mini
 
                 case RenderBackendChoice.GdiPlus:
                     {
-                        DemoBase demo = InitDemo(exAndDesc);
-                        if (demo == null) { return; }
-
-                        FormTestBed testBed = new FormTestBed();
-                        testBed.WindowState = FormWindowState.Maximized;
 
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                              testBed.GetLandingControl(),
@@ -128,13 +128,28 @@ namespace Mini
                         testBed.Show();
                     }
                     break;
+                case RenderBackendChoice.OpenGLES: //gles 2 and 3
+                    {
+                        //--------------------------------------------
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
+                          testBed.GetLandingControl(),
+                          0, 0, 800, 600,
+                          LayoutFarm.UI.InnerViewportKind.GLES,
+                          out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                          );
+
+
+                        GLESAppModule glbaseDemo = new GLESAppModule();
+                        glbaseDemo.BindSurface(surfaceViewport);
+                        glbaseDemo.LoadExample(demo);
+                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
+
+                        testBed.LoadExample(exAndDesc, demo);
+                        testBed.Show();
+                    }
+                    break;
                 case RenderBackendChoice.AggOnGLES:
                     {
-                        DemoBase demo = InitDemo(exAndDesc);
-                        if (demo == null) { return; }
-
-                        FormTestBed testBed = new FormTestBed();
-                        testBed.WindowState = FormWindowState.Maximized;
 
 
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
@@ -145,7 +160,7 @@ namespace Mini
                             );
 
                         CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
-               
+
                         glbaseDemo.BindSurface(surfaceViewport);
                         glbaseDemo.LoadExample(demo);
                         testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
@@ -154,24 +169,19 @@ namespace Mini
                         testBed.Show();
                     }
                     break;
-                case RenderBackendChoice.OpenGLES: //gles 2 and 3
+                case RenderBackendChoice.GdiPlusOnGLES:
                     {
-                        DemoBase demo = InitDemo(exAndDesc);
-                        if (demo == null) { return; }
+                        //similar to agg on GLES
 
-                        FormTestBed testBed = new FormTestBed();
-                        testBed.WindowState = FormWindowState.Maximized;
-
-                        //--------------------------------------------
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                           testBed.GetLandingControl(),
                           0, 0, 800, 600,
-                          LayoutFarm.UI.InnerViewportKind.GLES,
+                          LayoutFarm.UI.InnerViewportKind.AggOnGLES,
                           out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                           );
 
+                        CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
 
-                        GLESAppModule glbaseDemo = new GLESAppModule(); 
                         glbaseDemo.BindSurface(surfaceViewport);
                         glbaseDemo.LoadExample(demo);
                         testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
@@ -180,6 +190,7 @@ namespace Mini
                         testBed.Show();
                     }
                     break;
+               
                 //case RenderBackendChoice.OpenGLES_OnFormTestBed:
                 //    {
                 //        //create demo
