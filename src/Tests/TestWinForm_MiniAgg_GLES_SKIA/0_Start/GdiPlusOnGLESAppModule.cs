@@ -271,6 +271,7 @@ namespace Mini
                 if (_glBmp == null)
                 {
                     _glBmp = new GLBitmap(_lzBmpProvider);
+                    _glBmp.BitmapFormat = GLBitmapFormat.BGR;
                     _glBmp.IsInvert = false;
                 }
 

@@ -359,7 +359,15 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _bgrImgTextureShader.Render(bmp, x, y, w, h);
+                if (bmp.BitmapFormat == GLBitmapFormat.BGR)
+                {
+                    _bgrImgTextureShader.Render(bmp, x, y, w, h);
+                }
+                else
+                {
+                    _bgraImgTextureShader.Render(bmp, x, y, w, h);
+                }
+
             }
         }
 
