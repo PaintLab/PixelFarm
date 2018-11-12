@@ -69,17 +69,17 @@ namespace LayoutFarm.UI.GdiPlus
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this.rootGraphics.PrepareRender();
+            this._rootGraphics.PrepareRender();
             //---------------
-            this.rootGraphics.IsInRenderPhase = true;
+            this._rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
+            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+            this._rootGraphics.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
                 _quadPages.RenderToOutputWindowFullMode(
-                    rootGraphics.TopWindowRenderBox, hdc,
+                    _rootGraphics.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
             else
@@ -87,10 +87,10 @@ namespace LayoutFarm.UI.GdiPlus
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
                 _quadPages.RenderToOutputWindowPartialMode2(
-                   rootGraphics.TopWindowRenderBox, hdc,
+                   _rootGraphics.TopWindowRenderBox, hdc,
                    this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
             }
-            this.rootGraphics.IsInRenderPhase = false;
+            this._rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -119,17 +119,17 @@ namespace LayoutFarm.UI.GdiPlus
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this.rootGraphics.PrepareRender();
+            this._rootGraphics.PrepareRender();
             //---------------
-            this.rootGraphics.IsInRenderPhase = true;
+            this._rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
+            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+            this._rootGraphics.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
                 _quadPages.RenderToOutputWindowFullMode(
-                    rootGraphics.TopWindowRenderBox, hdc,
+                    _rootGraphics.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
             else
@@ -137,10 +137,10 @@ namespace LayoutFarm.UI.GdiPlus
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
                 _quadPages.RenderToOutputWindowPartialMode(
-                   rootGraphics.TopWindowRenderBox, hdc,
+                   _rootGraphics.TopWindowRenderBox, hdc,
                    this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
-            this.rootGraphics.IsInRenderPhase = false;
+            this._rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -168,19 +168,19 @@ namespace LayoutFarm.UI.GdiPlus
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this.rootGraphics.PrepareRender();
+            this._rootGraphics.PrepareRender();
             //---------------
-            this.rootGraphics.IsInRenderPhase = true;
+            this._rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
+            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+            this._rootGraphics.dbug_drawLevel = 0;
 #endif
 
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
             Rectangle rect = mycanvas.Rect;
-            this.rootGraphics.TopWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+            this._rootGraphics.TopWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG
-            this.rootGraphics.TopWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
+            this._rootGraphics.TopWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
 #endif
 
             mycanvas.IsContentReady = true;
@@ -198,7 +198,7 @@ namespace LayoutFarm.UI.GdiPlus
             //        this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
 
             //}
-            this.rootGraphics.IsInRenderPhase = false;
+            this._rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;

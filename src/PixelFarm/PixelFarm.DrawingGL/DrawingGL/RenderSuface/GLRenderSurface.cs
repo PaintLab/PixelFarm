@@ -34,6 +34,8 @@ namespace PixelFarm.DrawingGL
         int _canvasOriginY = 0;
         int _width;
         int _height;
+        int _vwWidth = 0;
+        int _vwHeight = 0;
 
         MyMat4 _orthoView;
         MyMat4 _flipVerticalView;
@@ -119,11 +121,7 @@ namespace PixelFarm.DrawingGL
             FlipY = true;
             //-------------------------------------------------------------------------------
         }
-
-
-        int _vwWidth = 0;
-        int _vwHeight = 0;
-
+         
         public void SetViewport(int width, int height)
         {
             //when change, need to recalcate?
