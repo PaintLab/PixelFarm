@@ -22,10 +22,11 @@ namespace Mini
         RootGraphic _rootGfx;
         //
         DemoUI _demoUI;
-
-
         DemoBase _demoBase;
+         
+
         OpenTK.MyGLControl _glControl;
+
         public CpuBlitOnGLESAppModule() { }
 
 

@@ -14,19 +14,19 @@ namespace Mini
     class GLESAppModule
     {
         //this context is for WinForm
-        DemoUI _demoUI;
+
+
         int _myWidth;
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;
-        InnerViewportKind _innerViewportKind;
         RootGraphic _rootGfx;
-
-
+        //
+        DemoUI _demoUI;
         DemoBase _demoBase;
+
+
         OpenTK.MyGLControl _glControl;
-        IntPtr _hh1;
-        //GLRenderSurface _glsx;
-        //GLPainter _canvasPainter;
+
 
         public GLESAppModule()
         {
@@ -37,7 +37,7 @@ namespace Mini
         {
 
 
-            _innerViewportKind = surfaceViewport.InnerViewportKind;
+
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
 
@@ -47,7 +47,7 @@ namespace Mini
             _myHeight = _glControl.Height;
 
 
-            _hh1 = _glControl.Handle; //ensure that contrl handler is created
+            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();
         }
 
@@ -78,10 +78,7 @@ namespace Mini
             DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
             //Add to RenderTree
             _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
-
         }
-
-
         public void CloseDemo()
         {
             _demoBase.CloseDemo();
