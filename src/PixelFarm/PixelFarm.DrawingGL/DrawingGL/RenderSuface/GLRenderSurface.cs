@@ -16,10 +16,10 @@ namespace PixelFarm.DrawingGL
         BasicFillShader basicFillShader;
         RectFillShader rectFillShader;
         GlyphImageStecilShader glyphStencilShader;
-        GdiImageTextureShader gdiImgTextureShader;
+        BGRImageTextureShader gdiImgTextureShader;
         GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
         ImageTextureWithSubPixelRenderingShader textureSubPixRendering;
-        OpenGLESTextureShader glesTextureShader;
+        RGBATextureShader glesTextureShader;
         BlurShader blurShader;
         Conv3x3TextureShader conv3x3TextureShader;
         MultiChannelSdf msdfShader;
@@ -71,12 +71,12 @@ namespace PixelFarm.DrawingGL
             basicFillShader = new BasicFillShader(_shareRes);
             smoothLineShader = new SmoothLineShader(_shareRes);
             rectFillShader = new RectFillShader(_shareRes);
-            gdiImgTextureShader = new GdiImageTextureShader(_shareRes);
+            gdiImgTextureShader = new BGRImageTextureShader(_shareRes);
             gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(_shareRes);
             glyphStencilShader = new GlyphImageStecilShader(_shareRes);
             textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(_shareRes);
             blurShader = new BlurShader(_shareRes);
-            glesTextureShader = new OpenGLESTextureShader(_shareRes);
+            glesTextureShader = new RGBATextureShader(_shareRes);
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);

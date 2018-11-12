@@ -249,9 +249,12 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class GdiImageTextureShader : SimpleRectTextureShader
+    /// <summary>
+    /// for image in BGR format (Windows GDI,with no alpha)d, we can specific A component laterd
+    /// </summary>
+    class BGRImageTextureShader : SimpleRectTextureShader
     {
-        public GdiImageTextureShader(ShaderSharedResource shareRes)
+        public BGRImageTextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             //--------------------------------------------------------------------------
@@ -277,16 +280,22 @@ namespace PixelFarm.DrawingGL
                       void main()
                       {
                          vec4 c = texture2D(s_texture, v_texCoord);                            
-                         gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);
+                         gl_FragColor =  vec4(c[2],c[1],c[0],1.0);
                       }
                 ";
             BuildProgram(vs, fs);
         }
     }
 
-    class OpenGLESTextureShader : SimpleRectTextureShader
+
+
+
+    /// <summary>
+    /// texture in RGBA format
+    /// </summary>
+    class RGBATextureShader : SimpleRectTextureShader
     {
-        public OpenGLESTextureShader(ShaderSharedResource shareRes)
+        public RGBATextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             //--------------------------------------------------------------------------
