@@ -114,8 +114,8 @@ namespace PixelFarm.DrawingGL
 
             //-------------------------------------------------------------------------------
             //1. original GLES (0,0) is on left-lower.
-            //2. but our GLRenderSurface use Html5Canvas coordinate model
-            //so we need to FlipY
+            //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
+            // so (0,0) is on LEFT-UPPER => so we need to FlipY
             FlipY = true;
             //-------------------------------------------------------------------------------
         }
