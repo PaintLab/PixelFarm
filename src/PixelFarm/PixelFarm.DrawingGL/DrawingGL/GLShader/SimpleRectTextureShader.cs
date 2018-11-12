@@ -258,7 +258,7 @@ namespace PixelFarm.DrawingGL
         public BGRImageTextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-            Alpha = 1;//default 
+            Alpha = 1f;//default 
             //--------------------------------------------------------------------------
             string vs = @"
                 attribute vec4 a_position;
@@ -298,10 +298,31 @@ namespace PixelFarm.DrawingGL
         {
             u_alpha.SetValue(Alpha);
         }
+
+        float _alpha;
         /// <summary>
         /// 00-1.0f
         /// </summary>
-        public float Alpha { get; set; }
+        public float Alpha
+        {
+            get => _alpha;
+            set
+            {
+                //clamp 0-1
+                if (_alpha < 0)
+                {
+                    _alpha = 0;
+                }
+                else if (_alpha > 1)
+                {
+                    _alpha = 1;
+                }
+                else
+                {
+                    _alpha = value;
+                }
+            }
+        }
     }
 
 

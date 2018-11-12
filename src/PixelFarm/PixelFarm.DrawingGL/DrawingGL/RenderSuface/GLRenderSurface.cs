@@ -17,6 +17,7 @@ namespace PixelFarm.DrawingGL
         RectFillShader _rectFillShader;
         GlyphImageStecilShader _glyphStencilShader;
         BGRImageTextureShader _bgrImgTextureShader;
+        BGRAImageTextureShader _bgraImgTextureShader;
         BGRAImageTextureWithWhiteTransparentShader _bgraImgTextureWithWhiteTransparentShader;
         ImageTextureWithSubPixelRenderingShader _textureSubPixRendering;
         RGBATextureShader _rgbaTextureShader;
@@ -71,7 +72,9 @@ namespace PixelFarm.DrawingGL
             _smoothLineShader = new SmoothLineShader(_shareRes);
             _rectFillShader = new RectFillShader(_shareRes);
             //
-            _bgrImgTextureShader = new BGRImageTextureShader(_shareRes);
+            _bgrImgTextureShader = new BGRImageTextureShader(_shareRes); //BGR eg. from Win32 surface
+            _bgraImgTextureShader = new BGRAImageTextureShader(_shareRes);
+
             _bgraImgTextureWithWhiteTransparentShader = new BGRAImageTextureWithWhiteTransparentShader(_shareRes);
             _rgbaTextureShader = new RGBATextureShader(_shareRes);
             //
