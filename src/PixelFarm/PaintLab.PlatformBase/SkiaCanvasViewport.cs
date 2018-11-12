@@ -37,14 +37,7 @@ namespace LayoutFarm.UI.Skia
             //quadPages.CanvasInvalidate(r);
             //Console.WriteLine((dbugCount++).ToString() + " " + r.ToString());
         }
-        public override bool IsQuadPageValid
-        {
-            get
-            {
-                return true;
-                //return this.quadPages.IsValid;
-            }
-        }
+        
         protected override void ResetQuadPages(int viewportWidth, int viewportHeight)
         {
             //  quadPages.ResizeAllPages(viewportWidth, viewportHeight);

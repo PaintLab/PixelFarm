@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.WinGdi;
 namespace LayoutFarm.UI.GdiPlus
 {
-    class GdiPlusCanvasViewport : CanvasViewport, System.IDisposable
+    class GdiPlusCanvasViewport : CanvasViewport, IDisposable
     {
         //TODO: review this again
         //TODO: remove _quadPages
@@ -48,13 +48,7 @@ namespace LayoutFarm.UI.GdiPlus
             //Console.WriteLine("CanvasInvalidateArea:" + (dbugCount++).ToString() + " " + r.ToString());
 #endif
         }
-        public override bool IsQuadPageValid
-        {
-            get
-            {
-                return this._quadPages.IsValid;
-            }
-        }
+         
         protected override void ResetQuadPages(int viewportWidth, int viewportHeight)
         {
             _quadPages.ResizeAllPages(viewportWidth, viewportHeight);
