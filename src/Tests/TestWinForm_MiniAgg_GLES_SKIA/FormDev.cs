@@ -180,17 +180,16 @@ namespace Mini
                           out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                           );
 
-                        CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
-
-                        glbaseDemo.BindSurface(surfaceViewport);
-                        glbaseDemo.LoadExample(demo);
-                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
+                        GdiPlusOnGLESAppModule gdiOnGLESAppModule = new GdiPlusOnGLESAppModule();
+                        gdiOnGLESAppModule.BindSurface(surfaceViewport);
+                        gdiOnGLESAppModule.LoadExample(demo);
+                        testBed.FormClosing += (s2, e2) => gdiOnGLESAppModule.CloseDemo();
 
                         testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
                     }
                     break;
-               
+
                 //case RenderBackendChoice.OpenGLES_OnFormTestBed:
                 //    {
                 //        //create demo
