@@ -121,7 +121,7 @@ namespace PixelFarm.DrawingGL
             FlipY = true;
             //-------------------------------------------------------------------------------
         }
-         
+
         public void SetViewport(int width, int height)
         {
             //when change, need to recalcate?
@@ -369,8 +369,8 @@ namespace PixelFarm.DrawingGL
                     _bgrImgTextureShader.Render(bmp, x, y, w, h);
                 }
                 else
-                {
-                    _bgraImgTextureShader.Render(bmp, x, y, w, h);
+                { 
+                    _bgraImgTextureShader.Render(bmp, x, y, w, h); 
                 }
 
             }

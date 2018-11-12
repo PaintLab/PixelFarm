@@ -36,8 +36,8 @@ namespace OpenTkEssTest
         {
             _glsx.SmoothMode = SmoothMode.Smooth;
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
-            _glsx.ClearColorBuffer();
+            _glsx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
+            _glsx.ClearColorBuffer(); //test , clear only color buffer
             //-------------------------------
             if (!isInit)
             {
