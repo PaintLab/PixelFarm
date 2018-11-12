@@ -16,7 +16,9 @@ namespace LayoutFarm.Dev
 
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlus);
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GLES);
-            this.lstPlatformSelectors.Items.Add(InnerViewportKind.Skia);
+            //this.lstPlatformSelectors.Items.Add(InnerViewportKind.Skia);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.AggOnGLES);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlusOnGLES);
             this.lstPlatformSelectors.SelectedIndex = 0;//set default
 
 
@@ -60,8 +62,9 @@ namespace LayoutFarm.Dev
         Form _latest_formCanvas;
         public void RunDemo(App selectedDemo)
         {
-
-            YourImplementation.DemoFormCreatorHelper.CreateReadyForm(out _latestviewport, out _latest_formCanvas);
+            YourImplementation.DemoFormCreatorHelper.CreateReadyForm(
+                (InnerViewportKind)lstPlatformSelectors.SelectedItem,
+                out _latestviewport, out _latest_formCanvas);
 
             selectedDemo.Start(new WinFormAppHost(_latestviewport));
             _latestviewport.TopDownRecalculateContent();

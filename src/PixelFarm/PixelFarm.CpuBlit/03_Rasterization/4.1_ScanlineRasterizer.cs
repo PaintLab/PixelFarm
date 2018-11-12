@@ -124,7 +124,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 m_gammaLut[i] = i;
             }
         }
-        //public bool FlipY { get { return _filpY; } set { _filpY = value; } }
+       
         //--------------------------------------------------------------------
         public void Reset()
         {
