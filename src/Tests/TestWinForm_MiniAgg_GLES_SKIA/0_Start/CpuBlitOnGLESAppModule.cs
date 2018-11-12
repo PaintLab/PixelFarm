@@ -14,7 +14,8 @@ namespace Mini
 {
     class CpuBlitOnGLESAppModule
     {
-        //this context is for WinForm
+        //hardware renderer part=> GLES
+        //software renderer part => Pure Agg
 
         int _myWidth;
         int _myHeight;
