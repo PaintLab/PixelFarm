@@ -38,7 +38,6 @@ namespace PixelFarm.DrawingGL
         int _vwHeight = 0;
 
         MyMat4 _orthoView;
-        MyMat4 _flipVerticalView;
         MyMat4 _orthoAndFlip;
 
         TessTool _tessTool;
@@ -64,9 +63,13 @@ namespace PixelFarm.DrawingGL
             int max = Math.Max(width, height);
             _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
 
-            _flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0));
-            _orthoAndFlip = _orthoView * _flipVerticalView;
+
+            //ortho then flipY and then translate y down to viewport
+            _orthoAndFlip = _orthoView * MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0));
             //-----------------------------------------------------------------------
+
+
+
             _shareRes = new ShaderSharedResource();
             _shareRes.OrthoView = _orthoView;
             //----------------------------------------------------------------------- 
@@ -369,8 +372,10 @@ namespace PixelFarm.DrawingGL
                     _bgrImgTextureShader.Render(bmp, x, y, w, h);
                 }
                 else
-                { 
-                    _bgraImgTextureShader.Render(bmp, x, y, w, h); 
+                {
+                    FlipY = false;
+                    _bgraImgTextureShader.Render(bmp, x, y, w, h);
+                    FlipY = true;
                 }
 
             }
