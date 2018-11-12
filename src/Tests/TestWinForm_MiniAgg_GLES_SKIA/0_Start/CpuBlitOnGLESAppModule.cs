@@ -181,7 +181,7 @@ namespace Mini
             GLPainter _glPainter;
             GLBitmap _glBmp;
 
-            LazyAggBitmapBufferProvider _lzBmpProvider;
+            LazyActualBitmapBufferProvider _lzBmpProvider;
 
             public GLCanvasRenderElement(RootGraphic rootgfx, int w, int h)
                 : base(rootgfx, w, h)
@@ -194,7 +194,7 @@ namespace Mini
                 var aggTextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
                 _aggPainter.TextPrinter = aggTextPrinter;
                 //  
-                _lzBmpProvider = new LazyAggBitmapBufferProvider(_aggBmp);
+                _lzBmpProvider = new LazyActualBitmapBufferProvider(_aggBmp);
 
             }
             public void SetOwnerDemoUI(DemoUI demoUI)

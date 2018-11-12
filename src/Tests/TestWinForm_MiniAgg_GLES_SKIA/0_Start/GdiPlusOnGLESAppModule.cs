@@ -186,7 +186,7 @@ namespace Mini
             GLPainter _glPainter;
             GLBitmap _glBmp;
 
-            LazyAggBitmapBufferProvider _lzBmpProvider;
+            LazyActualBitmapBufferProvider _lzBmpProvider;
 
 
             //for software rendering part
@@ -214,7 +214,7 @@ namespace Mini
                 _aggPainter.TextPrinter = aggTextPrinter;
 
                 //
-                _lzBmpProvider = new LazyAggBitmapBufferProvider(_aggBmp);
+                _lzBmpProvider = new LazyActualBitmapBufferProvider(_aggBmp);
             }
             public void SetOwnerDemoUI(DemoUI demoUI)
             {
