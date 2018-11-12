@@ -17,7 +17,7 @@ namespace PixelFarm.DrawingGL
         RectFillShader rectFillShader;
         GlyphImageStecilShader glyphStencilShader;
         BGRImageTextureShader gdiImgTextureShader;
-        GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
+        BGRAImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
         ImageTextureWithSubPixelRenderingShader textureSubPixRendering;
         RGBATextureShader glesTextureShader;
         BlurShader blurShader;
@@ -72,7 +72,7 @@ namespace PixelFarm.DrawingGL
             smoothLineShader = new SmoothLineShader(_shareRes);
             rectFillShader = new RectFillShader(_shareRes);
             gdiImgTextureShader = new BGRImageTextureShader(_shareRes);
-            gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(_shareRes);
+            gdiImgTextureWithWhiteTransparentShader = new BGRAImageTextureWithWhiteTransparentShader(_shareRes);
             glyphStencilShader = new GlyphImageStecilShader(_shareRes);
             textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(_shareRes);
             blurShader = new BlurShader(_shareRes);
