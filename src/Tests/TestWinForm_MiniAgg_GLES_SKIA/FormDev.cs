@@ -176,7 +176,7 @@ namespace Mini
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                           testBed.GetLandingControl(),
                           0, 0, 800, 600,
-                          LayoutFarm.UI.InnerViewportKind.AggOnGLES,
+                          LayoutFarm.UI.InnerViewportKind.GdiPlusOnGLES,
                           out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                           );
 
