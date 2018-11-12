@@ -8,6 +8,9 @@ namespace LayoutFarm.UI.GdiPlus
 {
     class GdiPlusCanvasViewport : CanvasViewport, System.IDisposable
     {
+        //TODO: review this again
+        //TODO: remove _quadPages
+
         GdiPlusPaintToOutput _quadPages = null;
         public GdiPlusCanvasViewport(RootGraphic rootgfx, Size viewportSize) :
             base(rootgfx, viewportSize)

@@ -154,8 +154,12 @@ namespace LayoutFarm.UI.OpenGL
             Rectangle rect = mycanvas.Rect;
             topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 
-#if DEBUG
 
+#if DEBUG
+            //our OpenGLCanvasViewport use Html5Canvas model
+            //Html5Canvas coordinate (0,0) is on Upper-Left
+            //so this red rects should run from upper-left to lower-right
+            
             for (int i = 0; i < 100; ++i)
             {
                 mycanvas.FillRectangle(Color.Red, i * 5, i * 5, 5, 5);
