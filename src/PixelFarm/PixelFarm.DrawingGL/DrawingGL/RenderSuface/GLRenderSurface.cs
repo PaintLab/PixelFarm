@@ -29,6 +29,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
 
+        bool _origin_left_top;//
 
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -67,7 +68,7 @@ namespace PixelFarm.DrawingGL
 
 
             //ortho then flipY and then translate y down (GL coord) to viewport
-            _orthoFlipYandPullDown = _orthoView * 
+            _orthoFlipYandPullDown = _orthoView *
                                      MyMat4.scale(1, -1) * //flip Y
                                      MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down
             //-----------------------------------------------------------------------
@@ -125,7 +126,7 @@ namespace PixelFarm.DrawingGL
             //1. original GLES (0,0) is on left-lower.
             //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
             // so (0,0) is on LEFT-UPPER => so we need to FlipY
-            FlipY = true;
+            OriginIsLeftTop = true;
             //-------------------------------------------------------------------------------
         }
 
@@ -152,16 +153,15 @@ namespace PixelFarm.DrawingGL
         {
             get { return _height; }
         }
-        bool _flipY;
-        public bool FlipY
+        public bool OriginIsLeftTop
         {
             get
             {
-                return this._flipY;
+                return this._origin_left_top;
             }
             set
             {
-                if (this._flipY = value)
+                if (this._origin_left_top = value)
                 {
                     _shareRes.OrthoView = _orthoFlipYandPullDown;
                 }
@@ -171,7 +171,6 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
-
         public void Dispose()
         {
         }
