@@ -16,7 +16,9 @@ namespace OpenTkEssTest
         //
         SubImages1,
         SubImagesWithScale,
-
+        //
+        SubImageWithBlurX,
+        SubImageWithBlurY
     }
 
     [Info(OrderCode = "107")]
@@ -155,6 +157,44 @@ namespace OpenTkEssTest
                         {
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
                             _glsx.DrawSubImage(_glbmp, ref srcRect, i, i, 2f);
+                            i += 50;
+                        }
+                    }
+                    break;
+                case T107DrawImageSet.SubImageWithBlurX:
+                    {
+
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y) 
+                            _glsx.DrawImageWithBlurX(_glbmp, i, i);
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+                            _glsx.DrawImageWithBlurX(_glbmp, i, i);
+                            i += 50;
+                        }
+                    }
+                    break;
+                case T107DrawImageSet.SubImageWithBlurY:
+                    {
+
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y) 
+                            _glsx.DrawImageWithBlurY(_glbmp, i, i);
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+                            _glsx.DrawImageWithBlurY(_glbmp, i, i);
                             i += 50;
                         }
                     }

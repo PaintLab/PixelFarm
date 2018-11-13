@@ -669,14 +669,12 @@ namespace PixelFarm.DrawingGL
                 //***
                 top += bmp.Height;
             }
-            //TODO: review here not complete
-
-
+            //TODO: review here not complete 
             _blurShader.IsBigEndian = bmp.IsBigEndianPixel;
             _blurShader.IsHorizontal = false;
             _blurShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithBlurX(GLBitmap bmp, float top, float left)
+        public void DrawImageWithBlurX(GLBitmap bmp, float left, float top)
         {
 
             if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
@@ -689,7 +687,7 @@ namespace PixelFarm.DrawingGL
             //not complete
             _blurShader.IsBigEndian = bmp.IsBigEndianPixel;
             _blurShader.IsHorizontal = true;
-            _blurShader.Render(bmp, top, left, bmp.Width, bmp.Height);
+            _blurShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
         public void DrawImageWithConv3x3(GLBitmap bmp, float[] kernel3x3, float top, float left)
         {
@@ -701,7 +699,7 @@ namespace PixelFarm.DrawingGL
             _conv3x3TextureShader.IsBigEndian = bmp.IsBigEndianPixel;
             _conv3x3TextureShader.SetBitmapSize(bmp.Width, bmp.Height);
             _conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
-            _conv3x3TextureShader.Render(bmp, top, left, bmp.Width, bmp.Height);
+            _conv3x3TextureShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
         {
