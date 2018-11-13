@@ -57,7 +57,7 @@ namespace OpenTkEssTest
 
             _glsx.OriginKind = prevOrgKind;//restore 
             //-------------------------------
-            SwapBuffers();
+            
         }
     }
 }
