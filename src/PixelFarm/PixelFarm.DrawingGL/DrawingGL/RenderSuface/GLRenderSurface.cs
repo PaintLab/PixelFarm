@@ -369,6 +369,12 @@ namespace PixelFarm.DrawingGL
             Drawing.RectangleF srcRect,
             float left, float top, float w, float h)
         {
+            //IMPORTANT: (left,top) != (x,y) 
+            //IMPORTANT: left,top position need to be adjusted with 
+            //Canvas' origin kind
+            //see https://github.com/PaintLab/PixelFarm/issues/43
+            //-----------
+
             if (bmp.IsBigEndianPixel)
             {
                 _rgbaTextureShader.Render(bmp, left, top, w, h);
