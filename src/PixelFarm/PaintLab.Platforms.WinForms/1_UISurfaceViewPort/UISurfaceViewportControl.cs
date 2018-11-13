@@ -215,9 +215,10 @@ namespace LayoutFarm.UI
                         //
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
-#endif
+
                     }
                     break;
+#endif
 #if __SKIA__
                 case InnerViewportKind.Skia:
                     {

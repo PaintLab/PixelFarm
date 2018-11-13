@@ -257,7 +257,7 @@ namespace Mini
                     _glBmp.IsInvert = false;
                 }
 
-                _glsx.DrawImage(_glBmp, 0, _aggBmp.Height);
+                _glsx.DrawImage(_glBmp, 0, 0);
 
                 //test print text from our GLTextPrinter 
                 _glPainter.FillColor = PixelFarm.Drawing.Color.Black;

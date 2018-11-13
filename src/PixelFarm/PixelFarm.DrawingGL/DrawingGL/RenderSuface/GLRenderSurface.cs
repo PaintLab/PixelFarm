@@ -462,21 +462,14 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        /// <summary>
-        /// draw glyph image with transparent
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float x, float y)
-        {
-            //TODO: review coord here***
-            //TODO: review x,y or left,top
-            PixelFarm.Drawing.Rectangle r = new Drawing.Rectangle(0, bmp.Height, bmp.Width, bmp.Height);
-            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref r, x, y, 1);
-        }
-        public PixelFarm.Drawing.Color FontFillColor { get; set; }
 
+        public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
+        {
+            PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
+            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top, 1);
+        }
+
+        public PixelFarm.Drawing.Color FontFillColor { get; set; }
 
         /// <summary>
         /// draw glyph image with transparent
@@ -486,12 +479,19 @@ namespace PixelFarm.DrawingGL
         /// <param name="y"></param>
         public void DrawGlyphImage(GLBitmap bmp, float x, float y)
         {
-            //TODO: review x,y or left,top
+            //TODO: review x,y or left,top 
             this._bgraImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                targetTop += srcRect.Height;
+            }
+
             _glyphStencilShader.SetColor(this.FontFillColor);
+
             if (bmp.IsBigEndianPixel)
             {
 
@@ -514,41 +514,19 @@ namespace PixelFarm.DrawingGL
         {
             _textureSubPixRendering.SetAssociatedTextureInfo(bmp);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique(
-           ref PixelFarm.Drawing.Rectangle srcRect,
-           float targetLeft,
-           float targetTop,
-           float scale)
-        {
-            //TODO: review x,y or left,top***
 
-            //TODO: review performance here *** 
-            //1. B , cyan result
-            GL.ColorMask(false, false, true, false);
-            _textureSubPixRendering.SetCompo(0);
-            _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            //float subpixel_shift = 1 / 9f;
-            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
-            //---------------------------------------------------
-            //2. G , magenta result
-            GL.ColorMask(false, true, false, false);
-            _textureSubPixRendering.SetCompo(1);
-            _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
-            //1. R , yellow result 
-            _textureSubPixRendering.SetCompo(2);
-            GL.ColorMask(true, false, false, false);//             
-            _textureSubPixRendering.DrawSubImage(srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
-            //enable all color component
-            GL.ColorMask(true, true, true, true);
-        }
         public void DrawGlyphImageWithSubPixelRenderingTechnique2(
           ref PixelFarm.Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
           float scale)
         {
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                targetTop += srcRect.Height;
+            }
+
             _textureSubPixRendering.NewDrawSubImage(srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
@@ -563,6 +541,9 @@ namespace PixelFarm.DrawingGL
            float targetTop,
            float scale)
         {
+
+
+
             // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
             ushort indexCount = (ushort)indexList.Count;
@@ -609,12 +590,11 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
         {
-            //x = 100;
-            //y = 400;
-            //this.SetCanvasOrigin((int)x, (int)y);
 
             _textureSubPixRendering.NewDrawSubImage4FromCurrentLoadedVBO(count, x, y);
         }
+
+
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
             ref PixelFarm.Drawing.Rectangle srcRect,
@@ -622,6 +602,14 @@ namespace PixelFarm.DrawingGL
             float targetTop,
             float scale)
         {
+
+            //
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                targetTop += bmp.Height;
+            }
+            //
 
             if (bmp.IsBigEndianPixel)
             {
