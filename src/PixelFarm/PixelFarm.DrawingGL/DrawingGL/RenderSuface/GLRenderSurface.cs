@@ -5,7 +5,11 @@ using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
 {
-
+    public enum GLRenderSurfaceOrigin
+    {
+        LeftBottom,
+        LeftTop,
+    }
     /// <summary>
     /// GLES2 render surface, This is not intended to be used directly from your code
     /// </summary>
@@ -29,7 +33,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
 
-        bool _origin_left_top;//
+        GLRenderSurfaceOrigin _originKind;
 
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -126,10 +130,28 @@ namespace PixelFarm.DrawingGL
             //1. original GLES (0,0) is on left-lower.
             //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
             // so (0,0) is on LEFT-UPPER => so we need to FlipY
-            OriginIsLeftTop = true;
+
+            OriginKind = GLRenderSurfaceOrigin.LeftTop;
             //-------------------------------------------------------------------------------
         }
-
+        public GLRenderSurfaceOrigin OriginKind
+        {
+            get
+            {
+                return _originKind;
+            }
+            set
+            {
+                if ((_originKind = value) == GLRenderSurfaceOrigin.LeftTop)
+                {
+                    _shareRes.OrthoView = _orthoFlipYandPullDown;
+                }
+                else
+                {
+                    _shareRes.OrthoView = _orthoView;
+                }
+            }
+        }
         public void SetViewport(int width, int height)
         {
             //when change, need to recalcate?
@@ -153,24 +175,7 @@ namespace PixelFarm.DrawingGL
         {
             get { return _height; }
         }
-        public bool OriginIsLeftTop
-        {
-            get
-            {
-                return this._origin_left_top;
-            }
-            set
-            {
-                if (this._origin_left_top = value)
-                {
-                    _shareRes.OrthoView = _orthoFlipYandPullDown;
-                }
-                else
-                {
-                    _shareRes.OrthoView = _orthoView;
-                }
-            }
-        }
+
         public void Dispose()
         {
         }
@@ -282,11 +287,11 @@ namespace PixelFarm.DrawingGL
             //draw frame buffer into specific position
             _rgbaTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
         }
-        public void DrawImage(GLBitmap bmp, float x, float y)
+        public void DrawImage(GLBitmap bmp, float left, float top)
         {
             DrawImage(bmp,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                   x, y, bmp.Width, bmp.Height);
+                   left, top, bmp.Width, bmp.Height);
         }
         public void DrawImage(GLBitmap bmp, float x, float y, float w, float h)
         {
@@ -362,25 +367,29 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
-            float x, float y, float w, float h)
+            float left, float top, float w, float h)
         {
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.Render(bmp, x, y, w, h);
+                _rgbaTextureShader.Render(bmp, left, top, w, h);
             }
             else
             {
+                //-----------
+                if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+                {
+                    top += bmp.Height;
+                }
+
+                //-----------
+
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
-                    _bgrImgTextureShader.Render(bmp, x, y, w, h);
+                    _bgrImgTextureShader.Render(bmp, left, top, w, h);
                 }
                 else
                 {
-                    //FlipY = false;
-                    //bmp.IsInvert = true;
-                    _bgraImgTextureShader.Render(bmp, x, y, w, h);
-                    //bmp.IsInvert = false;
-                    //FlipY = true;
+                    _bgraImgTextureShader.Render(bmp, left, top, w, h);
                 }
 
             }
