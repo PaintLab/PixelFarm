@@ -212,7 +212,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                painter1.Canvas.DrawImage(glbmp, destRect.X, this.Height - destRect.Y, destRect.Width, destRect.Height);
+                painter1.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
 
         }
