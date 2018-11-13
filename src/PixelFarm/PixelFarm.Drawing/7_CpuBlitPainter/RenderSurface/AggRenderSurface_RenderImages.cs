@@ -34,8 +34,7 @@ namespace PixelFarm.CpuBlit
     {
         public bool UseSubPixelRendering
         {
-            get { return this._bmpRasterizer.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; }
-            //set { this._bmpRasterizer.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelLcdEffect : ScanlineRenderMode.Default; }
+            get { return this._bmpRasterizer.ScanlineRenderMode == ScanlineRenderMode.SubPixelLcdEffect; } 
         }
 
         static void BuildOrgImgRectVxs(int srcW, int srcH, VertexStore output)
