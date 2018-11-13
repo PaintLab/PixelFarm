@@ -60,17 +60,19 @@ namespace LayoutFarm.Dev
 
         LayoutFarm.UI.UISurfaceViewportControl _latestviewport;
         Form _latest_formCanvas;
-        public void RunDemo(App selectedDemo)
+        public void RunDemo(App app)
         {
+            //1. create blank form
             YourImplementation.DemoFormCreatorHelper.CreateReadyForm(
                 (InnerViewportKind)lstPlatformSelectors.SelectedItem,
                 out _latestviewport, out _latest_formCanvas);
 
-            selectedDemo.Start(new WinFormAppHost(_latestviewport));
+            //2. create app host
+            app.Start(new WinFormAppHost(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
-            //==================================================  
             _latestviewport.PaintMe();
 
+            //==================================================  
             if (this.chkShowLayoutInspector.Checked)
             {
                 YourImplementation.LayoutInspectorUtils.ShowFormLayoutInspector(_latestviewport);

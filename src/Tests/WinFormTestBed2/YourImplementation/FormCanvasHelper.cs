@@ -108,7 +108,6 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.GLES:
                     ifont = new OpenFontTextService();
                     break;
-
             }
 
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);

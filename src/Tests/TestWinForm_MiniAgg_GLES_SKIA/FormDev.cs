@@ -156,12 +156,12 @@ namespace Mini
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
                         testBed.SetUISurfaceViewportControl(surfaceViewport);
+                        //
                         CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
-
                         glbaseDemo.BindSurface(surfaceViewport);
                         glbaseDemo.LoadExample(demo);
-                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
 
+                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
                         testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
                     }
