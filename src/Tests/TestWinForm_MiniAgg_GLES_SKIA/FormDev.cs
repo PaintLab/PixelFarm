@@ -90,15 +90,13 @@ namespace Mini
 
                 case RenderBackendChoice.PureAgg:
                     {
-
-
-
                         LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
                             testBed.GetLandingControl(),
                             0, 0, 800, 600,
                             LayoutFarm.UI.InnerViewportKind.PureAgg,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
                         testBed.Show();
 
                         _cpuBlitContextWinForm = new CpuBlitAppModule();
@@ -106,10 +104,8 @@ namespace Mini
                         _cpuBlitContextWinForm.LoadExample(demo);
 
                         testBed.LoadExample(exAndDesc, demo);
-
                     }
                     break;
-
                 case RenderBackendChoice.GdiPlus:
                     {
 
@@ -119,6 +115,7 @@ namespace Mini
                              LayoutFarm.UI.InnerViewportKind.GdiPlus,
                              out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                              );
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
 
                         _cpuBlitContextWinForm = new CpuBlitAppModule();
                         _cpuBlitContextWinForm.BindSurface(surfaceViewport);
@@ -138,7 +135,7 @@ namespace Mini
                           out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                           );
 
-
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
                         GLESAppModule glbaseDemo = new GLESAppModule();
                         glbaseDemo.BindSurface(surfaceViewport);
                         glbaseDemo.LoadExample(demo);
@@ -158,7 +155,7 @@ namespace Mini
                             LayoutFarm.UI.InnerViewportKind.AggOnGLES,
                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                             );
-
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
                         CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
 
                         glbaseDemo.BindSurface(surfaceViewport);
@@ -179,7 +176,7 @@ namespace Mini
                           LayoutFarm.UI.InnerViewportKind.GdiPlusOnGLES,
                           out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
                           );
-
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
                         GdiPlusOnGLESAppModule gdiOnGLESAppModule = new GdiPlusOnGLESAppModule();
                         gdiOnGLESAppModule.BindSurface(surfaceViewport);
                         gdiOnGLESAppModule.LoadExample(demo);
