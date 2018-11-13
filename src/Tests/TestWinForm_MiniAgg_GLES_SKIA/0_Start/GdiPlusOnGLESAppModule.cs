@@ -275,7 +275,7 @@ namespace Mini
                     _glBmp.IsInvert = false;
                 }
 
-                _glsx.DrawImage(_glBmp, 0, _aggBmp.Height);
+                _glsx.DrawImage(_glBmp, 0, 0);
 
             }
             public override void ResetRootGraphics(RootGraphic rootgfx)
