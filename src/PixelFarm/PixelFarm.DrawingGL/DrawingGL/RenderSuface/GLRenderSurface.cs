@@ -352,7 +352,7 @@ namespace PixelFarm.DrawingGL
         {
             DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
-         
+
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
         {
             if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
@@ -381,6 +381,14 @@ namespace PixelFarm.DrawingGL
         //---------------------------------------------------------------------------------------------------------------------------------
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop)
         {
+            //we expect that the bmp supports alpha value
+
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                targetTop += r.Height;
+            }
+
             if (bmp.IsBigEndianPixel)
             {
                 _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
@@ -392,6 +400,14 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
         {
+            //we expect that the bmp supports alpha value
+
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                targetTop += r.Height;
+            }
+
             if (bmp.IsBigEndianPixel)
             {
                 _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
@@ -403,6 +419,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
         {
+
             if (bmp.IsBigEndianPixel)
             {
                 _msdfShader.RenderSubImages(bmp, coords, scale);
@@ -453,6 +470,8 @@ namespace PixelFarm.DrawingGL
         /// <param name="y"></param>
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float x, float y)
         {
+            //TODO: review coord here***
+            //TODO: review x,y or left,top
             PixelFarm.Drawing.Rectangle r = new Drawing.Rectangle(0, bmp.Height, bmp.Width, bmp.Height);
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref r, x, y, 1);
         }
@@ -467,19 +486,20 @@ namespace PixelFarm.DrawingGL
         /// <param name="y"></param>
         public void DrawGlyphImage(GLBitmap bmp, float x, float y)
         {
+            //TODO: review x,y or left,top
             this._bgraImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
-        public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             _glyphStencilShader.SetColor(this.FontFillColor);
             if (bmp.IsBigEndianPixel)
             {
 
-                _glyphStencilShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                _glyphStencilShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             }
             else
             {
-                _glyphStencilShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                _glyphStencilShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             }
         }
 
@@ -500,6 +520,8 @@ namespace PixelFarm.DrawingGL
            float targetTop,
            float scale)
         {
+            //TODO: review x,y or left,top***
+
             //TODO: review performance here *** 
             //1. B , cyan result
             GL.ColorMask(false, false, true, false);
@@ -639,45 +661,64 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-
-        public void DrawImageWithBlurY(GLBitmap bmp, float x, float y)
+        //-----------------------------------
+        public void DrawImageWithBlurY(GLBitmap bmp, float left, float top)
         {
-            //TODO: review here
-            //not complete
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                top += bmp.Height;
+            }
+            //TODO: review here not complete
+
+
             _blurShader.IsBigEndian = bmp.IsBigEndianPixel;
             _blurShader.IsHorizontal = false;
-            _blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            _blurShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithBlurX(GLBitmap bmp, float x, float y)
+        public void DrawImageWithBlurX(GLBitmap bmp, float top, float left)
         {
+
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                top += bmp.Height;
+            }
+
             //TODO: review here
             //not complete
             _blurShader.IsBigEndian = bmp.IsBigEndianPixel;
             _blurShader.IsHorizontal = true;
-            _blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            _blurShader.Render(bmp, top, left, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithConv3x3(GLBitmap bmp, float[] kernel3x3, float x, float y)
+        public void DrawImageWithConv3x3(GLBitmap bmp, float[] kernel3x3, float top, float left)
         {
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                top += bmp.Height;
+            }
             _conv3x3TextureShader.IsBigEndian = bmp.IsBigEndianPixel;
             _conv3x3TextureShader.SetBitmapSize(bmp.Width, bmp.Height);
             _conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
-            _conv3x3TextureShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            _conv3x3TextureShader.Render(bmp, top, left, bmp.Width, bmp.Height);
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
         {
+            //TODO: review x,y or lef,top ***
 
             _msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             _msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
         {
+            //TODO: review x,y or lef,top ***
             _msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-
             _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
         {
-
+            //TODO: review x,y or lef,top ***
             _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
             _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
@@ -685,15 +726,17 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
         {
+            //TODO: review x,y or lef,top ***
+
             _msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
             _msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
             _msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
-
-
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
+            //TODO: review x,y or lef,top ***
+
             _sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             _sdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
