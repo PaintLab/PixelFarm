@@ -18,7 +18,8 @@ namespace OpenTkEssTest
         SubImagesWithScale,
         //
         SubImageWithBlurX,
-        SubImageWithBlurY
+        SubImageWithBlurY,
+        DrawWithConv3x3,
     }
 
     [Info(OrderCode = "107")]
@@ -197,6 +198,27 @@ namespace OpenTkEssTest
                             _glsx.DrawImageWithBlurY(_glbmp, i, i);
                             i += 50;
                         }
+
+                        //
+                    }
+                    break;
+                case T107DrawImageSet.DrawWithConv3x3:
+                    {
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y) 
+                            _glsx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.sobelHorizontal, i, i);
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+                            _glsx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.emboss, i, i);
+                            i += 50;
+                        }
+
                     }
                     break;
             }
