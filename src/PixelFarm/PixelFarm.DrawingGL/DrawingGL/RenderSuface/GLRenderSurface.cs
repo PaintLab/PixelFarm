@@ -290,6 +290,9 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
+
+
+        //-----------------------------------------------------------------
         public void DrawFrameBuffer(FrameBuffer frameBuffer, float left, float top)
         {
             //IMPORTANT: (left,top) != (x,y) 
@@ -303,7 +306,7 @@ namespace PixelFarm.DrawingGL
                 top += frameBuffer.Height;
             }
 
-
+            //frame buffer is rgba***
             _rgbaTextureShader.Render(frameBuffer.TextureId, left, top, frameBuffer.Width, frameBuffer.Height);
         }
         public void DrawImage(GLBitmap bmp, float left, float top)
@@ -318,39 +321,64 @@ namespace PixelFarm.DrawingGL
                 new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                 left, top, w, h);
         }
+        //-----------------------------------------------------------------
+
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                targetTop += srcH;
+            }
+
+
             if (bmp.IsBigEndianPixel)
             {
                 _rgbaTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
             }
             else
             {
-                _bgrImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                if (bmp.BitmapFormat == GLBitmapFormat.BGR)
+                {
+                    _bgrImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                }
+                else
+                {
+                    _bgraImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                }
             }
         }
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
         {
-            if (bmp.IsBigEndianPixel)
-            {
-                _rgbaTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            }
-            else
-            {
-                _bgrImgTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            }
+            DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
+         
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
         {
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                targetTop += r.Height;
+            }
+            //
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                _rgbaTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
             }
             else
             {
-                _bgrImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                if (bmp.BitmapFormat == GLBitmapFormat.BGR)
+                {
+                    _bgrImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                }
+                else
+                {
+                    _bgraImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                }
             }
         }
+
+        //---------------------------------------------------------------------------------------------------------------------------------
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop)
         {
             if (bmp.IsBigEndianPixel)
@@ -611,7 +639,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-       
+
         public void DrawImageWithBlurY(GLBitmap bmp, float x, float y)
         {
             //TODO: review here
