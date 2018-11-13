@@ -611,13 +611,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public void DrawImage(GLBitmapReference bmp, float x, float y)
-        {
-            this.DrawImage(bmp.OwnerBitmap,
-                 bmp.GetRectF(),
-                 x, y, bmp.Width, bmp.Height);
-        }
-        //-------------------------------------------------------------------------------
+       
         public void DrawImageWithBlurY(GLBitmap bmp, float x, float y)
         {
             //TODO: review here

@@ -13,6 +13,7 @@ namespace OpenTkEssTest
         Full,
         Half,
         FromRect,
+        
     }
 
     [Info(OrderCode = "107")]
@@ -109,12 +110,12 @@ namespace OpenTkEssTest
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height); 
+                            PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
                             _glsx.DrawImage(_glbmp, srcRect, i, i, _glbmp.Width / 2, _glbmp.Height / 2);
                             i += 50;
                         }
                     }
-                    break;
+                    break; 
             }
             _glsx.OriginKind = prevOrgKind;//restore  
 
