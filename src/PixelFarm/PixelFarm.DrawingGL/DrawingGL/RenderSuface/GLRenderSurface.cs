@@ -28,7 +28,7 @@ namespace PixelFarm.DrawingGL
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
-        //tools---------------------------------
+
 
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -38,10 +38,12 @@ namespace PixelFarm.DrawingGL
         int _vwHeight = 0;
 
         MyMat4 _orthoView;
-        MyMat4 _orthoAndFlip;
+        MyMat4 _orthoFlipYandPullDown;
 
-        TessTool _tessTool;
+
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
+        //
+        TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
 
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH)
@@ -64,8 +66,10 @@ namespace PixelFarm.DrawingGL
             _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
 
 
-            //ortho then flipY and then translate y down to viewport
-            _orthoAndFlip = _orthoView * MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0));
+            //ortho then flipY and then translate y down (GL coord) to viewport
+            _orthoFlipYandPullDown = _orthoView * 
+                                     MyMat4.scale(1, -1) * //flip Y
+                                     MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down
             //-----------------------------------------------------------------------
 
 
@@ -90,9 +94,9 @@ namespace PixelFarm.DrawingGL
             _invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
-            _msdfShader = new DrawingGL.MultiChannelSdf(_shareRes);
-            _msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(_shareRes);
-            _sdfShader = new DrawingGL.SingleChannelSdf(_shareRes);
+            _msdfShader = new MultiChannelSdf(_shareRes);
+            _msdfSubPixelRenderingShader = new MultiChannelSubPixelRenderingSdf(_shareRes);
+            _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
 
@@ -159,7 +163,7 @@ namespace PixelFarm.DrawingGL
             {
                 if (this._flipY = value)
                 {
-                    _shareRes.OrthoView = _orthoAndFlip;
+                    _shareRes.OrthoView = _orthoFlipYandPullDown;
                 }
                 else
                 {
@@ -373,9 +377,11 @@ namespace PixelFarm.DrawingGL
                 }
                 else
                 {
-                    FlipY = false;
+                    //FlipY = false;
+                    //bmp.IsInvert = true;
                     _bgraImgTextureShader.Render(bmp, x, y, w, h);
-                    FlipY = true;
+                    //bmp.IsInvert = false;
+                    //FlipY = true;
                 }
 
             }
