@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
         {
             if (s_platform != null) return;
             //----------------------------------------------------
-            s_platform = new LayoutFarm.UI.UIPlatformWinForm();
+            s_platform = new UIPlatformWinForm();
             var instTypefaces = new InstalledTypefaceCollection();
             instTypefaces.LoadSystemFonts();
             s_fontstore = instTypefaces;
@@ -65,7 +65,7 @@ namespace LayoutFarm.UI
             //----------------------
             return form1;
         }
-        public static void MakeFormCanvas(Form form1, LayoutFarm.UI.UISurfaceViewportControl surfaceViewportControl)
+        public static void MakeFormCanvas(Form form1, UISurfaceViewportControl surfaceViewportControl)
         {
             form1.FormClosing += (s, e) =>
             {
