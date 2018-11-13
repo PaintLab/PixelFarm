@@ -983,9 +983,7 @@ namespace PixelFarm.CpuBlit
                         }
                         break;
                     default:
-                        {
-                            //_sclineRas.AddPath(vxs);
-                            //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
+                        { 
 
                             _aggsx.Render(vxs, fillColor);
                         }
@@ -994,10 +992,7 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                _aggsx.Render(vxs, fillColor);
-
-                //_sclineRas.AddPath(vxs);
-                //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
+                _aggsx.Render(vxs, fillColor); 
             }
         }
         public override void Render(RenderVx renderVx)
