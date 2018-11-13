@@ -219,6 +219,7 @@ namespace PixelFarm.DrawingGL
             }
             _currentFrameBuffer = null;
         }
+       
         public void Clear(PixelFarm.Drawing.Color c)
         {
             GL.ClearColor(
@@ -304,11 +305,11 @@ namespace PixelFarm.DrawingGL
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    left, top, bmp.Width, bmp.Height);
         }
-        public void DrawImage(GLBitmap bmp, float x, float y, float w, float h)
+        public void DrawImage(GLBitmap bmp, float left, float top, float w, float h)
         {
             DrawImage(bmp,
                 new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                x, y, w, h);
+                left, top, w, h);
         }
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
@@ -388,7 +389,7 @@ namespace PixelFarm.DrawingGL
             if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
             {
                 //***
-                top += bmp.Height;
+                top += h;
             }
 
             if (bmp.IsBigEndianPixel)
