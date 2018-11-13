@@ -282,10 +282,21 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void DrawFrameBuffer(FrameBuffer frameBuffer, float x, float y)
+        public void DrawFrameBuffer(FrameBuffer frameBuffer, float left, float top)
         {
-            //draw frame buffer into specific position
-            _rgbaTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
+            //IMPORTANT: (left,top) != (x,y) 
+            //IMPORTANT: left,top position need to be adjusted with 
+            //Canvas' origin kind
+            //see https://github.com/PaintLab/PixelFarm/issues/43
+            //-----------
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                top += frameBuffer.Height;
+            }
+
+
+            _rgbaTextureShader.Render(frameBuffer.TextureId, left, top, frameBuffer.Width, frameBuffer.Height);
         }
         public void DrawImage(GLBitmap bmp, float left, float top)
         {
@@ -374,28 +385,19 @@ namespace PixelFarm.DrawingGL
             //Canvas' origin kind
             //see https://github.com/PaintLab/PixelFarm/issues/43
             //-----------
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                top += bmp.Height;
+            }
 
             if (bmp.IsBigEndianPixel)
             {
+
                 _rgbaTextureShader.Render(bmp, left, top, w, h);
             }
             else
             {
-
-                //-----------
-                //IMPORTANT: left,top position need to be adjusted with 
-                //Canvas' origin kind
-                //see https://github.com/PaintLab/PixelFarm/issues/43
-                //-----------
-
-                if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
-                {
-                    //***
-                    top += bmp.Height;
-                }
-
-                //-----------
-
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
                     _bgrImgTextureShader.Render(bmp, left, top, w, h);
@@ -404,7 +406,6 @@ namespace PixelFarm.DrawingGL
                 {
                     _bgraImgTextureShader.Render(bmp, left, top, w, h);
                 }
-
             }
         }
 
