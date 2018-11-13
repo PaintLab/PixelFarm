@@ -11,7 +11,7 @@ namespace LayoutFarm.UI
 {
     public static partial class FormCanvasHelper
     {
-        static LayoutFarm.UI.UIPlatformWinForm s_platform;
+        static UIPlatformWinForm s_platform;
         static IInstalledTypefaceProvider s_fontstore;
         static void InitWinform()
         {
@@ -26,7 +26,7 @@ namespace LayoutFarm.UI
         public static Form CreateNewFormCanvas(
            int w, int h,
            InnerViewportKind internalViewportKind,
-           out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+           out UISurfaceViewportControl canvasViewport)
         {
             return CreateNewFormCanvas(0, 0, w, h, internalViewportKind, out canvasViewport);
         }
@@ -93,13 +93,13 @@ namespace LayoutFarm.UI
               int xpos, int ypos,
               int w, int h,
               InnerViewportKind internalViewportKind,
-              out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
+              out UISurfaceViewportControl canvasViewport)
         {
             //1. init
             InitWinform();
             IInstalledTypefaceProvider fontLoader = s_fontstore;
             //2. 
-            PixelFarm.Drawing.ITextService ifont = null;
+            ITextService ifont = null;
             switch (internalViewportKind)
             {
                 default:
@@ -117,7 +117,7 @@ namespace LayoutFarm.UI
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, ifont);
             //---------------------------------------------------------------------------
 
-            var innerViewport = canvasViewport = new LayoutFarm.UI.UISurfaceViewportControl();
+            var innerViewport = canvasViewport = new UISurfaceViewportControl();
             Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
 
             canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind);
