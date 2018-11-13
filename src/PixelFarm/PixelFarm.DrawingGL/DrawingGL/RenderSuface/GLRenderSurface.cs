@@ -375,9 +375,16 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
+
                 //-----------
+                //IMPORTANT: left,top position need to be adjusted with 
+                //Canvas' origin kind
+                //see https://github.com/PaintLab/PixelFarm/issues/43
+                //-----------
+
                 if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
                 {
+                    //***
                     top += bmp.Height;
                 }
 
