@@ -42,19 +42,7 @@ namespace LayoutFarm.Dev
 
             App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
             RunDemo(selectedDemo);
-
-            //------------------------------------------------------------ 
-            //LayoutFarm.UI.UISurfaceViewportControl viewport; 
-            //Form formCanvas;
-            //CreateReadyForm(
-            //    out viewport,
-            //    out formCanvas);
-
-            //selectedDemo.StartDemo(new SampleViewport(viewport));
-            //viewport.TopDownRecalculateContent();
-            ////==================================================  
-            //viewport.PaintMe();
-            //ShowFormLayoutInspector(viewport); 
+             
         }
 
 
