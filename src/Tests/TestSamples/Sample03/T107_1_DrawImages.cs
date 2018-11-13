@@ -7,7 +7,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
 
-    public enum T107DrawImageSet
+    public enum T107_1_DrawImageSet
     {
         //for test only!
         Full,
@@ -37,7 +37,7 @@ namespace OpenTkEssTest
             this._painter = painter;
         }
         [DemoConfig]
-        public T107DrawImageSet DrawSet
+        public T107_1_DrawImageSet DrawSet
         {
             get;
             set;
@@ -66,7 +66,7 @@ namespace OpenTkEssTest
             switch (DrawSet)
             {
                 default:
-                case T107DrawImageSet.Full:
+                case T107_1_DrawImageSet.Full:
                     {
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
                         for (int i = 0; i < 400;)
@@ -83,7 +83,7 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
-                case T107DrawImageSet.Half:
+                case T107_1_DrawImageSet.Half:
                     {
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
                         for (int i = 0; i < 400;)
@@ -101,7 +101,7 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
-                case T107DrawImageSet.FromRect:
+                case T107_1_DrawImageSet.FromRect:
                     {
 
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
@@ -122,7 +122,7 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
-                case T107DrawImageSet.SubImages1:
+                case T107_1_DrawImageSet.SubImages1:
                     {
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
                         for (int i = 0; i < 400;)
@@ -142,7 +142,7 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
-                case T107DrawImageSet.SubImagesWithScale:
+                case T107_1_DrawImageSet.SubImagesWithScale:
                     {
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
                         for (int i = 0; i < 400;)
@@ -162,7 +162,7 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
-                case T107DrawImageSet.SubImageWithBlurX:
+                case T107_1_DrawImageSet.SubImageWithBlurX:
                     {
 
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
@@ -181,7 +181,7 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
-                case T107DrawImageSet.SubImageWithBlurY:
+                case T107_1_DrawImageSet.SubImageWithBlurY:
                     {
 
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
@@ -202,7 +202,7 @@ namespace OpenTkEssTest
                         //
                     }
                     break;
-                case T107DrawImageSet.DrawWithConv3x3:
+                case T107_1_DrawImageSet.DrawWithConv3x3:
                     {
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
                         for (int i = 0; i < 400;)
