@@ -50,9 +50,9 @@ namespace LayoutFarm.UI
                     ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     //ifont = new OpenFontTextService();
                     break;
-                case InnerViewportKind.GLES:
-                    ifont = new OpenFontTextService();
-                    break;
+                //case InnerViewportKind.GLES:
+                //    ifont = new OpenFontTextService();
+                //    break;
 
             }
 
