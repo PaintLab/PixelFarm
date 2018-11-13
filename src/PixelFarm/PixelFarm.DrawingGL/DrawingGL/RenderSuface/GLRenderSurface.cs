@@ -219,7 +219,14 @@ namespace PixelFarm.DrawingGL
             }
             _currentFrameBuffer = null;
         }
-       
+        public void Clear()
+        {
+            GL.ClearStencil(0);
+            //actual clear here !
+            GL.Clear(ClearBufferMask.ColorBufferBit |
+                ClearBufferMask.DepthBufferBit |
+                ClearBufferMask.StencilBufferBit);
+        }
         public void Clear(PixelFarm.Drawing.Color c)
         {
             GL.ClearColor(
