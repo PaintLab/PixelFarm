@@ -5,7 +5,11 @@ using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
 {
-
+    public enum GLRenderSurfaceOrigin
+    {
+        LeftBottom,
+        LeftTop,
+    }
     /// <summary>
     /// GLES2 render surface, This is not intended to be used directly from your code
     /// </summary>
@@ -28,19 +32,23 @@ namespace PixelFarm.DrawingGL
         SingleChannelSdf _sdfShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
-        //tools---------------------------------
+
+        GLRenderSurfaceOrigin _originKind;
 
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
         int _width;
         int _height;
+        int _vwWidth = 0;
+        int _vwHeight = 0;
 
         MyMat4 _orthoView;
-        MyMat4 _flipVerticalView;
-        MyMat4 _orthoAndFlip;
+        MyMat4 _orthoFlipYandPullDown;
 
-        TessTool _tessTool;
+
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
+        //
+        TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
 
         internal GLRenderSurface(int width, int height, int viewportW, int viewportH)
@@ -62,9 +70,15 @@ namespace PixelFarm.DrawingGL
             int max = Math.Max(width, height);
             _orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
 
-            _flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0));
-            _orthoAndFlip = _orthoView * _flipVerticalView;
+
+            //ortho then flipY and then translate y down (GL coord) to viewport
+            _orthoFlipYandPullDown = _orthoView *
+                                     MyMat4.scale(1, -1) * //flip Y
+                                     MyMat4.translate(new OpenTK.Vector3(0, -viewportH, 0)); //pull-down
             //-----------------------------------------------------------------------
+
+
+
             _shareRes = new ShaderSharedResource();
             _shareRes.OrthoView = _orthoView;
             //----------------------------------------------------------------------- 
@@ -85,9 +99,9 @@ namespace PixelFarm.DrawingGL
             _invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
-            _msdfShader = new DrawingGL.MultiChannelSdf(_shareRes);
-            _msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(_shareRes);
-            _sdfShader = new DrawingGL.SingleChannelSdf(_shareRes);
+            _msdfShader = new MultiChannelSdf(_shareRes);
+            _msdfSubPixelRenderingShader = new MultiChannelSubPixelRenderingSdf(_shareRes);
+            _sdfShader = new SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
 
@@ -110,13 +124,34 @@ namespace PixelFarm.DrawingGL
             GL.ClearColor(1, 1, 1, 1);
             //-------------------------------------------------------------------------------
             GL.Viewport(0, 0, width, height);
-            FlipY = true;
+
+
+            //-------------------------------------------------------------------------------
+            //1. original GLES (0,0) is on left-lower.
+            //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
+            // so (0,0) is on LEFT-UPPER => so we need to FlipY
+
+            OriginKind = GLRenderSurfaceOrigin.LeftTop;
+            //-------------------------------------------------------------------------------
         }
-
-
-        int _vwWidth = 0;
-        int _vwHeight = 0;
-
+        public GLRenderSurfaceOrigin OriginKind
+        {
+            get
+            {
+                return _originKind;
+            }
+            set
+            {
+                if ((_originKind = value) == GLRenderSurfaceOrigin.LeftTop)
+                {
+                    _shareRes.OrthoView = _orthoFlipYandPullDown;
+                }
+                else
+                {
+                    _shareRes.OrthoView = _orthoView;
+                }
+            }
+        }
         public void SetViewport(int width, int height)
         {
             //when change, need to recalcate?
@@ -139,25 +174,6 @@ namespace PixelFarm.DrawingGL
         public int CanvasHeight
         {
             get { return _height; }
-        }
-        bool _flipY;
-        public bool FlipY
-        {
-            get
-            {
-                return this._flipY;
-            }
-            set
-            {
-                if (this._flipY = value)
-                {
-                    _shareRes.OrthoView = _orthoAndFlip;
-                }
-                else
-                {
-                    _shareRes.OrthoView = _orthoView;
-                }
-            }
         }
 
         public void Dispose()
@@ -202,6 +218,14 @@ namespace PixelFarm.DrawingGL
                 _currentFrameBuffer.ReleaseCurrent();
             }
             _currentFrameBuffer = null;
+        }
+        public void Clear()
+        {
+            GL.ClearStencil(0);
+            //actual clear here !
+            GL.Clear(ClearBufferMask.ColorBufferBit |
+                ClearBufferMask.DepthBufferBit |
+                ClearBufferMask.StencilBufferBit);
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {
@@ -266,22 +290,33 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void DrawFrameBuffer(FrameBuffer frameBuffer, float x, float y)
+        public void DrawFrameBuffer(FrameBuffer frameBuffer, float left, float top)
         {
-            //draw frame buffer into specific position
-            _rgbaTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
+            //IMPORTANT: (left,top) != (x,y) 
+            //IMPORTANT: left,top position need to be adjusted with 
+            //Canvas' origin kind
+            //see https://github.com/PaintLab/PixelFarm/issues/43
+            //-----------
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                top += frameBuffer.Height;
+            }
+
+
+            _rgbaTextureShader.Render(frameBuffer.TextureId, left, top, frameBuffer.Width, frameBuffer.Height);
         }
-        public void DrawImage(GLBitmap bmp, float x, float y)
+        public void DrawImage(GLBitmap bmp, float left, float top)
         {
             DrawImage(bmp,
                    new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                   x, y, bmp.Width, bmp.Height);
+                   left, top, bmp.Width, bmp.Height);
         }
-        public void DrawImage(GLBitmap bmp, float x, float y, float w, float h)
+        public void DrawImage(GLBitmap bmp, float left, float top, float w, float h)
         {
             DrawImage(bmp,
                 new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
-                x, y, w, h);
+                left, top, w, h);
         }
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
@@ -351,23 +386,34 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
-            float x, float y, float w, float h)
+            float left, float top, float w, float h)
         {
+            //IMPORTANT: (left,top) != (x,y) 
+            //IMPORTANT: left,top position need to be adjusted with 
+            //Canvas' origin kind
+            //see https://github.com/PaintLab/PixelFarm/issues/43
+            //-----------
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            {
+                //***
+                top += h;
+            }
+
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.Render(bmp, x, y, w, h);
+
+                _rgbaTextureShader.Render(bmp, left, top, w, h);
             }
             else
             {
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
-                    _bgrImgTextureShader.Render(bmp, x, y, w, h);
+                    _bgrImgTextureShader.Render(bmp, left, top, w, h);
                 }
                 else
                 {
-                    _bgraImgTextureShader.Render(bmp, x, y, w, h);
+                    _bgraImgTextureShader.Render(bmp, left, top, w, h);
                 }
-
             }
         }
 
@@ -565,13 +611,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public void DrawImage(GLBitmapReference bmp, float x, float y)
-        {
-            this.DrawImage(bmp.OwnerBitmap,
-                 bmp.GetRectF(),
-                 x, y, bmp.Width, bmp.Height);
-        }
-        //-------------------------------------------------------------------------------
+       
         public void DrawImageWithBlurY(GLBitmap bmp, float x, float y)
         {
             //TODO: review here

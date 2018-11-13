@@ -15,16 +15,14 @@ namespace Mini
             InitializeComponent();
 
         }
-        //LayoutFarm.UI.UISurfaceViewportControl _cpuBlitControl;
+        LayoutFarm.UI.UISurfaceViewportControl _cpuBlitControl;
         void InvalidateSampleViewPort()
         {
-            //_cpuBlitControl?.Invalidate();
+            _cpuBlitControl?.Invalidate();
         }
-        public void LoadSurfaceControl(Control ctrl)
+        public void SetUISurfaceViewportControl(LayoutFarm.UI.UISurfaceViewportControl cpuBlitControl)
         {
-            this.splitContainer1.Panel2.Controls.Clear();
-            this.splitContainer1.Panel2.Controls.Add(ctrl);
-            //_cpuBlitControl = ctrl as LayoutFarm.UI.UISurfaceViewportControl;
+            _cpuBlitControl = cpuBlitControl;
         }
         public Control GetLandingControl()
         {

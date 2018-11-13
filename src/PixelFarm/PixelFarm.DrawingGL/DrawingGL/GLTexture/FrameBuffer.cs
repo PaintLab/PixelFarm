@@ -75,6 +75,7 @@ namespace PixelFarm.DrawingGL
         {
             GL.BindTexture(TextureTarget.Texture2D, textureId);
             GL.GenerateMipmap(TextureTarget.Texture2D);
+
         }
         internal void ReleaseCurrent()
         {

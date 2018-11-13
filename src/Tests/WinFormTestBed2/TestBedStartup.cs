@@ -99,12 +99,12 @@ namespace YourImplementation
     public static class DemoFormCreatorHelper
     {
         public static void CreateReadyForm(
+         InnerViewportKind innerViewportKind,
          out LayoutFarm.UI.UISurfaceViewportControl viewport,
          out Form formCanvas)
         {
 
-            //1. select view port kind
-            InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
+            //1. select view port kind  
 
             var workingArea = Screen.PrimaryScreen.WorkingArea;
 

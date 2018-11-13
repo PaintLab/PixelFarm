@@ -6,19 +6,19 @@ namespace LayoutFarm.UI.OpenGL
 {
     class OpenGLCanvasViewport : CanvasViewport
     {
-        DrawBoard canvas;
-        bool isClosed;
+        DrawBoard _canvas;
+        bool _isClosed;
         public OpenGLCanvasViewport(RootGraphic root, Size viewportSize)
             : base(root, viewportSize)
         {
         }
         protected override void OnClosing()
         {
-            isClosed = true;
-            if (canvas != null)
+            _isClosed = true;
+            if (_canvas != null)
             {
-                canvas.CloseCanvas();
-                canvas = null;
+                _canvas.CloseCanvas();
+                _canvas = null;
             }
         }
         public override void CanvasInvalidateArea(Rectangle r)
@@ -30,7 +30,7 @@ namespace LayoutFarm.UI.OpenGL
 
         public void SetCanvas(DrawBoard canvas)
         {
-            this.canvas = canvas;
+            this._canvas = canvas;
 
         }
         //----------
@@ -86,7 +86,7 @@ namespace LayoutFarm.UI.OpenGL
 
         public void PaintMe()
         {
-            if (isClosed) return;
+            if (_isClosed) return;
             //---------------------------------------------
 
             //canvas.Orientation = CanvasOrientation.LeftTop;
@@ -99,11 +99,11 @@ namespace LayoutFarm.UI.OpenGL
             // return;
             //----------------------------------
             //gl paint here
-            if (canvas == null)
+            if (_canvas == null)
             {
                 return;
             }
-            canvas.Clear(Color.White);
+            _canvas.Clear(Color.White);
             ////test draw rect
             //canvas.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //canvas.DrawRectangle(Color.Blue, 20, 20, 200, 200);
@@ -115,16 +115,16 @@ namespace LayoutFarm.UI.OpenGL
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this.rootGraphics.PrepareRender();
+            this._rootGraphics.PrepareRender();
             //---------------
-            this.rootGraphics.IsInRenderPhase = true;
+            this._rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
+            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+            this._rootGraphics.dbug_drawLevel = 0;
 #endif
-            UpdateAllArea(this.canvas, this.topWindowBox);
+            UpdateAllArea(this._canvas, this._topWindowBox);
 
-            this.rootGraphics.IsInRenderPhase = false;
+            this._rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -153,7 +153,12 @@ namespace LayoutFarm.UI.OpenGL
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
             Rectangle rect = mycanvas.Rect;
             topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+
+
 #if DEBUG
+            //our OpenGLCanvasViewport use Html5Canvas model
+            //Html5Canvas coordinate (0,0) is on Upper-Left
+            //so this red rects should run from upper-left to lower-right
 
             for (int i = 0; i < 100; ++i)
             {
@@ -162,13 +167,6 @@ namespace LayoutFarm.UI.OpenGL
 #endif
 
 
-#if DEBUG  
-            //mycanvas.FillRectangle(Color.Blue, 50, 50, 50, 50);
-            //  topWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
-
-#endif
-
-            //mycanvas.IsContentReady = true;
             mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
         }
     }

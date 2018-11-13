@@ -31,14 +31,14 @@ namespace OpenTkEssTest
             {
                 //glbmp = LoadTexture(@"..\logo-dark.jpg");
                 glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
-               
+
                 resInit = true;
             }
 
             _glsx.DrawSubImage(glbmp, 10, 10, 100, 100, 200, 400);
             _glsx.DrawImage(glbmp, 0, 300);
             _glsx.DrawImageWithBlurX(glbmp, 0, 600);
-            SwapBuffers();
+
         }
     }
 }
