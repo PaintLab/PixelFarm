@@ -249,16 +249,97 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class GdiImageTextureShader : SimpleRectTextureShader
+    /// <summary>
+    /// for 32 bits texture/image  in BGR format (Windows GDI,with no alpha)d, we can specific A component laterd
+    /// </summary>
+    class BGRImageTextureShader : SimpleRectTextureShader
     {
-        public GdiImageTextureShader(ShaderSharedResource shareRes)
+        ShaderUniformVar1 u_alpha;//** alpha component to apply with original img
+        public BGRImageTextureShader(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            Alpha = 1f;//default 
+            //--------------------------------------------------------------------------
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform mat4 u_mvpMatrix;   
+                
+
+                varying vec2 v_texCoord;
+                void main()
+                {
+                    gl_Position = u_mvpMatrix* a_position;
+                    v_texCoord =  a_texCoord;
+                 }	 
+                ";
+            //in fs, angle on windows 
+            //we need to switch color component ***
+            //because we store value in memory as BGRA
+            //and gl expect input in RGBA
+            string fs = @"
+                      precision mediump float;
+                      varying vec2 v_texCoord;
+                      uniform sampler2D s_texture;
+                      uniform float u_alpha;
+                      void main()
+                      {
+                         vec4 c = texture2D(s_texture, v_texCoord);                            
+                         gl_FragColor =  vec4(c[2],c[1],c[0],u_alpha);
+                      }
+                ";
+            BuildProgram(vs, fs);
+        }
+        protected override void OnProgramBuilt()
+        {
+            u_alpha = shaderProgram.GetUniform1("u_alpha");
+        }
+        protected override void OnSetVarsBeforeRenderer()
+        {
+            u_alpha.SetValue(Alpha);
+        }
+
+        float _alpha;
+        /// <summary>
+        /// 00-1.0f
+        /// </summary>
+        public float Alpha
+        {
+            get => _alpha;
+            set
+            {
+                //clamp 0-1
+                if (_alpha < 0)
+                {
+                    _alpha = 0;
+                }
+                else if (_alpha > 1)
+                {
+                    _alpha = 1;
+                }
+                else
+                {
+                    _alpha = value;
+                }
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// for 32 bits texture/image in BGRA format (eg. CpuBlit's ActualBitmap)
+    /// </summary>
+    class BGRAImageTextureShader : SimpleRectTextureShader
+    {
+
+        public BGRAImageTextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             //--------------------------------------------------------------------------
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
-                uniform mat4 u_mvpMatrix; 
+                uniform mat4 u_mvpMatrix;                  
                 varying vec2 v_texCoord;
                 void main()
                 {
@@ -284,9 +365,14 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class OpenGLESTextureShader : SimpleRectTextureShader
+
+
+    /// <summary>
+    /// for 32 bits texture/image  in RGBA format
+    /// </summary>
+    class RGBATextureShader : SimpleRectTextureShader
     {
-        public OpenGLESTextureShader(ShaderSharedResource shareRes)
+        public RGBATextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             //--------------------------------------------------------------------------
@@ -316,9 +402,9 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class GdiImageTextureWithWhiteTransparentShader : SimpleRectTextureShader
+    class BGRAImageTextureWithWhiteTransparentShader : SimpleRectTextureShader
     {
-        public GdiImageTextureWithWhiteTransparentShader(ShaderSharedResource shareRes)
+        public BGRAImageTextureWithWhiteTransparentShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"
@@ -352,6 +438,7 @@ namespace PixelFarm.DrawingGL
                 ";
             BuildProgram(vs, fs);
         }
+
     }
 
 

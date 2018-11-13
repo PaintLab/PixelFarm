@@ -32,18 +32,23 @@ namespace Win32
                 out dib,
                 out ppvBits);
         }
+
+        /// <summary>
+        /// handle to win32 memory context
+        /// </summary>
         public IntPtr DC
         {
             get { return this.memHdc; }
         }
+        /// <summary>
+        /// handle to bitmap buffer
+        /// </summary>
         public IntPtr PPVBits
         {
             get { return this.ppvBits; }
         }
-        public void SetTextColor(int win32Color)
-        {
-            Win32.MyWin32.SetTextColor(memHdc, win32Color);
-        }
+
+
         public void Dispose()
         {
             if (isDisposed)
@@ -98,7 +103,10 @@ namespace Win32
             //convert to win32 colorv
             MyWin32.SetTextColor(memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
         }
-
+        public void SetTextColor(int win32Color)
+        {
+            Win32.MyWin32.SetTextColor(memHdc, win32Color);
+        }
         public void SetClipRect(int x, int y, int w, int h)
         {
             if (hRgn == IntPtr.Zero)
@@ -135,7 +143,7 @@ namespace Win32
             Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)this.PPVBits, copyLen);
         }
         public unsafe void BlendWin32From(
-           IntPtr srcDC, 
+           IntPtr srcDC,
            int srcX,
            int srcY,
            int srcWidth,
@@ -166,12 +174,12 @@ namespace Win32
 
         }
         public unsafe void BlendBltBitFrom(
-        byte* srcHeader, int srcStrideInBytes,
-        int srcX,
-        int srcY,
-        int srcWidth,
-        int srcHeight,
-        int destX, int destY)
+            byte* srcHeader, int srcStrideInBytes,
+            int srcX,
+            int srcY,
+            int srcWidth,
+            int srcHeight,
+            int destX, int destY)
         {
             //no alpha
 

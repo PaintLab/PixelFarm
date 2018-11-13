@@ -15,6 +15,12 @@ namespace PixelFarm.DrawingGL
         public abstract bool IsInvert { get; }
     }
 
+    public enum GLBitmapFormat
+    {
+        BGRA,
+        BGR,
+        RGBA
+    }
     public class GLBitmap : Image
     {
         int _textureId;
@@ -27,11 +33,6 @@ namespace PixelFarm.DrawingGL
         LazyBitmapBufferProvider _lazyProvider;
         bool _isNativePtrOwner;
 
-        //static readonly bool isLittleEndian;
-        //static GLBitmap()
-        //{
-        //    isLittleEndian = BitConverter.IsLittleEndian;
-        //}
 
         public GLBitmap(int w, int h, int[] rawIntBuffer, bool isInvertImage)
         {
@@ -76,9 +77,8 @@ namespace PixelFarm.DrawingGL
 
         }
 
-
+        public GLBitmapFormat BitmapFormat { get; set; }
         public bool IsBigEndianPixel { get; set; }
-
         public bool IsInvert { get; set; }
         public int TextureId => _textureId;
 
@@ -162,12 +162,6 @@ namespace PixelFarm.DrawingGL
                 System.Buffer.BlockCopy(_rawIntBuffer, 0, _rawIntBuffer, 0, newBuff.Length);
                 buffRequest.OutputBuffer32 = newBuff;
             }
-            //else if (rawBuffer != null)
-            //{
-            //    byte[] newBuff = new byte[rawBuffer.Length];
-            //    Buffer.BlockCopy(rawBuffer, 0, newBuff, 0, rawBuffer.Length);
-            //    buffRequest.OutputBuffer = newBuff;
-            //}
             else
             {
 

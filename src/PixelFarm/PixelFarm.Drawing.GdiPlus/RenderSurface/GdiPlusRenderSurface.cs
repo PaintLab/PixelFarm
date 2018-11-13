@@ -48,6 +48,7 @@ namespace PixelFarm.Drawing.WinGdi
         CpuBlit.AggPainter _painter;
         //------------------------------- 
 
+        IntPtr _hFont;
 
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
@@ -67,24 +68,39 @@ namespace PixelFarm.Drawing.WinGdi
             win32MemDc = new NativeWin32MemoryDC(width, height, false);
             win32MemDc.PatBlt(NativeWin32MemoryDC.PatBltColor.White);
             win32MemDc.SetBackTransparent(true);
-            win32MemDc.SetClipRect(0, 0, width, height); 
+            win32MemDc.SetClipRect(0, 0, width, height);
+            //--------------
+
             this.originalHdc = win32MemDc.DC;
+            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
+
+            //--------------
+            //set default font
+            Win32.Win32Font font = Win32.FontHelper.CreateWin32Font("Tahoma", 10, false, false);
+            _hFont = font.GetHFont();
+            win32MemDc.SetFont(_hFont);
+            //---------------------
+
             //--------------
             //set default font and default text color
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
-            //--------------
-
-
-            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
             //-------------------------------------------------------     
             //managed object
             internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
-            internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black); 
-            this.StrokeWidth = 1; 
+            internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            this.StrokeWidth = 1;
         }
 
+        public NativeWin32MemoryDC Win32DC => win32MemDc;
+
 #if DEBUG
+        public void dbugTestDrawText()
+        {
+            win32MemDc.SetFont(_hFont);
+            this.CurrentTextColor = Color.Black;
+            DrawText("ABCDE012345".ToCharArray(), 0, 0);
+        }
         public override string ToString()
         {
             return "visible_clip" + this.gx.VisibleClipBounds.ToString();
@@ -1032,14 +1048,9 @@ namespace PixelFarm.Drawing.WinGdi
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
-        //public override float GetCharWidth(RequestFont f, char c)
-        //{
-        //    WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(f);
-        //    return winFont.GetGlyph(c).horiz_adv_x >> 6;
-        //}
+
         public void DrawText(char[] buffer, int x, int y)
         {
-
             var clipRect = currentClipRect;
             clipRect.Offset(canvasOriginX, canvasOriginY);
             //1.
@@ -1051,8 +1062,6 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-
-
             var clipRect = System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
             //1.
             clipRect.Offset(canvasOriginX, canvasOriginY);
@@ -1062,8 +1071,6 @@ namespace PixelFarm.Drawing.WinGdi
             NativeTextWin32.TextOut(win32MemDc.DC, canvasOriginX + logicalTextBox.X, canvasOriginY + logicalTextBox.Y, buffer, buffer.Length);
             //4.
             win32MemDc.ClearClipRect();
-
-
         }
         public void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
@@ -1091,6 +1098,7 @@ namespace PixelFarm.Drawing.WinGdi
                     fixed (char* startAddr = &str[0])
                     {
                         //4.
+
                         NativeTextWin32.TextOutUnsafe(originalHdc,
                             (int)logicalTextBox.X + canvasOriginX,
                             (int)logicalTextBox.Y + canvasOriginY,
@@ -1171,13 +1179,6 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 mycurrentTextColor = value;
                 win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
-                //int rgb = (value.B & 0xFF) << 16 | (value.G & 0xFF) << 8 | value.R;
-                //MyWin32.SetTextColor(originalHdc, rgb); 
-                //SetTextColor(value);
-                //this.currentTextColor = ConvColor(value);
-                //IntPtr hdc = gx.GetHdc();
-                //MyWin32.SetTextColor(hdc, MyWin32.ColorToWin32(value));
-                //gx.ReleaseHdc();
             }
         }
     }

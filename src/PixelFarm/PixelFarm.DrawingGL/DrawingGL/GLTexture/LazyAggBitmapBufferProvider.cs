@@ -3,10 +3,10 @@
 using System;
 namespace PixelFarm.DrawingGL
 {
-    public class LazyAggBitmapBufferProvider : LazyBitmapBufferProvider
+    public class LazyActualBitmapBufferProvider : LazyBitmapBufferProvider
     {
         PixelFarm.CpuBlit.ActualBitmap image;
-        public LazyAggBitmapBufferProvider(PixelFarm.CpuBlit.ActualBitmap image)
+        public LazyActualBitmapBufferProvider(PixelFarm.CpuBlit.ActualBitmap image)
         {
             this.image = image;
         }

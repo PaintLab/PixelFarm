@@ -12,30 +12,27 @@ using LayoutFarm.UI;
 
 namespace Mini
 {
-    class CpuBlitOnGLESAppModule
+    class GdiPlusOnGLESAppModule
     {
         //hardware renderer part=> GLES
-        //software renderer part => Pure Agg
+        //software renderer part => GDI/Agg
 
         int _myWidth;
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;
         RootGraphic _rootGfx;
-        //
         DemoUI _demoUI;
         DemoBase _demoBase;
-         
-
         OpenTK.MyGLControl _glControl;
 
-        public CpuBlitOnGLESAppModule() { }
+        public GdiPlusOnGLESAppModule()
+        {
 
-
+        }
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
         {
             _myWidth = 800;
             _myHeight = 600;
-
 
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
@@ -70,7 +67,7 @@ namespace Mini
             //-----------------------------------------------
 
             DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
-           
+
 
             //Add to RenderTree
             _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_rootGfx));
@@ -170,10 +167,18 @@ namespace Mini
                 base.OnMouseUp(e);
             }
         }
+
+
         class GLCanvasRenderElement : RenderElement, IDisposable
         {
+            //***
+            //THIS IS A TEMPORARY EXPERIMENT BEFORE ANOTHER MOVE
+            //***
+
+
             ActualBitmap _aggBmp;
             AggPainter _aggPainter;
+
             DemoBase _demo;
             DemoUI _demoUI;
 
@@ -183,19 +188,33 @@ namespace Mini
 
             LazyActualBitmapBufferProvider _lzBmpProvider;
 
+
+            //for software rendering part
+            //we use gdiplus render surface
+
+            PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard _gdiDrawBoard;
+
             public GLCanvasRenderElement(RootGraphic rootgfx, int w, int h)
                 : base(rootgfx, w, h)
             {
-                _aggBmp = new ActualBitmap(800, 600);
+                //1. we create gdi plus draw board
+                _gdiDrawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(0, 0, w, h);
+                _gdiDrawBoard.CurrentFont = new RequestFont("Tahoma", 10);
+
+
+                //2. create actual bitmap that share 'bitmap mem' with gdiPlus Render surface                 
+                _aggBmp = new ActualBitmap(w, h, _gdiDrawBoard.RenderSurface.Win32DC.PPVBits);
+                //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
                 _aggPainter = AggPainter.Create(_aggBmp);
 
+                //...
                 //optional if we want to print text on agg surface
                 _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
                 var aggTextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
                 _aggPainter.TextPrinter = aggTextPrinter;
-                //  
-                _lzBmpProvider = new LazyActualBitmapBufferProvider(_aggBmp);
 
+                //
+                _lzBmpProvider = new LazyActualBitmapBufferProvider(_aggBmp);
             }
             public void SetOwnerDemoUI(DemoUI demoUI)
             {
@@ -211,19 +230,17 @@ namespace Mini
                 _glsx = glsx;
                 _glPainter = canvasPainter;
             }
-
-
             void UpdateCpuBlitSurface()
             {
-
-                _aggPainter.Clear(PixelFarm.Drawing.Color.White);
+                _gdiDrawBoard.RenderSurface.Win32DC.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
                 //TODO:
                 //if the content of _aggBmp is not changed
                 //we should not draw again 
                 _demo.Draw(_aggPainter);
-                //test print some text
-                _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
-                _aggPainter.DrawString("Hello! 12345", 0, 500);
+                ////test print some text
+#if DEBUG       
+                _gdiDrawBoard.dbugTestDrawString();
+#endif
             }
 
             public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
@@ -234,7 +251,6 @@ namespace Mini
                 //we should not render again 
                 //2. if we only update some part of texture
                 //may can transfer only that part to the glBmp
-
                 //-------------------------------------------------------------------------  
                 if (_demoUI.ContentMayChanged)
                 {
@@ -250,18 +266,16 @@ namespace Mini
                 }
 
                 //------------------------------------------------------------------------- 
-                //copy from 
+                //copy from 'client' gdi buffer to GL Bitmap
+                //TODO: copy only update parts
                 if (_glBmp == null)
                 {
                     _glBmp = new GLBitmap(_lzBmpProvider);
+                    _glBmp.BitmapFormat = GLBitmapFormat.BGR;
                     _glBmp.IsInvert = false;
                 }
 
                 _glsx.DrawImage(_glBmp, 0, 0);
-
-                //test print text from our GLTextPrinter 
-                _glPainter.FillColor = PixelFarm.Drawing.Color.Black;
-                _glPainter.DrawString("Hello2", 0, 400);
 
             }
             public override void ResetRootGraphics(RootGraphic rootgfx)

@@ -72,12 +72,16 @@ namespace PixelFarm.DrawingGL
                 _fontFillColor = value;
             }
         }
-        DrawBoardOrientation _orientation;
+
+
+        DrawBoardOrientation _orientation = DrawBoardOrientation.LeftBottom;
         public override DrawBoardOrientation Orientation
         {
             get { return _orientation; }
             set
-            { _orientation = value; }
+            {
+                _orientation = value;
+            }
         }
         public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)

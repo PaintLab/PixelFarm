@@ -13,8 +13,8 @@ namespace Mini
 {
     class GLESAppModule
     {
-        //this context is for WinForm
-
+        //hardware renderer part=> GLES
+        //software renderer part => not specific now
 
         int _myWidth;
         int _myHeight;

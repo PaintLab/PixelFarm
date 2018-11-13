@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 
 
- 
+
 using System;
 using System.Collections.Generic;
 //
@@ -99,7 +99,7 @@ namespace PixelFarm.DrawingGL
                 //3.copy to gl bitmap
                 //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
-                GLBitmap glBmp = new GLBitmap(_actualImage);
+                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_actualImage));
                 glBmp.IsInvert = false;
                 //TODO: review font height
                 if (StartDrawOnLeftTop)
@@ -135,7 +135,7 @@ namespace PixelFarm.DrawingGL
 
                 //------------------------------------------------------
                 //GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
-                GLBitmap glBmp = new GLBitmap(_actualImage);
+                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_actualImage));
                 glBmp.IsInvert = false;
                 //TODO: review font height 
                 //if (StartDrawOnLeftTop)
@@ -669,4 +669,3 @@ namespace PixelFarm.DrawingGL
 }
 
 
- 

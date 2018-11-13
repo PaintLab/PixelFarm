@@ -24,7 +24,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            frameBuffer = _glsx.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer = _glsx.CreateFrameBuffer(_glsx.CanvasWidth, _glsx.CanvasHeight);
             frameBufferNeedUpdate = true;
             //------------ 
         }
@@ -36,38 +36,46 @@ namespace OpenTkEssTest
         {
             _glsx.SmoothMode = SmoothMode.Smooth;
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
-            _glsx.ClearColorBuffer();
+            _glsx.Clear(PixelFarm.Drawing.Color.White); //set clear color and clear all buffer
+            _glsx.ClearColorBuffer(); //test , clear only color buffer
             //-------------------------------
             if (!isInit)
             {
                 glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
                 isInit = true;
             }
+
+            GLRenderSurfaceOrigin prevOrgKind = _glsx.OriginKind; //save
+            _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+
             if (frameBuffer.FrameBufferId > 0)
             {
                 if (frameBufferNeedUpdate)
                 {
+
                     _glsx.AttachFrameBuffer(frameBuffer);
                     //------------------------------------------------------------------------------------  
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    _glsx.Clear(PixelFarm.Drawing.Color.Red);
-                    _glsx.DrawImage(glbmp, 0, 300);
+                    _glsx.Clear(PixelFarm.Drawing.Color.Black);
+                    _glsx.DrawImage(glbmp, 0, 0);
                     //------------------------------------------------------------------------------------  
                     _glsx.DetachFrameBuffer();
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;
                 }
-                _glsx.DrawFrameBuffer(frameBuffer, 15, 300);
+                _glsx.DrawFrameBuffer(frameBuffer, 0, 0);
             }
             else
             {
                 _glsx.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
-            SwapBuffers();
+            _glsx.OriginKind = prevOrgKind;//restore
+            
+
+
         }
     }
 }

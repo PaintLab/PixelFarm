@@ -97,5 +97,12 @@ namespace PixelFarm.Drawing.WinGdi
                 _gdigsx.CurrentTextColor = value;
             }
         }
+
+#if DEBUG
+        public void dbugTestDrawString()
+        {
+            _gdigsx.dbugTestDrawText();
+        }
+#endif
     }
 }

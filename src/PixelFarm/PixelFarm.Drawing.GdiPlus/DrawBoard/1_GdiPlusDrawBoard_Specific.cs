@@ -36,7 +36,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             _gdigsx = new GdiPlusRenderSurface(left, top, width, height);
         }
-
+        public GdiPlusRenderSurface RenderSurface => _gdigsx;
 #if DEBUG
         public override string ToString()
         {
