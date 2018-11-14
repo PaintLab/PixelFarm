@@ -1,7 +1,4 @@
 ﻿//MIT, 2016-present, WinterDev
-
-
-
 using System;
 using System.Collections.Generic;
 //
@@ -11,6 +8,8 @@ using PixelFarm.Drawing.Fonts;
 //
 using Typography.TextLayout;
 using Typography.OpenFont;
+using Typography.OpenFont.Extensions;
+
 
 namespace PixelFarm.DrawingGL
 {
@@ -221,6 +220,9 @@ namespace PixelFarm.DrawingGL
             //if not-> request the MySimpleGLBitmapFontManager to create a newone 
             _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
             _font = font;
+
+            Typeface typeface = _textServices.ResolveTypeface(font);
+            _px_scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
         }
         public void Dispose()
         {
@@ -242,7 +244,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-        float _finalTextureScale = 1;
+        float _px_scale = 1;
 
 
         void EnsureLoadGLBmp()
@@ -376,11 +378,12 @@ namespace PixelFarm.DrawingGL
 
         List<float> _vboBufferList = new List<float>();
         List<ushort> _indexList = new List<ushort>();
-        public void DrawString(char[] buffer, int startAt, int len, double x, double y)
+        public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
 
-            _glsx.FontFillColor = _painter.FontFillColor;
 
+
+            _glsx.FontFillColor = _painter.FontFillColor;
             int j = buffer.Length;
 
             //create temp buffer span that describe the part of a whole char buffer
@@ -389,24 +392,22 @@ namespace PixelFarm.DrawingGL
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            float scale = _px_scale;
 
-
-            float scale = 1;// _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = (int)_font.LineSpacingInPx;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((_font.LineSpacingInPx) * scale);
+            float bottom = (float)top + _font.LineSpacingInPixels; //  recommendLineSpacing
 
-            EnsureLoadGLBmp();
+            //EnsureLoadGLBmp();
             // 
-            float scaleFromTexture = _finalTextureScale;
+            float scaleFromTexture = 1;
             TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_x = 0;
             float g_y = 0;
-            int baseY = (int)Math.Round(y);
+            int baseY = (int)Math.Round(bottom);
 
             //int n = glyphPlanSeq.len;
             //int endBefore = glyphPlanSeq.startAt + n;
@@ -419,8 +420,16 @@ namespace PixelFarm.DrawingGL
             _indexList.Clear(); //clear before use
 
 
-            float acc_x = 0;
-            float acc_y = 0;
+            float acc_x = 0; //accumulate x
+            float acc_y = 0; //accumulate y 
+
+#if DEBUG
+            _glsx.DrawImage(_glBmp, 0, 0);
+            _painter.StrokeColor = Color.Magenta;
+            _painter.DrawLine(left, bottom, left + 200, bottom);
+            _painter.StrokeColor = Color.Blue;
+#endif
+
 
 
             int seqLen = glyphPlanSeq.Count;
@@ -437,12 +446,11 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //-------------------------------------- 
 
-                PixelFarm.Drawing.Rectangle srcRect =
-                    new Rectangle(glyphData.Left,
-                    glyphData.Top,
-                    glyphData.Width,
-                    glyphData.Height);
-
+                Rectangle srcRect =
+                      new Rectangle(glyphData.Left,
+                          glyphData.Top,
+                          glyphData.Width,
+                          glyphData.Height);
 
                 float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
                 float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);
@@ -450,64 +458,75 @@ namespace PixelFarm.DrawingGL
                 // -glyphData.TextureXOffset => restore to original pos
                 // -glyphData.TextureYOffset => restore to original pos 
                 //--------------------------
-                g_x = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                g_y = (float)(y + (ngy - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-
+                g_x = (float)(left + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
+                g_y = (float)(baseY - (ngy - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
 
                 //g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
+#if DEBUG
+                //paint src rect
+                float newY = _glBmp.Height - srcRect.Y - srcRect.Height;
+                float diff = newY - srcRect.Y;
+                srcRect.OffsetY((int)diff);
 
-
-
+                _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
+                //paint dest
                 _painter.DrawRectangle(g_x, g_y, srcRect.Width, srcRect.Height, Color.Black);
 
-                //switch (textureKind)
-                //{
-                //    case TextureKind.Msdf:
+                _painter.StrokeColor = Color.Red;
+                _painter.DrawLine(left, g_y, left + 200, g_y);
+                _painter.StrokeColor = Color.Blue;
+#endif
 
-                //        _glsx.DrawSubImageWithMsdf(_glBmp,
-                //            ref srcRect,
-                //            g_x,
-                //            g_y,
-                //            scaleFromTexture);
+                textureKind = TextureKind.Bitmap;
 
-                //        break;
-                //    case TextureKind.StencilGreyScale:
+                switch (textureKind)
+                {
+                    case TextureKind.Msdf:
 
-                //        //stencil gray scale with fill-color
-                //        _glsx.DrawGlyphImageWithStecil(_glBmp,
-                //         ref srcRect,
-                //            g_x,
-                //            g_y,
-                //            scaleFromTexture);
+                        _glsx.DrawSubImageWithMsdf(_glBmp,
+                            ref srcRect,
+                            g_x,
+                            g_y,
+                            scaleFromTexture);
 
-                //        break;
-                //    case TextureKind.Bitmap:
-                //        _glsx.DrawSubImage(_glBmp,
-                //         ref srcRect,
-                //            g_x,
-                //            g_y,
-                //            scaleFromTexture);
-                //        break;
-                //    case TextureKind.StencilLcdEffect:
+                        break;
+                    case TextureKind.StencilGreyScale:
 
-                //        _glsx.WriteVboToList(
-                //          _vboBufferList,
-                //          _indexList,
-                //          ref srcRect,
-                //          g_x,
-                //          g_y,
-                //          scaleFromTexture);
+                        //stencil gray scale with fill-color
+                        _glsx.DrawGlyphImageWithStecil(_glBmp,
+                         ref srcRect,
+                            g_x,
+                            g_y,
+                            scaleFromTexture);
 
-                //        break;
-                //}
+                        break;
+                    case TextureKind.Bitmap:
+                        _glsx.DrawSubImage(_glBmp,
+                         ref srcRect,
+                            g_x,
+                            g_y,
+                            1);
+                        break;
+                    case TextureKind.StencilLcdEffect:
+
+                        _glsx.WriteVboToList(
+                          _vboBufferList,
+                          _indexList,
+                          ref srcRect,
+                          g_x,
+                          g_y,
+                          scaleFromTexture);
+
+                        //-------
+                        //we create vbo first 
+                        //then render 
+                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
+                        break;
+                }
             }
-            //-------
-            //we create vbo first 
-            //then render 
-            //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
 
         }
 
@@ -540,8 +559,8 @@ namespace PixelFarm.DrawingGL
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
-            float scale = 1;// _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = (int)_font.LineSpacingInPx;
+            float scale = _px_scale;
+            int recommendLineSpacing = (int)_font.LineSpacingInPixels;
 
             //--------------------------
             //TODO:
@@ -554,7 +573,7 @@ namespace PixelFarm.DrawingGL
             renderVx.RecommmendLineSpacing = (int)(recommendLineSpacing * scale);
 
             // 
-            float scaleFromTexture = _finalTextureScale;
+            float scaleFromTexture = 1;
             TextureKind textureKind = _fontAtlas.TextureKind;
 
             //--------------------------
@@ -584,6 +603,9 @@ namespace PixelFarm.DrawingGL
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
             {
+                //from unscaled glyph plan
+                //we must scale it to pixel size with px_scale
+
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
                 Typography.Rendering.TextureGlyphMapData glyphData;
@@ -614,8 +636,6 @@ namespace PixelFarm.DrawingGL
 
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
-
-                //g_x = (float)Math.Round(g_x);
                 g_y = (float)Math.Floor(g_y);
 
 

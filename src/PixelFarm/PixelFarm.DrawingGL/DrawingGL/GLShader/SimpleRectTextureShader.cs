@@ -72,12 +72,12 @@ namespace PixelFarm.DrawingGL
                 float srcW = srcDestList[i + 2];
                 float srcH = srcDestList[i + 3];
                 float targetLeft = srcDestList[i + 4];
-                float targetTop = srcDestList[i + 5];
+                float targetTop = srcDestList[i + 5] ;
 
                 i += 6;
                 //-------------------------------
-                float srcBottom = srcTop - srcH;
-                float srcRight = srcLeft + srcW;
+                float srcBottom = srcTop + srcH * scale;
+                float srcRight = srcLeft + srcW * scale;
 
                 unsafe
                 {
@@ -108,20 +108,20 @@ namespace PixelFarm.DrawingGL
                     {
                         float* imgVertices = stackalloc float[5 * 4];
                         {
-                            imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                            imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcTop / orgBmpH; //texture coord 0 (left,top)
+                            imgVertices[0] = targetLeft;        /**/imgVertices[1] = targetTop;                   /**/imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                            imgVertices[3] = srcLeft / orgBmpW; /**/imgVertices[4] = srcTop / orgBmpH; /**/                               //texture coord 0 (left,top)
 
                             //---------------------
-                            imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
-                            imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcBottom / orgBmpH; //texture coord 1 (left,bottom)
+                            imgVertices[5] = targetLeft;        /**/imgVertices[6] = targetTop + (srcH * scale);  /**/imgVertices[7] = 0; //coord 1 (left,bottom)
+                            imgVertices[8] = srcLeft / orgBmpW; /**/imgVertices[9] = srcBottom / orgBmpH;         /**/                     //texture coord 1 (left,bottom)
 
                             //---------------------
-                            imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
-                            imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcTop / orgBmpH; //texture coord 2 (right,top)
+                            imgVertices[10] = targetLeft + (srcW * scale); /**/imgVertices[11] = targetTop;       /**/imgVertices[12] = 0; //coord 2 (right,top)
+                            imgVertices[13] = srcRight / orgBmpW;          /**/imgVertices[14] = srcTop / orgBmpH;                         //texture coord 2 (right,top)
 
                             //---------------------
-                            imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
-                            imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcBottom / orgBmpH; //texture coord 3  (right,bottom)
+                            imgVertices[15] = targetLeft + (srcW * scale); /**/imgVertices[16] = targetTop + (srcH * scale);    /**/imgVertices[17] = 0; //coord 3 (right, bottom)
+                            imgVertices[18] = srcRight / orgBmpW;          /**/imgVertices[19] = srcBottom / orgBmpH;               //texture coord 3  (right,bottom)
                         }
                         a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                         a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
@@ -870,7 +870,7 @@ namespace PixelFarm.DrawingGL
     {
         public static void DrawSubImage(this SimpleRectTextureShader shader, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
-            //TODO: review float array here,use buffer instead
+
             unsafe
             {
                 float* srcDestList = stackalloc float[6];
@@ -892,7 +892,6 @@ namespace PixelFarm.DrawingGL
             float scale = 1)
         {
 
-            //TODO: review float array here,use buffer instead
             unsafe
             {
                 float* srcDestList = stackalloc float[6];

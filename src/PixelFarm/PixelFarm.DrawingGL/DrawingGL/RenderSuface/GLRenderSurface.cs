@@ -325,12 +325,11 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == GLRenderSurfaceOrigin.LeftBottom) //***
             {
-                //***
-                targetTop += srcH;
+               
+                targetTop -= srcH; //***
             }
-
 
             if (bmp.IsBigEndianPixel)
             {
@@ -353,27 +352,28 @@ namespace PixelFarm.DrawingGL
             DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == GLRenderSurfaceOrigin.LeftBottom) //***
             {
                 //***
-                targetTop += r.Height;
+                targetTop -= srcRect.Height;  //***
             }
+
             //
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                _rgbaTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
             }
             else
             {
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
-                    _bgrImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                    _bgrImgTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
                 }
                 else
                 {
-                    _bgraImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                    _bgraImgTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
                 }
             }
         }
@@ -1111,7 +1111,7 @@ namespace PixelFarm.DrawingGL
 
                         if (prevStrokeW < 0.25f)
                         {
-                            StrokeWidth = 0.25f; 
+                            StrokeWidth = 0.25f;
                         }
 
                         int subPathCount = igpth.FigCount;
@@ -1128,7 +1128,7 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
             }
-        } 
+        }
         public int OriginX
         {
             get { return this._canvasOriginX; }
@@ -1162,7 +1162,7 @@ namespace PixelFarm.DrawingGL
             GL.Scissor(x, y, w, h);
         }
 
-       
+
 
         internal TessTool GetTessTool() { return _tessTool; }
         internal SmoothBorderBuilder GetSmoothBorderBuilder() { return _smoothBorderBuilder; }

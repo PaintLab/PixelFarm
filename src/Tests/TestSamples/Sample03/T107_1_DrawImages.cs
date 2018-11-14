@@ -14,7 +14,9 @@ namespace OpenTkEssTest
         Half,
         FromRect,
         //
+        SubImages0,
         SubImages1,
+        SubImages2,
         SubImagesWithScale,
         //
         SubImageWithBlurX,
@@ -122,7 +124,47 @@ namespace OpenTkEssTest
                         }
                     }
                     break;
+                case T107_1_DrawImageSet.SubImages0:
+                    {
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y)
+                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width, _glbmp.Height);
+                            _glsx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width, _glbmp.Height);
+                            _glsx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            i += 50;
+                        }
+                    }
+                    break;
                 case T107_1_DrawImageSet.SubImages1:
+                    {
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
+                        for (int i = 0; i < 400;)
+                        {
+                            //left,top (NOT x,y)
+                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);
+                            _glsx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            i += 50;
+                        }
+                        //
+                        _glsx.OriginKind = GLRenderSurfaceOrigin.LeftBottom;
+                        for (int i = 0; i < 400;)
+                        {
+                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);
+                            _glsx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            i += 50;
+                        }
+                    }
+                    break;
+                case T107_1_DrawImageSet.SubImages2:
                     {
                         _glsx.OriginKind = GLRenderSurfaceOrigin.LeftTop;
                         for (int i = 0; i < 400;)
