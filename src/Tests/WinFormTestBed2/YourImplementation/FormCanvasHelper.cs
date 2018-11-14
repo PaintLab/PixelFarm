@@ -105,9 +105,9 @@ namespace LayoutFarm.UI
                 default:
                     ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
                     break;
-                case InnerViewportKind.GLES:
-                    ifont = new OpenFontTextService();
-                    break;
+                //case InnerViewportKind.GLES:
+                //    ifont = new OpenFontTextService();
+                //    break;
             }
 
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
