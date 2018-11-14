@@ -484,10 +484,10 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == GLRenderSurfaceOrigin.LeftBottom) //***
             {
                 //***
-                targetTop += srcRect.Height;
+                targetTop -= srcRect.Height;  //***
             }
 
             _glyphStencilShader.SetColor(this.FontFillColor);
