@@ -22,30 +22,31 @@ namespace PixelFarm.Drawing.GLES2
     {
         class MyGLCanvasException : Exception { }
 
-        float strokeWidth = 1f;
-        Color fillSolidColor = Color.Transparent;
-        Color strokeColor = Color.Black;
+        float _strokeWidth = 1f;
+        Color _fillSolidColor = Color.Transparent;
+        Color _strokeColor = Color.Black;
+
         //==========================================================
         public override Color StrokeColor
         {
             get
             {
-                return this.strokeColor;
+                return this._strokeColor;
             }
             set
             {
-                painter1.StrokeColor = this.strokeColor = value;
+                _painter1.StrokeColor = this._strokeColor = value;
             }
         }
         public override float StrokeWidth
         {
             get
             {
-                return this.strokeWidth;
+                return this._strokeWidth;
             }
             set
             {
-                painter1.StrokeWidth = this.strokeWidth = value;
+                _painter1.StrokeWidth = this._strokeWidth = value;
             }
         }
 
@@ -61,7 +62,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void Clear(PixelFarm.Drawing.Color c)
         {
-            painter1.Clear(c);
+            _painter1.Clear(c);
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
@@ -77,7 +78,7 @@ namespace PixelFarm.Drawing.GLES2
                     {
                         //use default solid brush
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        painter1.FillRect(
+                        _painter1.FillRect(
                             left, top,
                             width, height,
                             solidBrush.Color);
@@ -104,15 +105,15 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-            painter1.FillRect(left, top, width, height, color);
+            _painter1.FillRect(left, top, width, height, color);
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            painter1.DrawRect(left, top, width, height);
+            _painter1.DrawRect(left, top, width, height);
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-            painter1.DrawLine(x1, y1, x2, y2);
+            _painter1.DrawLine(x1, y1, x2, y2);
         }
 
 
@@ -128,11 +129,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return painter1.SmoothingMode;
+                return _painter1.SmoothingMode;
             }
             set
             {
-                painter1.SmoothingMode = value;
+                _painter1.SmoothingMode = value;
             }
         }
 
@@ -148,7 +149,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
+                _painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
             }
         }
         public override void DrawImage(Image image, int x, int y)
@@ -222,7 +223,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                painter1.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+                _painter1.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
 
         }

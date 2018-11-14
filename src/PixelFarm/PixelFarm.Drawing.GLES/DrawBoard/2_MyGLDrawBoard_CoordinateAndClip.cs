@@ -23,38 +23,38 @@ namespace PixelFarm.Drawing.GLES2
         int _width;
         int _height;
 
-        int canvasOriginX = 0;
-        int canvasOriginY = 0;
-        Rectangle invalidateArea;
+        int _canvasOriginX = 0;
+        int _canvasOriginY = 0;
+        Rectangle _invalidateArea;
 
-        bool isEmptyInvalidateArea;
+        bool _isEmptyInvalidateArea;
         //--------------------------------------------------------------------
         public override void SetCanvasOrigin(int x, int y)
         {
 
-            painter1.SetOrigin(x, -y);
+            _painter1.SetOrigin(x, -y);
             //----------- 
-            int total_dx = x - canvasOriginX;
-            int total_dy = y - canvasOriginY;
+            int total_dx = x - _canvasOriginX;
+            int total_dy = y - _canvasOriginY;
             //this.gx.TranslateTransform(total_dx, total_dy);
             //clip rect move to another direction***
-            this.currentClipRect.Offset(-total_dx, -total_dy);
-            this.canvasOriginX = x;
-            this.canvasOriginY = y;
+            _currentClipRect.Offset(-total_dx, -total_dy);
+            _canvasOriginX = x;
+            _canvasOriginY = y;
         }
 
         public override int OriginX
         {
-            get { return this.canvasOriginX; }
+            get { return this._canvasOriginX; }
         }
         public override int OriginY
         {
-            get { return this.canvasOriginY; }
+            get { return this._canvasOriginY; }
         }
         public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
             //TODO: reivew clip combine mode
-            painter1.SetClipBox(rect.Left, rect.Bottom, rect.Right, rect.Top);
+            _painter1.SetClipBox(rect.Left, rect.Bottom, rect.Right, rect.Top);
         }
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
@@ -81,10 +81,10 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void PopClipAreaRect()
         {
-            if (clipRectStack.Count > 0)
+            if (_clipRectStack.Count > 0)
             {
-                currentClipRect = clipRectStack.Pop();
-                painter1.SetClipBox(currentClipRect.Left, currentClipRect.Top, currentClipRect.Right, currentClipRect.Bottom);
+                _currentClipRect = _clipRectStack.Pop();
+                _painter1.SetClipBox(_currentClipRect.Left, _currentClipRect.Top, _currentClipRect.Right, _currentClipRect.Bottom);
                 //gx.SetClip(currentClipRect);
             }
         }
@@ -92,7 +92,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return currentClipRect;
+                return _currentClipRect;
             }
         }
         public override int Top
@@ -148,25 +148,25 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return invalidateArea;
+                return _invalidateArea;
             }
         }
 
         public override void ResetInvalidateArea()
         {
-            this.invalidateArea = Rectangle.Empty;
-            this.isEmptyInvalidateArea = true;//set
+            this._invalidateArea = Rectangle.Empty;
+            this._isEmptyInvalidateArea = true;//set
         }
         public override void Invalidate(Rectangle rect)
         {
-            if (isEmptyInvalidateArea)
+            if (_isEmptyInvalidateArea)
             {
-                invalidateArea = rect;
-                isEmptyInvalidateArea = false;
+                _invalidateArea = rect;
+                _isEmptyInvalidateArea = false;
             }
             else
             {
-                invalidateArea = Rectangle.Union(rect, invalidateArea);
+                _invalidateArea = Rectangle.Union(rect, _invalidateArea);
             }
 
             //need to draw again

@@ -23,11 +23,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return painter1.CurrentFont;
+                return _painter1.CurrentFont;
             }
             set
             {
-                painter1.CurrentFont = value;
+                _painter1.CurrentFont = value;
             }
         }
         /// <summary>
@@ -43,7 +43,7 @@ namespace PixelFarm.Drawing.GLES2
             {
                 this._currentTextColor = value;
                 //set this to 
-                painter1.TextPrinter.ChangeFillColor(value);
+                _painter1.TextPrinter.ChangeFillColor(value);
             }
         }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
@@ -52,9 +52,9 @@ namespace PixelFarm.Drawing.GLES2
             System.Array.Copy(buffer, startAt, copy, 0, len);
 
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString(copy);
-            if (painter1.TextPrinter != null)
+            if (_painter1.TextPrinter != null)
             {
-                painter1.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+                _painter1.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
 
             }
             return renderVxFmtStr;
@@ -65,38 +65,38 @@ namespace PixelFarm.Drawing.GLES2
             {
                 DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
                
-                var prevColor = painter1.FillColor;
-                painter1.FillColor = PixelFarm.Drawing.Color.Black; 
-                painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
-                painter1.FillColor = prevColor;
+                var prevColor = _painter1.FillColor;
+                _painter1.FillColor = PixelFarm.Drawing.Color.Black; 
+                _painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
+                _painter1.FillColor = prevColor;
             }
         }
        
         public override void DrawText(char[] buffer, int x, int y)
         {
-            var prevColor = painter1.FillColor;
+            var prevColor = _painter1.FillColor;
 
             //TODO: review here
             //use font color for fill the glyphs
 
-            painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
-            painter1.FillColor = prevColor;
+            _painter1.FillColor = PixelFarm.Drawing.Color.Black;
+            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
+            _painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            var prevColor = painter1.FillColor;
-            painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, this.Height - logicalTextBox.Y);
-            painter1.FillColor = prevColor;
+            var prevColor = _painter1.FillColor;
+            _painter1.FillColor = PixelFarm.Drawing.Color.Black;
+            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, this.Height - logicalTextBox.Y);
+            _painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             //TODO: review again
-            var prevColor = painter1.FillColor;
-            painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, this.Height - logicalTextBox.Y);
-            painter1.FillColor = prevColor;
+            var prevColor = _painter1.FillColor;
+            _painter1.FillColor = PixelFarm.Drawing.Color.Black;
+            _painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, this.Height - logicalTextBox.Y);
+            _painter1.FillColor = prevColor;
             //TODO: review here
             //painter1.FillRectangle(0, 0, 20, 20, Color.Red);
 
