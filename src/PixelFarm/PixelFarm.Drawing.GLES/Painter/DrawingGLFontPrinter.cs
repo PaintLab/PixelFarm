@@ -461,53 +461,53 @@ namespace PixelFarm.DrawingGL
 
 
 
-                // _painter.DrawRectangle(g_x, g_y, srcRect.Width, srcRect.Height, Color.Black);
+                _painter.DrawRectangle(g_x, g_y, srcRect.Width, srcRect.Height, Color.Black);
 
-                switch (textureKind)
-                {
-                    case TextureKind.Msdf:
+                //switch (textureKind)
+                //{
+                //    case TextureKind.Msdf:
 
-                        _glsx.DrawSubImageWithMsdf(_glBmp,
-                            ref srcRect,
-                            g_x,
-                            g_y,
-                            scaleFromTexture);
+                //        _glsx.DrawSubImageWithMsdf(_glBmp,
+                //            ref srcRect,
+                //            g_x,
+                //            g_y,
+                //            scaleFromTexture);
 
-                        break;
-                    case TextureKind.StencilGreyScale:
+                //        break;
+                //    case TextureKind.StencilGreyScale:
 
-                        //stencil gray scale with fill-color
-                        _glsx.DrawGlyphImageWithStecil(_glBmp,
-                         ref srcRect,
-                            g_x,
-                            g_y,
-                            scaleFromTexture);
+                //        //stencil gray scale with fill-color
+                //        _glsx.DrawGlyphImageWithStecil(_glBmp,
+                //         ref srcRect,
+                //            g_x,
+                //            g_y,
+                //            scaleFromTexture);
 
-                        break;
-                    case TextureKind.Bitmap:
-                        _glsx.DrawSubImage(_glBmp,
-                         ref srcRect,
-                            g_x,
-                            g_y,
-                            scaleFromTexture);
-                        break;
-                    case TextureKind.StencilLcdEffect:
+                //        break;
+                //    case TextureKind.Bitmap:
+                //        _glsx.DrawSubImage(_glBmp,
+                //         ref srcRect,
+                //            g_x,
+                //            g_y,
+                //            scaleFromTexture);
+                //        break;
+                //    case TextureKind.StencilLcdEffect:
 
-                        _glsx.WriteVboToList(
-                          _vboBufferList,
-                          _indexList,
-                          ref srcRect,
-                          g_x,
-                          g_y,
-                          scaleFromTexture);
+                //        _glsx.WriteVboToList(
+                //          _vboBufferList,
+                //          _indexList,
+                //          ref srcRect,
+                //          g_x,
+                //          g_y,
+                //          scaleFromTexture);
 
-                        break;
-                }
+                //        break;
+                //}
             }
             //-------
             //we create vbo first 
             //then render 
-            _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
+            //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
 
         }
 
