@@ -365,11 +365,10 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
-        float[] rect_coords = new float[8];
+
         public override void FillRect(double left, double top, double width, double height)
         {
-            CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, rect_coords);
-            _glsx.FillTriangleStrip(_fillColor, rect_coords, 4);
+            _glsx.FillRect(_fillColor, left, top, width, height);
         }
         public override void DrawEllipse(double left, double top, double width, double height)
         {
@@ -608,54 +607,6 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        ///// <summary>
-        ///// create rect tess for openGL
-        ///// </summary>
-        ///// <param name="x">left</param>
-        ///// <param name="y">bottom</param>
-        ///// <param name="w">width</param>
-        ///// <param name="h">height</param>
-        ///// <param name="output"></param>
-        //static void CreateRectTessCoordsTriStrip(float x, float y, float w, float h, float[] output)
-        //{
-        //    //float x0 = x;
-        //    //float y0 = y + h;
-        //    //float x1 = x;
-        //    //float y1 = y;
-        //    //float x2 = x + w;
-        //    //float y2 = y + h;
-        //    //float x3 = x + w;
-        //    //float y3 = y;
-        //    output[0] = x; output[1] = y + h;
-        //    output[2] = x; output[3] = y;
-        //    output[4] = x + w; output[5] = y + h;
-        //    output[6] = x + w; output[7] = y; 
-        //}
-        static void CreateRectTessCoordsTriStrip(float left, float bottom, float w, float h, float[] output)
-        {
-            //
-            //use original GLES coord base => (0,0)= left,bottom
-
-            //float x0 = x;
-            //float y0 = y + h;
-            //float x1 = x;
-            //float y1 = y;
-            //float x2 = x + w;
-            //float y2 = y + h;
-            //float x3 = x + w;
-            //float y3 = y;
-
-            output[0] = left; output[1] = bottom - h; //(left,top)
-            output[2] = left; output[3] = bottom;
-            output[4] = left + w; output[5] = bottom - h;
-            output[6] = left + w; output[7] = bottom;
-
-
-            //output[0] = left; output[1] = bottom + h; //(left,top)
-            //output[2] = left; output[3] = bottom;
-            //output[4] = left + w; output[5] = bottom + h;
-            //output[6] = left + w; output[7] = bottom;
-        }
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _glsx.StrokeColor = _strokeColor;
