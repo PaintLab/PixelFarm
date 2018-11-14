@@ -160,20 +160,19 @@ namespace PixelFarm.DrawingGL
     public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
-
         SimpleFontAtlas _fontAtlas;
-
         GLRenderSurface _glsx;
-        GLPainter painter;
+        GLPainter _painter;
         GLBitmap _glBmp;
-        RequestFont font;
+        RequestFont _font;
         LayoutFarm.OpenFontTextService _textServices;
+
         public GLBitmapGlyphTextPrinter(GLPainter painter, LayoutFarm.OpenFontTextService textServices)
         {
             //create text printer for use with canvas painter           
-            this.painter = painter;
-            this._glsx = painter.Canvas;
-            this._textServices = textServices;
+            _painter = painter;
+            _glsx = painter.Canvas;
+            _textServices = textServices;
 
             //_currentTextureKind = TextureKind.Msdf; 
             //_currentTextureKind = TextureKind.StencilGreyScale;
@@ -199,7 +198,7 @@ namespace PixelFarm.DrawingGL
         public void ChangeFillColor(Color color)
         {
             //called by owner painter  
-            painter.FontFillColor = color;
+            _painter.FontFillColor = color;
 
         }
         public void ChangeStrokeColor(Color strokeColor)
@@ -212,7 +211,7 @@ namespace PixelFarm.DrawingGL
 
         public void ChangeFont(RequestFont font)
         {
-            if (this.font == font)
+            if (this._font == font)
             {
                 return;
             }
@@ -221,7 +220,7 @@ namespace PixelFarm.DrawingGL
             //check if we have this texture-font atlas in our MySimpleGLBitmapFontManager 
             //if not-> request the MySimpleGLBitmapFontManager to create a newone 
             _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
-            this.font = font;
+            _font = font;
         }
         public void Dispose()
         {
@@ -380,7 +379,7 @@ namespace PixelFarm.DrawingGL
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
 
-            _glsx.FontFillColor = painter.FontFillColor;
+            _glsx.FontFillColor = _painter.FontFillColor;
 
             int j = buffer.Length;
 
@@ -389,16 +388,16 @@ namespace PixelFarm.DrawingGL
 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
 
             float scale = 1;// _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = (int)font.LineSpacingInPx;
+            int recommendLineSpacing = (int)_font.LineSpacingInPx;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((font.LineSpacingInPx) * scale);
+            y -= ((_font.LineSpacingInPx) * scale);
 
             EnsureLoadGLBmp();
             // 
@@ -461,6 +460,9 @@ namespace PixelFarm.DrawingGL
                 g_y = (float)Math.Floor(g_y);
 
 
+
+                // _painter.DrawRectangle(g_x, g_y, srcRect.Width, srcRect.Height, Color.Black);
+
                 switch (textureKind)
                 {
                     case TextureKind.Msdf:
@@ -514,7 +516,7 @@ namespace PixelFarm.DrawingGL
         {
             _glsx.LoadTexture1(_glBmp);
 
-            _glsx.FontFillColor = painter.FontFillColor;
+            _glsx.FontFillColor = _painter.FontFillColor;
             DrawingGL.GLRenderVxFormattedString renderVxString1 = (DrawingGL.GLRenderVxFormattedString)renderVx;
             DrawingGL.VertexBufferObject2 vbo = renderVxString1.GetVbo();
 
@@ -536,10 +538,10 @@ namespace PixelFarm.DrawingGL
 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, font);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
             float scale = 1;// _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = (int)font.LineSpacingInPx;
+            int recommendLineSpacing = (int)_font.LineSpacingInPx;
 
             //--------------------------
             //TODO:
