@@ -728,6 +728,15 @@ namespace PixelFarm.DrawingGL
         }
 
         //-------------------------------------------------------------------------------
+        float[] _rect_coords = new float[8];
+        public void FillRect(Drawing.Color color, double left, double top, double width, double height)
+        {
+            //left,bottom,width,height
+            SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
+
+            FillTriangleStrip(color, _rect_coords, 4);
+        }
+
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
             _basicFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
@@ -1100,10 +1109,9 @@ namespace PixelFarm.DrawingGL
                         float prevStrokeW = StrokeWidth;
                         //Drawing.Color prevColor = color;
 
-                        if (prevStrokeW < 1.5f)
+                        if (prevStrokeW < 0.25f)
                         {
-                            StrokeWidth = 1.5f;
-                            //StrokeColor = Drawing.Color.FromArgb(200, color);
+                            StrokeWidth = 0.25f; 
                         }
 
                         int subPathCount = igpth.FigCount;
@@ -1120,43 +1128,7 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
             }
-        }
-        //-------------------------------------------------------------------------------
-
-        /// <summary>
-        /// reusable rect coord
-        /// </summary>
-        float[] _rectCoords = new float[8];
-        /// <summary>
-        /// draw rect in OpenGL coord 
-        /// </summary>
-        /// <param name="x">left</param>
-        /// <param name="y">bottom</param>
-        /// <param name="w">width</param>
-        /// <param name="h">height</param>
-        public void DrawRect(float x, float y, float w, float h)
-        {
-            switch (this.SmoothMode)
-            {
-                case SmoothMode.Smooth:
-                    {
-                        int borderTriAngleCount;
-                        CreatePolyLineRectCoords(x, y, w, h, _rectCoords);
-                        float[] triangles = _smoothBorderBuilder.BuildSmoothBorders(
-                            _rectCoords,
-                            true,
-                            out borderTriAngleCount);
-
-                        _smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
-                    }
-                    break;
-                default:
-                    {
-                    }
-                    break;
-            }
-        }
-
+        } 
         public int OriginX
         {
             get { return this._canvasOriginX; }
@@ -1190,20 +1162,29 @@ namespace PixelFarm.DrawingGL
             GL.Scissor(x, y, w, h);
         }
 
-        static void CreatePolyLineRectCoords(
-               float x, float y, float w, float h, float[] output8)
-        {
-            //GL coordinate
-            //(0,0) is on left-lower corner
-
-            output8[0] = x; output8[1] = y; //left, bottom
-            output8[2] = x + w; output8[3] = y; //right, bottom
-            output8[4] = x + w; output8[5] = y + h; //right, top
-            output8[6] = x; output8[7] = y + h;//left,top
-
-        }
+       
 
         internal TessTool GetTessTool() { return _tessTool; }
         internal SmoothBorderBuilder GetSmoothBorderBuilder() { return _smoothBorderBuilder; }
+    }
+
+    static class SimpleTessTool
+    {
+        /// <summary>
+        /// create coord for left-bottom-origin canvas
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="bottom"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="output"></param>
+        public static void CreateRectTessCoordsTriStrip(float left, float bottom, float w, float h, float[] output)
+        {
+            //use original GLES coord base => (0,0)= left,bottom 
+            output[0] = left; output[1] = bottom - h;
+            output[2] = left; output[3] = bottom;
+            output[4] = left + w; output[5] = bottom - h;
+            output[6] = left + w; output[7] = bottom;
+        }
     }
 }

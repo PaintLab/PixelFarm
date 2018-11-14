@@ -126,6 +126,9 @@ namespace PixelFarm.CpuBlit.Rasterization
         }
 
         //--------------------------------------------------------------------
+        /// <summary>
+        /// reset scanlineRas cell and status
+        /// </summary>
         public void Reset()
         {
             m_cellAARas.Reset();

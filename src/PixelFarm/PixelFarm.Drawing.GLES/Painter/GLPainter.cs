@@ -517,22 +517,30 @@ namespace PixelFarm.DrawingGL
             ////---------------------------------------------- 
         }
 
-
         public override void DrawRect(double left, double top, double width, double height)
         {
-            _glsx.DrawRect((float)left, (float)top, (float)width, (float)height);
+            switch (_glsx.SmoothMode)
+            {
+                case SmoothMode.Smooth:
+                    {
+                        _glsx.StrokeColor = this.StrokeColor;
+                        using (PixelFarm.Drawing.VxsTemp.Borrow(out Drawing.VertexStore v1))
+                        using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
+                        {
 
-            //if (_orientation == DrawBoardOrientation.LeftBottom)
-            //{
-            //    _glsx.DrawRect((float)left, (float)top, (float)width, (float)height);
-
-            //}
-            //else
-            //{
-            //    int canvasH = _glsx.ViewportHeight;
-            //    _glsx.DrawRect((float)left + 0.5f, canvasH - (float)(top + height + 0.5f), (float)width, (float)height);
-            //}
-
+                            r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f); 
+                            r.MakeVxs(v1);
+                            //create stroke around 
+                            RenderVx renderVX = CreateRenderVx(v1);
+                            DrawRenderVx(renderVX);
+                        }
+                    }
+                    break;
+                default:
+                    {
+                    }
+                    break;
+            }
         }
 
         public override float OriginX
@@ -611,17 +619,6 @@ namespace PixelFarm.DrawingGL
         {
             _glsx.StrokeColor = _strokeColor;
             _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
-            //if (this._orientation == DrawBoardOrientation.LeftBottom)
-            //{
-            //    //as OpenGL original
-            //    _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
-            //}
-            //else
-            //{
-            //    int h = _glsx.ViewportHeight;
-            //    _glsx.DrawLine((float)x1, h - (float)y1, (float)x2, h - (float)y2);
-            //}
-
 
         }
 
