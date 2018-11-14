@@ -74,7 +74,7 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        DrawBoardOrientation _orientation = DrawBoardOrientation.LeftBottom;
+        DrawBoardOrientation _orientation = DrawBoardOrientation.LeftTop;
         public override DrawBoardOrientation Orientation
         {
             get { return _orientation; }
@@ -348,18 +348,18 @@ namespace PixelFarm.DrawingGL
 
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp == null) return;
-
-            if (this._orientation == DrawBoardOrientation.LeftTop)
-            {
-                //place left upper corner at specific x y 
-                _glsx.DrawImage(glBmp, (float)left, _glsx.ViewportHeight - (float)top);
-            }
-            else
-            {
-                //left-bottom as original
-                //place left-lower of the img at specific (x,y)
-                _glsx.DrawImage(glBmp, (float)left, (float)top);
-            }
+            _glsx.DrawImage(glBmp, (float)left, (float)top);
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    //place left upper corner at specific x y 
+            //    _glsx.DrawImage(glBmp, (float)left, _glsx.ViewportHeight - (float)top);
+            //}
+            //else
+            //{
+            //    //left-bottom as original
+            //    //place left-lower of the img at specific (x,y)
+            //    _glsx.DrawImage(glBmp, (float)left, (float)top);
+            //}
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
@@ -368,15 +368,7 @@ namespace PixelFarm.DrawingGL
         float[] rect_coords = new float[8];
         public override void FillRect(double left, double top, double width, double height)
         {
-            if (_orientation == DrawBoardOrientation.LeftBottom)
-            {
-                CreateRectTessCoordsTriStrip((float)left, (float)(top - height), (float)width, (float)height, rect_coords);
-            }
-            else
-            {
-                int canvasH = _glsx.ViewportHeight;
-                CreateRectTessCoordsTriStrip((float)left, canvasH - (float)(top + height), (float)width, (float)height, rect_coords);
-            }
+            CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, rect_coords);
             _glsx.FillTriangleStrip(_fillColor, rect_coords, 4);
         }
         public override void DrawEllipse(double left, double top, double width, double height)
@@ -409,10 +401,10 @@ namespace PixelFarm.DrawingGL
 
 
 
-            if (this._orientation == DrawBoardOrientation.LeftTop)
-            {
-                y = _glsx.ViewportHeight - y; //set new y
-            }
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    y = _glsx.ViewportHeight - y; //set new y
+            //}
 
             ellipse.Set(x, y, rx, ry);
 
@@ -440,10 +432,10 @@ namespace PixelFarm.DrawingGL
 
 
 
-            if (this._orientation == DrawBoardOrientation.LeftTop)
-            {
-                y = _glsx.ViewportHeight - y; //set new y
-            }
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    y = _glsx.ViewportHeight - y; //set new y
+            //}
 
             ellipse.Set(x, y, rx, ry);
             using (VxsTemp.Borrow(out var vxs))
@@ -529,16 +521,18 @@ namespace PixelFarm.DrawingGL
 
         public override void DrawRect(double left, double top, double width, double height)
         {
-            if (_orientation == DrawBoardOrientation.LeftBottom)
-            {
-                _glsx.DrawRect((float)left, (float)top, (float)width, (float)height);
+            _glsx.DrawRect((float)left, (float)top, (float)width, (float)height);
 
-            }
-            else
-            {
-                int canvasH = _glsx.ViewportHeight;
-                _glsx.DrawRect((float)left + 0.5f, canvasH - (float)(top + height + 0.5f), (float)width, (float)height);
-            }
+            //if (_orientation == DrawBoardOrientation.LeftBottom)
+            //{
+            //    _glsx.DrawRect((float)left, (float)top, (float)width, (float)height);
+
+            //}
+            //else
+            //{
+            //    int canvasH = _glsx.ViewportHeight;
+            //    _glsx.DrawRect((float)left + 0.5f, canvasH - (float)(top + height + 0.5f), (float)width, (float)height);
+            //}
 
         }
 
@@ -560,14 +554,15 @@ namespace PixelFarm.DrawingGL
         {
             if (_textPrinter != null)
             {
-                if (_orientation == DrawBoardOrientation.LeftBottom)
-                {
-                    _textPrinter.DrawString(text, x, y);
-                }
-                else
-                {
-                    _textPrinter.DrawString(text, x, _glsx.ViewportHeight - y);
-                }
+                _textPrinter.DrawString(text, x, y);
+                //if (_orientation == DrawBoardOrientation.LeftBottom)
+                //{
+                //    _textPrinter.DrawString(text, x, y);
+                //}
+                //else
+                //{
+                //    _textPrinter.DrawString(text, x, _glsx.ViewportHeight - y);
+                //}
 
             }
         }
@@ -613,16 +608,34 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        /// <summary>
-        /// create rect tess for openGL
-        /// </summary>
-        /// <param name="x">left</param>
-        /// <param name="y">bottom</param>
-        /// <param name="w">width</param>
-        /// <param name="h">height</param>
-        /// <param name="output"></param>
-        static void CreateRectTessCoordsTriStrip(float x, float y, float w, float h, float[] output)
+        ///// <summary>
+        ///// create rect tess for openGL
+        ///// </summary>
+        ///// <param name="x">left</param>
+        ///// <param name="y">bottom</param>
+        ///// <param name="w">width</param>
+        ///// <param name="h">height</param>
+        ///// <param name="output"></param>
+        //static void CreateRectTessCoordsTriStrip(float x, float y, float w, float h, float[] output)
+        //{
+        //    //float x0 = x;
+        //    //float y0 = y + h;
+        //    //float x1 = x;
+        //    //float y1 = y;
+        //    //float x2 = x + w;
+        //    //float y2 = y + h;
+        //    //float x3 = x + w;
+        //    //float y3 = y;
+        //    output[0] = x; output[1] = y + h;
+        //    output[2] = x; output[3] = y;
+        //    output[4] = x + w; output[5] = y + h;
+        //    output[6] = x + w; output[7] = y; 
+        //}
+        static void CreateRectTessCoordsTriStrip(float left, float bottom, float w, float h, float[] output)
         {
+            //
+            //use original GLES coord base => (0,0)= left,bottom
+
             //float x0 = x;
             //float y0 = y + h;
             //float x1 = x;
@@ -631,27 +644,32 @@ namespace PixelFarm.DrawingGL
             //float y2 = y + h;
             //float x3 = x + w;
             //float y3 = y;
-            output[0] = x; output[1] = y + h;
-            output[2] = x; output[3] = y;
-            output[4] = x + w; output[5] = y + h;
-            output[6] = x + w; output[7] = y;
+
+            output[0] = left; output[1] = bottom - h; //(left,top)
+            output[2] = left; output[3] = bottom;
+            output[4] = left + w; output[5] = bottom - h;
+            output[6] = left + w; output[7] = bottom;
 
 
+            //output[0] = left; output[1] = bottom + h; //(left,top)
+            //output[2] = left; output[3] = bottom;
+            //output[4] = left + w; output[5] = bottom + h;
+            //output[6] = left + w; output[7] = bottom;
         }
-
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _glsx.StrokeColor = _strokeColor;
-            if (this._orientation == DrawBoardOrientation.LeftBottom)
-            {
-                //as OpenGL original
-                _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
-            }
-            else
-            {
-                int h = _glsx.ViewportHeight;
-                _glsx.DrawLine((float)x1, h - (float)y1, (float)x2, h - (float)y2);
-            }
+            _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            //if (this._orientation == DrawBoardOrientation.LeftBottom)
+            //{
+            //    //as OpenGL original
+            //    _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            //}
+            //else
+            //{
+            //    int h = _glsx.ViewportHeight;
+            //    _glsx.DrawLine((float)x1, h - (float)y1, (float)x2, h - (float)y2);
+            //}
 
 
         }
