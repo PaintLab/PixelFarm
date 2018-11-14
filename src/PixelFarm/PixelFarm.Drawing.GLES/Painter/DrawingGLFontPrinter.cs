@@ -480,7 +480,7 @@ namespace PixelFarm.DrawingGL
                 _painter.StrokeColor = Color.Blue;
 #endif
 
-                textureKind = TextureKind.Bitmap;
+                textureKind = TextureKind.StencilGreyScale;
 
                 switch (textureKind)
                 {
@@ -500,8 +500,7 @@ namespace PixelFarm.DrawingGL
                          ref srcRect,
                             g_x,
                             g_y,
-                            scaleFromTexture);
-
+                            scaleFromTexture); 
                         break;
                     case TextureKind.Bitmap:
                         _glsx.DrawSubImage(_glBmp,

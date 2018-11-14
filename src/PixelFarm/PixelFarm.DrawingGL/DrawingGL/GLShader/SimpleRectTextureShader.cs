@@ -72,7 +72,7 @@ namespace PixelFarm.DrawingGL
                 float srcW = srcDestList[i + 2];
                 float srcH = srcDestList[i + 3];
                 float targetLeft = srcDestList[i + 4];
-                float targetTop = srcDestList[i + 5] ;
+                float targetTop = srcDestList[i + 5];
 
                 i += 6;
                 //-------------------------------
@@ -442,16 +442,89 @@ namespace PixelFarm.DrawingGL
     }
 
 
+    //old
+    //class GlyphImageStecilShader : SimpleRectTextureShader
+    //{
+    //    //similar to GdiImageTextureWithWhiteTransparentShader
+    //    float _color_a = 1f;
+    //    float _color_r;
+    //    float _color_g;
+    //    float _color_b;
+
+    //    ShaderUniformVar4 _d_color; //drawing color
+    //    public GlyphImageStecilShader(ShaderSharedResource shareRes)
+    //        : base(shareRes)
+    //    {
+    //        string vs = @"
+    //            attribute vec4 a_position;
+    //            attribute vec2 a_texCoord;
+    //            uniform mat4 u_mvpMatrix; 
+    //            varying vec2 v_texCoord;
+    //            void main()
+    //            {
+    //                gl_Position = u_mvpMatrix* a_position;
+    //                v_texCoord =  a_texCoord;
+    //             }	 
+    //            ";
+    //        //in fs, angle on windows 
+    //        //we need to switch color component
+    //        //because we store value in memory as BGRA
+    //        //and gl expect input in RGBA
+    //        string fs = @"
+    //                  precision mediump float;
+    //                  varying vec2 v_texCoord;
+    //                  uniform sampler2D s_texture;
+    //                  uniform vec4 d_color;
+    //                  void main()
+    //                  {
+    //                     vec4 c = texture2D(s_texture, v_texCoord); 
+    //                     if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
+    //                        discard;
+    //                     }else{                                                 
+
+    //                        gl_FragColor =  vec4(d_color[0],d_color[1],d_color[2],c[3]);  
+    //                     }
+    //                  }
+    //            ";
+    //        BuildProgram(vs, fs);
+    //    }
+    //    public void SetColor(PixelFarm.Drawing.Color c)
+    //    {
+    //        this._color_a = c.A / 255f;
+    //        this._color_r = c.R / 255f;
+    //        this._color_g = c.G / 255f;
+    //        this._color_b = c.B / 255f;
+    //    }
+    //    protected override void OnProgramBuilt()
+    //    {
+    //        _d_color = shaderProgram.GetUniform4("d_color");
+    //    }
+    //    protected override void OnSetVarsBeforeRenderer()
+    //    {
+    //        _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
+    //    }
+    //}
+
 
     class GlyphImageStecilShader : SimpleRectTextureShader
     {
-        //similar to GdiImageTextureWithWhiteTransparentShader
+
+        //we share the texture with the subpixel-lcd effect texture
+        //which is 32 bits bitmap.
+        //backgrond color= black,
+        //font =white + subpixel value
+
+        //see the glyph texture example at https://github.com/PaintLab/PixelFarm/issues/16
+        
+
+
+
         float _color_a = 1f;
         float _color_r;
         float _color_g;
         float _color_b;
 
-        ShaderUniformVar4 _d_color; //drawing color
+        ShaderUniformVar4 _d_color;
         public GlyphImageStecilShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -478,12 +551,7 @@ namespace PixelFarm.DrawingGL
                       void main()
                       {
                          vec4 c = texture2D(s_texture, v_texCoord); 
-                         if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
-                            discard;
-                         }else{                                                 
-                                
-                            gl_FragColor =  vec4(d_color[0],d_color[1],d_color[2],c[3]);  
-                         }
+                         gl_FragColor =  vec4(d_color[0],d_color[1],d_color[2],c[1]);  
                       }
                 ";
             BuildProgram(vs, fs);
@@ -504,7 +572,6 @@ namespace PixelFarm.DrawingGL
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
         }
     }
-
 
 
     class ImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
