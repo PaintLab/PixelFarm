@@ -285,8 +285,8 @@ namespace PixelFarm.DrawingGL
             float scaleFromTexture = 1;
             TextureKind textureKind = _fontAtlas.TextureKind;
 
-            float g_x = 0;
-            float g_y = 0;
+            float g_left = 0;
+            float g_top = 0;
             int baseY = (int)Math.Round(bottom);
 
             //int n = glyphPlanSeq.len;
@@ -334,38 +334,41 @@ namespace PixelFarm.DrawingGL
                           glyphData.Width,
                           glyphData.Height);
 
-                float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale) - glyphData.TextureXOffset;
-                float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale) - glyphData.TextureYOffset;
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * scale) - glyphData.TextureXOffset;
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * scale) - glyphData.TextureYOffset + srcRect.Height; //***
+
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
                 // -glyphData.TextureYOffset => restore to original pos 
                 //--------------------------              
-                g_x = (float)(left + ngx);
-                g_y = (float)(baseY - ngy - srcRect.Height);
+
+                g_left = (float)(left + x_offset);
+                g_top = (float)(baseY - y_offset); //***
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
 
                 //g_x = (float)Math.Round(g_x); //***
-                g_y = (float)Math.Floor(g_y);
+                g_top = (float)Math.Floor(g_top);
 #if DEBUG
                 //paint src rect
                 float newY = _glBmp.Height - srcRect.Y - srcRect.Height;
                 float diff = newY - srcRect.Y;
                 srcRect.OffsetY((int)diff);
 
+                //draw marker on original texture
                 _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
                 //paint dest
-                _painter.DrawRectangle(g_x, g_y, srcRect.Width, srcRect.Height, Color.Black);
+                _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
 
                 _painter.StrokeColor = Color.Red;
-                _painter.DrawLine(left, g_y, left + 200, g_y);
+                _painter.DrawLine(left, g_top, left + 200, g_top);
                 _painter.StrokeColor = Color.Blue;
 #endif 
                 if (textureKind == TextureKind.Msdf)
                 {
                     _glsx.DrawSubImageWithMsdf(_glBmp,
                         ref srcRect,
-                        g_x,
-                        g_y,
+                        g_left,
+                        g_top,
                         scaleFromTexture);
                 }
                 else
@@ -379,8 +382,8 @@ namespace PixelFarm.DrawingGL
                                 //stencil gray scale with fill-color
                                 _glsx.DrawGlyphImageWithStecil(_glBmp,
                                     ref srcRect,
-                                    g_x,
-                                    g_y,
+                                    g_left,
+                                    g_top,
                                     scaleFromTexture);
                             }
                             break;
@@ -388,8 +391,8 @@ namespace PixelFarm.DrawingGL
                             {
                                 _glsx.DrawSubImage(_glBmp,
                                     ref srcRect,
-                                    g_x,
-                                    g_y,
+                                    g_left,
+                                    g_top,
                                     1);
                             }
                             break;
@@ -400,16 +403,16 @@ namespace PixelFarm.DrawingGL
                                   _vboBufferList,
                                   _indexList,
                                   ref srcRect,
-                                  g_x,
-                                  g_y,
+                                  g_left,
+                                  g_top,
                                   1);
                             }
                             else
                             {
                                 _glsx.DrawGlyphImageWithSubPixelRenderingTechnique2(
                                  ref srcRect,
-                                    g_x,
-                                    g_y,
+                                    g_left,
+                                    g_top,
                                     1);
                             }
                             break;
