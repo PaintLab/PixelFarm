@@ -400,9 +400,18 @@ namespace PixelFarm.DrawingGL
                 {
                     switch (DrawingTechnique)
                     {
-
-
                         case GlyphTexturePrinterDrawingTechnique.Stencil:
+                            if (UseVBO)
+                            {
+                                _glsx.WriteVboToList(
+                                  _vboBufferList,
+                                  _indexList,
+                                  ref srcRect,
+                                  g_left,
+                                  g_top,
+                                  1);
+                            }
+                            else
                             {
                                 //stencil gray scale with fill-color
                                 _glsx.DrawGlyphImageWithStecil(_glBmp,
@@ -413,6 +422,17 @@ namespace PixelFarm.DrawingGL
                             }
                             break;
                         case GlyphTexturePrinterDrawingTechnique.Copy:
+                            if (UseVBO)
+                            {
+                                _glsx.WriteVboToList(
+                                  _vboBufferList,
+                                  _indexList,
+                                  ref srcRect,
+                                  g_left,
+                                  g_top,
+                                  1);
+                            }
+                            else
                             {
                                 _glsx.DrawSubImage(_glBmp,
                                     ref srcRect,
@@ -446,13 +466,22 @@ namespace PixelFarm.DrawingGL
             }
             //-------------------------------------------
             //
-            if (DrawingTechnique == GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering && UseVBO)
+            if (UseVBO)
             {
-                _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
-            }
+                switch (DrawingTechnique)
+                {
+                    case GlyphTexturePrinterDrawingTechnique.Copy:
+
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.Stencil:
+                        _glsx.DrawGlyphImageWithStecil_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        break;
+                } 
+            } 
         }
-
-
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
             _glsx.LoadTexture1(_glBmp);
