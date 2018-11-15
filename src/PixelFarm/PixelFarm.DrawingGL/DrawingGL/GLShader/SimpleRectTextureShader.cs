@@ -81,7 +81,7 @@ namespace PixelFarm.DrawingGL
 
                 unsafe
                 {
-                    if (_latestBmpYFlipped)
+                    if (!_latestBmpYFlipped)
                     {
                         float* imgVertices = stackalloc float[5 * 4];
                         {
