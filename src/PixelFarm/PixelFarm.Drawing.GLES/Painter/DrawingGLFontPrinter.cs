@@ -338,8 +338,9 @@ namespace PixelFarm.DrawingGL
                       new Rectangle(glyphData.Left,
                          _glBmp.Height - (glyphData.Top + glyphData.Height),
                           glyphData.Width,
-                          glyphData.Height);  
+                          glyphData.Height);
 
+                //offset length from 'base-line'
                 float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * scale) - glyphData.TextureXOffset;
                 float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * scale) - glyphData.TextureYOffset + srcRect.Height; //***
 
@@ -350,13 +351,13 @@ namespace PixelFarm.DrawingGL
 
                 g_left = (float)(left + x_offset);
                 g_top = (float)(baseY - y_offset); //***
+
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
 
                 //g_x = (float)Math.Round(g_x); //***
-                g_top = (float)Math.Floor(g_top);
+                g_top = (float)Math.Floor(g_top);//adjust to integer num ***
 
 #if DEBUG
-
 
                 //draw yellow-rect-marker on original texture
 
@@ -366,6 +367,7 @@ namespace PixelFarm.DrawingGL
                 _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
 
                 _painter.StrokeColor = Color.Red;
+                //draw debug-line of top pos with blue color
                 _painter.DrawLine(left, g_top, left + 200, g_top);
                 _painter.StrokeColor = Color.Blue;
 #endif 

@@ -76,7 +76,7 @@ namespace PixelFarm.DrawingGL
 
                 i += 6;//***
                 //-------------------------------
-                float srcBottom = srcTop - srcH * scale;
+                float srcBottom = srcTop + srcH * scale;
                 float srcRight = srcLeft + srcW * scale;
 
                 unsafe
@@ -895,7 +895,7 @@ namespace PixelFarm.DrawingGL
             GL.ColorMask(true, true, true, true);
 
         }
-        public void NewDrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        public void DrawSubImageWithLcdSubPix(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
             SetCurrent();

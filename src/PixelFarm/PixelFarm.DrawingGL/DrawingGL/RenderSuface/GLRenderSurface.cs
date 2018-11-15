@@ -521,6 +521,7 @@ namespace PixelFarm.DrawingGL
           float targetTop,
           float scale)
         {
+
             if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
                 //***
@@ -528,7 +529,8 @@ namespace PixelFarm.DrawingGL
             }
 
 
-            _textureSubPixRendering.NewDrawSubImage(srcRect.Left,
+            _textureSubPixRendering.DrawSubImageWithLcdSubPix(
+                srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
                 srcRect.Height, targetLeft, targetTop);
