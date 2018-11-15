@@ -101,12 +101,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
 
             float scale = 1;// _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = (int)_font.LineSpacingInPx;
+            int recommendLineSpacing = (int)_font.LineSpacingInPixels;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((_font.LineSpacingInPx) * scale);
+            y -= _font.LineSpacingInPixels;
 
             // 
             float scaleFromTexture = _finalTextureScale;
@@ -119,7 +119,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             float acc_x = 0;
             float acc_y = 0;
 
-            int lineHeight = (int)_font.LineSpacingInPx;//temp
+            int lineHeight = (int)_font.LineSpacingInPixels;//temp
             //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
             painter.DestBitmapBlender.OutputPixelBlender = _maskPixelBlenderPerCompo; //change to new blender  
 
@@ -222,7 +222,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             p.Clear(Drawing.Color.White);
             p.FillColor = Color.Black;
 
-            int lineSpaceInPx = (int)_font.LineSpacingInPx;
+            int lineSpaceInPx = (int)_font.LineSpacingInPixels;
             int ypos = 0;
             DrawString(p, "Hello World", 10, ypos);
             ypos += lineSpaceInPx;

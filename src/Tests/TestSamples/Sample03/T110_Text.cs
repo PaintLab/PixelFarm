@@ -5,6 +5,7 @@ using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
+
     [Info(OrderCode = "110")]
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
@@ -14,7 +15,20 @@ namespace OpenTkEssTest
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             this._glsx = glsx;
-            this.painter = painter; 
+            this.painter = painter;
+        }
+
+        [DemoConfig]
+        public GlyphTexturePrinterDrawingTechnique DrawTextTechnique
+        {
+            get;
+            set;
+        }
+        [DemoConfig]
+        public bool UseVbo
+        {
+            get;
+            set;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
@@ -30,10 +44,24 @@ namespace OpenTkEssTest
             _glsx.ClearColorBuffer();
             _glsx.Clear(PixelFarm.Drawing.Color.White);
 
+
+#if DEBUG
+            //test only
+            GLBitmapGlyphTextPrinter.s_dbugDrawTechnique = DrawTextTechnique;
+            GLBitmapGlyphTextPrinter.s_useVBO = UseVbo;
+#endif
+
             //-------------------------------
-            painter.FillColor = PixelFarm.Drawing.Color.Black;
-            painter.DrawString("OK", 0, 100);
-            painter.DrawString("1234567890", 0, 200);
+            int line_top = 500;
+            painter.FontFillColor = PixelFarm.Drawing.Color.Blue;
+            painter.DrawString("ABCD", 0, line_top);
+            painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            painter.DrawLine(0, line_top, 300, line_top);
+            //
+            line_top = 550;
+            painter.DrawString("1234567890", 0, line_top);
+            painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            painter.DrawLine(0, line_top, 300, line_top);
             //-------------------------------
             SwapBuffers();
         }

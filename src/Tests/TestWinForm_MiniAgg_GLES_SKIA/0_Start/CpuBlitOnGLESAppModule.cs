@@ -254,7 +254,7 @@ namespace Mini
                 if (_glBmp == null)
                 {
                     _glBmp = new GLBitmap(_lzBmpProvider);
-                    _glBmp.IsInvert = false;
+                    _glBmp.IsYFlipped = false;
                 }
 
                 _glsx.DrawImage(_glBmp, 0, 0);

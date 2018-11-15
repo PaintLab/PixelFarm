@@ -64,17 +64,17 @@ namespace PixelFarm.Drawing.GLES2
             if (renderVx is DrawingGL.GLRenderVxFormattedString)
             {
                 DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
-               
+
                 var prevColor = _painter1.FillColor;
-                _painter1.FillColor = PixelFarm.Drawing.Color.Black; 
+                _painter1.FillColor = PixelFarm.Drawing.Color.Black;
                 _painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
                 _painter1.FillColor = prevColor;
             }
         }
-       
+
         public override void DrawText(char[] buffer, int x, int y)
         {
-            var prevColor = _painter1.FillColor;
+            Color prevColor = _painter1.FillColor;
 
             //TODO: review here
             //use font color for fill the glyphs
@@ -85,7 +85,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            var prevColor = _painter1.FillColor;
+            Color prevColor = _painter1.FillColor;
             _painter1.FillColor = PixelFarm.Drawing.Color.Black;
             _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, this.Height - logicalTextBox.Y);
             _painter1.FillColor = prevColor;
@@ -93,7 +93,7 @@ namespace PixelFarm.Drawing.GLES2
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             //TODO: review again
-            var prevColor = _painter1.FillColor;
+            Color prevColor = _painter1.FillColor;
             _painter1.FillColor = PixelFarm.Drawing.Color.Black;
             _painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, this.Height - logicalTextBox.Y);
             _painter1.FillColor = prevColor;

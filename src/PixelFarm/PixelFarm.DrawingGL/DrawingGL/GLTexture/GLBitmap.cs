@@ -39,7 +39,7 @@ namespace PixelFarm.DrawingGL
             this._width = w;
             this._height = h;
             this._rawIntBuffer = rawIntBuffer;
-            this.IsInvert = isInvertImage;
+            this.IsYFlipped = isInvertImage;
         }
         public GLBitmap(int w, int h, IntPtr nativeImgMem)
         {
@@ -52,7 +52,7 @@ namespace PixelFarm.DrawingGL
             this._width = lazyProvider.Width;
             this._height = lazyProvider.Height;
             this._lazyProvider = lazyProvider;
-            this.IsInvert = lazyProvider.IsInvert;
+            this.IsYFlipped = lazyProvider.IsInvert;
         }
         public GLBitmap(int textureId, int w, int h)
         {
@@ -79,7 +79,10 @@ namespace PixelFarm.DrawingGL
 
         public GLBitmapFormat BitmapFormat { get; set; }
         public bool IsBigEndianPixel { get; set; }
-        public bool IsInvert { get; set; }
+        /// <summary>
+        /// is vertical flipped
+        /// </summary>
+        public bool IsYFlipped { get; set; }
         public int TextureId => _textureId;
 
         public override int Width => this._width;
