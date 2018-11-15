@@ -497,10 +497,13 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithStecil_VBO(float[] buffer, ushort[] indexList)
         {
             _glyphStencilShader.SetColor(this.FontFillColor);
-            _glyphStencilShader.LoadVBO(buffer, indexList);
-
-
+            _glyphStencilShader.DrawWithVBO(buffer, indexList);
         }
+        public void DrawGlyphImageWithCopy_VBO(float[] buffer, ushort[] indexList)
+        {
+            _bgraImgTextureShader.DrawWithVBO(buffer, indexList); 
+        }
+
         public void LoadTexture1(GLBitmap bmp)
         {
             _textureSubPixRendering.LoadGLBitmap(bmp);

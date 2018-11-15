@@ -131,6 +131,22 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        public void DrawWithVBO(float[] vboList, ushort[] indexList)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------       
+            unsafe
+            {
+                fixed (float* imgVertices = &vboList[0])
+                {
+                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+                }
+            }
+            int count1 = indexList.Length;
+            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+        }
 
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
         {
@@ -577,22 +593,7 @@ namespace PixelFarm.DrawingGL
         {
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
         }
-        public void LoadVBO(float[] vboList, ushort[] indexList)
-        {
-            SetCurrent();
-            CheckViewMatrix();
-            //-------------------------------------------------------------------------------------       
-            unsafe
-            {
-                fixed (float* imgVertices = &vboList[0])
-                {
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
-            }
-            int count1 = indexList.Length;
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList); 
-        }
+
     }
 
 
@@ -952,6 +953,7 @@ namespace PixelFarm.DrawingGL
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions
     {
+
         public static void DrawSubImage(this SimpleRectTextureShader shader, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 

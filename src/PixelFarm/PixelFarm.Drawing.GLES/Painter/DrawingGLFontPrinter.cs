@@ -471,7 +471,7 @@ namespace PixelFarm.DrawingGL
                 switch (DrawingTechnique)
                 {
                     case GlyphTexturePrinterDrawingTechnique.Copy:
-
+                        _glsx.DrawGlyphImageWithCopy_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
                         break;
                     case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                         _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
