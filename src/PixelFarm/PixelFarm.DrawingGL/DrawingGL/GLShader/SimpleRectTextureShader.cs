@@ -686,6 +686,55 @@ namespace PixelFarm.DrawingGL
             float targetLeft, float targetTop)
         {
 
+
+            //if (_latestBmpYFlipped)
+            //{
+            //    float* imgVertices = stackalloc float[5 * 4];
+            //    {
+            //        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)
+            //        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+
+            //        //---------------------
+            //        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
+            //        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcTop / orgBmpH; //texture coord 1  (left,top)
+
+            //        //---------------------
+            //        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
+            //        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcBottom / orgBmpH; //texture coord 2  (right,bottom)
+
+            //        //---------------------
+            //        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
+            //        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcTop / orgBmpH; //texture coord 3 (right,top)
+            //    }
+            //    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+            //    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+            //}
+            //else
+            //{
+            //    float* imgVertices = stackalloc float[5 * 4];
+            //    {
+            //        imgVertices[0] = targetLeft;        /**/imgVertices[1] = targetTop;                   /**/imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+            //        imgVertices[3] = srcLeft / orgBmpW; /**/imgVertices[4] = srcTop / orgBmpH; /**/                               //texture coord 0 (left,top)
+
+            //        //---------------------
+            //        imgVertices[5] = targetLeft;        /**/imgVertices[6] = targetTop - (srcH * scale);  /**/imgVertices[7] = 0; //coord 1 (left,bottom)
+            //        imgVertices[8] = srcLeft / orgBmpW; /**/imgVertices[9] = srcBottom / orgBmpH;         /**/                     //texture coord 1 (left,bottom)
+
+            //        //---------------------
+            //        imgVertices[10] = targetLeft + (srcW * scale); /**/imgVertices[11] = targetTop;       /**/imgVertices[12] = 0; //coord 2 (right,top)
+            //        imgVertices[13] = srcRight / orgBmpW;          /**/imgVertices[14] = srcTop / orgBmpH;                         //texture coord 2 (right,top)
+
+            //        //---------------------
+            //        imgVertices[15] = targetLeft + (srcW * scale); /**/imgVertices[16] = targetTop - (srcH * scale);    /**/imgVertices[17] = 0; //coord 3 (right, bottom)
+            //        imgVertices[18] = srcRight / orgBmpW;          /**/imgVertices[19] = srcBottom / orgBmpH;               //texture coord 3  (right,bottom)
+            //    }
+            //    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+            //    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+            //}
+
+            //float srcBottom = srcTop - srcH * scale;
+            //float srcRight = srcLeft + srcW * scale;
+
             //TODO: review float array here,use buffer instead
             unsafe
             {
@@ -700,8 +749,36 @@ namespace PixelFarm.DrawingGL
 
                 unsafe
                 {
-                    if (!_latestBmpYFlipped)
+                    if (_latestBmpYFlipped)
                     {
+                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
+
+                        if (duplicateFirst)
+                        {
+                            //for creating degenerative triangle
+
+
+                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
+                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
+
+                        }
+                        //---------------------
+                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
+
+                    }
+                    else
+                    {
+
 
                         vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
                         vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
@@ -726,34 +803,6 @@ namespace PixelFarm.DrawingGL
                         vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 3 (right, bottom)
                         vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 3 (right,top)
 
-                    }
-                    else
-                    {
-
-
-                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                        if (duplicateFirst)
-                        {
-                            //for creating degenerative triangle
-
-
-                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                        }
-                        //---------------------
-                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom)
 
                     }
                 }
@@ -811,7 +860,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------          
-            //int fieldCount = vboList.Length;
+
             unsafe
             {
                 fixed (float* imgVertices = &vboList[0])
@@ -927,11 +976,8 @@ namespace PixelFarm.DrawingGL
             this.SetCompo(2);
             OnSetVarsBeforeRenderer();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
             //restore
             GL.ColorMask(true, true, true, true);
-
-
         }
     }
 

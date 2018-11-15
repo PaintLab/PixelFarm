@@ -5,6 +5,7 @@ using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
+
     [Info(OrderCode = "110")]
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
@@ -15,6 +16,19 @@ namespace OpenTkEssTest
         {
             this._glsx = glsx;
             this.painter = painter;
+        }
+
+        [DemoConfig]
+        public GlyphTexturePrinterDrawingTechnique DrawTextTechnique
+        {
+            get;
+            set;
+        }
+        [DemoConfig]
+        public bool UseVbo
+        {
+            get;
+            set;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
@@ -29,6 +43,13 @@ namespace OpenTkEssTest
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsx.ClearColorBuffer();
             _glsx.Clear(PixelFarm.Drawing.Color.White);
+
+
+#if DEBUG
+            //test only
+            GLBitmapGlyphTextPrinter.s_dbugDrawTechnique = DrawTextTechnique;
+            GLBitmapGlyphTextPrinter.s_useVBO = UseVbo;
+#endif
 
             //-------------------------------
             int line_top = 500;
