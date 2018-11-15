@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingGL
         List<ushort> _indexList = new List<ushort>();
 
 #if DEBUG
-        public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
+        public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
         public static bool s_dbugUseVBO = true;
         public static bool s_dbugShowGlyphTexture = false;
         public static bool s_dbugShowMarkers = false;
