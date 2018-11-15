@@ -11,11 +11,11 @@ namespace OpenTkEssTest
     public class T110_DrawText : DemoBase
     {
         GLRenderSurface _glsx;
-        GLPainter painter;
+        GLPainter _painter;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             this._glsx = glsx;
-            this.painter = painter;
+            this._painter = painter;
 #if DEBUG
             ShowGlyphTexture = ShowMarkers = true;
 #endif
@@ -71,14 +71,14 @@ namespace OpenTkEssTest
 
             //-------------------------------
             int line_top = 500;
-            painter.FontFillColor = PixelFarm.Drawing.Color.Blue;
-            painter.DrawString("aftjypqkx", 0, line_top);
-            painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _painter.FontFillColor = PixelFarm.Drawing.Color.Blue;
+            _painter.DrawString("aftjypqkx", 0, line_top);
+            _painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
            
             //
             line_top = 550;
-            painter.DrawString("1234567890 ABCD", 0, line_top);
-            painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _painter.DrawString("1234567890 ABCD", 0, line_top);
+            _painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
             
             //-------------------------------
             SwapBuffers();

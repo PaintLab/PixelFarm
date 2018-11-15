@@ -273,14 +273,11 @@ namespace PixelFarm.DrawingGL
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
-            float scale = _px_scale;
-
+            float px_scale = _px_scale;
             //--------------------------
             //TODO:
             //if (x,y) is left top
-            //we need to adjust y again            
-
-
+            //we need to adjust y again      
             //EnsureLoadGLBmp();
             // 
             float scaleFromTexture = 1;
@@ -360,8 +357,8 @@ namespace PixelFarm.DrawingGL
                           glyphData.Height);
 
                 //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * scale - glyphData.TextureXOffset);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * scale - glyphData.TextureYOffset) + srcRect.Height; //***
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset) + srcRect.Height; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
@@ -371,7 +368,7 @@ namespace PixelFarm.DrawingGL
                 g_left = (float)(left + x_offset);
                 g_top = (float)(baseLine - y_offset); //***
 
-                acc_x += (float)Math.Round(glyph.AdvanceX * scale);
+                acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
 
                 //g_x = (float)Math.Round(g_x); //***
                 g_top = (float)Math.Floor(g_top);//adjust to integer num ***
