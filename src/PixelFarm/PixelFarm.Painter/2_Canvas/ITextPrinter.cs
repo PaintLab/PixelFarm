@@ -58,7 +58,7 @@ namespace PixelFarm.Drawing
 
         void MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth);
 
-        void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan, 
+        void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
             RequestFont font,
             int[] outputXAdvances,
             out int outputTotalW,
@@ -76,14 +76,14 @@ namespace PixelFarm.Drawing
     public interface ITextPrinter
     {
         bool StartDrawOnLeftTop { get; set; }
-        void DrawString(char[] text, int startAt, int len, double x, double y);
+        void DrawString(char[] text, int startAt, int len, double left, double top);
         /// <summary>
         /// render from RenderVxFormattedString object to specific pos
         /// </summary>
         /// <param name="renderVx"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        void DrawString(RenderVxFormattedString renderVx, double x, double y);
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        void DrawString(RenderVxFormattedString renderVx, double left, double top);
         //-------------
         void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len);
         void ChangeFont(RequestFont font);

@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
-
+        Color _fontFillColor;
 
         public GLPainter(GLRenderSurface glsx)
         {
@@ -60,7 +60,7 @@ namespace PixelFarm.DrawingGL
         {
             _glsx.DetachCurrentShader();
         }
-        Color _fontFillColor;
+      
         public Color FontFillColor
         {
             get
@@ -528,7 +528,7 @@ namespace PixelFarm.DrawingGL
                         using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
                         {
 
-                            r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f); 
+                            r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);
                             r.MakeVxs(v1);
                             //create stroke around 
                             RenderVx renderVX = CreateRenderVx(v1);
@@ -562,15 +562,6 @@ namespace PixelFarm.DrawingGL
             if (_textPrinter != null)
             {
                 _textPrinter.DrawString(text, x, y);
-                //if (_orientation == DrawBoardOrientation.LeftBottom)
-                //{
-                //    _textPrinter.DrawString(text, x, y);
-                //}
-                //else
-                //{
-                //    _textPrinter.DrawString(text, x, _glsx.ViewportHeight - y);
-                //}
-
             }
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
