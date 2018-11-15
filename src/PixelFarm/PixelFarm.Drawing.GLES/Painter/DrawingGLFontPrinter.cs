@@ -179,7 +179,9 @@ namespace PixelFarm.DrawingGL
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
-        public static bool s_useVBO = true;
+        public static bool s_dbugUseVBO = true;
+        public static bool s_dbugShowGlyphTexture = false;
+        public static bool s_dbugShowMarkers = false;
 #endif
         /// <summary>
         /// use vertex buffer object
@@ -211,7 +213,7 @@ namespace PixelFarm.DrawingGL
             //**
             ChangeFont(painter.CurrentFont);
             //
-            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy; //default 
+            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
         }
 
@@ -278,7 +280,6 @@ namespace PixelFarm.DrawingGL
             //if (x,y) is left top
             //we need to adjust y again            
 
-            float bottom = (float)top + _font.LineSpacingInPixels; //  recommendLineSpacing
 
             //EnsureLoadGLBmp();
             // 
@@ -287,7 +288,7 @@ namespace PixelFarm.DrawingGL
 
             float g_left = 0;
             float g_top = 0;
-            int baseY = (int)Math.Round(bottom);
+            int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
 
             //int n = glyphPlanSeq.len;
             //int endBefore = glyphPlanSeq.startAt + n;
@@ -304,16 +305,31 @@ namespace PixelFarm.DrawingGL
             float acc_y = 0; //local accumulate y 
 
 #if DEBUG
-            //_glsx.DrawImage(_glBmp, 0, 0);
-            _painter.FillRect(0, 0, 20, 20);
-            //_painter.StrokeColor = Color.Magenta;
-            //_painter.DrawLine(left, bottom, left + 200, bottom);
-            //_painter.StrokeColor = Color.Blue;
+            if (s_dbugShowMarkers)
+            {
+                if (s_dbugShowGlyphTexture)
+                {
+                    //show original glyph texture at top 
+                    _glsx.DrawImage(_glBmp, 0, 0);
+                }
+                //draw red-line-marker for baseLine
+                _painter.StrokeColor = Color.Red;
+                _painter.DrawLine(left, baseLine, left + 200, baseLine);
+                //
+                //draw magenta-line-marker for bottom line
+                _painter.StrokeColor = Color.Magenta;
+                int bottomLine = (int)Math.Round((float)top + _font.LineSpacingInPixels);
+                _painter.DrawLine(left, bottomLine, left + 200, bottomLine);
+                //draw blue-line-marker for top line
+                _painter.StrokeColor = Color.Blue;
+                _painter.DrawLine(0, top, left + 200, top);
+            }
 
-            //DrawingTechnique = s_dbugDrawTechnique;//for debug only
-            //UseVBO = s_useVBO;//for debug only
-            UseVBO = true;
-            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+            DrawingTechnique = s_dbugDrawTechnique;//for debug only
+            UseVBO = s_dbugUseVBO;//for debug only
+
+            //UseVBO = true;
+            //DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
 #endif
 
 
@@ -344,8 +360,8 @@ namespace PixelFarm.DrawingGL
                           glyphData.Height);
 
                 //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * scale) - glyphData.TextureXOffset;
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * scale) - glyphData.TextureYOffset + srcRect.Height; //***
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * scale - glyphData.TextureXOffset);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * scale - glyphData.TextureYOffset) + srcRect.Height; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
@@ -353,7 +369,7 @@ namespace PixelFarm.DrawingGL
                 //--------------------------              
 
                 g_left = (float)(left + x_offset);
-                g_top = (float)(baseY - y_offset); //***
+                g_top = (float)(baseLine - y_offset); //***
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
 
@@ -361,18 +377,19 @@ namespace PixelFarm.DrawingGL
                 g_top = (float)Math.Floor(g_top);//adjust to integer num ***
 
 #if DEBUG
+                if (s_dbugShowMarkers)
+                {
 
-                //draw yellow-rect-marker on original texture
+                    if (s_dbugShowGlyphTexture)
+                    {
+                        //draw yellow-rect-marker on original texture
+                        _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
+                    }
 
-                _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
-
-                //draw debug-rect box at target glyph position
-                _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
-
-                _painter.StrokeColor = Color.Red;
-                //draw debug-line of top pos with blue color
-                _painter.DrawLine(left, g_top, left + 200, g_top);
-                _painter.StrokeColor = Color.Blue;
+                    //draw debug-rect box at target glyph position
+                    _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
+                    _painter.StrokeColor = Color.Blue; //restore
+                }
 #endif 
                 if (textureKind == TextureKind.Msdf)
                 {

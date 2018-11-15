@@ -16,6 +16,9 @@ namespace OpenTkEssTest
         {
             this._glsx = glsx;
             this.painter = painter;
+#if DEBUG
+            ShowGlyphTexture = ShowMarkers = true;
+#endif
         }
 
         [DemoConfig]
@@ -30,6 +33,19 @@ namespace OpenTkEssTest
             get;
             set;
         }
+        [DemoConfig]
+        public bool ShowMarkers
+        {
+            get;
+            set;
+        }
+        [DemoConfig]
+        public bool ShowGlyphTexture
+        {
+            get;
+            set;
+        }
+
         protected override void OnReadyForInitGLShaderProgram()
         {
         }
@@ -48,20 +64,22 @@ namespace OpenTkEssTest
 #if DEBUG
             //test only
             GLBitmapGlyphTextPrinter.s_dbugDrawTechnique = DrawTextTechnique;
-            GLBitmapGlyphTextPrinter.s_useVBO = UseVbo;
+            GLBitmapGlyphTextPrinter.s_dbugUseVBO = UseVbo;
+            GLBitmapGlyphTextPrinter.s_dbugShowGlyphTexture = ShowGlyphTexture;
+            GLBitmapGlyphTextPrinter.s_dbugShowMarkers = ShowMarkers;
 #endif
 
             //-------------------------------
             int line_top = 500;
             painter.FontFillColor = PixelFarm.Drawing.Color.Blue;
-            painter.DrawString("ABCD", 0, line_top);
+            painter.DrawString("aftjypqkx", 0, line_top);
             painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            painter.DrawLine(0, line_top, 300, line_top);
+           
             //
             line_top = 550;
-            painter.DrawString("1234567890", 0, line_top);
+            painter.DrawString("1234567890 ABCD", 0, line_top);
             painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            painter.DrawLine(0, line_top, 300, line_top);
+            
             //-------------------------------
             SwapBuffers();
         }
