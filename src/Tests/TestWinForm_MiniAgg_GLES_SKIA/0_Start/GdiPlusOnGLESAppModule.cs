@@ -272,7 +272,7 @@ namespace Mini
                 {
                     _glBmp = new GLBitmap(_lzBmpProvider);
                     _glBmp.BitmapFormat = GLBitmapFormat.BGR;
-                    _glBmp.IsInvert = false;
+                    _glBmp.IsYFlipped = false;
                 }
 
                 _glsx.DrawImage(_glBmp, 0, 0);

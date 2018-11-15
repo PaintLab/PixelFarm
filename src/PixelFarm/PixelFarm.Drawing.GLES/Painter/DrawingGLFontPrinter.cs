@@ -99,7 +99,7 @@ namespace PixelFarm.DrawingGL
                 //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
                 GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_actualImage));
-                glBmp.IsInvert = false;
+                glBmp.IsYFlipped = false;
                 //TODO: review font height
                 if (StartDrawOnLeftTop)
                 {
@@ -135,7 +135,7 @@ namespace PixelFarm.DrawingGL
                 //------------------------------------------------------
                 //GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_actualImage));
-                glBmp.IsInvert = false;
+                glBmp.IsYFlipped = false;
                 //TODO: review font height 
                 //if (StartDrawOnLeftTop)
                 //{

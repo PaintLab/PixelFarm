@@ -327,10 +327,10 @@ namespace PixelFarm.DrawingGL
         {
             if (OriginKind == GLRenderSurfaceOrigin.LeftBottom) //***
             {
-
                 targetTop -= srcH; //***
             }
 
+            //
             if (bmp.IsBigEndianPixel)
             {
                 _rgbaTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
@@ -526,8 +526,8 @@ namespace PixelFarm.DrawingGL
                 //***
                 targetTop += srcRect.Height;  //***
             }
-    
-            
+
+
             _textureSubPixRendering.NewDrawSubImage(srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
@@ -549,7 +549,7 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcRect.Height;  //***
             }
 
-             
+
 
             // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
@@ -593,7 +593,6 @@ namespace PixelFarm.DrawingGL
 
             //version 3            
             _textureSubPixRendering.NewDrawSubImage3(buffer, indexList);
-            //textureSubPixRendering.WriteVboStream(buffer, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
         {

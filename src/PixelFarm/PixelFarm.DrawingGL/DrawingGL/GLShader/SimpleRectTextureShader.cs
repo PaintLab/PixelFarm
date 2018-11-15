@@ -28,7 +28,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------
         protected float _latestBmpW;
         protected float _latestBmpH;
-        protected bool _latestBmpInverted;
+        protected bool _latestBmpYFlipped;
 
         /// <summary>
         /// load glbmp before draw
@@ -48,13 +48,13 @@ namespace PixelFarm.DrawingGL
             s_texture.SetValue(0);
             this._latestBmpW = bmp.Width;
             this._latestBmpH = bmp.Height;
-            this._latestBmpInverted = bmp.IsInvert;
+            this._latestBmpYFlipped = bmp.IsYFlipped;
         }
         internal void SetAssociatedTextureInfo(GLBitmap bmp)
         {
             this._latestBmpW = bmp.Width;
             this._latestBmpH = bmp.Height;
-            this._latestBmpInverted = bmp.IsInvert;
+            this._latestBmpYFlipped = bmp.IsYFlipped;
         }
         internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
@@ -74,14 +74,14 @@ namespace PixelFarm.DrawingGL
                 float targetLeft = srcDestList[i + 4];
                 float targetTop = srcDestList[i + 5];
 
-                i += 6;
+                i += 6;//***
                 //-------------------------------
                 float srcBottom = srcTop + srcH * scale;
                 float srcRight = srcLeft + srcW * scale;
 
                 unsafe
                 {
-                    if (_latestBmpInverted)
+                    if (_latestBmpYFlipped)
                     {
 
                         float* imgVertices = stackalloc float[5 * 4];
@@ -136,14 +136,40 @@ namespace PixelFarm.DrawingGL
         {
             unsafe
             {
-                if (bmp.IsInvert)
+                //user's coord
+                //(left,top) ----- (right,top)
+                //  |                   |
+                //  |                   |
+                //  |                   |
+                //(left,bottom) ---(right,bottom)
+
+                // 
+                //(0,1) ------------ (1,1)
+                //  |                   |
+                //  |   texture-img     |
+                //  |                   |
+                //(0,0) -------------(1,0)
+
+
+                if (bmp.IsYFlipped)
                 {
+                    //since this is fliped in Y axis
+                    //so we map 
+                    //| user's coord    | texture-img |
+                    //----------------------------------
+                    //| left            | left
+                    //| right           | right 
+                    //----------------------------------
+                    //| top             | bottom
+                    //| bottom          | top
+                    //----------------------------------
 
                     float* imgVertices = stackalloc float[5 * 4];
                     {
+
                         imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)
                         imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
-                        //imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+
 
                         //---------------------
                         imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
@@ -161,7 +187,16 @@ namespace PixelFarm.DrawingGL
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
                 else
-                {
+                {    //since this is NOT fliped in Y axis
+                    //so we map 
+                    //| user's coord    | texture-img |
+                    //----------------------------------
+                    //| left            | left
+                    //| right           | right 
+                    //----------------------------------
+                    //| top             | top
+                    //| bottom          | bottom
+                    //----------------------------------
                     float* imgVertices = stackalloc float[5 * 4];
                     {
                         imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
@@ -695,7 +730,7 @@ namespace PixelFarm.DrawingGL
 
                 unsafe
                 {
-                    if (!_latestBmpInverted)
+                    if (!_latestBmpYFlipped)
                     {
 
                         vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
@@ -795,12 +830,18 @@ namespace PixelFarm.DrawingGL
 
             u_matrix.SetData(backup.data);
         }
+
+        /// <summary>
+        /// use vertex-buffer and index-list
+        /// </summary>
+        /// <param name="vboList"></param>
+        /// <param name="indexList"></param>
         public void NewDrawSubImage3(float[] vboList, ushort[] indexList)
         {
             SetCurrent();
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------          
-            int fieldCount = vboList.Length;
+            //int fieldCount = vboList.Length;
             unsafe
             {
                 fixed (float* imgVertices = &vboList[0])
@@ -851,7 +892,7 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
-                if (!_latestBmpInverted)
+                if (!_latestBmpYFlipped)
                 {
 
                     float* imgVertices = stackalloc float[5 * 4];
@@ -896,30 +937,30 @@ namespace PixelFarm.DrawingGL
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
-
-
-                ////version 1
-                ////1. B , yellow  result
-                GL.ColorMask(false, false, true, false);
-                this.SetCompo(0);
-                OnSetVarsBeforeRenderer();
-                GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
-                ////2. G , magenta result
-                GL.ColorMask(false, true, false, false);
-                this.SetCompo(1);
-                OnSetVarsBeforeRenderer();
-                GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
-                //1. R , cyan result 
-                GL.ColorMask(true, false, false, false);//     
-                this.SetCompo(2);
-                OnSetVarsBeforeRenderer();
-                GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
-                //restore
-                GL.ColorMask(true, true, true, true);
             }
+
+            ////version 1
+            ////1. B , yellow  result
+            GL.ColorMask(false, false, true, false);
+            this.SetCompo(0);
+            OnSetVarsBeforeRenderer();
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+            ////2. G , magenta result
+            GL.ColorMask(false, true, false, false);
+            this.SetCompo(1);
+            OnSetVarsBeforeRenderer();
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+            //1. R , cyan result 
+            GL.ColorMask(true, false, false, false);//     
+            this.SetCompo(2);
+            OnSetVarsBeforeRenderer();
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+            //restore
+            GL.ColorMask(true, true, true, true);
+
 
         }
     }
