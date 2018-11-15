@@ -325,9 +325,9 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftBottom) //***
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
-                targetTop -= srcH; //***
+                targetTop += srcH; //***
             }
 
             //
@@ -354,10 +354,10 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftBottom) //***
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
                 //***
-                targetTop -= srcRect.Height;  //***
+                targetTop += srcRect.Height;  //***
             }
 
             //
