@@ -348,15 +348,22 @@ namespace PixelFarm.DrawingGL
 
                 //g_x = (float)Math.Round(g_x); //***
                 g_top = (float)Math.Floor(g_top);
+
 #if DEBUG
                 //paint src rect
-                float newY = _glBmp.Height - srcRect.Y - srcRect.Height;
-                float diff = newY - srcRect.Y;
-                srcRect.OffsetY((int)diff);
+                //temp fix, glyph texture img is not flipped
+                //but the associate info is flipped => so
+                //we need remap exact Y from the image 
 
-                //draw marker on original texture
+                float newY = _glBmp.Height - (srcRect.Y + srcRect.Height);
+                //float diff = newY - srcRect.Y;
+                srcRect = new Rectangle(srcRect.X, (int)newY, srcRect.Width, srcRect.Height);
+
+                //draw yellow-rect-marker on original texture
+
                 _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
-                //paint dest
+
+                //draw debug-rect box at target glyph position
                 _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
 
                 _painter.StrokeColor = Color.Red;
