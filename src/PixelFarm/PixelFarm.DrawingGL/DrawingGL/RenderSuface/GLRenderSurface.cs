@@ -491,16 +491,17 @@ namespace PixelFarm.DrawingGL
             }
 
             _glyphStencilShader.SetColor(this.FontFillColor);
+            _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+        }
 
-            if (bmp.IsBigEndianPixel)
-            {
-
-                _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            }
-            else
-            {
-                _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            }
+        public void DrawGlyphImageWithStecil_VBO(float[] buffer, ushort[] indexList)
+        {
+            _glyphStencilShader.SetColor(this.FontFillColor);
+            _glyphStencilShader.DrawWithVBO(buffer, indexList);
+        }
+        public void DrawGlyphImageWithCopy_VBO(float[] buffer, ushort[] indexList)
+        {
+            _bgraImgTextureShader.DrawWithVBO(buffer, indexList); 
         }
 
         public void LoadTexture1(GLBitmap bmp)
@@ -588,14 +589,15 @@ namespace PixelFarm.DrawingGL
             //add degenerate rect
 
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique3(
+        public void DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(
              float[] buffer,
              ushort[] indexList)
         {
 
             //version 3            
-            _textureSubPixRendering.NewDrawSubImage3(buffer, indexList);
+            _textureSubPixRendering.DrawSubImages_VBO(buffer, indexList);
         }
+
         public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
         {
 

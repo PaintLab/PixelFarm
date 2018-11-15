@@ -67,12 +67,12 @@ namespace PixelFarm.Drawing.GLES2
 
                 var prevColor = _painter1.FillColor;
                 _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-                _painter1.TextPrinter.DrawString(formattedString, x, this.Height - y);
+                _painter1.TextPrinter.DrawString(formattedString, x, y);
                 _painter1.FillColor = prevColor;
             }
         }
 
-        public override void DrawText(char[] buffer, int x, int y)
+        public override void DrawText(char[] buffer, int left, int top)
         {
             Color prevColor = _painter1.FillColor;
 
@@ -80,14 +80,14 @@ namespace PixelFarm.Drawing.GLES2
             //use font color for fill the glyphs
 
             _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
+            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
             _painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
             Color prevColor = _painter1.FillColor;
             _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, this.Height - logicalTextBox.Y);
+            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, logicalTextBox.Y);
             _painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
@@ -95,7 +95,7 @@ namespace PixelFarm.Drawing.GLES2
             //TODO: review again
             Color prevColor = _painter1.FillColor;
             _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, this.Height - logicalTextBox.Y);
+            _painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, logicalTextBox.Y);
             _painter1.FillColor = prevColor;
             //TODO: review here
             //painter1.FillRectangle(0, 0, 20, 20, Color.Red);

@@ -178,8 +178,10 @@ namespace PixelFarm.DrawingGL
         List<ushort> _indexList = new List<ushort>();
 
 #if DEBUG
-        public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
-        public static bool s_useVBO = true;
+        public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+        public static bool s_dbugUseVBO = true;
+        public static bool s_dbugShowGlyphTexture = false;
+        public static bool s_dbugShowMarkers = false;
 #endif
         /// <summary>
         /// use vertex buffer object
@@ -211,7 +213,7 @@ namespace PixelFarm.DrawingGL
             //**
             ChangeFont(painter.CurrentFont);
             //
-            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy; //default 
+            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
         }
 
@@ -271,15 +273,11 @@ namespace PixelFarm.DrawingGL
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
-            float scale = _px_scale;
-
+            float px_scale = _px_scale;
             //--------------------------
             //TODO:
             //if (x,y) is left top
-            //we need to adjust y again            
-
-            float bottom = (float)top + _font.LineSpacingInPixels; //  recommendLineSpacing
-
+            //we need to adjust y again      
             //EnsureLoadGLBmp();
             // 
             float scaleFromTexture = 1;
@@ -287,7 +285,7 @@ namespace PixelFarm.DrawingGL
 
             float g_left = 0;
             float g_top = 0;
-            int baseY = (int)Math.Round(bottom);
+            int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
 
             //int n = glyphPlanSeq.len;
             //int endBefore = glyphPlanSeq.startAt + n;
@@ -304,13 +302,31 @@ namespace PixelFarm.DrawingGL
             float acc_y = 0; //local accumulate y 
 
 #if DEBUG
-            _glsx.DrawImage(_glBmp, 0, 0);
-            _painter.StrokeColor = Color.Magenta;
-            _painter.DrawLine(left, bottom, left + 200, bottom);
-            _painter.StrokeColor = Color.Blue;
+            if (s_dbugShowMarkers)
+            {
+                if (s_dbugShowGlyphTexture)
+                {
+                    //show original glyph texture at top 
+                    _glsx.DrawImage(_glBmp, 0, 0);
+                }
+                //draw red-line-marker for baseLine
+                _painter.StrokeColor = Color.Red;
+                _painter.DrawLine(left, baseLine, left + 200, baseLine);
+                //
+                //draw magenta-line-marker for bottom line
+                _painter.StrokeColor = Color.Magenta;
+                int bottomLine = (int)Math.Round((float)top + _font.LineSpacingInPixels);
+                _painter.DrawLine(left, bottomLine, left + 200, bottomLine);
+                //draw blue-line-marker for top line
+                _painter.StrokeColor = Color.Blue;
+                _painter.DrawLine(0, top, left + 200, top);
+            }
 
             DrawingTechnique = s_dbugDrawTechnique;//for debug only
-            UseVBO = s_useVBO;//for debug only
+            UseVBO = s_dbugUseVBO;//for debug only
+
+            //UseVBO = true;
+            //DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
 #endif
 
 
@@ -341,8 +357,8 @@ namespace PixelFarm.DrawingGL
                           glyphData.Height);
 
                 //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * scale) - glyphData.TextureXOffset;
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * scale) - glyphData.TextureYOffset + srcRect.Height; //***
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset) + srcRect.Height; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
@@ -350,26 +366,27 @@ namespace PixelFarm.DrawingGL
                 //--------------------------              
 
                 g_left = (float)(left + x_offset);
-                g_top = (float)(baseY - y_offset); //***
+                g_top = (float)(baseLine - y_offset); //***
 
-                acc_x += (float)Math.Round(glyph.AdvanceX * scale);
+                acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
 
                 //g_x = (float)Math.Round(g_x); //***
                 g_top = (float)Math.Floor(g_top);//adjust to integer num ***
 
 #if DEBUG
+                if (s_dbugShowMarkers)
+                {
 
-                //draw yellow-rect-marker on original texture
+                    if (s_dbugShowGlyphTexture)
+                    {
+                        //draw yellow-rect-marker on original texture
+                        _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
+                    }
 
-                _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
-
-                //draw debug-rect box at target glyph position
-                _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
-
-                _painter.StrokeColor = Color.Red;
-                //draw debug-line of top pos with blue color
-                _painter.DrawLine(left, g_top, left + 200, g_top);
-                _painter.StrokeColor = Color.Blue;
+                    //draw debug-rect box at target glyph position
+                    _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
+                    _painter.StrokeColor = Color.Blue; //restore
+                }
 #endif 
                 if (textureKind == TextureKind.Msdf)
                 {
@@ -383,9 +400,18 @@ namespace PixelFarm.DrawingGL
                 {
                     switch (DrawingTechnique)
                     {
-
-
                         case GlyphTexturePrinterDrawingTechnique.Stencil:
+                            if (UseVBO)
+                            {
+                                _glsx.WriteVboToList(
+                                  _vboBufferList,
+                                  _indexList,
+                                  ref srcRect,
+                                  g_left,
+                                  g_top,
+                                  1);
+                            }
+                            else
                             {
                                 //stencil gray scale with fill-color
                                 _glsx.DrawGlyphImageWithStecil(_glBmp,
@@ -396,6 +422,17 @@ namespace PixelFarm.DrawingGL
                             }
                             break;
                         case GlyphTexturePrinterDrawingTechnique.Copy:
+                            if (UseVBO)
+                            {
+                                _glsx.WriteVboToList(
+                                  _vboBufferList,
+                                  _indexList,
+                                  ref srcRect,
+                                  g_left,
+                                  g_top,
+                                  1);
+                            }
+                            else
                             {
                                 _glsx.DrawSubImage(_glBmp,
                                     ref srcRect,
@@ -429,13 +466,22 @@ namespace PixelFarm.DrawingGL
             }
             //-------------------------------------------
             //
-            if (DrawingTechnique == GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering && UseVBO)
+            if (UseVBO)
             {
-                _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
-            }
+                switch (DrawingTechnique)
+                {
+                    case GlyphTexturePrinterDrawingTechnique.Copy:
+                        _glsx.DrawGlyphImageWithCopy_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.Stencil:
+                        _glsx.DrawGlyphImageWithStecil_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        break;
+                } 
+            } 
         }
-
-
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
             _glsx.LoadTexture1(_glBmp);
