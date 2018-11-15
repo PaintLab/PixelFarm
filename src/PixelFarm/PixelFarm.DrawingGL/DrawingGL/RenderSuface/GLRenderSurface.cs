@@ -1,6 +1,8 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+
 using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
@@ -494,16 +496,20 @@ namespace PixelFarm.DrawingGL
             _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawGlyphImageWithStecil_VBO(float[] buffer, ushort[] indexList)
+        public void DrawGlyphImageWithStecil_VBO(TextureCoordVboBuilder vboBuilder)
         {
             _glyphStencilShader.SetColor(this.FontFillColor);
-            _glyphStencilShader.DrawWithVBO(buffer, indexList);
+            _glyphStencilShader.DrawWithVBO(vboBuilder._buffer.ToArray(), vboBuilder._indexList.ToArray());
         }
         public void DrawGlyphImageWithCopy_VBO(float[] buffer, ushort[] indexList)
         {
             _bgraImgTextureShader.DrawWithVBO(buffer, indexList);
         }
-
+        public void DrawGlyphImageWithCopy_VBO(TextureCoordVboBuilder vboBuilder)
+        {
+            //TODO: ToArray() optimization
+            _bgraImgTextureShader.DrawWithVBO(vboBuilder._buffer.ToArray(), vboBuilder._indexList.ToArray());
+        }
         public void LoadTexture1(GLBitmap bmp)
         {
             _textureSubPixRendering.LoadGLBitmap(bmp);
@@ -537,148 +543,12 @@ namespace PixelFarm.DrawingGL
                 srcRect.Height, targetLeft, targetTop);
 
         }
-        public void WriteVboToList(
-           System.Collections.Generic.List<float> buffer,
-           System.Collections.Generic.List<ushort> indexList,
-           ref PixelFarm.Drawing.Rectangle srcRect,
-           float targetLeft,
-           float targetTop,
-           float scale, float orgBmpW, float orgBmpH,
-           bool bmpYFlipped)
+
+        public void DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(TextureCoordVboBuilder vboBuilder)
         {
-
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
-            {
-                //***
-                targetTop += srcRect.Height;  //***
-            }
-
-
-
-            // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
-
-            ushort indexCount = (ushort)indexList.Count;
-
-            if (indexCount > 0)
-            {
-
-                //add degenerative triangle
-                float prev_5 = buffer[buffer.Count - 5];
-                float prev_4 = buffer[buffer.Count - 4];
-                float prev_3 = buffer[buffer.Count - 3];
-                float prev_2 = buffer[buffer.Count - 2];
-                float prev_1 = buffer[buffer.Count - 1];
-
-                buffer.Add(prev_5); buffer.Add(prev_4); buffer.Add(prev_3);
-                buffer.Add(prev_2); buffer.Add(prev_1);
-
-
-                indexList.Add((ushort)(indexCount));
-                indexList.Add((ushort)(indexCount + 1));
-
-                indexCount += 2;
-            }
-
             //version 3            
-            WriteVboStream(buffer, indexCount > 0,
-                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop,
-                orgBmpW, orgBmpH, bmpYFlipped);
-
-            indexList.Add(indexCount);
-            indexList.Add((ushort)(indexCount + 1));
-            indexList.Add((ushort)(indexCount + 2));
-            indexList.Add((ushort)(indexCount + 3));
-            //---
-            //add degenerate rect
-
+            _textureSubPixRendering.DrawSubImages_VBO(vboBuilder._buffer.ToArray(), vboBuilder._indexList.ToArray());
         }
-
-
-        static void WriteVboStream(
-            System.Collections.Generic.List<float> vboList,
-            bool duplicateFirst,
-            float srcLeft, float srcTop,
-            float srcW, float srcH,
-            float targetLeft, float targetTop,
-            float orgBmpW, float orgBmpH,
-            bool bmpYFlipped
-        )
-        {
-
-            unsafe
-            {
-                float scale = 1;
-                float srcBottom = srcTop + srcH;
-                float srcRight = srcLeft + srcW;
-
-                unsafe
-                {
-                    if (bmpYFlipped)
-                    {
-                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                        if (duplicateFirst)
-                        {
-                            //for creating degenerative triangle
-
-
-                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                        }
-                        //---------------------
-                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
-
-                    }
-                    else
-                    {
-
-
-                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
-                        if (duplicateFirst)
-                        {
-                            //for creating degenerative triangle
-                            //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
-
-                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
-                        }
-
-                        //---------------------
-                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 1  (left,top)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 3 (right, bottom)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 3 (right,top) 
-                    }
-                }
-            }
-        }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(
-             float[] buffer,
-             ushort[] indexList)
-        {
-
-            //version 3            
-            _textureSubPixRendering.DrawSubImages_VBO(buffer, indexList);
-        }
-
         public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
         {
 
@@ -1280,8 +1150,165 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    public class VboStore
+
+    public class TextureCoordVboBuilder
     {
 
+        int _orgBmpW;
+        int _orgBmpH;
+        bool _bmpYFlipped;
+        float _scale = 1;
+        GLRenderSurfaceOrigin _glsxOrgKind;
+        //
+        internal List<float> _buffer = new List<float>();
+        internal List<ushort> _indexList = new List<ushort>();
+
+        public TextureCoordVboBuilder()
+        {
+
+        }
+
+        public void SetTextureInfo(int width, int height, bool isYFlipped, GLRenderSurfaceOrigin glsxOrgKind)
+        {
+            _orgBmpW = width;
+            _orgBmpH = height;
+            _bmpYFlipped = isYFlipped;
+            _glsxOrgKind = glsxOrgKind;
+        }
+
+        public void Clear()
+        {
+            _buffer.Clear();
+            _indexList.Clear();
+        }
+        public void WriteVboToList(
+            ref PixelFarm.Drawing.Rectangle srcRect,
+            float targetLeft,
+            float targetTop)
+        {
+
+            if (_glsxOrgKind == GLRenderSurfaceOrigin.LeftTop) //***
+            {
+                //***
+                targetTop += srcRect.Height;  //***
+            }
+
+
+
+            // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+            ushort indexCount = (ushort)_indexList.Count;
+
+            if (indexCount > 0)
+            {
+
+                //add degenerative triangle
+                float prev_5 = _buffer[_buffer.Count - 5];
+                float prev_4 = _buffer[_buffer.Count - 4];
+                float prev_3 = _buffer[_buffer.Count - 3];
+                float prev_2 = _buffer[_buffer.Count - 2];
+                float prev_1 = _buffer[_buffer.Count - 1];
+
+                _buffer.Add(prev_5); _buffer.Add(prev_4); _buffer.Add(prev_3);
+                _buffer.Add(prev_2); _buffer.Add(prev_1);
+
+
+                _indexList.Add((ushort)(indexCount));
+                _indexList.Add((ushort)(indexCount + 1));
+
+                indexCount += 2;
+            }
+
+            //version 3            
+            WriteVboStream(_buffer, indexCount > 0,
+                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop,
+                _orgBmpW, _orgBmpH, _bmpYFlipped);
+
+            _indexList.Add(indexCount);
+            _indexList.Add((ushort)(indexCount + 1));
+            _indexList.Add((ushort)(indexCount + 2));
+            _indexList.Add((ushort)(indexCount + 3));
+            //---
+            //add degenerate rect
+
+        }
+
+
+        static void WriteVboStream(
+            System.Collections.Generic.List<float> vboList,
+            bool duplicateFirst,
+            float srcLeft, float srcTop,
+            float srcW, float srcH,
+            float targetLeft, float targetTop,
+            float orgBmpW, float orgBmpH,
+            bool bmpYFlipped
+        )
+        {
+
+            unsafe
+            {
+                float scale = 1;
+                float srcBottom = srcTop + srcH;
+                float srcRight = srcLeft + srcW;
+
+                unsafe
+                {
+                    if (bmpYFlipped)
+                    {
+                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
+
+                        if (duplicateFirst)
+                        {
+                            //for creating degenerative triangle
+
+
+                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
+                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
+
+                        }
+                        //---------------------
+                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
+
+                    }
+                    else
+                    {
+
+
+                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
+                        if (duplicateFirst)
+                        {
+                            //for creating degenerative triangle
+                            //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
+                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
+                        }
+
+                        //---------------------
+                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
+                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 1  (left,top)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
+
+                        //---------------------
+                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 3 (right, bottom)
+                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 3 (right,top) 
+                    }
+                }
+            }
+        }
     }
 }

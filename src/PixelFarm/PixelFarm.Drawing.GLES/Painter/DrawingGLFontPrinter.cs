@@ -174,8 +174,7 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
 
-        List<float> _vboBufferList = new List<float>();
-        List<ushort> _indexList = new List<ushort>();
+
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -259,10 +258,14 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
+            _vboBuilder.Clear();
+            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _glsx.OriginKind);
 
+            //
 
             _glsx.FontFillColor = _painter.FontFillColor;
             int j = buffer.Length;
@@ -294,8 +297,7 @@ namespace PixelFarm.DrawingGL
             _glsx.LoadTexture1(_glBmp);
             //-------------------------------------
 
-            _vboBufferList.Clear(); //clear before use
-            _indexList.Clear(); //clear before use
+
 
 
             float acc_x = 0; //local accumulate x
@@ -406,16 +408,9 @@ namespace PixelFarm.DrawingGL
                         case GlyphTexturePrinterDrawingTechnique.Stencil:
                             if (UseVBO)
                             {
-                                _glsx.WriteVboToList(
-                                  _vboBufferList,
-                                  _indexList,
-                                  ref srcRect,
-                                  g_left,
-                                  g_top,
-                                  1,
-                                  srcBmpW,
-                                  srcBmpH,
-                                  bmpYFlip);
+                                _vboBuilder.WriteVboToList(
+                                     ref srcRect,
+                                     g_left, g_top);
                             }
                             else
                             {
@@ -430,16 +425,9 @@ namespace PixelFarm.DrawingGL
                         case GlyphTexturePrinterDrawingTechnique.Copy:
                             if (UseVBO)
                             {
-                                _glsx.WriteVboToList(
-                                  _vboBufferList,
-                                  _indexList,
-                                  ref srcRect,
-                                  g_left,
-                                  g_top,
-                                  1,
-                                  srcBmpW,
-                                  srcBmpH,
-                                  bmpYFlip);
+                                _vboBuilder.WriteVboToList(
+                                      ref srcRect,
+                                      g_left, g_top);
                             }
                             else
                             {
@@ -453,16 +441,9 @@ namespace PixelFarm.DrawingGL
                         case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                             if (UseVBO)
                             {
-                                _glsx.WriteVboToList(
-                                  _vboBufferList,
-                                  _indexList,
-                                  ref srcRect,
-                                  g_left,
-                                  g_top,
-                                  1,
-                                  srcBmpW,
-                                  srcBmpH,
-                                  bmpYFlip);
+                                _vboBuilder.WriteVboToList(
+                                      ref srcRect,
+                                      g_left, g_top);
                             }
                             else
                             {
@@ -483,15 +464,17 @@ namespace PixelFarm.DrawingGL
                 switch (DrawingTechnique)
                 {
                     case GlyphTexturePrinterDrawingTechnique.Copy:
-                        _glsx.DrawGlyphImageWithCopy_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        _glsx.DrawGlyphImageWithCopy_VBO(_vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(_vboBuilder);
                         break;
                     case GlyphTexturePrinterDrawingTechnique.Stencil:
-                        _glsx.DrawGlyphImageWithStecil_VBO(_vboBufferList.ToArray(), _indexList.ToArray());
+                        _glsx.DrawGlyphImageWithStecil_VBO(_vboBuilder);
                         break;
                 }
+
+                _vboBuilder.Clear();
             }
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
