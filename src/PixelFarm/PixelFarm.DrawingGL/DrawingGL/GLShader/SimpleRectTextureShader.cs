@@ -58,6 +58,7 @@ namespace PixelFarm.DrawingGL
         }
         internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
+            
 
             //-------------------------------------------------------------------------------------
             OnSetVarsBeforeRenderer();
@@ -76,8 +77,8 @@ namespace PixelFarm.DrawingGL
 
                 i += 6;//***
                 //-------------------------------
-                float srcBottom = srcTop + srcH * scale;
-                float srcRight = srcLeft + srcW * scale;
+                float srcBottom = srcTop + srcH;
+                float srcRight = srcLeft + srcW;
 
                 unsafe
                 {
@@ -1002,7 +1003,7 @@ namespace PixelFarm.DrawingGL
                 shader.UnsafeDrawSubImages(srcDestList, 6, 1);
             }
         }
-        public static void RenderSubImage(this SimpleRectTextureShader shader, GLBitmap bmp,
+        public static void DrawSubImage(this SimpleRectTextureShader shader, GLBitmap bmp,
             float srcLeft, float srcTop,
             float srcW, float srcH,
             float targetLeft, float targetTop,
@@ -1034,7 +1035,7 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
-        public static void RenderSubImages(this SimpleRectTextureShader shader, GLBitmap bmp, float[] srcDestList, float scale)
+        public static void DrawSubImages(this SimpleRectTextureShader shader, GLBitmap bmp, float[] srcDestList, float scale)
         {
             shader.LoadGLBitmap(bmp);
             shader.DrawSubImages(srcDestList, scale);

@@ -333,17 +333,17 @@ namespace PixelFarm.DrawingGL
             //
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                _rgbaTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
             }
             else
             {
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
-                    _bgrImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                    _bgrImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
                 }
                 else
                 {
-                    _bgraImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                    _bgraImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
                 }
             }
         }
@@ -357,23 +357,23 @@ namespace PixelFarm.DrawingGL
             if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
                 //***
-                targetTop += srcRect.Height;  //***
+                targetTop += srcRect.Height * scale;  //***
             }
 
             //
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
+                _rgbaTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
             }
             else
             {
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
-                    _bgrImgTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
+                    _bgrImgTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
                 }
                 else
                 {
-                    _bgraImgTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
+                    _bgraImgTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
                 }
             }
         }
@@ -391,11 +391,11 @@ namespace PixelFarm.DrawingGL
 
             if (bmp.IsBigEndianPixel)
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
             }
             else
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
             }
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
@@ -410,11 +410,11 @@ namespace PixelFarm.DrawingGL
 
             if (bmp.IsBigEndianPixel)
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
             }
             else
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
             }
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
@@ -422,11 +422,11 @@ namespace PixelFarm.DrawingGL
 
             if (bmp.IsBigEndianPixel)
             {
-                _msdfShader.RenderSubImages(bmp, coords, scale);
+                _msdfShader.DrawSubImages(bmp, coords, scale);
             }
             else
             {
-                _msdfShader.RenderSubImages(bmp, coords, scale);
+                _msdfShader.DrawSubImages(bmp, coords, scale);
             }
         }
         public void DrawImage(GLBitmap bmp,
@@ -495,11 +495,11 @@ namespace PixelFarm.DrawingGL
             if (bmp.IsBigEndianPixel)
             {
 
-                _glyphStencilShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             }
             else
             {
-                _glyphStencilShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+                _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             }
         }
 
