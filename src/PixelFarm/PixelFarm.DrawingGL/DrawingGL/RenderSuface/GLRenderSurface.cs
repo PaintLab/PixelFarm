@@ -492,23 +492,21 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcRect.Height;  //***
             }
 
+            _glyphStencilShader.SetCurrent();
             _glyphStencilShader.SetColor(this.FontFillColor);
             _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
         public void DrawGlyphImageWithStecil_VBO(TextureCoordVboBuilder vboBuilder)
         {
+            _glyphStencilShader.SetCurrent();
             _glyphStencilShader.SetColor(this.FontFillColor);
-            _glyphStencilShader.DrawWithVBO(vboBuilder._buffer.ToArray(), vboBuilder._indexList.ToArray());
+            _glyphStencilShader.DrawWithVBO(vboBuilder);
         }
-        public void DrawGlyphImageWithCopy_VBO(float[] buffer, ushort[] indexList)
-        {
-            _bgraImgTextureShader.DrawWithVBO(buffer, indexList);
-        }
+
         public void DrawGlyphImageWithCopy_VBO(TextureCoordVboBuilder vboBuilder)
-        {
-            //TODO: ToArray() optimization
-            _bgraImgTextureShader.DrawWithVBO(vboBuilder._buffer.ToArray(), vboBuilder._indexList.ToArray());
+        {   
+            _bgraImgTextureShader.DrawWithVBO(vboBuilder);
         }
         public void LoadTexture1(GLBitmap bmp)
         {
@@ -547,7 +545,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(TextureCoordVboBuilder vboBuilder)
         {
             //version 3            
-            _textureSubPixRendering.DrawSubImages_VBO(vboBuilder._buffer.ToArray(), vboBuilder._indexList.ToArray());
+            _textureSubPixRendering.DrawSubImages_VBO(vboBuilder);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
         {
@@ -1160,9 +1158,12 @@ namespace PixelFarm.DrawingGL
         float _scale = 1;
         GLRenderSurfaceOrigin _glsxOrgKind;
         //
-        internal List<float> _buffer = new List<float>();
-        internal List<ushort> _indexList = new List<ushort>();
+        //internal List<float> _buffer = new List<float>();
+        //internal List<ushort> _indexList = new List<ushort>();
 
+
+        internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
+        internal PixelFarm.CpuBlit.ArrayList<ushort> _indexList = new CpuBlit.ArrayList<ushort>();
         public TextureCoordVboBuilder()
         {
 
@@ -1180,6 +1181,8 @@ namespace PixelFarm.DrawingGL
         {
             _buffer.Clear();
             _indexList.Clear();
+
+
         }
         public void WriteVboToList(
             ref PixelFarm.Drawing.Rectangle srcRect,
@@ -1209,25 +1212,25 @@ namespace PixelFarm.DrawingGL
                 float prev_2 = _buffer[_buffer.Count - 2];
                 float prev_1 = _buffer[_buffer.Count - 1];
 
-                _buffer.Add(prev_5); _buffer.Add(prev_4); _buffer.Add(prev_3);
-                _buffer.Add(prev_2); _buffer.Add(prev_1);
+                _buffer.AddVertex(prev_5); _buffer.AddVertex(prev_4); _buffer.AddVertex(prev_3);
+                _buffer.AddVertex(prev_2); _buffer.AddVertex(prev_1);
 
 
-                _indexList.Add((ushort)(indexCount));
-                _indexList.Add((ushort)(indexCount + 1));
+                _indexList.AddVertex((ushort)(indexCount));
+                _indexList.AddVertex((ushort)(indexCount + 1));
 
                 indexCount += 2;
             }
 
-            //version 3            
+
             WriteVboStream(_buffer, indexCount > 0,
                 srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop,
                 _orgBmpW, _orgBmpH, _bmpYFlipped);
 
-            _indexList.Add(indexCount);
-            _indexList.Add((ushort)(indexCount + 1));
-            _indexList.Add((ushort)(indexCount + 2));
-            _indexList.Add((ushort)(indexCount + 3));
+            _indexList.AddVertex(indexCount);
+            _indexList.AddVertex((ushort)(indexCount + 1));
+            _indexList.AddVertex((ushort)(indexCount + 2));
+            _indexList.AddVertex((ushort)(indexCount + 3));
             //---
             //add degenerate rect
 
@@ -1235,7 +1238,7 @@ namespace PixelFarm.DrawingGL
 
 
         static void WriteVboStream(
-            System.Collections.Generic.List<float> vboList,
+           PixelFarm.CpuBlit.ArrayList<float> vboList,
             bool duplicateFirst,
             float srcLeft, float srcTop,
             float srcW, float srcH,
@@ -1255,57 +1258,57 @@ namespace PixelFarm.DrawingGL
                 {
                     if (bmpYFlipped)
                     {
-                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
+                        vboList.AddVertex(targetLeft); vboList.AddVertex(targetTop); vboList.AddVertex(0); //coord 0 (left,top)                                                                                                       
+                        vboList.AddVertex(srcLeft / orgBmpW); vboList.AddVertex(srcTop / orgBmpH); //texture coord 0 (left,top)
 
                         if (duplicateFirst)
                         {
                             //for creating degenerative triangle
 
 
-                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
+                            vboList.AddVertex(targetLeft); vboList.AddVertex(targetTop); vboList.AddVertex(0); //coord 0 (left,top)                                                                                                       
+                            vboList.AddVertex(srcLeft / orgBmpW); vboList.AddVertex(srcTop / orgBmpH); //texture coord 0 (left,top)
 
                         }
                         //---------------------
-                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
+                        vboList.AddVertex(targetLeft); vboList.AddVertex(targetTop - (srcH * scale)); vboList.AddVertex(0); //coord 1 (left,bottom)
+                        vboList.AddVertex(srcLeft / orgBmpW); vboList.AddVertex(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
 
                         //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
+                        vboList.AddVertex(targetLeft + (srcW * scale)); vboList.AddVertex(targetTop); vboList.AddVertex(0); //coord 2 (right,top)
+                        vboList.AddVertex(srcRight / orgBmpW); vboList.AddVertex(srcTop / orgBmpH); //texture coord 2 (right,top)
 
                         //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
+                        vboList.AddVertex(targetLeft + (srcW * scale)); vboList.AddVertex(targetTop - (srcH * scale)); vboList.AddVertex(0);//coord 3 (right, bottom)
+                        vboList.AddVertex(srcRight / orgBmpW); vboList.AddVertex(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
 
                     }
                     else
                     {
 
 
-                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
+                        vboList.AddVertex(targetLeft); vboList.AddVertex(targetTop); vboList.AddVertex(0); //coord 0 (left,top)
+                        vboList.AddVertex(srcLeft / orgBmpW); vboList.AddVertex(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
                         if (duplicateFirst)
                         {
                             //for creating degenerative triangle
                             //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
-                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
+                            vboList.AddVertex(targetLeft); vboList.AddVertex(targetTop); vboList.AddVertex(0); //coord 0 (left,top)
+                            vboList.AddVertex(srcLeft / orgBmpW); vboList.AddVertex(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
                         }
 
                         //---------------------
-                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 1  (left,top)
+                        vboList.AddVertex(targetLeft); vboList.AddVertex(targetTop - (srcH * scale)); vboList.AddVertex(0); //coord 1 (left,bottom)
+                        vboList.AddVertex(srcLeft / orgBmpW); vboList.AddVertex(srcTop / orgBmpH); //texture coord 1  (left,top)
 
                         //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
+                        vboList.AddVertex(targetLeft + (srcW * scale)); vboList.AddVertex(targetTop); vboList.AddVertex(0); //coord 2 (right,top)
+                        vboList.AddVertex(srcRight / orgBmpW); vboList.AddVertex(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
 
                         //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 3 (right, bottom)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 3 (right,top) 
+                        vboList.AddVertex(targetLeft + (srcW * scale)); vboList.AddVertex(targetTop - (srcH * scale)); vboList.AddVertex(0); //coord 3 (right, bottom)
+                        vboList.AddVertex(srcRight / orgBmpW); vboList.AddVertex(srcTop / orgBmpH); //texture coord 3 (right,top) 
                     }
                 }
             }

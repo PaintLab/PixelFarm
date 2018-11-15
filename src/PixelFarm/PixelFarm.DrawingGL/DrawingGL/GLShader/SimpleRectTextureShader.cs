@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
         }
 
         int orthoviewVersion = -1;
-        protected void CheckViewMatrix()
+        internal void CheckViewMatrix()
         {
             int version = 0;
             if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
@@ -131,8 +131,11 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void DrawWithVBO(float[] vboList, ushort[] indexList)
+        public void DrawWithVBO(TextureCoordVboBuilder vboBuilder)
         {
+            float[] vboList = vboBuilder._buffer.Array;
+            ushort[] indexList = vboBuilder._indexList.Array;
+
             SetCurrent();
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------       
@@ -143,9 +146,8 @@ namespace PixelFarm.DrawingGL
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
-            }
-            int count1 = indexList.Length;
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+            } 
+            GL.DrawElements(BeginMode.TriangleStrip, vboBuilder._indexList.Count, DrawElementsType.UnsignedShort, indexList);
         }
 
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
@@ -696,7 +698,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-    
+
 
         public void NewDrawSubImage4FromCurrentLoadedVBO(int count1, float x, float y)
         {
@@ -744,12 +746,13 @@ namespace PixelFarm.DrawingGL
         /// </summary>
         /// <param name="vboList"></param>
         /// <param name="indexList"></param>
-        public void DrawSubImages_VBO(float[] vboList, ushort[] indexList)
+        public void DrawSubImages_VBO(TextureCoordVboBuilder vboBuilder)
         {
             SetCurrent();
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------          
 
+            float[] vboList = vboBuilder._buffer.Array; //***
             unsafe
             {
                 fixed (float* imgVertices = &vboList[0])
@@ -759,8 +762,10 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
+            //SHARED ARRAY 
+            ushort[] indexList = vboBuilder._indexList.Array; //***
+            int count1 = vboBuilder._indexList.Count; //***
 
-            int count1 = indexList.Length;
             //version 1
             //1. B , yellow  result
             GL.ColorMask(false, false, true, false);
