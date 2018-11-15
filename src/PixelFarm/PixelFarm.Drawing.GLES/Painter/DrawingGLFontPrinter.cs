@@ -304,13 +304,16 @@ namespace PixelFarm.DrawingGL
             float acc_y = 0; //local accumulate y 
 
 #if DEBUG
-            _glsx.DrawImage(_glBmp, 0, 0);
-            _painter.StrokeColor = Color.Magenta;
-            _painter.DrawLine(left, bottom, left + 200, bottom);
-            _painter.StrokeColor = Color.Blue;
+            //_glsx.DrawImage(_glBmp, 0, 0);
+            _painter.FillRect(0, 0, 20, 20);
+            //_painter.StrokeColor = Color.Magenta;
+            //_painter.DrawLine(left, bottom, left + 200, bottom);
+            //_painter.StrokeColor = Color.Blue;
 
-            DrawingTechnique = s_dbugDrawTechnique;//for debug only
-            UseVBO = s_useVBO;//for debug only
+            //DrawingTechnique = s_dbugDrawTechnique;//for debug only
+            //UseVBO = s_useVBO;//for debug only
+            UseVBO = true;
+            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
 #endif
 
 
