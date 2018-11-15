@@ -380,8 +380,7 @@ namespace PixelFarm.DrawingGL
         List<ushort> _indexList = new List<ushort>();
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
-
-
+             
 
             _glsx.FontFillColor = _painter.FontFillColor;
             int j = buffer.Length;
@@ -432,6 +431,8 @@ namespace PixelFarm.DrawingGL
 
 
 
+          
+
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
             {
@@ -480,7 +481,7 @@ namespace PixelFarm.DrawingGL
                 _painter.StrokeColor = Color.Blue;
 #endif
 
-                textureKind = TextureKind.StencilGreyScale;
+                textureKind = TextureKind.StencilLcdEffect;
 
                 switch (textureKind)
                 {
@@ -500,7 +501,7 @@ namespace PixelFarm.DrawingGL
                          ref srcRect,
                             g_x,
                             g_y,
-                            scaleFromTexture); 
+                            scaleFromTexture);
                         break;
                     case TextureKind.Bitmap:
                         _glsx.DrawSubImage(_glBmp,
@@ -510,19 +511,25 @@ namespace PixelFarm.DrawingGL
                             1);
                         break;
                     case TextureKind.StencilLcdEffect:
+                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique2(
+                         ref srcRect,
+                            g_x,
+                            g_y,
+                            1);
+                        break;
+                        //case TextureKind.StencilLcdEffect:
 
-                        _glsx.WriteVboToList(
-                          _vboBufferList,
-                          _indexList,
-                          ref srcRect,
-                          g_x,
-                          g_y,
-                          scaleFromTexture);
-
-                        //-------
-                        //we create vbo first 
-                        //then render 
-                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
+                        //_glsx.WriteVboToList(
+                        //  _vboBufferList,
+                        //  _indexList,
+                        //  ref srcRect,
+                        //  g_x,
+                        //  g_y,
+                        //  scaleFromTexture);
+                        ////-------
+                        ////we create vbo first 
+                        ////then render 
+                        //_glsx.DrawGlyphImageWithSubPixelRenderingTechnique3(_vboBufferList.ToArray(), _indexList.ToArray());
                         break;
                 }
             }

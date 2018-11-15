@@ -327,7 +327,7 @@ namespace PixelFarm.DrawingGL
         {
             if (OriginKind == GLRenderSurfaceOrigin.LeftBottom) //***
             {
-               
+
                 targetTop -= srcH; //***
             }
 
@@ -516,17 +516,18 @@ namespace PixelFarm.DrawingGL
         }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique2(
-          ref PixelFarm.Drawing.Rectangle srcRect,
+          ref Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
           float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
                 //***
-                targetTop += srcRect.Height;
+                targetTop += srcRect.Height;  //***
             }
-
+    
+            
             _textureSubPixRendering.NewDrawSubImage(srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,

@@ -32,7 +32,7 @@ namespace OpenTkEssTest
 
             //-------------------------------
             int line_top = 500;
-            painter.FillColor = PixelFarm.Drawing.Color.Black;
+            painter.FontFillColor = PixelFarm.Drawing.Color.Blue;
             painter.DrawString("ABCD", 0, line_top);
             painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
             painter.DrawLine(0, line_top, 300, line_top);
