@@ -328,11 +328,17 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //-------------------------------------- 
 
+
+                //paint src rect
+                //temp fix, glyph texture img is not flipped
+                //but the associate info is flipped => so
+                //we need remap exact Y from the image 
+
                 Rectangle srcRect =
                       new Rectangle(glyphData.Left,
-                          glyphData.Top,
+                         _glBmp.Height - (glyphData.Top + glyphData.Height),
                           glyphData.Width,
-                          glyphData.Height);
+                          glyphData.Height);  
 
                 float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * scale) - glyphData.TextureXOffset;
                 float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * scale) - glyphData.TextureYOffset + srcRect.Height; //***
@@ -350,14 +356,7 @@ namespace PixelFarm.DrawingGL
                 g_top = (float)Math.Floor(g_top);
 
 #if DEBUG
-                //paint src rect
-                //temp fix, glyph texture img is not flipped
-                //but the associate info is flipped => so
-                //we need remap exact Y from the image 
 
-                float newY = _glBmp.Height - (srcRect.Y + srcRect.Height);
-                //float diff = newY - srcRect.Y;
-                srcRect = new Rectangle(srcRect.X, (int)newY, srcRect.Width, srcRect.Height);
 
                 //draw yellow-rect-marker on original texture
 
