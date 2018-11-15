@@ -690,12 +690,12 @@ namespace PixelFarm.DrawingGL
                 float scale = 1;
 
                 //-------------------------------
-                float srcBottom = srcTop - srcH;
+                float srcBottom = srcTop + srcH;
                 float srcRight = srcLeft + srcW;
 
                 unsafe
                 {
-                    if (_latestBmpInverted)
+                    if (!_latestBmpInverted)
                     {
 
                         vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)

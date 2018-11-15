@@ -543,7 +543,13 @@ namespace PixelFarm.DrawingGL
            float scale)
         {
 
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
+            {
+                //***
+                targetTop += srcRect.Height;  //***
+            }
 
+             
 
             // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
