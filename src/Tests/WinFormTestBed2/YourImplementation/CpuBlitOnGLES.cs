@@ -9,7 +9,7 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using LayoutFarm;
 using LayoutFarm.UI;
-
+using LayoutFarm.RenderBoxes;
 
 namespace YourImplementation
 {
@@ -34,8 +34,8 @@ namespace YourImplementation
             //
             SetupAggCanvas();//***
             ContentMayChanged = true;
-
         }
+
         public AggPainter GetAggPainter() => _aggPainter;
 
         public void SetUpdateCpuBlitSurfaceDelegate(UpdateCpuBlitSurface updateCpuBlitSurfaceDel)
@@ -120,10 +120,14 @@ namespace YourImplementation
             //we should not draw again  
             _updateCpuBlitSurfaceDel(_aggPainter);
             //
-            //test print some text
-            _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
-            _aggPainter.DrawString("Hello! 12345", 0, 500);
+            ////test print some text
+            //_aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
+            //_aggPainter.DrawString("Hello! 12345", 0, 500);
         }
+
+
+
+
     }
 
     /// <summary>
@@ -135,6 +139,7 @@ namespace YourImplementation
         public GdiOnGLESUIElement(int width, int height)
             : base(width, height)
         {
+
         }
         public override DrawBoard GetDrawBoard()
         {
@@ -168,7 +173,7 @@ namespace YourImplementation
         }
     }
 
-    public class CpuBlitGLCanvasRenderElement : RenderElement, IDisposable
+    public class CpuBlitGLCanvasRenderElement : RenderBoxBase, IDisposable
     {
 
         CpuBlitGLESUIElement _ui;
@@ -178,41 +183,46 @@ namespace YourImplementation
         GLBitmap _glBmp;
         //
         LazyActualBitmapBufferProvider _lzBmpProvider;
+
         public CpuBlitGLCanvasRenderElement(RootGraphic rootgfx, int w, int h, LazyActualBitmapBufferProvider lzBmpProvider)
             : base(rootgfx, w, h)
         {
             _lzBmpProvider = lzBmpProvider;// 
+            this.MayHasChild = true;
         }
         public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
         {
             _ui = ui;
+        }
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            base.ChildrenHitTestCore(hitChain);
         }
         public void SetPainter(GLRenderSurface glsx, GLPainter canvasPainter)
         {
             _glsx = glsx;
             _glPainter = canvasPainter;
         }
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-
             //TODO: 
             //1. if the content of glBmp is not changed
             //we should not render again 
             //2. if we only update some part of texture
             //may can transfer only that part to the glBmp
             //-------------------------------------------------------------------------  
-            if (_ui.ContentMayChanged)
-            {
-                _ui.UpdateCpuBlitSurface();
-                _ui.ContentMayChanged = false;
+            //if (_ui.ContentMayChanged)
+            //{
+            _ui.UpdateCpuBlitSurface();
+            _ui.ContentMayChanged = false;
 
-                //load new glBmp 
-                if (_glBmp != null)
-                {
-                    _glBmp.Dispose();
-                    _glBmp = null;
-                }
+            //load new glBmp 
+            if (_glBmp != null)
+            {
+                _glBmp.Dispose();
+                _glBmp = null;
             }
+            //}
             //------------------------------------------------------------------------- 
             //copy from 
             if (_glBmp == null)
@@ -223,10 +233,15 @@ namespace YourImplementation
             //------------------------------------------------------------------------- 
             _glsx.DrawImage(_glBmp, 0, 0);
             //test print text from our GLTextPrinter 
-            _glPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            _glPainter.DrawString("Hello2", 0, 400);
+            //_glPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            //_glPainter.DrawString("Hello2", 0, 400);
             //------------------------------------------------------------------------- 
         }
+        //public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        //{
+
+
+        //}
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
 
@@ -235,6 +250,7 @@ namespace YourImplementation
         {
 
         }
+
     }
 
 
