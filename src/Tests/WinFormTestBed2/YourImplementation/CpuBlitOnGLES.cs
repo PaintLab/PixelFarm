@@ -14,7 +14,7 @@ using LayoutFarm.RenderBoxes;
 namespace YourImplementation
 {
 
-    public delegate void UpdateCpuBlitSurface(AggPainter painter);
+    public delegate void UpdateCpuBlitSurface(AggPainter painter, Rectangle updateArea);
 
     /// <summary>
     /// CpuBlit to GLES UIElement
@@ -112,13 +112,15 @@ namespace YourImplementation
         {
             _aggPainter.Clear(PixelFarm.Drawing.Color.White);
         }
-        internal void UpdateCpuBlitSurface()
+        internal void UpdateCpuBlitSurface(Rectangle updateArea)
         {
+            //update only specific part
+
             ClearSurface();
             //TODO:
             //if the content of _aggBmp is not changed
             //we should not draw again  
-            _updateCpuBlitSurfaceDel(_aggPainter);
+            _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
             //
             ////test print some text
             //_aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
@@ -213,7 +215,7 @@ namespace YourImplementation
             //-------------------------------------------------------------------------  
             //if (_ui.ContentMayChanged)
             //{
-            _ui.UpdateCpuBlitSurface();
+            _ui.UpdateCpuBlitSurface(updateArea);
             _ui.ContentMayChanged = false;
 
             //load new glBmp 

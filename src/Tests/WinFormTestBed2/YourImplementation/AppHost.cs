@@ -144,9 +144,9 @@ namespace LayoutFarm
 
 
             //essential***
-            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate(p =>
+            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>
             {
-                _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), new Rectangle(0, 0, 1200, 1200));
+                _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), area);
             });
             //DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter()); 
             GLRenderSurface glsx = _vw.GetGLRenderSurface();
