@@ -47,7 +47,7 @@ namespace LayoutFarm.UI.GdiPlus
 
             this.FullMode = true;
         }
-        public void PaintMe2(IntPtr hdc, Rectangle invalidateArea)
+        public void PaintMe(IntPtr hdc, Rectangle invalidateArea)
         {
             if (this.IsClosed) { return; }
             //------------------------------------ 
