@@ -179,7 +179,7 @@ namespace YourImplementation
         }
     }
 
-    public class CpuBlitGLCanvasRenderElement : RenderBoxBase, IDisposable
+    class CpuBlitGLCanvasRenderElement : RenderBoxBase, IDisposable
     {
 
         CpuBlitGLESUIElement _ui;
