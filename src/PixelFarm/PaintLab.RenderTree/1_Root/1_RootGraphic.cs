@@ -144,7 +144,7 @@ namespace LayoutFarm
 #endif
 
 
-        internal void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
+        public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level
 
@@ -231,7 +231,7 @@ namespace LayoutFarm
                     }
                     parentLink.AdjustLocation(ref globalPoint);
                     //move up
-                    fromElement = parentLink.ParentRenderElement; 
+                    fromElement = parentLink.ParentRenderElement;
                     if (fromElement == null)
                     {
                         return;
@@ -254,7 +254,7 @@ namespace LayoutFarm
 #endif
 
             //----------------------------------------
-          
+
             elemClientRect.Offset(globalPoint);
             if (elemClientRect.Top > this.Height
                 || elemClientRect.Left > this.Width
