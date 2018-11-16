@@ -8,12 +8,12 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "113")]
     [Info("T113_FrameBuffer")]
-    public class T113_FrameBufferWithBlur : DemoBase
+    public class T113_FramebufferWithBlur : DemoBase
     {
         GLRenderSurface _glsx;
         GLPainter painter;
-        FrameBuffer frameBuffer;
-        FrameBuffer frameBuffer2;
+        Framebuffer frameBuffer;
+        Framebuffer frameBuffer2;
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
@@ -24,10 +24,10 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            frameBuffer = _glsx.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer = _glsx.CreateFramebuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
             //------------ 
-            frameBuffer2 = _glsx.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer2 = _glsx.CreateFramebuffer(this.Width, this.Height);
         }
         protected override void DemoClosing()
         {
@@ -51,20 +51,20 @@ namespace OpenTkEssTest
                 {
                     //------------------------------------------------------------------------------------           
                     //framebuffer
-                    _glsx.AttachFrameBuffer(frameBuffer);
+                    _glsx.AttachFramebuffer(frameBuffer);
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     _glsx.Clear(PixelFarm.Drawing.Color.Red);
                     _glsx.DrawImageWithBlurX(glbmp, 0, 300);
-                    _glsx.DetachFrameBuffer();
+                    _glsx.DetachFramebuffer();
                     //------------------------------------------------------------------------------------  
                     //framebuffer2
-                    _glsx.AttachFrameBuffer(frameBuffer2);
+                    _glsx.AttachFramebuffer(frameBuffer2);
                     GLBitmap bmp2 = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
                     bmp2.IsBigEndianPixel = true;
                     _glsx.DrawImageWithBlurY(bmp2, 0, 300);
-                    _glsx.DetachFrameBuffer();
+                    _glsx.DetachFramebuffer();
                     //------------------------------------------------------------------------------------  
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;

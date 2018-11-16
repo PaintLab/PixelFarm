@@ -17,8 +17,9 @@ namespace Mini
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;
         RootGraphic _rootGfx;
+
         //
-        CpuBlitGLESUIElement _demoUI;
+        CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
 
         OpenTK.MyGLControl _glControl;
@@ -50,22 +51,24 @@ namespace Mini
 
             if (WithGdiPlusDrawBoard)
             {
-                _demoUI = new GdiOnGLESUIElement(_myWidth, _myHeight);
+                _bridgeUI = new GdiOnGLESUIElement(_myWidth, _myHeight);
             }
             else
             {
                 //pure agg's cpu blit 
-                _demoUI = new CpuBlitGLESUIElement(_myWidth, _myHeight);
+                _bridgeUI = new CpuBlitGLESUIElement(_myWidth, _myHeight);
             }
-            _demoUI.SetUpdateCpuBlitSurfaceDelegate(p => _demoBase.Draw(p));
-            DemoBase.InvokePainterReady(_demoBase, _demoUI.GetAggPainter());
+            //
+            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, updateArea) => _demoBase.Draw(p));
+
+            DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter());
             //
             //use existing GLRenderSurface and GLPainter
             //see=>UISurfaceViewportControl.InitRootGraphics()
 
             GLRenderSurface glsx = _surfaceViewport.GetGLRenderSurface();
             GLPainter glPainter = _surfaceViewport.GetGLPainter();
-            _demoUI.CreatePrimaryRenderElement(glsx, glPainter, _rootGfx);
+            _bridgeUI.CreatePrimaryRenderElement(glsx, glPainter, _rootGfx);
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
                 () => this._glControl.SwapBuffers(),
@@ -75,33 +78,31 @@ namespace Mini
             //-----------------------------------------------
             DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
             //Add to RenderTree
-            _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_rootGfx));
+            _rootGfx.TopWindowRenderBox.AddChild(_bridgeUI.GetPrimaryRenderElement(_rootGfx));
             //-----------------------------------------------
             //***
             GeneralEventListener genEvListener = new GeneralEventListener();
             genEvListener.MouseDown += e =>
             {
-                _demoUI.ContentMayChanged = true;
+               
                 _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
-                _demoUI.InvalidateGraphics();
+                _bridgeUI.InvalidateGraphics();
             };
             genEvListener.MouseMove += e =>
             {
                 if (e.IsDragging)
                 {
-                    _demoUI.InvalidateGraphics();
-                    _demoUI.ContentMayChanged = true;
+                    _bridgeUI.InvalidateGraphics();
                     _demoBase.MouseDrag(e.X, e.Y);
-                    _demoUI.InvalidateGraphics();
+                    _bridgeUI.InvalidateGraphics();
                 }
             };
             genEvListener.MouseUp += e =>
             {
-                _demoUI.ContentMayChanged = true;
                 _demoBase.MouseUp(e.X, e.Y);
             };
             //-----------------------------------------------
-            _demoUI.AttachExternalEventListener(genEvListener);
+            _bridgeUI.AttachExternalEventListener(genEvListener);
         }
         public void CloseDemo()
         {

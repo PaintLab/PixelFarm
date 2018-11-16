@@ -48,7 +48,7 @@ namespace PixelFarm.DrawingGL
         MyMat4 _orthoFlipYandPullDown;
 
 
-        FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
+        Framebuffer _currentFrameBuffer;//default = null, system provide frame buffer 
         //
         TessTool _tessTool;
         SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
@@ -191,25 +191,25 @@ namespace PixelFarm.DrawingGL
             set;
         }
 
-        public FrameBuffer CreateFrameBuffer(int w, int h)
+        public Framebuffer CreateFramebuffer(int w, int h)
         {
-            return new FrameBuffer(w, h);
+            return new Framebuffer(w, h);
         }
 
-        public FrameBuffer CurrentFrameBuffer
+        public Framebuffer CurrentFramebuffer
         {
             get { return this._currentFrameBuffer; }
         }
-        public void AttachFrameBuffer(FrameBuffer frameBuffer)
+        public void AttachFramebuffer(Framebuffer frameBuffer)
         {
-            DetachFrameBuffer(true);
+            DetachFramebuffer(true);
             if (frameBuffer != null)
             {
                 this._currentFrameBuffer = frameBuffer;
                 frameBuffer.MakeCurrent();
             }
         }
-        public void DetachFrameBuffer(bool updateTextureResult = true)
+        public void DetachFramebuffer(bool updateTextureResult = true)
         {
             if (_currentFrameBuffer != null)
             {
@@ -295,7 +295,7 @@ namespace PixelFarm.DrawingGL
 
 
         //-----------------------------------------------------------------
-        public void DrawFrameBuffer(FrameBuffer frameBuffer, float left, float top)
+        public void DrawFrameBuffer(Framebuffer frameBuffer, float left, float top)
         {
             //IMPORTANT: (left,top) != (x,y) 
             //IMPORTANT: left,top position need to be adjusted with 

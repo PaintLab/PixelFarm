@@ -9,12 +9,12 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using LayoutFarm;
 using LayoutFarm.UI;
-
+using LayoutFarm.RenderBoxes;
 
 namespace YourImplementation
 {
 
-    public delegate void UpdateCpuBlitSurface(AggPainter painter);
+    public delegate void UpdateCpuBlitSurface(AggPainter painter, Rectangle updateArea);
 
     /// <summary>
     /// CpuBlit to GLES UIElement
@@ -32,10 +32,9 @@ namespace YourImplementation
             _width = width;
             _height = height;
             //
-            SetupAggCanvas();//***
-            ContentMayChanged = true;
-
+            SetupAggCanvas();//*** 
         }
+
         public AggPainter GetAggPainter() => _aggPainter;
 
         public void SetUpdateCpuBlitSurfaceDelegate(UpdateCpuBlitSurface updateCpuBlitSurfaceDel)
@@ -83,15 +82,17 @@ namespace YourImplementation
         {
 
         }
-        //handle event
-        public bool ContentMayChanged { get; set; }
 
 
         //----------------------------------------------
         protected ActualBitmap _aggBmp;
         protected AggPainter _aggPainter;
         protected LazyActualBitmapBufferProvider _lazyImgProvider;
-        //
+
+
+        //----------------------------------------------
+        public virtual DrawBoard GetDrawBoard() { return null; }
+        //----------------------------------------------
         protected virtual void SetupAggCanvas()
         {
             //***
@@ -104,22 +105,29 @@ namespace YourImplementation
             _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
             //
         }
-        protected virtual void ClearSurface()
+
+
+
+        internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
         {
+            //update only specific part
+            //***
             _aggPainter.Clear(PixelFarm.Drawing.Color.White);
-        }
-        internal void UpdateCpuBlitSurface()
-        {
-            ClearSurface();
             //TODO:
             //if the content of _aggBmp is not changed
             //we should not draw again  
-            _updateCpuBlitSurfaceDel(_aggPainter);            
             //
-            //test print some text
-            _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
-            _aggPainter.DrawString("Hello! 12345", 0, 500);
+            _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
+            //
+            ////test print some text
+            //_aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
+            //_aggPainter.DrawString("Hello! 12345", 0, 500);
         }
+        internal void RaiseUpdateCpuBlitSurface(Rectangle updateArea)
+        {
+            _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
+        }
+
     }
 
     /// <summary>
@@ -127,18 +135,26 @@ namespace YourImplementation
     /// </summary>
     public class GdiOnGLESUIElement : CpuBlitGLESUIElement
     {
-
         PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard _gdiDrawBoard;
-
         public GdiOnGLESUIElement(int width, int height)
             : base(width, height)
         {
+
         }
-        public PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard GetGdiDrawBoard() => _gdiDrawBoard;
-        protected override void ClearSurface()
+        public override DrawBoard GetDrawBoard()
         {
-            _gdiDrawBoard.RenderSurface.Win32DC.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
+            return _gdiDrawBoard;
         }
+        internal override void UpdateCpuBlitSurface(Rectangle updateArea)
+        {
+            _gdiDrawBoard.RenderSurface.Win32DC.SetClipRect(updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height);
+            _gdiDrawBoard.RenderSurface.Win32DC.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
+            _gdiDrawBoard.RenderSurface.Win32DC.ClearClipRect();
+            //------------
+            RaiseUpdateCpuBlitSurface(updateArea);
+            //------------
+        }
+
         protected override bool HasSomeExtension => true;
         protected override void SetupAggCanvas()
         {
@@ -159,10 +175,11 @@ namespace YourImplementation
             _aggPainter.TextPrinter = aggTextPrinter;
             //
             _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
+            _lazyImgProvider.BitmapFormat = GLBitmapFormat.BGR;//**
         }
     }
 
-    public class CpuBlitGLCanvasRenderElement : RenderElement, IDisposable
+    class CpuBlitGLCanvasRenderElement : RenderBoxBase, IDisposable
     {
 
         CpuBlitGLESUIElement _ui;
@@ -172,58 +189,69 @@ namespace YourImplementation
         GLBitmap _glBmp;
         //
         LazyActualBitmapBufferProvider _lzBmpProvider;
+        RootGraphic _rootgfx;
+
         public CpuBlitGLCanvasRenderElement(RootGraphic rootgfx, int w, int h, LazyActualBitmapBufferProvider lzBmpProvider)
             : base(rootgfx, w, h)
         {
+            _rootgfx = rootgfx;
             _lzBmpProvider = lzBmpProvider;// 
+            this.MayHasChild = true;
         }
         public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
         {
             _ui = ui;
+        }
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            base.ChildrenHitTestCore(hitChain);
         }
         public void SetPainter(GLRenderSurface glsx, GLPainter canvasPainter)
         {
             _glsx = glsx;
             _glPainter = canvasPainter;
         }
-        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-
             //TODO: 
             //1. if the content of glBmp is not changed
             //we should not render again 
             //2. if we only update some part of texture
             //may can transfer only that part to the glBmp
             //-------------------------------------------------------------------------  
-            if (_ui.ContentMayChanged)
+            if (_rootgfx.HasRenderTreeInvalidateAccumRect)
             {
-                _ui.UpdateCpuBlitSurface();
-                _ui.ContentMayChanged = false;
-
-                //load new glBmp 
-                if (_glBmp != null)
-                {
-                    _glBmp.Dispose();
-                    _glBmp = null;
-                }
+                _ui.UpdateCpuBlitSurface(updateArea);
             }
+
 
             //------------------------------------------------------------------------- 
             //copy from 
             if (_glBmp == null)
             {
+                //create  a new one
                 _glBmp = new GLBitmap(_lzBmpProvider);
                 _glBmp.IsYFlipped = false;
+                _lzBmpProvider.MayNeedUpdate = true;
             }
+            else
+            {
 
-
+                _lzBmpProvider.MayNeedUpdate = true;
+                _glBmp.UpdateTexture(updateArea);
+            }
             //------------------------------------------------------------------------- 
             _glsx.DrawImage(_glBmp, 0, 0);
             //test print text from our GLTextPrinter 
-            _glPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            _glPainter.DrawString("Hello2", 0, 400);
+            //_glPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            //_glPainter.DrawString("Hello2", 0, 400);
             //------------------------------------------------------------------------- 
         }
+        //public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        //{
+
+
+        //}
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
 
@@ -232,6 +260,7 @@ namespace YourImplementation
         {
 
         }
+
     }
 
 

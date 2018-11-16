@@ -13,7 +13,7 @@ namespace OpenTkEssTest
     {
         GLRenderSurface _glsx;
         GLPainter painter;
-        FrameBuffer frameBuffer;
+        Framebuffer frameBuffer;
         bool isInit;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
@@ -23,7 +23,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            frameBuffer = _glsx.CreateFrameBuffer(max, max);
+            frameBuffer = _glsx.CreateFramebuffer(max, max);
         }
         protected override void DemoClosing()
         {

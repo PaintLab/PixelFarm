@@ -1101,10 +1101,7 @@ namespace PixelFarm.CpuBlit
                     {
 
                     }
-
                 }
-
-
                 return;
             }
 

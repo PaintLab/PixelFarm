@@ -62,7 +62,7 @@ namespace YourImplementation
                out UISurfaceViewportControl latestviewport);
             formCanvas.Text = innerViewportKind.ToString();
 
-            demo.Start(new LayoutFarm.WinFormAppHost(latestviewport));
+            demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
             latestviewport.TopDownRecalculateContent();
             //==================================================  
             latestviewport.PaintMe();

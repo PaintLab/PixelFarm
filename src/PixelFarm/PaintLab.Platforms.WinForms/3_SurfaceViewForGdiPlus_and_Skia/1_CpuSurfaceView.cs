@@ -75,7 +75,7 @@ namespace LayoutFarm.UI
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            this._winBridge.PaintToOutputWindow2(e.ClipRectangle.ToRect());
+            this._winBridge.PaintToOutputWindow(e.ClipRectangle.ToRect());
             base.OnPaint(e);
         }
 

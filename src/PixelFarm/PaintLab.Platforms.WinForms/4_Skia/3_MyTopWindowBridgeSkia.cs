@@ -14,7 +14,7 @@ namespace LayoutFarm.UI.Skia
             : base(root, topWinEventRoot)
         {
         }
-        public override void PaintToOutputWindow2(Rectangle invalidateArea)
+        public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
             throw new NotImplementedException();
         }

@@ -6,14 +6,14 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    public class FrameBuffer : IDisposable
+    public class Framebuffer : IDisposable
     {
         int frameBufferId;
         int renderBufferId;
         int textureId;
         int w;
         int h;
-        public FrameBuffer(int w, int h)
+        public Framebuffer(int w, int h)
         {
             this.w = w;
             this.h = h;
