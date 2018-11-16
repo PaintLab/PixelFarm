@@ -12,6 +12,7 @@ namespace LayoutFarm.UI.GdiPlus
 #if DEBUG
         static int s_totalDebugId;
         public readonly int dbugId = s_totalDebugId++;
+        int dbugPaintToOutputWin;
 #endif
         public MyTopWindowBridgeGdiPlus(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
@@ -44,9 +45,6 @@ namespace LayoutFarm.UI.GdiPlus
                     RootGfx.TopWindowRenderBox,
                     ref rect);
         }
-#if DEBUG
-        int dbugPaintToOutputWin;
-#endif
         public override void PaintToOutputWindow()
         {
             IntPtr winHandle = this._windowControl.Handle;
@@ -88,7 +86,7 @@ namespace LayoutFarm.UI.GdiPlus
                 memDc.Dispose();
             }
         }
- 
+
         protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
@@ -121,6 +119,7 @@ namespace LayoutFarm.UI.GdiPlus
 #if DEBUG
         static int s_totalDebugId;
         public readonly int dbugId = s_totalDebugId++;
+        int dbugPaintToOutputWin;
 #endif
         public MyTopWindowBridgeAgg(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
@@ -148,14 +147,10 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void InvalidateRootArea(Rectangle r)
         {
-            Rectangle rect = r;
-            this.RootGfx.InvalidateGraphicArea(
-                    RootGfx.TopWindowRenderBox,
-                    ref rect);
+            //Rectangle rect = r;
+            this.RootGfx.InvalidateGraphicArea(RootGfx.TopWindowRenderBox, ref r);
         }
-#if DEBUG
-        int dbugPaintToOutputWin;
-#endif
+
         public override void PaintToOutputWindow()
         {
             IntPtr winHandle = this._windowControl.Handle;
@@ -181,26 +176,26 @@ namespace LayoutFarm.UI.GdiPlus
             //1. This version support on Win32 only
             //2. this is an example, to draw directly into the memDC, not need to create control            
             //3. x and y set to 0
-            //4. w and h must be the width and height of the viewport
-
-
-            unsafe
+            //4. w and h must be the width and height of the viewport 
+            //create new memdc
+            using (var memDc = new Win32.NativeWin32MemoryDC(w, h))
             {
-                //create new memdc
-                Win32.NativeWin32MemoryDC memDc = new Win32.NativeWin32MemoryDC(w, h);
+                //clear background with white color
                 memDc.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
+
                 //TODO: check if we need to set init font/brush/pen for the new DC or not
                 _gdiPlusViewport.FullMode = true;
-                //pain to the destination dc
-                this._gdiPlusViewport.PaintMe(memDc.DC);
-                IntPtr outputBits = memDc.PPVBits;
-                //Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)memDc.PPVBits, w * 4 * h);
-                memDc.CopyPixelBitsToOutput((byte*)outputBuffer);
-                memDc.Dispose();
-            }
 
+                //pain to the destination dc 
+                _gdiPlusViewport.PaintMe(memDc.DC);
+
+                unsafe
+                {
+                    memDc.CopyPixelBitsToOutput((byte*)memDc.PPVBits);
+                }
+            }
         }
-         
+
         protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
