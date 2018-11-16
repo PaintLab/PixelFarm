@@ -72,7 +72,7 @@ namespace LayoutFarm.UI
 
         //-------------------------------------------------------------------
         public abstract void PaintToOutputWindow();
-        public abstract void PaintToOutputWindow2(Rectangle invalidateArea);
+        public abstract void PaintToOutputWindow(Rectangle invalidateArea);
         //-------------------------------------------------------------------
         public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer);
         public void UpdateCanvasViewportSize(int w, int h)

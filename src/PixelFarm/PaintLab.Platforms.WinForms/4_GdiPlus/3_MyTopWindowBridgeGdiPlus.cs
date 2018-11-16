@@ -57,7 +57,7 @@ namespace LayoutFarm.UI.GdiPlus
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
 #endif
         }
-        public override void PaintToOutputWindow2(Rectangle invalidateArea)
+        public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
             IntPtr winHandle = this._windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
@@ -166,7 +166,7 @@ namespace LayoutFarm.UI.GdiPlus
             //Console.WriteLine("p->w  " + dbugId + " " + dbugPaintToOutputWin++);
 #endif
         }
-        public override void PaintToOutputWindow2(Rectangle invalidateArea)
+        public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
             IntPtr winHandle = this._windowControl.Handle;
             IntPtr hdc = GetDC(winHandle);
