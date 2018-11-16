@@ -88,11 +88,7 @@ namespace LayoutFarm.UI.GdiPlus
                 memDc.Dispose();
             }
         }
-
-        //public void PrintToCanvas(PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard canvas)
-        //{
-        //    this._gdiPlusViewport.PaintMe(canvas);
-        //}
+ 
         protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
@@ -204,11 +200,7 @@ namespace LayoutFarm.UI.GdiPlus
             }
 
         }
-
-        //public void PrintToCanvas(PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard canvas)
-        //{
-        //    this._gdiPlusViewport.PaintMe(canvas);
-        //}
+         
         protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)
