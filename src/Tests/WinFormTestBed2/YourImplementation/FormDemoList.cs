@@ -56,7 +56,7 @@ namespace LayoutFarm.Dev
 
             //2. create app host
 
-            app.Start(new WinFormAppHost(_latestviewport));
+            app.Start(new AppHostWinForm(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             _latestviewport.PaintMe();
 
