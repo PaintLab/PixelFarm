@@ -60,7 +60,7 @@ namespace PixelFarm.DrawingGL
         {
             _glsx.DetachCurrentShader();
         }
-      
+
         public Color FontFillColor
         {
             get
@@ -557,11 +557,11 @@ namespace PixelFarm.DrawingGL
                 return _glsx.OriginY;
             }
         }
-        public override void DrawString(string text, double x, double y)
+        public override void DrawString(string text, double left, double top)
         {
             if (_textPrinter != null)
             {
-                _textPrinter.DrawString(text, x, y);
+                _textPrinter.DrawString(text, left, top);
             }
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
