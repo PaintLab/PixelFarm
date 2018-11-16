@@ -112,23 +112,27 @@ namespace YourImplementation
         {
             _aggPainter.Clear(PixelFarm.Drawing.Color.White);
         }
-        internal void UpdateCpuBlitSurface(Rectangle updateArea)
+
+
+        internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
         {
             //update only specific part
-
+            //***
             ClearSurface();
             //TODO:
             //if the content of _aggBmp is not changed
             //we should not draw again  
+            //
             _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
             //
             ////test print some text
             //_aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
             //_aggPainter.DrawString("Hello! 12345", 0, 500);
         }
-
-
-
+        internal void RaiseUpdateCpuBlitSurface(Rectangle updateArea)
+        {
+            _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
+        }
 
     }
 
@@ -146,6 +150,18 @@ namespace YourImplementation
         public override DrawBoard GetDrawBoard()
         {
             return _gdiDrawBoard;
+        }
+
+
+        internal override void UpdateCpuBlitSurface(Rectangle updateArea)
+        {
+
+            _gdiDrawBoard.RenderSurface.Win32DC.SetClipRect(updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height);
+            ClearSurface();
+            _gdiDrawBoard.RenderSurface.Win32DC.ClearClipRect();
+
+            RaiseUpdateCpuBlitSurface(updateArea);
+
         }
         protected override void ClearSurface()
         {

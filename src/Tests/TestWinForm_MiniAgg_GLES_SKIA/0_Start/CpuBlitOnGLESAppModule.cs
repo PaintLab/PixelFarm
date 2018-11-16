@@ -17,7 +17,7 @@ namespace Mini
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;
         RootGraphic _rootGfx;
-        
+
         //
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
@@ -58,7 +58,7 @@ namespace Mini
                 //pure agg's cpu blit 
                 _bridgeUI = new CpuBlitGLESUIElement(_myWidth, _myHeight);
             }
-            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate(p => _demoBase.Draw(p));
+            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, updateArea) => _demoBase.Draw(p));
 
             DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter());
             //
