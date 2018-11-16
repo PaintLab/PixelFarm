@@ -223,18 +223,28 @@ namespace YourImplementation
 
 
             //load new glBmp 
-            if (_glBmp != null)
-            {
-                _glBmp.Dispose();
-                _glBmp = null;
-            }
+            //if (_glBmp != null)
+            //{
+            //    _glBmp.Dispose();
+            //    _glBmp = null;
+            //}
+            //else
+            //{
+
+            //}
             //}
             //------------------------------------------------------------------------- 
             //copy from 
             if (_glBmp == null)
             {
+                //create  a new one
                 _glBmp = new GLBitmap(_lzBmpProvider);
                 _glBmp.IsYFlipped = false;
+                _lzBmpProvider.MayNeedUpdate = true;
+            }
+            else
+            {
+                _lzBmpProvider.MayNeedUpdate = true;
             }
             //------------------------------------------------------------------------- 
             _glsx.DrawImage(_glBmp, 0, 0);

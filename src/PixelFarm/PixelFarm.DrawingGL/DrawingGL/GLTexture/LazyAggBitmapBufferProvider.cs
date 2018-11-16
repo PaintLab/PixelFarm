@@ -10,7 +10,6 @@ namespace PixelFarm.DrawingGL
         {
             this.image = image;
         }
-        
         public override bool IsInvert
         {
             get { return false; }
@@ -31,5 +30,9 @@ namespace PixelFarm.DrawingGL
         {
             get { return this.image.Height; }
         }
+
+        //
+        public bool MayNeedUpdate { get; set; }
+
     }
 }
