@@ -20,7 +20,7 @@ namespace LayoutFarm.UI.OpenGL
         {
         }
 
-        public override void PaintToOutputWindow2(Rectangle invalidateArea)
+        public override void PaintToOutputWindow(Rectangle invalidateArea)
         {
             throw new NotImplementedException();
         }

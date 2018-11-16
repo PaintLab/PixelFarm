@@ -37,12 +37,11 @@ namespace LayoutFarm.Dev
         {
             //load demo sample
             DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
-            if (selectedDemoInfo == null) return;
-
+            if (selectedDemoInfo == null) return; 
 
             App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
             RunDemo(selectedDemo);
-             
+
         }
 
 
@@ -56,7 +55,8 @@ namespace LayoutFarm.Dev
                 out _latestviewport, out _latest_formCanvas);
 
             //2. create app host
-            app.Start(new WinFormAppHost(_latestviewport));
+
+            app.Start(new AppHostWinForm(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             _latestviewport.PaintMe();
 

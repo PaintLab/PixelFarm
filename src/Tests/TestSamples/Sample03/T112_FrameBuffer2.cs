@@ -12,7 +12,7 @@ namespace OpenTkEssTest
     {
         GLRenderSurface _glsx;
         GLPainter painter;
-        FrameBuffer frameBuffer;
+        Framebuffer frameBuffer;
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
@@ -24,7 +24,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            frameBuffer = _glsx.CreateFrameBuffer(_glsx.CanvasWidth, _glsx.CanvasHeight);
+            frameBuffer = _glsx.CreateFramebuffer(_glsx.CanvasWidth, _glsx.CanvasHeight);
             frameBufferNeedUpdate = true;
             //------------ 
         }
@@ -53,7 +53,7 @@ namespace OpenTkEssTest
                 if (frameBufferNeedUpdate)
                 {
 
-                    _glsx.AttachFrameBuffer(frameBuffer);
+                    _glsx.AttachFramebuffer(frameBuffer);
                     //------------------------------------------------------------------------------------  
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
@@ -61,7 +61,7 @@ namespace OpenTkEssTest
                     _glsx.Clear(PixelFarm.Drawing.Color.Black);
                     _glsx.DrawImage(glbmp, 0, 0);
                     //------------------------------------------------------------------------------------  
-                    _glsx.DetachFrameBuffer();
+                    _glsx.DetachFramebuffer();
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;
                 }

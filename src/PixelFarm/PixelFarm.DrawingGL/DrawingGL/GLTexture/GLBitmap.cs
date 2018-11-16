@@ -13,6 +13,7 @@ namespace PixelFarm.DrawingGL
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract bool IsInvert { get; }
+        public GLBitmapFormat BitmapFormat { get; set; }
     }
 
     public enum GLBitmapFormat
@@ -53,6 +54,8 @@ namespace PixelFarm.DrawingGL
             this._height = lazyProvider.Height;
             this._lazyProvider = lazyProvider;
             this.IsYFlipped = lazyProvider.IsInvert;
+            this.BitmapFormat = lazyProvider.BitmapFormat;
+
         }
         public GLBitmap(int textureId, int w, int h)
         {
@@ -96,51 +99,101 @@ namespace PixelFarm.DrawingGL
         //only after gl context is created
         internal int GetServerTextureId()
         {
-            if (this._textureId == 0)
+            if (_textureId == 0)
             {
-                //server part
-                //gen texture 
-                GL.GenTextures(1, out this._textureId);
-                //bind
-                GL.BindTexture(TextureTarget.Texture2D, this._textureId);
-                if (_nativeImgMem != IntPtr.Zero)
+                BuildTexture();
+            }
+            return _textureId;
+        }
+        void BuildTexture()
+        {
+            //server part
+            //gen texture 
+            GL.GenTextures(1, out this._textureId);
+            //bind
+            GL.BindTexture(TextureTarget.Texture2D, this._textureId);
+            if (_nativeImgMem != IntPtr.Zero)
+            {
+                GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                      (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
+                      PixelFormat.Rgba, // 
+                      PixelType.UnsignedByte, _nativeImgMem);
+            }
+            else if (this._rawIntBuffer != null)
+            {
+                unsafe
                 {
-                    GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                          (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
-                          PixelFormat.Rgba, // 
-                          PixelType.UnsignedByte, _nativeImgMem);
-                }
-                else if (this._rawIntBuffer != null)
-                {
-                    unsafe
+                    fixed (int* head = &_rawIntBuffer[0])
                     {
-                        fixed (int* head = &_rawIntBuffer[0])
-                        {
 
-                            GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                            (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
-                            PixelFormat.Rgba, // 
-                            PixelType.UnsignedByte, new IntPtr((void*)head));
-                        }
+                        GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                        (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
+                        PixelFormat.Rgba, // 
+                        PixelType.UnsignedByte, new IntPtr((void*)head));
                     }
                 }
-                else
+            }
+            else
+            {
+                //use lazy provider
+                IntPtr bmpScan0 = this._lazyProvider.GetRawBufferHead();
+                GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                       (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
+                       PixelFormat.Rgba,
+                       PixelType.UnsignedByte, (IntPtr)bmpScan0);
+                this._lazyProvider.ReleaseBufferHead();
+            }
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+        }
+        /// <summary>
+        /// update texture from the same 'client source'
+        /// </summary>
+        public void UpdateTexture(Rectangle updateArea)
+        {
+
+            if (_textureId == 0)
+            {
+                BuildTexture();
+                return;
+            }
+            //--
+            GL.BindTexture(TextureTarget.Texture2D, this._textureId);
+            if (_nativeImgMem != IntPtr.Zero)
+            {
+                GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                      updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
+                      PixelFormat.Rgba, // 
+                      PixelType.UnsignedByte, _nativeImgMem);
+            }
+            else if (this._rawIntBuffer != null)
+            {
+                unsafe
                 {
-                    //use lazy provider
-                    IntPtr bmpScan0 = this._lazyProvider.GetRawBufferHead();
-                    GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                           (TextureComponentCount)PixelInternalFormat.Rgba, this._width, this._height, 0,
-                           PixelFormat.Rgba,
-                           PixelType.UnsignedByte, (IntPtr)bmpScan0);
-                    this._lazyProvider.ReleaseBufferHead();
+                    fixed (int* head = &_rawIntBuffer[0])
+                    {
+                        GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                          updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
+                          PixelFormat.Rgba, // 
+                          PixelType.UnsignedByte, new IntPtr((void*)head));
+                    }
                 }
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            }
+            else
+            {
+                //use lazy provider
+                IntPtr bmpScan0 = this._lazyProvider.GetRawBufferHead();
+
+                GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
+                         updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
+                         PixelFormat.Rgba, // 
+                         PixelType.UnsignedByte, (IntPtr)bmpScan0);
+
+
+                this._lazyProvider.ReleaseBufferHead();
             }
 
-            return this._textureId;
         }
-
         public override void Dispose()
         {
             //after delete the textureId will set to 0 ?

@@ -30,5 +30,9 @@ namespace PixelFarm.DrawingGL
         {
             get { return this.image.Height; }
         }
+
+        //
+        public bool MayNeedUpdate { get; set; }
+
     }
 }

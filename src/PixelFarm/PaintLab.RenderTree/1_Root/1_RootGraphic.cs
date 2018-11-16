@@ -19,8 +19,10 @@ namespace LayoutFarm
         public delegate void PaintToOutputWindowDelegate();
         protected PaintToOutputWindowDelegate _paintToOutputWindowHandler;
         CanvasInvalidateDelegate _canvasInvalidateDelegate;
-        Rectangle accumulateInvalidRect;
-        bool hasAccumRect;
+        Rectangle _accumulateInvalidRect;
+        bool _hasAccumRect;
+        bool _hasRenderTreeInvalidateAccumRect;
+
         public RootGraphic(int width, int heigth)
         {
             this.Width = width;
@@ -91,16 +93,17 @@ namespace LayoutFarm
 
         public abstract void PrepareRender();
 
+        public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
+
         public void InvalidateRectArea(Rectangle invalidateRect)
         {
-            //this._paintToOutputWindowHandler();
-            accumulateInvalidRect = Rectangle.Union(accumulateInvalidRect, invalidateRect);
-            hasAccumRect = true;
-
+            //invalidate rect come from external UI (not from interal render tree)
+            _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, invalidateRect);
+            _hasAccumRect = true;
         }
         public void FlushAccumGraphics()
         {
-            if (!this.hasAccumRect)
+            if (!this._hasAccumRect)
             {
                 return;
             }
@@ -108,10 +111,12 @@ namespace LayoutFarm
             //System.Diagnostics.Debug.WriteLine("flush" + accumulateInvalidRect.ToString());
 #endif
             if (this.IsInRenderPhase) { return; }
-            this._canvasInvalidateDelegate(accumulateInvalidRect);
-            this._paintToOutputWindowHandler();
-            hasAccumRect = false;
+            _canvasInvalidateDelegate(_accumulateInvalidRect);
+            _paintToOutputWindowHandler();
+            _hasAccumRect = false;
+            _hasRenderTreeInvalidateAccumRect = false;
         }
+
         public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
             this._canvasInvalidateDelegate = canvasInvalidateDelegate;
@@ -149,6 +154,10 @@ namespace LayoutFarm
             //and then merge to accumulate rect
             //int globalX = 0;
             //int globalY = 0;
+
+
+            _hasRenderTreeInvalidateAccumRect = true;//***
+
             Point globalPoint = new Point();
 #if DEBUG
             //if (fromElement.dbug_ObjectNote == "panel")
@@ -222,7 +231,7 @@ namespace LayoutFarm
                     }
                     parentLink.AdjustLocation(ref globalPoint);
                     //move up
-                    fromElement = parentLink.ParentRenderElement;// fromElement.ParentRenderElement;
+                    fromElement = parentLink.ParentRenderElement;
                     if (fromElement == null)
                     {
                         return;
@@ -245,7 +254,7 @@ namespace LayoutFarm
 #endif
 
             //----------------------------------------
-            //elemClientRect.Offset(globalX, globalY);
+
             elemClientRect.Offset(globalPoint);
             if (elemClientRect.Top > this.Height
                 || elemClientRect.Left > this.Width
@@ -265,14 +274,14 @@ namespace LayoutFarm
                 return;
             }
             //--------------------------------------------------------------------------------------------------
-            if (!hasAccumRect)
+            if (!_hasAccumRect)
             {
-                accumulateInvalidRect = elemClientRect;
-                hasAccumRect = true;
+                _accumulateInvalidRect = elemClientRect;
+                _hasAccumRect = true;
             }
             else
             {
-                accumulateInvalidRect = Rectangle.Union(accumulateInvalidRect, elemClientRect);
+                _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
             }
 
 #if DEBUG
@@ -284,7 +293,7 @@ namespace LayoutFarm
                 {
                     state_str = "!!" + state_str;
                 }
-                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("ACC: " + accumulateInvalidRect.ToString());
+                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("ACC: " + _accumulateInvalidRect.ToString());
                 dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("\r\n");
             }
 #endif
