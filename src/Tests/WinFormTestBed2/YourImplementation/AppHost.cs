@@ -1,9 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
-
+using System;
 using System.IO;
 using PixelFarm.Drawing;
- 
+
 using PaintLab.Svg;
+using LayoutFarm.UI;
+using PixelFarm.DrawingGL;
+using YourImplementation;
 
 namespace LayoutFarm
 {
@@ -19,6 +22,8 @@ namespace LayoutFarm
 
 
         }
+        protected abstract LayoutFarm.UI.UISurfaceViewportControl GetHostSurfaceViewportControl();
+
         public abstract string OwnerFormTitle { get; set; }
         public abstract Image LoadImage(string imgName, int reqW, int reqH);
         public Image LoadImage(string imgName)
@@ -80,6 +85,14 @@ namespace LayoutFarm
 
     public class WinFormAppHost : AppHost
     {
+        //if ENABLE OPENGL
+        //-----------------------------------
+        OpenTK.MyGLControl _glControl;
+        CpuBlitGLESUIElement _bridgeUI;
+        bool _useBridgeUI;
+
+        //-----------------------------------
+
 
         LayoutFarm.UI.UISurfaceViewportControl _vw;
         System.Windows.Forms.Form _ownerForm;
@@ -88,18 +101,77 @@ namespace LayoutFarm
             //---------------------------------------
             //this specific for WindowForm viewport
             //---------------------------------------
-            this._vw = vw;
+            _vw = vw;
+
             _ownerForm = this._vw.FindForm();
             System.Drawing.Rectangle screenRectangle = _ownerForm.RectangleToScreen(_ownerForm.ClientRectangle);
             _formTitleBarHeight = screenRectangle.Top - _ownerForm.Top;
 
 
             System.Drawing.Rectangle primScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-            this._primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
-            this._primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
+            _primaryScreenWorkingAreaW = primScreenWorkingArea.Width;
+            _primaryScreenWorkingAreaH = primScreenWorkingArea.Height;
+
+
+            // 
+            switch (vw.InnerViewportKind)
+            {
+                case InnerViewportKind.GdiPlusOnGLES:
+                case InnerViewportKind.AggOnGLES:
+                    SetUpGLSurface(vw.GetOpenTKControl());
+                    break;
+            }
+        }
+        void SetUpGLSurface(OpenTK.MyGLControl glControl)
+        {
+            if (glControl == null) return;
+            //TODO: review here
+            //Temp: 
+            _glControl = glControl;
+            _glControl.SetGLPaintHandler(null);
+            //
+            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
+            _glControl.MakeCurrent();
+            if (_vw.InnerViewportKind == InnerViewportKind.GdiPlusOnGLES)
+            {
+                _bridgeUI = new GdiOnGLESUIElement(glControl.Width, glControl.Height);
+            }
+            else
+            {
+                //pure agg's cpu blit 
+                _bridgeUI = new CpuBlitGLESUIElement(glControl.Width, glControl.Height);
+            }
+
+
+            //essential***
+            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate(p =>
+            {
+                _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), new Rectangle(0, 0, 1200, 1200));
+            });
+            //DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter()); 
+            GLRenderSurface glsx = _vw.GetGLRenderSurface();
+            GLPainter glPainter = _vw.GetGLPainter();
+
+            RootGraphic rootGfx = _vw.RootGfx;
+            _bridgeUI.CreatePrimaryRenderElement(glsx, glPainter, rootGfx);
+
+            _useBridgeUI = true;
+            //demoBase.SetEssentialGLHandlers(
+            //    () => this._glControl.SwapBuffers(),
+            //    () => this._glControl.GetEglDisplay(),
+            //    () => this._glControl.GetEglSurface()
+            //);
+            //------------------------------------------------
+            //***
+            rootGfx.TopWindowRenderBox.AddChild(_bridgeUI.GetPrimaryRenderElement(rootGfx));
+
         }
 
-
+        //
+        protected override UISurfaceViewportControl GetHostSurfaceViewportControl()
+        {
+            return _vw;
+        }
 
         public override string OwnerFormTitle
         {
@@ -109,23 +181,40 @@ namespace LayoutFarm
                 _ownerForm.Text = value;
             }
         }
-        internal LayoutFarm.UI.UISurfaceViewportControl ViewportControl
-        {
-            get { return this._vw; }
-        }
+
 
         public override RootGraphic RootGfx
         {
             get { return this._vw.RootGfx; }
         }
 
+
+        RenderElement _client;
+
         public override void AddChild(RenderElement renderElement)
         {
-            this._vw.AddChild(renderElement);
+            if (_useBridgeUI)
+            {
+                _client = renderElement;
+                _bridgeUI.CurrentPrimaryRenderElement.AddChild(renderElement);
+            }
+            else
+            {
+                this._vw.AddChild(renderElement);
+            }
         }
         public override void AddChild(RenderElement renderElement, object owner)
         {
-            this._vw.AddChild(renderElement, owner);
+            if (_useBridgeUI)
+            {
+                _client = renderElement;
+                _bridgeUI.CurrentPrimaryRenderElement.AddChild(renderElement);
+            }
+            else
+            {
+                this._vw.AddChild(renderElement, owner);
+            }
+
         }
 
         public override Image LoadImage(string imgName, int reqW, int reqH)
@@ -216,10 +305,120 @@ namespace LayoutFarm
             painter.StrokeWidth = prevStrokeW;//restore 
             return backimg;
         }
-
-
-
     }
-
-
 }
+
+////MIT, 2014-present, WinterDev
+////MIT, 2018-present, WinterDev
+
+//using System;
+//using PixelFarm.DrawingGL;
+//using LayoutFarm;
+//using LayoutFarm.UI;
+//using YourImplementation;
+//namespace Mini
+//{
+//    class CpuBlitOnGLESAppModule
+//    {
+//        //hardware renderer part=> GLES
+//        //software renderer part => Pure Agg
+
+//        int _myWidth;
+//        int _myHeight;
+//        UISurfaceViewportControl _surfaceViewport;
+//        RootGraphic _rootGfx;
+
+//        //
+//        CpuBlitGLESUIElement _bridgeUI;
+//        DemoBase _demoBase;
+
+//        OpenTK.MyGLControl _glControl;
+//        public CpuBlitOnGLESAppModule() { }
+//        public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
+//        {
+//            _myWidth = 800;
+//            _myHeight = 600;
+
+//            _surfaceViewport = surfaceViewport;
+//            _rootGfx = surfaceViewport.RootGfx;
+//            //----------------------
+//            this._glControl = surfaceViewport.GetOpenTKControl();
+//            _glControl.SetGLPaintHandler(null);
+
+//            IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
+//            _glControl.MakeCurrent();
+//        }
+
+//        public bool WithGdiPlusDrawBoard { get; set; }
+
+//        public void LoadExample(DemoBase demoBase)
+//        {
+//            _glControl.MakeCurrent();
+
+//            this._demoBase = demoBase;
+//            demoBase.Init();
+
+//            if (WithGdiPlusDrawBoard)
+//            {
+//                _bridgeUI = new GdiOnGLESUIElement(_myWidth, _myHeight);
+//            }
+//            else
+//            {
+//                //pure agg's cpu blit 
+//                _bridgeUI = new CpuBlitGLESUIElement(_myWidth, _myHeight);
+//            }
+//            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate(p => _demoBase.Draw(p));
+
+//            DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter());
+//            //
+//            //use existing GLRenderSurface and GLPainter
+//            //see=>UISurfaceViewportControl.InitRootGraphics()
+
+//            GLRenderSurface glsx = _surfaceViewport.GetGLRenderSurface();
+//            GLPainter glPainter = _surfaceViewport.GetGLPainter();
+//            _bridgeUI.CreatePrimaryRenderElement(glsx, glPainter, _rootGfx);
+//            //-----------------------------------------------
+//            demoBase.SetEssentialGLHandlers(
+//                () => this._glControl.SwapBuffers(),
+//                () => this._glControl.GetEglDisplay(),
+//                () => this._glControl.GetEglSurface()
+//            );
+//            //-----------------------------------------------
+//            DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
+//            //Add to RenderTree
+//            _rootGfx.TopWindowRenderBox.AddChild(_bridgeUI.GetPrimaryRenderElement(_rootGfx));
+//            //-----------------------------------------------
+//            //***
+//            GeneralEventListener genEvListener = new GeneralEventListener();
+//            genEvListener.MouseDown += e =>
+//            {
+//                _bridgeUI.ContentMayChanged = true;
+//                _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+//                _bridgeUI.InvalidateGraphics();
+//            };
+//            genEvListener.MouseMove += e =>
+//            {
+//                if (e.IsDragging)
+//                {
+//                    _bridgeUI.InvalidateGraphics();
+//                    _bridgeUI.ContentMayChanged = true;
+//                    _demoBase.MouseDrag(e.X, e.Y);
+//                    _bridgeUI.InvalidateGraphics();
+//                }
+//            };
+//            genEvListener.MouseUp += e =>
+//            {
+//                _bridgeUI.ContentMayChanged = true;
+//                _demoBase.MouseUp(e.X, e.Y);
+//            };
+//            //-----------------------------------------------
+//            _bridgeUI.AttachExternalEventListener(genEvListener);
+//        }
+//        public void CloseDemo()
+//        {
+//            _demoBase.CloseDemo();
+//        }
+//    }
+
+
+//}

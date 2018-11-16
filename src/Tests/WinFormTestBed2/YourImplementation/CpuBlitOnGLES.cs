@@ -91,7 +91,11 @@ namespace YourImplementation
         protected ActualBitmap _aggBmp;
         protected AggPainter _aggPainter;
         protected LazyActualBitmapBufferProvider _lazyImgProvider;
-        //
+
+
+        //----------------------------------------------
+        public virtual DrawBoard GetDrawBoard() { return null; }
+        //----------------------------------------------
         protected virtual void SetupAggCanvas()
         {
             //***
@@ -114,7 +118,7 @@ namespace YourImplementation
             //TODO:
             //if the content of _aggBmp is not changed
             //we should not draw again  
-            _updateCpuBlitSurfaceDel(_aggPainter);            
+            _updateCpuBlitSurfaceDel(_aggPainter);
             //
             //test print some text
             _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
@@ -127,14 +131,15 @@ namespace YourImplementation
     /// </summary>
     public class GdiOnGLESUIElement : CpuBlitGLESUIElement
     {
-
         PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard _gdiDrawBoard;
-
         public GdiOnGLESUIElement(int width, int height)
             : base(width, height)
         {
         }
-        public PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard GetGdiDrawBoard() => _gdiDrawBoard;
+        public override DrawBoard GetDrawBoard()
+        {
+            return _gdiDrawBoard;
+        }
         protected override void ClearSurface()
         {
             _gdiDrawBoard.RenderSurface.Win32DC.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
@@ -207,7 +212,6 @@ namespace YourImplementation
                     _glBmp = null;
                 }
             }
-
             //------------------------------------------------------------------------- 
             //copy from 
             if (_glBmp == null)
@@ -215,8 +219,6 @@ namespace YourImplementation
                 _glBmp = new GLBitmap(_lzBmpProvider);
                 _glBmp.IsYFlipped = false;
             }
-
-
             //------------------------------------------------------------------------- 
             _glsx.DrawImage(_glBmp, 0, 0);
             //test print text from our GLTextPrinter 
