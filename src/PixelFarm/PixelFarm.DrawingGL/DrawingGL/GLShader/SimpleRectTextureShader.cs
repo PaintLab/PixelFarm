@@ -133,8 +133,8 @@ namespace PixelFarm.DrawingGL
 
         public void DrawWithVBO(TextureCoordVboBuilder vboBuilder)
         {
-            float[] vboList = vboBuilder._buffer.Array;
-            ushort[] indexList = vboBuilder._indexList.Array;
+            float[] vboList = vboBuilder._buffer.UnsafeInternalArray;
+            ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray;
 
             SetCurrent();
             CheckViewMatrix();
@@ -752,7 +752,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------          
 
-            float[] vboList = vboBuilder._buffer.Array; //***
+            float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
             unsafe
             {
                 fixed (float* imgVertices = &vboList[0])
@@ -763,7 +763,7 @@ namespace PixelFarm.DrawingGL
             }
 
             //SHARED ARRAY 
-            ushort[] indexList = vboBuilder._indexList.Array; //***
+            ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
             int count1 = vboBuilder._indexList.Count; //***
 
             //version 1
