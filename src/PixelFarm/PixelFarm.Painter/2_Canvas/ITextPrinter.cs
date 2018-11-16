@@ -94,10 +94,10 @@ namespace PixelFarm.Drawing
 
     public static class ITextPrinterExtensions
     {
-        public static void DrawString(this ITextPrinter textPrinter, string text, double x, double y)
+        public static void DrawString(this ITextPrinter textPrinter, string text, double left, double top)
         {
             char[] textBuffer = text.ToCharArray();
-            textPrinter.DrawString(textBuffer, 0, textBuffer.Length, x, y);
+            textPrinter.DrawString(textBuffer, 0, textBuffer.Length, left, top);
         }
     }
 

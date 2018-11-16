@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
         }
 
         int orthoviewVersion = -1;
-        protected void CheckViewMatrix()
+        internal void CheckViewMatrix()
         {
             int version = 0;
             if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
@@ -131,8 +131,11 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void DrawWithVBO(float[] vboList, ushort[] indexList)
+        public void DrawWithVBO(TextureCoordVboBuilder vboBuilder)
         {
+            float[] vboList = vboBuilder._buffer.UnsafeInternalArray;
+            ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray;
+
             SetCurrent();
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------       
@@ -143,9 +146,8 @@ namespace PixelFarm.DrawingGL
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
-            }
-            int count1 = indexList.Length;
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+            } 
+            GL.DrawElements(BeginMode.TriangleStrip, vboBuilder._indexList.Count, DrawElementsType.UnsignedShort, indexList);
         }
 
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
@@ -696,86 +698,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public void WriteVboStream(
-            System.Collections.Generic.List<float> vboList,
-            bool duplicateFirst,
-            float srcLeft, float srcTop,
-            float srcW, float srcH,
-            float targetLeft, float targetTop)
-        {
-            //TODO: review float array here,use buffer instead
-            unsafe
-            {
-                //-------------------------------------------------------------------------------------          
-                float orgBmpW = _latestBmpW;
-                float orgBmpH = _latestBmpH;
-                float scale = 1;
 
-                //-------------------------------
-                float srcBottom = srcTop + srcH;
-                float srcRight = srcLeft + srcW;
-
-                unsafe
-                {
-                    if (_latestBmpYFlipped)
-                    {
-                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                        if (duplicateFirst)
-                        {
-                            //for creating degenerative triangle
-
-
-                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)                                                                                                       
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                        }
-                        //---------------------
-                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 2 (right,top)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0);//coord 3 (right, bottom)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
-
-                    }
-                    else
-                    {
-
-
-                        vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
-                        if (duplicateFirst)
-                        {
-                            //for creating degenerative triangle
-                            //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
-
-                            vboList.Add(targetLeft); vboList.Add(targetTop); vboList.Add(0); //coord 0 (left,top)
-                            vboList.Add(srcLeft / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
-                        }
-
-                        //---------------------
-                        vboList.Add(targetLeft); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 1 (left,bottom)
-                        vboList.Add(srcLeft / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 1  (left,top)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop); vboList.Add(0); //coord 2 (right,top)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        vboList.Add(targetLeft + (srcW * scale)); vboList.Add(targetTop - (srcH * scale)); vboList.Add(0); //coord 3 (right, bottom)
-                        vboList.Add(srcRight / orgBmpW); vboList.Add(srcTop / orgBmpH); //texture coord 3 (right,top)
-
-
-                    }
-                }
-            }
-        }
 
         public void NewDrawSubImage4FromCurrentLoadedVBO(int count1, float x, float y)
         {
@@ -823,12 +746,13 @@ namespace PixelFarm.DrawingGL
         /// </summary>
         /// <param name="vboList"></param>
         /// <param name="indexList"></param>
-        public void DrawSubImages_VBO(float[] vboList, ushort[] indexList)
+        public void DrawSubImages_VBO(TextureCoordVboBuilder vboBuilder)
         {
             SetCurrent();
             CheckViewMatrix();
             //-------------------------------------------------------------------------------------          
 
+            float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
             unsafe
             {
                 fixed (float* imgVertices = &vboList[0])
@@ -838,8 +762,10 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
+            //SHARED ARRAY 
+            ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
+            int count1 = vboBuilder._indexList.Count; //***
 
-            int count1 = indexList.Length;
             //version 1
             //1. B , yellow  result
             GL.ColorMask(false, false, true, false);
