@@ -189,10 +189,12 @@ namespace YourImplementation
         GLBitmap _glBmp;
         //
         LazyActualBitmapBufferProvider _lzBmpProvider;
+        RootGraphic _rootgfx;
 
         public CpuBlitGLCanvasRenderElement(RootGraphic rootgfx, int w, int h, LazyActualBitmapBufferProvider lzBmpProvider)
             : base(rootgfx, w, h)
         {
+            _rootgfx = rootgfx;
             _lzBmpProvider = lzBmpProvider;// 
             this.MayHasChild = true;
         }
@@ -217,22 +219,12 @@ namespace YourImplementation
             //2. if we only update some part of texture
             //may can transfer only that part to the glBmp
             //-------------------------------------------------------------------------  
-            //if (_ui.ContentMayChanged)
-            //{
-            _ui.UpdateCpuBlitSurface(updateArea);
+            if (_rootgfx.HasRenderTreeInvalidateAccumRect)
+            {
+                _ui.UpdateCpuBlitSurface(updateArea);
+            }
 
 
-            //load new glBmp 
-            //if (_glBmp != null)
-            //{
-            //    _glBmp.Dispose();
-            //    _glBmp = null;
-            //}
-            //else
-            //{
-
-            //}
-            //}
             //------------------------------------------------------------------------- 
             //copy from 
             if (_glBmp == null)
@@ -244,7 +236,9 @@ namespace YourImplementation
             }
             else
             {
+
                 _lzBmpProvider.MayNeedUpdate = true;
+                _glBmp.UpdateTexture(updateArea);
             }
             //------------------------------------------------------------------------- 
             _glsx.DrawImage(_glBmp, 0, 0);

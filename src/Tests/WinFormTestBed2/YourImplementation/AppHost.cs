@@ -212,6 +212,8 @@ namespace LayoutFarm
         }
 
 
+        //TODO: review primary render element here again!
+        //so special root elem switch?
         RenderElement _client;
         public override void AddChild(RenderElement renderElement)
         {
