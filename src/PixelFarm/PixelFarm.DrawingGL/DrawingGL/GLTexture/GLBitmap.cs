@@ -13,6 +13,7 @@ namespace PixelFarm.DrawingGL
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract bool IsInvert { get; }
+        public GLBitmapFormat BitmapFormat { get; set; }
     }
 
     public enum GLBitmapFormat
@@ -53,6 +54,8 @@ namespace PixelFarm.DrawingGL
             this._height = lazyProvider.Height;
             this._lazyProvider = lazyProvider;
             this.IsYFlipped = lazyProvider.IsInvert;
+            this.BitmapFormat = lazyProvider.BitmapFormat;
+
         }
         public GLBitmap(int textureId, int w, int h)
         {

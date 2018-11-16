@@ -164,6 +164,7 @@ namespace YourImplementation
             _aggPainter.TextPrinter = aggTextPrinter;
             //
             _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
+            _lazyImgProvider.BitmapFormat = GLBitmapFormat.BGR;
         }
     }
 

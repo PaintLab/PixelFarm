@@ -10,6 +10,7 @@ namespace PixelFarm.DrawingGL
         {
             this.image = image;
         }
+        
         public override bool IsInvert
         {
             get { return false; }
