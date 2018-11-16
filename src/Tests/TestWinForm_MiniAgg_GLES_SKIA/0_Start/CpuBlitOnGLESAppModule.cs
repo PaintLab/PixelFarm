@@ -58,6 +58,7 @@ namespace Mini
                 //pure agg's cpu blit 
                 _bridgeUI = new CpuBlitGLESUIElement(_myWidth, _myHeight);
             }
+            //
             _bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, updateArea) => _demoBase.Draw(p));
 
             DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter());
@@ -83,7 +84,7 @@ namespace Mini
             GeneralEventListener genEvListener = new GeneralEventListener();
             genEvListener.MouseDown += e =>
             {
-                _bridgeUI.ContentMayChanged = true;
+               
                 _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
                 _bridgeUI.InvalidateGraphics();
             };
@@ -92,14 +93,12 @@ namespace Mini
                 if (e.IsDragging)
                 {
                     _bridgeUI.InvalidateGraphics();
-                    _bridgeUI.ContentMayChanged = true;
                     _demoBase.MouseDrag(e.X, e.Y);
                     _bridgeUI.InvalidateGraphics();
                 }
             };
             genEvListener.MouseUp += e =>
             {
-                _bridgeUI.ContentMayChanged = true;
                 _demoBase.MouseUp(e.X, e.Y);
             };
             //-----------------------------------------------

@@ -32,8 +32,7 @@ namespace YourImplementation
             _width = width;
             _height = height;
             //
-            SetupAggCanvas();//***
-            ContentMayChanged = true;
+            SetupAggCanvas();//*** 
         }
 
         public AggPainter GetAggPainter() => _aggPainter;
@@ -83,8 +82,6 @@ namespace YourImplementation
         {
 
         }
-        //handle event
-        public bool ContentMayChanged { get; set; }
 
 
         //----------------------------------------------
@@ -108,17 +105,14 @@ namespace YourImplementation
             _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
             //
         }
-        protected virtual void ClearSurface()
-        {
-            _aggPainter.Clear(PixelFarm.Drawing.Color.White);
-        }
+
 
 
         internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
         {
             //update only specific part
             //***
-            ClearSurface();
+            _aggPainter.Clear(PixelFarm.Drawing.Color.White);
             //TODO:
             //if the content of _aggBmp is not changed
             //we should not draw again  
@@ -151,22 +145,16 @@ namespace YourImplementation
         {
             return _gdiDrawBoard;
         }
-
-
         internal override void UpdateCpuBlitSurface(Rectangle updateArea)
         {
-
             _gdiDrawBoard.RenderSurface.Win32DC.SetClipRect(updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height);
-            ClearSurface();
-            _gdiDrawBoard.RenderSurface.Win32DC.ClearClipRect();
-
-            RaiseUpdateCpuBlitSurface(updateArea);
-
-        }
-        protected override void ClearSurface()
-        {
             _gdiDrawBoard.RenderSurface.Win32DC.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
+            _gdiDrawBoard.RenderSurface.Win32DC.ClearClipRect();
+            //------------
+            RaiseUpdateCpuBlitSurface(updateArea);
+            //------------
         }
+
         protected override bool HasSomeExtension => true;
         protected override void SetupAggCanvas()
         {
@@ -232,7 +220,7 @@ namespace YourImplementation
             //if (_ui.ContentMayChanged)
             //{
             _ui.UpdateCpuBlitSurface(updateArea);
-            _ui.ContentMayChanged = false;
+
 
             //load new glBmp 
             if (_glBmp != null)
