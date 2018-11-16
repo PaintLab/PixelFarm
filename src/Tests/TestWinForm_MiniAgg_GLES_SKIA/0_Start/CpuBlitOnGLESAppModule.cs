@@ -24,7 +24,7 @@ namespace Mini
         //
         DemoUI _demoUI;
         DemoBase _demoBase;
-         
+
 
         OpenTK.MyGLControl _glControl;
 
@@ -61,6 +61,8 @@ namespace Mini
             GLPainter glPainter = _surfaceViewport.GetGLPainter();
             _demoUI.SetCanvasPainter(glsx, glPainter);
 
+
+
             //-----------------------------------------------
             demoBase.SetEssentialGLHandlers(
                 () => this._glControl.SwapBuffers(),
@@ -70,10 +72,34 @@ namespace Mini
             //-----------------------------------------------
 
             DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
-           
-
             //Add to RenderTree
             _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_rootGfx));
+
+            //-----------------------------------------------
+            GeneralEventListener genEvListener = new GeneralEventListener();
+            genEvListener.MouseDown += e =>
+            {
+                _demoUI.ContentMayChanged = true;
+                _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+                _demoUI.InvalidateGraphics();
+            };
+            genEvListener.MouseMove += e =>
+            {
+                if (e.IsDragging)
+                {
+                    _demoUI.InvalidateGraphics();
+                    _demoUI.ContentMayChanged = true;
+                    _demoBase.MouseDrag(e.X, e.Y);
+                    _demoUI.InvalidateGraphics();
+                }
+            };
+            genEvListener.MouseUp += e =>
+            {
+                _demoUI.ContentMayChanged = true;
+                _demoBase.MouseUp(e.X, e.Y);
+            };
+            //-----------------------------------------------
+            _demoUI.AttachExternalEventListener(genEvListener);
         }
         public void CloseDemo()
         {
@@ -90,16 +116,23 @@ namespace Mini
             GLRenderSurface _glsx;
             //
             GLPainter _painter;
-            public DemoUI(DemoBase demobase, int width, int height)
+            public DemoUI(DemoBase demoBase, int width, int height)
             {
                 _width = width;
                 _height = height;
-                _demoBase = demobase;
-
+                _demoBase = demoBase;
                 ContentMayChanged = true;
             }
 
-            public DemoBase InnerDemo => _demoBase;
+            //public DemoBase InnerDemo => _demoBase;
+            public void Draw(AggPainter aggPainter)
+            {
+                _demoBase.Draw(aggPainter);
+            }
+            public void SetAggPainter(AggPainter aggPainter)
+            {
+                DemoBase.InvokePainterReady(_demoBase, aggPainter);
+            }
             public void SetCanvasPainter(GLRenderSurface glsx, GLPainter painter)
             {
                 _glsx = glsx;
@@ -134,7 +167,10 @@ namespace Mini
 
             public override void InvalidateGraphics()
             {
-
+                if (_canvasRenderE != null)
+                {
+                    _canvasRenderE.InvalidateGraphics();
+                }
             }
 
             public override void Walk(UIVisitor visitor)
@@ -147,8 +183,8 @@ namespace Mini
 
             protected override void OnMouseDown(UIMouseEventArgs e)
             {
-                ContentMayChanged = true;
-                _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+                //ContentMayChanged = true;
+                //_demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
                 base.OnMouseDown(e);
             }
             protected override void OnMouseMove(UIMouseEventArgs e)
@@ -156,25 +192,25 @@ namespace Mini
 
                 if (e.IsDragging)
                 {
-                    ContentMayChanged = true;
-                    _canvasRenderE.InvalidateGraphics();
-                    _demoBase.MouseDrag(e.X, e.Y);
-                    _canvasRenderE.InvalidateGraphics();
+                    //ContentMayChanged = true;
+                    //_canvasRenderE.InvalidateGraphics();
+                    //_demoBase.MouseDrag(e.X, e.Y);
+                    //_canvasRenderE.InvalidateGraphics();
                 }
-                base.OnMouseMove(e);
+                base.OnMouseMove(e); //***
             }
             protected override void OnMouseUp(UIMouseEventArgs e)
             {
-                ContentMayChanged = true;
-                _demoBase.MouseUp(e.X, e.Y);
-                base.OnMouseUp(e);
+                //ContentMayChanged = true;
+                //_demoBase.MouseUp(e.X, e.Y);
+                base.OnMouseUp(e);//***
             }
         }
         class GLCanvasRenderElement : RenderElement, IDisposable
         {
             ActualBitmap _aggBmp;
             AggPainter _aggPainter;
-            DemoBase _demo;
+            //DemoBase _demo;
             DemoUI _demoUI;
 
             GLRenderSurface _glsx;
@@ -200,10 +236,11 @@ namespace Mini
             public void SetOwnerDemoUI(DemoUI demoUI)
             {
                 _demoUI = demoUI;
-                _demo = demoUI.InnerDemo;
+                //_demo = demoUI.InnerDemo;
                 if (_aggPainter != null)
                 {
-                    DemoBase.InvokePainterReady(_demo, _aggPainter);
+                    demoUI.SetAggPainter(_aggPainter);
+
                 }
             }
             public void SetPainter(GLRenderSurface glsx, GLPainter canvasPainter)
@@ -220,7 +257,7 @@ namespace Mini
                 //TODO:
                 //if the content of _aggBmp is not changed
                 //we should not draw again 
-                _demo.Draw(_aggPainter);
+                _demoUI.Draw(_aggPainter);
                 //test print some text
                 _aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
                 _aggPainter.DrawString("Hello! 12345", 0, 500);
