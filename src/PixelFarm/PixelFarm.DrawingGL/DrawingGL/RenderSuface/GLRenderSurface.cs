@@ -1,6 +1,8 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
+using System.Collections.Generic;
+
 using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
@@ -325,26 +327,25 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
-                //***
-                targetTop += srcH;
+                targetTop += srcH; //***
             }
 
-
+            //
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                _rgbaTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
             }
             else
             {
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
-                    _bgrImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                    _bgrImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
                 }
                 else
                 {
-                    _bgraImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                    _bgraImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
                 }
             }
         }
@@ -353,27 +354,28 @@ namespace PixelFarm.DrawingGL
             DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
                 //***
-                targetTop += r.Height;
+                targetTop += srcRect.Height * scale;  //***
             }
+
             //
             if (bmp.IsBigEndianPixel)
             {
-                _rgbaTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                _rgbaTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
             }
             else
             {
                 if (bmp.BitmapFormat == GLBitmapFormat.BGR)
                 {
-                    _bgrImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                    _bgrImgTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
                 }
                 else
                 {
-                    _bgraImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                    _bgraImgTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
                 }
             }
         }
@@ -391,11 +393,11 @@ namespace PixelFarm.DrawingGL
 
             if (bmp.IsBigEndianPixel)
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
             }
             else
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
             }
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
@@ -410,11 +412,11 @@ namespace PixelFarm.DrawingGL
 
             if (bmp.IsBigEndianPixel)
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
             }
             else
             {
-                _msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+                _msdfShader.DrawSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
             }
         }
         public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
@@ -422,11 +424,11 @@ namespace PixelFarm.DrawingGL
 
             if (bmp.IsBigEndianPixel)
             {
-                _msdfShader.RenderSubImages(bmp, coords, scale);
+                _msdfShader.DrawSubImages(bmp, coords, scale);
             }
             else
             {
-                _msdfShader.RenderSubImages(bmp, coords, scale);
+                _msdfShader.DrawSubImages(bmp, coords, scale);
             }
         }
         public void DrawImage(GLBitmap bmp,
@@ -484,25 +486,28 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
                 //***
-                targetTop += srcRect.Height;
+                targetTop += srcRect.Height;  //***
             }
 
+            _glyphStencilShader.SetCurrent();
             _glyphStencilShader.SetColor(this.FontFillColor);
-
-            if (bmp.IsBigEndianPixel)
-            {
-
-                _glyphStencilShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            }
-            else
-            {
-                _glyphStencilShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            }
+            _glyphStencilShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
+        public void DrawGlyphImageWithStecil_VBO(TextureCoordVboBuilder vboBuilder)
+        {
+            _glyphStencilShader.SetCurrent();
+            _glyphStencilShader.SetColor(this.FontFillColor);
+            _glyphStencilShader.DrawWithVBO(vboBuilder);
+        }
+
+        public void DrawGlyphImageWithCopy_VBO(TextureCoordVboBuilder vboBuilder)
+        {   
+            _bgraImgTextureShader.DrawWithVBO(vboBuilder);
+        }
         public void LoadTexture1(GLBitmap bmp)
         {
             _textureSubPixRendering.LoadGLBitmap(bmp);
@@ -516,77 +521,31 @@ namespace PixelFarm.DrawingGL
         }
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique2(
-          ref PixelFarm.Drawing.Rectangle srcRect,
+          ref Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
           float scale)
         {
-            if (OriginKind == GLRenderSurfaceOrigin.LeftTop)
+
+            if (OriginKind == GLRenderSurfaceOrigin.LeftTop) //***
             {
                 //***
-                targetTop += srcRect.Height;
+                targetTop += srcRect.Height;  //***
             }
 
-            _textureSubPixRendering.NewDrawSubImage(srcRect.Left,
+
+            _textureSubPixRendering.DrawSubImageWithLcdSubPix(
+                srcRect.Left,
                 srcRect.Top,
                 srcRect.Width,
                 srcRect.Height, targetLeft, targetTop);
 
         }
-        public void WriteVboToList(
-           System.Collections.Generic.List<float> buffer,
-           System.Collections.Generic.List<ushort> indexList,
-           ref PixelFarm.Drawing.Rectangle srcRect,
-           float targetLeft,
-           float targetTop,
-           float scale)
+
+        public void DrawGlyphImageWithSubPixelRenderingTechnique3_VBO(TextureCoordVboBuilder vboBuilder)
         {
-
-
-
-            // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
-
-            ushort indexCount = (ushort)indexList.Count;
-
-            if (indexCount > 0)
-            {
-
-                //add degenerative triangle
-                float prev_5 = buffer[buffer.Count - 5];
-                float prev_4 = buffer[buffer.Count - 4];
-                float prev_3 = buffer[buffer.Count - 3];
-                float prev_2 = buffer[buffer.Count - 2];
-                float prev_1 = buffer[buffer.Count - 1];
-
-                buffer.Add(prev_5); buffer.Add(prev_4); buffer.Add(prev_3);
-                buffer.Add(prev_2); buffer.Add(prev_1);
-
-
-                indexList.Add((ushort)(indexCount));
-                indexList.Add((ushort)(indexCount + 1));
-
-                indexCount += 2;
-            }
-
             //version 3            
-            _textureSubPixRendering.WriteVboStream(buffer, indexCount > 0, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-
-            indexList.Add(indexCount);
-            indexList.Add((ushort)(indexCount + 1));
-            indexList.Add((ushort)(indexCount + 2));
-            indexList.Add((ushort)(indexCount + 3));
-            //---
-            //add degenerate rect
-
-        }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique3(
-             float[] buffer,
-             ushort[] indexList)
-        {
-
-            //version 3            
-            _textureSubPixRendering.NewDrawSubImage3(buffer, indexList);
-            //textureSubPixRendering.WriteVboStream(buffer, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
+            _textureSubPixRendering.DrawSubImages_VBO(vboBuilder);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4(int count, float x, float y)
         {
@@ -728,6 +687,15 @@ namespace PixelFarm.DrawingGL
         }
 
         //-------------------------------------------------------------------------------
+        float[] _rect_coords = new float[8];
+        public void FillRect(Drawing.Color color, double left, double top, double width, double height)
+        {
+            //left,bottom,width,height
+            SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
+
+            FillTriangleStrip(color, _rect_coords, 4);
+        }
+
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
             _basicFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
@@ -1100,10 +1068,9 @@ namespace PixelFarm.DrawingGL
                         float prevStrokeW = StrokeWidth;
                         //Drawing.Color prevColor = color;
 
-                        if (prevStrokeW < 1.5f)
+                        if (prevStrokeW < 0.25f)
                         {
-                            StrokeWidth = 1.5f;
-                            //StrokeColor = Drawing.Color.FromArgb(200, color);
+                            StrokeWidth = 0.25f;
                         }
 
                         int subPathCount = igpth.FigCount;
@@ -1121,42 +1088,6 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        //-------------------------------------------------------------------------------
-
-        /// <summary>
-        /// reusable rect coord
-        /// </summary>
-        float[] _rectCoords = new float[8];
-        /// <summary>
-        /// draw rect in OpenGL coord 
-        /// </summary>
-        /// <param name="x">left</param>
-        /// <param name="y">bottom</param>
-        /// <param name="w">width</param>
-        /// <param name="h">height</param>
-        public void DrawRect(float x, float y, float w, float h)
-        {
-            switch (this.SmoothMode)
-            {
-                case SmoothMode.Smooth:
-                    {
-                        int borderTriAngleCount;
-                        CreatePolyLineRectCoords(x, y, w, h, _rectCoords);
-                        float[] triangles = _smoothBorderBuilder.BuildSmoothBorders(
-                            _rectCoords,
-                            true,
-                            out borderTriAngleCount);
-
-                        _smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
-                    }
-                    break;
-                default:
-                    {
-                    }
-                    break;
-            }
-        }
-
         public int OriginX
         {
             get { return this._canvasOriginX; }
@@ -1190,20 +1121,197 @@ namespace PixelFarm.DrawingGL
             GL.Scissor(x, y, w, h);
         }
 
-        static void CreatePolyLineRectCoords(
-               float x, float y, float w, float h, float[] output8)
-        {
-            //GL coordinate
-            //(0,0) is on left-lower corner
 
-            output8[0] = x; output8[1] = y; //left, bottom
-            output8[2] = x + w; output8[3] = y; //right, bottom
-            output8[4] = x + w; output8[5] = y + h; //right, top
-            output8[6] = x; output8[7] = y + h;//left,top
-
-        }
 
         internal TessTool GetTessTool() { return _tessTool; }
         internal SmoothBorderBuilder GetSmoothBorderBuilder() { return _smoothBorderBuilder; }
+    }
+
+    static class SimpleTessTool
+    {
+        /// <summary>
+        /// create coord for left-bottom-origin canvas
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="bottom"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="output"></param>
+        public static void CreateRectTessCoordsTriStrip(float left, float bottom, float w, float h, float[] output)
+        {
+            //use original GLES coord base => (0,0)= left,bottom 
+            output[0] = left; output[1] = bottom - h;
+            output[2] = left; output[3] = bottom;
+            output[4] = left + w; output[5] = bottom - h;
+            output[6] = left + w; output[7] = bottom;
+        }
+    }
+
+
+
+    public class TextureCoordVboBuilder
+    {
+
+        int _orgBmpW;
+        int _orgBmpH;
+        bool _bmpYFlipped;
+        float _scale = 1;
+        GLRenderSurfaceOrigin _glsxOrgKind;
+        //
+        //internal List<float> _buffer = new List<float>();
+        //internal List<ushort> _indexList = new List<ushort>();
+
+
+        internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
+        internal PixelFarm.CpuBlit.ArrayList<ushort> _indexList = new CpuBlit.ArrayList<ushort>();
+        public TextureCoordVboBuilder()
+        {
+
+        }
+
+        public void SetTextureInfo(int width, int height, bool isYFlipped, GLRenderSurfaceOrigin glsxOrgKind)
+        {
+            _orgBmpW = width;
+            _orgBmpH = height;
+            _bmpYFlipped = isYFlipped;
+            _glsxOrgKind = glsxOrgKind;
+        }
+
+        public void Clear()
+        {
+            _buffer.Clear();
+            _indexList.Clear();
+
+
+        }
+        public void WriteVboToList(
+            ref PixelFarm.Drawing.Rectangle srcRect,
+            float targetLeft,
+            float targetTop)
+        {
+
+            if (_glsxOrgKind == GLRenderSurfaceOrigin.LeftTop) //***
+            {
+                //***
+                targetTop += srcRect.Height;  //***
+            }
+
+
+
+            // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+            ushort indexCount = (ushort)_indexList.Count;
+
+            if (indexCount > 0)
+            {
+
+                //add degenerative triangle
+                float prev_5 = _buffer[_buffer.Count - 5];
+                float prev_4 = _buffer[_buffer.Count - 4];
+                float prev_3 = _buffer[_buffer.Count - 3];
+                float prev_2 = _buffer[_buffer.Count - 2];
+                float prev_1 = _buffer[_buffer.Count - 1];
+
+                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
+                _buffer.Append(prev_2); _buffer.Append(prev_1);
+
+
+                _indexList.Append((ushort)(indexCount));
+                _indexList.Append((ushort)(indexCount + 1));
+
+                indexCount += 2;
+            }
+
+
+            WriteVboStream(_buffer, indexCount > 0,
+                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop,
+                _orgBmpW, _orgBmpH, _bmpYFlipped);
+
+            _indexList.Append(indexCount);
+            _indexList.Append((ushort)(indexCount + 1));
+            _indexList.Append((ushort)(indexCount + 2));
+            _indexList.Append((ushort)(indexCount + 3));
+            //---
+            //add degenerate rect
+
+        }
+
+
+        static void WriteVboStream(
+           PixelFarm.CpuBlit.ArrayList<float> vboList,
+            bool duplicateFirst,
+            float srcLeft, float srcTop,
+            float srcW, float srcH,
+            float targetLeft, float targetTop,
+            float orgBmpW, float orgBmpH,
+            bool bmpYFlipped
+        )
+        {
+
+            unsafe
+            {
+                float scale = 1;
+                float srcBottom = srcTop + srcH;
+                float srcRight = srcLeft + srcW;
+
+                unsafe
+                {
+                    if (bmpYFlipped)
+                    {
+                        vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
+
+                        if (duplicateFirst)
+                        {
+                            //for creating degenerative triangle
+
+
+                            vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                            vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
+
+                        }
+                        //---------------------
+                        vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)
+                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
+
+                        //---------------------
+                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop); vboList.Append(0); //coord 2 (right,top)
+                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 2 (right,top)
+
+                        //---------------------
+                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0);//coord 3 (right, bottom)
+                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
+
+                    }
+                    else
+                    {
+
+
+                        vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)
+                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
+                        if (duplicateFirst)
+                        {
+                            //for creating degenerative triangle
+                            //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+                            vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)
+                            vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
+                        }
+
+                        //---------------------
+                        vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)
+                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 1  (left,top)
+
+                        //---------------------
+                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop); vboList.Append(0); //coord 2 (right,top)
+                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
+
+                        //---------------------
+                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 3 (right, bottom)
+                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 3 (right,top) 
+                    }
+                }
+            }
+        }
     }
 }

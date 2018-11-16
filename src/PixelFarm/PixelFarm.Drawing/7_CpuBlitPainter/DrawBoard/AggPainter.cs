@@ -24,17 +24,13 @@ namespace PixelFarm.CpuBlit
         {
             ActualBitmap.ReplaceBuffer(actualImage, newbuffer);
         }
-
     }
-
 
     public enum LineRenderingTechnique
     {
         StrokeVxsGenerator,
         OutlineAARenderer,
     }
-
-
 
     public class AggPainter : Painter
     {
@@ -43,9 +39,6 @@ namespace PixelFarm.CpuBlit
         //--------------------
         AggRenderSurface _aggsx_0; //primary render surface
         AggRenderSurface _aggsx_mask;
-
-
-
         //--------------------
         //low-level outline renderer
         LineRenderingTechnique _lineRenderingTech;
@@ -80,10 +73,10 @@ namespace PixelFarm.CpuBlit
         PixelBlender32 _defaultPixelBlender;
         PixelBlenderWithMask maskPixelBlender;
         PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo;
-        //
+
 
         bool _useDefaultBrush;
-
+        //
         public AggPainter(AggRenderSurface aggsx)
         {
             //painter paint to target surface
@@ -105,6 +98,7 @@ namespace PixelFarm.CpuBlit
 
         ClipingTechnique _currentClipTech;
 
+        public DrawBoard DrawBoard { get; set; }
         /// <summary>
         /// we DO NOT store vxs
         /// </summary>
@@ -113,9 +107,7 @@ namespace PixelFarm.CpuBlit
         {
             //clip rgn implementation
             //this version replace only
-            //TODO: add append clip rgn
-
-
+            //TODO: add append clip rgn 
             if (vxs != null)
             {
                 if (SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
@@ -984,8 +976,6 @@ namespace PixelFarm.CpuBlit
                         break;
                     default:
                         {
-                            //_sclineRas.AddPath(vxs);
-                            //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
 
                             _aggsx.Render(vxs, fillColor);
                         }
@@ -995,9 +985,6 @@ namespace PixelFarm.CpuBlit
             else
             {
                 _aggsx.Render(vxs, fillColor);
-
-                //_sclineRas.AddPath(vxs);
-                //_bmpRasterizer.RenderWithColor(this._aggsx.DestImage, _sclineRas, _scline, fillColor);
             }
         }
         public override void Render(RenderVx renderVx)

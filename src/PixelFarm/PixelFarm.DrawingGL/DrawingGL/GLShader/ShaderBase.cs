@@ -14,7 +14,7 @@ namespace PixelFarm.DrawingGL
         /// <summary>
         /// set as current shader
         /// </summary>
-        protected void SetCurrent()
+        internal void SetCurrent()
         {
             if (_shareRes._currentShader != this)
             {

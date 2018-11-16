@@ -22,17 +22,11 @@ namespace Mini
         RootGraphic _rootGfx;
         //
         DemoUI _demoUI;
-        DemoBase _demoBase;
-
-
-        OpenTK.MyGLControl _glControl;
-
-
+        DemoBase _demoBase; 
+        OpenTK.MyGLControl _glControl; 
         public GLESAppModule()
         {
-        }
-
-
+        } 
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
         {
 

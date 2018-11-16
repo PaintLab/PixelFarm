@@ -11,10 +11,10 @@ namespace PixelFarm.Drawing.GLES2
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
 
-        GLPainter painter1;
-        bool isDisposed;
-        Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
-        Rectangle currentClipRect;
+        GLPainter _painter1;
+        bool _isDisposed;
+        Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
+        Rectangle _currentClipRect;
 
         public MyGLDrawBoard(
            GLPainter painter, //*** we wrap around GLPainter *** 
@@ -23,14 +23,14 @@ namespace PixelFarm.Drawing.GLES2
         {
             //----------------
             //set painter first
-            this.painter1 = painter;
+            this._painter1 = painter;
             //----------------
             this._left = 0; //default start at 0,0
             this._top = 0;
             this._width = width;
             this._height = height;
 
-            currentClipRect = new Rectangle(0, 0, width, height);
+            _currentClipRect = new Rectangle(0, 0, width, height);
 
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
@@ -43,26 +43,27 @@ namespace PixelFarm.Drawing.GLES2
 
         public override Painter GetPainter()
         {
-            return painter1;
+            return _painter1;
         }
         public override void Dispose()
         {
 
             //TODO: review here
         }
+#if DEBUG
         public override string ToString()
         {
             return "visible_clip?";
         }
-
+#endif
         public override void CloseCanvas()
         {
-            if (isDisposed)
+            if (_isDisposed)
             {
                 return;
             }
 
-            isDisposed = true;
+            _isDisposed = true;
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -70,7 +71,7 @@ namespace PixelFarm.Drawing.GLES2
         /// </summary>
         void IDisposable.Dispose()
         {
-            if (isDisposed)
+            if (_isDisposed)
             {
                 return;
             }
@@ -79,17 +80,17 @@ namespace PixelFarm.Drawing.GLES2
 
         void ClearPreviousStoredValues()
         {
-            painter1.SetOrigin(0, 0);
+            _painter1.SetOrigin(0, 0);
 
-            this.canvasOriginX = 0;
-            this.canvasOriginY = 0;
-            this.clipRectStack.Clear();
+            this._canvasOriginX = 0;
+            this._canvasOriginY = 0;
+            this._clipRectStack.Clear();
         }
 
         void ReleaseUnManagedResource()
         {
-            clipRectStack.Clear();
-            currentClipRect = new Rectangle(0, 0, this.Width, this.Height);
+            _clipRectStack.Clear();
+            _currentClipRect = new Rectangle(0, 0, this.Width, this.Height);
 #if DEBUG
 
             debug_releaseCount++;

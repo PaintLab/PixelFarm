@@ -107,10 +107,10 @@ namespace PixelFarm.CpuBlit.Rasterization
             Closed
         }
 
-         
+
 
         public ScanlineRasterizer()
-        { 
+        {
 
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);
@@ -124,8 +124,11 @@ namespace PixelFarm.CpuBlit.Rasterization
                 m_gammaLut[i] = i;
             }
         }
-       
+
         //--------------------------------------------------------------------
+        /// <summary>
+        /// reset scanlineRas cell and status
+        /// </summary>
         public void Reset()
         {
             m_cellAARas.Reset();
@@ -143,6 +146,13 @@ namespace PixelFarm.CpuBlit.Rasterization
         }
         public void SetClipBox(int x1, int y1, int x2, int y2)
         {
+            //offset x1,y1,x2,y2
+            x1 += (int)OffsetOriginX;
+            y1 += (int)OffsetOriginY;
+            x2 += (int)OffsetOriginX;
+            y2 += (int)OffsetOriginY;
+
+
             userModeClipBox = new RectInt(x1, y1, x2, y2);
             Reset();
             m_vectorClipper.SetClipBox(
@@ -272,8 +282,8 @@ namespace PixelFarm.CpuBlit.Rasterization
             int index = 0;
 
             if (m_cellAARas.Sorted) { Reset(); }
-            double offsetOrgX = OffsetOriginX;
-            double offsetOrgY = OffsetOriginY;
+            float offsetOrgX = OffsetOriginX;
+            float offsetOrgY = OffsetOriginY;
 
 #if DEBUG
             int dbugVertexCount = 0;
@@ -290,11 +300,9 @@ namespace PixelFarm.CpuBlit.Rasterization
                     //NOTE: we scale horizontal 3 times.
                     //subpixel renderer will shrink it to 1 
                     //--------------------------------------------- 
-                    x = (x + offsetOrgX) * 3;
-                    y = (y + offsetOrgY);
-                    //
-                    tx.Transform(ref x, ref y); //***
-                    AddVertex(cmd, x, y);
+                    x *= 3;
+                    tx.Transform(ref x, ref y); //***  
+                    AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
                 }
             }
             else
@@ -304,11 +312,10 @@ namespace PixelFarm.CpuBlit.Rasterization
 #if DEBUG
                     dbugVertexCount++;
 #endif
-                    x = (x + offsetOrgX);
-                    y = (y + offsetOrgY);
+
                     //
                     tx.Transform(ref x, ref y); //***
-                    AddVertex(cmd, x, y);
+                    AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
                 }
             }
         }
@@ -349,7 +356,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                     //subpixel renderer will shrink it to 1 
                     //---------------------------------------------
 
-                    AddVertex(cmd, (x + offsetOrgX) * 3, (y + offsetOrgY));
+                    AddVertex(cmd, (x * 3) + offsetOrgX, y + offsetOrgY);
                 }
             }
             else
