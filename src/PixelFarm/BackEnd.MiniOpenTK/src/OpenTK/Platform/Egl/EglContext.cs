@@ -56,6 +56,7 @@ namespace OpenTK.Platform.Egl
             }
 
             //Egl.BindAPI(0x30A0); //bind EGL_OPENGL_ES_API
+            Egl.BindAPI(RenderApi.ES); //bind EGL_OPENGL_ES_API
             EglContext shared = GetSharedEglContext(sharedContext);
 
             WindowInfo = window;
@@ -118,7 +119,13 @@ namespace OpenTK.Platform.Egl
             }
 
             int[] attribList = { Egl.CONTEXT_CLIENT_VERSION, major, Egl.NONE };
-            var shareContext = shared?.HandleAsEGLContext ?? IntPtr.Zero;
+            IntPtr shareContext = shared?.HandleAsEGLContext ?? IntPtr.Zero;
+
+
+            //TODO: review here,
+            //temp fix => so We can open multiple GL windows
+            shareContext = IntPtr.Zero;
+
             HandleAsEGLContext = Egl.CreateContext(window.Display, config, shareContext, attribList);
 
             GraphicsContextFlags = flags;

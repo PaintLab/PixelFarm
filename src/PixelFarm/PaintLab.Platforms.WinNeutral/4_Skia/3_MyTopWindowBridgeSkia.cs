@@ -7,8 +7,8 @@ namespace LayoutFarm.UI.Skia
 {
     class MyTopWindowBridgeSkia : TopWindowBridgeWinNeutral
     {
-        Control windowControl;
-        SkiaCanvasViewport canvasViewport;
+        Control _windowControl;
+        SkiaCanvasViewport _canvasViewport;
         public MyTopWindowBridgeSkia(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
@@ -16,29 +16,29 @@ namespace LayoutFarm.UI.Skia
         public override void BindWindowControl(Control windowControl)
         {
             //bind to anycontrol GDI control  
-            this.windowControl = windowControl;
-            this.SetBaseCanvasViewport(this.canvasViewport = new SkiaCanvasViewport(this.RootGfx,
-                new Size(windowControl.Width, windowControl.Height) ));
+            this._windowControl = windowControl;
+            this.SetBaseCanvasViewport(this._canvasViewport = new SkiaCanvasViewport(this.RootGfx,
+                new Size(windowControl.Width, windowControl.Height)));
 
             this.RootGfx.SetPaintDelegates(
-                    this.canvasViewport.CanvasInvalidateArea,
+                    this._canvasViewport.CanvasInvalidateArea,
                     this.PaintToOutputWindow);
 #if DEBUG
             this.dbugWinControl = windowControl;
-            this.canvasViewport.dbugOutputWindow = this;
+            this._canvasViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
 
         public override void InvalidateRootArea(Rectangle r)
         {
+#if DEBUG
             Rectangle rect = r;
-            this.RootGfx.InvalidateGraphicArea(
-                RootGfx.TopWindowRenderBox,
-                ref rect);
+#endif
+            this.RootGfx.InvalidateRootGraphicArea(ref r);
         }
         public override void PaintToOutputWindow()
-        {   
+        {
             //TODO: review here
             throw new NotSupportedException();
             ////*** force paint to output viewdow

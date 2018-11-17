@@ -1,6 +1,4 @@
 ﻿//MIT, 2017-present, WinterDev
-
-
 using Typography.FontManagement;
 
 namespace YourImplementation

@@ -112,7 +112,7 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromBuffer(
+            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromCopy(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32
@@ -218,7 +218,7 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromBuffer(
+            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromCopy(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32

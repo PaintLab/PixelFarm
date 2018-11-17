@@ -68,6 +68,7 @@ namespace OpenTkEssTest
                     gl_FragColor = v_color;
                 }
             ";
+
             if (!shaderProgram.Build(vs, fs))
             {
                 throw new NotSupportedException();

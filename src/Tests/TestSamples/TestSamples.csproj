@@ -46,6 +46,9 @@
     <Compile Include="00_DemoBase\SpriteShape.cs" />
     <Compile Include="00_DemoBase\Square.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sample03\T102_1_BasicDraw2.cs" />
+    <Compile Include="Sample03\T107_1_DrawImages.cs" />
+    <Compile Include="Sample03\T107_2_DrawGlyphs.cs" />
     <Compile Include="Sample03\T115_VBO_01.cs" />
     <Compile Include="Sample04\T401_MsdfTest1.cs" />
     <Compile Include="Sample04\T402_BrushTest2.cs" />

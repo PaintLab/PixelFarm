@@ -14,8 +14,7 @@
 // "The Art of War"
 
 using System;
-using System.Collections.Generic;
-using Win32;
+
 namespace PixelFarm.Drawing.WinGdi
 {
     partial class GdiPlusDrawBoard

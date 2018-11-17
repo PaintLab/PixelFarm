@@ -77,12 +77,12 @@ namespace PixelFarm.DrawingGL
             float w, float h)
         {
             //horizontal gradient
-            vrx.AddVertex(new VertexC4V3f(c1, x, y));
-            vrx.AddVertex(new VertexC4V3f(c2, x + w, y));
-            vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
-            vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
-            vrx.AddVertex(new VertexC4V3f(c1, x, y + h));
-            vrx.AddVertex(new VertexC4V3f(c1, x, y));
+            vrx.Append(new VertexC4V3f(c1, x, y));
+            vrx.Append(new VertexC4V3f(c2, x + w, y));
+            vrx.Append(new VertexC4V3f(c2, x + w, y + h));
+            vrx.Append(new VertexC4V3f(c2, x + w, y + h));
+            vrx.Append(new VertexC4V3f(c1, x, y + h));
+            vrx.Append(new VertexC4V3f(c1, x, y));
         }
         //----------------------------------------------------------------------------
         public static void CalculateLinearGradientVxs2(
@@ -178,9 +178,9 @@ namespace PixelFarm.DrawingGL
         }
         static void AddVertext(ArrayList<float> vrx, float f0, float f1, float f2)
         {
-            vrx.AddVertex(f0);
-            vrx.AddVertex(f1);
-            vrx.AddVertex(f2);
+            vrx.Append(f0);
+            vrx.Append(f1);
+            vrx.Append(f2);
         }
     }
 }

@@ -132,6 +132,38 @@ namespace Win32
         public static unsafe extern void memcpy(byte* dest, byte* src, int byteCount);
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
+
+
+
+        //----------
+        [StructLayout(LayoutKind.Sequential)]
+        public struct BLENDFUNCTION
+        {
+            public byte BlendOp; //the only source and destination blend operation that has been defined is AC_SRC_OVER
+            public byte BlendFlags; //Must be zero.
+            public byte SourceConstantAlpha;
+            public byte AlphaFormat; //AC_SRC_ALPHA
+
+            //Specifies an alpha transparency value to be used on the entire source bitmap. 
+            //The SourceConstantAlpha value is combined with any per-pixel alpha values in the source bitmap. 
+            //If you set SourceConstantAlpha to 0, it is assumed that your image is transparent. 
+            //Set the SourceConstantAlpha value to 255 (opaque) when you only want to use per-pixel alpha values.
+        }
+
+        [DllImport("Msimg32.dll", EntryPoint = "AlphaBlend", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool AlphaBlend(
+            IntPtr hdcDest,
+            int xoriginDest,
+            int yoriginDest,
+            int wDest,
+            int hDest,
+            IntPtr hdcSrc,
+            int xoriginSrc,
+            int yoriginSrc,
+            int wSrc,
+            int hSrc,
+            BLENDFUNCTION ftn
+            );
         //----------
         //DC
         [DllImport("gdi32.dll", ExactSpelling = true)]
@@ -177,26 +209,7 @@ namespace Win32
         public static extern bool BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSource, int dwRop);
         [DllImport("gdi32.dll")]
         public static extern bool PatBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, int dwRop);
-        //
-        [DllImport("Msimg32.dll")]
-        public static extern bool AlphaBlend(IntPtr hdc, int nXOriginDest,
-            int nYOriginDest, int nWidthDest, int nHeightDest, IntPtr hdcSrc,
-            int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, ref _BLENDFUNCTION blendFunction);
-        [StructLayout(LayoutKind.Sequential)]
-        public struct _BLENDFUNCTION
-        {
-            public byte BlendOp;
-            public byte BlendFlags;
-            public byte SourceConstantAlpha;
-            public byte AlphaFormat;
-            public _BLENDFUNCTION(byte alphaValue)
-            {
-                BlendOp = AC_SRC_OVER;
-                BlendFlags = 0;
-                SourceConstantAlpha = alphaValue;
-                AlphaFormat = 0;
-            }
-        }
+
         //
         //
         public const int AC_SRC_OVER = 0x00;

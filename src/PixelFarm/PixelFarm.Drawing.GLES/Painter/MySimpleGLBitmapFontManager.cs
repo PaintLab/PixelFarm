@@ -1,5 +1,5 @@
 ﻿////MIT, 2016-present, WinterDev 
-#if GL_ENABLE
+  
 
 
 using PixelFarm.Drawing.Fonts;
@@ -18,11 +18,11 @@ namespace PixelFarm.DrawingGL
                 GlyphImage totalGlyphImg = atlas.TotalGlyph;
                 //load to glbmp 
                 GLBitmap found = new GLBitmap(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer(), false);
-                found.IsInvert = false;
+                found.IsYFlipped = false;
                 return found;
             });
         }
     }
 }
 
-#endif
+ 

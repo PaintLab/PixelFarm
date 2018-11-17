@@ -48,7 +48,6 @@ namespace PixelFarm.CpuBlit.Samples
         {
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
             var spriteShape = new SpriteShape(renderVx);
-           
             _testSprite = new MyTestSprite(spriteShape);
             //lionFill.AutoFlipY = true;
         }
@@ -70,6 +69,7 @@ namespace PixelFarm.CpuBlit.Samples
         }
         public override void MouseDrag(int x, int y)
         {
+            //move to specific position
             _testSprite.Move(x, y);
         }
         [DemoConfig]
@@ -121,7 +121,7 @@ namespace PixelFarm.CpuBlit.Samples
             // lion 
 
             VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
-            var spriteShape = new SpriteShape(renderVx); 
+            var spriteShape = new SpriteShape(renderVx);
             _spriteList.Add(new MyTestSprite(spriteShape));
             //
             //lionFill.AutoFlipY = true;           

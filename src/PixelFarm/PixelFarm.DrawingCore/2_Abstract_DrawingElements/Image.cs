@@ -40,7 +40,7 @@ namespace PixelFarm.Drawing
         {
             img.innerImage = new WeakReference(o);
         }
-         
+
         public enum RequestType
         {
             Rent,

@@ -1,6 +1,6 @@
 ﻿namespace LayoutFarm.UI
 {
-    partial class FormPopupShadow2
+    partial class FormPopupShadow
     {
         /// <summary>
         /// Required designer variable.

@@ -6,7 +6,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PixelFarm.CpuBlit;
-using PixelFarm.Drawing;
+
+
 namespace Mini
 {
     partial class FormDev : Form
@@ -25,8 +26,12 @@ namespace Mini
         enum RenderBackendChoice
         {
             PureAgg,
+            AggOnGLES,
             GdiPlus,
+            GdiPlusOnGLES, //temporary
             OpenGLES,
+
+
             SkiaMemoryBackend,
             SkiaGLBackend,
         }
@@ -35,13 +40,34 @@ namespace Mini
 
             lstBackEndRenderer.Items.Clear();
             lstBackEndRenderer.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.AggOnGLES);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlusOnGLES); //temporary ***
+            //
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);// legacy ***, for printing
+
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
+
             lstBackEndRenderer.SelectedIndex = 0;//set default 
             lstBackEndRenderer.DoubleClick += (s, e) => listBox1_DoubleClick(null, EventArgs.Empty);
         }
+
+
+
+        static DemoBase InitDemo(ExampleAndDesc exampleAndDesc)
+        {
+            DemoBase exBase = Activator.CreateInstance(exampleAndDesc.Type) as DemoBase;
+            if (exBase == null)
+            {
+                return null;
+            }
+            exBase.Init();
+            return exBase;
+        }
+
+
+        CpuBlitAppModule _cpuBlitContextWinForm;
 
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -52,74 +78,97 @@ namespace Mini
                 return; //early exit
             }
             //
-            //
-            switch ((RenderBackendChoice)lstBackEndRenderer.SelectedItem)
+            DemoBase demo = InitDemo(exAndDesc);
+            if (demo == null) { return; }
+
+
+            FormTestBed testBed = new FormTestBed();
+            testBed.WindowState = FormWindowState.Maximized;
+
+            RenderBackendChoice selItem = (RenderBackendChoice)lstBackEndRenderer.SelectedItem;
+
+            switch (selItem)
             {
+
                 case RenderBackendChoice.PureAgg:
                     {
-                        FormTestBed testBed = new FormTestBed();
-                        testBed.WindowState = FormWindowState.Maximized;
-                        testBed.UseGdiPlusOutput = false;
-                        testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
+                            testBed.GetLandingControl(),
+                            0, 0, 800, 600,
+                            LayoutFarm.UI.InnerViewportKind.PureAgg,
+                            out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                            );
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
                         testBed.Show();
-                        testBed.LoadExample(exAndDesc);
+
+                        _cpuBlitContextWinForm = new CpuBlitAppModule();
+                        _cpuBlitContextWinForm.BindSurface(surfaceViewport);
+                        _cpuBlitContextWinForm.LoadExample(demo);
+
+                        testBed.LoadExample(exAndDesc, demo);
                     }
                     break;
                 case RenderBackendChoice.GdiPlus:
                     {
-                        FormTestBed testBed = new FormTestBed();
-                        testBed.WindowState = FormWindowState.Maximized;
-                        testBed.UseGdiPlusOutput = true;
-                        testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
+                             testBed.GetLandingControl(),
+                             0, 0, 800, 600,
+                             LayoutFarm.UI.InnerViewportKind.GdiPlus,
+                             out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                             );
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
+
+                        _cpuBlitContextWinForm = new CpuBlitAppModule();
+                        _cpuBlitContextWinForm.BindSurface(surfaceViewport);
+                        _cpuBlitContextWinForm.LoadExample(demo);
+
+                        testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
-                        testBed.LoadExample(exAndDesc);
                     }
                     break;
                 case RenderBackendChoice.OpenGLES: //gles 2 and 3
                     {
-                        //create demo
-                        DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-                        if (exBase == null)
-                        {
-                            return;
-                        }
+                        //--------------------------------------------
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
+                          testBed.GetLandingControl(),
+                          0, 0, 800, 600,
+                          LayoutFarm.UI.InnerViewportKind.GLES,
+                          out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                          );
 
-                        //create form
-                        FormGLTest formGLTest = new FormGLTest();
-                        formGLTest.Text = exAndDesc.ToString();
-                        formGLTest.Show();
-                        //---------------------- 
-                        //get target control that used to present the example
-                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
+                        GLESAppModule glbaseDemo = new GLESAppModule();
+                        glbaseDemo.BindSurface(surfaceViewport);
+                        glbaseDemo.LoadExample(demo);
+                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
 
-                        {
-                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                            glbaseDemo.LoadGLControl(control);
-                            glbaseDemo.LoadSample(exBase);
-                            //----------------------
-                            formGLTest.FormClosing += (s2, e2) =>
-                            {
-                                glbaseDemo.CloseDemo();
-                            };
-                        }
-                        //{
-                        //    //test another example 
-                        //    DemoBase exBase2 = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-                        //    OpenTK.MyGLControl control2 = formGLTest.InitMiniGLControl2(400, 300);
-                        //    GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                        //    glbaseDemo.LoadGLControl(control2);
-                        //    glbaseDemo.LoadSample(exBase2);
-                        //    //----------------------
-                        //    formGLTest.FormClosing += (s2, e2) =>
-                        //    {
-                        //        glbaseDemo.CloseDemo();
-                        //    };
-                        //}
-
-
-                        formGLTest.WindowState = FormWindowState.Maximized;
+                        testBed.LoadExample(exAndDesc, demo);
+                        testBed.Show();
                     }
                     break;
+                case RenderBackendChoice.AggOnGLES:
+                case RenderBackendChoice.GdiPlusOnGLES:
+                    {
+                        LayoutFarm.UI.FormCanvasHelper.CreateCanvasControlOnExistingControl(
+                            testBed.GetLandingControl(),
+                            0, 0, 800, 600,
+                            LayoutFarm.UI.InnerViewportKind.AggOnGLES,
+                            out LayoutFarm.UI.UISurfaceViewportControl surfaceViewport
+                            );
+                        testBed.SetUISurfaceViewportControl(surfaceViewport);
+                        //
+
+                        CpuBlitOnGLESAppModule glbaseDemo = new CpuBlitOnGLESAppModule();
+                        glbaseDemo.WithGdiPlusDrawBoard = (selItem == RenderBackendChoice.GdiPlusOnGLES);//**
+                        glbaseDemo.BindSurface(surfaceViewport);
+                        glbaseDemo.LoadExample(demo);
+
+                        testBed.FormClosing += (s2, e2) => glbaseDemo.CloseDemo();
+                        testBed.LoadExample(exAndDesc, demo);
+                        testBed.Show();
+                    }
+                    break; 
 #if SKIA_ENABLE
                 case RenderBackendChoice.SkiaMemoryBackend:
                     {
@@ -141,11 +190,7 @@ namespace Mini
                 default:
                     throw new NotSupportedException();
             }
-
-
         }
-
-
         static void LoadSamplesFromAssembly(Type srcType, List<ExampleAndDesc> outputList)
         {
             //load examples
@@ -209,7 +254,7 @@ namespace Mini
                 bmp.Save("d:\\WImageTest\\test002_2.png");
             }
         }
-        
+
 
         private void button5_Click(object sender, EventArgs e)
         {

@@ -50,8 +50,6 @@
     <Compile Include="2_ContentManagers\ImageContentManager.cs" />
     <Compile Include="2_ContentManagers\TextContentManager.cs" />
     <Compile Include="2_ContentManagers\ClientBinder.cs" />
-    <Compile Include="4_FontServices\MySimpleGLBitmapFontManager.cs" />
-    <Compile Include="4_FontServices\DrawingGLFontPrinter.cs" />
     <Compile Include="4_FontServices\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -100,6 +98,7 @@
   <ItemGroup>
     <Compile Include="0_Bootstrap\StorageProviderImpl.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

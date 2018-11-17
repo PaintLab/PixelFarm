@@ -7,42 +7,44 @@ namespace LayoutFarm.UI
 {
     class GraphicsTimerTaskManager
     {
-        Dictionary<object, GraphicsTimerTask> registeredTasks = new Dictionary<object, GraphicsTimerTask>();
-        List<GraphicsTimerTask> fastIntervalTaskList = new List<GraphicsTimerTask>();
-        List<GraphicsTimerTask> caretIntervalTaskList = new List<GraphicsTimerTask>();
-        RootGraphic rootgfx;
+        Dictionary<object, GraphicsTimerTask> _registeredTasks = new Dictionary<object, GraphicsTimerTask>();
+        List<GraphicsTimerTask> _fastIntervalTaskList = new List<GraphicsTimerTask>();
+        List<GraphicsTimerTask> _caretIntervalTaskList = new List<GraphicsTimerTask>();
+        RootGraphic _rootgfx;
 
-        int fastPlanInterval = 20;//ms 
-        int caretBlinkInterval = 400;//ms (2 fps)
-        int tickAccum = 0;
-        bool enableCaretBlink = true;
-        UITimerTask uiTimerTask;
+        int _fastPlanInterval = 20;//ms 
+        int _caretBlinkInterval = 400;//ms 
+        int _tickAccum = 0;
+        bool _enableCaretBlink = true;
+        UITimerTask _uiTimerTask;
+
+
         public GraphicsTimerTaskManager(RootGraphic rootgfx)
         {
-            this.rootgfx = rootgfx;
+            this._rootgfx = rootgfx;
 
             //register timer task
-            uiTimerTask = new UITimerTask(graphicTimer1_Tick);
-            uiTimerTask.IntervalInMillisec = fastPlanInterval; //fast task plan
-            UIPlatform.RegisterTimerTask(uiTimerTask);
-            uiTimerTask.Enabled = true;
+            _uiTimerTask = new UITimerTask(graphicTimer1_Tick);
+            _uiTimerTask.IntervalInMillisec = _fastPlanInterval; //fast task plan
+            UIPlatform.RegisterTimerTask(_uiTimerTask);
+            _uiTimerTask.Enabled = true;
         }
         public bool Enabled
         {
-            get { return this.uiTimerTask.Enabled; }
-            set { this.uiTimerTask.Enabled = value; }
+            get { return this._uiTimerTask.Enabled; }
+            set { this._uiTimerTask.Enabled = value; }
         }
         public void CloseAllWorkers()
         {
-            this.uiTimerTask.Enabled = false;
+            this._uiTimerTask.Enabled = false;
         }
         public void StartCaretBlinkTask()
         {
-            enableCaretBlink = true;
+            _enableCaretBlink = true;
         }
         public void StopCaretBlinkTask()
         {
-            enableCaretBlink = false;
+            _enableCaretBlink = false;
         }
 
         public GraphicsTimerTask SubscribeGraphicsTimerTask(
@@ -52,20 +54,20 @@ namespace LayoutFarm.UI
             EventHandler<GraphicsTimerTaskEventArgs> tickhandler)
         {
             GraphicsTimerTask existingTask;
-            if (!registeredTasks.TryGetValue(uniqueName, out existingTask))
+            if (!_registeredTasks.TryGetValue(uniqueName, out existingTask))
             {
-                existingTask = new GraphicsTimerTask(this.rootgfx, planName, uniqueName, intervalMs, tickhandler);
-                registeredTasks.Add(uniqueName, existingTask);
+                existingTask = new GraphicsTimerTask(this._rootgfx, planName, uniqueName, intervalMs, tickhandler);
+                _registeredTasks.Add(uniqueName, existingTask);
                 switch (planName)
                 {
                     case TaskIntervalPlan.CaretBlink:
                         {
-                            caretIntervalTaskList.Add(existingTask);
+                            _caretIntervalTaskList.Add(existingTask);
                         }
                         break;
                     default:
                         {
-                            fastIntervalTaskList.Add(existingTask);
+                            _fastIntervalTaskList.Add(existingTask);
                         }
                         break;
                 }
@@ -75,19 +77,19 @@ namespace LayoutFarm.UI
         public void UnsubscribeTimerTask(object uniqueName)
         {
             GraphicsTimerTask found;
-            if (registeredTasks.TryGetValue(uniqueName, out found))
+            if (_registeredTasks.TryGetValue(uniqueName, out found))
             {
-                registeredTasks.Remove(uniqueName);
+                _registeredTasks.Remove(uniqueName);
                 switch (found.PlanName)
                 {
                     case TaskIntervalPlan.CaretBlink:
                         {
-                            caretIntervalTaskList.Remove(found);
+                            _caretIntervalTaskList.Remove(found);
                         }
                         break;
                     default:
                         {
-                            fastIntervalTaskList.Remove(found);
+                            _fastIntervalTaskList.Remove(found);
                         }
                         break;
                 }
@@ -103,54 +105,54 @@ namespace LayoutFarm.UI
         void graphicTimer1_Tick(UITimerTask timerTask)
         {
             //-------------------------------------------------
-            tickAccum += fastPlanInterval;
+            _tickAccum += _fastPlanInterval;
             //Console.WriteLine("tickaccum:" + tickAccum.ToString());
             //-------------------------------------------------
             bool doCaretPlan = false;
-            if (tickAccum > caretBlinkInterval)
+            if (_tickAccum > _caretBlinkInterval)
             {
                 // Console.WriteLine("*********");
-                tickAccum = 0;//reset
+                _tickAccum = 0;//reset
                 doCaretPlan = true;
             }
             //-------------------------------------------------
             int needUpdate = 0;
-            if (enableCaretBlink && doCaretPlan)
+            if (_enableCaretBlink && doCaretPlan)
             {
                 //-------------------------------------------------
                 //1. fast and animation plan
                 //------------------------------------------------- 
                 MyIntervalTaskEventArgs args = GetTaskEventArgs();
-                int j = this.fastIntervalTaskList.Count;
+                int j = this._fastIntervalTaskList.Count;
                 if (j > 0)
                 {
                     for (int i = 0; i < j; ++i)
                     {
-                        fastIntervalTaskList[i].InvokeHandler(args);
+                        _fastIntervalTaskList[i].InvokeHandler(args);
                         needUpdate |= args.NeedUpdate;
                     }
                 }
                 //-------------------------------------------------
                 //2. caret plan  
                 //------------------------------------------------- 
-                j = this.caretIntervalTaskList.Count;
+                j = this._caretIntervalTaskList.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    caretIntervalTaskList[i].InvokeHandler(args);
+                    _caretIntervalTaskList[i].InvokeHandler(args);
                     needUpdate |= args.NeedUpdate;
                 }
                 FreeTaskEventArgs(args);
             }
             else
             {
-                int j = this.fastIntervalTaskList.Count;
+                int j = this._fastIntervalTaskList.Count;
 
                 if (j > 0)
                 {
                     MyIntervalTaskEventArgs args = GetTaskEventArgs();
                     for (int i = 0; i < j; ++i)
                     {
-                        fastIntervalTaskList[i].InvokeHandler(args);
+                        _fastIntervalTaskList[i].InvokeHandler(args);
                         needUpdate |= args.NeedUpdate;
                     }
                     FreeTaskEventArgs(args);
@@ -160,16 +162,16 @@ namespace LayoutFarm.UI
             //remainnig tasks
             if (needUpdate > 0)
             {
-                this.rootgfx.PrepareRender();
-                this.rootgfx.FlushAccumGraphics();
+                this._rootgfx.PrepareRender();
+                this._rootgfx.FlushAccumGraphics();
             }
         }
-        Stack<MyIntervalTaskEventArgs> taskEventPools = new Stack<MyIntervalTaskEventArgs>();
+        Stack<MyIntervalTaskEventArgs> _taskEventPools = new Stack<MyIntervalTaskEventArgs>();
         MyIntervalTaskEventArgs GetTaskEventArgs()
         {
-            if (taskEventPools.Count > 0)
+            if (_taskEventPools.Count > 0)
             {
-                return taskEventPools.Pop();
+                return _taskEventPools.Pop();
             }
             else
             {
@@ -180,7 +182,7 @@ namespace LayoutFarm.UI
         {
             //clear for reues
             args.ClearForReuse();
-            taskEventPools.Push(args);
+            _taskEventPools.Push(args);
         }
     }
 }

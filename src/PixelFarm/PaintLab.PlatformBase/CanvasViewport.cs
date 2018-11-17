@@ -6,49 +6,36 @@ namespace LayoutFarm.UI
 {
     abstract class CanvasViewport
     {
-        int viewportX;
-        int viewportY;
-        int viewportWidth;
-        int viewportHeight;
-        protected IRenderElement topWindowBox;
-        protected RootGraphic rootGraphics;
-        int h_smallChange = 0;
-        int h_largeChange = 0;
-        int v_smallChange = 0;
-        int v_largeChange = 0;
-        EventHandler<EventArgs> canvasSizeChangedHandler;
-        bool fullMode = true;
-        bool isClosed;//is this viewport closed
+        int _viewportX;
+        int _viewportY;
+        int _viewportWidth;
+        int _viewportHeight;
+        protected IRenderElement _topWindowBox;
+        protected RootGraphic _rootGraphics;
+        int _h_smallChange = 0;
+        int _h_largeChange = 0;
+        int _v_smallChange = 0;
+        int _v_largeChange = 0;
+        EventHandler<EventArgs> _canvasSizeChangedHandler;
+        bool _fullMode = true;
+        bool _isClosed;//is this viewport closed
         public CanvasViewport(RootGraphic rootgfx, Size viewportSize)
         {
-            this.rootGraphics = rootgfx;
-            this.topWindowBox = rootgfx.TopWindowRenderBox;
-            this.viewportWidth = viewportSize.Width;
-            this.viewportHeight = viewportSize.Height;
-            canvasSizeChangedHandler = Canvas_SizeChanged;
-            viewportX = 0;
-            viewportY = 0;
+            _rootGraphics = rootgfx;
+            _topWindowBox = rootgfx.TopWindowRenderBox;
+            _viewportWidth = viewportSize.Width;
+            _viewportHeight = viewportSize.Height;
+            _canvasSizeChangedHandler = Canvas_SizeChanged;
+            _viewportX = 0;
+            _viewportY = 0;
         }
-        public bool IsClosed
-        {
-            get { return this.isClosed; }
-        }
-        public int ViewportX
-        {
-            get { return this.viewportX; }
-        }
-        public int ViewportY
-        {
-            get { return this.viewportY; }
-        }
-        public int ViewportWidth
-        {
-            get { return this.viewportWidth; }
-        }
-        public int ViewportHeight
-        {
-            get { return this.viewportHeight; }
-        }
+
+        public bool IsClosed => _isClosed;
+        public int ViewportX => _viewportX;
+        public int ViewportY => _viewportY;
+        public int ViewportWidth => _viewportWidth;
+        public int ViewportHeight => _viewportHeight;
+        //
 #if DEBUG
         public IdbugOutputWindow dbugOutputWindow
         {
@@ -58,26 +45,15 @@ namespace LayoutFarm.UI
 #endif
         public void UpdateCanvasViewportSize(int viewportWidth, int viewportHeight)
         {
-            if (this.viewportWidth != viewportWidth || this.viewportHeight != viewportHeight)
+            if (this._viewportWidth != viewportWidth || this._viewportHeight != viewportHeight)
             {
-                this.viewportWidth = viewportWidth;
-                this.viewportHeight = viewportHeight;
-                ResetQuadPages(viewportWidth, viewportHeight);
+                this._viewportWidth = viewportWidth;
+                this._viewportHeight = viewportHeight;
+                ResetViewSize(viewportWidth, viewportHeight);
                 CalculateCanvasPages();
             }
         }
-        void ChangeRootGraphicSize(int width, int height)
-        {
-            //Size currentSize = topWindowBox.Size;
-            //if (currentSize.Width != width || currentSize.Height != height)
-            //{
-            //    topWindowBox.SetSize(width, height);
-            //    topWindowBox.InvalidateContentArrangementFromContainerSizeChanged();
-            //    topWindowBox.TopDownReCalculateContentSize();
-            //    topWindowBox.TopDownReArrangeContentIfNeed();
-            //}
-        }
-        protected virtual void ResetQuadPages(int viewportWidth, int viewportHeight)
+        protected virtual void ResetViewSize(int viewportWidth, int viewportHeight)
         {
         }
 
@@ -86,14 +62,7 @@ namespace LayoutFarm.UI
             //EvaluateScrollBar();
         }
         public abstract void CanvasInvalidateArea(Rectangle r);
-        public virtual bool IsQuadPageValid
-        {
-            get { return true; }
-        }
-
-
-
-
+       
 #if DEBUG
         internal int debug_render_to_output_count = -1;
 #endif
@@ -101,15 +70,15 @@ namespace LayoutFarm.UI
 
         internal bool FullMode
         {
-            get { return this.fullMode; }
-            set { this.fullMode = value; }
+            get { return this._fullMode; }
+            set { this._fullMode = value; }
         }
 
         public Point LogicalViewportLocation
         {
             get
             {
-                return new Point(viewportX, viewportY);
+                return new Point(_viewportX, _viewportY);
             }
         }
 
@@ -122,36 +91,36 @@ namespace LayoutFarm.UI
             vScrollEventArgs = null;
             if (dy < 0)
             {
-                int old_y = viewportY;
-                if (viewportY + dy < 0)
+                int old_y = _viewportY;
+                if (_viewportY + dy < 0)
                 {
-                    dy = -viewportY;
-                    viewportY = 0;
+                    dy = -_viewportY;
+                    _viewportY = 0;
                 }
                 else
                 {
-                    viewportY += dy;
+                    _viewportY += dy;
                 }
                 vScrollEventArgs = new UIScrollEventArgs(
                     UIScrollEventType.ThumbPosition,
                     old_y,
-                    viewportY, UIScrollOrientation.VerticalScroll);
+                    _viewportY, UIScrollOrientation.VerticalScroll);
             }
             else if (dy > 0)
             {
-                int old_y = viewportY;
-                int viewportButtom = viewportY + viewportHeight; if (viewportButtom + dy > rootGraphics.Height)
+                int old_y = _viewportY;
+                int viewportButtom = _viewportY + _viewportHeight; if (viewportButtom + dy > _rootGraphics.Height)
                 {
-                    if (viewportButtom < rootGraphics.Height)
+                    if (viewportButtom < _rootGraphics.Height)
                     {
-                        viewportY = rootGraphics.Height - viewportHeight;
+                        _viewportY = _rootGraphics.Height - _viewportHeight;
                     }
                 }
                 else
                 {
-                    viewportY += dy;
+                    _viewportY += dy;
                 }
-                vScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_y, viewportY, UIScrollOrientation.VerticalScroll);
+                vScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_y, _viewportY, UIScrollOrientation.VerticalScroll);
             }
             hScrollEventArgs = null;
             if (dx == 0)
@@ -159,33 +128,33 @@ namespace LayoutFarm.UI
             }
             else if (dx > 0)
             {
-                int old_x = viewportX;
-                int viewportRight = viewportX + viewportWidth; if (viewportRight + dx > rootGraphics.Width)
+                int old_x = _viewportX;
+                int viewportRight = _viewportX + _viewportWidth; if (viewportRight + dx > _rootGraphics.Width)
                 {
-                    if (viewportRight < rootGraphics.Width)
+                    if (viewportRight < _rootGraphics.Width)
                     {
-                        viewportX = rootGraphics.Width - viewportWidth;
+                        _viewportX = _rootGraphics.Width - _viewportWidth;
                     }
                 }
                 else
                 {
-                    viewportX += dx;
+                    _viewportX += dx;
                 }
-                hScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_x, viewportX, UIScrollOrientation.HorizontalScroll);
+                hScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_x, _viewportX, UIScrollOrientation.HorizontalScroll);
             }
             else
             {
-                int old_x = viewportX;
+                int old_x = _viewportX;
                 if (old_x + dx < 0)
                 {
-                    dx = -viewportX;
-                    viewportX = 0;
+                    dx = -_viewportX;
+                    _viewportX = 0;
                 }
                 else
                 {
-                    viewportX += dx;
+                    _viewportX += dx;
                 }
-                hScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_x, viewportX, UIScrollOrientation.HorizontalScroll);
+                hScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_x, _viewportX, UIScrollOrientation.HorizontalScroll);
             }
             CalculateCanvasPages();
         }
@@ -194,9 +163,9 @@ namespace LayoutFarm.UI
         {
             hScrollEventArgs = null;
             vScrollEventArgs = null;
-            if (x > rootGraphics.Width - viewportWidth)
+            if (x > _rootGraphics.Width - _viewportWidth)
             {
-                x = rootGraphics.Width - viewportWidth;
+                x = _rootGraphics.Width - _viewportWidth;
             }
             if (x < 0)
             {
@@ -208,18 +177,18 @@ namespace LayoutFarm.UI
             }
             else if (y > 0)
             {
-                if (y > rootGraphics.Height - viewportHeight)
+                if (y > _rootGraphics.Height - _viewportHeight)
                 {
-                    y = rootGraphics.Height - viewportHeight;
+                    y = _rootGraphics.Height - _viewportHeight;
                     if (y < 0)
                     {
                         y = 0;
                     }
                 }
             }
-            int old_y = viewportY; viewportX = x;
-            viewportY = y;
-            vScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_y, viewportY, UIScrollOrientation.VerticalScroll);
+            int old_y = _viewportY; _viewportX = x;
+            _viewportY = y;
+            vScrollEventArgs = new UIScrollEventArgs(UIScrollEventType.ThumbPosition, old_y, _viewportY, UIScrollOrientation.VerticalScroll);
             CalculateCanvasPages();
         }
 
@@ -228,11 +197,11 @@ namespace LayoutFarm.UI
         {
             hScrollSupportEventArgs = null;
             vScrollSupportEventArgs = null;
-            v_largeChange = viewportHeight;
-            v_smallChange = v_largeChange / 4;
-            h_largeChange = viewportWidth;
-            h_smallChange = h_largeChange / 4;
-            if (rootGraphics.Height <= viewportHeight)
+            _v_largeChange = _viewportHeight;
+            _v_smallChange = _v_largeChange / 4;
+            _h_largeChange = _viewportWidth;
+            _h_smallChange = _h_largeChange / 4;
+            if (_rootGraphics.Height <= _viewportHeight)
             {
                 vScrollSupportEventArgs = new ScrollSurfaceRequestEventArgs(false);
             }
@@ -241,7 +210,7 @@ namespace LayoutFarm.UI
                 vScrollSupportEventArgs = new ScrollSurfaceRequestEventArgs(true);
             }
 
-            if (rootGraphics.Width <= viewportWidth)
+            if (_rootGraphics.Width <= _viewportWidth)
             {
                 hScrollSupportEventArgs = new ScrollSurfaceRequestEventArgs(false);
             }
@@ -253,8 +222,8 @@ namespace LayoutFarm.UI
         public void Close()
         {
             OnClosing();
-            this.isClosed = true;
-            this.rootGraphics.CloseWinRoot();
+            this._isClosed = true;
+            this._rootGraphics.CloseWinRoot();
         }
 
         protected virtual void OnClosing()

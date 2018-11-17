@@ -15,8 +15,10 @@ namespace LayoutFarm.Dev
             //------
 
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlus);
-            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GL);
-            this.lstPlatformSelectors.Items.Add(InnerViewportKind.Skia);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GLES);
+            //this.lstPlatformSelectors.Items.Add(InnerViewportKind.Skia);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.AggOnGLES);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlusOnGLES);
             this.lstPlatformSelectors.SelectedIndex = 0;//set default
 
 
@@ -35,39 +37,30 @@ namespace LayoutFarm.Dev
         {
             //load demo sample
             DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
-            if (selectedDemoInfo == null) return;
-
+            if (selectedDemoInfo == null) return; 
 
             App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
             RunDemo(selectedDemo);
 
-            //------------------------------------------------------------ 
-            //LayoutFarm.UI.UISurfaceViewportControl viewport; 
-            //Form formCanvas;
-            //CreateReadyForm(
-            //    out viewport,
-            //    out formCanvas);
-
-            //selectedDemo.StartDemo(new SampleViewport(viewport));
-            //viewport.TopDownRecalculateContent();
-            ////==================================================  
-            //viewport.PaintMe();
-            //ShowFormLayoutInspector(viewport); 
         }
 
 
         LayoutFarm.UI.UISurfaceViewportControl _latestviewport;
         Form _latest_formCanvas;
-        public void RunDemo(App selectedDemo)
+        public void RunDemo(App app)
         {
+            //1. create blank form
+            YourImplementation.DemoFormCreatorHelper.CreateReadyForm(
+                (InnerViewportKind)lstPlatformSelectors.SelectedItem,
+                out _latestviewport, out _latest_formCanvas);
 
-            YourImplementation.DemoFormCreatorHelper.CreateReadyForm(out _latestviewport, out _latest_formCanvas);
+            //2. create app host
 
-            selectedDemo.Start(new WinFormAppHost(_latestviewport));
+            app.Start(new AppHostWinForm(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
-            //==================================================  
             _latestviewport.PaintMe();
 
+            //==================================================  
             if (this.chkShowLayoutInspector.Checked)
             {
                 YourImplementation.LayoutInspectorUtils.ShowFormLayoutInspector(_latestviewport);

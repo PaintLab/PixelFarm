@@ -44,7 +44,7 @@ namespace LayoutFarm
         void textSurfaceListener_PreviewArrowKeyDown(object sender, Text.TextDomEventArgs e)
         {
             //update selection in list box 
-            switch (e.key)
+            switch (e.Key)
             {
                 case UIKeys.Down:
                     {

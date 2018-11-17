@@ -6,89 +6,80 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.WinGdi;
 namespace LayoutFarm.UI.GdiPlus
 {
-    class GdiPlusCanvasViewport : CanvasViewport
+    class GdiPlusCanvasViewport : CanvasViewport, IDisposable
     {
-        QuadPages _quadPages = null;
-        public GdiPlusCanvasViewport(RootGraphic rootgfx,
-            Size viewportSize)
-            : base(rootgfx, viewportSize)
+
+        GdiPlusDrawBoard _drawBoard;
+        public GdiPlusCanvasViewport(RootGraphic rootgfx, Size viewportSize) :
+            base(rootgfx, viewportSize)
         {
-            _quadPages = new QuadPages(viewportSize.Width, viewportSize.Height);
+            SetupRenderSurfaceAndDrawBoard();
             this.CalculateCanvasPages();
         }
-
-        ~GdiPlusCanvasViewport()
+        void SetupRenderSurfaceAndDrawBoard()
         {
-            if (_quadPages != null)
+            GdiPlusRenderSurface gdiRenderSurface = new GdiPlusRenderSurface(0, 0, ViewportWidth, ViewportHeight);
+            _drawBoard = new GdiPlusDrawBoard(gdiRenderSurface);
+            _drawBoard.CurrentFont = new RequestFont("Tahoma", 10); 
+        }
+        public void Dispose()
+        {
+            if (_drawBoard != null)
             {
-                _quadPages.Dispose();
+                _drawBoard.Dispose();
+                _drawBoard = null;
             }
         }
-
-        //static int dbugCount = 0;
-        protected override void OnClosing()
-        {
-            if (_quadPages != null)
-            {
-                _quadPages.Dispose();
-                _quadPages = null;
-            }
-            base.OnClosing();
-        }
-
+        
 #if DEBUG
         //int dbugCount;
 #endif
         public override void CanvasInvalidateArea(Rectangle r)
         {
-            _quadPages.CanvasInvalidate(r);
+            if (_drawBoard != null && _drawBoard.IntersectsWith(r))
+            {
+                _drawBoard.Invalidate(r);
+            }
 #if DEBUG
             //Console.WriteLine("CanvasInvalidateArea:" + (dbugCount++).ToString() + " " + r.ToString());
 #endif
         }
-        public override bool IsQuadPageValid
+        protected override void ResetViewSize(int viewportWidth, int viewportHeight)
         {
-            get
-            {
-                return this._quadPages.IsValid;
-            }
-        }
-        protected override void ResetQuadPages(int viewportWidth, int viewportHeight)
-        {
-            _quadPages.ResizeAllPages(viewportWidth, viewportHeight);
+            ResizeAllPages(viewportWidth, viewportHeight);
         }
         protected override void CalculateCanvasPages()
         {
-            _quadPages.CalculateCanvasPages(this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+
             this.FullMode = true;
         }
-        public void PaintMe2(IntPtr hdc, Rectangle invalidateArea)
+        public void PaintMe(IntPtr hdc, Rectangle invalidateArea)
         {
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this.rootGraphics.PrepareRender();
+            this._rootGraphics.PrepareRender();
             //---------------
-            this.rootGraphics.IsInRenderPhase = true;
+            this._rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
+            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+            this._rootGraphics.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
-                _quadPages.RenderToOutputWindowFullMode(
-                    rootGraphics.TopWindowRenderBox, hdc,
+                RenderToOutputWindowFullMode(
+                    _rootGraphics.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
             else
             {
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
-                _quadPages.RenderToOutputWindowPartialMode2(
-                   rootGraphics.TopWindowRenderBox, hdc,
-                   this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
+                RenderToOutputWindowPartialMode2(
+                        _rootGraphics.TopWindowRenderBox, hdc,
+                        this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight, invalidateArea);
             }
-            this.rootGraphics.IsInRenderPhase = false;
+            this._rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -117,28 +108,28 @@ namespace LayoutFarm.UI.GdiPlus
             if (this.IsClosed) { return; }
             //------------------------------------ 
 
-            this.rootGraphics.PrepareRender();
+            this._rootGraphics.PrepareRender();
             //---------------
-            this.rootGraphics.IsInRenderPhase = true;
+            this._rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
+            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+            this._rootGraphics.dbug_drawLevel = 0;
 #endif
             if (this.FullMode)
             {
-                _quadPages.RenderToOutputWindowFullMode(
-                    rootGraphics.TopWindowRenderBox, hdc,
+                RenderToOutputWindowFullMode(
+                    _rootGraphics.TopWindowRenderBox, hdc,
                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
             else
             {
                 //temp to full mode
                 //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
-                _quadPages.RenderToOutputWindowPartialMode(
-                   rootGraphics.TopWindowRenderBox, hdc,
-                   this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+                RenderToOutputWindowPartialMode(
+                     _rootGraphics.TopWindowRenderBox, hdc,
+                     this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
             }
-            this.rootGraphics.IsInRenderPhase = false;
+            this._rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
@@ -161,61 +152,198 @@ namespace LayoutFarm.UI.GdiPlus
         }
 
 
-        public void PaintMe(GdiPlusDrawBoard mycanvas)
+        //PRESERVE***
+        //        public void PaintMe(GdiPlusDrawBoard mycanvas)
+        //        {
+        //            if (this.IsClosed) { return; }
+        //            //------------------------------------ 
+
+        //            this._rootGraphics.PrepareRender();
+        //            //---------------
+        //            this._rootGraphics.IsInRenderPhase = true;
+        //#if DEBUG
+        //            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+        //            this._rootGraphics.dbug_drawLevel = 0;
+        //#endif
+
+        //            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
+        //            Rectangle rect = mycanvas.Rect;
+        //            this._rootGraphics.TopWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+        //#if DEBUG
+        //            this._rootGraphics.TopWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
+        //#endif
+
+        //            mycanvas.IsContentReady = true;
+        //            mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
+        //            //if (this.FullMode)
+        //            //{
+        //            //    quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc,
+        //            //        this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+        //            //}
+        //            //else
+        //            //{
+        //            //    //temp to full mode
+        //            //    //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+        //            //    quadPages.RenderToOutputWindowPartialMode(rootGraphics.TopWindowRenderBox, hdc,
+        //            //        this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+
+        //            //}
+        //            this._rootGraphics.IsInRenderPhase = false;
+        //#if DEBUG
+
+        //            RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
+        //            if (visualroot.dbug_RecordDrawingChain)
+        //            {
+        //                List<dbugLayoutMsg> outputMsgs = dbugOutputWindow.dbug_rootDocDebugMsgs;
+        //                outputMsgs.Clear();
+        //                outputMsgs.Add(new dbugLayoutMsg(null as RenderElement, "[" + debug_render_to_output_count + "]"));
+        //                visualroot.dbug_DumpRootDrawingMsg(outputMsgs);
+        //                dbugOutputWindow.dbug_InvokeVisualRootDrawMsg();
+        //                debug_render_to_output_count++;
+        //            }
+
+
+        //            if (dbugHelper01.dbugVE_HighlightMe != null)
+        //            {
+        //                dbugOutputWindow.dbug_HighlightMeNow(dbugHelper01.dbugVE_HighlightMe.dbugGetGlobalRect());
+        //            }
+        //#endif
+        //        }
+        //PRESERVE***
+
+        public void RenderToOutputWindowFullMode(
+            IRenderElement topWindowRenderBox,
+            IntPtr destOutputHdc,
+            int viewportX, int viewportY, int viewportWidth, int viewportHeight)
         {
-            if (this.IsClosed) { return; }
-            //------------------------------------ 
 
-            this.rootGraphics.PrepareRender();
-            //---------------
-            this.rootGraphics.IsInRenderPhase = true;
-#if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
-#endif
+            if (_drawBoard != null && !_drawBoard.IsContentReady)
+            {
+                UpdateAllArea(_drawBoard, topWindowRenderBox);
+            }
+            _drawBoard.RenderTo(destOutputHdc, viewportX - _drawBoard.Left,
+                          viewportY - _drawBoard.Top,
+                          new Rectangle(0, 0,
+                          viewportWidth,
+                          viewportHeight));
 
+        }
+        static void UpdateAllArea(GdiPlusDrawBoard mycanvas, IRenderElement topWindowRenderBox)
+        {
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
             Rectangle rect = mycanvas.Rect;
-            this.rootGraphics.TopWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
+            topWindowRenderBox.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG
-            this.rootGraphics.TopWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
+            topWindowRenderBox.dbugShowRenderPart(mycanvas, rect);
 #endif
 
             mycanvas.IsContentReady = true;
             mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
-            //if (this.FullMode)
-            //{
-            //    quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc,
-            //        this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
-            //}
-            //else
-            //{
-            //    //temp to full mode
-            //    //quadPages.RenderToOutputWindowFullMode(rootGraphics.TopWindowRenderBox, hdc, this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
-            //    quadPages.RenderToOutputWindowPartialMode(rootGraphics.TopWindowRenderBox, hdc,
-            //        this.ViewportX, this.ViewportY, this.ViewportWidth, this.ViewportHeight);
+        }
 
-            //}
-            this.rootGraphics.IsInRenderPhase = false;
+        static void UpdateInvalidArea(GdiPlusDrawBoard mycanvas, IRenderElement rootElement)
+        {
+            mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
+            Rectangle rect = mycanvas.InvalidateArea;
+
+            if (rect.Width > 0 && rect.Height > 0)
+            {
+                rootElement.DrawToThisCanvas(mycanvas, rect);
 #if DEBUG
-
-            RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
-            if (visualroot.dbug_RecordDrawingChain)
-            {
-                List<dbugLayoutMsg> outputMsgs = dbugOutputWindow.dbug_rootDocDebugMsgs;
-                outputMsgs.Clear();
-                outputMsgs.Add(new dbugLayoutMsg(null as RenderElement, "[" + debug_render_to_output_count + "]"));
-                visualroot.dbug_DumpRootDrawingMsg(outputMsgs);
-                dbugOutputWindow.dbug_InvokeVisualRootDrawMsg();
-                debug_render_to_output_count++;
-            }
-
-
-            if (dbugHelper01.dbugVE_HighlightMe != null)
-            {
-                dbugOutputWindow.dbug_HighlightMeNow(dbugHelper01.dbugVE_HighlightMe.dbugGetGlobalRect());
-            }
+                rootElement.dbugShowRenderPart(mycanvas, rect);
 #endif
+            }
+            else
+            {
+
+            }
+
+
+            mycanvas.IsContentReady = true;
+            mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
+        }
+
+        public void RenderToOutputWindowPartialMode(
+            IRenderElement renderE,
+            IntPtr destOutputHdc,
+            int viewportX, int viewportY,
+            int viewportWidth, int viewportHeight)
+        {
+            if (!_drawBoard.IsContentReady)
+            {
+                UpdateInvalidArea(_drawBoard, renderE);
+            }
+
+            Rectangle invalidateArea = _drawBoard.InvalidateArea;
+
+            _drawBoard.RenderTo(destOutputHdc, invalidateArea.Left - _drawBoard.Left, invalidateArea.Top - _drawBoard.Top,
+                new Rectangle(invalidateArea.Left -
+                    viewportX, invalidateArea.Top - viewportY,
+                    invalidateArea.Width, invalidateArea.Height));
+            _drawBoard.ResetInvalidateArea();
+        }
+        public void RenderToOutputWindowPartialMode2(
+            IRenderElement renderE,
+            IntPtr destOutputHdc,
+            int viewportX, int viewportY,
+            int viewportWidth, int viewportHeight,
+            Rectangle windowMsgInvalidateArea)
+        {
+            if (!_drawBoard.IsContentReady)
+            {
+                UpdateInvalidArea(_drawBoard, renderE);
+            }
+
+            Rectangle invalidateArea = _drawBoard.InvalidateArea;
+            if (invalidateArea.Width == 0 || invalidateArea.Height == 0)
+            {
+                invalidateArea = windowMsgInvalidateArea;// new Rectangle(0, 0, _pageA.Width, _pageA.Height);
+            }
+
+            _drawBoard.RenderTo(destOutputHdc, invalidateArea.Left - _drawBoard.Left, invalidateArea.Top - _drawBoard.Top,
+                new Rectangle(invalidateArea.Left -
+                    viewportX, invalidateArea.Top - viewportY,
+                    invalidateArea.Width, invalidateArea.Height));
+            _drawBoard.ResetInvalidateArea();
+        }
+        public void ResizeAllPages(int newWidth, int newHeight)
+        {
+            //physicalCanvasCollection.Dispose();
+            //physicalCanvasCollection.ResizeAllPages(newWidth, newHeight);
+            //if (_pageA != null)
+            //{
+            //    _pageA.IsUnused = true;
+            //    _pageA = null;
+            //}
+            if (_drawBoard != null)
+            {
+                if (_drawBoard.Height < newHeight || _drawBoard.Width < newWidth)
+                {
+
+                    _drawBoard.Dispose();
+                    _drawBoard = null;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            //
+            SetupRenderSurfaceAndDrawBoard();
+        }
+        public bool IsValid
+        {
+            get
+            {
+                if (_drawBoard != null)
+                {
+                    if (!_drawBoard.IsContentReady)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
     }
 }

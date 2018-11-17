@@ -13,6 +13,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\App.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHost.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHostExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\AppHostWinForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\CpuBlitOnGLES.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\DemoNote.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormCanvasHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormDemoList.cs">

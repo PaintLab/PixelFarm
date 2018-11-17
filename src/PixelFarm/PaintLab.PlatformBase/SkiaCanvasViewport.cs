@@ -16,14 +16,14 @@ namespace LayoutFarm.UI.Skia
         int internalSizeW = 800;
         int internalSizwH = 600;
 
-        Win32.NativeWin32MemoryDc memdc;
+        Win32.NativeWin32MemoryDC memdc;
         public SkiaCanvasViewport(RootGraphic rootgfx, Size viewportSize)
             : base(rootgfx, viewportSize)
         {
 
             this.CalculateCanvasPages();
             mySkCanvas = new PixelFarm.Drawing.Skia.MySkiaDrawBoard(0, 0, 0, 0, internalSizeW, internalSizwH);
-            memdc = new Win32.NativeWin32MemoryDc(internalSizeW, internalSizwH);
+            memdc = new Win32.NativeWin32MemoryDC(internalSizeW, internalSizwH);
 
         }
         protected override void OnClosing()
@@ -37,15 +37,8 @@ namespace LayoutFarm.UI.Skia
             //quadPages.CanvasInvalidate(r);
             //Console.WriteLine((dbugCount++).ToString() + " " + r.ToString());
         }
-        public override bool IsQuadPageValid
-        {
-            get
-            {
-                return true;
-                //return this.quadPages.IsValid;
-            }
-        }
-        protected override void ResetQuadPages(int viewportWidth, int viewportHeight)
+        
+        protected override void ResetViewSize(int viewportWidth, int viewportHeight)
         {
             //  quadPages.ResizeAllPages(viewportWidth, viewportHeight);
         }
@@ -70,18 +63,18 @@ namespace LayoutFarm.UI.Skia
         public void PaintMe(IntPtr hdc)
         {
             if (this.IsClosed) { return; }
-            this.rootGraphics.PrepareRender();
+            this._rootGraphics.PrepareRender();
             //---------------
-            this.rootGraphics.IsInRenderPhase = true;
+            this._rootGraphics.IsInRenderPhase = true;
 #if DEBUG
-            this.rootGraphics.dbug_rootDrawingMsg.Clear();
-            this.rootGraphics.dbug_drawLevel = 0;
+            this._rootGraphics.dbug_rootDrawingMsg.Clear();
+            this._rootGraphics.dbug_drawLevel = 0;
 #endif
 
             //1. clear sk surface
             mySkCanvas.Clear(PixelFarm.Drawing.Color.White);
             //2. render to the surface
-            UpdateAllArea(mySkCanvas, rootGraphics.TopWindowRenderBox);
+            UpdateAllArea(mySkCanvas, _rootGraphics.TopWindowRenderBox);
             //3. copy bitmap buffer from the surface and render to final hdc
 
             //-----------------------------------------------
@@ -119,7 +112,7 @@ namespace LayoutFarm.UI.Skia
             //    g2.DrawImage(tmpBmp, 0, 0);
             //}
             //-----------------------------------------------------------------------------
-            this.rootGraphics.IsInRenderPhase = false;
+            this._rootGraphics.IsInRenderPhase = false;
 #if DEBUG
 
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;

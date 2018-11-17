@@ -17,7 +17,10 @@ namespace PaintLab.Svg
 
         public SvgImageBinder(string imgsrc) : base(imgsrc)
         {
-
+        }
+        public SvgImageBinder(PixelFarm.CpuBlit.ActualBitmap actualImg) : base(null)
+        {
+            this.SetImage(actualImg);
         }
     }
 
@@ -138,6 +141,7 @@ namespace PaintLab.Svg
         {
             //paint with painter interface
         }
+        public abstract WellknownSvgElementName ElemName { get; }
         public virtual void Walk(VgPaintArgs p) { }
 
         /// <summary>
@@ -159,6 +163,7 @@ namespace PaintLab.Svg
         {
             return new VgTextNodeRenderElement { TextContent = this.TextContent };
         }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.Text;
     }
 
 
@@ -361,16 +366,14 @@ namespace PaintLab.Svg
             _visualSpec = visualSpec;
             _renderRoot = renderRoot;
         }
-        public WellknownSvgElementName ElemName
-        {
-            get { return _wellknownName; }
-        }
+
+        public override WellknownSvgElementName ElemName => _wellknownName;
         public void SetController(object o)
         {
             _controller = o;
         }
         public object GetController() { return _controller; }
-        internal LayoutFarm.ImageBinder ImageBinder
+        public LayoutFarm.ImageBinder ImageBinder
         {
             get
             {
@@ -582,6 +585,22 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Svg:
                     break;
                 case WellknownSvgElementName.Image:
+                    {
+                        if (_vxsPath == null)
+                        {
+                            //create rect path around img
+
+                            using (VectorToolBox.Borrow(out SimpleRect ss))
+                            {
+                                SvgImageSpec imgSpec = (SvgImageSpec)_visualSpec;
+                                ss.SetRect(0, imgSpec.Height.Number, imgSpec.Width.Number, 0);
+                                _vxsPath = new VertexStore();
+                                ss.MakeVxs(_vxsPath);
+                            }
+
+                        }
+                        goto case WellknownSvgElementName.Rect;
+                    }
                 case WellknownSvgElementName.Path:
                 case WellknownSvgElementName.Line:
                 case WellknownSvgElementName.Ellipse:
@@ -839,29 +858,62 @@ namespace PaintLab.Svg
                                         //check if we need scale or not
 
                                         Image img = this.ImageBinder.Image;
-                                        if (this._imgW == 0 || this._imgH == 0)
+
+                                        if (currentTx != null)
                                         {
-                                            //only X,and Y
-                                            RenderQuality prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                            p.RenderQuality = prevQ;
-                                        }
-                                        else if (_imgW == img.Width && _imgH == img.Height)
-                                        {
-                                            RenderQuality prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                            p.RenderQuality = prevQ;
+                                            Affine aff = currentTx as Affine;
+                                            if (this._imgW == 0 || this._imgH == 0)
+                                            {
+                                                //only X,and Y
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                //p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else if (_imgW == img.Width && _imgH == img.Height)
+                                            {
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                //p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else
+                                            {
+
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                //p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                                p.RenderQuality = prevQ;
+                                            }
                                         }
                                         else
                                         {
-                                            //TODO:  impl img scale here
-                                            RenderQuality prevQ = p.RenderQuality;
-                                            p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                            p.RenderQuality = prevQ;
+                                            if (this._imgW == 0 || this._imgH == 0)
+                                            {
+                                                //only X,and Y
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else if (_imgW == img.Width && _imgH == img.Height)
+                                            {
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                                p.RenderQuality = prevQ;
+                                            }
+                                            else
+                                            {
+
+                                                RenderQuality prevQ = p.RenderQuality;
+                                                p.RenderQuality = RenderQuality.Fast;
+                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+
+                                                p.RenderQuality = prevQ;
+                                            }
                                         }
+
                                     }
                                     break;
 
@@ -1104,7 +1156,7 @@ namespace PaintLab.Svg
                                     //stroke width must > 0 and stroke-color must not be transparent color 
                                     if (p.StrokeWidth > 0 && p.StrokeColor.A > 0)
                                     {
-                                        p.Draw(v1); 
+                                        p.Draw(v1);
 
                                     }
                                 }
@@ -1218,6 +1270,7 @@ namespace PaintLab.Svg
         {
             return new SvgForeignNode { _foriegnNode = this._foriegnNode };
         }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
 
     }
 
@@ -1231,6 +1284,7 @@ namespace PaintLab.Svg
         bool _needBoundUpdate;
         public SvgRenderElement _renderE;
         public ICoordTransformer _coordTx;
+
 
 #if DEBUG
         static int dbugTotalId;
@@ -1253,6 +1307,7 @@ namespace PaintLab.Svg
             _boundRect = new RectD(this.X, this.Y, 2, 2);
         }
 
+        
         public RectD GetBounds()
         {
 
@@ -1279,7 +1334,6 @@ namespace PaintLab.Svg
             return this._boundRect;
 
         }
-
         public bool HasBitmapSnapshot { get; internal set; }
 
         public Image BackingImage { get { return _backimg; } }
@@ -1294,6 +1348,8 @@ namespace PaintLab.Svg
 
         public float X { get; set; }
         public float Y { get; set; }
+
+        public SvgDocument OwnerDocument { get; set; } //optional
     }
 
 

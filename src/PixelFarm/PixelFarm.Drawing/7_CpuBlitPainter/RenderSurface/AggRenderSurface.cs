@@ -29,6 +29,10 @@ namespace PixelFarm.CpuBlit
 {
     public sealed partial class AggRenderSurface
     {
+        ActualBitmap _destActualImage;
+        ScanlineRasterizer _sclineRas;
+        Affine _currentTxMatrix = Affine.IdentityMatrix;
+
         MyBitmapBlender _destBitmapBlender;
         ScanlinePacked8 _sclinePack8;
 
@@ -46,11 +50,11 @@ namespace PixelFarm.CpuBlit
         {
             //create from actual image 
 
-            this.destActualImage = destImage;
+            this._destActualImage = destImage;
 
             this._destBitmapBlender = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
             //
-            this._sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
+            this._sclineRas = new ScanlineRasterizer();
             this._bmpRasterizer = new DestBitmapRasterizer();
             //
             this.destWidth = destImage.Width;
@@ -71,7 +75,7 @@ namespace PixelFarm.CpuBlit
         }
         public ActualBitmap DestActualImage
         {
-            get { return this.destActualImage; }
+            get { return this._destActualImage; }
         }
         public BitmapBlenderBase DestBitmapBlender
         {
@@ -229,21 +233,21 @@ namespace PixelFarm.CpuBlit
             unchecked { _destImageChanged++; };
             //-----------------------------
         }
-        ActualBitmap destActualImage;
-        ScanlineRasterizer _sclineRas;
-        Affine currentTxMatrix = Affine.IdentityMatrix;
+
         public Affine CurrentTransformMatrix
         {
-            get { return this.currentTxMatrix; }
+            get { return this._currentTxMatrix; }
             set
             {
-                this.currentTxMatrix = value;
+                this._currentTxMatrix = value;
             }
         }
+        //-------------------
         public float ScanlineRasOriginX
         {
             get { return _sclineRas.OffsetOriginX; }
         }
+
         public float ScanlineRasOriginY
         {
             get { return _sclineRas.OffsetOriginY; }
@@ -253,6 +257,8 @@ namespace PixelFarm.CpuBlit
             _sclineRas.OffsetOriginX = x;
             _sclineRas.OffsetOriginY = y;
         }
+        //-------------------
+
         public bool UseSubPixelLcdEffect
         {
             get

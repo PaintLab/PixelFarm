@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing.WinGdi
     static class WinGdiTextService
     {
         //TODO: consider use uniscribe 
-        static NativeWin32MemoryDc win32MemDc;
+        static NativeWin32MemoryDC win32MemDc;
         //=====================================
         //static 
         static readonly int[] _charFit = new int[1];
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.WinGdi
         static WinGdiTextService()
         {
             s_en = Encoding.Default; //use platform's default encoding
-            win32MemDc = new NativeWin32MemoryDc(2, 2);
+            win32MemDc = new NativeWin32MemoryDC(2, 2);
             whitespace[0] = ' ';
 
         }

@@ -53,7 +53,7 @@ namespace OpenTkEssTest
             painter.FillColor = PixelFarm.Drawing.Color.Green;
             painter.FillRect(100, 100, 50, 50);
             _glsx.DrawLine(50, 50, 200, 200);
-            _glsx.DrawRect(10, 10, 50, 50);
+          
             painter.FillRenderVx(polygon2);
             painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
             painter.DrawRenderVx(polygon2);

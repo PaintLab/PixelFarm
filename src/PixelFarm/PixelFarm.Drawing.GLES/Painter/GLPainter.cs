@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         RenderQuality _renderQuality;
-
+        Color _fontFillColor;
 
         public GLPainter(GLRenderSurface glsx)
         {
@@ -47,9 +47,6 @@ namespace PixelFarm.DrawingGL
             UseVertexBufferObjectForRenderVx = true;
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
-
-
-
         }
         public override void SetClipRgn(VertexStore vxs)
         {
@@ -59,8 +56,11 @@ namespace PixelFarm.DrawingGL
         {
             throw new NotImplementedException();
         }
+        public void DetachCurrentShader()
+        {
+            _glsx.DetachCurrentShader();
+        }
 
-        Color _fontFillColor;
         public Color FontFillColor
         {
             get
@@ -72,12 +72,16 @@ namespace PixelFarm.DrawingGL
                 _fontFillColor = value;
             }
         }
-        DrawBoardOrientation _orientation;
+
+
+        DrawBoardOrientation _orientation = DrawBoardOrientation.LeftTop;
         public override DrawBoardOrientation Orientation
         {
             get { return _orientation; }
             set
-            { _orientation = value; }
+            {
+                _orientation = value;
+            }
         }
         public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)
@@ -314,16 +318,26 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
-            //TODO: affinePlans
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+            //TODO: affinePlans***
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
             }
         }
+        public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
+        {
+            //TODO: implement transformation matrix
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
+            if (glBmp != null)
+            {
+                _glsx.DrawImage(glBmp, 0, 0);
+            }
+        }
+
         public override void DrawImage(Image actualImage)
         {
-            GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _glsx.DrawImage(glBmp, 0, 0);
@@ -334,36 +348,27 @@ namespace PixelFarm.DrawingGL
 
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp == null) return;
-
-            if (this._orientation == DrawBoardOrientation.LeftTop)
-            {
-                //place left upper corner at specific x y 
-                _glsx.DrawImage(glBmp, (float)left, _glsx.ViewportHeight - (float)top);
-            }
-            else
-            {
-                //left-bottom as original
-                //place left-lower of the img at specific (x,y)
-                _glsx.DrawImage(glBmp, (float)left, (float)top);
-            }
+            _glsx.DrawImage(glBmp, (float)left, (float)top);
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    //place left upper corner at specific x y 
+            //    _glsx.DrawImage(glBmp, (float)left, _glsx.ViewportHeight - (float)top);
+            //}
+            //else
+            //{
+            //    //left-bottom as original
+            //    //place left-lower of the img at specific (x,y)
+            //    _glsx.DrawImage(glBmp, (float)left, (float)top);
+            //}
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
             throw new NotImplementedException();
         }
-        float[] rect_coords = new float[8];
+
         public override void FillRect(double left, double top, double width, double height)
         {
-            if (_orientation == DrawBoardOrientation.LeftBottom)
-            {
-                CreateRectTessCoordsTriStrip((float)left, (float)(top - height), (float)width, (float)height, rect_coords);
-            }
-            else
-            {
-                int canvasH = _glsx.ViewportHeight;
-                CreateRectTessCoordsTriStrip((float)left, canvasH - (float)(top + height), (float)width, (float)height, rect_coords);
-            }
-            _glsx.FillTriangleStrip(_fillColor, rect_coords, 4);
+            _glsx.FillRect(_fillColor, left, top, width, height);
         }
         public override void DrawEllipse(double left, double top, double width, double height)
         {
@@ -395,10 +400,10 @@ namespace PixelFarm.DrawingGL
 
 
 
-            if (this._orientation == DrawBoardOrientation.LeftTop)
-            {
-                y = _glsx.ViewportHeight - y; //set new y
-            }
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    y = _glsx.ViewportHeight - y; //set new y
+            //}
 
             ellipse.Set(x, y, rx, ry);
 
@@ -426,10 +431,10 @@ namespace PixelFarm.DrawingGL
 
 
 
-            if (this._orientation == DrawBoardOrientation.LeftTop)
-            {
-                y = _glsx.ViewportHeight - y; //set new y
-            }
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    y = _glsx.ViewportHeight - y; //set new y
+            //}
 
             ellipse.Set(x, y, rx, ry);
             using (VxsTemp.Borrow(out var vxs))
@@ -512,20 +517,30 @@ namespace PixelFarm.DrawingGL
             ////---------------------------------------------- 
         }
 
-
         public override void DrawRect(double left, double top, double width, double height)
         {
-            if (_orientation == DrawBoardOrientation.LeftBottom)
+            switch (_glsx.SmoothMode)
             {
-                _glsx.DrawRect((float)left, (float)top, (float)width, (float)height);
+                case SmoothMode.Smooth:
+                    {
+                        _glsx.StrokeColor = this.StrokeColor;
+                        using (PixelFarm.Drawing.VxsTemp.Borrow(out Drawing.VertexStore v1))
+                        using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
+                        {
 
+                            r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);
+                            r.MakeVxs(v1);
+                            //create stroke around 
+                            RenderVx renderVX = CreateRenderVx(v1);
+                            DrawRenderVx(renderVX);
+                        }
+                    }
+                    break;
+                default:
+                    {
+                    }
+                    break;
             }
-            else
-            {
-                int canvasH = _glsx.ViewportHeight;
-                _glsx.DrawRect((float)left + 0.5f, canvasH - (float)(top + height + 0.5f), (float)width, (float)height);
-            }
-
         }
 
         public override float OriginX
@@ -542,19 +557,11 @@ namespace PixelFarm.DrawingGL
                 return _glsx.OriginY;
             }
         }
-        public override void DrawString(string text, double x, double y)
+        public override void DrawString(string text, double left, double top)
         {
             if (_textPrinter != null)
             {
-                if (_orientation == DrawBoardOrientation.LeftBottom)
-                {
-                    _textPrinter.DrawString(text, x, y);
-                }
-                else
-                {
-                    _textPrinter.DrawString(text, x, _glsx.ViewportHeight - y);
-                }
-
+                _textPrinter.DrawString(text, left, top);
             }
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
@@ -599,46 +606,10 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        /// <summary>
-        /// create rect tess for openGL
-        /// </summary>
-        /// <param name="x">left</param>
-        /// <param name="y">bottom</param>
-        /// <param name="w">width</param>
-        /// <param name="h">height</param>
-        /// <param name="output"></param>
-        static void CreateRectTessCoordsTriStrip(float x, float y, float w, float h, float[] output)
-        {
-            //float x0 = x;
-            //float y0 = y + h;
-            //float x1 = x;
-            //float y1 = y;
-            //float x2 = x + w;
-            //float y2 = y + h;
-            //float x3 = x + w;
-            //float y3 = y;
-            output[0] = x; output[1] = y + h;
-            output[2] = x; output[3] = y;
-            output[4] = x + w; output[5] = y + h;
-            output[6] = x + w; output[7] = y;
-
-
-        }
-
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _glsx.StrokeColor = _strokeColor;
-            if (this._orientation == DrawBoardOrientation.LeftBottom)
-            {
-                //as OpenGL original
-                _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
-            }
-            else
-            {
-                int h = _glsx.ViewportHeight;
-                _glsx.DrawLine((float)x1, h - (float)y1, (float)x2, h - (float)y2);
-            }
-
+            _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
 
         }
 
