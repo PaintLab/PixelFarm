@@ -193,7 +193,7 @@ namespace YourImplementation
         {
             //don't call base
             //1. we create gdi plus draw board
-            var renderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(0, 0, _width, _height);
+            var renderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(_width, _height);
             _gdiDrawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(renderSurface);
             _gdiDrawBoard.CurrentFont = new RequestFont("Tahoma", 10);
 

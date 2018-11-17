@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit
 
         int _strideBytes;
         int _bitDepth;
-        CpuBlit.Imaging.PixelFormat pixelFormat;
+        CpuBlit.Imaging.PixelFormat _pixelFormat;
         IntPtr _pixelBuffer;
         int _pixelBufferInBytes;
         bool _pixelBufferFromExternalSrc;
@@ -119,7 +119,7 @@ namespace PixelFarm.CpuBlit
         public MemBitmap(int width, int height)
             : this(width, height, System.Runtime.InteropServices.Marshal.AllocHGlobal(width * height * 4))
         {
-            _pixelBufferFromExternalSrc = false;//**
+            _pixelBufferFromExternalSrc = false;//** if we alloc then we are the owner of this MemBmp
             MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set
         }
         public MemBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
@@ -128,12 +128,12 @@ namespace PixelFarm.CpuBlit
             this._width = width;
             this._height = height;
             this._strideBytes = CalculateStride(width,
-                this.pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
+                this._pixelFormat = CpuBlit.Imaging.PixelFormat.ARGB32, //***
                 out _bitDepth,
                 out int bytesPerPixel);
 
             _pixelBufferInBytes = width * height * 4;
-            _pixelBufferFromExternalSrc = true; //*** 
+            _pixelBufferFromExternalSrc = true; //*** we receive ptr from external ***
             _pixelBuffer = externalNativeInt32Ptr;
         }
         public override void Dispose()
@@ -170,7 +170,7 @@ namespace PixelFarm.CpuBlit
             get { return false; }
         }
 
-        public CpuBlit.Imaging.PixelFormat PixelFormat { get { return this.pixelFormat; } }
+        public CpuBlit.Imaging.PixelFormat PixelFormat { get { return this._pixelFormat; } }
         public int Stride { get { return this._strideBytes; } }
         public int BitDepth { get { return this._bitDepth; } }
         public bool IsBigEndian { get; set; }
@@ -206,7 +206,7 @@ namespace PixelFarm.CpuBlit
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
             //TODO: review here 2018-08-26
-            if (pixelFormat != CpuBlit.Imaging.PixelFormat.ARGB32)
+            if (_pixelFormat != CpuBlit.Imaging.PixelFormat.ARGB32)
             {
                 throw new NotSupportedException();
             }
