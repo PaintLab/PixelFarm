@@ -32,7 +32,7 @@ namespace YourImplementation
             _width = width;
             _height = height;
             //
-            SetupAggCanvas();//*** 
+            SetupCpuBlitRenderSurface();//*** 
         }
 
         public AggPainter GetAggPainter() => _aggPainter;
@@ -97,7 +97,7 @@ namespace YourImplementation
         //----------------------------------------------
         public virtual DrawBoard GetDrawBoard() { return null; }
         //----------------------------------------------
-        protected virtual void SetupAggCanvas()
+        protected virtual void SetupCpuBlitRenderSurface()
         {
             //***
             _memBmp = new MemBitmap(_width, _height);
@@ -185,11 +185,9 @@ namespace YourImplementation
                 RaiseUpdateCpuBlitSurface(updateArea);
             }
         }
-        //------------
-
-
+        //------------ 
         protected override bool HasSomeExtension => true;
-        protected override void SetupAggCanvas()
+        protected override void SetupCpuBlitRenderSurface()
         {
             //don't call base
             //1. we create gdi plus draw board
@@ -201,10 +199,10 @@ namespace YourImplementation
             _memBmp = renderSurface.GetMemBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
             _aggPainter = renderSurface.GetAggPainter();//**
-            _gdiDrawBoard.SetAggPainter(_aggPainter); //***
-                                                      //
-                                                      //...
-
+            _gdiDrawBoard.SetAggPainter(_aggPainter);
+            //***
+            //
+            //... 
             //
             _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
             _lazyBmpProvider.BitmapFormat = GLBitmapFormat.BGR;//**
