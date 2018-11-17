@@ -9,17 +9,18 @@ namespace LayoutFarm.UI
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
     {
 
-        List<ToNotifySizeChangedEvent> tobeNotifySizeChangedList = new List<ToNotifySizeChangedEvent>();
-        List<RenderElementRequest> renderRequestList = new List<RenderElementRequest>();
-        GraphicsTimerTaskManager graphicTimerTaskMan;
+        List<ToNotifySizeChangedEvent> _tobeNotifySizeChangedList = new List<ToNotifySizeChangedEvent>();
+        List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
+        GraphicsTimerTaskManager _graphicTimerTaskMan;
 
-        static object normalUpdateTask = new object();
-        readonly TopWindowEventRoot topWindowEventRoot;
-        readonly RenderBoxBase topWindowRenderBox;
+        static object _normalUpdateTask = new object();
+        readonly TopWindowEventRoot _topWindowEventRoot;
+        readonly RenderBoxBase _topWindowRenderBox;
 
 
         RequestFont _defaultTextEditFont; //TODO: review here
         ITextService _ifonts;
+
         public MyRootGraphic(
             int width, int height,
             ITextService ifonts)
@@ -28,7 +29,7 @@ namespace LayoutFarm.UI
 
 
             this._ifonts = ifonts;
-            this.graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
+            this._graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
 
 #if DEBUG
@@ -37,9 +38,9 @@ namespace LayoutFarm.UI
 #endif
 
             //create default render box***
-            this.topWindowRenderBox = new TopWindowRenderBox(this, width, height);
-            this.topWindowEventRoot = new TopWindowEventRoot(this.topWindowRenderBox);
-            this.SubscribeGraphicsIntervalTask(normalUpdateTask,
+            this._topWindowRenderBox = new TopWindowRenderBox(this, width, height);
+            this._topWindowEventRoot = new TopWindowEventRoot(this._topWindowRenderBox);
+            this.SubscribeGraphicsIntervalTask(_normalUpdateTask,
                 TaskIntervalPlan.Animation,
                 20,
                 (s, e) =>
@@ -62,17 +63,17 @@ namespace LayoutFarm.UI
         }
         public ITopWindowEventRoot TopWinEventPortal
         {
-            get { return this.topWindowEventRoot; }
+            get { return this._topWindowEventRoot; }
         }
         public override bool GfxTimerEnabled
         {
             get
             {
-                return this.graphicTimerTaskMan.Enabled;
+                return this._graphicTimerTaskMan.Enabled;
             }
             set
             {
-                this.graphicTimerTaskMan.Enabled = value;
+                this._graphicTimerTaskMan.Enabled = value;
             }
         }
 
@@ -81,7 +82,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return this.topWindowRenderBox;
+                return this._topWindowRenderBox;
             }
         }
         public override void PrepareRender()
@@ -116,28 +117,28 @@ namespace LayoutFarm.UI
 
         public override void CloseWinRoot()
         {
-            if (graphicTimerTaskMan != null)
+            if (_graphicTimerTaskMan != null)
             {
-                this.graphicTimerTaskMan.CloseAllWorkers();
-                this.graphicTimerTaskMan = null;
+                this._graphicTimerTaskMan.CloseAllWorkers();
+                this._graphicTimerTaskMan = null;
             }
         }
 
         public override void CaretStartBlink()
         {
-            graphicTimerTaskMan.StartCaretBlinkTask();
+            _graphicTimerTaskMan.StartCaretBlinkTask();
         }
         public override void CaretStopBlink()
         {
-            graphicTimerTaskMan.StopCaretBlinkTask();
+            _graphicTimerTaskMan.StopCaretBlinkTask();
         }
 
         ~MyRootGraphic()
         {
-            if (graphicTimerTaskMan != null)
+            if (_graphicTimerTaskMan != null)
             {
-                this.graphicTimerTaskMan.CloseAllWorkers();
-                this.graphicTimerTaskMan = null;
+                this._graphicTimerTaskMan.CloseAllWorkers();
+                this._graphicTimerTaskMan = null;
             }
 
 
@@ -153,26 +154,26 @@ namespace LayoutFarm.UI
             int intervalMs,
             EventHandler<GraphicsTimerTaskEventArgs> tickhandler)
         {
-            return this.graphicTimerTaskMan.SubscribeGraphicsTimerTask(uniqueName, planName, intervalMs, tickhandler);
+            return this._graphicTimerTaskMan.SubscribeGraphicsTimerTask(uniqueName, planName, intervalMs, tickhandler);
         }
         public override void RemoveIntervalTask(object uniqueName)
         {
-            this.graphicTimerTaskMan.UnsubscribeTimerTask(uniqueName);
+            this._graphicTimerTaskMan.UnsubscribeTimerTask(uniqueName);
         }
         //-------------------------------------------------------------------------------
         int VisualRequestCount
         {
             get
             {
-                return renderRequestList.Count;
+                return _renderRequestList.Count;
             }
         }
         void ClearVisualRequests()
         {
-            int j = renderRequestList.Count;
+            int j = _renderRequestList.Count;
             for (int i = 0; i < j; ++i)
             {
-                RenderElementRequest req = renderRequestList[i];
+                RenderElementRequest req = _renderRequestList[i];
                 switch (req.req)
                 {
                     case RequestCommand.AddToWindowRoot:
@@ -196,20 +197,20 @@ namespace LayoutFarm.UI
                         break;
                 }
             }
-            renderRequestList.Clear();
+            _renderRequestList.Clear();
         }
         public override void SetCurrentKeyboardFocus(RenderElement renderElement)
         {
             if (renderElement == null)
             {
-                this.topWindowEventRoot.CurrentKeyboardFocusedElement = null;
+                this._topWindowEventRoot.CurrentKeyboardFocusedElement = null;
                 return;
             }
 
             var owner = renderElement.GetController() as IUIEventListener;
             if (owner != null)
             {
-                this.topWindowEventRoot.CurrentKeyboardFocusedElement = owner;
+                this._topWindowEventRoot.CurrentKeyboardFocusedElement = owner;
             }
         }
 
@@ -274,7 +275,7 @@ namespace LayoutFarm.UI
 
         ITopWindowEventRoot ITopWindowEventRootProvider.EventRoot
         {
-            get { return this.topWindowEventRoot; }
+            get { return this._topWindowEventRoot; }
         }
 
 

@@ -209,7 +209,7 @@ namespace Win32
         public static extern bool BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSource, int dwRop);
         [DllImport("gdi32.dll")]
         public static extern bool PatBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, int dwRop);
-        
+
         //
         //
         public const int AC_SRC_OVER = 0x00;
