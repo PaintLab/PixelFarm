@@ -44,10 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
-      <Link>0_Start\IcuSimpleTextFileDictionaryProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs">
-      <Link>0_Start\StorageProviderImpl.cs</Link>
+      <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
