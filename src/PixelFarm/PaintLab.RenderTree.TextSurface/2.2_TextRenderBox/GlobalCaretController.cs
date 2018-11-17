@@ -7,32 +7,33 @@ namespace LayoutFarm.Text
 {
     static class GlobalCaretController
     {
-        static bool enableCaretBlink = true;//default
-        static TextEditRenderBox currentTextBox;
-        static EventHandler<GraphicsTimerTaskEventArgs> tickHandler;
-        static object caretBlinkTask = new object();
-        static GraphicsTimerTask task;
+        static bool _enableCaretBlink = true;//default
+        static TextEditRenderBox _currentTextBox;
+        static EventHandler<GraphicsTimerTaskEventArgs> _tickHandler;
+        static object _caretBlinkTask = new object();
+        static GraphicsTimerTask _task;
+        //
         static GlobalCaretController()
         {
-            tickHandler = new EventHandler<GraphicsTimerTaskEventArgs>(caret_TickHandler);
+            _tickHandler = new EventHandler<GraphicsTimerTaskEventArgs>(caret_TickHandler);
         }
         internal static void RegisterCaretBlink(RootGraphic root)
         {
             if (!root.CaretHandleRegistered)
             {
                 root.CaretHandleRegistered = true;
-                task = root.SubscribeGraphicsIntervalTask(
-                    caretBlinkTask,
+                _task = root.SubscribeGraphicsIntervalTask(
+                    _caretBlinkTask,
                     TaskIntervalPlan.CaretBlink,
                     20,
-                    tickHandler);
+                    _tickHandler);
             }
         }
         static void caret_TickHandler(object sender, GraphicsTimerTaskEventArgs e)
         {
-            if (currentTextBox != null)
+            if (_currentTextBox != null)
             {
-                currentTextBox.SwapCaretState();
+                _currentTextBox.SwapCaretState();
                 e.NeedUpdate = 1;
             }
             else
@@ -42,33 +43,33 @@ namespace LayoutFarm.Text
         }
         public static bool EnableCaretBlink
         {
-            get { return enableCaretBlink; }
+            get { return _enableCaretBlink; }
             set
             {
-                enableCaretBlink = value;
+                _enableCaretBlink = value;
             }
         }
         internal static TextEditRenderBox CurrentTextEditBox
         {
-            get { return currentTextBox; }
+            get { return _currentTextBox; }
             set
             {
-                if (currentTextBox != value)//&& textEditBox != null)
+                if (_currentTextBox != value)//&& textEditBox != null)
                 {
                     //make lost focus on current textbox
-                    if (currentTextBox != null)
+                    if (_currentTextBox != null)
                     {
                         //stop caret on prev element
-                        currentTextBox.SetCaretState(false);
-                        var evlistener = currentTextBox.GetController() as IUIEventListener;
-                        currentTextBox = null;
+                        _currentTextBox.SetCaretState(false);
+                        var evlistener = _currentTextBox.GetController() as IUIEventListener;
+                        _currentTextBox = null;
                         if (evlistener != null)
                         {
                             evlistener.ListenLostKeyboardFocus(null);
                         }
                     }
                 }
-                currentTextBox = value;
+                _currentTextBox = value;
             }
         }
     }

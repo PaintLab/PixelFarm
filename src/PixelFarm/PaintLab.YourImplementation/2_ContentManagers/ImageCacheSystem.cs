@@ -8,17 +8,17 @@ namespace LayoutFarm.ContentManagers
 
     public class ImageCacheSystem
     {
-        protected Dictionary<string, Image> cacheImages = new Dictionary<string, Image>();
+        protected Dictionary<string, Image> _cacheImages = new Dictionary<string, Image>();
         public ImageCacheSystem()
         {
         }
         public virtual bool TryGetCacheImage(string url, out Image img)
         {
-            return cacheImages.TryGetValue(url, out img);
+            return _cacheImages.TryGetValue(url, out img);
         }
         public virtual void Replace(string url, Image img)
         {
-            this.cacheImages[url] = img;
+            this._cacheImages[url] = img;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace LayoutFarm
 
             //}
 #endif
-            this.SetSize(width, this.b_height);
+            this.SetSize(width, this._b_height);
         }
         public void SetHeight(int height)
         {
@@ -23,7 +23,7 @@ namespace LayoutFarm
 
             //}
 #endif
-            this.SetSize(this.b_width, height);
+            this.SetSize(this._b_width, height);
         }
         public void SetSize(int width, int height)
         {
@@ -33,17 +33,17 @@ namespace LayoutFarm
 
             }
 #endif
-            if (parentLink == null)
+            if (_parentLink == null)
             {
                 //direct set size
-                this.b_width = width;
-                this.b_height = height;
+                this._b_width = width;
+                this._b_height = height;
             }
             else
             {
                 Rectangle prevBounds = this.RectBounds;
-                this.b_width = width;
-                this.b_height = height;
+                this._b_width = width;
+                this._b_height = height;
                 //combine before and after rect 
                 //add to invalidate root invalidate queue  
                 this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
@@ -53,10 +53,10 @@ namespace LayoutFarm
 
         public void SetLocation(int left, int top)
         {
-            if (parentLink == null)
+            if (_parentLink == null)
             {
-                this.b_left = left;
-                this.b_top = top;
+                this._b_left = left;
+                this._b_top = top;
             }
             else
             {
@@ -65,8 +65,8 @@ namespace LayoutFarm
                 Rectangle prevBounds = this.RectBounds;
                 //----------------
 
-                this.b_left = left;
-                this.b_top = top;
+                this._b_left = left;
+                this._b_top = top;
                 //----------------   
                 //combine before and after rect  
                 //add to invalidate root invalidate queue
@@ -77,20 +77,20 @@ namespace LayoutFarm
 
         public void SetBounds(int left, int top, int width, int height)
         {
-            if (parentLink == null)
+            if (_parentLink == null)
             {
-                this.b_left = left;
-                this.b_top = top;
-                this.b_width = width;
-                this.b_height = height;
+                this._b_left = left;
+                this._b_top = top;
+                this._b_width = width;
+                this._b_height = height;
             }
             else
             {
                 Rectangle prevBounds = this.RectBounds;
-                this.b_left = left;
-                this.b_top = top;
-                this.b_width = width;
-                this.b_height = height;
+                this._b_left = left;
+                this._b_top = top;
+                this._b_width = width;
+                this._b_height = height;
                 this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
             }
         }

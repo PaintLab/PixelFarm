@@ -4,7 +4,7 @@ namespace LayoutFarm
 {
     public abstract class UIPlatform
     {
-        static UIPlatform ui_plaform;
+        static UIPlatform s_ui_plaform;
 
         public abstract void SetClipboardData(string textData);
         public abstract string GetClipboardData();
@@ -12,7 +12,7 @@ namespace LayoutFarm
 
         protected void SetAsDefaultPlatform()
         {
-            ui_plaform = this;
+            s_ui_plaform = this;
         }
         public static void RegisterTimerTask(UITimerTask uiTimer)
         {

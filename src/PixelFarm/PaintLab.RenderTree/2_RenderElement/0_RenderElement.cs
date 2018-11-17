@@ -8,18 +8,17 @@ namespace LayoutFarm
 
     public abstract partial class RenderElement : IRenderElement
     {
-        RootGraphic rootGfx;
-
-        IParentLink parentLink;
-        object controller;
-        int propFlags;
-        bool needClipArea;
+        RootGraphic _rootGfx;
+        IParentLink _parentLink;
+        object _controller;
+        int _propFlags;
+        bool _needClipArea;
 
         public RenderElement(RootGraphic rootGfx, int width, int height)
         {
-            this.b_width = width;
-            this.b_height = height;
-            this.rootGfx = rootGfx;
+            this._b_width = width;
+            this._b_height = height;
+            this._rootGfx = rootGfx;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
@@ -30,26 +29,26 @@ namespace LayoutFarm
         public abstract void ResetRootGraphics(RootGraphic rootgfx);
         protected static void DirectSetRootGraphics(RenderElement r, RootGraphic rootgfx)
         {
-            r.rootGfx = rootgfx;
+            r._rootGfx = rootgfx;
         }
         public bool NeedClipArea
         {
-            get { return needClipArea; }
+            get { return _needClipArea; }
             set
             {
-                needClipArea = value;
+                _needClipArea = value;
             }
         }
         public RootGraphic Root
         {
-            get { return this.rootGfx; }
+            get { return this._rootGfx; }
         }
 
         public RenderElement GetTopWindowRenderBox()
         {
-            if (parentLink == null) { return null; }
+            if (_parentLink == null) { return null; }
 
-            return this.rootGfx.TopWindowRenderBox;
+            return this._rootGfx.TopWindowRenderBox;
         }
 
         //==============================================================
@@ -57,24 +56,24 @@ namespace LayoutFarm
         public object GetController()
         {
             //TODO: move to extension method ***
-            return controller;
+            return _controller;
         }
         public void SetController(object controller)
         {
             //TODO: move to extension method ***
-            this.controller = controller;
+            this._controller = controller;
         }
         public bool TransparentForAllEvents
         {
             get
             {
-                return (propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0;
+                return (_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0;
             }
             set
             {
-                propFlags = value ?
-                       propFlags | RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS :
-                       propFlags & ~RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS;
+                _propFlags = value ?
+                       _propFlags | RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS :
+                       _propFlags & ~RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS;
             }
         }
 
@@ -84,7 +83,7 @@ namespace LayoutFarm
         {
             get
             {
-                return this.parentLink != null;
+                return this._parentLink != null;
             }
         }
         public virtual void ClearAllChildren()
@@ -99,27 +98,27 @@ namespace LayoutFarm
 
         protected bool HasParentLink
         {
-            get { return this.parentLink != null; }
+            get { return this._parentLink != null; }
         }
         public RenderElement ParentRenderElement
         {
             get
             {
-                if (parentLink == null)
+                if (_parentLink == null)
                 {
                     return null;
                 }
-                return parentLink.ParentRenderElement;
+                return _parentLink.ParentRenderElement;
             }
         }
 
         public static void RemoveParentLink(RenderElement childElement)
         {
-            childElement.parentLink = null;
+            childElement._parentLink = null;
         }
         public static void SetParentLink(RenderElement childElement, IParentLink parentLink)
         {
-            childElement.parentLink = parentLink;
+            childElement._parentLink = parentLink;
 #if DEBUG
             if (childElement.ParentRenderElement == childElement)
             {
@@ -130,22 +129,22 @@ namespace LayoutFarm
         }
         public bool MayHasChild
         {
-            get { return (propFlags & RenderElementConst.MAY_HAS_CHILD) != 0; }
+            get { return (_propFlags & RenderElementConst.MAY_HAS_CHILD) != 0; }
             protected set
             {
-                propFlags = value ?
-                      propFlags | RenderElementConst.MAY_HAS_CHILD :
-                      propFlags & ~RenderElementConst.MAY_HAS_CHILD;
+                _propFlags = value ?
+                      _propFlags | RenderElementConst.MAY_HAS_CHILD :
+                      _propFlags & ~RenderElementConst.MAY_HAS_CHILD;
             }
         }
         public bool MayHasViewport
         {
-            get { return (propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0; }
+            get { return (_propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0; }
             protected set
             {
-                propFlags = value ?
-                      propFlags | RenderElementConst.MAY_HAS_VIEWPORT :
-                      propFlags & ~RenderElementConst.MAY_HAS_VIEWPORT;
+                _propFlags = value ?
+                      _propFlags | RenderElementConst.MAY_HAS_VIEWPORT :
+                      _propFlags & ~RenderElementConst.MAY_HAS_VIEWPORT;
             }
         }
         public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point)
@@ -161,7 +160,7 @@ namespace LayoutFarm
         {
             get
             {
-                return ((propFlags & RenderElementConst.HIDDEN) == 0);
+                return ((_propFlags & RenderElementConst.HIDDEN) == 0);
             }
         }
         public void SetVisible(bool value)
@@ -169,10 +168,10 @@ namespace LayoutFarm
             //check if visible change? 
             if (this.Visible != value)
             {
-                propFlags = value ?
-                    propFlags & ~RenderElementConst.HIDDEN :
-                    propFlags | RenderElementConst.HIDDEN;
-                if (parentLink != null)
+                _propFlags = value ?
+                    _propFlags & ~RenderElementConst.HIDDEN :
+                    _propFlags | RenderElementConst.HIDDEN;
+                if (_parentLink != null)
                 {
                     this.InvalidateParentGraphics(this.RectBounds);
                 }
@@ -183,13 +182,13 @@ namespace LayoutFarm
         {
             get
             {
-                return ((propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
+                return ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
             }
             set
             {
-                propFlags = value ?
-                     propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
-                     propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
+                _propFlags = value ?
+                     _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
+                     _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
             }
         }
 
@@ -197,13 +196,13 @@ namespace LayoutFarm
         {
             get
             {
-                return (this.propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
+                return (this._propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
             }
             set
             {
-                propFlags = value ?
-                      propFlags | RenderElementConst.IS_TOP_RENDERBOX :
-                      propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
+                _propFlags = value ?
+                      _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
+                      _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
             }
         }
 
@@ -211,13 +210,13 @@ namespace LayoutFarm
         {
             get
             {
-                return (this.propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
+                return (this._propFlags & RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE) != 0;
             }
             set
             {
-                propFlags = value ?
-                      propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
-                      propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
+                _propFlags = value ?
+                      _propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
+                      _propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
             }
         }
 
@@ -225,19 +224,19 @@ namespace LayoutFarm
         {
             get
             {
-                return (propFlags & RenderElementConst.HAS_TRANSPARENT_BG) != 0;
+                return (_propFlags & RenderElementConst.HAS_TRANSPARENT_BG) != 0;
             }
             set
             {
-                propFlags = value ?
-                       propFlags | RenderElementConst.HAS_TRANSPARENT_BG :
-                       propFlags & ~RenderElementConst.HAS_TRANSPARENT_BG;
+                _propFlags = value ?
+                       _propFlags | RenderElementConst.HAS_TRANSPARENT_BG :
+                       _propFlags & ~RenderElementConst.HAS_TRANSPARENT_BG;
             }
         }
 
         public bool VisibleAndHasParent
         {
-            get { return ((this.propFlags & RenderElementConst.HIDDEN) == 0) && (this.parentLink != null); }
+            get { return ((this._propFlags & RenderElementConst.HIDDEN) == 0) && (this._parentLink != null); }
         }
 
         //==============================================================
@@ -247,7 +246,7 @@ namespace LayoutFarm
         {
 
 
-            if ((propFlags & RenderElementConst.HIDDEN) != 0)
+            if ((_propFlags & RenderElementConst.HIDDEN) != 0)
             {
                 return false;
             }
@@ -257,18 +256,18 @@ namespace LayoutFarm
             int testY;
             hitChain.GetTestPoint(out testX, out testY);
 
-            if ((testY >= b_top && testY <= (b_top + b_height)
-            && (testX >= b_left && testX <= (b_left + b_width))))
+            if ((testY >= _b_top && testY <= (_b_top + _b_height)
+            && (testX >= _b_left && testX <= (_b_left + _b_width))))
             {
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                        -b_left + this.ViewportX,
-                        -b_top + this.ViewportY);
+                        -_b_left + this.ViewportX,
+                        -_b_top + this.ViewportY);
                 }
                 else
                 {
-                    hitChain.OffsetTestPoint(-b_left, -b_top);
+                    hitChain.OffsetTestPoint(-_b_left, -_b_top);
                 }
 
                 hitChain.AddHitObject(this);
@@ -280,15 +279,15 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                            b_left - this.ViewportX,
-                            b_top - this.ViewportY);
+                            _b_left - this.ViewportX,
+                            _b_top - this.ViewportY);
                 }
                 else
                 {
-                    hitChain.OffsetTestPoint(b_left, b_top);
+                    hitChain.OffsetTestPoint(_b_left, _b_top);
                 }
 
-                if ((propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0 &&
+                if ((_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0 &&
                     hitChain.TopMostElement == this)
                 {
                     hitChain.RemoveCurrentHit();
@@ -302,7 +301,7 @@ namespace LayoutFarm
             else
             {
                 //not visual hit on this object..
-                if (this.needClipArea)
+                if (this._needClipArea)
                 {
                     return false;
                 }
@@ -316,12 +315,12 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                        -b_left + this.ViewportX,
-                        -b_top + this.ViewportY);
+                        -_b_left + this.ViewportX,
+                        -_b_top + this.ViewportY);
                 }
                 else
                 {
-                    hitChain.OffsetTestPoint(-b_left, -b_top);
+                    hitChain.OffsetTestPoint(-_b_left, -_b_top);
                 }
 
 
@@ -333,12 +332,12 @@ namespace LayoutFarm
                 if (this.MayHasViewport)
                 {
                     hitChain.OffsetTestPoint(
-                            b_left - this.ViewportX,
-                            b_top - this.ViewportY);
+                            _b_left - this.ViewportX,
+                            _b_top - this.ViewportY);
                 }
                 else
                 {
-                    hitChain.OffsetTestPoint(b_left, b_top);
+                    hitChain.OffsetTestPoint(_b_left, _b_top);
                 }
 
                 return hitChain.Count > preTestCount;
@@ -350,7 +349,7 @@ namespace LayoutFarm
         public abstract void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea);
         public void DrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
-            if ((propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
+            if ((_propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {
                 return;
             }
@@ -358,11 +357,11 @@ namespace LayoutFarm
             dbugVRoot.dbug_drawLevel++;
 #endif
 
-            if (needClipArea)
+            if (_needClipArea)
             {
                 //some elem may need clip for its child
                 //some may not need
-                if (canvas.PushClipAreaRect(b_width, b_height, ref updateArea))
+                if (canvas.PushClipAreaRect(_b_width, _b_height, ref updateArea))
                 {
 #if DEBUG
                     if (dbugVRoot.dbug_RecordDrawingChain)
@@ -373,7 +372,7 @@ namespace LayoutFarm
                     //------------------------------------------ 
                     this.CustomDrawToThisCanvas(canvas, updateArea);
                     //------------------------------------------
-                    propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+                    _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
 #if DEBUG
                     debug_RecordPostDrawInfo(canvas);
 #endif
@@ -392,7 +391,7 @@ namespace LayoutFarm
                 //------------------------------------------ 
                 this.CustomDrawToThisCanvas(canvas, updateArea);
                 //------------------------------------------
-                propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+                _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
 #if DEBUG
                 debug_RecordPostDrawInfo(canvas);
 #endif
@@ -408,13 +407,13 @@ namespace LayoutFarm
 
         public static void DirectSetSize(RenderElement visualElement, int width, int height)
         {
-            visualElement.b_width = width;
-            visualElement.b_height = height;
+            visualElement._b_width = width;
+            visualElement._b_height = height;
         }
         public static void DirectSetLocation(RenderElement visualElement, int x, int y)
         {
-            visualElement.b_left = x;
-            visualElement.b_top = y;
+            visualElement._b_left = x;
+            visualElement._b_top = y;
         }
     }
 }

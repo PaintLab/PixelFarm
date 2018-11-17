@@ -9,8 +9,12 @@ namespace LayoutFarm.Text
 {
     partial class EditableTextFlowLayer : RenderElementLayer
     {
-        object _lineCollection;
+
+
+
         public event EventHandler Reflow; //TODO: review this field
+
+        object _lineCollection;
         int _defaultLineHeight;
         TextEditRenderBox _ownerTextEditRenderBox;
         public EditableTextFlowLayer(TextEditRenderBox owner)

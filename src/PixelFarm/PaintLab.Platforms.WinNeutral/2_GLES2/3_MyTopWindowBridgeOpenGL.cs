@@ -13,9 +13,9 @@ namespace LayoutFarm.UI.OpenGL
     class MyTopWindowBridgeOpenGL : TopWindowBridgeWinNeutral
     {
 
-        bool isInitGLControl;
-        OpenGLCanvasViewport openGLViewport;
-        UISurfaceViewportControl windowControl;
+        bool _isInitGLControl;
+        OpenGLCanvasViewport _openGLViewport;
+        UISurfaceViewportControl _windowControl;
         GLRenderSurface _glsx;
 
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
@@ -26,7 +26,7 @@ namespace LayoutFarm.UI.OpenGL
         public void SetupCanvas(DrawBoard canvas)
         {
 
-            openGLViewport.SetCanvas(canvas);
+            _openGLViewport.SetCanvas(canvas);
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
@@ -46,8 +46,8 @@ namespace LayoutFarm.UI.OpenGL
         }
         public override void BindWindowControl(Control windowControl)
         {
-            this.windowControl = (UISurfaceViewportControl)windowControl;
-            SetBaseCanvasViewport(this.openGLViewport = new OpenGLCanvasViewport(
+            this._windowControl = (UISurfaceViewportControl)windowControl;
+            SetBaseCanvasViewport(this._openGLViewport = new OpenGLCanvasViewport(
                 this.RootGfx,
                 new Size(windowControl.Width, windowControl.Height)));
 
@@ -94,7 +94,7 @@ namespace LayoutFarm.UI.OpenGL
             ////--------------------
             //openGLViewport.NotifyWindowControlBinding();
 #if DEBUG
-            this.openGLViewport.dbugOutputWindow = this;
+            this._openGLViewport.dbugOutputWindow = this;
 #endif
             this.EvaluateScrollbar();
         }
@@ -102,19 +102,19 @@ namespace LayoutFarm.UI.OpenGL
         protected override void OnClosing()
         {
             //make current before clear GL resource
-            this.windowControl.MakeCurrent();
+            this._windowControl.MakeCurrent();
         }
         internal override void OnHostControlLoaded()
         {
 
-            if (!isInitGLControl)
+            if (!_isInitGLControl)
             {
                 //init gl after this control is loaded
                 //set myGLControl detail
                 //1.
                 //TODO: review here again 
-                windowControl.InitSetup2d(new Rectangle(0, 0, 800, 600));// Screen.PrimaryScreen.Bounds);
-                isInitGLControl = true;
+                _windowControl.InitSetup2d(new Rectangle(0, 0, 800, 600));// Screen.PrimaryScreen.Bounds);
+                _isInitGLControl = true;
                 //2.
                 //windowControl.ClearColor = new OpenTK.Graphics.Color4(1f, 1f, 1f, 1f);
                 //3.
@@ -137,9 +137,9 @@ namespace LayoutFarm.UI.OpenGL
             //Console.WriteLine(">" + innumber);
             //TODO: review here
 
-            windowControl.MakeCurrent();
-            this.openGLViewport.PaintMe();
-            windowControl.SwapBuffers();
+            _windowControl.MakeCurrent();
+            this._openGLViewport.PaintMe();
+            _windowControl.SwapBuffers();
 
             //Console.WriteLine("<" + innumber); 
         }

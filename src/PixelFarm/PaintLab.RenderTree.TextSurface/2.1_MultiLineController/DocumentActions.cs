@@ -6,12 +6,12 @@ namespace LayoutFarm.Text
 {
     abstract class DocumentAction
     {
-        protected int startLineNumber;
-        protected int startCharIndex;
+        protected int _startLineNumber;
+        protected int _startCharIndex;
         public DocumentAction(int lineNumber, int charIndex)
         {
-            this.startLineNumber = lineNumber;
-            this.startCharIndex = charIndex;
+            _startLineNumber = lineNumber;
+            _startCharIndex = charIndex;
         }
 
         public abstract void InvokeUndo(InternalTextLayerController textLayer);
@@ -20,24 +20,24 @@ namespace LayoutFarm.Text
 
     class DocActionCharTyping : DocumentAction
     {
-        char c;
+        char _c;
         public DocActionCharTyping(char c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
-            this.c = c;
+            this._c = c;
         }
 
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.DoBackspace();
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
-            textLayer.AddCharToCurrentLine(c);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
+            textLayer.AddCharToCurrentLine(_c);
         }
     }
 
@@ -49,14 +49,14 @@ namespace LayoutFarm.Text
         }
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
+            textLayer.CurrentLineNumber = _startLineNumber;
             textLayer.DoEnd();
             textLayer.DoDelete();
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.SplitCurrentLineIntoNewLine();
         }
     }
@@ -68,14 +68,14 @@ namespace LayoutFarm.Text
         }
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.SplitCurrentLineIntoNewLine();
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.DoDelete();
         }
     }
@@ -83,51 +83,51 @@ namespace LayoutFarm.Text
 
     class DocActionDeleteChar : DocumentAction
     {
-        char c;
+        char _c;
         public DocActionDeleteChar(char c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
-            this.c = c;
+            this._c = c;
         }
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
-            textLayer.AddCharToCurrentLine(c);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
+            textLayer.AddCharToCurrentLine(_c);
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.DoDelete();
         }
     }
     class DocActionDeleteRange : DocumentAction
     {
-        List<EditableRun> deletedTextRuns;
-        int endLineNumber;
-        int endCharIndex;
+        List<EditableRun> _deletedTextRuns;
+        int _endLineNumber;
+        int _endCharIndex;
         public DocActionDeleteRange(List<EditableRun> deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
-            this.deletedTextRuns = deletedTextRuns;
-            this.endLineNumber = endLineNum;
-            this.endCharIndex = endColumnNum;
+            this._deletedTextRuns = deletedTextRuns;
+            this._endLineNumber = endLineNum;
+            this._endCharIndex = endColumnNum;
         }
 
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CancelSelect();
-            textLayer.AddTextRunsToCurrentLine(deletedTextRuns);
+            textLayer.AddTextRunsToCurrentLine(_deletedTextRuns);
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.StartSelect();
-            textLayer.CurrentLineNumber = endLineNumber;
-            textLayer.TryMoveCaretTo(endCharIndex);
+            textLayer.CurrentLineNumber = _endLineNumber;
+            textLayer.TryMoveCaretTo(_endCharIndex);
             textLayer.EndSelect();
             textLayer.DoDelete();
         }
@@ -135,71 +135,71 @@ namespace LayoutFarm.Text
 
     class DocActionInsertRuns : DocumentAction
     {
-        EditableRun singleInsertTextRun;
-        IEnumerable<EditableRun> insertingTextRuns;
-        int endLineNumber;
-        int endCharIndex;
+        EditableRun _singleInsertTextRun;
+        IEnumerable<EditableRun> _insertingTextRuns;
+        int _endLineNumber;
+        int _endCharIndex;
         public DocActionInsertRuns(IEnumerable<EditableRun> insertingTextRuns,
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
-            this.insertingTextRuns = insertingTextRuns;
-            this.endLineNumber = endLineNumber;
-            this.endCharIndex = endCharIndex;
+            this._insertingTextRuns = insertingTextRuns;
+            this._endLineNumber = endLineNumber;
+            this._endCharIndex = endCharIndex;
         }
         public DocActionInsertRuns(EditableRun insertingTextRun,
            int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
-            this.singleInsertTextRun = insertingTextRun;
-            this.endLineNumber = endLineNumber;
-            this.endCharIndex = endCharIndex;
+            this._singleInsertTextRun = insertingTextRun;
+            this._endLineNumber = endLineNumber;
+            this._endCharIndex = endCharIndex;
         }
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.StartSelect();
-            textLayer.CurrentLineNumber = endLineNumber;
-            textLayer.TryMoveCaretTo(endCharIndex);
+            textLayer.CurrentLineNumber = _endLineNumber;
+            textLayer.TryMoveCaretTo(_endCharIndex);
             textLayer.EndSelect();
             textLayer.DoDelete();
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
-            if (singleInsertTextRun != null)
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
+            if (_singleInsertTextRun != null)
             {
-                textLayer.AddTextRunToCurrentLine(singleInsertTextRun);
+                textLayer.AddTextRunToCurrentLine(_singleInsertTextRun);
             }
             else
             {
-                textLayer.AddTextRunsToCurrentLine(insertingTextRuns);
+                textLayer.AddTextRunsToCurrentLine(_insertingTextRuns);
             }
         }
     }
     class DocActionFormatting : DocumentAction
     {
-        int endLineNumber;
-        int endCharIndex;
-        TextSpanStyle textStyle;
+        int _endLineNumber;
+        int _endCharIndex;
+        TextSpanStyle _textStyle;
         public DocActionFormatting(TextSpanStyle textStyle, int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
-            this.textStyle = textStyle;
-            this.endLineNumber = endLineNumber;
-            this.endCharIndex = endCharIndex;
+            this._textStyle = textStyle;
+            this._endLineNumber = endLineNumber;
+            this._endCharIndex = endCharIndex;
         }
 
 
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.CurrentLineNumber = _startLineNumber;
+            textLayer.TryMoveCaretTo(_startCharIndex);
             textLayer.StartSelect();
-            textLayer.CurrentLineNumber = endLineNumber;
-            textLayer.TryMoveCaretTo(endCharIndex);
+            textLayer.CurrentLineNumber = _endLineNumber;
+            textLayer.TryMoveCaretTo(_endCharIndex);
             textLayer.EndSelect();
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
@@ -209,36 +209,36 @@ namespace LayoutFarm.Text
 
     class DocumentCommandCollection
     {
-        LinkedList<DocumentAction> undoList = new LinkedList<DocumentAction>();
-        Stack<DocumentAction> reverseUndoAction = new Stack<DocumentAction>();
-        int maxCommandsCount = 20;
-        InternalTextLayerController textdom;
+        LinkedList<DocumentAction> _undoList = new LinkedList<DocumentAction>();
+        Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
+        int _maxCommandsCount = 20;
+        InternalTextLayerController _textdom;
         public DocumentCommandCollection(InternalTextLayerController textdomManager)
         {
-            this.textdom = textdomManager;
+            this._textdom = textdomManager;
         }
 
         public void Clear()
         {
-            undoList.Clear();
-            reverseUndoAction.Clear();
+            _undoList.Clear();
+            _reverseUndoAction.Clear();
         }
 
         public int MaxCommandCount
         {
             get
             {
-                return maxCommandsCount;
+                return _maxCommandsCount;
             }
             set
             {
-                maxCommandsCount = value;
-                if (undoList.Count > maxCommandsCount)
+                _maxCommandsCount = value;
+                if (_undoList.Count > _maxCommandsCount)
                 {
-                    int diff = undoList.Count - maxCommandsCount;
+                    int diff = _undoList.Count - _maxCommandsCount;
                     for (int i = 0; i < diff; i++)
                     {
-                        undoList.RemoveFirst();
+                        _undoList.RemoveFirst();
                     }
                 }
             }
@@ -246,18 +246,18 @@ namespace LayoutFarm.Text
 
         public void AddDocAction(DocumentAction docAct)
         {
-            if (textdom.EnableUndoHistoryRecording)
+            if (_textdom.EnableUndoHistoryRecording)
             {
-                undoList.AddLast(docAct);
+                _undoList.AddLast(docAct);
                 EnsureCapacity();
             }
         }
 
         void EnsureCapacity()
         {
-            if (undoList.Count > maxCommandsCount)
+            if (_undoList.Count > _maxCommandsCount)
             {
-                undoList.RemoveFirst();
+                _undoList.RemoveFirst();
             }
         }
         public void UndoLastAction()
@@ -265,43 +265,43 @@ namespace LayoutFarm.Text
             DocumentAction docAction = PopUndoCommand();
             if (docAction != null)
             {
-                textdom.EnableUndoHistoryRecording = false;
-                docAction.InvokeUndo(textdom);
-                textdom.EnableUndoHistoryRecording = true;
-                reverseUndoAction.Push(docAction);
+                _textdom.EnableUndoHistoryRecording = false;
+                docAction.InvokeUndo(_textdom);
+                _textdom.EnableUndoHistoryRecording = true;
+                _reverseUndoAction.Push(docAction);
             }
         }
         public void ReverseLastUndoAction()
         {
-            if (reverseUndoAction.Count > 0)
+            if (_reverseUndoAction.Count > 0)
             {
-                textdom.EnableUndoHistoryRecording = false;
-                DocumentAction docAction = reverseUndoAction.Pop();
-                textdom.EnableUndoHistoryRecording = true;
-                docAction.InvokeRedo(textdom);
-                undoList.AddLast(docAction);
+                _textdom.EnableUndoHistoryRecording = false;
+                DocumentAction docAction = _reverseUndoAction.Pop();
+                _textdom.EnableUndoHistoryRecording = true;
+                docAction.InvokeRedo(_textdom);
+                _undoList.AddLast(docAction);
             }
         }
         public DocumentAction PeekCommand
         {
             get
             {
-                return undoList.Last.Value;
+                return _undoList.Last.Value;
             }
         }
         public int Count
         {
             get
             {
-                return undoList.Count;
+                return _undoList.Count;
             }
         }
         public DocumentAction PopUndoCommand()
         {
-            if (undoList.Count > 0)
+            if (_undoList.Count > 0)
             {
-                DocumentAction lastCmd = undoList.Last.Value;
-                undoList.RemoveLast();
+                DocumentAction lastCmd = _undoList.Last.Value;
+                _undoList.RemoveLast();
                 return lastCmd;
             }
             else

@@ -50,10 +50,10 @@ namespace LayoutFarm
         }
         public virtual void dbug_WriteOwnerLayerInfo(RootGraphic visualroot, int i)
         {
-            if (this.parentLink != null)
+            if (this._parentLink != null)
             {
                 visualroot.dbug_rootHitChainMsg.AddLast(new dbugLayoutMsg(this, new string('.', i) + " [Ly:" + i + "] " +
-                      parentLink.dbugGetLinkInfo()));
+                      _parentLink.dbugGetLinkInfo()));
             }
         }
         public virtual void dbug_WriteOwnerLineInfo(RootGraphic visualroot, int i)

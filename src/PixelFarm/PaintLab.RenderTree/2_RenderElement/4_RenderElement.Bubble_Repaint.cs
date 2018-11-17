@@ -8,8 +8,8 @@ namespace LayoutFarm
         public bool InvalidateGraphics()
         {
             //RELATIVE to this ***
-            propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            if ((uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -18,7 +18,7 @@ namespace LayoutFarm
             }
 
 
-            Rectangle rect = new Rectangle(0, 0, b_width, b_height);
+            Rectangle rect = new Rectangle(0, 0, _b_width, _b_height);
             RootInvalidateGraphicArea(this, ref rect);
             return true;//TODO: review this 
         }
@@ -31,12 +31,12 @@ namespace LayoutFarm
         {
             //RELATIVE to its parent***
 
-            propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             RenderElement parent = this.ParentRenderElement; //start at parent ****
             //--------------------------------------- 
             if (parent != null)
             {
-                this.rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
+                this._rootGfx.InvalidateGraphicArea(parent, ref totalBounds, true);//RELATIVE to its parent***
             }
         }
 
@@ -44,9 +44,9 @@ namespace LayoutFarm
         {
             //RELATIVE to re ***
             //1.
-            re.propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             //2.  
-            re.rootGfx.InvalidateGraphicArea(re, ref rect);
+            re._rootGfx.InvalidateGraphicArea(re, ref rect);
         }
 
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
@@ -85,7 +85,7 @@ namespace LayoutFarm
             get
             {
 #if DEBUG
-                return (uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
+                return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #else
                 return (uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #endif

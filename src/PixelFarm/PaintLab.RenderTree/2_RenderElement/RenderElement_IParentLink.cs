@@ -20,7 +20,7 @@ namespace LayoutFarm
 
         public IParentLink MyParentLink
         {
-            get { return this.parentLink; }
+            get { return this._parentLink; }
         }
 
 
