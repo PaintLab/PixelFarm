@@ -185,13 +185,13 @@ namespace LayoutFarm
             });
         }
         //
-        PixelFarm.CpuBlit.ActualBitmap CreateBitmap(VgRenderVx renderVx, int reqW, int reqH)
+        PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgRenderVx renderVx, int reqW, int reqH)
         {
 
             PixelFarm.CpuBlit.RectD bound = renderVx.GetBounds();
             //create
-            PixelFarm.CpuBlit.ActualBitmap backimg = new PixelFarm.CpuBlit.ActualBitmap((int)bound.Width + 10, (int)bound.Height + 10);
-            PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backimg);
+            PixelFarm.CpuBlit.MemBitmap backingBmp = new PixelFarm.CpuBlit.MemBitmap((int)bound.Width + 10, (int)bound.Height + 10);
+            PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);
             ////TODO: review here
             ////temp fix
             //if (s_openfontTextService == null)
@@ -207,7 +207,7 @@ namespace LayoutFarm
                 renderVx._renderE.Paint(paintArgs);
             }
             painter.StrokeWidth = prevStrokeW;//restore 
-            return backimg;
+            return backingBmp;
         }
     }
 }

@@ -96,7 +96,7 @@ namespace PixelFarm.DrawingGL
 
 
             _memdc.MeasureTextSize(textBuffer, out _bmpWidth, out _bmpHeight);
-            var actualImg = new CpuBlit.ActualBitmap(_bmpWidth, _bmpHeight);
+            var actualImg = new CpuBlit.MemBitmap(_bmpWidth, _bmpHeight);
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   

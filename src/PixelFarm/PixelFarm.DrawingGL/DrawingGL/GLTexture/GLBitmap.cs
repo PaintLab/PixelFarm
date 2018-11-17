@@ -65,14 +65,14 @@ namespace PixelFarm.DrawingGL
             this._height = h;
         }
 
-        public GLBitmap(PixelFarm.CpuBlit.ActualBitmap srcBmp)
+        public GLBitmap(PixelFarm.CpuBlit.MemBitmap srcBmp)
         {
             this._width = srcBmp.Width;
             this._height = srcBmp.Height;
 
             _isNativePtrOwner = true;
 
-            PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(srcBmp);
+            PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(srcBmp);
             _nativeImgMem = System.Runtime.InteropServices.Marshal.AllocHGlobal(tmp.LengthInBytes);
             unsafe
             {

@@ -5,10 +5,10 @@ namespace PixelFarm.DrawingGL
 {
     public class LazyActualBitmapBufferProvider : LazyBitmapBufferProvider
     {
-        PixelFarm.CpuBlit.ActualBitmap image;
-        public LazyActualBitmapBufferProvider(PixelFarm.CpuBlit.ActualBitmap image)
+        PixelFarm.CpuBlit.MemBitmap _memBmp;
+        public LazyActualBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
-            this.image = image;
+            this._memBmp = memBmp;
         }
         public override bool IsYFlipped
         {
@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
         }
         public override IntPtr GetRawBufferHead()
         {
-            return PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(image).Ptr;
+            return PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(_memBmp).Ptr;
         }
         public override void ReleaseBufferHead()
         {
@@ -24,11 +24,11 @@ namespace PixelFarm.DrawingGL
         }
         public override int Width
         {
-            get { return this.image.Width; }
+            get { return this._memBmp.Width; }
         }
         public override int Height
         {
-            get { return this.image.Height; }
+            get { return this._memBmp.Height; }
         }
 
         //

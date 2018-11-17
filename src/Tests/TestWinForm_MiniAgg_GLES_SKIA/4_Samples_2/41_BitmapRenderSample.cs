@@ -38,15 +38,15 @@ namespace PixelFarm.CpuBlit.Sample_Images
     [Info("Basic Bitmap Rendering")]
     public class BasicBitmapRendering : DemoBase
     {
-        ActualBitmap actualImage;
-        AffinePlan[] affinePlans;
+        MemBitmap _memBmp;
+        AffinePlan[] _affinePlans;
         public override void Init()
         {
             //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
-            actualImage = LoadImage(RootDemoPath.Path + "\\02.jpg");
-            affinePlans = new AffinePlan[] { AffinePlan.Translate(50, 50) };
+            _memBmp = LoadImage(RootDemoPath.Path + "\\02.jpg");
+            _affinePlans = new AffinePlan[] { AffinePlan.Translate(50, 50) };
         }
-        static ActualBitmap LoadImage(string filename)
+        static MemBitmap LoadImage(string filename)
         {
             //read sample image
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
@@ -54,9 +54,9 @@ namespace PixelFarm.CpuBlit.Sample_Images
                 //read to image buffer 
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
-                ActualBitmap img = new ActualBitmap(bmpW, bmpH);
-                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
-                return img;
+                MemBitmap memBmp = new MemBitmap(bmpW, bmpH);
+                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
+                return memBmp;
             }
         }
 

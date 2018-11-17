@@ -29,8 +29,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         double skewY = 0;
         bool isMaskSliderValueChanged = true;
 
-        ActualBitmap lionImg;
-        ActualBitmap _alphaBitmap;
+        MemBitmap lionImg;
+        MemBitmap _alphaBitmap;
 
         public LionAlphaMask3()
         {
@@ -60,7 +60,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //----------
             //same size
-            _alphaBitmap = new ActualBitmap(width, height);
+            _alphaBitmap = new MemBitmap(width, height);
             var alphaPainter = AggPainter.Create(_alphaBitmap, new PixelBlenderBGRA());
             alphaPainter.Clear(Color.Black);
             //------------ 

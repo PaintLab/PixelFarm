@@ -18,9 +18,9 @@ namespace PaintLab.Svg
         public SvgImageBinder(string imgsrc) : base(imgsrc)
         {
         }
-        public SvgImageBinder(PixelFarm.CpuBlit.ActualBitmap actualImg) : base(null)
+        public SvgImageBinder(PixelFarm.CpuBlit.MemBitmap bmp) : base(null)
         {
-            this.SetImage(actualImg);
+            this.SetImage(bmp);
         }
     }
 

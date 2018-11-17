@@ -89,7 +89,7 @@ namespace YourImplementation
 
 
         //----------------------------------------------
-        protected ActualBitmap _aggBmp;
+        protected MemBitmap _memBmp;
         protected AggPainter _aggPainter;
         protected LazyActualBitmapBufferProvider _lazyImgProvider;
 
@@ -100,13 +100,13 @@ namespace YourImplementation
         protected virtual void SetupAggCanvas()
         {
             //***
-            _aggBmp = new ActualBitmap(_width, _height);
-            _aggPainter = AggPainter.Create(_aggBmp);
+            _memBmp = new MemBitmap(_width, _height);
+            _aggPainter = AggPainter.Create(_memBmp);
 
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
             _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
+            _lazyImgProvider = new LazyActualBitmapBufferProvider(_memBmp);
             //
         }
         internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
@@ -204,7 +204,7 @@ namespace YourImplementation
             _gdiDrawBoard.CurrentFont = new RequestFont("Tahoma", 10);
 
             //2. create actual bitmap that share 'bitmap mem' with gdiPlus Render surface                 
-            _aggBmp = renderSurface.GetActualBitmap();
+            _memBmp = renderSurface.GetActualBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
             _aggPainter = renderSurface.GetAggPainter();//**
             _gdiDrawBoard.SetAggPainter(_aggPainter); //***
@@ -212,7 +212,7 @@ namespace YourImplementation
                                                       //...
 
             //
-            _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
+            _lazyImgProvider = new LazyActualBitmapBufferProvider(_memBmp);
             _lazyImgProvider.BitmapFormat = GLBitmapFormat.BGR;//**
         }
     }
