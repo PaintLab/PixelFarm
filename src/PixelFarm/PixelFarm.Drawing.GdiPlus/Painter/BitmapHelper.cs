@@ -398,7 +398,7 @@ namespace PixelFarm.CpuBlit.Imaging
 
             int h = windowsBitmap.Height;
             int w = windowsBitmap.Width;
-             
+
             TempMemPtr targetBufferPtr = MemBitmap.GetBufferPtr(memBmp);
             BitmapData bitmapData1 = windowsBitmap.LockBits(
                       new Rectangle(0, 0,
