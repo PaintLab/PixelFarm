@@ -18,15 +18,15 @@ namespace PixelFarm.DrawingGL
 
     public class AggTextSpanPrinter : ITextPrinter
     {
-        MemBitmap _actualImage;
-
+        MemBitmap _memBmp; 
         AggPainter _aggPainter;
         VxsTextPrinter _vxsTextPrinter;
-        int bmpWidth;
-        int bmpHeight;
+        int _bmpWidth;
+        int _bmpHeight;
         GLRenderSurface _glsx;
-        GLPainter canvasPainter;
+        GLPainter _canvasPainter;
         LayoutFarm.OpenFontTextService _openFontTextServices;
+
         public AggTextSpanPrinter(GLPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
@@ -35,13 +35,13 @@ namespace PixelFarm.DrawingGL
 
 
             //TODO: review here
-            this.canvasPainter = canvasPainter;
+            this._canvasPainter = canvasPainter;
             this._glsx = canvasPainter.Canvas;
-            bmpWidth = w;
-            bmpHeight = h;
+            _bmpWidth = w;
+            _bmpHeight = h;
 
-            _actualImage = new MemBitmap(bmpWidth, bmpHeight);
-            _aggPainter = AggPainter.Create(_actualImage);
+            _memBmp = new MemBitmap(_bmpWidth, _bmpHeight);
+            _aggPainter = AggPainter.Create(_memBmp);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;
 
@@ -98,7 +98,7 @@ namespace PixelFarm.DrawingGL
                 //3.copy to gl bitmap
                 //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
-                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_actualImage));
+                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_memBmp));
                 glBmp.IsYFlipped = false;
                 //TODO: review font height
                 if (StartDrawOnLeftTop)
@@ -134,7 +134,7 @@ namespace PixelFarm.DrawingGL
 
                 //------------------------------------------------------
                 //GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
-                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_actualImage));
+                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_memBmp));
                 glBmp.IsYFlipped = false;
                 //TODO: review font height 
                 //if (StartDrawOnLeftTop)

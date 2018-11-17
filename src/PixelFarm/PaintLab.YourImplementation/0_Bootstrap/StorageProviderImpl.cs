@@ -119,16 +119,16 @@ namespace YourImplementation
 
 
         }
-        public static void Save(MemBitmap actualImg, Stream strm)
+        public static void Save(MemBitmap bmp, Stream strm)
         {
             //-------------
             unsafe
             {
-                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = MemBitmap.GetBufferPtr(actualImg);
+                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = MemBitmap.GetBufferPtr(bmp);
                 int* intBuffer = (int*)tmp.Ptr;
 
-                int imgW = actualImg.Width;
-                int imgH = actualImg.Height;
+                int imgW = bmp.Width;
+                int imgH = bmp.Height;
 
                 Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
                 Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(strm, imgInfo);

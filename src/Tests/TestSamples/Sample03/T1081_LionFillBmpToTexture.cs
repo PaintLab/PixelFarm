@@ -21,7 +21,7 @@ namespace OpenTkEssTest
 
         //---------------------------
 
-        MemBitmap aggImage;
+        MemBitmap _memBmp;
 
         AggPainter aggPainter;
         //---------------------------
@@ -45,13 +45,13 @@ namespace OpenTkEssTest
 
             RectD lionBounds = lionShape.Bounds;
             //-------------
-            aggImage = new MemBitmap((int)lionBounds.Width, (int)lionBounds.Height);
-            aggPainter = AggPainter.Create(aggImage);
+            _memBmp = new MemBitmap((int)lionBounds.Width, (int)lionBounds.Height);
+            aggPainter = AggPainter.Create(_memBmp);
 
 
             DrawLion(aggPainter, lionShape);
             //convert affImage to texture 
-            glBmp = DemoHelper.LoadTexture(aggImage);
+            glBmp = DemoHelper.LoadTexture(_memBmp);
         }
         protected override void DemoClosing()
         {

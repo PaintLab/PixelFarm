@@ -297,8 +297,8 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = null;
                 if (image is MemBitmap)
                 {
-                    MemBitmap actualImage = (MemBitmap)image;
-                    glBmp = new GLBitmap(actualImage);
+                 
+                    glBmp = new GLBitmap((MemBitmap)image);
                 }
                 else
                 {

@@ -119,10 +119,10 @@ namespace Mini
         {
             return LoadTexture(s_LoadImgDel(imgFileName));
         }
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap actualImg)
+        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
-            return new PixelFarm.DrawingGL.GLBitmap(actualImg)
-            { IsBigEndianPixel = actualImg.IsBigEndian };
+            return new PixelFarm.DrawingGL.GLBitmap(memBmp)
+            { IsBigEndianPixel = memBmp.IsBigEndian };
         }
 
         public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Drawing.Image bmp)

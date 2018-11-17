@@ -59,7 +59,7 @@ namespace Mini
             //check if we have that data?            
             //------------------------------------------- 
             //string typographyDir = @"brkitr_src/dictionaries";
-            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr"; 
+            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr";
             if (!System.IO.Directory.Exists(icu_datadir))
             {
                 throw new System.NotSupportedException("dic");
@@ -88,10 +88,10 @@ namespace Mini
                                        System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb
                                        );
 
-            PixelFarm.CpuBlit.MemBitmap actualImg = new PixelFarm.CpuBlit.MemBitmap(bmp.Width, bmp.Height);
+            PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(bmp.Width, bmp.Height);
             unsafe
             {
-                var ptrBuffer = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(actualImg);
+                var ptrBuffer = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(memBmp);
                 PixelFarm.CpuBlit.MemMx.memcpy((byte*)ptrBuffer.Ptr, (byte*)bmpData.Scan0, bmp.Width * 4 * bmp.Height);
             }
 
@@ -102,9 +102,9 @@ namespace Mini
 
             //gdi+ load as little endian
 
-            actualImg.IsBigEndian = false;
+            memBmp.IsBigEndian = false;
             bmp.Dispose();
-            return actualImg;
+            return memBmp;
         }
 
 

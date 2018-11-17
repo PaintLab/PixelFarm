@@ -110,8 +110,8 @@ namespace PixelFarm.CpuBlit.Samples
                     RectD bound = vgRenerVx.GetBounds();
 
                     //create 
-                    MemBitmap backimg = new MemBitmap((int)bound.Width, (int)bound.Height);
-                    AggPainter painter = AggPainter.Create(backimg);
+                    MemBitmap backBmp = new MemBitmap((int)bound.Width, (int)bound.Height);
+                    AggPainter painter = AggPainter.Create(backBmp);
 
 
                     painter.Clear(Drawing.Color.White);
@@ -138,7 +138,7 @@ namespace PixelFarm.CpuBlit.Samples
 #endif
 
 
-                    vgRenerVx.SetBitmapSnapshot(backimg);
+                    vgRenerVx.SetBitmapSnapshot(backBmp);
                 }
             }
             //if (!_renderVx.HasBitmapSnapshot)

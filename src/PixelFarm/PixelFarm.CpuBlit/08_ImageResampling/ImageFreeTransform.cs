@@ -21,9 +21,9 @@ namespace PixelFarm.CpuBlit.Imaging
 
         class MyBitmapBlender : BitmapBlenderBase
         {
-            public MyBitmapBlender(MemBitmap img)
+            public MyBitmapBlender(MemBitmap bmp)
             {
-                Attach(img);
+                Attach(bmp);
             }
             public override void ReplaceBuffer(int[] newbuffer)
             {
@@ -517,7 +517,7 @@ namespace PixelFarm.CpuBlit.Imaging
                     //targetPixelIndex = startLine;
                 }
 
-               
+
                 //------------------------
                 //System.Runtime.InteropServices.Marshal.Copy(
                 //outputBuffer, 0,

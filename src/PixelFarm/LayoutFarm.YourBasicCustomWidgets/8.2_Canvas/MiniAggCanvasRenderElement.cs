@@ -8,18 +8,18 @@ namespace LayoutFarm.CustomWidgets
     public class MiniAggCanvasRenderElement : RenderBoxBase, IDisposable
     {
 
-        Painter painter;
-        bool needUpdate;
-        MemBitmap actualImage;
-        Image bmp;
+        Painter _painter;
+        bool _needUpdate;
+        MemBitmap _memBmp;
+        Image _bmp;
 
         public MiniAggCanvasRenderElement(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
 
-            this.actualImage = new MemBitmap(width, height);
-            this.painter = AggPainter.Create(actualImage);
-            needUpdate = true;
+            _memBmp = new MemBitmap(width, height);
+            _painter = AggPainter.Create(_memBmp);
+            _needUpdate = true;
             this.BackColor = Color.White;
         }
         public override void ClearAllChildren()
@@ -32,8 +32,8 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
-            
-            if (needUpdate)
+
+            if (_needUpdate)
             {
                 //default bg => transparent !, 
                 //gfx2d.Clear(ColorRGBA.White);//if want opaque bg
@@ -43,17 +43,17 @@ namespace LayoutFarm.CustomWidgets
                 //    bmp.Dispose();
                 //}
 
-                this.bmp = this.actualImage;// new Bitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
+                this._bmp = this._memBmp;// new Bitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
                 // canvas.Platform.CreatePlatformBitmap(this.Width, this.Height, this.actualImage.GetBuffer(), false);
-                Image.ClearCache(bmp);
+                Image.ClearCache(_bmp);
 
-                needUpdate = false;
+                _needUpdate = false;
             }
             //canvas.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
 
-            if (bmp != null)
+            if (_bmp != null)
             {
-                canvas.DrawImage(this.bmp, new RectangleF(0, 0, this.Width, this.Height));
+                canvas.DrawImage(this._bmp, new RectangleF(0, 0, this.Width, this.Height));
             }
             //---------------------
 
@@ -92,12 +92,12 @@ namespace LayoutFarm.CustomWidgets
             get
             {
                 //context
-                return this.painter;
+                return this._painter;
             }
         }
         public void InvalidateCanvasContent()
         {
-            this.needUpdate = true;
+            this._needUpdate = true;
             this.InvalidateGraphics();
         }
 

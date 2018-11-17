@@ -265,7 +265,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 
                 ScanlineUnpacked8 sl = new ScanlineUnpacked8();
                 int size_mul = (int)this.PixelSize;
-                CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, aggsx.DestActualImage);
+                CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, aggsx.DestBitmap);
                 rasterizer.Reset();
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);

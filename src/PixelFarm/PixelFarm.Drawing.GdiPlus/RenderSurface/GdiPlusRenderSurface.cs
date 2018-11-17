@@ -44,7 +44,7 @@ namespace PixelFarm.Drawing.WinGdi
         //------------------------------- 
         LayoutFarm.OpenFontTextService _openFontTextServices;
 
-        PixelFarm.CpuBlit.MemBitmap _actualBmp;
+        PixelFarm.CpuBlit.MemBitmap _bmp;
         CpuBlit.AggPainter _painter;
         //------------------------------- 
 
@@ -70,7 +70,7 @@ namespace PixelFarm.Drawing.WinGdi
             win32MemDc.SetBackTransparent(true);
             win32MemDc.SetClipRect(0, 0, width, height);
             //--------------
-            _actualBmp = new CpuBlit.MemBitmap(width, height, win32MemDc.PPVBits);
+            _bmp = new CpuBlit.MemBitmap(width, height, win32MemDc.PPVBits);
 
             this.originalHdc = win32MemDc.DC;
             this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
@@ -95,13 +95,13 @@ namespace PixelFarm.Drawing.WinGdi
         public NativeWin32MemoryDC Win32DC => win32MemDc;
         public CpuBlit.MemBitmap GetActualBitmap()
         {
-            return _actualBmp;
+            return _bmp;
         }
         public CpuBlit.AggPainter GetAggPainter()
         {
             if (_painter == null)
             {
-                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
+                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_bmp);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
                 if (_openFontTextServices == null)
                 {
@@ -648,8 +648,8 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void DrawImage(Image image, int x, int y)
         {
-            PixelFarm.CpuBlit.MemBitmap actualBmp = image as PixelFarm.CpuBlit.MemBitmap;
-            if (actualBmp != null)
+            PixelFarm.CpuBlit.MemBitmap bmp = image as PixelFarm.CpuBlit.MemBitmap;
+            if (bmp != null)
             {
                 Win32.NativeWin32MemoryDC win32DC = ResolveForWin32Dc(image);
                 if (win32DC != null)

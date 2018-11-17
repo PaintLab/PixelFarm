@@ -112,14 +112,14 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.CpuBlit.MemBitmap actualImg = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
+            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian
-            actualImg.IsBigEndian = true;
-            return actualImg;
+            memBmp.IsBigEndian = true;
+            return memBmp;
         }
     }
 
@@ -218,14 +218,14 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.CpuBlit.MemBitmap actualImg = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
+            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian
-            actualImg.IsBigEndian = true;
-            return actualImg;
+            memBmp.IsBigEndian = true;
+            return memBmp;
         }
 
 
