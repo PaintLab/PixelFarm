@@ -34,6 +34,7 @@ namespace PixelFarm.Drawing.WinGdi
             _bottom = renderSurface.Height;
 
             _gdigsx = renderSurface;
+            _painter = _gdigsx.GetAggPainter();
         }
 
         public GdiPlusRenderSurface RenderSurface => _gdigsx;
@@ -44,10 +45,7 @@ namespace PixelFarm.Drawing.WinGdi
             return _gdigsx.ToString();
         }
 #endif
-        public void SetAggPainter(Painter p)
-        {
-            _painter = p;
-        }
+        
         public override Painter GetPainter()
         {
             //since painter origin and canvas origin is separated 

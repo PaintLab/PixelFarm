@@ -8,11 +8,14 @@ namespace YourImplementation
     {
         public static void Setup()
         {
+
+
 #if GL_ENABLE
-            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
-#else
+            BootStrapOpenGLES2.SetupDefaultValues();
+#endif
+            //you can use your font loader
+            
             CommonTextServiceSetup.SetupDefaultValues();
-#endif 
             PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 

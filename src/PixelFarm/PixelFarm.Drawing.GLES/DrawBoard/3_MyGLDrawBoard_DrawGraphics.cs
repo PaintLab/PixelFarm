@@ -149,12 +149,17 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                _painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
+                _painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
             }
         }
         public override void DrawImage(Image image, int x, int y)
         {
-            throw new NotImplementedException();
+            DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
+            if (glbmp != null)
+            {
+
+                _painter1.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
+            }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
@@ -184,6 +189,11 @@ namespace PixelFarm.Drawing.GLES2
 
         static DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
         {
+            //1.
+            DrawingGL.GLBitmap glBmp = image as DrawingGL.GLBitmap;
+            if (glBmp != null) return glBmp;
+            //
+
             var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
             if (cacheBmp != null)
             {
@@ -197,7 +207,7 @@ namespace PixelFarm.Drawing.GLES2
                 MemBitmap bmp = image as MemBitmap;
                 if (bmp != null)
                 {
-                    var glBmp = new DrawingGL.GLBitmap(new DrawingGL.LazyActualBitmapBufferProvider(bmp));
+                    glBmp = new DrawingGL.GLBitmap(new DrawingGL.LazyActualBitmapBufferProvider(bmp));
                     Image.SetCacheInnerImage(image, glBmp);
                     return glBmp;
                 }
@@ -206,7 +216,7 @@ namespace PixelFarm.Drawing.GLES2
                     var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
                     image.RequestInternalBuffer(ref req);
                     //**
-                    var glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
+                    glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
                     Image.SetCacheInnerImage(image, glBmp);
                     return glBmp;
                 }
