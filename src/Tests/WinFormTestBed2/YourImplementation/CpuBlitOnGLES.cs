@@ -89,7 +89,7 @@ namespace YourImplementation
 
 
         //----------------------------------------------
-        protected ActualBitmap _aggBmp;
+        protected MemBitmap _aggBmp;
         protected AggPainter _aggPainter;
         protected LazyActualBitmapBufferProvider _lazyImgProvider;
 
@@ -100,7 +100,7 @@ namespace YourImplementation
         protected virtual void SetupAggCanvas()
         {
             //***
-            _aggBmp = new ActualBitmap(_width, _height);
+            _aggBmp = new MemBitmap(_width, _height);
             _aggPainter = AggPainter.Create(_aggBmp);
 
             //optional if we want to print text on agg surface

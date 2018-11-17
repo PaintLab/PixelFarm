@@ -306,7 +306,7 @@ namespace Mini
         {
 
             PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
-            ActualBitmap img = LoadImage("Samples\\lion1.png");
+            MemBitmap img = LoadImage("Samples\\lion1.png");
 
 
             freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
@@ -317,17 +317,17 @@ namespace Mini
                 new PixelFarm.VectorMath.PointF(0, img.Height)
             );
 
-            ActualBitmap transformImg = freeTx.GetTransformedBitmap(img);
+            MemBitmap transformImg = freeTx.GetTransformedBitmap(img);
 
             SaveImage(transformImg, "d:\\WImageTest\\test01_tx.png");
         }
-        static void SaveImage(ActualBitmap img, string filename)
+        static void SaveImage(MemBitmap img, string filename)
         {
             Bitmap newBmp = new Bitmap(img.Width, img.Height);
             PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(img, newBmp);
             newBmp.Save("d:\\WImageTest\\test01_tx.png");
         }
-        static ActualBitmap LoadImage(string filename)
+        static MemBitmap LoadImage(string filename)
         {
             //read sample image
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
@@ -335,7 +335,7 @@ namespace Mini
                 //read to image buffer 
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
-                ActualBitmap img = new ActualBitmap(bmpW, bmpH);
+                MemBitmap img = new MemBitmap(bmpW, bmpH);
                 PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
                 return img;
             }

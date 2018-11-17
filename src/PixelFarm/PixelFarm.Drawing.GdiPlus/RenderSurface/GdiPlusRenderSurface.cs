@@ -44,7 +44,7 @@ namespace PixelFarm.Drawing.WinGdi
         //------------------------------- 
         LayoutFarm.OpenFontTextService _openFontTextServices;
 
-        PixelFarm.CpuBlit.ActualBitmap _actualBmp;
+        PixelFarm.CpuBlit.MemBitmap _actualBmp;
         CpuBlit.AggPainter _painter;
         //------------------------------- 
 
@@ -70,7 +70,7 @@ namespace PixelFarm.Drawing.WinGdi
             win32MemDc.SetBackTransparent(true);
             win32MemDc.SetClipRect(0, 0, width, height);
             //--------------
-            _actualBmp = new CpuBlit.ActualBitmap(width, height, win32MemDc.PPVBits);
+            _actualBmp = new CpuBlit.MemBitmap(width, height, win32MemDc.PPVBits);
 
             this.originalHdc = win32MemDc.DC;
             this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
@@ -93,7 +93,7 @@ namespace PixelFarm.Drawing.WinGdi
             this.StrokeWidth = 1;
         }
         public NativeWin32MemoryDC Win32DC => win32MemDc;
-        public CpuBlit.ActualBitmap GetActualBitmap()
+        public CpuBlit.MemBitmap GetActualBitmap()
         {
             return _actualBmp;
         }
@@ -587,7 +587,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         static Win32.NativeWin32MemoryDC ResolveForWin32Dc(Image image)
         {
-            if (image is PixelFarm.CpuBlit.ActualBitmap)
+            if (image is PixelFarm.CpuBlit.MemBitmap)
             {
                 //this is known image
                 var win32Dc = Image.GetCacheInnerImage(image) as Win32.NativeWin32MemoryDC;
@@ -601,7 +601,7 @@ namespace PixelFarm.Drawing.WinGdi
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
 
-            if (image is PixelFarm.CpuBlit.ActualBitmap)
+            if (image is PixelFarm.CpuBlit.MemBitmap)
             {
                 //this is known image
                 var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
@@ -613,7 +613,7 @@ namespace PixelFarm.Drawing.WinGdi
                         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     //
                     //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
-                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.ActualBitmap)image, bmp);
+                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.MemBitmap)image, bmp);
                     //
                     Image.SetCacheInnerImage(image, bmp);
                     return bmp;
@@ -648,7 +648,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void DrawImage(Image image, int x, int y)
         {
-            PixelFarm.CpuBlit.ActualBitmap actualBmp = image as PixelFarm.CpuBlit.ActualBitmap;
+            PixelFarm.CpuBlit.MemBitmap actualBmp = image as PixelFarm.CpuBlit.MemBitmap;
             if (actualBmp != null)
             {
                 Win32.NativeWin32MemoryDC win32DC = ResolveForWin32Dc(image);

@@ -21,7 +21,7 @@ namespace PixelFarm.CpuBlit.Imaging
 
         class MyBitmapBlender : BitmapBlenderBase
         {
-            public MyBitmapBlender(ActualBitmap img)
+            public MyBitmapBlender(MemBitmap img)
             {
                 Attach(img);
             }
@@ -184,7 +184,7 @@ namespace PixelFarm.CpuBlit.Imaging
                    !MyVectorHelper.IsCCW(pt, _p3, _p0);
         }
 
-        public ActualBitmap GetTransformedBitmap(IBitmapSrc bitmap)
+        public MemBitmap GetTransformedBitmap(IBitmapSrc bitmap)
         {
             _srcBmp = bitmap;
 
@@ -214,9 +214,9 @@ namespace PixelFarm.CpuBlit.Imaging
 
         }
 
-        ActualBitmap GetTransformedBitmapNoInterpolation()
+        MemBitmap GetTransformedBitmapNoInterpolation()
         {
-            var destCB = new ActualBitmap(_destBounds.Width, _destBounds.Height);
+            var destCB = new MemBitmap(_destBounds.Width, _destBounds.Height);
             var destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
 
@@ -269,11 +269,11 @@ namespace PixelFarm.CpuBlit.Imaging
             }
         }
 
-        unsafe ActualBitmap GetTransformedBilinearInterpolation()
+        unsafe MemBitmap GetTransformedBilinearInterpolation()
         {
             //4 points sampling
             //weight between four point
-            ActualBitmap destCB = new ActualBitmap(_destBounds.Width, _destBounds.Height);
+            MemBitmap destCB = new MemBitmap(_destBounds.Width, _destBounds.Height);
             MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
             PointF ptInPlane = new PointF();
             int x1, x2, y1, y2;
@@ -448,7 +448,7 @@ namespace PixelFarm.CpuBlit.Imaging
         //    }
         //    return destCB;
         //}
-        unsafe ActualBitmap GetTransformedBicubicInterpolation()
+        unsafe MemBitmap GetTransformedBicubicInterpolation()
         {
             //4 points sampling
             //weight between four point 
@@ -467,7 +467,7 @@ namespace PixelFarm.CpuBlit.Imaging
             {
                 BufferReader4 reader = new BufferReader4(bufferPtr, _srcBmp.Width, _srcBmp.Height);
 
-                ActualBitmap destCB = new ActualBitmap(_destBounds.Width, _destBounds.Height);
+                MemBitmap destCB = new MemBitmap(_destBounds.Width, _destBounds.Height);
                 MyBitmapBlender destWriter = new MyBitmapBlender(destCB);
                 int rectLeft = this._destBounds.Left;
                 int rectTop = this._destBounds.Top;

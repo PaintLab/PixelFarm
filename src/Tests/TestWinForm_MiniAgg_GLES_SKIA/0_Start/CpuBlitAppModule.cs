@@ -117,7 +117,7 @@ namespace Mini
         {
             Win32.NativeWin32MemoryDC _nativeWin32DC; //use this as gdi back buffer
             DemoBase _demo;
-            ActualBitmap _actualImage;
+            MemBitmap _actualImage;
             Painter _painter;
             public CpuBlitAggCanvasRenderElement(RootGraphic rootgfx, int w, int h)
                 : base(rootgfx, w, h)
@@ -127,7 +127,7 @@ namespace Mini
                 //1. gdi+ create backbuffer
                 _nativeWin32DC = new Win32.NativeWin32MemoryDC(w, h);
                 //2. create actual bitmap that share bitmap data from native _nativeWin32Dc
-                _actualImage = new ActualBitmap(w, h, _nativeWin32DC.PPVBits);
+                _actualImage = new MemBitmap(w, h, _nativeWin32DC.PPVBits);
                 //----------------------------------------------------------------
                 //3. create render surface from bitmap => provide basic bitmap fill operations
                 AggRenderSurface aggsx = new AggRenderSurface(_actualImage);
@@ -153,8 +153,8 @@ namespace Mini
                 //and render directly to the target canvas
                 //
                 //if img changed then clear cache and render again
-                ActualBitmap.ClearCache(_actualImage);
-                ActualBitmap.SetCacheInnerImage(_actualImage, _nativeWin32DC);
+                MemBitmap.ClearCache(_actualImage);
+                MemBitmap.SetCacheInnerImage(_actualImage, _nativeWin32DC);
                 _demo.Draw(_painter);
                 //copy from actual image and paint to canvas 
                 canvas.DrawImage(_actualImage, 0, 0);

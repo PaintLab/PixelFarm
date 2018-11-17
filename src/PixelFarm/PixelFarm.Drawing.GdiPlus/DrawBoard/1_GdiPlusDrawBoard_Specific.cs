@@ -64,10 +64,10 @@ namespace PixelFarm.Drawing.WinGdi
 
             unsafe
             {
-                CpuBlit.ActualBitmap img = destImg as CpuBlit.ActualBitmap;
+                CpuBlit.MemBitmap img = destImg as CpuBlit.MemBitmap;
                 if (img != null)
                 {
-                    CpuBlit.Imaging.TempMemPtr tmpPtr = CpuBlit.ActualBitmap.GetBufferPtr(img);
+                    CpuBlit.Imaging.TempMemPtr tmpPtr = CpuBlit.MemBitmap.GetBufferPtr(img);
                     byte* head = (byte*)tmpPtr.Ptr;
                     _gdigsx.RenderTo(head);
                     tmpPtr.Dispose();

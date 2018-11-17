@@ -18,7 +18,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         AggRenderSurface gfx;
-        public CustomRas_EnlargeV2(double size, ActualBitmap destImage)
+        public CustomRas_EnlargeV2(double size, MemBitmap destImage)
         {
             this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             m_size = size;

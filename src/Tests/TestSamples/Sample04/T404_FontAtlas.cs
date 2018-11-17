@@ -16,7 +16,7 @@ namespace OpenTkEssTest
         GLBitmap msdf_bmp;
         GLPainter painter;
         SimpleFontAtlas fontAtlas;
-        PixelFarm.CpuBlit.ActualBitmap totalImg;
+        PixelFarm.CpuBlit.MemBitmap totalImg;
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
@@ -42,7 +42,7 @@ namespace OpenTkEssTest
             //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
             //totalImg.UnlockBits(bmpdata);
             var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
-            glyph.SetImageBuffer(PixelFarm.CpuBlit.ActualBitmap.CopyImgBuffer(actualImg), false);
+            glyph.SetImageBuffer(PixelFarm.CpuBlit.MemBitmap.CopyImgBuffer(actualImg), false);
             fontAtlas.TotalGlyph = glyph;
         }
         protected override void DemoClosing()

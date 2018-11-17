@@ -185,12 +185,12 @@ namespace LayoutFarm
             });
         }
         //
-        PixelFarm.CpuBlit.ActualBitmap CreateBitmap(VgRenderVx renderVx, int reqW, int reqH)
+        PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgRenderVx renderVx, int reqW, int reqH)
         {
 
             PixelFarm.CpuBlit.RectD bound = renderVx.GetBounds();
             //create
-            PixelFarm.CpuBlit.ActualBitmap backimg = new PixelFarm.CpuBlit.ActualBitmap((int)bound.Width + 10, (int)bound.Height + 10);
+            PixelFarm.CpuBlit.MemBitmap backimg = new PixelFarm.CpuBlit.MemBitmap((int)bound.Width + 10, (int)bound.Height + 10);
             PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backimg);
             ////TODO: review here
             ////temp fix

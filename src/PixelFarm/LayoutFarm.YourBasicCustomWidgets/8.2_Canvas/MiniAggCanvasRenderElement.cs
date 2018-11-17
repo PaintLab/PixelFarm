@@ -10,14 +10,14 @@ namespace LayoutFarm.CustomWidgets
 
         Painter painter;
         bool needUpdate;
-        ActualBitmap actualImage;
+        MemBitmap actualImage;
         Image bmp;
 
         public MiniAggCanvasRenderElement(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
 
-            this.actualImage = new ActualBitmap(width, height);
+            this.actualImage = new MemBitmap(width, height);
             this.painter = AggPainter.Create(actualImage);
             needUpdate = true;
             this.BackColor = Color.White;

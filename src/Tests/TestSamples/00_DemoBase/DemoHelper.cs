@@ -93,7 +93,7 @@ namespace Mini
 
 
 
-    public delegate PixelFarm.CpuBlit.ActualBitmap LoadImageDelegate(string filename);
+    public delegate PixelFarm.CpuBlit.MemBitmap LoadImageDelegate(string filename);
 
     public static class DemoHelper
     {
@@ -111,7 +111,7 @@ namespace Mini
         //{
         //    return s_fontProvider;
         //}
-        public static PixelFarm.CpuBlit.ActualBitmap LoadImage(string imgFileName)
+        public static PixelFarm.CpuBlit.MemBitmap LoadImage(string imgFileName)
         {
             return s_LoadImgDel(imgFileName);
         }
@@ -119,7 +119,7 @@ namespace Mini
         {
             return LoadTexture(s_LoadImgDel(imgFileName));
         }
-        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.CpuBlit.ActualBitmap actualImg)
+        public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap actualImg)
         {
             return new PixelFarm.DrawingGL.GLBitmap(actualImg)
             { IsBigEndianPixel = actualImg.IsBigEndian };

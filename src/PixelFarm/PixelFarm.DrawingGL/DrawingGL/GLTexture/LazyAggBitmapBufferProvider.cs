@@ -5,8 +5,8 @@ namespace PixelFarm.DrawingGL
 {
     public class LazyActualBitmapBufferProvider : LazyBitmapBufferProvider
     {
-        PixelFarm.CpuBlit.ActualBitmap image;
-        public LazyActualBitmapBufferProvider(PixelFarm.CpuBlit.ActualBitmap image)
+        PixelFarm.CpuBlit.MemBitmap image;
+        public LazyActualBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap image)
         {
             this.image = image;
         }
@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
         }
         public override IntPtr GetRawBufferHead()
         {
-            return PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(image).Ptr;
+            return PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(image).Ptr;
         }
         public override void ReleaseBufferHead()
         {

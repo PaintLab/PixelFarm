@@ -77,9 +77,9 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
         public abstract void ReplaceBuffer(int[] newbuffer);
 
-        protected void Attach(ActualBitmap img)
+        protected void Attach(MemBitmap img)
         {
-            Attach(img.Width, img.Height, img.BitDepth, ActualBitmap.GetBufferPtr(img), new PixelBlenderBGRA());
+            Attach(img.Width, img.Height, img.BitDepth, MemBitmap.GetBufferPtr(img), new PixelBlenderBGRA());
         }
         /// <summary>
         /// attach image buffer and its information to the reader
@@ -555,8 +555,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         }
 
 
-        ActualBitmap _filterImage;
-        public void SetFilterImage(ActualBitmap filterImg)
+        MemBitmap _filterImage;
+        public void SetFilterImage(MemBitmap filterImg)
         {
             _filterImage = filterImg;
         }

@@ -81,7 +81,7 @@ namespace TestGlfw
             }
         }
 
-        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
+        static PixelFarm.CpuBlit.MemBitmap LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
@@ -112,7 +112,7 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromCopy(
+            PixelFarm.CpuBlit.MemBitmap actualImg = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32
@@ -187,7 +187,7 @@ namespace TestGlfw
 
     class GLFWProgram
     {
-        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
+        static PixelFarm.CpuBlit.MemBitmap LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
@@ -218,7 +218,7 @@ namespace TestGlfw
             }
             //assume 32 bit 
 
-            PixelFarm.CpuBlit.ActualBitmap actualImg = PixelFarm.CpuBlit.ActualBitmap.CreateFromCopy(
+            PixelFarm.CpuBlit.MemBitmap actualImg = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 extendedImg.Pixels32
@@ -245,11 +245,11 @@ namespace TestGlfw
                 System.IO.File.WriteAllBytes(dataName, content);
             }
 
-            public override PixelFarm.CpuBlit.ActualBitmap ReadPngBitmap(string filename)
+            public override PixelFarm.CpuBlit.MemBitmap ReadPngBitmap(string filename)
             {
                 throw new System.NotImplementedException();
             }
-            public override void SavePngBitmap(PixelFarm.CpuBlit.ActualBitmap bmp, string filename)
+            public override void SavePngBitmap(PixelFarm.CpuBlit.MemBitmap bmp, string filename)
             {
                 throw new System.NotImplementedException();
             }

@@ -29,7 +29,7 @@ namespace PixelFarm.CpuBlit
 {
     public sealed partial class AggRenderSurface
     {
-        ActualBitmap _destActualImage;
+        MemBitmap _destActualImage;
         ScanlineRasterizer _sclineRas;
         Affine _currentTxMatrix = Affine.IdentityMatrix;
 
@@ -46,7 +46,7 @@ namespace PixelFarm.CpuBlit
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
 
 
-        public AggRenderSurface(ActualBitmap destImage)
+        public AggRenderSurface(MemBitmap destImage)
         {
             //create from actual image 
 
@@ -73,7 +73,7 @@ namespace PixelFarm.CpuBlit
         {
             get { return _sclineRas; }
         }
-        public ActualBitmap DestActualImage
+        public MemBitmap DestActualImage
         {
             get { return this._destActualImage; }
         }

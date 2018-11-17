@@ -15,7 +15,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
     {
-        ActualBitmap imageToFillOn;
+        MemBitmap imageToFillOn;
 
         int imgOffsetX = 20;
         int imgOffsetY = 60;
@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         {
             //
             BackgroundColor = Color.White;
-            imageToFillOn = new ActualBitmap(400, 300);
+            imageToFillOn = new MemBitmap(400, 300);
             AggPainter p = AggPainter.Create(imageToFillOn);
 
             p.Clear(Color.White);

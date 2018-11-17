@@ -69,7 +69,7 @@ namespace OpenTkEssTest
             mSamplerLoc = GL.GetUniformLocation(mProgram, "s_texture");
             //// Load the texture
 
-            PixelFarm.CpuBlit.ActualBitmap bmp = DemoHelper.LoadImage(RootDemoPath.Path + @"\lion1.png");
+            PixelFarm.CpuBlit.MemBitmap bmp = DemoHelper.LoadImage(RootDemoPath.Path + @"\lion1.png");
             int bmpW = bmp.Width;
             int bmpH = bmp.Height;
             mTexture = LoadTexture(bmp);
@@ -133,7 +133,7 @@ namespace OpenTkEssTest
             GL.DeleteTexture(mTexture);
             mProgram = mTexture = 0;
         }
-        static int LoadTexture(PixelFarm.CpuBlit.ActualBitmap bmp)
+        static int LoadTexture(PixelFarm.CpuBlit.MemBitmap bmp)
         {
             int texture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, texture);

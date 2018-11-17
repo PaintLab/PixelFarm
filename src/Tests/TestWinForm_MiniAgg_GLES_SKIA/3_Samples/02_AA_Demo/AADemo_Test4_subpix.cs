@@ -25,7 +25,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
         {
             this.EnableSubPix = false;
         }
-        static byte[] CreateGreyScaleBuffer(ActualBitmap img)
+        static byte[] CreateGreyScaleBuffer(MemBitmap img)
         {
             //assume img is 32 rgba img
             int imgW = img.Width;
@@ -33,7 +33,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //56 level grey scale buffer
 
 
-            CpuBlit.Imaging.TempMemPtr srcMemPtr = ActualBitmap.GetBufferPtr(img);
+            CpuBlit.Imaging.TempMemPtr srcMemPtr = MemBitmap.GetBufferPtr(img);
 
             int greyScaleBufferLen = imgW * height;
             byte[] greyScaleBuffer = new byte[greyScaleBufferLen];
@@ -76,7 +76,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             srcMemPtr.Dispose();
             return greyScaleBuffer;
         }
-        void Blend(ActualBitmap destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
+        void Blend(MemBitmap destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
         {
             PixelFarm.Drawing.Color color = PixelFarm.Drawing.Color.Black;
             for (int y = 0; y < greyBufferHeight; ++y)
@@ -87,7 +87,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
         }
 
 
-        void BlendScanline(ActualBitmap destImg, byte[] expandGreyBuffer,
+        void BlendScanline(MemBitmap destImg, byte[] expandGreyBuffer,
          PixelFarm.Drawing.Color color, int x, int y, int width)
 
         {
@@ -99,7 +99,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //-------------------------
             //destination
 
-            CpuBlit.Imaging.TempMemPtr memPtr = ActualBitmap.GetBufferPtr(destImg);
+            CpuBlit.Imaging.TempMemPtr memPtr = MemBitmap.GetBufferPtr(destImg);
             //start pixel
             int destImgIndex = (x * 4) + (destImg.Stride * y);
             //start img src
@@ -204,7 +204,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
-            using (ActualBitmap glyphImg = new ActualBitmap(100, 100))
+            using (MemBitmap glyphImg = new MemBitmap(100, 100))
             {
                 AggPainter painter = AggPainter.Create(glyphImg);
 
@@ -249,7 +249,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //version 2:
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
-            using (ActualBitmap glyphImg = new ActualBitmap(100, 100))
+            using (MemBitmap glyphImg = new MemBitmap(100, 100))
             {
                 AggPainter painter = AggPainter.Create(glyphImg);
                 //
@@ -412,7 +412,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
         }
 
         static PixelFarm.CpuBlit.Rasterization.LcdDistributionLut g8_4_2_1 = new PixelFarm.CpuBlit.Rasterization.LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
-        void BlendWithLcdTechnique(ActualBitmap destImg, ActualBitmap glyphImg, PixelFarm.Drawing.Color color)
+        void BlendWithLcdTechnique(MemBitmap destImg, MemBitmap glyphImg, PixelFarm.Drawing.Color color)
         {
             //var g8Lut = g8_4_2_1;
             //var forwardBuffer = new ScanlineSubPixelRasterizer.TempForwardAccumBuffer();

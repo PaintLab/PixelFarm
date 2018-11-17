@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit.Samples
                     RectD bound = vgRenerVx.GetBounds();
 
                     //create 
-                    ActualBitmap backimg = new ActualBitmap((int)bound.Width, (int)bound.Height);
+                    MemBitmap backimg = new MemBitmap((int)bound.Width, (int)bound.Height);
                     AggPainter painter = AggPainter.Create(backimg);
 
 

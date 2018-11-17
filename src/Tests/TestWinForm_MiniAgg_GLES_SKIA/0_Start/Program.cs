@@ -76,7 +76,7 @@ namespace Mini
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());
         }
-        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
+        static PixelFarm.CpuBlit.MemBitmap LoadImage(string filename)
         {
 
 
@@ -88,10 +88,10 @@ namespace Mini
                                        System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb
                                        );
 
-            PixelFarm.CpuBlit.ActualBitmap actualImg = new PixelFarm.CpuBlit.ActualBitmap(bmp.Width, bmp.Height);
+            PixelFarm.CpuBlit.MemBitmap actualImg = new PixelFarm.CpuBlit.MemBitmap(bmp.Width, bmp.Height);
             unsafe
             {
-                var ptrBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(actualImg);
+                var ptrBuffer = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(actualImg);
                 PixelFarm.CpuBlit.MemMx.memcpy((byte*)ptrBuffer.Ptr, (byte*)bmpData.Scan0, bmp.Width * 4 * bmp.Height);
             }
 

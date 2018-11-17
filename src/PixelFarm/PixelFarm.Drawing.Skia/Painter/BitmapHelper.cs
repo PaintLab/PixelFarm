@@ -12,11 +12,11 @@ namespace PixelFarm.Drawing.Skia
         /// <param name="actualImage"></param>
         /// <param name="hBmpScan0"></param>
         public static void CopyToWindowsBitmapSameSize(
-           ActualBitmap actualImage,
+           MemBitmap actualImage,
            IntPtr hBmpScan0)
         {
             //1st, fast
-            CpuBlit.Imaging.TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImage);
+            CpuBlit.Imaging.TempMemPtr tmp = MemBitmap.GetBufferPtr(actualImage);
             //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
             //   hBmpScan0, rawBuffer.Length);
             unsafe
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.Skia
         /////////////////////////////////////////////////////////////////////////////////////
 
         public static void CopyToGdiPlusBitmapSameSize(
-            ActualBitmap actualImage,
+            MemBitmap actualImage,
             SkiaSharp.SKBitmap skBmp)
         {
             //agg store image buffer head-down
@@ -57,7 +57,7 @@ namespace PixelFarm.Drawing.Skia
                 //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
                 unsafe
                 {
-                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = ActualBitmap.GetBufferPtr(actualImage);
+                    CpuBlit.Imaging.TempMemPtr srcBufferPtr = MemBitmap.GetBufferPtr(actualImage);
                     //fixed (byte* bufferH = &srcBuffer[0])
                     byte* bufferH = (byte*)srcBufferPtr.Ptr;
                     {
