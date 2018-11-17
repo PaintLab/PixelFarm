@@ -17,6 +17,7 @@ namespace LayoutFarm.UI
         readonly TopWindowEventRoot _topWindowEventRoot;
         readonly RenderBoxBase _topWindowRenderBox;
 
+        RenderBoxBase _primaryContainerElement;
 
         RequestFont _defaultTextEditFont; //TODO: review here
         ITextService _ifonts;
@@ -48,6 +49,8 @@ namespace LayoutFarm.UI
                     this.PrepareRender();
                     this.FlushAccumGraphics();
                 });
+
+            _primaryContainerElement = _topWindowRenderBox;
         }
         public override ITextService TextServices
         {
@@ -175,9 +178,23 @@ namespace LayoutFarm.UI
                 return _renderRequestList.Count;
             }
         }
+
         public override void AddChild(RenderElement renderE)
         {
-            _topWindowRenderBox.AddChild(renderE);
+            _primaryContainerElement.AddChild(renderE); 
+        }
+
+        public override void SetPrimaryContainerElement(RenderBoxBase renderBox)
+        {
+            if (renderBox == null)
+            {
+                //reset to default
+                _primaryContainerElement = _topWindowRenderBox;
+            }
+            else
+            {
+                _primaryContainerElement = renderBox;
+            }
         }
         void ClearVisualRequests()
         {
