@@ -33,11 +33,9 @@ namespace LayoutFarm
         public abstract RequestFont DefaultTextEditFontInfo
         {
             get;
-        }
-        public abstract RenderBoxBase TopWindowRenderBox
-        {
-            get;
-        }
+        } 
+        public abstract RenderBoxBase TopWindowRenderBox { get; }
+
         public int Width
         {
             get;

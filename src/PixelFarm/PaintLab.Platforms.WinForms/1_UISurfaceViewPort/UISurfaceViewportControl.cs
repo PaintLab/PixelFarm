@@ -317,7 +317,7 @@ namespace LayoutFarm.UI
         {
             this._rootgfx.TopWindowRenderBox.AddChild(vi);
         }
-        static IntPtr s_tmpHandle;
+
 
         public void AddChild(RenderElement renderElem, object owner)
         {
@@ -349,7 +349,7 @@ namespace LayoutFarm.UI
                         renderElem.SetLocation(0, 0);
                         newSurfaceViewport.AddChild(renderElem);
                         //-----------------------------------------------------                        
-                        s_tmpHandle = newForm.Handle;//force newform to create window handle
+                        IntPtr tmpHandle = newForm.Handle;//force newform to create window handle
 
                         //-----------------------------------------------------              
 
@@ -361,8 +361,6 @@ namespace LayoutFarm.UI
                         platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
                         platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
                         _subForms.Add(newForm);
-                        s_tmpHandle = IntPtr.Zero;
-
                     }
                 }
                 else

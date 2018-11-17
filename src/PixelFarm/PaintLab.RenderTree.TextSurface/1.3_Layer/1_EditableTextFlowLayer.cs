@@ -680,7 +680,7 @@ namespace LayoutFarm.Text
                         line.SetLineNumber(i + 1);
                         cy += line.ActualLineHeight;
                     }
-                    textLine.editableFlowLayer = this;
+                    textLine.EditableFlowLayer = this;
                     lines.Insert(insertAt, textLine);
                 }
             }
@@ -710,7 +710,7 @@ namespace LayoutFarm.Text
                         line.SetLineNumber(i + 1);
                         cy += line.ActualLineHeight;
                     }
-                    textLine.editableFlowLayer = this;
+                    textLine.EditableFlowLayer = this;
                     lines.Insert(insertAt, textLine);
                 }
             }

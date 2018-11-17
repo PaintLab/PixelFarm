@@ -20,6 +20,9 @@ namespace LayoutFarm
         bool _useBridgeUI;
         //-----------------------------------
 
+        //TODO: review primary render element here again!
+        //so special root elem switch?
+        RenderElement _client;
 
         LayoutFarm.UI.UISurfaceViewportControl _vw;
         System.Windows.Forms.Form _ownerForm;
@@ -131,21 +134,20 @@ namespace LayoutFarm
                 _ownerForm.Text = value;
             }
         }
-
-
         public override RootGraphic RootGfx
         {
             get { return this._vw.RootGfx; }
         }
-
-
-        //TODO: review primary render element here again!
-        //so special root elem switch?
-        RenderElement _client;
         public override void AddChild(RenderElement renderElement)
         {
             if (_useBridgeUI)
             {
+#if DEBUG
+                if (_client != null)
+                {
+
+                }
+#endif
                 _client = renderElement;
                 _bridgeUI.CurrentPrimaryRenderElement.AddChild(renderElement);
 

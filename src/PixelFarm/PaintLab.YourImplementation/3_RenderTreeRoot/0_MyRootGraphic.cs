@@ -77,14 +77,8 @@ namespace LayoutFarm.UI
             }
         }
 
+        public override RenderBoxBase TopWindowRenderBox => _topWindowRenderBox;
 
-        public override RenderBoxBase TopWindowRenderBox
-        {
-            get
-            {
-                return this._topWindowRenderBox;
-            }
-        }
         public override void PrepareRender()
         {
             //clear layout queue before render*** 

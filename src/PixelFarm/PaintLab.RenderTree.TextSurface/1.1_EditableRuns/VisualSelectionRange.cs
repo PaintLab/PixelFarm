@@ -25,46 +25,46 @@ namespace LayoutFarm.Text
                 && endLineNum == 0 && endColumnNum == 0;
         }
         public static readonly VisualSelectionRangeSnapShot Empty = new VisualSelectionRangeSnapShot();
-    } 
+    }
 
     public class VisualSelectionRange
     {
-        EditableVisualPointInfo startPoint = null;
-        EditableVisualPointInfo endPoint = null;
+        EditableVisualPointInfo _startPoint = null;
+        EditableVisualPointInfo _endPoint = null;
         internal VisualSelectionRange(
             EditableVisualPointInfo startPoint,
             EditableVisualPointInfo endPoint)
         {
-            this.startPoint = startPoint;
-            this.endPoint = endPoint;
+            this._startPoint = startPoint;
+            this._endPoint = endPoint;
             this.BackgroundColor = Color.LightGray;
         }
         internal EditableVisualPointInfo StartPoint
         {
             get
             {
-                return startPoint;
+                return _startPoint;
             }
             set
             {
-                startPoint = value;
+                _startPoint = value;
             }
         }
         internal EditableVisualPointInfo EndPoint
         {
             get
             {
-                return endPoint;
+                return _endPoint;
             }
             set
             {
-                if (startPoint != null)
+                if (_startPoint != null)
                 {
-                    endPoint = value;
+                    _endPoint = value;
                 }
                 else
                 {
-                    endPoint = null;
+                    _endPoint = null;
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return startPoint.LineId == endPoint.LineId;
+                return _startPoint.LineId == _endPoint.LineId;
             }
         }
 
@@ -84,20 +84,20 @@ namespace LayoutFarm.Text
         {
             if (IsOnTheSameLine)
             {
-                if (startPoint.LineCharIndex > endPoint.LineCharIndex)
+                if (_startPoint.LineCharIndex > _endPoint.LineCharIndex)
                 {
-                    EditableVisualPointInfo tmpPoint = startPoint;
-                    startPoint = endPoint;
-                    endPoint = tmpPoint;
+                    EditableVisualPointInfo tmpPoint = _startPoint;
+                    _startPoint = _endPoint;
+                    _endPoint = tmpPoint;
                 }
             }
             else
             {
-                if (startPoint.LineId > endPoint.LineId)
+                if (_startPoint.LineId > _endPoint.LineId)
                 {
-                    EditableVisualPointInfo tmp = startPoint;
-                    startPoint = endPoint;
-                    endPoint = tmp;
+                    EditableVisualPointInfo tmp = _startPoint;
+                    _startPoint = _endPoint;
+                    _endPoint = tmp;
                 }
             }
         }
@@ -106,15 +106,15 @@ namespace LayoutFarm.Text
         {
             get
             {
-                if (startPoint != null && endPoint != null)
+                if (_startPoint != null && _endPoint != null)
                 {
-                    if ((startPoint.TextRun != null && !startPoint.TextRun.HasParent) ||
-                        (endPoint.TextRun != null && !endPoint.TextRun.HasParent))
+                    if ((_startPoint.TextRun != null && !_startPoint.TextRun.HasParent) ||
+                        (_endPoint.TextRun != null && !_endPoint.TextRun.HasParent))
                     {
                         throw new NotSupportedException("text range err");
                     }
-                    if ((startPoint.LineCharIndex == endPoint.LineCharIndex) &&
-                    (startPoint.LineId == endPoint.LineId))
+                    if ((_startPoint.LineCharIndex == _endPoint.LineCharIndex) &&
+                    (_startPoint.LineId == _endPoint.LineId))
                     {
                         return false;
                     }
@@ -133,42 +133,42 @@ namespace LayoutFarm.Text
         {
             get
             {
-                switch (startPoint.LineId.CompareTo(endPoint.LineId))
+                switch (_startPoint.LineId.CompareTo(_endPoint.LineId))
                 {
                     case -1:
-                        return startPoint;
+                        return _startPoint;
                     case 0:
-                        if (startPoint.X <= endPoint.X)
+                        if (_startPoint.X <= _endPoint.X)
                         {
-                            return startPoint;
+                            return _startPoint;
                         }
                         else
                         {
-                            return endPoint;
+                            return _endPoint;
                         }
                 }
-                return endPoint;
+                return _endPoint;
             }
         }
         internal EditableVisualPointInfo BottomEnd
         {
             get
             {
-                switch (startPoint.LineId.CompareTo(endPoint.LineId))
+                switch (_startPoint.LineId.CompareTo(_endPoint.LineId))
                 {
                     case -1:
-                        return endPoint;
+                        return _endPoint;
                     case 0:
-                        if (endPoint.X > startPoint.X)
+                        if (_endPoint.X > _startPoint.X)
                         {
-                            return endPoint;
+                            return _endPoint;
                         }
                         else
                         {
-                            return startPoint;
+                            return _startPoint;
                         }
                 }
-                return startPoint;
+                return _startPoint;
             }
         }
         public void Draw(DrawBoard destPage, Rectangle updateArea)
@@ -211,33 +211,33 @@ namespace LayoutFarm.Text
         }
         public void UpdateSelectionRange()
         {
-            if (startPoint.TextRun != null && !startPoint.TextRun.HasParent)
+            if (_startPoint.TextRun != null && !_startPoint.TextRun.HasParent)
             {
-                EditableTextLine startLine = startPoint.EditableLine;
-                startPoint = startLine.GetTextPointInfoFromCharIndex(startPoint.LineCharIndex);
+                EditableTextLine startLine = _startPoint.EditableLine;
+                _startPoint = startLine.GetTextPointInfoFromCharIndex(_startPoint.LineCharIndex);
             }
-            if (endPoint.TextRun != null && !endPoint.TextRun.HasParent)
+            if (_endPoint.TextRun != null && !_endPoint.TextRun.HasParent)
             {
-                EditableTextLine stopLine = endPoint.EditableLine;
-                endPoint = stopLine.GetTextPointInfoFromCharIndex(endPoint.LineCharIndex);
+                EditableTextLine stopLine = _endPoint.EditableLine;
+                _endPoint = stopLine.GetTextPointInfoFromCharIndex(_endPoint.LineCharIndex);
             }
         }
 
         public IEnumerable<EditableRun> GetPrintableTextRunIter()
         {
             EditableRun startRun = null;
-            if (startPoint.TextRun == null)
+            if (_startPoint.TextRun == null)
             {
-                EditableTextLine line = startPoint.EditableLine;
+                EditableTextLine line = _startPoint.EditableLine;
                 startRun = line.FirstRun;
             }
             else
             {
-                startRun = startPoint.TextRun.NextTextRun;
+                startRun = _startPoint.TextRun.NextTextRun;
             }
 
-            EditableTextFlowLayer layer = startRun.OwnerEditableLine.editableFlowLayer;
-            foreach (EditableRun t in layer.GetDrawingIter(startRun, endPoint.TextRun))
+            EditableTextFlowLayer layer = startRun.OwnerEditableLine.EditableFlowLayer;
+            foreach (EditableRun t in layer.GetDrawingIter(startRun, _endPoint.TextRun))
             {
                 if (!t.IsLineBreak)
                 {
@@ -248,10 +248,10 @@ namespace LayoutFarm.Text
         public VisualSelectionRangeSnapShot GetSelectionRangeSnapshot()
         {
             return new VisualSelectionRangeSnapShot(
-                startPoint.LineNumber,
-                startPoint.LineCharIndex,
-                endPoint.LineNumber,
-                endPoint.LineCharIndex);
+                _startPoint.LineNumber,
+                _startPoint.LineCharIndex,
+                _endPoint.LineNumber,
+                _endPoint.LineCharIndex);
         }
 
 
@@ -267,9 +267,9 @@ namespace LayoutFarm.Text
             {
                 stBuilder.Append("!sel");
             }
-            stBuilder.Append(startPoint.ToString());
+            stBuilder.Append(_startPoint.ToString());
             stBuilder.Append(',');
-            stBuilder.Append(endPoint.ToString());
+            stBuilder.Append(_endPoint.ToString());
             return stBuilder.ToString();
         }
 #endif
@@ -288,39 +288,39 @@ namespace LayoutFarm.Text
 
         }
 
-        EditableTextFlowLayer textLayer;
-        VisualSelectionRangeSnapShot selectionRangeSnapshot;
+        EditableTextFlowLayer _textLayer;
+        VisualSelectionRangeSnapShot _selectionRangeSnapshot;
         MarkerLocation _startLocation;
         MarkerLocation _stopLocation;
 
 
         public VisualMarkerSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
         {
-            this.selectionRangeSnapshot = selectionRangeSnapshot;
+            this._selectionRangeSnapshot = selectionRangeSnapshot;
             BackgroundColor = Color.FromArgb(80, Color.Yellow);//test, default
-        }         
+        }
         public Color BackgroundColor { get; set; }
         public bool IsOnTheSameLine
         {
             get
             {
-                return selectionRangeSnapshot.startLineNum == selectionRangeSnapshot.endLineNum;
+                return _selectionRangeSnapshot.startLineNum == _selectionRangeSnapshot.endLineNum;
             }
         }
 
         internal void BindToTextLayer(EditableTextFlowLayer textLayer)
         {
-            this.textLayer = textLayer;
+            this._textLayer = textLayer;
             //check is on the sameline,
             //or multiple lines
             //
             if (IsOnTheSameLine)
             {
-                EditableTextLine line = textLayer.GetTextLine(selectionRangeSnapshot.startLineNum);
+                EditableTextLine line = textLayer.GetTextLine(_selectionRangeSnapshot.startLineNum);
                 //at this line
                 //find start and end point
-                int startColNum = selectionRangeSnapshot.startColumnNum;
-                int endColNum = selectionRangeSnapshot.endColumnNum;
+                int startColNum = _selectionRangeSnapshot.startColumnNum;
+                int endColNum = _selectionRangeSnapshot.endColumnNum;
                 int lineHeight = line.ActualLineHeight;
 
                 _startLocation = new MarkerLocation() { lineNum = line.LineNumber, x_offset = line.GetXOffsetAtCharIndex(startColNum), line = line };
@@ -328,19 +328,19 @@ namespace LayoutFarm.Text
             }
             else
             {
-                EditableTextLine startLine = textLayer.GetTextLine(selectionRangeSnapshot.startLineNum);
+                EditableTextLine startLine = textLayer.GetTextLine(_selectionRangeSnapshot.startLineNum);
                 _startLocation = new MarkerLocation()
                 {
                     lineNum = startLine.LineNumber,
-                    x_offset = startLine.GetXOffsetAtCharIndex(selectionRangeSnapshot.startColumnNum),
+                    x_offset = startLine.GetXOffsetAtCharIndex(_selectionRangeSnapshot.startColumnNum),
                     line = startLine
                 };
                 //
-                EditableTextLine endLine = textLayer.GetTextLine(selectionRangeSnapshot.endLineNum);
+                EditableTextLine endLine = textLayer.GetTextLine(_selectionRangeSnapshot.endLineNum);
                 _stopLocation = new MarkerLocation()
                 {
                     lineNum = endLine.LineNumber,
-                    x_offset = endLine.GetXOffsetAtCharIndex(selectionRangeSnapshot.endColumnNum),
+                    x_offset = endLine.GetXOffsetAtCharIndex(_selectionRangeSnapshot.endColumnNum),
                     line = endLine
                 };
                 //
@@ -400,7 +400,7 @@ namespace LayoutFarm.Text
         }
 
 
-     
+
     }
 }
 

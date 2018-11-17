@@ -225,32 +225,7 @@ namespace LayoutFarm.UI.WinNeutral
         {
             this._winBridge.Close();
         }
-
-
-        /// <summary>
-        /// create new UIViewport based on this control's current platform
-        /// </summary>
-        /// <returns></returns>
-        public UISurfaceViewportControl CreateNewOne(int w, int h)
-        {
-            //each viewport has its own root graphics 
-
-            UISurfaceViewportControl newViewportControl = new UISurfaceViewportControl();
-            newViewportControl.Size = new PixelFarm.Drawing.Size(w, h);
-
-            RootGraphic newRootGraphic = this._rootgfx.CreateNewOne(w, h);
-            ITopWindowEventRoot topEventRoot = null;
-            if (newRootGraphic is ITopWindowEventRootProvider)
-            {
-                topEventRoot = ((ITopWindowEventRootProvider)newRootGraphic).EventRoot;
-            }
-            newViewportControl.InitRootGraphics(
-                newRootGraphic,//new root
-                topEventRoot,
-                this._innerViewportKind);
-            return newViewportControl;
-        }
-        //-----------
+         
     }
 
     class PlatformWinBoxForm : IPlatformWindowBox
