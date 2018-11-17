@@ -33,42 +33,42 @@ namespace LayoutFarm.UI
 
     public class UIScrollEventArgs : EventArgs
     {
-        UIScrollEventType eventType;
-        int oldValue;
-        int newValue;
-        UIScrollOrientation orientation;
+        UIScrollEventType _eventType;
+        int _oldValue;
+        int _newValue;
+        UIScrollOrientation _orientation;
         public UIScrollEventArgs(UIScrollEventType eventType, int oldValue, int newValue, UIScrollOrientation orientation)
         {
-            this.eventType = eventType;
-            this.oldValue = oldValue;
-            this.newValue = newValue;
-            this.orientation = orientation;
+            this._eventType = eventType;
+            this._oldValue = oldValue;
+            this._newValue = newValue;
+            this._orientation = orientation;
         }
         public UIScrollEventArgs(UIScrollEventType eventType, int oldValue, int newValue)
         {
-            this.eventType = eventType;
-            this.oldValue = oldValue;
-            this.newValue = newValue;
+            this._eventType = eventType;
+            this._oldValue = oldValue;
+            this._newValue = newValue;
         }
         public int NewValue
         {
             get
             {
-                return this.newValue;
+                return this._newValue;
             }
         }
         public int OldValue
         {
             get
             {
-                return this.oldValue;
+                return this._oldValue;
             }
         }
         public UIScrollEventType Type
         {
             get
             {
-                return this.eventType;
+                return this._eventType;
             }
         }
     }

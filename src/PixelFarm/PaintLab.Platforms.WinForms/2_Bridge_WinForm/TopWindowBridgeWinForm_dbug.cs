@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         List<dbugLayoutMsg> dbugrootDocHitChainMsgs = new List<dbugLayoutMsg>();
         RenderBoxBase dbugTopwin
         {
-            get { return this.rootGraphic.TopWindowRenderBox; }
+            get { return this._rootGraphic.TopWindowRenderBox; }
         }
 
 

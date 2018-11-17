@@ -1,9 +1,5 @@
 ﻿//MIT, 2014-present, WinterDev
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 namespace PixelFarm.Drawing
 {
     public abstract class CustomRenderSurface
@@ -17,8 +13,6 @@ namespace PixelFarm.Drawing
             get;
             set;
         }
-
-
         public abstract int Width
         {
             get;
@@ -33,9 +27,6 @@ namespace PixelFarm.Drawing
         {
             get;
         }
-
-
         public abstract void DrawToThisPage(DrawBoard destPage, Rectangle updateArea);
-        //------------------------------------
     }
 }

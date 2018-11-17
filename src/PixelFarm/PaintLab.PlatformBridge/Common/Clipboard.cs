@@ -4,27 +4,27 @@ namespace LayoutFarm.UI
 {
     public static class Clipboard
     {
-        static UIPlatform currentUIPlatform;
+        static UIPlatform s_currentUIPlatform;
         public static void Clear()
         {
         }
         public static void SetText(string text)
         {
             //textdata = text;
-            currentUIPlatform.SetClipboardData(text);
+            s_currentUIPlatform.SetClipboardData(text);
         }
         public static bool ContainUnicodeText()
         {
-            return currentUIPlatform.GetClipboardData() != null;
+            return s_currentUIPlatform.GetClipboardData() != null;
         }
         public static string GetUnicodeText()
         {
-            return currentUIPlatform.GetClipboardData();
+            return s_currentUIPlatform.GetClipboardData();
         }
 
         public static void SetUIPlatform(UIPlatform uiPlatform)
         {
-            currentUIPlatform = uiPlatform;
+            s_currentUIPlatform = uiPlatform;
         }
     }
 }
