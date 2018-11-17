@@ -206,7 +206,7 @@ namespace YourImplementation
             _memBmp = renderSurface.GetMemBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
             _aggPainter = renderSurface.GetAggPainter();//**
-            _gdiDrawBoard.SetAggPainter(_aggPainter);
+            
             //***
             //
             //... 
