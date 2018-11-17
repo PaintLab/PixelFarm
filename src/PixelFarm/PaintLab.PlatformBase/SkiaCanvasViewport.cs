@@ -38,7 +38,7 @@ namespace LayoutFarm.UI.Skia
             //Console.WriteLine((dbugCount++).ToString() + " " + r.ToString());
         }
         
-        protected override void ResetQuadPages(int viewportWidth, int viewportHeight)
+        protected override void ResetViewSize(int viewportWidth, int viewportHeight)
         {
             //  quadPages.ResizeAllPages(viewportWidth, viewportHeight);
         }

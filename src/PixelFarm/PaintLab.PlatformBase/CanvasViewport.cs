@@ -49,11 +49,11 @@ namespace LayoutFarm.UI
             {
                 this._viewportWidth = viewportWidth;
                 this._viewportHeight = viewportHeight;
-                ResetQuadPages(viewportWidth, viewportHeight);
+                ResetViewSize(viewportWidth, viewportHeight);
                 CalculateCanvasPages();
             }
         }
-        protected virtual void ResetQuadPages(int viewportWidth, int viewportHeight)
+        protected virtual void ResetViewSize(int viewportWidth, int viewportHeight)
         {
         }
 

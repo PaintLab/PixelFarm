@@ -17,10 +17,10 @@ namespace PixelFarm.Drawing.WinGdi
 {
     partial class GdiPlusDrawBoard
     {
-        int left;
-        int top;
-        int right;
-        int bottom;
+        int _left;
+        int _top;
+        int _right;
+        int _bottom;
         int canvasOriginX = 0;
         int canvasOriginY = 0;
         Rectangle invalidateArea;
@@ -59,7 +59,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public bool IntersectsWith(Rectangle clientRect)
         {
-            return clientRect.IntersectsWith(left, top, right, bottom);
+            return clientRect.IntersectsWith(_left, _top, _right, _bottom);
         }
 
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
@@ -84,14 +84,14 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
-                return top;
+                return _top;
             }
         }
         public override int Left
         {
             get
             {
-                return left;
+                return _left;
             }
         }
 
@@ -100,35 +100,35 @@ namespace PixelFarm.Drawing.WinGdi
             get
             {
  
-                return right - left;
+                return _right - _left;
             }
         }
         public override int Height
         {
             get
             {
-                return bottom - top;
+                return _bottom - _top;
             }
         }
         public override int Bottom
         {
             get
             {
-                return bottom;
+                return _bottom;
             }
         }
         public override int Right
         {
             get
             {
-                return right;
+                return _right;
             }
         }
         public override Rectangle Rect
         {
             get
             {
-                return Rectangle.FromLTRB(left, top, right, bottom);
+                return Rectangle.FromLTRB(_left, _top, _right, _bottom);
             }
         }
         public override Rectangle InvalidateArea

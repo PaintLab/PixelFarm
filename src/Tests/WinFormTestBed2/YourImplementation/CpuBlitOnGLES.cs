@@ -160,19 +160,18 @@ namespace YourImplementation
         {
             //don't call base
             //1. we create gdi plus draw board
-            _gdiDrawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(0, 0, _width, _height);
+            var renderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(0, 0, _width, _height);
+            _gdiDrawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(renderSurface);
             _gdiDrawBoard.CurrentFont = new RequestFont("Tahoma", 10);
 
             //2. create actual bitmap that share 'bitmap mem' with gdiPlus Render surface                 
-            _aggBmp = new ActualBitmap(_width, _height, _gdiDrawBoard.RenderSurface.Win32DC.PPVBits);
+            _aggBmp = renderSurface.GetActualBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
-            _aggPainter = AggPainter.Create(_aggBmp);
+            _aggPainter = renderSurface.GetAggPainter();//**
+            _gdiDrawBoard.SetAggPainter(_aggPainter); //***
+                                                      //
+                                                      //...
 
-            //...
-            //optional if we want to print text on agg surface
-            _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
-            var aggTextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _aggPainter.TextPrinter = aggTextPrinter;
             //
             _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
             _lazyImgProvider.BitmapFormat = GLBitmapFormat.BGR;//**
@@ -236,7 +235,6 @@ namespace YourImplementation
             }
             else
             {
-
                 _lzBmpProvider.MayNeedUpdate = true;
                 _glBmp.UpdateTexture(updateArea);
             }

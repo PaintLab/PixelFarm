@@ -157,7 +157,18 @@ namespace PixelFarm.DrawingGL
                 BuildTexture();
                 return;
             }
-            //--
+
+#if DEBUG
+            Rectangle backupRect = updateArea;
+#endif
+
+            updateArea = Rectangle.Intersect(updateArea, new Rectangle(0, 0, Width, Height));
+            if (updateArea.Width == 0 || updateArea.Height == 0)
+            {
+                return;
+            }
+            //----
+
             GL.BindTexture(TextureTarget.Texture2D, this._textureId);
             if (_nativeImgMem != IntPtr.Zero)
             {
@@ -182,6 +193,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 //use lazy provider
+
                 IntPtr bmpScan0 = this._lazyProvider.GetRawBufferHead();
 
                 GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
@@ -189,8 +201,8 @@ namespace PixelFarm.DrawingGL
                          PixelFormat.Rgba, // 
                          PixelType.UnsignedByte, (IntPtr)bmpScan0);
 
-
                 this._lazyProvider.ReleaseBufferHead();
+
             }
 
         }

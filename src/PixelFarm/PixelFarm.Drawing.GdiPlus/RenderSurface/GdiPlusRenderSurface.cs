@@ -70,6 +70,7 @@ namespace PixelFarm.Drawing.WinGdi
             win32MemDc.SetBackTransparent(true);
             win32MemDc.SetClipRect(0, 0, width, height);
             //--------------
+            _actualBmp = new CpuBlit.ActualBitmap(width, height, win32MemDc.PPVBits);
 
             this.originalHdc = win32MemDc.DC;
             this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
@@ -91,9 +92,31 @@ namespace PixelFarm.Drawing.WinGdi
             internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             this.StrokeWidth = 1;
         }
-
         public NativeWin32MemoryDC Win32DC => win32MemDc;
+        public CpuBlit.ActualBitmap GetActualBitmap()
+        {
+            return _actualBmp;
+        }
+        public CpuBlit.AggPainter GetAggPainter()
+        {
+            if (_painter == null)
+            {
+                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
+                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+                if (_openFontTextServices == null)
+                {
+                    _openFontTextServices = new LayoutFarm.OpenFontTextService();
+                }
+                //optional if we want to print text on agg surface
 
+                //aggPainter.TextPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices); //1.
+                aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(aggPainter);//2.
+                //
+                _painter = aggPainter;
+                _painter.SetOrigin(this.OriginX, this.OriginY);
+            }
+            return _painter;
+        }
 #if DEBUG
         public void dbugTestDrawText()
         {
@@ -808,31 +831,7 @@ namespace PixelFarm.Drawing.WinGdi
             System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
             gx.FillPath(internalSolidBrush, innerPath);
         }
-        internal Painter GetAggPainter()
-        {
-            if (_actualBmp == null)
-            {
-                //the actual bmp share the same bitmap buffer with the agg
-                _actualBmp = new CpuBlit.ActualBitmap(this.Width, this.Height, win32MemDc.PPVBits);
-            }
 
-            if (_painter == null)
-            {
-                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
-                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-                if (_openFontTextServices == null)
-                {
-                    _openFontTextServices = new LayoutFarm.OpenFontTextService();
-                }
-
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices);
-                aggPainter.TextPrinter = textPrinter;
-                //
-                _painter = aggPainter;
-                _painter.SetOrigin(this.OriginX, this.OriginY);
-            }
-            return _painter;
-        }
         public void FillPath(Brush brush, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
 
