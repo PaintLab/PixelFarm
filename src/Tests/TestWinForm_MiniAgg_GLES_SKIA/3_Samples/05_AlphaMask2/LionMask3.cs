@@ -135,13 +135,9 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
         public override void Draw(Painter p)
         {
-            if (p is GdiPlusPainter)
-            {
-                return;
-            }
-
+            AggPainter painter = p as AggPainter;
+            if (painter == null) return;
             //
-            AggPainter painter = (AggPainter)p;
             painter.Clear(Color.White);
 
             int width = painter.Width;
