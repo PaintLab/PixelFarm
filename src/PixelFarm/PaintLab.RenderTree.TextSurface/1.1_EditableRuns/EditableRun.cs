@@ -11,8 +11,7 @@ namespace LayoutFarm.Text
     public abstract class EditableRun : RenderElement
     {
         //1. owner is a textline
-        EditableTextLine ownerTextLine;
-
+        EditableTextLine _ownerTextLine;
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
 
         public EditableRun(RootGraphic gfx)
@@ -96,7 +95,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return this.ownerTextLine;
+                return this._ownerTextLine;
             }
         }
         internal LinkedListNode<EditableRun> LinkedNodeForEditableRun
@@ -105,7 +104,7 @@ namespace LayoutFarm.Text
         }
         internal void SetInternalLinkedNode(LinkedListNode<EditableRun> linkedNode, EditableTextLine ownerTextLine)
         {
-            this.ownerTextLine = ownerTextLine;
+            this._ownerTextLine = ownerTextLine;
             this._editableRunInternalLinkedNode = linkedNode;
             EditableRun.SetParentLink(this, ownerTextLine);
         }

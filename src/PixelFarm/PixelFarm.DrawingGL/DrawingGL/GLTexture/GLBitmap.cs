@@ -12,16 +12,17 @@ namespace PixelFarm.DrawingGL
         public abstract void ReleaseBufferHead();
         public abstract int Width { get; }
         public abstract int Height { get; }
-        public abstract bool IsInvert { get; }
+        public abstract bool IsYFlipped { get; }
         public GLBitmapFormat BitmapFormat { get; set; }
     }
 
     public enum GLBitmapFormat
     {
-        BGRA,
-        BGR,
-        RGBA
+        BGRA, //eg. System.Drawing.Bitmap
+        BGR, //eg. Native Windows GDI surface
+        RGBA //eg. OpenGL 
     }
+
     public class GLBitmap : Image
     {
         int _textureId;
@@ -53,7 +54,7 @@ namespace PixelFarm.DrawingGL
             this._width = lazyProvider.Width;
             this._height = lazyProvider.Height;
             this._lazyProvider = lazyProvider;
-            this.IsYFlipped = lazyProvider.IsInvert;
+            this.IsYFlipped = lazyProvider.IsYFlipped;
             this.BitmapFormat = lazyProvider.BitmapFormat;
 
         }

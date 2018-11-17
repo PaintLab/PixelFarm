@@ -9,15 +9,15 @@ namespace LayoutFarm.UI.WinNeutral
 
     public partial class UISurfaceViewportControl : Control
     {
-        TopWindowBridgeWinNeutral winBridge;
-        RootGraphic rootgfx;
-        ITopWindowEventRoot topWinEventRoot;
-        InnerViewportKind innerViewportKind;
-        List<Form> subForms = new List<Form>();
-        int width;
-        int height;
-        int left;
-        int top;
+        TopWindowBridgeWinNeutral _winBridge;
+        RootGraphic _rootgfx;
+        ITopWindowEventRoot _topWinEventRoot;
+        InnerViewportKind _innerViewportKind;
+        List<Form> _subForms = new List<Form>();
+        int _width;
+        int _height;
+        int _left;
+        int _top;
 
         public UISurfaceViewportControl()
         {
@@ -29,22 +29,22 @@ namespace LayoutFarm.UI.WinNeutral
         }
         public PixelFarm.Drawing.Size Size
         {
-            get { return new PixelFarm.Drawing.Size(width, height); }
+            get { return new PixelFarm.Drawing.Size(_width, _height); }
             set
             {
-                this.width = value.Width;
-                this.height = value.Height;
+                this._width = value.Width;
+                this._height = value.Height;
             }
         }
         public PixelFarm.Drawing.Rectangle Bounds
         {
-            get { return new PixelFarm.Drawing.Rectangle(left, top, width, height); }
+            get { return new PixelFarm.Drawing.Rectangle(_left, _top, _width, _height); }
             set
             {
-                this.left = value.Left;
-                this.top = value.Top;
-                this.width = value.Width;
-                this.height = value.Height;
+                this._left = value.Left;
+                this._top = value.Top;
+                this._width = value.Width;
+                this._height = value.Height;
             }
         }
         public void SwapBuffers()
@@ -74,9 +74,9 @@ namespace LayoutFarm.UI.WinNeutral
             InnerViewportKind innerViewportKind)
         {
             //1.
-            this.rootgfx = rootgfx;
-            this.topWinEventRoot = topWinEventRoot;
-            this.innerViewportKind = innerViewportKind;
+            this._rootgfx = rootgfx;
+            this._topWinEventRoot = topWinEventRoot;
+            this._innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
                 case InnerViewportKind.GLES:
@@ -93,7 +93,7 @@ namespace LayoutFarm.UI.WinNeutral
                         //this.Controls.Add(view);
                         ////--------------------------------------- 
                         //view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                     }
                     break;
                 case InnerViewportKind.Skia:
@@ -106,7 +106,7 @@ namespace LayoutFarm.UI.WinNeutral
                         //this.Controls.Add(view);
                         ////--------------------------------------- 
                         //view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                     }
                     break;
                 case InnerViewportKind.GdiPlus:
@@ -137,7 +137,7 @@ namespace LayoutFarm.UI.WinNeutral
         //}
         protected override void OnLoad(EventArgs e)
         {
-            this.winBridge.OnHostControlLoaded();
+            this._winBridge.OnHostControlLoaded();
         }
         public void PaintMe(PixelFarm.DrawingGL.GLRenderSurface glsx)
         {
@@ -150,7 +150,7 @@ namespace LayoutFarm.UI.WinNeutral
         }
         public void PaintMeFullMode()
         {
-            this.winBridge.PaintToOutputWindowFullMode();
+            this._winBridge.PaintToOutputWindowFullMode();
         }
         public void PrintMe(object targetCanvas)
         {
@@ -164,16 +164,16 @@ namespace LayoutFarm.UI.WinNeutral
 #if DEBUG
         public IdbugOutputWindow IdebugOutputWin
         {
-            get { return this.winBridge; }
+            get { return this._winBridge; }
         }
 #endif
         public void TopDownRecalculateContent()
         {
-            this.rootgfx.TopWindowRenderBox.TopDownReCalculateContentSize();
+            this._rootgfx.TopDownRecalculateContent();
         }
         public void AddContent(RenderElement vi)
         {
-            this.rootgfx.TopWindowRenderBox.AddChild(vi);
+            this._rootgfx.AddChild(vi);
         }
 
         public void AddContent(RenderElement vi, object owner)
@@ -205,12 +205,12 @@ namespace LayoutFarm.UI.WinNeutral
                 }
                 else
                 {
-                    this.rootgfx.TopWindowRenderBox.AddChild(vi);
+                    this._rootgfx.AddChild(vi);
                 }
             }
             else
             {
-                this.rootgfx.TopWindowRenderBox.AddChild(vi);
+                this._rootgfx.AddChild(vi);
             }
         }
 
@@ -218,47 +218,22 @@ namespace LayoutFarm.UI.WinNeutral
         {
             get
             {
-                return this.rootgfx;
+                return this._rootgfx;
             }
         }
         public void Close()
         {
-            this.winBridge.Close();
+            this._winBridge.Close();
         }
 
-
-        /// <summary>
-        /// create new UIViewport based on this control's current platform
-        /// </summary>
-        /// <returns></returns>
-        public UISurfaceViewportControl CreateNewOne(int w, int h)
-        {
-            //each viewport has its own root graphics 
-
-            UISurfaceViewportControl newViewportControl = new UISurfaceViewportControl();
-            newViewportControl.Size = new PixelFarm.Drawing.Size(w, h);
-
-            RootGraphic newRootGraphic = this.rootgfx.CreateNewOne(w, h);
-            ITopWindowEventRoot topEventRoot = null;
-            if (newRootGraphic is ITopWindowEventRootProvider)
-            {
-                topEventRoot = ((ITopWindowEventRootProvider)newRootGraphic).EventRoot;
-            }
-            newViewportControl.InitRootGraphics(
-                newRootGraphic,//new root
-                topEventRoot,
-                this.innerViewportKind);
-            return newViewportControl;
-        }
-        //-----------
     }
 
     class PlatformWinBoxForm : IPlatformWindowBox
     {
-        AbstractCompletionWindow form;
+        AbstractCompletionWindow _form;
         public PlatformWinBoxForm(AbstractCompletionWindow form)
         {
-            this.form = form;
+            this._form = form;
         }
         public bool UseRelativeLocationToParent
         {
@@ -269,30 +244,30 @@ namespace LayoutFarm.UI.WinNeutral
         {
             get
             {
-                return form.Visible;
+                return _form.Visible;
             }
             set
             {
                 if (value)
                 {
-                    if (!form.Visible)
+                    if (!_form.Visible)
                     {
-                        form.ShowForm();
+                        _form.ShowForm();
                     }
                 }
                 else
                 {
-                    if (form.Visible)
+                    if (_form.Visible)
                     {
-                        form.Hide();
+                        _form.Hide();
                     }
                 }
             }
         }
         void IPlatformWindowBox.Close()
         {
-            form.Close();
-            form = null;
+            _form.Close();
+            _form = null;
         }
 
         void IPlatformWindowBox.SetLocation(int x, int y)

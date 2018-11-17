@@ -37,9 +37,10 @@ namespace YourImplementation
 
         public AggPainter GetAggPainter() => _aggPainter;
 
-        public void SetUpdateCpuBlitSurfaceDelegate(UpdateCpuBlitSurface updateCpuBlitSurfaceDel)
+
+        public void DrawChildContent(DrawBoard d)
         {
-            _updateCpuBlitSurfaceDel = updateCpuBlitSurfaceDel;
+
         }
         //
         protected virtual bool HasSomeExtension => false;//class that override 
@@ -55,6 +56,9 @@ namespace YourImplementation
                 _canvasRenderE = glRenderElem;
             }
         }
+
+        internal CpuBlitGLCanvasRenderElement CpuBlitCanvasRenderElement => _canvasRenderE;
+
         public override RenderElement CurrentPrimaryRenderElement
         {
             get
@@ -105,19 +109,19 @@ namespace YourImplementation
             _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
             //
         }
-
-
-
         internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
         {
             //update only specific part
             //***
-            _aggPainter.Clear(PixelFarm.Drawing.Color.White);
+            //_aggPainter.Clear(PixelFarm.Drawing.Color.White);
             //TODO:
             //if the content of _aggBmp is not changed
             //we should not draw again  
-            //
-            _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
+            // 
+            if (_updateCpuBlitSurfaceDel != null)
+            {
+                _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
+            }
             //
             ////test print some text
             //_aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
@@ -125,9 +129,16 @@ namespace YourImplementation
         }
         internal void RaiseUpdateCpuBlitSurface(Rectangle updateArea)
         {
-            _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
+            if (_updateCpuBlitSurfaceDel != null)
+            {
+                _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
+            }
         }
-
+        internal bool HasCpuBlitUpdateSurfaceDel => _updateCpuBlitSurfaceDel != null;
+        public void SetUpdateCpuBlitSurfaceDelegate(UpdateCpuBlitSurface updateCpuBlitSurfaceDel)
+        {
+            _updateCpuBlitSurfaceDel = updateCpuBlitSurfaceDel;
+        }
     }
 
     /// <summary>
@@ -147,13 +158,19 @@ namespace YourImplementation
         }
         internal override void UpdateCpuBlitSurface(Rectangle updateArea)
         {
-            _gdiDrawBoard.RenderSurface.Win32DC.SetClipRect(updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height);
-            _gdiDrawBoard.RenderSurface.Win32DC.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
-            _gdiDrawBoard.RenderSurface.Win32DC.ClearClipRect();
+            //_gdiDrawBoard.RenderSurface.Win32DC.SetClipRect(updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height);
+            //_gdiDrawBoard.RenderSurface.Win32DC.PatBlt(Win32.NativeWin32MemoryDC.PatBltColor.White);
+            //_gdiDrawBoard.RenderSurface.Win32DC.ClearClipRect();
             //------------
-            RaiseUpdateCpuBlitSurface(updateArea);
-            //------------
+            //update software part content
+            RenderBoxBase primElem = base.CpuBlitCanvasRenderElement;
+            if (HasCpuBlitUpdateSurfaceDel)
+            {
+                RaiseUpdateCpuBlitSurface(updateArea);
+            }
         }
+        //------------
+
 
         protected override bool HasSomeExtension => true;
         protected override void SetupAggCanvas()
@@ -210,8 +227,12 @@ namespace YourImplementation
             _glsx = glsx;
             _glPainter = canvasPainter;
         }
+
+
         protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
+            //canvas here should be glcanvas
+
             //TODO: 
             //1. if the content of glBmp is not changed
             //we should not render again 
@@ -220,7 +241,12 @@ namespace YourImplementation
             //-------------------------------------------------------------------------  
             if (_rootgfx.HasRenderTreeInvalidateAccumRect)
             {
-                _ui.UpdateCpuBlitSurface(updateArea);
+                //update cpu surface part*** 
+                DrawDefaultLayer(_ui.GetDrawBoard(), ref updateArea);
+                if (_ui.HasCpuBlitUpdateSurfaceDel)
+                {
+                    _ui.UpdateCpuBlitSurface(updateArea);
+                }
             }
 
 
@@ -245,11 +271,7 @@ namespace YourImplementation
             //_glPainter.DrawString("Hello2", 0, 400);
             //------------------------------------------------------------------------- 
         }
-        //public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
-        //{
 
-
-        //}
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
 

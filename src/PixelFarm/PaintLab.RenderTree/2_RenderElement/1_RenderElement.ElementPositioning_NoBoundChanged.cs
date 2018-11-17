@@ -8,11 +8,11 @@ namespace LayoutFarm
         //----------------------
         //rectangle boundary area 
         //for fast approximation
-        int b_top;
-        int b_left;
-        int b_width;
-        int b_height;
-        int uiLayoutFlags;
+        int _b_top;
+        int _b_left;
+        int _b_width;
+        int _b_height;
+        int _uiLayoutFlags;
         //------------------------ 
 
         /// <summary>
@@ -22,49 +22,49 @@ namespace LayoutFarm
         {
             get
             {
-                return new Rectangle(b_left, b_top, b_width, b_height);
+                return new Rectangle(_b_left, _b_top, _b_width, _b_height);
             }
         }
         public Size Size
         {
             get
             {
-                return new Size(b_width, b_height);
+                return new Size(_b_width, _b_height);
             }
         }
         public int X
         {
             get
             {
-                return b_left;
+                return _b_left;
             }
         }
         public int Y
         {
             get
             {
-                return b_top;
+                return _b_top;
             }
         }
         public int Right
         {
             get
             {
-                return b_left + b_width;
+                return _b_left + _b_width;
             }
         }
         public int Bottom
         {
             get
             {
-                return b_top + b_height;
+                return _b_top + _b_height;
             }
         }
         public Point Location
         {
             get
             {
-                return new Point(b_left, b_top);
+                return new Point(_b_left, _b_top);
             }
         }
         public int Width
@@ -72,14 +72,14 @@ namespace LayoutFarm
             get
             {
 
-                return b_width;
+                return _b_width;
             }
         }
         public int Height
         {
             get
             {
-                return b_height;
+                return _b_height;
             }
         }
 
@@ -133,16 +133,16 @@ namespace LayoutFarm
             if (parentVisualElement != null)
             {
                 Point parentGlobalLocation = GetGlobalLocationStatic(parentVisualElement);
-                re.parentLink.AdjustLocation(ref parentGlobalLocation);
+                re._parentLink.AdjustLocation(ref parentGlobalLocation);
                 if (parentVisualElement.MayHasViewport)
                 {
                     return new Point(
-                        re.b_left + parentGlobalLocation.X - parentVisualElement.ViewportX,
-                        re.b_top + parentGlobalLocation.Y - parentVisualElement.ViewportY);
+                        re._b_left + parentGlobalLocation.X - parentVisualElement.ViewportX,
+                        re._b_top + parentGlobalLocation.Y - parentVisualElement.ViewportY);
                 }
                 else
                 {
-                    return new Point(re.b_left + parentGlobalLocation.X, re.b_top + parentGlobalLocation.Y);
+                    return new Point(re._b_left + parentGlobalLocation.X, re._b_top + parentGlobalLocation.Y);
                 }
             }
             else
@@ -155,26 +155,26 @@ namespace LayoutFarm
         {
             get
             {
-                return ((uiLayoutFlags & RenderElementConst.LY_HAS_SPC_WIDTH) == RenderElementConst.LY_HAS_SPC_WIDTH);
+                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_WIDTH) == RenderElementConst.LY_HAS_SPC_WIDTH);
             }
             set
             {
-                uiLayoutFlags = value ?
-                   uiLayoutFlags | RenderElementConst.LY_HAS_SPC_WIDTH :
-                   uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_WIDTH;
+                _uiLayoutFlags = value ?
+                   _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_WIDTH :
+                   _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_WIDTH;
             }
         }
         public bool HasSpecificHeight
         {
             get
             {
-                return ((uiLayoutFlags & RenderElementConst.LY_HAS_SPC_HEIGHT) == RenderElementConst.LY_HAS_SPC_HEIGHT);
+                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_HEIGHT) == RenderElementConst.LY_HAS_SPC_HEIGHT);
             }
             set
             {
-                uiLayoutFlags = value ?
-                    uiLayoutFlags | RenderElementConst.LY_HAS_SPC_HEIGHT :
-                    uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_HEIGHT;
+                _uiLayoutFlags = value ?
+                    _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_HEIGHT :
+                    _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_HEIGHT;
             }
         }
 
@@ -182,40 +182,40 @@ namespace LayoutFarm
         {
             get
             {
-                return ((uiLayoutFlags & RenderElementConst.LY_HAS_SPC_SIZE) != 0);
+                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_SIZE) != 0);
             }
             set
             {
-                uiLayoutFlags = value ?
-                    uiLayoutFlags | RenderElementConst.LY_HAS_SPC_SIZE :
-                    uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_SIZE;
+                _uiLayoutFlags = value ?
+                    _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_SIZE :
+                    _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_SIZE;
             }
         }
 
 
         public bool Contains(Point testPoint)
         {
-            return ((propFlags & RenderElementConst.HIDDEN) != 0) ?
+            return ((_propFlags & RenderElementConst.HIDDEN) != 0) ?
                         false :
                         ContainPoint(testPoint.X, testPoint.Y);
         }
         public bool ContainPoint(int x, int y)
         {
-            return ((x >= b_left && x < Right) && (y >= b_top && y < Bottom));
+            return ((x >= _b_left && x < Right) && (y >= _b_top && y < Bottom));
         }
         public bool ContainRect(Rectangle r)
         {
-            return r.Left >= b_left &&
-                    r.Top >= b_top &&
-                    r.Right <= b_left + b_width &&
-                    r.Bottom <= b_top + b_height;
+            return r.Left >= _b_left &&
+                    r.Top >= _b_top &&
+                    r.Right <= _b_left + _b_width &&
+                    r.Bottom <= _b_top + _b_height;
         }
         public bool ContainRect(int x, int y, int width, int height)
         {
-            return x >= b_left &&
-                    y >= b_top &&
-                    x + width <= b_left + b_width &&
-                    y + height <= b_top + b_height;
+            return x >= _b_left &&
+                    y >= _b_top &&
+                    x + width <= _b_left + _b_width &&
+                    y + height <= _b_top + _b_height;
         }
         /// <summary>
         /// no rect change
@@ -224,11 +224,11 @@ namespace LayoutFarm
         /// <returns></returns>
         public bool IntersectsWith(ref Rectangle r)
         {
-            int left = this.b_left;
+            int left = this._b_left;
             if (((left <= r.Left) && (this.Right > r.Left)) ||
                 ((left >= r.Left) && (left < r.Right)))
             {
-                int top = this.b_top;
+                int top = this._b_top;
                 return (((top <= r.Top) && (this.Bottom > r.Top)) ||
                           ((top >= r.Top) && (top < r.Bottom)));
             }
@@ -241,7 +241,7 @@ namespace LayoutFarm
         /// <returns></returns>
         public bool IntersectOnHorizontalWith(ref Rectangle r)
         {
-            int left = this.b_left;
+            int left = this._b_left;
             return (((left <= r.Left) && (this.Right > r.Left)) ||
                      ((left >= r.Left) && (left < r.Right)));
         }

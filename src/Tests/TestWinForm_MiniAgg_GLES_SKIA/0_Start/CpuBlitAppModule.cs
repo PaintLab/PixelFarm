@@ -37,7 +37,7 @@ namespace Mini
         public void LoadExample(DemoBase exBase)
         {
             _demoUI = new DemoUI(exBase, _myWidth, _myHeight);
-            _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
+            _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
         }
 
 

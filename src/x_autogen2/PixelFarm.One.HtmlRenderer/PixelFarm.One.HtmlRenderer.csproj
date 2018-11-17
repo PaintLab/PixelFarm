@@ -2615,9 +2615,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TextureFontStore.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TextureFontStore.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs</Link>
     </Compile>

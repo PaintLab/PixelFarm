@@ -10,14 +10,15 @@ namespace LayoutFarm.UI
     /// </summary>
     public abstract partial class TopWindowBridgeWinForm
     {
-        RootGraphic rootGraphic;
-        ITopWindowEventRoot topWinEventRoot;
-        CanvasViewport canvasViewport;
-        MouseCursorStyle currentCursorStyle = MouseCursorStyle.Default;
+        RootGraphic _rootGraphic;
+        ITopWindowEventRoot _topWinEventRoot;
+        CanvasViewport _canvasViewport;
+        MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
         public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
         public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
+
         public TopWindowBridgeWinForm(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
 
@@ -28,8 +29,8 @@ namespace LayoutFarm.UI
             }
 
 #endif
-            this.topWinEventRoot = topWinEventRoot;
-            this.rootGraphic = rootGraphic;
+            this._topWinEventRoot = topWinEventRoot;
+            this._rootGraphic = rootGraphic;
         }
 #if DEBUG
         static void SaveImage(byte[] imgBuffer, int pixelWidth, int pixelHeight)
@@ -48,12 +49,12 @@ namespace LayoutFarm.UI
         public abstract void InvalidateRootArea(Rectangle r);
         public RootGraphic RootGfx
         {
-            get { return this.rootGraphic; }
+            get { return this._rootGraphic; }
         }
         protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
         internal void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
-            this.canvasViewport = canvasViewport;
+            this._canvasViewport = canvasViewport;
         }
         internal virtual void OnHostControlLoaded()
         {
@@ -61,10 +62,8 @@ namespace LayoutFarm.UI
 #if DEBUG
         public void dbugPaintToOutputWindowFullMode()
         {
-            Rectangle rect = new Rectangle(0, 0, rootGraphic.Width, rootGraphic.Height);
-            rootGraphic.InvalidateGraphicArea(
-                rootGraphic.TopWindowRenderBox,
-                ref rect);
+            Rectangle rect = new Rectangle(0, 0, _rootGraphic.Width, _rootGraphic.Height);
+            _rootGraphic.InvalidateRootGraphicArea(ref rect);
             this.PaintToOutputWindow();
         }
 #endif
@@ -77,7 +76,7 @@ namespace LayoutFarm.UI
         public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer);
         public void UpdateCanvasViewportSize(int w, int h)
         {
-            this.canvasViewport.UpdateCanvasViewportSize(w, h);
+            this._canvasViewport.UpdateCanvasViewportSize(w, h);
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll"), System.Security.SuppressUnmanagedCodeSecurity]
@@ -90,7 +89,7 @@ namespace LayoutFarm.UI
         public void Close()
         {
             OnClosing();
-            canvasViewport.Close();
+            _canvasViewport.Close();
         }
         protected virtual void OnClosing()
         {
@@ -100,7 +99,7 @@ namespace LayoutFarm.UI
         {
             ScrollSurfaceRequestEventArgs hScrollSupportEventArgs;
             ScrollSurfaceRequestEventArgs vScrollSupportEventArgs;
-            canvasViewport.EvaluateScrollBar(out hScrollSupportEventArgs, out vScrollSupportEventArgs);
+            _canvasViewport.EvaluateScrollBar(out hScrollSupportEventArgs, out vScrollSupportEventArgs);
             if (hScrollSupportEventArgs != null)
             {
                 viewport_HScrollRequest(this, hScrollSupportEventArgs);
@@ -114,7 +113,7 @@ namespace LayoutFarm.UI
         {
             UIScrollEventArgs hScrollEventArgs;
             UIScrollEventArgs vScrollEventArgs;
-            canvasViewport.ScrollByNotRaiseEvent(dx, dy, out hScrollEventArgs, out vScrollEventArgs);
+            _canvasViewport.ScrollByNotRaiseEvent(dx, dy, out hScrollEventArgs, out vScrollEventArgs);
             if (vScrollEventArgs != null)
             {
                 viewport_VScrollChanged(this, vScrollEventArgs);
@@ -129,14 +128,14 @@ namespace LayoutFarm.UI
         }
         public void ScrollTo(int x, int y)
         {
-            Point viewporyLocation = canvasViewport.LogicalViewportLocation;
+            Point viewporyLocation = _canvasViewport.LogicalViewportLocation;
             if (viewporyLocation.Y == y && viewporyLocation.X == x)
             {
                 return;
             }
             UIScrollEventArgs hScrollEventArgs;
             UIScrollEventArgs vScrollEventArgs;
-            canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
+            _canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
             if (vScrollEventArgs != null)
             {
                 viewport_VScrollChanged(this, vScrollEventArgs);
@@ -187,32 +186,32 @@ namespace LayoutFarm.UI
         }
         public void HandleGotFocus(EventArgs e)
         {
-            if (canvasViewport.IsClosed)
+            if (_canvasViewport.IsClosed)
             {
                 return;
             }
 
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootGotFocus();
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootGotFocus();
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleLostFocus(EventArgs e)
         {
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootLostFocus();
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootLostFocus();
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
         public void HandleMouseDown(System.Windows.Forms.MouseEventArgs e)
         {
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootMouseDown(
-                e.X + this.canvasViewport.ViewportX,
-                e.Y + this.canvasViewport.ViewportY,
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootMouseDown(
+                e.X + this._canvasViewport.ViewportX,
+                e.Y + this._canvasViewport.ViewportY,
                 GetMouseButton(e.Button));
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
 
             PrepareRenderAndFlushAccumGraphics();
@@ -229,13 +228,13 @@ namespace LayoutFarm.UI
         }
         public void HandleMouseMove(System.Windows.Forms.MouseEventArgs e)
         {
-            this.topWinEventRoot.RootMouseMove(
-                    e.X + this.canvasViewport.ViewportX,
-                    e.Y + this.canvasViewport.ViewportY,
+            this._topWinEventRoot.RootMouseMove(
+                    e.X + this._canvasViewport.ViewportX,
+                    e.Y + this._canvasViewport.ViewportY,
                     GetMouseButton(e.Button));
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -255,24 +254,24 @@ namespace LayoutFarm.UI
         }
         public void HandleMouseUp(System.Windows.Forms.MouseEventArgs e)
         {
-            canvasViewport.FullMode = false;
-            topWinEventRoot.RootMouseUp(
-                     e.X + this.canvasViewport.ViewportX,
-                     e.Y + this.canvasViewport.ViewportY,
+            _canvasViewport.FullMode = false;
+            _topWinEventRoot.RootMouseUp(
+                     e.X + this._canvasViewport.ViewportX,
+                     e.Y + this._canvasViewport.ViewportY,
                     GetMouseButton(e.Button));
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleMouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
-            canvasViewport.FullMode = true;
-            this.topWinEventRoot.RootMouseWheel(e.Delta);
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            _canvasViewport.FullMode = true;
+            this._topWinEventRoot.RootMouseWheel(e.Delta);
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -290,14 +289,14 @@ namespace LayoutFarm.UI
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)e.KeyCode);
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
 #endif
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootKeyDown(e.KeyValue);
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootKeyDown(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyUp(System.Windows.Forms.KeyEventArgs e)
         {
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootKeyUp(e.KeyValue);
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootKeyUp(e.KeyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyPress(System.Windows.Forms.KeyPressEventArgs e)
@@ -311,8 +310,8 @@ namespace LayoutFarm.UI
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYPRESS " + e.KeyChar);
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
 #endif
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootKeyPress(e.KeyChar);
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootKeyPress(e.KeyChar);
             PrepareRenderAndFlushAccumGraphics();
         }
 
@@ -325,8 +324,8 @@ namespace LayoutFarm.UI
             //#if DEBUG
             //            Console.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
             //#endif
-            canvasViewport.FullMode = false;
-            bool result = this.topWinEventRoot.RootProcessDialogKey((int)keyData);
+            _canvasViewport.FullMode = false;
+            bool result = this._topWinEventRoot.RootProcessDialogKey((int)keyData);
             if (result)
             {
                 PrepareRenderAndFlushAccumGraphics();
@@ -336,8 +335,8 @@ namespace LayoutFarm.UI
 
         void PrepareRenderAndFlushAccumGraphics()
         {
-            this.rootGraphic.PrepareRender();
-            this.rootGraphic.FlushAccumGraphics();
+            this._rootGraphic.PrepareRender();
+            this._rootGraphic.FlushAccumGraphics();
         }
     }
 }

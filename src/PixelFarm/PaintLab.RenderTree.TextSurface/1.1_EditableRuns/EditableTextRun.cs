@@ -10,8 +10,8 @@ namespace LayoutFarm.Text
     public class EditableTextRun : EditableRun
     {
 
-        TextSpanStyle spanStyle;
-        int[] outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
+        TextSpanStyle _spanStyle;
+        int[] _outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
         ILineSegmentList _lineSegs;
 
@@ -20,7 +20,7 @@ namespace LayoutFarm.Text
         {
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span
-            this.spanStyle = style;
+            this._spanStyle = style;
             SetNewContent(copyBuffer);
             UpdateRunWidth();
 
@@ -31,7 +31,7 @@ namespace LayoutFarm.Text
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
         {
-            this.spanStyle = style;
+            this._spanStyle = style;
             SetNewContent(new char[] { c });
             if (c == '\n')
             {
@@ -44,7 +44,7 @@ namespace LayoutFarm.Text
         public EditableTextRun(RootGraphic gfx, string str, TextSpanStyle style)
             : base(gfx)
         {
-            this.spanStyle = style;
+            this._spanStyle = style;
             if (str != null && str.Length > 0)
             {
                 SetNewContent(str.ToCharArray());
@@ -144,7 +144,7 @@ namespace LayoutFarm.Text
                 //we should not store this as a text run
                 //if this is a linebreak it should be encoded at the end of this visual line
                 size = new Size(0, (int)Math.Round(txServices.MeasureBlankLineHeight(GetFont())));
-                outputUserCharAdvances = null;
+                _outputUserCharAdvances = null;
             }
             else
             {
@@ -164,11 +164,11 @@ namespace LayoutFarm.Text
                     //
                     _content_unparsed = false;
                     //output glyph position
-                    outputUserCharAdvances = new int[len];
+                    _outputUserCharAdvances = new int[len];
 
                     int outputTotalW, outputLineHeight;
                     txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, _lineSegs, GetFont(),
-                        outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                        _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
 
                 }
@@ -177,11 +177,11 @@ namespace LayoutFarm.Text
 
                     _content_unparsed = false;
                     int len = mybuffer.Length;
-                    outputUserCharAdvances = new int[len];
+                    _outputUserCharAdvances = new int[len];
                     int outputTotalW, outputLineHeight;
                     var textBufferSpan = new TextBufferSpan(mybuffer);
                     txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, GetFont(),
-                        outputUserCharAdvances, out outputTotalW, out outputLineHeight);
+                        _outputUserCharAdvances, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
                 }
 
@@ -218,7 +218,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return this.spanStyle;
+                return this._spanStyle;
             }
         }
         public override void SetStyle(TextSpanStyle spanStyle)
@@ -229,7 +229,7 @@ namespace LayoutFarm.Text
             //so we invalidate graphics area pre and post
 
             this.InvalidateGraphics();
-            this.spanStyle = spanStyle;
+            this._spanStyle = spanStyle;
             this.InvalidateGraphics();
             UpdateRunWidth();
         }
@@ -247,11 +247,11 @@ namespace LayoutFarm.Text
                 {
                     //ca
                     int total = 0;
-                    if (outputUserCharAdvances != null)
+                    if (_outputUserCharAdvances != null)
                     {
                         for (int i = 0; i < length; ++i)
                         {
-                            total += this.outputUserCharAdvances[i];
+                            total += this._outputUserCharAdvances[i];
                         }
                     }
                     return new Size(total, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
@@ -401,11 +401,11 @@ namespace LayoutFarm.Text
         {
             if (pixelOffset < Width)
             {
-                int j = outputUserCharAdvances.Length;
+                int j = _outputUserCharAdvances.Length;
                 int accWidth = 0; //accummulate width
                 for (int i = 0; i < j; i++)
                 {
-                    int charW = outputUserCharAdvances[i];
+                    int charW = _outputUserCharAdvances[i];
                     if (accWidth + charW > pixelOffset)
                     {
                         //stop

@@ -46,7 +46,7 @@ namespace LayoutFarm
         public object owner;
         public string msg;
         public int indentLevel;
-        public dbugLayoutMsg(RenderElement ve, string msg)
+        public dbugLayoutMsg(object ve, string msg)
         {
             this.owner = ve;
             this.msg = msg;

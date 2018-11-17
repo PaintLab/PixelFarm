@@ -10,14 +10,14 @@ namespace LayoutFarm.UI
     {
         //current hit chain        
         HitChain _previousChain = new HitChain();
-        Stack<HitChain> hitChainStack = new Stack<HitChain>();
+        Stack<HitChain> _hitChainStack = new Stack<HitChain>();
 #if DEBUG
         int dbugMsgChainVersion;
 #endif
-        readonly RenderElement topRenderElement;
+        readonly RenderElement _topRenderElement;
         public RenderElementEventPortal(RenderElement topRenderElement)
         {
-            this.topRenderElement = topRenderElement;
+            _topRenderElement = topRenderElement;
 #if DEBUG
             dbugRootGraphics = (MyRootGraphic)topRenderElement.Root;
 #endif
@@ -145,7 +145,7 @@ namespace LayoutFarm.UI
 
             //temp fix
             //TODO: fix bug on HitTestOnPreviousChain()
-            RenderElement commonElement = this.topRenderElement;
+            RenderElement commonElement = this._topRenderElement;
             ////use root 
             //if (isDragging)
             //{

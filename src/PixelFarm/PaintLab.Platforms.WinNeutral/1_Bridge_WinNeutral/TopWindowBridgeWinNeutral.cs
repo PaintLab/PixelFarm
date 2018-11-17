@@ -7,52 +7,52 @@ namespace LayoutFarm.UI
 {
     abstract partial class TopWindowBridgeWinNeutral
     {
-        RootGraphic rootGraphic;
-        ITopWindowEventRoot topWinEventRoot;
-        CanvasViewport canvasViewport;
-        MouseCursorStyle currentCursorStyle = MouseCursorStyle.Default;
+        RootGraphic _rootGraphic;
+        ITopWindowEventRoot _topWinEventRoot;
+        CanvasViewport _canvasViewport;
+        MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
+        //
         public event EventHandler<ScrollSurfaceRequestEventArgs> VScrollRequest;
         public event EventHandler<ScrollSurfaceRequestEventArgs> HScrollRequest;
         public event EventHandler<UIScrollEventArgs> VScrollChanged;
         public event EventHandler<UIScrollEventArgs> HScrollChanged;
         public TopWindowBridgeWinNeutral(RootGraphic rootGraphic, ITopWindowEventRoot topWinEventRoot)
         {
-            this.topWinEventRoot = topWinEventRoot;
-            this.rootGraphic = rootGraphic;
+            this._topWinEventRoot = topWinEventRoot;
+            this._rootGraphic = rootGraphic;
         }
         public abstract void BindWindowControl(Control windowControl);
         public abstract void InvalidateRootArea(Rectangle r);
         public RootGraphic RootGfx
         {
-            get { return this.rootGraphic; }
+            get { return this._rootGraphic; }
         }
         protected abstract void ChangeCursorStyle(MouseCursorStyle cursorStyle);
         protected void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
-            this.canvasViewport = canvasViewport;
+            this._canvasViewport = canvasViewport;
         }
         internal virtual void OnHostControlLoaded()
         {
         }
         public void PaintToOutputWindowFullMode()
         {
-            Rectangle rect = new Rectangle(0, 0, rootGraphic.Width, rootGraphic.Height);
-            rootGraphic.InvalidateGraphicArea(
-                rootGraphic.TopWindowRenderBox,
-                ref rect);
+            Rectangle rect = new Rectangle(0, 0, _rootGraphic.Width, _rootGraphic.Height);
+            _rootGraphic.InvalidateRootGraphicArea(ref rect);
+
             this.PaintToOutputWindow();
         }
         public abstract void PaintToOutputWindow();
 
         public void UpdateCanvasViewportSize(int w, int h)
         {
-            this.canvasViewport.UpdateCanvasViewportSize(w, h);
+            this._canvasViewport.UpdateCanvasViewportSize(w, h);
         }
 
         public void Close()
         {
             OnClosing();
-            canvasViewport.Close();
+            _canvasViewport.Close();
         }
         protected virtual void OnClosing()
         {
@@ -62,7 +62,7 @@ namespace LayoutFarm.UI
         {
             ScrollSurfaceRequestEventArgs hScrollSupportEventArgs;
             ScrollSurfaceRequestEventArgs vScrollSupportEventArgs;
-            canvasViewport.EvaluateScrollBar(out hScrollSupportEventArgs, out vScrollSupportEventArgs);
+            _canvasViewport.EvaluateScrollBar(out hScrollSupportEventArgs, out vScrollSupportEventArgs);
             if (hScrollSupportEventArgs != null)
             {
                 viewport_HScrollRequest(this, hScrollSupportEventArgs);
@@ -76,7 +76,7 @@ namespace LayoutFarm.UI
         {
             UIScrollEventArgs hScrollEventArgs;
             UIScrollEventArgs vScrollEventArgs;
-            canvasViewport.ScrollByNotRaiseEvent(dx, dy, out hScrollEventArgs, out vScrollEventArgs);
+            _canvasViewport.ScrollByNotRaiseEvent(dx, dy, out hScrollEventArgs, out vScrollEventArgs);
             if (vScrollEventArgs != null)
             {
                 viewport_VScrollChanged(this, vScrollEventArgs);
@@ -91,14 +91,14 @@ namespace LayoutFarm.UI
         }
         public void ScrollTo(int x, int y)
         {
-            Point viewporyLocation = canvasViewport.LogicalViewportLocation;
+            Point viewporyLocation = _canvasViewport.LogicalViewportLocation;
             if (viewporyLocation.Y == y && viewporyLocation.X == x)
             {
                 return;
             }
             UIScrollEventArgs hScrollEventArgs;
             UIScrollEventArgs vScrollEventArgs;
-            canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
+            _canvasViewport.ScrollToNotRaiseScrollChangedEvent(x, y, out hScrollEventArgs, out vScrollEventArgs);
             if (vScrollEventArgs != null)
             {
                 viewport_VScrollChanged(this, vScrollEventArgs);
@@ -150,32 +150,32 @@ namespace LayoutFarm.UI
         }
         public void HandleGotFocus(EventArgs e)
         {
-            if (canvasViewport.IsClosed)
+            if (_canvasViewport.IsClosed)
             {
                 return;
             }
 
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootGotFocus();
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootGotFocus();
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleLostFocus(EventArgs e)
         {
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootLostFocus();
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootLostFocus();
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
         public void HandleMouseDown(int x, int y, UIMouseButtons b)
         {
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootMouseDown(
-                x + this.canvasViewport.ViewportX,
-                y + this.canvasViewport.ViewportY,
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootMouseDown(
+                x + this._canvasViewport.ViewportX,
+                y + this._canvasViewport.ViewportY,
                 b);
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
 
             PrepareRenderAndFlushAccumGraphics();
@@ -192,13 +192,13 @@ namespace LayoutFarm.UI
         }
         public void HandleMouseMove(int x, int y, UIMouseButtons b)
         {
-            this.topWinEventRoot.RootMouseMove(
-                    x + this.canvasViewport.ViewportX,
-                    y + this.canvasViewport.ViewportY,
+            this._topWinEventRoot.RootMouseMove(
+                    x + this._canvasViewport.ViewportX,
+                    y + this._canvasViewport.ViewportY,
                     b);
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -218,42 +218,42 @@ namespace LayoutFarm.UI
         //}
         public void HandleMouseUp(int x, int y, UIMouseButtons b)
         {
-            canvasViewport.FullMode = false;
-            topWinEventRoot.RootMouseUp(
-                   x + this.canvasViewport.ViewportX,
-                   y + this.canvasViewport.ViewportY,
+            _canvasViewport.FullMode = false;
+            _topWinEventRoot.RootMouseUp(
+                   x + this._canvasViewport.ViewportX,
+                   y + this._canvasViewport.ViewportY,
                    b);
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleMouseWheel(int delta)
         {
-            canvasViewport.FullMode = true;
-            this.topWinEventRoot.RootMouseWheel(delta);
-            if (currentCursorStyle != this.topWinEventRoot.MouseCursorStyle)
+            _canvasViewport.FullMode = true;
+            this._topWinEventRoot.RootMouseWheel(delta);
+            if (_currentCursorStyle != this._topWinEventRoot.MouseCursorStyle)
             {
-                ChangeCursorStyle(this.currentCursorStyle = this.topWinEventRoot.MouseCursorStyle);
+                ChangeCursorStyle(this._currentCursorStyle = this._topWinEventRoot.MouseCursorStyle);
             }
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyDown(int keyValue)
         {
-//#if DEBUG
-//            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
-//            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)e.KeyCode);
-//            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
-//#endif
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootKeyDown(keyValue);
+            //#if DEBUG
+            //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
+            //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)e.KeyCode);
+            //            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
+            //#endif
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootKeyDown(keyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyUp(int keyValue)
         {
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootKeyUp(keyValue);
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootKeyUp(keyValue);
             PrepareRenderAndFlushAccumGraphics();
         }
         public void HandleKeyPress(char c)
@@ -267,14 +267,14 @@ namespace LayoutFarm.UI
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYPRESS " + c);
             dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
 #endif
-            canvasViewport.FullMode = false;
-            this.topWinEventRoot.RootKeyPress(c);
+            _canvasViewport.FullMode = false;
+            this._topWinEventRoot.RootKeyPress(c);
             PrepareRenderAndFlushAccumGraphics();
         }
         public bool HandleProcessDialogKey(int keyData)
         {
-            canvasViewport.FullMode = false;
-            bool result = this.topWinEventRoot.RootProcessDialogKey((int)keyData);
+            _canvasViewport.FullMode = false;
+            bool result = this._topWinEventRoot.RootProcessDialogKey((int)keyData);
             if (result)
             {
                 PrepareRenderAndFlushAccumGraphics();
@@ -284,8 +284,8 @@ namespace LayoutFarm.UI
 
         void PrepareRenderAndFlushAccumGraphics()
         {
-            this.rootGraphic.PrepareRender();
-            this.rootGraphic.FlushAccumGraphics();
+            this._rootGraphic.PrepareRender();
+            this._rootGraphic.FlushAccumGraphics();
         }
     }
 }

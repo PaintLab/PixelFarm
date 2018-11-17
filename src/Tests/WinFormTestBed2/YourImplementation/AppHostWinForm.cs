@@ -1,10 +1,10 @@
 ﻿//Apache2, 2014-present, WinterDev
 using System;
 using System.IO;
-using PixelFarm.Drawing;
 
 using PaintLab.Svg;
 using LayoutFarm.UI;
+using PixelFarm.Drawing;
 //
 using PixelFarm.DrawingGL;
 using YourImplementation;
@@ -17,7 +17,7 @@ namespace LayoutFarm
         //-----------------------------------
         OpenTK.MyGLControl _glControl;
         CpuBlitGLESUIElement _bridgeUI;
-        bool _useBridgeUI;
+
         //-----------------------------------
 
 
@@ -59,6 +59,7 @@ namespace LayoutFarm
             //
             IntPtr hh1 = _glControl.Handle; //ensure that contrl handler is created
             _glControl.MakeCurrent();
+
             if (_vw.InnerViewportKind == InnerViewportKind.GdiPlusOnGLES)
             {
                 _bridgeUI = new GdiOnGLESUIElement(glControl.Width, glControl.Height);
@@ -70,51 +71,26 @@ namespace LayoutFarm
             }
 
 
-            //essential***
-            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>
-            {
-                _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), area);
-            });
-            //DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter()); 
+            //optional***
+            //_bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>
+            //{
+            //    _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), area);
+            //});
+
+
             GLRenderSurface glsx = _vw.GetGLRenderSurface();
             GLPainter glPainter = _vw.GetGLPainter();
 
             RootGraphic rootGfx = _vw.RootGfx;
             _bridgeUI.CreatePrimaryRenderElement(glsx, glPainter, rootGfx);
 
-            _useBridgeUI = true;
-            //demoBase.SetEssentialGLHandlers(
-            //    () => this._glControl.SwapBuffers(),
-            //    () => this._glControl.GetEglDisplay(),
-            //    () => this._glControl.GetEglSurface()
-            //);
-            //------------------------------------------------
+
+
+            //*****
+            RenderBoxBase renderE = (RenderBoxBase)_bridgeUI.GetPrimaryRenderElement(rootGfx);
+            rootGfx.AddChild(renderE);
+            rootGfx.SetPrimaryContainerElement(renderE);
             //***
-            //this will do as a proxy for transfer event from e1 to e2 
-
-            //GeneralEventListener evListener = new GeneralEventListener();
-            //evListener.MouseDown += e =>
-            //{
-            //    _bridgeUI.ContentMayChanged = true;
-            //    _bridgeUI.InvalidateGraphics();
-            //};
-            //evListener.MouseMove += e =>
-            //{
-            //    if (e.IsDragging)
-            //    {
-            //        _bridgeUI.InvalidateGraphics();
-            //        _bridgeUI.ContentMayChanged = true;
-            //    }
-            //};
-            //evListener.MouseUp += e =>
-            //{
-
-            //    _bridgeUI.ContentMayChanged = true;
-            //    _bridgeUI.InvalidateGraphics();
-            //};
-            //_bridgeUI.AttachExternalEventListener(evListener);
-
-            rootGfx.TopWindowRenderBox.AddChild(_bridgeUI.GetPrimaryRenderElement(rootGfx));
         }
 
         //
@@ -131,42 +107,17 @@ namespace LayoutFarm
                 _ownerForm.Text = value;
             }
         }
-
-
         public override RootGraphic RootGfx
         {
             get { return this._vw.RootGfx; }
         }
-
-
-        //TODO: review primary render element here again!
-        //so special root elem switch?
-        RenderElement _client;
         public override void AddChild(RenderElement renderElement)
         {
-            if (_useBridgeUI)
-            {
-                _client = renderElement;
-                _bridgeUI.CurrentPrimaryRenderElement.AddChild(renderElement);
-
-            }
-            else
-            {
-                this._vw.AddChild(renderElement);
-            }
+            this._vw.AddChild(renderElement);
         }
         public override void AddChild(RenderElement renderElement, object owner)
         {
-            if (_useBridgeUI)
-            {
-                _client = renderElement;
-                _bridgeUI.CurrentPrimaryRenderElement.AddChild(renderElement);
-            }
-            else
-            {
-                this._vw.AddChild(renderElement, owner);
-            }
-
+            this._vw.AddChild(renderElement, owner);
         }
 
         public override Image LoadImage(string imgName, int reqW, int reqH)

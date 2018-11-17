@@ -5,8 +5,8 @@ namespace LayoutFarm.UI
 {
     partial class AbstractCompletionWindow : Form
     {
-        Form linkedParentForm;
-        Control linkedParentControl;
+        Form _linkedParentForm;
+        Control _linkedParentControl;
         public AbstractCompletionWindow()
         {
             //TODO: review here 
@@ -17,15 +17,15 @@ namespace LayoutFarm.UI
         }
         public Form LinkedParentForm
         {
-            get { return this.linkedParentForm; }
-            set { this.linkedParentForm = value; }
+            get { return this._linkedParentForm; }
+            set { this._linkedParentForm = value; }
         }
         public Control LinkedParentControl
         {
-            get { return this.linkedParentControl; }
+            get { return this._linkedParentControl; }
             set
             {
-                this.linkedParentControl = value;
+                this._linkedParentControl = value;
             }
         }
         //protected override CreateParams CreateParams
@@ -48,7 +48,7 @@ namespace LayoutFarm.UI
         public void ShowForm()
         {
             this.Show();
-            this.linkedParentControl.Focus();
+            this._linkedParentControl.Focus();
         }
     }
 }

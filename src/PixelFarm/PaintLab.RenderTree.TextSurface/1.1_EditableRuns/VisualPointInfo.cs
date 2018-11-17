@@ -4,42 +4,42 @@ namespace LayoutFarm.Text
 {
     public abstract class VisualPointInfo
     {
-        int lineCharIndex;
-        EditableRun onVisualElement;
-        int onTextRunCharOffset;
-        int caretXPos;
-        int onTextRunPixelOffset;
+        int _lineCharIndex;
+        EditableRun _onVisualElement;
+        int _onTextRunCharOffset;
+        int _caretXPos;
+        int _onTextRunPixelOffset;
         public VisualPointInfo(int lineCharIndex)
         {
-            this.lineCharIndex = lineCharIndex;
+            this._lineCharIndex = lineCharIndex;
         }
 
         public void SetAdditionVisualInfo(EditableRun onTextRun, int onTextRunCharOffset, int caretXPos, int textRunPixelOffset)
         {
-            this.caretXPos = caretXPos;
-            this.onVisualElement = onTextRun;
-            this.onTextRunCharOffset = onTextRunCharOffset;
-            this.onTextRunPixelOffset = textRunPixelOffset;
+            this._caretXPos = caretXPos;
+            this._onVisualElement = onTextRun;
+            this._onTextRunCharOffset = onTextRunCharOffset;
+            this._onTextRunPixelOffset = textRunPixelOffset;
         }
         public int LineCharIndex
         {
             get
             {
-                return lineCharIndex;
+                return _lineCharIndex;
             }
         }
         public int TextRunCharOffset
         {
             get
             {
-                return onTextRunCharOffset;
+                return _onTextRunCharOffset;
             }
         }
         public EditableRun TextRun
         {
             get
             {
-                return onVisualElement;
+                return _onVisualElement;
             }
         }
         public bool IsOnTheBeginOfLine
@@ -74,34 +74,34 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return lineCharIndex - onTextRunCharOffset;
+                return _lineCharIndex - _onTextRunCharOffset;
             }
         }
         public int X
         {
             get
             {
-                return caretXPos;
+                return _caretXPos;
             }
         }
         public int TextRunPixelOffset
         {
             get
             {
-                return onTextRunPixelOffset;
+                return _onTextRunPixelOffset;
             }
         }
 
 #if DEBUG
         public override string ToString()
         {
-            if (onVisualElement == null)
+            if (_onVisualElement == null)
             {
                 return "null " + " ,local[" + RunLocalSelectedIndex + "]";
             }
             else
             {
-                return onVisualElement.ToString() + " ,local[" + RunLocalSelectedIndex + "]";
+                return _onVisualElement.ToString() + " ,local[" + RunLocalSelectedIndex + "]";
             }
         }
 #endif

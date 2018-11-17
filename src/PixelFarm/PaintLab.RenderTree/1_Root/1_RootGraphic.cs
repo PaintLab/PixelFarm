@@ -34,10 +34,11 @@ namespace LayoutFarm
         {
             get;
         }
-        public abstract RenderBoxBase TopWindowRenderBox
-        {
-            get;
-        }
+        public abstract void TopDownRecalculateContent();
+        public abstract IRenderElement TopWindowRenderBox { get; }
+        public abstract void AddChild(RenderElement renderE);
+        public abstract void InvalidateRootArea(Rectangle r);
+        public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
         public int Width
         {
             get;
@@ -143,7 +144,7 @@ namespace LayoutFarm
         }
 #endif
 
-
+        public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
         public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level

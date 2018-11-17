@@ -14,19 +14,19 @@ namespace PixelFarm.DrawingGL
     }
     public class TextureAtlas
     {
-        int width;
-        int height;
-        int currentXPos;
-        int currentYPos;
-        int currentLineMaxHeight = 0;
-        List<PixelFarm.Drawing.RectangleF> areas = new List<Drawing.RectangleF>();
+        int _width;
+        int _height;
+        int _currentXPos;
+        int _currentYPos;
+        int _currentLineMaxHeight = 0;
+        List<PixelFarm.Drawing.RectangleF> _areas = new List<Drawing.RectangleF>();
         public TextureAtlas(int w, int h)
         {
-            this.width = w;
-            this.height = h;
+            this._width = w;
+            this._height = h;
         }
-        public int Width { get { return this.width; } }
-        public int Height { get { return this.height; } }
+        public int Width { get { return this._width; } }
+        public int Height { get { return this._height; } }
 
         public uint GraphicsTextureId
         {
@@ -48,39 +48,39 @@ namespace PixelFarm.DrawingGL
             //find new area for w and h 
 
             //-------------------------
-            if (w > this.width)
+            if (w > this._width)
             {
                 areaId = x = y = 0;
                 return TextureAtlasAllocResult.WidthOverLimit;
             }
-            if (h > this.height)
+            if (h > this._height)
             {
                 areaId = x = y = 0;
                 return TextureAtlasAllocResult.HeightOverLimit;
             }
             //-------------------------
-            if (this.currentXPos + w > this.width)
+            if (this._currentXPos + w > this._width)
             {
                 //start to new line
-                this.currentXPos = 0;
-                this.currentYPos += currentLineMaxHeight;
-                this.currentLineMaxHeight = 0;
+                this._currentXPos = 0;
+                this._currentYPos += _currentLineMaxHeight;
+                this._currentLineMaxHeight = 0;
             }
-            if (this.currentYPos + h > this.height)
+            if (this._currentYPos + h > this._height)
             {
                 areaId = x = y = 0;
                 return TextureAtlasAllocResult.FullSpace;
             }
             //-------------------------
-            x = currentXPos;
-            y = currentYPos;
-            areaId = this.areas.Count + 1;
-            this.areas.Add(new Drawing.RectangleF(x, y, w, h));
+            x = _currentXPos;
+            y = _currentYPos;
+            areaId = this._areas.Count + 1;
+            this._areas.Add(new Drawing.RectangleF(x, y, w, h));
             //move xpos to next
-            this.currentXPos += w;
-            if (currentLineMaxHeight < h)
+            this._currentXPos += w;
+            if (_currentLineMaxHeight < h)
             {
-                currentLineMaxHeight = h;
+                _currentLineMaxHeight = h;
             }
             //------------------------- 
 

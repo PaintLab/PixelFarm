@@ -16,12 +16,14 @@ namespace LayoutFarm.Text
         //current line runs
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
 
-        internal EditableTextFlowLayer editableFlowLayer; //owner
-        int currentLineNumber;
-        int actualLineHeight;
-        int actualLineWidth;
-        int lineTop;
-        int lineFlags;
+        internal EditableTextFlowLayer EditableFlowLayer; //owner
+        int _currentLineNumber;
+        int _actualLineHeight;
+        int _actualLineWidth;
+        int _lineTop;
+        int _lineFlags;
+        //
+        //
         const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
         const int LINE_SIZE_VALID = 1 << (2 - 1);
         const int LOCAL_SUSPEND_LINE_REARRANGE = 1 << (3 - 1);
@@ -34,8 +36,8 @@ namespace LayoutFarm.Text
         internal EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
         {
 
-            this.editableFlowLayer = ownerFlowLayer;
-            this.actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
+            this.EditableFlowLayer = ownerFlowLayer;
+            this._actualLineHeight = ownerFlowLayer.DefaultLineHeight; //we start with default line height
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
@@ -115,13 +117,13 @@ namespace LayoutFarm.Text
                 accumWidth += r.Width;
                 r = r.NextTextRun;
             }
-            this.actualLineWidth = accumWidth;
-            this.actualLineHeight = maxHeight;
+            this._actualLineWidth = accumWidth;
+            this._actualLineHeight = maxHeight;
 
             if (this.RunCount == 0)
             {
                 //no span
-                this.actualLineHeight = OwnerFlowLayer.DefaultLineHeight;
+                this._actualLineHeight = OwnerFlowLayer.DefaultLineHeight;
             }
         }
         internal bool HitTestCore(HitChain hitChain)
@@ -136,7 +138,7 @@ namespace LayoutFarm.Text
             else
             {
                 LinkedListNode<EditableRun> cnode = this.First;
-                int curLineTop = this.lineTop;
+                int curLineTop = this._lineTop;
                 hitChain.OffsetTestPoint(0, -curLineTop);
                 while (cnode != null)
                 {
@@ -156,9 +158,9 @@ namespace LayoutFarm.Text
         {
             get
             {
-                if (editableFlowLayer != null)
+                if (EditableFlowLayer != null)
                 {
-                    return editableFlowLayer.OwnerRenderElement;
+                    return EditableFlowLayer.OwnerRenderElement;
                 }
                 else
                 {
@@ -170,65 +172,65 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return this.editableFlowLayer;
+                return this.EditableFlowLayer;
             }
         }
         public bool EndWithLineBreak
         {
             get
             {
-                return (lineFlags & END_WITH_LINE_BREAK) != 0;
+                return (_lineFlags & END_WITH_LINE_BREAK) != 0;
             }
             set
             {
                 if (value)
                 {
-                    lineFlags |= END_WITH_LINE_BREAK;
+                    _lineFlags |= END_WITH_LINE_BREAK;
                 }
                 else
                 {
-                    lineFlags &= ~END_WITH_LINE_BREAK;
+                    _lineFlags &= ~END_WITH_LINE_BREAK;
                 }
             }
         }
 
         public bool IntersectsWith(int y)
         {
-            return y >= lineTop && y < (lineTop + actualLineHeight);
+            return y >= _lineTop && y < (_lineTop + _actualLineHeight);
         }
         public int LineTop
         {
             get
             {
-                return lineTop;
+                return _lineTop;
             }
         }
         public int ActualLineHeight
         {
             get
             {
-                return actualLineHeight;
+                return _actualLineHeight;
             }
         }
         public int ActualLineWidth
         {
             get
             {
-                return actualLineWidth;
+                return _actualLineWidth;
             }
         }
         public Rectangle ActualLineArea
         {
             get
             {
-                return new Rectangle(0, lineTop, actualLineWidth, actualLineHeight);
+                return new Rectangle(0, _lineTop, _actualLineWidth, _actualLineHeight);
             }
         }
         public Rectangle ParentLineArea
         {
             get
             {
-                return new Rectangle(0, lineTop, this.editableFlowLayer.OwnerRenderElement.Width, actualLineHeight);
+                return new Rectangle(0, _lineTop, this.EditableFlowLayer.OwnerRenderElement.Width, _actualLineHeight);
             }
         }
         internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement)
@@ -277,7 +279,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return lineTop + actualLineHeight;
+                return _lineTop + _actualLineHeight;
             }
         }
 
@@ -301,13 +303,13 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return lineTop;
+                return _lineTop;
             }
         }
 
         public void SetTop(int linetop)
         {
-            this.lineTop = linetop;
+            this._lineTop = linetop;
         }
 #if DEBUG
         public override string ToString()
@@ -318,8 +320,8 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return "LINE[" + dbugLineId + "]:" + this.currentLineNumber + "{T:" + lineTop.ToString() + ",W:" +
-                   actualLineWidth + ",H:" + this.actualLineHeight + "}";
+                return "LINE[" + dbugLineId + "]:" + this._currentLineNumber + "{T:" + _lineTop.ToString() + ",W:" +
+                   _actualLineWidth + ",H:" + this._actualLineHeight + "}";
             }
         }
 #endif
@@ -327,25 +329,25 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return currentLineNumber;
+                return _currentLineNumber;
             }
         }
         internal void SetLineNumber(int value)
         {
-            this.currentLineNumber = value;
+            this._currentLineNumber = value;
         }
         bool IsFirstLine
         {
             get
             {
-                return currentLineNumber == 0;
+                return _currentLineNumber == 0;
             }
         }
         bool IsLastLine
         {
             get
             {
-                return currentLineNumber == editableFlowLayer.LineCount - 1;
+                return _currentLineNumber == EditableFlowLayer.LineCount - 1;
             }
         }
         bool IsSingleLine
@@ -366,9 +368,9 @@ namespace LayoutFarm.Text
         {
             get
             {
-                if (currentLineNumber < editableFlowLayer.LineCount - 1)
+                if (_currentLineNumber < EditableFlowLayer.LineCount - 1)
                 {
-                    return editableFlowLayer.GetTextLine(currentLineNumber + 1);
+                    return EditableFlowLayer.GetTextLine(_currentLineNumber + 1);
                 }
                 else
                 {
@@ -380,9 +382,9 @@ namespace LayoutFarm.Text
         {
             get
             {
-                if (currentLineNumber > 0)
+                if (_currentLineNumber > 0)
                 {
-                    return editableFlowLayer.GetTextLine(currentLineNumber - 1);
+                    return EditableFlowLayer.GetTextLine(_currentLineNumber - 1);
                 }
                 else
                 {
@@ -409,12 +411,12 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return (lineFlags & LINE_CONTENT_ARRANGED) == 0;
+                return (_lineFlags & LINE_CONTENT_ARRANGED) == 0;
             }
         }
         internal void ValidateContentArrangement()
         {
-            lineFlags |= LINE_CONTENT_ARRANGED;
+            _lineFlags |= LINE_CONTENT_ARRANGED;
         }
         public static void InnerCopyLineContent(EditableTextLine line, StringBuilder stBuilder)
         {
@@ -434,14 +436,14 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return (this.lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
+                return (this._lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
             }
         }
 
         internal void InvalidateLineLayout()
         {
-            this.lineFlags &= ~LINE_SIZE_VALID;
-            this.lineFlags &= ~LINE_CONTENT_ARRANGED;
+            this._lineFlags &= ~LINE_SIZE_VALID;
+            this._lineFlags &= ~LINE_CONTENT_ARRANGED;
         }
     }
 }

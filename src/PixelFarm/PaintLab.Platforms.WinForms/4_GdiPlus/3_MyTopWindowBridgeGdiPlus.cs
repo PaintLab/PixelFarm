@@ -40,10 +40,10 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void InvalidateRootArea(Rectangle r)
         {
+#if DEBUG
             Rectangle rect = r;
-            this.RootGfx.InvalidateGraphicArea(
-                    RootGfx.TopWindowRenderBox,
-                    ref rect);
+#endif
+            this.RootGfx.InvalidateRootGraphicArea(ref r);
         }
         public override void PaintToOutputWindow()
         {
@@ -147,8 +147,8 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void InvalidateRootArea(Rectangle r)
         {
-            //Rectangle rect = r;
-            this.RootGfx.InvalidateGraphicArea(RootGfx.TopWindowRenderBox, ref r);
+
+            this.RootGfx.InvalidateRootArea(r);
         }
 
         public override void PaintToOutputWindow()

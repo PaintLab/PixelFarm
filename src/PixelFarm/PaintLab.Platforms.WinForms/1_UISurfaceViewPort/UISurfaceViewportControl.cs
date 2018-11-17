@@ -14,18 +14,18 @@ namespace LayoutFarm.UI
 {
     public partial class UISurfaceViewportControl : UserControl
     {
-        TopWindowBridgeWinForm winBridge;
-        RootGraphic rootgfx;
-        ITopWindowEventRoot topWinEventRoot;
-        InnerViewportKind innerViewportKind;
-        List<Form> subForms = new List<Form>();
+        TopWindowBridgeWinForm _winBridge;
+        RootGraphic _rootgfx;
+        ITopWindowEventRoot _topWinEventRoot;
+        InnerViewportKind _innerViewportKind;
+        List<Form> _subForms = new List<Form>();
         public UISurfaceViewportControl()
         {
             InitializeComponent();
 
             //this.panel1.Visible = false; 
         }
-        public InnerViewportKind InnerViewportKind => innerViewportKind;
+        public InnerViewportKind InnerViewportKind => _innerViewportKind;
 
 
 #if DEBUG
@@ -41,8 +41,8 @@ namespace LayoutFarm.UI
         {
             //s_dbugCount++;
             //Console.WriteLine("focus" + s_dbugCount.ToString());
-            rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, rootgfx.Width, rootgfx.Height));
-            rootgfx.FlushAccumGraphics();
+            _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+            _rootgfx.FlushAccumGraphics();
             //#if DEBUG
             //            s_dbugCount++;
             //            Console.WriteLine("vis" + s_dbugCount.ToString());
@@ -55,14 +55,14 @@ namespace LayoutFarm.UI
             if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
             {
                 //entire window
-                rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, rootgfx.Width, rootgfx.Height));
+                _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
             }
             else
             {
-                rootgfx.InvalidateRectArea(
+                _rootgfx.InvalidateRectArea(
                     new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
             }
-            rootgfx.FlushAccumGraphics();
+            _rootgfx.FlushAccumGraphics();
             //#if DEBUG
             //            s_dbugCount++;
             //            Console.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
@@ -79,7 +79,6 @@ namespace LayoutFarm.UI
 
 #if GL_ENABLE
 
-        IntPtr hh1;
         OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
         GLRenderSurface _glsx;
         GLPainter _glPainter;
@@ -107,9 +106,9 @@ namespace LayoutFarm.UI
 
             //create a proper bridge****
 
-            this.rootgfx = rootgfx;
-            this.topWinEventRoot = topWinEventRoot;
-            this.innerViewportKind = innerViewportKind;
+            this._rootgfx = rootgfx;
+            this._topWinEventRoot = topWinEventRoot;
+            this._innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
 #if GL_ENABLE
@@ -124,10 +123,10 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                         //--------------------------------------- 
                         view.SetGLPaintHandler(null);
-                        hh1 = view.Handle; //force real window handle creation
+                        IntPtr hh1 = view.Handle; //force real window handle creation
                         view.MakeCurrent();
 
 
@@ -179,10 +178,10 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                         //--------------------------------------- 
                         view.SetGLPaintHandler(null);
-                        hh1 = view.Handle; //force real window handle creation
+                        IntPtr hh1 = view.Handle; //force real window handle creation
                         view.MakeCurrent();
 
 
@@ -230,7 +229,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
 
                     }
                     break;
@@ -243,7 +242,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                     }
                     break;
 
@@ -256,7 +255,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                     }
                     break;
             }
@@ -289,36 +288,36 @@ namespace LayoutFarm.UI
         }
         protected override void OnLoad(EventArgs e)
         {
-            this.winBridge.OnHostControlLoaded();
+            this._winBridge.OnHostControlLoaded();
         }
         public void PaintMe()
         {
-            this.winBridge.PaintToOutputWindow();
+            this._winBridge.PaintToOutputWindow();
         }
         public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
         {
-            winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
+            _winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
         }
 
 #if DEBUG
         public void dbugPaintMeFullMode()
         {
-            this.winBridge.dbugPaintToOutputWindowFullMode();
+            this._winBridge.dbugPaintToOutputWindowFullMode();
         }
         public IdbugOutputWindow IdebugOutputWin
         {
-            get { return this.winBridge; }
+            get { return this._winBridge; }
         }
 #endif
         public void TopDownRecalculateContent()
         {
-            this.rootgfx.TopWindowRenderBox.TopDownReCalculateContentSize();
+            this._rootgfx.TopDownRecalculateContent();
         }
         public void AddChild(RenderElement vi)
         {
-            this.rootgfx.TopWindowRenderBox.AddChild(vi);
+            this._rootgfx.AddChild(vi);
         }
-        static IntPtr s_tmpHandle;
+
 
         public void AddChild(RenderElement renderElem, object owner)
         {
@@ -350,7 +349,7 @@ namespace LayoutFarm.UI
                         renderElem.SetLocation(0, 0);
                         newSurfaceViewport.AddChild(renderElem);
                         //-----------------------------------------------------                        
-                        s_tmpHandle = newForm.Handle;//force newform to create window handle
+                        IntPtr tmpHandle = newForm.Handle;//force newform to create window handle
 
                         //-----------------------------------------------------              
 
@@ -361,19 +360,17 @@ namespace LayoutFarm.UI
                         platformWinBox.PreviewBoundChanged += PlatformWinBox_PreviewBoundChanged;
                         platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
                         platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
-                        subForms.Add(newForm);
-                        s_tmpHandle = IntPtr.Zero;
-
+                        _subForms.Add(newForm);
                     }
                 }
                 else
                 {
-                    this.rootgfx.TopWindowRenderBox.AddChild(renderElem);
+                    this._rootgfx.AddChild(renderElem);
                 }
             }
             else
             {
-                this.rootgfx.TopWindowRenderBox.AddChild(renderElem);
+                this._rootgfx.AddChild(renderElem);
             }
         }
 
@@ -412,14 +409,14 @@ namespace LayoutFarm.UI
             UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
 
 
-            rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
+            _rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
             _hasInvalidateAreaAccum = false;
         }
 
         private void PlatformWinBox_BoundsChanged(object sender, EventArgs e)
         {
             UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
-            rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
+            _rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
             _hasInvalidateAreaAccum = false;
         }
 
@@ -427,12 +424,12 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return this.rootgfx;
+                return this._rootgfx;
             }
         }
         public void Close()
         {
-            this.winBridge.Close();
+            this._winBridge.Close();
         }
 
 
@@ -446,7 +443,7 @@ namespace LayoutFarm.UI
 
             UISurfaceViewportControl newViewportControl = new UISurfaceViewportControl();
             newViewportControl.Size = new System.Drawing.Size(w, h);
-            RootGraphic newRootGraphic = this.rootgfx.CreateNewOne(w, h);
+            RootGraphic newRootGraphic = this._rootgfx.CreateNewOne(w, h);
             ITopWindowEventRoot topEventRoot = null;
             if (newRootGraphic is ITopWindowEventRootProvider)
             {
@@ -455,7 +452,7 @@ namespace LayoutFarm.UI
             newViewportControl.InitRootGraphics(
                 newRootGraphic,//new root
                 topEventRoot,
-                this.innerViewportKind);
+                this._innerViewportKind);
             return newViewportControl;
         }
         //-----------

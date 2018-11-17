@@ -6,18 +6,19 @@ namespace LayoutFarm.Text
 {
     public class TextDomEventArgs : EventArgs
     {
-        public bool updateJustCurrentLine;
-        public readonly UIKeys key;
+        public bool UpdateJustCurrentLine;
+        public readonly UIKeys Key;
         public readonly char c;
         public bool PreventDefault;
         public int delta;
+
         public TextDomEventArgs(char c)
         {
             this.c = c;
         }
         public TextDomEventArgs(UIKeys key)
         {
-            this.key = key;
+            this.Key = key;
         }
         public TextDomEventArgs(int delta)
         {
@@ -26,11 +27,11 @@ namespace LayoutFarm.Text
 
         public TextDomEventArgs(bool updateJustCurrentLine)
         {
-            this.updateJustCurrentLine = updateJustCurrentLine;
+            this.UpdateJustCurrentLine = updateJustCurrentLine;
         }
         public TextDomEventArgs(bool updateJustCurrentLine, VisualSelectionRangeSnapShot changedSnapShot)
         {
-            this.updateJustCurrentLine = updateJustCurrentLine;
+            this.UpdateJustCurrentLine = updateJustCurrentLine;
             this.SelectionSnapShot = changedSnapShot;
         }
         public VisualSelectionRangeSnapShot SelectionSnapShot { get; private set; }
