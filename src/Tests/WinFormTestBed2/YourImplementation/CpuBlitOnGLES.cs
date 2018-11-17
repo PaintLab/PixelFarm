@@ -139,6 +139,28 @@ namespace YourImplementation
         {
             _updateCpuBlitSurfaceDel = updateCpuBlitSurfaceDel;
         }
+#if DEBUG
+        public virtual void dbugSaveAggBmp(string filename)
+        {
+            //using (System.Drawing.Bitmap bmp1 = new System.Drawing.Bitmap(_aggBmp.Width, _aggBmp.Height))
+            //{
+            //    var bmpData = bmp1.LockBits(new System.Drawing.Rectangle(0, 0, _aggBmp.Width, _aggBmp.Height),
+            //         System.Drawing.Imaging.ImageLockMode.ReadWrite,
+            //         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            //    PixelFarm.CpuBlit.Imaging.TempMemPtr ptr = ActualBitmap.GetBufferPtr(_aggBmp);
+
+            //    unsafe
+            //    {
+            //        PixelFarm.CpuBlit.NativeMemMx.MemCopy((byte*)bmpData.Scan0, (byte*)ptr.Ptr, bmpData.Stride * bmpData.Height);
+            //    }
+
+
+            //    bmp1.UnlockBits(bmpData);
+            //    bmp1.Save(filename);
+            //}
+        }
+#endif
     }
 
     /// <summary>
@@ -211,8 +233,7 @@ namespace YourImplementation
             : base(rootgfx, w, h)
         {
             _rootgfx = rootgfx;
-            _lzBmpProvider = lzBmpProvider;// 
-            this.MayHasChild = true;
+            _lzBmpProvider = lzBmpProvider;//  
         }
         public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
         {
@@ -241,8 +262,20 @@ namespace YourImplementation
             //-------------------------------------------------------------------------  
             if (_rootgfx.HasRenderTreeInvalidateAccumRect)
             {
-                //update cpu surface part*** 
-                DrawDefaultLayer(_ui.GetDrawBoard(), ref updateArea);
+               
+                //update cpu surface part***  
+                DrawBoard board = _ui.GetDrawBoard();
+                if (board != null)
+                {
+                    board.SetClipRect(updateArea);
+                    board.Clear(Color.White); //clear background
+                    //board.SetClipRect(new Rectangle(0, 0, 1200, 1200)); 
+                    DrawDefaultLayer(board, ref updateArea); 
+#if DEBUG
+                    //_ui.dbugSaveAggBmp("c:\\WImageTest\\a001.png");
+#endif
+                }
+
                 if (_ui.HasCpuBlitUpdateSurfaceDel)
                 {
                     _ui.UpdateCpuBlitSurface(updateArea);

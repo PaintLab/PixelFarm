@@ -50,7 +50,11 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override Painter GetPainter()
         {
-            //create agg painter
+            //since painter origin and canvas origin is separated 
+            //so must check here
+            //TODO: revisit the painter and the surface => shared resource **
+
+            _painter.SetOrigin(this.canvasOriginX, this.canvasOriginY);
             return _painter;
         }
         public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
