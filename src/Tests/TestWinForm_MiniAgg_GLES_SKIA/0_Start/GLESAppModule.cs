@@ -71,7 +71,7 @@ namespace Mini
 
             DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
             //Add to RenderTree
-            _rootGfx.TopWindowRenderBox.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
+            _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
         }
         public void CloseDemo()
         {

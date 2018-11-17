@@ -33,8 +33,11 @@ namespace LayoutFarm
         public abstract RequestFont DefaultTextEditFontInfo
         {
             get;
-        } 
-        public abstract RenderBoxBase TopWindowRenderBox { get; }
+        }
+        public abstract void TopDownRecalculateContent();
+        public abstract IRenderElement TopWindowRenderBox { get; }
+        public abstract void AddChild(RenderElement renderE);
+        public abstract void InvalidateRootArea(Rectangle r);
 
         public int Width
         {
@@ -141,7 +144,7 @@ namespace LayoutFarm
         }
 #endif
 
-
+        public abstract void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false);
         public void InvalidateGraphicArea(RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem = false)
         {
             //total bounds = total bounds at level

@@ -78,7 +78,7 @@ namespace Mini
             //-----------------------------------------------
             DemoBase.InvokeGLContextReady(demoBase, glsx, glPainter);
             //Add to RenderTree
-            _rootGfx.TopWindowRenderBox.AddChild(_bridgeUI.GetPrimaryRenderElement(_rootGfx));
+            _rootGfx.AddChild(_bridgeUI.GetPrimaryRenderElement(_rootGfx));
             //-----------------------------------------------
             //***
             GeneralEventListener genEvListener = new GeneralEventListener();

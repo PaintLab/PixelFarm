@@ -169,11 +169,11 @@ namespace LayoutFarm.UI.WinNeutral
 #endif
         public void TopDownRecalculateContent()
         {
-            this._rootgfx.TopWindowRenderBox.TopDownReCalculateContentSize();
+            this._rootgfx.TopDownRecalculateContent();
         }
         public void AddContent(RenderElement vi)
         {
-            this._rootgfx.TopWindowRenderBox.AddChild(vi);
+            this._rootgfx.AddChild(vi);
         }
 
         public void AddContent(RenderElement vi, object owner)
@@ -205,12 +205,12 @@ namespace LayoutFarm.UI.WinNeutral
                 }
                 else
                 {
-                    this._rootgfx.TopWindowRenderBox.AddChild(vi);
+                    this._rootgfx.AddChild(vi);
                 }
             }
             else
             {
-                this._rootgfx.TopWindowRenderBox.AddChild(vi);
+                this._rootgfx.AddChild(vi);
             }
         }
 
@@ -225,7 +225,7 @@ namespace LayoutFarm.UI.WinNeutral
         {
             this._winBridge.Close();
         }
-         
+
     }
 
     class PlatformWinBoxForm : IPlatformWindowBox

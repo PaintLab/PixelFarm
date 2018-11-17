@@ -63,9 +63,7 @@ namespace LayoutFarm.UI
         public void dbugPaintToOutputWindowFullMode()
         {
             Rectangle rect = new Rectangle(0, 0, _rootGraphic.Width, _rootGraphic.Height);
-            _rootGraphic.InvalidateGraphicArea(
-                _rootGraphic.TopWindowRenderBox,
-                ref rect);
+            _rootGraphic.InvalidateRootGraphicArea(ref rect);
             this.PaintToOutputWindow();
         }
 #endif

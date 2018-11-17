@@ -117,7 +117,7 @@ namespace LayoutFarm
             //};
             //_bridgeUI.AttachExternalEventListener(evListener);
 
-            rootGfx.TopWindowRenderBox.AddChild(_bridgeUI.GetPrimaryRenderElement(rootGfx));
+            rootGfx.AddChild(_bridgeUI.GetPrimaryRenderElement(rootGfx));
         }
 
         //

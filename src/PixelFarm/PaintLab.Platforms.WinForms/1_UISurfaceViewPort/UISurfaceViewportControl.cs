@@ -311,11 +311,11 @@ namespace LayoutFarm.UI
 #endif
         public void TopDownRecalculateContent()
         {
-            this._rootgfx.TopWindowRenderBox.TopDownReCalculateContentSize();
+            this._rootgfx.TopDownRecalculateContent();
         }
         public void AddChild(RenderElement vi)
         {
-            this._rootgfx.TopWindowRenderBox.AddChild(vi);
+            this._rootgfx.AddChild(vi);
         }
 
 
@@ -365,12 +365,12 @@ namespace LayoutFarm.UI
                 }
                 else
                 {
-                    this._rootgfx.TopWindowRenderBox.AddChild(renderElem);
+                    this._rootgfx.AddChild(renderElem);
                 }
             }
             else
             {
-                this._rootgfx.TopWindowRenderBox.AddChild(renderElem);
+                this._rootgfx.AddChild(renderElem);
             }
         }
 

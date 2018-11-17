@@ -277,11 +277,8 @@ namespace LayoutFarm.CustomWidgets
             //add to topmost box 
             if (!showing)
             {
-                this.topWindow = rootgfx.TopWindowRenderBox;
-                if (topWindow != null)
-                {
-                    topWindow.AddChild(this.myRenderE = this.GetPrimaryRenderElement(topWindow.Root));
-                }
+
+                rootgfx.AddChild(this.myRenderE = this.GetPrimaryRenderElement(topWindow.Root)); 
                 showing = true;
             }
         }

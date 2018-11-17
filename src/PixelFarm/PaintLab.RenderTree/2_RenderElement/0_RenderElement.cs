@@ -47,8 +47,7 @@ namespace LayoutFarm
         public RenderElement GetTopWindowRenderBox()
         {
             if (_parentLink == null) { return null; }
-
-            return this._rootGfx.TopWindowRenderBox;
+            return this._rootGfx.TopWindowRenderBox as RenderElement;
         }
 
         //==============================================================

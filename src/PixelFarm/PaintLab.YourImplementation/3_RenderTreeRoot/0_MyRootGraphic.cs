@@ -65,6 +65,19 @@ namespace LayoutFarm.UI
         {
             get { return this._topWindowEventRoot; }
         }
+        public override void TopDownRecalculateContent()
+        {
+            _topWindowRenderBox.TopDownReCalculateContentSize();
+        }
+        public override void InvalidateRootArea(Rectangle r)
+        {
+            InvalidateGraphicArea(_topWindowRenderBox, ref r);
+
+        }
+        public override void InvalidateRootGraphicArea(ref Rectangle elemClientRect, bool passSourceElem = false)
+        {
+            base.InvalidateGraphicArea(_topWindowRenderBox, ref elemClientRect, passSourceElem);
+        }
         public override bool GfxTimerEnabled
         {
             get
@@ -77,7 +90,7 @@ namespace LayoutFarm.UI
             }
         }
 
-        public override RenderBoxBase TopWindowRenderBox => _topWindowRenderBox;
+        public override IRenderElement TopWindowRenderBox => _topWindowRenderBox;
 
         public override void PrepareRender()
         {
@@ -162,6 +175,10 @@ namespace LayoutFarm.UI
                 return _renderRequestList.Count;
             }
         }
+        public override void AddChild(RenderElement renderE)
+        {
+            _topWindowRenderBox.AddChild(renderE);
+        }
         void ClearVisualRequests()
         {
             int j = _renderRequestList.Count;
@@ -172,7 +189,7 @@ namespace LayoutFarm.UI
                 {
                     case RequestCommand.AddToWindowRoot:
                         {
-                            this.TopWindowRenderBox.AddChild(req.ve);
+                            AddChild(req.ve);
                         }
                         break;
                     case RequestCommand.DoFocus:
@@ -234,10 +251,11 @@ namespace LayoutFarm.UI
                 debugVisualLay.EndCurrentContext();
             }
         }
+
         void dbug_DumpAllVisualElementProps(dbugLayoutMsgWriter writer)
         {
             //this.dbug_DumpVisualProps(writer);
-            this.TopWindowRenderBox.dbug_DumpVisualProps(writer);
+            _topWindowRenderBox.dbug_DumpVisualProps(writer);
             writer.Add(new dbugLayoutMsg(this.TopWindowRenderBox, "FINISH"));
         }
         public void dbugShowRenderPart(DrawBoard canvasPage, Rectangle updateArea)
