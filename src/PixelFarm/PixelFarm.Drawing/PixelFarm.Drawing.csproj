@@ -304,11 +304,11 @@
     <Compile Include="..\PixelFarm.Painter\2_Canvas\ITextPrinter.cs">
       <Link>0_REF_Painter\2_Canvas\ITextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs">
-      <Link>0_REF_Painter\0_REF_CpuBlit\ActualBitmap.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>0_REF_Painter\0_REF_CpuBlit\ColorRGBAf.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs">
+      <Link>0_REF_Painter\0_REF_CpuBlit\MemBitmap.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs">
       <Link>0_REF_Painter\0_REF_CpuBlit\PainterExtensions.cs</Link>

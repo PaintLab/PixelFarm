@@ -16,7 +16,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : DemoBase
     {
-        ActualBitmap lionImg;
+        MemBitmap lionImg;
         public override void Init()
         {
             UseBitmapExt = false;

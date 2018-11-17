@@ -15,17 +15,16 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
     {
-        ActualBitmap imageToFillOn;
-
-        int imgOffsetX = 20;
-        int imgOffsetY = 60;
+        MemBitmap _bmpToFillOn;
+        int _imgOffsetX = 20;
+        int _imgOffsetY = 60;
 
         public FloodFillDemo()
         {
             //
             BackgroundColor = Color.White;
-            imageToFillOn = new ActualBitmap(400, 300);
-            AggPainter p = AggPainter.Create(imageToFillOn);
+            _bmpToFillOn = new MemBitmap(400, 300);
+            AggPainter p = AggPainter.Create(_bmpToFillOn);
 
             p.Clear(Color.White);
 
@@ -64,7 +63,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         {
             p.Clear(Color.Blue);
 
-            p.DrawImage(imageToFillOn, imgOffsetX, imgOffsetY);
+            p.DrawImage(_bmpToFillOn, _imgOffsetX, _imgOffsetY);
 
             p.FillColor = Color.Yellow;
             p.FillEllipse(20, 20, 30, 30);
@@ -74,10 +73,10 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         }
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
-            int x = mx + imgOffsetX;
-            int y = my + imgOffsetY;
+            int x = mx + _imgOffsetX;
+            int y = my + _imgOffsetY;
             FloodFill filler = new FloodFill(Color.Red);
-            filler.Fill(imageToFillOn, x, y);
+            filler.Fill(_bmpToFillOn, x, y);
         }
     }
 }

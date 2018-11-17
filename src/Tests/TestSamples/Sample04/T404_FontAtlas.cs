@@ -12,16 +12,16 @@ namespace OpenTkEssTest
     public class T404_FontAtlas : DemoBase
     {
         GLRenderSurface _glsx;
-        bool resInit;
-        GLBitmap msdf_bmp;
-        GLPainter painter;
-        SimpleFontAtlas fontAtlas;
-        PixelFarm.CpuBlit.ActualBitmap totalImg;
+        bool _resInit;
+        GLBitmap _msdf_bmp;
+        GLPainter _painter;
+        SimpleFontAtlas _fontAtlas;
+        PixelFarm.CpuBlit.MemBitmap _totalBmp;
 
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
             this._glsx = glsx;
-            this.painter = painter;
+            this._painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
@@ -31,19 +31,19 @@ namespace OpenTkEssTest
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             using (System.IO.FileStream fs = new System.IO.FileStream(RootDemoPath.Path + @"\a_total.xml", System.IO.FileMode.Open))
             {
-                fontAtlas = atlasBuilder.LoadFontInfo(fs);
+                _fontAtlas = atlasBuilder.LoadFontInfo(fs);
             }
 
 
             var actualImg = DemoHelper.LoadImage(RootDemoPath.Path + @"\a_total.png");
-            totalImg = actualImg;
+            _totalBmp = actualImg;
             //var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
             //var buffer = new int[totalImg.Width * totalImg.Height];
             //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
             //totalImg.UnlockBits(bmpdata);
-            var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
-            glyph.SetImageBuffer(PixelFarm.CpuBlit.ActualBitmap.CopyImgBuffer(actualImg), false);
-            fontAtlas.TotalGlyph = glyph;
+            var glyph = new Typography.Rendering.GlyphImage(_totalBmp.Width, _totalBmp.Height);
+            glyph.SetImageBuffer(PixelFarm.CpuBlit.MemBitmap.CopyImgBuffer(actualImg), false);
+            _fontAtlas.TotalGlyph = glyph;
         }
         protected override void DemoClosing()
         {
@@ -54,17 +54,17 @@ namespace OpenTkEssTest
             _glsx.SmoothMode = SmoothMode.Smooth;
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsx.ClearColorBuffer();
-            if (!resInit)
+            if (!_resInit)
             {
                 // msdf_bmp = LoadTexture(@"..\msdf_75.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1_66.png");
-                msdf_bmp = DemoHelper.LoadTexture(totalImg);
+                _msdf_bmp = DemoHelper.LoadTexture(_totalBmp);
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png"); 
-                resInit = true;
+                _resInit = true;
             }
 
-            painter.Clear(PixelFarm.Drawing.Color.White);
+            _painter.Clear(PixelFarm.Drawing.Color.White);
             //var f = painter.CurrentFont;
 
             //painter.DrawString("hello!", 0, 20);
@@ -73,24 +73,24 @@ namespace OpenTkEssTest
             Typography.Rendering.TextureGlyphMapData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
-            fontAtlas.TryGetGlyphMapData(codepoint[0], out glyphData);
+            _fontAtlas.TryGetGlyphMapData(codepoint[0], out glyphData);
             PixelFarm.Drawing.Rectangle r =
                    new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,
                    glyphData.Height);
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
-            _glsx.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
+            _glsx.DrawSubImageWithMsdf(_msdf_bmp, ref r, 100, 500);
 
-            fontAtlas.TryGetGlyphMapData(codepoint[1], out glyphData);
+            _fontAtlas.TryGetGlyphMapData(codepoint[1], out glyphData);
             PixelFarm.Drawing.Rectangle r2 = new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,
                    glyphData.Height);
-            _glsx.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);
+            _glsx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width - 10, 500);
 
             //full image
-            _glsx.DrawImage(msdf_bmp, 100, 300);
+            _glsx.DrawImage(_msdf_bmp, 100, 300);
             SwapBuffers();
         }
         static PixelFarm.Drawing.Rectangle ConvToRect(Rectangle r)

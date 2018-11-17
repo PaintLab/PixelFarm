@@ -168,7 +168,7 @@ namespace Mini
                         testBed.LoadExample(exAndDesc, demo);
                         testBed.Show();
                     }
-                    break; 
+                    break;
 #if SKIA_ENABLE
                 case RenderBackendChoice.SkiaMemoryBackend:
                     {
@@ -306,28 +306,28 @@ namespace Mini
         {
 
             PixelFarm.CpuBlit.Imaging.FreeTransform freeTx = new PixelFarm.CpuBlit.Imaging.FreeTransform();
-            ActualBitmap img = LoadImage("Samples\\lion1.png");
+            MemBitmap bmp = LoadImage("Samples\\lion1.png");
 
 
             freeTx.Interpolation = PixelFarm.CpuBlit.Imaging.FreeTransform.InterpolationMode.None;// PixelFarm.Agg.Imaging.FreeTransform.InterpolationMode.Bilinear;
             freeTx.SetFourCorners(
                 new PixelFarm.VectorMath.PointF(0, 0),
-                new PixelFarm.VectorMath.PointF(img.Width / 2, 0),
-                new PixelFarm.VectorMath.PointF(img.Width, img.Height),
-                new PixelFarm.VectorMath.PointF(0, img.Height)
+                new PixelFarm.VectorMath.PointF(bmp.Width / 2, 0),
+                new PixelFarm.VectorMath.PointF(bmp.Width, bmp.Height),
+                new PixelFarm.VectorMath.PointF(0, bmp.Height)
             );
 
-            ActualBitmap transformImg = freeTx.GetTransformedBitmap(img);
+            MemBitmap transferBmp = freeTx.GetTransformedBitmap(bmp);
 
-            SaveImage(transformImg, "d:\\WImageTest\\test01_tx.png");
+            SaveImage(transferBmp, "d:\\WImageTest\\test01_tx.png");
         }
-        static void SaveImage(ActualBitmap img, string filename)
+        static void SaveImage(MemBitmap bmp, string filename)
         {
-            Bitmap newBmp = new Bitmap(img.Width, img.Height);
-            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(img, newBmp);
+            Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
+            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(bmp, newBmp);
             newBmp.Save("d:\\WImageTest\\test01_tx.png");
         }
-        static ActualBitmap LoadImage(string filename)
+        static MemBitmap LoadImage(string filename)
         {
             //read sample image
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
@@ -335,7 +335,7 @@ namespace Mini
                 //read to image buffer 
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
-                ActualBitmap img = new ActualBitmap(bmpW, bmpH);
+                MemBitmap img = new MemBitmap(bmpW, bmpH);
                 PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
                 return img;
             }

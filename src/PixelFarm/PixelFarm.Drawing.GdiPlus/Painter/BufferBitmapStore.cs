@@ -6,7 +6,7 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class BufferBitmapStore
     {
-        Stack<System.Drawing.Bitmap> bmpStack = new Stack<System.Drawing.Bitmap>();
+        Stack<System.Drawing.Bitmap> _bmpStack = new Stack<System.Drawing.Bitmap>();
         public BufferBitmapStore(int w, int h)
         {
             this.Width = w;
@@ -17,9 +17,9 @@ namespace PixelFarm.Drawing.WinGdi
 
         public System.Drawing.Bitmap GetFreeBmp()
         {
-            if (bmpStack.Count > 0)
+            if (_bmpStack.Count > 0)
             {
-                return bmpStack.Pop();
+                return _bmpStack.Pop();
             }
             else
             {
@@ -28,7 +28,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void RelaseBmp(System.Drawing.Bitmap bmp)
         {
-            bmpStack.Push(bmp);
+            _bmpStack.Push(bmp);
         }
     }
 }

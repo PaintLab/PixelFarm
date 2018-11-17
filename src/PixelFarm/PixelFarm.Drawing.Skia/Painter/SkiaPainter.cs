@@ -351,26 +351,26 @@ namespace PixelFarm.Drawing.Skia
         }
         public override void DrawImage(Image img, double left, double top)
         {
-            if (img is ActualBitmap)
+            if (img is MemBitmap)
             {
-                ActualBitmap actualImage = (ActualBitmap)img;
+                MemBitmap memBmp = (MemBitmap)img;
                 //create Gdi bitmap from actual image
-                int w = actualImage.Width;
-                int h = actualImage.Height;
-                switch (actualImage.PixelFormat)
+                int w = memBmp.Width;
+                int h = memBmp.Height;
+                switch (memBmp.PixelFormat)
                 {
                     case CpuBlit.Imaging.PixelFormat.ARGB32:
                         {
 
-                            using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
+                            using (SKBitmap newBmp = new SKBitmap(memBmp.Width, memBmp.Height))
                             {
                                 newBmp.LockPixels();
                                 //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-                                CpuBlit.Imaging.TempMemPtr bufferPtr = ActualBitmap.GetBufferPtr(actualImage);
+                                CpuBlit.Imaging.TempMemPtr bufferPtr = MemBitmap.GetBufferPtr(memBmp);
                                 unsafe
                                 {
                                     byte* actualImgH = (byte*)bufferPtr.Ptr;
-                                    MemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
+                                    MemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, memBmp.Stride * memBmp.Height);
                                     //System.Runtime.InteropServices.Marshal.Copy(
                                     //    actualImgBuffer,
                                     //    0,

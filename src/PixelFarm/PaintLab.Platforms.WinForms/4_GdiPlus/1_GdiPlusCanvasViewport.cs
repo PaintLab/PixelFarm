@@ -18,9 +18,9 @@ namespace LayoutFarm.UI.GdiPlus
         }
         void SetupRenderSurfaceAndDrawBoard()
         {
-            GdiPlusRenderSurface gdiRenderSurface = new GdiPlusRenderSurface(0, 0, ViewportWidth, ViewportHeight);
+            GdiPlusRenderSurface gdiRenderSurface = new GdiPlusRenderSurface(ViewportWidth, ViewportHeight);
             _drawBoard = new GdiPlusDrawBoard(gdiRenderSurface);
-            _drawBoard.CurrentFont = new RequestFont("Tahoma", 10); 
+            _drawBoard.CurrentFont = new RequestFont("Tahoma", 10);
         }
         public void Dispose()
         {
@@ -30,7 +30,7 @@ namespace LayoutFarm.UI.GdiPlus
                 _drawBoard = null;
             }
         }
-        
+
 #if DEBUG
         //int dbugCount;
 #endif

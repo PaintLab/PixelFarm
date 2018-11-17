@@ -194,7 +194,7 @@ namespace PixelFarm.Drawing.GLES2
                 //TODO: review here
                 //we should create 'borrow' method ? => send direct exact ptr to img buffer
                 //for now, create a new one -- after we copy we, don't use it
-                ActualBitmap bmp = image as ActualBitmap;
+                MemBitmap bmp = image as MemBitmap;
                 if (bmp != null)
                 {
                     var glBmp = new DrawingGL.GLBitmap(new DrawingGL.LazyActualBitmapBufferProvider(bmp));

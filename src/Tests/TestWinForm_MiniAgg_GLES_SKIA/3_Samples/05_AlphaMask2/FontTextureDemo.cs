@@ -18,8 +18,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
     {
 
 
-        ActualBitmap _alphaBitmap;
-        ActualBitmap _glyphAtlasBmp;
+        MemBitmap _alphaBitmap;
+        MemBitmap _glyphAtlasBmp;
         PixelBlenderWithMask maskPixelBlender = new PixelBlenderWithMask();
         PixelBlenderPerColorComponentWithMask maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
         bool _maskReady;
@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //----------
             //same size
-            _alphaBitmap = new ActualBitmap(width, height);
+            _alphaBitmap = new MemBitmap(width, height);
             var maskBufferPainter = AggPainter.Create(_alphaBitmap, new PixelBlenderBGRA());
             maskBufferPainter.Clear(Color.Black);
             //------------  
@@ -77,13 +77,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
         public override void Draw(Painter p)
         {
-            if (p is GdiPlusPainter)
-            {
-                return;
-            }
-
+            AggPainter painter = p as AggPainter;
+            if (painter == null) return;
             //
-            AggPainter painter = (AggPainter)p;
+           
             painter.Clear(Color.White);
 
             int width = painter.Width;

@@ -2519,9 +2519,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs">
-      <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs</Link>
     </Compile>
@@ -2879,11 +2876,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs">
       <Link>PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs">
-      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs">
+      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs</Link>

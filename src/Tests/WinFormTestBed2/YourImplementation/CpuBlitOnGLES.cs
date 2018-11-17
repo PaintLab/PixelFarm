@@ -49,7 +49,7 @@ namespace YourImplementation
         {
             if (_canvasRenderE == null)
             {
-                var glRenderElem = new CpuBlitGLCanvasRenderElement(rootgfx, _width, _height, _lazyImgProvider);
+                var glRenderElem = new CpuBlitGLCanvasRenderElement(rootgfx, _width, _height, _lazyBmpProvider);
                 glRenderElem.SetPainter(glsx, painter);
                 glRenderElem.SetController(this); //connect to event system
                 glRenderElem.SetOwnerDemoUI(this);
@@ -89,9 +89,9 @@ namespace YourImplementation
 
 
         //----------------------------------------------
-        protected ActualBitmap _aggBmp;
+        protected MemBitmap _memBmp;
         protected AggPainter _aggPainter;
-        protected LazyActualBitmapBufferProvider _lazyImgProvider;
+        protected LazyActualBitmapBufferProvider _lazyBmpProvider;
 
 
         //----------------------------------------------
@@ -100,13 +100,13 @@ namespace YourImplementation
         protected virtual void SetupAggCanvas()
         {
             //***
-            _aggBmp = new ActualBitmap(_width, _height);
-            _aggPainter = AggPainter.Create(_aggBmp);
+            _memBmp = new MemBitmap(_width, _height);
+            _aggPainter = AggPainter.Create(_memBmp);
 
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
             _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
+            _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
             //
         }
         internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
@@ -118,10 +118,7 @@ namespace YourImplementation
             //if the content of _aggBmp is not changed
             //we should not draw again  
             // 
-            if (_updateCpuBlitSurfaceDel != null)
-            {
-                _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
-            }
+            _updateCpuBlitSurfaceDel?.Invoke(_aggPainter, updateArea);
             //
             ////test print some text
             //_aggPainter.FillColor = PixelFarm.Drawing.Color.Black; //set font 'fill' color
@@ -129,16 +126,35 @@ namespace YourImplementation
         }
         internal void RaiseUpdateCpuBlitSurface(Rectangle updateArea)
         {
-            if (_updateCpuBlitSurfaceDel != null)
-            {
-                _updateCpuBlitSurfaceDel(_aggPainter, updateArea);
-            }
+            _updateCpuBlitSurfaceDel?.Invoke(_aggPainter, updateArea);
         }
         internal bool HasCpuBlitUpdateSurfaceDel => _updateCpuBlitSurfaceDel != null;
         public void SetUpdateCpuBlitSurfaceDelegate(UpdateCpuBlitSurface updateCpuBlitSurfaceDel)
         {
             _updateCpuBlitSurfaceDel = updateCpuBlitSurfaceDel;
         }
+#if DEBUG
+        public virtual void dbugSaveAggBmp(string filename)
+        {
+            //using (System.Drawing.Bitmap bmp1 = new System.Drawing.Bitmap(_aggBmp.Width, _aggBmp.Height))
+            //{
+            //    var bmpData = bmp1.LockBits(new System.Drawing.Rectangle(0, 0, _aggBmp.Width, _aggBmp.Height),
+            //         System.Drawing.Imaging.ImageLockMode.ReadWrite,
+            //         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            //    PixelFarm.CpuBlit.Imaging.TempMemPtr ptr = ActualBitmap.GetBufferPtr(_aggBmp);
+
+            //    unsafe
+            //    {
+            //        PixelFarm.CpuBlit.NativeMemMx.MemCopy((byte*)bmpData.Scan0, (byte*)ptr.Ptr, bmpData.Stride * bmpData.Height);
+            //    }
+
+
+            //    bmp1.UnlockBits(bmpData);
+            //    bmp1.Save(filename);
+            //}
+        }
+#endif
     }
 
     /// <summary>
@@ -177,12 +193,12 @@ namespace YourImplementation
         {
             //don't call base
             //1. we create gdi plus draw board
-            var renderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(0, 0, _width, _height);
+            var renderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(_width, _height);
             _gdiDrawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(renderSurface);
             _gdiDrawBoard.CurrentFont = new RequestFont("Tahoma", 10);
 
             //2. create actual bitmap that share 'bitmap mem' with gdiPlus Render surface                 
-            _aggBmp = renderSurface.GetActualBitmap();
+            _memBmp = renderSurface.GetMemBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
             _aggPainter = renderSurface.GetAggPainter();//**
             _gdiDrawBoard.SetAggPainter(_aggPainter); //***
@@ -190,8 +206,8 @@ namespace YourImplementation
                                                       //...
 
             //
-            _lazyImgProvider = new LazyActualBitmapBufferProvider(_aggBmp);
-            _lazyImgProvider.BitmapFormat = GLBitmapFormat.BGR;//**
+            _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
+            _lazyBmpProvider.BitmapFormat = GLBitmapFormat.BGR;//**
         }
     }
 
@@ -211,8 +227,7 @@ namespace YourImplementation
             : base(rootgfx, w, h)
         {
             _rootgfx = rootgfx;
-            _lzBmpProvider = lzBmpProvider;// 
-            this.MayHasChild = true;
+            _lzBmpProvider = lzBmpProvider;//  
         }
         public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
         {
@@ -241,8 +256,20 @@ namespace YourImplementation
             //-------------------------------------------------------------------------  
             if (_rootgfx.HasRenderTreeInvalidateAccumRect)
             {
-                //update cpu surface part*** 
-                DrawDefaultLayer(_ui.GetDrawBoard(), ref updateArea);
+
+                //update cpu surface part***  
+                DrawBoard board = _ui.GetDrawBoard();
+                if (board != null)
+                {
+                    board.SetClipRect(updateArea);
+                    board.Clear(Color.White); //clear background
+                    //board.SetClipRect(new Rectangle(0, 0, 1200, 1200)); 
+                    DrawDefaultLayer(board, ref updateArea);
+#if DEBUG
+                    //_ui.dbugSaveAggBmp("c:\\WImageTest\\a001.png");
+#endif
+                }
+
                 if (_ui.HasCpuBlitUpdateSurfaceDel)
                 {
                     _ui.UpdateCpuBlitSurface(updateArea);
