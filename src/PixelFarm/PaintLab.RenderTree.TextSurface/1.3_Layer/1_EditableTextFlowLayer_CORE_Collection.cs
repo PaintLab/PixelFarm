@@ -10,7 +10,7 @@ namespace LayoutFarm.Text
         {
             if (_lineCollection != null)
             {
-                if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
                 {
                     List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                     int j = lines.Count;
@@ -41,7 +41,7 @@ namespace LayoutFarm.Text
         {
             if (_lineCollection != null)
             {
-                if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
                 {
                     List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                     int j = lines.Count;
@@ -70,7 +70,7 @@ namespace LayoutFarm.Text
         }
         public void AddTop(EditableRun visualElement)
         {
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
                 List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 lines[lines.Count - 1].AddLast(visualElement);
@@ -108,7 +108,7 @@ namespace LayoutFarm.Text
 
         public override void Clear()
         {
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
                 List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 for (int i = lines.Count - 1; i > -1; --i)
@@ -135,7 +135,7 @@ namespace LayoutFarm.Text
                 throw new NotSupportedException();
             }
 #endif
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) == 0)
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) == 0)
             {
                 return;
             }

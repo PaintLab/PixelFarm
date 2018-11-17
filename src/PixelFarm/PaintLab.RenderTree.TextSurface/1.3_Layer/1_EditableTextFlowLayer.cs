@@ -59,24 +59,24 @@ namespace LayoutFarm.Text
         {
             get
             {
-                return (layerFlags & FLOWLAYER_HAS_MULTILINE) != 0;
+                return (_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0;
             }
             private set
             {
                 if (value)
                 {
-                    layerFlags |= FLOWLAYER_HAS_MULTILINE;
+                    _layerFlags |= FLOWLAYER_HAS_MULTILINE;
                 }
                 else
                 {
-                    layerFlags &= ~FLOWLAYER_HAS_MULTILINE;
+                    _layerFlags &= ~FLOWLAYER_HAS_MULTILINE;
                 }
             }
         }
 
         internal IEnumerable<EditableRun> GetDrawingIter(EditableRun start, EditableRun stop)
         {
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
                 List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 int j = lines.Count;
@@ -158,7 +158,7 @@ namespace LayoutFarm.Text
         {
             get
             {
-                if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
                 {
                     return ((List<EditableTextLine>)_lineCollection).Count;
                 }
@@ -171,13 +171,13 @@ namespace LayoutFarm.Text
 
         public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
-            if ((layerFlags & IS_LAYER_HIDDEN) != 0)
+            if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             {
                 return;
             }
 
             this.BeginDrawingChildContent();
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
                 List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 int renderAreaTop = updateArea.Top;
@@ -291,9 +291,9 @@ namespace LayoutFarm.Text
 
             }
 #endif
-            if ((layerFlags & IS_LAYER_HIDDEN) == 0)
+            if ((_layerFlags & IS_LAYER_HIDDEN) == 0)
             {
-                if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+                if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
                 {
                     List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                     int j = lines.Count;
@@ -477,7 +477,7 @@ namespace LayoutFarm.Text
         /// <param name="line"></param>
         void AppendLine(EditableTextLine line)
         {
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
                 List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 int lineCount = lines.Count;
@@ -822,7 +822,7 @@ namespace LayoutFarm.Text
         }
         public IEnumerable<EditableRun> dbugGetDrawingIter2()
         {
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
             {
                 List<EditableTextLine> lines = (List<EditableTextLine>)_lineCollection;
                 int j = lines.Count;
