@@ -73,11 +73,12 @@ namespace LayoutFarm
             }
 
 
-            //essential***
-            _bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>
-            {
-                _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), area);
-            });
+            //optional***
+            //_bridgeUI.SetUpdateCpuBlitSurfaceDelegate((p, area) =>
+            //{
+            //    _client.DrawToThisCanvas(_bridgeUI.GetDrawBoard(), area);
+            //});
+
             //DemoBase.InvokePainterReady(_demoBase, _bridgeUI.GetAggPainter()); 
             GLRenderSurface glsx = _vw.GetGLRenderSurface();
             GLPainter glPainter = _vw.GetGLPainter();
@@ -91,33 +92,14 @@ namespace LayoutFarm
             //    () => this._glControl.GetEglDisplay(),
             //    () => this._glControl.GetEglSurface()
             //);
-            //------------------------------------------------
+
+
+
+            //*****
+            RenderBoxBase renderE = (RenderBoxBase)_bridgeUI.GetPrimaryRenderElement(rootGfx);
+            rootGfx.AddChild(renderE);
+            rootGfx.SetPrimaryContainerElement(renderE);
             //***
-            //this will do as a proxy for transfer event from e1 to e2 
-
-            //GeneralEventListener evListener = new GeneralEventListener();
-            //evListener.MouseDown += e =>
-            //{
-            //    _bridgeUI.ContentMayChanged = true;
-            //    _bridgeUI.InvalidateGraphics();
-            //};
-            //evListener.MouseMove += e =>
-            //{
-            //    if (e.IsDragging)
-            //    {
-            //        _bridgeUI.InvalidateGraphics();
-            //        _bridgeUI.ContentMayChanged = true;
-            //    }
-            //};
-            //evListener.MouseUp += e =>
-            //{
-
-            //    _bridgeUI.ContentMayChanged = true;
-            //    _bridgeUI.InvalidateGraphics();
-            //};
-            //_bridgeUI.AttachExternalEventListener(evListener);
-
-            rootGfx.AddChild(_bridgeUI.GetPrimaryRenderElement(rootGfx));
         }
 
         //
