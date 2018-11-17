@@ -21,7 +21,7 @@ namespace YourImplementation
     /// </summary>
     public class CpuBlitGLESUIElement : UIElement
     {
-        //DemoBase _demoBase;
+
         protected int _width;
         protected int _height;
         CpuBlitGLCanvasRenderElement _canvasRenderE;
@@ -109,6 +109,10 @@ namespace YourImplementation
             _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
             //
         }
+        /// <summary>
+        /// update cpublit surface with external handler
+        /// </summary>
+        /// <param name="updateArea"></param>
         internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
         {
             //update only specific part
