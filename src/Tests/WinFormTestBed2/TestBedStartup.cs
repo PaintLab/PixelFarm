@@ -55,8 +55,7 @@ namespace YourImplementation
             ////------------------------------- 
             //1. select view port kind
 
-            //InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
-            //InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES;
+            
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
 
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
