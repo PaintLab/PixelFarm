@@ -11,7 +11,7 @@ namespace YourImplementation
 
 
 #if GL_ENABLE
-            BootStrapOpenGLES2.SetupDefaultValues();
+            FrameworkInitGLES.SetupDefaultValues();
 #endif
             //you can use your font loader
             
@@ -28,7 +28,7 @@ namespace YourImplementation
             });
 
             //you can use your font loader
-            YourImplementation.BootStrapWinGdi.SetupDefaultValues();
+            YourImplementation.FrameworkInitWinGDI.SetupDefaultValues();
             //default text breaker, this bridge between 
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
         }

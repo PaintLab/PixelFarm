@@ -4,8 +4,9 @@
 namespace YourImplementation
 {
 
+
 #if GL_ENABLE
-    public static class BootStrapOpenGLES2
+    public static class FrameworkInitGLES
     {
         static bool s_initInit;
         public static void SetupDefaultValues()

@@ -5,7 +5,7 @@ namespace YourImplementation
 {
 
 
-    public static class BootStrapWinGdi
+    public static class FrameworkInitWinGDI
     {
         public static IInstalledTypefaceProvider GetFontLoader()
         {
