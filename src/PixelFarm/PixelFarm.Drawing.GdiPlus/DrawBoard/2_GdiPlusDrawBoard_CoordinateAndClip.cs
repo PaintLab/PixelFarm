@@ -21,30 +21,30 @@ namespace PixelFarm.Drawing.WinGdi
         int _top;
         int _right;
         int _bottom;
-        int canvasOriginX = 0;
-        int canvasOriginY = 0;
-        Rectangle invalidateArea;
+        int _canvasOriginX = 0;
+        int _canvasOriginY = 0;
+        Rectangle _invalidateArea;
 
-        bool isEmptyInvalidateArea;
+        bool _isEmptyInvalidateArea;
         //--------------------------------------------------------------------
         public override void SetCanvasOrigin(int x, int y)
         {
             _gdigsx.SetCanvasOrigin(x, y);
             //----------- 
-            int total_dx = x - canvasOriginX;
-            int total_dy = y - canvasOriginY;
+            int total_dx = x - _canvasOriginX;
+            int total_dy = y - _canvasOriginY;
 
-            this.canvasOriginX = x;
-            this.canvasOriginY = y;
+            this._canvasOriginX = x;
+            this._canvasOriginY = y;
         }
 
         public override int OriginX
         {
-            get { return this.canvasOriginX; }
+            get { return this._canvasOriginX; }
         }
         public override int OriginY
         {
-            get { return this.canvasOriginY; }
+            get { return this._canvasOriginY; }
         }
 
 
@@ -99,7 +99,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
- 
+
                 return _right - _left;
             }
         }
@@ -135,25 +135,25 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
-                return invalidateArea;
+                return _invalidateArea;
             }
         }
 
         public override void ResetInvalidateArea()
         {
-            this.invalidateArea = Rectangle.Empty;
-            this.isEmptyInvalidateArea = true;//set
+            this._invalidateArea = Rectangle.Empty;
+            this._isEmptyInvalidateArea = true;//set
         }
         public override void Invalidate(Rectangle rect)
         {
-            if (isEmptyInvalidateArea)
+            if (_isEmptyInvalidateArea)
             {
-                invalidateArea = rect;
-                isEmptyInvalidateArea = false;
+                _invalidateArea = rect;
+                _isEmptyInvalidateArea = false;
             }
             else
             {
-                invalidateArea = Rectangle.Union(rect, invalidateArea);
+                _invalidateArea = Rectangle.Union(rect, _invalidateArea);
             }
 
             //need to draw again

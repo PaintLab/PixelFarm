@@ -17,20 +17,21 @@ namespace PixelFarm.Drawing.WinGdi
     static class WinGdiTextService
     {
         //TODO: consider use uniscribe 
-        static NativeWin32MemoryDC win32MemDc;
+        static NativeWin32MemoryDC s_win32MemDc;
         //=====================================
         //static 
-        static readonly int[] _charFit = new int[1];
-        static readonly int[] _charFitWidth = new int[1000];
+        static readonly int[] s_charFit = new int[1];
+        static readonly int[] s_charFitWidth = new int[1000];
 
-        static float whitespaceSize = -1;
-        static char[] whitespace = new char[1];
+        static float s_whitespaceSize = -1;
+        static char[] s_whitespace = new char[1];
         static Encoding s_en;
+
         static WinGdiTextService()
         {
             s_en = Encoding.Default; //use platform's default encoding
-            win32MemDc = new NativeWin32MemoryDC(2, 2);
-            whitespace[0] = ' ';
+            s_win32MemDc = new NativeWin32MemoryDC(2, 2);
+            s_whitespace[0] = ' ';
 
         }
         public static void SetDefaultEncoding(Encoding encoding)
@@ -47,7 +48,7 @@ namespace PixelFarm.Drawing.WinGdi
             //only in ascii range
             //current version
             charWidths = new int[MAX_CODEPOINT_NO + 1]; // 
-            MyWin32.SelectObject(win32MemDc.DC, hFont);
+            MyWin32.SelectObject(s_win32MemDc.DC, hFont);
             unsafe
             {
                 //see: https://msdn.microsoft.com/en-us/library/ms404377(v=vs.110).aspx
@@ -57,7 +58,7 @@ namespace PixelFarm.Drawing.WinGdi
                 abcSizes = new NativeTextWin32.FontABC[MAX_CODEPOINT_NO + 1];
                 fixed (NativeTextWin32.FontABC* abc = abcSizes)
                 {
-                    NativeTextWin32.GetCharABCWidths(win32MemDc.DC, (uint)0, (uint)MAX_CODEPOINT_NO, abc);
+                    NativeTextWin32.GetCharABCWidths(s_win32MemDc.DC, (uint)0, (uint)MAX_CODEPOINT_NO, abc);
                 }
                 for (int i = 0; i < (MAX_CODEPOINT_NO + 1); ++i)
                 {
@@ -68,12 +69,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public static float MeasureWhitespace(RequestFont f)
         {
-            return whitespaceSize = MeasureString(whitespace, 0, 1, f).Width;
+            return s_whitespaceSize = MeasureString(s_whitespace, 0, 1, f).Width;
         }
         static WinGdiFont SetFont(RequestFont font)
         {
             WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(font);
-            MyWin32.SelectObject(win32MemDc.DC, winFont.CachedHFont());
+            MyWin32.SelectObject(s_win32MemDc.DC, winFont.CachedHFont());
             return winFont;
         }
         /// <summary>
@@ -97,7 +98,7 @@ namespace PixelFarm.Drawing.WinGdi
                 {
                     fixed (char* startAddr = &buff[0])
                     {
-                        NativeTextWin32.UnsafeGetTextExtentPoint32(win32MemDc.DC, startAddr + startAt, len, ref win32_size);
+                        NativeTextWin32.UnsafeGetTextExtentPoint32(s_win32MemDc.DC, startAddr + startAt, len, ref win32_size);
                     }
                 }
             }
@@ -135,12 +136,12 @@ namespace PixelFarm.Drawing.WinGdi
                 fixed (char* startAddr = &buff[0])
                 {
                     NativeTextWin32.UnsafeGetTextExtentExPoint(
-                        win32MemDc.DC, startAddr + startAt, len,
-                        (int)Math.Round(maxWidth), _charFit, _charFitWidth, ref size);
+                        s_win32MemDc.DC, startAddr + startAt, len,
+                        (int)Math.Round(maxWidth), s_charFit, s_charFitWidth, ref size);
                 }
             }
-            charFit = _charFit[0];
-            charFitWidth = charFit > 0 ? _charFitWidth[charFit - 1] : 0;
+            charFit = s_charFit[0];
+            charFitWidth = charFit > 0 ? s_charFitWidth[charFit - 1] : 0;
             return new PixelFarm.Drawing.Size(size.W, size.H);
             //}
         }

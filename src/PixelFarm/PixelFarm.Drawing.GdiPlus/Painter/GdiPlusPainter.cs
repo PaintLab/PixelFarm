@@ -30,8 +30,8 @@ namespace PixelFarm.Drawing.WinGdi
 
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
-            get { return _renderSurface.gx.CompositingMode; }
-            set { _renderSurface.gx.CompositingMode = value; }
+            get { return _renderSurface._gx.CompositingMode; }
+            set { _renderSurface._gx.CompositingMode = value; }
         }
 
 
@@ -191,7 +191,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override RenderVx CreateRenderVx(VertexStore vxs)
         {
             var renderVx = new WinGdiRenderVx(vxs);
-            renderVx.path = VxsHelper.CreateGraphicsPath(vxs);
+            renderVx._path = VxsHelper.CreateGraphicsPath(vxs);
             return renderVx;
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
@@ -282,7 +282,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void DrawEllipse(double left, double top, double width, double height)
         {
-            _renderSurface.gx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
+            _renderSurface._gx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
 
         }
 
@@ -425,18 +425,18 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
-            _renderSurface.gx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
+            _renderSurface._gx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
 
         public override void DrawRect(double left, double top, double width, double height)
         {
-            _renderSurface.gx.DrawRectangle(_currentPen, (float)left, (float)top, (float)width, (float)height);
+            _renderSurface._gx.DrawRectangle(_currentPen, (float)left, (float)top, (float)width, (float)height);
         }
 
         public override void DrawRenderVx(RenderVx renderVx)
         {
             WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
-            VxsHelper.DrawPath(_renderSurface.gx, wRenderVx.path, this._strokeColor);
+            VxsHelper.DrawPath(_renderSurface._gx, wRenderVx._path, this._strokeColor);
         }
 
         public override void DrawString(string text, double x, double y)
@@ -475,21 +475,21 @@ namespace PixelFarm.Drawing.WinGdi
         public override void Fill(VertexStore vxs)
         {
 
-            VxsHelper.FillVxs(_renderSurface.gx, vxs, _fillColor);
+            VxsHelper.FillVxs(_renderSurface._gx, vxs, _fillColor);
 
         }
 
         public override void FillEllipse(double left, double top, double width, double height)
         {
 
-            _renderSurface.gx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
+            _renderSurface._gx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
 
         }
 
         public override void FillRect(double left, double top, double width, double height)
         {
 
-            _renderSurface.gx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)width, (float)height);
+            _renderSurface._gx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)width, (float)height);
 
         }
 
@@ -502,13 +502,13 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //TODO: review brush implementation here
             WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
-            VxsHelper.FillPath(_renderSurface.gx, wRenderVx.path, this.FillColor);
+            VxsHelper.FillPath(_renderSurface._gx, wRenderVx._path, this.FillColor);
         }
 
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
 
-            _renderSurface.gx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
+            _renderSurface._gx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
 
         }
 
