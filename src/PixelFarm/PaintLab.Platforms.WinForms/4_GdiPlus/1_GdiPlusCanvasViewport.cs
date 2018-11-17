@@ -13,8 +13,14 @@ namespace LayoutFarm.UI.GdiPlus
         public GdiPlusCanvasViewport(RootGraphic rootgfx, Size viewportSize) :
             base(rootgfx, viewportSize)
         {
-            _drawBoard = new GdiPlusDrawBoard(0, 0, viewportSize.Width, viewportSize.Height);
+            SetupRenderSurfaceAndDrawBoard();
             this.CalculateCanvasPages();
+        }
+        void SetupRenderSurfaceAndDrawBoard()
+        {
+            GdiPlusRenderSurface gdiRenderSurface = new GdiPlusRenderSurface(0, 0, ViewportWidth, ViewportHeight);
+            _drawBoard = new GdiPlusDrawBoard(gdiRenderSurface);
+            _drawBoard.CurrentFont = new RequestFont("Tahoma", 10); 
         }
         public void Dispose()
         {
@@ -24,7 +30,7 @@ namespace LayoutFarm.UI.GdiPlus
                 _drawBoard = null;
             }
         }
-
+        
 #if DEBUG
         //int dbugCount;
 #endif
@@ -38,7 +44,7 @@ namespace LayoutFarm.UI.GdiPlus
             //Console.WriteLine("CanvasInvalidateArea:" + (dbugCount++).ToString() + " " + r.ToString());
 #endif
         }
-        protected override void ResetQuadPages(int viewportWidth, int viewportHeight)
+        protected override void ResetViewSize(int viewportWidth, int viewportHeight)
         {
             ResizeAllPages(viewportWidth, viewportHeight);
         }
@@ -322,8 +328,8 @@ namespace LayoutFarm.UI.GdiPlus
                     return;
                 }
             }
-
-            _drawBoard = new GdiPlusDrawBoard(0, 0, newWidth, newHeight);
+            //
+            SetupRenderSurfaceAndDrawBoard();
         }
         public bool IsValid
         {

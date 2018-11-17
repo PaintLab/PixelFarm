@@ -21,34 +21,37 @@ namespace PixelFarm.Drawing.WinGdi
 
     public partial class GdiPlusDrawBoard : DrawBoard, IDisposable
     {
-        bool isDisposed;
-        GdiPlusRenderSurface _gdigsx;
-        static GdiPlusDrawBoard()
-        {
-            DrawBoardCreator.RegisterCreator(1, (w, h) => new GdiPlusDrawBoard(0, 0, w, h));
-        }
-        public GdiPlusDrawBoard(int left, int top, int width, int height)
-        {
-            this.left = left;
-            this.top = top;
-            this.right = left + width;
-            this.bottom = top + height;
 
-            _gdigsx = new GdiPlusRenderSurface(left, top, width, height);
+        bool _disposed;
+        GdiPlusRenderSurface _gdigsx;
+        Painter _painter;
+
+        public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
+        {
+            _left = 0;
+            _top = 0;
+            _right = renderSurface.Width;
+            _bottom = renderSurface.Height;
+
+            _gdigsx = renderSurface;
         }
+
         public GdiPlusRenderSurface RenderSurface => _gdigsx;
+
 #if DEBUG
         public override string ToString()
         {
             return _gdigsx.ToString();
         }
 #endif
-
+        public void SetAggPainter(Painter p)
+        {
+            _painter = p;
+        }
         public override Painter GetPainter()
         {
             //create agg painter
-            return _gdigsx.GetAggPainter();
-
+            return _painter;
         }
         public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
         {
@@ -77,14 +80,14 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void CloseCanvas()
         {
-            if (isDisposed)
+            if (_disposed)
             {
                 return;
             }
 
             _gdigsx.CloseCanvas();
 
-            isDisposed = true;
+            _disposed = true;
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -92,7 +95,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// </summary>
         void IDisposable.Dispose()
         {
-            if (isDisposed)
+            if (_disposed)
             {
                 return;
             }
