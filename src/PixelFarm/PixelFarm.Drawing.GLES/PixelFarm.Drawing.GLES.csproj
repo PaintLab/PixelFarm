@@ -107,9 +107,6 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs">
       <Link>0_REF_DrawingGL\RenderSurface\TessListener.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TextureFontStore.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\TextureFontStore.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs">
       <Link>0_REF_DrawingGL\RenderSurface\VertexBufferObject.cs</Link>
     </Compile>
