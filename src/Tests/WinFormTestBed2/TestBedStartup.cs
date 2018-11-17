@@ -14,7 +14,7 @@ namespace YourImplementation
             FrameworkInitGLES.SetupDefaultValues();
 #endif
             //you can use your font loader
-            
+
             CommonTextServiceSetup.SetupDefaultValues();
             PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
@@ -46,7 +46,8 @@ namespace YourImplementation
 #if DEBUG
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
-        public static void RunSpecificDemo(LayoutFarm.App demo)
+
+        public static void RunSpecificDemo(LayoutFarm.App demo, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             //-------------------------------
             Application.EnableVisualStyles();
@@ -55,7 +56,7 @@ namespace YourImplementation
             //1. select view port kind
 
             //InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
-            InnerViewportKind innerViewportKind = InnerViewportKind.PureAgg;
+            //InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES;
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
 
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
@@ -63,7 +64,9 @@ namespace YourImplementation
                workingArea.Height,
                innerViewportKind,
                out UISurfaceViewportControl latestviewport);
+#if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
+#endif
 
             demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
             latestviewport.TopDownRecalculateContent();
