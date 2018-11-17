@@ -6,13 +6,14 @@ namespace LayoutFarm.UI
 
     public class UITimerTask
     {
-        TimerTick tickAction;
+        TimerTick _tickAction;
         int _intervalInMillisec;
+        //
         public delegate void TimerTick(UITimerTask timerTask);
 
         public UITimerTask(TimerTick tickAction)
         {
-            this.tickAction = tickAction;
+            this._tickAction = tickAction;
             RunOnce = false;
         }
         public bool Enabled
@@ -38,7 +39,7 @@ namespace LayoutFarm.UI
         protected virtual void InvokeAction()
         {
             //direct invoke action
-            tickAction(this);
+            _tickAction(this);
         }
         public virtual void Reset()
         {

@@ -24,8 +24,6 @@ namespace PixelFarm.Drawing.Pdf
         bool _useSubPixelRendering;
         //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
-
-
         CpuBlit.VertexProcessing.RoundedRect roundRect;
 
 
@@ -34,6 +32,10 @@ namespace PixelFarm.Drawing.Pdf
         public PdfPainter()
         {
 
+        }
+        public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
+        {
+            throw new NotImplementedException();
         }
         public override void Render(RenderVx renderVx)
         {
@@ -218,7 +220,7 @@ namespace PixelFarm.Drawing.Pdf
             }
         }
 
-         
+
         public override void Clear(Color color)
         {
             //_gfx.Clear(VxsHelper.ToDrawingColor(color));

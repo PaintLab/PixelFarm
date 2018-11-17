@@ -18,7 +18,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants> TRACE; DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32;</DefineConstants>
+    <DefineConstants> TRACE; DEBUG; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -27,7 +27,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32;</DefineConstants>
+    <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -2309,12 +2309,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
       <Link>PixelFarm\PaintLab.PlatformBase\SkiaCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs</Link>
     </Compile>
@@ -2333,6 +2327,7 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.Designer.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.Designer.cs</Link>
@@ -2380,14 +2375,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs">
-      <Link>PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\Conv.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\QuadPages.cs">
-      <Link>PixelFarm\PaintLab.Platforms.WinForms\4_GdiPlus\QuadPages.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs</Link>
@@ -2530,9 +2519,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusBitmapBackBuffer.cs">
-      <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusBitmapBackBuffer.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs</Link>
     </Compile>
@@ -2599,9 +2585,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmapReference.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmapReference.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs</Link>
     </Compile>
@@ -2632,9 +2615,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TextureFontStore.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TextureFontStore.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs</Link>
     </Compile>
@@ -2659,8 +2639,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\4_MyGLDrawBoard_TextAndFonts.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\DrawBoard\4_MyGLDrawBoard_TextAndFonts.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\Painter\DrawingGLFontPrinter.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GLES\Painter\DrawingGLFontPrinter.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\Painter\GLPainter.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\Painter\GLPainter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\Painter\MySimpleGLBitmapFontManager.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GLES\Painter\MySimpleGLBitmapFontManager.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\0_Start\SkiaGraphicsPlatform.cs">
       <Link>PixelFarm\PixelFarm.Drawing.Skia\0_Start\SkiaGraphicsPlatform.cs</Link>

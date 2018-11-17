@@ -1,33 +1,26 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
-using System.Runtime.InteropServices;
 namespace PixelFarm.DrawingGL
 {
-    public class LazyAggBitmapBufferProvider : LazyBitmapBufferProvider
+    public class LazyActualBitmapBufferProvider : LazyBitmapBufferProvider
     {
         PixelFarm.CpuBlit.ActualBitmap image;
-        //GCHandle handle;
-        public LazyAggBitmapBufferProvider(PixelFarm.CpuBlit.ActualBitmap image)
+        public LazyActualBitmapBufferProvider(PixelFarm.CpuBlit.ActualBitmap image)
         {
             this.image = image;
         }
-        public override bool IsInvert
+        public override bool IsYFlipped
         {
             get { return false; }
         }
         public override IntPtr GetRawBufferHead()
         {
             return PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(image).Ptr;
-
-
-            //int[] buffer = PixelFarm.CpuBlit.ActualBitmap.GetBuffer(image);
-            //this.handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            //return this.handle.AddrOfPinnedObject();
         }
         public override void ReleaseBufferHead()
         {
-            //this.handle.Free();
+
         }
         public override int Width
         {
@@ -37,5 +30,9 @@ namespace PixelFarm.DrawingGL
         {
             get { return this.image.Height; }
         }
+
+        //
+        public bool MayNeedUpdate { get; set; }
+
     }
 }

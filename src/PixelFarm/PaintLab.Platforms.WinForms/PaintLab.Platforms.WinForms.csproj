@@ -61,12 +61,6 @@
     <Compile Include="..\PaintLab.PlatformBase\SkiaCanvasViewport.cs">
       <Link>4_Skia\SkiaCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.YourImplementation\4_FontServices\DrawingGLFontPrinter.cs">
-      <Link>0_Platform\DrawingGLFontPrinter.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.YourImplementation\4_FontServices\MySimpleGLBitmapFontManager.cs">
-      <Link>0_Platform\MySimpleGLBitmapFontManager.cs</Link>
-    </Compile>
     <Compile Include="1_UISurfaceViewport\UISurfaceViewportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -86,8 +80,6 @@
       <DependentUpon>FormPopupShadow2.cs</DependentUpon>
     </Compile>
     <Compile Include="4_GdiPlus\Conv.cs" />
-    <Compile Include="4_GdiPlus\CanvasCollection.cs" />
-    <Compile Include="4_GdiPlus\QuadPages.cs" />
     <Compile Include="3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -11,8 +11,6 @@
 
 using System;
 using System.Drawing;
-using System.Drawing.Text;
-using System.Drawing.Imaging;
 
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -22,16 +20,16 @@ namespace LayoutFarm.UI
     /// <summary>
     /// Displays a shadow effect for a visual popup.
     /// </summary>
-    partial class FormPopupShadow2 : Form
+    partial class FormPopupShadow : Form
     {
-        private static readonly int SHADOW_SIZE = 3;
+        internal static readonly int SHADOW_SIZE = 3;
         private static readonly Brush[] _brushes;
 
         private GraphicsPath _path1;
         private GraphicsPath _path2;
         private GraphicsPath _path3;
 
-        static FormPopupShadow2()
+        static FormPopupShadow()
         {
             _brushes = new Brush[SHADOW_SIZE];
             for (int i = 0; i < SHADOW_SIZE; i++)
@@ -45,7 +43,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// Initialize a new instance of the VisualPopupShadow class. 
         /// </summary>
-        public FormPopupShadow2()
+        public FormPopupShadow()
         {
             // Update form properties so we do not have a border and do not show
             // in the task bar. We draw the background in Magenta and set that as
@@ -68,7 +66,7 @@ namespace LayoutFarm.UI
 
             base.Dispose(disposing);
         }
-
+        protected override bool ShowWithoutActivation => true;
         ///// <summary>
         ///// Show the popup using the provided rectangle as the screen rect.
         ///// </summary>
@@ -205,22 +203,31 @@ namespace LayoutFarm.UI
             g.FillPath(_brushes[0], _path3);
         }
 
+        bool _drawSimpleRectShadow = true;
         private void DrawShadow(Graphics g, Rectangle area)
         {
-            using (GraphicsPath outside1 = CommonHelper.RoundedRectanglePath(area, 6))
+
+            if (_drawSimpleRectShadow)
             {
-                area.Inflate(-1, -1);
-                g.FillPath(_brushes[2], outside1);
-                using (GraphicsPath outside2 = CommonHelper.RoundedRectanglePath(area, 6))
+                g.FillRectangle(_brushes[1], area);
+            }
+            else
+            {
+                using (GraphicsPath outside1 = CommonHelper.RoundedRectanglePath(area, 6))
                 {
-                    g.FillPath(_brushes[1], outside2);
                     area.Inflate(-1, -1);
-                    using (GraphicsPath outside3 = CommonHelper.RoundedRectanglePath(area, 6))
+                    g.FillPath(_brushes[2], outside1);
+                    using (GraphicsPath outside2 = CommonHelper.RoundedRectanglePath(area, 6))
                     {
-                        g.FillPath(_brushes[0], outside3);
+                        g.FillPath(_brushes[1], outside2);
+                        area.Inflate(-1, -1);
+                        using (GraphicsPath outside3 = CommonHelper.RoundedRectanglePath(area, 6))
+                        {
+                            g.FillPath(_brushes[0], outside3);
+                        }
                     }
                 }
-            }
+            } 
         }
     }
 }

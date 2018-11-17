@@ -386,6 +386,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
+        public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
+        {
+            throw new NotImplementedException();
+        }
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             throw new NotImplementedException();

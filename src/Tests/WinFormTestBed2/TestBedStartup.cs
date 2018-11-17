@@ -51,7 +51,8 @@ namespace YourImplementation
             ////------------------------------- 
             //1. select view port kind
 
-            InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
+            //InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
+            InnerViewportKind innerViewportKind = InnerViewportKind.PureAgg;
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
 
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
@@ -61,7 +62,7 @@ namespace YourImplementation
                out UISurfaceViewportControl latestviewport);
             formCanvas.Text = innerViewportKind.ToString();
 
-            demo.Start(new LayoutFarm.WinFormAppHost(latestviewport));
+            demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
             latestviewport.TopDownRecalculateContent();
             //==================================================  
             latestviewport.PaintMe();
@@ -98,12 +99,12 @@ namespace YourImplementation
     public static class DemoFormCreatorHelper
     {
         public static void CreateReadyForm(
+         InnerViewportKind innerViewportKind,
          out LayoutFarm.UI.UISurfaceViewportControl viewport,
          out Form formCanvas)
         {
 
-            //1. select view port kind
-            InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
+            //1. select view port kind  
 
             var workingArea = Screen.PrimaryScreen.WorkingArea;
 

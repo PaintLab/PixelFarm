@@ -43,6 +43,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\MiniOpenTKWinForms\MiniOpenTKWinForms.csproj">
+      <Project>{43ebd500-b9a1-4671-92d6-35fb835cca0f}</Project>
+      <Name>MiniOpenTKWinForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>PaintLab.Platforms.WinForms</Name>

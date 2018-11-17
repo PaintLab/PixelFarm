@@ -9,8 +9,12 @@ namespace LayoutFarm.Text
 {
     partial class EditableTextFlowLayer : RenderElementLayer
     {
-        object _lineCollection;
+
+
+
         public event EventHandler Reflow; //TODO: review this field
+
+        object _lineCollection;
         int _defaultLineHeight;
         TextEditRenderBox _ownerTextEditRenderBox;
         public EditableTextFlowLayer(TextEditRenderBox owner)
@@ -676,7 +680,7 @@ namespace LayoutFarm.Text
                         line.SetLineNumber(i + 1);
                         cy += line.ActualLineHeight;
                     }
-                    textLine.editableFlowLayer = this;
+                    textLine.EditableFlowLayer = this;
                     lines.Insert(insertAt, textLine);
                 }
             }
@@ -706,7 +710,7 @@ namespace LayoutFarm.Text
                         line.SetLineNumber(i + 1);
                         cy += line.ActualLineHeight;
                     }
-                    textLine.editableFlowLayer = this;
+                    textLine.EditableFlowLayer = this;
                     lines.Insert(insertAt, textLine);
                 }
             }

@@ -114,7 +114,7 @@ namespace LayoutFarm.Text
                 for (int i = lines.Count - 1; i > -1; --i)
                 {
                     EditableTextLine line = lines[i];
-                    line.editableFlowLayer = null;
+                    line.EditableFlowLayer = null;
                     line.Clear();
                 }
                 lines.Clear();
@@ -150,7 +150,7 @@ namespace LayoutFarm.Text
           
             //
             lines.RemoveAt(lineId);
-            removedLine.editableFlowLayer = null;
+            removedLine.EditableFlowLayer = null;
 
 
             int j = lines.Count;

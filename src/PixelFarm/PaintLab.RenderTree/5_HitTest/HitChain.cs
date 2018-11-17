@@ -44,7 +44,24 @@ namespace LayoutFarm.RenderBoxes
 #if DEBUG
         public override string ToString()
         {
-            return point + " :" + _hitObject.ToString();
+            RenderElement renderE = _hitObject as RenderElement;
+            if (renderE != null)
+            {
+                object controller = renderE.GetController();
+                if (controller != null)
+                {
+                    return point + " :" + renderE.ToString() + " " + renderE.RectBounds.ToString() + " " + renderE.GetType().Name + " , ctrl=" + controller;
+                }
+                else
+                {
+                    return point + " :" + renderE.ToString() + " " + renderE.RectBounds.ToString() + " " + renderE.GetType().Name;
+                }
+
+            }
+            else
+            {
+                return point + " :" + _hitObject.ToString();
+            }
         }
 #endif
     }
@@ -146,10 +163,10 @@ namespace LayoutFarm.RenderBoxes
             //{
 
             //}
-            //if (this.dbugHitPhase == dbugHitChainPhase.MouseDown)
-            //{
+            if (this.dbugHitPhase == dbugHitChainPhase.MouseDown)
+            {
 
-            //}
+            }
 
             if (dbugHitTracker != null)
             {

@@ -354,8 +354,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             return degree * (180d / Math.PI);
         }
-        
-       
+
+
     }
 
     public class Affine : ICoordTransformer
@@ -374,7 +374,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //sy = copyFrom.sy;
             //tx = copyFrom.tx;
             //ty = copyFrom.ty;
-            
+
             _elems = copyFrom._elems;
             isIdenHint = copyFrom.isIdenHint;
         }
@@ -390,6 +390,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 v4_tx, v5_ty);
 
             isIdenHint = false;
+        }
+        ICoordTransformer ICoordTransformer.CreateInvert()
+        {
+            return CreateInvert();
         }
         public ICoordTransformer MultiplyWith(ICoordTransformer another)
         {

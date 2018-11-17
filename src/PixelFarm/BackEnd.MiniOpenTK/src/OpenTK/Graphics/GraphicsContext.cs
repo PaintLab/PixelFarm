@@ -66,14 +66,14 @@ namespace OpenTK.Graphics
         private readonly static Dictionary<ContextHandle, IGraphicsContext> available_contexts =
             new Dictionary<ContextHandle, IGraphicsContext>();
 
-        /// <summary>
-        /// Constructs a new GraphicsContext with the specified GraphicsMode and attaches it to the specified window.
-        /// </summary>
-        /// <param name="mode">The OpenTK.Graphics.GraphicsMode of the GraphicsContext.</param>
-        /// <param name="window">The OpenTK.Platform.IWindowInfo to attach the GraphicsContext to.</param>
-        public GraphicsContext(GraphicsMode mode, IWindowInfo window)
-            : this(mode, window, 1, 0, GraphicsContextFlags.Default)
-        { }
+        ///// <summary>
+        ///// Constructs a new GraphicsContext with the specified GraphicsMode and attaches it to the specified window.
+        ///// </summary>
+        ///// <param name="mode">The OpenTK.Graphics.GraphicsMode of the GraphicsContext.</param>
+        ///// <param name="window">The OpenTK.Platform.IWindowInfo to attach the GraphicsContext to.</param>
+        //public GraphicsContext(GraphicsMode mode, IWindowInfo window)
+        //    : this(mode, window, 1, 0, GraphicsContextFlags.Default)
+        //{ }
 
         /// <summary>
         /// Constructs a new GraphicsContext with the specified GraphicsMode, version and flags,  and attaches it to the specified window.
@@ -262,28 +262,28 @@ namespace OpenTK.Graphics
             implementation.LoadAll();
         }
 
-        /// <summary>
-        /// Constructs a new GraphicsContext from a pre-existing context created outside of OpenTK. A dummy context will be created if both
-        /// the handle and the window are null.
-        /// </summary>
-        /// <param name="handle">The handle of the existing context. This must be a valid, unique handle that is not known to OpenTK.</param>
-        /// <param name="window">This parameter is reserved.</param>
-        public GraphicsContext(ContextHandle handle, IWindowInfo window)
-            : this(handle, window, null, 1, 0, GraphicsContextFlags.Default)
-        { }
+        ///// <summary>
+        ///// Constructs a new GraphicsContext from a pre-existing context created outside of OpenTK. A dummy context will be created if both
+        ///// the handle and the window are null.
+        ///// </summary>
+        ///// <param name="handle">The handle of the existing context. This must be a valid, unique handle that is not known to OpenTK.</param>
+        ///// <param name="window">This parameter is reserved.</param>
+        //public GraphicsContext(ContextHandle handle, IWindowInfo window)
+        //    : this(handle, window, null, 1, 0, GraphicsContextFlags.Default)
+        //{ }
 
-        /// <summary>
-        /// Constructs a new GraphicsContext from a pre-existing context created outside of OpenTK.
-        /// </summary>
-        /// <param name="handle">The handle of the existing context. This must be a valid, unique handle that is not known to OpenTK.</param>
-        /// <param name="window">This parameter is reserved.</param>
-        /// <param name="shareContext">This parameter is reserved.</param>
-        /// <param name="major">This parameter is reserved.</param>
-        /// <param name="minor">This parameter is reserved.</param>
-        /// <param name="flags">This parameter is reserved..</param>
-        public GraphicsContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, int major, int minor, GraphicsContextFlags flags)
-            : this(handle, PlatformAddressPortal.GetAddressDelegate, OpenTK.Platform.Factory.Default.CreateGetCurrentGraphicsContext())
-        { }
+        ///// <summary>
+        ///// Constructs a new GraphicsContext from a pre-existing context created outside of OpenTK.
+        ///// </summary>
+        ///// <param name="handle">The handle of the existing context. This must be a valid, unique handle that is not known to OpenTK.</param>
+        ///// <param name="window">This parameter is reserved.</param>
+        ///// <param name="shareContext">This parameter is reserved.</param>
+        ///// <param name="major">This parameter is reserved.</param>
+        ///// <param name="minor">This parameter is reserved.</param>
+        ///// <param name="flags">This parameter is reserved..</param>
+        //public GraphicsContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, int major, int minor, GraphicsContextFlags flags)
+        //    : this(handle, PlatformAddressPortal.GetAddressDelegate, OpenTK.Platform.Factory.Default.CreateGetCurrentGraphicsContext())
+        //{ }
 
         /// <summary>
         /// Returns a <see cref="System.String"/> representing this instance.

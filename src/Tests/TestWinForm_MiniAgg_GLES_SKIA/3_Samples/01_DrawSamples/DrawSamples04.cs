@@ -47,7 +47,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 atlas =>
                 {
                     GlyphImage totalGlyphImg = atlas.TotalGlyph;
-                    return new ActualBitmap(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
+                    return ActualBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
                 }
             );
             _bmpFontMx.SetCurrentScriptLangs(new ScriptLang[]
@@ -99,12 +99,12 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             Typeface typeface = _textServices.ResolveTypeface(_font);
             float scale = typeface.CalculateScaleToPixelFromPointSize(_font.SizeInPoints);
 
-            int recommendLineSpacing = (int)_font.LineSpacingInPx;
+            int recommendLineSpacing = (int)_font.LineSpacingInPixels;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= ((_font.LineSpacingInPx) * scale);
+            y -= _font.LineSpacingInPixels;
 
             // 
             float scaleFromTexture = _finalTextureScale;

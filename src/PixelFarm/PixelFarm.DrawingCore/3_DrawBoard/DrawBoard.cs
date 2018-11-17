@@ -15,11 +15,10 @@ namespace PixelFarm.Drawing
         //(0,0) is on left-upper corner
         //-------------------------------
         //who implement this class
-        //1. PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas (for win32,legacy)
-        //2. Agg's 
-        //3. PixelFarm.Drawing.GLES2.MyGLCanvas  (for GLES2)
-        //4. PixelFarm.Drawing.Pdf.MyPdfCanvas (future)
-        //5. PixelFarm.Drawing.Skia.MySkia Canvas (not complete)
+        //1. PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas (for win32,legacy) 
+        //2. PixelFarm.Drawing.GLES2.MyGLCanvas  (for GLES2)
+        //3. PixelFarm.Drawing.Pdf.MyPdfCanvas (future)
+        //4. PixelFarm.Drawing.Skia.MySkia Canvas (not complete)
         //------------------------------
         //who use this interface
         //the HtmlRenderer
@@ -116,10 +115,8 @@ namespace PixelFarm.Drawing
         public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len);
         public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
         public abstract void Dispose();
-
         //--
         public abstract Painter GetPainter();
-
     }
 
 
@@ -197,51 +194,23 @@ namespace PixelFarm.Drawing
             drawBoard.SmoothingMode = value;
             return saveState;
         }
-
-
-
-
-
+         
         public struct SmoothingModeState
         {
-            readonly DrawBoard drawBoard;
+            readonly DrawBoard _drawBoard;
             readonly SmoothingMode _latestSmoothMode;
             internal SmoothingModeState(DrawBoard drawBoard, SmoothingMode state)
             {
                 _latestSmoothMode = state;
-                this.drawBoard = drawBoard;
+                this._drawBoard = drawBoard;
             }
             public void Restore()
             {
-                drawBoard.SmoothingMode = _latestSmoothMode;
-            }
-        }
-
-
-    }
-
-
-    public static class DrawBoardCreator
-    {
-        public delegate DrawBoard CreateNewDrawBoardDelegate(int w, int h);
-        static System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate> _s_creators = new System.Collections.Generic.Dictionary<int, CreateNewDrawBoardDelegate>();
-        public static void RegisterCreator(int creatorName, CreateNewDrawBoardDelegate del)
-        {
-            _s_creators.Add(creatorName, del);
-        }
-        public static DrawBoard CreateNewDrawBoard(int name, int w, int h)
-        {
-            if (_s_creators.TryGetValue(name, out CreateNewDrawBoardDelegate foundCreator))
-            {
-                return foundCreator(w, h);
-            }
-            else
-            {
-                //not found this creator
-                return null;
+                _drawBoard.SmoothingMode = _latestSmoothMode;
             }
         }
     }
+
 }
 
 

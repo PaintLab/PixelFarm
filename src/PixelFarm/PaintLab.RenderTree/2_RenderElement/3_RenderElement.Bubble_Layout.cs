@@ -10,25 +10,25 @@ namespace LayoutFarm
         }
         protected static void SetCalculatedSize(RenderBoxBase v, int w, int h)
         {
-            v.b_width = w;
-            v.b_height = h;
+            v._b_width = w;
+            v._b_height = h;
             v.MarkHasValidCalculateSize();
         }
         internal static int GetLayoutSpecificDimensionType(RenderElement visualElement)
         {
-            return visualElement.uiLayoutFlags & 0x3;
+            return visualElement._uiLayoutFlags & 0x3;
         }
 
         public bool HasCalculatedSize
         {
             get
             {
-                return ((uiLayoutFlags & RenderElementConst.LAY_HAS_CALCULATED_SIZE) != 0);
+                return ((_uiLayoutFlags & RenderElementConst.LAY_HAS_CALCULATED_SIZE) != 0);
             }
         }
         protected void MarkHasValidCalculateSize()
         {
-            uiLayoutFlags |= RenderElementConst.LAY_HAS_CALCULATED_SIZE;
+            _uiLayoutFlags |= RenderElementConst.LAY_HAS_CALCULATED_SIZE;
 #if DEBUG
             this.dbug_ValidateRecalculateSizeEpisode++;
 #endif
@@ -51,7 +51,7 @@ namespace LayoutFarm
         {
             get
             {
-                return (uiLayoutFlags & RenderElementConst.LAY_HAS_CALCULATED_SIZE) == 0;
+                return (_uiLayoutFlags & RenderElementConst.LAY_HAS_CALCULATED_SIZE) == 0;
             }
         }
 
@@ -77,26 +77,26 @@ namespace LayoutFarm
             this.dbug_ValidateContentArrEpisode++;
 #endif
 
-            uiLayoutFlags |= RenderElementConst.LY_HAS_ARRANGED_CONTENT;
+            _uiLayoutFlags |= RenderElementConst.LY_HAS_ARRANGED_CONTENT;
         }
         public bool NeedContentArrangement
         {
             get
             {
-                return (uiLayoutFlags & RenderElementConst.LY_HAS_ARRANGED_CONTENT) == 0;
+                return (_uiLayoutFlags & RenderElementConst.LY_HAS_ARRANGED_CONTENT) == 0;
             }
         }
         internal bool FirstArrangementPass
         {
             get
             {
-                return (propFlags & RenderElementConst.FIRST_ARR_PASS) != 0;
+                return (_propFlags & RenderElementConst.FIRST_ARR_PASS) != 0;
             }
             set
             {
-                propFlags = value ?
-                   propFlags | RenderElementConst.FIRST_ARR_PASS :
-                   propFlags & ~RenderElementConst.FIRST_ARR_PASS;
+                _propFlags = value ?
+                   _propFlags | RenderElementConst.FIRST_ARR_PASS :
+                   _propFlags & ~RenderElementConst.FIRST_ARR_PASS;
             }
         }
     }

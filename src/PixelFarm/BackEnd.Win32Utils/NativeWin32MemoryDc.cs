@@ -5,77 +5,82 @@ using System;
 namespace Win32
 {
 
-    public class NativeWin32MemoryDc : IDisposable
+    public class NativeWin32MemoryDC : IDisposable
     {
         int _width;
         int _height;
 
-        IntPtr memHdc;
-        IntPtr dib;
-        IntPtr ppvBits;
-        IntPtr hRgn = IntPtr.Zero;
+        IntPtr _memHdc;
+        IntPtr _dib;
+        IntPtr _ppvBits;
+        IntPtr _hRgn = IntPtr.Zero;
 
-        bool isDisposed;
+        bool _isDisposed;
         bool _invertedImage;
 
-        public NativeWin32MemoryDc(int w, int h, bool invertImage = false)
+        public NativeWin32MemoryDC(int w, int h, bool invertImage = false)
         {
             this._width = w;
             this._height = h;
 
             _invertedImage = invertImage;
 
-            memHdc = MyWin32.CreateMemoryHdc(
+            _memHdc = MyWin32.CreateMemoryHdc(
                 IntPtr.Zero,
                 w,
                 invertImage ? -h : h, //***
-                out dib,
-                out ppvBits);
+                out _dib,
+                out _ppvBits);
         }
+
+        /// <summary>
+        /// handle to win32 memory context
+        /// </summary>
         public IntPtr DC
         {
-            get { return this.memHdc; }
+            get { return this._memHdc; }
         }
+        /// <summary>
+        /// handle to bitmap buffer
+        /// </summary>
         public IntPtr PPVBits
         {
-            get { return this.ppvBits; }
+            get { return this._ppvBits; }
         }
-        public void SetTextColor(int win32Color)
-        {
-            Win32.MyWin32.SetTextColor(memHdc, win32Color);
-        }
+
+
         public void Dispose()
         {
-            if (isDisposed)
+            if (_isDisposed)
             {
                 return;
             }
 
-            if (hRgn != IntPtr.Zero)
+            if (_hRgn != IntPtr.Zero)
             {
-                MyWin32.DeleteObject(hRgn);
-                hRgn = IntPtr.Zero;
+                MyWin32.DeleteObject(_hRgn);
+                _hRgn = IntPtr.Zero;
             }
 
 
-            MyWin32.ReleaseMemoryHdc(memHdc, dib);
-            dib = IntPtr.Zero;
-            memHdc = IntPtr.Zero;
-            isDisposed = true;
+            MyWin32.ReleaseMemoryHdc(_memHdc, _dib);
+            _dib = IntPtr.Zero;
+            _memHdc = IntPtr.Zero;
+            _isDisposed = true;
         }
         public void PatBlt(PatBltColor color)
         {
-            MyWin32.PatBlt(memHdc, 0, 0, _width, _height, (int)color);
+            MyWin32.PatBlt(_memHdc, 0, 0, _width, _height, (int)color);
         }
         public void PatBlt(PatBltColor color, int x, int y, int w, int h)
         {
-            MyWin32.PatBlt(memHdc, x, y, w, h, (int)color);
+            MyWin32.PatBlt(_memHdc, x, y, w, h, (int)color);
         }
         public void SetBackTransparent(bool value)
         {
             //public const int _SetBkMode_TRANSPARENT = 1;
             //public const int _SetBkMode_OPAQUE = 2;
-            MyWin32.SetBkMode(memHdc, value ? 1 : 2);
+            MyWin32.SetBkMode(_memHdc, value ? 1 : 2);
         }
         public enum PatBltColor
         {
@@ -84,7 +89,7 @@ namespace Win32
         }
         public IntPtr SetFont(IntPtr hFont)
         {
-            return MyWin32.SelectObject(memHdc, hFont);
+            return MyWin32.SelectObject(_memHdc, hFont);
         }
 
         /// <summary>
@@ -96,35 +101,38 @@ namespace Win32
         public void SetSolidTextColor(byte r, byte g, byte b)
         {
             //convert to win32 colorv
-            MyWin32.SetTextColor(memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
+            MyWin32.SetTextColor(_memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
         }
-
+        public void SetTextColor(int win32Color)
+        {
+            Win32.MyWin32.SetTextColor(_memHdc, win32Color);
+        }
         public void SetClipRect(int x, int y, int w, int h)
         {
-            if (hRgn == IntPtr.Zero)
+            if (_hRgn == IntPtr.Zero)
             {
                 //create
-                hRgn = MyWin32.CreateRectRgn(0, 0, w, h);
+                _hRgn = MyWin32.CreateRectRgn(0, 0, w, h);
             }
-            MyWin32.SetRectRgn(hRgn,
+            MyWin32.SetRectRgn(_hRgn,
             x,
             y,
             x + w,
             y + h);
-            MyWin32.SelectObject(memHdc, hRgn);
+            MyWin32.SelectObject(_memHdc, _hRgn);
         }
         public void ClearClipRect()
         {
-            MyWin32.SelectClipRgn(memHdc, IntPtr.Zero);
+            MyWin32.SelectClipRgn(_memHdc, IntPtr.Zero);
         }
         //
         public void TextOut(char[] textBuffer)
         {
-            NativeTextWin32.TextOut(this.memHdc, 0, 0, textBuffer, textBuffer.Length);
+            NativeTextWin32.TextOut(this._memHdc, 0, 0, textBuffer, textBuffer.Length);
         }
         public void TextOut(char[] textBuffer, int x, int y)
         {
-            NativeTextWin32.TextOut(this.memHdc, x, y, textBuffer, textBuffer.Length);
+            NativeTextWin32.TextOut(this._memHdc, x, y, textBuffer, textBuffer.Length);
         }
         public unsafe void CopyPixelBitsToOutput(byte* outputBuffer)
         {
@@ -134,9 +142,39 @@ namespace Win32
         {
             Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)this.PPVBits, copyLen);
         }
+        public unsafe void BlendWin32From(
+           IntPtr srcDC,
+           int srcX,
+           int srcY,
+           int srcWidth,
+           int srcHeight,
+           int destX, int destY)
+        {
+            Rectangle rect = Rectangle.Intersect(
+                        new Rectangle(destX, destY, srcWidth, srcHeight), //src rect
+                        new Rectangle(0, 0, this._width, this._height));//dest rectt
 
+            if (rect.W <= 0 || rect.H <= 0)
+            {
+                return;
+            }
+
+
+            Win32.MyWin32.BLENDFUNCTION blendFunc = new MyWin32.BLENDFUNCTION();
+            blendFunc.BlendOp = Win32.MyWin32.AC_SRC_OVER;
+            blendFunc.BlendFlags = 0;
+            blendFunc.SourceConstantAlpha = 255;
+            blendFunc.AlphaFormat = Win32.MyWin32.AC_SRC_ALPHA;
+
+            Win32.MyWin32.AlphaBlend(_memHdc,
+                destX, destY,
+                srcWidth, srcHeight, srcDC,
+                srcX, srcY, srcWidth, srcHeight,
+                blendFunc);
+
+        }
         public unsafe void BlendBltBitFrom(
-            byte* srcH, int srcStrideInBytes,
+            byte* srcHeader, int srcStrideInBytes,
             int srcX,
             int srcY,
             int srcWidth,
@@ -172,9 +210,9 @@ namespace Win32
                 for (int h = srcY; h < src_intersect_height; ++h)
                 {
                     //
-                    Win32.MyWin32.memcpy(destHead + destXOffset, srcH + srcXOffset, srcRowLenInBytes);
+                    Win32.MyWin32.memcpy(destHead + destXOffset, srcHeader + srcXOffset, srcRowLenInBytes);
 
-                    srcH += srcStrideInBytes;
+                    srcHeader += srcStrideInBytes;
                     destHead -= destStrideInBytes; //***
                 }
             }
@@ -182,8 +220,8 @@ namespace Win32
             {
                 for (int h = srcY; h < src_intersect_height; ++h)
                 {
-                    Win32.MyWin32.memcpy(destHead + destXOffset, srcH + srcXOffset, srcRowLenInBytes);
-                    srcH += srcStrideInBytes;
+                    Win32.MyWin32.memcpy(destHead + destXOffset, srcHeader + srcXOffset, srcRowLenInBytes);
+                    srcHeader += srcStrideInBytes;
                     destHead += destStrideInBytes;
                 }
             }
@@ -245,7 +283,7 @@ namespace Win32
             {
                 fixed (char* bufferHead = &textBuffer[0])
                 {
-                    Win32.NativeTextWin32.GetTextExtentPoint32Char(this.memHdc,
+                    Win32.NativeTextWin32.GetTextExtentPoint32Char(this._memHdc,
                         bufferHead, textBuffer.Length, out win32Size);
                 }
             }
@@ -254,24 +292,24 @@ namespace Win32
         }
         public void BitBltTo(IntPtr destHdc)
         {
-            Win32.MyWin32.BitBlt(destHdc, 0, 0, _width, _height, this.memHdc, 0, 0, MyWin32.SRCCOPY);
+            Win32.MyWin32.BitBlt(destHdc, 0, 0, _width, _height, this._memHdc, 0, 0, MyWin32.SRCCOPY);
         }
     }
 
     public class Win32Font : IDisposable
     {
-        IntPtr hfont;
+        IntPtr _hfont;
         public Win32Font(IntPtr hfont)
         {
-            this.hfont = hfont;
+            this._hfont = hfont;
         }
         public IntPtr GetHFont()
         {
-            return this.hfont;
+            return this._hfont;
         }
         public void Dispose()
         {
-            Win32.MyWin32.DeleteObject(hfont);
+            Win32.MyWin32.DeleteObject(_hfont);
         }
     }
 

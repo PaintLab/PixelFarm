@@ -25,10 +25,11 @@ namespace LayoutFarm.RenderBoxes
     }
     public class GraphicsTimerTask
     {
-        RootGraphic rootgfx;
-        bool enable;
-        object uniqueName;
-        EventHandler<GraphicsTimerTaskEventArgs> tickHandler;
+        RootGraphic _rootgfx;
+        bool _enable;
+        object _uniqueName;
+        EventHandler<GraphicsTimerTaskEventArgs> _tickHandler;
+        //
         public GraphicsTimerTask(RootGraphic rootgfx,
             TaskIntervalPlan planName,
             object uniqueName,
@@ -36,10 +37,10 @@ namespace LayoutFarm.RenderBoxes
             EventHandler<GraphicsTimerTaskEventArgs> tickHandler)
         {
             this.PlanName = planName;
-            this.uniqueName = uniqueName;
-            this.enable = false;
-            this.rootgfx = rootgfx;
-            this.tickHandler = tickHandler;
+            this._uniqueName = uniqueName;
+            this._enable = false;
+            this._rootgfx = rootgfx;
+            this._tickHandler = tickHandler;
         }
 
         public TaskIntervalPlan PlanName { get; private set; }
@@ -47,23 +48,23 @@ namespace LayoutFarm.RenderBoxes
         {
             get
             {
-                return this.enable;
+                return this._enable;
             }
             set
             {
-                this.enable = value;
+                this._enable = value;
             }
         }
         public void RemoveSelf()
         {
-            if (this.rootgfx != null)
+            if (this._rootgfx != null)
             {
-                this.rootgfx.RemoveIntervalTask(this.uniqueName);
+                this._rootgfx.RemoveIntervalTask(this._uniqueName);
             }
         }
         public void InvokeHandler(GraphicsTimerTaskEventArgs args)
         {
-            this.tickHandler(this, args);
+            this._tickHandler(this, args);
         }
     }
 }

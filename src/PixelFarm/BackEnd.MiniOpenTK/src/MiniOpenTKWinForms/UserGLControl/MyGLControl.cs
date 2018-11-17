@@ -11,57 +11,63 @@ namespace OpenTK
     {
 
 
-        OpenTK.Graphics.Color4 clearColor;
-        EventHandler glPaintHandler;
+        const int GLES_MAJOR = 3;
+        const int GLES_MINOR = 0;
+
+        EventHandler _glPaintHandler;
+
         static OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
              DisplayDevice.Default.BitsPerPixel,//default 32 bits color
              16,//depth buffer => 16
-             8,  //stencil buffer => 8 (  //if want to use stencil buffer then set stencil buffer too! )
-             0,//number of sample of FSAA
-             0,  //accum buffer
+             8, //stencil buffer => 8 (set this if you want to use stencil buffer toos)
+             0, //number of sample of FSAA (not always work)
+             0, //accum buffer
              2, // n buffer, 2=> double buffer
              false);//sterio
         public MyGLControl()
-            : base(gfxmode, 3, 0, OpenTK.Graphics.GraphicsContextFlags.Embedded)
+            : base(gfxmode, GLES_MAJOR, GLES_MINOR, OpenTK.Graphics.GraphicsContextFlags.Embedded)
         {
             this.InitializeComponent();
         }
         public void InitSetup2d(int x, int y, int w, int h)
         {
+            //TODO review here again
 
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)
         {
-            this.glPaintHandler = glPaintHandler;
+            this._glPaintHandler = glPaintHandler;
         }
-        public OpenTK.Graphics.Color4 ClearColor
+        public void ClearSurface(OpenTK.Graphics.Color4 color)
         {
-            get { return clearColor; }
-            set
-            {
-                clearColor = value;
-                if (!this.DesignMode)
-                {
-                    MakeCurrent();
-                    GL.ClearColor(clearColor);
-                }
-            }
+            MakeCurrent();
+            GL.ClearColor(color);
         }
-
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+        }
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+        }
         protected override void OnPaint(PaintEventArgs e)
         {
 
             base.OnPaint(e);
             if (!this.DesignMode)
             {
-                MakeCurrent();
-                if (glPaintHandler != null)
+                if (_glPaintHandler != null)
                 {
-                    glPaintHandler(this, e);
+                    MakeCurrent();
+                    _glPaintHandler(this, e);
+                    SwapBuffers();
                 }
-                SwapBuffers();
-            } 
+            }
         }
-
     }
 }

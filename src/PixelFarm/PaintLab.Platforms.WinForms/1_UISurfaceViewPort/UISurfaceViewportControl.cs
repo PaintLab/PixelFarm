@@ -14,17 +14,20 @@ namespace LayoutFarm.UI
 {
     public partial class UISurfaceViewportControl : UserControl
     {
-        TopWindowBridgeWinForm winBridge;
-        RootGraphic rootgfx;
-        ITopWindowEventRoot topWinEventRoot;
-        InnerViewportKind innerViewportKind;
-        List<Form> subForms = new List<Form>();
+        TopWindowBridgeWinForm _winBridge;
+        RootGraphic _rootgfx;
+        ITopWindowEventRoot _topWinEventRoot;
+        InnerViewportKind _innerViewportKind;
+        List<Form> _subForms = new List<Form>();
         public UISurfaceViewportControl()
         {
             InitializeComponent();
 
             //this.panel1.Visible = false; 
         }
+        public InnerViewportKind InnerViewportKind => _innerViewportKind;
+
+
 #if DEBUG
         static int s_dbugCount;
 #endif
@@ -38,9 +41,12 @@ namespace LayoutFarm.UI
         {
             //s_dbugCount++;
             //Console.WriteLine("focus" + s_dbugCount.ToString());
-            rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, rootgfx.Width, rootgfx.Height));
-            rootgfx.FlushAccumGraphics();
-
+            _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
+            _rootgfx.FlushAccumGraphics();
+            //#if DEBUG
+            //            s_dbugCount++;
+            //            Console.WriteLine("vis" + s_dbugCount.ToString());
+            //#endif
             base.OnVisibleChanged(e);
         }
         protected override void OnPaint(PaintEventArgs e)
@@ -49,18 +55,18 @@ namespace LayoutFarm.UI
             if (e.ClipRectangle.Width + e.ClipRectangle.Height == 0)
             {
                 //entire window
-                rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, rootgfx.Width, rootgfx.Height));
+                _rootgfx.InvalidateRectArea(new PixelFarm.Drawing.Rectangle(0, 0, _rootgfx.Width, _rootgfx.Height));
             }
             else
             {
-                rootgfx.InvalidateRectArea(
+                _rootgfx.InvalidateRectArea(
                     new PixelFarm.Drawing.Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
             }
-            rootgfx.FlushAccumGraphics();
-#if DEBUG
-            //s_dbugCount++;
-            //Console.WriteLine(s_dbugCount.ToString() + e.ClipRectangle);
-#endif
+            _rootgfx.FlushAccumGraphics();
+            //#if DEBUG
+            //            s_dbugCount++;
+            //            Console.WriteLine("p" + s_dbugCount.ToString() + e.ClipRectangle);
+            //#endif
             base.OnPaint(e);
         }
         public UIPlatform Platform
@@ -70,30 +76,28 @@ namespace LayoutFarm.UI
                 return UIPlatformWinForm.GetDefault();
             }
         }
-#if GL_ENABLE
-        IntPtr hh1;
-        OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
-        GLRenderSurface _glsx;
-        GLPainter canvasPainter;
-#endif
-        void HandleGLPaint(object sender, System.EventArgs e)
-        {
-            //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            //canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
-            //canvas2d.ClearColorBuffer();
-            ////example
-            //canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            //canvasPainter.FillRectLBWH(20, 20, 150, 150);
-            ////load bmp image 
-            //////------------------------------------------------------------------------- 
-            ////if (exampleBase != null)
-            ////{
-            ////    exampleBase.Draw(canvasPainter);
-            ////}
-            ////draw data 
 
-            //openGLSurfaceView.SwapBuffers();
+#if GL_ENABLE
+
+        OpenGL.GpuOpenGLSurfaceView _gpuSurfaceViewUserControl;
+        GLRenderSurface _glsx;
+        GLPainter _glPainter;
+
+        public OpenTK.MyGLControl GetOpenTKControl()
+        {
+            return _gpuSurfaceViewUserControl;
         }
+        public GLPainter GetGLPainter()
+        {
+            return _glPainter;
+        }
+        public GLRenderSurface GetGLRenderSurface()
+        {
+            return _glsx;
+        }
+#endif
+
+
         public void InitRootGraphics(
             RootGraphic rootgfx,
             ITopWindowEventRoot topWinEventRoot,
@@ -102,35 +106,27 @@ namespace LayoutFarm.UI
 
             //create a proper bridge****
 
-            this.rootgfx = rootgfx;
-            this.topWinEventRoot = topWinEventRoot;
-            this.innerViewportKind = innerViewportKind;
+            this._rootgfx = rootgfx;
+            this._topWinEventRoot = topWinEventRoot;
+            this._innerViewportKind = innerViewportKind;
             switch (innerViewportKind)
             {
-                case InnerViewportKind.GL:
-                    {
 #if GL_ENABLE
-                        //temp not suppport  
-                        //TODO: review here
-                        //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-
+                case InnerViewportKind.GdiPlusOnGLES:
+                    {
+                        //similar to agg on GLES
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
                         var view = new OpenGL.GpuOpenGLSurfaceView();
-
                         view.Width = 1200;
                         view.Height = 1200;
-                        openGLSurfaceView = view;
-                        //view.Dock = DockStyle.Fill;
+                        _gpuSurfaceViewUserControl = view;
                         this.Controls.Add(view);
-                        //this.panel1.Visible = true;
-                        //this.panel1.Controls.Add(view);
-
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                         //--------------------------------------- 
                         view.SetGLPaintHandler(null);
-                        hh1 = view.Handle; //force real window handle creation
+                        IntPtr hh1 = view.Handle; //force real window handle creation
                         view.MakeCurrent();
 
 
@@ -139,7 +135,7 @@ namespace LayoutFarm.UI
                         //---------------
                         //canvas2d.FlipY = true;//
                         //---------------
-                        canvasPainter = new GLPainter(_glsx);
+                        _glPainter = new GLPainter(_glsx);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -157,15 +153,71 @@ namespace LayoutFarm.UI
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer; 
                         //3 
-                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
-                        canvasPainter.TextPrinter = printer;
+                        var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        _glPainter.TextPrinter = printer;
 
                         //
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(canvasPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
-#endif
+
+
                     }
                     break;
+                case InnerViewportKind.AggOnGLES:
+                case InnerViewportKind.GLES:
+                    {
+
+                        //temp not suppport  
+
+
+                        var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
+                        var view = new OpenGL.GpuOpenGLSurfaceView();
+                        view.Width = 1200;
+                        view.Height = 1200;
+                        _gpuSurfaceViewUserControl = view;
+                        this.Controls.Add(view);
+                        //--------------------------------------- 
+                        view.Bind(bridge);
+                        this._winBridge = bridge;
+                        //--------------------------------------- 
+                        view.SetGLPaintHandler(null);
+                        IntPtr hh1 = view.Handle; //force real window handle creation
+                        view.MakeCurrent();
+
+
+                        int max = Math.Max(view.Width, view.Height);
+                        _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, view.Width, view.Height);
+                        //---------------
+                        //canvas2d.FlipY = true;//
+                        //---------------
+                        _glPainter = new GLPainter(_glsx);
+
+                        //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
+                        //----------------------
+                        //1. win gdi based
+                        //var printer = new WinGdiFontPrinter(canvas2d, view.Width, view.Height);
+                        //canvasPainter.TextPrinter = printer;
+                        //----------------------
+                        //2. raw vxs
+                        //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+                        //canvasPainter.TextPrinter = printer;
+                        //----------------------
+                        //3. agg texture based font texture
+                        //var printer = new AggTextSpanPrinter(canvasPainter, 400, 50);
+                        //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
+                        //printer.UseSubPixelRendering = true;
+                        //canvasPainter.TextPrinter = printer; 
+                        //3 
+                        var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                        _glPainter.TextPrinter = printer;
+
+                        //
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx.CanvasWidth, _glsx.CanvasHeight);
+                        bridge.SetCanvas(myGLCanvas1);
+
+                    }
+                    break;
+#endif
 #if __SKIA__
                 case InnerViewportKind.Skia:
                     {
@@ -177,11 +229,23 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
 
                     }
                     break;
 #endif
+                case InnerViewportKind.PureAgg:
+                    {
+                        var bridge = new GdiPlus.MyTopWindowBridgeAgg(rootgfx, topWinEventRoot);
+                        var view = new CpuSurfaceView();
+                        view.Dock = DockStyle.Fill;
+                        this.Controls.Add(view);
+                        //--------------------------------------- 
+                        view.Bind(bridge);
+                        this._winBridge = bridge;
+                    }
+                    break;
+
                 case InnerViewportKind.GdiPlus:
                 default:
                     {
@@ -191,7 +255,7 @@ namespace LayoutFarm.UI
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);
-                        this.winBridge = bridge;
+                        this._winBridge = bridge;
                     }
                     break;
             }
@@ -215,51 +279,49 @@ namespace LayoutFarm.UI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             //this.Controls.Add(this.panel1);
+#if DEBUG
             this.Name = "UISurfaceViewportControl";
+#endif
             this.Size = new System.Drawing.Size(863, 760);
             this.ResumeLayout(false);
 
         }
         protected override void OnLoad(EventArgs e)
         {
-            this.winBridge.OnHostControlLoaded();
+            this._winBridge.OnHostControlLoaded();
         }
         public void PaintMe()
         {
-            this.winBridge.PaintToOutputWindow();
+            this._winBridge.PaintToOutputWindow();
+        }
+        public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
+        {
+            _winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
         }
 
 #if DEBUG
         public void dbugPaintMeFullMode()
         {
-            this.winBridge.dbugPaintToOutputWindowFullMode();
+            this._winBridge.dbugPaintToOutputWindowFullMode();
         }
-#endif
-        public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
-        {
-            winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
-        }
-
-#if DEBUG
         public IdbugOutputWindow IdebugOutputWin
         {
-            get { return this.winBridge; }
+            get { return this._winBridge; }
         }
 #endif
         public void TopDownRecalculateContent()
         {
-            this.rootgfx.TopWindowRenderBox.TopDownReCalculateContentSize();
+            this._rootgfx.TopDownRecalculateContent();
         }
         public void AddChild(RenderElement vi)
         {
-            this.rootgfx.TopWindowRenderBox.AddChild(vi);
+            this._rootgfx.AddChild(vi);
         }
 
 
-        static IntPtr s_tmpHandle;
-        public void AddChild(RenderElement vi, object owner)
+        public void AddChild(RenderElement renderElem, object owner)
         {
-            if (vi is RenderBoxBase)
+            if (renderElem is RenderBoxBase)
             {
                 if (owner is ITopWindowBox)
                 {
@@ -267,8 +329,9 @@ namespace LayoutFarm.UI
                     if (topWinBox.PlatformWinBox == null)
                     {
 
-                        FormPopupShadow2 popupShadow1 = new FormPopupShadow2();
-                        IntPtr handle1 = popupShadow1.Handle;
+                        FormPopupShadow popupShadow1 = new FormPopupShadow();
+                        popupShadow1.Visible = false;
+                        IntPtr handle1 = popupShadow1.Handle; //***
 
 
                         //create platform winbox 
@@ -277,49 +340,96 @@ namespace LayoutFarm.UI
                         newForm.LinkedParentControl = this;
                         newForm.PopupShadow = popupShadow1;
 
-
                         //TODO: review here=> 300,200
 
                         UISurfaceViewportControl newSurfaceViewport = this.CreateNewOne(300, 200);
                         newSurfaceViewport.Location = new System.Drawing.Point(0, 0);
                         newForm.Controls.Add(newSurfaceViewport);
-                        vi.ResetRootGraphics(newSurfaceViewport.RootGfx);
-                        vi.SetLocation(0, 0);
-                        newSurfaceViewport.AddChild(vi);
+                        renderElem.ResetRootGraphics(newSurfaceViewport.RootGfx);
+                        renderElem.SetLocation(0, 0);
+                        newSurfaceViewport.AddChild(renderElem);
                         //-----------------------------------------------------                        
-                        s_tmpHandle = newForm.Handle;//force newform to create window handle
+                        IntPtr tmpHandle = newForm.Handle;//force newform to create window handle
 
                         //-----------------------------------------------------              
 
                         var platformWinBox = new PlatformWinBoxForm(newForm);
                         topWinBox.PlatformWinBox = platformWinBox;
                         platformWinBox.UseRelativeLocationToParent = true;
-                        subForms.Add(newForm);
-                        s_tmpHandle = IntPtr.Zero;
-
+                        platformWinBox.PreviewVisibilityChanged += PlatformWinBox_PreviewVisibilityChanged;
+                        platformWinBox.PreviewBoundChanged += PlatformWinBox_PreviewBoundChanged;
+                        platformWinBox.BoundsChanged += PlatformWinBox_BoundsChanged;
+                        platformWinBox.VisibityChanged += PlatformWinBox_VisibityChanged;
+                        _subForms.Add(newForm);
                     }
                 }
                 else
                 {
-                    this.rootgfx.TopWindowRenderBox.AddChild(vi);
+                    this._rootgfx.AddChild(renderElem);
                 }
             }
             else
             {
-                this.rootgfx.TopWindowRenderBox.AddChild(vi);
+                this._rootgfx.AddChild(renderElem);
             }
+        }
+
+
+        PixelFarm.Drawing.Rectangle _winBoxAccumInvalidateArea;
+        bool _hasInvalidateAreaAccum;
+
+        void UpdateInvalidateAccumArea(PlatformWinBoxForm winform)
+        {
+            winform.GetLocalBoundsIncludeShadow(out int x, out int y, out int w, out int h);
+            if (_hasInvalidateAreaAccum)
+            {
+                _winBoxAccumInvalidateArea = PixelFarm.Drawing.Rectangle.Union(
+                    new PixelFarm.Drawing.Rectangle(x, y, w, h),
+                    _winBoxAccumInvalidateArea);
+            }
+            else
+            {
+                _winBoxAccumInvalidateArea =
+                    new PixelFarm.Drawing.Rectangle(x, y, w, h);
+
+                _hasInvalidateAreaAccum = true;
+            }
+        }
+        private void PlatformWinBox_PreviewBoundChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
+        }
+        private void PlatformWinBox_PreviewVisibilityChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
+        }
+
+        private void PlatformWinBox_VisibityChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
+
+
+            _rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
+            _hasInvalidateAreaAccum = false;
+        }
+
+        private void PlatformWinBox_BoundsChanged(object sender, EventArgs e)
+        {
+            UpdateInvalidateAccumArea((PlatformWinBoxForm)sender);
+            _rootgfx.InvalidateRectArea(_winBoxAccumInvalidateArea);
+            _hasInvalidateAreaAccum = false;
         }
 
         public RootGraphic RootGfx
         {
             get
             {
-                return this.rootgfx;
+                return this._rootgfx;
             }
         }
         public void Close()
         {
-            this.winBridge.Close();
+            this._winBridge.Close();
         }
 
 
@@ -333,7 +443,7 @@ namespace LayoutFarm.UI
 
             UISurfaceViewportControl newViewportControl = new UISurfaceViewportControl();
             newViewportControl.Size = new System.Drawing.Size(w, h);
-            RootGraphic newRootGraphic = this.rootgfx.CreateNewOne(w, h);
+            RootGraphic newRootGraphic = this._rootgfx.CreateNewOne(w, h);
             ITopWindowEventRoot topEventRoot = null;
             if (newRootGraphic is ITopWindowEventRootProvider)
             {
@@ -342,7 +452,7 @@ namespace LayoutFarm.UI
             newViewportControl.InitRootGraphics(
                 newRootGraphic,//new root
                 topEventRoot,
-                this.innerViewportKind);
+                this._innerViewportKind);
             return newViewportControl;
         }
         //-----------
@@ -353,18 +463,27 @@ namespace LayoutFarm.UI
         AbstractCompletionWindow _form;
         bool _evalLocationRelativeToDesktop;
         System.Drawing.Point _locationRelToDesktop;
+        int _formLocalX;
+        int _formLocalY;
 
+        public event EventHandler VisibityChanged;
+        public event EventHandler BoundsChanged;
+        public event EventHandler PreviewBoundChanged;
+        public event EventHandler PreviewVisibilityChanged;
 
         public PlatformWinBoxForm(AbstractCompletionWindow form)
         {
+
             this._form = form;
+            _form.Move += (s, e) => _evalLocationRelativeToDesktop = false;
+
         }
         public bool UseRelativeLocationToParent
         {
             get;
             set;
         }
-        bool IPlatformWindowBox.Visible
+        public bool Visible
         {
             get
             {
@@ -376,15 +495,18 @@ namespace LayoutFarm.UI
                 {
                     if (!_form.Visible)
                     {
+                        PreviewVisibilityChanged?.Invoke(this, EventArgs.Empty);
                         _form.ShowForm();
+                        VisibityChanged?.Invoke(this, EventArgs.Empty);
                     }
                 }
                 else
                 {
-                    _evalLocationRelativeToDesktop = false;
                     if (_form.Visible)
                     {
+                        PreviewVisibilityChanged?.Invoke(this, EventArgs.Empty);
                         _form.Hide();
+                        VisibityChanged?.Invoke(this, EventArgs.Empty);
                     }
                 }
             }
@@ -394,28 +516,28 @@ namespace LayoutFarm.UI
             _form.Close();
             _form = null;
         }
-
-
         void IPlatformWindowBox.SetLocation(int x, int y)
         {
+            //invoke Before accept new location
+            PreviewBoundChanged?.Invoke(this, EventArgs.Empty);
+            //------------------ 
+            _formLocalX = x;
+            _formLocalY = y;
+            //Console.WriteLine("set location " + x + "," + y);
+            //
             if (this.UseRelativeLocationToParent)
             {
-                //#if DEBUG
-                //                if (!_form.IsHandleCreated)
-                //                {
-                //                }
-                //#endif
-                //1. find parent form/control  
+
                 if (!_evalLocationRelativeToDesktop)
                 {
-                    _locationRelToDesktop = new System.Drawing.Point();// _form.LinkedParentForm.Location;
+                    _locationRelToDesktop = new System.Drawing.Point();
                     if (_form.LinkedParentControl != null)
                     {
+                        //get location of this control relative to desktop
                         _locationRelToDesktop = _form.LinkedParentControl.PointToScreen(_form.LinkedParentControl.Location);
                     }
                     _evalLocationRelativeToDesktop = true;
                 }
-
                 _form.Location = new System.Drawing.Point(
                     _locationRelToDesktop.X + x,
                     _locationRelToDesktop.Y + y);
@@ -423,13 +545,32 @@ namespace LayoutFarm.UI
             else
             {
                 _form.Location = new System.Drawing.Point(x, y);
-            }
 
+            }
+            BoundsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         void IPlatformWindowBox.SetSize(int w, int h)
         {
+            PreviewBoundChanged?.Invoke(this, EventArgs.Empty);
             _form.Size = new System.Drawing.Size(w, h);
+            BoundsChanged?.Invoke(this, EventArgs.Empty);
+        }
+        public void GetLocalBounds(out int x, out int y, out int w, out int h)
+        {
+            System.Drawing.Size size = _form.Size;
+            x = _formLocalX;
+            y = _formLocalY;
+            w = size.Width;
+            h = size.Height;
+        }
+        public void GetLocalBoundsIncludeShadow(out int x, out int y, out int w, out int h)
+        {
+            System.Drawing.Size size = _form.Size;
+            x = _formLocalX;
+            y = _formLocalY;
+            w = size.Width + FormPopupShadow.SHADOW_SIZE + 5;
+            h = size.Height + FormPopupShadow.SHADOW_SIZE + 5;
         }
     }
 }

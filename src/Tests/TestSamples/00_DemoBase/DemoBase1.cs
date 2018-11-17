@@ -26,9 +26,13 @@ namespace Mini
         GLSwapBufferDelegate _swapBufferDelegate;
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
-        GLPainter _painter;
 
-        public virtual void Draw(Painter p) { }
+      
+
+        public virtual void Draw(Painter p)
+        {
+            OnGLRender(this, EventArgs.Empty);
+        }
         public void CloseDemo()
         {
             DemoClosing();
@@ -42,7 +46,7 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public virtual int Width { get; set; }
         public virtual int Height { get; set; }
-        
+
 
 
         protected virtual void DemoClosing()
@@ -57,16 +61,16 @@ namespace Mini
             set { }
         }
 
-        //----------------------------------------------------
-        //for GL
-        public virtual void BuildCustomDemoGLContext(out GLRenderSurface glsx, out GLPainter painter)
-        {
-            glsx = null;
-            painter = null;
-        }
+        ////----------------------------------------------------
+        ////for GL
+        //public virtual void BuildCustomDemoGLContext(out GLRenderSurface glsx, out GLPainter painter)
+        //{
+        //    glsx = null;
+        //    painter = null;
+        //}
         public static void InvokeGLContextReady(DemoBase demo, GLRenderSurface glsx, GLPainter painter)
         {
-            demo._painter = painter;
+            
             demo.OnGLSurfaceReady(glsx, painter);
             demo.OnReadyForInitGLShaderProgram();
         }
@@ -88,7 +92,7 @@ namespace Mini
         }
         protected virtual void OnGLRender(object sender, EventArgs args)
         {
-            this.Draw(_painter);
+            
         }
         public void InvokeGLPaint()
         {

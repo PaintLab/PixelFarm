@@ -3,8 +3,11 @@ namespace LayoutFarm.UI
 {
     public enum InnerViewportKind
     {
+        PureAgg,
+        AggOnGLES,
         GdiPlus,
+        GdiPlusOnGLES, //temporary! 
         Skia,
-        GL
+        GLES
     }
 }

@@ -22,17 +22,17 @@ namespace LayoutFarm.Text
         }
         internal void SetPostArrangeLineSize(int lineWidth, int lineHeight)
         {
-            this.actualLineWidth = lineWidth;
-            this.actualLineHeight = lineHeight;
+            this._actualLineWidth = lineWidth;
+            this._actualLineHeight = lineHeight;
           
         }
         public void LocalSuspendLineReArrange()
         {
-            lineFlags |= LOCAL_SUSPEND_LINE_REARRANGE;
+            _lineFlags |= LOCAL_SUSPEND_LINE_REARRANGE;
         }
         public void LocalResumeLineReArrange()
         {
-            lineFlags &= ~LOCAL_SUSPEND_LINE_REARRANGE;
+            _lineFlags &= ~LOCAL_SUSPEND_LINE_REARRANGE;
             LinkedListNode<EditableRun> curNode = this.First;
             int cx = 0;
             while (curNode != null)

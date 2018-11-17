@@ -71,7 +71,9 @@ namespace OpenTK.Platform.Windows
 
         private static void LoadOpenGL()
         {
-            OpenGLHandle = Functions.LoadLibrary(OpenGLName);
+
+
+            OpenGLHandle = OpenTK.Platform.Egl.ESLib.GetGLESv2();// Functions.LoadLibrary(OpenGLName);
             if (OpenGLHandle == IntPtr.Zero)
             {
                 throw new ApplicationException(String.Format("LoadLibrary(\"{0}\") call failed with code {1}",
@@ -82,7 +84,7 @@ namespace OpenTK.Platform.Windows
 
         public override INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
         {
-            
+
             return new WinGLNative(x, y, width, height, title, options, device);
         }
 

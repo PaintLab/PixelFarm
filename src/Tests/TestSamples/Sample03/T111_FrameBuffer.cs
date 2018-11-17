@@ -13,7 +13,7 @@ namespace OpenTkEssTest
     {
         GLRenderSurface _glsx;
         GLPainter painter;
-        FrameBuffer frameBuffer;
+        Framebuffer frameBuffer;
         bool isInit;
         protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
@@ -23,7 +23,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            frameBuffer = _glsx.CreateFrameBuffer(max, max);
+            frameBuffer = _glsx.CreateFramebuffer(max, max);
         }
         protected override void DemoClosing()
         {
@@ -33,8 +33,7 @@ namespace OpenTkEssTest
         {
             _glsx.SmoothMode = SmoothMode.Smooth;
             _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsx.Clear(PixelFarm.Drawing.Color.White);
-            _glsx.ClearColorBuffer();
+            _glsx.Clear();
             //-------------------------------
             if (!isInit)
             {
@@ -46,22 +45,27 @@ namespace OpenTkEssTest
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer.FrameBufferId);
                 //--------
                 //do draw to frame buffer here
-                GL.ClearColor(OpenTK.Graphics.Color4.Red);
+                GL.ClearColor(OpenTK.Graphics.Color4.Red); //clear with red color
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 //------------------------------------------------------------------------------------
-
 
 
                 //------------------------------------------------------------------------------------ 
                 GL.BindTexture(TextureTarget.Texture2D, frameBuffer.TextureId);
                 GL.GenerateMipmap(TextureTarget.Texture2D);
                 GL.BindTexture(TextureTarget.Texture2D, 0);
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);//switch to default framewbuffer
                 //------------------------------------------------------------------------------------
 
+                //create gl bmp from framebuffer 
                 GLBitmap bmp = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
-                bmp.IsBigEndianPixel = true;
-                _glsx.DrawImage(bmp, 15, 300);
+                bmp.IsBigEndianPixel = true;//since this is created from FrameBuffer so set BigEndianPixel = true
+
+
+                _glsx.DrawImage(bmp, 15, 0);
+
+                //
+                GL.ClearColor(OpenTK.Graphics.Color4.White); //clear with red color
             }
             else
             {
