@@ -30,7 +30,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
 
 
-            string fontfile = YourImplementation.BootStrapWinGdi.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Regular).FontPath;
+            string fontfile = YourImplementation.FrameworkInitWinGDI.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Regular).FontPath;
 
             this.FillBG = true;
             int size = 72;

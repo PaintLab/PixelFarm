@@ -9,7 +9,7 @@ using YourImplementation;
 namespace Mini
 {
     class CpuBlitOnGLESAppModule
-    {
+    {//FOR DEMO PROJECT
         //hardware renderer part=> GLES
         //software renderer part => Pure Agg
 

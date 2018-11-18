@@ -8,7 +8,7 @@ using PixelFarm.CpuBlit;
 
 namespace YourImplementation
 {
-    class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
+    public class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
     {
         public override bool DataExists(string dataName)
         {

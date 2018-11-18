@@ -123,14 +123,17 @@ namespace LayoutFarm
         }
         public override string ToString()
         {
+#if DEBUG
+            return dbug_GetBoundInfo();
+#endif
             return string.Empty;
         }
         public string dbug_GetBoundInfo()
         {
             Rectangle r = this.RectBounds;
             string output = "{" + r.X + "," + r.Y + "," + r.Width + "," + r.Height + ";";
-                //";dw=" + this.Width +
-                //";dh=" + this.Height;
+            //";dw=" + this.Width +
+            //";dh=" + this.Height;
             return output;
         }
         public string dbug_GetLayoutInfo()
@@ -162,7 +165,7 @@ namespace LayoutFarm
                 }
             }
 
-         
+
             return info;
         }
         public int dbug_BeginArr;

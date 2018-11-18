@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;GL_ENABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -37,6 +37,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
+      <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
+    </Compile>
     <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
     <Compile Include="Demo1.1\1.14_Demo_EasingFuncs.cs" />
     <Compile Include="Demo1.1\1.15_Demo_Drag2.cs" />
@@ -77,7 +80,7 @@
     <Compile Include="Demo1\1.7_Demo_ListView.cs" />
     <Compile Include="Demo1\1.8_Demo_Hinge.cs" />
     <Compile Include="Demo1\1.9_Demo_TreeView.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="0_Start\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />
@@ -127,6 +130,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography.One\Typography.One.csproj">
+      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
+      <Name>Typography.One</Name>
     </ProjectReference>
     <ProjectReference Include="..\WinFormTestBed\WinFormTestBed.csproj">
       <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>

@@ -30,9 +30,7 @@ namespace PixelFarm.DrawingGL
         {
             get { return this._memBmp.Height; }
         }
-
-        //
-        public bool MayNeedUpdate { get; set; }
+         
 
     }
 }
