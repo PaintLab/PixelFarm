@@ -26,7 +26,7 @@ namespace YourImplementation
             OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
             //use common font loader
             //user can create and use other font-loader
-            CommonTextServiceSetup.SetupDefaultValues();
+            //CommonTextServiceSetup.SetupDefaultValues();
             PixelFarm.Drawing.GLES2.GLES2Platform.SetInstalledTypefaceProvider(CommonTextServiceSetup.FontLoader);
         }
     }

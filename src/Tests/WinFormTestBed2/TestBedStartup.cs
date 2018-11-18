@@ -9,13 +9,11 @@ namespace YourImplementation
         public static void Setup()
         {
 
-
+            CommonTextServiceSetup.SetupDefaultValues();
 #if GL_ENABLE
             FrameworkInitGLES.SetupDefaultValues();
 #endif
-            //you can use your font loader
-
-            CommonTextServiceSetup.SetupDefaultValues();
+            //you can use your font loader 
             PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 
