@@ -1103,14 +1103,7 @@ namespace PixelFarm.DrawingGL
             GL.Viewport(x,
                 (OriginKind == GLRenderSurfaceOrigin.LeftTop) ? -y : y,
                 _width,
-                _height);
-            //
-
-            //GL.MatrixMode(MatrixMode.Projection);
-            //GL.LoadIdentity();
-            //GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);
-            //GL.MatrixMode(MatrixMode.Modelview);
-            //GL.LoadIdentity();
+                _height); 
         }
         public void EnableClipRect()
         {
