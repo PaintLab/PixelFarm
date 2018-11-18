@@ -9,13 +9,11 @@ namespace YourImplementation
         public static void Setup()
         {
 
-
-#if GL_ENABLE
-            BootStrapOpenGLES2.SetupDefaultValues();
-#endif
-            //you can use your font loader
-            
             CommonTextServiceSetup.SetupDefaultValues();
+#if GL_ENABLE
+            FrameworkInitGLES.SetupDefaultValues();
+#endif
+            //you can use your font loader 
             PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
 
@@ -28,7 +26,7 @@ namespace YourImplementation
             });
 
             //you can use your font loader
-            YourImplementation.BootStrapWinGdi.SetupDefaultValues();
+            YourImplementation.FrameworkInitWinGDI.SetupDefaultValues();
             //default text breaker, this bridge between 
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
         }
@@ -46,7 +44,8 @@ namespace YourImplementation
 #if DEBUG
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
-        public static void RunSpecificDemo(LayoutFarm.App demo)
+
+        public static void RunSpecificDemo(LayoutFarm.App demo, InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             //-------------------------------
             Application.EnableVisualStyles();
@@ -54,8 +53,7 @@ namespace YourImplementation
             ////------------------------------- 
             //1. select view port kind
 
-            //InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlus;
-            InnerViewportKind innerViewportKind = InnerViewportKind.PureAgg;
+            
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
 
             Form formCanvas = FormCanvasHelper.CreateNewFormCanvas(
@@ -63,7 +61,9 @@ namespace YourImplementation
                workingArea.Height,
                innerViewportKind,
                out UISurfaceViewportControl latestviewport);
+#if DEBUG
             formCanvas.Text = innerViewportKind.ToString();
+#endif
 
             demo.Start(new LayoutFarm.AppHostWinForm(latestviewport));
             latestviewport.TopDownRecalculateContent();

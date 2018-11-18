@@ -13,7 +13,7 @@ namespace Mini
     //This is a helper class
     class CpuBlitAppModule
     {
-
+        //FOR DEMO PROJECT
         int _myWidth;
         int _myHeight;
         UISurfaceViewportControl _surfaceViewport;

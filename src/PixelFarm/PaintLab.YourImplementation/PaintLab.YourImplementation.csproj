@@ -35,9 +35,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_Bootstrap\CommonTextServiceSetup.cs" />
-    <Compile Include="0_Bootstrap\BootStrapOpenGLES2.cs" />
-    <Compile Include="0_Bootstrap\BootStrapWinGdi.cs" />
+    <Compile Include="0_FrameworkInit\CommonTextServiceSetup.cs" />
+    <Compile Include="0_FrameworkInit\FrameworkInitGLES.cs" />
+    <Compile Include="0_FrameworkInit\FrameworkInitWinGDI.cs" />
     <Compile Include="3_RenderTreeRoot\0_MyRootGraphic.cs" />
     <Compile Include="3_RenderTreeRoot\TopWindowRenderBox.cs" />
     <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
@@ -96,7 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_Bootstrap\StorageProviderImpl.cs" />
+    <Compile Include="0_FrameworkInit\StorageProviderImpl.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
-      <Link>IcuSimpleTextFileDictionaryProvider.cs</Link>
+      <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
     <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
     <Compile Include="Demo1.1\1.14_Demo_EasingFuncs.cs" />
@@ -80,7 +80,7 @@
     <Compile Include="Demo1\1.7_Demo_ListView.cs" />
     <Compile Include="Demo1\1.8_Demo_Hinge.cs" />
     <Compile Include="Demo1\1.9_Demo_TreeView.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="0_Start\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />

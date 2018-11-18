@@ -13,9 +13,6 @@ namespace YourImplementation
         static bool s_isInit;
         static Typography.FontManagement.InstalledTypefaceCollection s_intalledTypefaces;
 
-#if DEBUG
-        static LocalFileStorageProvider s_localFileStorageProvider;
-#endif
 
         public static IInstalledTypefaceProvider FontLoader
         {
@@ -99,13 +96,6 @@ namespace YourImplementation
             //--------------------
             InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);
 
-
-
-#if DEBUG
-            //1. Storage provider
-            s_localFileStorageProvider = new LocalFileStorageProvider();
-
-#endif
         }
 
 

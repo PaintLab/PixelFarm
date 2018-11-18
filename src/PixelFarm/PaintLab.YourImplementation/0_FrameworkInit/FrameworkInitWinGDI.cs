@@ -5,7 +5,7 @@ namespace YourImplementation
 {
 
 
-    public static class BootStrapWinGdi
+    public static class FrameworkInitWinGDI
     {
         public static IInstalledTypefaceProvider GetFontLoader()
         {
@@ -13,7 +13,7 @@ namespace YourImplementation
         }
         public static void SetupDefaultValues()
         {
-            CommonTextServiceSetup.SetupDefaultValues();
+            //CommonTextServiceSetup.SetupDefaultValues();
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(CommonTextServiceSetup.FontLoader);
         }
     }

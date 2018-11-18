@@ -130,7 +130,6 @@ namespace PaintLab.Svg
             paintArgs.P = painter;
             return context;
         }
-
     }
 
 
@@ -158,6 +157,7 @@ namespace PaintLab.Svg
     }
     public class VgTextNodeRenderElement : SvgRenderElementBase
     {
+        public VgTextNodeRenderElement() { }
         public string TextContent { get; set; }
         public override SvgRenderElementBase Clone()
         {
@@ -1307,7 +1307,7 @@ namespace PaintLab.Svg
             _boundRect = new RectD(this.X, this.Y, 2, 2);
         }
 
-        
+
         public RectD GetBounds()
         {
 

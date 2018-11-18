@@ -2,7 +2,6 @@
 
 using System;
 using PixelFarm.DrawingGL;
-using PixelFarm.CpuBlit;
 
 using PixelFarm.Drawing;
 using LayoutFarm;
@@ -11,8 +10,13 @@ using LayoutFarm.UI;
 
 namespace Mini
 {
+
+
+
     class GLESAppModule
     {
+        //FOR DEMO PROJECT
+
         //hardware renderer part=> GLES
         //software renderer part => not specific now
 
@@ -22,11 +26,11 @@ namespace Mini
         RootGraphic _rootGfx;
         //
         DemoUI _demoUI;
-        DemoBase _demoBase; 
-        OpenTK.MyGLControl _glControl; 
+        DemoBase _demoBase;
+        OpenTK.MyGLControl _glControl;
         public GLESAppModule()
         {
-        } 
+        }
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
         {
 
