@@ -10,7 +10,7 @@ namespace LayoutFarm
 #if DEBUG
             if (ui.ParentUI != null)
             {
-
+                throw new System.NotSupportedException();
             }
 #endif
             appHost.AddChild(ui.GetPrimaryRenderElement(appHost.RootGfx), ui);

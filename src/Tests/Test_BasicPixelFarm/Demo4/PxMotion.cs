@@ -7,7 +7,7 @@ using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.VectorMath;
 
- 
+
 using PaintLab.Svg;
 using LayoutFarm.RenderBoxes;
 
@@ -81,7 +81,7 @@ namespace LayoutFarm.UI
             if (_spriteShape == null)
             {
                 //TODO: review bounds again
-                RectD bounds = _vgRenderVx.GetBounds();
+                RectD bounds = _vgRenderVx.GetRectBounds();
                 _spriteShape = new SpriteShape(_vgRenderVx, rootgfx, (int)bounds.Width, (int)bounds.Height);
                 _spriteShape.SetController(this);//listen event 
                 _spriteShape.SetLocation((int)_posX, (int)_posY);
@@ -135,10 +135,10 @@ namespace LayoutFarm.UI
         }
 
 
-        public SvgRenderElement HitTest(float x, float y, bool withSupPart)
+        public VgVisualElement HitTest(float x, float y, bool withSupPart)
         {
-            SvgRenderElement result = null;
-            using (VgHitChainPool.Borrow(out SvgHitChain svgHitChain))
+            VgVisualElement result = null;
+            using (VgHitChainPool.Borrow(out VgHitChain svgHitChain))
             {
                 svgHitChain.WithSubPartTest = withSupPart;
                 if (HitTest(x, y, svgHitChain))
@@ -152,7 +152,7 @@ namespace LayoutFarm.UI
             }
             return result;
         }
-        public bool HitTest(float x, float y, SvgHitChain svgHitChain)
+        public bool HitTest(float x, float y, VgHitChain svgHitChain)
         {
             RectD bounds = _spriteShape.Bounds;
             if (bounds.Contains(x, y))
@@ -171,7 +171,7 @@ namespace LayoutFarm.UI
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
                     {
-                        SvgRenderElement svgElem = svgHitChain.GetLastHitInfo().svg;
+                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().svg;
                         //if yes then change its bg color
                         svgElem.VisualSpec.FillColor = Color.Red;
                         _spriteShape.InvalidateGraphics();
@@ -230,7 +230,7 @@ namespace LayoutFarm.UI
         {
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
 
             //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
@@ -390,12 +390,12 @@ namespace LayoutFarm.UI
         public void UpdateBounds()
         {
             _svgRenderVx.InvalidateBounds();
-            this._boundingRect = _svgRenderVx.GetBounds();
+            this._boundingRect = _svgRenderVx.GetRectBounds();
 
             _boundingRect.Offset(this.X, this.Y);
             SetSize((int)_boundingRect.Width, (int)_boundingRect.Height);
         }
-        public void HitTestOnSubPart(SvgHitChain hitChain)
+        public void HitTestOnSubPart(VgHitChain hitChain)
         {
 
             _svgRenderVx._renderE.HitTest(hitChain);
@@ -429,16 +429,16 @@ namespace LayoutFarm.UI
     public static class VgHitChainPool
     {
 
-        public static TempContext<SvgHitChain> Borrow(out SvgHitChain hitTestArgs)
+        public static TempContext<VgHitChain> Borrow(out VgHitChain hitTestArgs)
         {
-            if (!Temp<SvgHitChain>.IsInit())
+            if (!Temp<VgHitChain>.IsInit())
             {
-                Temp<SvgHitChain>.SetNewHandler(
-                    () => new SvgHitChain(),
+                Temp<VgHitChain>.SetNewHandler(
+                    () => new VgHitChain(),
                     ch => ch.Clear()
                     );
             }
-            return Temp<SvgHitChain>.Borrow(out hitTestArgs);
+            return Temp<VgHitChain>.Borrow(out hitTestArgs);
         }
 
     }

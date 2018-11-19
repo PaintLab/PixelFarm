@@ -831,94 +831,106 @@ namespace PaintLab.Svg
                     {
                         SvgImageSpec imgSpec = this._visualSpec as SvgImageSpec;
                         //request from resource
-                        if (imgSpec.ImageSrc != null)
+
+                        bool isOK = true;
+
+                        if (this.ImageBinder == null)
                         {
-                            if (this.ImageBinder == null)
+                            isOK = false;
+                            if (imgSpec.ImageSrc != null)
                             {
                                 //create new 
                                 this.ImageBinder = new VgImageBinder(imgSpec.ImageSrc);
+                                isOK = true;
                             }
-                            bool tryLoadOnce = false;
-                            EVAL_STATE:
-                            switch (this.ImageBinder.State)
-                            {
-                                case LayoutFarm.BinderState.Unload:
-                                    if (!tryLoadOnce)
+                        }
+
+                        if (!isOK)
+                        {
+                            return;
+                        }
+
+                        bool tryLoadOnce = false;
+                        EVAL_STATE:
+                        switch (this.ImageBinder.State)
+                        {
+                            case LayoutFarm.BinderState.Unload:
+                                if (!tryLoadOnce)
+                                {
+                                    tryLoadOnce = true;
+
+                                    _renderRoot.RequestImageAsync(this.ImageBinder, this, this);
+                                    goto EVAL_STATE;
+                                }
+                                break;
+                            case LayoutFarm.BinderState.Loading: { } break;
+                            //
+                            case LayoutFarm.BinderState.Loaded:
+                                {
+                                    //check if we need scale or not
+
+                                    Image img = this.ImageBinder.Image;
+
+                                    if (currentTx != null)
                                     {
-                                        tryLoadOnce = true;
-
-                                        _renderRoot.RequestImageAsync(this.ImageBinder, this, this);
-                                        goto EVAL_STATE;
-                                    }
-                                    break;
-                                case LayoutFarm.BinderState.Loading: { } break;
-                                //
-                                case LayoutFarm.BinderState.Loaded:
-                                    {
-                                        //check if we need scale or not
-
-                                        Image img = this.ImageBinder.Image;
-
-                                        if (currentTx != null)
+                                        Affine aff = currentTx as Affine;
+                                        if (this._imgW == 0 || this._imgH == 0)
                                         {
-                                            Affine aff = currentTx as Affine;
-                                            if (this._imgW == 0 || this._imgH == 0)
-                                            {
-                                                //only X,and Y
-                                                RenderQuality prevQ = p.RenderQuality;
-                                                //p.RenderQuality = RenderQuality.Fast;
-                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
-                                                p.RenderQuality = prevQ;
-                                            }
-                                            else if (_imgW == img.Width && _imgH == img.Height)
-                                            {
-                                                RenderQuality prevQ = p.RenderQuality;
-                                                //p.RenderQuality = RenderQuality.Fast;
-                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
-                                                p.RenderQuality = prevQ;
-                                            }
-                                            else
-                                            {
-
-                                                RenderQuality prevQ = p.RenderQuality;
-                                                //p.RenderQuality = RenderQuality.Fast;
-                                                p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
-                                                p.RenderQuality = prevQ;
-                                            }
+                                            //only X,and Y
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            //p.RenderQuality = RenderQuality.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                            p.RenderQuality = prevQ;
+                                        }
+                                        else if (_imgW == img.Width && _imgH == img.Height)
+                                        {
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            //p.RenderQuality = RenderQuality.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                            p.RenderQuality = prevQ;
                                         }
                                         else
                                         {
-                                            if (this._imgW == 0 || this._imgH == 0)
-                                            {
-                                                //only X,and Y
-                                                RenderQuality prevQ = p.RenderQuality;
-                                                p.RenderQuality = RenderQuality.Fast;
-                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                                p.RenderQuality = prevQ;
-                                            }
-                                            else if (_imgW == img.Width && _imgH == img.Height)
-                                            {
-                                                RenderQuality prevQ = p.RenderQuality;
-                                                p.RenderQuality = RenderQuality.Fast;
-                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-                                                p.RenderQuality = prevQ;
-                                            }
-                                            else
-                                            {
 
-                                                RenderQuality prevQ = p.RenderQuality;
-                                                p.RenderQuality = RenderQuality.Fast;
-                                                p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
-
-                                                p.RenderQuality = prevQ;
-                                            }
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            //p.RenderQuality = RenderQuality.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                            p.RenderQuality = prevQ;
                                         }
-
                                     }
-                                    break;
+                                    else
+                                    {
+                                        if (this._imgW == 0 || this._imgH == 0)
+                                        {
+                                            //only X,and Y
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQuality.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.RenderQuality = prevQ;
+                                        }
+                                        else if (_imgW == img.Width && _imgH == img.Height)
+                                        {
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQuality.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+                                            p.RenderQuality = prevQ;
+                                        }
+                                        else
+                                        {
 
-                            }
+                                            RenderQuality prevQ = p.RenderQuality;
+                                            p.RenderQuality = RenderQuality.Fast;
+                                            p.DrawImage(this.ImageBinder.Image, this._imgX, this._imgY);
+
+                                            p.RenderQuality = prevQ;
+                                        }
+                                    }
+
+                                }
+                                break;
+
                         }
+
                     }
                     break;
                 case WellknownSvgElementName.Text:

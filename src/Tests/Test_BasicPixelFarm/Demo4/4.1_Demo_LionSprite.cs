@@ -24,7 +24,7 @@ namespace LayoutFarm
             {
                 if (e.Button == UIMouseButtons.Right)
                 {
-                    SvgRenderElement foundE = _mySprite.HitTest(e.X, e.Y, true);
+                    VgVisualElement foundE = _mySprite.HitTest(e.X, e.Y, true);
                     if (foundE != null)
                     {
                         foundE.VisualSpec.FillColor = Color.Red;
