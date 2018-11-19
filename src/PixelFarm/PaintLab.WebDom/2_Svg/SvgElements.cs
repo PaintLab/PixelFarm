@@ -100,6 +100,10 @@ namespace PaintLab.Svg
         /// use
         /// </summary>
         Use,
+        /// <summary>
+        /// stop
+        /// </summary>
+        Stop,
 
         /// <summary>
         /// my extension
@@ -167,6 +171,7 @@ namespace PaintLab.Svg
                     case WellknownSvgElementName.LinearGradient: return "linearGradient";
                     case WellknownSvgElementName.RadialGradient: return "radialGradient";
                     case WellknownSvgElementName.Use: return "use";
+                    case WellknownSvgElementName.Stop: return "stop";
                 }
             }
         }
@@ -265,6 +270,8 @@ namespace PaintLab.Svg
                     return new SvgElement(WellknownSvgElementName.Ellipse, new SvgEllipseSpec());
                 case "use":
                     return new SvgElement(WellknownSvgElementName.Use, new SvgUseSpec());
+                case "stop":
+                    return new SvgElement(WellknownSvgElementName.Stop, new SvgColorStopSpec());
             }
         }
 
@@ -518,6 +525,9 @@ namespace PaintLab.Svg
                     break;
                 case "y2":
                     spec.Y2 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "gradientTransform":
+                    SvgParser.ParseTransform(attrValue, spec);
                     break;
             }
         }
