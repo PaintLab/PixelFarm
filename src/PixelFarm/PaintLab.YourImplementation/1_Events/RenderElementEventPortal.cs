@@ -11,10 +11,12 @@ namespace LayoutFarm.UI
         //current hit chain        
         HitChain _previousChain = new HitChain();
         Stack<HitChain> _hitChainStack = new Stack<HitChain>();
+        readonly RenderElement _topRenderElement;
+
 #if DEBUG
         int dbugMsgChainVersion;
 #endif
-        readonly RenderElement _topRenderElement;
+
         public RenderElementEventPortal(RenderElement topRenderElement)
         {
             _topRenderElement = topRenderElement;
@@ -25,38 +27,20 @@ namespace LayoutFarm.UI
 
         HitChain GetFreeHitChain()
         {
-            //TODO: review here again
-
-            return new HitChain();
-            //            if (hitChainStack.Count > 0)
-            //            {                    
-            //                return hitChainStack.Pop();
-            //            }
-            //            else
-            //            {
-
-            //#if DEBUG
-            //                var hitChain = new HitChain();
-            //                hitChain.dbugHitTracker = this.dbugRootGraphics.dbugHitTracker;
-            //                return hitChain;
-            //#else
-            //                return new HitChain();
-            //#endif
-
-            //            }
+            return (_hitChainStack.Count > 0) ? _hitChainStack.Pop() : new HitChain();
         }
         void SwapHitChain(HitChain hitChain)
         {
+
+            if (_previousChain != null)
+            {
+
+                _hitChainStack.Push(_previousChain);
+            }
+
             this._previousChain = hitChain;
             //temp fix here 
             this._previousChain.ClearAll();
-            // hitChain.ClearAll();
-            //if (isDragging && hitChain.Count < 2)
-            //{
-
-            //}
-            //hitChain.ClearAll();
-            //this.hitChainStack.Push(hitChain);
 
         }
 
@@ -203,9 +187,8 @@ namespace LayoutFarm.UI
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
 
 
-            int hitCount = hitPointChain.Count;
 
-            if (hitCount > 0)
+            if (hitPointChain.Count > 0)
             {
                 //------------------------------
                 //1. origin object 
@@ -277,7 +260,9 @@ namespace LayoutFarm.UI
                 }
             }
 #endif
+
             SwapHitChain(hitPointChain);
+
             e.StopPropagation();
 #if DEBUG
             if (local_msgVersion != dbugMsgChainVersion)
@@ -365,8 +350,8 @@ namespace LayoutFarm.UI
             _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, this._previousChain, e.X, e.Y);
-            int hitCount = hitPointChain.Count;
-            if (hitCount > 0)
+
+            if (hitPointChain.Count > 0)
             {
                 SetEventOrigin(e, hitPointChain);
                 //--------------------------------------------------------------- 

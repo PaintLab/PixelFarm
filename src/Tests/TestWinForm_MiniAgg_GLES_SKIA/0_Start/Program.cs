@@ -16,26 +16,19 @@ namespace Mini
         [STAThread]
         static void Main()
         {
-            //PaintLab.Svg.SvgParser parser = new PaintLab.Svg.SvgParser();
-            //string svgContent = System.IO.File.ReadAllText("Samples/arrow2.svg");
-            //parser.ParseDocument(new LayoutFarm.WebLexer.TextSnapshot(svgContent));
 
 
 
-
-            RootDemoPath.Path = @"..\Data";
             YourImplementation.TestBedStartup.Setup();
-            YourImplementation.LocalFileStorageProvider file_storageProvider = new YourImplementation.LocalFileStorageProvider();
-
             //---------------------------------------------------
+            PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider());
+
+
+
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
-            PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
-#if GL_ENABLE
-            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
-#endif
-            //you can use your font loader
-            YourImplementation.BootStrapWinGdi.SetupDefaultValues();
+
+
             //default text breaker, this bridge between              
 #if DEBUG
             //PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
@@ -72,6 +65,12 @@ namespace Mini
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
             //----------------------------
 
+
+
+            //app specfic
+            RootDemoPath.Path = @"..\Data";//***
+
+            //----------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());

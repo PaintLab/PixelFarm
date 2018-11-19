@@ -505,7 +505,7 @@ namespace PixelFarm.DrawingGL
         }
 
         public void DrawGlyphImageWithCopy_VBO(TextureCoordVboBuilder vboBuilder)
-        {   
+        {
             _bgraImgTextureShader.DrawWithVBO(vboBuilder);
         }
         public void LoadTexture1(GLBitmap bmp)
@@ -1099,14 +1099,11 @@ namespace PixelFarm.DrawingGL
 
         public void SetCanvasOrigin(int x, int y)
         {
-            //int originalW = 800;
-            //set new viewport
-            GL.Viewport(x, y, _width, _height);
-            //GL.MatrixMode(MatrixMode.Projection);
-            //GL.LoadIdentity();
-            //GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);
-            //GL.MatrixMode(MatrixMode.Modelview);
-            //GL.LoadIdentity();
+
+            GL.Viewport(x,
+                (OriginKind == GLRenderSurfaceOrigin.LeftTop) ? -y : y,
+                _width,
+                _height); 
         }
         public void EnableClipRect()
         {

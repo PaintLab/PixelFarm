@@ -13,7 +13,7 @@ namespace PixelFarm.CpuBlit
         {
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
 
             //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");

@@ -13,7 +13,7 @@ namespace LayoutFarm.RenderBoxes
         public int dbug_ValidateCount = 0;
 #endif
 
-        protected int layerFlags;
+
         protected const int IS_LAYER_HIDDEN = 1 << (14 - 1);
         protected const int IS_GROUND_LAYER = 1 << (15 - 1);
         protected const int MAY_HAS_OTHER_OVERLAP_CHILD = 1 << (16 - 1);
@@ -23,9 +23,13 @@ namespace LayoutFarm.RenderBoxes
         protected const int ARRANGEMENT_VALID = 1 << (23 - 1);
         protected const int HAS_CALCULATE_SIZE = 1 << (24 - 1);
         protected const int FLOWLAYER_HAS_MULTILINE = 1 << (25 - 1);
+        //
+
+        protected int _layerFlags;
         protected RenderElement _owner;
-        int postCalculateContentWidth;
-        int postCalculateContentHeight;
+        int _postCalculateContentWidth;
+        int _postCalculateContentHeight;
+
         public RenderElementLayer(RenderElement owner)
         {
             this._owner = owner;
@@ -44,13 +48,13 @@ namespace LayoutFarm.RenderBoxes
         {
             get
             {
-                return (layerFlags & IS_LAYER_HIDDEN) == 0;
+                return (_layerFlags & IS_LAYER_HIDDEN) == 0;
             }
             set
             {
-                layerFlags = value ?
-                    layerFlags & ~IS_LAYER_HIDDEN :
-                    layerFlags | IS_LAYER_HIDDEN;
+                _layerFlags = value ?
+                    _layerFlags & ~IS_LAYER_HIDDEN :
+                    _layerFlags | IS_LAYER_HIDDEN;
             }
         }
 
@@ -58,7 +62,7 @@ namespace LayoutFarm.RenderBoxes
         {
             get
             {
-                return new Size(postCalculateContentWidth, postCalculateContentHeight);
+                return new Size(_postCalculateContentWidth, _postCalculateContentHeight);
             }
         }
         protected void OwnerInvalidateGraphic()
@@ -72,24 +76,24 @@ namespace LayoutFarm.RenderBoxes
 
         protected void BeginDrawingChildContent()
         {
-            layerFlags |= CONTENT_DRAWING;
+            _layerFlags |= CONTENT_DRAWING;
         }
         protected void FinishDrawingChildContent()
         {
-            layerFlags &= ~CONTENT_DRAWING;
+            _layerFlags &= ~CONTENT_DRAWING;
         }
 
         public bool DoubleBackCanvasWidth
         {
             get
             {
-                return (layerFlags & DOUBLE_BACKCANVAS_WIDTH) != 0;
+                return (_layerFlags & DOUBLE_BACKCANVAS_WIDTH) != 0;
             }
             set
             {
-                layerFlags = value ?
-                    layerFlags | DOUBLE_BACKCANVAS_WIDTH :
-                    layerFlags & ~DOUBLE_BACKCANVAS_WIDTH;
+                _layerFlags = value ?
+                    _layerFlags | DOUBLE_BACKCANVAS_WIDTH :
+                    _layerFlags & ~DOUBLE_BACKCANVAS_WIDTH;
             }
         }
 
@@ -97,13 +101,13 @@ namespace LayoutFarm.RenderBoxes
         {
             get
             {
-                return (layerFlags & DOUBLE_BACKCANVAS_HEIGHT) != 0;
+                return (_layerFlags & DOUBLE_BACKCANVAS_HEIGHT) != 0;
             }
             set
             {
-                layerFlags = value ?
-                    layerFlags | DOUBLE_BACKCANVAS_HEIGHT :
-                    layerFlags & ~DOUBLE_BACKCANVAS_HEIGHT;
+                _layerFlags = value ?
+                    _layerFlags | DOUBLE_BACKCANVAS_HEIGHT :
+                    _layerFlags & ~DOUBLE_BACKCANVAS_HEIGHT;
             }
         }
         protected void SetDoubleCanvas(bool useWithWidth, bool useWithHeight)
@@ -114,15 +118,15 @@ namespace LayoutFarm.RenderBoxes
         protected void SetPostCalculateLayerContentSize(int width, int height)
         {
             ValidateCalculateContentSize();
-            postCalculateContentWidth = width;
-            postCalculateContentHeight = height;
+            _postCalculateContentWidth = width;
+            _postCalculateContentHeight = height;
         }
 
         protected void SetPostCalculateLayerContentSize(Size s)
         {
             ValidateCalculateContentSize();
-            postCalculateContentWidth = s.Width;
-            postCalculateContentHeight = s.Height;
+            _postCalculateContentWidth = s.Width;
+            _postCalculateContentHeight = s.Height;
         }
 
         public abstract bool HitTestCore(HitChain hitChain);
@@ -137,19 +141,19 @@ namespace LayoutFarm.RenderBoxes
             this.dbug_ValidateCount++;
 #endif
 
-            layerFlags |= ARRANGEMENT_VALID;
+            _layerFlags |= ARRANGEMENT_VALID;
         }
 
         bool NeedReArrangeContent
         {
             get
             {
-                return (layerFlags & ARRANGEMENT_VALID) == 0;
+                return (_layerFlags & ARRANGEMENT_VALID) == 0;
             }
         }
         void ValidateCalculateContentSize()
         {
-            this.layerFlags |= HAS_CALCULATE_SIZE;
+            this._layerFlags |= HAS_CALCULATE_SIZE;
         }
 
 #if DEBUG

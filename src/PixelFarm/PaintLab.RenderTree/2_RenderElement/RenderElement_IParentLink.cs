@@ -11,7 +11,7 @@ namespace LayoutFarm
 #if DEBUG
         public bool dbugBreak;
 #endif
-        internal LinkedListNode<RenderElement> internalLinkedNode;
+        internal LinkedListNode<RenderElement> _internalLinkedNode;
         protected virtual bool _MayHasOverlapChild()
         {
 
@@ -39,7 +39,7 @@ namespace LayoutFarm
             //called from child node
             if (this._MayHasOverlapChild())
             {
-                var child_internalLinkedNode = afterThisChild.internalLinkedNode;
+                var child_internalLinkedNode = afterThisChild._internalLinkedNode;
                 if (child_internalLinkedNode == null)
                 {
                     return null;

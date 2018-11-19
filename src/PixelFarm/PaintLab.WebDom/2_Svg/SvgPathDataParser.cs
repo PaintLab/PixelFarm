@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 namespace PaintLab.Svg
 {
-    public class SvgPathDataParser
+    public class VgPathDataParser
     {
 
 #if DEBUG

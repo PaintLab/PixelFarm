@@ -6,14 +6,14 @@ namespace LayoutFarm.RenderBoxes
 {
     class PlainLayer : RenderElementLayer
     {
-        LinkedList<RenderElement> myElements = new LinkedList<RenderElement>();
+        LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
         public PlainLayer(RenderElement owner)
             : base(owner)
         {
         }
         public override IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
-            LinkedListNode<RenderElement> cur = myElements.Last;
+            LinkedListNode<RenderElement> cur = _myElements.Last;
             while (cur != null)
             {
                 yield return cur.Value;
@@ -22,7 +22,7 @@ namespace LayoutFarm.RenderBoxes
         }
         public override IEnumerable<RenderElement> GetRenderElementIter()
         {
-            LinkedListNode<RenderElement> cur = myElements.First;
+            LinkedListNode<RenderElement> cur = _myElements.First;
             while (cur != null)
             {
                 yield return cur.Value;
@@ -33,14 +33,14 @@ namespace LayoutFarm.RenderBoxes
 
         public void AddChild(RenderElement re)
         {
-            re.internalLinkedNode = myElements.AddLast(re);
+            re._internalLinkedNode = _myElements.AddLast(re);
             RenderElement.SetParentLink(re, this._owner);
             re.InvalidateGraphics();
         }
         public void RemoveChild(RenderElement re)
         {
-            myElements.Remove(re.internalLinkedNode);
-            re.internalLinkedNode = null;
+            _myElements.Remove(re._internalLinkedNode);
+            re._internalLinkedNode = null;
             var bounds = re.RectBounds;
             RenderElement.SetParentLink(re, null);
             RenderElement.InvalidateGraphicLocalArea(this.OwnerRenderElement, bounds);
@@ -48,16 +48,16 @@ namespace LayoutFarm.RenderBoxes
         public override void Clear()
         {
             //todo: clear all parent link 
-            this.myElements.Clear();
+            this._myElements.Clear();
             this.OwnerRenderElement.InvalidateGraphics();
         }
 
 #if DEBUG
-        public int dbugChildCount => myElements.Count;
+        public int dbugChildCount => _myElements.Count;
 #endif
         IEnumerable<RenderElement> GetDrawingIter()
         {
-            LinkedListNode<RenderElement> curNode = this.myElements.First;
+            LinkedListNode<RenderElement> curNode = this._myElements.First;
             while (curNode != null)
             {
                 yield return curNode.Value;
@@ -66,7 +66,7 @@ namespace LayoutFarm.RenderBoxes
         }
         IEnumerable<RenderElement> GetHitTestIter()
         {
-            LinkedListNode<RenderElement> curNode = this.myElements.Last;
+            LinkedListNode<RenderElement> curNode = this._myElements.Last;
             while (curNode != null)
             {
                 yield return curNode.Value;
@@ -76,7 +76,7 @@ namespace LayoutFarm.RenderBoxes
 
         public override void DrawChildContent(DrawBoard canvasPage, Rectangle updateArea)
         {
-            if ((layerFlags & IS_LAYER_HIDDEN) != 0)
+            if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
             {
                 return;
             }
@@ -119,7 +119,7 @@ namespace LayoutFarm.RenderBoxes
 #endif
         public override bool HitTestCore(HitChain hitChain)
         {
-            if ((layerFlags & IS_LAYER_HIDDEN) == 0)
+            if ((_layerFlags & IS_LAYER_HIDDEN) == 0)
             {
                 foreach (RenderElement renderE in this.GetHitTestIter())
                 {
@@ -186,7 +186,7 @@ namespace LayoutFarm.RenderBoxes
             vinv_dbug_EnterLayerReCalculateContent(this);
 #endif
 
-            SetPostCalculateLayerContentSize(ReCalculateContentSizeNoLayout(this.myElements));
+            SetPostCalculateLayerContentSize(ReCalculateContentSizeNoLayout(this._myElements));
 #if DEBUG
             vinv_dbug_ExitLayerReCalculateContent();
 #endif

@@ -176,7 +176,7 @@ namespace LayoutFarm
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
             //TODO: review this step again
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
             return builder.CreateRenderVx(docBuidler.ResultDocument, svgElem =>
             {
                 //**
@@ -188,7 +188,7 @@ namespace LayoutFarm
         PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgRenderVx renderVx, int reqW, int reqH)
         {
 
-            PixelFarm.CpuBlit.RectD bound = renderVx.GetBounds();
+            PixelFarm.CpuBlit.RectD bound = renderVx.GetRectBounds();
             //create
             PixelFarm.CpuBlit.MemBitmap backingBmp = new PixelFarm.CpuBlit.MemBitmap((int)bound.Width + 10, (int)bound.Height + 10);
             PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);

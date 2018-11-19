@@ -101,7 +101,7 @@ namespace PixelFarm.CpuBlit
                 if (withSubPathTest)
                 {
                     //fine hit on sup part***
-                    VgHitChainPool.GetFreeHitTestChain(out SvgHitChain svgHitChain);
+                    VgHitChainPool.GetFreeHitTestChain(out VgHitChain svgHitChain);
                     svgHitChain.SetHitTestPos(x, y);
                     svgHitChain.WithSubPartTest = withSubPathTest;
                     _spriteShape.HitTestOnSubPart(svgHitChain);
@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
                     {
-                        SvgRenderElement svgElem = svgHitChain.GetLastHitInfo().svg;
+                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().svg;
                         //if yes then change its bg color
                         svgElem.VisualSpec.FillColor = Drawing.Color.Red;
                     }

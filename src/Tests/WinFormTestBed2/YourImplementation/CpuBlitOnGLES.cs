@@ -21,7 +21,7 @@ namespace YourImplementation
     /// </summary>
     public class CpuBlitGLESUIElement : UIElement
     {
-        //DemoBase _demoBase;
+
         protected int _width;
         protected int _height;
         CpuBlitGLCanvasRenderElement _canvasRenderE;
@@ -32,7 +32,7 @@ namespace YourImplementation
             _width = width;
             _height = height;
             //
-            SetupAggCanvas();//*** 
+            SetupCpuBlitRenderSurface();//*** 
         }
 
         public AggPainter GetAggPainter() => _aggPainter;
@@ -49,8 +49,11 @@ namespace YourImplementation
         {
             if (_canvasRenderE == null)
             {
-                var glRenderElem = new CpuBlitGLCanvasRenderElement(rootgfx, _width, _height, _lazyBmpProvider);
-                glRenderElem.SetPainter(glsx, painter);
+
+                var glBmp = new GLBitmap(_lazyBmpProvider);
+                glBmp.IsYFlipped = false;
+                //
+                var glRenderElem = new CpuBlitGLCanvasRenderElement(rootgfx, _width, _height, glBmp);
                 glRenderElem.SetController(this); //connect to event system
                 glRenderElem.SetOwnerDemoUI(this);
                 _canvasRenderE = glRenderElem;
@@ -97,7 +100,7 @@ namespace YourImplementation
         //----------------------------------------------
         public virtual DrawBoard GetDrawBoard() { return null; }
         //----------------------------------------------
-        protected virtual void SetupAggCanvas()
+        protected virtual void SetupCpuBlitRenderSurface()
         {
             //***
             _memBmp = new MemBitmap(_width, _height);
@@ -109,6 +112,10 @@ namespace YourImplementation
             _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
             //
         }
+        /// <summary>
+        /// update cpublit surface with external handler
+        /// </summary>
+        /// <param name="updateArea"></param>
         internal virtual void UpdateCpuBlitSurface(Rectangle updateArea)
         {
             //update only specific part
@@ -185,11 +192,9 @@ namespace YourImplementation
                 RaiseUpdateCpuBlitSurface(updateArea);
             }
         }
-        //------------
-
-
+        //------------ 
         protected override bool HasSomeExtension => true;
-        protected override void SetupAggCanvas()
+        protected override void SetupCpuBlitRenderSurface()
         {
             //don't call base
             //1. we create gdi plus draw board
@@ -201,10 +206,10 @@ namespace YourImplementation
             _memBmp = renderSurface.GetMemBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
             _aggPainter = renderSurface.GetAggPainter();//**
-            _gdiDrawBoard.SetAggPainter(_aggPainter); //***
-                                                      //
-                                                      //...
-
+            
+            //***
+            //
+            //... 
             //
             _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
             _lazyBmpProvider.BitmapFormat = GLBitmapFormat.BGR;//**
@@ -215,36 +220,21 @@ namespace YourImplementation
     {
 
         CpuBlitGLESUIElement _ui;
-        //
-        GLRenderSurface _glsx;
-        GLPainter _glPainter;
         GLBitmap _glBmp;
-        //
-        LazyActualBitmapBufferProvider _lzBmpProvider;
         RootGraphic _rootgfx;
 
-        public CpuBlitGLCanvasRenderElement(RootGraphic rootgfx, int w, int h, LazyActualBitmapBufferProvider lzBmpProvider)
+        public CpuBlitGLCanvasRenderElement(RootGraphic rootgfx, int w, int h, GLBitmap glBmp)
             : base(rootgfx, w, h)
         {
             _rootgfx = rootgfx;
-            _lzBmpProvider = lzBmpProvider;//  
+            _glBmp = glBmp;
         }
         public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
         {
             _ui = ui;
         }
-        public override void ChildrenHitTestCore(HitChain hitChain)
-        {
-            base.ChildrenHitTestCore(hitChain);
-        }
-        public void SetPainter(GLRenderSurface glsx, GLPainter canvasPainter)
-        {
-            _glsx = glsx;
-            _glPainter = canvasPainter;
-        }
-
-
-        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
+        
+        protected override void DrawBoxContent(DrawBoard d, Rectangle updateArea)
         {
             //canvas here should be glcanvas
 
@@ -276,23 +266,12 @@ namespace YourImplementation
                 }
             }
 
+            _glBmp.UpdateTexture(updateArea);
 
             //------------------------------------------------------------------------- 
-            //copy from 
-            if (_glBmp == null)
-            {
-                //create  a new one
-                _glBmp = new GLBitmap(_lzBmpProvider);
-                _glBmp.IsYFlipped = false;
-                _lzBmpProvider.MayNeedUpdate = true;
-            }
-            else
-            {
-                _lzBmpProvider.MayNeedUpdate = true;
-                _glBmp.UpdateTexture(updateArea);
-            }
-            //------------------------------------------------------------------------- 
-            _glsx.DrawImage(_glBmp, 0, 0);
+            d.DrawImage(_glBmp, 0, 0);
+            //_glsx.DrawImage(_glBmp, 0, 0);
+
             //test print text from our GLTextPrinter 
             //_glPainter.FillColor = PixelFarm.Drawing.Color.Black;
             //_glPainter.DrawString("Hello2", 0, 400);

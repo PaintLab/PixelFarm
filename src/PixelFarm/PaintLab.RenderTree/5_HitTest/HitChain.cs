@@ -78,11 +78,11 @@ namespace LayoutFarm.RenderBoxes
 
     public class HitChain
     {
-        List<HitInfo> hitList = new List<HitInfo>();
-        int startTestX;
-        int startTestY;
-        int testPointX;
-        int testPointY;
+        List<HitInfo> _hitList = new List<HitInfo>();
+        int _startTestX;
+        int _startTestY;
+        int _testPointX;
+        int _testPointY;
         public HitChain()
         {
         }
@@ -91,37 +91,37 @@ namespace LayoutFarm.RenderBoxes
         {
             get
             {
-                return new Point(testPointX, testPointY);
+                return new Point(_testPointX, _testPointY);
             }
         }
-        public int TextPointX { get { return testPointX; } }
-        public int TextPointY { get { return testPointY; } }
+        public int TextPointX { get { return _testPointX; } }
+        public int TextPointY { get { return _testPointY; } }
         public void GetTestPoint(out int x, out int y)
         {
-            x = this.testPointX;
-            y = this.testPointY;
+            x = this._testPointX;
+            y = this._testPointY;
         }
         public void SetStartTestPoint(int x, int y)
         {
-            testPointX = x;
-            testPointY = y;
-            startTestX = x;
-            startTestY = y;
+            _testPointX = x;
+            _testPointY = y;
+            _startTestX = x;
+            _startTestY = y;
         }
 
         public void OffsetTestPoint(int dx, int dy)
         {
-            testPointX += dx;
-            testPointY += dy;
+            _testPointX += dx;
+            _testPointY += dy;
         }
         public void ClearAll()
         {
 #if DEBUG
             dbugHitPhase = dbugHitChainPhase.Unknown;
 #endif
-            testPointX = 0;
-            testPointY = 0;
-            hitList.Clear();
+            _testPointX = 0;
+            _testPointY = 0;
+            _hitList.Clear();
         }
 
 
@@ -139,15 +139,15 @@ namespace LayoutFarm.RenderBoxes
         }
         public dbugHitTestTracker dbugHitTracker;
 #endif
-        public int Count { get { return this.hitList.Count; } }
-        public HitInfo GetHitInfo(int index) { return hitList[index]; }
+        public int Count { get { return this._hitList.Count; } }
+        public HitInfo GetHitInfo(int index) { return _hitList[index]; }
         public RenderElement TopMostElement
         {
             get
             {
-                if (hitList.Count > 0)
+                if (_hitList.Count > 0)
                 {
-                    return hitList[hitList.Count - 1].HitElemAsRenderElement;
+                    return _hitList[_hitList.Count - 1].HitElemAsRenderElement;
                 }
                 else
                 {
@@ -157,7 +157,7 @@ namespace LayoutFarm.RenderBoxes
         }
         public void AddHitObject(RenderElement hitObject)
         {
-            hitList.Add(new HitInfo(hitObject, new Point(testPointX, testPointY)));
+            _hitList.Add(new HitInfo(hitObject, new Point(_testPointX, _testPointY)));
 #if DEBUG
             //if (hitObject.dbug_ObjectNote == "AAA")
             //{
@@ -170,17 +170,17 @@ namespace LayoutFarm.RenderBoxes
 
             if (dbugHitTracker != null)
             {
-                dbugHitTracker.WriteTrackNode(hitList.Count,
-                    new Point(testPointX, testPointY).ToString() + " on "
+                dbugHitTracker.WriteTrackNode(_hitList.Count,
+                    new Point(_testPointX, _testPointY).ToString() + " on "
                     + hitObject.ToString());
             }
 #endif
         }
         public void RemoveCurrentHit()
         {
-            if (hitList.Count > 0)
+            if (_hitList.Count > 0)
             {
-                hitList.RemoveAt(hitList.Count - 1);
+                _hitList.RemoveAt(_hitList.Count - 1);
             }
         }
 

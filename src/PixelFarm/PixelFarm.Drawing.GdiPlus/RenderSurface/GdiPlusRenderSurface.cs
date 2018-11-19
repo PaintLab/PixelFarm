@@ -99,11 +99,6 @@ namespace PixelFarm.Drawing.WinGdi
             _internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             this.StrokeWidth = 1;
         }
-
-
-
-
-
         public NativeWin32MemoryDC Win32DC => _win32MemDc;
         public CpuBlit.MemBitmap GetMemBitmap()
         {
@@ -147,13 +142,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 return;
             }
-            if (_win32MemDc != null)
-            {
-                _win32MemDc.Dispose();
-                _win32MemDc = null;
-            }
             _isDisposed = true;
-
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -184,8 +173,17 @@ namespace PixelFarm.Drawing.WinGdi
                 _originalHdc = IntPtr.Zero;
             }
 
+            if (_hFont != IntPtr.Zero)
+            {
+                Win32.MyWin32.DeleteObject(_hFont);
+                _hFont = IntPtr.Zero;
+            }
+
             _clipRectStack.Clear();
             _currentClipRect = new System.Drawing.Rectangle(0, 0, this.Width, this.Height);
+
+
+
 #if DEBUG
 
             debug_releaseCount++;
@@ -236,6 +234,8 @@ namespace PixelFarm.Drawing.WinGdi
             DrawLine(rect.Left, rect.Top, rect.Right, rect.Bottom);
             DrawLine(rect.Left, rect.Bottom, rect.Right, rect.Top);
             this.StrokeColor = prevColor;
+
+
         }
 
 #endif

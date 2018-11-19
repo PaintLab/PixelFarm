@@ -103,7 +103,9 @@ namespace PaintLab.Svg
         ForeignNode
     }
 
-
+    /// <summary>
+    /// vg dom element
+    /// </summary>
     public class SvgElement
     {
         readonly WellknownSvgElementName _wellknownName;
@@ -346,7 +348,7 @@ namespace PaintLab.Svg
         }
     }
 
-    public class SvgElementSpecEvaluator
+    class SvgElementSpecEvaluator
     {
         CssParser _cssParser = new CssParser();
         SvgElement _currentElem;
