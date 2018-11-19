@@ -115,6 +115,7 @@ namespace PaintLab.Svg
         List<SvgElement> _childNodes;
         object _controller;
 
+
         public SvgElement(WellknownSvgElementName wellknownName, SvgElemSpec elemSpec)
         {
             _wellknownName = wellknownName;
@@ -125,7 +126,7 @@ namespace PaintLab.Svg
             _wellknownName = wellknownName;
             _unknownElemName = name;
         }
-
+        public string ElemId { get; set; }
         public void SetController(object controller)
         {
             _controller = controller;

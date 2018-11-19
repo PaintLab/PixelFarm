@@ -1350,7 +1350,7 @@ namespace PaintLab.Svg
                         if (args.TempCurrentStrokeWidth > maxStrokeWidth)
                         {
                             maxStrokeWidth = args.TempCurrentStrokeWidth;
-                           
+
                         }
 
                     };
@@ -1439,7 +1439,7 @@ namespace PaintLab.Svg
             {
                 //translate SvgElement to  
                 //command stream?
-                CreateSvgRenderElement(rootSvgElem, rootElem.GetChild(i));
+                CreateSvgVisualElement(rootSvgElem, rootElem.GetChild(i));
             }
 
             //resolve
@@ -1472,7 +1472,7 @@ namespace PaintLab.Svg
             _containerHeight = height;
         }
 
-        VgVisualElement CreateSvgRenderElement(VgVisualElement parentNode, SvgElement elem)
+        VgVisualElement CreateSvgVisualElement(VgVisualElement parentNode, SvgElement elem)
         {
             VgVisualElement renderE = null;
             switch (elem.WellknowElemName)
@@ -1543,7 +1543,7 @@ namespace PaintLab.Svg
             int childCount = elem.ChildCount;
             for (int i = 0; i < childCount; ++i)
             {
-                CreateSvgRenderElement(renderE, elem.GetChild(i));
+                CreateSvgVisualElement(renderE, elem.GetChild(i));
             }
 
             return renderE;
@@ -1588,7 +1588,7 @@ namespace PaintLab.Svg
                             {
                                 //clip path definition  
                                 //make this as a clip path 
-                                VgVisualElement renderE = CreateSvgRenderElement(definitionRoot, child);
+                                VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
                                 _clipPathDic.Add(child.ElemSpecId, renderE);
                             }
                             break;
@@ -1596,7 +1596,7 @@ namespace PaintLab.Svg
                             {
                                 //clip path definition  
                                 //make this as a clip path 
-                                VgVisualElement renderE = CreateSvgRenderElement(definitionRoot, child);
+                                VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
                                 _markerDic.Add(child.ElemSpecId, renderE);
                             }
                             break;
