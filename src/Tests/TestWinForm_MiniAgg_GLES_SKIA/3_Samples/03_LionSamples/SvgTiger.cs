@@ -111,18 +111,10 @@ namespace PixelFarm.CpuBlit.Samples
 
                     //create 
                     MemBitmap backBmp = new MemBitmap((int)bound.Width, (int)bound.Height);
-                    AggPainter painter = AggPainter.Create(backBmp);
-
-
+                    AggPainter painter = AggPainter.Create(backBmp); 
                     painter.Clear(Drawing.Color.White);
                     painter.StrokeColor = Color.Transparent;
-                    painter.StrokeWidth = 1;//svg standard, init stroke-width =1
-
-                    //#if DEBUG
-                    //            _dbugSW.Reset();
-                    //            _dbugSW.Start();
-                    //#endif 
-
+                    painter.StrokeWidth = 1; 
 
                     using (VgPainterArgsPool.Borrow(painter, out var paintArgs))
                     {

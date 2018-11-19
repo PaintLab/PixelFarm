@@ -112,6 +112,11 @@ namespace PaintLab.Svg
             ExternalVxsVisitHandler = null;
             Current = null;
         }
+
+        /// <summary>
+        /// use for finding vg boundaries
+        /// </summary>
+        public float TempCurrentStrokeWidth;
     }
 
     public static class VgPainterArgsPool
@@ -543,6 +548,12 @@ namespace PaintLab.Svg
                     vgPainterArgs._currentTx = currentTx;
                 }
 
+                if (!_visualSpec.StrokeWidth.IsEmptyOrAuto &&
+                    _visualSpec.StrokeWidth.Number > 1)
+                {
+                    vgPainterArgs.TempCurrentStrokeWidth = _visualSpec.StrokeWidth.Number;
+                }
+
                 //***SKIP CLIPPING***
                 //if (_visualSpec.ResolvedClipPath != null)
                 //{
@@ -578,7 +589,6 @@ namespace PaintLab.Svg
                     //unknown
                     break;
                 case WellknownSvgElementName.Text:
-
                     break;
                 case WellknownSvgElementName.Group:
                 case WellknownSvgElementName.RootSvg:
@@ -1332,13 +1342,31 @@ namespace PaintLab.Svg
                     RectD rectTotal = RectD.ZeroIntersection;
                     bool evaluated = false;
 
+                    float maxStrokeWidth = 1;
                     paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
                     {
                         evaluated = true;//once 
                         BoundingRect.GetBoundingRect(vxs, ref rectTotal);
+                        if (args.TempCurrentStrokeWidth > maxStrokeWidth)
+                        {
+                            maxStrokeWidth = args.TempCurrentStrokeWidth;
+                           
+                        }
+
                     };
                     _renderE.Walk(paintArgs);
                     _needBoundUpdate = false;
+
+                    if (evaluated && maxStrokeWidth > 1)
+                    {
+                        float half = maxStrokeWidth / 2f;
+                        rectTotal.Left -= half;
+                        rectTotal.Right += half;
+                        rectTotal.Top -= half;
+                        rectTotal.Bottom += half;
+                    }
+
+
                     return this._boundRect = evaluated ? rectTotal : new RectD();
                 }
             }
