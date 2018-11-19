@@ -9,7 +9,7 @@ namespace PaintLab.Svg
 
     public abstract class SvgElemSpec
     {
-        
+
     }
 
 
@@ -235,7 +235,27 @@ namespace PaintLab.Svg
         public CssLength X2 { get; set; }
         public CssLength Y2 { get; set; }
     }
-
+    public class SvgRadialGradientSpec : SvgVisualSpec
+    {
+        public System.Collections.Generic.List<StopColorPoint> StopList { get; set; }
+        public CssLength CX { get; set; }
+        public CssLength CY { get; set; }
+        public CssLength R { get; set; }
+        public CssLength FX { get; set; }
+        public CssLength FY { get; set; }
+    }
+    public class SvgColorStopSpec : SvgElemSpec
+    {
+        public CssLength Offset { get; set; }
+        public Color StopColor { get; set; }
+        public float StopOpacity { get; set; }
+    }
+    public class StopColorPoint
+    {
+        public CssLength Offset { get; set; }
+        public Color StopColor { get; set; }
+     
+    }
     public class SvgPolygonSpec : SvgVisualSpec, IMayHaveMarkers
     {
         public PixelFarm.Drawing.PointF[] Points { get; set; }
@@ -336,19 +356,7 @@ namespace PaintLab.Svg
         public SvgAttributeLink MarkerMid { get; set; }
         public SvgAttributeLink MarkerEnd { get; set; }
     }
-    public class StopColorPoint
-    {
-        public Color StopColor
-        {
-            get;
-            set;
-        }
-        public CssLength Offset
-        {
-            get;
-            set;
-        }
-    }
+
 
     public class SvgMarkerSpec : SvgVisualSpec
     {

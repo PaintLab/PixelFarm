@@ -258,12 +258,12 @@ namespace PixelFarm.CpuBlit.Rasterization
         public float OffsetOriginX
         {
             get;
-            set;
+            internal set;
         }
         public float OffsetOriginY
         {
             get;
-            set;
+            internal set;
         }
         /// <summary>
         /// we do NOT store vxs

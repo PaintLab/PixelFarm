@@ -840,8 +840,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Image:
                     {
                         SvgImageSpec imgSpec = this._visualSpec as SvgImageSpec;
-                        //request from resource
-
+                        //request from resource 
                         bool isOK = true;
 
                         if (this.ImageBinder == null)
@@ -1480,10 +1479,15 @@ namespace PaintLab.Svg
                 default:
                     throw new KeyNotFoundException();
                 //-----------------
+                case WellknownSvgElementName.RadialGradient:
+                    //TODO: add radial grapdient support 
+                    //this version not support linear gradient
+                    return null;
                 case WellknownSvgElementName.LinearGradient:
                     //TODO: add linear grapdient support 
                     //this version not support linear gradient
-                    return null;
+
+                    return CreateLinearGradient(parentNode, (SvgLinearGradientSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Defs:
                     _defsList.Add(elem);
                     return null;
@@ -1872,6 +1876,40 @@ namespace PaintLab.Svg
                 AssignAttributes(cirSpec);
                 return cir;
             }
+        }
+
+
+        VgVisualElement CreateLinearGradient(VgVisualElement parentNode, SvgLinearGradientSpec spec)
+        {
+
+            //create linear gradient texure (or brush)
+            VgVisualElement linearGrd = new VgVisualElement(WellknownSvgElementName.LinearGradient, spec, _renderRoot);
+            //read attribute
+
+            float x1 = spec.X1.Number;
+            float y1 = spec.Y1.Number;
+            float x2 = spec.X2.Number;
+            float y2 = spec.Y2.Number;
+            //
+
+
+
+
+            return linearGrd;
+
+            //using (VectorToolBox.Borrow(out Ellipse ellipse))
+            //using (VxsTemp.Borrow(out var v1))
+            //{
+            //    //ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
+            //    //double x = ConvertToPx(spec.X, ref a);
+            //    //double y = ConvertToPx(spec.Y, ref a);
+            //    //double r = ConvertToPx(spec.Radius, ref a);
+
+            //    //ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step  
+            //    //cir._vxsPath = ellipse.MakeVxs(v1).CreateTrim();
+            //    //AssignAttributes(spec);
+            //    return linearGrd;
+            //}
         }
 
 

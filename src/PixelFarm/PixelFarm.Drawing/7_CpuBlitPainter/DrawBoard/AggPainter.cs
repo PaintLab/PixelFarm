@@ -123,11 +123,8 @@ namespace PixelFarm.CpuBlit
 
                     _currentClipTech = ClipingTechnique.ClipMask;
                     this.TargetBufferName = TargetBufferName.AlphaMask;
-                    //aggPainter.TargetBufferName = TargetBufferName.Default; //for debug
                     var prevColor = this.FillColor;
                     this.FillColor = Color.White;
-                    //aggPainter.StrokeColor = Color.Black; //for debug
-                    //aggPainter.StrokeWidth = 1; //for debug  
 
                     this.Fill(vxs);
                     this.FillColor = prevColor;
@@ -1366,12 +1363,18 @@ namespace PixelFarm.CpuBlit
 
         void SetupMaskPixelBlender()
         {
-            if (_aggsx_mask != null) return;
+            if (_aggsx_mask != null)
+            {
+                //also set the canvas origin for the aggsx_mask
+                _aggsx_mask.SetScanlineRasOrigin(this.OriginX, this.OriginY);
+                return;
+            }
             //----------
             //same size                  
 
             _alphaBitmap = new MemBitmap(_aggsx_0.Width, _aggsx_0.Height);
             _aggsx_mask = new AggRenderSurface(_alphaBitmap) { PixelBlender = new PixelBlenderBGRA() };
+            _aggsx_mask.SetScanlineRasOrigin(this.OriginX, this.OriginY); //also set the canvas origin for the aggsx_mask
 
             maskPixelBlender = new PixelBlenderWithMask();
             maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();

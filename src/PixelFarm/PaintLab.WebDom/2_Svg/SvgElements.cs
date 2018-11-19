@@ -65,6 +65,10 @@ namespace PaintLab.Svg
         /// </summary>
         LinearGradient,
         /// <summary>
+        /// circular gradient
+        /// </summary>
+        RadialGradient,
+        /// <summary>
         /// text
         /// </summary>
         Text,
@@ -161,6 +165,7 @@ namespace PaintLab.Svg
                     case WellknownSvgElementName.Image: return "image";
                     case WellknownSvgElementName.Text: return "text";
                     case WellknownSvgElementName.LinearGradient: return "linearGradient";
+                    case WellknownSvgElementName.RadialGradient: return "radialGradient";
                     case WellknownSvgElementName.Use: return "use";
                 }
             }
@@ -252,6 +257,8 @@ namespace PaintLab.Svg
                     return new SvgElement(WellknownSvgElementName.Image, new SvgImageSpec());
                 case "linearGradient":
                     return new SvgElement(WellknownSvgElementName.LinearGradient, new SvgLinearGradientSpec());
+                case "radialGradient":
+                    return new SvgElement(WellknownSvgElementName.RadialGradient, new SvgRadialGradientSpec());
                 case "circle":
                     return new SvgElement(WellknownSvgElementName.Circle, new SvgCircleSpec());
                 case "ellipse":
