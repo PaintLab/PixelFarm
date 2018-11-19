@@ -1349,6 +1349,7 @@ namespace PaintLab.Svg
         public float X { get; set; }
         public float Y { get; set; }
 
+        public object UserData { get; set; } //optional
         public SvgDocument OwnerDocument { get; set; } //optional
     }
 
