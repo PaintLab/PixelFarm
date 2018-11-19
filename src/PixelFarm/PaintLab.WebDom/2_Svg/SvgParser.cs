@@ -336,6 +336,7 @@ namespace PaintLab.Svg
     {
 
         ISvgDocBuilder _svgDocBuilder;
+        string _currentElemName;
 
         public SvgParser(ISvgDocBuilder svgDocBuilder)
         {
@@ -365,8 +366,8 @@ namespace PaintLab.Svg
         }
         protected override void OnVisitNewElement(TextSpan localName)
         {
-            string elemName = _textSnapshot.Substring(localName.startIndex, localName.len);
-            _svgDocBuilder.OnVisitNewElement(elemName);
+            _currentElemName = _textSnapshot.Substring(localName.startIndex, localName.len);
+            _svgDocBuilder.OnVisitNewElement(_currentElemName);
         }
 
         protected override void OnAttribute(TextSpan localAttr, TextSpan value)
@@ -388,9 +389,17 @@ namespace PaintLab.Svg
         }
         protected override void OnExitingElementBody()
         {
+            _currentElemName = null;
             _svgDocBuilder.OnExitingElementBody();
         }
-
+        protected override void OnTextNode(TextSpan text)
+        {
+            //not all text node that we focus
+            if (_currentElemName == "text")
+            {
+                _svgDocBuilder.OnTextNode(_textSnapshot.Substring(text.startIndex, text.len));
+            }
+        }
         public static void ParseTransform(string value, SvgVisualSpec spec)
         {
             //TODO: ....
@@ -468,7 +477,7 @@ namespace PaintLab.Svg
             float[] elem_values = new float[j];
             for (int i = 0; i < j; ++i)
             {
-                elem_values[i] = float.Parse(elem_string_args[i],System.Globalization.CultureInfo.InvariantCulture);
+                elem_values[i] = float.Parse(elem_string_args[i], System.Globalization.CultureInfo.InvariantCulture);
             }
             return elem_values;
         }
