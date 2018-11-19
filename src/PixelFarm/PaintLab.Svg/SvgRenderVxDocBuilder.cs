@@ -998,7 +998,15 @@ namespace PaintLab.Svg
                                 newFontReq = true;
                             }
 
-                            p.DrawString(textSpec.TextContent, textSpec.ActualX, textSpec.ActualY);
+                            p.FillColor = Color.Black;
+
+                            double pos_x = textSpec.ActualX;
+                            double pos_y = textSpec.ActualY;
+                            if (currentTx != null)
+                            {
+                                currentTx.Transform(ref pos_x, ref pos_y);
+                            }
+                            p.DrawString(textSpec.TextContent, (float)pos_x, (float)pos_y);
                             p.FillColor = prevColor;//restore back
                                                     //change font or not
                         }
@@ -1502,7 +1510,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Use:
                     return CreateUseElement(parentNode, (SvgUseSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Text:
-                    return CreateTextElem(parentNode, (SvgTextSpec)elem.ElemSpec);
+                    return CreateTextElem(parentNode, elem, (SvgTextSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Svg:
                     renderE = new VgVisualElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec, _renderRoot);
                     break;
@@ -1907,7 +1915,7 @@ namespace PaintLab.Svg
             //	<stop offset="1" style="stop-color:#FDEE00"/>
             //</linearGradient>
 
-            return linearGrd; 
+            return linearGrd;
         }
 
 
@@ -1925,7 +1933,7 @@ namespace PaintLab.Svg
             parentNode.AddChildElement(renderE);
             return renderE;
         }
-        VgVisualElement CreateTextElem(VgVisualElement parentNode, SvgTextSpec textspec)
+        VgVisualElement CreateTextElem(VgVisualElement parentNode, SvgElement elem, SvgTextSpec textspec)
         {
             //text render element  
             VgVisualElement textRenderElem = new VgVisualElement(WellknownSvgElementName.Text, textspec, _renderRoot);

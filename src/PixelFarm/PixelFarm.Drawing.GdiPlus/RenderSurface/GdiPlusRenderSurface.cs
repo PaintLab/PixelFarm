@@ -116,7 +116,8 @@ namespace PixelFarm.Drawing.WinGdi
                 }
                 //optional if we want to print text on agg surface
 
-                //aggPainter.TextPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices); //1.
+
+                //aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.VxsTextPrinter(aggPainter, _openFontTextServices); //1.
                 aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(aggPainter);//2.
                 //
                 _painter = aggPainter;
