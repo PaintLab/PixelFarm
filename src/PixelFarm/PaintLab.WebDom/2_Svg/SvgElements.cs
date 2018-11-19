@@ -260,10 +260,10 @@ namespace PaintLab.Svg
                     return new SvgElement(WellknownSvgElementName.Path, new SvgPathSpec());
                 case "image":
                     return new SvgElement(WellknownSvgElementName.Image, new SvgImageSpec());
-                case "linearGradient":
-                    return new SvgElement(WellknownSvgElementName.LinearGradient, new SvgLinearGradientSpec());
-                case "radialGradient":
-                    return new SvgElement(WellknownSvgElementName.RadialGradient, new SvgRadialGradientSpec());
+                //case "linearGradient":
+                //    return new SvgElement(WellknownSvgElementName.LinearGradient, new SvgLinearGradientSpec());
+                //case "radialGradient":
+                //    return new SvgElement(WellknownSvgElementName.RadialGradient, new SvgRadialGradientSpec());
                 case "circle":
                     return new SvgElement(WellknownSvgElementName.Circle, new SvgCircleSpec());
                 case "ellipse":
