@@ -1308,8 +1308,9 @@ namespace PaintLab.Svg
         }
 
 
-        public RectD GetBounds()
+        public RectD GetRectBounds()
         {
+            //TODO: check bounds where border-width > 1
 
             //***
             if (_needBoundUpdate)
@@ -1328,7 +1329,6 @@ namespace PaintLab.Svg
                     _needBoundUpdate = false;
                     return this._boundRect = evaluated ? rectTotal : new RectD();
                 }
-
             }
 
             return this._boundRect;
