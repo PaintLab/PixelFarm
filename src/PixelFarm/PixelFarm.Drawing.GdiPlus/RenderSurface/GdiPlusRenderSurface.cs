@@ -118,12 +118,17 @@ namespace PixelFarm.Drawing.WinGdi
 
 
                 //aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.VxsTextPrinter(aggPainter, _openFontTextServices); //1.
-                aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(aggPainter);//2.
+                //aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(aggPainter);//2.
+                aggPainter.TextPrinter = new GdiPlusTextPrinter(this);
                 //
                 _painter = aggPainter;
                 _painter.SetOrigin(this.OriginX, this.OriginY);
             }
             return _painter;
+        }
+        internal LayoutFarm.OpenFontTextService OpenFontTextService
+        {
+            get { return _openFontTextServices; }
         }
 #if DEBUG
         public void dbugTestDrawText()
@@ -1186,6 +1191,67 @@ namespace PixelFarm.Drawing.WinGdi
                 _mycurrentTextColor = value;
                 _win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
             }
+        }
+    }
+
+
+    sealed class GdiPlusTextPrinter : ITextPrinter
+    {
+
+        GdiPlusRenderSurface _rendersx;
+        public GdiPlusTextPrinter(GdiPlusRenderSurface rendersx)
+        {
+            _rendersx = rendersx;
+        }
+        /// <summary>
+        /// start draw on 'left-top' of a given area box
+        /// </summary>
+        public bool StartDrawOnLeftTop { get; set; }
+        public void ChangeFont(RequestFont font)
+        {
+            _rendersx.CurrentFont = font;
+            _rendersx.OpenFontTextService.ResolveTypeface(font);
+            ////call to service
+            //_font = font;
+            //_textServices.ResolveTypeface(font); //resolve for 'actual' font
+            //_fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
+            //FontSizeInPoints = font.SizeInPoints;
+
+        }
+        public RequestFont CurrentFont
+        {
+            get { return _rendersx.CurrentFont; }
+
+        }
+
+        public void ChangeFillColor(Color fontColor)
+        {
+            //change font color
+            _rendersx.CurrentTextColor = fontColor;
+        }
+        public void ChangeStrokeColor(Color strokeColor)
+        {
+            //TODO: ...
+        }
+
+        public void DrawString(char[] text, int startAt, int len, double left, double top)
+        {
+
+            _rendersx.DrawText(text,
+                startAt, len,
+                new Rectangle((int)left,
+                (int)(top - _rendersx.CurrentFont.LineSpacingInPixels),
+                2480, //temp we,not need clip
+                1024),//temp we,not need clip
+                0);
+        }
+        public void DrawString(RenderVxFormattedString renderVx, double left, double top)
+        {
+            //TODO: implement this
+        }
+        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
+        {
+            //TODO: implement this
         }
     }
 }
