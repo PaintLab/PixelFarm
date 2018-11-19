@@ -211,9 +211,9 @@ namespace PixelFarm.CpuBlit
         public void UpdateBounds()
         {
             _svgRenderVx.InvalidateBounds();
-            this._boundingRect = _svgRenderVx.GetBounds();
+            this._boundingRect = _svgRenderVx.GetRectBounds();
         }
-        public void HitTestOnSubPart(SvgHitChain hitChain)
+        public void HitTestOnSubPart(VgHitChain hitChain)
         {
             _svgRenderVx._renderE.HitTest(hitChain);
         }
@@ -236,9 +236,9 @@ namespace PixelFarm.CpuBlit
         //
         //
         [System.ThreadStatic]
-        static System.Collections.Generic.Stack<SvgHitChain> s_hitChains = new System.Collections.Generic.Stack<SvgHitChain>();
+        static System.Collections.Generic.Stack<VgHitChain> s_hitChains = new System.Collections.Generic.Stack<VgHitChain>();
 
-        public static void GetFreeHitTestChain(out SvgHitChain hitTestArgs)
+        public static void GetFreeHitTestChain(out VgHitChain hitTestArgs)
         {
             if (s_hitChains.Count > 0)
             {
@@ -246,10 +246,10 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                hitTestArgs = new SvgHitChain();
+                hitTestArgs = new VgHitChain();
             }
         }
-        public static void ReleaseHitTestChain(ref SvgHitChain hitTestArgs)
+        public static void ReleaseHitTestChain(ref VgHitChain hitTestArgs)
         {
             hitTestArgs.Clear();
             s_hitChains.Push(hitTestArgs);

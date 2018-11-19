@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder svgDoc = new SvgDocBuilder();
             SvgParser svg = new SvgParser(svgDoc);
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
 
             svg.ReadSvgFile("Samples\\tiger002.svg");
             _renderVx = builder.CreateRenderVx(svgDoc.ResultDocument);
@@ -88,7 +88,7 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
 
             //svg.ReadSvgFile("Samples\\lion.svg"); 
             //svg.ReadSvgFile("Samples\\tiger002.svg");
@@ -107,7 +107,7 @@ namespace PixelFarm.CpuBlit.Samples
                 VgRenderVx vgRenerVx = vx as VgRenderVx;
                 if (vgRenerVx != null && !vgRenerVx.HasBitmapSnapshot)
                 {
-                    RectD bound = vgRenerVx.GetBounds();
+                    RectD bound = vgRenerVx.GetRectBounds();
 
                     //create 
                     MemBitmap backBmp = new MemBitmap((int)bound.Width, (int)bound.Height);

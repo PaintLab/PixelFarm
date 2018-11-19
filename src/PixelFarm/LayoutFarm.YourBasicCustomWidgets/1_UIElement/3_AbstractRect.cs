@@ -178,12 +178,7 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.InvalidateGraphics();
             }
         }
-        public void InvalidateOuterGraphics()
-        {
-            //if we have primary render element
-            //invalidate 'bubble' rect start
-            CurrentPrimaryRenderElement?.InvalidateParentGraphics();
-        }
+
         public override void GetViewport(out int x, out int y)
         {
             //AbstractRect dose not have actual viewport
@@ -226,7 +221,7 @@ namespace LayoutFarm.UI
             //if you want viewport you must overide this
             SetViewport(x, y, this);
         }
-        
+
         //------------------------------
         public virtual void PerformContentLayout()
         {
