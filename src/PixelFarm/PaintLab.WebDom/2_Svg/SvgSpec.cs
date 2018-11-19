@@ -9,8 +9,7 @@ namespace PaintLab.Svg
 
     public abstract class SvgElemSpec
     {
-        //TODO: review here
-        public string Id { get; set; }
+        
     }
 
 

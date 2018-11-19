@@ -186,14 +186,7 @@ namespace PaintLab.Svg
         {
             get { return _elemSpec; }
         }
-        public string ElemSpecId
-        {
-            get
-            {
-                if (_elemSpec == null) return null;
-                return _elemSpec.Id;
-            }
-        }
+
     }
 
     public interface ISvgDocBuilder
@@ -823,7 +816,7 @@ namespace PaintLab.Svg
                     spec.Class = value; //solve it later
                     break;
                 case "id":
-                    spec.Id = value;
+                    _currentElem.ElemId = value; //?
                     break;
                 case "style":
                     AddStyle(spec, value);

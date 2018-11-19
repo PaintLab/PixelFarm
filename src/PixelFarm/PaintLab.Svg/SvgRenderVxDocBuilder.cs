@@ -1528,14 +1528,10 @@ namespace PaintLab.Svg
                     break;
             }
 
-            if (renderE._visualSpec != null)
+            if (elem.ElemId != null)
             {
-                string id = renderE._visualSpec.Id;
-                if (id != null)
-                {
-                    //replace duplicated item
-                    _registeredElemsById[id] = renderE;
-                }
+                //replace duplicated item ???
+                _registeredElemsById[elem.ElemId] = renderE;
             }
 
             renderE.SetController(elem);
@@ -1589,7 +1585,7 @@ namespace PaintLab.Svg
                                 //clip path definition  
                                 //make this as a clip path 
                                 VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
-                                _clipPathDic.Add(child.ElemSpecId, renderE);
+                                _clipPathDic.Add(child.ElemId, renderE);
                             }
                             break;
                         case WellknownSvgElementName.Marker:
@@ -1597,7 +1593,7 @@ namespace PaintLab.Svg
                                 //clip path definition  
                                 //make this as a clip path 
                                 VgVisualElement renderE = CreateSvgVisualElement(definitionRoot, child);
-                                _markerDic.Add(child.ElemSpecId, renderE);
+                                _markerDic.Add(child.ElemId, renderE);
                             }
                             break;
                     }
