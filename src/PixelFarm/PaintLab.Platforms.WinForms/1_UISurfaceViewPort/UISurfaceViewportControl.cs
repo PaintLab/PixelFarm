@@ -251,7 +251,8 @@ namespace LayoutFarm.UI
                     {
                         var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot);
                         var view = new CpuSurfaceView();
-                        view.Dock = DockStyle.Fill;
+                        view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
+                        //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);

@@ -254,7 +254,7 @@ namespace PaintLab.Svg
     {
         public CssLength Offset { get; set; }
         public Color StopColor { get; set; }
-     
+
     }
     public class SvgPolygonSpec : SvgVisualSpec, IMayHaveMarkers
     {
@@ -316,6 +316,7 @@ namespace PaintLab.Svg
 
     public class SvgTextSpec : SvgVisualSpec
     {
+        public string FontFamily { get; set; }
         public string FontFace { get; set; }
         public CssLength FontSize { get; set; }
 

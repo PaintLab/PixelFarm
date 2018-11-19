@@ -998,7 +998,15 @@ namespace PaintLab.Svg
                                 newFontReq = true;
                             }
 
-                            p.DrawString(textSpec.TextContent, textSpec.ActualX, textSpec.ActualY);
+                            p.FillColor = Color.Black;
+
+                            double pos_x = textSpec.ActualX;
+                            double pos_y = textSpec.ActualY;
+                            if (currentTx != null)
+                            {
+                                currentTx.Transform(ref pos_x, ref pos_y);
+                            }
+                            p.DrawString(textSpec.TextContent, (float)pos_x, (float)pos_y);
                             p.FillColor = prevColor;//restore back
                                                     //change font or not
                         }
@@ -1486,8 +1494,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.LinearGradient:
                     //TODO: add linear grapdient support 
                     //this version not support linear gradient
-
-                    return CreateLinearGradient(parentNode, (SvgLinearGradientSpec)elem.ElemSpec);
+                    return CreateLinearGradient(parentNode, elem, (SvgLinearGradientSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Defs:
                     _defsList.Add(elem);
                     return null;
@@ -1503,7 +1510,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Use:
                     return CreateUseElement(parentNode, (SvgUseSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Text:
-                    return CreateTextElem(parentNode, (SvgTextSpec)elem.ElemSpec);
+                    return CreateTextElem(parentNode, elem, (SvgTextSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Svg:
                     renderE = new VgVisualElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec, _renderRoot);
                     break;
@@ -1879,7 +1886,7 @@ namespace PaintLab.Svg
         }
 
 
-        VgVisualElement CreateLinearGradient(VgVisualElement parentNode, SvgLinearGradientSpec spec)
+        VgVisualElement CreateLinearGradient(VgVisualElement parentNode, SvgElement elem, SvgLinearGradientSpec spec)
         {
 
             //create linear gradient texure (or brush)
@@ -1890,26 +1897,25 @@ namespace PaintLab.Svg
             float y1 = spec.Y1.Number;
             float x2 = spec.X2.Number;
             float y2 = spec.Y2.Number;
-            //
+            int childCount = elem.ChildCount;
 
+            for (int i = 0; i < childCount; ++i)
+            {
+                SvgElement child = elem.GetChild(i);
+                if (child.ElemName == "stop")
+                {
+                    //color stop
 
+                }
+            }
 
+            // <linearGradient id="polygon101_1_" gradientUnits="userSpaceOnUse" x1="343.1942" y1="259.6319" x2="424.394" y2="337.1182" gradientTransform="matrix(1.2948 0 0 1.2948 -0.9411 368.7214)">
+            //	<stop offset="1.348625e-002" style="stop-color:#DC2E19"/>
+            //	<stop offset="0.3012" style="stop-color:#DC2B19"/>
+            //	<stop offset="1" style="stop-color:#FDEE00"/>
+            //</linearGradient>
 
             return linearGrd;
-
-            //using (VectorToolBox.Borrow(out Ellipse ellipse))
-            //using (VxsTemp.Borrow(out var v1))
-            //{
-            //    //ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
-            //    //double x = ConvertToPx(spec.X, ref a);
-            //    //double y = ConvertToPx(spec.Y, ref a);
-            //    //double r = ConvertToPx(spec.Radius, ref a);
-
-            //    //ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step  
-            //    //cir._vxsPath = ellipse.MakeVxs(v1).CreateTrim();
-            //    //AssignAttributes(spec);
-            //    return linearGrd;
-            //}
         }
 
 
@@ -1927,7 +1933,7 @@ namespace PaintLab.Svg
             parentNode.AddChildElement(renderE);
             return renderE;
         }
-        VgVisualElement CreateTextElem(VgVisualElement parentNode, SvgTextSpec textspec)
+        VgVisualElement CreateTextElem(VgVisualElement parentNode, SvgElement elem, SvgTextSpec textspec)
         {
             //text render element  
             VgVisualElement textRenderElem = new VgVisualElement(WellknownSvgElementName.Text, textspec, _renderRoot);

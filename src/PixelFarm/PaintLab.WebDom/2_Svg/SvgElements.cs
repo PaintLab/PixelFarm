@@ -100,6 +100,10 @@ namespace PaintLab.Svg
         /// use
         /// </summary>
         Use,
+        /// <summary>
+        /// stop
+        /// </summary>
+        Stop,
 
         /// <summary>
         /// my extension
@@ -167,6 +171,7 @@ namespace PaintLab.Svg
                     case WellknownSvgElementName.LinearGradient: return "linearGradient";
                     case WellknownSvgElementName.RadialGradient: return "radialGradient";
                     case WellknownSvgElementName.Use: return "use";
+                    case WellknownSvgElementName.Stop: return "stop";
                 }
             }
         }
@@ -201,6 +206,7 @@ namespace PaintLab.Svg
 
         void OnAttribute(string attrName, string value);
         void OnEnteringElementBody();
+        void OnTextNode(string text);
         void OnExitingElementBody();
         void OnEnd();
     }
@@ -255,16 +261,19 @@ namespace PaintLab.Svg
                     return new SvgElement(WellknownSvgElementName.Path, new SvgPathSpec());
                 case "image":
                     return new SvgElement(WellknownSvgElementName.Image, new SvgImageSpec());
-                case "linearGradient":
-                    return new SvgElement(WellknownSvgElementName.LinearGradient, new SvgLinearGradientSpec());
-                case "radialGradient":
-                    return new SvgElement(WellknownSvgElementName.RadialGradient, new SvgRadialGradientSpec());
+                //case "linearGradient":
+                //    return new SvgElement(WellknownSvgElementName.LinearGradient, new SvgLinearGradientSpec());
+                //case "radialGradient":
+                //    return new SvgElement(WellknownSvgElementName.RadialGradient, new SvgRadialGradientSpec());
+                //case "stop":
+                //    return new SvgElement(WellknownSvgElementName.Stop, new SvgColorStopSpec());
                 case "circle":
                     return new SvgElement(WellknownSvgElementName.Circle, new SvgCircleSpec());
                 case "ellipse":
                     return new SvgElement(WellknownSvgElementName.Ellipse, new SvgEllipseSpec());
                 case "use":
                     return new SvgElement(WellknownSvgElementName.Use, new SvgUseSpec());
+
             }
         }
 
@@ -332,7 +341,10 @@ namespace PaintLab.Svg
         {
 
         }
-
+        public void OnTextNode(string text)
+        {
+            _specEvaluator.OnTextNode(text);
+        }
         public void OnExitingElementBody()
         {
 
@@ -463,7 +475,12 @@ namespace PaintLab.Svg
                     break;
                 case "font":
                     //parse font
-
+                    break;
+                case "font-family":
+                    textspec.FontFamily = attrValue;
+                    break;
+                case "font-size":
+                    textspec.FontSize = UserMapUtil.ParseGenericLength(attrValue);
                     break;
             }
         }
@@ -518,6 +535,9 @@ namespace PaintLab.Svg
                     break;
                 case "y2":
                     spec.Y2 = UserMapUtil.ParseGenericLength(attrValue);
+                    break;
+                case "gradientTransform":
+                    SvgParser.ParseTransform(attrValue, spec);
                     break;
             }
         }
@@ -763,6 +783,16 @@ namespace PaintLab.Svg
         //    }
         //}
 
+        public void OnTextNode(string content)
+        {
+            if (_currentElem.ElemName == "text")
+            {
+                SvgTextSpec elemSpec = (SvgTextSpec)_currentElem.ElemSpec;
+                elemSpec.TextContent = content;
+            }
+
+
+        }
         public void OnAttribute(string attrName, string value)
         {
             SvgElemSpec elemSpec = _currentElem.ElemSpec;
