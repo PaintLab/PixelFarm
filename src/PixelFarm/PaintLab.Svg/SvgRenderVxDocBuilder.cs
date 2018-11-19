@@ -1480,6 +1480,10 @@ namespace PaintLab.Svg
                 default:
                     throw new KeyNotFoundException();
                 //-----------------
+                case WellknownSvgElementName.LinearGradient:
+                    //TODO: add linear grapdient support 
+                    //this version not support linear gradient
+                    return null;
                 case WellknownSvgElementName.Defs:
                     _defsList.Add(elem);
                     return null;
