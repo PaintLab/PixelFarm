@@ -382,5 +382,35 @@ namespace LayoutFarm.WebDom.Parser
         }
 
         #endregion
+
+        //---------------------------
+        //TODO: review here again
+        //a COPY from Typography.OpenFont.Typeface  
+        const int pointsPerInch = 72;
+
+        /// <summary>
+        /// convert from point-unit value to pixel value
+        /// </summary>
+        /// <param name="pointSize"></param>
+        /// <param name="resolution"></param>
+        /// <returns></returns>
+        public static float ConvPointsToPixels(float pointSize, int resolution = 96)
+        {
+            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
+            //points = pixels * 72 / 96
+            //------------------------------------------------
+            //pixels = targetPointSize * 96 /72
+            //pixels = targetPointSize * resolution / pointPerInch
+            return pointSize * resolution / pointsPerInch;
+        }
+        public static float ConvPixelsToPoints(float pixelSize, int resolution = 96)
+        {
+            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
+            //points = pixels * 72 / 96
+            //------------------------------------------------
+            //pixels = targetPointSize * 96 /72
+            //pixels = targetPointSize * resolution / pointPerInch
+            return pixelSize * pointsPerInch / resolution;
+        }
     }
 }

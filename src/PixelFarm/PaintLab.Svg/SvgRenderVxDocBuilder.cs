@@ -765,35 +765,7 @@ namespace PaintLab.Svg
             get { return _visualSpec; }
         }
 
-        //---------------------------
-        //TODO: review here again
-        //a COPY from Typography.OpenFont.Typeface  
-        const int pointsPerInch = 72;
 
-        /// <summary>
-        /// convert from point-unit value to pixel value
-        /// </summary>
-        /// <param name="pointSize"></param>
-        /// <param name="resolution"></param>
-        /// <returns></returns>
-        static float ConvPointsToPixels(float pointSize, int resolution = 96)
-        {
-            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
-            //points = pixels * 72 / 96
-            //------------------------------------------------
-            //pixels = targetPointSize * 96 /72
-            //pixels = targetPointSize * resolution / pointPerInch
-            return pointSize * resolution / pointsPerInch;
-        }
-        static float ConvPixelsToPoints(float pixelSize, int resolution = 96)
-        {
-            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
-            //points = pixels * 72 / 96
-            //------------------------------------------------
-            //pixels = targetPointSize * 96 /72
-            //pixels = targetPointSize * resolution / pointPerInch
-            return pixelSize * pointsPerInch / resolution;
-        }
         //---------------------------
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
@@ -1023,7 +995,7 @@ namespace PaintLab.Svg
                                     //assum pixel unit , so we convert it to point
                                     p.CurrentFont = new RequestFont(
                                       textSpec.FontFace,
-                                      ConvPixelsToPoints(textSpec.FontSize.Number));
+                                    LayoutFarm.WebDom.Parser.CssValueParser.ConvPixelsToPoints(textSpec.FontSize.Number));
                                 }
                                 newFontReq = true;
                             }
@@ -1040,7 +1012,7 @@ namespace PaintLab.Svg
                                     //assum pixel unit , so we convert it to point
                                     p.CurrentFont = new RequestFont(
                                       textSpec.FontFace,
-                                      ConvPixelsToPoints(textSpec.FontSize.Number));
+                                     LayoutFarm.WebDom.Parser.CssValueParser.ConvPixelsToPoints(textSpec.FontSize.Number));
                                 }
                                 newFontReq = true;
                             }
@@ -1346,20 +1318,17 @@ namespace PaintLab.Svg
         }
     }
 
-
-
-
-
-
     public class VgVisualForeignNode : VgVisualElementBase
     {
         public object _foriegnNode;
+
+        public VgVisualForeignNode() { }
+
         public override VgVisualElementBase Clone()
         {
             return new VgVisualForeignNode { _foriegnNode = this._foriegnNode };
         }
         public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
-
     }
 
 
@@ -1405,9 +1374,12 @@ namespace PaintLab.Svg
             {
                 using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
                 {
+                    //when we find bounds, lets start with  RectD.ZeroIntersectio
                     RectD rectTotal = RectD.ZeroIntersection;
                     bool evaluated = false;
                     paintArgs._currentTx = this._coordTx;
+
+
 #if DEBUG
                     //if (this._coordTx != null)
                     //{ 
