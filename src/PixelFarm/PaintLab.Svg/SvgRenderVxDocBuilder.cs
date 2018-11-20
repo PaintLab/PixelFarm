@@ -1,5 +1,4 @@
-﻿//----------------------------------------------------------------------------
-//MIT, 2014-present, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -12,9 +11,10 @@ using LayoutFarm.WebDom;
 
 namespace PaintLab.Svg
 {
-    public class VgImageBinder : LayoutFarm.ImageBinder
-    {
 
+    class VgImageBinder : LayoutFarm.ImageBinder
+    {
+        //TODO: review this again
         public VgImageBinder(string imgsrc) : base(imgsrc)
         {
         }
@@ -117,7 +117,7 @@ namespace PaintLab.Svg
         /// <summary>
         /// use for finding vg boundaries
         /// </summary>
-        public float TempCurrentStrokeWidth;
+        public float TempCurrentStrokeWidth { get; internal set; }
 
         internal override void Reset()
         {
@@ -227,7 +227,7 @@ namespace PaintLab.Svg
 
     class VgUseVisualElement : VgVisualElement
     {
-        public VgUseVisualElement(SvgUseSpec useSpec, VgVisualRootElement root)
+        public VgUseVisualElement(SvgUseSpec useSpec, VgDocRoot root)
             : base(WellknownSvgElementName.Use, useSpec, root)
         {
 
@@ -235,6 +235,7 @@ namespace PaintLab.Svg
         internal VgVisualElement HRefSvgRenderElement { get; set; }
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
+
             Painter p = vgPainterArgs.P;
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
             //
@@ -246,7 +247,11 @@ namespace PaintLab.Svg
 
             if (current_tx != null)
             {
-                //*** IMPORTANT : matrix transform order !***           
+                //*** IMPORTANT : matrix transform order !***
+                //TODO:
+                //in this version, assume X number is pixel => not always correct
+                //please use this => LayoutFarm.WebDom.Parser.CssValueParser.ConvertToPx() instead
+                //
                 vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
@@ -280,7 +285,6 @@ namespace PaintLab.Svg
             }
 
             HRefSvgRenderElement.Paint(vgPainterArgs);
-            //base.Paint(vgPainterArgs);
 
             //restore
             p.FillColor = color;
@@ -344,18 +348,15 @@ namespace PaintLab.Svg
                 }
             }
         }
-
     }
 
 
-    /// <summary>
-    ///root element of vg visual (render) tree
-    /// </summary>
-    public class VgVisualRootElement
+
+    public class VgDocRoot
     {
         internal Action<VgVisualElement> _invalidate;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgReqHandler;
-        public VgVisualRootElement()
+        public VgDocRoot()
         {
         }
         public Action<LayoutFarm.ImageBinder, VgVisualElement, object> ImgRequestHandler
@@ -368,6 +369,7 @@ namespace PaintLab.Svg
         }
         internal void Invalidate(VgVisualElement e)
         {
+            //***
             if (_invalidate != null)
             {
                 _invalidate(e);
@@ -405,10 +407,10 @@ namespace PaintLab.Svg
         internal SvgVisualSpec _visualSpec;
         internal VgPathVisualMarkers _pathMarkers;
         LayoutFarm.ImageBinder _imgBinder;
-        VgVisualRootElement _renderRoot;
+        VgDocRoot _renderRoot;
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
-            VgVisualRootElement renderRoot)
+            VgDocRoot renderRoot)
         {
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
@@ -1483,7 +1485,7 @@ namespace PaintLab.Svg
         float _containerHeight = 500;//default?
         float _emHeight = 17;//default
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
-        VgVisualRootElement _renderRoot;
+        VgDocRoot _renderRoot;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _handler;
         public VgRenderVxDocBuilder()
         {
@@ -1498,7 +1500,7 @@ namespace PaintLab.Svg
             _svgdoc = svgdoc;
             _activeSheet1 = svgdoc.CssActiveSheet;
 
-            _renderRoot = new VgVisualRootElement();
+            _renderRoot = new VgDocRoot();
             _renderRoot._invalidate = invalidate;
             _renderRoot.ImgRequestHandler += _handler;
             //---------------------------
