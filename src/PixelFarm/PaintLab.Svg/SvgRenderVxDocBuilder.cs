@@ -1,5 +1,4 @@
-﻿//----------------------------------------------------------------------------
-//MIT, 2014-present, WinterDev
+﻿//MIT, 2014-present, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -12,9 +11,10 @@ using LayoutFarm.WebDom;
 
 namespace PaintLab.Svg
 {
+
     public class VgImageBinder : LayoutFarm.ImageBinder
     {
-
+        //TODO: review this again
         public VgImageBinder(string imgsrc) : base(imgsrc)
         {
         }
@@ -101,29 +101,31 @@ namespace PaintLab.Svg
     {
         public VgVisualElement Current;
         public ICoordTransformer _currentTx;
+        internal VgVisitorBase() { }
         internal virtual void Reset()
         {
             _currentTx = null;
             Current = null;
-
         }
     }
 
     public class VgVisitorArgs : VgVisitorBase
     {
         internal VgVisitorArgs() { }
-        public Action<VertexStore, VgVisitorArgs> ExternalVgElemenVisitHandler;
+        public Action<VertexStore, VgVisitorArgs> VgElemenVisitHandler;
 
         /// <summary>
         /// use for finding vg boundaries
         /// </summary>
-        public float TempCurrentStrokeWidth;
+        public float TempCurrentStrokeWidth { get; internal set; }
 
         internal override void Reset()
         {
-            base.Reset();//***
+            base.Reset();//*** reset base class fiels too
+
+            //-------
             TempCurrentStrokeWidth = 1;
-            ExternalVgElemenVisitHandler = null;
+            VgElemenVisitHandler = null;
         }
     }
 
@@ -132,11 +134,14 @@ namespace PaintLab.Svg
     {
         internal VgPaintArgs() { }
         public Painter P { get; internal set; }
-        public Action<VertexStore, VgPaintArgs> ExternalPaintVisitHandler;
+        public Action<VertexStore, VgPaintArgs> PaintVisitHandler;
         internal override void Reset()
         {
+            base.Reset();//*** reset base class fiels too
+            //-------
+
             P = null;
-            ExternalPaintVisitHandler = null;
+            PaintVisitHandler = null;
         }
     }
 
@@ -227,7 +232,7 @@ namespace PaintLab.Svg
 
     class VgUseVisualElement : VgVisualElement
     {
-        public VgUseVisualElement(SvgUseSpec useSpec, VgVisualRootElement root)
+        public VgUseVisualElement(SvgUseSpec useSpec, VgDocRoot root)
             : base(WellknownSvgElementName.Use, useSpec, root)
         {
 
@@ -235,6 +240,7 @@ namespace PaintLab.Svg
         internal VgVisualElement HRefSvgRenderElement { get; set; }
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
+
             Painter p = vgPainterArgs.P;
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
             //
@@ -246,7 +252,11 @@ namespace PaintLab.Svg
 
             if (current_tx != null)
             {
-                //*** IMPORTANT : matrix transform order !***           
+                //*** IMPORTANT : matrix transform order !***
+                //TODO:
+                //in this version, assume X number is pixel => not always correct
+                //please use this => LayoutFarm.WebDom.Parser.CssValueParser.ConvertToPx() instead
+                //
                 vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
@@ -280,7 +290,6 @@ namespace PaintLab.Svg
             }
 
             HRefSvgRenderElement.Paint(vgPainterArgs);
-            //base.Paint(vgPainterArgs);
 
             //restore
             p.FillColor = color;
@@ -344,18 +353,15 @@ namespace PaintLab.Svg
                 }
             }
         }
-
     }
 
 
-    /// <summary>
-    ///root element of vg visual (render) tree
-    /// </summary>
-    public class VgVisualRootElement
+
+    public class VgDocRoot
     {
         internal Action<VgVisualElement> _invalidate;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgReqHandler;
-        public VgVisualRootElement()
+        public VgDocRoot()
         {
         }
         public Action<LayoutFarm.ImageBinder, VgVisualElement, object> ImgRequestHandler
@@ -368,6 +374,7 @@ namespace PaintLab.Svg
         }
         internal void Invalidate(VgVisualElement e)
         {
+            //***
             if (_invalidate != null)
             {
                 _invalidate(e);
@@ -405,10 +412,10 @@ namespace PaintLab.Svg
         internal SvgVisualSpec _visualSpec;
         internal VgPathVisualMarkers _pathMarkers;
         LayoutFarm.ImageBinder _imgBinder;
-        VgVisualRootElement _renderRoot;
+        VgDocRoot _renderRoot;
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
-            VgVisualRootElement renderRoot)
+            VgDocRoot renderRoot)
         {
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
@@ -416,11 +423,12 @@ namespace PaintLab.Svg
         }
 
         public override WellknownSvgElementName ElemName => _wellknownName;
-        public void SetController(object o)
-        {
-            _controller = o;
-        }
+
+        //
+        public void SetController(object o) { _controller = o; }
         public object GetController() { return _controller; }
+        //
+
         public LayoutFarm.ImageBinder ImageBinder
         {
             get
@@ -457,7 +465,7 @@ namespace PaintLab.Svg
         {
             using (VgVistorArgsPool.Borrow(out VgVisitorArgs visitor))
             {
-                visitor.ExternalVgElemenVisitHandler = (vxs, args) =>
+                visitor.VgElemenVisitHandler = (vxs, args) =>
                 {
                     if (args.Current != null &&
                        PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, x, y))
@@ -473,7 +481,7 @@ namespace PaintLab.Svg
         {
             using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
             {
-                paintArgs.ExternalVgElemenVisitHandler = (vxs, args) =>
+                paintArgs.VgElemenVisitHandler = (vxs, args) =>
                 {
 
                     if (args.Current != null &&
@@ -572,7 +580,7 @@ namespace PaintLab.Svg
 
         public override void Accept(VgVisitorArgs visitor)
         {
-            if (visitor.ExternalVgElemenVisitHandler == null)
+            if (visitor.VgElemenVisitHandler == null)
             {
                 return;
             }
@@ -676,7 +684,7 @@ namespace PaintLab.Svg
                         if (currentTx == null)
                         {
                             visitor.Current = this;
-                            visitor.ExternalVgElemenVisitHandler(_vxsPath, visitor);
+                            visitor.VgElemenVisitHandler(_vxsPath, visitor);
                             visitor.Current = null;
                         }
                         else
@@ -686,7 +694,7 @@ namespace PaintLab.Svg
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
                                 visitor.Current = this;
-                                visitor.ExternalVgElemenVisitHandler(v1, visitor);
+                                visitor.VgElemenVisitHandler(v1, visitor);
                                 visitor.Current = null;
                             }
                         }
@@ -763,35 +771,7 @@ namespace PaintLab.Svg
             get { return _visualSpec; }
         }
 
-        //---------------------------
-        //TODO: review here again
-        //a COPY from Typography.OpenFont.Typeface  
-        const int pointsPerInch = 72;
 
-        /// <summary>
-        /// convert from point-unit value to pixel value
-        /// </summary>
-        /// <param name="pointSize"></param>
-        /// <param name="resolution"></param>
-        /// <returns></returns>
-        static float ConvPointsToPixels(float pointSize, int resolution = 96)
-        {
-            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
-            //points = pixels * 72 / 96
-            //------------------------------------------------
-            //pixels = targetPointSize * 96 /72
-            //pixels = targetPointSize * resolution / pointPerInch
-            return pointSize * resolution / pointsPerInch;
-        }
-        static float ConvPixelsToPoints(float pixelSize, int resolution = 96)
-        {
-            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
-            //points = pixels * 72 / 96
-            //------------------------------------------------
-            //pixels = targetPointSize * 96 /72
-            //pixels = targetPointSize * resolution / pointPerInch
-            return pixelSize * pointsPerInch / resolution;
-        }
         //---------------------------
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
@@ -1021,7 +1001,7 @@ namespace PaintLab.Svg
                                     //assum pixel unit , so we convert it to point
                                     p.CurrentFont = new RequestFont(
                                       textSpec.FontFace,
-                                      ConvPixelsToPoints(textSpec.FontSize.Number));
+                                    LayoutFarm.WebDom.Parser.CssValueParser.ConvPixelsToPoints(textSpec.FontSize.Number));
                                 }
                                 newFontReq = true;
                             }
@@ -1038,7 +1018,7 @@ namespace PaintLab.Svg
                                     //assum pixel unit , so we convert it to point
                                     p.CurrentFont = new RequestFont(
                                       textSpec.FontFace,
-                                      ConvPixelsToPoints(textSpec.FontSize.Number));
+                                     LayoutFarm.WebDom.Parser.CssValueParser.ConvPixelsToPoints(textSpec.FontSize.Number));
                                 }
                                 newFontReq = true;
                             }
@@ -1080,7 +1060,7 @@ namespace PaintLab.Svg
                         {
                             //no transform
 
-                            if (vgPainterArgs.ExternalPaintVisitHandler == null)
+                            if (vgPainterArgs.PaintVisitHandler == null)
                             {
                                 if (p.FillColor.A > 0)
                                 {
@@ -1122,7 +1102,7 @@ namespace PaintLab.Svg
                             }
                             else
                             {
-                                vgPainterArgs.ExternalPaintVisitHandler(_vxsPath, vgPainterArgs);
+                                vgPainterArgs.PaintVisitHandler(_vxsPath, vgPainterArgs);
                             }
 
 
@@ -1226,7 +1206,7 @@ namespace PaintLab.Svg
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
 
-                                if (vgPainterArgs.ExternalPaintVisitHandler == null)
+                                if (vgPainterArgs.PaintVisitHandler == null)
                                 {
                                     if (p.FillColor.A > 0)
                                     {
@@ -1243,7 +1223,7 @@ namespace PaintLab.Svg
                                 }
                                 else
                                 {
-                                    vgPainterArgs.ExternalPaintVisitHandler(v1, vgPainterArgs);
+                                    vgPainterArgs.PaintVisitHandler(v1, vgPainterArgs);
                                 }
                             }
 
@@ -1344,20 +1324,17 @@ namespace PaintLab.Svg
         }
     }
 
-
-
-
-
-
     public class VgVisualForeignNode : VgVisualElementBase
     {
         public object _foriegnNode;
+
+        public VgVisualForeignNode() { }
+
         public override VgVisualElementBase Clone()
         {
             return new VgVisualForeignNode { _foriegnNode = this._foriegnNode };
         }
         public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
-
     }
 
 
@@ -1403,9 +1380,12 @@ namespace PaintLab.Svg
             {
                 using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
                 {
+                    //when we find bounds, lets start with  RectD.ZeroIntersectio
                     RectD rectTotal = RectD.ZeroIntersection;
                     bool evaluated = false;
                     paintArgs._currentTx = this._coordTx;
+
+
 #if DEBUG
                     //if (this._coordTx != null)
                     //{ 
@@ -1413,7 +1393,7 @@ namespace PaintLab.Svg
 #endif
 
                     float maxStrokeWidth = 1;
-                    paintArgs.ExternalVgElemenVisitHandler = (vxs, args) =>
+                    paintArgs.VgElemenVisitHandler = (vxs, args) =>
                     {
                         evaluated = true;//once 
                         BoundingRect.GetBoundingRect(vxs, ref rectTotal);
@@ -1483,7 +1463,7 @@ namespace PaintLab.Svg
         float _containerHeight = 500;//default?
         float _emHeight = 17;//default
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
-        VgVisualRootElement _renderRoot;
+        VgDocRoot _renderRoot;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _handler;
         public VgRenderVxDocBuilder()
         {
@@ -1498,7 +1478,7 @@ namespace PaintLab.Svg
             _svgdoc = svgdoc;
             _activeSheet1 = svgdoc.CssActiveSheet;
 
-            _renderRoot = new VgVisualRootElement();
+            _renderRoot = new VgDocRoot();
             _renderRoot._invalidate = invalidate;
             _renderRoot.ImgRequestHandler += _handler;
             //---------------------------
@@ -1534,6 +1514,7 @@ namespace PaintLab.Svg
 
             return rootSvgElem;
         }
+
         public VgRenderVx CreateRenderVx(SvgDocument svgdoc, Action<VgVisualElement> invalidateAction = null)
         {
             return new VgRenderVx(CreateSvgRenderElement(svgdoc, invalidateAction));
@@ -1971,7 +1952,7 @@ namespace PaintLab.Svg
                 if (child.ElemName == "stop")
                 {
                     //color stop
-
+                    //TODO: implement this....
                 }
             }
 

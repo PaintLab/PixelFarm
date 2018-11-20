@@ -336,7 +336,7 @@ namespace LayoutFarm.UI
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = tx;
-                paintArgs.ExternalPaintVisitHandler = (vxs, painterA) =>
+                paintArgs.PaintVisitHandler = (vxs, painterA) =>
                 {
                     //use external painter handler
                     //draw only outline with its fill-color.

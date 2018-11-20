@@ -225,7 +225,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 using (VgPainterArgsPool.Borrow(aggPainter, out VgPaintArgs paintArgs))
                 {
                     paintArgs._currentTx = affTx;
-                    paintArgs.ExternalPaintVisitHandler = (vxs, painterA) =>
+                    paintArgs.PaintVisitHandler = (vxs, painterA) =>
                     {
                         //use external painter handler
                         //draw only outline with its fill-color. 
@@ -255,7 +255,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     using (VgPainterArgsPool.Borrow(aggPainter, out VgPaintArgs paintArgs))
                     {
                         paintArgs._currentTx = affTx;
-                        paintArgs.ExternalPaintVisitHandler = (vxs, painterA) =>
+                        paintArgs.PaintVisitHandler = (vxs, painterA) =>
                         {
                             //use external painter handler
                             //draw only outline with its fill-color.
@@ -292,7 +292,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     using (VgPainterArgsPool.Borrow(aggPainter, out VgPaintArgs paintArgs))
                     {
                         paintArgs._currentTx = affTx;
-                        paintArgs.ExternalPaintVisitHandler = (vxs, painterA) =>
+                        paintArgs.PaintVisitHandler = (vxs, painterA) =>
                         {
                             //use external painter handler
                             //draw only outline with its fill-color.
