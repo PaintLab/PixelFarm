@@ -413,6 +413,7 @@ namespace PaintLab.Svg
         internal VgPathVisualMarkers _pathMarkers;
         LayoutFarm.ImageBinder _imgBinder;
         VgDocRoot _renderRoot;
+
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
             VgDocRoot renderRoot)
