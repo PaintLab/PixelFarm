@@ -12,7 +12,7 @@ using LayoutFarm.WebDom;
 namespace PaintLab.Svg
 {
 
-    class VgImageBinder : LayoutFarm.ImageBinder
+    public class VgImageBinder : LayoutFarm.ImageBinder
     {
         //TODO: review this again
         public VgImageBinder(string imgsrc) : base(imgsrc)
@@ -418,11 +418,12 @@ namespace PaintLab.Svg
         }
 
         public override WellknownSvgElementName ElemName => _wellknownName;
-        public void SetController(object o)
-        {
-            _controller = o;
-        }
+
+        //
+        public void SetController(object o) { _controller = o; }
         public object GetController() { return _controller; }
+        //
+
         public LayoutFarm.ImageBinder ImageBinder
         {
             get
@@ -1508,6 +1509,7 @@ namespace PaintLab.Svg
 
             return rootSvgElem;
         }
+
         public VgRenderVx CreateRenderVx(SvgDocument svgdoc, Action<VgVisualElement> invalidateAction = null)
         {
             return new VgRenderVx(CreateSvgRenderElement(svgdoc, invalidateAction));
@@ -1945,7 +1947,7 @@ namespace PaintLab.Svg
                 if (child.ElemName == "stop")
                 {
                     //color stop
-
+                    //TODO: implement this....
                 }
             }
 
