@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using LayoutFarm.HtmlBoxes;
 using LayoutFarm.WebDom;
 using LayoutFarm.WebDom.Parser;
 namespace PaintLab.Svg
@@ -452,7 +451,7 @@ namespace PaintLab.Svg
                                 if (value != "none")
                                 {
 
-                                    spec.FillColor = CssValueParser2.ParseCssColor(value);
+                                    spec.FillColor = CssValueParser.ParseCssColor(value);
                                 }
                             }
                             break;
@@ -865,7 +864,7 @@ namespace PaintLab.Svg
                     {
                         if (value != "none")
                         {
-                            spec.FillColor = CssValueParser2.ParseCssColor(value);
+                            spec.FillColor = CssValueParser.ParseCssColor(value);
                         }
                     }
                     break;
@@ -886,7 +885,7 @@ namespace PaintLab.Svg
                         if (value != "none")
                         {
                             //spec.StrokeColor = ConvToActualColor(CssValueParser2.GetActualColor(value));
-                            spec.StrokeColor = CssValueParser2.ParseCssColor(value);
+                            spec.StrokeColor = CssValueParser.ParseCssColor(value);
                         }
                     }
                     break;

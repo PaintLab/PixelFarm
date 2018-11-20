@@ -97,26 +97,47 @@ namespace PaintLab.Svg
         }
     }
 
-    public class VgPaintArgs
+    public abstract class VgVisitorBase
     {
-        public Painter P { get; internal set; }
-        public ICoordTransformer _currentTx;
-
-        public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
         public VgVisualElement Current;
-
-        internal void Reset()
+        public ICoordTransformer _currentTx;
+        internal virtual void Reset()
         {
-            P = null;
             _currentTx = null;
-            ExternalVxsVisitHandler = null;
             Current = null;
+
         }
+    }
+
+    public class VgVisitorArgs : VgVisitorBase
+    {
+        internal VgVisitorArgs() { }
+        public Action<VertexStore, VgVisitorArgs> ExternalVgElemenVisitHandler;
 
         /// <summary>
         /// use for finding vg boundaries
         /// </summary>
         public float TempCurrentStrokeWidth;
+
+        internal override void Reset()
+        {
+            base.Reset();//***
+            TempCurrentStrokeWidth = 1;
+            ExternalVgElemenVisitHandler = null;
+        }
+    }
+
+
+    public class VgPaintArgs : VgVisitorBase
+    {
+        internal VgPaintArgs() { }
+        public Painter P { get; internal set; }
+        public Action<VertexStore, VgPaintArgs> ExternalPaintVisitHandler;
+        internal override void Reset()
+        {
+            P = null;
+            ExternalPaintVisitHandler = null;
+        }
     }
 
     public static class VgPainterArgsPool
@@ -136,9 +157,25 @@ namespace PaintLab.Svg
             return context;
         }
     }
+    public static class VgVistorArgsPool
+    {
 
+        public static TempContext<VgVisitorArgs> Borrow(out VgVisitorArgs visitor)
+        {
+            if (!Temp<VgVisitorArgs>.IsInit())
+            {
+                Temp<VgVisitorArgs>.SetNewHandler(
+                    () => new VgVisitorArgs(),
+                    p => p.Reset());//when relese back
+            }
 
+            return Temp<VgVisitorArgs>.Borrow(out visitor);
+        }
+    }
 
+    /// <summary>
+    /// Base class of vg element that draw on rendering surface with painter. 
+    /// </summary>
     public abstract class VgVisualElementBase
     {
         public virtual void Paint(VgPaintArgs p)
@@ -146,13 +183,14 @@ namespace PaintLab.Svg
             //paint with painter interface
         }
         public abstract WellknownSvgElementName ElemName { get; }
-        public virtual void Walk(VgPaintArgs p) { }
+        public virtual void Accept(VgVisitorArgs p) { }
 
         /// <summary>
         /// clone visual part
         /// </summary>
         /// <returns></returns>
         public abstract VgVisualElementBase Clone();
+
 #if DEBUG
         public bool dbugHasParent;
 
@@ -160,19 +198,18 @@ namespace PaintLab.Svg
         static int s_dbugTotalId;
 #endif
     }
+
+
     public class VgTextNodeVisualElement : VgVisualElementBase
     {
         public VgTextNodeVisualElement() { }
         public string TextContent { get; set; }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.Text;
         public override VgVisualElementBase Clone()
         {
             return new VgTextNodeVisualElement { TextContent = this.TextContent };
         }
-        public override WellknownSvgElementName ElemName => WellknownSvgElementName.Text;
     }
-
-
-
     class VgPathVisualMarkers
     {
         public PointF StartMarkerPos { get; set; }
@@ -252,26 +289,26 @@ namespace PaintLab.Svg
             //
             vgPainterArgs._currentTx = current_tx;
         }
-        public override void Walk(VgPaintArgs vgPainterArgs)
+        public override void Accept(VgVisitorArgs visitor)
         {
 
             SvgUseSpec useSpec = (SvgUseSpec)this._visualSpec;
-            ICoordTransformer current_tx = vgPainterArgs._currentTx;
+            ICoordTransformer current_tx = visitor._currentTx;
 
             if (current_tx != null)
             {
                 //*** IMPORTANT : matrix transform order !***           
-                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
+                visitor._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number).MultiplyWith(current_tx);
             }
             else
             {
-                vgPainterArgs._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number);
+                visitor._currentTx = Affine.NewTranslation(useSpec.X.Number, useSpec.Y.Number);
             }
 
 
-            HRefSvgRenderElement.Walk(vgPainterArgs);
+            HRefSvgRenderElement.Accept(visitor);
 
-            vgPainterArgs._currentTx = current_tx;
+            visitor._currentTx = current_tx;
             //base.Walk(vgPainterArgs);
         }
     }
@@ -310,6 +347,10 @@ namespace PaintLab.Svg
 
     }
 
+
+    /// <summary>
+    ///root element of vg visual (render) tree
+    /// </summary>
     public class VgVisualRootElement
     {
         internal Action<VgVisualElement> _invalidate;
@@ -350,6 +391,8 @@ namespace PaintLab.Svg
             }
         }
     }
+
+
     public class VgVisualElement : VgVisualElementBase
     {
 
@@ -412,9 +455,9 @@ namespace PaintLab.Svg
 
         public void HitTest(float x, float y, Action<VgVisualElement, float, float, VertexStore> onHitSvg)
         {
-            using (VgPainterArgsPool.Borrow(null, out VgPaintArgs paintArgs))
+            using (VgVistorArgsPool.Borrow(out VgVisitorArgs visitor))
             {
-                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                visitor.ExternalVgElemenVisitHandler = (vxs, args) =>
                 {
                     if (args.Current != null &&
                        PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, x, y))
@@ -423,14 +466,14 @@ namespace PaintLab.Svg
                         onHitSvg(args.Current, x, y, vxs);
                     }
                 };
-                this.Walk(paintArgs);
+                this.Accept(visitor);
             }
         }
         public bool HitTest(VgHitChain hitChain)
         {
-            using (VgPainterArgsPool.Borrow(null, out VgPaintArgs paintArgs))
+            using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
             {
-                paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                paintArgs.ExternalVgElemenVisitHandler = (vxs, args) =>
                 {
 
                     if (args.Current != null &&
@@ -443,7 +486,7 @@ namespace PaintLab.Svg
                             hitChain.MakeCopyOfHitVxs ? vxs.CreateTrim() : null);
                     }
                 };
-                this.Walk(paintArgs);
+                this.Accept(paintArgs);
                 return hitChain.Count > 0;
             }
         }
@@ -527,16 +570,16 @@ namespace PaintLab.Svg
         }
 
 
-        public override void Walk(VgPaintArgs vgPainterArgs)
+        public override void Accept(VgVisitorArgs visitor)
         {
-            if (vgPainterArgs.ExternalVxsVisitHandler == null)
+            if (visitor.ExternalVgElemenVisitHandler == null)
             {
                 return;
             }
 
             //----------------------------------------------------
-            ICoordTransformer prevTx = vgPainterArgs._currentTx; //backup
-            ICoordTransformer currentTx = vgPainterArgs._currentTx;
+            ICoordTransformer prevTx = visitor._currentTx; //backup
+            ICoordTransformer currentTx = visitor._currentTx;
 
             if (_visualSpec != null)
             {
@@ -547,20 +590,20 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //*** IMPORTANT : matrix transform order !***                         
-                        currentTx = latest.MultiplyWith(vgPainterArgs._currentTx);
+                        currentTx = latest.MultiplyWith(visitor._currentTx);
                     }
                     else
                     {
                         currentTx = latest;
                     }
 
-                    vgPainterArgs._currentTx = currentTx;
+                    visitor._currentTx = currentTx;
                 }
 
                 if (!_visualSpec.StrokeWidth.IsEmptyOrAuto &&
                     _visualSpec.StrokeWidth.Number > 1)
                 {
-                    vgPainterArgs.TempCurrentStrokeWidth = _visualSpec.StrokeWidth.Number;
+                    visitor.TempCurrentStrokeWidth = _visualSpec.StrokeWidth.Number;
                 }
 
                 //***SKIP CLIPPING***
@@ -632,9 +675,9 @@ namespace PaintLab.Svg
 
                         if (currentTx == null)
                         {
-                            vgPainterArgs.Current = this;
-                            vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
-                            vgPainterArgs.Current = null;
+                            visitor.Current = this;
+                            visitor.ExternalVgElemenVisitHandler(_vxsPath, visitor);
+                            visitor.Current = null;
                         }
                         else
                         {
@@ -642,9 +685,9 @@ namespace PaintLab.Svg
                             using (VxsTemp.Borrow(out var v1))
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
-                                vgPainterArgs.Current = this;
-                                vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
-                                vgPainterArgs.Current = null;
+                                visitor.Current = this;
+                                visitor.ExternalVgElemenVisitHandler(v1, visitor);
+                                visitor.Current = null;
                             }
                         }
                         //------
@@ -663,14 +706,14 @@ namespace PaintLab.Svg
                                     //set offset   
                                     if (_pathMarkers.StartMarkerAffine != null)
                                     {
-                                        vgPainterArgs._currentTx = Affine.NewTranslation(
+                                        visitor._currentTx = Affine.NewTranslation(
                                             _pathMarkers.StartMarkerPos.X,
                                             _pathMarkers.StartMarkerPos.Y) * _pathMarkers.StartMarkerAffine;
                                     }
 
-                                    _pathMarkers.StartMarker.GetChildNode(i).Walk(vgPainterArgs);
+                                    _pathMarkers.StartMarker.GetChildNode(i).Accept(visitor);
                                 }
-                                vgPainterArgs._currentTx = currentTx;
+                                visitor._currentTx = currentTx;
 
                             }
                             if (_pathMarkers.EndMarker != null)
@@ -682,12 +725,12 @@ namespace PaintLab.Svg
                                     //temp fix 
                                     if (_pathMarkers.EndMarkerAffine != null)
                                     {
-                                        vgPainterArgs._currentTx = Affine.NewTranslation(
+                                        visitor._currentTx = Affine.NewTranslation(
                                             _pathMarkers.EndMarkerPos.X, _pathMarkers.EndMarkerPos.Y) * _pathMarkers.EndMarkerAffine;
                                     }
-                                    _pathMarkers.EndMarker.GetChildNode(i).Walk(vgPainterArgs);
+                                    _pathMarkers.EndMarker.GetChildNode(i).Accept(visitor);
                                 }
-                                vgPainterArgs._currentTx = currentTx;
+                                visitor._currentTx = currentTx;
                             }
                         }
                     }
@@ -701,12 +744,12 @@ namespace PaintLab.Svg
                 var node = GetChildNode(i) as VgVisualElement;
                 if (node != null)
                 {
-                    node.Walk(vgPainterArgs);
+                    node.Accept(visitor);
                 }
             }
 
 
-            vgPainterArgs._currentTx = prevTx;
+            visitor._currentTx = prevTx;
             //***SKIP CLIPPING***
             //if (hasClip)
             //{
@@ -1037,7 +1080,7 @@ namespace PaintLab.Svg
                         {
                             //no transform
 
-                            if (vgPainterArgs.ExternalVxsVisitHandler == null)
+                            if (vgPainterArgs.ExternalPaintVisitHandler == null)
                             {
                                 if (p.FillColor.A > 0)
                                 {
@@ -1079,7 +1122,7 @@ namespace PaintLab.Svg
                             }
                             else
                             {
-                                vgPainterArgs.ExternalVxsVisitHandler(_vxsPath, vgPainterArgs);
+                                vgPainterArgs.ExternalPaintVisitHandler(_vxsPath, vgPainterArgs);
                             }
 
 
@@ -1183,7 +1226,7 @@ namespace PaintLab.Svg
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
 
-                                if (vgPainterArgs.ExternalVxsVisitHandler == null)
+                                if (vgPainterArgs.ExternalPaintVisitHandler == null)
                                 {
                                     if (p.FillColor.A > 0)
                                     {
@@ -1200,7 +1243,7 @@ namespace PaintLab.Svg
                                 }
                                 else
                                 {
-                                    vgPainterArgs.ExternalVxsVisitHandler(v1, vgPainterArgs);
+                                    vgPainterArgs.ExternalPaintVisitHandler(v1, vgPainterArgs);
                                 }
                             }
 
@@ -1301,6 +1344,11 @@ namespace PaintLab.Svg
         }
     }
 
+
+
+
+
+
     public class VgVisualForeignNode : VgVisualElementBase
     {
         public object _foriegnNode;
@@ -1353,7 +1401,7 @@ namespace PaintLab.Svg
             //***
             if (_needBoundUpdate)
             {
-                using (VgPainterArgsPool.Borrow(null, out VgPaintArgs paintArgs))
+                using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
                 {
                     RectD rectTotal = RectD.ZeroIntersection;
                     bool evaluated = false;
@@ -1365,7 +1413,7 @@ namespace PaintLab.Svg
 #endif
 
                     float maxStrokeWidth = 1;
-                    paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
+                    paintArgs.ExternalVgElemenVisitHandler = (vxs, args) =>
                     {
                         evaluated = true;//once 
                         BoundingRect.GetBoundingRect(vxs, ref rectTotal);
@@ -1375,7 +1423,7 @@ namespace PaintLab.Svg
                         }
 
                     };
-                    _vgVisualElement.Walk(paintArgs);
+                    _vgVisualElement.Accept(paintArgs);
                     _needBoundUpdate = false;
 
                     if (evaluated && maxStrokeWidth > 1)
@@ -1817,7 +1865,7 @@ namespace PaintLab.Svg
                         //turn marker to the start direction
                         PointF p0 = points[j - 2]; //before the last one
                         PointF p1 = points[j - 1];//the last one
-                        //find rotation angle
+                                                  //find rotation angle
                         double rotateRad = Math.Atan2(p1.Y - p0.Y, p1.X - p0.X);
                         SvgMarkerSpec markerSpec = (SvgMarkerSpec)pathMarkers.EndMarker._visualSpec;
 
@@ -1981,7 +2029,7 @@ namespace PaintLab.Svg
                                 textspec.FontFace = propDecl.GetPropertyValue(0).ToString();
                                 break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.Fill:
-                                textspec.FillColor = LayoutFarm.HtmlBoxes.CssValueParser2.ParseCssColor(propDecl.GetPropertyValue(0).ToString());
+                                textspec.FillColor = LayoutFarm.WebDom.Parser.CssValueParser.ParseCssColor(propDecl.GetPropertyValue(0).ToString());
                                 break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.Unknown:
                                 {
@@ -2063,6 +2111,7 @@ namespace PaintLab.Svg
 
         static float ConvertToPx(LayoutFarm.Css.CssLength length, ref ReEvaluateArgs args)
         {
+
             //Return zero if no length specified, zero specified      
             switch (length.UnitOrNames)
             {
