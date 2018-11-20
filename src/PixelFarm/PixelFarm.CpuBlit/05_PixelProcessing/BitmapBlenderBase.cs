@@ -90,9 +90,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         /// <param name="imgbuffer"></param>
         /// <param name="outputPxBlender"></param>
         protected void Attach(int width, int height, int bitsPerPixel, CpuBlit.Imaging.TempMemPtr imgbuffer, PixelBlender32 outputPxBlender)
-        {
-
-
+        {   
             if (width <= 0 || height <= 0)
             {
                 throw new ArgumentOutOfRangeException("You must have a width and height > than 0.");

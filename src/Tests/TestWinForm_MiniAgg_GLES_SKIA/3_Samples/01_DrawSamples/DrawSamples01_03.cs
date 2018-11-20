@@ -45,11 +45,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 p.RenderQuality = RenderQuality.HighQuality;
             }
-
-
-
             p.Clear(Drawing.Color.White);
-
             p.UseSubPixelLcdEffect = false;
             //string teststr = "ABCDE pqyt 1230";
             //p.FillColor = Color.Black;
@@ -184,7 +180,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
                     using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
                     {
-                        
+
                         ellipseVxsGen.MakeVxs(mat, v2);
                         p.FillColor = Drawing.Color.Yellow;
                         p.Fill(v2);

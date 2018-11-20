@@ -312,13 +312,13 @@ namespace LayoutFarm.UI
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
 
         }
         public void Paint(VgPaintArgs paintArgs)
         {
-            _svgRenderVx._renderE.Paint(paintArgs);
+            _svgRenderVx._vgVisualElement.Paint(paintArgs);
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
@@ -336,7 +336,7 @@ namespace LayoutFarm.UI
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = tx;
-                paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                paintArgs.PaintVisitHandler = (vxs, painterA) =>
                 {
                     //use external painter handler
                     //draw only outline with its fill-color.
@@ -346,7 +346,7 @@ namespace LayoutFarm.UI
                     m_painter.Fill(vxs);
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -398,7 +398,7 @@ namespace LayoutFarm.UI
         public void HitTestOnSubPart(VgHitChain hitChain)
         {
 
-            _svgRenderVx._renderE.HitTest(hitChain);
+            _svgRenderVx._vgVisualElement.HitTest(hitChain);
         }
 
         public override void ResetRootGraphics(RootGraphic rootgfx)

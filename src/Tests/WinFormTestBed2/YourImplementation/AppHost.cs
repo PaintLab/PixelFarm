@@ -14,8 +14,6 @@ namespace LayoutFarm
 
         public AppHost()
         {
-
-
         }
         protected abstract LayoutFarm.UI.UISurfaceViewportControl GetHostSurfaceViewportControl();
 
@@ -73,9 +71,6 @@ namespace LayoutFarm
             });
             return clientImgBinder;
         }
-
     }
-
-
 
 }

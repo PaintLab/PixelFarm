@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
-                _renderVx._renderE.Paint(paintArgs);
+                _renderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -111,22 +111,14 @@ namespace PixelFarm.CpuBlit.Samples
 
                     //create 
                     MemBitmap backBmp = new MemBitmap((int)bound.Width, (int)bound.Height);
-                    AggPainter painter = AggPainter.Create(backBmp);
-
-
+                    AggPainter painter = AggPainter.Create(backBmp); 
                     painter.Clear(Drawing.Color.White);
                     painter.StrokeColor = Color.Transparent;
-                    painter.StrokeWidth = 1;//svg standard, init stroke-width =1
-
-                    //#if DEBUG
-                    //            _dbugSW.Reset();
-                    //            _dbugSW.Start();
-                    //#endif 
-
+                    painter.StrokeWidth = 1; 
 
                     using (VgPainterArgsPool.Borrow(painter, out var paintArgs))
                     {
-                        ((VgRenderVx)vx)._renderE.Paint(paintArgs);
+                        ((VgRenderVx)vx)._vgVisualElement.Paint(paintArgs);
                     }
 
 #if DEBUG

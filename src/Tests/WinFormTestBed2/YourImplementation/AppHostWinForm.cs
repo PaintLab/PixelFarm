@@ -152,9 +152,16 @@ namespace LayoutFarm
                         try
                         {
 
+                            //System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
+                            //GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+                            //return bmp;
+
+
                             System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName);
-                            GdiPlusBitmap bmp = new GdiPlusBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-                            return bmp;
+                            PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
+                            PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(
+                                gdiBmp, memBmp);
+                            return memBmp;
                         }
                         catch (System.Exception ex)
                         {
@@ -204,7 +211,7 @@ namespace LayoutFarm
             double prevStrokeW = painter.StrokeWidth;
             using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
             {
-                renderVx._renderE.Paint(paintArgs);
+                renderVx._vgVisualElement.Paint(paintArgs);
             }
             painter.StrokeWidth = prevStrokeW;//restore 
             return backingBmp;
