@@ -619,7 +619,7 @@ namespace PixelFarm.Drawing.WinGdi
                 var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
                 if (cacheBmp == null)
                 {
-
+                    //TODO: check mem leak too!
                     System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
                         image.Height,
                         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
