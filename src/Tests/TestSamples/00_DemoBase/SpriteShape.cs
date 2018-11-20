@@ -130,7 +130,7 @@ namespace PixelFarm.CpuBlit
 
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
-                paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                paintArgs.ExternalPaintVisitHandler = (vxs, painterA) =>
                 {
                     //use external painter handler
                     //draw only outline with its fill-color.
@@ -159,7 +159,7 @@ namespace PixelFarm.CpuBlit
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = tx;
-                paintArgs.ExternalVxsVisitHandler = (vxs, arg) =>
+                paintArgs.ExternalPaintVisitHandler = (vxs, arg) =>
                 {
                     //use external painter handler
                     //draw only outline with its fill-color.
