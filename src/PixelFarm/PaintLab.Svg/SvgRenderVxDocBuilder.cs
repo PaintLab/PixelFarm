@@ -209,11 +209,7 @@ namespace PaintLab.Svg
         {
             return new VgTextNodeVisualElement { TextContent = this.TextContent };
         }
-
     }
-
-
-
     class VgPathVisualMarkers
     {
         public PointF StartMarkerPos { get; set; }
@@ -351,6 +347,10 @@ namespace PaintLab.Svg
 
     }
 
+
+    /// <summary>
+    ///root element of vg visual (render) tree
+    /// </summary>
     public class VgVisualRootElement
     {
         internal Action<VgVisualElement> _invalidate;
@@ -1344,6 +1344,11 @@ namespace PaintLab.Svg
         }
     }
 
+
+
+
+
+
     public class VgVisualForeignNode : VgVisualElementBase
     {
         public object _foriegnNode;
@@ -2024,7 +2029,7 @@ namespace PaintLab.Svg
                                 textspec.FontFace = propDecl.GetPropertyValue(0).ToString();
                                 break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.Fill:
-                                textspec.FillColor = LayoutFarm.HtmlBoxes.CssValueParser2.ParseCssColor(propDecl.GetPropertyValue(0).ToString());
+                                textspec.FillColor = LayoutFarm.WebDom.Parser.CssValueParser.ParseCssColor(propDecl.GetPropertyValue(0).ToString());
                                 break;
                             case LayoutFarm.WebDom.WellknownCssPropertyName.Unknown:
                                 {
@@ -2106,6 +2111,7 @@ namespace PaintLab.Svg
 
         static float ConvertToPx(LayoutFarm.Css.CssLength length, ref ReEvaluateArgs args)
         {
+
             //Return zero if no length specified, zero specified      
             switch (length.UnitOrNames)
             {
