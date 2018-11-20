@@ -117,12 +117,12 @@ namespace PixelFarm.CpuBlit
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
         }
         public void Paint(VgPaintArgs paintArgs)
         {
-            _svgRenderVx._renderE.Paint(paintArgs);
+            _svgRenderVx._vgVisualElement.Paint(paintArgs);
         }
         public void Paint(Painter p, Bilinear tx)
         {
@@ -146,7 +146,7 @@ namespace PixelFarm.CpuBlit
                     }
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -169,7 +169,7 @@ namespace PixelFarm.CpuBlit
                     m_painter.Fill(vxs);
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -215,7 +215,7 @@ namespace PixelFarm.CpuBlit
         }
         public void HitTestOnSubPart(VgHitChain hitChain)
         {
-            _svgRenderVx._renderE.HitTest(hitChain);
+            _svgRenderVx._vgVisualElement.HitTest(hitChain);
         }
 
         //public override void ResetRootGraphics(RootGraphic rootgfx)

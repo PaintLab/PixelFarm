@@ -390,6 +390,15 @@ namespace PaintLab.Svg
                 if (value != null)
                 {
                     //bind image change event
+                    if (_imgW == 0)
+                    {
+                        _imgW = value.ImageWidth;
+                    }
+                    if (_imgH == 0)
+                    {
+                        _imgH = value.ImageHeight;
+                    }
+
                     value.ImageChanged += Value_ImageChanged;
                 }
             }
@@ -1311,7 +1320,7 @@ namespace PaintLab.Svg
         Image _backimg;
         RectD _boundRect;
         bool _needBoundUpdate;
-        public VgVisualElement _renderE;
+        public VgVisualElement _vgVisualElement;
         public ICoordTransformer _coordTx;
 
 
@@ -1321,13 +1330,13 @@ namespace PaintLab.Svg
 #endif
         public VgRenderVx(VgVisualElement svgRenderE)
         {
-            _renderE = svgRenderE;
+            _vgVisualElement = svgRenderE;
             _needBoundUpdate = true;
 
         }
         public VgRenderVx Clone()
         {
-            return new VgRenderVx((VgVisualElement)_renderE.Clone());
+            return new VgRenderVx((VgVisualElement)_vgVisualElement.Clone());
         }
 
         public void InvalidateBounds()
@@ -1357,11 +1366,10 @@ namespace PaintLab.Svg
                         if (args.TempCurrentStrokeWidth > maxStrokeWidth)
                         {
                             maxStrokeWidth = args.TempCurrentStrokeWidth;
-
                         }
 
                     };
-                    _renderE.Walk(paintArgs);
+                    _vgVisualElement.Walk(paintArgs);
                     _needBoundUpdate = false;
 
                     if (evaluated && maxStrokeWidth > 1)
@@ -1422,12 +1430,15 @@ namespace PaintLab.Svg
         float _emHeight = 17;//default
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
         VgVisualRootElement _renderRoot;
-
+        Action<LayoutFarm.ImageBinder, VgVisualElement, object> _handler;
         public VgRenderVxDocBuilder()
         {
 
         }
-
+        public void SetLoadImageHandler(Action<LayoutFarm.ImageBinder, VgVisualElement, object> handler)
+        {
+            _handler = handler;
+        }
         public VgVisualElement CreateSvgRenderElement(SvgDocument svgdoc, Action<VgVisualElement> invalidate)
         {
             _svgdoc = svgdoc;
@@ -1435,8 +1446,9 @@ namespace PaintLab.Svg
 
             _renderRoot = new VgVisualRootElement();
             _renderRoot._invalidate = invalidate;
+            _renderRoot.ImgRequestHandler += _handler;
+            //---------------------------
 
-            // 
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             VgVisualElement rootSvgElem = new VgVisualElement(WellknownSvgElementName.RootSvg, null, _renderRoot);

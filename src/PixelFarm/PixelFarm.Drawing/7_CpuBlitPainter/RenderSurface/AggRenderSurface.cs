@@ -104,6 +104,7 @@ namespace PixelFarm.CpuBlit
         }
         public void SetClippingRect(RectInt rect)
         {
+            rect.IntersectWithRectangle(new RectInt(0, 0, this.Width, this.Height));
             ScanlineRasterizer.SetClipBox(rect);
         }
         public RectInt GetClippingRect()

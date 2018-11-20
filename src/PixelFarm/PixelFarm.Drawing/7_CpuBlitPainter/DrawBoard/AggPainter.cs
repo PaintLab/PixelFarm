@@ -112,8 +112,11 @@ namespace PixelFarm.CpuBlit
             {
                 if (SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
                 {
-                    //use simple rect technique
-                    this.SetClipBox((int)clipRect.X, (int)clipRect.Y, (int)clipRect.Right, (int)clipRect.Bottom);
+
+                    this.SetClipBox(
+                        (int)Math.Floor(clipRect.X), (int)Math.Floor(clipRect.Y),
+                        (int)Math.Ceiling(clipRect.Right), (int)Math.Ceiling(clipRect.Bottom));
+
                     _currentClipTech = ClipingTechnique.ClipSimpleRect;
                 }
                 else
@@ -159,8 +162,8 @@ namespace PixelFarm.CpuBlit
             set
             {
 
-                if (value == LineRenderingTechnique.OutlineAARenderer
-                     && _outlineRas == null)
+                if (value == LineRenderingTechnique.OutlineAARenderer &&
+                    _outlineRas == null)
                 {
 
 
