@@ -99,7 +99,7 @@ namespace PaintLab.Svg
 
     public class VgPaintArgs
     {
-        public Painter P;
+        public Painter P { get; internal set; }
         public ICoordTransformer _currentTx;
 
         public Action<VertexStore, VgPaintArgs> ExternalVxsVisitHandler;
@@ -1357,6 +1357,12 @@ namespace PaintLab.Svg
                 {
                     RectD rectTotal = RectD.ZeroIntersection;
                     bool evaluated = false;
+                    paintArgs._currentTx = this._coordTx;
+#if DEBUG
+                    //if (this._coordTx != null)
+                    //{ 
+                    //}
+#endif
 
                     float maxStrokeWidth = 1;
                     paintArgs.ExternalVxsVisitHandler = (vxs, args) =>
