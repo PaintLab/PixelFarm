@@ -112,7 +112,7 @@ namespace PaintLab.Svg
     public class VgVisitorArgs : VgVisitorBase
     {
         internal VgVisitorArgs() { }
-        public Action<VertexStore, VgVisitorArgs> ExternalVgElemenVisitHandler;
+        public Action<VertexStore, VgVisitorArgs> VgElemenVisitHandler;
 
         /// <summary>
         /// use for finding vg boundaries
@@ -125,7 +125,7 @@ namespace PaintLab.Svg
 
             //-------
             TempCurrentStrokeWidth = 1;
-            ExternalVgElemenVisitHandler = null;
+            VgElemenVisitHandler = null;
         }
     }
 
@@ -134,14 +134,14 @@ namespace PaintLab.Svg
     {
         internal VgPaintArgs() { }
         public Painter P { get; internal set; }
-        public Action<VertexStore, VgPaintArgs> ExternalPaintVisitHandler;
+        public Action<VertexStore, VgPaintArgs> PaintVisitHandler;
         internal override void Reset()
         {
             base.Reset();//*** reset base class fiels too
             //-------
 
             P = null;
-            ExternalPaintVisitHandler = null;
+            PaintVisitHandler = null;
         }
     }
 
@@ -465,7 +465,7 @@ namespace PaintLab.Svg
         {
             using (VgVistorArgsPool.Borrow(out VgVisitorArgs visitor))
             {
-                visitor.ExternalVgElemenVisitHandler = (vxs, args) =>
+                visitor.VgElemenVisitHandler = (vxs, args) =>
                 {
                     if (args.Current != null &&
                        PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, x, y))
@@ -481,7 +481,7 @@ namespace PaintLab.Svg
         {
             using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
             {
-                paintArgs.ExternalVgElemenVisitHandler = (vxs, args) =>
+                paintArgs.VgElemenVisitHandler = (vxs, args) =>
                 {
 
                     if (args.Current != null &&
@@ -580,7 +580,7 @@ namespace PaintLab.Svg
 
         public override void Accept(VgVisitorArgs visitor)
         {
-            if (visitor.ExternalVgElemenVisitHandler == null)
+            if (visitor.VgElemenVisitHandler == null)
             {
                 return;
             }
@@ -684,7 +684,7 @@ namespace PaintLab.Svg
                         if (currentTx == null)
                         {
                             visitor.Current = this;
-                            visitor.ExternalVgElemenVisitHandler(_vxsPath, visitor);
+                            visitor.VgElemenVisitHandler(_vxsPath, visitor);
                             visitor.Current = null;
                         }
                         else
@@ -694,7 +694,7 @@ namespace PaintLab.Svg
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
                                 visitor.Current = this;
-                                visitor.ExternalVgElemenVisitHandler(v1, visitor);
+                                visitor.VgElemenVisitHandler(v1, visitor);
                                 visitor.Current = null;
                             }
                         }
@@ -1060,7 +1060,7 @@ namespace PaintLab.Svg
                         {
                             //no transform
 
-                            if (vgPainterArgs.ExternalPaintVisitHandler == null)
+                            if (vgPainterArgs.PaintVisitHandler == null)
                             {
                                 if (p.FillColor.A > 0)
                                 {
@@ -1102,7 +1102,7 @@ namespace PaintLab.Svg
                             }
                             else
                             {
-                                vgPainterArgs.ExternalPaintVisitHandler(_vxsPath, vgPainterArgs);
+                                vgPainterArgs.PaintVisitHandler(_vxsPath, vgPainterArgs);
                             }
 
 
@@ -1206,7 +1206,7 @@ namespace PaintLab.Svg
                             {
                                 currentTx.TransformToVxs(_vxsPath, v1);
 
-                                if (vgPainterArgs.ExternalPaintVisitHandler == null)
+                                if (vgPainterArgs.PaintVisitHandler == null)
                                 {
                                     if (p.FillColor.A > 0)
                                     {
@@ -1223,7 +1223,7 @@ namespace PaintLab.Svg
                                 }
                                 else
                                 {
-                                    vgPainterArgs.ExternalPaintVisitHandler(v1, vgPainterArgs);
+                                    vgPainterArgs.PaintVisitHandler(v1, vgPainterArgs);
                                 }
                             }
 
@@ -1393,7 +1393,7 @@ namespace PaintLab.Svg
 #endif
 
                     float maxStrokeWidth = 1;
-                    paintArgs.ExternalVgElemenVisitHandler = (vxs, args) =>
+                    paintArgs.VgElemenVisitHandler = (vxs, args) =>
                     {
                         evaluated = true;//once 
                         BoundingRect.GetBoundingRect(vxs, ref rectTotal);

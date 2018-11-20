@@ -293,7 +293,7 @@ namespace LayoutFarm.UI
         }
         public void PaintMe()
         {
-            this._winBridge.PaintToOutputWindow();
+            _winBridge.PaintToOutputWindow();
         }
         public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
         {
