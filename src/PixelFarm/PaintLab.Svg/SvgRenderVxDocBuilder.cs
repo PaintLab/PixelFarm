@@ -101,11 +101,11 @@ namespace PaintLab.Svg
     {
         public VgVisualElement Current;
         public ICoordTransformer _currentTx;
+        internal VgVisitorBase() { }
         internal virtual void Reset()
         {
             _currentTx = null;
             Current = null;
-
         }
     }
 
@@ -121,7 +121,9 @@ namespace PaintLab.Svg
 
         internal override void Reset()
         {
-            base.Reset();//***
+            base.Reset();//*** reset base class fiels too
+
+            //-------
             TempCurrentStrokeWidth = 1;
             ExternalVgElemenVisitHandler = null;
         }
@@ -135,6 +137,9 @@ namespace PaintLab.Svg
         public Action<VertexStore, VgPaintArgs> ExternalPaintVisitHandler;
         internal override void Reset()
         {
+            base.Reset();//*** reset base class fiels too
+            //-------
+
             P = null;
             ExternalPaintVisitHandler = null;
         }
