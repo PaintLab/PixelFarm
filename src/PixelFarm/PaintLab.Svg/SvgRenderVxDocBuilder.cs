@@ -1430,12 +1430,15 @@ namespace PaintLab.Svg
         float _emHeight = 17;//default
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
         VgVisualRootElement _renderRoot;
-
+        Action<LayoutFarm.ImageBinder, VgVisualElement, object> _handler;
         public VgRenderVxDocBuilder()
         {
 
         }
-
+        public void SetLoadImageHandler(Action<LayoutFarm.ImageBinder, VgVisualElement, object> handler)
+        {
+            _handler = handler;
+        }
         public VgVisualElement CreateSvgRenderElement(SvgDocument svgdoc, Action<VgVisualElement> invalidate)
         {
             _svgdoc = svgdoc;
@@ -1443,8 +1446,9 @@ namespace PaintLab.Svg
 
             _renderRoot = new VgVisualRootElement();
             _renderRoot._invalidate = invalidate;
+            _renderRoot.ImgRequestHandler += _handler;
+            //---------------------------
 
-            // 
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
             VgVisualElement rootSvgElem = new VgVisualElement(WellknownSvgElementName.RootSvg, null, _renderRoot);
