@@ -390,6 +390,15 @@ namespace PaintLab.Svg
                 if (value != null)
                 {
                     //bind image change event
+                    if (_imgW == 0)
+                    {
+                        _imgW = value.ImageWidth;
+                    }
+                    if (_imgH == 0)
+                    {
+                        _imgH = value.ImageHeight;
+                    }
+
                     value.ImageChanged += Value_ImageChanged;
                 }
             }
@@ -1311,7 +1320,7 @@ namespace PaintLab.Svg
         Image _backimg;
         RectD _boundRect;
         bool _needBoundUpdate;
-        public VgVisualElement _renderE;
+        public VgVisualElement _vgVisualElement;
         public ICoordTransformer _coordTx;
 
 
@@ -1321,13 +1330,13 @@ namespace PaintLab.Svg
 #endif
         public VgRenderVx(VgVisualElement svgRenderE)
         {
-            _renderE = svgRenderE;
+            _vgVisualElement = svgRenderE;
             _needBoundUpdate = true;
 
         }
         public VgRenderVx Clone()
         {
-            return new VgRenderVx((VgVisualElement)_renderE.Clone());
+            return new VgRenderVx((VgVisualElement)_vgVisualElement.Clone());
         }
 
         public void InvalidateBounds()
@@ -1357,11 +1366,10 @@ namespace PaintLab.Svg
                         if (args.TempCurrentStrokeWidth > maxStrokeWidth)
                         {
                             maxStrokeWidth = args.TempCurrentStrokeWidth;
-
                         }
 
                     };
-                    _renderE.Walk(paintArgs);
+                    _vgVisualElement.Walk(paintArgs);
                     _needBoundUpdate = false;
 
                     if (evaluated && maxStrokeWidth > 1)

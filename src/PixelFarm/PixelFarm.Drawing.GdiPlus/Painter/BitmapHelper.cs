@@ -10,7 +10,7 @@ namespace PixelFarm.CpuBlit.Imaging
     public static class BitmapHelper
     {
         /// <summary>
-        /// copy from actual image direct to hBmpScan0
+        /// copy from mem image direct to hBmpScan0
         /// </summary>
         /// <param name="memBmp"></param>
         /// <param name="hBmpScan0"></param>
@@ -391,6 +391,7 @@ namespace PixelFarm.CpuBlit.Imaging
             //    long ms = sss.ElapsedMilliseconds;
             //} 
         }
+
         public static void CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(
            Bitmap windowsBitmap,
            MemBitmap memBmp)
@@ -406,100 +407,113 @@ namespace PixelFarm.CpuBlit.Imaging
                           h),
                           System.Drawing.Imaging.ImageLockMode.ReadOnly,
                           System.Drawing.Imaging.PixelFormat.Format32bppArgb); //read as 32 bits
-            IntPtr scan0 = bitmapData1.Scan0;
-            int stride = bitmapData1.Stride;
-
-            //test
-            //in this version we decided that
-            //Agg's image should use Big-endian bytes.
-
-            //so we convert the byte order for 
-
             unsafe
             {
-
-                byte* targetH = (byte*)targetBufferPtr.Ptr;
-                int startRowAt = ((h - 1) * stride);
-                byte* src = (byte*)scan0;
-                for (int y = h; y > 0; --y)
-                {
-
-                    //System.Runtime.InteropServices.Marshal.Copy(
-                    //      (IntPtr)src,//src
-                    //      targetBuffer, startRowAt, stride);
-                    MemMx.memcpy(targetH + startRowAt, src, stride);
-                    startRowAt -= stride;
-                    src += stride;
-                }
-
-                //////////////////////////////////////////////////////////////////
-                //fixed (byte* targetH = &targetBuffer[0])
-                //{
-                //    byte* src = (byte*)scan0;
-                //    for (int y = h; y > 0; --y)
-                //    {
-                //        byte* target = targetH + ((y - 1) * stride); //start at first column of the current row
-
-                //        for (int n = stride - 1; n >= 0;) //n steps
-                //        {
-                //            //*target = *src;
-                //            //target++;
-                //            //src++;
-
-                //            //the win gdi+ is 
-                //            *(target + 2) = *src; //R, 0->2
-                //            *(target + 1) = *(src + 1); //G 1->1
-                //            *(target + 0) = *(src + 2); //B 2->0
-                //            *(target + 3) = *(src + 3); //A 3->3
-
-                //            //#if !RGBA
-                //            //       //eg OpenGL, 
-                //            //       /// <summary>
-                //            //        /// order b
-                //            //        /// </summary>
-                //            //        public const int B = 0;
-                //            //        /// <summary>
-                //            //        /// order g
-                //            //        /// </summary>
-                //            //        public const int G = 1;
-                //            //        /// <summary>
-                //            //        /// order b
-                //            //        /// </summary>
-                //            //        public const int R = 2;
-                //            //        /// <summary>
-                //            //        /// order a
-                //            //        /// </summary>
-                //            //        public const int A = 3;
-                //            //#else
-                //            //        //RGBA (Windows GDI+)
-
-                //            //        /// <summary>
-                //            //        /// order b
-                //            //        /// </summary>
-                //            //        public const int B = 2;
-                //            //        /// <summary>
-                //            //        /// order g
-                //            //        /// </summary>
-                //            //        public const int G = 1;
-                //            //        /// <summary>
-                //            //        /// order b
-                //            //        /// </summary>
-                //            //        public const int R = 0;
-                //            //        /// <summary>
-                //            //        /// order a
-                //            //        /// </summary>
-                //            //        public const int A = 3;
-                //            //#endif
-
-                //            target += 4;
-                //            src += 4;
-                //            //target++;
-                //            //src++;
-                //            n -= 4;
-                //        }
-                //    }
-                //}
+                PixelFarm.CpuBlit.NativeMemMx.MemCopy(
+                    (byte*)targetBufferPtr.Ptr,
+                    (byte*)bitmapData1.Scan0,
+                    bitmapData1.Stride * memBmp.Height
+                );
             }
+
+
+
+
+
+
+            //int stride = bitmapData1.Stride;
+
+            ////test
+            ////in this version we decided that
+            ////Agg's image should use Big-endian bytes.
+
+            ////so we convert the byte order for 
+
+            //unsafe
+            //{
+
+            //    byte* targetH = (byte*)targetBufferPtr.Ptr;
+            //    int startRowAt = ((h - 1) * stride);
+            //    byte* src = (byte*)scan0;
+            //    for (int y = h; y > 0; --y)
+            //    {
+
+            //        //System.Runtime.InteropServices.Marshal.Copy(
+            //        //      (IntPtr)src,//src
+            //        //      targetBuffer, startRowAt, stride);
+            //        MemMx.memcpy(targetH + startRowAt, src, stride);
+            //        startRowAt -= stride;
+            //        src += stride;
+            //    }
+
+            //    //////////////////////////////////////////////////////////////////
+            //    //fixed (byte* targetH = &targetBuffer[0])
+            //    //{
+            //    //    byte* src = (byte*)scan0;
+            //    //    for (int y = h; y > 0; --y)
+            //    //    {
+            //    //        byte* target = targetH + ((y - 1) * stride); //start at first column of the current row
+
+            //    //        for (int n = stride - 1; n >= 0;) //n steps
+            //    //        {
+            //    //            //*target = *src;
+            //    //            //target++;
+            //    //            //src++;
+
+            //    //            //the win gdi+ is 
+            //    //            *(target + 2) = *src; //R, 0->2
+            //    //            *(target + 1) = *(src + 1); //G 1->1
+            //    //            *(target + 0) = *(src + 2); //B 2->0
+            //    //            *(target + 3) = *(src + 3); //A 3->3
+
+            //    //            //#if !RGBA
+            //    //            //       //eg OpenGL, 
+            //    //            //       /// <summary>
+            //    //            //        /// order b
+            //    //            //        /// </summary>
+            //    //            //        public const int B = 0;
+            //    //            //        /// <summary>
+            //    //            //        /// order g
+            //    //            //        /// </summary>
+            //    //            //        public const int G = 1;
+            //    //            //        /// <summary>
+            //    //            //        /// order b
+            //    //            //        /// </summary>
+            //    //            //        public const int R = 2;
+            //    //            //        /// <summary>
+            //    //            //        /// order a
+            //    //            //        /// </summary>
+            //    //            //        public const int A = 3;
+            //    //            //#else
+            //    //            //        //RGBA (Windows GDI+)
+
+            //    //            //        /// <summary>
+            //    //            //        /// order b
+            //    //            //        /// </summary>
+            //    //            //        public const int B = 2;
+            //    //            //        /// <summary>
+            //    //            //        /// order g
+            //    //            //        /// </summary>
+            //    //            //        public const int G = 1;
+            //    //            //        /// <summary>
+            //    //            //        /// order b
+            //    //            //        /// </summary>
+            //    //            //        public const int R = 0;
+            //    //            //        /// <summary>
+            //    //            //        /// order a
+            //    //            //        /// </summary>
+            //    //            //        public const int A = 3;
+            //    //            //#endif
+
+            //    //            target += 4;
+            //    //            src += 4;
+            //    //            //target++;
+            //    //            //src++;
+            //    //            n -= 4;
+            //    //        }
+            //    //    }
+            //    //}
+            //}
             targetBufferPtr.Dispose();
             windowsBitmap.UnlockBits(bitmapData1);
         }

@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
-                _renderVx._renderE.Paint(paintArgs);
+                _renderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -118,7 +118,7 @@ namespace PixelFarm.CpuBlit.Samples
 
                     using (VgPainterArgsPool.Borrow(painter, out var paintArgs))
                     {
-                        ((VgRenderVx)vx)._renderE.Paint(paintArgs);
+                        ((VgRenderVx)vx)._vgVisualElement.Paint(paintArgs);
                     }
 
 #if DEBUG
