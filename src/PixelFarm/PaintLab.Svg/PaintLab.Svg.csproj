@@ -132,6 +132,10 @@
     <Compile Include="SvgRenderVxDocBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PaintLab.RenderTree\PaintLab.RenderTree.csproj">
+      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
+      <Name>PaintLab.RenderTree</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
