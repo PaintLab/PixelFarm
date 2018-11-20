@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing.GLES2
         public override void SetCanvasOrigin(int x, int y)
         {
 
-            _painter1.SetOrigin(x, -y);
+            _painter1.SetOrigin(x, y);
             //----------- 
             int total_dx = x - _canvasOriginX;
             int total_dy = y - _canvasOriginY;

@@ -5,11 +5,11 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiRenderVx : RenderVx
     {
-        internal VertexStore vxs;
-        internal System.Drawing.Drawing2D.GraphicsPath path;
+        internal VertexStore _vxs;
+        internal System.Drawing.Drawing2D.GraphicsPath _path;
         public WinGdiRenderVx(VertexStore vxs)
         {
-            this.vxs = vxs;
+            this._vxs = vxs;
         }
     }
     class WinGdiRenderVxFormattedString : RenderVxFormattedString

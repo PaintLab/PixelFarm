@@ -35,7 +35,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\FormPrint.Designer.cs">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\GdiPlusBitmap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation\MyTextBreaker.cs" />
   </ItemGroup>
   <ItemGroup>

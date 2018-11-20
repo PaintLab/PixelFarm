@@ -117,12 +117,12 @@ namespace PixelFarm.CpuBlit
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
         }
         public void Paint(VgPaintArgs paintArgs)
         {
-            _svgRenderVx._renderE.Paint(paintArgs);
+            _svgRenderVx._vgVisualElement.Paint(paintArgs);
         }
         public void Paint(Painter p, Bilinear tx)
         {
@@ -130,7 +130,7 @@ namespace PixelFarm.CpuBlit
 
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
-                paintArgs.ExternalVxsVisitHandler = (vxs, painterA) =>
+                paintArgs.PaintVisitHandler = (vxs, painterA) =>
                 {
                     //use external painter handler
                     //draw only outline with its fill-color.
@@ -146,7 +146,7 @@ namespace PixelFarm.CpuBlit
                     }
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -159,7 +159,7 @@ namespace PixelFarm.CpuBlit
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = tx;
-                paintArgs.ExternalVxsVisitHandler = (vxs, arg) =>
+                paintArgs.PaintVisitHandler = (vxs, arg) =>
                 {
                     //use external painter handler
                     //draw only outline with its fill-color.
@@ -169,7 +169,7 @@ namespace PixelFarm.CpuBlit
                     m_painter.Fill(vxs);
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._renderE.Paint(paintArgs);
+                _svgRenderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -211,11 +211,11 @@ namespace PixelFarm.CpuBlit
         public void UpdateBounds()
         {
             _svgRenderVx.InvalidateBounds();
-            this._boundingRect = _svgRenderVx.GetBounds();
+            this._boundingRect = _svgRenderVx.GetRectBounds();
         }
-        public void HitTestOnSubPart(SvgHitChain hitChain)
+        public void HitTestOnSubPart(VgHitChain hitChain)
         {
-            _svgRenderVx._renderE.HitTest(hitChain);
+            _svgRenderVx._vgVisualElement.HitTest(hitChain);
         }
 
         //public override void ResetRootGraphics(RootGraphic rootgfx)
@@ -236,9 +236,9 @@ namespace PixelFarm.CpuBlit
         //
         //
         [System.ThreadStatic]
-        static System.Collections.Generic.Stack<SvgHitChain> s_hitChains = new System.Collections.Generic.Stack<SvgHitChain>();
+        static System.Collections.Generic.Stack<VgHitChain> s_hitChains = new System.Collections.Generic.Stack<VgHitChain>();
 
-        public static void GetFreeHitTestChain(out SvgHitChain hitTestArgs)
+        public static void GetFreeHitTestChain(out VgHitChain hitTestArgs)
         {
             if (s_hitChains.Count > 0)
             {
@@ -246,10 +246,10 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                hitTestArgs = new SvgHitChain();
+                hitTestArgs = new VgHitChain();
             }
         }
-        public static void ReleaseHitTestChain(ref SvgHitChain hitTestArgs)
+        public static void ReleaseHitTestChain(ref VgHitChain hitTestArgs)
         {
             hitTestArgs.Clear();
             s_hitChains.Push(hitTestArgs);

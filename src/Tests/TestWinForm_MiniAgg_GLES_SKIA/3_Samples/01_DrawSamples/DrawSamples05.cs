@@ -13,7 +13,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample05 : DemoBase
     {
-        ActualBitmap lionImg;
+        MemBitmap lionImg;
         public override void Init()
         {
             UseBitmapExt = false;
@@ -102,8 +102,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample06 : DemoBase
     {
-        ActualBitmap lionImg;
-        ActualBitmap halfLion;
+        MemBitmap lionImg;
+        MemBitmap halfLion;
         public override void Init()
         {
             UseBitmapExt = false;
@@ -128,12 +128,12 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
         }
 
-        ActualBitmap CreateHalfSize(ActualBitmap orgBmp)
+        MemBitmap CreateHalfSize(MemBitmap orgBmp)
         {
             //TODO: ...
             //
             //1. create a new one
-            ActualBitmap smallBmp = new ActualBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
+            MemBitmap smallBmp = new MemBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
 
             //
             var rendersx = new AggRenderSurface(smallBmp);

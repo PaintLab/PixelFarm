@@ -8,7 +8,7 @@ using PixelFarm.CpuBlit;
 
 namespace YourImplementation
 {
-    class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
+    public class LocalFileStorageProvider : PixelFarm.Platforms.StorageServiceProvider
     {
         public override bool DataExists(string dataName)
         {
@@ -23,14 +23,14 @@ namespace YourImplementation
         {
             System.IO.File.WriteAllBytes(dataName, content);
         }
-        public override ActualBitmap ReadPngBitmap(string filename)
+        public override MemBitmap ReadPngBitmap(string filename)
         {
             using (FileStream fs = new FileStream(filename, FileMode.Open))
             {
                 return PngIOStorage.Read(fs);
             }
         }
-        public override void SavePngBitmap(ActualBitmap bmp, string filename)
+        public override void SavePngBitmap(MemBitmap bmp, string filename)
         {
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
@@ -45,7 +45,7 @@ namespace YourImplementation
     static class PngIOStorage
     {
 
-        public static ActualBitmap Read(Stream strm)
+        public static MemBitmap Read(Stream strm)
         {
 
             Hjg.Pngcs.PngReader reader = new Hjg.Pngcs.PngReader(strm);
@@ -85,7 +85,7 @@ namespace YourImplementation
                     }
                     startWriteAt -= imgW;
                 }
-                return ActualBitmap.CreateFromCopy(imgW, imgH, buffer);
+                return MemBitmap.CreateFromCopy(imgW, imgH, buffer);
             }
             else
             {
@@ -114,21 +114,21 @@ namespace YourImplementation
                     }
                     startWriteAt += imgW;
                 }
-                return ActualBitmap.CreateFromCopy(imgW, imgH, buffer);
+                return MemBitmap.CreateFromCopy(imgW, imgH, buffer);
             }
 
 
         }
-        public static void Save(ActualBitmap actualImg, Stream strm)
+        public static void Save(MemBitmap bmp, Stream strm)
         {
             //-------------
             unsafe
             {
-                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = ActualBitmap.GetBufferPtr(actualImg);
+                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = MemBitmap.GetBufferPtr(bmp);
                 int* intBuffer = (int*)tmp.Ptr;
 
-                int imgW = actualImg.Width;
-                int imgH = actualImg.Height;
+                int imgW = bmp.Width;
+                int imgH = bmp.Height;
 
                 Hjg.Pngcs.ImageInfo imgInfo = new Hjg.Pngcs.ImageInfo(imgW, imgH, 8, true); //8 bits per channel with alpha
                 Hjg.Pngcs.PngWriter writer = new Hjg.Pngcs.PngWriter(strm, imgInfo);

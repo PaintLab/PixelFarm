@@ -26,11 +26,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
 
         LayoutFarm.OpenFontTextService _textServices;
-        BitmapFontManager<ActualBitmap> _bmpFontMx;
+        BitmapFontManager<MemBitmap> _bmpFontMx;
         SimpleFontAtlas _fontAtlas;
         RequestFont _font;
-        ActualBitmap _fontBmp;
-        ActualBitmap _alphaBmp;
+        MemBitmap _fontBmp;
+        MemBitmap _alphaBmp;
         float _finalTextureScale = 1;
 
         public FontTextureDemo2()
@@ -46,13 +46,13 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             _textServices = new LayoutFarm.OpenFontTextService();
 
             //2. create manager
-            _bmpFontMx = new BitmapFontManager<ActualBitmap>(
+            _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 TextureKind.StencilLcdEffect,
                 _textServices,
                 atlas =>
                 {
                     GlyphImage totalGlyphImg = atlas.TotalGlyph;
-                    return ActualBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
+                    return MemBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
                 }
             );
             _bmpFontMx.SetCurrentScriptLangs(new ScriptLang[]
@@ -177,7 +177,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         {
             //----------
             //same size
-            _alphaBmp = new ActualBitmap(width, height);
+            _alphaBmp = new MemBitmap(width, height);
             _maskBufferPainter = AggPainter.Create(_alphaBmp, new PixelBlenderBGRA());
             _maskBufferPainter.Clear(Color.Black);
             //------------ 

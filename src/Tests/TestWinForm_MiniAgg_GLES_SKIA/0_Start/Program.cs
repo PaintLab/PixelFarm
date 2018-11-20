@@ -16,26 +16,19 @@ namespace Mini
         [STAThread]
         static void Main()
         {
-            //PaintLab.Svg.SvgParser parser = new PaintLab.Svg.SvgParser();
-            //string svgContent = System.IO.File.ReadAllText("Samples/arrow2.svg");
-            //parser.ParseDocument(new LayoutFarm.WebLexer.TextSnapshot(svgContent));
 
 
 
-
-            RootDemoPath.Path = @"..\Data";
             YourImplementation.TestBedStartup.Setup();
-            YourImplementation.LocalFileStorageProvider file_storageProvider = new YourImplementation.LocalFileStorageProvider();
-
             //---------------------------------------------------
+            PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider());
+
+
+
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
-            PixelFarm.Platforms.StorageService.RegisterProvider(file_storageProvider);
-#if GL_ENABLE
-            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
-#endif
-            //you can use your font loader
-            YourImplementation.BootStrapWinGdi.SetupDefaultValues();
+
+
             //default text breaker, this bridge between              
 #if DEBUG
             //PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
@@ -59,7 +52,7 @@ namespace Mini
             //check if we have that data?            
             //------------------------------------------- 
             //string typographyDir = @"brkitr_src/dictionaries";
-            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr"; 
+            string icu_datadir = @"D:\projects\Typography\Typography.TextBreak\icu62\brkitr";
             if (!System.IO.Directory.Exists(icu_datadir))
             {
                 throw new System.NotSupportedException("dic");
@@ -72,11 +65,17 @@ namespace Mini
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
             //----------------------------
 
+
+
+            //app specfic
+            RootDemoPath.Path = @"..\Data";//***
+
+            //----------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());
         }
-        static PixelFarm.CpuBlit.ActualBitmap LoadImage(string filename)
+        static PixelFarm.CpuBlit.MemBitmap LoadImage(string filename)
         {
 
 
@@ -88,10 +87,10 @@ namespace Mini
                                        System.Drawing.Imaging.PixelFormat.Format32bppArgb //lock and read as 32-argb
                                        );
 
-            PixelFarm.CpuBlit.ActualBitmap actualImg = new PixelFarm.CpuBlit.ActualBitmap(bmp.Width, bmp.Height);
+            PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(bmp.Width, bmp.Height);
             unsafe
             {
-                var ptrBuffer = PixelFarm.CpuBlit.ActualBitmap.GetBufferPtr(actualImg);
+                var ptrBuffer = PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(memBmp);
                 PixelFarm.CpuBlit.MemMx.memcpy((byte*)ptrBuffer.Ptr, (byte*)bmpData.Scan0, bmp.Width * 4 * bmp.Height);
             }
 
@@ -102,9 +101,9 @@ namespace Mini
 
             //gdi+ load as little endian
 
-            actualImg.IsBigEndian = false;
+            memBmp.IsBigEndian = false;
             bmp.Dispose();
-            return actualImg;
+            return memBmp;
         }
 
 

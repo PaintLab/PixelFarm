@@ -26,10 +26,10 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
         LayoutFarm.OpenFontTextService _textServices;
-        BitmapFontManager<ActualBitmap> _bmpFontMx;
+        BitmapFontManager<MemBitmap> _bmpFontMx;
         SimpleFontAtlas _fontAtlas;
         RequestFont _font;
-        ActualBitmap _fontBmp;
+        MemBitmap _fontBmp;
 
 
 
@@ -41,13 +41,13 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _textServices = new LayoutFarm.OpenFontTextService();
 
             //2. create manager
-            _bmpFontMx = new BitmapFontManager<ActualBitmap>(
+            _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 TextureKind.StencilLcdEffect,
                 _textServices,
                 atlas =>
                 {
                     GlyphImage totalGlyphImg = atlas.TotalGlyph;
-                    return ActualBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
+                    return MemBitmap.CreateFromCopy(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer());
                 }
             );
             _bmpFontMx.SetCurrentScriptLangs(new ScriptLang[]

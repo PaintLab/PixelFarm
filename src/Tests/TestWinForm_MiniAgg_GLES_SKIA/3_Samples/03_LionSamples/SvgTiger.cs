@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder svgDoc = new SvgDocBuilder();
             SvgParser svg = new SvgParser(svgDoc);
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
 
             svg.ReadSvgFile("Samples\\tiger002.svg");
             _renderVx = builder.CreateRenderVx(svgDoc.ResultDocument);
@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
-                _renderVx._renderE.Paint(paintArgs);
+                _renderVx._vgVisualElement.Paint(paintArgs);
             }
 
 
@@ -88,7 +88,7 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
-            SvgRenderVxDocBuilder builder = new SvgRenderVxDocBuilder();
+            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
 
             //svg.ReadSvgFile("Samples\\lion.svg"); 
             //svg.ReadSvgFile("Samples\\tiger002.svg");
@@ -107,26 +107,18 @@ namespace PixelFarm.CpuBlit.Samples
                 VgRenderVx vgRenerVx = vx as VgRenderVx;
                 if (vgRenerVx != null && !vgRenerVx.HasBitmapSnapshot)
                 {
-                    RectD bound = vgRenerVx.GetBounds();
+                    RectD bound = vgRenerVx.GetRectBounds();
 
                     //create 
-                    ActualBitmap backimg = new ActualBitmap((int)bound.Width, (int)bound.Height);
-                    AggPainter painter = AggPainter.Create(backimg);
-
-
+                    MemBitmap backBmp = new MemBitmap((int)bound.Width, (int)bound.Height);
+                    AggPainter painter = AggPainter.Create(backBmp); 
                     painter.Clear(Drawing.Color.White);
                     painter.StrokeColor = Color.Transparent;
-                    painter.StrokeWidth = 1;//svg standard, init stroke-width =1
-
-                    //#if DEBUG
-                    //            _dbugSW.Reset();
-                    //            _dbugSW.Start();
-                    //#endif 
-
+                    painter.StrokeWidth = 1; 
 
                     using (VgPainterArgsPool.Borrow(painter, out var paintArgs))
                     {
-                        ((VgRenderVx)vx)._renderE.Paint(paintArgs);
+                        ((VgRenderVx)vx)._vgVisualElement.Paint(paintArgs);
                     }
 
 #if DEBUG
@@ -138,7 +130,7 @@ namespace PixelFarm.CpuBlit.Samples
 #endif
 
 
-                    vgRenerVx.SetBitmapSnapshot(backimg);
+                    vgRenerVx.SetBitmapSnapshot(backBmp);
                 }
             }
             //if (!_renderVx.HasBitmapSnapshot)

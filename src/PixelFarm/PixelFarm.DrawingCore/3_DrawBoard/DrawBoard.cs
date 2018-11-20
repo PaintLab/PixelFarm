@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing
         public int debug_releaseCount = 0;
         public int debug_canvas_id = 0;
         public abstract void dbug_DrawRuler(int x);
-        public abstract void dbug_DrawCrossRect(Color color, Rectangle rect);
+        public abstract void dbug_DrawCrossRect(Color color, Rectangle rect); 
 #endif
 
         public abstract void CloseCanvas();
@@ -194,7 +194,7 @@ namespace PixelFarm.Drawing
             drawBoard.SmoothingMode = value;
             return saveState;
         }
-         
+
         public struct SmoothingModeState
         {
             readonly DrawBoard _drawBoard;

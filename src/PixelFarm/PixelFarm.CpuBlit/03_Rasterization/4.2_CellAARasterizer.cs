@@ -133,6 +133,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             //------------------
             int m_min_x;
             int m_min_y;
+
             int m_max_x;
             int m_max_y;
             bool m_sorted;
@@ -331,6 +332,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
             public int MinX { get { return m_min_x; } }
             public int MinY { get { return m_min_y; } }
+            //
             public int MaxX { get { return m_max_x; } }
             public int MaxY { get { return m_max_y; } }
 

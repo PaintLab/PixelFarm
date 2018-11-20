@@ -14,13 +14,104 @@
 // "The Art of War"
 
 using System;
-namespace LayoutFarm.HtmlBoxes
+using LayoutFarm.Css;
+
+namespace LayoutFarm.WebDom.Parser
 {
     /// <summary>
     /// Parse CSS properties values like numbers, urls, etc.
     /// </summary>
-    public static class CssValueParser2
+    public static class CssValueParser
     {
+
+
+        /// <summary>
+        /// get length in pixel
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="hundredPercent"></param>
+        /// <param name="box"></param>
+        /// <returns></returns>
+        public static float ConvertToPx(CssLength length, float hundredPercent, IHasGetEmHeight box)
+        {
+            //Return zero if no length specified, zero specified      
+            switch (length.UnitOrNames)
+            {
+                case CssUnitOrNames.EmptyValue:
+                    return 0;
+                case CssUnitOrNames.Percent:
+                    return (length.Number / 100f) * hundredPercent;
+                case CssUnitOrNames.Ems:
+                    return length.Number * box.GetEmHeight();
+                case CssUnitOrNames.Ex:
+                    return length.Number * (box.GetEmHeight() / 2);
+                case CssUnitOrNames.Pixels:
+                    //atodo: check support for hi dpi
+                    return length.Number;
+                case CssUnitOrNames.Milimeters:
+                    return length.Number * 3.779527559f; //3 pixels per millimeter      
+                case CssUnitOrNames.Centimeters:
+                    return length.Number * 37.795275591f; //37 pixels per centimeter 
+                case CssUnitOrNames.Inches:
+                    return length.Number * 96f; //96 pixels per inch 
+                case CssUnitOrNames.Points:
+                    return length.Number * (96f / 72f); // 1 point = 1/72 of inch   
+                case CssUnitOrNames.Picas:
+                    return length.Number * 16f; // 1 pica = 12 points 
+                default:
+                    return 0;
+            }
+        }
+
+        public static float ConvertToPxWithFontAdjust(CssLength length, float hundredPercent, IHasGetEmHeight box)
+        {
+            //Return zero if no length specified, zero specified     
+            switch (length.UnitOrNames)
+            {
+                case CssUnitOrNames.EmptyValue:
+                    return 0;
+                case CssUnitOrNames.Percent:
+                    return (length.Number / 100f) * hundredPercent;
+                case CssUnitOrNames.Ems:
+                    return length.Number * box.GetEmHeight();
+                case CssUnitOrNames.Ex:
+                    return length.Number * (box.GetEmHeight() / 2);
+                case CssUnitOrNames.Pixels:
+                    //atodo: check support for hi dpi
+                    return length.Number * (72f / 96f); //font adjust
+                case CssUnitOrNames.Milimeters:
+                    return length.Number * 3.779527559f; //3 pixels per millimeter      
+                case CssUnitOrNames.Centimeters:
+                    return length.Number * 37.795275591f; //37 pixels per centimeter 
+                case CssUnitOrNames.Inches:
+                    return length.Number * 96f; //96 pixels per inch 
+                case CssUnitOrNames.Points:
+                    return length.Number * (96f / 72f); // 1 point = 1/72 of inch   
+                case CssUnitOrNames.Picas:
+                    return length.Number * 16f; // 1 pica = 12 points 
+                default:
+                    return 0;
+            }
+        }
+        public static float GetActualBorderWidth(CssLength borderValue, IHasGetEmHeight b)
+        {
+            //------------------------------
+            //plan: use extended cssunit
+            //------------------------------
+            switch (borderValue.UnitOrNames)
+            {
+                case CssUnitOrNames.EmptyValue://as medium 
+                case CssUnitOrNames.BorderMedium:
+                    return 2f;
+                case CssUnitOrNames.BorderThin:
+                    return 1f;
+                case CssUnitOrNames.BorderThick:
+                    return 4f;
+                default:
+                    return Math.Abs(ConvertToPx(borderValue, 1, b));
+            }
+        }
+
         /// <summary>
         /// Parses a color value in CSS style; e.g. #ff0000, red, rgb(255,0,0), rgb(100%, 0, 0)
         /// </summary>
@@ -291,5 +382,35 @@ namespace LayoutFarm.HtmlBoxes
         }
 
         #endregion
+
+        //---------------------------
+        //TODO: review here again
+        //a COPY from Typography.OpenFont.Typeface  
+        const int pointsPerInch = 72;
+
+        /// <summary>
+        /// convert from point-unit value to pixel value
+        /// </summary>
+        /// <param name="pointSize"></param>
+        /// <param name="resolution"></param>
+        /// <returns></returns>
+        public static float ConvPointsToPixels(float pointSize, int resolution = 96)
+        {
+            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
+            //points = pixels * 72 / 96
+            //------------------------------------------------
+            //pixels = targetPointSize * 96 /72
+            //pixels = targetPointSize * resolution / pointPerInch
+            return pointSize * resolution / pointsPerInch;
+        }
+        public static float ConvPixelsToPoints(float pixelSize, int resolution = 96)
+        {
+            //http://stackoverflow.com/questions/139655/convert-pixels-to-points
+            //points = pixels * 72 / 96
+            //------------------------------------------------
+            //pixels = targetPointSize * 96 /72
+            //pixels = targetPointSize * resolution / pointPerInch
+            return pixelSize * pointsPerInch / resolution;
+        }
     }
 }

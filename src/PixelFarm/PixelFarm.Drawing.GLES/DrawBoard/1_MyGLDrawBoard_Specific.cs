@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.DrawingGL;
-
 namespace PixelFarm.Drawing.GLES2
 {
 
@@ -43,6 +42,7 @@ namespace PixelFarm.Drawing.GLES2
 
         public override Painter GetPainter()
         {
+            //TODO: check if we must set canvas origin to painter or not
             return _painter1;
         }
         public override void Dispose()

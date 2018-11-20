@@ -4,17 +4,17 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class MyRegion : Region
     {
-        System.Drawing.Region rgn = new System.Drawing.Region();
+        System.Drawing.Region _rgn = new System.Drawing.Region();
         public override object InnerRegion
         {
-            get { return this.rgn; }
+            get { return this._rgn; }
         }
         public override void Dispose()
         {
-            if (rgn != null)
+            if (_rgn != null)
             {
-                rgn.Dispose();
-                rgn = null;
+                _rgn.Dispose();
+                _rgn = null;
             }
         }
     }

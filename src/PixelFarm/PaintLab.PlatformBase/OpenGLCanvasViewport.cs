@@ -156,6 +156,7 @@ namespace LayoutFarm.UI.OpenGL
 
 
 #if DEBUG
+            //### DRAW_DEBUG_RED_BOXES***
             //our OpenGLCanvasViewport use Html5Canvas model
             //Html5Canvas coordinate (0,0) is on Upper-Left
             //so this red rects should run from upper-left to lower-right
@@ -169,6 +170,7 @@ namespace LayoutFarm.UI.OpenGL
 
             mycanvas.OffsetCanvasOrigin(mycanvas.Left, mycanvas.Top);
         }
+
     }
 
 }

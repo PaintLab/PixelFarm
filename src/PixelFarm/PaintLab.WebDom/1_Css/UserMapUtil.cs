@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 
 using LayoutFarm.Css;
-using LayoutFarm.HtmlBoxes;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.WebDom
 {
-   
+
 
     public static class UserMapUtil
     {
@@ -35,7 +34,7 @@ namespace LayoutFarm.WebDom
         static readonly ValueMap<CssNamedBorderWidth> _cssNamedBorderWidthMap = new ValueMap<CssNamedBorderWidth>();
         static readonly ValueMap<CssBackgroundRepeat> _cssBackgroundRepeatMap = new ValueMap<CssBackgroundRepeat>();
         static readonly ValueMap<LayoutFarm.WebDom.WellknownCssPropertyName> _wellKnownCssPropNameMap = new ValueMap<WebDom.WellknownCssPropertyName>();
-      
+
         static readonly ValueMap<CssBoxSizing> _cssBoxSizingMap = new ValueMap<CssBoxSizing>();
         static UserMapUtil()
         {
@@ -501,7 +500,7 @@ namespace LayoutFarm.WebDom
                 }
                 else
                 {
-                    Color actualColor = CssValueParser2.ParseCssColor(value.GetTranslatedStringValue());
+                    Color actualColor = LayoutFarm.WebDom.Parser.CssValueParser.ParseCssColor(value.GetTranslatedStringValue());
                     value.SetColorValue(actualColor);
                     return actualColor;
                 }
@@ -551,7 +550,7 @@ namespace LayoutFarm.WebDom
         }
 
 
-       
+
 
         /// <summary>
         /// Converts an HTML length into a Css length

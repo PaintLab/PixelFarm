@@ -307,6 +307,8 @@ namespace LayoutFarm.WebDom.Parser
                             else
                             {
                                 //terminate
+                                //TODO: fix this  ....1.348625e-002 
+
 
                                 EmitBuffer(i, CssTokenName.NumberUnit);
                                 //-------------------------------------------

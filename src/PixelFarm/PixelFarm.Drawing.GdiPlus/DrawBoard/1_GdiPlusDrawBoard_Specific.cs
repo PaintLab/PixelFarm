@@ -34,6 +34,7 @@ namespace PixelFarm.Drawing.WinGdi
             _bottom = renderSurface.Height;
 
             _gdigsx = renderSurface;
+            _painter = _gdigsx.GetAggPainter();
         }
 
         public GdiPlusRenderSurface RenderSurface => _gdigsx;
@@ -44,13 +45,14 @@ namespace PixelFarm.Drawing.WinGdi
             return _gdigsx.ToString();
         }
 #endif
-        public void SetAggPainter(Painter p)
-        {
-            _painter = p;
-        }
+        
         public override Painter GetPainter()
         {
-            //create agg painter
+            //since painter origin and canvas origin is separated 
+            //so must check here
+            //TODO: revisit the painter and the surface => shared resource **
+
+            _painter.SetOrigin(this._canvasOriginX, this._canvasOriginY);
             return _painter;
         }
         public override void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH)
@@ -60,10 +62,10 @@ namespace PixelFarm.Drawing.WinGdi
 
             unsafe
             {
-                CpuBlit.ActualBitmap img = destImg as CpuBlit.ActualBitmap;
-                if (img != null)
+                CpuBlit.MemBitmap memBmp = destImg as CpuBlit.MemBitmap;
+                if (memBmp != null)
                 {
-                    CpuBlit.Imaging.TempMemPtr tmpPtr = CpuBlit.ActualBitmap.GetBufferPtr(img);
+                    CpuBlit.Imaging.TempMemPtr tmpPtr = CpuBlit.MemBitmap.GetBufferPtr(memBmp);
                     byte* head = (byte*)tmpPtr.Ptr;
                     _gdigsx.RenderTo(head);
                     tmpPtr.Dispose();

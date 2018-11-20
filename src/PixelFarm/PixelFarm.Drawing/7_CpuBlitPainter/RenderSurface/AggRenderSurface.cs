@@ -29,7 +29,7 @@ namespace PixelFarm.CpuBlit
 {
     public sealed partial class AggRenderSurface
     {
-        ActualBitmap _destActualImage;
+        MemBitmap _destBmp;
         ScanlineRasterizer _sclineRas;
         Affine _currentTxMatrix = Affine.IdentityMatrix;
 
@@ -46,21 +46,21 @@ namespace PixelFarm.CpuBlit
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
 
 
-        public AggRenderSurface(ActualBitmap destImage)
+        public AggRenderSurface(MemBitmap dstBmp)
         {
             //create from actual image 
 
-            this._destActualImage = destImage;
+            this._destBmp = dstBmp;
 
-            this._destBitmapBlender = new MyBitmapBlender(destImage, new PixelBlenderBGRA());
+            this._destBitmapBlender = new MyBitmapBlender(dstBmp, new PixelBlenderBGRA());
             //
             this._sclineRas = new ScanlineRasterizer();
             this._bmpRasterizer = new DestBitmapRasterizer();
             //
-            this.destWidth = destImage.Width;
-            this.destHeight = destImage.Height;
+            this.destWidth = dstBmp.Width;
+            this.destHeight = dstBmp.Height;
             //
-            this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
+            this.clipBox = new RectInt(0, 0, dstBmp.Width, dstBmp.Height);
             this._sclineRas.SetClipBox(this.clipBox);
             this._sclinePack8 = new ScanlinePacked8();
         }
@@ -73,9 +73,9 @@ namespace PixelFarm.CpuBlit
         {
             get { return _sclineRas; }
         }
-        public ActualBitmap DestActualImage
+        public MemBitmap DestBitmap
         {
-            get { return this._destActualImage; }
+            get { return this._destBmp; }
         }
         public BitmapBlenderBase DestBitmapBlender
         {
@@ -104,6 +104,7 @@ namespace PixelFarm.CpuBlit
         }
         public void SetClippingRect(RectInt rect)
         {
+            rect.IntersectWithRectangle(new RectInt(0, 0, this.Width, this.Height));
             ScanlineRasterizer.SetClipBox(rect);
         }
         public RectInt GetClippingRect()

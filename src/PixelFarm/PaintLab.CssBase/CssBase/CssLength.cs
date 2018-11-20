@@ -5,7 +5,11 @@ using System;
 using System.Globalization;
 namespace LayoutFarm.Css
 {
- 
+    public interface IHasGetEmHeight
+    {
+        float GetEmHeight();
+    }
+
     /// <summary>
     /// Represents and gets info about a CSS Length
     /// </summary>

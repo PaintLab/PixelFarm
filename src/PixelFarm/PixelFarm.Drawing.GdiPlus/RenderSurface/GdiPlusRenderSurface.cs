@@ -16,41 +16,46 @@
 using System;
 using System.Collections.Generic;
 using Win32;
-using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing.WinGdi
 {
 
 
+    //RenderSurface => a basic object that
+    //1. holds drawing states
+    //2. help us do some primitive operations, (eg. scanline)
+
+
+
     public partial class GdiPlusRenderSurface : IDisposable
     {
 
-        bool isDisposed;
+        bool _isDisposed;
         //-------------------------------
-        NativeWin32MemoryDC win32MemDc;
-        //-------------------------------
-
-        IntPtr originalHdc = IntPtr.Zero;
-        internal System.Drawing.Graphics gx;
-
-        //-------------------------------
-        Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
+        NativeWin32MemoryDC _win32MemDc;
         //-------------------------------
 
-        System.Drawing.Color currentTextColor = System.Drawing.Color.Black;
-        System.Drawing.Pen internalPen;
-        System.Drawing.SolidBrush internalSolidBrush;
-        System.Drawing.Rectangle currentClipRect;
+        IntPtr _originalHdc = IntPtr.Zero;
+        internal System.Drawing.Graphics _gx;
+
+        //-------------------------------
+        Stack<System.Drawing.Rectangle> _clipRectStack = new Stack<System.Drawing.Rectangle>();
+        //-------------------------------
+
+        System.Drawing.Color _currentTextColor = System.Drawing.Color.Black;
+        System.Drawing.Pen _internalPen;
+        System.Drawing.SolidBrush _internalSolidBrush;
+        System.Drawing.Rectangle _currentClipRect;
         //------------------------------- 
         LayoutFarm.OpenFontTextService _openFontTextServices;
 
-        PixelFarm.CpuBlit.ActualBitmap _actualBmp;
+        PixelFarm.CpuBlit.MemBitmap _memBmp;
         CpuBlit.AggPainter _painter;
         //------------------------------- 
 
         IntPtr _hFont;
 
-        public GdiPlusRenderSurface(int left, int top, int width, int height)
+        public GdiPlusRenderSurface(int width, int height)
         {
 #if DEBUG
             debug_canvas_id = dbug_canvasCount + 1;
@@ -58,28 +63,30 @@ namespace PixelFarm.Drawing.WinGdi
 #endif
 
             //2. dimension
-            this.left = left;
-            this.top = top;
-            this.right = left + width;
-            this.bottom = top + height;
-            currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
+            this._left = 0;
+            this._top = 0;
+            this._right = _left + width;
+            this._bottom = _top + height;
+            _currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
 
             //--------------
-            win32MemDc = new NativeWin32MemoryDC(width, height, false);
-            win32MemDc.PatBlt(NativeWin32MemoryDC.PatBltColor.White);
-            win32MemDc.SetBackTransparent(true);
-            win32MemDc.SetClipRect(0, 0, width, height);
+            _win32MemDc = new NativeWin32MemoryDC(width, height, false);
+            _win32MemDc.PatBlt(NativeWin32MemoryDC.PatBltColor.White);
+            _win32MemDc.SetBackTransparent(true);
+            _win32MemDc.SetClipRect(0, 0, width, height);
             //--------------
-            _actualBmp = new CpuBlit.ActualBitmap(width, height, win32MemDc.PPVBits);
+            _memBmp = new CpuBlit.MemBitmap(width, height, _win32MemDc.PPVBits);
 
-            this.originalHdc = win32MemDc.DC;
-            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
+            this._originalHdc = _win32MemDc.DC;
+            this._gx = System.Drawing.Graphics.FromHdc(_win32MemDc.DC);
+
 
             //--------------
+            //TODO: review here how to set default font***
             //set default font
             Win32.Win32Font font = Win32.FontHelper.CreateWin32Font("Tahoma", 10, false, false);
             _hFont = font.GetHFont();
-            win32MemDc.SetFont(_hFont);
+            _win32MemDc.SetFont(_hFont);
             //---------------------
 
             //--------------
@@ -88,20 +95,20 @@ namespace PixelFarm.Drawing.WinGdi
             this.CurrentTextColor = Color.Black;
             //-------------------------------------------------------     
             //managed object
-            internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
-            internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            _internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
+            _internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             this.StrokeWidth = 1;
         }
-        public NativeWin32MemoryDC Win32DC => win32MemDc;
-        public CpuBlit.ActualBitmap GetActualBitmap()
+        public NativeWin32MemoryDC Win32DC => _win32MemDc;
+        public CpuBlit.MemBitmap GetMemBitmap()
         {
-            return _actualBmp;
+            return _memBmp;
         }
         public CpuBlit.AggPainter GetAggPainter()
         {
             if (_painter == null)
             {
-                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_actualBmp);
+                CpuBlit.AggPainter aggPainter = CpuBlit.AggPainter.Create(_memBmp);
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
                 if (_openFontTextServices == null)
                 {
@@ -109,39 +116,39 @@ namespace PixelFarm.Drawing.WinGdi
                 }
                 //optional if we want to print text on agg surface
 
-                //aggPainter.TextPrinter = new VxsTextPrinter(aggPainter, _openFontTextServices); //1.
-                aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(aggPainter);//2.
+
+                //aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.VxsTextPrinter(aggPainter, _openFontTextServices); //1.
+                //aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(aggPainter);//2.
+                aggPainter.TextPrinter = new GdiPlusTextPrinter(this);
                 //
                 _painter = aggPainter;
                 _painter.SetOrigin(this.OriginX, this.OriginY);
             }
             return _painter;
         }
+        internal LayoutFarm.OpenFontTextService OpenFontTextService
+        {
+            get { return _openFontTextServices; }
+        }
 #if DEBUG
         public void dbugTestDrawText()
         {
-            win32MemDc.SetFont(_hFont);
+            _win32MemDc.SetFont(_hFont);
             this.CurrentTextColor = Color.Black;
             DrawText("ABCDE012345".ToCharArray(), 0, 0);
         }
         public override string ToString()
         {
-            return "visible_clip" + this.gx.VisibleClipBounds.ToString();
+            return "visible_clip" + this._gx.VisibleClipBounds.ToString();
         }
 #endif 
         public void CloseCanvas()
         {
-            if (isDisposed)
+            if (_isDisposed)
             {
                 return;
             }
-            if (win32MemDc != null)
-            {
-                win32MemDc.Dispose();
-                win32MemDc = null;
-            }
-            isDisposed = true;
-
+            _isDisposed = true;
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -149,7 +156,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// </summary>
         void IDisposable.Dispose()
         {
-            if (isDisposed)
+            if (_isDisposed)
             {
                 return;
             }
@@ -157,23 +164,32 @@ namespace PixelFarm.Drawing.WinGdi
         }
         internal void ClearPreviousStoredValues()
         {
-            this.gx.RenderingOrigin = new System.Drawing.Point(0, 0);
-            this.canvasOriginX = 0;
-            this.canvasOriginY = 0;
-            this.clipRectStack.Clear();
+            this._gx.RenderingOrigin = new System.Drawing.Point(0, 0);
+            this._canvasOriginX = 0;
+            this._canvasOriginY = 0;
+            this._clipRectStack.Clear();
         }
 
         internal void ReleaseUnManagedResource()
         {
-            if (win32MemDc != null)
+            if (_win32MemDc != null)
             {
-                win32MemDc.Dispose();
-                win32MemDc = null;
-                originalHdc = IntPtr.Zero;
+                _win32MemDc.Dispose();
+                _win32MemDc = null;
+                _originalHdc = IntPtr.Zero;
             }
 
-            clipRectStack.Clear();
-            currentClipRect = new System.Drawing.Rectangle(0, 0, this.Width, this.Height);
+            if (_hFont != IntPtr.Zero)
+            {
+                Win32.MyWin32.DeleteObject(_hFont);
+                _hFont = IntPtr.Zero;
+            }
+
+            _clipRectStack.Clear();
+            _currentClipRect = new System.Drawing.Rectangle(0, 0, this.Width, this.Height);
+
+
+
 #if DEBUG
 
             debug_releaseCount++;
@@ -210,7 +226,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public void dbug_DrawRuler(int x)
         {
-            int canvas_top = this.top;
+            int canvas_top = this._top;
             int canvas_bottom = this.Bottom;
             for (int y = canvas_top; y < canvas_bottom; y += 10)
             {
@@ -224,6 +240,8 @@ namespace PixelFarm.Drawing.WinGdi
             DrawLine(rect.Left, rect.Top, rect.Right, rect.Bottom);
             DrawLine(rect.Left, rect.Bottom, rect.Right, rect.Top);
             this.StrokeColor = prevColor;
+
+
         }
 
 #endif
@@ -245,36 +263,36 @@ namespace PixelFarm.Drawing.WinGdi
     //coordinate
     partial class GdiPlusRenderSurface
     {
-        int left;
-        int top;
-        int right;
-        int bottom;
-        int canvasOriginX = 0;
-        int canvasOriginY = 0;
-        Rectangle invalidateArea;
+        int _left;
+        int _top;
+        int _right;
+        int _bottom;
+        int _canvasOriginX = 0;
+        int _canvasOriginY = 0;
+        Rectangle _invalidateArea;
 
-        bool isEmptyInvalidateArea;
+        bool _isEmptyInvalidateArea;
         //--------------------------------------------------------------------
         public void SetCanvasOrigin(int x, int y)
         {
 
             //----------- 
-            int total_dx = x - canvasOriginX;
-            int total_dy = y - canvasOriginY;
-            this.gx.TranslateTransform(total_dx, total_dy);
+            int total_dx = x - _canvasOriginX;
+            int total_dy = y - _canvasOriginY;
+            this._gx.TranslateTransform(total_dx, total_dy);
             //clip rect move to another direction***
-            this.currentClipRect.Offset(-total_dx, -total_dy);
-            this.canvasOriginX = x;
-            this.canvasOriginY = y;
+            this._currentClipRect.Offset(-total_dx, -total_dy);
+            this._canvasOriginX = x;
+            this._canvasOriginY = y;
         }
 
         public int OriginX
         {
-            get { return this.canvasOriginX; }
+            get { return this._canvasOriginX; }
         }
         public int OriginY
         {
-            get { return this.canvasOriginY; }
+            get { return this._canvasOriginY; }
         }
 
 
@@ -285,26 +303,20 @@ namespace PixelFarm.Drawing.WinGdi
         /// <param name="combineMode">Member of the <see cref="T:System.Drawing.Drawing2D.CombineMode"/> enumeration that specifies the combining operation to use. </param>
         public void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
-
-            gx.SetClip(
-               this.currentClipRect = new System.Drawing.Rectangle(
+            _gx.SetClip(
+               this._currentClipRect = new System.Drawing.Rectangle(
                     rect.X, rect.Y,
                     rect.Width, rect.Height),
                     (System.Drawing.Drawing2D.CombineMode)combineMode);
         }
-        //public bool IntersectsWith(Rectangle clientRect)
-        //{
-        //    return clientRect.IntersectsWith(left, top, right, bottom);
-        //}
-
         public bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
-            this.clipRectStack.Push(currentClipRect);
+            this._clipRectStack.Push(_currentClipRect);
             System.Drawing.Rectangle intersectResult =
                   System.Drawing.Rectangle.Intersect(
                   System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
                   new System.Drawing.Rectangle(0, 0, width, height));
-            currentClipRect = intersectResult;
+            _currentClipRect = intersectResult;
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
                 //not intersec?
@@ -313,38 +325,38 @@ namespace PixelFarm.Drawing.WinGdi
             else
             {
                 updateArea = Conv.ToRect(intersectResult);
-                gx.SetClip(intersectResult);
+                _gx.SetClip(intersectResult);
                 return true;
             }
         }
         public void PopClipAreaRect()
         {
-            if (clipRectStack.Count > 0)
+            if (_clipRectStack.Count > 0)
             {
 
-                currentClipRect = clipRectStack.Pop();
-                gx.SetClip(currentClipRect);
+                _currentClipRect = _clipRectStack.Pop();
+                _gx.SetClip(_currentClipRect);
             }
         }
         public Rectangle CurrentClipRect
         {
             get
             {
-                return currentClipRect.ToRect();
+                return _currentClipRect.ToRect();
             }
         }
         public int Top
         {
             get
             {
-                return top;
+                return _top;
             }
         }
         public int Left
         {
             get
             {
-                return left;
+                return _left;
             }
         }
 
@@ -352,42 +364,42 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
-                return right - left;
+                return _right - _left;
             }
         }
         public int Height
         {
             get
             {
-                return bottom - top;
+                return _bottom - _top;
             }
         }
         public int Bottom
         {
             get
             {
-                return bottom;
+                return _bottom;
             }
         }
         public int Right
         {
             get
             {
-                return right;
+                return _right;
             }
         }
         public Rectangle Rect
         {
             get
             {
-                return Rectangle.FromLTRB(left, top, right, bottom);
+                return Rectangle.FromLTRB(_left, _top, _right, _bottom);
             }
         }
         public Rectangle InvalidateArea
         {
             get
             {
-                return invalidateArea;
+                return _invalidateArea;
             }
         }
 
@@ -398,14 +410,14 @@ namespace PixelFarm.Drawing.WinGdi
         //}
         public void Invalidate(Rectangle rect)
         {
-            if (isEmptyInvalidateArea)
+            if (_isEmptyInvalidateArea)
             {
-                invalidateArea = rect;
-                isEmptyInvalidateArea = false;
+                _invalidateArea = rect;
+                _isEmptyInvalidateArea = false;
             }
             else
             {
-                invalidateArea = Rectangle.Union(rect, invalidateArea);
+                _invalidateArea = Rectangle.Union(rect, _invalidateArea);
             }
 
             //need to draw again
@@ -418,52 +430,52 @@ namespace PixelFarm.Drawing.WinGdi
     //drawing
     partial class GdiPlusRenderSurface
     {
-        float strokeWidth = 1f;
-        Color fillSolidColor = Color.Transparent;
-        Color strokeColor = Color.Black;
+        float _strokeWidth = 1f;
+        Color _fillSolidColor = Color.Transparent;
+        Color _strokeColor = Color.Black;
         //==========================================================
         public Color StrokeColor
         {
             get
             {
-                return this.strokeColor;
+                return this._strokeColor;
             }
             set
             {
-                this.internalPen.Color = ConvColor(this.strokeColor = value);
+                this._internalPen.Color = ConvColor(this._strokeColor = value);
             }
         }
         public float StrokeWidth
         {
             get
             {
-                return this.strokeWidth;
+                return this._strokeWidth;
             }
             set
             {
-                this.internalPen.Width = this.strokeWidth = value;
+                this._internalPen.Width = this._strokeWidth = value;
             }
         }
 
         public void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {
 
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, canvasOriginX, canvasOriginY, IntPtr.Zero);
+            MyWin32.SetViewportOrgEx(_win32MemDc.DC, _canvasOriginX, _canvasOriginY, IntPtr.Zero);
             MyWin32.BitBlt(
                 destHdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, //dest
-                win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
+                _win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
+            MyWin32.SetViewportOrgEx(_win32MemDc.DC, -_canvasOriginX, -_canvasOriginY, IntPtr.Zero);
         }
         public unsafe void RenderTo(byte* outputBuffer)
         {
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, canvasOriginX, canvasOriginY, IntPtr.Zero);
-            win32MemDc.CopyPixelBitsToOutput(outputBuffer);
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
+            MyWin32.SetViewportOrgEx(_win32MemDc.DC, _canvasOriginX, _canvasOriginY, IntPtr.Zero);
+            _win32MemDc.CopyPixelBitsToOutput(outputBuffer);
+            MyWin32.SetViewportOrgEx(_win32MemDc.DC, -_canvasOriginX, -_canvasOriginY, IntPtr.Zero);
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {
 
-            gx.Clear(System.Drawing.Color.FromArgb(
+            _gx.Clear(System.Drawing.Color.FromArgb(
                 c.A,
                 c.R,
                 c.G,
@@ -471,7 +483,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void DrawPath(GraphicsPath gfxPath)
         {
-            gx.DrawPath(internalPen, ResolveGraphicsPath(gfxPath));
+            _gx.DrawPath(_internalPen, ResolveGraphicsPath(gfxPath));
         }
         public void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
@@ -482,10 +494,10 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                         //use default solid brush
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        gx.FillRectangle(internalSolidBrush, left, top, width, height);
-                        internalSolidBrush.Color = prevColor;
+                        var prevColor = _internalSolidBrush.Color;
+                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        _gx.FillRectangle(_internalSolidBrush, left, top, width, height);
+                        _internalSolidBrush.Color = prevColor;
                     }
                     break;
                 case BrushKind.LinearGradient:
@@ -499,7 +511,7 @@ namespace PixelFarm.Drawing.WinGdi
                             ConvColor(firstPair.c1),
                             ConvColor(firstPair.c2)))
                         {
-                            gx.FillRectangle(linearGradBrush, left, top, width, height);
+                            _gx.FillRectangle(linearGradBrush, left, top, width, height);
                         }
                     }
                     break;
@@ -520,22 +532,22 @@ namespace PixelFarm.Drawing.WinGdi
         public void FillRectangle(Color color, float left, float top, float width, float height)
         {
 
-            internalSolidBrush.Color = ConvColor(color);
-            gx.FillRectangle(internalSolidBrush, left, top, width, height);
+            _internalSolidBrush.Color = ConvColor(color);
+            _gx.FillRectangle(_internalSolidBrush, left, top, width, height);
         }
 
 
         public void DrawRectangle(Color color, float left, float top, float width, float height)
         {
 
-            internalPen.Color = ConvColor(color);
-            gx.DrawRectangle(internalPen, left, top, width, height);
+            _internalPen.Color = ConvColor(color);
+            _gx.DrawRectangle(_internalPen, left, top, width, height);
         }
 
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
 
-            gx.DrawLine(internalPen, x1, y1, x2, y2);
+            _gx.DrawLine(_internalPen, x1, y1, x2, y2);
         }
 
 
@@ -576,18 +588,18 @@ namespace PixelFarm.Drawing.WinGdi
             get
             {
 
-                return (SmoothingMode)(gx.SmoothingMode);
+                return (SmoothingMode)(_gx.SmoothingMode);
             }
             set
             {
 
-                gx.SmoothingMode = (System.Drawing.Drawing2D.SmoothingMode)value;
+                _gx.SmoothingMode = (System.Drawing.Drawing2D.SmoothingMode)value;
             }
         }
 
         static Win32.NativeWin32MemoryDC ResolveForWin32Dc(Image image)
         {
-            if (image is PixelFarm.CpuBlit.ActualBitmap)
+            if (image is PixelFarm.CpuBlit.MemBitmap)
             {
                 //this is known image
                 var win32Dc = Image.GetCacheInnerImage(image) as Win32.NativeWin32MemoryDC;
@@ -601,19 +613,19 @@ namespace PixelFarm.Drawing.WinGdi
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
 
-            if (image is PixelFarm.CpuBlit.ActualBitmap)
+            if (image is PixelFarm.CpuBlit.MemBitmap)
             {
                 //this is known image
                 var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
                 if (cacheBmp == null)
                 {
-
+                    //TODO: check mem leak too!
                     System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
                         image.Height,
                         System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     //
                     //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
-                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.ActualBitmap)image, bmp);
+                    PixelFarm.CpuBlit.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSizeNotFlip((PixelFarm.CpuBlit.MemBitmap)image, bmp);
                     //
                     Image.SetCacheInnerImage(image, bmp);
                     return bmp;
@@ -641,30 +653,30 @@ namespace PixelFarm.Drawing.WinGdi
         public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
 
-            gx.DrawImage(ResolveInnerBmp(image),
+            _gx.DrawImage(ResolveInnerBmp(image),
                 destRect.ToRectF(),
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
         }
         public void DrawImage(Image image, int x, int y)
         {
-            PixelFarm.CpuBlit.ActualBitmap actualBmp = image as PixelFarm.CpuBlit.ActualBitmap;
-            if (actualBmp != null)
+            PixelFarm.CpuBlit.MemBitmap bmp = image as PixelFarm.CpuBlit.MemBitmap;
+            if (bmp != null)
             {
                 Win32.NativeWin32MemoryDC win32DC = ResolveForWin32Dc(image);
                 if (win32DC != null)
                 {
-                    this.win32MemDc.BlendWin32From(win32DC.DC, 0, 0, image.Width, image.Height, x, y);
+                    this._win32MemDc.BlendWin32From(win32DC.DC, 0, 0, image.Width, image.Height, x, y);
                     return;
                 }
 
                 System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
-                gx.DrawImageUnscaled(resolvedImg, x, y);
+                _gx.DrawImageUnscaled(resolvedImg, x, y);
             }
             else
             {
                 System.Drawing.Bitmap resolvedImg = ResolveInnerBmp(image);
-                gx.DrawImageUnscaled(resolvedImg, x, y);
+                _gx.DrawImageUnscaled(resolvedImg, x, y);
             }
         }
         public void DrawImages(Image image, RectangleF[] destAndSrcPairs)
@@ -682,7 +694,7 @@ namespace PixelFarm.Drawing.WinGdi
                 System.Drawing.Bitmap inner = ResolveInnerBmp(image);
                 for (int i = 0; i < j;)
                 {
-                    gx.DrawImage(inner,
+                    _gx.DrawImage(inner,
                         destAndSrcPairs[i].ToRectF(),
                         destAndSrcPairs[i + 1].ToRectF(),
                         System.Drawing.GraphicsUnit.Pixel);
@@ -720,7 +732,7 @@ namespace PixelFarm.Drawing.WinGdi
                 image.Height == destRect.Height)
             {
                 System.Drawing.Bitmap inner2 = ResolveInnerBmp(image);
-                if (inner2.HorizontalResolution == gx.DpiX)
+                if (inner2.HorizontalResolution == _gx.DpiX)
                 {
                     DrawImage(image, (int)destRect.X, (int)destRect.Y);
                     return;
@@ -730,7 +742,7 @@ namespace PixelFarm.Drawing.WinGdi
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
             if (image.IsReferenceImage)
             {
-                gx.DrawImage(inner,
+                _gx.DrawImage(inner,
                     destRect.ToRectF(),
                      new System.Drawing.RectangleF(
                          image.ReferenceX, image.ReferenceY,
@@ -739,18 +751,18 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else
             {
-                gx.DrawImage(inner, destRect.ToRectF());
+                _gx.DrawImage(inner, destRect.ToRectF());
             }
         }
         public void FillPath(Color color, GraphicsPath gfxPath)
         {
 
             //solid color
-            var prevColor = internalSolidBrush.Color;
-            internalSolidBrush.Color = ConvColor(color);
+            var prevColor = _internalSolidBrush.Color;
+            _internalSolidBrush.Color = ConvColor(color);
             System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(gfxPath);
-            gx.FillPath(internalSolidBrush, innerPath);
-            internalSolidBrush.Color = prevColor;
+            _gx.FillPath(_internalSolidBrush, innerPath);
+            _internalSolidBrush.Color = prevColor;
         }
         //static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(PixelFarm.CpuBlit.VgCmd vxsRenderVx)
         //{
@@ -819,17 +831,17 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
             //solid color
-            var prevColor = internalSolidBrush.Color;
-            internalSolidBrush.Color = ConvColor(color);
+            var prevColor = _internalSolidBrush.Color;
+            _internalSolidBrush.Color = ConvColor(color);
             System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
-            gx.FillPath(internalSolidBrush, innerPath);
-            internalSolidBrush.Color = prevColor;
+            _gx.FillPath(_internalSolidBrush, innerPath);
+            _internalSolidBrush.Color = prevColor;
         }
         public void FillPath(PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
         {
             //solid color 
             System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
-            gx.FillPath(internalSolidBrush, innerPath);
+            _gx.FillPath(_internalSolidBrush, innerPath);
         }
 
         public void FillPath(Brush brush, PixelFarm.CpuBlit.VxsRenderVx vxsRenderVx)
@@ -840,25 +852,25 @@ namespace PixelFarm.Drawing.WinGdi
                 case BrushKind.Solid:
                     {
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        var prevColor = _internalSolidBrush.Color;
+                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
                         //
                         System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
-                        gx.FillPath(internalSolidBrush, innerPath);
+                        _gx.FillPath(_internalSolidBrush, innerPath);
                         //
-                        internalSolidBrush.Color = prevColor;
+                        _internalSolidBrush.Color = prevColor;
                     }
                     break;
                 case BrushKind.LinearGradient:
                     {
                         LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        var prevColor = _internalSolidBrush.Color;
+                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
                         //
                         System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(vxsRenderVx);
-                        gx.FillPath(internalSolidBrush, innerPath);
+                        _gx.FillPath(_internalSolidBrush, innerPath);
                         //
-                        internalSolidBrush.Color = prevColor;
+                        _internalSolidBrush.Color = prevColor;
                     }
                     break;
                 default:
@@ -879,25 +891,25 @@ namespace PixelFarm.Drawing.WinGdi
                 case BrushKind.Solid:
                     {
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        var prevColor = _internalSolidBrush.Color;
+                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
                         //
                         System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        gx.FillPath(internalSolidBrush, innerPath);
+                        _gx.FillPath(_internalSolidBrush, innerPath);
                         //
-                        internalSolidBrush.Color = prevColor;
+                        _internalSolidBrush.Color = prevColor;
                     }
                     break;
                 case BrushKind.LinearGradient:
                     {
                         LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        var prevColor = _internalSolidBrush.Color;
+                        _internalSolidBrush.Color = ConvColor(solidBrush.Color);
                         //
                         System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        gx.FillPath(internalSolidBrush, innerPath);
+                        _gx.FillPath(_internalSolidBrush, innerPath);
                         //
-                        internalSolidBrush.Color = prevColor;
+                        _internalSolidBrush.Color = prevColor;
                     }
                     break;
                 default:
@@ -992,14 +1004,14 @@ namespace PixelFarm.Drawing.WinGdi
 
             var pps = ConvPointFArray(points);
             //use internal solid color            
-            gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
+            _gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
         }
         public void FillPolygon(Color color, PointF[] points)
         {
 
             var pps = ConvPointFArray(points);
-            internalSolidBrush.Color = ConvColor(color);
-            gx.FillPolygon(this.internalSolidBrush, pps);
+            _internalSolidBrush.Color = ConvColor(color);
+            _gx.FillPolygon(this._internalSolidBrush, pps);
         }
 
         ////==========================================================
@@ -1045,31 +1057,31 @@ namespace PixelFarm.Drawing.WinGdi
     //text and font
     partial class GdiPlusRenderSurface
     {
-        RequestFont currentTextFont = null;
-        Color mycurrentTextColor = Color.Black;
+        RequestFont _currentTextFont = null;
+        Color _mycurrentTextColor = Color.Black;
 
         public void DrawText(char[] buffer, int x, int y)
         {
-            var clipRect = currentClipRect;
-            clipRect.Offset(canvasOriginX, canvasOriginY);
+            var clipRect = _currentClipRect;
+            clipRect.Offset(_canvasOriginX, _canvasOriginY);
             //1.
-            win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+            _win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
             //2.
-            NativeTextWin32.TextOut(win32MemDc.DC, canvasOriginX + x, canvasOriginY + y, buffer, buffer.Length);
+            NativeTextWin32.TextOut(_win32MemDc.DC, _canvasOriginX + x, _canvasOriginY + y, buffer, buffer.Length);
             //3
-            win32MemDc.ClearClipRect();
+            _win32MemDc.ClearClipRect();
         }
         public void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            var clipRect = System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
+            var clipRect = System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), _currentClipRect);
             //1.
-            clipRect.Offset(canvasOriginX, canvasOriginY);
+            clipRect.Offset(_canvasOriginX, _canvasOriginY);
             //2.
-            win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+            _win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
             //3.
-            NativeTextWin32.TextOut(win32MemDc.DC, canvasOriginX + logicalTextBox.X, canvasOriginY + logicalTextBox.Y, buffer, buffer.Length);
+            NativeTextWin32.TextOut(_win32MemDc.DC, _canvasOriginX + logicalTextBox.X, _canvasOriginY + logicalTextBox.Y, buffer, buffer.Length);
             //4.
-            win32MemDc.ClearClipRect();
+            _win32MemDc.ClearClipRect();
         }
         public void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
@@ -1083,14 +1095,14 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 //1. find clip rect
                 var clipRect = Rectangle.Intersect(logicalTextBox,
-                    new Rectangle(currentClipRect.Left,
-                        currentClipRect.Top,
-                        currentClipRect.Width,
-                        currentClipRect.Height));
+                    new Rectangle(_currentClipRect.Left,
+                        _currentClipRect.Top,
+                        _currentClipRect.Width,
+                        _currentClipRect.Height));
                 //2. offset to canvas origin 
-                clipRect.Offset(canvasOriginX, canvasOriginY);
+                clipRect.Offset(_canvasOriginX, _canvasOriginY);
                 //3. set rect rgn
-                win32MemDc.SetClipRect(clipRect.X, clipRect.Y, clipRect.Width, clipRect.Height);
+                _win32MemDc.SetClipRect(clipRect.X, clipRect.Y, clipRect.Width, clipRect.Height);
 
                 unsafe
                 {
@@ -1098,14 +1110,14 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                         //4.
 
-                        NativeTextWin32.TextOutUnsafe(originalHdc,
-                            (int)logicalTextBox.X + canvasOriginX,
-                            (int)logicalTextBox.Y + canvasOriginY,
+                        NativeTextWin32.TextOutUnsafe(_originalHdc,
+                            (int)logicalTextBox.X + _canvasOriginX,
+                            (int)logicalTextBox.Y + _canvasOriginY,
                             (startAddr + startAt), len);
                     }
                 }
                 //5. clear rect rgn
-                win32MemDc.ClearClipRect();
+                _win32MemDc.ClearClipRect();
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -1122,28 +1134,28 @@ namespace PixelFarm.Drawing.WinGdi
                 //-------------------------------------------
                 //1. find clip rect
                 var clipRect = Rectangle.Intersect(logicalTextBox,
-                    new Rectangle(currentClipRect.Left,
-                        currentClipRect.Top,
-                        currentClipRect.Width,
-                        currentClipRect.Height));
+                    new Rectangle(_currentClipRect.Left,
+                        _currentClipRect.Top,
+                        _currentClipRect.Width,
+                        _currentClipRect.Height));
                 //2. offset to canvas origin 
-                clipRect.Offset(canvasOriginX, canvasOriginY);
+                clipRect.Offset(_canvasOriginX, _canvasOriginY);
                 //3. set rect rgn
-                win32MemDc.SetClipRect(clipRect.X, clipRect.Y, clipRect.Width, clipRect.Height);
+                _win32MemDc.SetClipRect(clipRect.X, clipRect.Y, clipRect.Width, clipRect.Height);
 
                 unsafe
                 {
                     fixed (char* startAddr = &str[0])
                     {
                         //4.
-                        NativeTextWin32.TextOutUnsafe(originalHdc,
-                            (int)logicalTextBox.X + canvasOriginX,
-                            (int)logicalTextBox.Y + canvasOriginY,
+                        NativeTextWin32.TextOutUnsafe(_originalHdc,
+                            (int)logicalTextBox.X + _canvasOriginX,
+                            (int)logicalTextBox.Y + _canvasOriginY,
                             (startAddr + startAt), len);
                     }
                 }
                 //5. clear rect rgn
-                win32MemDc.ClearClipRect();
+                _win32MemDc.ClearClipRect();
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -1159,26 +1171,87 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get
             {
-                return currentTextFont;
+                return _currentTextFont;
             }
             set
             {
 
-                this.currentTextFont = value;
-                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).CachedHFont());
+                this._currentTextFont = value;
+                _win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).CachedHFont());
             }
         }
         public Color CurrentTextColor
         {
             get
             {
-                return mycurrentTextColor;
+                return _mycurrentTextColor;
             }
             set
             {
-                mycurrentTextColor = value;
-                win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
+                _mycurrentTextColor = value;
+                _win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
             }
+        }
+    }
+
+
+    sealed class GdiPlusTextPrinter : ITextPrinter
+    {
+
+        GdiPlusRenderSurface _rendersx;
+        public GdiPlusTextPrinter(GdiPlusRenderSurface rendersx)
+        {
+            _rendersx = rendersx;
+        }
+        /// <summary>
+        /// start draw on 'left-top' of a given area box
+        /// </summary>
+        public bool StartDrawOnLeftTop { get; set; }
+        public void ChangeFont(RequestFont font)
+        {
+            _rendersx.CurrentFont = font;
+            _rendersx.OpenFontTextService.ResolveTypeface(font);
+            ////call to service
+            //_font = font;
+            //_textServices.ResolveTypeface(font); //resolve for 'actual' font
+            //_fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
+            //FontSizeInPoints = font.SizeInPoints;
+
+        }
+        public RequestFont CurrentFont
+        {
+            get { return _rendersx.CurrentFont; }
+
+        }
+
+        public void ChangeFillColor(Color fontColor)
+        {
+            //change font color
+            _rendersx.CurrentTextColor = fontColor;
+        }
+        public void ChangeStrokeColor(Color strokeColor)
+        {
+            //TODO: ...
+        }
+
+        public void DrawString(char[] text, int startAt, int len, double left, double top)
+        {
+
+            _rendersx.DrawText(text,
+                startAt, len,
+                new Rectangle((int)left,
+                (int)(top - _rendersx.CurrentFont.LineSpacingInPixels),
+                2480, //temp we,not need clip
+                1024),//temp we,not need clip
+                0);
+        }
+        public void DrawString(RenderVxFormattedString renderVx, double left, double top)
+        {
+            //TODO: implement this
+        }
+        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
+        {
+            //TODO: implement this
         }
     }
 }

@@ -295,10 +295,10 @@ namespace PixelFarm.DrawingGL
             else
             {
                 GLBitmap glBmp = null;
-                if (image is ActualBitmap)
+                if (image is MemBitmap)
                 {
-                    ActualBitmap actualImage = (ActualBitmap)image;
-                    glBmp = new GLBitmap(actualImage);
+                 
+                    glBmp = new GLBitmap((MemBitmap)image);
                 }
                 else
                 {

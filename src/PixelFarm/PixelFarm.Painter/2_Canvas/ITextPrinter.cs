@@ -96,6 +96,12 @@ namespace PixelFarm.Drawing
     {
         public static void DrawString(this ITextPrinter textPrinter, string text, double left, double top)
         {
+#if DEBUG
+            if (text == null)
+            {
+                return;
+            }
+#endif
             char[] textBuffer = text.ToCharArray();
             textPrinter.DrawString(textBuffer, 0, textBuffer.Length, left, top);
         }

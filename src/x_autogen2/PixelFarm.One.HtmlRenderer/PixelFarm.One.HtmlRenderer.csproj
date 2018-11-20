@@ -2381,17 +2381,17 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs">
       <Link>PixelFarm\PaintLab.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapOpenGLES2.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapWinGdi.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\BootStrapWinGdi.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitGLES.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\CommonTextServiceSetup.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\CommonTextServiceSetup.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\FrameworkInitWinGDI.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs">
-      <Link>PixelFarm\PaintLab.YourImplementation\0_Bootstrap\StorageProviderImpl.cs</Link>
+    <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs">
+      <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\StorageProviderImpl.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\1_Events\GraphicsTimerTasksManager.cs</Link>
@@ -2518,9 +2518,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\BufferBitmapStore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs">
-      <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusPainter.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GdiPlus\Painter\GdiPlusRenderVx.cs</Link>
@@ -2879,11 +2876,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs">
       <Link>PixelFarm\PixelFarm.Painter\2_Canvas\ITextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs">
-      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ActualBitmap.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs">
+      <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs">
       <Link>PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs</Link>

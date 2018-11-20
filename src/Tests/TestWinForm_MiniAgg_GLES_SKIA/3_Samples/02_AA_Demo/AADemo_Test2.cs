@@ -18,12 +18,12 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         AggRenderSurface gfx;
-        public CustomRas_EnlargeV2(double size, ActualBitmap destImage)
+        public CustomRas_EnlargeV2(double size, MemBitmap dstBmp)
         {
             this.ScanlineRenderMode = ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
-            gfx = new AggRenderSurface(destImage);
+            gfx = new AggRenderSurface(dstBmp);
         }
         protected override void CustomRenderSingleScanLine(IBitmapBlender destImage, Scanline scanline, Color color)
         {
@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
                 var sl = new ScanlineUnpacked8();
                 int size_mul = this.PixelSize;
-                var sclineToBmpEn2 = new CustomRas_EnlargeV2(size_mul, aggsx.DestActualImage);
+                var sclineToBmpEn2 = new CustomRas_EnlargeV2(size_mul, aggsx.DestBitmap);
                 rasterizer.Reset();
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
