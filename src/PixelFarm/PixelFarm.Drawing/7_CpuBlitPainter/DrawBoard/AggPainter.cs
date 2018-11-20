@@ -162,8 +162,8 @@ namespace PixelFarm.CpuBlit
             set
             {
 
-                if (value == LineRenderingTechnique.OutlineAARenderer
-                     && _outlineRas == null)
+                if (value == LineRenderingTechnique.OutlineAARenderer &&
+                    _outlineRas == null)
                 {
 
 
