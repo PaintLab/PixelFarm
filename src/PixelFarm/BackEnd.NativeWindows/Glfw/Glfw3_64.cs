@@ -1,4 +1,4 @@
-//2016, MIT, WinterDev
+//MIT, 2016-present,WinterDev
 
 // Copyright (c) 2013 Antonie Blom
 // 

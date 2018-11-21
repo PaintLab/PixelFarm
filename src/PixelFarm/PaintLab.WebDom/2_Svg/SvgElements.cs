@@ -121,7 +121,7 @@ namespace PaintLab.Svg
         SvgElemSpec _elemSpec;
         List<SvgElement> _childNodes;
         object _controller;
-
+        
 
         public SvgElement(WellknownSvgElementName wellknownName, SvgElemSpec elemSpec)
         {

@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2016,WinterDev
+﻿//MIT, 2014-present,WinterDev
 //
 // Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
