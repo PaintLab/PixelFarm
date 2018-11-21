@@ -99,7 +99,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public struct AffineMat
     {
         //3x2 matrix (rows x cols)
-        internal double
+        public double
             sx, shy,
             shx, sy,
             tx, ty;
