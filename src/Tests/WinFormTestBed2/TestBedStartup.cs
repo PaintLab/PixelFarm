@@ -1,4 +1,5 @@
-﻿//#define GL_ENABLE
+﻿//Apache2, 2014-present, WinterDev
+//#define GL_ENABLE
 using System;
 using System.Windows.Forms;
 using LayoutFarm.UI;
