@@ -138,7 +138,7 @@ namespace LayoutFarm
                     try
                     {
                         string svg_str = File.ReadAllText(imgName);
-                        VgVisualElement vgVisElem = ReadSvgFile(imgName);
+                        VgVisualElement vgVisElem = ReadSvgFile(imgName).VgRootElem;
                         return CreateBitmap(vgVisElem, reqW, reqH);
 
                     }
@@ -174,7 +174,7 @@ namespace LayoutFarm
 
         }
 
-        VgVisualElement ReadSvgFile(string filename)
+        VgDocRoot ReadSvgFile(string filename)
         {
 
             string svgContent = System.IO.File.ReadAllText(filename);
