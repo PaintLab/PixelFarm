@@ -17,7 +17,7 @@ namespace LayoutFarm
         {
             _host = host;
             //_renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\1f0cf.svg");
-            _renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
+            _renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg").VgRootElem;
             _mySprite = new MyTestSprite(_renderVx);
             var evListener = new GeneralEventListener();
             evListener.MouseDown += e =>

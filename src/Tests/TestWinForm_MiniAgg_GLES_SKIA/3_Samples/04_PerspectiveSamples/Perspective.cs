@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
         public perspective_application()
         {
 
-            _lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg"));
+            _lionShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg").VgRootElem);
             lionFill = new MyTestSprite(_lionShape);
 
 

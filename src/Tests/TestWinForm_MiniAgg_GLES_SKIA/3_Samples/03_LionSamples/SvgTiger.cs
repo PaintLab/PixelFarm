@@ -24,9 +24,9 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder svgDoc = new SvgDocBuilder();
             SvgParser svg = new SvgParser(svgDoc);
-            VgDocBuilder builder = new VgDocBuilder(); 
+            VgDocBuilder builder = new VgDocBuilder();
             svg.ReadSvgFile("Samples\\tiger002.svg");
-            _vgVisualElem = builder.CreateVgVisualElem(svgDoc.ResultDocument);
+            _vgVisualElem = builder.CreateVgVisualDoc(svgDoc.ResultDocument, null).VgRootElem;
         }
 
 
@@ -94,7 +94,7 @@ namespace PixelFarm.CpuBlit.Samples
             svg.ReadSvgFile("Samples\\arrow2.svg");
 
 
-            VgVisualElement renderVx = builder.CreateVgVisualElem(docBuilder.ResultDocument);
+            VgVisualElement renderVx = builder.CreateVgVisualDoc(docBuilder.ResultDocument,null).VgRootElem;
             //renderVx.ApplyTransform(Transform.Affine.NewScaling(0.1, 0.1));
 
 

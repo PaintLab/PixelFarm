@@ -146,7 +146,7 @@ namespace LayoutFarm.UI
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
                     {
-                        result = svgHitChain.GetLastHitInfo().svg;
+                        result = svgHitChain.GetLastHitInfo().hitElem;
                     }
                 }
             }
@@ -171,7 +171,7 @@ namespace LayoutFarm.UI
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
                     {
-                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().svg;
+                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().hitElem;
                         //if yes then change its bg color
                         svgElem.VisualSpec.FillColor = Color.Red;
                         _spriteShape.InvalidateGraphics();
@@ -224,7 +224,7 @@ namespace LayoutFarm.UI
         }
     }
 
-    
+
 
     public class SpriteShape : RenderElement
     {
@@ -426,6 +426,23 @@ namespace LayoutFarm.UI
             }
             return Temp<VgHitChain>.Borrow(out hitTestArgs);
         }
+    }
+
+    static class SvgRenderVxLoader
+    {
+        public static VgVisualDoc CreateSvgRenderVxFromFile(string filename)
+        {
+            SvgDocBuilder docBuilder = new SvgDocBuilder();
+            SvgParser svg = new SvgParser(docBuilder);
+            VgDocBuilder builder = new VgDocBuilder();
+            //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
+            //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
+            svg.ReadSvgFile(filename);
+            return builder.CreateVgVisualDoc(docBuilder.ResultDocument, null);
+        }
 
     }
+
+
+
 }

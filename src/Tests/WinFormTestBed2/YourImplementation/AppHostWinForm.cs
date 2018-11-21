@@ -174,7 +174,7 @@ namespace LayoutFarm
 
         }
 
-        VgDocRoot ReadSvgFile(string filename)
+        VgVisualDoc ReadSvgFile(string filename)
         {
 
             string svgContent = System.IO.File.ReadAllText(filename);
@@ -184,7 +184,7 @@ namespace LayoutFarm
             parser.ParseDocument(textSnapshot);
             //TODO: review this step again
             VgDocBuilder builder = new VgDocBuilder();
-            return builder.CreateVgVisualElem(docBuidler.ResultDocument, svgElem =>
+            return builder.CreateVgVisualDoc(docBuidler.ResultDocument, svgElem =>
             {
                 //**
                 //TODO: review here

@@ -232,7 +232,7 @@ namespace PaintLab.Svg
 
     class VgUseVisualElement : VgVisualElement
     {
-        public VgUseVisualElement(SvgUseSpec useSpec, VgDocRoot root)
+        public VgUseVisualElement(SvgUseSpec useSpec, VgVisualDoc root)
             : base(WellknownSvgElementName.Use, useSpec, root)
         {
 
@@ -322,18 +322,22 @@ namespace PaintLab.Svg
         }
     }
 
-
-
-
-
-
-    public class VgDocRoot
+    public class VgVisualDoc
     {
         //vector graphic document root
 
         Action<VgVisualElement> _invalidate;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgReqHandler;
-        public VgDocRoot()
+
+        internal List<SvgElement> _defsList = new List<SvgElement>();
+        internal List<SvgElement> _styleList = new List<SvgElement>();
+        internal Dictionary<string, VgVisualElement> _registeredElemsById = new Dictionary<string, VgVisualElement>();
+        internal Dictionary<string, VgVisualElement> _clipPathDic = new Dictionary<string, VgVisualElement>();
+        internal Dictionary<string, VgVisualElement> _markerDic = new Dictionary<string, VgVisualElement>();
+
+
+
+        public VgVisualDoc()
         {
 
         }
@@ -397,7 +401,7 @@ namespace PaintLab.Svg
 
 
         LayoutFarm.ImageBinder _imgBinder;
-        VgDocRoot _renderRoot;
+        VgVisualDoc _renderRoot;
 
         Image _backimg;
         RectD _boundRect;
@@ -411,7 +415,7 @@ namespace PaintLab.Svg
 
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
-            VgDocRoot renderRoot)
+            VgVisualDoc renderRoot)
         {
             //we can create visual element without its DOM
             _needBoundUpdate = true;
@@ -1445,52 +1449,71 @@ namespace PaintLab.Svg
     public class VgDocBuilder
     {
         SvgDocument _svgdoc;
-        List<SvgElement> _defsList = new List<SvgElement>();
-        List<SvgElement> _styleList = new List<SvgElement>();
+        List<SvgElement> _defsList;
+        List<SvgElement> _styleList;
 
         //-----------------------------------------------------------
         MyVgPathDataParser _pathDataParser = new MyVgPathDataParser();
         List<VgVisualElement> _waitingList = new List<VgVisualElement>();
 
-        Dictionary<string, VgVisualElement> _registeredElemsById = new Dictionary<string, VgVisualElement>();
-        Dictionary<string, VgVisualElement> _clipPathDic = new Dictionary<string, VgVisualElement>();
-        Dictionary<string, VgVisualElement> _markerDic = new Dictionary<string, VgVisualElement>();
+        Dictionary<string, VgVisualElement> _registeredElemsById;
+        Dictionary<string, VgVisualElement> _clipPathDic;
+        Dictionary<string, VgVisualElement> _markerDic;
 
         float _containerWidth = 500;//default?
         float _containerHeight = 500;//default?
         float _emHeight = 17;//default
 
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
-        VgDocRoot _vgDocRoot; //result 
+        VgVisualDoc _vgVisualDoc; //result 
 
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgLoadingHandler;
         public VgDocBuilder()
         {
         }
+
         public void SetLoadImageHandler(Action<LayoutFarm.ImageBinder, VgVisualElement, object> imgLoadingHandler)
         {
             _imgLoadingHandler = imgLoadingHandler;
         }
-
-        public VgDocRoot CreateVgDoc(SvgDocument svgdoc, Action<VgVisualElement> invalidateHandler)
+        public void SetContainerSize(float width, float height)
         {
+            _containerWidth = width;
+            _containerHeight = height;
+        }
+
+        public VgVisualDoc CreateVgVisualDoc(SvgDocument svgdoc, Action<VgVisualElement> invalidateHandler)
+        {
+            //
+            //reset some value
+            _containerWidth = 500;
+            _containerHeight = 500;
+            _emHeight = 17;
+            _waitingList.Clear();
+
+            //
             _svgdoc = svgdoc;
             _activeSheet1 = svgdoc.CssActiveSheet;
 
-            _vgDocRoot = new VgDocRoot();
-            _vgDocRoot.SetInvalidateDelegate(invalidateHandler);
-            _vgDocRoot.SetImgRequestDelgate(_imgLoadingHandler);
+            _vgVisualDoc = new VgVisualDoc();
+            _vgVisualDoc.SetInvalidateDelegate(invalidateHandler);
+            _vgVisualDoc.SetImgRequestDelgate(_imgLoadingHandler);
+
+            _defsList = _vgVisualDoc._defsList;
+            _styleList = _vgVisualDoc._styleList;
+            _registeredElemsById = _vgVisualDoc._registeredElemsById;
+            _clipPathDic = _vgVisualDoc._clipPathDic;
+            _markerDic = _vgVisualDoc._markerDic;
+
 
             //---------------------------
-
             //create visual element for the svg
             SvgElement rootElem = svgdoc.Root;
 
-            VgVisualElement vgVisualRootElem = new VgVisualElement(WellknownSvgElementName.RootSvg, null, _vgDocRoot);
-            _vgDocRoot.VgRootElem = vgVisualRootElem;//**
+            VgVisualElement vgVisualRootElem = new VgVisualElement(WellknownSvgElementName.RootSvg, null, _vgVisualDoc);
+            _vgVisualDoc.VgRootElem = vgVisualRootElem;//**
 
-            int childCount = rootElem.ChildCount;
-
+            int childCount = rootElem.ChildCount; 
             for (int i = 0; i < childCount; ++i)
             {
                 //translate SvgElement to  
@@ -1516,21 +1539,11 @@ namespace PaintLab.Svg
             }
 
             //------------
-          
-            return _vgDocRoot;
-        }
 
-        public VgDocRoot CreateVgVisualElem(SvgDocument svgdoc, Action<VgVisualElement> invalidateAction = null)
-        {
-            return CreateVgDoc(svgdoc, invalidateAction);
+            return _vgVisualDoc;
         }
-
-        public void SetContainerSize(float width, float height)
-        {
-            _containerWidth = width;
-            _containerHeight = height;
-        }
-
+         
+      
         VgVisualElement CreateSvgVisualElement(VgVisualElement parentNode, SvgElement elem)
         {
             VgVisualElement vgVisElem = null;
@@ -1562,7 +1575,7 @@ namespace PaintLab.Svg
                 case WellknownSvgElementName.Unknown:
                     return null;
                 case WellknownSvgElementName.Svg:
-                    vgVisElem = new VgVisualElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec, _vgDocRoot);
+                    vgVisElem = new VgVisualElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec, _vgVisualDoc);
                     break;
                 case WellknownSvgElementName.Rect:
                     vgVisElem = CreateRect(parentNode, (SvgRectSpec)elem.ElemSpec);
@@ -1645,13 +1658,13 @@ namespace PaintLab.Svg
 
         VgVisualElement CreateClipPath(VgVisualElement parentNode, SvgVisualSpec visualSpec)
         {
-            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.ClipPath, visualSpec, _vgDocRoot);
+            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.ClipPath, visualSpec, _vgVisualDoc);
             AssignAttributes(visualSpec);
             return vgVisElem;
         }
         VgVisualElement CreateMarker(VgVisualElement parentNode, SvgMarkerSpec visualSpec)
         {
-            VgVisualElement renderE = new VgVisualElement(WellknownSvgElementName.Marker, visualSpec, _vgDocRoot);
+            VgVisualElement renderE = new VgVisualElement(WellknownSvgElementName.Marker, visualSpec, _vgVisualDoc);
             AssignAttributes(visualSpec);
             return renderE;
         }
@@ -1663,7 +1676,7 @@ namespace PaintLab.Svg
                 return;
             }
             _buildDefs = true;
-            VgVisualElement definitionRoot = new VgVisualElement(WellknownSvgElementName.Defs, null, _vgDocRoot);
+            VgVisualElement definitionRoot = new VgVisualElement(WellknownSvgElementName.Defs, null, _vgVisualDoc);
 
             int j = _defsList.Count;
             for (int i = 0; i < j; ++i)
@@ -1714,7 +1727,7 @@ namespace PaintLab.Svg
         VgVisualElement CreatePath(VgVisualElement parentNode, SvgPathSpec pathSpec)
         {
 
-            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.Path, pathSpec, _vgDocRoot); //**
+            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.Path, pathSpec, _vgVisualDoc); //**
 
             //d             
             AssignAttributes(pathSpec);
@@ -1746,7 +1759,7 @@ namespace PaintLab.Svg
         VgVisualElement CreateEllipse(VgVisualElement parentNode, SvgEllipseSpec ellipseSpec)
         {
 
-            VgVisualElement vgEllipse = new VgVisualElement(WellknownSvgElementName.Ellipse, ellipseSpec, _vgDocRoot);
+            VgVisualElement vgEllipse = new VgVisualElement(WellknownSvgElementName.Ellipse, ellipseSpec, _vgVisualDoc);
             using (VectorToolBox.Borrow(out Ellipse ellipse))
             using (VxsTemp.Borrow(out var v1))
             {
@@ -1766,7 +1779,7 @@ namespace PaintLab.Svg
         }
         VgVisualElement CreateImage(VgVisualElement parentNode, SvgImageSpec imgspec)
         {
-            VgVisualElement vgImg = new VgVisualElement(WellknownSvgElementName.Image, imgspec, _vgDocRoot);
+            VgVisualElement vgImg = new VgVisualElement(WellknownSvgElementName.Image, imgspec, _vgVisualDoc);
             using (VectorToolBox.Borrow(out SimpleRect rectTool))
             using (VxsTemp.Borrow(out var v1))
             {
@@ -1790,7 +1803,7 @@ namespace PaintLab.Svg
         }
         VgVisualElement CreatePolygon(VgVisualElement parentNode, SvgPolygonSpec polygonSpec)
         {
-            VgVisualElement vgPolygon = new VgVisualElement(WellknownSvgElementName.Polygon, polygonSpec, _vgDocRoot);
+            VgVisualElement vgPolygon = new VgVisualElement(WellknownSvgElementName.Polygon, polygonSpec, _vgVisualDoc);
 
             PointF[] points = polygonSpec.Points;
             int j = points.Length;
@@ -1825,7 +1838,7 @@ namespace PaintLab.Svg
         }
         VgVisualElement CreatePolyline(VgVisualElement parentNode, SvgPolylineSpec polylineSpec)
         {
-            VgVisualElement vgPolyline = new VgVisualElement(WellknownSvgElementName.Polyline, polylineSpec, _vgDocRoot);
+            VgVisualElement vgPolyline = new VgVisualElement(WellknownSvgElementName.Polyline, polylineSpec, _vgVisualDoc);
             PointF[] points = polylineSpec.Points;
             int j = points.Length;
             if (j > 1)
@@ -1950,7 +1963,7 @@ namespace PaintLab.Svg
         VgVisualElement CreateCircle(VgVisualElement parentNode, SvgCircleSpec cirSpec)
         {
 
-            VgVisualElement cir = new VgVisualElement(WellknownSvgElementName.Circle, cirSpec, _vgDocRoot);
+            VgVisualElement cir = new VgVisualElement(WellknownSvgElementName.Circle, cirSpec, _vgVisualDoc);
 
             using (VectorToolBox.Borrow(out Ellipse ellipse))
             using (VxsTemp.Borrow(out var v1))
@@ -1972,7 +1985,7 @@ namespace PaintLab.Svg
         {
 
             //create linear gradient texure (or brush)
-            VgVisualElement linearGrd = new VgVisualElement(WellknownSvgElementName.LinearGradient, spec, _vgDocRoot);
+            VgVisualElement linearGrd = new VgVisualElement(WellknownSvgElementName.LinearGradient, spec, _vgVisualDoc);
             //read attribute
 
             float x1 = spec.X1.Number;
@@ -2003,7 +2016,7 @@ namespace PaintLab.Svg
 
         VgVisualElement CreateUseElement(VgVisualElement parentNode, SvgUseSpec spec)
         {
-            VgUseVisualElement vgVisElem = new VgUseVisualElement(spec, _vgDocRoot);
+            VgUseVisualElement vgVisElem = new VgUseVisualElement(spec, _vgVisualDoc);
             AssignAttributes(spec);
             if (spec.Href != null)
             {
@@ -2018,7 +2031,7 @@ namespace PaintLab.Svg
         VgVisualElement CreateTextElem(VgVisualElement parentNode, SvgElement elem, SvgTextSpec textspec)
         {
             //text render element  
-            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.Text, textspec, _vgDocRoot);
+            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.Text, textspec, _vgVisualDoc);
             vgVisElem.DomElem = elem;
             //some att
 
@@ -2080,7 +2093,7 @@ namespace PaintLab.Svg
         VgVisualElement CreateRect(VgVisualElement parentNode, SvgRectSpec rectSpec)
         {
 
-            VgVisualElement rect = new VgVisualElement(WellknownSvgElementName.Rect, rectSpec, _vgDocRoot);
+            VgVisualElement rect = new VgVisualElement(WellknownSvgElementName.Rect, rectSpec, _vgVisualDoc);
 
 
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
@@ -2175,7 +2188,7 @@ namespace PaintLab.Svg
         VgVisualElement CreateGroup(VgVisualElement parentNode, SvgVisualSpec visSpec)
         {
 
-            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.Group, visSpec, _vgDocRoot);
+            VgVisualElement vgVisElem = new VgVisualElement(WellknownSvgElementName.Group, visSpec, _vgVisualDoc);
             AssignAttributes(visSpec);
             return vgVisElem;
         }
