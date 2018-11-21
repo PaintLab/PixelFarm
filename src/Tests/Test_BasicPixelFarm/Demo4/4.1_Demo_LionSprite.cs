@@ -9,7 +9,7 @@ namespace LayoutFarm
     [DemoNote("4.1 Demo_LionSprite")]
     class Demo_LionSprite : App
     {
-        VgRenderVx _renderVx;
+        VgVisualElement _renderVx;
 
         MyTestSprite _mySprite;
         AppHost _host;

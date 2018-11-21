@@ -13,7 +13,7 @@ namespace PaintLab.Svg
     }
 
 
-    public class SvgVisualSpec : SvgElemSpec
+    public abstract class SvgVisualSpec : SvgElemSpec
     {
         Color fillColor = Color.Black;
         Color strokeColor = Color.Transparent;
@@ -55,11 +55,12 @@ namespace PaintLab.Svg
         public string Class { get; set; }
 
         public SvgAttributeLink ClipPathLink { get; set; }
-        public object ResolvedClipPath { get; set; } //TODO: review here
-
+        public object ResolvedClipPath { get; set; } //TODO: review here 
+    }
+    public class SvgGroupSpec : SvgVisualSpec
+    {
 
     }
-
     public class SvgBoxSpec : SvgVisualSpec
     {
         public float ViewBoxX { get; set; }

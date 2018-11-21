@@ -49,11 +49,7 @@ namespace PixelFarm.Drawing.WinGdi
                 }
                 else
                 {
-                    //var vgRenderVx = renderVx as CpuBlit.VgRenderVx;
-                    //if (vgRenderVx != null)
-                    //{
-                    //    _gdigsx.Render(vgRenderVx);
-                    //}
+
 
                 }
 

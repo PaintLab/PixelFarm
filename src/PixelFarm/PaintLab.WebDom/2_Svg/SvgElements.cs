@@ -247,7 +247,7 @@ namespace PaintLab.Svg
                 case "clipPath":
                     return new SvgElement(WellknownSvgElementName.ClipPath, new SvgPathSpec());
                 case "g":
-                    return new SvgElement(WellknownSvgElementName.Group, new SvgVisualSpec());
+                    return new SvgElement(WellknownSvgElementName.Group, new SvgGroupSpec());
                 case "rect":
                     return new SvgElement(WellknownSvgElementName.Rect, new SvgRectSpec());
                 case "line":
