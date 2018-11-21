@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2016,WinterDev
+﻿//MIT, 2014-present,WinterDev
 //creadit : http://learningwebgl.com/lessons/lesson16/index.html
 
 using System;
