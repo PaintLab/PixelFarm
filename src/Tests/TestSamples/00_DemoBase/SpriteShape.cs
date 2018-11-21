@@ -12,13 +12,13 @@ namespace PixelFarm.CpuBlit
 
     public class SpriteShape
     {
-        VgRenderVx _svgRenderVx;
+        VgVisualElement _svgRenderVx;
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
         CpuBlit.VertexProcessing.ICoordTransformer _currentTx;
 
-        public SpriteShape(VgRenderVx svgRenderVx)//, RootGraphic root, int w, int h)
+        public SpriteShape(VgVisualElement svgRenderVx)//, RootGraphic root, int w, int h)
                                                   //: base(root, w, h)
         {
             LoadFromSvg(svgRenderVx);
@@ -103,7 +103,7 @@ namespace PixelFarm.CpuBlit
                 return _center;
             }
         }
-        public VgRenderVx GetRenderVx()
+        public VgVisualElement GetRenderVx()
         {
             return _svgRenderVx;
         }
@@ -117,12 +117,12 @@ namespace PixelFarm.CpuBlit
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
-                _svgRenderVx._vgVisualElement.Paint(paintArgs);
+                _svgRenderVx.Paint(paintArgs);
             }
         }
         public void Paint(VgPaintArgs paintArgs)
         {
-            _svgRenderVx._vgVisualElement.Paint(paintArgs);
+            _svgRenderVx.Paint(paintArgs);
         }
         public void Paint(Painter p, Bilinear tx)
         {
@@ -146,7 +146,7 @@ namespace PixelFarm.CpuBlit
                     }
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._vgVisualElement.Paint(paintArgs);
+                _svgRenderVx.Paint(paintArgs);
             }
 
 
@@ -169,7 +169,7 @@ namespace PixelFarm.CpuBlit
                     m_painter.Fill(vxs);
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._vgVisualElement.Paint(paintArgs);
+                _svgRenderVx.Paint(paintArgs);
             }
 
 
@@ -200,7 +200,7 @@ namespace PixelFarm.CpuBlit
             //return; //** 
         }
 
-        public void LoadFromSvg(VgRenderVx svgRenderVx)
+        public void LoadFromSvg(VgVisualElement svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
             UpdateBounds();
@@ -215,7 +215,7 @@ namespace PixelFarm.CpuBlit
         }
         public void HitTestOnSubPart(VgHitChain hitChain)
         {
-            _svgRenderVx._vgVisualElement.HitTest(hitChain);
+            _svgRenderVx.HitTest(hitChain);
         }
 
         //public override void ResetRootGraphics(RootGraphic rootgfx)
