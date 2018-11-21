@@ -76,17 +76,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         Affine aff = (Affine)coordTx;
                         writer.Write((ushort)txKind); //type
                         AffineMat affMat = aff.GetInternalMat();
-                        //sx = v0_sx; shy = v1_shy;
-                        //shx = v2_shx; sy = v3_sy;
-                        //tx = v4_tx; ty = v5_ty;
-
-                        //write element
-                        writer.Write(affMat.sx);
-                        writer.Write(affMat.shy);
-                        writer.Write(affMat.shx);
-                        writer.Write(affMat.sy);
-                        writer.Write(affMat.tx);
-                        writer.Write(affMat.ty);
+                        //write elements
+                        writer.Write(affMat.sx); writer.Write(affMat.shy);
+                        writer.Write(affMat.shx); writer.Write(affMat.sy);
+                        writer.Write(affMat.tx); writer.Write(affMat.ty);
 
                     }
                     break;
@@ -94,7 +87,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         Bilinear binTx = (Bilinear)coordTx;
                         writer.Write((ushort)txKind);
-
+                        //write elements
+                        BilinearMat binMat = binTx.GetInternalElements();
+                        writer.Write(binMat.rc00); writer.Write(binMat.rc01);
+                        writer.Write(binMat.rc10); writer.Write(binMat.rc11);
+                        writer.Write(binMat.rc20); writer.Write(binMat.rc21);
+                        writer.Write(binMat.rc30); writer.Write(binMat.rc31);
 
                     }
                     break;
@@ -102,13 +100,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         Perspective perTx = (Perspective)coordTx;
                         writer.Write((ushort)txKind);
+                        PerspectiveMat perMat = perTx.GetInternalElements();
+                        writer.Write(perMat.sx); writer.Write(perMat.shx); writer.Write(perMat.w0);
+                        writer.Write(perMat.shy); writer.Write(perMat.sy); writer.Write(perMat.w1);
+                        writer.Write(perMat.tx); writer.Write(perMat.ty); writer.Write(perMat.w2);
+
+                        //sx, shy, w0,
+                        //shx, sy, w1,
+                        //tx, ty, w2; 
                     }
                     break;
                 case CoordTransformerKind.TransformChain:
                     {
                         CoordTransformationChain chainTx = (CoordTransformationChain)coordTx;
                         writer.Write((ushort)txKind);
-
+                        //*** left, right
+                        Write(chainTx.Left, writer);
+                        Write(chainTx.Right, writer);
                     }
                     break;
             }
@@ -121,10 +129,47 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static CoordTransformationChain ReadCoordTransfromChain(System.IO.BinaryReader reader)
+        public static ICoordTransformer Read(System.IO.BinaryReader reader)
         {
 
-            return null;
+            CoordTransformerKind txKind = (CoordTransformerKind)reader.ReadUInt16();
+            switch (txKind)
+            {
+                default:
+                    throw new System.NotSupportedException();
+                case CoordTransformerKind.Affine3x2:
+                    {
+                        double sx = reader.ReadDouble(); double shy = reader.ReadDouble();
+                        double shx = reader.ReadDouble(); double sy = reader.ReadDouble();
+                        double tx = reader.ReadDouble(); double ty = reader.ReadDouble();
+                        return new Affine(sx, shy, shx, sy, tx, ty);
+                    }
+
+                case CoordTransformerKind.Bilinear:
+                    {
+                        return new Bilinear(
+                             reader.ReadDouble(), reader.ReadDouble(),
+                             reader.ReadDouble(), reader.ReadDouble(),
+                             reader.ReadDouble(), reader.ReadDouble(),
+                             reader.ReadDouble(), reader.ReadDouble()
+                        );
+                    }
+                case CoordTransformerKind.Perspective:
+                    {
+                        return new Perspective(
+                             reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble(),
+                             reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble(),
+                             reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble()
+                            );
+                    }
+                case CoordTransformerKind.TransformChain:
+                    {
+                        return new CoordTransformationChain(
+                            Read(reader), //left
+                            Read(reader) // right
+                            );
+                    }
+            }
         }
     }
 }

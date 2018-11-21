@@ -50,6 +50,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public CoordTransformerKind Kind => CoordTransformerKind.TransformChain;
     }
+
+    public struct PerspectiveMat
+    {
+        public double
+                 sx, shy, w0,
+                 shx, sy, w1,
+                 tx, ty, w2;
+    }
+
     public sealed class Perspective : ICoordTransformer
     {
         const double EPSILON = 1e-14;
@@ -688,6 +697,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             y = Math.Sqrt(shy * shy + sy * sy);
         }
 
+        public PerspectiveMat GetInternalElements()
+        {
+            PerspectiveMat m = new PerspectiveMat();
+            m.sx = sx;      /**/m.shy = shy;    /**/m.w0 = w0;
+            m.shx = shx;    /**/m.sy = sy;      /**/m.w1 = w1;
+            m.tx = tx;      /**/m.ty = ty;      /**/m.w2 = w2;
+            return m;
+        }
 
     }
 

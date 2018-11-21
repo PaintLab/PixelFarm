@@ -23,6 +23,13 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //==========================================================trans_bilinear
 
+    public struct BilinearMat
+    {
+        public double rc00, rc01,
+             rc10, rc11,
+             rc20, rc21,
+             rc30, rc31;
+    }
     public sealed class Bilinear : ICoordTransformer
     {
         //readonly double[,] m_mtx = new double[4, 2];//row x column
@@ -32,6 +39,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                rc10, rc11,
                rc20, rc21,
                rc30, rc31;
+        //
         bool m_valid;
         private Bilinear()
         {
@@ -48,7 +56,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             rc31 = result[3, 1];
             this.m_valid = true;
         }
+        public Bilinear(double rc00, double rc01,
+             double rc10, double rc11,
+              double rc20, double rc21,
+              double rc30, double rc31)
+        {
+            this.rc00 = rc00; this.rc01 = rc01;
+            this.rc10 = rc10; this.rc11 = rc11;
+            this.rc20 = rc20; this.rc21 = rc21;
+            this.rc30 = rc30; this.rc31 = rc31;
 
+        }
         //--------------------------------------------------------------------
         // Set the transformations using two arbitrary quadrangles. 
         public static Bilinear RectToQuad(double srcX1, double srcY1, double srcX2, double srcY2, double[] quad)
@@ -158,7 +176,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         //-------------------------------------------------------------------------
 
-
-
+        public BilinearMat GetInternalElements()
+        {
+            var mat = new BilinearMat();
+            mat.rc00 = rc00; mat.rc01 = rc01;
+            mat.rc10 = rc10; mat.rc01 = rc11;
+            mat.rc20 = rc20; mat.rc21 = rc21;
+            mat.rc30 = rc30; mat.rc31 = rc31;
+            return mat;
+        }
     }
 }
