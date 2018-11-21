@@ -80,20 +80,20 @@ namespace PaintLab.Svg
 
     public struct VgHitInfo
     {
-        public readonly VgVisualElement svg;
+        public readonly VgVisualElement hitElem;
         public readonly float x;
         public readonly float y;
         public readonly VertexStore copyOfVxs;
         public VgHitInfo(VgVisualElement svg, float x, float y, VertexStore copyOfVxs)
         {
-            this.svg = svg;
+            this.hitElem = svg;
             this.x = x;
             this.y = y;
             this.copyOfVxs = copyOfVxs;
         }
         public SvgElement GetSvgElement()
         {
-            return svg.GetController() as SvgElement;
+            return hitElem.GetController() as SvgElement;
         }
     }
 
@@ -411,6 +411,8 @@ namespace PaintLab.Svg
         object _controller;
         internal SvgVisualSpec _visualSpec;
         internal VgPathVisualMarkers _pathMarkers;
+
+
         LayoutFarm.ImageBinder _imgBinder;
         VgDocRoot _renderRoot;
 
@@ -418,14 +420,15 @@ namespace PaintLab.Svg
             SvgVisualSpec visualSpec,
             VgDocRoot renderRoot)
         {
+            //we can create visual element without its DOM
             _needBoundUpdate = true;
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
             _renderRoot = renderRoot;
         }
-
+        //its dom element(optional)
+        public SvgElement DomElem { get; set; }//***
         public override WellknownSvgElementName ElemName => _wellknownName;
-
         //
         public void SetController(object o) { _controller = o; }
         public object GetController() { return _controller; }
@@ -504,6 +507,7 @@ namespace PaintLab.Svg
         public override VgVisualElementBase Clone()
         {
             VgVisualElement clone = new VgVisualElement(_wellknownName, _visualSpec, _renderRoot);
+            clone.DomElem = this.DomElem;
             if (_vxsPath != null)
             {
                 clone._vxsPath = this._vxsPath.CreateTrim();
@@ -1334,7 +1338,7 @@ namespace PaintLab.Svg
         RectD _boundRect;
         bool _needBoundUpdate;
 
- 
+
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
@@ -1515,7 +1519,9 @@ namespace PaintLab.Svg
 
         VgVisualElement CreateSvgVisualElement(VgVisualElement parentNode, SvgElement elem)
         {
-            VgVisualElement renderE = null;
+            VgVisualElement vgVisElem = null;
+            bool skipChildrenNode = false;
+
             switch (elem.WellknowElemName)
             {
                 default:
@@ -1536,62 +1542,91 @@ namespace PaintLab.Svg
                     _styleList.Add(elem);
                     return null;
                 case WellknownSvgElementName.Marker:
-                    renderE = CreateMarker(parentNode, (SvgMarkerSpec)elem.ElemSpec);
+                    vgVisElem = CreateMarker(parentNode, (SvgMarkerSpec)elem.ElemSpec);
                     break;
                 //-----------------
                 case WellknownSvgElementName.Unknown:
                     return null;
-                case WellknownSvgElementName.Use:
-                    return CreateUseElement(parentNode, (SvgUseSpec)elem.ElemSpec);
-                case WellknownSvgElementName.Text:
-                    return CreateTextElem(parentNode, elem, (SvgTextSpec)elem.ElemSpec);
                 case WellknownSvgElementName.Svg:
-                    renderE = new VgVisualElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec, _renderRoot);
+                    vgVisElem = new VgVisualElement(WellknownSvgElementName.Svg, (SvgVisualSpec)elem.ElemSpec, _renderRoot);
                     break;
                 case WellknownSvgElementName.Rect:
-                    renderE = CreateRect(parentNode, (SvgRectSpec)elem.ElemSpec);
+                    vgVisElem = CreateRect(parentNode, (SvgRectSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Image:
-                    renderE = CreateImage(parentNode, (SvgImageSpec)elem.ElemSpec);
+                    vgVisElem = CreateImage(parentNode, (SvgImageSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Polyline:
-                    renderE = CreatePolyline(parentNode, (SvgPolylineSpec)elem.ElemSpec);
+                    vgVisElem = CreatePolyline(parentNode, (SvgPolylineSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Polygon:
-                    renderE = CreatePolygon(parentNode, (SvgPolygonSpec)elem.ElemSpec);
+                    vgVisElem = CreatePolygon(parentNode, (SvgPolygonSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Ellipse:
-                    renderE = CreateEllipse(parentNode, (SvgEllipseSpec)elem.ElemSpec);
+                    vgVisElem = CreateEllipse(parentNode, (SvgEllipseSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Circle:
-                    renderE = CreateCircle(parentNode, (SvgCircleSpec)elem.ElemSpec);
+                    vgVisElem = CreateCircle(parentNode, (SvgCircleSpec)elem.ElemSpec);
                     break;
-                case WellknownSvgElementName.Path:
-                    renderE = CreatePath(parentNode, (SvgPathSpec)elem.ElemSpec);
-                    return renderE;
+
                 case WellknownSvgElementName.ClipPath:
-                    renderE = CreateClipPath(parentNode, (SvgVisualSpec)elem.ElemSpec);
+                    vgVisElem = CreateClipPath(parentNode, (SvgVisualSpec)elem.ElemSpec);
                     break;
                 case WellknownSvgElementName.Group:
-                    renderE = CreateGroup(parentNode, (SvgVisualSpec)elem.ElemSpec);
+                    vgVisElem = CreateGroup(parentNode, (SvgVisualSpec)elem.ElemSpec);
                     break;
+                //---------------------------------------------
+                case WellknownSvgElementName.Path:
+                    vgVisElem = CreatePath(parentNode, (SvgPathSpec)elem.ElemSpec);
+                    skipChildrenNode = true;//***
+                    break;
+                case WellknownSvgElementName.Text:
+                    vgVisElem = CreateTextElem(parentNode, elem, (SvgTextSpec)elem.ElemSpec);
+                    skipChildrenNode = true;//***
+                    break;
+                case WellknownSvgElementName.Use:
+                    vgVisElem = CreateUseElement(parentNode, (SvgUseSpec)elem.ElemSpec);
+                    skipChildrenNode = true;
+                    break;
+
             }
 
+            if (vgVisElem == null)
+            {
+                return null;
+            }
+            //-----------------------------------
+            vgVisElem.DomElem = elem;
             if (elem.ElemId != null)
             {
                 //replace duplicated item ???
-                _registeredElemsById[elem.ElemId] = renderE;
+                _registeredElemsById[elem.ElemId] = vgVisElem;
             }
 
-            renderE.SetController(elem);
-            parentNode.AddChildElement(renderE);
-            int childCount = elem.ChildCount;
-            for (int i = 0; i < childCount; ++i)
+            vgVisElem.SetController(elem);
+
+
+#if DEBUG
+            if (skipChildrenNode && !vgVisElem.dbugHasParent)
             {
-                CreateSvgVisualElement(renderE, elem.GetChild(i));
+
+            }
+#endif
+            //-----------------------------------
+            if (!skipChildrenNode)
+            {
+
+                parentNode.AddChildElement(vgVisElem);
+
+
+                int childCount = elem.ChildCount;
+                for (int i = 0; i < childCount; ++i)
+                {
+                    CreateSvgVisualElement(vgVisElem, elem.GetChild(i));
+                }
             }
 
-            return renderE;
+            return vgVisElem;
         }
 
         VgVisualElement CreateClipPath(VgVisualElement parentNode, SvgVisualSpec visualSpec)
@@ -1666,6 +1701,7 @@ namespace PaintLab.Svg
         }
         VgVisualElement CreatePath(VgVisualElement parentNode, SvgPathSpec pathSpec)
         {
+
             VgVisualElement renderE = new VgVisualElement(WellknownSvgElementName.Path, pathSpec, _renderRoot); //**
 
             //d             
@@ -1971,6 +2007,7 @@ namespace PaintLab.Svg
         {
             //text render element  
             VgVisualElement textRenderElem = new VgVisualElement(WellknownSvgElementName.Text, textspec, _renderRoot);
+            textRenderElem.DomElem = elem;
             //some att
 
             if (textspec.Class != null && _activeSheet1 != null)
