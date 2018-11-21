@@ -403,18 +403,33 @@ namespace PaintLab.Svg
     public class VgVisualElement : VgVisualElementBase
     {
 
-        public VertexStore _vxsPath;
+
+        //-------------------------
         List<VgVisualElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
-        VertexStore _strokeVxs;
-        float _latestStrokeW;
+        //-------------------------
+        float _latestStrokeW; //latest caching stroke width, if strokeW changed then we need to regenerate _strokeVxs
+        VertexStore _strokeVxs; //caching stroke vxs 
+        //-------------------------
+
         object _controller;
+
         internal SvgVisualSpec _visualSpec;
         internal VgPathVisualMarkers _pathMarkers;
 
 
         LayoutFarm.ImageBinder _imgBinder;
         VgDocRoot _renderRoot;
+
+        Image _backimg;
+        RectD _boundRect;
+        bool _needBoundUpdate;
+
+        internal float _imgW;
+        internal float _imgH;
+        internal float _imgX;
+        internal float _imgY;
+
 
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
@@ -433,6 +448,8 @@ namespace PaintLab.Svg
         public void SetController(object o) { _controller = o; }
         public object GetController() { return _controller; }
         //
+        public VertexStore VxsPath { get; set; }
+        public ICoordTransformer CoordTx { get; set; }
 
         public LayoutFarm.ImageBinder ImageBinder
         {
@@ -454,16 +471,9 @@ namespace PaintLab.Svg
                     {
                         _imgH = value.ImageHeight;
                     }
-
-                    value.ImageChanged += Value_ImageChanged;
+                    value.ImageChanged += (s, e) => _renderRoot.Invalidate(this);
                 }
             }
-        }
-
-        private void Value_ImageChanged(object sender, EventArgs e)
-        {
-            //
-            _renderRoot.Invalidate(this);
         }
 
         public void HitTest(float x, float y, Action<VgVisualElement, float, float, VertexStore> onHitSvg)
@@ -508,9 +518,9 @@ namespace PaintLab.Svg
         {
             VgVisualElement clone = new VgVisualElement(_wellknownName, _visualSpec, _renderRoot);
             clone.DomElem = this.DomElem;
-            if (_vxsPath != null)
+            if (VxsPath != null)
             {
-                clone._vxsPath = this._vxsPath.CreateTrim();
+                clone.VxsPath = this.VxsPath.CreateTrim();
             }
             if (_childNodes != null)
             {
@@ -528,10 +538,7 @@ namespace PaintLab.Svg
             return clone;
         }
 
-        internal float _imgW;
-        internal float _imgH;
-        internal float _imgX;
-        internal float _imgY;
+
 
         static ICoordTransformer ResolveTransformation(SvgTransform transformation)
         {
@@ -662,7 +669,7 @@ namespace PaintLab.Svg
                     break;
                 case WellknownSvgElementName.Image:
                     {
-                        if (_vxsPath == null)
+                        if (VxsPath == null)
                         {
                             //create rect path around img
 
@@ -670,8 +677,8 @@ namespace PaintLab.Svg
                             {
                                 SvgImageSpec imgSpec = (SvgImageSpec)_visualSpec;
                                 ss.SetRect(0, imgSpec.Height.Number, imgSpec.Width.Number, 0);
-                                _vxsPath = new VertexStore();
-                                ss.MakeVxs(_vxsPath);
+                                VxsPath = new VertexStore();
+                                ss.MakeVxs(VxsPath);
                             }
 
                         }
@@ -690,7 +697,7 @@ namespace PaintLab.Svg
                         if (currentTx == null)
                         {
                             visitor.Current = this;
-                            visitor.VgElemenVisitHandler(_vxsPath, visitor);
+                            visitor.VgElemenVisitHandler(VxsPath, visitor);
                             visitor.Current = null;
                         }
                         else
@@ -698,7 +705,7 @@ namespace PaintLab.Svg
                             //have some tx
                             using (VxsTemp.Borrow(out var v1))
                             {
-                                currentTx.TransformToVxs(_vxsPath, v1);
+                                currentTx.TransformToVxs(VxsPath, v1);
                                 visitor.Current = this;
                                 visitor.VgElemenVisitHandler(v1, visitor);
                                 visitor.Current = null;
@@ -843,7 +850,7 @@ namespace PaintLab.Svg
                     hasClip = true;
 
                     VgVisualElement clipPath = (VgVisualElement)_visualSpec.ResolvedClipPath;
-                    VertexStore clipVxs = ((VgVisualElement)clipPath.GetChildNode(0))._vxsPath;
+                    VertexStore clipVxs = ((VgVisualElement)clipPath.GetChildNode(0)).VxsPath;
 
                     //----------
                     //for optimization check if clip path is Rect
@@ -1070,7 +1077,7 @@ namespace PaintLab.Svg
                             {
                                 if (p.FillColor.A > 0)
                                 {
-                                    p.Fill(_vxsPath);
+                                    p.Fill(VxsPath);
 
                                 }
                                 //to draw stroke
@@ -1097,7 +1104,7 @@ namespace PaintLab.Svg
                                         using (VectorToolBox.Borrow(out Stroke stroke))
                                         {
                                             stroke.Width = _latestStrokeW;
-                                            stroke.MakeVxs(_vxsPath, v1);
+                                            stroke.MakeVxs(VxsPath, v1);
                                             _strokeVxs = v1.CreateTrim();
                                         }
                                     }
@@ -1108,7 +1115,7 @@ namespace PaintLab.Svg
                             }
                             else
                             {
-                                vgPainterArgs.PaintVisitHandler(_vxsPath, vgPainterArgs);
+                                vgPainterArgs.PaintVisitHandler(VxsPath, vgPainterArgs);
                             }
 
 
@@ -1210,7 +1217,7 @@ namespace PaintLab.Svg
                             //have some tx
                             using (VxsTemp.Borrow(out var v1))
                             {
-                                currentTx.TransformToVxs(_vxsPath, v1);
+                                currentTx.TransformToVxs(VxsPath, v1);
 
                                 if (vgPainterArgs.PaintVisitHandler == null)
                                 {
@@ -1333,16 +1340,12 @@ namespace PaintLab.Svg
         public object UserData { get; set; } //optional
         public SvgDocument OwnerDocument { get; set; } //optional
 
-        public ICoordTransformer _coordTx;
-        Image _backimg;
-        RectD _boundRect;
-        bool _needBoundUpdate;
 
 
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
-            _boundRect = new RectD(this.X, this.Y, 2, 2);
+            _boundRect = RectD.ZeroIntersection;// new RectD(this.X, this.Y, 2, 2);
         }
 
 
@@ -1358,7 +1361,7 @@ namespace PaintLab.Svg
                     //when we find bounds, lets start with  RectD.ZeroIntersectio
                     RectD rectTotal = RectD.ZeroIntersection;
                     bool evaluated = false;
-                    paintArgs._currentTx = this._coordTx;
+                    paintArgs._currentTx = this.CoordTx;
 
 
 #if DEBUG
@@ -1411,9 +1414,6 @@ namespace PaintLab.Svg
             this._backimg = img;
             HasBitmapSnapshot = img != null;
         }
-        public float X { get; set; }
-        public float Y { get; set; }
-
     }
 
     public class VgVisualForeignNode : VgVisualElementBase
@@ -1706,7 +1706,7 @@ namespace PaintLab.Svg
 
             //d             
             AssignAttributes(pathSpec);
-            renderE._vxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
+            renderE.VxsPath = ParseSvgPathDefinitionToVxs(pathSpec.D.ToCharArray());
             ResolveMarkers(renderE, pathSpec);
 
             if (renderE._pathMarkers != null)
@@ -1745,7 +1745,7 @@ namespace PaintLab.Svg
                 double ry = ConvertToPx(ellipseSpec.RadiusY, ref a);
 
                 ellipse.Set(x, y, rx, ry);////TODO: review here => temp fix for ellipse step  
-                ellipseRenderE._vxsPath = ellipse.MakeVxs(v1).CreateTrim();
+                ellipseRenderE.VxsPath = ellipse.MakeVxs(v1).CreateTrim();
                 AssignAttributes(ellipseSpec);
                 return ellipseRenderE;
             }
@@ -1769,7 +1769,7 @@ namespace PaintLab.Svg
                     img._imgY + img._imgH,
                     img._imgX + img._imgW,
                     img._imgY);
-                img._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
+                img.VxsPath = rectTool.MakeVxs(v1).CreateTrim();
                 //
                 AssignAttributes(imgspec);
                 //
@@ -1799,7 +1799,7 @@ namespace PaintLab.Svg
                     v1.AddMoveTo(p0.X, p0.Y);
                     v1.AddCloseFigure();
 
-                    renderE._vxsPath = v1.CreateTrim();
+                    renderE.VxsPath = v1.CreateTrim();
                 }
                 AssignAttributes(polygonSpec);
                 ResolveMarkers(renderE, polygonSpec);
@@ -1827,7 +1827,7 @@ namespace PaintLab.Svg
                         p = points[i];
                         v1.AddLineTo(p.X, p.Y);
                     }
-                    renderE._vxsPath = v1.CreateTrim();
+                    renderE.VxsPath = v1.CreateTrim();
                 }
                 AssignAttributes(polylineSpec);
 
@@ -1949,7 +1949,7 @@ namespace PaintLab.Svg
                 double r = ConvertToPx(cirSpec.Radius, ref a);
 
                 ellipse.Set(x, y, r, r);////TODO: review here => temp fix for ellipse step  
-                cir._vxsPath = ellipse.MakeVxs(v1).CreateTrim();
+                cir.VxsPath = ellipse.MakeVxs(v1).CreateTrim();
                 AssignAttributes(cirSpec);
                 return cir;
             }
@@ -2085,7 +2085,7 @@ namespace PaintLab.Svg
                         ConvertToPx(rectSpec.Y, ref a));
 
                     roundRect.SetRadius(ConvertToPx(rectSpec.CornerRadiusX, ref a), ConvertToPx(rectSpec.CornerRadiusY, ref a));
-                    rect._vxsPath = roundRect.MakeVxs(v1).CreateTrim();
+                    rect.VxsPath = roundRect.MakeVxs(v1).CreateTrim();
                 }
 
 
@@ -2103,7 +2103,7 @@ namespace PaintLab.Svg
                         ConvertToPx(rectSpec.X, ref a) + ConvertToPx(rectSpec.Width, ref a),
                         ConvertToPx(rectSpec.Y, ref a));
                     // 
-                    rect._vxsPath = rectTool.MakeVxs(v1).CreateTrim();
+                    rect.VxsPath = rectTool.MakeVxs(v1).CreateTrim();
 
                 }
 
