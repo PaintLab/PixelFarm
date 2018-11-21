@@ -224,21 +224,7 @@ namespace LayoutFarm.UI
         }
     }
 
-    public class SvgRenderVxLoader
-    {
-        public static VgVisualElement CreateSvgRenderVxFromFile(string filename)
-        {
-            SvgDocBuilder docBuilder = new SvgDocBuilder();
-            SvgParser svg = new SvgParser(docBuilder);
-            VgDocBuilder builder = new VgDocBuilder();
-
-            //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
-            //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
-            svg.ReadSvgFile(filename);
-            return builder.CreateVgVisualElem(docBuilder.ResultDocument);
-        }
-
-    }
+    
 
     public class SpriteShape : RenderElement
     {
