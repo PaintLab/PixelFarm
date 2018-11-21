@@ -46,7 +46,7 @@ namespace PixelFarm.CpuBlit.Samples
         MyTestSprite _testSprite;
         public override void Init()
         {
-            VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
+            VgVisualElement renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
             var spriteShape = new SpriteShape(renderVx);
             _testSprite = new MyTestSprite(spriteShape);
             //lionFill.AutoFlipY = true;
@@ -120,7 +120,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             // lion 
 
-            VgRenderVx renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
+            VgVisualElement renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
             var spriteShape = new SpriteShape(renderVx);
             _spriteList.Add(new MyTestSprite(spriteShape));
             //

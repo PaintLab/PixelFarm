@@ -989,6 +989,7 @@ namespace PixelFarm.CpuBlit
         }
         public override void Render(RenderVx renderVx)
         {
+            //VG Render?
             //if (renderVx is VgRenderVx)
             //{
 
