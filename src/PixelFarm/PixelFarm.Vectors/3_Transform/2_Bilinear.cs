@@ -132,6 +132,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         // Check if the equations were solved successfully
         public bool IsValid { get { return m_valid; } }
 
+        public CoordTransformerKind Kind => CoordTransformerKind.Bilinear;
+
         //--------------------------------------------------------------------
         // Transform a point (x, y)
         public void Transform(ref double x, ref double y)

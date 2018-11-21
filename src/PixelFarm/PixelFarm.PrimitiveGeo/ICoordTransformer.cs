@@ -35,6 +35,80 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         void Transform(ref double x, ref double y);
         ICoordTransformer MultiplyWith(ICoordTransformer another);
         ICoordTransformer CreateInvert();
+        CoordTransformerKind Kind { get; }
     }
 
+
+    public enum CoordTransformerKind
+    {
+        Unknown,
+        Affine,
+        Perspective,
+        Bilinear,
+        TransformChain,
+    }
+
+
+    //Manual Serializer/ Deserializer
+    //---------------------------
+    //TODO: move this class to another file
+    /// <summary>
+    /// ICoordTransform Serializer/ Deseralizer
+    /// </summary>
+    public static class ICoordTransformRW
+    {
+        /// <summary>
+        /// serialize coord-transform-chain to specific stream
+        /// </summary>
+        /// <param name="coordTx"></param>
+        /// <param name="writer"></param>
+        public static void Write(ICoordTransformer coordTx, System.IO.BinaryWriter writer)
+        {
+            //write transformation matrix to binary stream
+            CoordTransformerKind txKind = coordTx.Kind;
+            switch (txKind)
+            {
+                case CoordTransformerKind.Unknown:
+                default:
+                    throw new System.NotSupportedException();
+                case CoordTransformerKind.Affine:
+                    {
+                        Affine aff = (Affine)coordTx;
+
+                    }
+                    break;
+                case CoordTransformerKind.Bilinear:
+                    {
+                        Bilinear binTx = (Bilinear)coordTx;
+
+                    }
+                    break;
+                case CoordTransformerKind.Perspective:
+                    {
+                        Perspective perTx = (Perspective)coordTx;
+
+                    }
+                    break;
+                case CoordTransformerKind.TransformChain:
+                    {
+                        CoordTransformationChain chainTx = (CoordTransformationChain)coordTx;
+                    }
+
+                    break;
+            }
+        }
+
+
+
+        /// <summary>
+        /// read back, read  coord-transform-chain  back from specific stream
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static CoordTransformationChain ReadCoordTransfromChain(System.IO.BinaryReader reader)
+        {
+
+            return null;
+        }
+    }
 }

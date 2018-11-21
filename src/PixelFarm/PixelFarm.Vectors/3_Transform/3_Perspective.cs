@@ -23,10 +23,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     //=======================================================trans_perspective
 
-    class CoordTransformationChain : ICoordTransformer
+    public class CoordTransformationChain : ICoordTransformer
     {
         ICoordTransformer _left, _right;
-        public CoordTransformationChain(ICoordTransformer left, ICoordTransformer right)
+        internal CoordTransformationChain(ICoordTransformer left, ICoordTransformer right)
         {
             this._left = left;
             this._right = right;
@@ -45,6 +45,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //TODO: impl 
             throw new System.NotSupportedException();
         }
+        public ICoordTransformer Left => _left;
+        public ICoordTransformer Right => _right;
+
+        public CoordTransformerKind Kind => CoordTransformerKind.TransformChain;
     }
     public sealed class Perspective : ICoordTransformer
     {
@@ -604,6 +608,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
+        public CoordTransformerKind Kind => CoordTransformerKind.Perspective;
+
         bool is_identity()
         {
             return is_equal_eps(sx, 1.0, EPSILON) &&
@@ -684,4 +690,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
     }
+
+
+
+
+
+
 }

@@ -427,6 +427,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public double tx { get { return _elems.tx; } }
         public double ty { get { return _elems.ty; } }
 
+        public CoordTransformerKind Kind => CoordTransformerKind.Affine;
+
 
         /// <summary>
         /// set elements by copy values from input elems
