@@ -232,7 +232,7 @@ namespace PaintLab.Svg
 
     class VgUseVisualElement : VgVisualElement
     {
-        public VgUseVisualElement(SvgUseSpec useSpec, VgRoot root)
+        public VgUseVisualElement(SvgUseSpec useSpec, VgDocRoot root)
             : base(WellknownSvgElementName.Use, useSpec, root)
         {
 
@@ -357,13 +357,13 @@ namespace PaintLab.Svg
 
 
 
-    public class VgRoot
+    public class VgDocRoot
     {
-        //vector graphic root
+        //vector graphic document root
 
         Action<VgVisualElement> _invalidate;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgReqHandler;
-        public VgRoot()
+        public VgDocRoot()
         {
 
         }
@@ -423,7 +423,7 @@ namespace PaintLab.Svg
 
 
         LayoutFarm.ImageBinder _imgBinder;
-        VgRoot _renderRoot;
+        VgDocRoot _renderRoot;
 
         Image _backimg;
         RectD _boundRect;
@@ -437,7 +437,7 @@ namespace PaintLab.Svg
 
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
-            VgRoot renderRoot)
+            VgDocRoot renderRoot)
         {
             //we can create visual element without its DOM
             _needBoundUpdate = true;
@@ -1458,7 +1458,7 @@ namespace PaintLab.Svg
         float _containerHeight = 500;//default?
         float _emHeight = 17;//default
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
-        VgRoot _renderRoot;
+        VgDocRoot _renderRoot;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _handler;
         public VgDocBuilder()
         {
@@ -1473,7 +1473,7 @@ namespace PaintLab.Svg
             _svgdoc = svgdoc;
             _activeSheet1 = svgdoc.CssActiveSheet;
 
-            _renderRoot = new VgRoot();
+            _renderRoot = new VgDocRoot();
             _renderRoot.SetInvalidateDelegate(invalidate);
             _renderRoot.SetImgRequestDelgate(_handler);
 
