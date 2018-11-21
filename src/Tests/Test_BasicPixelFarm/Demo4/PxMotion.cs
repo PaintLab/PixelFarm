@@ -32,14 +32,14 @@ namespace LayoutFarm.UI
     public class MyTestSprite : BasicSprite
     {
         SpriteShape _spriteShape;
-        VgRenderVx _vgRenderVx;
+        VgVisualElement _vgRenderVx;
 
         float _posX, _posY;
         float _mouseDownX, _mouseDownY;
         Affine _currentTx = null;
         byte alpha;
         bool _hitTestOnSubPart;
-        public MyTestSprite(VgRenderVx vgRenderVx)
+        public MyTestSprite(VgVisualElement vgRenderVx)
         {
             this.Width = 500;
             this.Height = 500;
@@ -226,28 +226,28 @@ namespace LayoutFarm.UI
 
     public class SvgRenderVxLoader
     {
-        public static VgRenderVx CreateSvgRenderVxFromFile(string filename)
+        public static VgVisualElement CreateSvgRenderVxFromFile(string filename)
         {
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
-            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
+            VgDocBuilder builder = new VgDocBuilder();
 
             //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
             //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
             svg.ReadSvgFile(filename);
-            return builder.CreateRenderVx(docBuilder.ResultDocument);
+            return builder.CreateVgVisualElem(docBuilder.ResultDocument);
         }
 
     }
 
     public class SpriteShape : RenderElement
     {
-        VgRenderVx _svgRenderVx;
+        VgVisualElement _svgRenderVx;
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
         Affine _currentTx;
-        public SpriteShape(VgRenderVx svgRenderVx, RootGraphic root, int w, int h)
+        public SpriteShape(VgVisualElement svgRenderVx, RootGraphic root, int w, int h)
                    : base(root, w, h)
         {
             LoadFromSvg(svgRenderVx);
@@ -297,7 +297,7 @@ namespace LayoutFarm.UI
                 return _center;
             }
         }
-        public VgRenderVx GetRenderVx()
+        public VgVisualElement GetRenderVx()
         {
             return _svgRenderVx;
         }
@@ -312,13 +312,13 @@ namespace LayoutFarm.UI
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
-                _svgRenderVx._vgVisualElement.Paint(paintArgs);
+                _svgRenderVx.Paint(paintArgs);
             }
 
         }
         public void Paint(VgPaintArgs paintArgs)
         {
-            _svgRenderVx._vgVisualElement.Paint(paintArgs);
+            _svgRenderVx.Paint(paintArgs);
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
@@ -346,7 +346,7 @@ namespace LayoutFarm.UI
                     m_painter.Fill(vxs);
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx._vgVisualElement.Paint(paintArgs);
+                _svgRenderVx.Paint(paintArgs);
             }
 
 
@@ -379,7 +379,7 @@ namespace LayoutFarm.UI
             //return; //** 
         }
 
-        public void LoadFromSvg(VgRenderVx svgRenderVx)
+        public void LoadFromSvg(VgVisualElement svgRenderVx)
         {
             _svgRenderVx = svgRenderVx;
             UpdateBounds();
@@ -398,7 +398,7 @@ namespace LayoutFarm.UI
         public void HitTestOnSubPart(VgHitChain hitChain)
         {
 
-            _svgRenderVx._vgVisualElement.HitTest(hitChain);
+            _svgRenderVx.HitTest(hitChain);
         }
 
         public override void ResetRootGraphics(RootGraphic rootgfx)

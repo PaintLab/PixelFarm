@@ -138,8 +138,8 @@ namespace LayoutFarm
                     try
                     {
                         string svg_str = File.ReadAllText(imgName);
-                        VgRenderVx vgRenderVx = ReadSvgFile(imgName);
-                        return CreateBitmap(vgRenderVx, reqW, reqH);
+                        VgVisualElement vgVisElem = ReadSvgFile(imgName);
+                        return CreateBitmap(vgVisElem, reqW, reqH);
 
                     }
                     catch (System.Exception ex)
@@ -174,7 +174,7 @@ namespace LayoutFarm
 
         }
 
-        VgRenderVx ReadSvgFile(string filename)
+        VgVisualElement ReadSvgFile(string filename)
         {
 
             string svgContent = System.IO.File.ReadAllText(filename);
@@ -183,8 +183,8 @@ namespace LayoutFarm
             WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
             parser.ParseDocument(textSnapshot);
             //TODO: review this step again
-            VgRenderVxDocBuilder builder = new VgRenderVxDocBuilder();
-            return builder.CreateRenderVx(docBuidler.ResultDocument, svgElem =>
+            VgDocBuilder builder = new VgDocBuilder();
+            return builder.CreateVgVisualElem(docBuidler.ResultDocument, svgElem =>
             {
                 //**
                 //TODO: review here
@@ -192,7 +192,7 @@ namespace LayoutFarm
             });
         }
         //
-        PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgRenderVx renderVx, int reqW, int reqH)
+        PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgVisualElement renderVx, int reqW, int reqH)
         {
 
             PixelFarm.CpuBlit.RectD bound = renderVx.GetRectBounds();
@@ -211,7 +211,7 @@ namespace LayoutFarm
             double prevStrokeW = painter.StrokeWidth;
             using (VgPainterArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
             {
-                renderVx._vgVisualElement.Paint(paintArgs);
+                renderVx.Paint(paintArgs);
             }
             painter.StrokeWidth = prevStrokeW;//restore 
             return backingBmp;

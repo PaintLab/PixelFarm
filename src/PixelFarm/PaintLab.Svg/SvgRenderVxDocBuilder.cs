@@ -418,6 +418,7 @@ namespace PaintLab.Svg
             SvgVisualSpec visualSpec,
             VgDocRoot renderRoot)
         {
+            _needBoundUpdate = true;
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
             _renderRoot = renderRoot;
@@ -1323,48 +1324,17 @@ namespace PaintLab.Svg
                 _childNodes.Clear();
             }
         }
-    }
-
-    public class VgVisualForeignNode : VgVisualElementBase
-    {
-        public object _foriegnNode;
-
-        public VgVisualForeignNode() { }
-
-        public override VgVisualElementBase Clone()
-        {
-            return new VgVisualForeignNode { _foriegnNode = this._foriegnNode };
-        }
-        public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
-    }
 
 
+        public object UserData { get; set; } //optional
+        public SvgDocument OwnerDocument { get; set; } //optional
 
-    public class VgRenderVx : RenderVx
-    {
-
+        public ICoordTransformer _coordTx;
         Image _backimg;
         RectD _boundRect;
         bool _needBoundUpdate;
-        public VgVisualElement _vgVisualElement;
-        public ICoordTransformer _coordTx;
 
-
-#if DEBUG
-        static int dbugTotalId;
-        public readonly int dbugId = dbugTotalId++;
-#endif
-        public VgRenderVx(VgVisualElement svgRenderE)
-        {
-            _vgVisualElement = svgRenderE;
-            _needBoundUpdate = true;
-
-        }
-        public VgRenderVx Clone()
-        {
-            return new VgRenderVx((VgVisualElement)_vgVisualElement.Clone());
-        }
-
+ 
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
@@ -1404,7 +1374,10 @@ namespace PaintLab.Svg
                         }
 
                     };
-                    _vgVisualElement.Accept(paintArgs);
+
+
+                    this.Accept(paintArgs);//**
+
                     _needBoundUpdate = false;
 
                     if (evaluated && maxStrokeWidth > 1)
@@ -1433,18 +1406,31 @@ namespace PaintLab.Svg
         {
             this._backimg = img;
             HasBitmapSnapshot = img != null;
-
         }
-
         public float X { get; set; }
         public float Y { get; set; }
 
-        public object UserData { get; set; } //optional
-        public SvgDocument OwnerDocument { get; set; } //optional
+    }
+
+    public class VgVisualForeignNode : VgVisualElementBase
+    {
+        public object _foriegnNode;
+
+        public VgVisualForeignNode() { }
+
+        public override VgVisualElementBase Clone()
+        {
+            return new VgVisualForeignNode { _foriegnNode = this._foriegnNode };
+        }
+        public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
     }
 
 
-    public class VgRenderVxDocBuilder
+
+    /// <summary>
+    /// vector graphics (vg) document builder
+    /// </summary>
+    public class VgDocBuilder
     {
         SvgDocument _svgdoc;
         List<SvgElement> _defsList = new List<SvgElement>();
@@ -1466,7 +1452,7 @@ namespace PaintLab.Svg
         LayoutFarm.WebDom.CssActiveSheet _activeSheet1; //temp fix1 
         VgDocRoot _renderRoot;
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _handler;
-        public VgRenderVxDocBuilder()
+        public VgDocBuilder()
         {
 
         }
@@ -1516,9 +1502,9 @@ namespace PaintLab.Svg
             return rootSvgElem;
         }
 
-        public VgRenderVx CreateRenderVx(SvgDocument svgdoc, Action<VgVisualElement> invalidateAction = null)
+        public VgVisualElement CreateVgVisualElem(SvgDocument svgdoc, Action<VgVisualElement> invalidateAction = null)
         {
-            return new VgRenderVx(CreateSvgRenderElement(svgdoc, invalidateAction));
+            return CreateSvgRenderElement(svgdoc, invalidateAction);
         }
 
         public void SetContainerSize(float width, float height)
