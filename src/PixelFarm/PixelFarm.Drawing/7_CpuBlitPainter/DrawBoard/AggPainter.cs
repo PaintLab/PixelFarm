@@ -1501,7 +1501,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public CoordTransformerKind Kind => CoordTransformerKind.Affine;
+        public CoordTransformerKind Kind => CoordTransformerKind.Affine3x2;
 
         public void Transform(ref double x, ref double y)
         {

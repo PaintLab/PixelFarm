@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public enum CoordTransformerKind
     {
         Unknown,
-        Affine,
+        Affine3x2,
         Perspective,
         Bilinear,
         TransformChain,
@@ -71,29 +71,45 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 case CoordTransformerKind.Unknown:
                 default:
                     throw new System.NotSupportedException();
-                case CoordTransformerKind.Affine:
+                case CoordTransformerKind.Affine3x2:
                     {
                         Affine aff = (Affine)coordTx;
+                        writer.Write((ushort)txKind); //type
+                        AffineMat affMat = aff.GetInternalMat();
+                        //sx = v0_sx; shy = v1_shy;
+                        //shx = v2_shx; sy = v3_sy;
+                        //tx = v4_tx; ty = v5_ty;
+
+                        //write element
+                        writer.Write(affMat.sx);
+                        writer.Write(affMat.shy);
+                        writer.Write(affMat.shx);
+                        writer.Write(affMat.sy);
+                        writer.Write(affMat.tx);
+                        writer.Write(affMat.ty);
 
                     }
                     break;
                 case CoordTransformerKind.Bilinear:
                     {
                         Bilinear binTx = (Bilinear)coordTx;
+                        writer.Write((ushort)txKind);
+
 
                     }
                     break;
                 case CoordTransformerKind.Perspective:
                     {
                         Perspective perTx = (Perspective)coordTx;
-
+                        writer.Write((ushort)txKind);
                     }
                     break;
                 case CoordTransformerKind.TransformChain:
                     {
                         CoordTransformationChain chainTx = (CoordTransformationChain)coordTx;
-                    }
+                        writer.Write((ushort)txKind);
 
+                    }
                     break;
             }
         }
