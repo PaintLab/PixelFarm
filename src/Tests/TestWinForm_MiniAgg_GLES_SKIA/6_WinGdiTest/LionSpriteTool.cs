@@ -17,7 +17,7 @@ namespace Mini.WinForms
         int offsetX, offSetY;
         public MyLionSpriteTool()
         {
-            lionFill = new MyTestSprite(new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg").VgRootElem));
+            lionFill = new MyTestSprite(new SpriteShape(VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\arrow2.svg").VgRootElem));
         }
         public override bool IsDrawingTool { get { return true; } }
         public override void Draw(Graphics g)

@@ -7,9 +7,9 @@
 using PaintLab.Svg;
 namespace PixelFarm.CpuBlit
 {
-    public static class SvgRenderVxLoader
+    public static class VgVisualDocHelper
     {
-        public static VgVisualDoc CreateSvgRenderVxFromFile(string filename)
+        public static VgVisualDoc CreateVgVisualDocFromFile(string filename)
         {
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);

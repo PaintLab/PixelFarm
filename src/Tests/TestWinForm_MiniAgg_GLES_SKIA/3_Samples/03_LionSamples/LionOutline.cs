@@ -119,7 +119,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         //special option 
         public LionOutlineSprite()
         {
-            _spriteShape = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg").VgRootElem);
+            _spriteShape = new SpriteShape(VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem);
             this.Width = 500;
             this.Height = 500;
         }
