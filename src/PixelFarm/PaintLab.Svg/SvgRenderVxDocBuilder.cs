@@ -232,12 +232,14 @@ namespace PaintLab.Svg
 
     class VgUseVisualElement : VgVisualElement
     {
-        public VgUseVisualElement(SvgUseSpec useSpec, VgVisualDoc root)
+        internal VgUseVisualElement(SvgUseSpec useSpec, VgVisualDoc root)
             : base(WellknownSvgElementName.Use, useSpec, root)
         {
 
         }
         internal VgVisualElement HRefSvgRenderElement { get; set; }
+
+
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
 
@@ -320,6 +322,9 @@ namespace PaintLab.Svg
             visitor._currentTx = current_tx;
             //base.Walk(vgPainterArgs);
         }
+
+
+
     }
 
     public class VgVisualDoc
@@ -341,6 +346,7 @@ namespace PaintLab.Svg
         {
 
         }
+
         public bool TryGetVgVisualElementById(string id, out VgVisualElement found)
         {
             return _registeredElemsById.TryGetValue(id, out found);
@@ -383,6 +389,17 @@ namespace PaintLab.Svg
         //
         public VgVisualElement VgRootElem { get; set; }
 
+
+        public VgVisualElement CreateVgUseVisualElement(VgVisualElement refVgVisualElem)
+        {
+
+            //#if DEBUG 
+            //#endif
+            SvgUseSpec useSpec = new SvgUseSpec();
+            VgUseVisualElement vgUseVisualElem = new VgUseVisualElement(useSpec, this);
+            vgUseVisualElem.HRefSvgRenderElement = refVgVisualElem;
+            return vgUseVisualElem;
+        }
     }
 
 
@@ -405,7 +422,7 @@ namespace PaintLab.Svg
 
 
         LayoutFarm.ImageBinder _imgBinder;
-        VgVisualDoc _renderRoot;
+        VgVisualDoc _vgVisualDoc;
 
         Image _backimg;
         RectD _boundRect;
@@ -419,14 +436,16 @@ namespace PaintLab.Svg
 
         public VgVisualElement(WellknownSvgElementName wellknownName,
             SvgVisualSpec visualSpec,
-            VgVisualDoc renderRoot)
+            VgVisualDoc vgVisualDoc)
         {
             //we can create visual element without its DOM
             _needBoundUpdate = true;
             _wellknownName = wellknownName;
             _visualSpec = visualSpec;
-            _renderRoot = renderRoot;
+            _vgVisualDoc = vgVisualDoc;
         }
+        //
+        public VgVisualDoc VgVisualDoc => _vgVisualDoc;
 
         public SvgElement DomElem { get; set; }//*** its dom element(optional)
         public override WellknownSvgElementName ElemName => _wellknownName;
@@ -457,7 +476,7 @@ namespace PaintLab.Svg
                     {
                         _imgH = value.ImageHeight;
                     }
-                    value.ImageChanged += (s, e) => _renderRoot.Invalidate(this);
+                    value.ImageChanged += (s, e) => _vgVisualDoc.Invalidate(this);
                 }
             }
         }
@@ -502,7 +521,7 @@ namespace PaintLab.Svg
 
         public override VgVisualElementBase Clone()
         {
-            VgVisualElement clone = new VgVisualElement(_wellknownName, _visualSpec, _renderRoot);
+            VgVisualElement clone = new VgVisualElement(_wellknownName, _visualSpec, _vgVisualDoc);
             clone.DomElem = this.DomElem;
             if (VxsPath != null)
             {
@@ -899,7 +918,7 @@ namespace PaintLab.Svg
                                 {
                                     tryLoadOnce = true;
 
-                                    _renderRoot.RequestImageAsync(this.ImageBinder, this, this);
+                                    _vgVisualDoc.RequestImageAsync(this.ImageBinder, this, this);
                                     goto EVAL_STATE;
                                 }
                                 break;
