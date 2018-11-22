@@ -341,6 +341,10 @@ namespace PaintLab.Svg
         {
 
         }
+        public bool TryGetVgVisualElementById(string id, out VgVisualElement found)
+        {
+            return _registeredElemsById.TryGetValue(id, out found);
+        }
         public void SetInvalidateDelegate(Action<VgVisualElement> invalidate)
         {
             _invalidate = invalidate;
