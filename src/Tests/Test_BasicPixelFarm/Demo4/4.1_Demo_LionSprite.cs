@@ -9,16 +9,15 @@ namespace LayoutFarm
     [DemoNote("4.1 Demo_LionSprite")]
     class Demo_LionSprite : App
     {
-        VgVisualElement _renderVx;
+        VgVisualElement _vgVisElem;
 
         MyTestSprite _mySprite;
         AppHost _host;
         protected override void OnStart(AppHost host)
         {
             _host = host;
-            //_renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\1f0cf.svg");
-            _renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
-            _mySprite = new MyTestSprite(_renderVx);
+            _vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
+            _mySprite = new MyTestSprite(_vgVisElem);
             var evListener = new GeneralEventListener();
             evListener.MouseDown += e =>
             {
