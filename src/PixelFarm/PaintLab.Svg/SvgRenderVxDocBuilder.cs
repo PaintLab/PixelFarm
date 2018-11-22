@@ -1446,7 +1446,7 @@ namespace PaintLab.Svg
     /// <summary>
     /// vector graphics (vg) document builder
     /// </summary>
-    public class VgDocBuilder
+    public class VgVisualDocBuilder
     {
         SvgDocument _svgdoc;
         List<SvgElement> _defsList;
@@ -1468,7 +1468,7 @@ namespace PaintLab.Svg
         VgVisualDoc _vgVisualDoc; //result 
 
         Action<LayoutFarm.ImageBinder, VgVisualElement, object> _imgLoadingHandler;
-        public VgDocBuilder()
+        public VgVisualDocBuilder()
         {
         }
 
@@ -2316,4 +2316,22 @@ namespace PaintLab.Svg
             }
         }
     }
+
+
+    public static class VgVisualDocHelper
+    {
+        public static VgVisualDoc CreateVgVisualDocFromFile(string filename)
+        {
+            SvgDocBuilder docBuilder = new SvgDocBuilder();
+            SvgParser svg = new SvgParser(docBuilder);
+            VgVisualDocBuilder builder = new VgVisualDocBuilder();
+            //svg.ReadSvgFile("d:\\WImageTest\\lion.svg");
+            //svg.ReadSvgFile("d:\\WImageTest\\tiger001.svg");
+            svg.ReadSvgFile(filename);
+            return builder.CreateVgVisualDoc(docBuilder.ResultDocument, null);
+        }
+
+    }
+
+
 }

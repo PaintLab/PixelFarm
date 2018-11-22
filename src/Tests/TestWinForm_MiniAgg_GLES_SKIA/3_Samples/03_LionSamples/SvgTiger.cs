@@ -83,7 +83,7 @@ namespace PixelFarm.CpuBlit.Samples
             string lionSvg = System.Text.Encoding.UTF8.GetString(Convert.FromBase64CharArray(lionSvgBase64, 0, lionSvgBase64.Length));
             SvgDocBuilder docBuilder = new SvgDocBuilder();
             SvgParser svg = new SvgParser(docBuilder);
-            VgDocBuilder builder = new VgDocBuilder();
+            VgVisualDocBuilder builder = new VgVisualDocBuilder();
 
             //svg.ReadSvgFile("Samples\\lion.svg"); 
             //svg.ReadSvgFile("Samples\\tiger002.svg");

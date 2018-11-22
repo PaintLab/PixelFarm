@@ -39,7 +39,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            PaintLab.Svg.VgVisualDoc vgVisualDoc = PixelFarm.CpuBlit.VgVisualDocHelper.CreateVgVisualDocFromFile("Samples/lion.svg");
+            PaintLab.Svg.VgVisualDoc vgVisualDoc = PaintLab.Svg.VgVisualDocHelper.CreateVgVisualDocFromFile("Samples/lion.svg");
             lionShape = new SpriteShape(vgVisualDoc.VgRootElem);
 
             RectD lionBounds = lionShape.Bounds;
