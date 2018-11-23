@@ -9,7 +9,6 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using LayoutFarm;
 using LayoutFarm.UI;
-using LayoutFarm.RenderBoxes;
 
 namespace YourImplementation
 {
@@ -26,6 +25,11 @@ namespace YourImplementation
         protected int _height;
         CpuBlitGLCanvasRenderElement _canvasRenderE;
         UpdateCpuBlitSurface _updateCpuBlitSurfaceDel;
+        //----------------------------------------------
+        protected MemBitmap _memBmp;
+        protected AggPainter _aggPainter;
+        protected LazyActualBitmapBufferProvider _lazyBmpProvider;
+
 
         public CpuBlitGLESUIElement(int width, int height)
         {
@@ -38,11 +42,6 @@ namespace YourImplementation
         public AggPainter GetAggPainter() => _aggPainter;
 
 
-        public void DrawChildContent(DrawBoard d)
-        {
-
-        }
-        //
         protected virtual bool HasSomeExtension => false;//class that override 
 
         public void CreatePrimaryRenderElement(GLRenderSurface glsx, GLPainter painter, RootGraphic rootgfx)
@@ -91,15 +90,15 @@ namespace YourImplementation
         }
 
 
-        //----------------------------------------------
-        protected MemBitmap _memBmp;
-        protected AggPainter _aggPainter;
-        protected LazyActualBitmapBufferProvider _lazyBmpProvider;
+
 
 
         //----------------------------------------------
         public virtual DrawBoard GetDrawBoard() { return null; }
         //----------------------------------------------
+        /// <summary>
+        /// set-up CpuBlit(software-rendering surface) 
+        /// </summary>
         protected virtual void SetupCpuBlitRenderSurface()
         {
             //***
@@ -206,7 +205,7 @@ namespace YourImplementation
             _memBmp = renderSurface.GetMemBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
             _aggPainter = renderSurface.GetAggPainter();//**
-            
+
             //***
             //
             //... 
@@ -233,7 +232,7 @@ namespace YourImplementation
         {
             _ui = ui;
         }
-        
+
         protected override void DrawBoxContent(DrawBoard d, Rectangle updateArea)
         {
             //canvas here should be glcanvas
