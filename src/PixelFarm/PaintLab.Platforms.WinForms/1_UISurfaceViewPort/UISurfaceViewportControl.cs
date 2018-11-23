@@ -25,9 +25,12 @@ namespace LayoutFarm.UI
 
             //this.panel1.Visible = false; 
         }
+        public void Close()
+        {
+            this._winBridge.Close();
+
+        }
         public InnerViewportKind InnerViewportKind => _innerViewportKind;
-
-
 #if DEBUG
         static int s_dbugCount;
 #endif
@@ -427,10 +430,6 @@ namespace LayoutFarm.UI
             {
                 return this._rootgfx;
             }
-        }
-        public void Close()
-        {
-            this._winBridge.Close();
         }
 
 
