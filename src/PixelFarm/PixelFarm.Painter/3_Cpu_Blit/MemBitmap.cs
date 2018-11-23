@@ -117,6 +117,7 @@ namespace PixelFarm.CpuBlit
         static System.Text.StringBuilder s_stbuilder = new System.Text.StringBuilder();
         static object s_lock1 = new object();
         static System.Timers.Timer s_tim1;
+        static int s_count;
         static System.Collections.Generic.List<TempMemBitmapMonitor> _registerMemBmp = new System.Collections.Generic.List<TempMemBitmapMonitor>();
         public static void dbugRegisterMemBitmap(MemBitmap memBmp, string detail)
         {
@@ -131,6 +132,8 @@ namespace PixelFarm.CpuBlit
                     lock (s_lock1)
                     {
                         s_tim1.Enabled = false;
+
+                        s_stbuilder.AppendLine((s_count++).ToString());
                         for (int i = _registerMemBmp.Count - 1; i >= 0; --i)
                         {
                             if (!_registerMemBmp[i].IsAlive())
