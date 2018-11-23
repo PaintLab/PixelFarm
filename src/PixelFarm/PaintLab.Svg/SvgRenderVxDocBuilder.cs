@@ -1768,7 +1768,7 @@ namespace PaintLab.Svg
             return vgVisElem;
         }
 
-        struct ReEvaluateArgs : LayoutFarm.Css.IHasGetEmHeight
+        struct ReEvaluateArgs : LayoutFarm.Css.IHasEmHeight
         {
             public readonly float containerW;
             public readonly float containerH;
