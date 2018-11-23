@@ -932,20 +932,20 @@ namespace PaintLab.Svg
 
                                     if (currentTx != null)
                                     {
-                                        Affine aff = currentTx as Affine;
+
                                         if (this._imgW == 0 || this._imgH == 0)
                                         {
                                             //only X,and Y
                                             RenderQuality prevQ = p.RenderQuality;
                                             //p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, currentTx);
                                             p.RenderQuality = prevQ;
                                         }
                                         else if (_imgW == img.Width && _imgH == img.Height)
                                         {
                                             RenderQuality prevQ = p.RenderQuality;
                                             //p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, currentTx);
                                             p.RenderQuality = prevQ;
                                         }
                                         else
@@ -953,9 +953,11 @@ namespace PaintLab.Svg
 
                                             RenderQuality prevQ = p.RenderQuality;
                                             //p.RenderQuality = RenderQuality.Fast;
-                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, aff);
+                                            p.DrawImage(this.ImageBinder.Image, _imgX, _imgY, currentTx);
                                             p.RenderQuality = prevQ;
                                         }
+
+
                                     }
                                     else
                                     {
