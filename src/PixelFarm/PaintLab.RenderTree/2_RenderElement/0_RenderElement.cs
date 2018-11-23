@@ -22,8 +22,15 @@ namespace LayoutFarm
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
-            //this.dbug_SetFixedElementCode(this.GetType().Name);
 #endif
+        }
+        /// <summary>
+        /// on hardware-rendering backing, the system will try to provide a software rendering surface for this element
+        /// </summary>
+        public bool PreferSoftwareRenderer
+        {
+            get;
+            set;
         }
 
         public abstract void ResetRootGraphics(RootGraphic rootgfx);
