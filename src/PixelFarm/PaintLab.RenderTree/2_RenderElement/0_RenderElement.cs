@@ -352,9 +352,11 @@ namespace LayoutFarm
 
         //==============================================================
         //render...
-        public abstract void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea);
-        public void DrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
+        public abstract void CustomDrawToThisCanvas(DrawBoard d, Rectangle updateArea);
+        public void DrawToThisCanvas(DrawBoard d, Rectangle updateArea)
         {
+            //TODO: rename Canvas to Drawboard ?
+
             if ((_propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {
                 return;
@@ -367,39 +369,39 @@ namespace LayoutFarm
             {
                 //some elem may need clip for its child
                 //some may not need
-                if (canvas.PushClipAreaRect(_b_width, _b_height, ref updateArea))
+                if (d.PushClipAreaRect(_b_width, _b_height, ref updateArea))
                 {
 #if DEBUG
                     if (dbugVRoot.dbug_RecordDrawingChain)
                     {
-                        dbugVRoot.dbug_AddDrawElement(this, canvas);
+                        dbugVRoot.dbug_AddDrawElement(this, d);
                     }
 #endif
                     //------------------------------------------ 
-                    this.CustomDrawToThisCanvas(canvas, updateArea);
+                    this.CustomDrawToThisCanvas(d, updateArea);
                     //------------------------------------------
                     _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
 #if DEBUG
-                    debug_RecordPostDrawInfo(canvas);
+                    debug_RecordPostDrawInfo(d);
 #endif
                 }
 
-                canvas.PopClipAreaRect();
+                d.PopClipAreaRect();
             }
             else
             {
 #if DEBUG
                 if (dbugVRoot.dbug_RecordDrawingChain)
                 {
-                    dbugVRoot.dbug_AddDrawElement(this, canvas);
+                    dbugVRoot.dbug_AddDrawElement(this, d);
                 }
 #endif
                 //------------------------------------------ 
-                this.CustomDrawToThisCanvas(canvas, updateArea);
+                this.CustomDrawToThisCanvas(d, updateArea);
                 //------------------------------------------
                 _propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
 #if DEBUG
-                debug_RecordPostDrawInfo(canvas);
+                debug_RecordPostDrawInfo(d);
 #endif
 
             }
