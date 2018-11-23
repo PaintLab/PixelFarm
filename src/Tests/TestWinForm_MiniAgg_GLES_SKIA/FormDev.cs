@@ -195,11 +195,7 @@ namespace Mini
 #endif
                 default:
                     throw new NotSupportedException();
-            }
-
-
-
-
+            } 
         }
         static void LoadSamplesFromAssembly(Type srcType, List<ExampleAndDesc> outputList)
         {

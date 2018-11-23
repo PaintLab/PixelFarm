@@ -26,6 +26,8 @@ namespace YourImplementation
         CpuBlitGLCanvasRenderElement _canvasRenderE;
         UpdateCpuBlitSurface _updateCpuBlitSurfaceDel;
         //----------------------------------------------
+
+        //software part
         protected MemBitmap _memBmp;
         protected AggPainter _aggPainter;
         protected LazyActualBitmapBufferProvider _lazyBmpProvider;
