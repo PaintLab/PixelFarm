@@ -21,6 +21,7 @@ namespace YourImplementation
     public class CpuBlitGLESUIElement : UIElement
     {
 
+
         protected int _width;
         protected int _height;
         CpuBlitGLCanvasRenderElement _canvasRenderE;
