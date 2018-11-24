@@ -59,6 +59,10 @@ namespace PixelFarm.Drawing.GLES2
             //TODO: check if we must set canvas origin to painter or not
             return _gpuPainter;
         }
+        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        {
+            throw new NotImplementedException();
+        }
         public override DrawBoard GetCpuBlitDrawBoard()
         {
             if (!_evalCpuBlitCreator)
@@ -70,6 +74,18 @@ namespace PixelFarm.Drawing.GLES2
                 _evalCpuBlitCreator = true;
             }
             return _cpuBlitDrawBoard;
+        }
+        public override void BlitFrom(DrawBoard src, float x, float y, float w, float h)
+        {
+            if (!src.IsGpuDrawBoard)
+            {
+                //cpu draw board
+                
+            }
+            else
+            {
+                //TODO: implement this....
+            }
         }
         public override void Dispose()
         {

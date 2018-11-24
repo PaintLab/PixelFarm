@@ -123,9 +123,26 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public abstract DrawBoard GetCpuBlitDrawBoard();
         public abstract bool IsGpuDrawBoard { get; }
+        public abstract void BlitFrom(DrawBoard src, float x, float y, float w, float h);
+        public abstract LazyBitmapBufferProvider GetInternalLazyBitmapProvider();
 
     }
 
+    public enum BitmapBufferFormat
+    {
+        BGRA, //eg. System.Drawing.Bitmap
+        BGR, //eg. Native Windows GDI surface
+        RGBA //eg. OpenGL 
+    }
+    public abstract class LazyBitmapBufferProvider
+    {
+        public abstract System.IntPtr GetRawBufferHead();
+        public abstract void ReleaseBufferHead();
+        public abstract int Width { get; }
+        public abstract int Height { get; }
+        public abstract bool IsYFlipped { get; }
+        public BitmapBufferFormat BitmapFormat { get; set; }
+    }
 
     public enum RenderQuality
     {

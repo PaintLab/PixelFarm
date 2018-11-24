@@ -30,7 +30,7 @@ namespace YourImplementation
         //software part
         protected MemBitmap _memBmp;
         protected AggPainter _aggPainter;
-        protected LazyActualBitmapBufferProvider _lazyBmpProvider;
+        protected LazyMemBitmapBufferProvider _lazyBmpProvider;
 
 
         public CpuBlitGLESUIElement(int width, int height)
@@ -110,7 +110,7 @@ namespace YourImplementation
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
             _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
+            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp);
             //
         }
         /// <summary>
@@ -212,8 +212,8 @@ namespace YourImplementation
             //
             //... 
             //
-            _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
-            _lazyBmpProvider.BitmapFormat = GLBitmapFormat.BGR;//**
+            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp);
+            _lazyBmpProvider.BitmapFormat = BitmapBufferFormat.BGR;//**
         }
     }
 

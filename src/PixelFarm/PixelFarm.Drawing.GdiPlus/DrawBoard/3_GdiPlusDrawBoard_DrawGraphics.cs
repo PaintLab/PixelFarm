@@ -77,10 +77,13 @@ namespace PixelFarm.Drawing.WinGdi
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
             _gdigsx.DrawLine(x1, y1, x2, y2);
-
         }
 
-
+        public override void BlitFrom(DrawBoard src, float x, float y, float w, float h)
+        {
+            //TODO: review here***
+            //throw new NotImplementedException();
+        }
         //public override void DrawRoundRect(int x, int y, int w, int h, Size cornerSize)
         //{
 
@@ -123,7 +126,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 _gdigsx.SmoothingMode = value;
             }
-        } 
+        }
 
         /// <summary>
         /// Draws the specified portion of the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.

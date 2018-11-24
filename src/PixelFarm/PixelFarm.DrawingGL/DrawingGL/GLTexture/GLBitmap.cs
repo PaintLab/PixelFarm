@@ -6,22 +6,6 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
-    public abstract class LazyBitmapBufferProvider
-    {
-        public abstract IntPtr GetRawBufferHead();
-        public abstract void ReleaseBufferHead();
-        public abstract int Width { get; }
-        public abstract int Height { get; }
-        public abstract bool IsYFlipped { get; }
-        public GLBitmapFormat BitmapFormat { get; set; }
-    }
-
-    public enum GLBitmapFormat
-    {
-        BGRA, //eg. System.Drawing.Bitmap
-        BGR, //eg. Native Windows GDI surface
-        RGBA //eg. OpenGL 
-    }
 
     public class GLBitmap : Image
     {
@@ -32,7 +16,7 @@ namespace PixelFarm.DrawingGL
         int[] _rawIntBuffer;
 
         IntPtr _nativeImgMem;
-        LazyBitmapBufferProvider _lazyProvider;
+        PixelFarm.Drawing.LazyBitmapBufferProvider _lazyProvider;
         bool _isNativePtrOwner;
 
 
@@ -81,7 +65,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public GLBitmapFormat BitmapFormat { get; set; }
+        public BitmapBufferFormat BitmapFormat { get; set; }
         public bool IsBigEndianPixel { get; set; }
         /// <summary>
         /// is vertical flipped

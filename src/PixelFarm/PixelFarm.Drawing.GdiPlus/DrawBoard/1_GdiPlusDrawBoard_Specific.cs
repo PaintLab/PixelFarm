@@ -43,6 +43,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return this;//
         }
+        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        {
+            throw new NotImplementedException();
+        }
 #if DEBUG
         public override string ToString()
         {

@@ -47,6 +47,10 @@ namespace PixelFarm.Drawing.Skia
 
             this.StrokeWidth = 1;
         }
+        public override void BlitFrom(DrawBoard src, float x, float y, float w, float h)
+        {
+            //TODO: review here
+        }
         public override bool IsGpuDrawBoard => false;
         public override Painter GetPainter()
         {
