@@ -77,9 +77,6 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs">
       <Link>0_REF_DrawingGL\GLTexture\GLBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs">
-      <Link>0_REF_DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs">
       <Link>0_REF_DrawingGL\GLTexture\TextureAtlas.cs</Link>
     </Compile>

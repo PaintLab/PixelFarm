@@ -21,8 +21,8 @@ namespace Mini
         //
         CpuBlitGLESUIElement _bridgeUI;
         DemoBase _demoBase;
-
         OpenTK.MyGLControl _glControl;
+
         public CpuBlitOnGLESAppModule() { }
         public void BindSurface(LayoutFarm.UI.UISurfaceViewportControl surfaceViewport)
         {
@@ -84,7 +84,7 @@ namespace Mini
             GeneralEventListener genEvListener = new GeneralEventListener();
             genEvListener.MouseDown += e =>
             {
-               
+
                 _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
                 _bridgeUI.InvalidateGraphics();
             };
@@ -104,9 +104,21 @@ namespace Mini
             //-----------------------------------------------
             _bridgeUI.AttachExternalEventListener(genEvListener);
         }
-        public void CloseDemo()
+
+        public void Close()
         {
             _demoBase.CloseDemo();
+            _demoBase = null;
+
+            if (_surfaceViewport != null)
+            {
+                _surfaceViewport.Close();
+                _surfaceViewport = null;
+            }
+            _rootGfx = null;
+            _glControl = null;
+
+
         }
     }
 
