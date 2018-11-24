@@ -122,6 +122,8 @@ namespace PixelFarm.Drawing
         /// </summary>
         /// <returns></returns>
         public abstract DrawBoard GetCpuBlitDrawBoard();
+        public abstract bool IsGpuDrawBoard { get; }
+
     }
 
 

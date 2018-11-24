@@ -47,6 +47,7 @@ namespace PixelFarm.Drawing.Skia
 
             this.StrokeWidth = 1;
         }
+        public override bool IsGpuDrawBoard => false;
         public override Painter GetPainter()
         {
             throw new NotSupportedException();

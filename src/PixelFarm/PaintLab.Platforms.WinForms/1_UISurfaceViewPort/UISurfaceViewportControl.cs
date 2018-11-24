@@ -161,6 +161,11 @@ namespace LayoutFarm.UI
 
                         //
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx);
+                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() =>
+                        {
+                            return null;
+                        });
+
                         bridge.SetCanvas(myGLCanvas1);
 
 
@@ -213,9 +218,17 @@ namespace LayoutFarm.UI
                         //3 
                         var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
                         _glPainter.TextPrinter = printer;
-
                         //
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(_glPainter, _glsx);
+
+                        //----------
+                        
+
+                        //----------
+                        myGLCanvas1.SetCpuBlitDrawBoardCreator(() =>
+                        {
+                            return null;
+                        });
                         bridge.SetCanvas(myGLCanvas1);
 
                     }
@@ -255,7 +268,6 @@ namespace LayoutFarm.UI
                         var bridge = new GdiPlus.MyTopWindowBridgeGdiPlus(rootgfx, topWinEventRoot);
                         var view = new CpuSurfaceView();
                         view.Size = new System.Drawing.Size(rootgfx.Width, rootgfx.Height);
-                        //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
                         //--------------------------------------- 
                         view.Bind(bridge);

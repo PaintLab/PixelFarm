@@ -5,14 +5,21 @@ using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.GLES2
 {
 
+
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
+        public delegate DrawBoard GetCpuBlitDrawBoardDelegate();
+
 
         GLPainter _gpuPainter;
         GLRenderSurface _glsx;
         bool _isDisposed;
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
         Rectangle _currentClipRect;
+
+        GetCpuBlitDrawBoardDelegate _getCpuBlitDrawBoardDel;
+        DrawBoard _cpuBlitDrawBoard;
+        bool _evalCpuBlitCreator;
 
         public MyGLDrawBoard(
            GLPainter painter, //*** we wrap around GLPainter *** 
@@ -40,6 +47,13 @@ namespace PixelFarm.Drawing.GLES2
             this.StrokeWidth = 1;
         }
 
+        public void SetCpuBlitDrawBoardCreator(GetCpuBlitDrawBoardDelegate getCpuBlitDelegate)
+        {
+            _getCpuBlitDrawBoardDel = getCpuBlitDelegate;
+        }
+
+        public override bool IsGpuDrawBoard => true;
+
         public override Painter GetPainter()
         {
             //TODO: check if we must set canvas origin to painter or not
@@ -47,9 +61,15 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override DrawBoard GetCpuBlitDrawBoard()
         {
-            //request for CpuBlit drawboard
-
-            throw new NotImplementedException();
+            if (!_evalCpuBlitCreator)
+            {
+                if (_getCpuBlitDrawBoardDel != null)
+                {
+                    _cpuBlitDrawBoard = _getCpuBlitDrawBoardDel();
+                }
+                _evalCpuBlitCreator = true;
+            }
+            return _cpuBlitDrawBoard;
         }
         public override void Dispose()
         {
