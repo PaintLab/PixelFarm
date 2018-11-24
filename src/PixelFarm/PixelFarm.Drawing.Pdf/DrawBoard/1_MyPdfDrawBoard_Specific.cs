@@ -31,6 +31,10 @@ namespace PixelFarm.Drawing.Pdf
         {
             throw new NotImplementedException();
         }
+        public override DrawBoard GetCpuBlitDrawBoard()
+        {
+            throw new NotImplementedException();
+        }
         internal MyPdfDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,

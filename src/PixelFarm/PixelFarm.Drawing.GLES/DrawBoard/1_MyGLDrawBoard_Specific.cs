@@ -5,31 +5,31 @@ using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.GLES2
 {
 
-
-
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
 
-        GLPainter _painter1;
+        GLPainter _gpuPainter;
+        GLRenderSurface _glsx;
         bool _isDisposed;
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
         Rectangle _currentClipRect;
 
         public MyGLDrawBoard(
            GLPainter painter, //*** we wrap around GLPainter *** 
-           int width,
-           int height)
+           GLRenderSurface glsx)
         {
+
             //----------------
             //set painter first
-            this._painter1 = painter;
+            _gpuPainter = painter;
+            _glsx = glsx;
             //----------------
             this._left = 0; //default start at 0,0
             this._top = 0;
-            this._width = width;
-            this._height = height;
+            this._width = glsx.CanvasWidth;
+            this._height = glsx.CanvasHeight;
 
-            _currentClipRect = new Rectangle(0, 0, width, height);
+            _currentClipRect = new Rectangle(0, 0, this._width, this._height);
 
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
@@ -43,7 +43,13 @@ namespace PixelFarm.Drawing.GLES2
         public override Painter GetPainter()
         {
             //TODO: check if we must set canvas origin to painter or not
-            return _painter1;
+            return _gpuPainter;
+        }
+        public override DrawBoard GetCpuBlitDrawBoard()
+        {
+            //request for CpuBlit drawboard
+
+            throw new NotImplementedException();
         }
         public override void Dispose()
         {
@@ -80,7 +86,7 @@ namespace PixelFarm.Drawing.GLES2
 
         void ClearPreviousStoredValues()
         {
-            _painter1.SetOrigin(0, 0);
+            _gpuPainter.SetOrigin(0, 0);
 
             this._canvasOriginX = 0;
             this._canvasOriginY = 0;

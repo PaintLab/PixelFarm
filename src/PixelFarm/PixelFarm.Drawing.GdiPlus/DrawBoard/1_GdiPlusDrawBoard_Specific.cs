@@ -38,14 +38,17 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         public GdiPlusRenderSurface RenderSurface => _gdigsx;
-
+        public override DrawBoard GetCpuBlitDrawBoard()
+        {
+            return this;//
+        }
 #if DEBUG
         public override string ToString()
         {
             return _gdigsx.ToString();
         }
 #endif
-        
+
         public override Painter GetPainter()
         {
             //since painter origin and canvas origin is separated 
