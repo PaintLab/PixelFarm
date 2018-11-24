@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.GLES2
     {
         public delegate DrawBoard GetCpuBlitDrawBoardDelegate();
 
-
+        GLBitmap _tmpGLBmp;
         GLPainter _gpuPainter;
         GLRenderSurface _glsx;
         bool _isDisposed;
@@ -46,7 +46,15 @@ namespace PixelFarm.Drawing.GLES2
 #endif
             this.StrokeWidth = 1;
         }
-
+        public override void Dispose()
+        {
+            //TODO: review here
+            if (_tmpGLBmp != null)
+            {
+                _tmpGLBmp.Dispose();
+                _tmpGLBmp = null;
+            }
+        }
         public void SetCpuBlitDrawBoardCreator(GetCpuBlitDrawBoardDelegate getCpuBlitDelegate)
         {
             _getCpuBlitDrawBoardDel = getCpuBlitDelegate;
@@ -61,6 +69,11 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
         {
+            //TODO: implement this
+            //copy bitmap data to target 
+            //(server-to-server)
+            //(server-to-client)
+
             throw new NotImplementedException();
         }
         public override DrawBoard GetCpuBlitDrawBoard()
@@ -80,18 +93,25 @@ namespace PixelFarm.Drawing.GLES2
             if (!src.IsGpuDrawBoard)
             {
                 //cpu draw board
-                
+                LazyBitmapBufferProvider bmpProvider = src.GetInternalLazyBitmapProvider();
+
+                if (_tmpGLBmp == null)
+                {
+                    _tmpGLBmp = new GLBitmap(bmpProvider);
+                }
+                else
+                {
+                    _tmpGLBmp.UpdateTexture(new Rectangle((int)x, (int)y, (int)w, (int)h));
+                }
+                //---------
+                this.DrawImage(_tmpGLBmp, new RectangleF(x, y, w, h), new RectangleF(x, y, w, h));
             }
             else
             {
                 //TODO: implement this....
             }
         }
-        public override void Dispose()
-        {
 
-            //TODO: review here
-        }
 #if DEBUG
         public override string ToString()
         {

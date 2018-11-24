@@ -51,6 +51,10 @@ namespace PixelFarm.Drawing.Skia
         {
             //TODO: review here
         }
+        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        {
+            return null;
+        }
         public override bool IsGpuDrawBoard => false;
         public override Painter GetPainter()
         {
