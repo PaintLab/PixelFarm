@@ -123,7 +123,7 @@ namespace PixelFarm.Drawing
         /// <returns></returns>
         public abstract DrawBoard GetCpuBlitDrawBoard();
         public abstract bool IsGpuDrawBoard { get; }
-        public abstract void BlitFrom(DrawBoard src, float x, float y, float w, float h);
+        public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
         public abstract LazyBitmapBufferProvider GetInternalLazyBitmapProvider();
 
     }

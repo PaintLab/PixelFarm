@@ -88,7 +88,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             return _cpuBlitDrawBoard;
         }
-        public override void BlitFrom(DrawBoard src, float x, float y, float w, float h)
+        public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
         {
             if (!src.IsGpuDrawBoard)
             {
@@ -101,10 +101,13 @@ namespace PixelFarm.Drawing.GLES2
                 }
                 else
                 {
-                    _tmpGLBmp.UpdateTexture(new Rectangle((int)x, (int)y, (int)w, (int)h));
+                    _tmpGLBmp.UpdateTexture(new Rectangle((int)srcX, (int)srcY, (int)srcW, (int)srcH));
                 }
+
                 //---------
-                this.DrawImage(_tmpGLBmp, new RectangleF(x, y, w, h), new RectangleF(x, y, w, h));
+                this.DrawImage(_tmpGLBmp,
+                    new RectangleF((int)dstX, (int)dstY, (int)srcW, (int)srcH), //dst
+                    new RectangleF((int)srcX, (int)srcY, (int)srcW, (int)srcH)); //src
             }
             else
             {

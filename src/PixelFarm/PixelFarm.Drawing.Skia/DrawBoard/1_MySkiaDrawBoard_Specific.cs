@@ -47,7 +47,7 @@ namespace PixelFarm.Drawing.Skia
 
             this.StrokeWidth = 1;
         }
-        public override void BlitFrom(DrawBoard src, float x, float y, float w, float h)
+        public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
         {
             //TODO: review here
         }

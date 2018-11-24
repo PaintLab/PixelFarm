@@ -79,7 +79,7 @@ namespace PixelFarm.Drawing.WinGdi
             _gdigsx.DrawLine(x1, y1, x2, y2);
         }
 
-        public override void BlitFrom(DrawBoard src, float x, float y, float w, float h)
+        public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
         {
             //TODO: review here***
             //throw new NotImplementedException();
