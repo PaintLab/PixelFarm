@@ -300,6 +300,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                     //NOTE: we scale horizontal 3 times.
                     //subpixel renderer will shrink it to 1 
                     //--------------------------------------------- 
+                    //TODO: review here
                     x *= 3;
                     tx.Transform(ref x, ref y); //***  
                     AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
@@ -354,9 +355,8 @@ namespace PixelFarm.CpuBlit.Rasterization
                     //---------------------------------------------
                     //NOTE: we scale horizontal 3 times.
                     //subpixel renderer will shrink it to 1 
-                    //---------------------------------------------
-
-                    AddVertex(cmd, (x * 3) + offsetOrgX, y + offsetOrgY);
+                    //--------------------------------------------- 
+                    AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
                 }
             }
             else
