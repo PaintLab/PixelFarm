@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 namespace LayoutFarm.Css
 {
-    public interface IHasGetEmHeight
+    public interface IHasEmHeight
     {
         float GetEmHeight();
     }

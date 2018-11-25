@@ -32,7 +32,7 @@ namespace LayoutFarm.WebDom.Parser
         /// <param name="hundredPercent"></param>
         /// <param name="box"></param>
         /// <returns></returns>
-        public static float ConvertToPx(CssLength length, float hundredPercent, IHasGetEmHeight box)
+        public static float ConvertToPx(CssLength length, float hundredPercent, IHasEmHeight box)
         {
             //Return zero if no length specified, zero specified      
             switch (length.UnitOrNames)
@@ -63,7 +63,7 @@ namespace LayoutFarm.WebDom.Parser
             }
         }
 
-        public static float ConvertToPxWithFontAdjust(CssLength length, float hundredPercent, IHasGetEmHeight box)
+        public static float ConvertToPxWithFontAdjust(CssLength length, float hundredPercent, IHasEmHeight box)
         {
             //Return zero if no length specified, zero specified     
             switch (length.UnitOrNames)
@@ -93,7 +93,7 @@ namespace LayoutFarm.WebDom.Parser
                     return 0;
             }
         }
-        public static float GetActualBorderWidth(CssLength borderValue, IHasGetEmHeight b)
+        public static float GetActualBorderWidth(CssLength borderValue, IHasEmHeight b)
         {
             //------------------------------
             //plan: use extended cssunit

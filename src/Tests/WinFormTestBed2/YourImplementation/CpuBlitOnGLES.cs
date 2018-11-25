@@ -9,7 +9,6 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using LayoutFarm;
 using LayoutFarm.UI;
-using LayoutFarm.RenderBoxes;
 
 namespace YourImplementation
 {
@@ -22,10 +21,18 @@ namespace YourImplementation
     public class CpuBlitGLESUIElement : UIElement
     {
 
+
         protected int _width;
         protected int _height;
         CpuBlitGLCanvasRenderElement _canvasRenderE;
         UpdateCpuBlitSurface _updateCpuBlitSurfaceDel;
+        //----------------------------------------------
+
+        //software part
+        protected MemBitmap _memBmp;
+        protected AggPainter _aggPainter;
+        protected LazyMemBitmapBufferProvider _lazyBmpProvider;
+
 
         public CpuBlitGLESUIElement(int width, int height)
         {
@@ -38,11 +45,6 @@ namespace YourImplementation
         public AggPainter GetAggPainter() => _aggPainter;
 
 
-        public void DrawChildContent(DrawBoard d)
-        {
-
-        }
-        //
         protected virtual bool HasSomeExtension => false;//class that override 
 
         public void CreatePrimaryRenderElement(GLRenderSurface glsx, GLPainter painter, RootGraphic rootgfx)
@@ -91,15 +93,15 @@ namespace YourImplementation
         }
 
 
-        //----------------------------------------------
-        protected MemBitmap _memBmp;
-        protected AggPainter _aggPainter;
-        protected LazyActualBitmapBufferProvider _lazyBmpProvider;
+
 
 
         //----------------------------------------------
         public virtual DrawBoard GetDrawBoard() { return null; }
         //----------------------------------------------
+        /// <summary>
+        /// set-up CpuBlit(software-rendering surface) 
+        /// </summary>
         protected virtual void SetupCpuBlitRenderSurface()
         {
             //***
@@ -109,7 +111,7 @@ namespace YourImplementation
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("Tahoma", 10);
             _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
-            _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
+            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp);
             //
         }
         /// <summary>
@@ -206,13 +208,13 @@ namespace YourImplementation
             _memBmp = renderSurface.GetMemBitmap();
             //3. create painter from the agg bmp (then we will copy the 'client' gdi mem surface to the GL)
             _aggPainter = renderSurface.GetAggPainter();//**
-            
+
             //***
             //
             //... 
             //
-            _lazyBmpProvider = new LazyActualBitmapBufferProvider(_memBmp);
-            _lazyBmpProvider.BitmapFormat = GLBitmapFormat.BGR;//**
+            _lazyBmpProvider = new LazyMemBitmapBufferProvider(_memBmp);
+            _lazyBmpProvider.BitmapFormat = BitmapBufferFormat.BGR;//**
         }
     }
 
@@ -233,7 +235,7 @@ namespace YourImplementation
         {
             _ui = ui;
         }
-        
+
         protected override void DrawBoxContent(DrawBoard d, Rectangle updateArea)
         {
             //canvas here should be glcanvas

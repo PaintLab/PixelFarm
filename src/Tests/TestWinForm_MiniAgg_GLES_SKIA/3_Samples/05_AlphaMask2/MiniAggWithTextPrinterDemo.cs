@@ -123,6 +123,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
 
             int lineSpaceInPx = (int)p.CurrentFont.LineSpacingInPixels;
+            if (lineSpaceInPx == 0)
+            {
+                lineSpaceInPx = 16; //tmp fix
+            }
             int ypos = 0;
 
 

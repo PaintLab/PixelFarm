@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                _painter1.StrokeColor = this._strokeColor = value;
+                _gpuPainter.StrokeColor = this._strokeColor = value;
             }
         }
         public override float StrokeWidth
@@ -46,7 +46,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                _painter1.StrokeWidth = this._strokeWidth = value;
+                _gpuPainter.StrokeWidth = this._strokeWidth = value;
             }
         }
 
@@ -62,7 +62,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void Clear(PixelFarm.Drawing.Color c)
         {
-            _painter1.Clear(c);
+            _gpuPainter.Clear(c);
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
@@ -78,7 +78,7 @@ namespace PixelFarm.Drawing.GLES2
                     {
                         //use default solid brush
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        _painter1.FillRect(
+                        _gpuPainter.FillRect(
                             left, top,
                             width, height,
                             solidBrush.Color);
@@ -105,15 +105,15 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-            _painter1.FillRect(left, top, width, height, color);
+            _gpuPainter.FillRect(left, top, width, height, color);
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            _painter1.DrawRect(left, top, width, height);
+            _gpuPainter.DrawRect(left, top, width, height);
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-            _painter1.DrawLine(x1, y1, x2, y2);
+            _gpuPainter.DrawLine(x1, y1, x2, y2);
         }
 
 
@@ -129,11 +129,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return _painter1.SmoothingMode;
+                return _gpuPainter.SmoothingMode;
             }
             set
             {
-                _painter1.SmoothingMode = value;
+                _gpuPainter.SmoothingMode = value;
             }
         }
 
@@ -149,7 +149,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                _painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
+                _gpuPainter.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
             }
         }
         public override void DrawImage(Image image, int x, int y)
@@ -158,7 +158,7 @@ namespace PixelFarm.Drawing.GLES2
             if (glbmp != null)
             {
 
-                _painter1.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
+                _gpuPainter.Canvas.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
@@ -207,7 +207,7 @@ namespace PixelFarm.Drawing.GLES2
                 MemBitmap bmp = image as MemBitmap;
                 if (bmp != null)
                 {
-                    glBmp = new DrawingGL.GLBitmap(new DrawingGL.LazyActualBitmapBufferProvider(bmp));
+                    glBmp = new DrawingGL.GLBitmap(new LazyMemBitmapBufferProvider(bmp));
                     Image.SetCacheInnerImage(image, glBmp);
                     return glBmp;
                 }
@@ -233,7 +233,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                _painter1.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+                _gpuPainter.Canvas.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
             }
 
         }

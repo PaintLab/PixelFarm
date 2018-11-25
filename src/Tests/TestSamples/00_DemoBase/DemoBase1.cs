@@ -27,7 +27,7 @@ namespace Mini
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
 
-      
+
 
         public virtual void Draw(Painter p)
         {
@@ -70,7 +70,7 @@ namespace Mini
         //}
         public static void InvokeGLContextReady(DemoBase demo, GLRenderSurface glsx, GLPainter painter)
         {
-            
+
             demo.OnGLSurfaceReady(glsx, painter);
             demo.OnReadyForInitGLShaderProgram();
         }
@@ -92,7 +92,7 @@ namespace Mini
         }
         protected virtual void OnGLRender(object sender, EventArgs args)
         {
-            
+
         }
         public void InvokeGLPaint()
         {
@@ -126,7 +126,16 @@ namespace Mini
         }
     }
 
+    [Flags]
+    public enum DemoBackend
+    {
+        All,
+    }
 
+    public class DemoGroupAttribute : Attribute
+    {
+
+    }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class InfoAttribute : Attribute

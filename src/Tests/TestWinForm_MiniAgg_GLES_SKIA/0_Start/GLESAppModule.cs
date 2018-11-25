@@ -49,7 +49,6 @@ namespace Mini
             _glControl.MakeCurrent();
         }
 
-
         public void LoadExample(DemoBase demoBase)
         {
             _glControl.MakeCurrent();
@@ -77,9 +76,17 @@ namespace Mini
             //Add to RenderTree
             _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
         }
-        public void CloseDemo()
+        public void Close()
         {
+
             _demoBase.CloseDemo();
+            if (_surfaceViewport != null)
+            {
+                _surfaceViewport.Close();
+                _surfaceViewport = null;
+            }
+            _rootGfx = null;
+            _glControl = null;
         }
         //This is a simple UIElement for testing only
         class DemoUI : UIElement

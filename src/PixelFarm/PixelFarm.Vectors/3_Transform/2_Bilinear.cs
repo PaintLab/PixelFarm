@@ -30,8 +30,48 @@ namespace PixelFarm.CpuBlit.VertexProcessing
              rc20, rc21,
              rc30, rc31;
     }
+
+
+
     public sealed class Bilinear : ICoordTransformer
     {
+        struct Quad4
+        {
+            public readonly double m0, m1,
+                          m2, m3,
+                          m4, m5,
+                          m6, m7;
+            public Quad4(double m0, double m1,
+                         double m2, double m3,
+                         double m4, double m5,
+                         double m6, double m7)
+            {
+                this.m0 = m0;
+                this.m1 = m1;
+                this.m2 = m2;
+                this.m3 = m3;
+                this.m4 = m4;
+                this.m5 = m5;
+                this.m6 = m6;
+                this.m7 = m7;
+            }
+            public void FillIntoArray(double[] outputArr)
+            {
+#if DEBUG
+                if (outputArr.Length != 8) throw new NotSupportedException();
+#endif
+
+                outputArr[0] = m0; outputArr[1] = m1;
+                outputArr[2] = m2; outputArr[3] = m3;
+                outputArr[4] = m4; outputArr[5] = m5;
+                outputArr[6] = m6; outputArr[7] = m7;
+            }
+        }
+
+        Quad4 _srcQuad; //backup of srcQuad
+        Quad4 _dstQuad; //backup of dstQuad
+
+
         //readonly double[,] m_mtx = new double[4, 2];//row x column
         //4 row, 2 columns
 
@@ -39,13 +79,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                rc10, rc11,
                rc20, rc21,
                rc30, rc31;
+        //----------
+
+
+        //----------
         //
         bool m_valid;
         private Bilinear()
         {
         }
-        private Bilinear(double[,] result)
+        private Bilinear(double[,] result, Quad4 srcQuad, Quad4 dstQuad)
         {
+
             rc00 = result[0, 0];
             rc10 = result[1, 0];
             rc20 = result[2, 0];
@@ -55,7 +100,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             rc21 = result[2, 1];
             rc31 = result[3, 1];
             this.m_valid = true;
+
+            _srcQuad = srcQuad;
+            _dstQuad = dstQuad;
+
         }
+
         public Bilinear(double rc00, double rc01,
              double rc10, double rc11,
               double rc20, double rc21,
@@ -69,7 +119,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         //--------------------------------------------------------------------
         // Set the transformations using two arbitrary quadrangles. 
-        public static Bilinear RectToQuad(double srcX1, double srcY1, double srcX2, double srcY2, double[] quad)
+        public static Bilinear RectToQuad(
+            double srcX1, double srcY1, double srcX2, double srcY2,
+            double[] quad)
         {
             double[] src = new double[8];
             //cartesian coord
@@ -80,7 +132,21 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double[,] result = new double[4, 2];
             if (GenerateMatrixQuadToQuad(src, quad, result))
             {
-                return new Bilinear(result);
+                //we want to backup srcQuad and destQuad
+
+                return new Bilinear(result,
+                    new Quad4(
+                        srcX1, srcY1,
+                        srcX2, srcY1,
+                        srcX2, srcY2,
+                        srcX1, srcY2
+                    ),
+                    new Quad4(
+                        quad[0], quad[1],
+                        quad[2], quad[3],
+                        quad[4], quad[5],
+                        quad[6], quad[7]
+                    ));
             }
             else
             {
@@ -103,7 +169,20 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double[,] result = new double[4, 2];
             if (GenerateMatrixQuadToQuad(srcQuad, dst, result))
             {
-                return new Bilinear(result);
+
+                return new Bilinear(result,
+                    new Quad4(
+                        srcQuad[0], srcQuad[1],
+                        srcQuad[2], srcQuad[3],
+                        srcQuad[4], srcQuad[5],
+                        srcQuad[6], srcQuad[7]
+                    ),
+                    new Quad4(
+                        destX1, destY1,
+                        destX2, destY1,
+                        destX2, destY2,
+                        destX1, destY2
+                    ));
             }
             else
             {
@@ -118,7 +197,19 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double[,] result = new double[4, 2];
             if (GenerateMatrixQuadToQuad(srcQuad, dst, result))
             {
-                return new Bilinear(result);
+                return new Bilinear(result,
+                    new Quad4(
+                       srcQuad[0], srcQuad[1],
+                       srcQuad[2], srcQuad[3],
+                       srcQuad[4], srcQuad[5],
+                       srcQuad[6], srcQuad[7]
+                       ),
+                    new Quad4(
+                        dst[0], dst[1],
+                        dst[2], dst[3],
+                        dst[4], dst[5],
+                        dst[6], dst[7]
+                        ));
             }
             else
             {
@@ -168,11 +259,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         ICoordTransformer ICoordTransformer.CreateInvert()
         {
-            //TODO: impl
-            //create invert from Rect to Quad or Quad to Rect
-            //or Quad to Quad
-            throw new NotSupportedException();
-            //return CreateInvert();
+
+            double[] srcQuad = new double[8];
+            double[] dstQuad = new double[8];
+
+            _srcQuad.FillIntoArray(srcQuad);
+            _dstQuad.FillIntoArray(dstQuad);
+
+            //invert dst=> src *** (invert)
+            return QuadToQuad(dstQuad, srcQuad);
         }
         //-------------------------------------------------------------------------
 

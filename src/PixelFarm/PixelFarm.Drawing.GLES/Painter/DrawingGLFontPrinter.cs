@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
 
     public class AggTextSpanPrinter : ITextPrinter
     {
-        MemBitmap _memBmp; 
+        MemBitmap _memBmp;
         AggPainter _aggPainter;
         VxsTextPrinter _vxsTextPrinter;
         int _bmpWidth;
@@ -98,7 +98,7 @@ namespace PixelFarm.DrawingGL
                 //3.copy to gl bitmap
                 //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
-                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_memBmp));
+                GLBitmap glBmp = new GLBitmap(new PixelFarm.Drawing.LazyMemBitmapBufferProvider(_memBmp));
                 glBmp.IsYFlipped = false;
                 //TODO: review font height
                 if (StartDrawOnLeftTop)
@@ -134,7 +134,7 @@ namespace PixelFarm.DrawingGL
 
                 //------------------------------------------------------
                 //GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
-                GLBitmap glBmp = new GLBitmap(new LazyActualBitmapBufferProvider(_memBmp));
+                GLBitmap glBmp = new GLBitmap(new PixelFarm.Drawing.LazyMemBitmapBufferProvider(_memBmp));
                 glBmp.IsYFlipped = false;
                 //TODO: review font height 
                 //if (StartDrawOnLeftTop)
