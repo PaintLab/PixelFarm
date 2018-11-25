@@ -265,12 +265,28 @@ namespace PixelFarm.CpuBlit
         {
             System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, bmp._pixelBuffer, pixelBuffer.Length);
         }
-        public static MemBitmap CreateFromCopy(int width, int height, int[] buffer)
+        public static MemBitmap CreateFromCopy(int width, int height, int[] totalBuffer, bool doFlipY = false)
         {
+
             var bmp = new MemBitmap(width, height);
+
+            if (doFlipY)
+            {
+                //flip vertical Y  
+                int[] totalBufferFlipY = new int[totalBuffer.Length];
+                int srcRowIndex = height - 1;
+                int strideInBytes = width * 4;//32 bpp
+                for (int i = 0; i < height; ++i)
+                {
+                    //copy each row from src to dst
+                    System.Buffer.BlockCopy(totalBuffer, strideInBytes * srcRowIndex, totalBufferFlipY, strideInBytes * i, strideInBytes);
+                    srcRowIndex--;
+                }
+                totalBuffer = totalBufferFlipY; 
+            } 
             unsafe
             {
-                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmp._pixelBuffer, buffer.Length);
+                System.Runtime.InteropServices.Marshal.Copy(totalBuffer, 0, bmp._pixelBuffer, totalBuffer.Length);
             }
             return bmp;
         }
