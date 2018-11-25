@@ -26,15 +26,7 @@ namespace PixelFarm.Drawing.Pdf
             : this(0, 0, left, top, width, height)
         {
         }
-
-        public override Painter GetPainter()
-        {
-            throw new NotImplementedException();
-        }
-        public override DrawBoard GetCpuBlitDrawBoard()
-        {
-            throw new NotImplementedException();
-        }
+      
         internal MyPdfDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
@@ -65,6 +57,23 @@ namespace PixelFarm.Drawing.Pdf
             //internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
+        }
+        public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
+        {
+            throw new NotImplementedException();
+        }
+        public override Painter GetPainter()
+        {
+            throw new NotImplementedException();
+        }
+        public override DrawBoard GetCpuBlitDrawBoard()
+        {
+            throw new NotImplementedException();
+        }
+        public override bool IsGpuDrawBoard => false;
+        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        {
+            throw new NotImplementedException();
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
