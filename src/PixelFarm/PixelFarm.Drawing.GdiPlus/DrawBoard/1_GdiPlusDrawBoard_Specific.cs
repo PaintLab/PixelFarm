@@ -25,6 +25,8 @@ namespace PixelFarm.Drawing.WinGdi
         bool _disposed;
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
+        LazyBitmapBufferProvider _lazyBmpBuffProvider;
+
 
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
         {
@@ -35,9 +37,19 @@ namespace PixelFarm.Drawing.WinGdi
 
             _gdigsx = renderSurface;
             _painter = _gdigsx.GetAggPainter();
+
+            _lazyBmpBuffProvider = new LazyMemBitmapBufferProvider(renderSurface.GetMemBitmap());
+            _lazyBmpBuffProvider.BitmapFormat = BitmapBufferFormat.BGR;
+
         }
 
         public GdiPlusRenderSurface RenderSurface => _gdigsx;
+        public override bool IsGpuDrawBoard => false;
+        public override DrawBoard GetCpuBlitDrawBoard()
+        {
+            return this;//
+        }
+        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider() => _lazyBmpBuffProvider;
 
 #if DEBUG
         public override string ToString()
@@ -45,7 +57,7 @@ namespace PixelFarm.Drawing.WinGdi
             return _gdigsx.ToString();
         }
 #endif
-        
+
         public override Painter GetPainter()
         {
             //since painter origin and canvas origin is separated 

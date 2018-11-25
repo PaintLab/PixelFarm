@@ -1,5 +1,5 @@
 
-//2016, MIT, WinterDev
+//MIT, 2016-present,WinterDev
 // Copyright (c) 2013 Antonie Blom
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy

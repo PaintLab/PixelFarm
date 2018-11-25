@@ -99,6 +99,79 @@ namespace PixelFarm.CpuBlit.Imaging
 namespace PixelFarm.CpuBlit
 {
 
+
+
+#if DEBUG
+
+    static class dbugMemBitmapMonitor
+    {
+        class TempMemBitmapMonitor
+        {
+            public WeakReference _memBmp;
+            public string _detail;
+            public TempMemBitmapMonitor(string detail) => _detail = detail;
+            public bool IsAlive() => _memBmp.IsAlive;
+            public override string ToString() => _detail;
+
+        }
+        static System.Text.StringBuilder s_stbuilder = new System.Text.StringBuilder();
+        static object s_lock1 = new object();
+        static System.Timers.Timer s_tim1;
+        static int s_count;
+        static System.Collections.Generic.List<TempMemBitmapMonitor> _registerMemBmp = new System.Collections.Generic.List<TempMemBitmapMonitor>();
+        public static void dbugRegisterMemBitmap(MemBitmap memBmp, string detail)
+        {
+            if (s_tim1 == null)
+            {
+                s_tim1 = new System.Timers.Timer();
+                s_tim1.Interval = 10000; //10 sec
+                s_tim1.Elapsed += (s, e) =>
+                {
+                    //check the report
+
+                    lock (s_lock1)
+                    {
+                        s_tim1.Enabled = false;
+
+                        s_stbuilder.AppendLine((s_count++).ToString());
+                        for (int i = _registerMemBmp.Count - 1; i >= 0; --i)
+                        {
+                            if (!_registerMemBmp[i].IsAlive())
+                            {
+                                //remove
+                                _registerMemBmp.RemoveAt(i);
+                            }
+                            else
+                            {
+                                s_stbuilder.AppendLine(_registerMemBmp[i]._detail);
+                            }
+                        }
+                        s_stbuilder.AppendLine("remaing : " + _registerMemBmp.Count);
+                        s_stbuilder.AppendLine("---");
+                        s_stbuilder.AppendLine();
+
+                        //
+                        System.Diagnostics.Debug.Write(s_stbuilder.ToString());
+                        //
+                        s_stbuilder.Length = 0;//clear
+                        s_tim1.Enabled = true;
+                    }
+
+
+
+                };
+                s_tim1.Enabled = true;
+            }
+
+            lock (s_lock1)
+            {
+                _registerMemBmp.Add(new TempMemBitmapMonitor(detail) { _memBmp = new WeakReference(memBmp) });
+            }
+        }
+    }
+
+
+#endif
     /// <summary>
     /// 32 bpp native memory bitmap
     /// </summary>
@@ -121,6 +194,8 @@ namespace PixelFarm.CpuBlit
         {
             _pixelBufferFromExternalSrc = false;//** if we alloc then we are the owner of this MemBmp
             MemMx.memset_unsafe(_pixelBuffer, 0, _pixelBufferInBytes); //set
+
+
         }
         public MemBitmap(int width, int height, IntPtr externalNativeInt32Ptr)
         {
@@ -135,6 +210,11 @@ namespace PixelFarm.CpuBlit
             _pixelBufferInBytes = width * height * 4;
             _pixelBufferFromExternalSrc = true; //*** we receive ptr from external ***
             _pixelBuffer = externalNativeInt32Ptr;
+
+
+#if DEBUG
+            dbugMemBitmapMonitor.dbugRegisterMemBitmap(this, width + "x" + height + ":" + DateTime.Now.ToString("u"));
+#endif
         }
         public override void Dispose()
         {
@@ -185,12 +265,28 @@ namespace PixelFarm.CpuBlit
         {
             System.Runtime.InteropServices.Marshal.Copy(pixelBuffer, 0, bmp._pixelBuffer, pixelBuffer.Length);
         }
-        public static MemBitmap CreateFromCopy(int width, int height, int[] buffer)
+        public static MemBitmap CreateFromCopy(int width, int height, int[] totalBuffer, bool doFlipY = false)
         {
+
             var bmp = new MemBitmap(width, height);
+
+            if (doFlipY)
+            {
+                //flip vertical Y  
+                int[] totalBufferFlipY = new int[totalBuffer.Length];
+                int srcRowIndex = height - 1;
+                int strideInBytes = width * 4;//32 bpp
+                for (int i = 0; i < height; ++i)
+                {
+                    //copy each row from src to dst
+                    System.Buffer.BlockCopy(totalBuffer, strideInBytes * srcRowIndex, totalBufferFlipY, strideInBytes * i, strideInBytes);
+                    srcRowIndex--;
+                }
+                totalBuffer = totalBufferFlipY; 
+            } 
             unsafe
             {
-                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmp._pixelBuffer, buffer.Length);
+                System.Runtime.InteropServices.Marshal.Copy(totalBuffer, 0, bmp._pixelBuffer, totalBuffer.Length);
             }
             return bmp;
         }

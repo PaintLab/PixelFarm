@@ -39,8 +39,15 @@ namespace Mini
             _demoUI = new DemoUI(exBase, _myWidth, _myHeight);
             _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_surfaceViewport.RootGfx));
         }
-
-
+        public void Close()
+        {
+            if (_surfaceViewport != null)
+            {
+                _surfaceViewport.Close();
+                _surfaceViewport = null;
+            }
+            _rootGfx = null; 
+        }
         //This is a simple UIElement for testing only
         class DemoUI : UIElement
         {

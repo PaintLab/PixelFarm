@@ -60,7 +60,6 @@
     <Compile Include="DrawingGL\GLShader\SmoothLineShader.cs" />
     <Compile Include="DrawingGL\GLTexture\FrameBuffer.cs" />
     <Compile Include="DrawingGL\GLTexture\GLBitmap.cs" />
-    <Compile Include="DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="DrawingGL\GLTexture\TextureAtlas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

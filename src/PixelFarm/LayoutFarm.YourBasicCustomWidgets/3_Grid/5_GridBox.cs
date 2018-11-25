@@ -38,6 +38,8 @@ namespace LayoutFarm.CustomWidgets
 #endif
             //sample bg  
             //TODO: review here again
+
+
             if (this.MayHasViewport)
             {
                 canvas.FillRectangle(BackColor, ViewportX, ViewportY, this.Width, this.Height);
@@ -46,8 +48,6 @@ namespace LayoutFarm.CustomWidgets
             {
                 canvas.FillRectangle(BackColor, 0, 0, this.Width, this.Height);
             }
-
-
 
             gridLayer.DrawChildContent(canvas, updateArea);
             if (this.HasDefaultLayer)

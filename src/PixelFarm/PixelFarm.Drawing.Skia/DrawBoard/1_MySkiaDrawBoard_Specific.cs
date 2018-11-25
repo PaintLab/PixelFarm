@@ -47,9 +47,22 @@ namespace PixelFarm.Drawing.Skia
 
             this.StrokeWidth = 1;
         }
+        public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
+        {
+            //TODO: review here
+        }
+        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
+        {
+            return null;
+        }
+        public override bool IsGpuDrawBoard => false;
         public override Painter GetPainter()
         {
             throw new NotSupportedException();
+        }
+        public override DrawBoard GetCpuBlitDrawBoard()
+        {
+            throw new NotImplementedException();
         }
         public override void DrawImage(Image image, int x, int y)
         {

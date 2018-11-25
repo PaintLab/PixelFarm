@@ -124,6 +124,9 @@
     <Compile Include="..\BackEnd.Tesselate\Tesselator.cs">
       <Link>0_REF_Tesselate\Tesselator.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs">
+      <Link>0_REF_CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>0_REF_DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>
     </Compile>

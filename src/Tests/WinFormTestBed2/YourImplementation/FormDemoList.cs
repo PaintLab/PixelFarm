@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Apache2, 2014-present, WinterDev
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using LayoutFarm.UI;
@@ -37,7 +38,7 @@ namespace LayoutFarm.Dev
         {
             //load demo sample
             DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
-            if (selectedDemoInfo == null) return; 
+            if (selectedDemoInfo == null) return;
 
             App selectedDemo = (App)Activator.CreateInstance(selectedDemoInfo.DemoType);
             RunDemo(selectedDemo);
@@ -54,11 +55,20 @@ namespace LayoutFarm.Dev
                 (InnerViewportKind)lstPlatformSelectors.SelectedItem,
                 out _latestviewport, out _latest_formCanvas);
 
+            _latest_formCanvas.FormClosed += (s, e) =>
+            {
+                //when owner form is disposed
+                //we should clear our resource?
+                _latest_formCanvas = null;
+                _latestviewport = null;
+            };
             //2. create app host
+
 
             app.Start(new AppHostWinForm(_latestviewport));
             _latestviewport.TopDownRecalculateContent();
             _latestviewport.PaintMe();
+
 
             //==================================================  
             if (this.chkShowLayoutInspector.Checked)

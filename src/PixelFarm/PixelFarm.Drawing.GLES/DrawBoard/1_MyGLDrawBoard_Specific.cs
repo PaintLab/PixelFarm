@@ -6,30 +6,37 @@ namespace PixelFarm.Drawing.GLES2
 {
 
 
-
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
+        public delegate DrawBoard GetCpuBlitDrawBoardDelegate();
 
-        GLPainter _painter1;
+        GLBitmap _tmpGLBmp;
+        GLPainter _gpuPainter;
+        GLRenderSurface _glsx;
         bool _isDisposed;
         Stack<Rectangle> _clipRectStack = new Stack<Rectangle>();
         Rectangle _currentClipRect;
 
+        GetCpuBlitDrawBoardDelegate _getCpuBlitDrawBoardDel;
+        DrawBoard _cpuBlitDrawBoard;
+        bool _evalCpuBlitCreator;
+
         public MyGLDrawBoard(
            GLPainter painter, //*** we wrap around GLPainter *** 
-           int width,
-           int height)
+           GLRenderSurface glsx)
         {
+
             //----------------
             //set painter first
-            this._painter1 = painter;
+            _gpuPainter = painter;
+            _glsx = glsx;
             //----------------
             this._left = 0; //default start at 0,0
             this._top = 0;
-            this._width = width;
-            this._height = height;
+            this._width = glsx.CanvasWidth;
+            this._height = glsx.CanvasHeight;
 
-            _currentClipRect = new Rectangle(0, 0, width, height);
+            _currentClipRect = new Rectangle(0, 0, this._width, this._height);
 
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
@@ -39,17 +46,75 @@ namespace PixelFarm.Drawing.GLES2
 #endif
             this.StrokeWidth = 1;
         }
+        public override void Dispose()
+        {
+            //TODO: review here
+            if (_tmpGLBmp != null)
+            {
+                _tmpGLBmp.Dispose();
+                _tmpGLBmp = null;
+            }
+        }
+        public void SetCpuBlitDrawBoardCreator(GetCpuBlitDrawBoardDelegate getCpuBlitDelegate)
+        {
+            _getCpuBlitDrawBoardDel = getCpuBlitDelegate;
+        }
+
+        public override bool IsGpuDrawBoard => true;
 
         public override Painter GetPainter()
         {
             //TODO: check if we must set canvas origin to painter or not
-            return _painter1;
+            return _gpuPainter;
         }
-        public override void Dispose()
+        public override LazyBitmapBufferProvider GetInternalLazyBitmapProvider()
         {
+            //TODO: implement this
+            //copy bitmap data to target 
+            //(server-to-server)
+            //(server-to-client)
 
-            //TODO: review here
+            throw new NotImplementedException();
         }
+        public override DrawBoard GetCpuBlitDrawBoard()
+        {
+            if (!_evalCpuBlitCreator)
+            {
+                if (_getCpuBlitDrawBoardDel != null)
+                {
+                    _cpuBlitDrawBoard = _getCpuBlitDrawBoardDel();
+                }
+                _evalCpuBlitCreator = true;
+            }
+            return _cpuBlitDrawBoard;
+        }
+        public override void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY)
+        {
+            if (!src.IsGpuDrawBoard)
+            {
+                //cpu draw board
+                LazyBitmapBufferProvider bmpProvider = src.GetInternalLazyBitmapProvider();
+
+                if (_tmpGLBmp == null)
+                {
+                    _tmpGLBmp = new GLBitmap(bmpProvider);
+                }
+                else
+                {
+                    _tmpGLBmp.UpdateTexture(new Rectangle((int)srcX, (int)srcY, (int)srcW, (int)srcH));
+                }
+
+                //---------
+                this.DrawImage(_tmpGLBmp,
+                    new RectangleF((int)dstX, (int)dstY, (int)srcW, (int)srcH), //dst
+                    new RectangleF((int)srcX, (int)srcY, (int)srcW, (int)srcH)); //src
+            }
+            else
+            {
+                //TODO: implement this....
+            }
+        }
+
 #if DEBUG
         public override string ToString()
         {
@@ -80,7 +145,7 @@ namespace PixelFarm.Drawing.GLES2
 
         void ClearPreviousStoredValues()
         {
-            _painter1.SetOrigin(0, 0);
+            _gpuPainter.SetOrigin(0, 0);
 
             this._canvasOriginX = 0;
             this._canvasOriginY = 0;

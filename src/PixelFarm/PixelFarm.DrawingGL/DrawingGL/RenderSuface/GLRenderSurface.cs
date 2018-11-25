@@ -339,7 +339,8 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                if (bmp.BitmapFormat == GLBitmapFormat.BGR)
+
+                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
                 {
                     _bgrImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
                 }
@@ -369,7 +370,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                if (bmp.BitmapFormat == GLBitmapFormat.BGR)
+                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
                 {
                     _bgrImgTextureShader.DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop, scale);
                 }
@@ -453,7 +454,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                if (bmp.BitmapFormat == GLBitmapFormat.BGR)
+                if (bmp.BitmapFormat == PixelFarm.Drawing.BitmapBufferFormat.BGR)
                 {
                     _bgrImgTextureShader.Render(bmp, left, top, w, h);
                 }
@@ -1103,7 +1104,7 @@ namespace PixelFarm.DrawingGL
             GL.Viewport(x,
                 (OriginKind == GLRenderSurfaceOrigin.LeftTop) ? -y : y,
                 _width,
-                _height); 
+                _height);
         }
         public void EnableClipRect()
         {

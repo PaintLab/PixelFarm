@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
                     {
-                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().svg;
+                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().hitElem;
                         //if yes then change its bg color
                         svgElem.VisualSpec.FillColor = Drawing.Color.Red;
                     }
