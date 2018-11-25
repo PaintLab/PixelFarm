@@ -1,4 +1,4 @@
-﻿//MIT, 2014-2016,WinterDev
+﻿//MIT, 2014-present,WinterDev
 
 using System;
 using Mini;
@@ -28,8 +28,8 @@ namespace OpenTkEssTest
             //string sampleFile = "Samples/tiger002.svg";
             //string sampleFile = "Samples/tiger_wrinkles.svg";
 
-            VgVisualElement svgRenderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(sampleFile);
-            lionShape = new SpriteShape(svgRenderVx);
+            VgVisualElement vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(sampleFile).VgRootElem;
+            lionShape = new SpriteShape(vgVisElem);
             //flip this lion vertically before use with openGL
             PixelFarm.CpuBlit.VertexProcessing.Affine aff = PixelFarm.CpuBlit.VertexProcessing.Affine.NewMatix(
                  PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Scale(1, -1),

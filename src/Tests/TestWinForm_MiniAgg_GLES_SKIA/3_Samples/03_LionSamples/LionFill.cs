@@ -46,7 +46,7 @@ namespace PixelFarm.CpuBlit.Samples
         MyTestSprite _testSprite;
         public override void Init()
         {
-            VgVisualElement renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\lion.svg");
+            VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
             var spriteShape = new SpriteShape(renderVx);
             _testSprite = new MyTestSprite(spriteShape);
             //lionFill.AutoFlipY = true;
@@ -120,7 +120,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             // lion 
 
-            VgVisualElement renderVx = SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg");
+            VgVisualElement renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\arrow2.svg").VgRootElem;
             var spriteShape = new SpriteShape(renderVx);
             _spriteList.Add(new MyTestSprite(spriteShape));
             //
@@ -134,7 +134,7 @@ namespace PixelFarm.CpuBlit.Samples
             {
                 case System.Windows.Forms.Keys.A:
                     {
-                        SpriteShape s = new SpriteShape(SvgRenderVxLoader.CreateSvgRenderVxFromFile(@"Samples\arrow2.svg"));
+                        SpriteShape s = new SpriteShape(VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\arrow2.svg").VgRootElem);
                         _spriteList.Add(new MyTestSprite(s) { JustMove = true });
                     }
                     break;

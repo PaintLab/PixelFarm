@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing
         public int debug_releaseCount = 0;
         public int debug_canvas_id = 0;
         public abstract void dbug_DrawRuler(int x);
-        public abstract void dbug_DrawCrossRect(Color color, Rectangle rect); 
+        public abstract void dbug_DrawCrossRect(Color color, Rectangle rect);
 #endif
 
         public abstract void CloseCanvas();
@@ -117,8 +117,32 @@ namespace PixelFarm.Drawing
         public abstract void Dispose();
         //--
         public abstract Painter GetPainter();
+        /// <summary>
+        /// get software rendering surface drawboard
+        /// </summary>
+        /// <returns></returns>
+        public abstract DrawBoard GetCpuBlitDrawBoard();
+        public abstract bool IsGpuDrawBoard { get; }
+        public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
+        public abstract LazyBitmapBufferProvider GetInternalLazyBitmapProvider();
+
     }
 
+    public enum BitmapBufferFormat
+    {
+        BGRA, //eg. System.Drawing.Bitmap
+        BGR, //eg. Native Windows GDI surface
+        RGBA //eg. OpenGL 
+    }
+    public abstract class LazyBitmapBufferProvider
+    {
+        public abstract System.IntPtr GetRawBufferHead();
+        public abstract void ReleaseBufferHead();
+        public abstract int Width { get; }
+        public abstract int Height { get; }
+        public abstract bool IsYFlipped { get; }
+        public BitmapBufferFormat BitmapFormat { get; set; }
+    }
 
     public enum RenderQuality
     {

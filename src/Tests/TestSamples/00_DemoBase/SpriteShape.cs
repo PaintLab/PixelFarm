@@ -12,16 +12,16 @@ namespace PixelFarm.CpuBlit
 
     public class SpriteShape
     {
-        VgVisualElement _svgRenderVx;
+        VgVisualElement _vgVisElem;
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
         CpuBlit.VertexProcessing.ICoordTransformer _currentTx;
 
-        public SpriteShape(VgVisualElement svgRenderVx)//, RootGraphic root, int w, int h)
-                                                  //: base(root, w, h)
+        public SpriteShape(VgVisualElement vgVisElem)//, RootGraphic root, int w, int h)
+                                                       //: base(root, w, h)
         {
-            LoadFromSvg(svgRenderVx);
+            LoadFromSvg(vgVisElem);
         }
         public RectD Bounds
         {
@@ -103,9 +103,9 @@ namespace PixelFarm.CpuBlit
                 return _center;
             }
         }
-        public VgVisualElement GetRenderVx()
+        public VgVisualElement GetVgVisualElem()
         {
-            return _svgRenderVx;
+            return _vgVisElem;
         }
 
         public void ApplyNewAlpha(byte alphaValue0_255)
@@ -117,12 +117,12 @@ namespace PixelFarm.CpuBlit
             using (VgPainterArgsPool.Borrow(p, out var paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
-                _svgRenderVx.Paint(paintArgs);
+                _vgVisElem.Paint(paintArgs);
             }
         }
         public void Paint(VgPaintArgs paintArgs)
         {
-            _svgRenderVx.Paint(paintArgs);
+            _vgVisElem.Paint(paintArgs);
         }
         public void Paint(Painter p, Bilinear tx)
         {
@@ -146,7 +146,7 @@ namespace PixelFarm.CpuBlit
                     }
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx.Paint(paintArgs);
+                _vgVisElem.Paint(paintArgs);
             }
 
 
@@ -169,7 +169,7 @@ namespace PixelFarm.CpuBlit
                     m_painter.Fill(vxs);
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx.Paint(paintArgs);
+                _vgVisElem.Paint(paintArgs);
             }
 
 
@@ -200,9 +200,9 @@ namespace PixelFarm.CpuBlit
             //return; //** 
         }
 
-        public void LoadFromSvg(VgVisualElement svgRenderVx)
+        public void LoadFromSvg(VgVisualElement vgVisElem)
         {
-            _svgRenderVx = svgRenderVx;
+            _vgVisElem = vgVisElem;
             UpdateBounds();
             //find center 
             _center.x = (_boundingRect.Right - _boundingRect.Left) / 2.0;
@@ -210,12 +210,12 @@ namespace PixelFarm.CpuBlit
         }
         public void UpdateBounds()
         {
-            _svgRenderVx.InvalidateBounds();
-            this._boundingRect = _svgRenderVx.GetRectBounds();
+            _vgVisElem.InvalidateBounds();
+            this._boundingRect = _vgVisElem.GetRectBounds();
         }
         public void HitTestOnSubPart(VgHitChain hitChain)
         {
-            _svgRenderVx.HitTest(hitChain);
+            _vgVisElem.HitTest(hitChain);
         }
 
         //public override void ResetRootGraphics(RootGraphic rootgfx)

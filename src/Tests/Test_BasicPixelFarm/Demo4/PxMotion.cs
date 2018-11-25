@@ -32,7 +32,7 @@ namespace LayoutFarm.UI
     public class MyTestSprite : BasicSprite
     {
         SpriteShape _spriteShape;
-        VgVisualElement _vgRenderVx;
+        VgVisualElement _vgVisElem;
 
         float _posX, _posY;
         float _mouseDownX, _mouseDownY;
@@ -44,7 +44,7 @@ namespace LayoutFarm.UI
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
-            _vgRenderVx = vgRenderVx;
+            _vgVisElem = vgRenderVx;
         }
         public float X { get { return _posX; } }
         public float Y { get { return _posY; } }
@@ -81,8 +81,8 @@ namespace LayoutFarm.UI
             if (_spriteShape == null)
             {
                 //TODO: review bounds again
-                RectD bounds = _vgRenderVx.GetRectBounds();
-                _spriteShape = new SpriteShape(_vgRenderVx, rootgfx, (int)bounds.Width, (int)bounds.Height);
+                RectD bounds = _vgVisElem.GetRectBounds();
+                _spriteShape = new SpriteShape(_vgVisElem, rootgfx, (int)bounds.Width, (int)bounds.Height);
                 _spriteShape.SetController(this);//listen event 
                 _spriteShape.SetLocation((int)_posX, (int)_posY);
             }
@@ -146,7 +146,7 @@ namespace LayoutFarm.UI
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
                     {
-                        result = svgHitChain.GetLastHitInfo().svg;
+                        result = svgHitChain.GetLastHitInfo().hitElem;
                     }
                 }
             }
@@ -171,7 +171,7 @@ namespace LayoutFarm.UI
                     int hitCount = svgHitChain.Count;
                     if (hitCount > 0)
                     {
-                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().svg;
+                        VgVisualElement svgElem = svgHitChain.GetLastHitInfo().hitElem;
                         //if yes then change its bg color
                         svgElem.VisualSpec.FillColor = Color.Red;
                         _spriteShape.InvalidateGraphics();
@@ -224,19 +224,19 @@ namespace LayoutFarm.UI
         }
     }
 
-    
+
 
     public class SpriteShape : RenderElement
     {
-        VgVisualElement _svgRenderVx;
+        VgVisualElement _vgVisElem;
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
         Affine _currentTx;
-        public SpriteShape(VgVisualElement svgRenderVx, RootGraphic root, int w, int h)
+        public SpriteShape(VgVisualElement vgVisElem, RootGraphic root, int w, int h)
                    : base(root, w, h)
         {
-            LoadFromSvg(svgRenderVx);
+            LoadFromSvg(vgVisElem);
         }
         public bool EnableHitOnSupParts { get; set; }
         protected override bool _MayHasOverlapChild()
@@ -285,7 +285,7 @@ namespace LayoutFarm.UI
         }
         public VgVisualElement GetRenderVx()
         {
-            return _svgRenderVx;
+            return _vgVisElem;
         }
 
         public void ApplyNewAlpha(byte alphaValue0_255)
@@ -298,13 +298,13 @@ namespace LayoutFarm.UI
             using (VgPainterArgsPool.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
-                _svgRenderVx.Paint(paintArgs);
+                _vgVisElem.Paint(paintArgs);
             }
 
         }
         public void Paint(VgPaintArgs paintArgs)
         {
-            _svgRenderVx.Paint(paintArgs);
+            _vgVisElem.Paint(paintArgs);
         }
 
         public void Paint(Painter p, PixelFarm.CpuBlit.VertexProcessing.Perspective tx)
@@ -332,7 +332,7 @@ namespace LayoutFarm.UI
                     m_painter.Fill(vxs);
                     m_painter.FillColor = prevFillColor;
                 };
-                _svgRenderVx.Paint(paintArgs);
+                _vgVisElem.Paint(paintArgs);
             }
 
 
@@ -367,7 +367,7 @@ namespace LayoutFarm.UI
 
         public void LoadFromSvg(VgVisualElement svgRenderVx)
         {
-            _svgRenderVx = svgRenderVx;
+            _vgVisElem = svgRenderVx;
             UpdateBounds();
             //find center 
             _center.x = (_boundingRect.Right - _boundingRect.Left) / 2.0;
@@ -375,8 +375,8 @@ namespace LayoutFarm.UI
         }
         public void UpdateBounds()
         {
-            _svgRenderVx.InvalidateBounds();
-            this._boundingRect = _svgRenderVx.GetRectBounds();
+            _vgVisElem.InvalidateBounds();
+            this._boundingRect = _vgVisElem.GetRectBounds();
 
             _boundingRect.Offset(this.X, this.Y);
             SetSize((int)_boundingRect.Width, (int)_boundingRect.Height);
@@ -384,7 +384,7 @@ namespace LayoutFarm.UI
         public void HitTestOnSubPart(VgHitChain hitChain)
         {
 
-            _svgRenderVx.HitTest(hitChain);
+            _vgVisElem.HitTest(hitChain);
         }
 
         public override void ResetRootGraphics(RootGraphic rootgfx)
@@ -426,6 +426,10 @@ namespace LayoutFarm.UI
             }
             return Temp<VgHitChain>.Borrow(out hitTestArgs);
         }
-
     }
+
+   
+
+
+
 }

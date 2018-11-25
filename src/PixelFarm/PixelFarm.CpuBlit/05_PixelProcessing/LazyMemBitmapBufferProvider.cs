@@ -1,12 +1,15 @@
 ﻿//MIT, 2014-present, WinterDev
 
 using System;
-namespace PixelFarm.DrawingGL
+namespace PixelFarm.Drawing
 {
-    public class LazyActualBitmapBufferProvider : LazyBitmapBufferProvider
+   
+   
+
+    public class LazyMemBitmapBufferProvider : LazyBitmapBufferProvider
     {
         PixelFarm.CpuBlit.MemBitmap _memBmp;
-        public LazyActualBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap memBmp)
+        public LazyMemBitmapBufferProvider(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
             this._memBmp = memBmp;
         }

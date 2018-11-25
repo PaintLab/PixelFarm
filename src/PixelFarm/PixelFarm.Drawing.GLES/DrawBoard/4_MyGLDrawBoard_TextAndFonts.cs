@@ -23,11 +23,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return _painter1.CurrentFont;
+                return _gpuPainter.CurrentFont;
             }
             set
             {
-                _painter1.CurrentFont = value;
+                _gpuPainter.CurrentFont = value;
             }
         }
         /// <summary>
@@ -43,7 +43,7 @@ namespace PixelFarm.Drawing.GLES2
             {
                 this._currentTextColor = value;
                 //set this to 
-                _painter1.TextPrinter.ChangeFillColor(value);
+                _gpuPainter.TextPrinter.ChangeFillColor(value);
             }
         }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len)
@@ -52,9 +52,9 @@ namespace PixelFarm.Drawing.GLES2
             System.Array.Copy(buffer, startAt, copy, 0, len);
 
             var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString(copy);
-            if (_painter1.TextPrinter != null)
+            if (_gpuPainter.TextPrinter != null)
             {
-                _painter1.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+                _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
 
             }
             return renderVxFmtStr;
@@ -65,38 +65,38 @@ namespace PixelFarm.Drawing.GLES2
             {
                 DrawingGL.GLRenderVxFormattedString formattedString = (DrawingGL.GLRenderVxFormattedString)renderVx;
 
-                var prevColor = _painter1.FillColor;
-                _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-                _painter1.TextPrinter.DrawString(formattedString, x, y);
-                _painter1.FillColor = prevColor;
+                var prevColor = _gpuPainter.FillColor;
+                _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+                _gpuPainter.TextPrinter.DrawString(formattedString, x, y);
+                _gpuPainter.FillColor = prevColor;
             }
         }
 
         public override void DrawText(char[] buffer, int left, int top)
         {
-            Color prevColor = _painter1.FillColor;
+            Color prevColor = _gpuPainter.FillColor;
 
             //TODO: review here
             //use font color for fill the glyphs
 
-            _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
-            _painter1.FillColor = prevColor;
+            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, left, top);
+            _gpuPainter.FillColor = prevColor;
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            Color prevColor = _painter1.FillColor;
-            _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, logicalTextBox.Y);
-            _painter1.FillColor = prevColor;
+            Color prevColor = _gpuPainter.FillColor;
+            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            _gpuPainter.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, logicalTextBox.Y);
+            _gpuPainter.FillColor = prevColor;
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             //TODO: review again
-            Color prevColor = _painter1.FillColor;
-            _painter1.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, logicalTextBox.Y);
-            _painter1.FillColor = prevColor;
+            Color prevColor = _gpuPainter.FillColor;
+            _gpuPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            _gpuPainter.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, logicalTextBox.Y);
+            _gpuPainter.FillColor = prevColor;
             //TODO: review here
             //painter1.FillRectangle(0, 0, 20, 20, Color.Red);
 

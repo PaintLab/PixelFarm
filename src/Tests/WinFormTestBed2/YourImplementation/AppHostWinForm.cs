@@ -138,7 +138,7 @@ namespace LayoutFarm
                     try
                     {
                         string svg_str = File.ReadAllText(imgName);
-                        VgVisualElement vgVisElem = ReadSvgFile(imgName);
+                        VgVisualElement vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(imgName).VgRootElem;
                         return CreateBitmap(vgVisElem, reqW, reqH);
 
                     }
@@ -174,24 +174,7 @@ namespace LayoutFarm
 
         }
 
-        VgVisualElement ReadSvgFile(string filename)
-        {
 
-            string svgContent = System.IO.File.ReadAllText(filename);
-            SvgDocBuilder docBuidler = new SvgDocBuilder();
-            SvgParser parser = new SvgParser(docBuidler);//***
-            WebLexer.TextSnapshot textSnapshot = new WebLexer.TextSnapshot(svgContent);
-            parser.ParseDocument(textSnapshot);
-            //TODO: review this step again
-            VgDocBuilder builder = new VgDocBuilder();
-            return builder.CreateVgVisualElem(docBuidler.ResultDocument, svgElem =>
-            {
-                //**
-                //TODO: review here
-
-            });
-        }
-        //
         PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgVisualElement renderVx, int reqW, int reqH)
         {
 

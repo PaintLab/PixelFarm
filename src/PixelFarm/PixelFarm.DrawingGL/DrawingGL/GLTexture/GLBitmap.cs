@@ -6,22 +6,6 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
-    public abstract class LazyBitmapBufferProvider
-    {
-        public abstract IntPtr GetRawBufferHead();
-        public abstract void ReleaseBufferHead();
-        public abstract int Width { get; }
-        public abstract int Height { get; }
-        public abstract bool IsYFlipped { get; }
-        public GLBitmapFormat BitmapFormat { get; set; }
-    }
-
-    public enum GLBitmapFormat
-    {
-        BGRA, //eg. System.Drawing.Bitmap
-        BGR, //eg. Native Windows GDI surface
-        RGBA //eg. OpenGL 
-    }
 
     public class GLBitmap : Image
     {
@@ -32,7 +16,7 @@ namespace PixelFarm.DrawingGL
         int[] _rawIntBuffer;
 
         IntPtr _nativeImgMem;
-        LazyBitmapBufferProvider _lazyProvider;
+        PixelFarm.Drawing.LazyBitmapBufferProvider _lazyProvider;
         bool _isNativePtrOwner;
 
 
@@ -81,7 +65,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public GLBitmapFormat BitmapFormat { get; set; }
+        public BitmapBufferFormat BitmapFormat { get; set; }
         public bool IsBigEndianPixel { get; set; }
         /// <summary>
         /// is vertical flipped
@@ -163,7 +147,13 @@ namespace PixelFarm.DrawingGL
             Rectangle backupRect = updateArea;
 #endif
 
-            updateArea = Rectangle.Intersect(updateArea, new Rectangle(0, 0, Width, Height));
+
+            //if (updateArea.X != 0 || updateArea.Y != 0 ||
+            //    updateArea.Width != this.Width || updateArea.Height != Height)
+            //{
+            //}
+            //updateArea = Rectangle.Intersect(updateArea, new Rectangle(0, 0, Width, Height));
+            updateArea = new Rectangle(0, 0, this.Width, this.Height);
             if (updateArea.Width == 0 || updateArea.Height == 0)
             {
                 return;
@@ -198,9 +188,12 @@ namespace PixelFarm.DrawingGL
                 IntPtr bmpScan0 = this._lazyProvider.GetRawBufferHead();
 
                 GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
-                         updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
-                         PixelFormat.Rgba, // 
-                         PixelType.UnsignedByte, (IntPtr)bmpScan0);
+                     updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
+                     PixelFormat.Rgba, // 
+                     PixelType.UnsignedByte, (IntPtr)bmpScan0);
+
+
+
 
                 this._lazyProvider.ReleaseBufferHead();
 

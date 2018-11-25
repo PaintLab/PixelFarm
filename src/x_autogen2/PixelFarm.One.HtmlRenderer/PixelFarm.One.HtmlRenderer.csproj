@@ -2582,9 +2582,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs</Link>
     </Compile>
@@ -2803,6 +2800,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\LazyMemBitmapBufferProvider.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\05_pixelprocessing\PixelBlenderOthers.cs</Link>
