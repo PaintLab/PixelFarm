@@ -39,6 +39,7 @@ namespace PixelFarm.DrawingGL
             //
             _memBitmap = srcBmp;
             _isOwner = isOwner;
+            
         }
 
         public BitmapBufferFormat BitmapFormat { get; set; }

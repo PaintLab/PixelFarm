@@ -1,5 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 //MIT, 2018-present, WinterDev
+using System;
 using System.Collections.Generic;
 using System.IO;
 namespace PixelFarm.Platforms
@@ -57,17 +58,21 @@ namespace LayoutFarm
 
 
 
-    public abstract class ImageBinder
+    public class ImageBinder : PixelFarm.Drawing.LazyBitmapBufferProvider
     {
         /// <summary>
         /// local img cached
         /// </summary>
         PixelFarm.Drawing.Image _localImg;
+        bool _isLocalImgOwner;
+
         LazyLoadImageFunc _lazyLoadImgFunc;
         public event System.EventHandler ImageChanged;
 
         int _previewImgWidth = 16; //default ?
         int _previewImgHeight = 16;
+
+
 #if DEBUG
         static int dbugTotalId;
         public int dbugId = dbugTotalId++;
@@ -79,6 +84,18 @@ namespace LayoutFarm
         public ImageBinder(string imgSource)
         {
             ImageSource = imgSource;
+        }
+        public ImageBinder(PixelFarm.Drawing.Image img, bool isOwner = false)
+        {
+#if DEBUG
+            if (img == null)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            _localImg = img;
+            _isLocalImgOwner = isOwner;
+            this.State = BinderState.Loaded;
         }
         /// <summary>
         /// preview img size is an expected(assume) img of original img, 
@@ -120,6 +137,8 @@ namespace LayoutFarm
             //TODO: review here
             this.State = BinderState.Unload;//reset this to unload?
         }
+        public override int Width => ImageWidth;
+        public override int Height => ImageHeight;
 
         public int ImageWidth
         {
@@ -187,6 +206,25 @@ namespace LayoutFarm
         {
             _lazyLoadImgFunc?.Invoke(this);
         }
+        public override IntPtr GetRawBufferHead()
+        {
+
+            PixelFarm.CpuBlit.MemBitmap bmp = _localImg as PixelFarm.CpuBlit.MemBitmap;
+            if (bmp != null)
+            {
+                return PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(bmp).Ptr;
+            }
+
+            return IntPtr.Zero;
+        }
+        public override void ReleaseBufferHead()
+        {
+
+        }
+
+        public override bool IsYFlipped => false;
+
+
 
         //
         public static readonly ImageBinder NoImage = new NoImageImageBinder();
@@ -195,6 +233,13 @@ namespace LayoutFarm
             public NoImageImageBinder()
             {
                 this.State = BinderState.Blank;
+            }
+            public override IntPtr GetRawBufferHead()
+            {
+                return IntPtr.Zero;
+            }
+            public override void ReleaseBufferHead()
+            {
             }
         }
 

@@ -12,17 +12,7 @@ using LayoutFarm.WebDom;
 namespace PaintLab.Svg
 {
 
-    public class VgImageBinder : LayoutFarm.ImageBinder
-    {
-        //TODO: review this again
-        public VgImageBinder(string imgsrc) : base(imgsrc)
-        {
-        }
-        public VgImageBinder(PixelFarm.CpuBlit.MemBitmap bmp) : base(null)
-        {
-            this.SetLocalImage(bmp);
-        }
-    }
+
 
     //----------------------
     public class VgHitChain
@@ -899,7 +889,7 @@ namespace PaintLab.Svg
                             if (imgSpec.ImageSrc != null)
                             {
                                 //create new 
-                                this.ImageBinder = new VgImageBinder(imgSpec.ImageSrc);
+                                this.ImageBinder = new LayoutFarm.ImageBinder(imgSpec.ImageSrc);
                                 isOK = true;
                             }
                         }
